@@ -67,13 +67,15 @@ flutter build apk --release --flavor mobile-public    --dart-define=TORTUGARR_PU
 # own server addresses and keys.
 for apk in build/app/outputs/flutter-apk/*-release.apk; do
   rm -rf /tmp/apk-check && unzip -q "$apk" -d /tmp/apk-check
-  grep -rlaE '/home/|/root/|/Users/' /tmp/apk-check/lib/*/libapp.so \
+  grep -rlaE 'file:///(home|root|Users)/' /tmp/apk-check/lib/*/libapp.so \
       /tmp/apk-check/assets/flutter_assets/ && echo "LEAK in $apk"
 done
 ```
 
 Build paths inside the prebuilt third-party `.so` files (such as `libass.so` and `libmpv.so`)
-are expected and harmless, so the check skips them.
+are expected and harmless, so the check skips them. Flutter embeds build paths as `file://`
+URIs, so the check looks for those rather than bare `/home/` or `/Users/`, which also appear in
+harmless places such as Jellyfin API paths.
 
 For the server tar file, export the commit first, then build the plugin and make the tar
 there as in [server/README.md](server/README.md). `server/plugin/build.sh` refuses to publish
