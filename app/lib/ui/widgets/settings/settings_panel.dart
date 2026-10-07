@@ -1,0 +1,273 @@
+import 'dart:ui' show ImageFilter;
+
+import 'package:custom_tv_text_field/custom_tv_text_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:moonfin_design/moonfin_design.dart';
+
+import '../../../l10n/app_localizations.dart';
+import '../../../util/idiom/app_ui_idiom.dart';
+import '../../../util/platform_detection.dart';
+import '../../../util/focus/dpad_keys.dart';
+import '../overlay_sheet.dart';
+import 'preference_tiles.dart';
+
+class SettingsPanel extends StatelessWidget {
+  final Widget child;
+
+  /// Stable key so the nested navigator survives theme changes: some themes
+  /// (Glass, the pixel theme) wrap the panel in a different widget, which would
+  /// otherwise rebuild the navigator and drop the user back to the root.
+  final GlobalKey navigatorKey;
+
+  static final isOpenNotifier = ValueNotifier<bool>(false);
+
+  const SettingsPanel({
+    super.key,
+    required this.child,
+    required this.navigatorKey,
+  });
+
+  static Future<void> open(BuildContext context, Widget content) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    final l10n = AppLocalizations.of(context);
+    isOpenNotifier.value = true;
+    final navigatorKey = GlobalKey();
+    final future = showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: l10n.settings,
+      barrierColor: AppColorScheme.scrim.withValues(alpha: 0.54),
+      transitionDuration: const Duration(milliseconds: 220),
+      pageBuilder: (_, anim, _) =>
+          SettingsPanel(navigatorKey: navigatorKey, child: content),
+      transitionBuilder: (context, anim, secondAnim, child) {
+        final slide = Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic));
+        return SlideTransition(
+          position: slide,
+          child: FadeTransition(opacity: anim, child: child),
+        );
+      },
+    );
+    return future.whenComplete(() {
+      isOpenNotifier.value = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final appleTv = AppUiIdiomResolver.appleTvStyle;
+    final isMobile = PlatformDetection.useMobileUi;
+    final panelWidth = PlatformDetection.isAppleTV
+        ? (screenWidth * 0.42).clamp(560.0, screenWidth)
+        : isMobile
+        ? screenWidth
+        : (screenWidth - 16).clamp(320.0, 420.0);
+    final panelCorner = isMobile ? 0.0 : 16.0;
+    final glass = AppColorScheme.isGlass;
+    final frostedForTv = appleTv && !glass;
+    final surface = Theme.of(context).colorScheme.surface;
+    final Widget body = SizedBox(
+      width: panelWidth,
+      height: double.infinity,
+      child: SettingsListTypography(
+        child: ScaffoldMessenger(
+          child: _SettingsNavigator(key: navigatorKey, initial: child),
+        ),
+      ),
+    );
+    Widget content;
+    if (glass) {
+      content = GlassSurface(
+        cornerRadius: panelCorner,
+        reinforced: true,
+        fallbackColor: Colors.transparent,
+        child: body,
+      );
+    } else if (frostedForTv) {
+      final sigma = GlassSettings.capSigma(32);
+      final panel = DecoratedBox(
+        decoration: BoxDecoration(
+          // Without blur behind it the panel needs more opacity to read.
+          color: surface.withValues(alpha: sigma > 0 ? 0.62 : 0.86),
+          border: Border(
+            left: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+        ),
+        child: body,
+      );
+      content = sigma > 0
+          ? BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
+              child: panel,
+            )
+          : panel;
+    } else {
+      final navBorder = ThemeRegistry.active.borders.navBorder;
+      if (navBorder != null) {
+        content = DecoratedBox(
+          position: DecorationPosition.foreground,
+          decoration: BoxDecoration(
+            border: Border(
+              left: navBorder,
+            ),
+          ),
+          child: body,
+        );
+      } else {
+        content = body;
+      }
+    }
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Material(
+        color: (glass || frostedForTv) ? Colors.transparent : surface,
+        borderRadius: BorderRadius.horizontal(
+          left: Radius.circular(panelCorner),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: content,
+      ),
+    );
+  }
+}
+
+class _SettingsNavigator extends StatefulWidget {
+  final Widget initial;
+
+  const _SettingsNavigator({super.key, required this.initial});
+
+  @override
+  State<_SettingsNavigator> createState() => _SettingsNavigatorState();
+}
+
+class _SettingsNavigatorState extends State<_SettingsNavigator> {
+  final _navKey = GlobalKey<NavigatorState>();
+  final _trapScope = FocusScopeNode(
+    debugLabel: 'SettingsPanelTrap',
+    traversalEdgeBehavior: TraversalEdgeBehavior.stop,
+  );
+  bool _rootDismissInProgress = false;
+
+  @override
+  void dispose() {
+    _trapScope.dispose();
+    super.dispose();
+  }
+
+  void _handleBackDismiss() {
+    // An open TV keyboard owns back, so close it instead of popping the panel
+    // out from underneath it.
+    if (CustomTVTextField.closeTopKeyboard()) return;
+    final navigator = _navKey.currentState;
+    if (navigator != null && navigator.canPop()) {
+      navigator.pop();
+      return;
+    }
+    if (_rootDismissInProgress || !mounted) {
+      return;
+    }
+    _rootDismissInProgress = true;
+    DialogBackSuppressor.markDismissed();
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FocusScope(
+      node: _trapScope,
+      autofocus: true,
+      child: Focus(
+        onKeyEvent: (_, event) {
+          if (!event.logicalKey.isContextMenuKey) {
+            return KeyEventResult.ignored;
+          }
+          if (event is! KeyDownEvent) {
+            return KeyEventResult.handled;
+          }
+          _handleBackDismiss();
+          return KeyEventResult.handled;
+        },
+        child: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, _) {
+            if (didPop) return;
+            _handleBackDismiss();
+          },
+          child: Navigator(
+            key: _navKey,
+            onGenerateRoute: (_) =>
+                MaterialPageRoute(builder: (_) => widget.initial),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+extension SettingsPush on BuildContext {
+  Future<void> pushSettingsScreen(Widget screen, {FocusNode? returnFocus}) {
+    final focusToRestore = returnFocus ?? FocusManager.instance.primaryFocus;
+    return Navigator.of(this)
+        .push(
+          PageRouteBuilder(
+            pageBuilder: (_, _, _) => _AutoFocusWrapper(child: screen),
+            transitionDuration: const Duration(milliseconds: 160),
+            reverseTransitionDuration: const Duration(milliseconds: 130),
+            transitionsBuilder: (context, anim, _, child) {
+              final slide =
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+                  );
+              return SlideTransition(position: slide, child: child);
+            },
+          ),
+        )
+        .then((_) {
+          if (focusToRestore != null && focusToRestore.context != null) {
+            focusToRestore.requestFocus();
+          }
+        });
+  }
+}
+
+class _AutoFocusWrapper extends StatefulWidget {
+  final Widget child;
+  const _AutoFocusWrapper({required this.child});
+
+  @override
+  State<_AutoFocusWrapper> createState() => _AutoFocusWrapperState();
+}
+
+class _AutoFocusWrapperState extends State<_AutoFocusWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    _scheduleInitialFocus();
+  }
+
+  void _scheduleInitialFocus({int attempt = 0}) {
+    if (!mounted || attempt > 15) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final scope = FocusScope.of(context);
+      if (scope.hasFocus) return;
+      final didFocus = scope.focusInDirection(TraversalDirection.down);
+      if (!didFocus && attempt < 15) {
+        Future<void>.delayed(const Duration(milliseconds: 16), () {
+          _scheduleInitialFocus(attempt: attempt + 1);
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}

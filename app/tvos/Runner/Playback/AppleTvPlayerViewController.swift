@@ -1,0 +1,3442 @@
+import AVFoundation
+import QuartzCore
+import UIKit
+
+// Localized prompt text pushed from Dart. The literals are the English
+// fallback for the window before the push arrives.
+struct PromptStrings {
+    var endsInTemplate = "Ends in {time}"
+    var upNext = "Up Next"
+    var playNext = "Play Next"
+    var stillWatchingTitle = "Still Watching?"
+    var stillWatchingBody = "Playback has been paused. Are you still watching?"
+    var stillWatchingContinue = "Continue"
+    var stillWatchingStop = "Stop"
+
+    func endsIn(_ time: String) -> String {
+        endsInTemplate.replacingOccurrences(of: "{time}", with: time)
+    }
+}
+
+final class AppleTvPlayerViewController: UIViewController {
+    private let player: AetherPlayerWrapper
+    var onExit: (() -> Void)?
+    var onNext: (() -> Void)?
+    var onPrevious: (() -> Void)?
+    var onSelectAudio: ((Int) -> Void)?
+    var onSelectSubtitle: ((Int) -> Void)?
+    var onSetSpeed: ((Double) -> Void)?
+    var onSetBitrate: ((Int) -> Void)?
+    var onSelectChannel: ((String) -> Void)?
+    var onOpenGuide: (() -> Void)?
+    var onToggleFavorite: (() -> Void)?
+    var onStillWatchingContinue: (() -> Void)?
+    var onStillWatchingStop: (() -> Void)?
+    var onNextUpPlay: (() -> Void)?
+    var onNextUpCancel: (() -> Void)?
+    var onNextUpDismiss: (() -> Void)?
+    var onSkipSegmentSelect: (() -> Void)?
+    var onUserSeek: (() -> Void)?
+    var onSearchSubtitles: (() -> Void)?
+    var onDownloadSubtitle: ((String) -> Void)?
+    var onSyncplayLeave: (() -> Void)?
+    var onSyncplayIgnoreWait: ((Bool) -> Void)?
+    var onOpenCastPerson: ((String) -> Void)?
+    var baseSubtitlePos = 92
+    private var didAttachSurface = false
+    private var updateTimer: Timer?
+    private var lastShowAt: TimeInterval = 0
+    private var osdDismissed = false
+    private var subtitlesRaised = false
+
+    private var skipForwardMs = 30000
+    private var skipBackMs = 10000
+    private var hasNext = false
+    private var hasPrevious = false
+    private var audioTracks: [(index: Int, label: String, subtitle: String, selected: Bool)] = []
+    private var subtitleTracks: [(index: Int, label: String, subtitle: String, selected: Bool)] = []
+    private var streamInfoSections: [[String: Any]] = []
+    private var hasCast = false
+    private var castPeople:
+        [(name: String, subtitle: String, imageUrl: String, personId: String)] = []
+    private var canFavorite = false
+    private var isFavorite = false
+    private var canDownloadSubtitles = false
+    private weak var subtitleSearchingAlert: UIAlertController?
+    private var syncPlayEnabled = false
+    private var syncPlayGroupName = ""
+    private var syncPlayParticipants: [String] = []
+    private var syncPlayIgnoreWait = false
+    private var stillWatchingShown = false
+    private var selectedBitrateMbps = -1
+    private var logoUrlString = ""
+    private var headerPrimary = ""
+    private var headerSecondary = ""
+    private var hasLogo = false
+
+    private var trickplay: TrickplayData?
+    private var trickplaySheets: [Int: UIImage] = [:]
+
+    // The Next Up card, skip button, and Still Watching prompt are pure
+    // renderers. The Dart side owns every decision (when to show, the
+    // authoritative countdown, what a press does) so tvOS behaves exactly
+    // like the Flutter player. The deadline below only draws the countdown.
+    private var nextUpVisible = false
+    private var nextUpFocusOnPlay = true
+    private var nextUpCountdownDeadline: CFTimeInterval = 0
+    private var nextUpCountdownTotalMs = 0
+    private var nextUpCountdownStyle = "both"
+
+    private var pauseMeta: (overview: String, imageUrl: String)?
+
+    private var skipSegmentActive = false
+    private let skipSegmentButton = UIView()
+    private let skipSegmentGlass = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let skipSegmentRow = UIStackView()
+    private let skipSegmentIcon = UIImageView()
+    private let skipSegmentLabel = UILabel()
+    private let skipSegmentTimerLabel = UILabel()
+    private let skipSegmentRingContainer = UIView()
+    private let skipSegmentRingTrack = CAShapeLayer()
+    private let skipSegmentRing = CAShapeLayer()
+    private let skipSegmentRingNumber = UILabel()
+    private let skipSegmentRingIcon = UIImageView()
+    private var skipSegmentStartMs = 0
+    private var skipSegmentEndMs = 0
+    private var skipSegmentCountdownStyle = "none"
+    private let skipRingSize: CGFloat = 72
+
+    private let loadingOverlay = UIView()
+    private let loadingSpinner = UIActivityIndicatorView(style: .large)
+    private var loadingDismissed = false
+
+    private var isLive = false
+    private var liveProgram:
+        (name: String, episodeTitle: String, startMs: Int, endMs: Int, hasTimer: Bool)?
+    private var liveChannelNumber = ""
+    private var channelList:
+        [(id: String, number: String, name: String, logoUrl: String, programName: String,
+            selected: Bool)] = []
+    private var streamStats: [(label: String, value: String)] = []
+
+    private var scrubTargetMs: Int?
+    private var scrubCommitTimer: Timer?
+    private var scrubHoldTimer: Timer?
+    private var scrubHoldForward = false
+    private var scrubHoldStart: TimeInterval = 0
+    private var panScrubEngaged = false
+    private var panScrubLastTranslationX: CGFloat = 0
+    // A touch pan borrows the scrubber zone while it runs. The zone the user
+    // was in is restored when the pan ends so the control bar stays reachable.
+    private var zoneBeforePanScrub: Zone?
+
+    private struct TrickplayData {
+        let urls: [String]
+        let headers: [String: String]
+        let width: Int
+        let height: Int
+        let cols: Int
+        let rows: Int
+        let intervalMs: Int
+    }
+
+    private enum Zone { case scrubber, buttons }
+    private enum ControlId {
+        case prev, skipBack, playPause, skipForward, next
+        case speed, chapters, subtitles, audio, cast, quality, zoom, info, channels, favorite
+        case syncplay
+    }
+    private var focusedZone: Zone = .buttons
+    private var focusedControlIndex = 0
+    private var controls: [ControlId] = []
+    private var controlViews: [ControlId: UIView] = [:]
+    private var controlIcons: [ControlId: UIImageView] = [:]
+
+    private let osdContainer = UIView()
+    private let gradientLayer = CAGradientLayer()
+    private let scrubber = UIProgressView(progressViewStyle: .default)
+    private let currentTimeLabel = UILabel()
+    private let durationLabel = UILabel()
+    private let endsAtLabel = UILabel()
+    private let chapterOverlay = UIView()
+    private let controlBar = UIView()
+    private let controlStack = UIStackView()
+    private let tooltipView = UIView()
+    private let tooltipLabel = UILabel()
+
+    private let trickplayContainer = UIView()
+    private let trickplayImageView = UIImageView()
+    private let trickplayWidth: CGFloat = 480
+    private var trickplayCenterX: NSLayoutConstraint?
+    private var trickplayHeight: NSLayoutConstraint?
+
+    private let topContainer = UIView()
+    private let topGradientLayer = CAGradientLayer()
+    private let headerStack = UIStackView()
+    private let logoImageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
+
+    private let liveHeaderStack = UIStackView()
+    private let liveChannelRow = UIStackView()
+    private let channelBadge = PaddedLabel()
+    private let channelNameLabel = UILabel()
+    private let recordingDot = UIView()
+    private let programLabel = UILabel()
+    private let upNextLabel = UILabel()
+
+    private let defaultAccent = UIColor(red: 0.9, green: 0.1, blue: 0.55, alpha: 1)
+    private var glassActive = false
+    private var hasThemeConfig = false
+    private var glassAccent = UIColor(red: 0.04, green: 0.52, blue: 1.0, alpha: 1)
+    private var glassRangeProgress = UIColor(red: 0.04, green: 0.52, blue: 1.0, alpha: 1)
+    private var glassRangeTrack = UIColor(white: 1, alpha: 0.2)
+    private var glassSurface = UIColor(white: 1, alpha: 0.12)
+    private var glassOnSurface = UIColor.white
+    // Dart pushes the accent for every theme, not only glass ones, so this is
+    // the accent every prompt surface renders with. The pink constant only
+    // covers the window before the first theme config arrives.
+    private var themeAccent: UIColor { hasThemeConfig ? glassAccent : defaultAccent }
+    private var promptStrings = PromptStrings()
+    private let statsStack = UIStackView()
+
+    private let nextUpCard = UIView()
+    private let nextUpImage = UIImageView()
+    private let nextUpEpisodeLabel = UILabel()
+    private let nextUpTitleLabel = UILabel()
+    private let nextUpCountdownLabel = UILabel()
+    private let nextUpPlayButton = UIView()
+    private let nextUpPlayLabel = UILabel()
+    private let nextUpCancelButton = UIView()
+    private let nextUpCancelIcon = UIImageView()
+    private let nextUpRing = CAShapeLayer()
+    private var nextUpCardWidth: NSLayoutConstraint?
+    private var nextUpImageHeight: NSLayoutConstraint?
+
+    private let pauseOverlay = UIView()
+    private let pauseImage = UIImageView()
+    private let pauseTitleLabel = UILabel()
+    private let pauseTextLabel = UILabel()
+
+    private var chapters: [(title: String, startMs: Int)] = []
+
+    private static let endTimeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .none
+        return formatter
+    }()
+
+    init(player: AetherPlayerWrapper) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+        player.attachVideoView(view)
+        didAttachSurface = true
+        setupOsd()
+        setupSwipeGestures()
+        rebuildControls()
+        layoutHeader()
+        rebuildStats()
+        restyleForTheme()
+    }
+
+    func applyThemeConfig(_ args: [String: Any]) {
+        glassActive = (args["isGlass"] as? Bool) ?? false
+        hasThemeConfig = true
+        if let v = (args["accent"] as? NSNumber)?.intValue {
+            glassAccent = Self.color(fromARGB: v)
+        }
+        if let v = (args["surface"] as? NSNumber)?.intValue {
+            glassSurface = Self.color(fromARGB: v)
+        }
+        if let v = (args["onSurface"] as? NSNumber)?.intValue {
+            glassOnSurface = Self.color(fromARGB: v)
+        }
+        if let v = (args["rangeProgress"] as? NSNumber)?.intValue {
+            glassRangeProgress = Self.color(fromARGB: v)
+        }
+        if let v = (args["rangeTrack"] as? NSNumber)?.intValue {
+            glassRangeTrack = Self.color(fromARGB: v)
+        }
+        if isViewLoaded {
+            restyleForTheme()
+        }
+    }
+
+    private static func color(fromARGB value: Int) -> UIColor {
+        let a = CGFloat((value >> 24) & 0xFF) / 255.0
+        let r = CGFloat((value >> 16) & 0xFF) / 255.0
+        let g = CGFloat((value >> 8) & 0xFF) / 255.0
+        let b = CGFloat(value & 0xFF) / 255.0
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+    }
+
+    func applyPromptStrings(_ args: [String: Any]) {
+        if let v = args["endsIn"] as? String { promptStrings.endsInTemplate = v }
+        if let v = args["upNext"] as? String { promptStrings.upNext = v }
+        if let v = args["playNext"] as? String { promptStrings.playNext = v }
+        if let v = args["stillWatchingTitle"] as? String { promptStrings.stillWatchingTitle = v }
+        if let v = args["stillWatchingBody"] as? String { promptStrings.stillWatchingBody = v }
+        if let v = args["stillWatchingContinue"] as? String { promptStrings.stillWatchingContinue = v }
+        if let v = args["stillWatchingStop"] as? String { promptStrings.stillWatchingStop = v }
+        if isViewLoaded {
+            upNextLabel.text = promptStrings.upNext.uppercased()
+            nextUpPlayLabel.text = promptStrings.playNext
+        }
+    }
+
+    private func restyleForTheme() {
+        let accent = themeAccent
+        scrubber.progressTintColor = glassActive ? glassRangeProgress : accent
+        channelBadge.backgroundColor = accent
+        upNextLabel.textColor = accent
+        skipSegmentButton.layer.borderColor = accent.cgColor
+        skipSegmentIcon.tintColor = accent
+        skipSegmentRingIcon.tintColor = accent
+        skipSegmentRing.strokeColor = accent.cgColor
+        nextUpPlayButton.backgroundColor = accent
+    }
+
+    private func setupOsd() {
+        topContainer.translatesAutoresizingMaskIntoConstraints = false
+        topContainer.alpha = 0
+        view.addSubview(topContainer)
+        NSLayoutConstraint.activate([
+            topContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topContainer.topAnchor.constraint(equalTo: view.topAnchor),
+            topContainer.heightAnchor.constraint(equalToConstant: 280),
+        ])
+
+        topGradientLayer.colors = [
+            UIColor(white: 0, alpha: 0.85).cgColor,
+            UIColor.clear.cgColor,
+        ]
+        topContainer.layer.addSublayer(topGradientLayer)
+
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.contentMode = .scaleAspectFit
+        logoImageView.setContentHuggingPriority(.required, for: .horizontal)
+        logoImageView.heightAnchor.constraint(equalToConstant: 82).isActive = true
+        logoImageView.widthAnchor.constraint(lessThanOrEqualToConstant: 480).isActive = true
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .systemFont(ofSize: 42, weight: .bold)
+        titleLabel.textColor = .white
+        titleLabel.numberOfLines = 1
+
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.font = .systemFont(ofSize: 28, weight: .semibold)
+        subtitleLabel.textColor = UIColor(white: 1, alpha: 0.75)
+        subtitleLabel.numberOfLines = 1
+
+        headerStack.translatesAutoresizingMaskIntoConstraints = false
+        headerStack.axis = .vertical
+        headerStack.alignment = .leading
+        headerStack.spacing = 10
+        topContainer.addSubview(headerStack)
+        NSLayoutConstraint.activate([
+            headerStack.leadingAnchor.constraint(
+                equalTo: topContainer.leadingAnchor, constant: 90),
+            headerStack.trailingAnchor.constraint(
+                lessThanOrEqualTo: topContainer.trailingAnchor, constant: -90),
+            headerStack.topAnchor.constraint(
+                equalTo: topContainer.safeAreaLayoutGuide.topAnchor, constant: 40),
+        ])
+
+        osdContainer.translatesAutoresizingMaskIntoConstraints = false
+        osdContainer.alpha = 0
+        view.addSubview(osdContainer)
+        NSLayoutConstraint.activate([
+            osdContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            osdContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            osdContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            osdContainer.heightAnchor.constraint(equalToConstant: 360),
+        ])
+
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor(white: 0, alpha: 0.9).cgColor,
+        ]
+        osdContainer.layer.addSublayer(gradientLayer)
+
+        controlBar.translatesAutoresizingMaskIntoConstraints = false
+        osdContainer.addSubview(controlBar)
+
+        controlStack.translatesAutoresizingMaskIntoConstraints = false
+        controlStack.axis = .horizontal
+        controlStack.alignment = .center
+        controlStack.spacing = 20
+        controlBar.addSubview(controlStack)
+
+        tooltipView.backgroundColor = UIColor(white: 0, alpha: 0.78)
+        tooltipView.layer.cornerRadius = 8
+        tooltipView.isHidden = true
+        osdContainer.addSubview(tooltipView)
+        tooltipLabel.font = .systemFont(ofSize: 24, weight: .medium)
+        tooltipLabel.textColor = .white
+        tooltipView.addSubview(tooltipLabel)
+
+        scrubber.translatesAutoresizingMaskIntoConstraints = false
+        scrubber.progressTintColor = UIColor(red: 0.9, green: 0.1, blue: 0.55, alpha: 1)
+        scrubber.trackTintColor = UIColor(white: 1, alpha: 0.25)
+        scrubber.layer.cornerRadius = 3
+        scrubber.clipsToBounds = true
+        osdContainer.addSubview(scrubber)
+
+        chapterOverlay.translatesAutoresizingMaskIntoConstraints = false
+        chapterOverlay.isUserInteractionEnabled = false
+        osdContainer.addSubview(chapterOverlay)
+
+        currentTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        currentTimeLabel.font = .monospacedDigitSystemFont(ofSize: 26, weight: .medium)
+        currentTimeLabel.textColor = UIColor(white: 1, alpha: 0.7)
+        osdContainer.addSubview(currentTimeLabel)
+
+        durationLabel.translatesAutoresizingMaskIntoConstraints = false
+        durationLabel.font = .monospacedDigitSystemFont(ofSize: 26, weight: .medium)
+        durationLabel.textColor = UIColor(white: 1, alpha: 0.7)
+        durationLabel.textAlignment = .right
+        osdContainer.addSubview(durationLabel)
+
+        endsAtLabel.translatesAutoresizingMaskIntoConstraints = false
+        endsAtLabel.font = .monospacedDigitSystemFont(ofSize: 24, weight: .medium)
+        endsAtLabel.textColor = UIColor(white: 1, alpha: 0.7)
+        endsAtLabel.textAlignment = .right
+        osdContainer.addSubview(endsAtLabel)
+
+        NSLayoutConstraint.activate([
+            controlBar.leadingAnchor.constraint(
+                equalTo: osdContainer.leadingAnchor, constant: 90),
+            controlBar.trailingAnchor.constraint(
+                equalTo: osdContainer.trailingAnchor, constant: -90),
+            controlBar.bottomAnchor.constraint(
+                equalTo: osdContainer.bottomAnchor, constant: -56),
+            controlBar.heightAnchor.constraint(equalToConstant: 72),
+
+            controlStack.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            controlStack.centerYAnchor.constraint(equalTo: controlBar.centerYAnchor),
+            controlStack.trailingAnchor.constraint(
+                lessThanOrEqualTo: controlBar.trailingAnchor),
+
+            currentTimeLabel.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            currentTimeLabel.bottomAnchor.constraint(
+                equalTo: controlBar.topAnchor, constant: -16),
+
+            durationLabel.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
+            durationLabel.bottomAnchor.constraint(
+                equalTo: controlBar.topAnchor, constant: -16),
+
+            scrubber.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            scrubber.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
+            scrubber.bottomAnchor.constraint(
+                equalTo: currentTimeLabel.topAnchor, constant: -10),
+            scrubber.heightAnchor.constraint(equalToConstant: 6),
+
+            chapterOverlay.leadingAnchor.constraint(equalTo: scrubber.leadingAnchor),
+            chapterOverlay.trailingAnchor.constraint(equalTo: scrubber.trailingAnchor),
+            chapterOverlay.centerYAnchor.constraint(equalTo: scrubber.centerYAnchor),
+            chapterOverlay.heightAnchor.constraint(equalToConstant: 16),
+
+            endsAtLabel.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
+            endsAtLabel.bottomAnchor.constraint(
+                equalTo: scrubber.topAnchor, constant: -8),
+        ])
+
+        setupTrickplay()
+        setupNextUpCard()
+        setupPauseOverlay()
+        setupLiveOverlays()
+        setupSkipSegment()
+        setupLoadingOverlay()
+    }
+
+    private func setupLoadingOverlay() {
+        loadingOverlay.translatesAutoresizingMaskIntoConstraints = false
+        loadingOverlay.backgroundColor = .black
+        view.addSubview(loadingOverlay)
+        loadingSpinner.translatesAutoresizingMaskIntoConstraints = false
+        loadingSpinner.color = .white
+        loadingSpinner.hidesWhenStopped = true
+        loadingOverlay.addSubview(loadingSpinner)
+        NSLayoutConstraint.activate([
+            loadingOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            loadingSpinner.centerXAnchor.constraint(equalTo: loadingOverlay.centerXAnchor),
+            loadingSpinner.centerYAnchor.constraint(equalTo: loadingOverlay.centerYAnchor),
+        ])
+        loadingSpinner.startAnimating()
+    }
+
+    private func updateLoadingOverlay() {
+        guard !loadingDismissed else { return }
+        if player.currentTime > 0 || player.state == .playing || player.state == .error {
+            loadingDismissed = true
+            loadingSpinner.stopAnimating()
+            UIView.animate(withDuration: 0.25) {
+                self.loadingOverlay.alpha = 0
+            } completion: { _ in
+                self.loadingOverlay.isHidden = true
+            }
+        }
+    }
+
+    // Mirrors the Flutter SkipSegmentOverlay at the same 2x scale the Next Up
+    // card uses: a glass capsule with an accent focus ring, skip icon, label,
+    // optional inline timer, and an optional countdown ring that tracks the
+    // segment off the player position.
+    private func setupSkipSegment() {
+        skipSegmentButton.translatesAutoresizingMaskIntoConstraints = false
+        skipSegmentButton.layer.borderWidth = 4
+        skipSegmentButton.layer.borderColor = themeAccent.cgColor
+        skipSegmentButton.clipsToBounds = true
+        skipSegmentButton.isHidden = true
+        view.addSubview(skipSegmentButton)
+
+        skipSegmentGlass.translatesAutoresizingMaskIntoConstraints = false
+        skipSegmentButton.addSubview(skipSegmentGlass)
+
+        skipSegmentRow.translatesAutoresizingMaskIntoConstraints = false
+        skipSegmentRow.axis = .horizontal
+        skipSegmentRow.alignment = .center
+        skipSegmentButton.addSubview(skipSegmentRow)
+
+        let iconConfig = UIImage.SymbolConfiguration(pointSize: 34, weight: .semibold)
+        skipSegmentIcon.image = UIImage(systemName: "forward.end.fill", withConfiguration: iconConfig)
+        skipSegmentIcon.tintColor = themeAccent
+
+        skipSegmentLabel.font = .systemFont(ofSize: 30, weight: .semibold)
+        skipSegmentLabel.textColor = .white
+
+        skipSegmentTimerLabel.font = .monospacedDigitSystemFont(ofSize: 28, weight: .semibold)
+        skipSegmentTimerLabel.textColor = UIColor(white: 1, alpha: 0.5)
+
+        skipSegmentRingContainer.translatesAutoresizingMaskIntoConstraints = false
+        let ringPath = UIBezierPath(
+            arcCenter: CGPoint(x: skipRingSize / 2, y: skipRingSize / 2),
+            radius: skipRingSize / 2 - 3,
+            startAngle: -.pi / 2,
+            endAngle: .pi * 1.5,
+            clockwise: true)
+        for layer in [skipSegmentRingTrack, skipSegmentRing] {
+            layer.fillColor = UIColor.clear.cgColor
+            layer.lineWidth = 6
+            layer.frame = CGRect(x: 0, y: 0, width: skipRingSize, height: skipRingSize)
+            layer.path = ringPath.cgPath
+            skipSegmentRingContainer.layer.addSublayer(layer)
+        }
+        skipSegmentRingTrack.strokeColor = UIColor(white: 1, alpha: 0.16).cgColor
+        skipSegmentRing.strokeColor = themeAccent.cgColor
+
+        skipSegmentRingNumber.translatesAutoresizingMaskIntoConstraints = false
+        skipSegmentRingNumber.font = .monospacedDigitSystemFont(ofSize: 28, weight: .semibold)
+        skipSegmentRingNumber.textColor = .white
+        skipSegmentRingContainer.addSubview(skipSegmentRingNumber)
+
+        let ringIconConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
+        skipSegmentRingIcon.image = UIImage(systemName: "forward.end.fill", withConfiguration: ringIconConfig)
+        skipSegmentRingIcon.tintColor = themeAccent
+        skipSegmentRingIcon.translatesAutoresizingMaskIntoConstraints = false
+        skipSegmentRingContainer.addSubview(skipSegmentRingIcon)
+
+        for item in [skipSegmentIcon, skipSegmentLabel, skipSegmentTimerLabel, skipSegmentRingContainer] {
+            skipSegmentRow.addArrangedSubview(item)
+        }
+        skipSegmentRow.setCustomSpacing(18, after: skipSegmentIcon)
+        skipSegmentRow.setCustomSpacing(16, after: skipSegmentLabel)
+        skipSegmentRow.setCustomSpacing(26, after: skipSegmentTimerLabel)
+
+        NSLayoutConstraint.activate([
+            skipSegmentButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor, constant: -48),
+            skipSegmentButton.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor, constant: -240),
+            skipSegmentGlass.topAnchor.constraint(equalTo: skipSegmentButton.topAnchor),
+            skipSegmentGlass.bottomAnchor.constraint(equalTo: skipSegmentButton.bottomAnchor),
+            skipSegmentGlass.leadingAnchor.constraint(equalTo: skipSegmentButton.leadingAnchor),
+            skipSegmentGlass.trailingAnchor.constraint(equalTo: skipSegmentButton.trailingAnchor),
+            skipSegmentRow.topAnchor.constraint(
+                equalTo: skipSegmentButton.topAnchor, constant: 20),
+            skipSegmentRow.bottomAnchor.constraint(
+                equalTo: skipSegmentButton.bottomAnchor, constant: -20),
+            skipSegmentRow.leadingAnchor.constraint(
+                equalTo: skipSegmentButton.leadingAnchor, constant: 40),
+            skipSegmentRow.trailingAnchor.constraint(
+                equalTo: skipSegmentButton.trailingAnchor, constant: -32),
+            skipSegmentRingContainer.widthAnchor.constraint(equalToConstant: skipRingSize),
+            skipSegmentRingContainer.heightAnchor.constraint(equalToConstant: skipRingSize),
+            skipSegmentRingNumber.centerXAnchor.constraint(
+                equalTo: skipSegmentRingContainer.centerXAnchor),
+            skipSegmentRingNumber.centerYAnchor.constraint(
+                equalTo: skipSegmentRingContainer.centerYAnchor),
+            skipSegmentRingIcon.centerXAnchor.constraint(
+                equalTo: skipSegmentRingContainer.centerXAnchor),
+            skipSegmentRingIcon.centerYAnchor.constraint(
+                equalTo: skipSegmentRingContainer.centerYAnchor),
+        ])
+    }
+
+    private func setupLiveOverlays() {
+        channelBadge.translatesAutoresizingMaskIntoConstraints = false
+        channelBadge.font = .systemFont(ofSize: 26, weight: .bold)
+        channelBadge.textColor = .white
+        channelBadge.backgroundColor = UIColor(red: 0.9, green: 0.1, blue: 0.55, alpha: 1)
+        channelBadge.layer.cornerRadius = 6
+        channelBadge.clipsToBounds = true
+        channelBadge.setContentHuggingPriority(.required, for: .horizontal)
+
+        channelNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        channelNameLabel.font = .systemFont(ofSize: 42, weight: .bold)
+        channelNameLabel.textColor = .white
+        channelNameLabel.numberOfLines = 1
+
+        recordingDot.translatesAutoresizingMaskIntoConstraints = false
+        recordingDot.backgroundColor = UIColor(red: 0.95, green: 0.2, blue: 0.2, alpha: 1)
+        recordingDot.layer.cornerRadius = 9
+        recordingDot.isHidden = true
+        recordingDot.widthAnchor.constraint(equalToConstant: 18).isActive = true
+        recordingDot.heightAnchor.constraint(equalToConstant: 18).isActive = true
+
+        let spacer = UIView()
+        spacer.translatesAutoresizingMaskIntoConstraints = false
+        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
+        liveChannelRow.translatesAutoresizingMaskIntoConstraints = false
+        liveChannelRow.axis = .horizontal
+        liveChannelRow.alignment = .center
+        liveChannelRow.spacing = 18
+        liveChannelRow.addArrangedSubview(channelBadge)
+        liveChannelRow.addArrangedSubview(channelNameLabel)
+        liveChannelRow.addArrangedSubview(spacer)
+        liveChannelRow.addArrangedSubview(recordingDot)
+
+        programLabel.translatesAutoresizingMaskIntoConstraints = false
+        programLabel.font = .systemFont(ofSize: 28, weight: .semibold)
+        programLabel.textColor = UIColor(white: 1, alpha: 0.75)
+        programLabel.numberOfLines = 1
+
+        liveHeaderStack.translatesAutoresizingMaskIntoConstraints = false
+        liveHeaderStack.axis = .vertical
+        liveHeaderStack.alignment = .fill
+        liveHeaderStack.spacing = 10
+        liveHeaderStack.isHidden = true
+        liveHeaderStack.addArrangedSubview(liveChannelRow)
+        liveHeaderStack.addArrangedSubview(programLabel)
+        topContainer.addSubview(liveHeaderStack)
+
+        statsStack.translatesAutoresizingMaskIntoConstraints = false
+        statsStack.axis = .horizontal
+        statsStack.alignment = .center
+        statsStack.spacing = 12
+        statsStack.isHidden = true
+        osdContainer.addSubview(statsStack)
+
+        NSLayoutConstraint.activate([
+            liveHeaderStack.leadingAnchor.constraint(
+                equalTo: topContainer.leadingAnchor, constant: 90),
+            liveHeaderStack.trailingAnchor.constraint(
+                equalTo: topContainer.trailingAnchor, constant: -90),
+            liveHeaderStack.topAnchor.constraint(
+                equalTo: topContainer.safeAreaLayoutGuide.topAnchor, constant: 40),
+
+            statsStack.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            statsStack.bottomAnchor.constraint(
+                equalTo: scrubber.topAnchor, constant: -10),
+        ])
+    }
+
+    private func rebuildStats() {
+        statsStack.arrangedSubviews.forEach {
+            statsStack.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        for stat in streamStats {
+            statsStack.addArrangedSubview(makeStatChip(stat.label, stat.value))
+        }
+        statsStack.isHidden = true
+    }
+
+    private func makeStatChip(_ label: String, _ value: String) -> UIView {
+        let chip = UIView()
+        chip.translatesAutoresizingMaskIntoConstraints = false
+        chip.backgroundColor = UIColor(white: 1, alpha: 0.12)
+        chip.layer.cornerRadius = 8
+        let text = UILabel()
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.font = .systemFont(ofSize: 22, weight: .medium)
+        text.textColor = .white
+        text.text = "\(label): \(value)"
+        chip.addSubview(text)
+        NSLayoutConstraint.activate([
+            text.leadingAnchor.constraint(equalTo: chip.leadingAnchor, constant: 14),
+            text.trailingAnchor.constraint(equalTo: chip.trailingAnchor, constant: -14),
+            text.topAnchor.constraint(equalTo: chip.topAnchor, constant: 8),
+            text.bottomAnchor.constraint(equalTo: chip.bottomAnchor, constant: -8),
+        ])
+        return chip
+    }
+
+    private func setupTrickplay() {
+        trickplayContainer.translatesAutoresizingMaskIntoConstraints = false
+        trickplayContainer.backgroundColor = .black
+        trickplayContainer.layer.cornerRadius = 6
+        trickplayContainer.layer.borderWidth = 2
+        trickplayContainer.layer.borderColor = UIColor.white.cgColor
+        trickplayContainer.clipsToBounds = true
+        trickplayContainer.isHidden = true
+        osdContainer.addSubview(trickplayContainer)
+
+        trickplayImageView.translatesAutoresizingMaskIntoConstraints = false
+        trickplayImageView.contentMode = .scaleAspectFill
+        trickplayContainer.addSubview(trickplayImageView)
+
+        let center = trickplayContainer.centerXAnchor.constraint(
+            equalTo: scrubber.leadingAnchor)
+        let height = trickplayContainer.heightAnchor.constraint(
+            equalToConstant: trickplayWidth * 9 / 16)
+        trickplayCenterX = center
+        trickplayHeight = height
+        NSLayoutConstraint.activate([
+            center,
+            height,
+            trickplayContainer.widthAnchor.constraint(equalToConstant: trickplayWidth),
+            trickplayContainer.bottomAnchor.constraint(
+                equalTo: scrubber.topAnchor, constant: -14),
+            trickplayImageView.leadingAnchor.constraint(
+                equalTo: trickplayContainer.leadingAnchor),
+            trickplayImageView.trailingAnchor.constraint(
+                equalTo: trickplayContainer.trailingAnchor),
+            trickplayImageView.topAnchor.constraint(equalTo: trickplayContainer.topAnchor),
+            trickplayImageView.bottomAnchor.constraint(
+                equalTo: trickplayContainer.bottomAnchor),
+        ])
+    }
+
+    // Mirrors the Flutter NextUpOverlay layout at TV scale: a thumbnail on
+    // top (extended only), an UP NEXT eyebrow with the episode pill and the
+    // countdown, the title, then a Play Next button beside a close button.
+    private func setupNextUpCard() {
+        nextUpCard.translatesAutoresizingMaskIntoConstraints = false
+        nextUpCard.backgroundColor = UIColor(white: 0.08, alpha: 0.96)
+        nextUpCard.layer.cornerRadius = 18
+        nextUpCard.clipsToBounds = true
+        nextUpCard.isHidden = true
+        view.addSubview(nextUpCard)
+
+        nextUpImage.translatesAutoresizingMaskIntoConstraints = false
+        nextUpImage.contentMode = .scaleAspectFill
+        nextUpImage.clipsToBounds = true
+        nextUpCard.addSubview(nextUpImage)
+
+        let upNext = upNextLabel
+        upNext.translatesAutoresizingMaskIntoConstraints = false
+        upNext.text = promptStrings.upNext.uppercased()
+        upNext.font = .systemFont(ofSize: 20, weight: .bold)
+        upNext.textColor = themeAccent
+        nextUpCard.addSubview(upNext)
+
+        nextUpEpisodeLabel.translatesAutoresizingMaskIntoConstraints = false
+        nextUpEpisodeLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        nextUpEpisodeLabel.textColor = UIColor(white: 1, alpha: 0.75)
+        nextUpCard.addSubview(nextUpEpisodeLabel)
+
+        nextUpCountdownLabel.translatesAutoresizingMaskIntoConstraints = false
+        nextUpCountdownLabel.font = .systemFont(ofSize: 20, weight: .regular)
+        nextUpCountdownLabel.textColor = UIColor(white: 1, alpha: 0.6)
+        nextUpCountdownLabel.textAlignment = .right
+        nextUpCard.addSubview(nextUpCountdownLabel)
+
+        nextUpTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        nextUpTitleLabel.font = .systemFont(ofSize: 28, weight: .semibold)
+        nextUpTitleLabel.textColor = .white
+        nextUpTitleLabel.numberOfLines = 2
+        nextUpCard.addSubview(nextUpTitleLabel)
+
+        nextUpPlayButton.translatesAutoresizingMaskIntoConstraints = false
+        nextUpPlayButton.backgroundColor = themeAccent
+        nextUpPlayButton.layer.cornerRadius = 12
+        nextUpCard.addSubview(nextUpPlayButton)
+
+        nextUpPlayLabel.translatesAutoresizingMaskIntoConstraints = false
+        nextUpPlayLabel.text = promptStrings.playNext
+        nextUpPlayLabel.font = .systemFont(ofSize: 26, weight: .semibold)
+        nextUpPlayLabel.textColor = .black
+        nextUpPlayLabel.textAlignment = .center
+        nextUpPlayButton.addSubview(nextUpPlayLabel)
+
+        nextUpRing.fillColor = UIColor.clear.cgColor
+        nextUpRing.strokeColor = UIColor(white: 1, alpha: 0.9).cgColor
+        nextUpRing.lineWidth = 4
+        nextUpRing.strokeEnd = 0
+        nextUpPlayButton.layer.addSublayer(nextUpRing)
+
+        nextUpCancelButton.translatesAutoresizingMaskIntoConstraints = false
+        nextUpCancelButton.backgroundColor = UIColor(white: 0.25, alpha: 0.9)
+        nextUpCancelButton.layer.cornerRadius = 12
+        nextUpCard.addSubview(nextUpCancelButton)
+
+        nextUpCancelIcon.translatesAutoresizingMaskIntoConstraints = false
+        nextUpCancelIcon.image = UIImage(
+            systemName: "xmark",
+            withConfiguration: UIImage.SymbolConfiguration(
+                pointSize: 22, weight: .semibold))
+        nextUpCancelIcon.tintColor = .white
+        nextUpCancelButton.addSubview(nextUpCancelIcon)
+
+        let cardWidth = nextUpCard.widthAnchor.constraint(equalToConstant: 680)
+        nextUpCardWidth = cardWidth
+        let imageHeight = nextUpImage.heightAnchor.constraint(
+            equalToConstant: 680 * 9 / 16)
+        nextUpImageHeight = imageHeight
+
+        NSLayoutConstraint.activate([
+            nextUpCard.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor, constant: -90),
+            nextUpCard.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor, constant: -120),
+            cardWidth,
+
+            nextUpImage.topAnchor.constraint(equalTo: nextUpCard.topAnchor),
+            nextUpImage.leadingAnchor.constraint(equalTo: nextUpCard.leadingAnchor),
+            nextUpImage.trailingAnchor.constraint(equalTo: nextUpCard.trailingAnchor),
+            imageHeight,
+
+            upNext.leadingAnchor.constraint(
+                equalTo: nextUpCard.leadingAnchor, constant: 24),
+            upNext.topAnchor.constraint(
+                equalTo: nextUpImage.bottomAnchor, constant: 18),
+
+            nextUpEpisodeLabel.leadingAnchor.constraint(
+                equalTo: upNext.trailingAnchor, constant: 14),
+            nextUpEpisodeLabel.centerYAnchor.constraint(equalTo: upNext.centerYAnchor),
+
+            nextUpCountdownLabel.trailingAnchor.constraint(
+                equalTo: nextUpCard.trailingAnchor, constant: -24),
+            nextUpCountdownLabel.centerYAnchor.constraint(equalTo: upNext.centerYAnchor),
+
+            nextUpTitleLabel.leadingAnchor.constraint(equalTo: upNext.leadingAnchor),
+            nextUpTitleLabel.trailingAnchor.constraint(
+                equalTo: nextUpCard.trailingAnchor, constant: -24),
+            nextUpTitleLabel.topAnchor.constraint(
+                equalTo: upNext.bottomAnchor, constant: 8),
+
+            nextUpPlayButton.leadingAnchor.constraint(equalTo: upNext.leadingAnchor),
+            nextUpPlayButton.topAnchor.constraint(
+                equalTo: nextUpTitleLabel.bottomAnchor, constant: 18),
+            nextUpPlayButton.heightAnchor.constraint(equalToConstant: 64),
+            nextUpPlayButton.bottomAnchor.constraint(
+                equalTo: nextUpCard.bottomAnchor, constant: -20),
+
+            nextUpPlayLabel.leadingAnchor.constraint(
+                equalTo: nextUpPlayButton.leadingAnchor, constant: 28),
+            nextUpPlayLabel.trailingAnchor.constraint(
+                equalTo: nextUpPlayButton.trailingAnchor, constant: -28),
+            nextUpPlayLabel.centerYAnchor.constraint(
+                equalTo: nextUpPlayButton.centerYAnchor),
+
+            nextUpCancelButton.leadingAnchor.constraint(
+                equalTo: nextUpPlayButton.trailingAnchor, constant: 14),
+            nextUpCancelButton.centerYAnchor.constraint(
+                equalTo: nextUpPlayButton.centerYAnchor),
+            nextUpCancelButton.widthAnchor.constraint(equalToConstant: 64),
+            nextUpCancelButton.heightAnchor.constraint(equalToConstant: 64),
+
+            nextUpCancelIcon.centerXAnchor.constraint(
+                equalTo: nextUpCancelButton.centerXAnchor),
+            nextUpCancelIcon.centerYAnchor.constraint(
+                equalTo: nextUpCancelButton.centerYAnchor),
+        ])
+    }
+
+    private func setupPauseOverlay() {
+        pauseOverlay.translatesAutoresizingMaskIntoConstraints = false
+        pauseOverlay.alpha = 0
+        view.addSubview(pauseOverlay)
+
+        pauseImage.translatesAutoresizingMaskIntoConstraints = false
+        pauseImage.contentMode = .scaleAspectFill
+        pauseImage.layer.cornerRadius = 10
+        pauseImage.clipsToBounds = true
+        pauseOverlay.addSubview(pauseImage)
+
+        pauseTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        pauseTitleLabel.font = .systemFont(ofSize: 36, weight: .bold)
+        pauseTitleLabel.textColor = .white
+        pauseTitleLabel.numberOfLines = 2
+        pauseOverlay.addSubview(pauseTitleLabel)
+
+        pauseTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        pauseTextLabel.font = .systemFont(ofSize: 26, weight: .regular)
+        pauseTextLabel.textColor = UIColor(white: 1, alpha: 0.85)
+        pauseTextLabel.numberOfLines = 6
+        pauseOverlay.addSubview(pauseTextLabel)
+
+        NSLayoutConstraint.activate([
+            pauseOverlay.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: 90),
+            pauseOverlay.trailingAnchor.constraint(
+                lessThanOrEqualTo: view.trailingAnchor, constant: -90),
+            pauseOverlay.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
+
+            pauseImage.leadingAnchor.constraint(equalTo: pauseOverlay.leadingAnchor),
+            pauseImage.topAnchor.constraint(equalTo: pauseOverlay.topAnchor),
+            pauseImage.widthAnchor.constraint(equalToConstant: 300),
+            pauseImage.heightAnchor.constraint(equalToConstant: 169),
+            pauseImage.bottomAnchor.constraint(
+                lessThanOrEqualTo: pauseOverlay.bottomAnchor),
+
+            pauseTitleLabel.leadingAnchor.constraint(
+                equalTo: pauseImage.trailingAnchor, constant: 24),
+            pauseTitleLabel.topAnchor.constraint(equalTo: pauseImage.topAnchor),
+            pauseTitleLabel.widthAnchor.constraint(equalToConstant: 820),
+
+            pauseTextLabel.leadingAnchor.constraint(equalTo: pauseTitleLabel.leadingAnchor),
+            pauseTextLabel.trailingAnchor.constraint(equalTo: pauseTitleLabel.trailingAnchor),
+            pauseTextLabel.topAnchor.constraint(
+                equalTo: pauseTitleLabel.bottomAnchor, constant: 12),
+            pauseTextLabel.bottomAnchor.constraint(
+                lessThanOrEqualTo: pauseOverlay.bottomAnchor),
+        ])
+    }
+
+    private func layoutHeader() {
+        if isLive {
+            headerStack.isHidden = true
+            liveHeaderStack.isHidden = false
+            channelBadge.text = liveChannelNumber
+            channelBadge.isHidden = liveChannelNumber.isEmpty
+            channelNameLabel.text = headerPrimary
+            let programName = liveProgram?.name ?? headerSecondary
+            programLabel.text = programName
+            programLabel.isHidden = programName.isEmpty
+            recordingDot.isHidden = !(liveProgram?.hasTimer ?? false)
+            return
+        }
+
+        liveHeaderStack.isHidden = true
+        headerStack.isHidden = false
+        headerStack.arrangedSubviews.forEach {
+            headerStack.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        if hasLogo {
+            headerStack.addArrangedSubview(logoImageView)
+        } else if !headerPrimary.isEmpty {
+            titleLabel.text = headerPrimary
+            headerStack.addArrangedSubview(titleLabel)
+        }
+        if !headerSecondary.isEmpty {
+            subtitleLabel.text = headerSecondary
+            headerStack.addArrangedSubview(subtitleLabel)
+        }
+    }
+
+    private func iconName(for id: ControlId) -> String {
+        switch id {
+        case .prev: return "backward.end.fill"
+        case .skipBack: return "backward.fill"
+        case .playPause: return isPaused() ? "play.fill" : "pause.fill"
+        case .skipForward: return "forward.fill"
+        case .next: return "forward.end.fill"
+        case .speed: return "gauge.with.dots.needle.67percent"
+        case .chapters: return "list.bullet"
+        case .subtitles: return "captions.bubble"
+        case .audio: return "speaker.wave.2"
+        case .cast: return "person.2"
+        case .quality: return "line.3.horizontal.decrease"
+        case .zoom: return player.zoomMode.iconName
+        case .info: return "info.circle"
+        case .channels: return "list.bullet.rectangle"
+        case .favorite: return isFavorite ? "heart.fill" : "heart"
+        case .syncplay: return "person.2.wave.2"
+        }
+    }
+
+    private func makeControl(_ id: ControlId) -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.layer.cornerRadius = 32
+        let iconView = UIImageView()
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.contentMode = .scaleAspectFit
+        iconView.tintColor = .white
+        iconView.image = UIImage(
+            systemName: iconName(for: id),
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 27, weight: .medium))
+        container.addSubview(iconView)
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 64),
+            container.heightAnchor.constraint(equalToConstant: 64),
+            iconView.widthAnchor.constraint(equalToConstant: 38),
+            iconView.heightAnchor.constraint(equalToConstant: 38),
+            iconView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            iconView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+        ])
+        controlViews[id] = container
+        controlIcons[id] = iconView
+        return container
+    }
+
+    private func rebuildControls() {
+        controlStack.arrangedSubviews.forEach {
+            controlStack.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        controlViews.removeAll()
+        controlIcons.removeAll()
+
+        var ids: [ControlId] = []
+        if isLive {
+            ids.append(.playPause)
+            if !channelList.isEmpty { ids.append(.channels) }
+            if !streamInfoSections.isEmpty { ids.append(.info) }
+        } else {
+            if hasPrevious { ids.append(.prev) }
+            ids.append(.skipBack)
+            ids.append(.playPause)
+            ids.append(.skipForward)
+            if hasNext { ids.append(.next) }
+            if canFavorite { ids.append(.favorite) }
+            ids.append(.speed)
+            if chapters.count > 1 { ids.append(.chapters) }
+            if !subtitleTracks.isEmpty || canDownloadSubtitles { ids.append(.subtitles) }
+            if audioTracks.count > 1 { ids.append(.audio) }
+            if hasCast { ids.append(.cast) }
+            if syncPlayEnabled { ids.append(.syncplay) }
+            ids.append(.quality)
+            ids.append(.zoom)
+            if !streamInfoSections.isEmpty { ids.append(.info) }
+        }
+
+        controls = ids
+        for id in ids {
+            controlStack.addArrangedSubview(makeControl(id))
+        }
+
+        if !controls.indices.contains(focusedControlIndex) {
+            focusedControlIndex = controls.firstIndex(of: .playPause) ?? 0
+        }
+        updateFocusHighlight()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if didAttachSurface {
+            player.notifySurfaceReady()
+        }
+        gradientLayer.frame = osdContainer.bounds
+        topGradientLayer.frame = topContainer.bounds
+        layoutChapters()
+        updateTooltip()
+    }
+
+    func applyUiMetadata(_ args: [String: Any]) {
+        headerPrimary = (args["topTitle"] as? String) ?? ""
+        headerSecondary = (args["topSubtitle"] as? String) ?? ""
+
+        hasNext = (args["hasNext"] as? Bool) ?? false
+        hasPrevious = (args["hasPrevious"] as? Bool) ?? false
+        skipForwardMs = (args["skipForwardMs"] as? NSNumber)?.intValue ?? 30000
+        skipBackMs = (args["skipBackMs"] as? NSNumber)?.intValue ?? 10000
+        audioTracks = parseTracks(args["audioTracks"])
+        subtitleTracks = parseTracks(args["subtitleTracks"])
+        streamInfoSections = (args["streamInfoSections"] as? [[String: Any]]) ?? []
+        selectedBitrateMbps = (args["selectedBitrateMbps"] as? NSNumber)?.intValue ?? -1
+        hasCast = (args["hasCast"] as? Bool) ?? false
+        canFavorite = (args["canFavorite"] as? Bool) ?? false
+        isFavorite = (args["isFavorite"] as? Bool) ?? false
+        canDownloadSubtitles = (args["canDownloadSubtitles"] as? Bool) ?? false
+        if let sync = args["syncPlay"] as? [String: Any] {
+            syncPlayEnabled = true
+            syncPlayGroupName = (sync["groupName"] as? String) ?? "SyncPlay"
+            syncPlayParticipants = (sync["participants"] as? [String]) ?? []
+            syncPlayIgnoreWait = (sync["ignoreWait"] as? Bool) ?? false
+        } else {
+            syncPlayEnabled = false
+        }
+        castPeople = ((args["castPeople"] as? [[String: Any]]) ?? []).compactMap { e in
+            guard let name = e["name"] as? String, !name.isEmpty else { return nil }
+            return (
+                name: name,
+                subtitle: (e["subtitle"] as? String) ?? "",
+                imageUrl: (e["imageUrl"] as? String) ?? "",
+                personId: (e["personId"] as? String) ?? "")
+        }
+
+        chapters = ((args["chapters"] as? [[String: Any]]) ?? []).compactMap {
+            entry in
+            guard let startMs = (entry["startMs"] as? NSNumber)?.intValue else {
+                return nil
+            }
+            let title = (entry["title"] as? String) ?? ""
+            return (title: title, startMs: startMs)
+        }
+
+        parseTrickplay(args["trickplay"])
+        parsePauseMeta(args["pauseMeta"])
+        parseLive(args)
+
+        loadLogo((args["logoUrl"] as? String) ?? "")
+
+        if isViewLoaded {
+            layoutHeader()
+            rebuildControls()
+            rebuildStats()
+            view.setNeedsLayout()
+        }
+    }
+
+    private func parseLive(_ args: [String: Any]) {
+        isLive = (args["isLive"] as? Bool) ?? false
+        liveChannelNumber = (args["liveChannelNumber"] as? String) ?? ""
+
+        if let dict = args["liveProgram"] as? [String: Any],
+            let name = dict["name"] as? String
+        {
+            liveProgram = (
+                name: name,
+                episodeTitle: (dict["episodeTitle"] as? String) ?? "",
+                startMs: (dict["startMs"] as? NSNumber)?.intValue ?? 0,
+                endMs: (dict["endMs"] as? NSNumber)?.intValue ?? 0,
+                hasTimer: (dict["hasTimer"] as? Bool) ?? false
+            )
+        } else {
+            liveProgram = nil
+        }
+
+        channelList = ((args["channelList"] as? [[String: Any]]) ?? []).compactMap {
+            entry in
+            guard let id = entry["id"] as? String, !id.isEmpty else { return nil }
+            return (
+                id: id,
+                number: (entry["number"] as? String) ?? "",
+                name: (entry["name"] as? String) ?? "",
+                logoUrl: (entry["logoUrl"] as? String) ?? "",
+                programName: (entry["programName"] as? String) ?? "",
+                selected: (entry["selected"] as? Bool) ?? false
+            )
+        }
+
+        streamStats = ((args["streamStats"] as? [[String: Any]]) ?? []).compactMap {
+            entry in
+            guard let label = entry["label"] as? String else { return nil }
+            return (label: label, value: (entry["value"] as? String) ?? "")
+        }
+    }
+
+    private func parseTrickplay(_ raw: Any?) {
+        trickplaySheets.removeAll()
+        guard let dict = raw as? [String: Any],
+            let urls = dict["urls"] as? [String],
+            let width = (dict["width"] as? NSNumber)?.intValue,
+            let height = (dict["height"] as? NSNumber)?.intValue,
+            let cols = (dict["cols"] as? NSNumber)?.intValue,
+            let rows = (dict["rows"] as? NSNumber)?.intValue,
+            let intervalMs = (dict["intervalMs"] as? NSNumber)?.intValue,
+            width > 0, height > 0, cols > 0, rows > 0, intervalMs > 0
+        else {
+            trickplay = nil
+            return
+        }
+        let headers = (dict["headers"] as? [String: String]) ?? [:]
+        trickplay = TrickplayData(
+            urls: urls, headers: headers, width: width, height: height,
+            cols: cols, rows: rows, intervalMs: intervalMs)
+        trickplayHeight?.constant = trickplayWidth * CGFloat(height) / CGFloat(width)
+    }
+
+    private func parsePauseMeta(_ raw: Any?) {
+        guard let dict = raw as? [String: Any],
+            let overview = dict["overview"] as? String, !overview.isEmpty
+        else {
+            pauseMeta = nil
+            return
+        }
+        pauseMeta = (overview: overview, imageUrl: (dict["imageUrl"] as? String) ?? "")
+    }
+
+    func showSkipSegment(
+        label: String, countdownStyle: String, segmentStartMs: Int, segmentEndMs: Int
+    ) {
+        skipSegmentActive = true
+        skipSegmentLabel.text = label
+        skipSegmentCountdownStyle = countdownStyle
+        skipSegmentStartMs = segmentStartMs
+        skipSegmentEndMs = segmentEndMs
+        updateSkipSegmentCountdown()
+        guard skipSegmentButton.isHidden else { return }
+        skipSegmentButton.alpha = 0
+        skipSegmentButton.isHidden = false
+        UIView.animate(withDuration: 0.2) { self.skipSegmentButton.alpha = 1 }
+    }
+
+    private func updateSkipSegmentCountdown() {
+        guard skipSegmentActive else { return }
+        skipSegmentButton.layoutIfNeeded()
+        skipSegmentButton.layer.cornerRadius = min(56, skipSegmentButton.bounds.height / 2)
+
+        let durationMs = skipSegmentEndMs - skipSegmentStartMs
+        let showTimer =
+            skipSegmentCountdownStyle == "timer" || skipSegmentCountdownStyle == "both"
+        let showRing =
+            skipSegmentCountdownStyle == "progressBar" || skipSegmentCountdownStyle == "both"
+        guard durationMs > 0, showTimer || showRing else {
+            skipSegmentTimerLabel.isHidden = true
+            skipSegmentRingContainer.isHidden = true
+            return
+        }
+
+        let positionMs = Int(player.currentTime * 1000)
+        let remainingSec = min(max(0, (skipSegmentEndMs - positionMs) / 1000), durationMs / 1000)
+        let numberInRing = showTimer && showRing && remainingSec < 60
+        let progress = 1 - Double(positionMs - skipSegmentStartMs) / Double(durationMs)
+
+        skipSegmentTimerLabel.isHidden = !showTimer || numberInRing
+        if !skipSegmentTimerLabel.isHidden {
+            let text = remainingSec >= 60
+                ? "\(remainingSec / 60):" + String(format: "%02d", remainingSec % 60)
+                : ":" + String(format: "%02d", remainingSec)
+            skipSegmentTimerLabel.text = promptStrings.endsIn(text)
+        }
+
+        skipSegmentRingContainer.isHidden = !showRing
+        skipSegmentRingNumber.isHidden = !numberInRing
+        skipSegmentRingIcon.isHidden = numberInRing
+        if showRing {
+            skipSegmentRingNumber.text = "\(remainingSec)"
+            skipSegmentRing.strokeEnd = CGFloat(min(1, max(0, progress)))
+        }
+    }
+
+    func hideSkipSegment() {
+        skipSegmentActive = false
+        guard !skipSegmentButton.isHidden else { return }
+        UIView.animate(withDuration: 0.15) {
+            self.skipSegmentButton.alpha = 0
+        } completion: { _ in
+            self.skipSegmentButton.isHidden = true
+        }
+    }
+
+    private func loadImage(
+        _ urlString: String, headers: [String: String] = [:],
+        completion: @escaping (UIImage?) -> Void
+    ) {
+        guard !urlString.isEmpty, let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        var request = URLRequest(url: url)
+        for (key, value) in headers {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            let image = data.flatMap { UIImage(data: $0) }
+            DispatchQueue.main.async { completion(image) }
+        }.resume()
+    }
+
+    private func loadLogo(_ urlString: String) {
+        guard urlString != logoUrlString else { return }
+        logoUrlString = urlString
+        if urlString.isEmpty {
+            hasLogo = false
+            logoImageView.image = nil
+            layoutHeader()
+            return
+        }
+        let expected = urlString
+        loadImage(urlString) { [weak self] image in
+            guard let self, self.logoUrlString == expected else { return }
+            if let image {
+                self.logoImageView.image = image
+                self.hasLogo = true
+            } else {
+                self.hasLogo = false
+            }
+            self.layoutHeader()
+        }
+    }
+
+    private func parseTracks(_ raw: Any?)
+        -> [(index: Int, label: String, subtitle: String, selected: Bool)]
+    {
+        guard let arr = raw as? [[String: Any]] else { return [] }
+        return arr.compactMap { entry in
+            guard let index = (entry["index"] as? NSNumber)?.intValue else {
+                return nil
+            }
+            let label = (entry["label"] as? String) ?? "Track"
+            let subtitle = (entry["subtitle"] as? String) ?? ""
+            let selected = (entry["selected"] as? Bool) ?? false
+            return (index: index, label: label, subtitle: subtitle, selected: selected)
+        }
+    }
+
+    private func layoutChapters() {
+        chapterOverlay.subviews.forEach { $0.removeFromSuperview() }
+        let width = chapterOverlay.bounds.width
+        let durationMs = player.duration * 1000
+        guard width > 0, durationMs > 0, chapters.count > 1 else { return }
+        for chapter in chapters {
+            let fraction = min(1, max(0, Double(chapter.startMs) / durationMs))
+            if fraction <= 0 { continue }
+            let tick = UIView()
+            tick.backgroundColor = UIColor(white: 1, alpha: 0.9)
+            tick.frame = CGRect(
+                x: CGFloat(fraction) * width - 1,
+                y: 0,
+                width: 2,
+                height: chapterOverlay.bounds.height)
+            chapterOverlay.addSubview(tick)
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        player.notifySurfaceReady()
+        focusedZone = .buttons
+        focusedControlIndex = controls.firstIndex(of: .playPause) ?? 0
+        updateFocusHighlight()
+        showOsd()
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) {
+            [weak self] _ in
+            Task { @MainActor in self?.updateOsd() }
+        }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        updateTimer?.invalidate()
+        updateTimer = nil
+        scrubCommitTimer?.invalidate()
+        scrubCommitTimer = nil
+        scrubHoldTimer?.invalidate()
+        scrubHoldTimer = nil
+        player.stop()
+        onExit?()
+    }
+
+    private func setupSwipeGestures() {
+        // The pan begins after a few points of travel and would otherwise
+        // cancel the swipes, leaving flicks dead. Both recognize
+        // simultaneously instead, which is safe because the pan only acts
+        // once horizontal travel dominates and the button zone is not focused.
+        for direction in [
+            UISwipeGestureRecognizer.Direction.up, .down, .left, .right,
+        ] {
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            swipe.direction = direction
+            swipe.delegate = self
+            view.addGestureRecognizer(swipe)
+        }
+        // Drag on the remote touch surface to scrub continuously, mapping
+        // horizontal travel to timeline time.
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleScrubPan(_:)))
+        pan.allowedTouchTypes = [NSNumber(value: UITouch.TouchType.indirect.rawValue)]
+        pan.delegate = self
+        view.addGestureRecognizer(pan)
+        // The system dismisses a presented controller on menu through its own
+        // window level recognizer, and overriding pressesBegan can't stop it.
+        // Owning a menu recognizer here wins the arbitration, so back can hide
+        // the OSD instead of tearing down the player.
+        let menuTap = UITapGestureRecognizer(target: self, action: #selector(handleMenuTap))
+        menuTap.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue)]
+        view.addGestureRecognizer(menuTap)
+    }
+
+    @objc private func handleMenuTap() {
+        if nextUpVisible {
+            hideNextUpCard()
+            onNextUpDismiss?()
+            return
+        }
+        // Back dismisses the skip button for the rest of the segment, the way
+        // the Flutter player does. The segment state machine keeps it from
+        // showing again until the segment is left and reentered.
+        if skipSegmentActive {
+            hideSkipSegment()
+            return
+        }
+        if panScrubEngaged {
+            finishPanScrub(commit: false)
+            showOsd()
+            return
+        }
+        if scrubTargetMs != nil {
+            cancelScrub()
+            showOsd()
+            return
+        }
+        if !osdDismissed && isOsdOnScreen {
+            osdDismissed = true
+            hideOsd()
+            return
+        }
+        dismiss(animated: true)
+    }
+
+    @objc private func handleSwipe(_ recognizer: UISwipeGestureRecognizer) {
+        guard presentedViewController == nil, !nextUpVisible else { return }
+        switch recognizer.direction {
+        case .up:
+            if !isLive {
+                focusedZone = .scrubber
+                updateFocusHighlight()
+            }
+            showOsd()
+        case .down:
+            focusedZone = .buttons
+            updateFocusHighlight()
+            showOsd()
+        case .left, .right:
+            // Horizontal flicks travel the action buttons. Scrubbing is the
+            // pan's job, and an engaged pan owns the scrubber zone anyway.
+            guard focusedZone == .buttons, isOsdOnScreen else { return }
+            handleHorizontal(forward: recognizer.direction == .right)
+            showOsd()
+        default:
+            break
+        }
+    }
+
+    @objc private func handleScrubPan(_ recognizer: UIPanGestureRecognizer) {
+        // Teardown sits above the guard so a card or modal appearing mid-pan
+        // can't strand the engaged state and misroute the next press.
+        switch recognizer.state {
+        case .ended, .cancelled, .failed:
+            finishPanScrub()
+            return
+        default:
+            break
+        }
+        guard presentedViewController == nil, !nextUpVisible, !isLive else { return }
+        switch recognizer.state {
+        case .began:
+            panScrubEngaged = false
+            panScrubLastTranslationX = 0
+        case .changed:
+            let t = recognizer.translation(in: view)
+            if !panScrubEngaged {
+                // Engage only once horizontal travel clearly dominates and the
+                // buttons aren't focused, so swipes keep switching zones and
+                // travelling the buttons instead of scrubbing.
+                guard abs(t.x) > 24, abs(t.x) > abs(t.y),
+                    focusedZone == .scrubber || !isOsdOnScreen
+                else { return }
+                panScrubEngaged = true
+                zoneBeforePanScrub = focusedZone
+                focusedZone = .scrubber
+                updateFocusHighlight()
+                showOsd()
+                panScrubLastTranslationX = t.x
+                return
+            }
+            let dx = t.x - panScrubLastTranslationX
+            panScrubLastTranslationX = t.x
+            let width = max(1, view.bounds.width)
+            let durationMs = max(1, Int(player.duration * 1000))
+            // A full-width sweep covers the larger of 90s or 1/12 of the runtime,
+            // so short clips stay fine-grained and long movies still move quickly.
+            let sweepMs = max(90_000, durationMs / 12)
+            let boost = 1 + min(3, abs(recognizer.velocity(in: view).x) / 1500)
+            let deltaMs = Int(dx / width * CGFloat(sweepMs) * boost)
+            if deltaMs != 0 {
+                adjustScrub(byMs: deltaMs)
+            }
+        default:
+            break
+        }
+    }
+
+    private func finishPanScrub(commit: Bool = true) {
+        if panScrubEngaged {
+            if commit {
+                commitScrub()
+            } else {
+                cancelScrub()
+            }
+            focusedZone = zoneBeforePanScrub ?? .buttons
+            updateFocusHighlight()
+        }
+        panScrubEngaged = false
+        zoneBeforePanScrub = nil
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if presentedViewController != nil {
+            super.pressesBegan(presses, with: event)
+            return
+        }
+        // While the Next Up card is up it owns the remote. Every press is
+        // consumed here so nothing falls through to scrubbing, OSD handling,
+        // or the default menu behavior underneath the card.
+        if nextUpVisible {
+            for press in presses {
+                switch press.type {
+                case .select:
+                    hideNextUpCard()
+                    if nextUpFocusOnPlay {
+                        onNextUpPlay?()
+                    } else {
+                        onNextUpCancel?()
+                    }
+                case .leftArrow:
+                    nextUpFocusOnPlay = true
+                    updateNextUpFocusHighlight()
+                case .rightArrow:
+                    nextUpFocusOnPlay = false
+                    updateNextUpFocusHighlight()
+                default:
+                    // Menu is handled by the tap recognizer.
+                    break
+                }
+            }
+            return
+        }
+        for press in presses {
+            // A press while a touch pan is scrubbing resolves the pan first so
+            // the press acts on the restored zone. Select means commit the
+            // seek, anything else commits and proceeds. Menu belongs to the
+            // tap recognizer, which cancels the pan itself.
+            if panScrubEngaged && press.type != .menu {
+                finishPanScrub()
+                if press.type == .select {
+                    showOsd()
+                    return
+                }
+            }
+            switch press.type {
+            case .menu:
+                // Consumed so the down press can't reach the system while the
+                // recognizer decides on release.
+                return
+            case .upArrow:
+                if isLive {
+                    showOsd()
+                    return
+                }
+                focusedZone = .scrubber
+                updateFocusHighlight()
+                showOsd()
+                return
+            case .downArrow:
+                focusedZone = .buttons
+                updateFocusHighlight()
+                showOsd()
+                return
+            case .playPause:
+                togglePlayPause()
+                if !isOsdOnScreen {
+                    focusedZone = .scrubber
+                } else {
+                    focusedZone = .buttons
+                    focusedControlIndex = controls.firstIndex(of: .playPause) ?? 0
+                }
+                updateFocusHighlight()
+                showOsd()
+                return
+            case .select:
+                if !isOsdOnScreen {
+                    togglePlayPause()
+                    focusedZone = .scrubber
+                    updateFocusHighlight()
+                    showOsd()
+                    return
+                }
+                if skipSegmentActive {
+                    hideSkipSegment()
+                    onSkipSegmentSelect?()
+                    showOsd()
+                    return
+                }
+                handleSelect()
+                showOsd()
+                return
+            case .leftArrow:
+                handleHorizontal(forward: false)
+                if focusedZone == .scrubber { beginScrubHold(forward: false) }
+                showOsd()
+                return
+            case .rightArrow:
+                handleHorizontal(forward: true)
+                if focusedZone == .scrubber { beginScrubHold(forward: true) }
+                showOsd()
+                return
+            default:
+                break
+            }
+        }
+        super.pressesBegan(presses, with: event)
+    }
+
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        endScrubHold()
+        super.pressesEnded(presses, with: event)
+    }
+
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        endScrubHold()
+        super.pressesCancelled(presses, with: event)
+    }
+
+    // Hold the D-pad left/right edge to scrub continuously (for users who click
+    // the ring instead of swiping); steps accelerate the longer it is held.
+    private func beginScrubHold(forward: Bool) {
+        guard !isLive else { return }
+        scrubHoldTimer?.invalidate()
+        scrubHoldForward = forward
+        scrubHoldStart = ProcessInfo.processInfo.systemUptime
+        scrubHoldTimer = Timer.scheduledTimer(withTimeInterval: 0.08, repeats: true) {
+            [weak self] _ in
+            Task { @MainActor in self?.tickScrubHold() }
+        }
+    }
+
+    private func tickScrubHold() {
+        let held = ProcessInfo.processInfo.systemUptime - scrubHoldStart
+        guard held >= 0.4 else { return }
+        let base = Double(scrubHoldForward ? skipForwardMs : skipBackMs)
+        let accel = min(6.0, 1.0 + held * 1.5)
+        let deltaMs = Int(base * 0.25 * accel) * (scrubHoldForward ? 1 : -1)
+        adjustScrub(byMs: deltaMs)
+        showOsd()
+    }
+
+    private func endScrubHold() {
+        guard scrubHoldTimer != nil else { return }
+        scrubHoldTimer?.invalidate()
+        scrubHoldTimer = nil
+        if scrubTargetMs != nil { commitScrub() }
+    }
+
+    private func handleSelect() {
+        switch focusedZone {
+        case .scrubber:
+            if scrubTargetMs != nil {
+                commitScrub()
+            } else {
+                togglePlayPause()
+            }
+        case .buttons:
+            guard controls.indices.contains(focusedControlIndex) else { return }
+            activate(controls[focusedControlIndex])
+        }
+    }
+
+    private func handleHorizontal(forward: Bool) {
+        switch focusedZone {
+        case .scrubber:
+            adjustScrub(byMs: forward ? skipForwardMs : -skipBackMs)
+        case .buttons:
+            let next = focusedControlIndex + (forward ? 1 : -1)
+            focusedControlIndex = min(controls.count - 1, max(0, next))
+            updateFocusHighlight()
+        }
+    }
+
+    private func activate(_ id: ControlId) {
+        switch id {
+        case .prev:
+            onPrevious?()
+        case .skipBack:
+            adjustScrub(byMs: -skipBackMs)
+        case .playPause:
+            togglePlayPause()
+        case .skipForward:
+            adjustScrub(byMs: skipForwardMs)
+        case .next:
+            onNext?()
+        case .speed:
+            presentSpeedMenu()
+        case .chapters:
+            presentChapterMenu()
+        case .subtitles:
+            presentSubtitleMenu()
+        case .audio:
+            presentAudioMenu()
+        case .cast:
+            presentCastPanel()
+        case .quality:
+            presentQualityMenu()
+        case .zoom:
+            player.cycleZoomMode()
+            controlIcons[.zoom]?.image = UIImage(
+                systemName: player.zoomMode.iconName,
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 27, weight: .medium))
+        case .info:
+            presentInfoPanel()
+        case .channels:
+            onOpenGuide?()
+        case .favorite:
+            onToggleFavorite?()
+        case .syncplay:
+            presentSyncPlay()
+        }
+    }
+
+    // The Dart side pauses before requesting this and resumes on Continue, so
+    // the modal never touches the transport itself. Returning true is the
+    // promise that the prompt will be on screen, which the Dart side needs
+    // before it blocks waiting for an answer.
+    func presentStillWatching() -> Bool {
+        guard !stillWatchingShown else { return true }
+        stillWatchingShown = true
+        hideNextUpCard()
+        if let presented = presentedViewController {
+            presented.dismiss(animated: false) { [weak self] in
+                self?.presentStillWatchingPanel()
+            }
+        } else {
+            presentStillWatchingPanel()
+        }
+        return true
+    }
+
+    private func presentStillWatchingPanel() {
+        let panel = StillWatchingViewController(
+            strings: promptStrings,
+            accent: themeAccent,
+            surface: hasThemeConfig ? glassSurface : UIColor(white: 0.1, alpha: 1),
+            onContinue: { [weak self] in
+                guard let self else { return }
+                self.stillWatchingShown = false
+                self.onStillWatchingContinue?()
+            },
+            onExit: { [weak self] in
+                guard let self else { return }
+                self.stillWatchingShown = false
+                self.onStillWatchingStop?()
+            })
+        panel.modalPresentationStyle = .overFullScreen
+        present(panel, animated: true)
+    }
+
+    private func presentSyncPlay() {
+        let panel = SyncPlayPanelViewController(
+            groupName: syncPlayGroupName,
+            participants: syncPlayParticipants,
+            ignoreWait: syncPlayIgnoreWait,
+            onIgnoreWait: { [weak self] value in self?.onSyncplayIgnoreWait?(value) },
+            onLeave: { [weak self] in self?.onSyncplayLeave?() })
+        panel.modalPresentationStyle = .overFullScreen
+        present(panel, animated: true)
+    }
+
+    private func presentChannelList() {
+        guard !channelList.isEmpty else { return }
+        let panel = ChannelListViewController(channels: channelList) {
+            [weak self] channelId in
+            self?.onSelectChannel?(channelId)
+        }
+        panel.modalPresentationStyle = .overFullScreen
+        present(panel, animated: true)
+    }
+
+    private func updateFocusHighlight() {
+        for (id, container) in controlViews {
+            let isFocused =
+                focusedZone == .buttons && controls.indices.contains(focusedControlIndex)
+                && controls[focusedControlIndex] == id
+            container.backgroundColor =
+                isFocused ? .white : UIColor(white: 1, alpha: 0)
+            controlIcons[id]?.tintColor = isFocused ? .black : UIColor(white: 1, alpha: 0.85)
+            container.transform =
+                isFocused ? CGAffineTransform(scaleX: 1.12, y: 1.12) : .identity
+        }
+        let scrubFocused = focusedZone == .scrubber
+        scrubber.transform =
+            scrubFocused ? CGAffineTransform(scaleX: 1, y: 2.0) : .identity
+        scrubber.trackTintColor =
+            scrubFocused ? UIColor(white: 1, alpha: 0.45) : UIColor(white: 1, alpha: 0.25)
+        updateTooltip()
+    }
+
+    private func tooltipText(for id: ControlId) -> String {
+        switch id {
+        case .prev: return "Previous"
+        case .skipBack: return "Seek Back"
+        case .playPause: return isPaused() ? "Play" : "Pause"
+        case .skipForward: return "Seek Forward"
+        case .next: return "Next"
+        case .speed: return "Playback Speed"
+        case .chapters: return "Chapters"
+        case .subtitles: return "Subtitles"
+        case .audio: return "Audio"
+        case .cast: return "Cast & Crew"
+        case .quality: return "Playback Quality"
+        case .zoom: return "Zoom Mode"
+        case .info: return "Playback Information"
+        case .channels: return "Guide"
+        case .favorite: return isFavorite ? "Remove from Favorites" : "Add to Favorites"
+        case .syncplay: return "SyncPlay"
+        }
+    }
+
+    private func updateTooltip() {
+        guard focusedZone == .buttons,
+            controls.indices.contains(focusedControlIndex),
+            let control = controlViews[controls[focusedControlIndex]]
+        else {
+            tooltipView.isHidden = true
+            return
+        }
+        tooltipLabel.text = tooltipText(for: controls[focusedControlIndex])
+        tooltipLabel.sizeToFit()
+        let padH: CGFloat = 16
+        let padV: CGFloat = 8
+        let width = tooltipLabel.bounds.width + padH * 2
+        let height = tooltipLabel.bounds.height + padV * 2
+        let controlFrame = control.convert(control.bounds, to: osdContainer)
+        let scrubFrame = scrubber.convert(scrubber.bounds, to: osdContainer)
+        tooltipLabel.frame = CGRect(
+            x: padH, y: padV, width: tooltipLabel.bounds.width,
+            height: tooltipLabel.bounds.height)
+        let minX: CGFloat = 90
+        let maxX = osdContainer.bounds.width - 90 - width
+        let x = min(max(minX, controlFrame.midX - width / 2), max(minX, maxX))
+        tooltipView.frame = CGRect(
+            x: x, y: scrubFrame.minY - height - 16,
+            width: width, height: height)
+        tooltipView.isHidden = false
+    }
+
+    private func togglePlayPause() {
+        switch player.state {
+        case .playing, .buffering, .opening:
+            player.pause()
+        default:
+            player.resume()
+        }
+    }
+
+    private func isPaused() -> Bool {
+        player.state == .paused
+    }
+
+    private func adjustScrub(byMs deltaMs: Int) {
+        guard !isLive else { return }
+        let durationMs = Int(player.duration * 1000)
+        guard durationMs > 0 else { return }
+        let base = scrubTargetMs ?? Int(player.currentTime * 1000)
+        scrubTargetMs = min(durationMs, max(0, base + deltaMs))
+        renderProgress()
+        updateTrickplay()
+        scrubCommitTimer?.invalidate()
+        scrubCommitTimer = Timer.scheduledTimer(
+            withTimeInterval: 0.6, repeats: false
+        ) { [weak self] _ in
+            Task { @MainActor in self?.commitScrub() }
+        }
+    }
+
+    private func commitScrub() {
+        scrubCommitTimer?.invalidate()
+        scrubCommitTimer = nil
+        guard let target = scrubTargetMs else { return }
+        scrubTargetMs = nil
+        trickplayContainer.isHidden = true
+        player.seek(to: Double(target) / 1000.0)
+        onUserSeek?()
+    }
+
+    private func cancelScrub() {
+        scrubHoldTimer?.invalidate()
+        scrubHoldTimer = nil
+        scrubCommitTimer?.invalidate()
+        scrubCommitTimer = nil
+        scrubTargetMs = nil
+        trickplayContainer.isHidden = true
+        renderProgress()
+    }
+
+    private func updateTrickplay() {
+        guard let tp = trickplay, let target = scrubTargetMs, player.duration > 0 else {
+            trickplayContainer.isHidden = true
+            return
+        }
+        let tilesPerImage = tp.cols * tp.rows
+        guard tilesPerImage > 0 else { return }
+        let tileIndex = target / tp.intervalMs
+        let imageIndex = tileIndex / tilesPerImage
+        let tileOffset = tileIndex % tilesPerImage
+        let col = tileOffset % tp.cols
+        let row = tileOffset / tp.cols
+
+        let width = scrubber.bounds.width
+        if width > 0 {
+            let fraction = CGFloat(min(1, max(0, Double(target) / (player.duration * 1000))))
+            let half: CGFloat = 120
+            let x = min(width - half, max(half, fraction * width))
+            trickplayCenterX?.constant = x
+        }
+
+        if let sheet = trickplaySheets[imageIndex] {
+            cropTrickplay(sheet, col: col, row: row, data: tp)
+            trickplayContainer.isHidden = false
+        } else {
+            trickplayContainer.isHidden = true
+            loadTrickplaySheet(imageIndex)
+        }
+    }
+
+    private func cropTrickplay(_ sheet: UIImage, col: Int, row: Int, data: TrickplayData) {
+        guard let cg = sheet.cgImage else { return }
+        let rect = CGRect(
+            x: col * data.width, y: row * data.height,
+            width: data.width, height: data.height)
+        if let cropped = cg.cropping(to: rect) {
+            trickplayImageView.image = UIImage(cgImage: cropped)
+        }
+    }
+
+    private func loadTrickplaySheet(_ index: Int) {
+        guard let tp = trickplay, index >= 0, index < tp.urls.count,
+            trickplaySheets[index] == nil
+        else { return }
+        loadImage(tp.urls[index], headers: tp.headers) { [weak self] image in
+            guard let self, let image else { return }
+            self.trickplaySheets[index] = image
+            if self.scrubTargetMs != nil {
+                self.updateTrickplay()
+            }
+        }
+    }
+
+    private func setSubtitlesRaised(_ raised: Bool) {
+        guard raised != subtitlesRaised else { return }
+        subtitlesRaised = raised
+        let pos = raised ? min(baseSubtitlePos, 70) : baseSubtitlePos
+        player.setSubtitlePosition(pos)
+    }
+
+    private func hideOsd() {
+        setSubtitlesRaised(false)
+        UIView.animate(withDuration: 0.3) {
+            self.osdContainer.alpha = 0
+            self.topContainer.alpha = 0
+        }
+    }
+
+    // Alpha drops to 0 the moment the hide animation starts while the OSD
+    // keeps rendering through the fade, so the presentation layer is what
+    // says whether the user can still see it.
+    private var isOsdOnScreen: Bool {
+        if osdContainer.alpha > 0.5 { return true }
+        guard let presented = osdContainer.layer.presentation() else { return false }
+        return presented.opacity > 0.1
+    }
+
+    private func trackActionTitle(
+        _ track: (index: Int, label: String, subtitle: String, selected: Bool)
+    ) -> String {
+        let prefix = track.selected ? "\u{2713} " : ""
+        if track.subtitle.isEmpty {
+            return "\(prefix)\(track.label)"
+        }
+        return "\(prefix)\(track.label) · \(track.subtitle)"
+    }
+
+    private func presentAudioMenu() {
+        let sheet = UIAlertController(
+            title: "Audio", message: nil, preferredStyle: .actionSheet)
+        for track in audioTracks {
+            sheet.addAction(
+                UIAlertAction(title: trackActionTitle(track), style: .default) {
+                    [weak self] _ in
+                    self?.onSelectAudio?(track.index)
+                })
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func presentSubtitleMenu() {
+        let sheet = UIAlertController(
+            title: "Subtitles", message: nil, preferredStyle: .actionSheet)
+        let anySelected = subtitleTracks.contains { $0.selected }
+        let offTitle = (anySelected ? "" : "\u{2713} ") + "Off"
+        sheet.addAction(
+            UIAlertAction(title: offTitle, style: .default) { [weak self] _ in
+                self?.onSelectSubtitle?(-1)
+            })
+        for track in subtitleTracks {
+            sheet.addAction(
+                UIAlertAction(title: trackActionTitle(track), style: .default) {
+                    [weak self] _ in
+                    self?.onSelectSubtitle?(track.index)
+                })
+        }
+        if canDownloadSubtitles {
+            sheet.addAction(
+                UIAlertAction(title: "Download Subtitles\u{2026}", style: .default) {
+                    [weak self] _ in
+                    self?.beginSubtitleSearch()
+                })
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func beginSubtitleSearch() {
+        let alert = UIAlertController(
+            title: "Searching for Subtitles\u{2026}", message: nil,
+            preferredStyle: .alert)
+        subtitleSearchingAlert = alert
+        present(alert, animated: true)
+        onSearchSubtitles?()
+    }
+
+    func presentRemoteSubtitleResults(_ results: [[String: Any]]) {
+        let show = { [weak self] in
+            guard let self else { return }
+            if results.isEmpty {
+                let alert = UIAlertController(
+                    title: "No Subtitles Found", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                self.present(alert, animated: true)
+                return
+            }
+            let sheet = UIAlertController(
+                title: "Download Subtitles", message: nil, preferredStyle: .actionSheet)
+            for result in results {
+                guard let id = result["id"] as? String, !id.isEmpty else { continue }
+                let label = (result["label"] as? String) ?? "Subtitle"
+                let subtitle = (result["subtitle"] as? String) ?? ""
+                let title = subtitle.isEmpty ? label : "\(label) \u{00B7} \(subtitle)"
+                sheet.addAction(
+                    UIAlertAction(title: title, style: .default) { [weak self] _ in
+                        self?.onDownloadSubtitle?(id)
+                    })
+            }
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            self.present(sheet, animated: true)
+        }
+        if let searching = subtitleSearchingAlert {
+            subtitleSearchingAlert = nil
+            searching.dismiss(animated: true) { show() }
+        } else {
+            show()
+        }
+    }
+
+    private func presentChapterMenu() {
+        let sheet = UIAlertController(
+            title: "Chapters", message: nil, preferredStyle: .actionSheet)
+        for chapter in chapters {
+            let stamp = formatTime(Double(chapter.startMs) / 1000.0)
+            sheet.addAction(
+                UIAlertAction(title: "\(chapter.title) · \(stamp)", style: .default) {
+                    [weak self] _ in
+                    self?.player.seek(to: Double(chapter.startMs) / 1000.0)
+                    self?.onUserSeek?()
+                    self?.showOsd()
+                })
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func presentSpeedMenu() {
+        let sheet = UIAlertController(
+            title: "Playback Speed", message: nil, preferredStyle: .actionSheet)
+        let speeds: [Double] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
+        let current = Double(player.rate)
+        for speed in speeds {
+            let check = abs(speed - current) < 0.01 ? "\u{2713} " : ""
+            let label = speed == 1.0 ? "Normal" : String(format: "%gx", speed)
+            sheet.addAction(
+                UIAlertAction(title: "\(check)\(label)", style: .default) {
+                    [weak self] _ in
+                    self?.onSetSpeed?(speed)
+                })
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func presentQualityMenu() {
+        let sheet = UIAlertController(
+            title: "Quality", message: nil, preferredStyle: .actionSheet)
+        let options = [-1, 40, 20, 12, 8, 4, 2]
+        for mbps in options {
+            let check = mbps == selectedBitrateMbps ? "\u{2713} " : ""
+            let label = mbps < 0 ? "Auto" : "\(mbps) Mbps"
+            sheet.addAction(
+                UIAlertAction(title: "\(check)\(label)", style: .default) {
+                    [weak self] _ in
+                    self?.onSetBitrate?(mbps)
+                })
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func presentInfoPanel() {
+        var sections: [(title: String, rows: [(label: String, value: String)])] = []
+        for section in streamInfoSections {
+            let title = (section["title"] as? String) ?? ""
+            var rows: [(label: String, value: String)] = []
+            for row in (section["rows"] as? [[String: Any]]) ?? [] {
+                rows.append(
+                    (
+                        label: (row["label"] as? String) ?? "",
+                        value: (row["value"] as? String) ?? ""
+                    ))
+            }
+            if !rows.isEmpty { sections.append((title: title, rows: rows)) }
+        }
+
+        let colorRows = colorTelemetryRows()
+        if let idx = sections.firstIndex(where: { $0.title == "Video" }) {
+            sections[idx].rows += colorRows
+        } else if !colorRows.isEmpty {
+            sections.append((title: "Color & HDR", rows: colorRows))
+        }
+
+        let deviceRows = deviceDiagnosticRows()
+        if let idx = sections.firstIndex(where: { $0.title == "Diagnostics" }) {
+            sections[idx].rows = deviceRows + sections[idx].rows
+        } else if !deviceRows.isEmpty {
+            sections.append((title: "Diagnostics", rows: deviceRows))
+        }
+
+        let panel = InfoPanelViewController(sections: sections)
+        panel.modalPresentationStyle = .overFullScreen
+        present(panel, animated: true)
+    }
+
+    private func deviceDiagnosticRows() -> [(label: String, value: String)] {
+        var rows: [(label: String, value: String)] = [
+            ("OS", UIDevice.current.systemVersion),
+            ("Model", VideoCapabilityDetector.deviceModelIdentifier()),
+            ("Generation", VideoCapabilityDetector.currentGeneration().rawValue),
+            ("Engine", "AetherEngine"),
+        ]
+        if let screen = view.window?.screen {
+            if let mode = screen.currentMode {
+                rows.append(
+                    ("Sink Mode", "\(Int(mode.size.width))x\(Int(mode.size.height))"))
+            }
+            rows.append(("Sink Max FPS", "\(screen.maximumFramesPerSecond)"))
+            rows.append(
+                ("EDR Potential", String(format: "%.2f", screen.potentialEDRHeadroom)))
+            rows.append(
+                ("EDR Current", String(format: "%.2f", screen.currentEDRHeadroom)))
+        }
+
+        // Display-criteria switching is engine-owned, with AetherEngine as
+        // the sole writer. The panel-mode outcome shows in the EDR rows.
+        if let window = view.window {
+            rows.append(
+                ("Match Dynamic Range",
+                 window.avDisplayManager.isDisplayCriteriaMatchingEnabled ? "on" : "off"))
+        }
+
+        let session = AVAudioSession.sharedInstance()
+        rows.append(("Max Output Channels", "\(session.maximumOutputNumberOfChannels)"))
+        let routeChannels = session.currentRoute.outputs.reduce(0) {
+            $0 + ($1.channels?.count ?? 0)
+        }
+        rows.append(("Route Channels", "\(routeChannels)"))
+        return rows
+    }
+
+    private func colorTelemetryRows() -> [(label: String, value: String)] {
+        let telemetry = player.dynamicRangeTelemetrySnapshot()
+        func value(_ key: String) -> String? {
+            guard let v = telemetry[key], !v.isEmpty,
+                v != "unknown", v != "no_engine"
+            else { return nil }
+            return v
+        }
+        func pair(_ a: String, _ b: String) -> String? {
+            guard let first = value(a) else { return nil }
+            return "\(first) / \(value(b) ?? "?")"
+        }
+
+        var rows: [(label: String, value: String)] = []
+        if let v = value("backend") { rows.append(("Playback Path", v)) }
+        if let v = pair("source_format", "video_format") {
+            rows.append(("Source / Output Format", v))
+        }
+        if let v = value("dv_profile") { rows.append(("Dolby Vision", v)) }
+        if let v = value("source_fps") { rows.append(("Source FPS", v)) }
+        if let v = value("source_bitrate") { rows.append(("Source Bitrate", v)) }
+        if let v = value("video_decoder") { rows.append(("Video Decoder", v)) }
+        if let v = value("audio_decoder") { rows.append(("Audio Decoder", v)) }
+        if let v = value("indicated_bitrate") {
+            rows.append(("Indicated Bitrate", v))
+        }
+        if let v = value("dropped_frames") { rows.append(("Frames Dropped", v)) }
+        if let v = value("stalls") { rows.append(("Stalls", v)) }
+        if let v = value("telemetry_observedFps") {
+            rows.append(("Observed FPS", v))
+        }
+        if let v = value("telemetry_avSyncGapMs") {
+            rows.append(("A/V Sync Gap (ms)", v))
+        }
+        if let v = value("telemetry_forwardBufferSeconds") {
+            rows.append(("Forward Buffer (s)", v))
+        }
+        if let v = value("telemetry_networkThroughputMbps") {
+            rows.append(("Network (Mbps)", v))
+        }
+        if let v = value("telemetry_rssMb") { rows.append(("Memory (MB)", v)) }
+        if let v = value("is_live") { rows.append(("Live", v)) }
+        if let v = value("last_error") { rows.append(("Last Error", v)) }
+
+        return rows
+    }
+
+    private func presentCastPanel() {
+        let panel = CastPanelViewController(people: castPeople) { [weak self] personId in
+            guard let self else { return }
+            self.dismiss(animated: true) {
+                self.onOpenCastPerson?(personId)
+            }
+        }
+        panel.modalPresentationStyle = .overFullScreen
+        present(panel, animated: true)
+    }
+
+    // Content is reassigned on every call so the card can never freeze on a
+    // previous episode. The countdown here is display only, the Dart timer
+    // decides what actually happens when it runs out.
+    func showNextUpCard(
+        title: String, episodeInfo: String, imageUrl: String,
+        isMinimal: Bool, countdownStyle: String, timeoutMs: Int
+    ) {
+        // Drop any in-flight touch scrub so its pending seek can't land
+        // underneath the card.
+        finishPanScrub(commit: false)
+        nextUpVisible = true
+        nextUpFocusOnPlay = true
+        nextUpCountdownStyle = countdownStyle
+        nextUpCountdownTotalMs = timeoutMs
+        nextUpCountdownDeadline =
+            timeoutMs > 0 ? CACurrentMediaTime() + Double(timeoutMs) / 1000.0 : 0
+        nextUpTitleLabel.text = title
+        nextUpTitleLabel.numberOfLines = isMinimal ? 1 : 2
+        nextUpEpisodeLabel.text = episodeInfo
+        nextUpEpisodeLabel.isHidden = episodeInfo.isEmpty
+        nextUpCountdownLabel.text = ""
+        let cardWidth: CGFloat = isMinimal ? 600 : 680
+        nextUpCardWidth?.constant = cardWidth
+        nextUpImage.isHidden = isMinimal || imageUrl.isEmpty
+        nextUpImageHeight?.constant = nextUpImage.isHidden ? 0 : cardWidth * 9 / 16
+        nextUpImage.image = nil
+        if !nextUpImage.isHidden {
+            loadImage(imageUrl) { [weak self] image in
+                guard let self, self.nextUpVisible else { return }
+                self.nextUpImage.image = image
+            }
+        }
+        nextUpRing.strokeEnd = 0
+        updateNextUpFocusHighlight()
+        // updateOsd keeps the OSD down while the card is visible, so this
+        // doesn't need to latch osdDismissed the way an explicit dismiss does.
+        hideOsd()
+        if nextUpCard.isHidden {
+            nextUpCard.alpha = 0
+            nextUpCard.isHidden = false
+            UIView.animate(withDuration: 0.25) { self.nextUpCard.alpha = 1 }
+        }
+        view.layoutIfNeeded()
+        updateNextUpRingPath()
+    }
+
+    func hideNextUpCard() {
+        guard nextUpVisible || !nextUpCard.isHidden else { return }
+        nextUpVisible = false
+        UIView.animate(withDuration: 0.2) { self.nextUpCard.alpha = 0 } completion: { _ in
+            self.nextUpCard.isHidden = true
+        }
+    }
+
+    private func updateNextUpFocusHighlight() {
+        nextUpPlayButton.layer.borderWidth = nextUpFocusOnPlay ? 4 : 0
+        nextUpPlayButton.layer.borderColor = UIColor.white.cgColor
+        nextUpCancelButton.layer.borderWidth = nextUpFocusOnPlay ? 0 : 4
+        nextUpCancelButton.layer.borderColor = UIColor.white.cgColor
+    }
+
+    private func updateNextUpRingPath() {
+        nextUpRing.frame = nextUpPlayButton.bounds
+        nextUpRing.path = UIBezierPath(
+            roundedRect: nextUpPlayButton.bounds.insetBy(dx: 2, dy: 2),
+            cornerRadius: 10
+        ).cgPath
+    }
+
+    private func updateNextUpCountdown() {
+        guard nextUpVisible, nextUpCountdownTotalMs > 0,
+            nextUpCountdownDeadline > 0
+        else {
+            nextUpRing.strokeEnd = 0
+            return
+        }
+        let remaining = max(0, nextUpCountdownDeadline - CACurrentMediaTime())
+        let showTimer =
+            nextUpCountdownStyle == "timer" || nextUpCountdownStyle == "both"
+        let showRing =
+            nextUpCountdownStyle == "progressBar" || nextUpCountdownStyle == "both"
+        if showTimer {
+            let seconds = Int(remaining.rounded(.up))
+            let text = seconds >= 60
+                ? "\(seconds / 60):" + String(format: "%02d", seconds % 60)
+                : ":" + String(format: "%02d", seconds)
+            nextUpCountdownLabel.text = promptStrings.endsIn(text)
+        } else {
+            nextUpCountdownLabel.text = ""
+        }
+        if showRing {
+            updateNextUpRingPath()
+            let total = Double(nextUpCountdownTotalMs) / 1000.0
+            nextUpRing.strokeEnd = total > 0 ? CGFloat(remaining / total) : 0
+        } else {
+            nextUpRing.strokeEnd = 0
+        }
+    }
+
+    private func updatePauseOverlay() {
+        let shouldShow = isPaused() && pauseMeta != nil
+        let visible = pauseOverlay.alpha > 0.5
+        if shouldShow && !visible, let meta = pauseMeta {
+            pauseTitleLabel.text = hasLogo ? headerPrimary : (headerPrimary.isEmpty ? headerSecondary : headerPrimary)
+            pauseTextLabel.text = meta.overview
+            pauseImage.image = nil
+            loadImage(meta.imageUrl) { [weak self] image in
+                self?.pauseImage.image = image
+            }
+            UIView.animate(withDuration: 0.25) { self.pauseOverlay.alpha = 1 }
+        } else if !shouldShow && visible {
+            UIView.animate(withDuration: 0.2) { self.pauseOverlay.alpha = 0 }
+        }
+    }
+
+    private func showOsd() {
+        lastShowAt = CACurrentMediaTime()
+        osdDismissed = false
+        setSubtitlesRaised(true)
+        if osdContainer.alpha < 1 {
+            UIView.animate(withDuration: 0.2) {
+                self.osdContainer.alpha = 1
+                self.topContainer.alpha = 1
+            }
+        }
+    }
+
+    private func renderProgress() {
+        if isLive {
+            renderLiveProgress()
+            return
+        }
+        let duration = player.duration
+        let current = scrubTargetMs.map { Double($0) / 1000.0 } ?? player.currentTime
+        scrubber.progress = duration > 0 ? Float(min(1, max(0, current / duration))) : 0
+        currentTimeLabel.text = formatTime(current)
+        durationLabel.text = formatTime(duration)
+
+        let rate = max(0.01, Double(player.rate))
+        if duration > 0 {
+            let remaining = max(0, duration - current) / rate
+            let endDate = Date().addingTimeInterval(remaining)
+            endsAtLabel.text = "Ends at \(Self.endTimeFormatter.string(from: endDate))"
+            endsAtLabel.isHidden = false
+        } else {
+            endsAtLabel.isHidden = true
+        }
+    }
+
+    private func renderLiveProgress() {
+        endsAtLabel.isHidden = true
+        if let program = liveProgram, program.endMs > program.startMs {
+            let nowMs = Date().timeIntervalSince1970 * 1000
+            let span = Double(program.endMs - program.startMs)
+            let progress = (nowMs - Double(program.startMs)) / span
+            scrubber.progress = Float(min(1, max(0, progress)))
+            currentTimeLabel.text = clockString(epochMs: program.startMs)
+            durationLabel.text = clockString(epochMs: program.endMs)
+        } else {
+            scrubber.progress = 1
+            currentTimeLabel.text = Self.endTimeFormatter.string(from: Date())
+            durationLabel.text = "LIVE"
+        }
+    }
+
+    private func clockString(epochMs: Int) -> String {
+        let date = Date(timeIntervalSince1970: Double(epochMs) / 1000.0)
+        return Self.endTimeFormatter.string(from: date)
+    }
+
+    private func updateOsd() {
+        renderProgress()
+        controlIcons[.playPause]?.image = UIImage(
+            systemName: isPaused() ? "play.fill" : "pause.fill",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 27, weight: .medium))
+
+        updateNextUpCountdown()
+        updateSkipSegmentCountdown()
+        updatePauseOverlay()
+        updateLoadingOverlay()
+
+        let shouldShow =
+            !osdDismissed && !nextUpVisible
+            && (isPaused() || scrubTargetMs != nil
+                || (CACurrentMediaTime() - lastShowAt < 4.0))
+        let visible = osdContainer.alpha > 0.5
+        if shouldShow && !visible {
+            setSubtitlesRaised(true)
+            UIView.animate(withDuration: 0.2) {
+                self.osdContainer.alpha = 1
+                self.topContainer.alpha = 1
+            }
+        } else if !shouldShow && visible {
+            setSubtitlesRaised(false)
+            UIView.animate(withDuration: 0.3) {
+                self.osdContainer.alpha = 0
+                self.topContainer.alpha = 0
+            }
+        }
+    }
+
+    private func formatTime(_ t: TimeInterval) -> String {
+        guard t.isFinite, t >= 0 else { return "0:00" }
+        let total = Int(t.rounded())
+        let h = total / 3600
+        let m = (total % 3600) / 60
+        let s = total % 60
+        return h > 0
+            ? String(format: "%d:%02d:%02d", h, m, s)
+            : String(format: "%d:%02d", m, s)
+    }
+}
+
+extension AppleTvPlayerViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+    ) -> Bool {
+        true
+    }
+}
+
+private let kInfoAccentColor = UIColor(red: 0.42, green: 0.49, blue: 0.96, alpha: 1)
+
+private final class InfoPanelViewController: UIViewController, UITableViewDataSource,
+    UITableViewDelegate
+{
+    private let sections: [(title: String, rows: [(label: String, value: String)])]
+    private let tableView = UITableView(frame: .zero, style: .grouped)
+
+    init(sections: [(title: String, rows: [(label: String, value: String)])]) {
+        self.sections = sections
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.4)
+
+        // Glass panel.
+        let panel = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        panel.translatesAutoresizingMaskIntoConstraints = false
+        panel.layer.cornerRadius = 28
+        panel.clipsToBounds = true
+        view.addSubview(panel)
+        let content = panel.contentView
+
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.text = "Playback Information"
+        title.font = .systemFont(ofSize: 26, weight: .bold)
+        title.textColor = .white
+        content.addSubview(title)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .clear
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 40
+        tableView.register(InfoCell.self, forCellReuseIdentifier: "cell")
+        content.addSubview(tableView)
+
+        let closeButton = UIButton(type: .system)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.setTitle("Close", for: .normal)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 22, weight: .semibold)
+        closeButton.addAction(
+            UIAction { [weak self] _ in self?.dismiss(animated: true) }, for: .primaryActionTriggered)
+        content.addSubview(closeButton)
+
+        NSLayoutConstraint.activate([
+            panel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            panel.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 48),
+            panel.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -48),
+            panel.widthAnchor.constraint(equalToConstant: 1240),
+
+            title.topAnchor.constraint(equalTo: content.topAnchor, constant: 28),
+            title.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 36),
+
+            tableView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
+            tableView.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
+            tableView.bottomAnchor.constraint(
+                equalTo: closeButton.topAnchor, constant: -4),
+
+            closeButton.centerXAnchor.constraint(equalTo: content.centerXAnchor),
+            closeButton.bottomAnchor.constraint(
+                equalTo: content.bottomAnchor, constant: -18),
+        ])
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int { sections.count }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        (sections[section].rows.count + 1) / 2
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int)
+        -> UIView?
+    {
+        let header = UIView()
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = sections[section].title.uppercased()
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.textColor = kInfoAccentColor
+        header.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 12),
+            label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -6),
+        ])
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int)
+        -> CGFloat
+    {
+        section == 0 ? 36 : 48
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! InfoCell
+        let rows = sections[indexPath.section].rows
+        let leftIndex = indexPath.row * 2
+        let rightIndex = leftIndex + 1
+        let left = rows[leftIndex]
+        let right = rightIndex < rows.count ? rows[rightIndex] : nil
+        cell.configure(
+            leftLabel: left.label,
+            leftValue: left.value,
+            rightLabel: right?.label,
+            rightValue: right?.value)
+        return cell
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses where press.type == .menu {
+            dismiss(animated: true)
+            return
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}
+
+private final class InfoCell: UITableViewCell {
+    private let leftName = UILabel()
+    private let leftValue = UILabel()
+    private let rightName = UILabel()
+    private let rightValue = UILabel()
+
+    private let highlight = UIView()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = UIColor(white: 1, alpha: 0.05)
+        selectionStyle = .none
+        focusStyle = .custom
+
+        highlight.translatesAutoresizingMaskIntoConstraints = false
+        highlight.backgroundColor = .clear
+        highlight.layer.cornerRadius = 10
+        contentView.addSubview(highlight)
+
+        for label in [leftName, rightName] {
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = .systemFont(ofSize: 20, weight: .regular)
+            label.textColor = UIColor(white: 1, alpha: 0.55)
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            contentView.addSubview(label)
+        }
+        for label in [leftValue, rightValue] {
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = .systemFont(ofSize: 20, weight: .medium)
+            label.textColor = .white
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            contentView.addSubview(label)
+        }
+
+        let divider = contentView.centerXAnchor
+
+        NSLayoutConstraint.activate([
+            highlight.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            highlight.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            highlight.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
+            highlight.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2),
+
+            leftName.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor, constant: 16),
+            leftName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 9),
+            leftName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -9),
+            leftName.widthAnchor.constraint(equalToConstant: 190),
+
+            leftValue.leadingAnchor.constraint(
+                equalTo: leftName.trailingAnchor, constant: 16),
+            leftValue.trailingAnchor.constraint(equalTo: divider, constant: -16),
+            leftValue.centerYAnchor.constraint(equalTo: leftName.centerYAnchor),
+
+            rightName.leadingAnchor.constraint(equalTo: divider, constant: 16),
+            rightName.centerYAnchor.constraint(equalTo: leftName.centerYAnchor),
+            rightName.widthAnchor.constraint(equalToConstant: 190),
+
+            rightValue.leadingAnchor.constraint(
+                equalTo: rightName.trailingAnchor, constant: 16),
+            rightValue.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor, constant: -16),
+            rightValue.centerYAnchor.constraint(equalTo: leftName.centerYAnchor),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(
+        leftLabel: String, leftValue: String, rightLabel: String?, rightValue: String?
+    ) {
+        leftName.text = leftLabel
+        self.leftValue.text = leftValue
+        let hasRight = rightLabel != nil
+        rightName.text = rightLabel
+        self.rightValue.text = rightValue
+        rightName.isHidden = !hasRight
+        self.rightValue.isHidden = !hasRight
+    }
+
+    override func didUpdateFocus(
+        in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator
+    ) {
+        coordinator.addCoordinatedAnimations {
+            self.highlight.backgroundColor =
+                self.isFocused ? kInfoAccentColor.withAlphaComponent(0.30) : .clear
+        }
+    }
+}
+
+private final class CastPanelViewController: UIViewController, UICollectionViewDataSource,
+    UICollectionViewDelegate
+{
+    private let people: [(name: String, subtitle: String, imageUrl: String, personId: String)]
+    private let onSelect: (String) -> Void
+    private var collectionView: UICollectionView!
+
+    init(
+        people: [(name: String, subtitle: String, imageUrl: String, personId: String)],
+        onSelect: @escaping (String) -> Void
+    ) {
+        self.people = people
+        self.onSelect = onSelect
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.6)
+
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.text = "Cast & Crew"
+        title.font = .systemFont(ofSize: 40, weight: .bold)
+        title.textColor = .white
+        view.addSubview(title)
+
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 240, height: 360)
+        layout.minimumLineSpacing = 36
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 90)
+
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(CastCell.self, forCellWithReuseIdentifier: "cast")
+        view.addSubview(collectionView)
+
+        NSLayoutConstraint.activate([
+            title.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 90),
+            title.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 40),
+            collectionView.heightAnchor.constraint(equalToConstant: 420),
+        ])
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int)
+        -> Int
+    {
+        people.count
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        let cell =
+            collectionView.dequeueReusableCell(withReuseIdentifier: "cast", for: indexPath)
+            as! CastCell
+        let person = people[indexPath.item]
+        cell.configure(name: person.name, subtitle: person.subtitle, imageUrl: person.imageUrl)
+        return cell
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath
+    ) {
+        let person = people[indexPath.item]
+        guard !person.personId.isEmpty else { return }
+        onSelect(person.personId)
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses where press.type == .menu {
+            dismiss(animated: true)
+            return
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}
+
+private final class CastCell: UICollectionViewCell {
+    private let imageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let roleLabel = UILabel()
+    private var imageUrl = ""
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 12
+        imageView.backgroundColor = UIColor(white: 0.2, alpha: 1)
+        contentView.addSubview(imageView)
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = .systemFont(ofSize: 24, weight: .semibold)
+        nameLabel.textColor = .white
+        nameLabel.numberOfLines = 1
+        contentView.addSubview(nameLabel)
+
+        roleLabel.translatesAutoresizingMaskIntoConstraints = false
+        roleLabel.font = .systemFont(ofSize: 20, weight: .regular)
+        roleLabel.textColor = UIColor(white: 1, alpha: 0.6)
+        roleLabel.numberOfLines = 1
+        contentView.addSubview(roleLabel)
+
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 280),
+
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 12),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            roleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            roleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            roleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(name: String, subtitle: String, imageUrl: String) {
+        nameLabel.text = name
+        roleLabel.text = subtitle
+        roleLabel.isHidden = subtitle.isEmpty
+        self.imageUrl = imageUrl
+        imageView.image = nil
+        guard !imageUrl.isEmpty, let url = URL(string: imageUrl) else { return }
+        let expected = imageUrl
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            let image = data.flatMap { UIImage(data: $0) }
+            DispatchQueue.main.async {
+                guard let self, self.imageUrl == expected else { return }
+                self.imageView.image = image
+            }
+        }.resume()
+    }
+
+    override func didUpdateFocus(
+        in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator
+    ) {
+        coordinator.addCoordinatedAnimations {
+            let focused = self.isFocused
+            self.imageView.transform =
+                focused ? CGAffineTransform(scaleX: 1.1, y: 1.1) : .identity
+            self.imageView.layer.borderWidth = focused ? 4 : 0
+            self.imageView.layer.borderColor = UIColor.white.cgColor
+        }
+    }
+}
+
+final class PaddedLabel: UILabel {
+    var insets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+
+    override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let size = super.intrinsicContentSize
+        return CGSize(
+            width: size.width + insets.left + insets.right,
+            height: size.height + insets.top + insets.bottom)
+    }
+}
+
+private final class ChannelListViewController: UIViewController, UITableViewDataSource,
+    UITableViewDelegate
+{
+    private let channels:
+        [(id: String, number: String, name: String, logoUrl: String, programName: String,
+            selected: Bool)]
+    private let onSelect: (String) -> Void
+    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let selectedIndex: Int
+
+    init(
+        channels: [(
+            id: String, number: String, name: String, logoUrl: String, programName: String,
+            selected: Bool
+        )],
+        onSelect: @escaping (String) -> Void
+    ) {
+        self.channels = channels
+        self.onSelect = onSelect
+        self.selectedIndex = channels.firstIndex(where: { $0.selected }) ?? 0
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.55)
+
+        let panel = UIView()
+        panel.translatesAutoresizingMaskIntoConstraints = false
+        panel.backgroundColor = UIColor(white: 0.1, alpha: 0.97)
+        panel.layer.cornerRadius = 22
+        panel.clipsToBounds = true
+        view.addSubview(panel)
+
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.text = "Channels"
+        title.font = .systemFont(ofSize: 38, weight: .bold)
+        title.textColor = .white
+        panel.addSubview(title)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .clear
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = 110
+        tableView.remembersLastFocusedIndexPath = true
+        tableView.register(ChannelRowCell.self, forCellReuseIdentifier: "channel")
+        panel.addSubview(tableView)
+
+        NSLayoutConstraint.activate([
+            panel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            panel.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            panel.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
+            panel.widthAnchor.constraint(equalToConstant: 980),
+
+            title.topAnchor.constraint(equalTo: panel.topAnchor, constant: 40),
+            title.leadingAnchor.constraint(equalTo: panel.leadingAnchor, constant: 56),
+
+            tableView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 16),
+            tableView.leadingAnchor.constraint(equalTo: panel.leadingAnchor, constant: 24),
+            tableView.trailingAnchor.constraint(equalTo: panel.trailingAnchor, constant: -24),
+            tableView.bottomAnchor.constraint(equalTo: panel.bottomAnchor, constant: -24),
+        ])
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard channels.indices.contains(selectedIndex) else { return }
+        tableView.scrollToRow(
+            at: IndexPath(row: selectedIndex, section: 0), at: .middle, animated: false)
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        channels.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell =
+            tableView.dequeueReusableCell(withIdentifier: "channel", for: indexPath)
+            as! ChannelRowCell
+        let channel = channels[indexPath.row]
+        cell.configure(
+            number: channel.number, name: channel.name, program: channel.programName,
+            logoUrl: channel.logoUrl, isCurrent: channel.selected)
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let channel = channels[indexPath.row]
+        dismiss(animated: true) { [onSelect] in
+            onSelect(channel.id)
+        }
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses where press.type == .menu {
+            dismiss(animated: true)
+            return
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}
+
+private final class ChannelRowCell: UITableViewCell {
+    private let logoView = UIImageView()
+    private let numberLabel = UILabel()
+    private let nameLabel = UILabel()
+    private let programLabel = UILabel()
+    private let liveTag = PaddedLabel()
+    private var logoUrl = ""
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .clear
+        selectionStyle = .none
+
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        logoView.contentMode = .scaleAspectFit
+        logoView.backgroundColor = UIColor(white: 1, alpha: 0.08)
+        logoView.layer.cornerRadius = 8
+        logoView.clipsToBounds = true
+        contentView.addSubview(logoView)
+
+        numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        numberLabel.font = .monospacedDigitSystemFont(ofSize: 28, weight: .bold)
+        numberLabel.textColor = UIColor(white: 1, alpha: 0.7)
+        numberLabel.textAlignment = .center
+        contentView.addSubview(numberLabel)
+
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = .systemFont(ofSize: 28, weight: .semibold)
+        nameLabel.textColor = .white
+        nameLabel.numberOfLines = 1
+        contentView.addSubview(nameLabel)
+
+        programLabel.translatesAutoresizingMaskIntoConstraints = false
+        programLabel.font = .systemFont(ofSize: 22, weight: .regular)
+        programLabel.textColor = UIColor(white: 1, alpha: 0.55)
+        programLabel.numberOfLines = 1
+        contentView.addSubview(programLabel)
+
+        liveTag.translatesAutoresizingMaskIntoConstraints = false
+        liveTag.text = "NOW PLAYING"
+        liveTag.font = .systemFont(ofSize: 18, weight: .bold)
+        liveTag.textColor = .white
+        liveTag.backgroundColor = UIColor(red: 0.9, green: 0.1, blue: 0.55, alpha: 1)
+        liveTag.layer.cornerRadius = 6
+        liveTag.clipsToBounds = true
+        liveTag.isHidden = true
+        contentView.addSubview(liveTag)
+
+        NSLayoutConstraint.activate([
+            numberLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor, constant: 12),
+            numberLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            numberLabel.widthAnchor.constraint(equalToConstant: 84),
+
+            logoView.leadingAnchor.constraint(
+                equalTo: numberLabel.trailingAnchor, constant: 12),
+            logoView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            logoView.widthAnchor.constraint(equalToConstant: 120),
+            logoView.heightAnchor.constraint(equalToConstant: 72),
+
+            nameLabel.leadingAnchor.constraint(
+                equalTo: logoView.trailingAnchor, constant: 24),
+            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            nameLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: liveTag.leadingAnchor, constant: -16),
+
+            programLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            programLabel.topAnchor.constraint(
+                equalTo: nameLabel.bottomAnchor, constant: 4),
+            programLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: liveTag.leadingAnchor, constant: -16),
+
+            liveTag.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor, constant: -16),
+            liveTag.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(
+        number: String, name: String, program: String, logoUrl: String, isCurrent: Bool
+    ) {
+        numberLabel.text = number
+        nameLabel.text = name
+        programLabel.text = program
+        programLabel.isHidden = program.isEmpty
+        liveTag.isHidden = !isCurrent
+        self.logoUrl = logoUrl
+        logoView.image = nil
+        guard !logoUrl.isEmpty, let url = URL(string: logoUrl) else { return }
+        let expected = logoUrl
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            let image = data.flatMap { UIImage(data: $0) }
+            DispatchQueue.main.async {
+                guard let self, self.logoUrl == expected else { return }
+                self.logoView.image = image
+            }
+        }.resume()
+    }
+
+    override func didUpdateFocus(
+        in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator
+    ) {
+        coordinator.addCoordinatedAnimations {
+            if self.isFocused {
+                self.backgroundColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 0.9)
+                self.numberLabel.textColor = .white
+                self.programLabel.textColor = UIColor(white: 1, alpha: 0.85)
+            } else {
+                self.backgroundColor = .clear
+                self.numberLabel.textColor = UIColor(white: 1, alpha: 0.7)
+                self.programLabel.textColor = UIColor(white: 1, alpha: 0.55)
+            }
+        }
+    }
+}
+
+// Mirrors the Flutter StillWatchingDialog at the same 2x scale the other
+// prompt surfaces use: a glass card with an eye badge, title, body copy, a
+// full width accent Continue over a quiet Stop. Focus is the two stacked
+// buttons with the soft overlay Material renders, no border ring.
+private final class StillWatchingViewController: UIViewController {
+    private let strings: PromptStrings
+    private let accent: UIColor
+    private let surface: UIColor
+    private let onContinue: () -> Void
+    private let onExit: () -> Void
+
+    private let continueOverlay = UIView()
+    private let stopOverlay = UIView()
+    private var focusOnContinue = true
+    private var answered = false
+
+    init(
+        strings: PromptStrings,
+        accent: UIColor,
+        surface: UIColor,
+        onContinue: @escaping () -> Void,
+        onExit: @escaping () -> Void
+    ) {
+        self.strings = strings
+        self.accent = accent
+        self.surface = surface
+        self.onContinue = onContinue
+        self.onExit = onExit
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.54)
+
+        // The system dismisses presented controllers on menu through its own
+        // window level recognizer, which would skip the exit callback and
+        // leave the Dart side waiting. Owning a menu recognizer wins the
+        // arbitration, the same as the player does.
+        let menuTap = UITapGestureRecognizer(target: self, action: #selector(handleMenuTap))
+        menuTap.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue)]
+        view.addGestureRecognizer(menuTap)
+
+        let card = UIView()
+        card.translatesAutoresizingMaskIntoConstraints = false
+        card.layer.cornerRadius = 48
+        card.clipsToBounds = true
+        view.addSubview(card)
+
+        let glass = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        glass.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(glass)
+
+        let tint = UIView()
+        tint.translatesAutoresizingMaskIntoConstraints = false
+        tint.backgroundColor = surface.withAlphaComponent(0.22)
+        card.addSubview(tint)
+
+        let badge = UIView()
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.backgroundColor = accent.withAlphaComponent(0.16)
+        badge.layer.cornerRadius = 54
+        badge.layer.borderWidth = 1
+        badge.layer.borderColor = accent.withAlphaComponent(0.4).cgColor
+        card.addSubview(badge)
+
+        let eye = UIImageView(
+            image: UIImage(
+                systemName: "eye",
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 44, weight: .regular)))
+        eye.translatesAutoresizingMaskIntoConstraints = false
+        eye.tintColor = accent
+        badge.addSubview(eye)
+
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.text = strings.stillWatchingTitle
+        title.font = .systemFont(ofSize: 38, weight: .semibold)
+        title.textColor = .white
+        title.textAlignment = .center
+        card.addSubview(title)
+
+        let body = UILabel()
+        body.translatesAutoresizingMaskIntoConstraints = false
+        body.text = strings.stillWatchingBody
+        body.font = .systemFont(ofSize: 28, weight: .regular)
+        body.textColor = UIColor(white: 1, alpha: 0.62)
+        body.textAlignment = .center
+        body.numberOfLines = 0
+        card.addSubview(body)
+
+        let continueButton = UIView()
+        continueButton.translatesAutoresizingMaskIntoConstraints = false
+        continueButton.backgroundColor = accent
+        continueButton.layer.cornerRadius = 28
+        continueButton.clipsToBounds = true
+        card.addSubview(continueButton)
+
+        continueOverlay.translatesAutoresizingMaskIntoConstraints = false
+        continueOverlay.backgroundColor = UIColor(white: 1, alpha: 0.12)
+        continueButton.addSubview(continueOverlay)
+
+        let continueLabel = UILabel()
+        continueLabel.translatesAutoresizingMaskIntoConstraints = false
+        continueLabel.text = strings.stillWatchingContinue
+        continueLabel.font = .systemFont(ofSize: 30, weight: .semibold)
+        continueLabel.textColor = .white
+        continueLabel.textAlignment = .center
+        continueButton.addSubview(continueLabel)
+
+        let stopButton = UIView()
+        stopButton.translatesAutoresizingMaskIntoConstraints = false
+        stopButton.layer.cornerRadius = 28
+        stopButton.clipsToBounds = true
+        card.addSubview(stopButton)
+
+        stopOverlay.translatesAutoresizingMaskIntoConstraints = false
+        stopOverlay.backgroundColor = UIColor(white: 1, alpha: 0.12)
+        stopButton.addSubview(stopOverlay)
+
+        let stopLabel = UILabel()
+        stopLabel.translatesAutoresizingMaskIntoConstraints = false
+        stopLabel.text = strings.stillWatchingStop
+        stopLabel.font = .systemFont(ofSize: 28, weight: .medium)
+        stopLabel.textColor = UIColor(white: 1, alpha: 0.6)
+        stopLabel.textAlignment = .center
+        stopButton.addSubview(stopLabel)
+
+        NSLayoutConstraint.activate([
+            card.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            card.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            card.widthAnchor.constraint(equalToConstant: 720),
+
+            glass.topAnchor.constraint(equalTo: card.topAnchor),
+            glass.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            glass.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            glass.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+            tint.topAnchor.constraint(equalTo: card.topAnchor),
+            tint.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            tint.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            tint.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+
+            badge.topAnchor.constraint(equalTo: card.topAnchor, constant: 52),
+            badge.centerXAnchor.constraint(equalTo: card.centerXAnchor),
+            badge.widthAnchor.constraint(equalToConstant: 108),
+            badge.heightAnchor.constraint(equalToConstant: 108),
+            eye.centerXAnchor.constraint(equalTo: badge.centerXAnchor),
+            eye.centerYAnchor.constraint(equalTo: badge.centerYAnchor),
+
+            title.topAnchor.constraint(equalTo: badge.bottomAnchor, constant: 32),
+            title.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 48),
+            title.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -48),
+
+            body.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 16),
+            body.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 48),
+            body.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -48),
+
+            continueButton.topAnchor.constraint(equalTo: body.bottomAnchor, constant: 48),
+            continueButton.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 48),
+            continueButton.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -48),
+            continueOverlay.topAnchor.constraint(equalTo: continueButton.topAnchor),
+            continueOverlay.bottomAnchor.constraint(equalTo: continueButton.bottomAnchor),
+            continueOverlay.leadingAnchor.constraint(equalTo: continueButton.leadingAnchor),
+            continueOverlay.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
+            continueLabel.topAnchor.constraint(equalTo: continueButton.topAnchor, constant: 26),
+            continueLabel.bottomAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: -26),
+            continueLabel.leadingAnchor.constraint(equalTo: continueButton.leadingAnchor),
+            continueLabel.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
+
+            stopButton.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 20),
+            stopButton.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 48),
+            stopButton.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -48),
+            stopButton.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -48),
+            stopOverlay.topAnchor.constraint(equalTo: stopButton.topAnchor),
+            stopOverlay.bottomAnchor.constraint(equalTo: stopButton.bottomAnchor),
+            stopOverlay.leadingAnchor.constraint(equalTo: stopButton.leadingAnchor),
+            stopOverlay.trailingAnchor.constraint(equalTo: stopButton.trailingAnchor),
+            stopLabel.topAnchor.constraint(equalTo: stopButton.topAnchor, constant: 22),
+            stopLabel.bottomAnchor.constraint(equalTo: stopButton.bottomAnchor, constant: -22),
+            stopLabel.leadingAnchor.constraint(equalTo: stopButton.leadingAnchor),
+            stopLabel.trailingAnchor.constraint(equalTo: stopButton.trailingAnchor),
+        ])
+
+        updateFocusHighlight()
+    }
+
+    private func updateFocusHighlight() {
+        continueOverlay.isHidden = !focusOnContinue
+        stopOverlay.isHidden = focusOnContinue
+    }
+
+    private func resolve(continueWatching: Bool) {
+        guard !answered else { return }
+        answered = true
+        dismiss(animated: true) {
+            continueWatching ? self.onContinue() : self.onExit()
+        }
+    }
+
+    @objc private func handleMenuTap() {
+        resolve(continueWatching: false)
+    }
+
+    // If the panel leaves the screen without an answer, resolve as continue
+    // so playback resumes instead of the prompt hanging the session.
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !answered {
+            answered = true
+            onContinue()
+        }
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses {
+            switch press.type {
+            case .upArrow:
+                focusOnContinue = true
+                updateFocusHighlight()
+                return
+            case .downArrow:
+                focusOnContinue = false
+                updateFocusHighlight()
+                return
+            case .select:
+                resolve(continueWatching: focusOnContinue)
+                return
+            case .menu:
+                return
+            default:
+                break
+            }
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}
+
+private final class SyncPlayPanelViewController: UIViewController {
+    private let groupName: String
+    private let participants: [String]
+    private var ignoreWait: Bool
+    private let onIgnoreWait: (Bool) -> Void
+    private let onLeave: () -> Void
+    private let ignoreWaitButton = UIButton(type: .system)
+
+    init(
+        groupName: String, participants: [String], ignoreWait: Bool,
+        onIgnoreWait: @escaping (Bool) -> Void, onLeave: @escaping () -> Void
+    ) {
+        self.groupName = groupName
+        self.participants = participants
+        self.ignoreWait = ignoreWait
+        self.onIgnoreWait = onIgnoreWait
+        self.onLeave = onLeave
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.6)
+
+        let panel = UIView()
+        panel.translatesAutoresizingMaskIntoConstraints = false
+        panel.backgroundColor = UIColor(white: 0.1, alpha: 0.97)
+        panel.layer.cornerRadius = 22
+        view.addSubview(panel)
+
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.text = groupName
+        title.font = .systemFont(ofSize: 38, weight: .bold)
+        title.textColor = .white
+        panel.addSubview(title)
+
+        let countLabel = UILabel()
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        countLabel.text = participants.count == 1
+            ? "1 participant" : "\(participants.count) participants"
+        countLabel.font = .systemFont(ofSize: 24, weight: .regular)
+        countLabel.textColor = UIColor(white: 1, alpha: 0.6)
+        panel.addSubview(countLabel)
+
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 8
+        for participant in participants {
+            let label = UILabel()
+            label.text = participant
+            label.font = .systemFont(ofSize: 24, weight: .medium)
+            label.textColor = .white
+            stack.addArrangedSubview(label)
+        }
+        panel.addSubview(stack)
+
+        ignoreWaitButton.translatesAutoresizingMaskIntoConstraints = false
+        ignoreWaitButton.titleLabel?.font = .systemFont(ofSize: 28, weight: .semibold)
+        updateIgnoreWaitTitle()
+        ignoreWaitButton.addAction(
+            UIAction { [weak self] _ in
+                guard let self else { return }
+                self.ignoreWait.toggle()
+                self.updateIgnoreWaitTitle()
+                self.onIgnoreWait(self.ignoreWait)
+            }, for: .primaryActionTriggered)
+        panel.addSubview(ignoreWaitButton)
+
+        let leaveButton = UIButton(type: .system)
+        leaveButton.translatesAutoresizingMaskIntoConstraints = false
+        leaveButton.setTitle("Leave Group", for: .normal)
+        leaveButton.setTitleColor(
+            UIColor(red: 0.95, green: 0.3, blue: 0.3, alpha: 1), for: .normal)
+        leaveButton.titleLabel?.font = .systemFont(ofSize: 28, weight: .semibold)
+        leaveButton.addAction(
+            UIAction { [weak self] _ in
+                self?.dismiss(animated: true) { self?.onLeave() }
+            }, for: .primaryActionTriggered)
+        panel.addSubview(leaveButton)
+
+        NSLayoutConstraint.activate([
+            panel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            panel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            panel.widthAnchor.constraint(equalToConstant: 820),
+
+            title.topAnchor.constraint(equalTo: panel.topAnchor, constant: 48),
+            title.leadingAnchor.constraint(equalTo: panel.leadingAnchor, constant: 56),
+
+            countLabel.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 6),
+            countLabel.leadingAnchor.constraint(equalTo: title.leadingAnchor),
+
+            stack.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: 24),
+            stack.leadingAnchor.constraint(equalTo: title.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: panel.trailingAnchor, constant: -56),
+
+            ignoreWaitButton.topAnchor.constraint(
+                equalTo: stack.bottomAnchor, constant: 32),
+            ignoreWaitButton.leadingAnchor.constraint(equalTo: title.leadingAnchor),
+
+            leaveButton.topAnchor.constraint(
+                equalTo: ignoreWaitButton.bottomAnchor, constant: 16),
+            leaveButton.leadingAnchor.constraint(equalTo: title.leadingAnchor),
+            leaveButton.bottomAnchor.constraint(equalTo: panel.bottomAnchor, constant: -48),
+        ])
+    }
+
+    private func updateIgnoreWaitTitle() {
+        ignoreWaitButton.setTitle(
+            ignoreWait ? "Ignore Wait: On" : "Ignore Wait: Off", for: .normal)
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses where press.type == .menu {
+            dismiss(animated: true)
+            return
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}

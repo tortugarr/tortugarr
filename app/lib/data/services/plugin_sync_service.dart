@@ -1,0 +1,1937 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:get_it/get_it.dart';
+import 'package:moonfin_design/moonfin_design.dart';
+import 'package:jellyfin_preference/jellyfin_preference.dart';
+import 'package:server_core/server_core.dart';
+
+import '../../data/repositories/seerr_repository.dart';
+import 'storage_path_service.dart';
+import 'synced_fields.dart';
+import '../../ui/widgets/navigation_layout.dart';
+import '../../preference/home_section_config.dart';
+import '../../preference/preference_constants.dart' as prefs;
+import '../../preference/seerr_preferences.dart';
+import '../../preference/seerr_row_config.dart';
+import '../../preference/user_preferences.dart';
+import '../../util/platform_detection.dart';
+
+enum _PluginAvailabilityStatus { available, unavailable, unknown }
+
+class PluginSyncService extends ChangeNotifier {
+  static const List<String> supportedProfiles = <String>[
+    'global',
+    'desktop',
+    'mobile',
+    'tv',
+  ];
+
+  final UserPreferences _prefs;
+  final PreferenceStore _store;
+  final Dio _dio;
+
+  SeerrPreferences get _seerrPrefs => GetIt.instance<SeerrPreferences>();
+
+  bool _pluginAvailable = false;
+  bool get pluginAvailable => _pluginAvailable;
+
+  String? _pluginVersion;
+  String? get pluginVersion => _pluginVersion;
+
+  String? _selectedCustomizationProfile;
+  int _syncRetryCount = 0;
+  Timer? _syncRetryTimer;
+
+  String? _seerrUrl;
+  String? get seerrUrl => _seerrUrl;
+  bool _seerrEnabled = false;
+  bool get seerrEnabled => _seerrEnabled;
+  bool get seerrAvailable =>
+      _pluginAvailable && _seerrEnabled && _prefs.get(UserPreferences.seerrEnabled);
+  bool _seerrInfoAvailable = false;
+  bool get seerrInfoAvailable => _seerrInfoAvailable;
+
+  bool _mdblistAvailable = false;
+  bool get mdblistAvailable => _mdblistAvailable;
+  bool _tmdbAvailable = false;
+  bool get tmdbAvailable => _tmdbAvailable;
+  String? _activeThemeCacheServerId;
+  void Function(String message)? onAdminMessage;
+  void Function(
+    String title,
+    String body,
+    String route, {
+    String? requestId,
+    bool isRequest,
+  })?
+  onSeerrNotification;
+  CancelToken? _settingsStreamCancelToken;
+  StreamSubscription<String>? _settingsStreamSubscription;
+  bool _settingsStreamReconnectPending = false;
+  int _settingsStreamReconnectAttempt = 0;
+
+  bool _isSyncingFromServer = false;
+  Timer? _pushDebounceTimer;
+
+  /// Profile JSON as last pushed to, or applied from, each server and profile.
+  /// A push whose payload matches its entry is skipped, which is what stops an
+  /// applied profile from echoing back up to the server.
+  final Map<String, String> _lastSyncedProfileJson = {};
+
+  PluginSyncService(this._prefs, this._store, {@visibleForTesting Dio? dio})
+    : _dio = dio ?? Dio() {
+    // An injected Dio brings its own adapter, so only the one built here needs
+    // the server interceptors.
+    if (dio == null) {
+      configureServerDio(_dio);
+      _dio.interceptors.add(redirectInterceptor(_dio));
+      _dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            ServerLog.network('→ ${options.method} ${options.uri}');
+            handler.next(options);
+          },
+          onResponse: (response, handler) {
+            ServerLog.network(
+              '← ${response.statusCode} ${response.requestOptions.method} '
+              '${response.requestOptions.uri}',
+            );
+            handler.next(response);
+          },
+          onError: (error, handler) {
+            ServerLog.network(
+              '✗ ${error.requestOptions.method} ${error.requestOptions.uri} '
+              '(${error.response?.statusCode ?? error.type.name})',
+              level: ServerLogLevel.error,
+              error: error.message ?? error.toString(),
+            );
+            handler.next(error);
+          },
+        ),
+      );
+    }
+    _prefs.addListener(_onPrefsChanged);
+  }
+
+  String _serverSyncKey(MediaServerClient client, {String? serverId}) {
+    if (serverId != null && serverId.trim().isNotEmpty) {
+      return serverId.trim();
+    }
+    final normalized = client.baseUrl.toLowerCase().trim();
+    return normalized.replaceAll(RegExp(r'[^a-z0-9]+'), '_');
+  }
+
+  String _snapshotKey(MediaServerClient client, String profile) =>
+      '${_serverSyncKey(client)}/$profile';
+
+  Map<String, String>? _authHeaders(MediaServerClient client) {
+    final token = client.accessToken;
+    if (token == null || token.isEmpty) return null;
+
+    return {
+      'Authorization': buildServerAuthorizationHeader(
+        scheme: 'MediaBrowser',
+        deviceInfo: client.deviceInfo,
+        accessToken: token,
+      ),
+    };
+  }
+
+  dynamic _readValue(Map<String, dynamic> data, String key) {
+    if (data.containsKey(key)) {
+      return data[key];
+    }
+
+    if (key.isNotEmpty) {
+      final pascal = '${key[0].toUpperCase()}${key.substring(1)}';
+      if (data.containsKey(pascal)) {
+        return data[pascal];
+      }
+    }
+
+    return null;
+  }
+
+  bool? _readBool(Map<String, dynamic> data, String key) {
+    final value = _readValue(data, key);
+    return value is bool ? value : null;
+  }
+
+  String? _readString(Map<String, dynamic> data, String key) {
+    final value = _readValue(data, key);
+    return value is String ? value : null;
+  }
+
+  void resetState({bool notify = true, bool stopStream = true}) {
+    _syncRetryTimer?.cancel();
+    if (stopStream) {
+      _stopSettingsStream();
+    }
+    // A snapshot describes the server state of the session being torn down, so
+    // keeping it could wrongly suppress the next user's first push.
+    _lastSyncedProfileJson.clear();
+    _pluginAvailable = false;
+    _pluginVersion = null;
+    _seerrUrl = null;
+    _seerrEnabled = false;
+    _seerrInfoAvailable = false;
+    _mdblistAvailable = false;
+    _tmdbAvailable = false;
+    _activeThemeCacheServerId = null;
+    if (notify) {
+      _setLocalSeerrEnabled(false);
+    }
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void _setLocalSeerrEnabled(bool enabled) {
+    _seerrPrefs.setEnabled(enabled);
+    if (_prefs.get(UserPreferences.seerrEnabled) == enabled) {
+      return;
+    }
+    _store.set(
+      _prefs.getEffectivePreference(UserPreferences.seerrEnabled),
+      enabled,
+    );
+    _prefs.notifyPreferenceChanged();
+  }
+
+  Future<_PluginAvailabilityStatus> _refreshAvailabilityStatus(
+    MediaServerClient client,
+  ) async {
+    resetState(notify: false, stopStream: false);
+
+    try {
+      final pingResult = await _ping(client);
+      if (pingResult == null) {
+        _stopSettingsStream();
+        notifyListeners();
+        return _PluginAvailabilityStatus.unknown;
+      }
+
+      final installed = _readBool(pingResult, 'installed');
+      if (installed != null && !installed) {
+        _stopSettingsStream();
+        _setLocalSeerrEnabled(false);
+        notifyListeners();
+        return _PluginAvailabilityStatus.unavailable;
+      }
+
+      final syncEnabled = _readBool(pingResult, 'settingsSyncEnabled');
+      if (syncEnabled != null && !syncEnabled) {
+        _stopSettingsStream();
+        _setLocalSeerrEnabled(false);
+        notifyListeners();
+        return _PluginAvailabilityStatus.unavailable;
+      }
+
+      _pluginAvailable = true;
+      _pluginVersion = _readString(pingResult, 'version');
+      _seerrUrl = _readString(pingResult, 'seerrUrl');
+      _seerrEnabled = _readBool(pingResult, 'seerrEnabled') ?? false;
+      _mdblistAvailable = _readBool(pingResult, 'mdblistAvailable') ?? false;
+      _tmdbAvailable = _readBool(pingResult, 'tmdbAvailable') ?? false;
+
+      final seerrConfig = await _fetchSeerrConfig(client);
+      if (seerrConfig != null) {
+        _seerrInfoAvailable = true;
+        _seerrUrl = _readString(seerrConfig, 'url') ?? _seerrUrl;
+
+        final enabled = _readBool(seerrConfig, 'enabled');
+        final userEnabled = _readBool(seerrConfig, 'userEnabled');
+        _seerrEnabled = enabled ?? _seerrEnabled;
+
+        if (userEnabled != null) {
+          _setLocalSeerrEnabled(userEnabled);
+        }
+
+        final variant = _readString(seerrConfig, 'variant');
+        if (variant != null && variant.trim().isNotEmpty) {
+          await _seerrPrefs.setMoonfinVariant(variant);
+        }
+
+        final displayName = _readString(seerrConfig, 'displayName');
+        if (displayName != null && displayName.trim().isNotEmpty) {
+          await _seerrPrefs.setMoonfinDisplayName(displayName);
+        }
+      } else {
+        _setLocalSeerrEnabled(_seerrEnabled);
+      }
+
+      notifyListeners();
+      return _PluginAvailabilityStatus.available;
+    } catch (_) {
+      resetState(notify: false);
+      return _PluginAvailabilityStatus.unknown;
+    }
+  }
+
+  Future<bool> refreshAvailability(MediaServerClient client) async {
+    final status = await _refreshAvailabilityStatus(client);
+    return status == _PluginAvailabilityStatus.available;
+  }
+
+  String get _profileName {
+    if (PlatformDetection.isTV) return 'tv';
+    if (PlatformDetection.useMobileUi) return 'mobile';
+    return 'desktop';
+  }
+
+  String get currentDeviceProfile => _profileName;
+  String get selectedCustomizationProfile =>
+      _selectedCustomizationProfile ?? _profileName;
+
+  bool isSyncInitializedForServer(
+    MediaServerClient client, {
+    String? serverId,
+  }) {
+    final syncInitializedPref = UserPreferences.pluginSyncInitializedForServer(
+      _serverSyncKey(client, serverId: serverId),
+    );
+    return _prefs.get(syncInitializedPref);
+  }
+
+  void setSelectedCustomizationProfile(String profile) {
+    if (!supportedProfiles.contains(profile)) return;
+    if (_selectedCustomizationProfile == profile) return;
+    _selectedCustomizationProfile = profile;
+    notifyListeners();
+  }
+
+  // Retries the plugin check a few times after login so a slow cellular link has
+  // time to come up.
+  void _scheduleSyncRetry(MediaServerClient client, {String? serverId}) {
+    if (_syncRetryCount >= 3) return;
+    _syncRetryCount++;
+    _syncRetryTimer?.cancel();
+    _syncRetryTimer = Timer(const Duration(seconds: 5), () {
+      syncOnLogin(client, serverId: serverId);
+    });
+  }
+
+  Future<void> syncOnLogin(MediaServerClient client, {String? serverId}) async {
+    try {
+      _activeThemeCacheServerId = serverId;
+      await _hydrateCachedThemes(client, serverId: serverId);
+
+      final availability = await _refreshAvailabilityStatus(client);
+      if (availability == _PluginAvailabilityStatus.available) {
+        _syncRetryCount = 0;
+      }
+
+      final syncInitializedPref =
+          UserPreferences.pluginSyncInitializedForServer(
+            _serverSyncKey(client, serverId: serverId),
+          );
+      if (_prefs.get(syncInitializedPref)) {
+        if (_prefs.get(UserPreferences.pluginSyncEnabled) &&
+            availability == _PluginAvailabilityStatus.available) {
+          await _refreshCustomThemes(client, serverId: serverId);
+
+          final resolved = await _fetchResolvedProfile(client, _profileName);
+          if (resolved != null) {
+            await _applyServerSettings(client, _profileName, resolved);
+          }
+
+          await _startSettingsStream(client);
+        }
+
+        if (availability == _PluginAvailabilityStatus.unknown) {
+          _scheduleSyncRetry(client, serverId: serverId);
+        }
+        return;
+      }
+
+      if (availability == _PluginAvailabilityStatus.unknown) {
+        _scheduleSyncRetry(client, serverId: serverId);
+        return;
+      }
+
+      if (availability != _PluginAvailabilityStatus.available) {
+        await _prefs.set(syncInitializedPref, true);
+        await _applyFallbackHomeRows();
+        return;
+      }
+
+      await _refreshCustomThemes(client, serverId: serverId);
+
+      final resolved = await _fetchResolvedProfile(client, _profileName);
+      if (resolved == null) {
+        return;
+      }
+
+      await _prefs.set(UserPreferences.pluginSyncEnabled, true);
+
+      await _applyServerSettings(client, _profileName, resolved);
+      await _prefs.set(syncInitializedPref, true);
+      await _startSettingsStream(client);
+    } catch (_) {
+      resetState();
+    }
+  }
+
+  void _stopSettingsStream() {
+    _settingsStreamReconnectPending = false;
+    _settingsStreamReconnectAttempt = 0;
+
+    final cancelToken = _settingsStreamCancelToken;
+    _settingsStreamCancelToken = null;
+    cancelToken?.cancel('settings stream stopped');
+
+    final subscription = _settingsStreamSubscription;
+    _settingsStreamSubscription = null;
+    if (subscription != null) {
+      unawaited(subscription.cancel());
+    }
+  }
+
+  void _scheduleSettingsStreamReconnect(MediaServerClient client) {
+    if (_settingsStreamReconnectPending) {
+      return;
+    }
+
+    final exponent = _settingsStreamReconnectAttempt < 6
+        ? _settingsStreamReconnectAttempt
+        : 6;
+    var delayMs = 1000 * (1 << exponent);
+    if (delayMs > 30000) {
+      delayMs = 30000;
+    }
+    if (_settingsStreamReconnectAttempt < 6) {
+      _settingsStreamReconnectAttempt += 1;
+    }
+
+    _settingsStreamReconnectPending = true;
+    unawaited(
+      Future<void>.delayed(Duration(milliseconds: delayMs), () async {
+        _settingsStreamReconnectPending = false;
+
+        final cancelToken = _settingsStreamCancelToken;
+        if (cancelToken == null || cancelToken.isCancelled) {
+          return;
+        }
+
+        if (!_pluginAvailable ||
+            !_prefs.get(UserPreferences.pluginSyncEnabled)) {
+          return;
+        }
+
+        await _startSettingsStream(client);
+      }),
+    );
+  }
+
+  Future<void> _handleSettingsStreamEvent(
+    MediaServerClient client,
+    String payload,
+  ) async {
+    try {
+      final parsed = jsonDecode(payload);
+      if (parsed is! Map<String, dynamic>) {
+        return;
+      }
+      await _dispatchServerEvent(client, parsed);
+    } catch (_) {}
+  }
+
+  // Entry point for plugin events delivered over the session websocket
+  // (Emby servers, where the SSE stream is unavailable).
+  Future<void> handleServerEvent(
+    MediaServerClient client,
+    Map<String, dynamic> payload,
+  ) async {
+    try {
+      await _dispatchServerEvent(client, payload);
+    } catch (_) {}
+  }
+
+  // Reads a key tolerating PascalCase, since the websocket path may
+  // re-serialize the payload with capitalized keys.
+  static dynamic _eventValue(Map<String, dynamic> map, String key) =>
+      map[key] ?? map[key[0].toUpperCase() + key.substring(1)];
+
+  Future<void> _dispatchServerEvent(
+    MediaServerClient client,
+    Map<String, dynamic> parsed,
+  ) async {
+    final type = _eventValue(parsed, 'type');
+
+    if (type == 'adminMessage') {
+      final text = _eventValue(parsed, 'text');
+      if (text is String) {
+        final trimmed = text.trim();
+        if (trimmed.isNotEmpty) {
+          onAdminMessage?.call(trimmed);
+        }
+      }
+      return;
+    }
+
+    if (type == 'seerrNotification') {
+      final title = _eventValue(parsed, 'title');
+      final body = _eventValue(parsed, 'body');
+      final route = _eventValue(parsed, 'route');
+      final kind = _eventValue(parsed, 'kind');
+      final requestIdRaw = _eventValue(parsed, 'requestId');
+      final requestId = requestIdRaw is String ? requestIdRaw : null;
+      if (route is String && route.trim().isNotEmpty) {
+        onSeerrNotification?.call(
+          title is String ? title : '',
+          body is String ? body : '',
+          route.trim(),
+          requestId: requestId,
+          isRequest: kind == 'request',
+        );
+      }
+      return;
+    }
+
+    if (type == 'themesChanged') {
+      await _refreshCustomThemes(client);
+      notifyListeners();
+      return;
+    }
+
+    if (type != 'settingsUpdated') {
+      return;
+    }
+
+    final resolved = await _fetchResolvedProfile(client, _profileName);
+    if (resolved == null) {
+      return;
+    }
+
+    await _applyServerSettings(client, _profileName, resolved);
+    notifyListeners();
+  }
+
+  Future<void> _startSettingsStream(MediaServerClient client) async {
+    // Emby servers have no SSE endpoint, so plugin events arrive over the
+    // session websocket instead. Don't loop on 501 reconnects here.
+    if (client.serverType == ServerType.emby) {
+      return;
+    }
+
+    if (!_pluginAvailable || !_prefs.get(UserPreferences.pluginSyncEnabled)) {
+      return;
+    }
+
+    final headers = _authHeaders(client);
+    if (headers == null) {
+      return;
+    }
+
+    _stopSettingsStream();
+
+    final cancelToken = CancelToken();
+    _settingsStreamCancelToken = cancelToken;
+
+    try {
+      final response = await _dio.get<ResponseBody>(
+        '${client.baseUrl}/Moonfin/Settings/Stream',
+        options: Options(headers: headers, responseType: ResponseType.stream),
+        cancelToken: cancelToken,
+      );
+
+      final body = response.data;
+      if (body == null) {
+        if (!cancelToken.isCancelled) {
+          _scheduleSettingsStreamReconnect(client);
+        }
+        return;
+      }
+
+      _settingsStreamReconnectAttempt = 0;
+
+      _settingsStreamSubscription = body.stream
+          .cast<List<int>>()
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen(
+            (line) {
+              if (!line.startsWith('data:')) {
+                return;
+              }
+
+              final payload = line.substring(5).trim();
+              if (payload.isEmpty) {
+                return;
+              }
+
+              unawaited(_handleSettingsStreamEvent(client, payload));
+            },
+            onError: (_) {
+              if (!cancelToken.isCancelled) {
+                _scheduleSettingsStreamReconnect(client);
+              }
+            },
+            onDone: () {
+              if (!cancelToken.isCancelled) {
+                _scheduleSettingsStreamReconnect(client);
+              }
+            },
+            cancelOnError: false,
+          );
+    } catch (_) {
+      if (!cancelToken.isCancelled) {
+        _scheduleSettingsStreamReconnect(client);
+      }
+    }
+  }
+
+  Future<bool> configureSeerr(
+    MediaServerClient client, {
+    String? username,
+    String? password,
+  }) async {
+    final token = client.accessToken;
+    if (token == null || token.isEmpty) return false;
+
+    final seerrRepo = await GetIt.instance.getAsync<SeerrRepository>();
+
+    // A cold start can reach this before the server answers the plugin ping, or
+    // before the plugin's Seerr session comes up after the restored token is
+    // applied. Retry across that window so Seerr recovers on its own instead of
+    // staying unavailable until the user opens its settings screen.
+    const attemptDelays = [
+      Duration.zero,
+      Duration(seconds: 3),
+      Duration(seconds: 6),
+      Duration(seconds: 10),
+    ];
+    for (final delay in attemptDelays) {
+      if (delay > Duration.zero) await Future<void>.delayed(delay);
+
+      if (!_pluginAvailable) {
+        final status = await _refreshAvailabilityStatus(client);
+        if (status == _PluginAvailabilityStatus.unavailable) return false;
+        if (!_pluginAvailable) continue;
+      }
+
+      try {
+        await seerrRepo.bootstrapMoonfinSso(
+          jellyfinBaseUrl: client.baseUrl,
+          jellyfinToken: token,
+          username: username,
+          password: password,
+        );
+        if (seerrRepo.isAvailable &&
+            !_prefs.get(UserPreferences.seerrEnabled)) {
+          _setLocalSeerrEnabled(true);
+          await pushSettingsForProfile(
+            client,
+            profile: selectedCustomizationProfile,
+          );
+        }
+        await _refreshAvailabilityStatus(client);
+      } catch (_) {
+        continue;
+      }
+
+      if (seerrRepo.isAvailable) return true;
+    }
+
+    return seerrRepo.isAvailable;
+  }
+
+  Future<void> pushSettings(
+    MediaServerClient client, {
+    bool force = false,
+  }) async {
+    await pushSettingsForProfile(
+      client,
+      profile: selectedCustomizationProfile,
+      force: force,
+    );
+  }
+
+  /// [force] skips the identity check, since an explicit push means overwrite
+  /// whatever the server holds. The snapshot only proves what this device sent
+  /// last, not what another device has written since.
+  Future<void> pushSettingsForProfile(
+    MediaServerClient client, {
+    required String profile,
+    bool force = false,
+  }) async {
+    if (!_pluginAvailable) return;
+    if (!_prefs.get(UserPreferences.pluginSyncEnabled)) return;
+
+    if (!supportedProfiles.contains(profile)) return;
+
+    try {
+      final payloadProfile = _buildProfileFromLocal();
+      final headers = _authHeaders(client);
+      if (headers == null) return;
+
+      // Pushing a payload the server already has makes the plugin broadcast a
+      // settingsUpdated event straight back at this device, and the resulting
+      // apply and push echo never converges on its own.
+      final snapshotKey = _snapshotKey(client, profile);
+      final payloadJson = jsonEncode(payloadProfile);
+      if (!force && _lastSyncedProfileJson[snapshotKey] == payloadJson) {
+        return;
+      }
+
+      await _dio.post(
+        '${client.baseUrl}/Moonfin/Settings/Profile/$profile',
+        data: {'profile': payloadProfile, 'clientId': 'moonfin-flutter'},
+        options: Options(
+          headers: {...headers, 'Content-Type': 'application/json'},
+        ),
+      );
+      // Only after the POST lands, so a failed push retries on the next change.
+      _lastSyncedProfileJson[snapshotKey] = payloadJson;
+    } catch (_) {}
+  }
+
+  Future<void> pushNotificationPrefs(MediaServerClient client) async {
+    if (!_pluginAvailable) {
+      debugPrint('PluginSync: skip pushNotificationPrefs, plugin unavailable');
+      return;
+    }
+
+    try {
+      final headers = _authHeaders(client);
+      if (headers == null) {
+        debugPrint('PluginSync: skip pushNotificationPrefs, no auth headers');
+        return;
+      }
+
+      await _dio.post(
+        '${client.baseUrl}/Moonfin/Notifications/Prefs',
+        data: {
+          'notifyOnNewRequests': _seerrPrefs.notifyOnNewRequests,
+          'notifyOnLibraryAdded': _seerrPrefs.notifyOnLibraryAdded,
+          'notifyOnIssues': _seerrPrefs.notifyOnIssues,
+          'notifyOnNewMedia': _seerrPrefs.notifyOnNewMedia,
+        },
+        options: Options(
+          headers: {...headers, 'Content-Type': 'application/json'},
+        ),
+      );
+    } catch (_) {}
+  }
+
+  /// Returns true when the registration POST succeeded and false when it was
+  /// skipped or failed, so the caller can queue a retry instead of assuming
+  /// the device is enrolled.
+  Future<bool> registerPushDevice(
+    MediaServerClient client, {
+    required String token,
+    required String platform,
+    required String deviceId,
+  }) async {
+    if (!_pluginAvailable) {
+      debugPrint('PluginSync: skip registerPushDevice, plugin unavailable');
+      return false;
+    }
+
+    try {
+      final headers = _authHeaders(client);
+      if (headers == null) {
+        debugPrint('PluginSync: skip registerPushDevice, no auth headers');
+        return false;
+      }
+
+      await _dio.post(
+        '${client.baseUrl}/Moonfin/Notifications/Register',
+        data: {
+          'token': token,
+          'platform': platform,
+          'deviceId': deviceId,
+        },
+        options: Options(
+          headers: {...headers, 'Content-Type': 'application/json'},
+        ),
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> unregisterPushDevice(
+    MediaServerClient client, {
+    required String deviceId,
+  }) async {
+    if (!_pluginAvailable) return;
+
+    try {
+      final headers = _authHeaders(client);
+      if (headers == null) return;
+
+      await _dio.delete(
+        '${client.baseUrl}/Moonfin/Notifications/Register',
+        data: {'deviceId': deviceId},
+        options: Options(
+          headers: {...headers, 'Content-Type': 'application/json'},
+        ),
+      );
+    } catch (_) {}
+  }
+
+  Future<List<String>?> fetchCustomCollectionOrder(
+    MediaServerClient client,
+    String collectionId,
+  ) async {
+    if (!_pluginAvailable) return null;
+    final headers = _authHeaders(client);
+    if (headers == null) return null;
+
+    try {
+      final response = await _dio.get(
+        '${client.baseUrl}/Moonfin/Collections/$collectionId/Order',
+        options: Options(headers: headers),
+      );
+      if (response.statusCode == 200 && response.data is List) {
+        return List<String>.from(response.data as List);
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<bool> saveCustomCollectionOrder(
+    MediaServerClient client,
+    String collectionId,
+    List<String> itemIds,
+  ) async {
+    if (!_pluginAvailable) return false;
+    final headers = _authHeaders(client);
+    if (headers == null) return false;
+
+    try {
+      final response = await _dio.post(
+        '${client.baseUrl}/Moonfin/Collections/$collectionId/Order',
+        data: itemIds,
+        options: Options(
+          headers: {...headers, 'Content-Type': 'application/json'},
+        ),
+      );
+      return response.statusCode == 200 || response.statusCode == 204;
+    } catch (_) {}
+    return false;
+  }
+
+  Future<bool> pullSettingsForProfile(
+    MediaServerClient client, {
+    required String profile,
+  }) async {
+    try {
+      if (!supportedProfiles.contains(profile)) return false;
+      if (!_pluginAvailable) return false;
+
+      await _refreshCustomThemes(client);
+
+      final resolved = await _fetchResolvedProfile(client, profile);
+      if (resolved == null) {
+        return false;
+      }
+      await _applyServerSettings(client, profile, resolved);
+
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Deletes the stored copy of [profile] on the server and puts every synced
+  /// setting on this device back to its default.
+  ///
+  /// Global takes the whole settings file with it, because the plugin has no
+  /// way to clear the base layer while device profiles still sit on top of it.
+  Future<bool> resetProfileToDefaults(
+    MediaServerClient client, {
+    required String profile,
+  }) async {
+    if (!_pluginAvailable) return false;
+    if (!_prefs.get(UserPreferences.pluginSyncEnabled)) return false;
+    if (!supportedProfiles.contains(profile)) return false;
+
+    final headers = _authHeaders(client);
+    if (headers == null) return false;
+
+    // A push queued by an earlier edit would put the old settings back moments
+    // after the delete, so drop it before anything is removed.
+    _pushDebounceTimer?.cancel();
+
+    try {
+      await _dio.delete(
+        profile == 'global'
+            ? '${client.baseUrl}/Moonfin/Settings'
+            : '${client.baseUrl}/Moonfin/Settings/Profile/$profile',
+        options: Options(headers: headers),
+      );
+    } catch (_) {
+      return false;
+    }
+
+    // Nothing this device sent still stands, so a later push must not be
+    // skipped for matching a snapshot the server no longer holds.
+    if (profile == 'global') {
+      _lastSyncedProfileJson.clear();
+    } else {
+      _lastSyncedProfileJson.remove(_snapshotKey(client, profile));
+    }
+
+    await _restoreLocalDefaults();
+
+    // Admin defaults, plus the global profile when this was a device one, are
+    // what the profile resolves to from here on.
+    await pullSettingsForProfile(client, profile: profile);
+
+    return true;
+  }
+
+  /// Drops the stored value of every setting a profile carries so each one
+  /// reads its built-in default again.
+  ///
+  /// Guarded and batched the way the apply path is, because these writes must
+  /// not read back as a local edit and push themselves straight to the server
+  /// that was just cleared.
+  Future<void> _restoreLocalDefaults() async {
+    _isSyncingFromServer = true;
+    try {
+      await _prefs.batchNotifications(_restoreLocalDefaultsUnbatched);
+    } finally {
+      _isSyncingFromServer = false;
+    }
+  }
+
+  Future<void> _restoreLocalDefaultsUnbatched() async {
+    // removePreference rather than a plain store delete, because reads fall
+    // back to the unscoped key when the scoped one is gone, and a value from
+    // before per-server scoping would resurface instead of the default.
+    for (final field in syncedFields) {
+      // The API keys come from the server rather than from anything the user
+      // typed here, so wiping them would stop ratings loading with nothing the
+      // user could do about it.
+      if (field.receiveOnly) continue;
+      await _prefs.removePreference(field.pref);
+    }
+
+    // The settings the field table can't describe, cleared by hand.
+    for (final pref in <Preference<dynamic>>[
+      UserPreferences.sinceYouWatchedNumRows,
+      UserPreferences.mediaBarMode,
+      UserPreferences.mediaBarEnabled,
+      UserPreferences.mediaBarContentType,
+      UserPreferences.enabledRatings,
+      UserPreferences.homeSectionsJson,
+    ]) {
+      await _prefs.removePreference(pref);
+    }
+
+    await _seerrPrefs.setRowsConfig(SeerrRowConfig.defaults());
+
+    // The nav chrome takes its position from this notifier rather than from
+    // the store, so it would sit in the old spot until the next launch.
+    final navbarPos = _prefs.get(UserPreferences.navbarPosition);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      NavigationLayout.positionNotifier.value = navbarPos;
+    });
+  }
+
+  Future<Map<String, dynamic>?> _ping(MediaServerClient client) async {
+    final headers = _authHeaders(client);
+    if (headers == null) return null;
+
+    try {
+      final response = await _dio.get(
+        '${client.baseUrl}/Moonfin/Ping',
+        options: Options(headers: headers),
+      );
+      if (response.data is Map<String, dynamic>) {
+        return response.data as Map<String, dynamic>;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> _fetchSeerrConfig(
+    MediaServerClient client,
+  ) async {
+    final headers = _authHeaders(client);
+    if (headers == null) return null;
+
+    try {
+      final response = await _dio.get(
+        '${client.baseUrl}/Moonfin/Seerr/Config',
+        options: Options(headers: headers),
+      );
+      if (response.data is Map<String, dynamic>) {
+        return response.data as Map<String, dynamic>;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> _fetchResolvedProfile(
+    MediaServerClient client,
+    String profile,
+  ) async {
+    final headers = _authHeaders(client);
+    if (headers == null) return null;
+
+    try {
+      final response = await _dio.get(
+        '${client.baseUrl}/Moonfin/Settings/Resolved/$profile',
+        options: Options(headers: headers),
+      );
+      if (response.data is Map<String, dynamic>) {
+        return response.data as Map<String, dynamic>;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<dynamic> _fetchThemesPayload(MediaServerClient client) async {
+    final headers = _authHeaders(client);
+    if (headers == null) return null;
+
+    try {
+      final response = await _dio.get(
+        '${client.baseUrl}/Moonfin/Themes',
+        options: Options(headers: headers),
+      );
+      return response.data;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Iterable<dynamic> _extractThemeObjects(dynamic payload) {
+    if (payload is List) {
+      return payload;
+    }
+    if (payload is Map) {
+      final map = payload.cast<String, dynamic>();
+      final themes = map['themes'];
+      if (themes is List) {
+        return themes;
+      }
+      final items = map['items'];
+      if (items is List) {
+        return items;
+      }
+      final values = map.values.whereType<Map>().toList();
+      if (values.isNotEmpty) {
+        return values;
+      }
+    }
+    return const [];
+  }
+
+  String _sanitizeThemeCacheFileNameStem(String id) {
+    final trimmed = id.trim().toLowerCase();
+    final sanitized = trimmed.replaceAll(RegExp(r'[^a-z0-9_-]+'), '_');
+    return sanitized.isEmpty ? 'theme' : sanitized;
+  }
+
+  Future<Directory?> _getThemeCacheDirectory(
+    MediaServerClient client, {
+    String? serverId,
+  }) async {
+    try {
+      final baseDirectory = await GetIt.instance<StoragePathService>()
+          .getThemeCacheDir();
+      final effectiveServerId = serverId ?? _activeThemeCacheServerId;
+      final scopedDirectory = Directory(
+        '${baseDirectory.path}/${_serverSyncKey(client, serverId: effectiveServerId)}',
+      );
+      if (!await scopedDirectory.exists()) {
+        await scopedDirectory.create(recursive: true);
+      }
+      return scopedDirectory;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<List<ThemeSpec>> _loadCachedCustomThemes(
+    Directory cacheDirectory,
+  ) async {
+    final specs = <ThemeSpec>[];
+    if (!await cacheDirectory.exists()) {
+      return specs;
+    }
+
+    final files =
+        cacheDirectory
+            .listSync()
+            .whereType<File>()
+            .where((file) => file.path.toLowerCase().endsWith('.json'))
+            .toList()
+          ..sort((a, b) => a.path.compareTo(b.path));
+
+    for (final file in files) {
+      try {
+        final raw = await file.readAsString();
+        final decoded = jsonDecode(raw);
+        if (decoded is! Map) {
+          continue;
+        }
+
+        specs.add(ThemeSpec.fromJson(Map<String, dynamic>.from(decoded)));
+      } catch (_) {}
+    }
+
+    return specs;
+  }
+
+  Future<void> _writeCachedCustomThemes(
+    Directory cacheDirectory,
+    List<ThemeSpec> specs,
+  ) async {
+    if (!await cacheDirectory.exists()) {
+      await cacheDirectory.create(recursive: true);
+    }
+
+    final desiredFileNames = <String>{};
+    const encoder = JsonEncoder.withIndent('  ');
+
+    for (final spec in specs) {
+      final fileName = '${_sanitizeThemeCacheFileNameStem(spec.id)}.json';
+      desiredFileNames.add(fileName);
+
+      final file = File('${cacheDirectory.path}/$fileName');
+      final json = encoder.convert(spec.toJson());
+      await file.writeAsString(json);
+    }
+
+    final existingFiles = cacheDirectory.listSync().whereType<File>().where(
+      (file) => file.path.toLowerCase().endsWith('.json'),
+    );
+
+    for (final file in existingFiles) {
+      final fileName = file.uri.pathSegments.isNotEmpty
+          ? file.uri.pathSegments.last
+          : '';
+      if (!desiredFileNames.contains(fileName)) {
+        try {
+          await file.delete();
+        } catch (_) {}
+      }
+    }
+  }
+
+  void _clearMissingCustomThemeSelection() {
+    final customThemeId = _prefs.get(UserPreferences.customThemeId);
+    if (customThemeId.isNotEmpty &&
+        !ThemeRegistry.availableThemes.containsKey(customThemeId)) {
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.customThemeId),
+        '',
+      );
+      _prefs.notifyPreferenceChanged();
+    }
+  }
+
+  Future<Directory?> _hydrateCachedThemes(
+    MediaServerClient client, {
+    String? serverId,
+  }) async {
+    final cacheDirectory = await _getThemeCacheDirectory(
+      client,
+      serverId: serverId,
+    );
+
+    if (cacheDirectory == null) {
+      return null;
+    }
+
+    final cachedSpecs = await _loadCachedCustomThemes(cacheDirectory);
+    ThemeRegistry.replaceCustomThemes(cachedSpecs);
+    return cacheDirectory;
+  }
+
+  Future<void> _refreshCustomThemes(
+    MediaServerClient client, {
+    String? serverId,
+  }) async {
+    final cacheDirectory = await _hydrateCachedThemes(
+      client,
+      serverId: serverId,
+    );
+
+    final payload = await _fetchThemesPayload(client);
+    if (payload == null) {
+      _clearMissingCustomThemeSelection();
+      return;
+    }
+
+    final objects = _extractThemeObjects(payload);
+    final specs = <ThemeSpec>[];
+
+    for (final entry in objects) {
+      if (entry is! Map) continue;
+      try {
+        specs.add(ThemeSpec.fromJson(Map<String, dynamic>.from(entry)));
+      } catch (_) {}
+    }
+
+    ThemeRegistry.replaceCustomThemes(specs);
+
+    if (cacheDirectory != null) {
+      try {
+        await _writeCachedCustomThemes(cacheDirectory, specs);
+      } catch (_) {}
+    }
+
+    _clearMissingCustomThemeSelection();
+  }
+
+  void _preserveLocalKeyWhenServerEmpty(
+    Map<String, dynamic> resolved,
+    String serverKey,
+    Preference<String> pref,
+  ) {
+    final serverVal = resolved[serverKey] as String?;
+    if (serverVal == null || serverVal.isEmpty || serverVal == 'null') {
+      final localVal = _store.get(_prefs.getEffectivePreference(pref));
+      if (localVal.isNotEmpty && localVal != 'null') {
+        resolved[serverKey] = localVal;
+      }
+    }
+  }
+
+  Future<void> _applyServerSettings(
+    MediaServerClient client,
+    String profile,
+    Map<String, dynamic> resolved,
+  ) async {
+    // Batched so the dozens of pref writes below collapse into one listener
+    // notification instead of one per key. Every notification makes the nav
+    // chrome reload its libraries from the server.
+    //
+    // The guard has to span the whole batch call, because batchNotifications
+    // flushes its one deferred notification in its own finally. A guard
+    // cleared inside the action would already be down when that flush lands,
+    // and the sync listener would read the apply as a local edit.
+    _isSyncingFromServer = true;
+    try {
+      await _prefs.batchNotifications(
+        () => _applyServerSettingsUnbatched(resolved),
+      );
+    } finally {
+      _isSyncingFromServer = false;
+    }
+
+    // Local now matches the server for every synced field, so a later push of
+    // this same payload is the echo of this apply and gets skipped.
+    try {
+      _lastSyncedProfileJson[_snapshotKey(client, profile)] = jsonEncode(
+        _buildProfileFromLocal(),
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _applyServerSettingsUnbatched(
+    Map<String, dynamic> resolved,
+  ) async {
+    final serverId = (_store.getString('pref_last_server_id') ?? '').trim();
+    if (serverId.isNotEmpty) {
+      // When the server profile carries no API key, keep the locally stored
+      // one. Both fallbacks must run before the field table is applied,
+      // otherwise _applySyncedField has already wiped the local value.
+      _preserveLocalKeyWhenServerEmpty(resolved, 'tmdbApiKey', UserPreferences.tmdbApiKey);
+      _preserveLocalKeyWhenServerEmpty(resolved, 'mdblistApiKey', UserPreferences.mdblistApiKey);
+
+      // Everything describable as a key, preference and codec comes from one table, so
+      // the send and receive directions can't drift apart. The settings that need
+      // real logic follow below.
+      for (final field in syncedFields) {
+        _applySyncedField(resolved, field);
+      }
+    }
+
+    _applySinceYouWatchedNumRows(resolved);
+    _applyMediaBarMode(resolved);
+    _applyMediaBarContentType(resolved);
+    if (resolved['mdblistRatingSources'] is List) {
+      final sources = (resolved['mdblistRatingSources'] as List)
+          .cast<String>()
+          .map((s) => _serverToClientRatingSource[s] ?? s)
+          .join(',');
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.enabledRatings),
+        sources,
+      );
+    }
+
+    // Prefer the full homeSections layout when present which unlike homeRowOrder it
+    // carries dynamic and disabled rows. home_sections_config is per-server
+    // scoped, so the payload is applied as-is.
+    final homeSectionsRaw = resolved['homeSections'];
+    var appliedHomeSections = false;
+
+    if (homeSectionsRaw is List) {
+      final parsed = <HomeSectionConfig>[
+        for (final e in homeSectionsRaw)
+          if (e is Map && HomeSectionConfig.isSupportedJson(Map<String, dynamic>.from(e)))
+            HomeSectionConfig.fromJson(Map<String, dynamic>.from(e)),
+      ];
+      if (parsed.isNotEmpty) {
+        parsed.sort((a, b) => a.order.compareTo(b.order));
+        final sections = <HomeSectionConfig>[];
+        var order = 0;
+        for (final c in parsed) {
+          sections.add(c.copyWith(order: order++));
+          // External list and calendar rows are also gated by their own toggle, so
+          // flip it to match the layout moonbase pushed or the row stays hidden.
+          // Awaited so its notification lands inside the batch rather than
+          // after the sync guard has dropped.
+          final toggle = _rowEnabledPreference(c.type);
+          if (toggle != null) {
+            await _prefs.set(toggle, c.enabled);
+          }
+        }
+        // Custom rows the profile doesn't mention haven't been pushed from here yet, so
+        // keep them instead of letting the incoming layout drop them. Matching is on
+        // pluginSection because an edit changes stableId and would leave a stale copy.
+        final incomingCustom = sections
+            .where((s) => s.isPluginDynamic && s.pluginSource == HomeSectionPluginSource.custom)
+            .map((s) => s.pluginSection)
+            .toSet();
+        final existingCustom = _prefs.homeSectionsConfig.where(
+          (c) =>
+              c.isPluginDynamic &&
+              c.pluginSource == HomeSectionPluginSource.custom &&
+              !incomingCustom.contains(c.pluginSection),
+        );
+        for (final custom in existingCustom) {
+          sections.add(custom.copyWith(order: order++));
+        }
+        _appendDisabledBuiltinSections(sections, order);
+        await _prefs.setHomeSectionsConfig(sections);
+        await _syncSeerrHomeRowsWithSections(sections);
+        appliedHomeSections = true;
+      }
+    }
+
+    if (!appliedHomeSections && resolved['homeRowOrder'] is List) {
+      final serverOrder = (resolved['homeRowOrder'] as List).cast<String>();
+      // Preserve any plugin-discovered dynamic sections so they survive a
+      // server-driven preference sync.
+      final pluginEntries = _prefs.homeSectionsConfig
+          .where((c) => c.isPluginDynamic)
+          .toList(growable: false);
+      if (serverOrder.isEmpty) {
+        await _applyFallbackHomeRows(preserve: pluginEntries);
+      } else {
+        final sections = <HomeSectionConfig>[];
+        var order = 0;
+        for (final name in serverOrder) {
+          final type = prefs.HomeSectionType.fromSerialized(name);
+          if (type == prefs.HomeSectionType.none) continue;
+          sections.add(
+            HomeSectionConfig(type: type, enabled: true, order: order++),
+          );
+        }
+        if (sections.isEmpty) {
+          await _applyFallbackHomeRows(preserve: pluginEntries);
+        } else {
+          final enabledTypes = sections.map((s) => s.type).toSet();
+          for (final type in prefs.HomeSectionType.values) {
+            if (type == prefs.HomeSectionType.none) continue;
+            if (_isTmdbSectionType(type)) {
+              final localEnabled = _prefs.get(_tmdbPrefForType(type));
+              final idx = sections.indexWhere((s) => s.type == type);
+              if (idx >= 0) {
+                sections[idx] = sections[idx].copyWith(enabled: localEnabled);
+              } else {
+                sections.add(
+                  HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+                );
+              }
+              continue;
+            }
+            if (type == prefs.HomeSectionType.radarrCalendar) {
+              final localEnabled = _prefs.get(UserPreferences.enableRadarrCalendar);
+              final idx = sections.indexWhere((s) => s.type == type);
+              if (idx >= 0) {
+                sections[idx] = sections[idx].copyWith(enabled: localEnabled);
+              } else {
+                sections.add(
+                  HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+                );
+              }
+              continue;
+            }
+            if (type == prefs.HomeSectionType.sonarrCalendar) {
+              final localEnabled = _prefs.get(UserPreferences.enableSonarrCalendar);
+              final idx = sections.indexWhere((s) => s.type == type);
+              if (idx >= 0) {
+                sections[idx] = sections[idx].copyWith(enabled: localEnabled);
+              } else {
+                sections.add(
+                  HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+                );
+              }
+              continue;
+            }
+            if (!enabledTypes.contains(type)) {
+              sections.add(
+                HomeSectionConfig(type: type, enabled: false, order: order++),
+              );
+            }
+          }
+          for (final entry in pluginEntries) {
+            sections.add(entry.copyWith(order: order++));
+          }
+          await _prefs.setHomeSectionsConfig(sections);
+          await _syncSeerrHomeRowsWithSections(sections);
+        }
+      }
+    }
+
+    if (resolved['seerrRows'] is Map<String, dynamic>) {
+      final rowsData = resolved['seerrRows'] as Map<String, dynamic>;
+      if (rowsData['rowOrder'] is List) {
+        final serverOrder = (rowsData['rowOrder'] as List).cast<String>();
+        if (serverOrder.isNotEmpty) {
+          final configs = <SeerrRowConfig>[];
+          var order = 0;
+          for (final name in serverOrder) {
+            final type = prefs.SeerrRowType.fromSerialized(name);
+            configs.add(
+              SeerrRowConfig(type: type, enabled: true, order: order++),
+            );
+          }
+          final enabledTypes = configs.map((c) => c.type).toSet();
+          for (final type in prefs.SeerrRowType.values) {
+            if (!enabledTypes.contains(type)) {
+              configs.add(
+                SeerrRowConfig(type: type, enabled: false, order: order++),
+              );
+            }
+          }
+          await _seerrPrefs.setRowsConfig(configs);
+        }
+      }
+    }
+
+    _prefs.notifyPreferenceChanged();
+
+    final currentNavbarPos = _prefs.get(UserPreferences.navbarPosition);
+    final navbarPos = NavigationLayout.sanitizeNavbarPosition(
+      currentNavbarPos,
+    );
+    if (currentNavbarPos != navbarPos) {
+      await _prefs.set(UserPreferences.navbarPosition, navbarPos);
+    }
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      NavigationLayout.positionNotifier.value = navbarPos;
+    });
+  }
+
+  Future<void> _applyFallbackHomeRows({
+    List<HomeSectionConfig> preserve = const [],
+  }) async {
+    const fallbackEnabled = <prefs.HomeSectionType>[
+      prefs.HomeSectionType.resume,
+      prefs.HomeSectionType.nextUp,
+      prefs.HomeSectionType.latestMedia,
+    ];
+
+    final sections = <HomeSectionConfig>[];
+    var order = 0;
+
+    for (final type in fallbackEnabled) {
+      sections.add(
+        HomeSectionConfig(type: type, enabled: true, order: order++),
+      );
+    }
+
+    for (final type in prefs.HomeSectionType.values) {
+      if (type == prefs.HomeSectionType.none ||
+          fallbackEnabled.contains(type)) {
+        continue;
+      }
+      if (_isTmdbSectionType(type)) {
+        final localEnabled = _prefs.get(_tmdbPrefForType(type));
+        sections.add(
+          HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+        );
+        continue;
+      }
+      if (type == prefs.HomeSectionType.radarrCalendar) {
+        final localEnabled = _prefs.get(UserPreferences.enableRadarrCalendar);
+        sections.add(
+          HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+        );
+        continue;
+      }
+      if (type == prefs.HomeSectionType.sonarrCalendar) {
+        final localEnabled = _prefs.get(UserPreferences.enableSonarrCalendar);
+        sections.add(
+          HomeSectionConfig(type: type, enabled: localEnabled, order: order++),
+        );
+        continue;
+      }
+      sections.add(
+        HomeSectionConfig(type: type, enabled: false, order: order++),
+      );
+    }
+
+    for (final entry in preserve) {
+      sections.add(entry.copyWith(order: order++));
+    }
+
+    await _prefs.setHomeSectionsConfig(sections);
+    await _syncSeerrHomeRowsWithSections(sections);
+  }
+
+  /// Appends a disabled entry for every built-in HomeSectionType not already in
+  /// [sections] so the settings UI shows every toggle. Returns the next order.
+  ///
+  /// A section the profile doesn't mention carries no opinion, so it lands
+  /// disabled rather than being re-derived from a toggle preference that
+  /// defaults to on. The preferences stay untouched because the profile's own
+  /// synced fields already set them, and writing false would push that back.
+  int _appendDisabledBuiltinSections(
+    List<HomeSectionConfig> sections,
+    int order,
+  ) {
+    final present = sections.map((s) => s.type).toSet();
+    for (final type in prefs.HomeSectionType.values) {
+      if (type == prefs.HomeSectionType.none || present.contains(type)) {
+        continue;
+      }
+      sections.add(
+        HomeSectionConfig(type: type, enabled: false, order: order++),
+      );
+    }
+    return order;
+  }
+
+  /// Seerr home rows keep their own copy of the enabled state that the settings
+  /// screens write alongside the section layout, so mirror it here too. Without
+  /// this the home view gates Seerr rows on stale values after a sync.
+  Future<void> _syncSeerrHomeRowsWithSections(
+    List<HomeSectionConfig> sections,
+  ) async {
+    final enabledByType = {
+      for (final section in sections) section.type: section.enabled,
+    };
+    final updated = _seerrPrefs.homeRowsConfig
+        .map(
+          (row) => row.copyWith(
+            enabled: enabledByType[row.type.homeSectionType] ?? false,
+          ),
+        )
+        .toList();
+    await _seerrPrefs.setHomeRowsConfig(updated);
+  }
+
+  /// Applies one table-driven field from an incoming profile.
+  void _applySyncedField(Map<String, dynamic> data, SyncedField field) {
+    switch (field.codec) {
+      case SyncCodec.boolean:
+        _applyBool(data, field.serverKey, field.pref as Preference<bool>);
+      case SyncCodec.integer:
+      case SyncCodec.textAsInt:
+        _applyInt(data, field.serverKey, field.pref);
+      case SyncCodec.text:
+        _applyString(data, field.serverKey, field.pref);
+      case SyncCodec.enumName:
+        _applyString(data, field.serverKey, field.pref,
+            enumValues: field.enumValues);
+      case SyncCodec.intAsText:
+        _applyString(data, field.serverKey, field.pref, intFromString: true);
+      case SyncCodec.decimal:
+        _applyDouble(data, field.serverKey, field.pref as Preference<double>);
+      case SyncCodec.colorAsText:
+        _applyColor(data, field.serverKey, field.pref as Preference<int>);
+      case SyncCodec.csvList:
+        _applyStringList(
+            data, field.serverKey, field.pref as Preference<String>);
+    }
+  }
+
+  /// Serializes one table-driven field for the outgoing profile.
+  dynamic _encodeSyncedField(SyncedField field) {
+    switch (field.codec) {
+      case SyncCodec.boolean:
+      case SyncCodec.integer:
+      case SyncCodec.text:
+      case SyncCodec.decimal:
+        return _prefs.get(field.pref);
+      case SyncCodec.enumName:
+        return (_prefs.get(field.pref) as Enum).name;
+      case SyncCodec.intAsText:
+        return _prefs.get(field.pref).toString();
+      case SyncCodec.textAsInt:
+        return int.tryParse(_prefs.get(field.pref) as String) ??
+            field.fallbackInt ??
+            0;
+      case SyncCodec.colorAsText:
+        return _formatArgb(_prefs.get(field.pref) as int);
+      case SyncCodec.csvList:
+        return _csvToList(field.pref as Preference<String>);
+    }
+  }
+
+  void _applyDouble(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<double> pref,
+  ) {
+    // JSON hands back an int when the value has no fractional part.
+    final value = data[serverKey];
+    if (value is num) {
+      _store.set(_prefs.getEffectivePreference(pref), value.toDouble());
+    }
+  }
+
+  void _applyColor(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<int> pref,
+  ) {
+    final value = data[serverKey];
+    if (value is! String) return;
+
+    final parsed = _parseArgb(value);
+    if (parsed == null) return;
+    _store.set(_prefs.getEffectivePreference(pref), parsed);
+  }
+
+  /// Reads a #AARRGGBB or #RRGGBB colour, returning null for anything else.
+  static int? _parseArgb(String value) {
+    var hex = value.trim();
+    if (hex.startsWith('#')) hex = hex.substring(1);
+    if (hex.length == 6) hex = 'FF$hex';
+    if (hex.length != 8) return null;
+    return int.tryParse(hex, radix: 16);
+  }
+
+  static String _formatArgb(int value) =>
+      '#${value.toRadixString(16).padLeft(8, '0').toUpperCase()}';
+
+  // Reads the media bar item types, ignoring anything outside the known set.
+  //
+  // This used to arrive under mediaBarSourceType, which the other clients use to say where
+  // the media bar draws from rather than which item types it shows. Their "library" landed
+  // here as an item type and stuck, leaving the picker displaying a value it never offered.
+  void _applyMediaBarContentType(Map<String, dynamic> data) {
+    final value = _readString(data, 'mediaBarContentType');
+    if (value == null) return;
+
+    _store.set(
+      _prefs.getEffectivePreference(UserPreferences.mediaBarContentType),
+      UserPreferences.normalizeMediaBarContentType(value),
+    );
+  }
+
+  void _applyBool(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<bool> pref,
+  ) {
+    final value = data[serverKey];
+    if (value is bool) {
+      _store.set(_prefs.getEffectivePreference(pref), value);
+      if (pref == UserPreferences.seerrEnabled) {
+        _seerrPrefs.setEnabled(value);
+      }
+    }
+  }
+
+  void _applyInt(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<dynamic> pref,
+  ) {
+    final value = data[serverKey];
+    if (value is int) {
+      final effective = _prefs.getEffectivePreference(pref);
+      if (effective.defaultValue is String) {
+        _store.set(effective as Preference<String>, value.toString());
+      } else {
+        _store.set(effective as Preference<int>, value);
+      }
+    }
+  }
+
+  // The server stores this as an int row count, so map it back onto the enum by value.
+  void _applySinceYouWatchedNumRows(Map<String, dynamic> data) {
+    final value = data['sinceYouWatchedNumRows'];
+    if (value is! int) return;
+
+    final match = prefs.SinceYouWatchedNumRows.values.where(
+      (e) => e.value == value,
+    );
+    if (match.isEmpty) return;
+
+    final effective = _prefs.getEffectivePreference(
+      UserPreferences.sinceYouWatchedNumRows,
+    );
+    _store.set(effective, match.first);
+  }
+
+  void _applyString<T>(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<T> pref, {
+    List<Enum>? enumValues,
+    bool intFromString = false,
+  }) {
+    final value = data[serverKey];
+    if (value == null) return;
+
+    final effective = _prefs.getEffectivePreference(pref);
+
+    if (intFromString && value is String) {
+      final parsed = int.tryParse(value);
+      if (parsed != null) {
+        _store.set(effective as Preference<int>, parsed);
+      }
+      return;
+    }
+
+    if (enumValues != null && effective is EnumPreference) {
+      if (value is String) {
+        final match = enumValues.cast<Enum>().where(
+          (e) => e.name.toLowerCase() == value.toLowerCase(),
+        );
+        if (match.isNotEmpty) {
+          _store.set(effective, match.first as T);
+        }
+      }
+      return;
+    }
+
+    if (value is String) {
+      _store.set(effective as Preference<String>, value);
+    }
+  }
+
+  void _applyStringList(
+    Map<String, dynamic> data,
+    String serverKey,
+    Preference<String> pref,
+  ) {
+    final value = data[serverKey];
+    if (value is List) {
+      _store.set(
+        _prefs.getEffectivePreference(pref),
+        value.cast<String>().join(','),
+      );
+    }
+  }
+
+  void _applyMediaBarMode(Map<String, dynamic> data) {
+    final modeFromServer = _readString(data, 'mediaBarMode');
+    if (modeFromServer != null && modeFromServer.trim().isNotEmpty) {
+      final normalized = UserPreferences.normalizeMediaBarMode(modeFromServer);
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.mediaBarMode),
+        normalized,
+      );
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.mediaBarEnabled),
+        UserPreferences.isMediaBarModeEnabled(normalized),
+      );
+      return;
+    }
+
+    final legacyEnabled = _readBool(data, 'mediaBarEnabled');
+    if (legacyEnabled != null) {
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.mediaBarEnabled),
+        legacyEnabled,
+      );
+      _store.set(
+        _prefs.getEffectivePreference(UserPreferences.mediaBarMode),
+        legacyEnabled
+            ? UserPreferences.mediaBarModeMoonfin
+            : UserPreferences.mediaBarModeOff,
+      );
+    }
+  }
+
+  // The Moonbase dashboard stores a few rating source keys in camelCase while
+  // the client uses lowercase. Keep one canonical map and derive its inverse so
+  // the two directions can never drift.
+  static const Map<String, String> _serverToClientRatingSource = {
+    'metacriticUser': 'metacriticuser',
+    'myAnimeList': 'myanimelist',
+    'rogerEbert': 'rogerebert',
+    // AniList is no longer a selectable source, but old profiles may still
+    // carry it, so keep decoding it so it round-trips harmlessly.
+    'aniList': 'anilist',
+  };
+  static final Map<String, String> _clientToServerRatingSource = {
+    for (final entry in _serverToClientRatingSource.entries)
+      entry.value: entry.key,
+  };
+
+  List<String> _csvToList(Preference<String> pref) {
+    return _prefs.get(pref).split(',').where((s) => s.isNotEmpty).toList();
+  }
+
+  Map<String, dynamic> _buildProfileFromLocal() {
+    final mediaBarMode = UserPreferences.normalizeMediaBarMode(
+      _prefs.get(UserPreferences.mediaBarMode),
+    );
+    final mediaBarEnabled = UserPreferences.isMediaBarModeEnabled(mediaBarMode);
+    final payload = <String, dynamic>{
+      // Everything the field table describes. The bespoke entries below cover the
+      // settings that need real logic rather than a straight codec.
+      for (final field in syncedFields)
+        if (!field.receiveOnly) field.serverKey: _encodeSyncedField(field),
+      'sinceYouWatchedNumRows': _prefs.get(UserPreferences.sinceYouWatchedNumRows).value,
+      'mediaBarEnabled': mediaBarEnabled,
+      'mediaBarMode': mediaBarMode,
+      'mediaBarContentType': UserPreferences.normalizeMediaBarContentType(
+        _prefs.get(UserPreferences.mediaBarContentType),
+      ),
+      'mdblistRatingSources': _csvToList(UserPreferences.enabledRatings)
+          .map((s) => _clientToServerRatingSource[s] ?? s)
+          .toList(),
+      'homeRowOrder': _prefs.homeSectionsConfig
+          .where((c) => c.enabled)
+          .map((c) => c.type.serializedName)
+          .toList(),
+      'homeSections':
+          _prefs.homeSectionsConfig.map((c) => c.toJson()).toList(),
+      'seerrRows': {
+        'rowOrder': _seerrPrefs.activeRows
+            .map((t) => t.serializedName)
+            .toList(),
+      },};
+
+    // Only include keys when set. Pushing an explicit null would clear the
+    // server-side profile value that other devices rely on.
+    final mdblistKey = _prefs.get(UserPreferences.mdblistApiKey);
+    if (mdblistKey.isNotEmpty && mdblistKey != 'null') {
+      payload['mdblistApiKey'] = mdblistKey;
+    }
+
+    final tmdbKey = _prefs.get(UserPreferences.tmdbApiKey);
+    if (tmdbKey.isNotEmpty && tmdbKey != 'null') {
+      payload['tmdbApiKey'] = tmdbKey;
+    }
+
+    return payload;
+  }
+
+  void _onPrefsChanged() {
+    if (_isSyncingFromServer) return;
+    if (!_pluginAvailable || !_prefs.get(UserPreferences.pluginSyncEnabled)) {
+      return;
+    }
+    _pushDebounceTimer?.cancel();
+    _pushDebounceTimer = Timer(const Duration(milliseconds: 1000), () {
+      final client = GetIt.instance.isRegistered<MediaServerClient>()
+          ? GetIt.instance<MediaServerClient>()
+          : null;
+      if (client != null &&
+          client.accessToken != null &&
+          client.accessToken!.isNotEmpty) {
+        pushSettings(client);
+      }
+    });
+  }
+
+
+
+  bool _isTmdbSectionType(prefs.HomeSectionType type) {
+    return type == prefs.HomeSectionType.tmdbPopularMovies ||
+        type == prefs.HomeSectionType.tmdbTopRatedMovies ||
+        type == prefs.HomeSectionType.tmdbNowPlayingMovies ||
+        type == prefs.HomeSectionType.tmdbUpcomingMovies ||
+        type == prefs.HomeSectionType.tmdbPopularTv ||
+        type == prefs.HomeSectionType.tmdbTopRatedTv ||
+        type == prefs.HomeSectionType.tmdbAiringTodayTv ||
+        type == prefs.HomeSectionType.tmdbOnTheAirTv ||
+        type == prefs.HomeSectionType.tmdbTrendingMovieDaily ||
+        type == prefs.HomeSectionType.tmdbTrendingMovieWeekly ||
+        type == prefs.HomeSectionType.tmdbTrendingTvDaily ||
+        type == prefs.HomeSectionType.tmdbTrendingTvWeekly ||
+        type == prefs.HomeSectionType.tmdbTrendingAllWeekly;
+  }
+
+  Preference<bool> _tmdbPrefForType(prefs.HomeSectionType type) {
+    switch (type) {
+      case prefs.HomeSectionType.tmdbPopularMovies:
+        return UserPreferences.tmdbPopularMoviesEnabled;
+      case prefs.HomeSectionType.tmdbTopRatedMovies:
+        return UserPreferences.tmdbTopRatedMoviesEnabled;
+      case prefs.HomeSectionType.tmdbNowPlayingMovies:
+        return UserPreferences.tmdbNowPlayingMoviesEnabled;
+      case prefs.HomeSectionType.tmdbUpcomingMovies:
+        return UserPreferences.tmdbUpcomingMoviesEnabled;
+      case prefs.HomeSectionType.tmdbPopularTv:
+        return UserPreferences.tmdbPopularTvEnabled;
+      case prefs.HomeSectionType.tmdbTopRatedTv:
+        return UserPreferences.tmdbTopRatedTvEnabled;
+      case prefs.HomeSectionType.tmdbAiringTodayTv:
+        return UserPreferences.tmdbAiringTodayTvEnabled;
+      case prefs.HomeSectionType.tmdbOnTheAirTv:
+        return UserPreferences.tmdbOnTheAirTvEnabled;
+      case prefs.HomeSectionType.tmdbTrendingMovieDaily:
+        return UserPreferences.tmdbTrendingMovieDailyEnabled;
+      case prefs.HomeSectionType.tmdbTrendingMovieWeekly:
+        return UserPreferences.tmdbTrendingMovieWeeklyEnabled;
+      case prefs.HomeSectionType.tmdbTrendingTvDaily:
+        return UserPreferences.tmdbTrendingTvDailyEnabled;
+      case prefs.HomeSectionType.tmdbTrendingTvWeekly:
+        return UserPreferences.tmdbTrendingTvWeeklyEnabled;
+      case prefs.HomeSectionType.tmdbTrendingAllWeekly:
+        return UserPreferences.tmdbTrendingAllWeeklyEnabled;
+      default:
+        throw ArgumentError('Not a TMDB section type: $type');
+    }
+  }
+
+  Preference<bool>? _rowEnabledPreference(prefs.HomeSectionType type) {
+    if (_isTmdbSectionType(type)) return _tmdbPrefForType(type);
+    return switch (type) {
+      prefs.HomeSectionType.imdbTop250Movies =>
+        UserPreferences.imdbTop250MoviesEnabled,
+      prefs.HomeSectionType.imdbTop250TvShows =>
+        UserPreferences.imdbTop250TvShowsEnabled,
+      prefs.HomeSectionType.imdbMostPopularMovies =>
+        UserPreferences.imdbMostPopularMoviesEnabled,
+      prefs.HomeSectionType.imdbMostPopularTvShows =>
+        UserPreferences.imdbMostPopularTvShowsEnabled,
+      prefs.HomeSectionType.imdbLowestRatedMovies =>
+        UserPreferences.imdbLowestRatedMoviesEnabled,
+      prefs.HomeSectionType.imdbTopEnglishMovies =>
+        UserPreferences.imdbTopEnglishMoviesEnabled,
+      prefs.HomeSectionType.radarrCalendar =>
+        UserPreferences.enableRadarrCalendar,
+      prefs.HomeSectionType.sonarrCalendar =>
+        UserPreferences.enableSonarrCalendar,
+      prefs.HomeSectionType.rewatch => UserPreferences.displayRewatchRow,
+      prefs.HomeSectionType.sinceYouWatched1 =>
+        UserPreferences.sinceYouWatched1Enabled,
+      prefs.HomeSectionType.sinceYouWatched2 =>
+        UserPreferences.sinceYouWatched2Enabled,
+      prefs.HomeSectionType.sinceYouWatched3 =>
+        UserPreferences.sinceYouWatched3Enabled,
+      prefs.HomeSectionType.sinceYouWatched4 =>
+        UserPreferences.sinceYouWatched4Enabled,
+      prefs.HomeSectionType.sinceYouWatched5 =>
+        UserPreferences.sinceYouWatched5Enabled,
+      _ => null,
+    };
+  }
+
+  @override
+  void dispose() {
+    _prefs.removeListener(_onPrefsChanged);
+    _pushDebounceTimer?.cancel();
+    _syncRetryTimer?.cancel();
+    _stopSettingsStream();
+    super.dispose();
+  }
+}

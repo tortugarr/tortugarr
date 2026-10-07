@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:server_core/server_core.dart';
+
+import '../../../data/services/plugin_sync_service.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../widgets/settings/settings_section_header.dart';
+import '../../../preference/user_preferences.dart';
+import '../../widgets/adaptive/adaptive_list_section.dart';
+import '../../widgets/settings/clean_settings_typography.dart';
+import '../../widgets/settings/preference_tiles.dart';
+import 'settings_app_bar.dart';
+
+class LocalPreviewsSettingsScreen extends StatelessWidget {
+  const LocalPreviewsSettingsScreen({super.key});
+
+  void _pushSync() {
+    final syncService = GetIt.instance<PluginSyncService>();
+    if (syncService.pluginAvailable) {
+      syncService.pushSettings(GetIt.instance<MediaServerClient>());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return withCleanSettingsTypography(
+      context,
+      Scaffold(
+        appBar: buildSettingsAppBar(context, Text(l10n.localPreviews)),
+        body: ListView(
+          children: [
+            SettingsSectionHeader(l10n.localPreviews),
+            adaptiveListSection(
+              children: [
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mediaBarTrailerPreview,
+                  title: l10n.trailerPreview,
+                  subtitle: l10n.autoPlayTrailers,
+                  icon: Icons.movie_outlined,
+                  onChanged: _pushSync,
+                ),
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mediaBarTrailerCaptions,
+                  title: l10n.trailerCaptions,
+                  subtitle: l10n.trailerCaptionsDescription,
+                  icon: Icons.closed_caption_outlined,
+                  onChanged: _pushSync,
+                ),
+                SwitchPreferenceTile(
+                  preference: UserPreferences.episodePreviewEnabled,
+                  title: l10n.mediaPreview,
+                  subtitle: l10n.mediaPreviewDescription,
+                  icon: Icons.ondemand_video,
+                  onChanged: _pushSync,
+                ),
+                // Trailer and preview sound: one "Preview sound" switch on the
+                // panel's first page sets both, so they are not here as well.
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

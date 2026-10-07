@@ -1,0 +1,20 @@
+name: moonfin_native_video
+description: "Android SurfaceView-based video output for mpv/media_kit on Android TV"
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  media_kit: 1.2.6
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: org.moonfin.nativevideo
+        pluginClass: NativeVideoPlugin

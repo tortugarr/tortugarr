@@ -1,0 +1,262 @@
+name: moonfin
+description: "Tortugarr - your own streaming service: an app for Android TV, phones and tablets"
+publish_to: 'none'
+version: 4.20.0+2000031
+
+moonfin:
+  android_tv_version: 4.20.0
+  android_tv_build_number: 2000032
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Navigation
+  go_router: ^17.2.2
+  animated_reorderable_list: ^1.3.0
+
+  # State Management & DI
+  get_it: ^9.2.1
+  injectable: ^2.5.0
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Networking
+  dio: ^5.9.2
+  dio_cookie_manager: ^3.4.0
+  background_downloader: ^9.5.6
+  cookie_jar: ^4.0.9
+  web_socket_channel: ^3.0.3
+
+  # Local Storage
+  shared_preferences: ^2.5.5
+  flutter_secure_storage: ^10.0.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  drift: ^2.28.2
+  sqlite3_flutter_libs: ^0.6.0
+  # Tizen has no sqlite3_flutter_libs; the Tizen drift connection loads the
+  # system libsqlite3 via package:sqlite3/open.dart (see
+  # lib/data/database/database_connection_impl_io.dart).
+  sqlite3: ^2.7.0
+
+  # Media Playback (Android/desktop/web, iOS and tvOS run on AetherEngine)
+  media_kit: 1.2.6
+  media_kit_video: 2.0.1
+  # media_kit_libs_video would pull in media_kit_libs_ios_video, and
+  # media_kit_video's iOS podspec links -framework Mpv whenever it finds that
+  # package name in pubspec.lock. A path override still counts as present, so
+  # the package has to stay out of the graph entirely for the iOS build to skip
+  # libmpv. The platforms that do need it are listed individually instead.
+  media_kit_libs_android_video: 1.3.8
+  media_kit_libs_macos_video: 1.1.4
+  media_kit_libs_windows_video: 1.0.11
+  media_kit_libs_linux: 1.2.1
+  # Tizen playback backend (TizenPlayerBackend) — media_kit/libmpv and Media3
+  # are unavailable on Tizen, so video plays through video_player, whose Tizen
+  # implementation (video_player_tizen) wraps the native AVPlay player.
+  video_player: ^2.9.2
+  video_player_tizen: any
+
+  # Image Loading
+  cached_network_image: ^3.4.1
+  flutter_cache_manager: ^3.4.1
+  flutter_svg: ^2.2.1
+
+  # Crypto
+  crypto: ^3.0.6
+
+  # Connectivity
+  connectivity_plus: ^7.1.1
+
+  # Gamepad UI navigation on desktop and iOS. Android is left out on purpose,
+  # because this plugin's setup wants to override the same Activity methods
+  # MainActivity already uses for the emulator, and pads there already arrive
+  # as key events anyway.
+  #
+  # Raw input stream only. The companion flutter_gamepads widget layer isn't
+  # used, since it drops input when nothing has focus and can't repeat a held
+  # direction. See GamepadNavigationScope.
+  gamepads: ^0.1.10
+
+  # Notifications
+  flutter_local_notifications: ^21.0.0
+  audio_service: ^0.18.18
+  audio_session: ^0.2.3
+  rxdart: ^0.28.0
+  # Linux desktop MPRIS media controls
+  dbus: ^0.7.14
+
+  # Utilities
+  device_info_plus: ^11.5.0
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  logger: ^2.7.0
+  intl: ^0.20.2
+  collection: ^1.19.1
+  package_info_plus: ^8.3.1
+  uuid: ^4.5.3
+  cupertino_icons: ^1.0.9
+  window_manager: ^0.5.1
+
+  # Local packages
+  server_core:
+    path: packages/server_core
+  server_jellyfin:
+    path: packages/server_jellyfin
+  server_emby:
+    path: packages/server_emby
+  playback_core:
+    path: packages/playback_core
+  playback_jellyfin:
+    path: packages/playback_jellyfin
+  playback_emby:
+    path: packages/playback_emby
+  moonfin_design:
+    path: packages/design
+  jellyfin_preference:
+    path: packages/preference
+  moonfin_native_video:
+    path: packages/moonfin_native_video
+  url_launcher: ^6.3.2
+  file_picker: ^11.0.2
+  webview_flutter: ^4.13.1
+  flutter_inappwebview: ^6.1.5
+  webview_win_floating: ^3.0.3
+  webview_flutter_android: ^4.12.0
+  webview_flutter_wkwebview: ^3.25.1
+  youtube_player_iframe: ^6.0.0
+  pdfrx: ^2.2.24
+  flutter_widget_from_html_core: ^0.16.1
+  # Vendored fork of kindle_unpack 0.1.1 (MOBI/AZW/AZW3 -> EPUB), patched to
+  # build against archive 4.x. See packages/kindle_unpack and the patch note.
+  kindle_unpack:
+    path: packages/kindle_unpack
+  archive: ^4.0.9
+  rar:
+    path: packages/rar_fork
+  archive_extract:
+    path: packages/archive_extract
+  screen_brightness_platform_interface: ^2.1.0
+  screen_brightness_android: ^2.1.3
+  screen_brightness_ios: ^2.1.2
+  wakelock_plus: ^1.3.3
+  volume_controller: ^3.4.2
+  web: ^1.1.1
+  custom_tv_text_field:
+    path: packages/custom_tv_text_field_fork
+  speech_to_text: ^7.3.0
+  qr_flutter: ^4.1.0
+
+  # Tizen (Samsung TV) federated plugin implementations. These contribute only
+  # to the `tizen` platform (no-ops on other platforms) and are resolved by
+  # `flutter-tizen pub get`. They provide Tizen backends for first-party plugins
+  # whose default implementation has no Tizen support.
+  path_provider_tizen: any
+  shared_preferences_tizen: any
+  connectivity_plus_tizen: any
+  device_info_plus_tizen: any
+  package_info_plus_tizen: any
+  url_launcher_tizen: any
+  permission_handler_tizen: any
+  flutter_secure_storage_tizen: any
+  wakelock_plus_tizen: any
+  sqflite_tizen: any
+
+  # 1.1.1 fixed a startup race where the configure call could be silently
+  # lost, leaving the engine's aggressive default remote tuning active.
+  flutter_tvos: ^1.1.2
+  path_provider_tvos: any
+  shared_preferences_tvos: any
+  flutter_secure_storage_tvos: any
+  sqflite_tvos: any
+  firebase_core: ^4.11.0
+  firebase_messaging: ^16.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.5.4
+  freezed: ^2.5.8
+  json_serializable: ^6.9.5
+  injectable_generator: ^2.7.0
+  riverpod_generator: ^2.6.4
+  drift_dev: ^2.28.0
+  mocktail: ^1.0.5
+  msix: ^3.16.12
+
+dependency_overrides:
+  media_kit_libs_android_video:
+    path: packages/media_kit_libs_android_video_full
+  media_kit_libs_windows_video:
+    path: packages/media_kit_libs_windows_video
+  # Vendored 0.6.0 with a Windows texture_bridge.cc fix for scroll/resize and
+  # tab-switch crashes (null-visual guard + WGC Recreate moved off the
+  # capture-thread mutex). The delta is recorded in
+  # patches/flutter_inappwebview_windows-0.6.0-texture_bridge.patch; on upgrade,
+  # re-vendor the matching version and re-apply that patch.
+  flutter_inappwebview_windows:
+    path: packages/flutter_inappwebview_windows
+  # Vendored 0.1.2 that degrades instead of throwing from its detached input
+  # thread, which aborted the app at startup when /dev/input was missing or
+  # could not be watched. The delta is recorded in
+  # patches/gamepads_linux-0.1.2-no-abort-on-input-errors.patch. On upgrade,
+  # re-vendor the matching version and re-apply that patch.
+  gamepads_linux:
+    path: packages/gamepads_linux
+  synchronized: 3.3.1
+  wakelock_plus: 1.3.3
+  screen_brightness_android: 2.1.3
+  screen_brightness_ios: 2.1.2
+  screen_brightness_platform_interface: 2.1.0
+  volume_controller: 3.4.2
+  universal_platform: 1.1.0
+  plugin_platform_interface: 2.1.8
+  web: 1.1.1
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/icons/ratings/
+    - assets/fonts/
+    - assets/subtitle_fonts/
+    - assets/licenses/cores/
+    - assets/intro/tortugarr_intro.mp4
+
+  fonts:
+    - family: NeonPulseDisplay
+      fonts:
+        - asset: assets/fonts/Orbitron-Regular.ttf
+        - asset: assets/fonts/Orbitron-Bold.ttf
+          weight: 700
+    - family: NeonPulseBody
+      fonts:
+        - asset: assets/fonts/Rajdhani-Regular.ttf
+        - asset: assets/fonts/Rajdhani-Bold.ttf
+          weight: 700
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+    - family: EightBitHero
+      fonts:
+        - asset: assets/fonts/PressStart2P-Regular.ttf
+
+msix_config:
+  display_name: Moonfin
+  publisher_display_name: Moonfin
+  identity_name: com.moonfin.app
+  msix_version: 2.3.2.0
+  logo_path: assets/icons/app_icon.png
+  capabilities: internetClient, internetClientServer
+  languages: en-us

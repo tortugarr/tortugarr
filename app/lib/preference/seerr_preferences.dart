@@ -1,0 +1,388 @@
+import '../util/subtitle_track_logic.dart';
+import 'package:get_it/get_it.dart';
+import 'package:jellyfin_preference/jellyfin_preference.dart';
+
+import '../auth/repositories/session_repository.dart';
+import 'home_section_config.dart';
+import 'preference_constants.dart';
+import 'seerr_row_config.dart';
+
+class SeerrPreferences {
+  final PreferenceStore _store;
+  final SessionRepository _session;
+
+  SeerrPreferences(this._store, this._session);
+
+  String _userKey(String key) {
+    final uid = _session.activeUserId ?? '';
+    return 'seerr_${key}_$uid';
+  }
+
+    static String normalizeVariant(String? value) {
+        final normalized = value?.trim().toLowerCase() ?? '';
+        if (normalized == 'seerr' || normalized == 'jelly') {
+            return 'seerr';
+        }
+        return 'seerr';
+    }
+
+  bool get enabled => _store.getBool(_userKey('enabled')) ?? false;
+  Future<void> setEnabled(bool value) => _store.setBool(_userKey('enabled'), value);
+
+  String get serverUrl => _store.getString(_userKey('server_url')) ?? '';
+  Future<void> setServerUrl(String value) => _store.setString(_userKey('server_url'), value);
+
+  String get authMethod => _store.getString(_userKey('auth_method')) ?? 'jellyfin';
+  Future<void> setAuthMethod(String value) => _store.setString(_userKey('auth_method'), value);
+
+  String get apiKey => _store.getString(_userKey('api_key')) ?? '';
+  Future<void> setApiKey(String value) => _store.setString(_userKey('api_key'), value);
+
+  bool get moonfinMode => _store.getBool(_userKey('moonfin_mode')) ?? false;
+  Future<void> setMoonfinMode(bool value) => _store.setBool(_userKey('moonfin_mode'), value);
+
+  String get moonfinDisplayName => _store.getString(_userKey('moonfin_display_name')) ?? '';
+  Future<void> setMoonfinDisplayName(String value) =>
+      _store.setString(_userKey('moonfin_display_name'), value);
+
+  /// Label for the Seerr integration: the moonbase display name when one is set,
+  /// otherwise [fallback] (typically l10n.seerr).
+  String labelOrDefault(String fallback) {
+    final name = moonfinDisplayName.trim();
+    return name.isNotEmpty ? name : fallback;
+  }
+
+  String get moonfinVariant => normalizeVariant(_store.getString(_userKey('moonfin_variant')));
+  bool get isSeerrVariant => moonfinVariant == 'seerr';
+  Future<void> setMoonfinVariant(String value) =>
+      _store.setString(_userKey('moonfin_variant'), normalizeVariant(value));
+
+  String get moonfinUserId => _store.getString(_userKey('moonfin_user_id')) ?? '';
+  Future<void> setMoonfinUserId(String value) =>
+      _store.setString(_userKey('moonfin_user_id'), value);
+
+  bool get lastConnectionSuccess =>
+      _store.getBool(_userKey('last_connection_success')) ?? false;
+  Future<void> setLastConnectionSuccess(bool value) =>
+      _store.setBool(_userKey('last_connection_success'), value);
+
+  bool get showInNavigation => _store.getBool(_userKey('show_in_navigation')) ?? true;
+  Future<void> setShowInNavigation(bool value) =>
+      _store.setBool(_userKey('show_in_navigation'), value);
+
+  bool get showInToolbar => _store.getBool(_userKey('show_in_toolbar')) ?? true;
+  Future<void> setShowInToolbar(bool value) =>
+      _store.setBool(_userKey('show_in_toolbar'), value);
+
+  String get requestsFilter => _store.getString(_userKey('requests_filter')) ?? '';
+  Future<void> setRequestsFilter(String value) =>
+      _store.setString(_userKey('requests_filter'), value);
+
+  bool get showRequestStatus => _store.getBool(_userKey('show_request_status')) ?? true;
+  Future<void> setShowRequestStatus(bool value) =>
+      _store.setBool(_userKey('show_request_status'), value);
+
+  /// Discovery rows keep only English/Scandinavian/German/French titles
+  /// (see SeerrLanguageFilter). Read by SeerrRepository under this key.
+  static const hideForeignKey = 'hide_foreign';
+  bool get hideForeignContent =>
+      _store.getBool(_userKey(hideForeignKey)) ?? true;
+  Future<void> setHideForeignContent(bool value) =>
+      _store.setBool(_userKey(hideForeignKey), value);
+
+  /// Debug view for the filter above: rows are left unfiltered and the titles
+  /// it would hide get a red "SKJULES" mark. Off by default.
+  static const previewForeignKey = 'preview_foreign';
+  bool get previewForeignContent =>
+      _store.getBool(_userKey(previewForeignKey)) ?? false;
+  Future<void> setPreviewForeignContent(bool value) =>
+      _store.setBool(_userKey(previewForeignKey), value);
+
+  /// Subtitle menus list every language instead of only Norwegian and
+  /// English. Off by default.
+  static const showAllSubtitleLanguagesKey = 'show_all_subtitle_langs';
+  bool get showAllSubtitleLanguages =>
+      _store.getBool(_userKey(showAllSubtitleLanguagesKey)) ?? false;
+  Future<void> setShowAllSubtitleLanguages(bool value) =>
+      _store.setBool(_userKey(showAllSubtitleLanguagesKey), value);
+
+  /// Languages the subtitle menus list when [showAllSubtitleLanguages] is off,
+  /// as ISO 639-2 codes. Norwegian and English by default.
+  static const subtitleMenuLanguagesKey = 'subtitle_menu_langs';
+  Set<String> get subtitleMenuLanguageCodes {
+    final raw = _store.getString(_userKey(subtitleMenuLanguagesKey));
+    if (raw == null) return Set.of(defaultSubtitleMenuLanguageCodes);
+    return raw.split(',').map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+  }
+
+  Future<void> setSubtitleMenuLanguageCodes(Set<String> codes) =>
+      _store.setString(_userKey(subtitleMenuLanguagesKey), codes.join(','));
+
+  /// Original languages the discovery filter keeps, as ISO 639-2 codes from
+  /// [discoveryMenuLanguages]. English, Norwegian, Swedish, Danish, German
+  /// and French by default.
+  static const discoveryLanguagesKey = 'discovery_langs';
+  Set<String> get discoveryLanguageCodes {
+    final raw = _store.getString(_userKey(discoveryLanguagesKey));
+    if (raw == null) return Set.of(defaultDiscoveryLanguageCodes);
+    return raw.split(',').map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+  }
+
+  Future<void> setDiscoveryLanguageCodes(Set<String> codes) =>
+      _store.setString(_userKey(discoveryLanguagesKey), codes.join(','));
+
+  /// Discovery titles in a kept language show their language badge
+  /// (EN, NO, SE ...) also when the preview is off. On by default.
+  static const showLanguageBadgesKey = 'show_language_badges';
+  bool get showLanguageBadges =>
+      _store.getBool(_userKey(showLanguageBadgesKey)) ?? true;
+  Future<void> setShowLanguageBadges(bool value) =>
+      _store.setBool(_userKey(showLanguageBadgesKey), value);
+
+  /// Season and series episode lists include the episodes Sonarr knows but
+  /// the library does not have yet, greyed out and downloadable. On by
+  /// default.
+  static const showMissingEpisodesKey = 'show_missing_episodes';
+  bool get showMissingEpisodes =>
+      _store.getBool(_userKey(showMissingEpisodesKey)) ?? true;
+  Future<void> setShowMissingEpisodes(bool value) =>
+      _store.setBool(_userKey(showMissingEpisodesKey), value);
+
+  /// Movie detail screens show the other movies of the movie's TMDB
+  /// collection ("Del av filmserien …"). On by default.
+  static const showMovieCollectionsKey = 'show_movie_collections';
+  bool get showMovieCollections =>
+      _store.getBool(_userKey(showMovieCollectionsKey)) ?? true;
+  Future<void> setShowMovieCollections(bool value) =>
+      _store.setBool(_userKey(showMovieCollectionsKey), value);
+
+  /// True when cards should carry the "SKJULES" mark.
+  bool get languagePreviewActive =>
+      hideForeignContent && previewForeignContent;
+
+  bool get blockNsfw => _store.getBool(_userKey('block_nsfw')) ?? true;
+  Future<void> setBlockNsfw(bool value) => _store.setBool(_userKey('block_nsfw'), value);
+
+  bool get notifyOnNewRequests => _store.getBool(_userKey('notify_new_requests')) ?? true;
+  Future<void> setNotifyOnNewRequests(bool value) =>
+      _store.setBool(_userKey('notify_new_requests'), value);
+
+  bool get notifyOnLibraryAdded => _store.getBool(_userKey('notify_library_added')) ?? true;
+  Future<void> setNotifyOnLibraryAdded(bool value) =>
+      _store.setBool(_userKey('notify_library_added'), value);
+
+  bool get notifyOnIssues => _store.getBool(_userKey('notify_issues')) ?? true;
+  Future<void> setNotifyOnIssues(bool value) =>
+      _store.setBool(_userKey('notify_issues'), value);
+
+  // Off by default: library churn (upgrades, re-scans) is noisy, and the
+  // Seerr "library added" pref above already covers requested media.
+  bool get notifyOnNewMedia =>
+      _store.getBool(_userKey('notify_new_media')) ?? false;
+  Future<void> setNotifyOnNewMedia(bool value) =>
+      _store.setBool(_userKey('notify_new_media'), value);
+
+  SeerrFetchLimit get fetchLimit {
+    final stored = _store.getString(_userKey('fetch_limit'));
+    if (stored == null || stored.isEmpty) return SeerrFetchLimit.medium;
+    for (final v in SeerrFetchLimit.values) {
+      if (v.name == stored) return v;
+    }
+    return SeerrFetchLimit.medium;
+  }
+
+  Future<void> setFetchLimit(SeerrFetchLimit value) =>
+      _store.setString(_userKey('fetch_limit'), value.name);
+
+  List<SeerrRowConfig> get rowsConfig =>
+      SeerrRowConfig.fromJsonString(_store.getString(_userKey('rows_config')) ?? '');
+
+  Future<void> setRowsConfig(List<SeerrRowConfig> value) =>
+      _store.setString(_userKey('rows_config'), SeerrRowConfig.toJsonString(value));
+
+  List<SeerrRowConfig> get homeRowsConfig {
+    final raw = _store.getString(_userKey('home_rows_config'));
+    if (raw != null && raw.isNotEmpty) {
+      return SeerrRowConfig.fromJsonString(raw);
+    }
+    // Fall back to the old home_sections_config state when this has never been
+    // saved, so upgrades keep the rows the user already chose.
+    return _homeRowsConfigFromSections();
+  }
+
+  Future<void> setHomeRowsConfig(List<SeerrRowConfig> value) =>
+      _store.setString(_userKey('home_rows_config'), SeerrRowConfig.toJsonString(value));
+
+  List<SeerrRowConfig> _homeRowsConfigFromSections() {
+    final sectionsJson = _store.getString('home_sections_config');
+    if (sectionsJson == null || sectionsJson.isEmpty) {
+      return SeerrRowConfig.defaults();
+    }
+    final sections = HomeSectionConfig.fromJsonString(sectionsJson);
+    return SeerrRowConfig.defaults().map((row) {
+      final idx = sections.indexWhere((s) => s.type == row.type.homeSectionType);
+      return idx >= 0 ? row.copyWith(enabled: sections[idx].enabled) : row;
+    }).toList();
+  }
+
+  bool isSeerrHomeRowEnabled(HomeSectionType type) {
+    final seerrType = type.seerrRowType;
+    if (seerrType == null || !enabled) return false;
+    final config = homeRowsConfig.firstWhere(
+      (c) => c.type == seerrType,
+      orElse: () => SeerrRowConfig(type: seerrType, enabled: false, order: 0),
+    );
+    return config.enabled;
+  }
+
+  List<SeerrRowType> get activeRows {
+    final configs = rowsConfig.where((c) => c.enabled).toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+    return configs.map((c) => c.type).toList();
+  }
+
+  String get hdMovieProfileId => _store.getString(_userKey('hd_movie_profile_id')) ?? '';
+  Future<void> setHdMovieProfileId(String value) =>
+      _store.setString(_userKey('hd_movie_profile_id'), value);
+
+  String get fourKMovieProfileId => _store.getString(_userKey('4k_movie_profile_id')) ?? '';
+  Future<void> setFourKMovieProfileId(String value) =>
+      _store.setString(_userKey('4k_movie_profile_id'), value);
+
+  String get hdTvProfileId => _store.getString(_userKey('hd_tv_profile_id')) ?? '';
+  Future<void> setHdTvProfileId(String value) =>
+      _store.setString(_userKey('hd_tv_profile_id'), value);
+
+  String get fourKTvProfileId => _store.getString(_userKey('4k_tv_profile_id')) ?? '';
+  Future<void> setFourKTvProfileId(String value) =>
+      _store.setString(_userKey('4k_tv_profile_id'), value);
+
+  String get hdMovieRootFolderId => _store.getString(_userKey('hd_movie_root_folder_id')) ?? '';
+  Future<void> setHdMovieRootFolderId(String value) =>
+      _store.setString(_userKey('hd_movie_root_folder_id'), value);
+
+  String get fourKMovieRootFolderId =>
+      _store.getString(_userKey('4k_movie_root_folder_id')) ?? '';
+  Future<void> setFourKMovieRootFolderId(String value) =>
+      _store.setString(_userKey('4k_movie_root_folder_id'), value);
+
+  String get hdTvRootFolderId => _store.getString(_userKey('hd_tv_root_folder_id')) ?? '';
+  Future<void> setHdTvRootFolderId(String value) =>
+      _store.setString(_userKey('hd_tv_root_folder_id'), value);
+
+  String get fourKTvRootFolderId => _store.getString(_userKey('4k_tv_root_folder_id')) ?? '';
+  Future<void> setFourKTvRootFolderId(String value) =>
+      _store.setString(_userKey('4k_tv_root_folder_id'), value);
+
+  String get hdMovieServerId => _store.getString(_userKey('hd_movie_server_id')) ?? '';
+  Future<void> setHdMovieServerId(String value) =>
+      _store.setString(_userKey('hd_movie_server_id'), value);
+
+  String get fourKMovieServerId => _store.getString(_userKey('4k_movie_server_id')) ?? '';
+  Future<void> setFourKMovieServerId(String value) =>
+      _store.setString(_userKey('4k_movie_server_id'), value);
+
+  String get hdTvServerId => _store.getString(_userKey('hd_tv_server_id')) ?? '';
+  Future<void> setHdTvServerId(String value) =>
+      _store.setString(_userKey('hd_tv_server_id'), value);
+
+  String get fourKTvServerId => _store.getString(_userKey('4k_tv_server_id')) ?? '';
+  Future<void> setFourKTvServerId(String value) =>
+      _store.setString(_userKey('4k_tv_server_id'), value);
+
+  Future<void> clearAll() async {
+    final keys = [
+      'enabled', 'server_url', 'auth_method', 'api_key',
+      'moonfin_mode', 'moonfin_display_name', 'moonfin_variant', 'moonfin_user_id',
+      'last_connection_success',
+      'show_in_navigation', 'show_in_toolbar', 'show_request_status',
+      'requests_filter',
+      'block_nsfw', hideForeignKey, previewForeignKey, showAllSubtitleLanguagesKey, showMissingEpisodesKey, 'notify_new_requests', 'notify_library_added',
+      'notify_issues', 'notify_new_media',
+      'fetch_limit', 'rows_config', 'home_rows_config',
+      'hd_movie_profile_id', '4k_movie_profile_id',
+      'hd_tv_profile_id', '4k_tv_profile_id',
+      'hd_movie_root_folder_id', '4k_movie_root_folder_id',
+      'hd_tv_root_folder_id', '4k_tv_root_folder_id',
+      'hd_movie_server_id', '4k_movie_server_id',
+      'hd_tv_server_id', '4k_tv_server_id',
+    ];
+    for (final key in keys) {
+      await _store.remove(_userKey(key));
+    }
+  }
+}
+
+/// Read by the subtitle menus. Shows everything if the prefs are missing.
+bool showAllSubtitleLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return true;
+  try {
+    return getIt<SeerrPreferences>().showAllSubtitleLanguages;
+  } catch (_) {
+    return true;
+  }
+}
+
+/// Read by the subtitle menus and the player. Norwegian and English if the
+/// prefs are missing.
+Set<String> subtitleMenuLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) {
+    return Set.of(defaultSubtitleMenuLanguageCodes);
+  }
+  try {
+    return getIt<SeerrPreferences>().subtitleMenuLanguageCodes;
+  } catch (_) {
+    return Set.of(defaultSubtitleMenuLanguageCodes);
+  }
+}
+
+/// Read by the discovery filter. The default languages if the prefs are
+/// missing.
+Set<String> discoveryLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) {
+    return Set.of(defaultDiscoveryLanguageCodes);
+  }
+  try {
+    return getIt<SeerrPreferences>().discoveryLanguageCodes;
+  } catch (_) {
+    return Set.of(defaultDiscoveryLanguageCodes);
+  }
+}
+
+/// Read by the discovery cards. Off if the prefs are missing.
+bool showLanguageBadgesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showLanguageBadges;
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Read by the episode lists. Off if the prefs are missing, so nothing new
+/// shows up when the setting cannot be read.
+bool showMissingEpisodesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showMissingEpisodes;
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Read by the movie detail screen. Off if the prefs are missing, so nothing
+/// new shows up when the setting cannot be read.
+bool showMovieCollectionsSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showMovieCollections;
+  } catch (_) {
+    return false;
+  }
+}

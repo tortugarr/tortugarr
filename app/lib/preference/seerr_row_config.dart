@@ -1,0 +1,87 @@
+import 'dart:convert';
+
+import 'preference_constants.dart';
+
+class SeerrRowConfig {
+  final SeerrRowType type;
+  final bool enabled;
+  final int order;
+
+  const SeerrRowConfig({
+    required this.type,
+    this.enabled = true,
+    this.order = 0,
+  });
+
+  factory SeerrRowConfig.fromJson(Map<String, dynamic> json) {
+    final typeName = json['type'] as String? ?? 'trending';
+    return SeerrRowConfig(
+      type: SeerrRowType.fromSerialized(typeName),
+      enabled: json['enabled'] as bool? ?? true,
+      order: json['order'] as int? ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'type': type.serializedName,
+        'enabled': enabled,
+        'order': order,
+      };
+
+  SeerrRowConfig copyWith({
+    SeerrRowType? type,
+    bool? enabled,
+    int? order,
+  }) =>
+      SeerrRowConfig(
+        type: type ?? this.type,
+        enabled: enabled ?? this.enabled,
+        order: order ?? this.order,
+      );
+
+  static List<SeerrRowConfig> defaults() => [
+        SeerrRowConfig(type: SeerrRowType.recentRequests, order: 0),
+        SeerrRowConfig(type: SeerrRowType.yourWatchlist, order: 1),
+        SeerrRowConfig(type: SeerrRowType.recentlyAdded, order: 2),
+        SeerrRowConfig(type: SeerrRowType.trending, order: 3),
+        SeerrRowConfig(type: SeerrRowType.popularMovies, order: 4),
+        SeerrRowConfig(type: SeerrRowType.movieGenres, order: 5),
+        SeerrRowConfig(type: SeerrRowType.upcomingMovies, order: 6),
+        SeerrRowConfig(type: SeerrRowType.popularSeries, order: 7),
+        SeerrRowConfig(type: SeerrRowType.seriesGenres, order: 8),
+        SeerrRowConfig(type: SeerrRowType.upcomingSeries, order: 9),
+      ];
+
+  static List<SeerrRowConfig> fromJsonString(String jsonString) {
+    if (jsonString.isEmpty) return defaults();
+    try {
+      final list = jsonDecode(jsonString) as List;
+      final parsed = list
+          .map((e) => SeerrRowConfig.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return _appendMissingDefaults(parsed);
+    } catch (_) {
+      return defaults();
+    }
+  }
+
+  /// Adds any default rows missing from a user's saved config, like the
+  /// watchlist row, so they show up without needing a reset. New rows go at
+  /// the end to keep the user's existing order.
+  static List<SeerrRowConfig> _appendMissingDefaults(
+    List<SeerrRowConfig> parsed,
+  ) {
+    final present = parsed.map((c) => c.type).toSet();
+    final merged = List<SeerrRowConfig>.of(parsed);
+    var order = parsed.fold<int>(-1, (m, c) => c.order > m ? c.order : m) + 1;
+    for (final def in defaults()) {
+      if (!present.contains(def.type)) {
+        merged.add(def.copyWith(order: order++));
+      }
+    }
+    return merged;
+  }
+
+  static String toJsonString(List<SeerrRowConfig> configs) =>
+      jsonEncode(configs.map((c) => c.toJson()).toList());
+}
