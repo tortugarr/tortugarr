@@ -318,6 +318,11 @@ through a VPN with a kill switch.
 
 ## When something looks wrong
 
+**Jellyfin says "Plugin updates available" for Moonfin. Should I update?**
+No. Tortugarr is tested with Moonfin plugin 2.0.2, and the installer keeps it there on purpose.
+If it was updated anyway, `sudo tortugarr repair` puts 2.0.2 back. See
+[troubleshooting](../server/docs/troubleshooting.md).
+
 **A series shows up under the wrong name (e.g. "Ted" appears as "Ted Lasso").**
 The folder name was ambiguous. Rename the folder to `Title (Year)`. If that's not enough, add the
 series' TVDB id, like `Ted (2024) [tvdbid-404604]`, and the library picks it up correctly after a
