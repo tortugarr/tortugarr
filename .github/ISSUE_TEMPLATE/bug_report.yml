@@ -1,0 +1,68 @@
+name: Bug report
+description: Something in the app, the installer or the plugin does not work.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please do not paste passwords, API keys, server addresses or
+        other private data. Security problems go through [SECURITY.md](https://github.com/tortugarr/tortugarr/blob/main/SECURITY.md),
+        never a public issue.
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: In the app, Settings > About.
+      placeholder: "4.20.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: TV model, or phone / tablet model, and Android version if you know it.
+      placeholder: "Chromecast with Google TV, Android 14"
+    validations:
+      required: true
+  - type: input
+    id: server-os
+    attributes:
+      label: Server OS
+      description: For example Ubuntu 24.04, or Windows 11 with WSL2.
+      placeholder: "Ubuntu 24.04"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you did
+      description: The steps, so we can do the same.
+      placeholder: |
+        1. Opened a film
+        2. Picked Download Now
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Error messages and screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: support-bundle
+    attributes:
+      label: Support bundle
+      description: |
+        On the server, run `sudo tortugarr support`. It prints where it saved the bundle
+        (`tortugarr-support-<date>.tar.gz`); drag that file here. Passwords and keys are
+        removed from it, but it does hold logs, so have a look before you attach it.
+    validations:
+      required: false
