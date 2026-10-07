@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/images/logo.webp" alt="Tortugarr logo: a parrot in a pirate hat" width="240">
+  <img src="docs/images/screensaver-sign.webp" alt="Tortugarr" width="520">
 </p>
 
-<h1 align="center">Tortugarr</h1>
+<h1 align="center">Every pirate needs a harbor.</h1>
 
 <p align="center">
   <b>Your own streaming service. On your TV. Yours forever.</b><br>
@@ -11,7 +11,6 @@
 
 <p align="center">
   <a href="https://github.com/tortugarr/tortugarr/releases/latest"><img alt="Release 4.20.0" src="https://img.shields.io/badge/release-4.20.0-8b5a2b"></a>
-  <a href="https://github.com/tortugarr/tortugarr/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/tortugarr/tortugarr/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License: GPL-2.0" src="https://img.shields.io/badge/license-GPL--2.0-blue"></a>
   <img alt="App: Android TV, Google TV, phone" src="https://img.shields.io/badge/app-Android%20TV%20%C2%B7%20Google%20TV%20%C2%B7%20phone-3ddc84">
   <img alt="Server: Ubuntu 22.04, 24.04" src="https://img.shields.io/badge/server-Ubuntu%2022.04%20%C2%B7%2024.04-e95420">
