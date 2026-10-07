@@ -50,12 +50,30 @@ export of a commit (a fresh `git worktree` or `git archive`), never from a worki
 working copy can hold git-ignored files, such as a filled-in secrets file or a stray answers
 file, that a clean export does not.
 
-- `app/build-android-tv-public.sh` does this for the APKs: it builds in a separate worktree with
-  the empty secrets template and scans the APK for private values before keeping it.
-- `server/plugin/build.sh` refuses to publish a plugin DLL that contains a build path.
+For the APKs, export the commit, use the empty secrets template, build there, then check the
+APK holds no private strings or home-folder paths before keeping it:
+
+```bash
+rm -rf /tmp/tortugarr-export && mkdir -p /tmp/tortugarr-export
+git archive HEAD | tar -x -C /tmp/tortugarr-export
+cd /tmp/tortugarr-export/app
+cp lib/data/services/download/download_now_secrets.example.dart \
+   lib/data/services/download/download_now_secrets.dart
+flutter pub get
+flutter build apk --release --flavor androidTv-public --dart-define=TORTUGARR_PUBLIC=true   # TV
+flutter build apk --release --flavor mobile-public    --dart-define=TORTUGARR_PUBLIC=true   # phone
+
+# Check every APK: no output from grep means clean. Also grep for your own server
+# addresses and keys.
+for apk in build/app/outputs/flutter-apk/*-release.apk; do
+  rm -rf /tmp/apk-check && unzip -q "$apk" -d /tmp/apk-check
+  grep -rlaE '/home/|/root/|/Users/' /tmp/apk-check && echo "LEAK in $apk"
+done
+```
 
 For the server tar file, export the commit first, then build the plugin and make the tar
-there as in [server/README.md](server/README.md):
+there as in [server/README.md](server/README.md). `server/plugin/build.sh` refuses to publish
+a plugin DLL that contains a build path:
 
 ```bash
 mkdir -p /tmp/tortugarr-export
