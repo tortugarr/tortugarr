@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  server:
+    name: Server (installer + plugin)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax
+        run: find server -name '*.sh' -print0 | xargs -0 -n1 bash -n
+      - name: Python
+        run: |
+          python3 -m py_compile server/bootstrap/tortugarr_bootstrap.py
+          python3 -I server/tests/unit/test_jellyfin_start.py
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Plugin tests and build
+        run: server/plugin/build.sh
+
+  app:
+    name: App (analyze)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.44.x'
+          cache: true
+      - name: Analyze
+        working-directory: app
+        run: |
+          cp lib/data/services/download/download_now_secrets.example.dart \
+             lib/data/services/download/download_now_secrets.dart
+          flutter pub get
+          flutter analyze --no-fatal-infos --no-fatal-warnings

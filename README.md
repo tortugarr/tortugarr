@@ -1,12 +1,20 @@
 <p align="center">
-  <img src="app/assets/images/screensaver_sign.png" alt="Tortugarr" width="520">
+  <img src="docs/images/logo.webp" alt="Tortugarr logo: a parrot in a pirate hat" width="240">
 </p>
 
-<h1 align="center">Every pirate needs a harbor.</h1>
+<h1 align="center">Tortugarr</h1>
 
 <p align="center">
   <b>Your own streaming service. On your TV. Yours forever.</b><br>
   No subscriptions. No ads. Nothing disappears because a licence ran out.
+</p>
+
+<p align="center">
+  <a href="https://github.com/tortugarr/tortugarr/releases/latest"><img alt="Release 4.20.0" src="https://img.shields.io/badge/release-4.20.0-8b5a2b"></a>
+  <a href="https://github.com/tortugarr/tortugarr/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/tortugarr/tortugarr/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="License: GPL-2.0" src="https://img.shields.io/badge/license-GPL--2.0-blue"></a>
+  <img alt="App: Android TV, Google TV, phone" src="https://img.shields.io/badge/app-Android%20TV%20%C2%B7%20Google%20TV%20%C2%B7%20phone-3ddc84">
+  <img alt="Server: Ubuntu 22.04, 24.04" src="https://img.shields.io/badge/server-Ubuntu%2022.04%20%C2%B7%2024.04-e95420">
 </p>
 
 <p align="center">
@@ -18,7 +26,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/tv-home.png" alt="Tortugarr on a TV" width="900">
+  <img src="docs/images/tv-home.webp" alt="Tortugarr on a TV" width="900">
 </p>
 
 ---
@@ -39,7 +47,7 @@ big apps, it runs on your TV with the normal remote, and everything you add stay
 No laptop. No copying files around. No fiddling with five web pages.
 
 <p align="center">
-  <img src="docs/images/tv-download-now.png" alt="Download Now: pick the exact file, by quality, size and seeders" width="900"><br>
+  <img src="docs/images/tv-download-now.webp" alt="Download Now: pick the exact file, by quality, size and seeders" width="900"><br>
   <sub><b>Download Now</b>: every release, sorted by quality, with size and seeders. You pick; it does the rest.</sub>
 </p>
 
@@ -60,21 +68,36 @@ No laptop. No copying files around. No fiddling with five web pages.
 - 📱 **TV, phone and tablet.** Same library everywhere; start on the phone, finish on the TV.
 
 <p align="center">
-  <img src="docs/images/tv-collection.png" alt="Film series: see which parts you are missing" width="900"><br>
+  <img src="docs/images/tv-collection.webp" alt="Film series: see which parts you are missing" width="900"><br>
   <sub>Film series at a glance: the parts you have, the ones you are <b>missing</b> (one click to get them), and what is <b>coming</b>.</sub>
 </p>
 
 <p align="center">
-  <img src="docs/images/tv-player.png" alt="Playback" width="440">
+  <img src="docs/images/tv-player.webp" alt="Playback" width="440">
   &nbsp;
-  <img src="docs/images/phone-login.png" alt="Tortugarr on a phone" width="160">
+  <img src="docs/images/phone-login.webp" alt="Tortugarr on a phone" width="160">
 </p>
 
-## One command sets up the whole harbor
+## How it works
 
-A few questions with sensible defaults, then the installer sets up and connects everything:
-Jellyfin, Seerr, Sonarr, Radarr, Prowlarr, Bazarr, the download client and the Tortugarr
-plugin. About ten minutes later you type a short code from the TV into your phone, and you are in.
+One command sets up the whole harbor. A few questions with sensible defaults, then the installer
+sets up and connects everything: Jellyfin, Seerr, Sonarr, Radarr, Prowlarr, Bazarr, the download
+client and the Tortugarr plugin. The app talks to your Jellyfin server; downloads, deletes and
+subtitles go through the Tortugarr plugin there, so the app holds no keys.
+
+```mermaid
+flowchart LR
+  app["📺 Tortugarr app<br/>TV · phone · tablet"] -->|port 8096| jf["Jellyfin<br/>+ Tortugarr plugin"]
+  jf --> arr["Sonarr · Radarr"]
+  jf --> bazarr["Bazarr<br/>subtitles"]
+  seerr["Seerr<br/>requests"] --> arr
+  prowlarr["Prowlarr<br/>your indexers"] --> arr
+  arr --> dl["Download client<br/>qBittorrent · SABnzbd"]
+  dl --> media[("Your media folder")]
+  media --> jf
+```
+
+Ports, files and security notes: [**architecture**](server/docs/architecture.md).
 
 ## Get started in about 15 minutes
 
@@ -99,7 +122,9 @@ Everything you need is on the **[Releases page](https://github.com/tortugarr/tor
 Open a terminal on the machine that will be your server and run:
 
 ```bash
-wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.0.tar
+wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.0.tar \
+     https://github.com/tortugarr/tortugarr/releases/latest/download/SHA256SUMS.txt
+sha256sum --check --ignore-missing SHA256SUMS.txt   # should print: tortugarr-server-4.20.0.tar: OK
 tar -xf tortugarr-server-4.20.0.tar
 cd tortugarr-server
 sudo ./install.sh
@@ -143,7 +168,8 @@ Open Tortugarr, add your server (`http://<server-address>:8096`) and choose **Qu
 The TV shows a six-digit code. On your phone, open the same address in a browser, log in, tap
 the profile icon > **Quick Connect**, and type the code. Done.
 
-### Changed your mind? Uninstall
+<details>
+<summary><b>Changed your mind? Uninstall</b></summary>
 
 On the server:
 
@@ -163,6 +189,8 @@ It lists what it will remove and asks before it does anything:
   too, and the network is set back the way it was.
 
 On the TV or phone, remove the app like any other: **Settings > Apps > Tortugarr > Uninstall**.
+
+</details>
 
 <details>
 <summary><b>For developers: build from source</b></summary>
@@ -220,14 +248,6 @@ sideloading.
 | **App** | Android TV and Google TV (real TV and emulator). Android phones: first runs in an emulator. |
 | **Version** | 4.20.0 |
 
-## What is in this repository
-
-| Folder | |
-|---|---|
-| [`app/`](app/) | The Tortugarr app, built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core). |
-| [`server/`](server/) | The installer and the Tortugarr Jellyfin plugin. |
-| [`docs/`](docs/) | [FAQ](docs/FAQ.md), user guide and manual. |
-
 ## Take it further 🏴‍☠️
 
 Tortugarr was built by one person and an AI, for one living room. If it is useful to you, it can
@@ -239,7 +259,8 @@ be so much more, and **you are warmly invited to build on it**:
 - **More homes:** other Linux distributions, ARM boards like the Raspberry Pi, a NAS.
 - **More people:** per-user permissions, profiles for the kids, more languages.
 - **Better ideas than ours:** open an issue, send a pull request, or just tell us what you
-  would change.
+  would change. [**CONTRIBUTING.md**](CONTRIBUTING.md) shows how to build both parts and what
+  is where in this repository.
 
 Every pirate ship started as somebody else's boat.
 

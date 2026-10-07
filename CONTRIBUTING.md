@@ -3,6 +3,14 @@
 Thanks for helping. This page covers how to build the two parts, and the two rules that keep
 the repository and the releases clean.
 
+## What is where
+
+| Folder | |
+|---|---|
+| [`app/`](app/) | The Tortugarr app, built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core). |
+| [`server/`](server/) | The installer and the Tortugarr Jellyfin plugin. |
+| [`docs/`](docs/) | [FAQ](docs/FAQ.md), user guide and manual. |
+
 ## Build the app
 
 Needs Flutter 3.44 (stable) with the Android SDK, and JDK 17 or newer. From `app/`:
