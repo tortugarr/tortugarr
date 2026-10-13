@@ -329,6 +329,11 @@ free-space enforcement — are built against the pinned plugin and can break wit
 The installer keeps the pinned version in place, and if it is ever updated anyway,
 `sudo tortugarr repair` restores 2.0.2.0. See [troubleshooting](../server/docs/troubleshooting.md).
 
+This is why the update prompt appears — and why you should ignore it. If you see a plugin update
+and are unsure what it means, or if Tortugarr's automation stops working, **report it at the
+Tortugarr issue tracker** (`https://github.com/tortugarr/tortugarr/issues`), not in Moonfin's
+tracker. The Tortugarr maintainers are the only ones who can fix Tortugarr-specific features.
+
 **Where to report problems.** Bugs, support questions, and unexpected behaviour are handled
 **only by the Tortugarr maintainers**. Please file **every** issue at the [Tortugarr GitHub
 issues page](https://github.com/tortugarr/tortugarr/issues), and not in the upstream Moonfin
