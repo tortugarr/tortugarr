@@ -1,0 +1,18 @@
+name: Feature idea
+description: Something Tortugarr could do better, or should do at all.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What should Tortugarr do?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: What would it make easier for you?
+    validations:
+      required: false

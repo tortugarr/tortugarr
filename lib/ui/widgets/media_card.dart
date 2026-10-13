@@ -4,16 +4,84 @@ import 'package:flutter_tvos/flutter_tvos.dart'
     show TvRemoteController, TvRemoteTouchEvent, TvRemoteTouchPhase;
 import 'package:moonfin_design/moonfin_design.dart';
 
+import 'seerr/seerr_media_type_badge.dart';
 import '../../preference/preference_constants.dart';
 import '../../util/platform_detection.dart';
 import '../../util/focus/dpad_keys.dart';
 import '../../util/focus/key_event_utils.dart';
+import '../../util/item_watch_state.dart';
+import '../../util/focus/scroll_utils.dart';
+import 'anime_marker_badge.dart';
 import 'bounded_network_image.dart';
 import 'focus/glass_focus_halo.dart';
 import 'marquee_text.dart';
+import 'media_badge.dart';
+import 'seerr/seerr_status_dot.dart';
 import '../mixins/focus_state_mixin.dart';
 
 class MediaCard extends StatefulWidget {
+  /// How much a focused card grows. A card with a title grows from the bottom
+  /// of its artwork, so all of the extra height lands above it and half the
+  /// extra width past each side. One without a title grows about its center.
+  /// A layout that packs cards against a clip boundary or each other has to
+  /// leave that much room or the focused card loses its edges.
+  ///
+  /// A television gets the larger pop because it's read from across a room.
+  /// Every television lays out on the same canvas, so which television it is
+  /// doesn't come into it.
+  static double get focusScale => PlatformDetection.isTV ? 1.12 : 1.05;
+
+  /// How much room to leave beside a card of [extent] so a focused one keeps
+  /// its edges.
+  ///
+  /// Cards paint in the order they are laid out, so the one after the focused
+  /// card covers whatever the growth pushed into the gap. Wide artwork grows
+  /// by the same fraction of a much larger number, so a gap that suits a
+  /// poster does not suit a banner.
+  static double focusGap(double extent, {double minimum = 12.0}) =>
+      minimum + (extent * (focusScale - 1) / 2);
+
+  /// The widest decode a card of this shape ever holds, in physical pixels.
+  ///
+  /// Public so a prefetch of a card's image uses the same cap the card does.
+  /// A prefetch capped differently lands under a different cache key and the
+  /// card decodes the image a second time.
+  static int decodeMaxWidthFor(double aspectRatio) =>
+      aspectRatio > 1.2 ? 960 : 640;
+
+  static const double _labelGap = 6;
+
+  static TextStyle _labelBaseStyle(BuildContext context) =>
+      Theme.of(context).textTheme.bodySmall ?? const TextStyle(fontSize: 12);
+
+  static double _titleFontSize(TextStyle base) => (base.fontSize ?? 12) + 1.0;
+
+  static double _lineHeight(TextScaler scaler, TextStyle style) =>
+      (scaler.scale(style.fontSize ?? 12) * (style.height ?? 1.2)) + 2;
+
+  /// How tall a titled card of [width] lays out, so a row can fit the cards it
+  /// holds. Assumes a card that isn't a banner and takes its subtitle as a
+  /// plain string.
+  ///
+  /// Focus growth isn't counted, since a titled card grows upward from the
+  /// bottom of its artwork and its bottom edge stays put.
+  static double layoutHeight(
+    BuildContext context, {
+    required double width,
+    required double aspectRatio,
+    bool hasSubtitle = false,
+  }) {
+    final scaler = MediaQuery.textScalerOf(context);
+    final base = _labelBaseStyle(context);
+    var height = width / aspectRatio + _labelGap;
+    height += _lineHeight(
+      scaler,
+      base.copyWith(fontSize: _titleFontSize(base)),
+    );
+    if (hasSubtitle) height += _lineHeight(scaler, base);
+    return height;
+  }
+
   final String? title;
   final String? subtitle;
   final Widget? subtitleWidget;
@@ -52,6 +120,10 @@ class MediaCard extends StatefulWidget {
   /// banner artwork has room for. The caller sets this rather than having the
   /// card guess from [aspectRatio].
   final bool isBanner;
+
+  /// The item behind the subbed/dubbed pill. Set only for standalone items such as
+  /// movies, which have no series to inherit a verdict from.
+  final String? animeMarkerItemId;
 
   /// Extra widgets layered over the poster image (inside its clip), e.g.
   /// format badges. Position each with [Positioned].
@@ -99,7 +171,25 @@ class MediaCard extends StatefulWidget {
     this.overlayOccupiesTopLeft = false,
     this.isGenreFallback = false,
     this.isBanner = false,
+    this.animeMarkerItemId,
   });
+
+  /// The genre name grows with the card, so it reads well both on a poster
+  /// and on a focused thumbnail. Long names shrink to fit.
+  static const _genreLabelRatio = 14 / 200;
+  static const _genreLabelMinSize = 14.0;
+  static const _genreLabelMaxSize = 24.0;
+
+  /// The Seerr genre rows draw their own label and call this, so both come out
+  /// the same size.
+  static double genreLabelFontSize(double cardWidth) =>
+      (cardWidth * _genreLabelRatio).clamp(
+        _genreLabelMinSize,
+        _genreLabelMaxSize,
+      );
+
+  /// Letter spacing grows with the text.
+  static double genreLabelLetterSpacing(double fontSize) => fontSize * 0.18;
 
   static IconData iconForType(String? type) {
     switch (type) {
@@ -247,8 +337,7 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
   @override
   Widget build(BuildContext context) {
     final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
-    final baseTextStyle =
-        Theme.of(context).textTheme.bodySmall ?? const TextStyle(fontSize: 12);
+    final baseTextStyle = MediaCard._labelBaseStyle(context);
     final subtitleColor =
         widget.subtitleColor ??
         (isNeon
@@ -257,9 +346,9 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
     final titleStyle = baseTextStyle.copyWith(
       color:
           widget.titleColor ??
-          (isNeon ? AppColorScheme.accent : baseTextStyle.color),
+          (isNeon ? AppColorScheme.accent : AppColorScheme.onSurface),
       fontWeight: FontWeight.bold,
-      fontSize: (baseTextStyle.fontSize ?? 12) + 1.0,
+      fontSize: MediaCard._titleFontSize(baseTextStyle),
       shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
     );
     final subtitleStyle = baseTextStyle.copyWith(
@@ -267,15 +356,8 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
       shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
     );
     final textScaler = MediaQuery.textScalerOf(context);
-
-    double lineHeightFor(TextStyle style) {
-      final fontSize = style.fontSize ?? 12;
-      final height = style.height ?? 1.2;
-      return (textScaler.scale(fontSize) * height) + 2;
-    }
-
-    final titleLineHeight = lineHeightFor(titleStyle);
-    final subtitleLineHeight = lineHeightFor(subtitleStyle);
+    final titleLineHeight = MediaCard._lineHeight(textScaler, titleStyle);
+    final subtitleLineHeight = MediaCard._lineHeight(textScaler, subtitleStyle);
     final externallyDriven = widget.externalIsFocused != null;
     final hasNodeFocus = widget.focusNode?.hasFocus ?? false;
     final effectiveFocused = externallyDriven
@@ -299,26 +381,27 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
           ? null
           : () => widget.onLongPress!(),
       child: RepaintBoundary(
-        child: _withTvParallax(
-          active: cardActive,
-          child: AnimatedScale(
-            scale: cardActive
-                ? (PlatformDetection.isAppleTV ? 1.12 : 1.05)
-                : 1.0,
-            duration: const Duration(milliseconds: 150),
-            curve: PlatformDetection.isAppleTV
-                ? Curves.easeOutCubic
-                : Curves.linear,
-            child: LayoutBuilder(
-              builder: (context, cardConstraints) {
-                final cardWidth = cardConstraints.maxWidth.isFinite
-                    ? cardConstraints.maxWidth
-                    : (widget.width.isFinite ? widget.width : 150.0);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _CardImage(
+        child: LayoutBuilder(
+          builder: (context, cardConstraints) {
+            final cardWidth = cardConstraints.maxWidth.isFinite
+                ? cardConstraints.maxWidth
+                : (widget.width.isFinite ? widget.width : 150.0);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _withTvParallax(
+                  active: cardActive,
+                  child: AnimatedScale(
+                    scale: cardActive ? MediaCard.focusScale : 1.0,
+                    duration: navigationAnimationDuration,
+                    curve: PlatformDetection.isAppleTV
+                        ? Curves.easeOutCubic
+                        : Curves.linear,
+                    alignment: widget.title != null
+                        ? Alignment.bottomCenter
+                        : Alignment.center,
+                    child: _CardImage(
                       imageUrl: widget.imageUrl,
                       title: widget.title,
                       aspectRatio: widget.aspectRatio,
@@ -338,67 +421,71 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
                       seerrStatus: widget.seerrStatus,
                       imageOverlays: widget.imageOverlays,
                       overlayOccupiesTopLeft: widget.overlayOccupiesTopLeft,
+                      animeMarkerItemId: widget.animeMarkerItemId,
                       isGenreFallback: widget.isGenreFallback,
                     ),
-                    if (widget.isBanner) ...[
-                      if (widget.title != null) ...[
-                        const SizedBox(height: 6),
-                        SizedBox(
-                          height: titleLineHeight,
-                          width: cardWidth,
-                          child: _bannerLabel(
-                            titleStyle: titleStyle,
-                            subtitleStyle: subtitleStyle,
-                            showMarquee: showMarquee,
-                          ),
-                        ),
-                      ],
-                      if (widget.subtitleWidget != null) ...[
-                        SizedBox(height: widget.title != null ? 2 : 6),
-                        widget.subtitleWidget!,
-                      ],
-                    ] else ...[
-                      if (widget.title != null) ...[
-                        const SizedBox(height: 6),
-                        SizedBox(
-                          height: titleLineHeight,
-                          width: cardWidth,
-                          child: showMarquee
-                              ? MarqueeText(text: widget.title!, style: titleStyle)
-                              : Text(
-                                  widget.title!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: titleStyle,
-                                ),
-                        ),
-                      ],
-                      if (widget.subtitleWidget != null) ...[
-                        SizedBox(height: widget.title != null ? 2 : 6),
-                        widget.subtitleWidget!,
-                      ] else if (widget.subtitle != null &&
-                          widget.subtitle!.isNotEmpty)
-                        SizedBox(
-                          height: subtitleLineHeight,
-                          width: cardWidth,
-                          child: showMarquee
-                              ? MarqueeText(
-                                  text: widget.subtitle!,
-                                  style: subtitleStyle,
-                                )
-                              : Text(
-                                  widget.subtitle!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: subtitleStyle,
-                                ),
-                        ),
-                    ],
+                  ),
+                ),
+                if (widget.isBanner) ...[
+                  if (widget.title != null) ...[
+                    const SizedBox(height: MediaCard._labelGap),
+                    SizedBox(
+                      height: titleLineHeight,
+                      width: cardWidth,
+                      child: _bannerLabel(
+                        titleStyle: titleStyle,
+                        subtitleStyle: subtitleStyle,
+                        showMarquee: showMarquee,
+                      ),
+                    ),
                   ],
-                );
-              },
-            ),
-          ),
+                  if (widget.subtitleWidget != null) ...[
+                    SizedBox(height: widget.title != null ? 2 : 6),
+                    widget.subtitleWidget!,
+                  ],
+                ] else ...[
+                  if (widget.title != null) ...[
+                    const SizedBox(height: MediaCard._labelGap),
+                    SizedBox(
+                      height: titleLineHeight,
+                      width: cardWidth,
+                      child: showMarquee
+                          ? MarqueeText(
+                              text: widget.title!,
+                              style: titleStyle,
+                            )
+                          : Text(
+                              widget.title!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: titleStyle,
+                            ),
+                    ),
+                  ],
+                  if (widget.subtitleWidget != null) ...[
+                    SizedBox(height: widget.title != null ? 2 : 6),
+                    widget.subtitleWidget!,
+                  ] else if (widget.subtitle != null &&
+                      widget.subtitle!.isNotEmpty)
+                    SizedBox(
+                      height: subtitleLineHeight,
+                      width: cardWidth,
+                      child: showMarquee
+                          ? MarqueeText(
+                              text: widget.subtitle!,
+                              style: subtitleStyle,
+                            )
+                          : Text(
+                              widget.subtitle!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: subtitleStyle,
+                            ),
+                    ),
+                ],
+              ],
+            );
+          },
         ),
       ),
     );
@@ -589,6 +676,7 @@ class _CardImage extends StatelessWidget {
   final List<Widget> imageOverlays;
   final bool overlayOccupiesTopLeft;
   final bool isGenreFallback;
+  final String? animeMarkerItemId;
 
   const _CardImage({
     this.imageUrl,
@@ -611,13 +699,21 @@ class _CardImage extends StatelessWidget {
     this.imageOverlays = const [],
     this.overlayOccupiesTopLeft = false,
     this.isGenreFallback = false,
+    this.animeMarkerItemId,
   });
+
+  /// How far the focus ring sits outside the artwork. The ring is 3px thick
+  /// and drawn inside its own box, so this also decides the gap between the
+  /// two. Too small a gap and an antialiased poster corner bleeds over the
+  /// ring, which reads as the image escaping its rounded container.
+  static const _focusRingInset = 5.0;
 
   @override
   Widget build(BuildContext context) {
     final radius = isCircular ? 999.0 : 8.0;
     final showBorder = !suppressFocusBorder && (focused || hovered);
-    final borderColor = focusColor ??
+    final borderColor =
+        focusColor ??
         (GlassFocusHalo.appleStyleActive
             ? Colors.white
             : Theme.of(context).colorScheme.primary);
@@ -633,16 +729,17 @@ class _CardImage extends StatelessWidget {
         children: [
           if (showGlow)
             Positioned(
-              top: -3.5,
-              bottom: -3.5,
-              left: -3.5,
-              right: -3.5,
+              top: -_focusRingInset,
+              bottom: -_focusRingInset,
+              left: -_focusRingInset,
+              right: -_focusRingInset,
               child: IgnorePointer(
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: isCircular
-                        ? AppRadius.circular(radius + 3.5)
-                        : borders.cardRadius + AppRadius.circular(3.5),
+                        ? AppRadius.circular(radius + _focusRingInset)
+                        : borders.cardRadius +
+                              AppRadius.circular(_focusRingInset),
                     boxShadow: borders.focusGlow,
                   ),
                 ),
@@ -673,12 +770,15 @@ class _CardImage extends StatelessWidget {
                           children: [
                             BoundedNetworkImage(
                               imageUrl: imageUrl!,
-                              fit: (itemType == 'Network' || itemType == 'Studio')
+                              fit:
+                                  (itemType == 'Network' ||
+                                      itemType == 'Studio')
                                   ? BoxFit.contain
                                   : BoxFit.cover,
                               fadeInDuration: Duration.zero,
-                              scale: isCircular ? 0.8 : 0.9,
-                              maxWidth: aspectRatio > 1.2 ? 960 : 640,
+                              maxWidth: MediaCard.decodeMaxWidthFor(
+                                aspectRatio,
+                              ),
                               errorBuilder: (_, _, _) => _PlaceholderIcon(
                                 itemType: itemType,
                                 title: title,
@@ -689,58 +789,82 @@ class _CardImage extends StatelessWidget {
                                 color: Colors.black.withValues(alpha: 0.45),
                               ),
                               if (title != null && title!.isNotEmpty)
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        title!.toUpperCase(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 2.5,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withValues(alpha: 0.9),
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final fontSize =
+                                        MediaCard.genreLabelFontSize(
+                                          constraints.maxWidth,
+                                        );
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            title!.toUpperCase(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: fontSize,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing:
+                                                  MediaCard.genreLabelLetterSpacing(
+                                                    fontSize,
+                                                  ),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withValues(alpha: 0.9),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                             ],
                           ],
                         )
                       : _PlaceholderIcon(itemType: itemType, title: title),
                 ),
-                if (isFavorite)
+                if (isFavorite ||
+                    _showSeerrMediaTypeBadge ||
+                    animeMarkerItemId != null)
                   Positioned(
-                    top: (_showSeerrMediaTypeBadge || overlayOccupiesTopLeft)
-                        ? 28
-                        : 4,
-                    left: 4,
-                    child: Icon(
-                      Icons.favorite,
-                      color: AppColorScheme.recordingActive,
-                      size: 18,
-                    ),
-                  ),
-                if (_showSeerrMediaTypeBadge)
-                  Positioned(
-                    top: 6,
+                    top: overlayOccupiesTopLeft ? 32 : 6,
                     left: 6,
-                    child: _buildSeerrMediaTypeBadge(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (_showSeerrMediaTypeBadge) ...[
+                          SeerrMediaTypeBadge(mediaType: seerrMediaType),
+                          if (animeMarkerItemId != null || isFavorite)
+                            const SizedBox(height: 4),
+                        ],
+                        // The gap sits inside the pill rather than in a sibling
+                        // box, because the pill draws nothing until an audio
+                        // verdict resolves and an empty one must take no space.
+                        if (animeMarkerItemId != null)
+                          AnimeItemAudioBadge(
+                            itemId: animeMarkerItemId!,
+                            scale: 0.85,
+                            padding: isFavorite
+                                ? const EdgeInsets.only(bottom: 4)
+                                : EdgeInsets.zero,
+                          ),
+                        if (isFavorite)
+                          const MediaFavoriteBadge(size: 22),
+                      ],
+                    ),
                   ),
                 if (_showSeerrStatusIndicator)
                   Positioned(
                     top: 6,
                     right: 6,
-                    child: _buildSeerrStatusIndicator(),
+                    child: SeerrStatusDot(status: seerrStatus),
                   )
                 else if (_showWatchedIndicator)
-                  Positioned(top: 4, right: 4, child: _buildWatchedIndicator()),
+                  Positioned(top: 6, right: 6, child: _buildWatchedIndicator()),
                 if (playedPercentage != null && playedPercentage! > 0)
                   Positioned(
                     left: 6,
@@ -766,16 +890,17 @@ class _CardImage extends StatelessWidget {
           ),
           if (showBorder)
             Positioned(
-              top: -3.5,
-              bottom: -3.5,
-              left: -3.5,
-              right: -3.5,
+              top: -_focusRingInset,
+              bottom: -_focusRingInset,
+              left: -_focusRingInset,
+              right: -_focusRingInset,
               child: IgnorePointer(
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: isCircular
-                        ? AppRadius.circular(radius + 3.5)
-                        : borders.cardRadius + AppRadius.circular(3.5),
+                        ? AppRadius.circular(radius + _focusRingInset)
+                        : borders.cardRadius +
+                              AppRadius.circular(_focusRingInset),
                     border: Border.fromBorderSide(
                       borders.focusBorder.copyWith(
                         color: borderColor,
@@ -791,154 +916,26 @@ class _CardImage extends StatelessWidget {
     );
   }
 
-  bool get _showWatchedIndicator {
-    switch (watchedBehavior) {
-      case WatchedIndicatorBehavior.always:
-        return isPlayed || (unplayedCount != null && unplayedCount! > 0);
-      case WatchedIndicatorBehavior.hideUnwatched:
-        return isPlayed;
-      case WatchedIndicatorBehavior.episodesOnly:
-        return itemType == 'Episode' &&
-            (isPlayed || (unplayedCount != null && unplayedCount! > 0));
-      case WatchedIndicatorBehavior.never:
-        return false;
-    }
-  }
+  bool get _showWatchedIndicator => showsWatchedIndicator(
+    behavior: watchedBehavior,
+    isPlayed: isPlayed,
+    itemType: itemType,
+    unplayedCount: unplayedCount,
+  );
 
   bool get _showSeerrMediaTypeBadge {
     final type = seerrMediaType?.toLowerCase();
     return type == 'movie' || type == 'tv';
   }
 
-  bool get _showSeerrStatusIndicator =>
-      seerrStatus == 2 ||
-      seerrStatus == 3 ||
-      seerrStatus == 4 ||
-      seerrStatus == 5;
-
-  Widget _buildSeerrMediaTypeBadge() {
-    final type = seerrMediaType?.toLowerCase();
-    final isMovie = type == 'movie';
-    final badgeColor = isMovie
-        ? AppColorScheme.mediaTypeBadgeMovie
-        : AppColorScheme.mediaTypeBadgeShow;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: badgeColor.withValues(alpha: 0.85),
-        borderRadius: AppRadius.circular(4),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        child: Text(
-          isMovie ? 'MOVIE' : 'SERIES',
-          style: TextStyle(
-            color: AppColorScheme.onBadge,
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.8,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSeerrStatusIndicator() {
-    if (seerrStatus == 5) {
-      return _buildStatusCircle(
-        borderColor: AppColorScheme.statusAvailable,
-        icon: Icon(
-          Icons.check_rounded,
-          size: 12,
-          color: AppColorScheme.statusAvailable,
-        ),
-      );
-    }
-
-    if (seerrStatus == 4) {
-      return _buildStatusCircle(
-        fillColor: AppColorScheme.statusAvailable,
-        icon: Icon(
-          Icons.remove_rounded,
-          size: 13,
-          color: AppColorScheme.onBadge,
-        ),
-      );
-    }
-
-    if (seerrStatus == 3) {
-      return _buildStatusCircle(
-        borderColor: AppColorScheme.statusRequested,
-        icon: Icon(
-          Icons.schedule_rounded,
-          size: 12,
-          color: AppColorScheme.statusRequested,
-        ),
-      );
-    }
-
-    return _buildStatusCircle(
-      borderColor: AppColorScheme.statusPending,
-      icon: Icon(
-        Icons.schedule_rounded,
-        size: 12,
-        color: AppColorScheme.statusPending,
-      ),
-    );
-  }
-
-  Widget _buildStatusCircle({
-    required Widget icon,
-    Color? fillColor,
-    Color? borderColor,
-  }) {
-    final effectiveFillColor = fillColor ?? AppColorScheme.onBadge;
-    return Container(
-      width: 20,
-      height: 20,
-      decoration: BoxDecoration(
-        color: effectiveFillColor,
-        shape: BoxShape.circle,
-        border: Border.fromBorderSide(
-          ThemeRegistry.active.borders.chipBorder.copyWith(
-            color: borderColor ?? effectiveFillColor,
-            width: 1.5,
-          ),
-        ),
-      ),
-      alignment: Alignment.center,
-      child: icon,
-    );
-  }
+  bool get _showSeerrStatusIndicator => SeerrMediaStatus.hasDot(seerrStatus);
 
   Widget _buildWatchedIndicator() {
     if (isPlayed) {
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColorScheme.badgeWatched,
-          shape: BoxShape.circle,
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(2),
-          child: Icon(Icons.check, color: AppColorScheme.onBadge, size: 12),
-        ),
-      );
+      return MediaWatchedBadge(size: 22);
     }
     if (unplayedCount != null && unplayedCount! > 0) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-        decoration: BoxDecoration(
-          color: AppColorScheme.badgeUnplayed,
-          borderRadius: AppRadius.circular(8),
-        ),
-        child: Text(
-          '$unplayedCount',
-          style: TextStyle(
-            color: AppColorScheme.onBadge,
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
+      return MediaUnplayedBadge(count: unplayedCount!);
     }
     return const SizedBox.shrink();
   }

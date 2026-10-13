@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../preference/user_preferences.dart';
 import '../models/media_bar_slide_item.dart';
 import '../models/media_bar_state.dart';
+import '../services/library_scope_service.dart';
+import '../utils/blocked_ratings.dart';
 
 class MediaBarRepository {
-  static const _precacheBackdropCount = 1;
-  static const _precacheLogoCount = 1;
 
   final MediaServerClient _client;
   final UserPreferences _prefs;
@@ -43,25 +42,13 @@ class MediaBarRepository {
     final maxItems = pluginSyncEnabled
         ? (int.tryParse(_prefs.get(UserPreferences.mediaBarItemCount)) ?? 10)
         : 5;
-    final libraryIds = pluginSyncEnabled
-        ? _prefs
-              .get(UserPreferences.mediaBarLibraryIds)
-              .split(',')
-              .where((s) => s.isNotEmpty)
-              .toList()
-        : <String>[];
-    final collectionIds = pluginSyncEnabled
-        ? _prefs
-              .get(UserPreferences.mediaBarCollectionIds)
-              .split(',')
-              .where((s) => s.isNotEmpty)
-              .toList()
-        : <String>[];
-    final excludedGenres = _prefs
-        .get(UserPreferences.mediaBarExcludedGenres)
-        .split(',')
-        .where((s) => s.isNotEmpty)
-        .toSet();
+    // The pickers in settings are open to everyone and the filtering below is
+    // plain item queries, so a plugin is not needed to honour the choice.
+    final libraryIds = _splitCsv(UserPreferences.mediaBarLibraryIds);
+    final collectionIds = _splitCsv(UserPreferences.mediaBarCollectionIds);
+    final excludedGenres = _splitCsv(
+      UserPreferences.mediaBarExcludedGenres,
+    ).toSet();
 
     final fetchLimit = maxItems + 2;
 
@@ -90,14 +77,19 @@ class MediaBarRepository {
       final validLibraryIds = <String>{};
       for (final view in views) {
         final viewId = view['Id']?.toString();
+        if (viewId == null ||
+            !supportsMediaBarLibrary(view, preferredCollectionTypes)) {
+          continue;
+        }
+
+        validLibraryIds.add(viewId);
+
+        // A mixed library is left off this map so it keeps the full type list
         final type = _normalizeCollectionType(view['CollectionType']);
-        if (viewId != null && preferredCollectionTypes.contains(type)) {
-          validLibraryIds.add(viewId);
-          if (type == 'movies') {
-            allParentItemTypes[viewId] = const ['Movie'];
-          } else if (type == 'tvshows') {
-            allParentItemTypes[viewId] = const ['Series'];
-          }
+        if (type == 'movies') {
+          allParentItemTypes[viewId] = const ['Movie'];
+        } else if (type == 'tvshows') {
+          allParentItemTypes[viewId] = const ['Series'];
         }
       }
 
@@ -113,8 +105,12 @@ class MediaBarRepository {
         allParentIds.addAll(validLibraryIds);
       }
     } catch (_) {
-      // Fallback: If UserViews lookup fails, trust user's selection directly
-      allParentIds.addAll(libraryIds);
+      // The views lookup failed, so fall back to what the user picked. Those
+      // saved ids can name a library access has since been revoked for, so
+      // drop what the policy no longer allows before trusting them.
+      allParentIds.addAll(
+        await GetIt.instance<LibraryScopeService>().retainPermitted(libraryIds),
+      );
       allParentIds.addAll(collectionIds);
     }
 
@@ -202,7 +198,7 @@ class MediaBarRepository {
         final items = selected.map(_toSlideItem).toList();
         return MediaBarReady(items);
       }
-      return MediaBarError('Failed to load: $e');
+      return MediaBarError(e);
     }
   }
 
@@ -211,18 +207,23 @@ class MediaBarRepository {
     int maxItems,
     Set<String> excludedGenres,
   ) {
+    final filter = activeParentalFilter;
     final withBackdrops =
         source
             .where(
               (item) =>
                   _hasBackdrop(item) &&
                   !_isBoxSet(item) &&
-                  !_hasExcludedGenre(item, excludedGenres),
+                  !_hasExcludedGenre(item, excludedGenres) &&
+                  !filter.isBlockedRaw(item),
             )
             .toList()
           ..shuffle();
     return withBackdrops.take(maxItems).toList();
   }
+
+  List<String> _splitCsv(Preference<String> pref) =>
+      _prefs.get(pref).split(',').where((s) => s.isNotEmpty).toList();
 
   Future<List<Map<String, dynamic>>> _fetchItemsFromFirstSeriesOrMoviesLibrary(
     List<String>? itemTypes,
@@ -268,10 +269,7 @@ class MediaBarRepository {
 
       if (libraryId == null) {
         for (final view in views) {
-          final collectionType = _normalizeCollectionType(
-            view['CollectionType'],
-          );
-          if (collectionType != 'tvshows' && collectionType != 'movies') {
+          if (!supportsMediaBarLibrary(view, const ['movies', 'tvshows'])) {
             continue;
           }
           final id = view['Id']?.toString();
@@ -296,18 +294,10 @@ class MediaBarRepository {
     return value?.toString().trim().toLowerCase() ?? '';
   }
 
-  void precacheImages(BuildContext context, List<MediaBarSlideItem> items) {
-    for (final item in items.take(_precacheBackdropCount)) {
-      if (item.backdropUrl != null) {
-        precacheImage(CachedNetworkImageProvider(item.backdropUrl!), context);
-      }
-    }
-    for (final item in items.take(_precacheLogoCount)) {
-      if (item.logoUrl != null) {
-        precacheImage(CachedNetworkImageProvider(item.logoUrl!), context);
-      }
-    }
-  }
+  /// How many titles each source hands the selector. The random source reads
+  /// this many from a random place in the library, and the dated ones read
+  /// this many of the newest.
+  static const _poolSize = 40;
 
   Future<List<Map<String, dynamic>>> _fetchItems(
     List<String>? itemTypes,
@@ -318,6 +308,11 @@ class MediaBarRepository {
         GetIt.instance<MediaBarRepository>() != this) {
       return const <Map<String, dynamic>>[];
     }
+    final sourceType = _prefs.get(UserPreferences.mediaBarSourceType);
+    if (sourceType == UserPreferences.mediaBarSourceRecentlyAdded ||
+        sourceType == UserPreferences.mediaBarSourceRecentlyReleased) {
+      return _fetchDatedItems(sourceType, itemTypes, limit, parentId: parentId);
+    }
     try {
       // Get the total count for this parent so we can pick a random window.
       // Asking for a single item keeps it cheap.
@@ -326,7 +321,10 @@ class MediaBarRepository {
             includeItemTypes: itemTypes,
             sortBy: 'SortName',
             sortOrder: 'Ascending',
-            recursive: parentId == null,
+            // A library the user has grouped with others holds those libraries
+            // rather than the titles, so only a recursive walk reaches anything.
+            // The type filter keeps the walk to movies and series either way.
+            recursive: true,
             parentId: parentId,
             limit: 1,
             enableTotalRecordCount: true,
@@ -341,8 +339,7 @@ class MediaBarRepository {
 
       // Fetch a random window with the fields and backdrop tags the selector
       // needs. A small library takes its whole set starting from the first item.
-      const requestLimit = 40;
-      final windowSize = math.min(total, requestLimit);
+      final windowSize = math.min(total, _poolSize);
       final maxStartIndex = total - windowSize;
       final startIndex = maxStartIndex > 0
           ? _random.nextInt(maxStartIndex + 1)
@@ -353,7 +350,7 @@ class MediaBarRepository {
             includeItemTypes: itemTypes,
             sortBy: 'SortName',
             sortOrder: 'Ascending',
-            recursive: parentId == null,
+            recursive: true,
             parentId: parentId,
             startIndex: startIndex,
             limit: windowSize,
@@ -389,6 +386,51 @@ class MediaBarRepository {
         limit,
         parentId: parentId,
       );
+    }
+  }
+
+  /// The newest titles a dated source offers, ordered and cut off the same way
+  /// the matching home row does, so the two surfaces agree on what recent
+  /// means.
+  Future<List<Map<String, dynamic>>> _fetchDatedItems(
+    String sourceType,
+    List<String>? itemTypes,
+    int limit, {
+    String? parentId,
+  }) async {
+    try {
+      final response =
+          sourceType == UserPreferences.mediaBarSourceRecentlyReleased
+          ? await _client.itemsApi
+                .getRecentlyReleasedItems(
+                  includeItemTypes: itemTypes,
+                  parentId: parentId,
+                  recursive: true,
+                  limit: _poolSize,
+                  fields: _fields,
+                  enableImageTypes: 'Backdrop,Logo',
+                )
+                .timeout(const Duration(seconds: 15))
+          : await _client.itemsApi
+                .getLatestItems(
+                  includeItemTypes: itemTypes,
+                  parentId: parentId,
+                  limit: _poolSize,
+                  fields: _fields,
+                  enableImageTypes: 'Backdrop,Logo',
+                )
+                .timeout(const Duration(seconds: 15));
+
+      final rawItems = response['Items'] as List? ?? [];
+      return rawItems.cast<Map<String, dynamic>>();
+    } catch (error) {
+      final statusCode = error is DioException
+          ? (error.response?.statusCode ?? 0)
+          : 0;
+      if (statusCode == 401 || statusCode == 403) {
+        return const <Map<String, dynamic>>[];
+      }
+      return _fetchItemsFromFallbackSource(itemTypes, limit, parentId: parentId);
     }
   }
 
@@ -448,6 +490,33 @@ class MediaBarRepository {
     return genres.any((g) => excluded.contains(g));
   }
 
+  /// Items for the setup wizard previews, free of the bar's own rules.
+  ///
+  /// The bar refuses to run without a movies or series library, and again
+  /// without backdrop artwork, and both refusals hold for the whole session
+  /// no matter how often it is asked. The previews only need something real
+  /// to draw, so this takes the newest items across everything the user can
+  /// see and keeps whatever comes back, posters and all.
+  Future<List<MediaBarSlideItem>> fetchPreviewItems({int limit = 10}) async {
+    try {
+      final response = await _client.itemsApi
+          .getItems(
+            includeItemTypes: const ['Movie', 'Series'],
+            sortBy: 'DateCreated',
+            sortOrder: 'Descending',
+            recursive: true,
+            limit: limit,
+            fields: _fields,
+          )
+          .timeout(const Duration(seconds: 15));
+      final items = (response['Items'] as List? ?? [])
+          .cast<Map<String, dynamic>>();
+      return items.map(_toSlideItem).toList(growable: false);
+    } catch (_) {
+      return const [];
+    }
+  }
+
   MediaBarSlideItem _toSlideItem(Map<String, dynamic> data) {
     final itemId = data['Id']?.toString() ?? '';
     final serverId = data['ServerId']?.toString() ?? '';
@@ -502,4 +571,20 @@ class MediaBarRepository {
           const [],
     );
   }
+}
+
+// A mixed library names no collection type, so the bar takes it for either
+// kind. Folders and recordings name none either, but a query on one of those
+// reaches every library, so they go out by name.
+bool supportsMediaBarLibrary(
+  Map<String, dynamic> view,
+  List<String> preferredTypes,
+) {
+  final name = (view['Name']?.toString() ?? '').trim().toLowerCase();
+  if (name == 'folders' || name == 'recordings') return false;
+
+  final type = (view['CollectionType']?.toString() ?? '').trim().toLowerCase();
+  if (type.isEmpty || type == 'mixed' || type == 'unknown') return true;
+
+  return preferredTypes.contains(type);
 }

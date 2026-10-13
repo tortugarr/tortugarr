@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -5,6 +8,7 @@ import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../preference/user_preferences.dart';
+import '../../util/platform_detection.dart';
 import 'marquee_text.dart';
 import 'overlay_sheet.dart';
 
@@ -13,7 +17,6 @@ Future<T?> showStyledPlayerDialog<T>(
   required String title,
   String? subtitle,
   required Widget Function(BuildContext ctx) builder,
-  Widget? footer,
   bool showCancel = false,
   double maxWidth = 440,
   bool useRootNavigator = true,
@@ -25,86 +28,106 @@ Future<T?> showStyledPlayerDialog<T>(
     barrierDismissible: barrierDismissible,
     builder: (dialogContext) {
       final mediaQuery = MediaQuery.of(dialogContext);
-      final maxDialogHeight = mediaQuery.size.height -
-          mediaQuery.padding.vertical -
-          mediaQuery.viewInsets.vertical -
-          24;
       final glass = AppColorScheme.isGlass;
-      final inner = Container(
-          constraints: BoxConstraints(
-            minWidth: 340,
-            maxWidth: maxWidth,
-            maxHeight: maxDialogHeight,
-          ),
-          decoration: glass
-              ? null
-              : BoxDecoration(
-                  color: AppColorScheme.surface.withValues(alpha: 0.9),
-                  borderRadius: AppRadius.circular(20),
-                  border: Border.fromBorderSide(
-                    ThemeRegistry.active.borders.chipBorder,
-                  ),
-                ),
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(24, 0, 24, subtitle != null ? 4 : 12),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+
+      return ValueListenableBuilder<bool>(
+        valueListenable: CustomTVTextField.isKeyboardVisibleNotifier,
+        builder: (context, isKeyboardVisible, _) {
+          final isTv = PlatformDetection.isTV;
+          final shiftUp = isKeyboardVisible && isTv;
+          final keyboardSpace = shiftUp ? 360.0 : 0.0;
+          final effectiveBottomInset = math.max(
+            mediaQuery.viewInsets.bottom,
+            keyboardSpace,
+          );
+          final maxDialogHeight = mediaQuery.size.height -
+              mediaQuery.padding.vertical -
+              effectiveBottomInset -
+              24;
+
+          final inner = Container(
+            constraints: BoxConstraints(
+              minWidth: 340,
+              maxWidth: maxWidth,
+              maxHeight: maxDialogHeight,
+            ),
+            decoration: glass
+                ? null
+                : BoxDecoration(
+                    color: AppColorScheme.surface.withValues(alpha: 0.9),
+                    borderRadius: AppRadius.circular(20),
+                    border: Border.fromBorderSide(
+                      ThemeRegistry.active.borders.chipBorder,
                     ),
                   ),
-                ),
-              ),
-              if (subtitle != null)
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, subtitle != null ? 4 : 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white.withValues(alpha: 0.54),
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-              Container(height: 1, color: Colors.white.withValues(alpha: 0.08)),
-              const SizedBox(height: 8),
-              Flexible(child: builder(dialogContext)),
-              if (footer != null) ...[const SizedBox(height: 4), footer],
-              if (showCancel) ...[
-                const SizedBox(height: 4),
+                if (subtitle != null)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white.withValues(alpha: 0.54),
+                        ),
+                      ),
+                    ),
+                  ),
                 Container(height: 1, color: Colors.white.withValues(alpha: 0.08)),
-                const SizedBox(height: 4),
-                _TrackRow(
-                  option: TrackOption(label: AppLocalizations.of(dialogContext).cancel),
-                  isSelected: false,
-                  onTap: () => Navigator.pop(dialogContext),
-                  dimmed: true,
-                ),
+                const SizedBox(height: 8),
+                Flexible(child: builder(dialogContext)),
+                if (showCancel) ...[
+                  const SizedBox(height: 4),
+                  Container(height: 1, color: Colors.white.withValues(alpha: 0.08)),
+                  const SizedBox(height: 4),
+                  _TrackRow(
+                    option: TrackOption(label: AppLocalizations.of(dialogContext).cancel),
+                    isSelected: false,
+                    onTap: () => Navigator.pop(dialogContext),
+                    dimmed: true,
+                  ),
+                ],
               ],
-            ],
-          ),
-        );
-      return Dialog(
-        backgroundColor: Colors.transparent,
-        child: glass
-            ? GlassSurface(
-                cornerRadius: 20,
-                reinforced: true,
-                fallbackColor: Colors.transparent,
-                child: inner,
-              )
-            : inner,
+            ),
+          );
+
+          return Dialog(
+            alignment: shiftUp ? const Alignment(0, -0.85) : Alignment.center,
+            insetAnimationDuration: const Duration(milliseconds: 200),
+            insetAnimationCurve: Curves.easeOutCubic,
+            insetPadding: shiftUp
+                ? const EdgeInsets.fromLTRB(40, 20, 40, 360)
+                : const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+            backgroundColor: Colors.transparent,
+            child: glass
+                ? GlassSurface(
+                    cornerRadius: 20,
+                    reinforced: true,
+                    fallbackColor: Colors.transparent,
+                    child: inner,
+                  )
+                : inner,
+          );
+        },
       );
     },
   );
@@ -114,6 +137,16 @@ class TrackOption {
   final String label;
   final String? subtitle;
   final int? labelMaxLines;
+
+  /// Lines the detail line may run to before it is cut short. One is right for
+  /// a track's own description; a remote subtitle result carries enough - the
+  /// format, the rating, the framerate - that one line loses the end of it.
+  final int subtitleMaxLines;
+
+  /// Short labels shown as pills under the detail line. What goes here is what
+  /// decides the choice rather than describes it, so it survives however narrow
+  /// the row gets instead of being the first thing cut off the end.
+  final List<String> badges;
   final bool scrollLabel;
   final bool scrollSubtitle;
 
@@ -121,6 +154,8 @@ class TrackOption {
     required this.label,
     this.subtitle,
     this.labelMaxLines = 1,
+    this.subtitleMaxLines = 1,
+    this.badges = const <String>[],
     this.scrollLabel = false,
     this.scrollSubtitle = false,
   });
@@ -140,18 +175,23 @@ class TrackSelectorDialog {
     return showStyledPlayerDialog<int>(
       context,
       title: title,
-      footer: footer,
       showCancel: true,
       useRootNavigator: useRootNavigator,
+      // The footer rides along as the last row rather than sitting under the
+      // list, so a long track list keeps the full height and the footer is
+      // something you scroll down to instead of something in the way.
       builder: (dialogCtx) => ListView.builder(
         shrinkWrap: true,
-        itemCount: options.length,
-        itemBuilder: (_, i) => _TrackRow(
-          option: options[i],
-          isSelected: selectedIndex == i,
-          autofocus: selectedIndex == i || (selectedIndex == null && i == 0),
-          onTap: () => Navigator.pop(dialogCtx, i),
-        ),
+        itemCount: options.length + (footer == null ? 0 : 1),
+        itemBuilder: (_, i) => i == options.length
+            ? footer!
+            : _TrackRow(
+                option: options[i],
+                isSelected: selectedIndex == i,
+                autofocus:
+                    selectedIndex == i || (selectedIndex == null && i == 0),
+                onTap: () => Navigator.pop(dialogCtx, i),
+              ),
       ),
     );
   }
@@ -267,13 +307,62 @@ class _TrackRowState extends State<_TrackRow> {
                                 fontSize: 12,
                                 color: subtitleColor,
                               ),
-                              maxLines: 1,
+                              maxLines: widget.option.subtitleMaxLines,
                               overflow: TextOverflow.ellipsis,
                             )),
+                    if (widget.option.badges.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: widget.option.badges
+                              .map((badge) => _OptionBadge(
+                                    label: badge,
+                                    dimmed: widget.dimmed,
+                                  ))
+                              .toList(growable: false),
+                        ),
+                      ),
                   ],
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A pill under a track row, in the same shape as the audio quality badge so
+/// the two read as the same kind of mark.
+class _OptionBadge extends StatelessWidget {
+  final String label;
+  final bool dimmed;
+
+  const _OptionBadge({required this.label, required this.dimmed});
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = AppColorScheme.accent;
+    final alpha = dimmed ? 0.3 : 0.55;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColorScheme.onSurface.withValues(alpha: 0.10),
+        borderRadius: AppRadius.circular(11),
+        border: Border.all(color: accent.withValues(alpha: alpha), width: 1),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.3,
+          color: Color.alphaBlend(
+            accent.withValues(alpha: dimmed ? 0.5 : 0.85),
+            Colors.white,
           ),
         ),
       ),

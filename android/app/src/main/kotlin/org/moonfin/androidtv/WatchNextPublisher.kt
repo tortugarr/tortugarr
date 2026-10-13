@@ -104,6 +104,8 @@ class WatchNextPublisher(private val context: Context) {
         val resumeMs = (item["resumePositionMs"] as? Number)?.toInt() ?: 0
 
         val intent = Intent(context, MainActivity::class.java).apply {
+            setPackage(context.packageName)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             putExtra(EXTRA_ITEM_ID, id)
             (item["serverId"] as? String)?.takeIf { it.isNotEmpty() }
                 ?.let { putExtra(EXTRA_SERVER_ID, it) }
@@ -115,10 +117,8 @@ class WatchNextPublisher(private val context: Context) {
                 if (isMovie) WatchNextPrograms.TYPE_MOVIE
                 else WatchNextPrograms.TYPE_TV_EPISODE,
             )
-            .setPosterArtAspectRatio(
-                if (isMovie) WatchNextPrograms.ASPECT_RATIO_MOVIE_POSTER
-                else WatchNextPrograms.ASPECT_RATIO_16_9,
-            )
+            // The launcher lays its rows out in 16:9, whatever the kind.
+            .setPosterArtAspectRatio(WatchNextPrograms.ASPECT_RATIO_16_9)
             .setTitle(item["title"] as? String ?: "")
             .setIntent(intent)
 

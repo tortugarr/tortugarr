@@ -1,14 +1,17 @@
 name: moonfin
 description: "Moonfin - Jellyfin & Emby media client for mobile, tablet, and desktop"
 publish_to: 'none'
-version: 2.3.2+30000144
+version: 2.7.0+30000154
 
 moonfin:
-  android_tv_version: 2.3.2
-  android_tv_build_number: 2000012
+  android_tv_version: 2.7.0
+  android_tv_build_number: 2000021
+  beta: false
+  beta_number: 1
 
 environment:
-  sdk: ^3.11.0
+  sdk: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
@@ -18,19 +21,18 @@ dependencies:
 
   # Navigation
   go_router: ^17.2.2
+  # moonfin:// deep links on Android, iOS, macOS, Windows and Linux
+  app_links: ^7.2.1
   animated_reorderable_list: ^1.3.0
 
   # State Management & DI
   get_it: ^9.2.1
-  injectable: ^2.5.0
   flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
 
   # Networking
-  dio: ^5.9.2
-  dio_cookie_manager: ^3.4.0
-  background_downloader: ^9.5.6
-  cookie_jar: ^4.0.9
+  dio: ^5.11.1
+  background_downloader: ^9.6.0
+  ffi: ^2.1.0
   web_socket_channel: ^3.0.3
 
   # Local Storage
@@ -40,34 +42,40 @@ dependencies:
   path_provider: ^2.1.5
   permission_handler: ^12.0.1
   drift: ^2.28.2
-  sqlite3_flutter_libs: ^0.6.0
-  # Tizen has no sqlite3_flutter_libs; the Tizen drift connection loads the
-  # system libsqlite3 via package:sqlite3/open.dart (see
-  # lib/data/database/database_connection_impl_io.dart).
+  sqlite3_flutter_libs: 0.5.42
   sqlite3: ^2.7.0
 
-  # Media Playback (Android/desktop/web, iOS and tvOS run on AetherEngine)
+  # Media Playback (Android, desktop and web. Apple runs on AetherEngine)
+  # mpv_frame_sampler_native.dart imports media_kit's NativeLibrary and libmpv
+  # bindings from src/, so check that file when moving this pin.
   media_kit: 1.2.6
   media_kit_video: 2.0.1
-  # media_kit_libs_video would pull in media_kit_libs_ios_video, and
-  # media_kit_video's iOS podspec links -framework Mpv whenever it finds that
-  # package name in pubspec.lock. A path override still counts as present, so
-  # the package has to stay out of the graph entirely for the iOS build to skip
-  # libmpv. The platforms that do need it are listed individually instead.
+  # media_kit_libs_video would pull in the Apple libs packages, and
+  # media_kit_video's podspecs link -framework Mpv whenever they find one in
+  # pubspec.lock. Two FFmpeg builds in one binary let the engine bind a call
+  # to the wrong one, which aborts playback, so Apple keeps libmpv out
+  # entirely. The platforms that need it are listed individually instead.
   media_kit_libs_android_video: 1.3.8
-  media_kit_libs_macos_video: 1.1.4
-  media_kit_libs_windows_video: 1.0.11
+  media_kit_libs_windows_video: 1.0.12
   media_kit_libs_linux: 1.2.1
-  # Tizen playback backend (TizenPlayerBackend) — media_kit/libmpv and Media3
-  # are unavailable on Tizen, so video plays through video_player, whose Tizen
-  # implementation (video_player_tizen) wraps the native AVPlay player.
-  video_player: ^2.9.2
-  video_player_tizen: any
 
   # Image Loading
-  cached_network_image: ^3.4.1
+  # Vendored fork of cached_network_image 3.4.1 that skips decoding an image
+  # again once it's been shown, since that second decode painted blank on
+  # Firefox web. See packages/cached_network_image_fork/pubspec.yaml.
+  cached_network_image:
+    path: packages/cached_network_image_fork
   flutter_cache_manager: ^3.4.1
+  # Direct because the image cache index stamps its entries with clock.now(),
+  # the same clock the cache manager reads, so a test can drive both. Keep in
+  # step with what flutter_cache_manager resolves.
+  clock: ^1.1.2
+  # Direct because the image cache wraps the cache manager's file service in a
+  # client of its own. Keep in step with what flutter_cache_manager resolves.
+  http: ^1.6.0
   flutter_svg: ^2.2.1
+  # Parses the seasonal effects' artwork into paths for the sprite atlas.
+  path_parsing: ^1.1.0
 
   # Crypto
   crypto: ^3.0.6
@@ -95,14 +103,22 @@ dependencies:
 
   # Utilities
   device_info_plus: ^11.5.0
-  freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   logger: ^2.7.0
   intl: ^0.20.2
+  punycoder: ^0.3.0
   collection: ^1.19.1
   package_info_plus: ^8.3.1
   uuid: ^4.5.3
   cupertino_icons: ^1.0.9
+  # Flutter bundles the older Material Icons font, which has no crown or owl
+  # for the achievement avatars to wear. Tree shaking keeps only the glyphs
+  # actually named.
+  material_symbols_icons: ^4.2960.0
+  # Direct because restoring a window needs the work areas of the attached
+  # displays to keep it on screen. Keep in step with what window_manager, which
+  # already pulls it in, resolves.
+  screen_retriever: ^0.2.0
   window_manager: ^0.5.1
 
   # Local packages
@@ -126,19 +142,20 @@ dependencies:
     path: packages/moonfin_native_video
   url_launcher: ^6.3.2
   file_picker: ^11.0.2
+  emoji_picker_flutter: ^4.5.4
   webview_flutter: ^4.13.1
   flutter_inappwebview: ^6.1.5
   webview_win_floating: ^3.0.3
   webview_flutter_android: ^4.12.0
   webview_flutter_wkwebview: ^3.25.1
   youtube_player_iframe: ^6.0.0
-  pdfrx: ^2.2.24
+  pdfrx: ^2.6.1
   flutter_widget_from_html_core: ^0.16.1
   # Vendored fork of kindle_unpack 0.1.1 (MOBI/AZW/AZW3 -> EPUB), patched to
-  # build against archive 4.x. See packages/kindle_unpack and the patch note.
+  # build against archive 4.x. See packages/kindle_unpack/pubspec.yaml.
   kindle_unpack:
     path: packages/kindle_unpack
-  archive: ^4.0.9
+  archive: ^4.2.0
   rar:
     path: packages/rar_fork
   archive_extract:
@@ -147,76 +164,107 @@ dependencies:
   screen_brightness_android: ^2.1.3
   screen_brightness_ios: ^2.1.2
   wakelock_plus: ^1.3.3
-  volume_controller: ^3.4.2
+  volume_controller: ^3.6.1
   web: ^1.1.1
   custom_tv_text_field:
     path: packages/custom_tv_text_field_fork
   speech_to_text: ^7.3.0
   qr_flutter: ^4.1.0
 
-  # Tizen (Samsung TV) federated plugin implementations. These contribute only
-  # to the `tizen` platform (no-ops on other platforms) and are resolved by
-  # `flutter-tizen pub get`. They provide Tizen backends for first-party plugins
-  # whose default implementation has no Tizen support.
-  path_provider_tizen: any
-  shared_preferences_tizen: any
-  connectivity_plus_tizen: any
-  device_info_plus_tizen: any
-  package_info_plus_tizen: any
-  url_launcher_tizen: any
-  permission_handler_tizen: any
-  flutter_secure_storage_tizen: any
-  wakelock_plus_tizen: any
-  sqflite_tizen: any
-
   # 1.1.1 fixed a startup race where the configure call could be silently
   # lost, leaving the engine's aggressive default remote tuning active.
   flutter_tvos: ^1.1.2
-  path_provider_tvos: any
-  shared_preferences_tvos: any
-  flutter_secure_storage_tvos: any
+  path_provider_tvos: 0.0.2
+  shared_preferences_tvos: 0.0.2
+  flutter_secure_storage_tvos: 0.0.2
   sqflite_tvos: any
   firebase_core: ^4.11.0
   firebase_messaging: ^16.4.1
+  pointer_interceptor: ^0.10.1+2
+  flutter_markdown_plus: ^1.0.12
+  markdown: ^7.3.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   build_runner: ^2.5.4
-  freezed: ^2.5.8
   json_serializable: ^6.9.5
-  injectable_generator: ^2.7.0
-  riverpod_generator: ^2.6.4
   drift_dev: ^2.28.0
   mocktail: ^1.0.5
+  # flutter_cache_manager hands widgets package:file handles, so a test that
+  # stands in for a disk hit has to build one. Keep in step with what the
+  # cache manager resolves.
+  file: ^7.0.1
   msix: ^3.16.12
+  wakelock_plus_platform_interface: ^1.5.1
+  # Lets a test stand in for the Android side of path_provider.
+  path_provider_platform_interface: ^2.1.2
+  plugin_platform_interface: ^2.1.8
 
 dependency_overrides:
+  # objective_c 9.3.0's build hook imports a private path out of
+  # native_toolchain_c, which stopped compiling on the Flutter 3.47 SDK and takes
+  # `flutter test` down with it. 9.4.1 drops that import.
+  objective_c: ^9.4.1
   media_kit_libs_android_video:
     path: packages/media_kit_libs_android_video_full
+  # Fork of 1.0.12 keeping shinchiro's newer libmpv over the media-kit archives,
+  # which build with a decoder allowlist that leaves out pgssub and so listed
+  # PGS tracks that could never render. Also carries the ARM64 ANGLE build and
+  # the libc++ it links, neither of which upstream ships. Meant to go upstream,
+  # so drop this once a published version covers it.
   media_kit_libs_windows_video:
-    path: packages/media_kit_libs_windows_video
+    git:
+      url: https://github.com/RadicalMuffinMan/media-kit.git
+      path: libs/windows/media_kit_libs_windows_video
+      ref: 43368ec394dcce7795707358b751a748c1fdc610
   # Vendored 0.6.0 with a Windows texture_bridge.cc fix for scroll/resize and
   # tab-switch crashes (null-visual guard + WGC Recreate moved off the
-  # capture-thread mutex). The delta is recorded in
-  # patches/flutter_inappwebview_windows-0.6.0-texture_bridge.patch; on upgrade,
-  # re-vendor the matching version and re-apply that patch.
+  # capture-thread mutex). Both changed sites carry their reasoning inline in
+  # packages/flutter_inappwebview_windows/windows/custom_platform_view/
+  # texture_bridge.cc. On upgrade, re-vendor the matching version and diff that
+  # file against the pub.dev release to carry the fix forward.
   flutter_inappwebview_windows:
     path: packages/flutter_inappwebview_windows
   # Vendored 0.1.2 that degrades instead of throwing from its detached input
   # thread, which aborted the app at startup when /dev/input was missing or
-  # could not be watched. The delta is recorded in
-  # patches/gamepads_linux-0.1.2-no-abort-on-input-errors.patch. On upgrade,
-  # re-vendor the matching version and re-apply that patch.
+  # could not be watched. The changed sites carry their reasoning inline in
+  # packages/gamepads_linux/linux/connection_listener.cc. Upstream 0.1.3 still
+  # throws, so on upgrade re-vendor the matching version and diff that file
+  # against the pub.dev release to carry the fix forward.
   gamepads_linux:
     path: packages/gamepads_linux
+  # Fork of 9.6.0 whose desktop finalize renames the staged download onto its
+  # destination instead of copying it, falling back to copy across volumes.
+  # With staging configured onto the destination volume this makes completion
+  # instant instead of a full second copy of the file. Also widens the
+  # connectivity_plus bound to allow the v7 the app already uses, which 9.6.1
+  # took upstream, so re-basing the fork past it drops that half. The delta is
+  # the fork's own commit at the pinned ref. Upstream 9.6.2 still copies, so
+  # this is meant to go upstream: drop the fork once a published version
+  # carries the rename.
+  background_downloader:
+    git:
+      url: https://github.com/RadicalMuffinMan/background_downloader.git
+      ref: e4d6fe85387195b972ff9d79a907d540f294b4e7
+  # Fork of 2.0.1 carrying a Linux renderer fix: an EGLImage that NVIDIA leaves
+  # idle under Wayland stops presenting, so a long gap between mpv frames
+  # rebuilds the texture, and frame notifications move onto the main thread.
+  # The pinned commit sits ahead of the published release, so it also carries
+  # unreleased upstream work on the Apple and Dart sides. Re-check those builds
+  # when moving the ref, and drop this once the fix reaches a published version.
+  media_kit_video:
+    git:
+      url: https://github.com/RadicalMuffinMan/media-kit.git
+      path: media_kit_video
+      ref: 43368ec394dcce7795707358b751a748c1fdc610
   synchronized: 3.3.1
   wakelock_plus: 1.3.3
   screen_brightness_android: 2.1.3
   screen_brightness_ios: 2.1.2
   screen_brightness_platform_interface: 2.1.0
-  volume_controller: 3.4.2
+  volume_controller: 3.6.1
   universal_platform: 1.1.0
   plugin_platform_interface: 2.1.8
   web: 1.1.1
@@ -226,6 +274,9 @@ flutter:
   uses-material-design: true
 
   assets:
+    # Bundled so AppBeta can read the beta flag back at runtime, which keeps
+    # pubspec the one place the beta number is written.
+    - pubspec.yaml
     - assets/images/
     - assets/icons/
     - assets/icons/ratings/
@@ -234,6 +285,16 @@ flutter:
     - assets/licenses/cores/
 
   fonts:
+    # The web engine fetches Roboto from fonts.gstatic.com unless it finds a
+    # family of that name here. Material typography asks for Roboto, so this
+    # is the font nearly all of the UI renders in.
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
     - family: NeonPulseDisplay
       fonts:
         - asset: assets/fonts/Orbitron-Regular.ttf
@@ -251,11 +312,14 @@ flutter:
       fonts:
         - asset: assets/fonts/PressStart2P-Regular.ttf
 
+# The identity has to match Partner Center's Product identity page or the Store
+# rejects the upload.
 msix_config:
   display_name: Moonfin
   publisher_display_name: Moonfin
-  identity_name: com.moonfin.app
-  msix_version: 2.3.2.0
+  identity_name: Moonfin.Moonfin
+  publisher: CN=4E670673-D47F-4792-94F7-65B4918F6E4C
   logo_path: assets/icons/app_icon.png
-  capabilities: internetClient, internetClientServer
+  capabilities: internetClient, internetClientServer, privateNetworkClientServer
   languages: en-us
+  protocol_activation: moonfin

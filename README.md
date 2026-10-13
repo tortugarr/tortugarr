@@ -1,161 +1,160 @@
-<h1 align="center">Moonfin</h1>
-<h3 align="center">Premium Jellyfin & Emby client for mobile, tablet, desktop, TV, and web</h3>
+# 🏴‍☠️ Tortugarr
 
----
+Tortugarr is a specialized, couch-locked automation extension fork of the [Moonfin-Core](https://github.com/Moonfin-Client/Moonfin-Core) framework (built on commit `567e2a8c`). 
+
+While the core media playback, multi-server unification, and design engine are powered by Moonfin and its contributors, Tortugarr adds a dedicated automated server orchestration installer, localized junk-release filtering, and single-click remote download routing directly from the TV layout.
 <p align="center">
-  <img width="1920" height="1080" alt="moonfin_1920x1080" src="https://github.com/user-attachments/assets/b1d9c7d8-f113-457d-ab5c-1600bbd0600a" />
+  <img src="docs/images/screensaver-sign.webp" alt="Tortugarr – Every pirate needs a harbor" width="520">
 </p>
 
+<h1 align="center">Every pirate needs a harbor.</h1>
 
-[![License](https://img.shields.io/github/license/Moonfin-Client/Moonfin-Core.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/Moonfin-Client/Moonfin-Core)](https://github.com/Moonfin-Client/Moonfin-Core/releases)
-[![Github Downloads](https://img.shields.io/github/downloads/Moonfin-Client/Moonfin-Core/total?label=Downloads)](https://github.com/Moonfin-Client/Moonfin-Core/releases) 
-[![Google Play Downloads](https://playbadges.pavi2410.com/badge/downloads?id=org.moonfin.androidtv&pretty)](https://play.google.com/store/apps/details?id=org.moonfin.androidtv)
-[![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/moonfin)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/moonfin)
+<p align="center">
+  <b>Your own streaming service. On your TV. Yours forever.</b><br>
+  Tired of five subscriptions, rising prices and shows that vanish when a licence runs out, we built our own streaming service at home: an app for Android TV and phones, and a one-command server installer. Pick the exact file from the sofa, keep it forever. No subscriptions, no ads.
+</p>
 
-> **[← Back to main Moonfin project](https://github.com/Moonfin-Client)**
+<p align="center">
+  <img src="docs/images/tv-home.webp" alt="Tortugarr on a TV" width="900">
+</p>
 
-Moonfin is a cross-platform media client built with Flutter, designed for Jellyfin and Emby users who want a modern, customizable experience across mobile, tablet, desktop, TV, and web. A single shared codebase powers phones and tablets, Windows, macOS, and Linux, Android TV and Apple TV, the browser, and experimental Samsung TV (Tizen).
+---
 
-## Supported Servers
+## 📺 Five subscriptions, and still nothing to watch?
 
-| Server | Minimum Version | Status |
-|--------|------------------|--------|
-| Jellyfin | 10.8.0+ | Full support |
-| Emby | 4.8.0.0+ | Full support |
+Shows vanish. Prices go up. The film you wanted is suddenly "not available in your region". 
 
-## Platform Support
+**Tortugarr turns a spare PC into your own streaming service.** It looks and feels like the big commercial apps, it runs natively on your TV with your normal remote, and everything you add stays in your library forever.
 
-| Platform | Minimum Version | Status |
-|----------|------------------|--------|
-| **Android** | 6.0 (API 23) | Full support |
-| **Android TV / Google TV** | Android 6.0 (API 23) | Full support |
-| **iOS** | 16.0 | Full support |
-| **Apple TV (tvOS)** | 17.0 | Full support |
-| **macOS** | 14.0 (Sonoma) | Full support |
-| **Windows** | 10 (x64 and ARM64) | Full support |
-| **Linux** | GTK 3+, CMake 3.13+ | Full support (Wayland only) |
-| **Web** | Modern browsers (installable PWA) | Full support |
-| **Tizen (Samsung TV)** | Tizen 6.0+ | Experimental |
+## 🛋️ From the sofa, in three clicks
 
-> Android TV and Apple TV ship from this same codebase with a TV-tuned interface and D-pad navigation, each on its own native backend. Web runs as an installable PWA through the Moonbase server plugin. Tizen is experimental and has real limitations, listed on the [Installation](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Installation) page.
+1. **Browse** what is trending, popular and coming soon, right on the TV screen.
+2. **Pick** *Download Now*, and choose the exact file release: quality, size, and how many seeders share it.
+3. **Watch.** It lands in your library completely on its own, with matching subtitles.
 
-## Features
+No laptop needed. No copying files around on USB sticks. No fiddling with five different web management pages.
 
-- **One codebase, every screen** spanning phones, tablets, desktop, Android TV, Apple TV, web, and Samsung TV, with navigation tuned for touch, pointer, and remote.
-- **Broad playback support** through AetherEngine on iOS, Apple TV, and macOS, native Media3 or libmpv on Android and Android TV, libmpv on Windows and Linux, and the browser's own player on web, covering AV1, HEVC, Dolby Vision, Dolby Atmos, HDR10+, and bitstream audio passthrough. See [Playback and Codecs](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Playback-and-Codecs).
-- **Offline downloads** in original or server-transcoded quality, with automatic folder organization and offline subtitles. See [Downloads](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Downloads).
-- **Ebooks and audiobooks** with EPUB, MOBI, AZW/AZW3, PDF, and comic archive reading, plus M4B audiobooks with chapter navigation.
-- **Retro games** browsed and played in-app from a server game library, with native libretro playback, gamepad support, and synced save states. See [Retro Games](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Retro-Games).
-- **Multi-server unified library** that merges content from several Jellyfin and Emby servers into one browsable, searchable UI.
-- **Featured media bar** with Classic, Bookshelf, Gallery, and Banner layouts, and optional in-bar trailer previews.
-- **Themes and Theme Store** with a built-in editor and server-side sync.
-- **Integrated admin panel** for settings, users, libraries, logs, devices, and analytics without leaving the client.
-- **Discovery with Seerr** for trending, popular, and upcoming rows, with request status overlays.
-- **Live TV and DVR** with an EPG-style guide and recording management.
-- **Cinema Mode and segment skipping** for pre-rolls, intros, credits, and SponsorBlock.
-- **Casting and remote control** over Google Cast, DLNA, and AirPlay, plus control of other Jellyfin devices on your network.
-- **SyncPlay** for synchronized group watching.
-- **Ratings from MDBList and TMDB**, home row customization, parental controls with PIN, and in-app update checks.
+<p align="center">
+  <img src="docs/images/tv-download-now.webp" alt="Download Now: pick the exact file, by quality, size and seeders" width="900"><br>
+  <sub><b>Download Now</b>: every release, sorted by quality, with size and seeders. You pick; it does the rest.</sub>
+</p>
 
-The full list is on the [Features](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Features) wiki page.
+## 🚀 Why people keep it
 
-## Screenshots
+- 🛋️ **Made for the remote:** Every single feature works from the sofa, optimized for Android TV and Google TV d-pads.
+- 🎯 **You choose the file:** No black box automation: see every available release, its quality, health, and size, and pick the one you want.
+- 🛡️ **Fakes stay out:** Cinema cam rips, fake releases and hidden `.exe`/`.scr` files are automatically filtered and blocked before they reach your hard drive.
+- 📺 **Series that complete themselves:** See exactly which episodes you are missing from a season. Grab one, a whole season, or track it automatically as new episodes air.
+- 💬 **Subtitles included:** Fetched automatically by your server. Missing one? Search and attach it straight from the TV layout.
+- 🧹 **Cleans up after itself:** Delete a title directly from the TV UI. The media file, the torrent download, and the server request all disappear cleanly. Running low on space? It tells you what is safe to remove.
+- 🔒 **Nothing phones home:** The app talks directly to your server and nothing else. No account with us, no tracking. The APK itself holds zero sensitive API keys.
+- 📱 **TV, phone and tablet:** Access the exact same library everywhere. Start watching on your phone while traveling, finish on the TV when you get home.
 
-<img width="48%" height="1200" alt="Tablet and desktop screenshot 1" src="https://github.com/user-attachments/assets/3ff05968-655f-42c7-a9ff-55b08529356c" />
-<img width="48%" height="1200" alt="Tablet and desktop screenshot 2" src="https://github.com/user-attachments/assets/70263c7b-24de-410d-a24f-d8bd1b08f1c6" />
-<img width="23%" height="2244" alt="Phone screenshot 1" src="https://github.com/user-attachments/assets/8bcc0483-a650-43e3-91fb-b9d3b4c57440" />
-<img width="23%" height="2244" alt="Phone screenshot 2" src="https://github.com/user-attachments/assets/1813ac6b-546e-4796-b4a8-15fe006d4c9e" />
+<p align="center">
+  <img src="docs/images/tv-collection.webp" alt="Film series: see which parts you are missing" width="900"><br>
+  <sub>Film series at a glance: the parts you have, the ones you are <b>missing</b> (one click to get them), and what is <b>coming</b>.</sub>
+</p>
 
-More in the [Screenshots](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Screenshots) gallery.
+<p align="center">
+  <img src="docs/images/tv-player.webp" alt="Playback" width="440">
+  &nbsp;
+  <img src="docs/images/phone-login.webp" alt="Tortugarr on a phone" width="160">
+</p>
 
-## Installation
+---
 
-Download platform artifacts from the [Releases page](https://github.com/Moonfin-Client/Moonfin-Core/releases).
+## 🎬 See it in action
 
-| Platform | File |
-|---|---|
-| Android / Android TV | `Moonfin_Android_v<version>.apk` |
-| iOS | `Moonfin_iOS_v<version>.ipa` |
-| Windows (x64 and ARM64) | `Moonfin_Windows_v<version>.exe` |
-| macOS | `Moonfin_macOS_v<version>.dmg` |
-| Linux | `Moonfin_Linux_v<version>.<ext>` (AppImage, deb, rpm, snap, flatpak, tarball) |
-| Web | Served as a PWA by the [Moonbase](https://github.com/Moonfin-Client/Plugin) server plugin |
+<p align="center">
+  <img src="docs/media/tv-browse.gif" alt="Browsing on the TV: recently added, a film page and its film series" width="720"><br>
+  <sub>Browse with the remote: open a film and see the whole film series – what you have, what is <b>missing</b>, what is <b>coming</b>.</sub>
+</p>
 
-On Arch Linux, install from the AUR with `yay -S moonfin` (or `paru`, `pamac build`).
+<p align="center">
+  <img src="docs/media/tv-delete.gif" alt="Deleting a film from the TV" width="720"><br>
+  <sub>Delete from the sofa. It asks first, then the file, the download and the request are gone.</sub>
+</p>
 
-Per-platform notes and the Tizen toolchain setup are on [Installation](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Installation).
+▶️ Full videos: [TV app, 48 s](https://github.com/tortugarr/tortugarr/raw/main/docs/media/tv-demo.mp4) · [Installing, 1:26 sped up](https://github.com/tortugarr/tortugarr/raw/main/docs/media/install-timelapse.mp4) · [Uninstalling, 42 s](https://github.com/tortugarr/tortugarr/raw/main/docs/media/uninstall.mp4)
 
-## Building
+<details>
+<summary><b>More screenshots</b></summary>
+<br>
+<p align="center">
+  <img src="docs/images/tv-home-banner.webp" alt="Home screen banner" width="440">
+  <img src="docs/images/tv-movie-available.webp" alt="A film page, available in your library" width="440">
+  <img src="docs/images/tv-trending.webp" alt="Trending films and series" width="440">
+  <img src="docs/images/tv-requests.webp" alt="Recent requests with their status" width="440">
+</p>
+</details>
 
-Flutter stable 3.41+ and Dart 3.11+ are the only prerequisites.
+## ⚙️ How it works
 
-```bash
-git clone https://github.com/Moonfin-Client/Moonfin-Core.git
-cd Moonfin-Core
-flutter pub get
+One command sets up the whole harbor. A few questions with sensible defaults, then the installer sets up and connects everything: Jellyfin, Seerr, Sonarr, Radarr, Prowlarr, Bazarr, the download client and the Tortugarr plugin. The app talks to your Jellyfin server; downloads, deletes and subtitles go through the Tortugarr plugin there, so the app holds no keys.
+
+Tortugarr does not bundle these tools. They are independent open-source projects; the installer downloads their official releases and wires them together.
+
+```mermaid
+flowchart LR
+  app["📺 Tortugarr app<br/>TV · phone · tablet"] -->|port 8096| jf["Jellyfin<br/>+ Tortugarr plugin"]
+  jf --> arr["Sonarr · Radarr"]
+  jf --> bazarr["Bazarr<br/>subtitles"]
+  seerr["Seerr<br/>requests"] --> arr
+  prowlarr["Prowlarr<br/>your indexers"] --> arr
+  arr --> dl["Download client<br/>qBittorrent · SABnzbd"]
+  dl --> media[("Your media folder")]
+  media --> jf
 ```
 
-The per-platform build commands are on [Building from Source](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Building-from-Source).
+Ports, files and security notes: [**architecture**](server/docs/architecture.md).
 
-## Documentation
+## 📦 Get started in about 15 minutes
 
-The deeper reference material lives in the [Wiki](https://github.com/Moonfin-Client/Moonfin-Core/wiki):
+Everything you need is on the **[Releases page](https://github.com/tortugarr/tortugarr/releases)**:
 
-| Page | What it covers |
-|------|----------------|
-| [Features](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Features) | The full feature list, section by section |
-| [Playback and Codecs](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Playback-and-Codecs) | The backend per platform, the codec table, HDR, and audio passthrough |
-| [Downloads](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Downloads) | Original and transcoded downloads, quality presets, and storage paths |
-| [Retro Games](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Retro-Games) | Playing server game libraries in-app, cores, controllers, and save states |
-| [Installation](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Installation) | Which release file to pick, the AUR package, and the Tizen toolchain |
-| [User Guide](https://github.com/Moonfin-Client/Moonfin-Core/wiki/User-Guide) | Keyboard shortcuts, subtitle downloads, and remote device control |
-| [Custom mpv Configuration](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Custom-mpv-Configuration) | Tuning playback with your own `mpv.conf`, allowed options, and SVP on Windows |
-| [Building from Source](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Building-from-Source) | Toolchain versions, quick start, and per-platform build commands |
-| [Development](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Development) | Developer notes, contributing guidelines, and the pull request process |
+| File | For |
+|---|---|
+| `tortugarr-server-4.20.0.tar` | The server: installer + Tortugarr plugin, ready to run |
+| `tortugarr-tv-4.20.0.apk` | The app for Android TV / Google TV |
+| `tortugarr-phone-4.20.0.apk` | The app for Android phones and tablets |
 
-## Contributing
+Jellyfin, Seerr, Sonarr and the other tools are not inside these files: the installer downloads them (and Docker, if needed) from the internet while it runs, about 5 GB the first time.
 
-Contributions are welcome. Check the existing issues first, discuss major feature changes before implementing them, match the existing code style, run `flutter analyze`, and test on at least one target platform. Keep pull requests focused and include context, screenshots or logs where useful.
+**Before you start, you need:**
+- A PC or server with **Linux**: Ubuntu 22.04 or 24.04 (64-bit). Other Debian-based systems usually work but are not tested. Tested on 24.04.
+- **4 GB RAM**, about **5 GB** for the software, and room for your movies and series.
+- An **internet connection** during the install.
+- Your own indexers (and, if you want, a usenet provider or a VPN subscription).
+- Windows? It is not supported, but you can run the installer inside WSL2. See [Windows and WSL2](server/docs/install.md#requirements) in the install guide first.
 
-See [Development](https://github.com/Moonfin-Client/Moonfin-Core/wiki/Development) for the full guidelines and the pull request process.
+### 1. Install the server
 
-## Help translate Moonfin [here](https://translate.moonfin.io/engage/moonfin-core/)
+Open a terminal on the machine that will be your server and run:
 
-<a href="https://translate.moonfin.io/engage/moonfin-core/">
-  <img
-    src="https://translate.moonfin.io/widgets/moonfin-core/-/multi-auto.svg"
-    alt="Moonfin Core translation status by language"
-  />
-</a>
+```bash
+wget https://github.com/tortugarr/tortugarr/releases/download/v4.20.0/tortugarr-server-4.20.0.tar \
+     https://github.com/tortugarr/tortugarr/releases/download/v4.20.0/SHA256SUMS.txt
+sha256sum --check --ignore-missing SHA256SUMS.txt   # should print: tortugarr-server-4.20.0.tar: OK
+tar -xf tortugarr-server-4.20.0.tar
+cd tortugarr-server
+sudo ./install.sh
+```
 
-## Support and Community
+<details>
+<summary><b>Changed your mind? Clean Uninstall</b></summary>
+If you ever want to remove Tortugarr, run: `sudo tortugarr uninstall`. It lists exactly what will be removed. Your media files and library downloads are NEVER touched.
+</details>
 
-- **Issues**: [GitHub Issues](https://github.com/Moonfin-Client/Moonfin-Core/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Moonfin-Client/Moonfin-Core/discussions)
-- **Discord**: [Discord](https://discord.gg/moonfin)
-- **Upstream Jellyfin**: [jellyfin.org](https://jellyfin.org)
+## 🗂️ What is in this repository
 
-## Credits
+| Folder | Description |
+|---|---|
+| [`app/`](app/) | The Tortugarr app, built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core). |
+| [`server/`](server/) | The installer and the Tortugarr Jellyfin plugin. |
+| [`docs/`](docs/) | [FAQ](docs/FAQ.md), user guide and manual. |
 
-Moonfin is built on the work of:
-- **[Jellyfin Project](https://jellyfin.org)**
-- **Jellyfin client contributors**
-- **Moonfin contributors**
-- **[MakD](https://github.com/MakD)** - Original Jellyfin-Media-Bar concept that inspired our featured media bar
-- **[MediaLyze](https://github.com/frederikemmer/MediaLyze)** The Admin analytics UI was inspired by this open-source project 
+## ⚖️ Free, and it stays free
 
-## License
+Open source under GPL-2.0. Use it, change it, share it. See [LICENSE](LICENSE).
 
-Moonfin is free software. You can redistribute it and modify it under the terms
-of the GNU General Public License as published by the Free Software Foundation,
-either version 2 of the License or, at your option, any later version. See
-[LICENSE](LICENSE) for the version 2 text.
-
----
-
-<p align="center">
-  <strong>Moonfin</strong> is an independent project and is not affiliated with the Jellyfin or Emby projects.<br>
-  <a href="https://github.com/Moonfin-Client">← Back to main Moonfin project</a>
-</p>
+> Tortugarr ships software only: no content, no indexers and no accounts. You decide what you add, and you are responsible for using it legally where you live.

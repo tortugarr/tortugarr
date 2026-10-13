@@ -6,9 +6,14 @@ import 'package:moonfin_design/moonfin_design.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../data/services/socket_handler.dart';
+import '../../data/services/remote_command_queue.dart';
+import '../../data/services/remote_volume_sender.dart';
 import '../../l10n/app_localizations.dart';
+import '../util/error_message.dart';
 import 'bounded_network_image.dart';
 import 'overlay_sheet.dart';
+import 'remote_search_sheet.dart';
+import 'remote_navigation_pad.dart';
 
 void showRemoteControlDialog(BuildContext context) {
   showFocusRestoringModalBottomSheet<void>(
@@ -26,8 +31,12 @@ class _RemoteControlSheet extends StatefulWidget {
   State<_RemoteControlSheet> createState() => _RemoteControlSheetState();
 }
 
-class _RemoteControlSheetState extends State<_RemoteControlSheet> {
+class _RemoteControlSheetState extends State<_RemoteControlSheet>
+    with WidgetsBindingObserver {
   late final SessionApi _sessionApi;
+  late final String? _userId;
+  RemoteCommandQueue? _navigation;
+  bool _suspended = false;
   List<Map<String, dynamic>> _sessions = [];
   bool _loading = true;
   bool _fetching = false;
@@ -36,13 +45,25 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
   bool _busy = false;
   double? _seekPosition;
   double? _volume;
+  String? _volumeSessionId;
+  RemoteVolumeSender? _volumeSender;
+  int _volumeRequest = 0;
+  bool _volumeDragging = false;
+  Timer? _volumeRefreshTimer;
+  Timer? _volumeConfirmationTimer;
   Timer? _refreshTimer;
   StreamSubscription<ServerWebSocketMessage>? _socketSub;
+  final _searchConnected = ValueNotifier<bool>(true);
+  String? _searchSessionId;
+  String? _searchDeviceId;
+  bool _openingSearch = false;
 
   @override
   void initState() {
     super.initState();
     _sessionApi = GetIt.instance<MediaServerClient>().sessionApi;
+    _userId = GetIt.instance<MediaServerClient>().userId;
+    WidgetsBinding.instance.addObserver(this);
     _load();
     _refreshTimer = Timer.periodic(
       const Duration(seconds: 5),
@@ -50,7 +71,14 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     );
     _socketSub = GetIt.instance<SocketHandler>().events.listen((event) {
       switch (event) {
-        case SessionEndedMessage():
+        case SessionEndedMessage(:final sessionId):
+          if (_searchSessionId == sessionId) _searchConnected.value = false;
+          if (_selectedSession?['Id'] == sessionId) {
+            _cancelNavigation();
+            _cancelVolume();
+            setState(() => _selectedSession = null);
+          }
+          _refresh();
         case PlayMessage():
         case PlaystateMessage():
         case GeneralCommandMessage():
@@ -66,16 +94,202 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cancelNavigation();
+    _cancelVolume();
     _socketSub?.cancel();
     _refreshTimer?.cancel();
+    _searchConnected.dispose();
     super.dispose();
+  }
+
+  void _cancelNavigation() {
+    _navigation?.close();
+    _navigation = null;
+  }
+
+  void _cancelVolume() {
+    _volumeRefreshTimer?.cancel();
+    _volumeRefreshTimer = null;
+    _volumeConfirmationTimer?.cancel();
+    _volumeConfirmationTimer = null;
+    _volumeSender?.close();
+    _volumeSender = null;
+    _volumeRequest++;
+    _volume = null;
+    _volumeSessionId = null;
+    _volumeDragging = false;
+  }
+
+  Future<void> _sendVolume(String command, {int? volume}) async {
+    final session = _selectedSession;
+    final id = session?['Id']?.toString();
+    if (_suspended ||
+        !_sameAccount ||
+        session == null ||
+        id == null ||
+        !_supportsCommand(session, command)) {
+      return;
+    }
+    final sender = _volumeSender ??= RemoteVolumeSender((name, level) async {
+      final current = _selectedSession;
+      if (_suspended ||
+          !_sameAccount ||
+          current == null ||
+          current['Id']?.toString() != id ||
+          current['DeviceId'] != session['DeviceId'] ||
+          !_supportsCommand(current, name)) {
+        throw StateError('Remote volume target is unavailable');
+      }
+      await _sessionApi.sendGeneralCommand(
+        id,
+        name,
+        arguments: level == null ? null : {'Volume': '$level'},
+      );
+    });
+    final request = ++_volumeRequest;
+    _volumeRefreshTimer?.cancel();
+    _volumeConfirmationTimer?.cancel();
+    setState(() {
+      _volume = volume?.toDouble();
+      _volumeSessionId = id;
+      _volumeDragging = false;
+    });
+    try {
+      await sender.add(command, volume: volume);
+      if (!mounted || request != _volumeRequest) return;
+      if (volume != null) {
+        // Older receivers only report every five seconds, so this bounds the
+        // optimistic display without delaying or retrying the command. A
+        // session that reports no level keeps ours, as it's the only number
+        // either side knows.
+        _volumeConfirmationTimer = Timer(const Duration(seconds: 6), () {
+          if (!mounted || request != _volumeRequest) return;
+          if (_selectedSession?['PlayState']?['VolumeLevel'] is num) {
+            setState(_cancelVolume);
+          } else {
+            _volumeRefreshTimer?.cancel();
+            _volumeRequest++;
+          }
+        });
+      }
+      _scheduleVolumeRefresh(request);
+    } catch (error) {
+      if (!mounted || request != _volumeRequest) return;
+      setState(_cancelVolume);
+      final l10n = AppLocalizations.of(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.remoteCommandFailed(describeError(error, l10n))),
+        ),
+      );
+    }
+  }
+
+  void _scheduleVolumeRefresh(
+    int request, {
+    Duration delay = const Duration(milliseconds: 300),
+  }) {
+    _volumeRefreshTimer = Timer(delay, () async {
+      if (!mounted || request != _volumeRequest) return;
+      await _refresh();
+      if (mounted && request == _volumeRequest && _volume != null) {
+        _scheduleVolumeRefresh(request, delay: const Duration(seconds: 1));
+      }
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _suspended = true;
+      _cancelNavigation();
+      _cancelVolume();
+    } else if (state == AppLifecycleState.resumed) {
+      _suspended = false;
+      unawaited(_refresh());
+    }
+  }
+
+  bool get _sameAccount {
+    if (!GetIt.instance.isRegistered<MediaServerClient>()) return false;
+    final client = GetIt.instance<MediaServerClient>();
+    return identical(client.sessionApi, _sessionApi) &&
+        client.userId == _userId;
+  }
+
+  void _sendNavigation(String command) {
+    final session = _selectedSession;
+    final id = session?['Id']?.toString();
+    if (_openingSearch ||
+        _suspended ||
+        !_sameAccount ||
+        session == null ||
+        id == null ||
+        !_supportsCommand(session, command)) {
+      _cancelNavigation();
+      return;
+    }
+    if (_navigation == null) {
+      late final RemoteCommandQueue queue;
+      queue = RemoteCommandQueue(
+        send: (name) async {
+          final current = _selectedSession;
+          if (!_sameAccount ||
+              current == null ||
+              current['Id']?.toString() != id ||
+              current['DeviceId'] != session['DeviceId'] ||
+              !_supportsCommand(current, name)) {
+            _cancelNavigation();
+            return;
+          }
+          await _sessionApi.sendGeneralCommand(id, name);
+        },
+        onError: (error) {
+          if (!mounted || !identical(_navigation, queue)) return;
+          // Overflow can fail while a request is still in flight. Keep the
+          // closed queue until it settles so a later tap can't overtake it.
+          unawaited(
+            queue.settled.then((_) {
+              if (identical(_navigation, queue)) _navigation = null;
+            }),
+          );
+          final l10n = AppLocalizations.of(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.remoteCommandFailed(describeError(error, l10n)),
+              ),
+            ),
+          );
+        },
+      );
+      _navigation = queue;
+    }
+    _navigation!.add(command);
   }
 
   Future<void> _load() async {
     if (_fetching) return;
     _fetching = true;
+    final volumeRequest = _volumeRequest;
     try {
       final client = GetIt.instance<MediaServerClient>();
+      if (!_sameAccount) {
+        _cancelNavigation();
+        _cancelVolume();
+        _searchConnected.value = false;
+        if (mounted) {
+          setState(() {
+            _sessions = [];
+            _selectedSession = null;
+            _loading = false;
+          });
+        }
+        return;
+      }
       List<Map<String, dynamic>> strictSessions = const [];
       try {
         strictSessions = await _sessionApi.getSessions(
@@ -95,6 +309,17 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
         ...fallbackSessions,
       ]);
       if (!mounted) return;
+      if (!_sameAccount) {
+        _cancelNavigation();
+        _cancelVolume();
+        _searchConnected.value = false;
+        setState(() {
+          _sessions = [];
+          _selectedSession = null;
+          _loading = false;
+        });
+        return;
+      }
       final selfDeviceId = client.deviceInfo.id;
       final controllable = sessions.where((s) {
         final deviceId = s['DeviceId']?.toString();
@@ -104,21 +329,42 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
 
         return _isPotentiallyControllable(s);
       }).toList();
+      if (_searchSessionId != null) {
+        _searchConnected.value =
+            identical(client.sessionApi, _sessionApi) &&
+            controllable.any(
+              (s) =>
+                  s['Id']?.toString() == _searchSessionId &&
+                  s['DeviceId']?.toString() == _searchDeviceId,
+            );
+      }
       setState(() {
         _sessions = controllable;
         _loading = false;
         _error = null;
         if (_selectedSession != null) {
           final id = _selectedSession!['Id'];
+          final deviceId = _selectedSession!['DeviceId'];
           _selectedSession = controllable
               .cast<Map<String, dynamic>?>()
-              .firstWhere((s) => s?['Id'] == id, orElse: () => null);
+              .firstWhere(
+                (s) => s?['Id'] == id && s?['DeviceId'] == deviceId,
+                orElse: () => null,
+              );
+          if (_selectedSession == null) {
+            _cancelNavigation();
+            _cancelVolume();
+          }
         }
+        _reconcileVolume(volumeRequest);
       });
     } catch (e) {
       if (!mounted) return;
+      _cancelNavigation();
+      _cancelVolume();
+      if (_searchSessionId != null) _searchConnected.value = false;
       setState(() {
-        _error = e.toString();
+        _error = describeError(e, AppLocalizations.of(context));
         _loading = false;
       });
     } finally {
@@ -153,7 +399,10 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
       return true;
     }
 
-    final commands = session['SupportedCommands'];
+    final capabilities = session['Capabilities'];
+    final commands =
+        session['SupportedCommands'] ??
+        (capabilities is Map ? capabilities['SupportedCommands'] : null);
     if (commands is List) {
       return commands.whereType<String>().isNotEmpty;
     }
@@ -178,7 +427,7 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.remoteCommandFailed(e.toString())),
+            content: Text(l10n.remoteCommandFailed(describeError(e, l10n))),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -200,12 +449,68 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     );
   }
 
-  Future<void> _sendGeneral(String commandName, {Map<String, String>? args}) {
-    final id = _selectedSession?['Id']?.toString();
-    if (id == null) return Future.value();
-    return _run(
-      () => _sessionApi.sendGeneralCommand(id, commandName, arguments: args),
-    );
+  Future<void> _openSearch() async {
+    final session = _selectedSession;
+    final id = session?['Id']?.toString();
+    if (_openingSearch || session == null || id == null) return;
+    _openingSearch = true;
+    try {
+      final navigation = _navigation;
+      _cancelNavigation();
+      await navigation?.settled;
+      if (!mounted ||
+          _suspended ||
+          !_sameAccount ||
+          _selectedSession?['Id']?.toString() != id ||
+          _selectedSession?['DeviceId'] != session['DeviceId']) {
+        return;
+      }
+      _searchSessionId = id;
+      _searchDeviceId = session['DeviceId']?.toString();
+      _searchConnected.value = true;
+      await showFocusRestoringModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => RemoteSearchSheet(
+          sessionApi: _sessionApi,
+          sessionId: id,
+          deviceName:
+              session['DeviceName']?.toString() ??
+              session['Client']?.toString() ??
+              '',
+          // Moonfin's receivers replace the phrase. Others may insert text,
+          // so leave their SendString as an explicit one-shot send.
+          liveUpdates: (session['Client']?.toString() ?? '')
+              .toLowerCase()
+              .contains('moonfin'),
+          connected: _searchConnected,
+        ),
+      );
+    } finally {
+      _openingSearch = false;
+      _searchSessionId = null;
+      _searchDeviceId = null;
+    }
+  }
+
+  /// A successful command POST doesn't mean Sessions has its new volume yet.
+  void _reconcileVolume(int request) {
+    final held = _volume;
+    if (held == null) return;
+
+    final currentId = _selectedSession?['Id']?.toString();
+    if (currentId == null || currentId != _volumeSessionId) {
+      _cancelVolume();
+      return;
+    }
+    final reported = _selectedSession?['PlayState']?['VolumeLevel'];
+    if (request == _volumeRequest &&
+        !_volumeDragging &&
+        !(_volumeSender?.isSending ?? false) &&
+        reported is num &&
+        reported.round() == held.round()) {
+      _cancelVolume();
+    }
   }
 
   @override
@@ -214,7 +519,7 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     final l10n = AppLocalizations.of(context);
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.65,
+      initialChildSize: 0.85,
       minChildSize: 0.3,
       maxChildSize: 0.95,
       builder: (context, scrollController) => Container(
@@ -346,8 +651,16 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
         borderRadius: AppRadius.circular(14),
         child: InkWell(
           borderRadius: AppRadius.circular(14),
-          onTap: () =>
-              setState(() => _selectedSession = isSelected ? null : session),
+          onTap: () => setState(() {
+            _cancelNavigation();
+            _cancelVolume();
+            _selectedSession = isSelected ? null : session;
+            // Another device has its own volume and position, so what was held
+            // for the last one doesn't carry over.
+            _volume = null;
+            _volumeSessionId = null;
+            _seekPosition = null;
+          }),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: AppRadius.circular(14),
@@ -461,9 +774,58 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     final runtimeTicks = (nowPlaying?['RunTimeTicks'] as num?)?.toInt();
     final volumeLevel = (playState?['VolumeLevel'] as num?)?.toDouble();
     final supportsSetVolume = _supportsCommand(session, 'SetVolume');
+    final navigation = <Widget>[
+      if ([
+        'MoveUp',
+        'MoveDown',
+        'MoveLeft',
+        'MoveRight',
+        'Select',
+      ].any((command) => _supportsCommand(session, command)))
+        RemoteNavigationPad(
+          supports: (command) => _supportsCommand(session, command),
+          onCommand: _sendNavigation,
+        ),
+      Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 12,
+        children: [
+          if (_supportsCommand(session, 'Back'))
+            TextButton.icon(
+              key: const ValueKey('remote-Back'),
+              onPressed: () => _sendNavigation('Back'),
+              icon: const Icon(Icons.arrow_back_rounded),
+              label: Text(l10n.back),
+            ),
+          if (_supportsCommand(session, 'GoHome'))
+            TextButton.icon(
+              key: const ValueKey('remote-GoHome'),
+              onPressed: () => _sendNavigation('GoHome'),
+              icon: const Icon(Icons.home_outlined),
+              label: Text(l10n.home),
+            ),
+          if (_supportsCommand(session, 'GoToSearch') &&
+              _supportsCommand(session, 'SendString'))
+            TextButton.icon(
+              onPressed: _openSearch,
+              icon: const Icon(Icons.search),
+              label: Text(l10n.search),
+            ),
+        ],
+      ),
+    ];
 
     if (nowPlaying == null) {
       return [
+        ...navigation,
+        // These receivers use TV system volume independently of playback.
+        // General session capabilities alone can't tell system volume apart
+        // from a Core client's player-only volume or provide a fresh idle level.
+        if (const {
+          'moonfin for webos',
+          'moonfin for tizen',
+        }.contains(session['Client']?.toString().toLowerCase()))
+          _buildIdleVolume(session, l10n),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 28),
           child: Center(
@@ -483,6 +845,7 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     }
 
     return [
+      ...navigation,
       _buildNowPlayingCard(theme, nowPlaying, positionTicks, runtimeTicks),
       const SizedBox(height: 18),
       _buildTransportRow(theme, isPaused),
@@ -491,6 +854,33 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
       const SizedBox(height: 14),
       _buildStopButton(theme, l10n),
     ];
+  }
+
+  Widget _buildIdleVolume(Map<String, dynamic> session, AppLocalizations l10n) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16,
+      children: [
+        if (_supportsCommand(session, 'VolumeDown'))
+          IconButton(
+            tooltip: l10n.sessionVolumeDown,
+            onPressed: () => _sendVolume('VolumeDown'),
+            icon: const Icon(Icons.volume_down_rounded),
+          ),
+        if (_supportsCommand(session, 'ToggleMute'))
+          IconButton(
+            tooltip: l10n.shortcutMute,
+            onPressed: () => _sendVolume('ToggleMute'),
+            icon: const Icon(Icons.volume_off_outlined),
+          ),
+        if (_supportsCommand(session, 'VolumeUp'))
+          IconButton(
+            tooltip: l10n.sessionVolumeUp,
+            onPressed: () => _sendVolume('VolumeUp'),
+            icon: const Icon(Icons.volume_up_rounded),
+          ),
+      ],
+    );
   }
 
   Widget _buildNowPlayingCard(
@@ -589,8 +979,10 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
             padding: EdgeInsets.zero,
           ),
           child: Slider(
-            value: (_seekPosition ?? positionTicks / runtimeTicks)
-                .clamp(0.0, 1.0),
+            value: (_seekPosition ?? positionTicks / runtimeTicks).clamp(
+              0.0,
+              1.0,
+            ),
             onChanged: (v) => setState(() => _seekPosition = v),
             onChangeEnd: (v) {
               final target = (v * runtimeTicks).round();
@@ -606,10 +998,7 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
               _ticksToTime(positionTicks),
               style: theme.textTheme.labelSmall,
             ),
-            Text(
-              _ticksToTime(runtimeTicks),
-              style: theme.textTheme.labelSmall,
-            ),
+            Text(_ticksToTime(runtimeTicks), style: theme.textTheme.labelSmall),
           ],
         ),
       ],
@@ -655,27 +1044,39 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
     double? volumeLevel,
     bool supportsSetVolume,
   ) {
+    final session = _selectedSession!;
+    final mute = isMuted ? 'Unmute' : 'Mute';
+    final muteCommand = _supportsCommand(session, mute)
+        ? mute
+        : _supportsCommand(session, 'ToggleMute')
+        ? 'ToggleMute'
+        : null;
     if (!supportsSetVolume) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _ControlButton(
-            icon: isMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
-            label: isMuted ? l10n.unmute : l10n.mute,
-            onTap: () => _sendGeneral(isMuted ? 'Unmute' : 'Mute'),
-          ),
+          if (muteCommand != null)
+            _ControlButton(
+              icon: isMuted
+                  ? Icons.volume_off_rounded
+                  : Icons.volume_up_rounded,
+              label: isMuted ? l10n.unmute : l10n.mute,
+              onTap: () => _sendVolume(muteCommand),
+            ),
           const SizedBox(width: 8),
-          _ControlButton(
-            icon: Icons.volume_down_rounded,
-            label: l10n.sessionVolumeDown,
-            onTap: () => _sendGeneral('VolumeDown'),
-          ),
+          if (_supportsCommand(session, 'VolumeDown'))
+            _ControlButton(
+              icon: Icons.volume_down_rounded,
+              label: l10n.sessionVolumeDown,
+              onTap: () => _sendVolume('VolumeDown'),
+            ),
           const SizedBox(width: 8),
-          _ControlButton(
-            icon: Icons.volume_up_rounded,
-            label: l10n.sessionVolumeUp,
-            onTap: () => _sendGeneral('VolumeUp'),
-          ),
+          if (_supportsCommand(session, 'VolumeUp'))
+            _ControlButton(
+              icon: Icons.volume_up_rounded,
+              label: l10n.sessionVolumeUp,
+              onTap: () => _sendVolume('VolumeUp'),
+            ),
         ],
       );
     }
@@ -704,7 +1105,9 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
             icon: Icon(volumeIcon),
             color: theme.colorScheme.onSurfaceVariant,
             tooltip: isMuted ? l10n.unmute : l10n.mute,
-            onPressed: () => _sendGeneral(isMuted ? 'Unmute' : 'Mute'),
+            onPressed: muteCommand == null
+                ? null
+                : () => _sendVolume(muteCommand),
           ),
           Expanded(
             child: SliderTheme(
@@ -717,13 +1120,18 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
                 min: 0,
                 max: 100,
                 value: value,
-                onChanged: (v) => setState(() => _volume = v),
+                onChanged: (v) => setState(() {
+                  if (!_volumeDragging) {
+                    _volumeRequest++;
+                    _volumeRefreshTimer?.cancel();
+                    _volumeConfirmationTimer?.cancel();
+                  }
+                  _volume = v;
+                  _volumeSessionId = _selectedSession?['Id']?.toString();
+                  _volumeDragging = true;
+                }),
                 onChangeEnd: (v) {
-                  _volume = null;
-                  _sendGeneral(
-                    'SetVolume',
-                    args: {'Volume': v.round().toString()},
-                  );
+                  _sendVolume('SetVolume', volume: v.round());
                 },
               ),
             ),
@@ -772,7 +1180,10 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet> {
   }
 
   bool _supportsCommand(Map<String, dynamic> session, String command) {
-    final commands = session['SupportedCommands'];
+    final capabilities = session['Capabilities'];
+    final commands =
+        session['SupportedCommands'] ??
+        (capabilities is Map ? capabilities['SupportedCommands'] : null);
     return commands is List && commands.whereType<String>().contains(command);
   }
 

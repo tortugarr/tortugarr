@@ -62,6 +62,10 @@ class Destinations {
   static const server = '/server';
   static const login = '/login';
 
+  /// First-run setup. Sits between login and home the first time a user lands
+  /// on a server, and is reachable again from About afterwards.
+  static const setup = '/setup';
+
   // General
   static const home = '/home';
   static const search = '/search';
@@ -177,11 +181,23 @@ class Destinations {
       '/library/$libraryId/letters';
   static String librarySuggestionsOf(String libraryId) =>
       '/library/$libraryId/suggestions';
-  static String item(String itemId, {String? serverId, bool autoPlay = false}) {
+  /// [seasonContext] names the season the viewer was browsing, which is not
+  /// always the item's own season: a special inlined by
+  /// DisplaySpecialsWithinSeasons is listed under a regular season while still
+  /// living in Specials. Carrying it keeps the episode list and the play queue
+  /// on the season that was on screen.
+  static String item(
+    String itemId, {
+    String? serverId,
+    bool autoPlay = false,
+    String? seasonContext,
+  }) {
     final base = '/item/$itemId';
     final params = <String>[
       if (serverId != null) 'serverId=$serverId',
       if (autoPlay) 'autoPlay=true',
+      if (seasonContext != null && seasonContext.isNotEmpty)
+        'seasonContext=${Uri.encodeQueryComponent(seasonContext)}',
     ];
     return params.isEmpty ? base : '$base?${params.join('&')}';
   }
@@ -211,19 +227,26 @@ class Destinations {
     String libraryId,
     String gameId, {
     required String core,
+    String? romFileName,
     String? biosId,
     String? name,
     bool startFresh = false,
+    bool forceEmulatorJs = false,
+    bool hardwareRenderingEnabled = true,
   }) {
     final base =
         '/game-player/${Uri.encodeComponent(libraryId)}/${Uri.encodeComponent(gameId)}';
     final params = <String>[
       'core=${Uri.encodeQueryComponent(core)}',
+      if (romFileName != null && romFileName.isNotEmpty)
+        'romFile=${Uri.encodeQueryComponent(romFileName)}',
       if (biosId != null && biosId.isNotEmpty)
         'bios=${Uri.encodeQueryComponent(biosId)}',
       if (name != null && name.isNotEmpty)
         'name=${Uri.encodeQueryComponent(name)}',
       if (startFresh) 'fresh=1',
+      if (forceEmulatorJs) 'backend=emulatorjs',
+      if (!hardwareRenderingEnabled) 'hw=0',
     ];
     return '$base?${params.join('&')}';
   }
@@ -250,6 +273,7 @@ class Destinations {
         ? '$base?serverId=${Uri.encodeComponent(serverId)}'
         : base;
   }
+
   static String collection(String collectionId) => '/collection/$collectionId';
   static String musicLibrary(String libraryId) => '/music/$libraryId';
   static String bookLibrary(String libraryId, {String? collectionType}) {
@@ -258,6 +282,7 @@ class Destinations {
         ? '$base?collectionType=${Uri.encodeComponent(collectionType)}'
         : base;
   }
+
   static String photo(String itemId) => '/player/photo/$itemId';
   static String trailer({String? videoId, String? url}) {
     final params = <String, String>{
@@ -277,21 +302,36 @@ class Destinations {
   static bool isLiveTvChannelType(String? type) =>
       type == 'TvChannel' || type == 'LiveTvChannel';
 
+  static bool isLiveTvProgramType(String? type) =>
+      type == 'Program' || type == 'LiveTvProgram';
+
   static bool isFolderType(String? type) =>
       type == 'Folder' || type == 'CollectionFolder' || type == 'UserView';
 
   static String liveTvChannel(String channelId) =>
       '$liveTvPlayer?channelId=${Uri.encodeQueryComponent(channelId)}';
 
-  static String itemOrPhoto(String itemId, {String? serverId, String? type}) {
+  static String itemOrPhoto(
+    String itemId, {
+    String? serverId,
+    String? type,
+    String? channelId,
+  }) {
     if (type == 'Photo') return photo(itemId);
     // Channels have no detail screen worth landing on, so go straight to
     // the live player, which resolves the lineup from the id.
     if (isLiveTvChannelType(type)) return liveTvChannel(itemId);
+    // A program is only its channel's current airing. Its own id carries no
+    // media sources, and asking the server for PlaybackInfo on one fails with
+    // a 500, so tune the channel instead.
+    if (isLiveTvProgramType(type) && channelId != null && channelId.isNotEmpty) {
+      return liveTvChannel(channelId);
+    }
     // Folders open their contents rather than a detail screen.
     if (isFolderType(type)) return folder(itemId, serverId: serverId);
     return item(itemId, serverId: serverId);
   }
+
   static String nextUpFor(String itemId) => '/player/next-up/$itemId';
   static String stillWatchingFor(String itemId) =>
       '/player/still-watching/$itemId';
@@ -305,11 +345,21 @@ class Destinations {
     return Uri(path: search, queryParameters: params).toString();
   }
 
-  static String seerrMedia(String itemId, {String? mediaType}) {
+  /// Everything the screen needs travels in the route, so a restored or shared
+  /// link resolves the same way a fresh tap does.
+  static String seerrMedia(String itemId, {String? mediaType, String? title}) {
     final base = '/seerr/media/$itemId';
-    if (mediaType == null || mediaType.trim().isEmpty) return base;
-    return Uri(path: base, queryParameters: {'mediaType': mediaType}).toString();
+    final params = <String, String>{};
+    if (mediaType != null && mediaType.trim().isNotEmpty) {
+      params['mediaType'] = mediaType;
+    }
+    if (title != null && title.trim().isNotEmpty) {
+      params['title'] = title;
+    }
+    if (params.isEmpty) return base;
+    return Uri(path: base, queryParameters: params).toString();
   }
+
   static String seerrPerson(String personId) => '/seerr/person/$personId';
   static String seerrCollection(String collectionId) =>
       '/seerr/collection/$collectionId';
@@ -321,6 +371,37 @@ class Destinations {
   static String adminLogFile(String fileName) =>
       '/admin/logs/${Uri.encodeComponent(fileName)}';
   static String adminMetadata(String itemId) => '/admin/metadata/$itemId';
+
+  /// Whether [path] is one of the full-screen player routes: video, audio,
+  /// the reader and its overlays, live TV, or a game.
+  static bool isPlayerRoute(String path) =>
+      path.startsWith('/player/') ||
+      path == liveTvPlayer ||
+      path.startsWith('/game-player/');
+
+  /// The video player turns Escape into leaving fullscreen and the game player
+  /// turns it into its own overlay, so both need the global handlers to stand
+  /// aside. Every other playback screen relies on being popped from there, so
+  /// treating the whole group alike leaves Escape doing nothing in a book, a
+  /// photo or a trailer.
+  static bool routeReadsBackKey(String path) =>
+      path == videoPlayer || path.startsWith('/game-player/');
+
+  /// The player routes that play through the shared playback manager, so
+  /// opening one replaces whatever it was playing. The trailer, photo, book
+  /// and game screens bring their own players.
+  static bool playsThroughPlaybackManager(String path) =>
+      path == videoPlayer ||
+      path == audioPlayer ||
+      path == externalPlayer ||
+      path == liveTvPlayer;
+
+  /// Where signing out or switching user lands, with nobody signed in yet.
+  static bool isSignedOutRoute(String path) =>
+      path == startup ||
+      path == serverSelect ||
+      path == server ||
+      path == login;
 
   static String seerrBrowseWith({
     required String filterId,

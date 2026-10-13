@@ -8,11 +8,12 @@ import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
 import 'package:server_core/server_core.dart';
 
+import '../../auth/repositories/session_repository.dart';
 import '../../util/platform_detection.dart';
 import 'sync_service.dart';
 
 class ConnectivityService extends ChangeNotifier {
-  final Connectivity _connectivity = Connectivity();
+  final Connectivity _connectivity;
   final Dio _pingDio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 5),
@@ -20,6 +21,21 @@ class ConnectivityService extends ChangeNotifier {
   ));
   StreamSubscription<List<ConnectivityResult>>? _subscription;
   Timer? _recheckDebounce;
+
+  /// Startup, a network flip and the retry below can all ask at once, and two
+  /// probes would each open a connection and each read the verdict from before
+  /// either answered.
+  Future<void>? _inFlightProbe;
+
+  /// An unreachable verdict sends every browse call to the downloads catalog,
+  /// and nothing else asks again until the network flips, so the verdict is
+  /// re-checked on a growing delay for as long as it stands.
+  Timer? _retryTimer;
+  int _retryAttempt = 0;
+  final Duration _retryBase;
+  static const _retryCap = Duration(seconds: 30);
+
+  static const _probeAttempts = 2;
 
   bool _isOnline = true;
   bool get isOnline => _isOnline;
@@ -29,6 +45,20 @@ class ConnectivityService extends ChangeNotifier {
 
   bool get canReachServer => _isOnline && _serverReachable;
 
+  /// Whether the only link is mobile data. Read by prefetchers that should
+  /// not spend a metered connection on artwork the user may never scroll to.
+  /// False until the first probe answers, and false on a link the platform
+  /// can't classify, since holding back on a healthy Wi-Fi costs more than
+  /// warming a few posters on a plan.
+  bool get isCellularOnly => _isCellularOnly;
+  bool _isCellularOnly = false;
+
+  static bool _cellularOnly(List<ConnectivityResult> results) {
+    final live = results.where((r) => r != ConnectivityResult.none).toList();
+    return live.isNotEmpty &&
+        live.every((r) => r == ConnectivityResult.mobile);
+  }
+
   /// Whether the initial connectivity check has completed.
   /// Stream events are ignored until this is true to prevent
   /// a false "offline" flash at boot.
@@ -37,7 +67,25 @@ class ConnectivityService extends ChangeNotifier {
   /// Set when a sync was skipped because the app was backgrounded.
   bool _pendingSync = false;
 
-  ConnectivityService() {
+  /// The app server id of the registered client, handed over with it by
+  /// [onServerClientReady] so the sync never pairs one server's rows with
+  /// another server's client.
+  String? _serverId;
+
+  /// The boot-time check, a sign-in and a network flip can all ask for the
+  /// sync within a second of each other, and only the progress step guards
+  /// itself, so a second chain would repeat the ratings push and the whole
+  /// metadata sweep. A request for a client that registered since the running
+  /// chain started waits for it and then runs once.
+  Future<void>? _inFlightSync;
+  MediaServerClient? _inFlightSyncClient;
+  bool _syncQueued = false;
+
+  ConnectivityService({
+    @visibleForTesting Connectivity? connectivity,
+    @visibleForTesting Duration retryBase = const Duration(seconds: 5),
+  }) : _connectivity = connectivity ?? Connectivity(),
+       _retryBase = retryBase {
     configureServerDio(_pingDio);
     _pingDio.interceptors.add(redirectInterceptor(_pingDio));
   }
@@ -63,6 +111,7 @@ class ConnectivityService extends ChangeNotifier {
     }
     final results = await _connectivity.checkConnectivity();
     _isOnline = results.any((r) => r != ConnectivityResult.none);
+    _isCellularOnly = _cellularOnly(results);
     if (_isOnline) {
       await _checkServerReachability();
       if (_serverReachable) {
@@ -81,8 +130,10 @@ class ConnectivityService extends ChangeNotifier {
     final wasOnline = _isOnline;
     final wasReachable = _serverReachable;
     _isOnline = results.any((r) => r != ConnectivityResult.none);
+    _isCellularOnly = _cellularOnly(results);
 
     if (!_isOnline) {
+      _retryTimer?.cancel();
       if (wasOnline) {
         _serverReachable = false;
         notifyListeners();
@@ -112,7 +163,29 @@ class ConnectivityService extends ChangeNotifier {
     _triggerSync();
   }
 
+  /// Every path that reports the network came back lands here, and that is
+  /// the moment a socket part way through its backoff should stop waiting.
+  void _nudgeSocket() {
+    final getIt = GetIt.instance;
+    if (!getIt.isRegistered<SessionRepository>()) return;
+    getIt<SessionRepository>().onNetworkRegained();
+  }
+
+  /// A server client was just registered for [serverId] (session restore,
+  /// sign-in, account or server switch). The boot-time check runs before any
+  /// client exists and a sign-in brings no reachability edge, so this is the
+  /// moment that reconciles progress recorded offline.
+  Future<void> onServerClientReady(String serverId) async {
+    _serverId = serverId;
+    if (!_isOnline) return;
+    // Straight to the probe rather than recheckNow, which would add a
+    // connectivity_plus call on Apple TV, where the service never makes one.
+    await _checkServerReachability();
+    if (_serverReachable) _triggerSync();
+  }
+
   void _triggerSync() {
+    _nudgeSocket();
     // Every network flip lands here, and the full progress and metadata sync
     // keeps the radio and CPU busy on a device nobody is looking at. Defer it
     // until the app is visible again, unless playback is active and progress
@@ -121,16 +194,48 @@ class ConnectivityService extends ChangeNotifier {
       _pendingSync = true;
       return;
     }
+    _startSyncChain();
+  }
+
+  void _startSyncChain() {
     final getIt = GetIt.instance;
-    if (!getIt.isRegistered<SyncService>() ||
+    final serverId = _serverId;
+    if (serverId == null ||
+        !getIt.isRegistered<SyncService>() ||
         !getIt.isRegistered<MediaServerClient>()) {
+      ServerLog.network('Progress sync skipped: no server client yet');
       return;
     }
     final syncService = getIt<SyncService>();
     final client = getIt<MediaServerClient>();
-    syncService.syncPlaybackProgress(client).then((_) {
-      syncService.refreshMetadata(client);
-    });
+    if (_inFlightSync != null) {
+      if (!identical(client, _inFlightSyncClient)) _syncQueued = true;
+      return;
+    }
+    _inFlightSyncClient = client;
+    // Ratings push first, so the metadata refresh at the end of the chain
+    // pulls back items that already carry them.
+    _inFlightSync = syncService
+        .syncPendingRatings(client, serverId: serverId)
+        .then(
+          (_) => syncService.syncPlaybackProgress(client, serverId: serverId),
+        )
+        .then((_) => syncService.refreshMetadata(client, serverId: serverId))
+        .catchError((Object e) {
+          ServerLog.network(
+            'Progress sync failed',
+            level: ServerLogLevel.warning,
+            error: e,
+          );
+        })
+        .whenComplete(() {
+          _inFlightSync = null;
+          _inFlightSyncClient = null;
+          if (_syncQueued) {
+            _syncQueued = false;
+            _startSyncChain();
+          }
+        });
   }
 
   bool _isForegroundOrPlaying() {
@@ -149,16 +254,66 @@ class ConnectivityService extends ChangeNotifier {
         getIt<PlaybackManager>().state.isPlaying;
   }
 
-  Future<void> _checkServerReachability() async {
+  Future<void> _checkServerReachability() => _inFlightProbe ??= _probeServer()
+      .whenComplete(() => _inFlightProbe = null);
+
+  Future<void> _probeServer() async {
     if (!GetIt.instance.isRegistered<MediaServerClient>()) return;
     final client = GetIt.instance<MediaServerClient>();
-    try {
-      await _pingDio.get('${client.baseUrl}/System/Ping');
-      _serverReachable = true;
-    } catch (_) {
-      _serverReachable = false;
+    final wasReachable = _serverReachable;
+    Object? failure;
+    // A pooled connection the server already dropped fails exactly like a
+    // server that went away, and sending the whole app to the downloads
+    // catalog over one of those is worse than asking twice. The failure takes
+    // the bad connection with it, so the second try needs no wait in front.
+    for (var attempt = 0; attempt < _probeAttempts; attempt++) {
+      try {
+        await _pingDio.get('${client.baseUrl}/System/Ping');
+        failure = null;
+        break;
+      } on DioException catch (e) {
+        // The probe carries no token, and Emby only lets that through from its
+        // own network, so a remote server turns it down with a 401. That
+        // refusal still came from the server.
+        if (e.response?.statusCode == 401) {
+          failure = null;
+          break;
+        }
+        failure = e;
+      } catch (e) {
+        failure = e;
+      }
+    }
+    _serverReachable = failure == null;
+    if (!_serverReachable && wasReachable) {
+      ServerLog.network(
+        'Server marked unreachable, every probe failed',
+        level: ServerLogLevel.warning,
+        error: failure,
+      );
+    }
+    if (_serverReachable) {
+      if (!wasReachable) ServerLog.network('Server reachable again');
+      _retryAttempt = 0;
+      _retryTimer?.cancel();
+      _retryTimer = null;
+    } else if (_isOnline) {
+      _scheduleRetry();
     }
     notifyListeners();
+  }
+
+  void _scheduleRetry() {
+    _retryTimer?.cancel();
+    final delay = _retryBase * (1 << _retryAttempt);
+    _retryTimer = Timer(delay < _retryCap ? delay : _retryCap, () {
+      _retryTimer = null;
+      if (!_isOnline || _serverReachable) return;
+      if (_retryAttempt < 6) _retryAttempt++;
+      _checkServerReachability().then((_) {
+        if (_serverReachable) _triggerSync();
+      });
+    });
   }
 
   /// Resolves true as soon as the device reports online, or false after
@@ -186,9 +341,11 @@ class ConnectivityService extends ChangeNotifier {
   Future<void> recheckNow() async {
     final results = await _connectivity.checkConnectivity();
     _isOnline = results.any((r) => r != ConnectivityResult.none);
+    _isCellularOnly = _cellularOnly(results);
     if (_isOnline) {
       await _checkServerReachability();
     } else {
+      _retryTimer?.cancel();
       _serverReachable = false;
       notifyListeners();
     }
@@ -198,6 +355,7 @@ class ConnectivityService extends ChangeNotifier {
   void dispose() {
     _subscription?.cancel();
     _recheckDebounce?.cancel();
+    _retryTimer?.cancel();
     super.dispose();
   }
 }

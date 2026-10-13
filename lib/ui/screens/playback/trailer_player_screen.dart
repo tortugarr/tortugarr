@@ -119,6 +119,14 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
     if (_embedFallbackTriggered || !_useEmbeddedYouTube) {
       return;
     }
+    // AVFoundation cannot decode what the resolver pulls out of YouTube, so
+    // on Apple the embed is the only thing that can play this. Leave it up for
+    // the viewer to start rather than falling back to a stream path with
+    // nothing behind it.
+    if (PlatformDetection.useApplePreviewPlayer) {
+      if (_loading) setState(() => _loading = false);
+      return;
+    }
     _embedFallbackTriggered = true;
     setState(() {
       _useEmbeddedYouTube = false;
@@ -139,17 +147,27 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
     super.dispose();
   }
 
-  Future<({String? streamUrl, String? sponsorBlockVideoId, bool useYouTubeHeaders})>
+  Future<
+    ({
+      String? streamUrl,
+      String? sponsorBlockVideoId,
+      bool useYouTubeHeaders,
+      String? audioLanguage,
+    })
+  >
   _resolveStreamUrl() async {
     String? streamUrl;
     String? sponsorBlockVideoId;
     bool useYouTubeHeaders = false;
+    String? audioLanguage;
 
     if (widget.videoId != null && widget.videoId!.isNotEmpty) {
       sponsorBlockVideoId = widget.videoId;
-      streamUrl = await YouTubeStreamResolver.resolve(
+      final stream = await YouTubeStreamResolver.resolve(
         widget.videoId!,
       ).timeout(_resolveTimeout, onTimeout: () => null);
+      streamUrl = stream?.url;
+      audioLanguage = stream?.audioLanguage;
       if (streamUrl != null && streamUrl.isNotEmpty) {
         useYouTubeHeaders = true;
       } else {
@@ -160,9 +178,11 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
       final trailerUrl = widget.trailerUrl!;
       final youtubeVideoId = YouTubeStreamResolver.extractVideoId(trailerUrl);
       sponsorBlockVideoId = youtubeVideoId;
-      streamUrl = await YouTubeStreamResolver.resolveFromUrl(
+      final stream = await YouTubeStreamResolver.resolveFromUrl(
         trailerUrl,
       ).timeout(_resolveTimeout, onTimeout: () => null);
+      streamUrl = stream?.url;
+      audioLanguage = stream?.audioLanguage;
       if (streamUrl != null && streamUrl.isNotEmpty) {
         useYouTubeHeaders = youtubeVideoId != null;
       } else {
@@ -175,6 +195,7 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
       streamUrl: streamUrl,
       sponsorBlockVideoId: sponsorBlockVideoId,
       useYouTubeHeaders: useYouTubeHeaders,
+      audioLanguage: audioLanguage,
     );
   }
 
@@ -204,6 +225,7 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
                 ? YouTubeStreamResolver.youtubeHeaders
                 : null,
             volume: 100,
+            audioLanguage: resolved.audioLanguage,
           )
           .timeout(_openTimeout);
       if (!mounted) {
@@ -254,6 +276,10 @@ class _TrailerPlayerScreenState extends State<TrailerPlayerScreen> {
       final media = useYouTubeHeaders
           ? Media(streamUrl, httpHeaders: YouTubeStreamResolver.youtubeHeaders)
           : Media(streamUrl);
+      await YouTubeStreamResolver.preferAudioLanguage(
+        _player!,
+        resolved.audioLanguage,
+      );
       await _player!.open(media).timeout(_openTimeout);
       if (!mounted) return;
       setState(() {

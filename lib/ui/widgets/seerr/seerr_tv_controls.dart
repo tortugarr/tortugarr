@@ -3,6 +3,7 @@ import 'package:moonfin_design/moonfin_design.dart';
 
 import '../focus/focusable_wrapper.dart';
 import '../track_selector_dialog.dart';
+import 'seerr_status_dot.dart';
 
 // D-pad friendly form controls for the Seerr request and issue dialogs. Plain
 // Material toggles, chips, and dropdowns don't react to the remote's select
@@ -127,11 +128,16 @@ class SeerrChoiceChip extends StatelessWidget {
   final bool selected;
   final ValueChanged<bool>? onSelected;
 
+  /// Marks a season the library already holds with a check, so a disabled
+  /// chip can say why it is off the table.
+  final bool isAvailable;
+
   const SeerrChoiceChip({
     super.key,
     required this.label,
     required this.selected,
     required this.onSelected,
+    this.isAvailable = false,
   });
 
   @override
@@ -145,16 +151,29 @@ class SeerrChoiceChip extends StatelessWidget {
             : Colors.white.withValues(alpha: enabled ? 0.08 : 0.04),
         borderRadius: AppRadius.circular(999),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          color: !enabled
-              ? Colors.white38
-              : selected
-                  ? Colors.white
-                  : Colors.white70,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isAvailable) ...[
+            Icon(
+              Icons.check_circle,
+              size: 14,
+              color: seerrStatusColor(SeerrMediaStatus.available),
+            ),
+            const SizedBox(width: 6),
+          ],
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              color: !enabled
+                  ? Colors.white38
+                  : selected
+                      ? Colors.white
+                      : Colors.white70,
+            ),
+          ),
+        ],
       ),
     );
 

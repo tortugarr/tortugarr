@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../l10n/current_app_localizations.dart';
+import '../../util/accent_folding.dart';
 import '../models/aggregated_item.dart';
+import '../repositories/multi_server_repository.dart';
 import '../repositories/search_repository.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
@@ -40,6 +43,8 @@ class SearchViewModel extends ChangeNotifier {
   final SearchRepository _searchRepository;
   final MediaServerClient _client;
   final String? _scopedParentId;
+  // Only set when search should cover every signed-in server.
+  final MultiServerRepository? _multiServerRepository;
   SeerrRepository? _seerrRepository;
 
   SearchViewModel(
@@ -47,7 +52,9 @@ class SearchViewModel extends ChangeNotifier {
     this._client, {
     SeerrRepository? seerrRepository,
     String? scopedParentId,
+    MultiServerRepository? multiServerRepository,
   }) : _seerrRepository = seerrRepository,
+       _multiServerRepository = multiServerRepository,
        _scopedParentId =
            (scopedParentId != null && scopedParentId.isNotEmpty)
                ? scopedParentId
@@ -57,7 +64,14 @@ class SearchViewModel extends ChangeNotifier {
     _seerrRepository = repo;
   }
 
-  ImageApi get imageApi => _client.imageApi;
+  ImageApi imageApiFor(AggregatedItem item) =>
+      _multiServerRepository?.getImageApiForServer(item.serverId) ??
+      _client.imageApi;
+
+  Map<String, String> _serverNames = const {};
+
+  /// The server [item] came from, or null when only one server was searched.
+  String? serverNameFor(AggregatedItem item) => _serverNames[item.serverId];
 
   SearchState _state = SearchState.idle;
   SearchState get state => _state;
@@ -78,14 +92,22 @@ class SearchViewModel extends ChangeNotifier {
   // client-side since the plugin exposes no search endpoint.
   Future<List<GameSearchResult>>? _allGamesFuture;
 
-  String _errorMessage = '';
-  String get errorMessage => _errorMessage;
+  Object? _error;
+  Object? get error => _error;
 
   Timer? _debounceTimer;
 
   static const _debounceMs = 600;
   static const _resultLimit = 24;
   static const _globalFetchLimit = 240;
+  // Some servers answer a people search far slower than everything else, so
+  // the rest of the results only wait a moment for it and it's dropped if it
+  // takes too long.
+  static const _peopleGrace = Duration(seconds: 1);
+  static const _peopleTimeout = Duration(seconds: 10);
+
+  // Counts searches, so people that answer late only fill in their own search.
+  int _searchRun = 0;
 
   static List<SearchResultGroup> _bookSearchGroups() {
     final l10n = currentAppLocalizations();
@@ -166,6 +188,7 @@ class SearchViewModel extends ChangeNotifier {
 
   Future<void> _executeSearch(String query) async {
     if (query != _query) return;
+    final run = ++_searchRun;
 
     try {
         final activeGroups = _scopedParentId != null
@@ -176,68 +199,141 @@ class SearchViewModel extends ChangeNotifier {
           ? Future.value(const <GameSearchResult>[])
           : _fetchGameResults(query);
 
-      final groups = _scopedParentId != null
-          ? await Future.wait(activeGroups.map((group) async {
-              final items = await _searchRepository.search(
-                query,
-                includeItemTypes: group.itemTypes,
-                parentId: _scopedParentId,
-                limit: _resultLimit,
-              );
-              return group.copyWith(items: items);
-            }))
+      final (groups, peopleFuture) = _scopedParentId != null
+          ? (
+              await Future.wait(
+                activeGroups.map((group) async {
+                  final items = await _searchRepository.search(
+                    query,
+                    includeItemTypes: group.itemTypes,
+                    parentId: _scopedParentId,
+                    limit: _resultLimit,
+                  );
+                  return group.copyWith(items: items);
+                }),
+              ),
+              Future.value(const <AggregatedItem>[]),
+            )
           : await _buildGroupedGlobalResults(query, activeGroups);
       final seerr = await seerrFuture;
       final games = await gamesFuture;
 
+      // With nothing else to show, the results wait for people instead of
+      // coming up empty.
+      final hasOtherResults =
+          groups.any((g) => g.items.isNotEmpty) ||
+          seerr.isNotEmpty ||
+          games.isNotEmpty;
+      final people = hasOtherResults
+          ? await peopleFuture
+                .then<List<AggregatedItem>?>((found) => found)
+                .timeout(_peopleGrace, onTimeout: () => null)
+          : await peopleFuture;
+
       if (query != _query) return;
 
-      _results = groups.where((g) => g.items.isNotEmpty).toList();
+      _results = _withPeople(groups, people ?? const []);
       _seerrResults = seerr;
       _gameResults = games;
       _state = SearchState.ready;
+      if (people == null) {
+        unawaited(
+          peopleFuture.then((found) {
+            if (found.isEmpty || run != _searchRun || query != _query) return;
+            _results = _withPeople(groups, found);
+            notifyListeners();
+          }),
+        );
+      }
     } catch (e) {
       if (query != _query) return;
-      _errorMessage = e.toString();
+      _error = e;
       _state = SearchState.error;
     }
     notifyListeners();
   }
 
-  Future<List<SearchResultGroup>> _buildGroupedGlobalResults(
+  /// Every group in order with the People group left empty, and the people
+  /// search that fills it.
+  Future<(List<SearchResultGroup>, Future<List<AggregatedItem>>)>
+  _buildGroupedGlobalResults(
     String query,
     List<SearchResultGroup> activeGroups,
   ) async {
-    final peopleFuture = _searchRepository
-        .searchPeople(query, limit: _resultLimit)
-        .catchError((_) => <AggregatedItem>[]);
+    // Looked up once before the searches start, so each of them reuses it
+    // instead of looking the servers up again.
+    final sessions = await _multiServerRepository?.getLoggedInServers();
+    _serverNames = sessions != null && sessions.length > 1
+        ? {for (final session in sessions) session.server.id: session.server.name}
+        : const {};
+    final peopleFuture = _searchEachServer(
+      (repository) => repository
+          .searchPeople(query, limit: _resultLimit)
+          .timeout(_peopleTimeout),
+      label: 'people search',
+    ).then(_interleave).catchError((_) => <AggregatedItem>[]);
     final channelsFuture = _channelMatches(query);
-    final allItems = await _searchRepository.search(
-      query,
-      parentId: _scopedParentId,
-      limit: _globalFetchLimit,
+    final perServerItems = await _searchEachServer(
+      (repository) => repository.search(
+        query,
+        parentId: _scopedParentId,
+        limit: _globalFetchLimit,
+      ),
+      label: 'search',
     );
-    final people = await peopleFuture;
     final channels = await channelsFuture;
 
     final grouped = <SearchResultGroup>[];
     for (final group in activeGroups) {
       if (group.itemTypes.contains('Person')) {
-        grouped.add(group.copyWith(items: people.take(_resultLimit).toList()));
+        grouped.add(group);
         continue;
       }
       if (group.itemTypes.contains('LiveTvChannel')) {
         grouped.add(group.copyWith(items: channels));
         continue;
       }
-      final matched = allItems
-          .where((item) => group.itemTypes.contains(item.type))
-          .take(_resultLimit)
-          .toList();
+      final matched = _interleave([
+        for (final items in perServerItems)
+          items.where((item) => group.itemTypes.contains(item.type)).toList(),
+      ]).take(_resultLimit).toList();
       grouped.add(group.copyWith(items: matched));
     }
 
-    return grouped;
+    return (grouped, peopleFuture);
+  }
+
+  /// The groups that have something to show, with [people] in the People
+  /// group.
+  static List<SearchResultGroup> _withPeople(
+    List<SearchResultGroup> groups,
+    List<AggregatedItem> people,
+  ) => [
+    for (final group in groups)
+      if (group.itemTypes.contains('Person'))
+        group.copyWith(items: people.take(_resultLimit).toList())
+      else
+        group,
+  ].where((g) => g.items.isNotEmpty).toList();
+
+  Future<List<List<AggregatedItem>>> _searchEachServer(
+    Future<List<AggregatedItem>> Function(SearchRepository repository) search, {
+    required String label,
+  }) async {
+    final multiServer = _multiServerRepository;
+    if (multiServer == null) return [await search(_searchRepository)];
+    return multiServer.searchEachServer(search, label: label);
+  }
+
+  /// Takes one result from each server in turn, so every server keeps its own
+  /// ranking and none crowds the others out of a capped group.
+  static List<AggregatedItem> _interleave(List<List<AggregatedItem>> perServer) {
+    final longest = perServer.fold(0, (most, items) => max(most, items.length));
+    return [
+      for (var i = 0; i < longest; i++)
+        for (final items in perServer)
+          if (i < items.length) items[i],
+    ];
   }
 
   // The lineup is fetched once per search session and reused across queries,
@@ -245,13 +341,18 @@ class SearchViewModel extends ChangeNotifier {
   Future<List<AggregatedItem>>? _channelsFuture;
 
   Future<List<AggregatedItem>> _channelMatches(String query) async {
-    final q = query.trim().toLowerCase();
+    // Channels come back wholesale rather than through a search the server
+    // answers, so the folding it would have done has to happen here.
+    final q = foldForSearch(query.trim());
     if (q.isEmpty || q.startsWith('studio:')) return const [];
-    _channelsFuture ??= _searchRepository.fetchLiveTvChannels();
+    _channelsFuture ??= _searchEachServer(
+      (repository) => repository.fetchLiveTvChannels(),
+      label: 'channel lineup',
+    ).then((perServer) => perServer.expand((channels) => channels).toList());
     try {
       final all = await _channelsFuture!;
       return all
-          .where((c) => c.name.toLowerCase().contains(q))
+          .where((c) => foldForSearch(c.name).contains(q))
           .take(_resultLimit)
           .toList();
     } catch (_) {
@@ -271,14 +372,16 @@ class SearchViewModel extends ChangeNotifier {
       await repo.ensureInitialized();
       if (!repo.isAvailable) return const [];
       final page = await repo.search(query, limit: _resultLimit);
-      return page.results;
+      return page.results.where((item) => !item.isBlacklisted).toList();
     } catch (_) {
       return const [];
     }
   }
 
   Future<List<GameSearchResult>> _fetchGameResults(String query) async {
-    final q = query.trim().toLowerCase();
+    // Games have no search endpoint, so the whole set is matched here and the
+    // folding is this side's to do.
+    final q = foldForSearch(query.trim());
     if (q.isEmpty || q.startsWith('studio:')) return const [];
     final gamesApi = _client.gamesApi;
     if (gamesApi == null) return const [];
@@ -288,8 +391,8 @@ class SearchViewModel extends ChangeNotifier {
       return all
           .where(
             (r) =>
-                r.game.title.toLowerCase().contains(q) ||
-                r.game.fileName.toLowerCase().contains(q),
+                foldForSearch(r.game.title).contains(q) ||
+                foldForSearch(r.game.fileName).contains(q),
           )
           .take(_resultLimit)
           .toList();
@@ -315,6 +418,8 @@ class SearchViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _debounceTimer?.cancel();
+    // Keeps people that answer after the screen closed from landing on it.
+    _searchRun++;
     super.dispose();
   }
 }

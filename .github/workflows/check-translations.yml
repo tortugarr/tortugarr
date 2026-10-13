@@ -1,0 +1,54 @@
+name: Check translations
+
+# Weblate pushes straight to main, and a translated ICU keyword like plural or
+# other breaks every build. gen-l10n fails on those, so run it on its own and
+# point at the broken string.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/l10n/*.arb'
+      - 'l10n.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'lib/l10n/*.arb'
+      - 'l10n.yaml'
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: '3.47.2'
+
+jobs:
+  gen-l10n:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Generate localizations
+        id: gen
+        run: |
+          set -o pipefail
+          flutter gen-l10n 2>&1 | tee gen-l10n.log
+
+      - name: Annotate broken strings
+        if: failure() && steps.gen.outcome == 'failure'
+        run: |
+          re='^\[(app_[^:]+\.arb):([^]]+)\] (ICU [A-Za-z]+ Error.*)$'
+          while IFS= read -r line; do
+            [[ $line =~ $re ]] || continue
+            file=lib/l10n/${BASH_REMATCH[1]}
+            key=${BASH_REMATCH[2]}
+            error=${BASH_REMATCH[3]}
+            row=$(grep -nm1 "\"$key\":" "$file" | cut -d: -f1)
+            echo "::error file=$file,line=${row:-1}::$key: $error"
+          done < gen-l10n.log

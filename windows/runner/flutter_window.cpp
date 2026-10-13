@@ -15,13 +15,24 @@ namespace {
 std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>>
     g_hdr_display_channel;
 
+// Posted after a nested WM_SIZE. WM_APP + 1 is native_game's.
+constexpr UINT kResyncViewMessage = WM_APP + 2;
+
+// Heartbeat that keeps the HDR companion windows in position - see the
+// WM_TIMER note in RouteMessage. The id is 'HD', chosen not to collide with
+// timers plugins set against the same window.
+constexpr UINT_PTR kHdrSyncTimerId = 0x4844;
+constexpr UINT kHdrSyncIntervalMs = 500;
+
 struct HdrDisplayState {
   bool supported = false;
   bool enabled = false;
 };
 
-#if defined(DISPLAYCONFIG_DEVICE_INFO_GET_ADVANCED_COLOR_INFO) && \
-    defined(DISPLAYCONFIG_DEVICE_INFO_SET_ADVANCED_COLOR_STATE)
+// Deliberately not guarded with `#if defined(DISPLAYCONFIG_DEVICE_INFO_...)`:
+// those names are enumerators, not macros, so such a guard always fails and
+// silently selects a stub. The APIs have been in the SDK since Windows 10
+// 1703, under this project's floor.
 
 bool GetMonitorDeviceNameFromWindow(HWND hwnd, std::wstring* device_name) {
   if (device_name == nullptr) {
@@ -146,21 +157,6 @@ bool SetHdrStateForWindow(HWND hwnd, bool enabled) {
   return DisplayConfigSetDeviceInfo(&request.header) == ERROR_SUCCESS;
 }
 
-#else
-
-HdrDisplayState QueryHdrStateForWindow(HWND hwnd) {
-  (void)hwnd;
-  return {};
-}
-
-bool SetHdrStateForWindow(HWND hwnd, bool enabled) {
-  (void)hwnd;
-  (void)enabled;
-  return false;
-}
-
-#endif
-
 }  // namespace
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
@@ -190,7 +186,18 @@ bool FlutterWindow::OnCreate() {
 
   native_game_ = std::make_unique<NativeGame>(
       flutter_controller_->engine()->messenger(),
-      native_game_registrar_->texture_registrar());
+      native_game_registrar_->texture_registrar(),
+      native_game_registrar_.get());
+
+  hdr_video_registrar_ = std::make_unique<flutter::PluginRegistrarWindows>(
+      flutter_controller_->engine()->GetRegistrarForPlugin("HdrVideo"));
+  hdr_video_ = std::make_unique<HdrVideoWindow>(
+      flutter_controller_->engine()->messenger(), hdr_video_registrar_.get(),
+      GetHandle(), [this]() { UpdateHdrSyncTimer(); });
+
+  hdr_overlay_ = std::make_unique<HdrOverlayWindow>(
+      flutter_controller_->engine()->messenger(), GetHandle(),
+      [this]() { UpdateHdrSyncTimer(); });
 
   if (!g_hdr_display_channel) {
     g_hdr_display_channel =
@@ -254,7 +261,29 @@ bool FlutterWindow::OnCreate() {
   return true;
 }
 
+void FlutterWindow::UpdateHdrSyncTimer() {
+  const bool needed =
+      (hdr_video_ != nullptr && hdr_video_->NeedsPositionSync()) ||
+      (hdr_overlay_ != nullptr && hdr_overlay_->NeedsPositionSync());
+  if (needed == hdr_sync_timer_running_) {
+    return;
+  }
+  if (needed) {
+    // Half-second heartbeat for the HDR windows' position sync - see the
+    // WM_TIMER note in MessageHandler.
+    SetTimer(GetHandle(), kHdrSyncTimerId, kHdrSyncIntervalMs, nullptr);
+  } else {
+    KillTimer(GetHandle(), kHdrSyncTimerId);
+  }
+  hdr_sync_timer_running_ = needed;
+}
+
 void FlutterWindow::OnDestroy() {
+  KillTimer(GetHandle(), kHdrSyncTimerId);
+  hdr_sync_timer_running_ = false;
+  hdr_overlay_ = nullptr;
+  hdr_video_ = nullptr;
+
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }
@@ -262,10 +291,68 @@ void FlutterWindow::OnDestroy() {
   Win32Window::OnDestroy();
 }
 
+void FlutterWindow::SizeChildToClientArea() {
+  if (IsIconic(GetHandle())) {
+    return;
+  }
+  const RECT frame = GetClientArea();
+  SizeChildContent(frame.right, frame.bottom);
+}
+
 LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (message == kResyncViewMessage) {
+    SizeChildToClientArea();
+    return 0;
+  }
+  if (message != WM_SIZE) {
+    return RouteMessage(hwnd, message, wparam, lparam);
+  }
+
+  // The engine pumps its task queue while answering a child resize, so a task
+  // that resizes the window re-enters here. A nested resize leaves the engine
+  // with a stale target (white, half-size or corner-drawn UI), so the child
+  // is sized once, after both have unwound.
+  ++size_depth_;
+  LRESULT result = 0;
+  if (size_depth_ == 1) {
+    result = RouteMessage(hwnd, message, wparam, lparam);
+  } else {
+    nested_size_ = true;
+    if (flutter_controller_) {
+      result = flutter_controller_
+                   ->HandleTopLevelWindowProc(hwnd, message, wparam, lparam)
+                   .value_or(0);
+    }
+  }
+  if (--size_depth_ == 0 && nested_size_) {
+    nested_size_ = false;
+    PostMessage(hwnd, kResyncViewMessage, 0, 0);
+  }
+  return result;
+}
+
+LRESULT
+FlutterWindow::RouteMessage(HWND hwnd, UINT const message,
+                            WPARAM const wparam,
+                            LPARAM const lparam) noexcept {
+  // Ahead of the plugin dispatch, deliberately: the registered-delegate chain
+  // stops at the first plugin that claims a message, and window_manager
+  // registers before these windows exist, so a delegate never sees
+  // WM_WINDOWPOSCHANGED. The timer is the fallback for a lost message;
+  // wparam-checked because plugins may set their own timers on this window.
+  if (message == WM_WINDOWPOSCHANGED ||
+      (message == WM_TIMER && wparam == kHdrSyncTimerId)) {
+    if (hdr_overlay_) {
+      hdr_overlay_->SyncPosition();
+    }
+    if (hdr_video_) {
+      hdr_video_->SyncPosition();
+    }
+  }
+
   // Give Flutter, including plugins, an opportunity to handle window messages.
   if (flutter_controller_) {
     std::optional<LRESULT> result =

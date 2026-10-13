@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -16,7 +18,10 @@ import '../../navigation/destinations.dart';
 import '../../widgets/media_card.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../widgets/quick_return_wrapper.dart';
+import '../../widgets/skeleton/skeleton_library_grid.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 Color get _navyBackground => AppColorScheme.background;
@@ -129,7 +134,13 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
 
   @override
   Widget build(BuildContext context) =>
-      RequestInitialFocus(child: _buildContent(context));
+      RequestInitialFocus(
+        child: QuickReturnWrapper(
+          scrollController: _scrollController,
+          topFocusNode: _allLetterFocusNode,
+          child: _buildContent(context),
+        ),
+      );
 
   Widget _buildContent(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -162,9 +173,12 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
   Widget _buildBody() {
     final l10n = AppLocalizations.of(context);
     final vm = _vm;
-    if (_initializing || vm == null || vm.state.isLoading) {
-      return Center(
-        child: CircularProgressIndicator(color: _seerrAccent),
+    if (_initializing || vm == null || (vm.state.isLoading && vm.state.items.isEmpty)) {
+      final cardWidth =
+          _prefs.resolveLibraryPosterSize().portraitHeight * (2 / 3);
+      return SkeletonLibraryGrid(
+        cardWidth: cardWidth,
+        aspectRatio: 2 / 3,
       );
     }
 
@@ -176,7 +190,7 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              s.error!,
+              describeError(s.error!, AppLocalizations.of(context)),
               style: TextStyle(
                 color: AppColorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -209,12 +223,16 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
 
     final cardWidth =
       _prefs.resolveLibraryPosterSize().portraitHeight * (2 / 3);
-    const spacing = 12.0;
+    final cardExpansion = GetIt.instance<UserPreferences>()
+        .get(UserPreferences.cardFocusExpansion);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = _isCompact(context);
         final gridPadding = isMobile ? 16.0 : _horizontalPadding;
+        final spacing = cardExpansion && !isMobile
+            ? MediaCard.focusGap(cardWidth)
+            : 12.0;
         final crossAxisCount = ((constraints.maxWidth -
                     gridPadding * 2 +
                     spacing) /
@@ -232,17 +250,23 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
         );
         final textScaler = MediaQuery.textScalerOf(context);
         final textHeight = (hasSubtitles ? 42.0 : 24.0) * textScaler.scale(1.0);
-        final childAspectRatio = cellWidth / (cellWidth / (2 / 3) + textHeight);
+        final imageHeight = cellWidth / (2 / 3);
+        final childAspectRatio = cellWidth / (imageHeight + textHeight);
+        final upwardGrowth = cardExpansion && !isMobile
+            ? (imageHeight * (MediaCard.focusScale - 1))
+            : 0.0;
+        final rowSpacing = 16.0 + upwardGrowth;
+        final topPadding = 20.0 + upwardGrowth;
 
         return CustomScrollView(
           controller: _scrollController,
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(gridPadding, 20, gridPadding, 16),
+              padding: EdgeInsets.fromLTRB(gridPadding, topPadding, gridPadding, 16),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 16,
+                  mainAxisSpacing: rowSpacing,
                   crossAxisSpacing: spacing,
                   childAspectRatio: childAspectRatio,
                 ),
@@ -301,8 +325,10 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
                     onTap: () {
                       final mt = item.mediaType ?? widget.mediaType ?? 'movie';
                       context.push(
-                        Destinations.seerrMedia(item.id.toString()),
-                        extra: {'mediaType': mt},
+                        Destinations.seerrMedia(
+                          item.id.toString(),
+                          mediaType: mt,
+                        ),
                       );
                     },
                   );
@@ -790,8 +816,9 @@ class _AlphaLetterButtonState extends State<_AlphaLetterButton>
           onTap: widget.onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 120),
-            width: 30,
+            constraints: const BoxConstraints(minWidth: 30),
             height: 34,
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: widget.isSelected
@@ -810,6 +837,8 @@ class _AlphaLetterButtonState extends State<_AlphaLetterButton>
             ),
             child: Text(
               widget.label,
+              maxLines: 1,
+              softWrap: false,
               style: TextStyle(
                 fontSize: 15,
                 fontWeight:
@@ -941,11 +970,14 @@ class _SeerrSortDialog extends StatefulWidget {
 
 class _SeerrSortDialogState extends State<_SeerrSortDialog> {
   bool _popped = false;
+  bool _genresExpanded = false;
+  bool _languagesExpanded = false;
 
   @override
   void initState() {
     super.initState();
     widget.vm.addListener(_rebuild);
+    unawaited(widget.vm.ensureFilterOptionsLoaded());
   }
 
   @override
@@ -982,7 +1014,7 @@ class _SeerrSortDialogState extends State<_SeerrSortDialog> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: Text(
-                l10n.sortBy,
+                l10n.sortAndFilter,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -1022,6 +1054,230 @@ class _SeerrSortDialogState extends State<_SeerrSortDialog> {
                 },
               );
             }),
+            ..._filterSections(l10n, vm, s),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _filterSections(
+    AppLocalizations l10n,
+    SeerrBrowseViewModel vm,
+    SeerrBrowseState s,
+  ) {
+    final divider = Divider(color: AppColorScheme.onSurface.withAlpha(20));
+    return [
+      if (vm.filterGenres.isNotEmpty) ...[
+        divider,
+        _expanderTile(
+          label: l10n.genres,
+          count: s.genreIds.length,
+          expanded: _genresExpanded,
+          onTap: () => setState(() => _genresExpanded = !_genresExpanded),
+        ),
+        if (_genresExpanded)
+          for (final genre in vm.filterGenres)
+            _checkTile(
+              label: genre.name,
+              checked: s.genreIds.contains(genre.id),
+              onTap: () => vm.toggleGenre(genre.id),
+            ),
+      ],
+      if (vm.mediaType == 'tv') ...[
+        divider,
+        _sectionHeader(l10n.seriesStatus),
+        for (final status in SeerrTvStatus.values)
+          _checkTile(
+            label: status.displayName,
+            checked: s.tvStatuses.contains(status),
+            onTap: () => vm.toggleTvStatus(status),
+          ),
+      ],
+      divider,
+      _sectionHeader(l10n.seerrReleased),
+      for (final window in SeerrReleaseWindow.values)
+        _radioTile(
+          label: window.displayName,
+          selected: s.released == window,
+          onTap: () => vm.setReleased(window),
+        ),
+      divider,
+      _sectionHeader(l10n.seerrMinRating),
+      for (final rating in SeerrMinRating.values)
+        _radioTile(
+          label: rating.displayName,
+          selected: s.minRating == rating,
+          onTap: () => vm.setMinRating(rating),
+        ),
+      divider,
+      _sectionHeader(l10n.seerrMinVotes),
+      for (final votes in SeerrMinVotes.values)
+        _radioTile(
+          label: votes.displayName,
+          selected: s.minVotes == votes,
+          onTap: () => vm.setMinVotes(votes),
+        ),
+      divider,
+      _sectionHeader(l10n.seerrRuntime),
+      for (final runtime in SeerrRuntimeFilter.values)
+        _radioTile(
+          label: runtime.displayName,
+          selected: s.runtime == runtime,
+          onTap: () => vm.setRuntime(runtime),
+        ),
+      if (vm.filterLanguages.isNotEmpty) ...[
+        divider,
+        _expanderTile(
+          label: l10n.seerrOriginalLanguage,
+          count: s.languageCode.isEmpty ? 0 : 1,
+          expanded: _languagesExpanded,
+          onTap: () => setState(() => _languagesExpanded = !_languagesExpanded),
+        ),
+        if (_languagesExpanded) ...[
+          _radioTile(
+            label: l10n.all,
+            selected: s.languageCode.isEmpty,
+            onTap: () => vm.setLanguage(''),
+          ),
+          for (final language in vm.filterLanguages)
+            _radioTile(
+              label: language.name,
+              selected: s.languageCode == language.code,
+              onTap: () => vm.setLanguage(language.code),
+            ),
+        ],
+      ],
+      if (s.hasDiscoverFilters) ...[
+        divider,
+        InkWell(
+          onTap: () {
+            if (_popped) return;
+            _popped = true;
+            vm.clearDiscoverFilters();
+            Navigator.of(context).pop();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            child: Row(
+              children: [
+                Icon(Icons.filter_alt_off, size: 18, color: _seerrAccent),
+                const SizedBox(width: 12),
+                Text(
+                  l10n.clearFilters,
+                  style: TextStyle(fontSize: 15, color: _seerrAccent),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ];
+  }
+
+  Widget _sectionHeader(String title) => Padding(
+    padding: const EdgeInsets.fromLTRB(24, 12, 24, 4),
+    child: Text(
+      title,
+      style: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: AppColorScheme.onSurface.withValues(alpha: 0.72),
+      ),
+    ),
+  );
+
+  Widget _expanderTile({
+    required String label,
+    required int count,
+    required bool expanded,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColorScheme.onSurface.withValues(alpha: 0.72),
+                ),
+              ),
+            ),
+            if (count > 0)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: _seerrAccent,
+                  ),
+                ),
+              ),
+            Icon(
+              expanded ? Icons.expand_less : Icons.expand_more,
+              size: 18,
+              color: AppColorScheme.onSurface.withValues(alpha: 0.72),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _checkTile({
+    required String label,
+    required bool checked,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              width: 18,
+              height: 18,
+              decoration: BoxDecoration(
+                borderRadius: AppRadius.circular(4),
+                border: Border.fromBorderSide(
+                  ThemeRegistry.active.borders.chipBorder.copyWith(
+                    color: checked
+                        ? _seerrAccent
+                        : AppColorScheme.onSurface.withAlpha(128),
+                    width: 2,
+                  ),
+                ),
+                color: checked ? _seerrAccent : Colors.transparent,
+              ),
+              child: checked
+                  ? Icon(
+                      Icons.check,
+                      size: 14,
+                      color: AppColorScheme.onSurface,
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: AppColorScheme.onSurface.withValues(
+                    alpha: checked ? 1 : 0.72,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -1144,7 +1400,7 @@ class _SeerrSettingsDialogState extends State<_SeerrSettingsDialog> {
               ),
             ),
             Divider(color: AppColorScheme.onSurface.withAlpha(20)),
-            for (final option in PosterSize.values)
+            for (final option in PosterSize.gridValues)
               _settingsRadioTile(
                 label: _posterSizeLabel(option, l10n),
                 selected: current == option,
@@ -1170,7 +1426,7 @@ class _SeerrSettingsDialogState extends State<_SeerrSettingsDialog> {
     PosterSize.small => l10n.small,
     PosterSize.medium => l10n.medium,
     PosterSize.large => l10n.large,
-    PosterSize.extraLarge => l10n.extraLarge,
+    PosterSize.extraLarge || PosterSize.grandparents => l10n.extraLarge,
   };
 
   Widget _settingsRadioTile({

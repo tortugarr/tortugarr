@@ -6,7 +6,7 @@ import '../../data/models/aggregated_item.dart';
 import '../../data/repositories/offline_repository.dart';
 import '../../data/services/download_service.dart';
 import '../../l10n/app_localizations.dart';
-import '../../util/platform_detection.dart';
+import '../../util/download_utils.dart';
 import 'focusable_dialog_row.dart';
 import 'overlay_sheet.dart';
 
@@ -14,6 +14,7 @@ class TrackActionDialog extends StatelessWidget {
   final AggregatedItem track;
   final VoidCallback? onPlay;
   final VoidCallback? onPlayNext;
+  final VoidCallback? onViewDetails;
   final VoidCallback? onAddToQueue;
   final VoidCallback? onAddToPlaylist;
   final VoidCallback? onRemoveFromPlaylist;
@@ -28,6 +29,7 @@ class TrackActionDialog extends StatelessWidget {
     required this.track,
     this.onPlay,
     this.onPlayNext,
+    this.onViewDetails,
     this.onAddToQueue,
     this.onAddToPlaylist,
     this.onRemoveFromPlaylist,
@@ -43,6 +45,7 @@ class TrackActionDialog extends StatelessWidget {
     required AggregatedItem track,
     VoidCallback? onPlay,
     VoidCallback? onPlayNext,
+    VoidCallback? onViewDetails,
     VoidCallback? onAddToQueue,
     VoidCallback? onAddToPlaylist,
     VoidCallback? onRemoveFromPlaylist,
@@ -58,6 +61,7 @@ class TrackActionDialog extends StatelessWidget {
         track: track,
         onPlay: onPlay,
         onPlayNext: onPlayNext,
+        onViewDetails: onViewDetails,
         onAddToQueue: onAddToQueue,
         onAddToPlaylist: onAddToPlaylist,
         onRemoveFromPlaylist: onRemoveFromPlaylist,
@@ -87,7 +91,7 @@ class TrackActionDialog extends StatelessWidget {
                 offlineItem?.downloadStatus == 2 && offlineItem?.localFilePath != null;
             final isDownloading = downloadService.isDownloading(track.id);
             final supportsOffline =
-              !PlatformDetection.isTV && _supportsOfflineActions(track);
+                userCanDownload() && _supportsOfflineActions(track);
 
             return Dialog(
               backgroundColor: Colors.transparent,
@@ -169,6 +173,15 @@ class TrackActionDialog extends StatelessWidget {
                               onPlayNext!();
                             },
                           ),
+                        if (onViewDetails != null)
+                          FocusableDialogRow(
+                            icon: Icons.info_outline,
+                            label: l10n.trackActionViewDetails,
+                            onTap: () {
+                              Navigator.pop(context);
+                              onViewDetails!();
+                            },
+                          ),
                         if (onAddToQueue != null)
                           FocusableDialogRow(
                             icon: Icons.add_to_queue,
@@ -189,7 +202,7 @@ class TrackActionDialog extends StatelessWidget {
                           ),
                         if (supportsOffline && !isDownloaded && !isDownloading)
                           FocusableDialogRow(
-                            icon: Icons.download,
+                            icon: Icons.download_for_offline,
                             label: l10n.download,
                             onTap: () {
                               Navigator.pop(context);

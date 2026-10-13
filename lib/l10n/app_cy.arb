@@ -33,7 +33,7 @@
     "@quickConnectInstruction": {
         "description": "Instruction text for Quick Connect code entry"
     },
-    "waitingForAuthorization": "Aros am awdurdodiad...",
+    "waitingForAuthorization": "Aros am awdurdodiad…",
     "@waitingForAuthorization": {
         "description": "Quick Connect polling status text"
     },
@@ -224,11 +224,11 @@
     "@embyConnectNetworkError": {
         "description": "Generic network error during Emby Connect flow"
     },
-    "loadingLinkedServers": "Wrthi'n llwytho gweinyddion cysylltiedig...",
+    "loadingLinkedServers": "Wrthi'n llwytho gweinyddion cysylltiedig…",
     "@loadingLinkedServers": {
         "description": "Status text while fetching Emby Connect server list"
     },
-    "connectingToServerEllipsis": "Wrthi'n cysylltu â'r gweinydd...",
+    "connectingToServerEllipsis": "Wrthi'n cysylltu â'r gweinydd…",
     "@connectingToServerEllipsis": {
         "description": "Status text while connecting to a selected server"
     },
@@ -1229,7 +1229,7 @@
             }
         }
     },
-    "downloadingTitle": "Wrthi'n llwytho i lawr {title} ({count} items)...",
+    "downloadingTitle": "Wrthi'n llwytho i lawr {title} ({count} items)…",
     "@downloadingTitle": {
         "description": "Snackbar message when downloading album tracks",
         "placeholders": {
@@ -1279,7 +1279,7 @@
     "@none": {
         "description": "Option label for no subtitle selected"
     },
-    "downloadSubtitlesLabel": "Lawrlwythwch isdeitlau...",
+    "downloadSubtitlesLabel": "Lawrlwythwch isdeitlau…",
     "@downloadSubtitlesLabel": {
         "description": "Label for the download subtitles option"
     },
@@ -1350,7 +1350,7 @@
     "@noEpisodesLoaded": {
         "description": "Message when no episodes are available for download"
     },
-    "downloadingItem": "Wrthi'n lawrlwytho {name} ({quality})...",
+    "downloadingItem": "Wrthi'n lawrlwytho {name} ({quality})…",
     "@downloadingItem": {
         "description": "Snackbar message when downloading an item",
         "placeholders": {
@@ -1991,7 +1991,7 @@
             }
         }
     },
-    "updating": "Wrthi'n diweddaru...",
+    "updating": "Wrthi'n diweddaru…",
     "@updating": {
         "description": "Button label while updating"
     },
@@ -2036,7 +2036,7 @@
     "@addBookmark": {
         "description": "Tooltip for add bookmark button"
     },
-    "bookmarksEllipsis": "Llyfrnodau...",
+    "bookmarksEllipsis": "Llyfrnodau…",
     "@bookmarksEllipsis": {
         "description": "Menu item to view bookmarks"
     },
@@ -2081,7 +2081,7 @@
     "@invertColorsPdf": {
         "description": "Menu item to invert colors for PDF"
     },
-    "preparingInAppReader": "Wrthi'n paratoi darllenydd mewn-app...",
+    "preparingInAppReader": "Wrthi'n paratoi darllenydd mewn-app…",
     "@preparingInAppReader": {
         "description": "Loading text while reader is being prepared"
     },
@@ -2282,11 +2282,11 @@
     "@failedToCancelSeriesRecording": {
         "description": "Error when cancelling a series recording fails"
     },
-    "searchThisLibrary": "Chwiliwch y llyfrgell hon...",
+    "searchThisLibrary": "Chwiliwch y llyfrgell hon…",
     "@searchThisLibrary": {
         "description": "Search hint when scoped to a specific library"
     },
-    "searchEllipsis": "Chwilio...",
+    "searchEllipsis": "Chwilio…",
     "@searchEllipsis": {
         "description": "Search hint placeholder"
     },
@@ -3272,7 +3272,7 @@
     "@loadProfile": {
         "description": "Button to load a profile"
     },
-    "syncing": "Wrthi'n cysoni...",
+    "syncing": "Wrthi'n cysoni…",
     "@syncing": {
         "description": "Label while syncing"
     },
@@ -3320,7 +3320,7 @@
     "@manage": {
         "description": "Button to manage storage"
     },
-    "calculating": "Wrthi'n cyfrifo...",
+    "calculating": "Wrthi'n cyfrifo…",
     "@calculating": {
         "description": "Label while calculating"
     },
@@ -4195,7 +4195,7 @@
     "@readReleaseNotes": {
         "description": "Option to read the release notes in a browser"
     },
-    "downloadingUpdate": "Wrthi'n lawrlwytho diweddariad...",
+    "downloadingUpdate": "Wrthi'n lawrlwytho diweddariad…",
     "@downloadingUpdate": {
         "description": "Label shown while an update is being downloaded"
     },
@@ -5023,7 +5023,7 @@
             }
         }
     },
-    "adminCreatingBackup": "Wrthi'n creu copi wrth gefn...",
+    "adminCreatingBackup": "Wrthi'n creu copi wrth gefn…",
     "adminBackupCreated": "Crëwyd copi wrth gefn yn llwyddiannus",
     "adminBackupCreateFailed": "Wedi methu creu copi wrth gefn: {error}",
     "@adminBackupCreateFailed": {
@@ -5051,7 +5051,7 @@
         }
     },
     "adminConfirmRestore": "Cadarnhau Adfer",
-    "adminRestoringBackup": "Wrthi'n adfer copi wrth gefn...",
+    "adminRestoringBackup": "Wrthi'n adfer copi wrth gefn…",
     "adminRestoreFailed": "Wedi methu ag adfer copi wrth gefn: {error}",
     "@adminRestoreFailed": {
         "placeholders": {
@@ -5162,7 +5162,7 @@
         }
     },
     "adminDayOfWeek": "Diwrnod yr wythnos",
-    "adminSearchPlugins": "Chwilio ategion...",
+    "adminSearchPlugins": "Chwilio ategion…",
     "adminPluginToggleFailed": "Wedi methu toglo ategyn: {error}",
     "@adminPluginToggleFailed": {
         "placeholders": {
@@ -5251,7 +5251,7 @@
             }
         }
     },
-    "adminPluginUpdating": "Wrthi'n diweddaru \"{name}\" i v{version}...",
+    "adminPluginUpdating": "Wrthi'n diweddaru \"{name}\" i v{version}…",
     "@adminPluginUpdating": {
         "placeholders": {
             "name": {
@@ -5849,7 +5849,7 @@
     },
     "adminPluginsCatalogNoSearchResults": "Nid oes unrhyw becynnau yn cyfateb i'ch chwiliad",
     "adminPluginsCatalogEmpty": "Dim pecynnau ar gael",
-    "adminPluginsInstalling": "Mae \"{name}\" yn cael ei osod...",
+    "adminPluginsInstalling": "Mae \"{name}\" yn cael ei osod…",
     "@adminPluginsInstalling": {
         "placeholders": {
             "name": {
@@ -5981,8 +5981,8 @@
     "adminTrickplayProcessing": "Prosesu",
     "adminTasksEmpty": "Ni chanfuwyd unrhyw dasgau wedi'u hamserlennu",
     "adminTasksNoFilterMatch": "Nid oes unrhyw dasgau yn cyfateb i'r hidlydd cyfredol",
-    "adminTaskCancelling": "Wrthi'n canslo...",
-    "adminTaskRunning": "Yn rhedeg...",
+    "adminTaskCancelling": "Wrthi'n canslo…",
+    "adminTaskRunning": "Yn rhedeg…",
     "adminTaskNeverRun": "Peidiwch byth â rhedeg",
     "adminTaskStop": "Stopio",
     "adminTaskRun": "Rhedeg",
@@ -6264,7 +6264,7 @@
     "noItems": "Dim eitemau",
     "switchUser": "Newid Defnyddiwr",
     "remoteControl": "Rheolaeth Anghysbell",
-    "mediaBarLoading": "Wrthi'n llwytho bar cyfryngau...",
+    "mediaBarLoading": "Wrthi'n llwytho bar cyfryngau…",
     "mediaBarError": "Methodd bar cyfryngau llwytho",
     "offlineServerUnavailable": "Wedi'i gysylltu â'r rhyngrwyd, ond nid yw'r gweinydd presennol ar gael.",
     "offlineNoInternet": "Rydych chi all-lein. Dim ond cynnwys wedi'i lawrlwytho sydd ar gael.",
@@ -6382,7 +6382,7 @@
     "trackActionAddToFavorites": "Ychwanegu at Ffefrynnau",
     "trackActionGoToAlbum": "Ewch i Albwm",
     "trackActionGoToArtist": "Ewch i Artist",
-    "trackActionDownloading": "Wrthi'n llwytho i lawr {name}...",
+    "trackActionDownloading": "Wrthi'n llwytho i lawr {name}…",
     "@trackActionDownloading": {
         "placeholders": {
             "name": {
@@ -6605,7 +6605,7 @@
     "settingsPreferServerTranscode": "Mae'n well gennyf drawsgod gweinydd",
     "settingsDolbyVisionProfile7DirectPlay": "Proffil Dolby Vision 7 Chwarae Uniongyrchol",
     "settingsDolbyVisionProfile7DirectPlayDescription": "Yn rheoli a ddylai ffrydiau haen gwella proffil Dolby Vision 7 gyfeirio chwarae.",
-    "settingsAutoAftkrtEnabled": "Auto (AFTKRT wedi'i alluogi)",
+    "settingsAutoAftkrtEnabled": "Auto",
     "settingsEnabledOnThisDevice": "Wedi'i alluogi ar y ddyfais hon",
     "settingsDisabledPreferTranscode": "Anabl (mae'n well gennym drawsgod)",
     "settingsResumeRewindDescription": "Wrth ailddechrau chwarae (o Parhau i Gwylio neu dudalen eitem cyfryngau), sawl eiliad y dylid ei hailddirwyn?",
@@ -7075,7 +7075,7 @@
     "cardSize": "Maint Cerdyn",
     "externalPlayerApp": "Ap chwaraewr allanol",
     "externalPlayerAskEachTimeSubtitle": "Dangos dewisydd ap pan fydd chwarae yn dechrau.",
-    "loadingInstalledPlayers": "Wrthi'n llwytho chwaraewyr sydd wedi'u gosod...",
+    "loadingInstalledPlayers": "Wrthi'n llwytho chwaraewyr sydd wedi'u gosod…",
     "connection": "Cysylltiad",
     "audioTranscodeTarget": "Targed Trawsnewid Sain",
     "passthrough": "Trosglwyddo",
@@ -7301,7 +7301,7 @@
     "cb7ExtractionUnavailable": "Nid yw echdynnu CB7 ar gael ar y platfform hwn.",
     "cb7ExtractionPluginUnavailable": "Nid yw ategyn echdynnu CB7 ar gael ar y platfform hwn.",
     "closeGenrePanel": "Panel genre agos",
-    "loadingShuffle": "Wrthi'n llwytho siffrwd...",
+    "loadingShuffle": "Wrthi'n llwytho siffrwd…",
     "libraryShuffleLabel": "HAPCHWARAE'R LLYFRGELL",
     "randomShuffleLabel": "HAPCHWARAE AR HAP",
     "genresShuffleLabel": "HAPCHWARAE GENRES",
@@ -7749,10 +7749,6 @@
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
     },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(Di-golled)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
-    },
     "settingsAudioFallbackCodecMp3": "MP3\n(Stereo yn Unig)",
     "@settingsAudioFallbackCodecMp3": {
         "description": "Fallback codec option: MP3"
@@ -8095,7 +8091,7 @@
             }
         }
     },
-    "requestingProgress": "Wrthi'n gwneud cais am {current} o {total}...",
+    "requestingProgress": "Wrthi'n gwneud cais am {current} o {total}…",
     "@requestingProgress": {
         "description": "Progress label while collection requests are submitted",
         "placeholders": {
@@ -8903,7 +8899,7 @@
             }
         }
     },
-    "checkingDirectPlay": "Yn gwirio'r gallu Direct Play...",
+    "checkingDirectPlay": "Yn gwirio'r gallu Direct Play…",
     "directPlayCapabilityLabel": "Gallu Direct Play: ",
     "forced": "Gorfodol",
     "transcodeContainerNotSupported": "Nid yw'r chwaraewr yn cefnogi fformat y cynhwysydd.",

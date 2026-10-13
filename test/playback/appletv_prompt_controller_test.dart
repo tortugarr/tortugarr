@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:moonfin/data/services/media_segment_service.dart';
 import 'package:moonfin/preference/preference_constants.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:moonfin/ui/screens/playback/appletv_playback_prompt_controller.dart';
-import 'package:server_core/server_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../util/media_segment_fakes.dart';
 
 class _FakeCommands implements AppleTvPromptCommands {
   final calls = <String>[];
@@ -102,51 +101,6 @@ class _FakeCommands implements AppleTvPromptCommands {
   }
 }
 
-class _FakeItemsApi implements ItemsApi {
-  List<Map<String, dynamic>> segments = const [];
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) {
-    if (invocation.memberName == #getMediaSegments) {
-      return Future<List<Map<String, dynamic>>>.value(segments);
-    }
-    return super.noSuchMethod(invocation);
-  }
-}
-
-class _FakeClient implements MediaServerClient {
-  final _FakeItemsApi items = _FakeItemsApi();
-
-  @override
-  ItemsApi get itemsApi => items;
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      super.noSuchMethod(invocation);
-}
-
-Map<String, dynamic> _segmentJson({
-  required String id,
-  required String type,
-  required int startMs,
-  required int endMs,
-}) {
-  return {
-    'Id': id,
-    'ItemId': 'ep1',
-    'Type': type,
-    'StartTicks': startMs * 10000,
-    'EndTicks': endMs * 10000,
-  };
-}
-
-Future<UserPreferences> _prefs() async {
-  SharedPreferences.setMockInitialValues(const {});
-  final store = PreferenceStore();
-  await store.init();
-  return UserPreferences(store);
-}
-
 AppleTvQueueSnapshot _snapshot({
   int currentIndex = 0,
   int length = 3,
@@ -200,27 +154,12 @@ class _Harness {
   }
 }
 
-Future<MediaSegmentService> _segmentServiceWith(
-  UserPreferences prefs,
-  List<Map<String, dynamic>> segments,
-) async {
-  final client = _FakeClient();
-  client.items.segments = segments;
-  final service = MediaSegmentService(
-    client,
-    FeatureDetector(serverType: ServerType.jellyfin, serverVersion: ''),
-    prefs,
-  );
-  await service.loadSegments('ep1');
-  return service;
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Next Up trigger thresholds', () {
     test('extended shows at 1000ms remaining and not at 1001ms', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 1001);
       expect(h.commands.count('showNextUp'), 0);
@@ -233,7 +172,7 @@ void main() {
     });
 
     test('minimal shows at 500ms remaining, without an image', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(UserPreferences.nextUpBehavior, NextUpBehavior.minimal);
       final h = _Harness(prefs);
 
@@ -248,7 +187,7 @@ void main() {
 
     test('countdown style comes from the media segment countdown pref',
         () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(
         UserPreferences.mediaSegmentCountdown,
         MediaSegmentCountdown.timer,
@@ -262,7 +201,7 @@ void main() {
 
   group('Next Up show guards', () {
     test('disabled behavior never shows', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(UserPreferences.nextUpBehavior, NextUpBehavior.disabled);
       final h = _Harness(prefs);
 
@@ -271,7 +210,7 @@ void main() {
     });
 
     test('dismissed stays hidden for the rest of the episode', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       h.controller.handleNextUpDismiss();
@@ -280,7 +219,7 @@ void main() {
     });
 
     test('already visible card does not re-show', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       h.tick(remainingMs: 800);
@@ -298,7 +237,7 @@ void main() {
         _snapshot(nextEligible: false),
       ];
       for (final snapshot in cases) {
-        final h = _Harness(await _prefs());
+        final h = _Harness(await testPrefs());
         h.snapshot = snapshot;
         h.tick(remainingMs: 100);
         expect(
@@ -312,7 +251,7 @@ void main() {
 
   group('suppressAutoNext lifecycle', () {
     test('set on present, cleared on dismiss', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       expect(h.commands.suppressAutoNext, isTrue);
@@ -322,7 +261,7 @@ void main() {
     });
 
     test('cleared on queue change along with card state', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       expect(h.commands.suppressAutoNext, isTrue);
@@ -335,7 +274,7 @@ void main() {
 
   group('countdown timeout', () {
     test('autoplay on advances after the configured timeout', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       final h = _Harness(prefs);
 
       fakeAsync((async) {
@@ -351,7 +290,7 @@ void main() {
     });
 
     test('autoplay off exits playback on timeout', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(UserPreferences.autoplayNextEpisode, false);
       final h = _Harness(prefs);
 
@@ -365,7 +304,7 @@ void main() {
     });
 
     test('timeout of zero never fires a timer', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(UserPreferences.nextUpTimeout, 0);
       final h = _Harness(prefs);
 
@@ -381,7 +320,7 @@ void main() {
 
   group('play and cancel paths', () {
     test('play hides the card and advances through the live queue', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       await h.controller.handleNextUpPlay();
@@ -391,7 +330,7 @@ void main() {
     });
 
     test('play falls back to cancel when the next item disappeared', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       h.snapshot = _snapshot(hasNext: false);
@@ -402,7 +341,7 @@ void main() {
     });
 
     test('rapid double play advances once', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
       await h.prefs.set(
         UserPreferences.stillWatchingBehavior,
         StillWatchingBehavior.short_,
@@ -421,7 +360,7 @@ void main() {
     });
 
     test('cancel exits playback', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       h.controller.handleNextUpCancel();
@@ -432,7 +371,7 @@ void main() {
 
   group('Still Watching', () {
     Future<_Harness> harnessAtThreshold() async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(
         UserPreferences.stillWatchingBehavior,
         StillWatchingBehavior.short_,
@@ -481,7 +420,7 @@ void main() {
     });
 
     test('below the episode threshold no prompt shows', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(
         UserPreferences.stillWatchingBehavior,
         StillWatchingBehavior.short_,
@@ -511,7 +450,7 @@ void main() {
 
     test('counter increments on queue change and resets only on continue',
         () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.controller.onQueueChanged();
       h.controller.onQueueChanged();
@@ -535,10 +474,39 @@ void main() {
     });
   });
 
+  group('Still Watching activity reset', () {
+    test('seeking says the viewer is awake', () async {
+      final h = _Harness(await testPrefs());
+      h.controller.consecutiveEpisodes = 2;
+
+      h.controller.onUserSeeked();
+
+      expect(h.controller.consecutiveEpisodes, 0);
+    });
+
+    test('skipping a segment says the viewer is awake', () async {
+      final h = _Harness(await testPrefs());
+      h.controller.consecutiveEpisodes = 2;
+
+      h.controller.handleSkipSegment();
+
+      expect(h.controller.consecutiveEpisodes, 0);
+    });
+
+    test('an episode that plays itself out still counts', () async {
+      final h = _Harness(await testPrefs());
+
+      h.controller.onQueueChanged();
+      h.controller.onQueueChanged();
+
+      expect(h.controller.consecutiveEpisodes, 2);
+    });
+  });
+
   group('seek suppression', () {
     test('a seek hides the card, clears suppressAutoNext, and blocks a '
         're-show for 1200ms', () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       expect(h.commands.suppressAutoNext, isTrue);
@@ -560,7 +528,7 @@ void main() {
   group('stale card regression', () {
     test('queue change hides the card and the next episode presents fresh',
         () async {
-      final h = _Harness(await _prefs());
+      final h = _Harness(await testPrefs());
 
       h.tick(remainingMs: 900);
       expect(h.commands.lastNextUpTitle, 'Episode 2');
@@ -583,10 +551,10 @@ void main() {
   group('media segments', () {
     test('an ask intro shows the button and leaving the segment hides it',
         () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       final h = _Harness(prefs);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(id: 's1', type: 'Intro', startMs: 5000, endMs: 65000),
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(id: 's1', type: 'Intro', startMs: 5000, endMs: 65000),
       ]);
 
       h.controller.onPositionTick(
@@ -607,14 +575,14 @@ void main() {
     });
 
     test('an auto-skip intro seeks to the segment end', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(
         UserPreferences.mediaSegmentActions,
         'intro:skip,outro:askToSkip',
       );
       final h = _Harness(prefs);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(id: 's1', type: 'Intro', startMs: 5000, endMs: 65000),
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(id: 's1', type: 'Intro', startMs: 5000, endMs: 65000),
       ]);
 
       h.controller.onPositionTick(
@@ -627,10 +595,10 @@ void main() {
     });
 
     test('skipping an outro marks the item played and seeks', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       final h = _Harness(prefs);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(
           id: 's1',
           type: 'Outro',
           startMs: 2300000,
@@ -651,11 +619,11 @@ void main() {
     });
 
     test('skipping an outro with no next item exits playback', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       final h = _Harness(prefs);
       h.snapshot = _snapshot(hasNext: false);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(
           id: 's1',
           type: 'Outro',
           startMs: 2300000,
@@ -676,11 +644,11 @@ void main() {
 
     test('replace outro with next up presents the card instead of skipping',
         () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       await prefs.set(UserPreferences.replaceSkipOutroWithNextUp, true);
       final h = _Harness(prefs);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(
           id: 's1',
           type: 'Outro',
           startMs: 2300000,
@@ -698,10 +666,10 @@ void main() {
     });
 
     test('outro deferral holds the card until the end threshold', () async {
-      final prefs = await _prefs();
+      final prefs = await testPrefs();
       final h = _Harness(prefs);
-      h.segmentService = await _segmentServiceWith(prefs, [
-        _segmentJson(
+      h.segmentService = await segmentServiceWith(prefs, [
+        segmentJson(
           id: 's1',
           type: 'Outro',
           startMs: 2300000,

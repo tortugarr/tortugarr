@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moonfin Theme Editor</title>
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <img class="topbar-logo-mark" src="../assets/assets/icons/moonfin_logo.svg" alt="Moonfin">
+    <span>Theme Editor</span>
+  </div>
+  <div class="tf"><label>ID</label><input id="tId" value="my-theme" maxlength="40" style="width:100px" oninput="onMeta()"></div>
+  <div class="tf"><label>Name</label><input id="tName" value="My Theme" maxlength="60" oninput="onMeta()"></div>
+  <div class="tf"><label>Description</label><input id="tDesc" value="" placeholder="optional" style="width:180px" oninput="onMeta()"></div>
+  <div class="tf">
+    <label>Preview Nav</label>
+    <select id="pNavMode" onchange="onMeta()">
+      <option value="left">Left Sidebar</option>
+      <option value="top">Top Toolbar</option>
+    </select>
+  </div>
+  <div class="tf">
+    <label>Profile</label>
+    <select id="pProfile" onchange="onMeta()">
+      <option value="desktop">Desktop / TV</option>
+      <option value="mobile">Mobile</option>
+    </select>
+  </div>
+  <div class="topbar-break"></div>
+  <span class="status-pill" id="statusPill">Ready</span>
+  <button class="btn btn-s" onclick="clearDraft()">Clear</button>
+  <input type="file" id="impFile" accept=".json" style="display:none" onchange="doImport(event)">
+  <button class="btn btn-s" onclick="document.getElementById('impFile').click()">↑ Import JSON</button>
+  <button class="btn btn-s" onclick="loadPreset('moonfin')">Moonfin</button>
+  <button class="btn btn-s" onclick="loadPreset('neon')">Neon Pulse</button>
+  <button class="btn btn-s" onclick="randomizeTheme()">Random</button>
+  <button class="btn btn-s" onclick="runValidation(true)">Validate</button>
+  <button class="btn btn-p" onclick="doExport()">↓ Export JSON</button>
+</div>
+
+<div class="constraint-banner">
+  Strict export constraints: blur 0-64, spread -32-32, border width 0-16, corner radius 0-9999,
+  text glow spread fixed to 0, and placeholder palette requires at least 1 color.
+</div>
+
+<div class="layout">
+
+  <div class="editor">
+    <div class="escroll" id="escroll">
+    </div>
+    <div class="editor-footer">
+      <div class="editor-meta"><span id="draftStamp">No draft saved</span><span id="dirtyFlag">Clean</span></div>
+      <ul class="issue-list" id="issueList"></ul>
+    </div>
+  </div>
+
+  <div class="editor-resizer" id="editorResizer" aria-label="Resize editor panel" role="separator"></div>
+
+  <div class="preview">
+    <div class="ptabs">
+      <div class="ptab on" onclick="setTab('home')">Home</div>
+      <div class="ptab" onclick="setTab('detail')">Detail</div>
+      <div class="ptab" onclick="setTab('player')">Player</div>
+      <div class="ptab" onclick="setTab('search')">Search</div>
+      <div class="ptab" onclick="setTab('library')">Library</div>
+      <div class="ptab" onclick="setTab('epg')">Live TV</div>
+      <div class="ptab" onclick="setTab('settings')">Settings</div>
+    </div>
+    <div class="pframe on" id="pf-home"><div class="pdevice" id="pd-home"></div></div>
+    <div class="pframe" id="pf-detail"><div class="pdevice" id="pd-detail"></div></div>
+    <div class="pframe" id="pf-player"><div class="pdevice" id="pd-player"></div></div>
+    <div class="pframe" id="pf-search"><div class="pdevice" id="pd-search"></div></div>
+    <div class="pframe" id="pf-library"><div class="pdevice" id="pd-library"></div></div>
+    <div class="pframe" id="pf-epg"><div class="pdevice" id="pd-epg"></div></div>
+    <div class="pframe" id="pf-settings"><div class="pdevice" id="pd-settings"></div></div>
+  </div>
+</div>
+  <script src="js/app.js"></script>
+</body>
+</html>

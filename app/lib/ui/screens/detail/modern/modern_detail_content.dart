@@ -1,0 +1,5242 @@
+import 'dart:async';
+import 'dart:math' show Random;
+import 'dart:ui' show ImageFilter;
+import 'package:collection/collection.dart';
+import '../../../widgets/offline_aware_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moonfin_design/moonfin_design.dart';
+import 'package:playback_core/playback_core.dart';
+import 'package:server_core/server_core.dart';
+import '../../../mixins/focus_state_mixin.dart';
+
+import '../../../../data/models/aggregated_item.dart';
+import '../../../../data/viewmodels/item_detail_view_model.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../preference/user_preferences.dart';
+import '../../../../preference/preference_constants.dart';
+import '../../../../util/overview_text.dart';
+import '../../../../util/platform_detection.dart';
+import '../../../../util/focus/dpad_keys.dart';
+import '../../../navigation/destinations.dart';
+import '../../../widgets/logo_view.dart';
+import '../../../widgets/marquee_text.dart';
+import '../../../widgets/media_card.dart';
+import '../../../widgets/rating_display.dart';
+import '../../../widgets/focus/focusable_wrapper.dart';
+import '../../../widgets/focus/focusable_toolbar_button.dart';
+import '../../../widgets/navigation_layout.dart';
+import '../../../widgets/top_toolbar.dart';
+import '../../../../data/repositories/seerr_repository.dart';
+import '../../../../data/repositories/tmdb_repository.dart';
+import '../../../../data/services/seerr/seerr_api_models.dart';
+import '../../../../data/services/plugin_sync_service.dart';
+import '../item_detail_screen.dart'
+    show
+        DetailActionButtons,
+        DetailCastRow,
+        DetailChaptersRow,
+        DetailFeaturesRow,
+        DetailEpisodeCard,
+        DetailSimilarRow,
+        DetailTrackList,
+        ExpandableBiography,
+        selectedMediaSourceForItem,
+        PersonDates,
+        FilmographyRow,
+        SeerrAppearancesRow,
+        SeerrCrewCreditsRow,
+        technicalDetailsFor;
+import 'modern_landscape_layout.dart';
+import 'modern_portrait_layout.dart';
+import 'widgets/details_tab_bar.dart';
+import 'widgets/season_card.dart';
+import 'widgets/up_next_card.dart';
+import '../../../../data/services/download/missing_episodes.dart';
+import '../../../../data/services/tortugarr/download_features.dart';
+import '../../../widgets/missing_episodes/missing_episode_card.dart';
+import '../../../widgets/missing_episodes/missing_episodes_flow.dart';
+import '../../../widgets/missing_episodes/season_monitor_toggle.dart';
+import '../../../widgets/missing_episodes/season_switcher.dart';
+import '../../../widgets/movie_collection/movie_collection_strip.dart';
+import '../../../widgets/download_now/download_now_button.dart';
+import '../../../../data/services/seerr/movie_collection.dart';
+import '../../../widgets/overlay_sheet.dart';
+import '../../../navigation/single_push.dart';
+import 'package:moonfin/util/app_l10n.dart';
+
+double _desktopUiScale({UserPreferences? prefs}) {
+  final effectivePrefs = prefs ?? GetIt.instance<UserPreferences>();
+  return effectivePrefs.get(UserPreferences.desktopUiScale).scaleFactor;
+}
+
+/// "Modern" detail-screen style: one responsive screen that chooses a landscape
+/// (TV / desktop / any landscape device) or portrait (phone / tablet portrait)
+/// layout. Selected globally via [UserPreferences.detailScreenStyle].
+///
+/// Mirrors the default content widget's constructor so the swap in
+/// `_ItemDetailScreenState._buildBody` is a drop-in, and reuses the public
+/// action/content widgets so playback and data logic are shared, not duplicated.
+class ModernDetailContent extends StatefulWidget {
+  final ItemDetailViewModel viewModel;
+  final UserPreferences prefs;
+  final ValueListenable<String?> backdropUrl;
+  final String? selectedMediaSourceId;
+  final ValueChanged<String?> onSelectedMediaSourceChanged;
+  final FocusNode? initialFocusNode;
+  final bool autoPlay;
+  final void Function(Duration position)? onPlayFromChapter;
+  final ValueChanged<bool>? onToggleNavbar;
+  final bool actionsExpanded;
+  final ValueChanged<bool> onActionsExpandedChanged;
+  final ValueChanged<AggregatedItem>? onBackdropItemFocused;
+  final VoidCallback? onCollapseBiography;
+
+  const ModernDetailContent({
+    super.key,
+    required this.viewModel,
+    required this.prefs,
+    required this.backdropUrl,
+    this.selectedMediaSourceId,
+    required this.onSelectedMediaSourceChanged,
+    this.onBackdropItemFocused,
+    this.initialFocusNode,
+    this.autoPlay = false,
+    this.onPlayFromChapter,
+    this.onToggleNavbar,
+    required this.actionsExpanded,
+    required this.onActionsExpandedChanged,
+    this.onCollapseBiography,
+  });
+
+  @override
+  State<ModernDetailContent> createState() => _ModernDetailContentState();
+}
+
+class _ModernDetailContentState extends State<ModernDetailContent> {
+  int _selectedTab = 0;
+  bool _landscape = true;
+
+  /// Expanded Tabs preference: when on, tabs behave like the search pill, with
+  /// the first tab expanded and focusing a tab showing its content. When off,
+  /// tabs start collapsed and are opened or closed by pressing them.
+  bool get _expandedTabs =>
+      widget.prefs.get(UserPreferences.detailExpandedTabs);
+
+  // Studios for the Studios tab. Logos always come from TMDB via the Moonfin
+  // plugin's server-side cache; the Jellyfin studio list is only a name-only
+  // fallback when the plugin is unavailable or has no logo.
+  List<StudioCompany> _tmdbStudios = const [];
+  String? _tmdbStudiosItemId;
+
+  final Map<String, FocusNode> _trackFocusNodes = {};
+  final List<FocusNode> _tabFocusNodes = [];
+  final FocusNode _upNextFocusNode = FocusNode(debugLabel: 'modernUpNext');
+  final FocusNode _actionRowRightFocusNode = FocusNode(debugLabel: 'actionRowRight');
+  final FocusNode _extraFirstFocusNode = FocusNode(debugLabel: 'extraFirstBtn');
+  final FocusNode _artistFocusNode = FocusNode(debugLabel: 'albumArtist');
+  final FocusNode _audioShowAllFocusNode = FocusNode(debugLabel: 'audioShowAll');
+  final FocusNode _subtitleShowAllFocusNode = FocusNode(debugLabel: 'subtitleShowAll');
+  final FocusNode _detailsTabFocusNode = FocusNode(debugLabel: 'detailsTabContent');
+  final FocusNode _castFirstFocusNode = FocusNode(debugLabel: 'castFirst');
+  final FocusNode _crewFirstFocusNode = FocusNode(debugLabel: 'crewFirst');
+  final FocusNode _studiosFirstFocusNode = FocusNode(debugLabel: 'studiosFirst');
+  final FocusNode _chaptersFirstFocusNode = FocusNode(debugLabel: 'chaptersFirst');
+  final FocusNode _similarFirstFocusNode = FocusNode(debugLabel: 'similarFirst');
+  final FocusNode _gridFirstFocusNode = FocusNode(debugLabel: 'gridFirst');
+  final FocusNode _collectionSortFocusNode = FocusNode(debugLabel: 'collectionSort');
+  final FocusNode _moviesFirstFocusNode = FocusNode(debugLabel: 'moviesFirst');
+  final FocusNode _seriesFirstFocusNode = FocusNode(debugLabel: 'seriesFirst');
+  final FocusNode _collectionFirstFocusNode = FocusNode(debugLabel: 'collectionFirst');
+  final FocusNode _seasonsFirstFocusNode = FocusNode(debugLabel: 'seasonsFirst');
+  final FocusNode _collectionStripFirstFocusNode =
+      FocusNode(debugLabel: 'movieCollectionFirst');
+  final FocusNode _episodesFirstFocusNode = FocusNode(debugLabel: 'episodesFirst');
+  final FocusNode _seasonSwitcherFocusNode = FocusNode(debugLabel: 'seasonSwitcher');
+  final FocusNode _seasonMonitorFocusNode = FocusNode(debugLabel: 'seasonMonitor');
+  bool _seasonMonitorShown = false;
+  /// Whether the Season page shows the season switcher above its episodes,
+  /// so Up from the first episode goes there instead of to the tab bar.
+  bool _seasonSwitcherShown = false;
+  final FocusNode _overviewFocusNode = FocusNode(debugLabel: 'overview');
+  final FocusNode _personMoviesFirstFocusNode = FocusNode(debugLabel: 'personMoviesFirst');
+  final FocusNode _personSeriesFirstFocusNode = FocusNode(debugLabel: 'personSeriesFirst');
+  final FocusNode _personSeerrAppearancesFirstFocusNode = FocusNode(debugLabel: 'personSeerrAppearancesFirst');
+  final FocusNode _personSeerrCrewCreditsFirstFocusNode = FocusNode(debugLabel: 'personSeerrCrewCreditsFirst');
+  final Map<String, FocusNode> _boxSetHeadingFocusNodes = {};
+  final Map<String, FocusNode> _boxSetRowFirstFocusNodes = {};
+  final Map<String, FocusNode> _collectionRowFocusNodes = {};
+  final Map<String, FocusNode> _featuresFirstFocusNodes = {};
+
+  FocusNode _collectionRowFocusNodeFor(String colId) {
+    return _collectionRowFocusNodes.putIfAbsent(
+      colId,
+      () => FocusNode(debugLabel: 'modernCollectionRow_$colId'),
+    );
+  }
+  late final ScrollController _scrollController = ScrollController();
+  String? _seriesLogoTag;
+  String? _seriesLogoId;
+  bool _showNavbarState = true;
+  bool _audioExpanded = false;
+  bool _subtitlesExpanded = false;
+  int? _loadedAudioIndex;
+  int? _loadedSubtitleIndex;
+  List<SeerrDiscoverItem>? _seerrAppearances;
+  List<SeerrDiscoverItem>? _seerrCrewCredits;
+  // Item ids these one-shot loaders already ran for, so repeated view-model
+  // notifications don't re-issue the network calls or re-roll the backdrop.
+  String? _seerrLoadedForItemId;
+  String? _randomBackdropForItemId;
+  String? _randomBackdropUrl;
+
+  PlaybackInfoResult? _playbackInfo;
+  bool _loadingPlaybackInfo = false;
+  String? _loadedPlaybackInfoItemId;
+
+  bool _upNextResolvedThisBuild = false;
+  Widget? _upNextCard;
+
+  Future<void> _loadPlaybackInfo(AggregatedItem item) async {
+    if (_loadingPlaybackInfo) return;
+    if (_playbackInfo != null &&
+        _loadedPlaybackInfoItemId == item.id &&
+        _loadedAudioIndex == _vm.selectedAudioIndex &&
+        _loadedSubtitleIndex == _vm.selectedSubtitleIndex) {
+      return;
+    }
+    
+    _loadingPlaybackInfo = true;
+    _loadedPlaybackInfoItemId = item.id;
+    _loadedAudioIndex = _vm.selectedAudioIndex;
+    _loadedSubtitleIndex = _vm.selectedSubtitleIndex;
+    // Delay state change slightly to prevent setstate during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() {});
+    });
+
+    try {
+      final client = GetIt.instance<MediaServerClient>();
+      final manager = GetIt.instance<PlaybackManager>();
+      
+      final backend = manager.backend;
+      final profile = backend?.getDeviceProfile() ?? {};
+      final bitrate = profile['MaxStreamingBitrate'] as int?;
+
+      final mediaSource = selectedMediaSourceForItem(item, widget.selectedMediaSourceId);
+      final mediaSourceId = mediaSource?['Id']?.toString();
+
+      final request = PlaybackInfoRequest(
+        itemId: item.id,
+        mediaSourceId: mediaSourceId,
+        audioStreamIndex: _vm.selectedAudioIndex,
+        subtitleStreamIndex: _vm.selectedSubtitleIndex,
+        deviceProfile: profile,
+        maxStreamingBitrate: bitrate,
+        enableDirectPlay: true,
+        enableDirectStream: true,
+        enableTranscoding: true,
+      );
+
+      final rawInfo = await client.playbackApi.getPlaybackInfo(
+        item.id,
+        requestBody: request.toJson(),
+        userId: client.userId,
+      );
+
+      final parsed = PlaybackInfoResult.fromJson(rawInfo);
+      if (mounted) {
+        // Drop the result if the track selection changed mid-request.
+        final stillCurrent = _loadedAudioIndex == _vm.selectedAudioIndex &&
+            _loadedSubtitleIndex == _vm.selectedSubtitleIndex;
+        setState(() {
+          _loadingPlaybackInfo = false;
+          if (stillCurrent) _playbackInfo = parsed;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _loadingPlaybackInfo = false;
+          _playbackInfo = null;
+        });
+      }
+    }
+  }
+
+  void _selectRandomBackdrop() {
+    final item = _vm.item;
+    if (item == null || item.type != 'Person') return;
+    if (_randomBackdropForItemId == item.id && _randomBackdropUrl != null) return;
+    final candidates = <String>[];
+
+    // 1. Local Jellyfin items
+    for (final f in _vm.filmographyMovies) {
+      if (f.backdropImageTags.isNotEmpty) {
+        candidates.add(_vm.imageApi.getBackdropImageUrl(f.id,
+            tag: f.backdropImageTags.first, maxWidth: 1920));
+      }
+    }
+    for (final f in _vm.filmographySeries) {
+      if (f.backdropImageTags.isNotEmpty) {
+        candidates.add(_vm.imageApi.getBackdropImageUrl(f.id,
+            tag: f.backdropImageTags.first, maxWidth: 1920));
+      }
+    }
+
+    if (candidates.isNotEmpty) {
+      final randIndex = Random().nextInt(candidates.length);
+      setState(() {
+        _randomBackdropUrl = candidates[randIndex];
+        _randomBackdropForItemId = item.id;
+      });
+    }
+  }
+
+  Future<void> _loadSeerrAppearances() async {
+    final item = _vm.item;
+    if (item == null || item.type != 'Person') return;
+    final tmdbId = item.tmdbId;
+    if (tmdbId == null || tmdbId.isEmpty) return;
+    if (!GetIt.instance<PluginSyncService>().seerrAvailable) {
+      return;
+    }
+    // Run once per person; the view-model notifies many times as data streams
+    // in and each call would otherwise re-issue the same combined-credits fetch.
+    if (_seerrLoadedForItemId == item.id) return;
+    _seerrLoadedForItemId = item.id;
+
+    try {
+      final repo = await GetIt.instance.getAsync<SeerrRepository>();
+      await repo.ensureInitialized();
+      final personId = int.tryParse(tmdbId);
+      if (personId != null) {
+        final credits = await repo.getPersonCombinedCredits(personId);
+        const excludedJobs = {'thanks', 'special thanks'};
+        final castWithPosters =
+            credits.cast.where((i) => i.posterPath != null).toList()
+              ..sort((a, b) => a.displayTitle.compareTo(b.displayTitle));
+        final crewWithPosters = credits.crew
+            .where(
+              (i) =>
+                  i.posterPath != null &&
+                  !excludedJobs.contains(i.job?.toLowerCase()),
+            )
+            .toList()
+          ..sort((a, b) => a.displayTitle.compareTo(b.displayTitle));
+        if (mounted) {
+          setState(() {
+            _seerrAppearances = castWithPosters;
+            _seerrCrewCredits = crewWithPosters;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error loading Seerr appearances: $e');
+    }
+  }
+
+  List<AggregatedItem> _sortJellyfinItems(List<AggregatedItem> list) {
+    final sortOpt = widget.prefs.get(UserPreferences.personPageSortOption);
+    final sorted = List<AggregatedItem>.from(list);
+    if (sortOpt == 'alphabetical') {
+      sorted.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    } else {
+      final asc = sortOpt == 'releaseDateAsc';
+      sorted.sort((a, b) {
+        final dateA = a.premiereDate ?? (a.productionYear != null ? DateTime(a.productionYear!) : null);
+        final dateB = b.premiereDate ?? (b.productionYear != null ? DateTime(b.productionYear!) : null);
+        if (dateA == null && dateB == null) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        }
+        if (dateA == null) return 1;
+        if (dateB == null) return -1;
+        final comp = dateA.compareTo(dateB);
+        return asc ? comp : -comp;
+      });
+    }
+    return sorted;
+  }
+
+  List<SeerrDiscoverItem> _groupSeerrItems(List<SeerrDiscoverItem> list, bool isCrew) {
+    final groupOpt = widget.prefs.get(UserPreferences.personPageGroupItems);
+    if (!groupOpt) return list;
+    final grouped = <int, List<SeerrDiscoverItem>>{};
+    for (final item in list) {
+      grouped.putIfAbsent(item.id, () => []).add(item);
+    }
+
+    final result = <SeerrDiscoverItem>[];
+    for (final entries in grouped.values) {
+      final first = entries.first;
+      if (entries.length == 1) {
+        result.add(first);
+        continue;
+      }
+
+      if (isCrew) {
+        final jobs = entries
+            .map((e) => e.job ?? e.department)
+            .where((j) => j != null && j.isNotEmpty)
+            .map((j) => j!)
+            .toSet();
+        final combinedJobs = jobs.join(', ');
+        result.add(SeerrDiscoverItem(
+          id: first.id,
+          mediaType: first.mediaType,
+          title: first.title,
+          name: first.name,
+          originalTitle: first.originalTitle,
+          originalName: first.originalName,
+          posterPath: first.posterPath,
+          backdropPath: first.backdropPath,
+          overview: first.overview,
+          releaseDate: first.releaseDate,
+          firstAirDate: first.firstAirDate,
+          originalLanguage: first.originalLanguage,
+          genreIds: first.genreIds,
+          voteAverage: first.voteAverage,
+          voteCount: first.voteCount,
+          popularity: first.popularity,
+          adult: first.adult,
+          mediaInfo: first.mediaInfo,
+          character: first.character,
+          job: combinedJobs.isNotEmpty ? combinedJobs : null,
+          department: first.department,
+        ));
+      } else {
+        final characters = entries
+            .map((e) => e.character)
+            .where((c) => c != null && c.isNotEmpty)
+            .map((c) => c!)
+            .toSet();
+        final combinedCharacters = characters.join(', ');
+        result.add(SeerrDiscoverItem(
+          id: first.id,
+          mediaType: first.mediaType,
+          title: first.title,
+          name: first.name,
+          originalTitle: first.originalTitle,
+          originalName: first.originalName,
+          posterPath: first.posterPath,
+          backdropPath: first.backdropPath,
+          overview: first.overview,
+          releaseDate: first.releaseDate,
+          firstAirDate: first.firstAirDate,
+          originalLanguage: first.originalLanguage,
+          genreIds: first.genreIds,
+          voteAverage: first.voteAverage,
+          voteCount: first.voteCount,
+          popularity: first.popularity,
+          adult: first.adult,
+          mediaInfo: first.mediaInfo,
+          character: combinedCharacters.isNotEmpty ? combinedCharacters : null,
+          job: first.job,
+          department: first.department,
+        ));
+      }
+    }
+    return result;
+  }
+
+  List<SeerrDiscoverItem> _sortSeerrItems(List<SeerrDiscoverItem> list) {
+    final sortOpt = widget.prefs.get(UserPreferences.personPageSortOption);
+    final sorted = List<SeerrDiscoverItem>.from(list);
+    if (sortOpt == 'alphabetical') {
+      sorted.sort((a, b) => a.displayTitle.toLowerCase().compareTo(b.displayTitle.toLowerCase()));
+    } else {
+      final asc = sortOpt == 'releaseDateAsc';
+      sorted.sort((a, b) {
+        final dateStrA = a.releaseDate ?? a.firstAirDate;
+        final dateStrB = b.releaseDate ?? b.firstAirDate;
+        if (dateStrA == null && dateStrB == null) {
+          return a.displayTitle.toLowerCase().compareTo(b.displayTitle.toLowerCase());
+        }
+        if (dateStrA == null) return 1;
+        if (dateStrB == null) return -1;
+        final dateA = DateTime.tryParse(dateStrA);
+        final dateB = DateTime.tryParse(dateStrB);
+        if (dateA == null && dateB == null) {
+          return dateStrA.compareTo(dateStrB);
+        }
+        if (dateA == null) return 1;
+        if (dateB == null) return -1;
+        final comp = dateA.compareTo(dateB);
+        return asc ? comp : -comp;
+      });
+    }
+    return sorted;
+  }
+
+  ItemDetailViewModel get _vm => widget.viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    final FocusOnKeyEventCallback leftToSidebarHandler = (node, event) {
+      if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+        if (navbarPosition == NavbarPosition.left) {
+          final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+          if (focusNavbar != null) {
+            focusNavbar();
+            return KeyEventResult.handled;
+          }
+        }
+      }
+      return KeyEventResult.ignored;
+    };
+
+    _castFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _crewFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _studiosFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _chaptersFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _similarFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _seasonsFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _episodesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _personMoviesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _personSeriesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _personSeerrAppearancesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _personSeerrCrewCreditsFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _gridFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _moviesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _seriesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _collectionFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+
+    for (final cat in extraCategoriesOrder) {
+      final node = FocusNode(debugLabel: 'modernFeatureFirst_$cat');
+      node.onKeyEvent = leftToSidebarHandler;
+      _featuresFirstFocusNodes[cat] = node;
+    }
+    _collectionSortFocusNode.onKeyEvent = (node, event) {
+      if (event is KeyDownEvent) {
+        if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          if (_vm.playlistItems.isNotEmpty) {
+            final firstTrackId = _vm.playlistItems.first.id;
+            final firstNode = _trackFocusNodes.putIfAbsent(firstTrackId, () => FocusNode());
+            if (firstNode.canRequestFocus) {
+              firstNode.requestFocus();
+              return KeyEventResult.handled;
+            }
+          }
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          _focusSelectedTab();
+          return KeyEventResult.handled;
+        }
+      }
+      return leftToSidebarHandler(node, event);
+    };
+
+    _vm.addListener(_onViewModelChanged);
+    _scrollController.addListener(_onScroll);
+    // With Expanded Tabs off the tabs start collapsed on every platform and are
+    // opened by clicking; Seasons always start expanded.
+    _selectedTab = (_expandedTabs || _vm.item?.type == 'Season') ? 0 : -1;
+    if (PlatformDetection.isTV) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.initialFocusNode?.requestFocus();
+      });
+      NavigationLayout.focusDetailsPlayButtonNotifier.value = widget.initialFocusNode;
+    }
+    _loadSeriesLogo();
+    _loadStudioLogos();
+    _loadSeerrAppearances().then((_) {
+      if (mounted) _selectRandomBackdrop();
+    });
+  }
+
+  @override
+  void didUpdateWidget(ModernDetailContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialFocusNode != oldWidget.initialFocusNode && PlatformDetection.isTV) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.initialFocusNode?.requestFocus();
+      });
+      NavigationLayout.focusDetailsPlayButtonNotifier.value = widget.initialFocusNode;
+    }
+    _loadSeerrAppearances().then((_) {
+      if (mounted) _selectRandomBackdrop();
+    });
+  }
+
+  void _onScroll() {
+    if (!mounted) return;
+    if (PlatformDetection.isTV) return;
+    final scrolledDown = _scrollController.offset > 50.0;
+    if (scrolledDown && _showNavbarState) {
+      _showNavbarState = false;
+      widget.onToggleNavbar?.call(false);
+    } else if (!scrolledDown && !_showNavbarState) {
+      _showNavbarState = true;
+      widget.onToggleNavbar?.call(true);
+    }
+  }
+
+  void _onViewModelChanged() {
+    if (mounted) {
+      setState(() {});
+      _loadSeriesLogo();
+      _loadStudioLogos();
+      _loadSeerrAppearances().then((_) {
+        if (mounted) _selectRandomBackdrop();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    if (NavigationLayout.focusDetailsPlayButtonNotifier.value == widget.initialFocusNode) {
+      NavigationLayout.focusDetailsPlayButtonNotifier.value = null;
+    }
+    _vm.removeListener(_onViewModelChanged);
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    for (final node in _trackFocusNodes.values) {
+      node.dispose();
+    }
+    for (final node in _tabFocusNodes) {
+      node.dispose();
+    }
+    _upNextFocusNode.dispose();
+    _actionRowRightFocusNode.dispose();
+    _extraFirstFocusNode.dispose();
+    _artistFocusNode.dispose();
+    _audioShowAllFocusNode.dispose();
+    _subtitleShowAllFocusNode.dispose();
+    _detailsTabFocusNode.dispose();
+    _castFirstFocusNode.dispose();
+    _crewFirstFocusNode.dispose();
+    _studiosFirstFocusNode.dispose();
+    _chaptersFirstFocusNode.dispose();
+    _similarFirstFocusNode.dispose();
+    _gridFirstFocusNode.dispose();
+    _collectionSortFocusNode.dispose();
+    _moviesFirstFocusNode.dispose();
+    _seriesFirstFocusNode.dispose();
+    _collectionFirstFocusNode.dispose();
+    _seasonsFirstFocusNode.dispose();
+    _collectionStripFirstFocusNode.dispose();
+    _episodesFirstFocusNode.dispose();
+    _seasonSwitcherFocusNode.dispose();
+    _seasonMonitorFocusNode.dispose();
+    _overviewFocusNode.dispose();
+    _personMoviesFirstFocusNode.dispose();
+    _personSeriesFirstFocusNode.dispose();
+    _personSeerrAppearancesFirstFocusNode.dispose();
+    _personSeerrCrewCreditsFirstFocusNode.dispose();
+    for (final node in _boxSetHeadingFocusNodes.values) {
+      node.dispose();
+    }
+    for (final node in _boxSetRowFirstFocusNodes.values) {
+      node.dispose();
+    }
+    for (final node in _collectionRowFocusNodes.values) {
+      node.dispose();
+    }
+    _collectionRowFocusNodes.clear();
+    for (final node in _featuresFirstFocusNodes.values) {
+      node.dispose();
+    }
+    _featuresFirstFocusNodes.clear();
+    super.dispose();
+  }
+
+  Future<void> _loadSeriesLogo() async {
+    final item = _vm.item;
+    if (item == null) return;
+    final seriesId = item.seriesId;
+    if (seriesId == null || _seriesLogoId == seriesId) return;
+
+    try {
+      final client = GetIt.instance<MediaServerClient>();
+      final seriesData = await client.itemsApi.getItem(seriesId);
+      final logoTag = (seriesData['ImageTags'] as Map?)?['Logo'] as String?;
+      if (mounted) {
+        setState(() {
+          _seriesLogoTag = logoTag;
+          _seriesLogoId = seriesId;
+        });
+      }
+    } catch (_) {}
+  }
+
+  // Fetch the item's production companies from TMDB so the Studios tab can show
+  // real studio logos. Needs the user's TMDB API key; without it or on failure
+  // the tab falls back to Jellyfin studio names.
+  Future<void> _loadStudioLogos() async {
+    final item = _vm.item;
+    if (item == null || _tmdbStudiosItemId == item.id) return;
+    _tmdbStudiosItemId = item.id;
+
+    final tmdbId = item.tmdbId;
+    final pluginAvailable = GetIt.instance<PluginSyncService>().pluginAvailable;
+    if (tmdbId == null || !pluginAvailable) {
+      if (_tmdbStudios.isNotEmpty && mounted) {
+        setState(() => _tmdbStudios = const []);
+      }
+      return;
+    }
+
+    final companies = await GetIt.instance<TmdbRepository>().getProductionCompanies(
+      tmdbId: tmdbId,
+      type: item.type == 'Series' ? 'tv' : 'movie',
+    );
+    if (!mounted || companies == null) return;
+    setState(() => _tmdbStudios = companies);
+  }
+
+  /// Right of the action buttons goes to the Up Next card when it's present,
+  /// otherwise into the tab rail.
+  void _focusRightOfActions() {
+    if (_upNextFocusNode.context != null) {
+      _upNextFocusNode.requestFocus();
+    } else {
+      _focusSelectedTab();
+    }
+  }
+
+  FocusNode _tabNode(int index) {
+    while (_tabFocusNodes.length <= index) {
+      final i = _tabFocusNodes.length;
+      final node = FocusNode(debugLabel: 'tab_$i');
+      if (PlatformDetection.isTV || PlatformDetection.useDesktopUi) {
+        node.addListener(() {
+          if (!node.hasFocus || !mounted) return;
+          // Expanded Tabs makes focus follow selection like the search pill.
+          // Otherwise the tab opens only when the user presses select or clicks.
+          if (_expandedTabs && _selectedTab != i) _selectTab(i);
+        });
+      }
+      _tabFocusNodes.add(node);
+    }
+    return _tabFocusNodes[index];
+  }
+
+  void _focusSelectedTab() {
+    // On TV _selectedTab starts at -1 (no tab chosen); guard the list index.
+    if (_selectedTab < 0) return;
+    _tabNode(_selectedTab).requestFocus();
+  }
+
+  // Moves D-pad focus into the first track of the track list, using the same
+  // focus node the DetailTrackList attaches to that row.
+  void _focusFirstTrack() {
+    if (_vm.tracks.isEmpty) return;
+    final id = _vm.tracks.first.id;
+    _trackFocusNodes.putIfAbsent(id, () => FocusNode()).requestFocus();
+  }
+
+  void _onTabBarNavigateDown(int tabIndex) {
+    if (_vm.item == null) return;
+    if (_selectedTab != tabIndex) {
+      _selectTab(tabIndex);
+    }
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      final tabs = _tabsFor(_vm.item!, l10n);
+      if (tabIndex >= 0 && tabIndex < tabs.length) {
+        final label = tabs[tabIndex].label;
+        String? extraCat;
+        for (final cat in extraCategoriesOrder) {
+          if (label == getExtraCategoryLabel(cat, l10n)) {
+            extraCat = cat;
+            break;
+          }
+        }
+        if (extraCat != null) {
+          _featuresFirstFocusNodes[extraCat]?.requestFocus();
+        } else if (label == l10n.castMembers) {
+          _castFirstFocusNode.requestFocus();
+        } else if (label == l10n.crewSection) {
+          _crewFirstFocusNode.requestFocus();
+        } else if (label == l10n.studios) {
+          _studiosFirstFocusNode.requestFocus();
+        } else if (label == l10n.chapters) {
+          _chaptersFirstFocusNode.requestFocus();
+        } else if (label == l10n.details) {
+          _detailsTabFocusNode.requestFocus();
+        } else if (label == l10n.similar) {
+          _similarFirstFocusNode.requestFocus();
+        } else if (label == l10n.collections) {
+          if (_vm.parentCollections.length == 1) {
+            _collectionFirstFocusNode.requestFocus();
+          } else if (_vm.parentCollections.isNotEmpty) {
+            _collectionRowFocusNodeFor(_vm.parentCollections.first.id).requestFocus();
+          }
+        } else if (label == l10n.seasons) {
+          _seasonsFirstFocusNode.requestFocus();
+        } else if (label == l10n.episodes) {
+          _episodesFirstFocusNode.requestFocus();
+        } else if (label == l10n.movies) {
+          if (_vm.item?.type == 'BoxSet') {
+            _moviesFirstFocusNode.requestFocus();
+          } else {
+            _personMoviesFirstFocusNode.requestFocus();
+          }
+        } else if (label == l10n.series) {
+          if (_vm.item?.type == 'BoxSet') {
+            _seriesFirstFocusNode.requestFocus();
+          } else {
+            _personSeriesFirstFocusNode.requestFocus();
+          }
+        } else if (label == l10n.appearancesSeerr) {
+          _personSeerrAppearancesFirstFocusNode.requestFocus();
+        } else if (label == l10n.crewContributionsSeerr) {
+          _personSeerrCrewCreditsFirstFocusNode.requestFocus();
+        } else if (label == l10n.albums || label == l10n.items || label == l10n.appearances) {
+          _gridFirstFocusNode.requestFocus();
+        } else if (label == l10n.trackList) {
+          _focusFirstTrack();
+        } else if (label == l10n.playlist) {
+          if (_vm.item?.type == 'BoxSet' && _vm.playlistItems.isNotEmpty) {
+            _collectionSortFocusNode.requestFocus();
+          } else {
+            _focusFirstTrack();
+          }
+        }
+      }
+    });
+  }
+
+  bool _isAudioItem(AggregatedItem item) {
+    final mediaType = item.rawData['MediaType'] as String?;
+    return item.type == 'Audio' ||
+        item.type == 'AudioBook' ||
+        mediaType == 'Audio';
+  }
+
+  bool _isAudiobook(AggregatedItem item) =>
+      item.type == 'AudioBook' ||
+      (item.type == 'Book' && item.rawData['MediaType'] == 'Audio');
+
+  String? _getAuthorName(AggregatedItem item) {
+    if (item.artists.isNotEmpty) {
+      return item.artists.join(', ');
+    }
+    if (item.albumArtist != null && item.albumArtist!.trim().isNotEmpty) {
+      return item.albumArtist!.trim();
+    }
+    if (item.albumArtists.isNotEmpty) {
+      final name = item.albumArtists.first['Name'] as String?;
+      if (name != null && name.trim().isNotEmpty) return name.trim();
+    }
+    if (item.seriesName != null && item.seriesName!.trim().isNotEmpty) {
+      return item.seriesName!.trim();
+    }
+    final rawAuthor =
+        item.rawData['Author'] as String? ?? item.rawData['Writer'] as String?;
+    if (rawAuthor != null && rawAuthor.trim().isNotEmpty) return rawAuthor.trim();
+
+    final people = item.people;
+    for (final p in people) {
+      final role = p['Type']?.toString() ?? p['Role']?.toString() ?? '';
+      if (role == 'Author' || role == 'Writer') {
+        final name = p['Name'] as String?;
+        if (name != null && name.trim().isNotEmpty) return name.trim();
+      }
+    }
+    return null;
+  }
+
+  List<_ModernTab> _tabsFor(AggregatedItem item, AppLocalizations l10n) {
+    final hasCast = _vm.actors.isNotEmpty;
+    final hasCrew = _vm.directors.isNotEmpty || _vm.writers.isNotEmpty;
+    final hasStudios = item.studios.isNotEmpty;
+    final hasSimilar = _vm.similar.isNotEmpty;
+
+    final groupedFeatures = <String, List<AggregatedItem>>{};
+    for (final f in _vm.features) {
+      final cat = getExtraCategory(f);
+      groupedFeatures.putIfAbsent(cat, () => []).add(f);
+    }
+
+    final List<_ModernTab> extraTabs = [];
+    for (final cat in extraCategoriesOrder) {
+      final items = groupedFeatures[cat];
+      if (items != null && items.isNotEmpty) {
+        extraTabs.add(_ModernTab(
+          getExtraCategoryLabel(cat, l10n),
+          (context, item) => _extrasTab(context, item, items, _featuresFirstFocusNodes[cat]),
+        ));
+      }
+    }
+
+    final cast = _ModernTab(l10n.castMembers, _castTab);
+    final crew = _ModernTab(l10n.crewSection, _crewTab);
+    final studios = _ModernTab(l10n.studios, _studiosTab);
+    final chapters = _ModernTab(l10n.chapters, _chaptersTab);
+    final details = _ModernTab(l10n.details, _detailsTab);
+    final similar = _ModernTab(l10n.similar, (_, _) => _similarTab(context, _vm.similar));
+
+    switch (item.type) {
+      case 'Series':
+        return [
+          if (_vm.seasons.isNotEmpty) _ModernTab(l10n.seasons, _seasonsTab),
+          _ModernTab(l10n.episodes, _seriesEpisodesTab),
+          if (hasCast) cast,
+          if (hasCrew) crew,
+          if (hasStudios) studios,
+          if (item.chapters.isNotEmpty) chapters,
+          ...extraTabs,
+          if (_vm.parentCollections.isNotEmpty)
+            _ModernTab(
+              l10n.collections,
+              (context, item) => _collectionsTab(context, item),
+            ),
+          if (hasSimilar) similar,
+        ];
+      case 'Season':
+        return [
+          if (_vm.episodes.isNotEmpty)
+            _ModernTab(l10n.episodes, _episodeListTab),
+          // All seasons of the series (library + missing), so a Season page is
+          // never a dead end. Only when there is another season to go to.
+          if (_seriesSeasonCount() > 1) _ModernTab(l10n.seasons, _seasonsTab),
+          if (hasCast) cast,
+          if (hasCrew) crew,
+          if (hasStudios) studios,
+          if (item.chapters.isNotEmpty) chapters,
+          ...extraTabs,
+        ];
+      case 'Episode':
+        return [
+          if (_vm.episodes.isNotEmpty)
+            _ModernTab(l10n.episodes, _episodeListTab),
+          if (_vm.seasons.isNotEmpty) _ModernTab(l10n.seasons, _seasonsTab),
+          if (hasCast) cast,
+          if (hasCrew) crew,
+          if (hasStudios) studios,
+          if (item.chapters.isNotEmpty) chapters,
+          details,
+          ...extraTabs,
+          if (hasSimilar) similar,
+        ];
+      case 'MusicAlbum':
+      case 'Playlist':
+      case 'AudioBook':
+        return [
+          if (_vm.tracks.isNotEmpty) _ModernTab(l10n.trackList, _tracksTab),
+          details,
+          if (hasSimilar) similar,
+        ];
+      case 'MusicArtist':
+        return [
+          if (_vm.albums.isNotEmpty)
+            _ModernTab(l10n.albums, (_, _) => _itemGrid(_vm.albums, aspectRatio: 1.0)),
+          if (hasSimilar) similar,
+        ];
+      case 'Person':
+        final movies = _sortJellyfinItems(_vm.filmographyMovies);
+        final series = _sortJellyfinItems(_vm.filmographySeries);
+        final hasSeerrAppearances = _seerrAppearances != null && _seerrAppearances!.isNotEmpty;
+        final hasSeerrCrewCredits = _seerrCrewCredits != null && _seerrCrewCredits!.isNotEmpty;
+        final sortedSeerrAppearances = hasSeerrAppearances ? _sortSeerrItems(_groupSeerrItems(_seerrAppearances!, false)) : const <SeerrDiscoverItem>[];
+        final sortedSeerrCrewCredits = hasSeerrCrewCredits ? _sortSeerrItems(_groupSeerrItems(_seerrCrewCredits!, true)) : const <SeerrDiscoverItem>[];
+
+        return [
+          if (movies.isNotEmpty)
+            _ModernTab(l10n.movies, (context, item) => _moviesTab(context, movies)),
+          if (series.isNotEmpty)
+            _ModernTab(l10n.series, (context, item) => _seriesTab(context, series)),
+          if (sortedSeerrAppearances.isNotEmpty)
+            _ModernTab(l10n.appearancesSeerr, (context, item) => _seerrAppearancesTab(context, sortedSeerrAppearances)),
+          if (sortedSeerrCrewCredits.isNotEmpty)
+            _ModernTab(l10n.crewContributionsSeerr, (context, item) => _seerrCrewCreditsTab(context, sortedSeerrCrewCredits)),
+          if (movies.isEmpty && series.isEmpty && sortedSeerrAppearances.isEmpty && sortedSeerrCrewCredits.isEmpty && _vm.filmography.isNotEmpty)
+            _ModernTab(l10n.appearances, (_, _) => _itemGrid(_sortJellyfinItems(_vm.filmography))),
+        ];
+      case 'BoxSet':
+        final moviesList = _vm.collectionItems.where((i) => i.type == 'Movie').toList();
+        moviesList.sort((a, b) {
+          final aIndex = _vm.playlistItems.indexWhere((p) => p.id == a.id);
+          final bIndex = _vm.playlistItems.indexWhere((p) => p.id == b.id);
+          if (aIndex == -1 && bIndex == -1) return 0;
+          if (aIndex == -1) return 1;
+          if (bIndex == -1) return -1;
+          return aIndex.compareTo(bIndex);
+        });
+
+        final seriesList = _vm.collectionItems.where((i) => i.type == 'Series').toList();
+        seriesList.sort((a, b) {
+          final aIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == a.id || p.id == a.id);
+          final bIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == b.id || p.id == b.id);
+          if (aIndex == -1 && bIndex == -1) return 0;
+          if (aIndex == -1) return 1;
+          if (bIndex == -1) return -1;
+          return aIndex.compareTo(bIndex);
+        });
+
+        return [
+          if (_vm.playlistItems.isNotEmpty)
+            _ModernTab(
+              l10n.playlist,
+              (context, item) {
+                final listWidget = DetailTrackList(
+                  tracks: _vm.playlistItems,
+                  imageApi: _vm.imageApi,
+                  isPlaylist: true,
+                  getFocusNode: (id) =>
+                      _trackFocusNodes.putIfAbsent(id, () => FocusNode()),
+                  onPlayTrack: (index) => _playPlaylistTrack(context, index),
+                  reorderable: _vm.collectionSort == CollectionSortOption.custom,
+                  onReorder: (oldIndex, newIndex) {
+                    var target = newIndex;
+                    if (target > oldIndex) {
+                      target -= 1;
+                    }
+                    _vm.reorderCollectionPlaylistItem(oldIndex, target);
+                  },
+                  onMoveUp: (index) => _vm.reorderCollectionPlaylistItem(index, index - 1),
+                  onMoveDown: (index) => _vm.reorderCollectionPlaylistItem(index, index + 1),
+                  onFirstTrackUp: () => _collectionSortFocusNode.requestFocus(),
+                  onTrackFocused: widget.onBackdropItemFocused,
+                );
+
+                return Focus(
+                  canRequestFocus: false,
+                  onFocusChange: (focused) {
+                    if (focused && mounted) {
+                      widget.onToggleNavbar?.call(false);
+                    } else if (!focused && mounted) {
+                      widget.onToggleNavbar?.call(true);
+                    }
+                  },
+                  onKeyEvent: (node, event) {
+                    return KeyEventResult.ignored;
+                  },
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 800),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: Row(
+                              children: [
+                                FocusableToolbarButton(
+                                  icon: Icons.sort_rounded,
+                                  focusNode: _collectionSortFocusNode,
+                                  tooltip: l10n.resetSort,
+                                  onTap: () => _showCollectionSortDialog(context),
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'Sort: ${_getCollectionSortLabel(_vm.collectionSort, l10n)}',
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                        color: Colors.white70,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          listWidget,
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          if (moviesList.isNotEmpty)
+            _ModernTab(l10n.movies, (context, item) => _mediaGrid(context, moviesList, firstFocusNode: _moviesFirstFocusNode)),
+          if (seriesList.isNotEmpty)
+            _ModernTab(l10n.series, (context, item) => _mediaGrid(context, seriesList, firstFocusNode: _seriesFirstFocusNode)),
+          if (hasCast) _ModernTab(l10n.castMembers, _boxSetCastTab),
+          if (hasCrew) _ModernTab(l10n.crewSection, _boxSetCrewTab),
+          if (hasStudios) studios,
+        ];
+      default:
+        return [
+          if (hasCast) cast,
+          if (hasCrew) crew,
+          if (hasStudios) studios,
+          if (item.chapters.isNotEmpty) chapters,
+          details,
+          ...extraTabs,
+          if (_vm.parentCollections.isNotEmpty)
+            _ModernTab(
+              l10n.collections,
+              (context, item) => _collectionsTab(context, item),
+            ),
+          if (hasSimilar) similar,
+        ];
+    }
+  }
+
+  Widget _seasonsTab(BuildContext context, AggregatedItem item) {
+    final l10n = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final counts = _episodeCountsBySeason();
+    final showPosterUrl = _seriesPosterUrl(item);
+    // Determine which season contains the "next up" episode, mirroring the
+    // episode-card logic: prefer _vm.nextUp.seasonId, fall back to the first
+    // unplayed episode's seasonId so the cyan border always renders correctly.
+    final nextUpSeasonId = _vm.nextUp?.seasonId ??
+        (item.type == 'Episode' ? item.seasonId : null) ??
+        _vm.seriesEpisodes.firstWhereOrNull((e) => !e.isPlayed)?.seasonId;
+    SeasonCard buildSeasonCard(
+      int i, {
+      double? width,
+      double? height,
+      bool topRow = true,
+    }) =>
+        SeasonCard(
+          title: _vm.seasons[i].name,
+          subtitle: l10n.episodeCount(
+            counts[_vm.seasons[i].id] ?? _vm.seasons[i].childCount ?? 0,
+          ),
+          imageUrl: _imageUrl(_vm.seasons[i]) ?? showPosterUrl,
+          isFallbackImage: _imageUrl(_vm.seasons[i]) == null,
+          landscape: _landscape,
+          isNextUp: _vm.seasons[i].id == nextUpSeasonId,
+          onNavigateUp: topRow ? _focusSelectedTab : null,
+          focusNode: i == 0 ? _seasonsFirstFocusNode : null,
+          width: width,
+          height: height,
+          autoScroll: true,
+          onTap: () {
+            final season = _vm.seasons[i];
+            final destination = Destinations.item(season.id, serverId: season.serverId);
+            if (item.type == 'Season') {
+              // Switching from one season to another replaces the page, so
+              // Back still returns to where the user came from.
+              if (season.id != item.id) context.pushReplacement(destination);
+            } else {
+              context.push(destination);
+            }
+          },
+        );
+    // Seasons Sonarr knows that the library has no episodes of.
+    final arr = _vm.arrStatus;
+    final missingSeasons = arr == null
+        ? const <int>[]
+        : MissingEpisodes.missingSeasons(
+            presentSeasons: [
+              for (final s in _vm.seasons)
+                if (s.indexNumber != null) s.indexNumber!,
+            ],
+            status: arr,
+          );
+    int sonarrEpisodeCount(int season) =>
+        arr?.episodes.where((e) => e.seasonNumber == season).length ?? 0;
+    // Sonarr monitoring per season, off by default; only for seasons Sonarr has.
+    List<Widget> monitorToggle(int? season) {
+      if (season == null) return const [];
+      final monitored = _vm.seasonMonitored(season);
+      if (monitored == null) return const [];
+      return [
+        const SizedBox(height: 4),
+        SeasonMonitorToggle(
+          season: season,
+          monitored: monitored,
+          compact: true,
+          onChanged: (on, searchNow) =>
+              _vm.setSeasonMonitoring(season, on: on, searchNow: searchNow),
+        ),
+      ];
+    }
+    final seasonLabelStyle = textTheme.labelMedium?.copyWith(
+      color: Colors.white70,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1.0,
+      fontSize: 10,
+    );
+    // Centered when it fits, horizontally scrollable when the name is longer
+    // than the card, so a long season name never wraps to a second line.
+    Widget nameLabel(String name, double viewportWidth) => SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: viewportWidth),
+            child: Text(
+              name.toUpperCase(),
+              maxLines: 1,
+              softWrap: false,
+              style: seasonLabelStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+    Widget seasonLabel(int i, double viewportWidth) =>
+        nameLabel(_vm.seasons[i].name, viewportWidth);
+    final child = LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 12.0;
+        final columns = (constraints.maxWidth / (_landscape ? 160.0 : 130.0))
+            .floor()
+            .clamp(3, _landscape ? 8 : 6);
+        final cardWidth =
+            ((constraints.maxWidth - spacing * (columns - 1)) / columns)
+                .floorToDouble();
+        final cardHeight = cardWidth * 1.5;
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 16,
+          children: [
+            for (var i = 0; i < _vm.seasons.length; i++)
+              SizedBox(
+                width: cardWidth,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    seasonLabel(i, cardWidth),
+                    const SizedBox(height: 6),
+                    buildSeasonCard(
+                      i,
+                      width: cardWidth,
+                      height: cardHeight,
+                      topRow: i < columns,
+                    ),
+                    ...monitorToggle(_vm.seasons[i].indexNumber),
+                  ],
+                ),
+              ),
+            for (var j = 0; j < missingSeasons.length; j++)
+              SizedBox(
+                width: cardWidth,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    nameLabel(l10n.seasonNumber(missingSeasons[j]), cardWidth),
+                    const SizedBox(height: 6),
+                    SeasonCard(
+                      title: l10n.seasonNumber(missingSeasons[j]),
+                      subtitle: l10n.episodeCount(
+                        sonarrEpisodeCount(missingSeasons[j]),
+                      ),
+                      imageUrl: showPosterUrl,
+                      isFallbackImage: true,
+                      landscape: _landscape,
+                      missing: true,
+                      width: cardWidth,
+                      height: cardHeight,
+                      autoScroll: true,
+                      onNavigateUp: _vm.seasons.length + j < columns
+                          ? _focusSelectedTab
+                          : null,
+                      onTap: () => _openMissingSeason(item, missingSeasons[j]),
+                    ),
+                    ...monitorToggle(missingSeasons[j]),
+                  ],
+                ),
+              ),
+          ],
+        );
+      },
+    );
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: _vm.missingLoad == MissingEpisodesLoad.unavailable
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  child,
+                  const SizedBox(height: 16),
+                  _missingStatusNote(first: false),
+                ],
+              )
+            : child,
+      ),
+    );
+  }
+
+  /// The poster of the series a Series/Season/Episode page belongs to, for
+  /// season cards that have no image of their own.
+  String? _seriesPosterUrl(AggregatedItem item) {
+    final seriesId = item.seriesId;
+    final tag = item.seriesPrimaryImageTag;
+    if (item.type == 'Episode' && seriesId != null && tag != null) {
+      return _vm.imageApi.getPrimaryImageUrl(seriesId, maxHeight: 360, tag: tag);
+    }
+    return _imageUrl(item);
+  }
+
+  /// The shown season's episodes with Sonarr's missing ones in between, or
+  /// null when Sonarr's list is not loaded (then only what is on disk shows).
+  /// [item] is the Season page, or the Episode page whose season is listed.
+  List<SeasonEntry>? _seasonEntries(AggregatedItem item) {
+    final status = _vm.arrStatus;
+    final number = MissingEpisodes.seasonShownBy(
+      itemType: item.type,
+      indexNumber: item.indexNumber,
+      parentIndexNumber: item.parentIndexNumber,
+    );
+    if (status == null || number == null) return null;
+    return MissingEpisodes.mergeSeason(
+      present: _vm.episodes,
+      status: status,
+      season: number,
+    );
+  }
+
+  void _openMissingSeason(AggregatedItem series, int season) {
+    final status = _vm.arrStatus;
+    if (status == null) return;
+    unawaited(showMissingSeasonDialog(
+      context,
+      vm: _vm,
+      seriesTitle: series.seriesName ?? series.name,
+      season: season,
+      entries: MissingEpisodes.mergeSeason(
+        present: const [],
+        status: status,
+        season: season,
+      ),
+    ));
+  }
+
+  /// Season-pack button, missing-episode placeholders and the add-to-Sonarr
+  /// tile for one season's list. [first] marks the row that takes the tab's
+  /// first focus node.
+  List<Widget Function(bool first)> _missingAwareRows(
+    BuildContext context, {
+    required String seriesTitle,
+    required int? season,
+    required List<SeasonEntry> entries,
+    required Widget Function(AggregatedItem episode, bool first) presentRow,
+  }) {
+    final rows = <Widget Function(bool first)>[];
+    if (season != null &&
+        _vm.arrStatus != null &&
+        MissingEpisodes.offerSeasonPack(entries)) {
+      rows.add((first) => SeasonPackButton(
+            missingCount: MissingEpisodes.downloadableCount(entries),
+            focusNode: first ? _episodesFirstFocusNode : null,
+            onNavigateUp: first ? _episodesUp : null,
+            onSelect: () => unawaited(openSeasonPack(
+              context,
+              vm: _vm,
+              seriesTitle: seriesTitle,
+              season: season,
+            )),
+          ));
+    }
+    for (final entry in entries) {
+      final present = entry.present;
+      final missing = entry.missing;
+      if (present != null) {
+        rows.add((first) => presentRow(present, first));
+      } else if (missing != null) {
+        rows.add((first) => MissingEpisodeCard(
+              missing: missing,
+              focusNode: first ? _episodesFirstFocusNode : null,
+              onNavigateUp: first ? _episodesUp : null,
+              onSelect: () => unawaited(openMissingEpisode(
+                context,
+                vm: _vm,
+                seriesTitle: seriesTitle,
+                missing: missing,
+              )),
+            ));
+      }
+    }
+    return rows;
+  }
+
+  Widget _missingStatusNote({required bool first}) => MissingEpisodesStatusNote(
+        reason: _vm.missingError ?? 'Ukjent feil',
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onNavigateUp: first ? _episodesUp : null,
+        onRetry: () => unawaited(_vm.loadMissingEpisodes()),
+      );
+
+  Widget _addToSonarrTile(BuildContext context, {required bool first}) =>
+      AddToSonarrTile(
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onNavigateUp: first ? _episodesUp : null,
+        onSelect: () => unawaited(addSeriesToSonarr(context, _vm)),
+      );
+
+  /// Library seasons plus the seasons only Sonarr knows about.
+  int _seriesSeasonCount() {
+    final arr = _vm.arrStatus;
+    final missing = arr == null
+        ? 0
+        : MissingEpisodes.missingSeasons(
+            presentSeasons: [
+              for (final s in _vm.seasons)
+                if (s.indexNumber != null) s.indexNumber!,
+            ],
+            status: arr,
+          ).length;
+    return _vm.seasons.length + missing;
+  }
+
+  /// Up from the first row of the episode list: the season switcher when the
+  /// Season page shows one, otherwise the tab bar.
+  void _episodesUp() {
+    if (_seasonMonitorShown && _seasonMonitorFocusNode.context != null) {
+      _seasonMonitorFocusNode.requestFocus();
+    } else if (_seasonSwitcherShown && _seasonSwitcherFocusNode.context != null) {
+      _seasonSwitcherFocusNode.requestFocus();
+    } else {
+      _focusSelectedTab();
+    }
+  }
+
+  /// Chips for every season of the series (library seasons plus the ones only
+  /// Sonarr knows) on a Season page, or null when there is nothing to switch to.
+  Widget? _seasonSwitcher(BuildContext context, AggregatedItem item) {
+    if (item.type != 'Season' || item.seriesId == null) return null;
+    try {
+      final l10n = AppLocalizations.of(context);
+      final arr = _vm.arrStatus;
+      final missing = arr == null
+          ? const <int>[]
+          : MissingEpisodes.missingSeasons(
+              presentSeasons: [
+                for (final s in _vm.seasons)
+                  if (s.indexNumber != null) s.indexNumber!,
+              ],
+              status: arr,
+            );
+      final entries = SeasonSwitcherEntry.combine(
+        library: [
+          for (final s in _vm.seasons)
+            (id: s.id, serverId: s.serverId, number: s.indexNumber, name: s.name),
+        ],
+        missingSeasons: missing,
+        missingLabel: l10n.seasonNumber,
+      );
+      if (entries.length < 2) return null;
+      return SeasonSwitcher(
+        entries: entries,
+        currentItemId: item.id,
+        currentFocusNode: _seasonSwitcherFocusNode,
+        onNavigateUp: _focusSelectedTab,
+        onNavigateDown: () => _seasonMonitorShown &&
+                _seasonMonitorFocusNode.context != null
+            ? _seasonMonitorFocusNode.requestFocus()
+            : _episodesFirstFocusNode.requestFocus(),
+        onSelect: (e) {
+          if (e.missing) {
+            final number = e.number;
+            if (number != null) _openMissingSeason(item, number);
+          } else {
+            // Replace, so Back still returns to where the user came from.
+            context.pushReplacement(
+              Destinations.item(e.itemId!, serverId: e.serverId),
+            );
+          }
+        },
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Widget _episodeListTab(BuildContext context, AggregatedItem item) {
+    // For Season pages _vm.nextUp is null (the API call uses seriesId which
+    // on a Season item resolves to nothing). Fall back to the first unplayed
+    // episode so the cyan "next up" border still renders correctly.
+    final nextUpId = _vm.nextUp?.id ??
+        _vm.episodes.firstWhereOrNull((e) => !e.isPlayed)?.id;
+    // Season pages and Episode pages (Continue Watching / Next Up) both list
+    // one season, so both get Sonarr's missing episodes merged in.
+    final season = MissingEpisodes.seasonShownBy(
+      itemType: item.type,
+      indexNumber: item.indexNumber,
+      parentIndexNumber: item.parentIndexNumber,
+    );
+    final listsSeason = season != null;
+    final entries = (listsSeason ? _seasonEntries(item) : null) ??
+        [for (final e in _vm.episodes) SeasonEntry.present(e)];
+
+    final switcher = _seasonSwitcher(context, item);
+    _seasonSwitcherShown = switcher != null;
+    final monitored = season == null ? null : _vm.seasonMonitored(season);
+    final monitorToggle = monitored == null
+        ? null
+        : SeasonMonitorToggle(
+            season: season!,
+            monitored: monitored,
+            focusNode: _seasonMonitorFocusNode,
+            onNavigateUp: () => _seasonSwitcherShown &&
+                    _seasonSwitcherFocusNode.context != null
+                ? _seasonSwitcherFocusNode.requestFocus()
+                : _focusSelectedTab(),
+            onNavigateDown: () => _episodesFirstFocusNode.requestFocus(),
+            onChanged: (on, searchNow) =>
+                _vm.setSeasonMonitoring(season, on: on, searchNow: searchNow),
+          );
+    _seasonMonitorShown = monitorToggle != null;
+    final rows = _missingAwareRows(
+      context,
+      seriesTitle: item.seriesName ?? item.name,
+      season: season,
+      entries: entries,
+      presentRow: (episode, first) => DetailEpisodeCard(
+        episode: episode,
+        imageApi: _vm.imageApi,
+        onChanged: () => _vm.load(),
+        isActive: episode.id == nextUpId,
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onKeyEvent: first
+            ? (node, event) {
+                if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                  _episodesUp();
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              }
+            : null,
+      ),
+    );
+    if (listsSeason && _vm.missingLoad == MissingEpisodesLoad.notInSonarr) {
+      rows.add((first) => _addToSonarrTile(context, first: first));
+    }
+    if (listsSeason && _vm.missingLoad == MissingEpisodesLoad.unavailable) {
+      rows.add((first) => _missingStatusNote(first: first));
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (switcher != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: switcher,
+            ),
+          if (monitorToggle != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Align(alignment: Alignment.centerLeft, child: monitorToggle),
+            ),
+          for (var i = 0; i < rows.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: rows[i](i == 0),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Map<String, int> _episodeCountsBySeason() {
+    final counts = <String, int>{};
+    for (final e in _vm.seriesEpisodes) {
+      final id = e.seasonId;
+      if (id == null) continue;
+      counts[id] = (counts[id] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  final Set<int> _expandedSeasons = {};
+  bool _initializedExpandedSeasons = false;
+
+  /// All episodes of a Series grouped into collapsible season containers.
+  Widget _seriesEpisodesTab(BuildContext context, AggregatedItem item) {
+    final l10n = AppLocalizations.of(context);
+    final episodes = _vm.seriesEpisodes;
+    if (episodes.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 32),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    final sorted = [...episodes]..sort((a, b) {
+        final sa = a.parentIndexNumber ?? 0;
+        final sb = b.parentIndexNumber ?? 0;
+        if (sa != sb) return sa.compareTo(sb);
+        return (a.indexNumber ?? 0).compareTo(b.indexNumber ?? 0);
+      });
+
+    // Group by season
+    final Map<int, List<AggregatedItem>> seasonGroups = {};
+    for (final episode in sorted) {
+      final s = episode.parentIndexNumber ?? 0;
+      seasonGroups.putIfAbsent(s, () => []).add(episode);
+    }
+
+    if (!_initializedExpandedSeasons && seasonGroups.isNotEmpty) {
+      _initializedExpandedSeasons = true;
+      final nextUpSeason = _vm.nextUp?.parentIndexNumber;
+      if (nextUpSeason != null && seasonGroups.containsKey(nextUpSeason)) {
+        _expandedSeasons.add(nextUpSeason);
+      } else {
+        _expandedSeasons.add(seasonGroups.keys.first);
+      }
+    }
+
+    // With Sonarr's list loaded, every season gets its missing episodes and
+    // seasons the library has none of get a group of their own.
+    final arr = _vm.arrStatus;
+    final seasonNumbers = <int>{
+      ...seasonGroups.keys,
+      if (arr != null)
+        ...MissingEpisodes.missingSeasons(
+          presentSeasons: seasonGroups.keys,
+          status: arr,
+        ),
+    }.toList()
+      ..sort();
+
+    final children = <Widget>[];
+    for (final season in seasonNumbers) {
+      final eps = seasonGroups[season] ?? const <AggregatedItem>[];
+      final entries = arr == null
+          ? [for (final e in eps) SeasonEntry.present(e)]
+          : MissingEpisodes.mergeSeason(present: eps, status: arr, season: season);
+      final isExpanded = _expandedSeasons.contains(season);
+      final isFirst = children.isEmpty;
+
+      children.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: FocusableWrapper(
+            onNavigateUp: isFirst ? _focusSelectedTab : null,
+            focusNode: isFirst ? _episodesFirstFocusNode : null,
+            onSelect: () {
+              setState(() {
+                if (_expandedSeasons.contains(season)) {
+                  _expandedSeasons.remove(season);
+                } else {
+                  _expandedSeasons.add(season);
+                }
+              });
+            },
+            borderRadius: 8,
+            suppressFocusGlow: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    isExpanded ? Icons.expand_more : Icons.chevron_right,
+                    color: Colors.white70,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    l10n.seasonNumber(season),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    entries.length > eps.length
+                        ? '(${eps.length} av ${entries.length})'
+                        : '(${eps.length})',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white38,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      if (isExpanded) {
+        children.add(
+          Padding(
+            padding: const EdgeInsets.only(left: 12, bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final row in _missingAwareRows(
+                  context,
+                  seriesTitle: item.name,
+                  season: season,
+                  entries: entries,
+                  presentRow: (episode, _) => DetailEpisodeCard(
+                    episode: episode,
+                    imageApi: _vm.imageApi,
+                    onChanged: () => _vm.load(),
+                    isActive: episode.id == _vm.nextUp?.id,
+                  ),
+                ))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: row(false),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
+    if (_vm.missingLoad == MissingEpisodesLoad.notInSonarr) {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: _addToSonarrTile(context, first: children.isEmpty),
+      ));
+    }
+    if (_vm.missingLoad == MissingEpisodesLoad.unavailable) {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: _missingStatusNote(first: children.isEmpty),
+      ));
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+
+  Widget _castTab(BuildContext context, AggregatedItem item) => SizedBox(
+        height: 200,
+        child: Focus(
+          canRequestFocus: false,
+          onFocusChange: (focused) {
+            if (focused && mounted) {
+              widget.onToggleNavbar?.call(false);
+            } else if (!focused && mounted) {
+              widget.onToggleNavbar?.call(true);
+            }
+          },
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+              _focusSelectedTab();
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: DetailCastRow(
+            people: _vm.actors,
+            imageApi: _vm.imageApi,
+            serverId: item.serverId,
+            firstItemFocusNode: _castFirstFocusNode,
+            onNavigateUp: _focusSelectedTab,
+            onItemKeyEvent: (index, event) {
+              if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowRight && index == _vm.actors.length - 1) {
+                return KeyEventResult.handled;
+              }
+              return KeyEventResult.ignored;
+            },
+          ),
+        ),
+      );
+
+  Widget _crewTab(BuildContext context, AggregatedItem item) {
+    final l10n = AppLocalizations.of(context);
+    final Map<String, Map<String, dynamic>> merged = {};
+    for (final d in _vm.directors) {
+      final id = d['Id']?.toString() ?? d['Name']?.toString() ?? '';
+      if (id.isEmpty) continue;
+      final roleStr = d['Role']?.toString().trim();
+      final role = (roleStr != null && roleStr.isNotEmpty) ? roleStr : l10n.director;
+      merged[id] = {
+        ...d,
+        'Roles': <String>{role},
+      };
+    }
+    for (final w in _vm.writers) {
+      final id = w['Id']?.toString() ?? w['Name']?.toString() ?? '';
+      if (id.isEmpty) continue;
+      final roleStr = w['Role']?.toString().trim();
+      final role = (roleStr != null && roleStr.isNotEmpty) ? roleStr : l10n.writer;
+      if (merged.containsKey(id)) {
+        final roles = merged[id]!['Roles'] as Set<String>;
+        roles.add(role);
+      } else {
+        merged[id] = {
+          ...w,
+          'Roles': <String>{role},
+        };
+      }
+    }
+    final crew = merged.values.map((person) {
+      final roles = person['Roles'] as Set<String>;
+      final normalizedRoles = roles.map((r) {
+        final trimmed = r.trim();
+        if (trimmed.isEmpty) return '';
+        return trimmed.split(RegExp(r'[;,]'))
+            .map((s) => s.trim())
+            .where((s) => s.isNotEmpty)
+            .map((s) {
+              if (s == s.toUpperCase() && s.length > 1) {
+                return s[0] + s.substring(1).toLowerCase();
+              }
+              return s;
+            })
+            .join('\n');
+      }).expand((r) => r.split('\n')).where((r) => r.isNotEmpty).toSet();
+
+      return {
+        ...person,
+        'Role': normalizedRoles.join('\n'),
+      };
+    }).toList();
+
+    return SizedBox(
+      height: 200,
+      child: Focus(
+        canRequestFocus: false,
+        onFocusChange: (focused) {
+          if (focused && mounted) {
+            widget.onToggleNavbar?.call(false);
+          } else if (!focused && mounted) {
+            widget.onToggleNavbar?.call(true);
+          }
+        },
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _focusSelectedTab();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: DetailCastRow(
+          people: crew,
+          imageApi: _vm.imageApi,
+          serverId: item.serverId,
+          firstItemFocusNode: _crewFirstFocusNode,
+          onNavigateUp: _focusSelectedTab,
+          onItemKeyEvent: (index, event) {
+            if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowRight && index == crew.length - 1) {
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+        ),
+      ),
+    );
+  }
+
+  bool _initializedBoxSetCastExpanded = false;
+  bool _initializedBoxSetCrewExpanded = false;
+  final Set<String> _expandedCollectionCastItems = {};
+  final Set<String> _expandedCollectionCrewItems = {};
+
+  Widget _boxSetCastTab(BuildContext context, AggregatedItem item) {
+    final sortedItems = [..._vm.collectionItems];
+    // Sort items by their order in playlistItems (playlist order)
+    sortedItems.sort((a, b) {
+      final aIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == a.id || p.id == a.id);
+      final bIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == b.id || p.id == b.id);
+      if (aIndex == -1 && bIndex == -1) return 0;
+      if (aIndex == -1) return 1;
+      if (bIndex == -1) return -1;
+      return aIndex.compareTo(bIndex);
+    });
+
+    if (!_initializedBoxSetCastExpanded && sortedItems.isNotEmpty) {
+      _initializedBoxSetCastExpanded = true;
+      _expandedCollectionCastItems.add(sortedItems.first.id);
+    }
+
+    final children = <Widget>[];
+    for (var i = 0; i < sortedItems.length; i++) {
+      final childItem = sortedItems[i];
+      final people = childItem.rawData['People'] as List?;
+      if (people == null || people.isEmpty) continue;
+      final childActors = people.cast<Map<String, dynamic>>().where((p) {
+        final type = p['Type'] as String?;
+        return type == 'Actor' || type == 'GuestStar';
+      }).toList();
+      if (childActors.isEmpty) continue;
+
+      final isExpanded = _expandedCollectionCastItems.contains(childItem.id);
+      
+      final headingNode = i == 0
+          ? _castFirstFocusNode
+          : _boxSetHeadingFocusNodes.putIfAbsent(childItem.id, () => FocusNode(debugLabel: 'heading_cast_${childItem.name}'));
+      final rowFirstNode = _boxSetRowFirstFocusNodes.putIfAbsent(childItem.id, () => FocusNode(debugLabel: 'row_first_cast_${childItem.name}'));
+
+      children.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: FocusableWrapper(
+            focusNode: headingNode,
+            onFocusChange: (focused) {
+              if (focused && mounted) {
+                Scrollable.ensureVisible(
+                  context,
+                  duration: const Duration(milliseconds: 150),
+                  alignment: 0.3,
+                );
+              }
+            },
+            onNavigateLeft: () {
+              final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+              if (navbarPosition == NavbarPosition.left) {
+                final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+                if (focusNavbar != null) {
+                  focusNavbar();
+                }
+              }
+            },
+            onNavigateRight: () {}, // Cap on right
+            onNavigateUp: () {
+              if (i == 0) {
+                _focusSelectedTab();
+              } else {
+                final prevItem = sortedItems[i - 1];
+                final prevExpanded = _expandedCollectionCastItems.contains(prevItem.id);
+                if (prevExpanded) {
+                  _boxSetRowFirstFocusNodes[prevItem.id]?.requestFocus();
+                } else {
+                  if (i - 1 == 0) {
+                    _castFirstFocusNode.requestFocus();
+                  } else {
+                    _boxSetHeadingFocusNodes[prevItem.id]?.requestFocus();
+                  }
+                }
+              }
+            },
+            onNavigateDown: () {
+              if (isExpanded) {
+                rowFirstNode.requestFocus();
+              } else if (i < sortedItems.length - 1) {
+                final nextItem = sortedItems[i + 1];
+                final nextNode = _boxSetHeadingFocusNodes.putIfAbsent(nextItem.id, () => FocusNode(debugLabel: 'heading_cast_${nextItem.name}'));
+                nextNode.requestFocus();
+              }
+            },
+            onSelect: () {
+              setState(() {
+                if (_expandedCollectionCastItems.contains(childItem.id)) {
+                  _expandedCollectionCastItems.remove(childItem.id);
+                } else {
+                  _expandedCollectionCastItems.add(childItem.id);
+                }
+              });
+            },
+            borderRadius: 8,
+            suppressFocusGlow: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    isExpanded ? Icons.expand_more : Icons.chevron_right,
+                    color: Colors.white70,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    childItem.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '(${childActors.length})',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white38,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      if (isExpanded) {
+        children.add(
+          Padding(
+            padding: const EdgeInsets.only(left: 12, bottom: 12),
+            child: Focus(
+              canRequestFocus: false,
+              onFocusChange: (focused) {
+                if (focused && mounted) {
+                  Scrollable.ensureVisible(
+                    context,
+                    duration: const Duration(milliseconds: 150),
+                    alignment: 0.5,
+                  );
+                }
+              },
+              child: SizedBox(
+                height: 200,
+                child: DetailCastRow(
+                  people: childActors,
+                  imageApi: _vm.imageApi,
+                  serverId: childItem.serverId,
+                  firstItemFocusNode: rowFirstNode,
+                  onNavigateUp: () {
+                    headingNode.requestFocus();
+                  },
+                  onItemKeyEvent: (index, event) {
+                    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+                      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                        if (i < sortedItems.length - 1) {
+                          final nextItem = sortedItems[i + 1];
+                          final nextNode = _boxSetHeadingFocusNodes.putIfAbsent(nextItem.id, () => FocusNode(debugLabel: 'heading_cast_${nextItem.name}'));
+                          nextNode.requestFocus();
+                        }
+                        return KeyEventResult.handled;
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                        headingNode.requestFocus();
+                        return KeyEventResult.handled;
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft && index == 0) {
+                        final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+                        if (navbarPosition == NavbarPosition.left) {
+                          final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+                          if (focusNavbar != null) {
+                            focusNavbar();
+                            return KeyEventResult.handled;
+                          }
+                        }
+                        return KeyEventResult.handled; // Cap on left
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight && index == childActors.length - 1) {
+                        return KeyEventResult.handled; // Cap on right
+                      }
+                    }
+                    return KeyEventResult.ignored;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+
+  Widget _boxSetCrewTab(BuildContext context, AggregatedItem item) {
+    final l10n = AppLocalizations.of(context);
+    final sortedItems = [..._vm.collectionItems];
+    // Sort items by their order in playlistItems (playlist order)
+    sortedItems.sort((a, b) {
+      final aIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == a.id || p.id == a.id);
+      final bIndex = _vm.playlistItems.indexWhere((p) => p.seriesId == b.id || p.id == b.id);
+      if (aIndex == -1 && bIndex == -1) return 0;
+      if (aIndex == -1) return 1;
+      if (bIndex == -1) return -1;
+      return aIndex.compareTo(bIndex);
+    });
+
+    if (!_initializedBoxSetCrewExpanded && sortedItems.isNotEmpty) {
+      _initializedBoxSetCrewExpanded = true;
+      _expandedCollectionCrewItems.add(sortedItems.first.id);
+    }
+
+    final children = <Widget>[];
+    for (var i = 0; i < sortedItems.length; i++) {
+      final childItem = sortedItems[i];
+      final people = childItem.rawData['People'] as List?;
+      if (people == null || people.isEmpty) continue;
+      final childCrewRaw = people.cast<Map<String, dynamic>>().where((p) {
+        final type = p['Type'] as String?;
+        return type == 'Director' || type == 'Writer';
+      }).toList();
+      if (childCrewRaw.isEmpty) continue;
+
+      final Map<String, Map<String, dynamic>> merged = {};
+      for (final person in childCrewRaw) {
+        final id = person['Id']?.toString() ?? person['Name']?.toString() ?? '';
+        if (id.isEmpty) continue;
+        final type = person['Type'] as String?;
+        final roleStr = person['Role']?.toString().trim();
+        final role = (roleStr != null && roleStr.isNotEmpty)
+            ? roleStr
+            : (type == 'Director' ? l10n.director : l10n.writer);
+        if (merged.containsKey(id)) {
+          final roles = merged[id]!['Roles'] as Set<String>;
+          roles.add(role);
+        } else {
+          merged[id] = {
+            ...person,
+            'Roles': <String>{role},
+          };
+        }
+      }
+      final childCrew = merged.values.map((person) {
+        final roles = person['Roles'] as Set<String>;
+        final normalizedRoles = roles.map((r) {
+          final trimmed = r.trim();
+          if (trimmed.isEmpty) return '';
+          return trimmed.split(RegExp(r'[;,]'))
+              .map((s) => s.trim())
+              .where((s) => s.isNotEmpty)
+              .map((s) {
+                if (s == s.toUpperCase() && s.length > 1) {
+                  return s[0] + s.substring(1).toLowerCase();
+                }
+                return s;
+              })
+              .join('\n');
+        }).expand((r) => r.split('\n')).where((r) => r.isNotEmpty).toSet();
+
+        return {
+          ...person,
+          'Role': normalizedRoles.join('\n'),
+        };
+      }).toList();
+
+      if (childCrew.isEmpty) continue;
+
+      final isExpanded = _expandedCollectionCrewItems.contains(childItem.id);
+      
+      final headingNode = i == 0
+          ? _crewFirstFocusNode
+          : _boxSetHeadingFocusNodes.putIfAbsent(childItem.id, () => FocusNode(debugLabel: 'heading_crew_${childItem.name}'));
+      final rowFirstNode = _boxSetRowFirstFocusNodes.putIfAbsent(childItem.id, () => FocusNode(debugLabel: 'row_first_crew_${childItem.name}'));
+
+      children.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: FocusableWrapper(
+            focusNode: headingNode,
+            onFocusChange: (focused) {
+              if (focused && mounted) {
+                Scrollable.ensureVisible(
+                  context,
+                  duration: const Duration(milliseconds: 150),
+                  alignment: 0.3,
+                );
+              }
+            },
+            onNavigateLeft: () {
+              final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+              if (navbarPosition == NavbarPosition.left) {
+                final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+                if (focusNavbar != null) {
+                  focusNavbar();
+                }
+              }
+            },
+            onNavigateRight: () {}, // Cap on right
+            onNavigateUp: () {
+              if (i == 0) {
+                _focusSelectedTab();
+              } else {
+                final prevItem = sortedItems[i - 1];
+                final prevExpanded = _expandedCollectionCrewItems.contains(prevItem.id);
+                if (prevExpanded) {
+                  _boxSetRowFirstFocusNodes[prevItem.id]?.requestFocus();
+                } else {
+                  if (i - 1 == 0) {
+                    _crewFirstFocusNode.requestFocus();
+                  } else {
+                    _boxSetHeadingFocusNodes[prevItem.id]?.requestFocus();
+                  }
+                }
+              }
+            },
+            onNavigateDown: () {
+              if (isExpanded) {
+                rowFirstNode.requestFocus();
+              } else if (i < sortedItems.length - 1) {
+                final nextItem = sortedItems[i + 1];
+                final nextNode = _boxSetHeadingFocusNodes.putIfAbsent(nextItem.id, () => FocusNode(debugLabel: 'heading_crew_${nextItem.name}'));
+                nextNode.requestFocus();
+              }
+            },
+            onSelect: () {
+              setState(() {
+                if (_expandedCollectionCrewItems.contains(childItem.id)) {
+                  _expandedCollectionCrewItems.remove(childItem.id);
+                } else {
+                  _expandedCollectionCrewItems.add(childItem.id);
+                }
+              });
+            },
+            borderRadius: 8,
+            suppressFocusGlow: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    isExpanded ? Icons.expand_more : Icons.chevron_right,
+                    color: Colors.white70,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    childItem.name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '(${childCrew.length})',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white38,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      if (isExpanded) {
+        children.add(
+          Padding(
+            padding: const EdgeInsets.only(left: 12, bottom: 12),
+            child: Focus(
+              canRequestFocus: false,
+              onFocusChange: (focused) {
+                if (focused && mounted) {
+                  Scrollable.ensureVisible(
+                    context,
+                    duration: const Duration(milliseconds: 150),
+                    alignment: 0.5,
+                  );
+                }
+              },
+              child: SizedBox(
+                height: 200,
+                child: DetailCastRow(
+                  people: childCrew,
+                  imageApi: _vm.imageApi,
+                  serverId: childItem.serverId,
+                  firstItemFocusNode: rowFirstNode,
+                  onNavigateUp: () {
+                    headingNode.requestFocus();
+                  },
+                  onItemKeyEvent: (index, event) {
+                    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+                      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                        if (i < sortedItems.length - 1) {
+                          final nextItem = sortedItems[i + 1];
+                          final nextNode = _boxSetHeadingFocusNodes.putIfAbsent(nextItem.id, () => FocusNode(debugLabel: 'heading_crew_${nextItem.name}'));
+                          nextNode.requestFocus();
+                        }
+                        return KeyEventResult.handled;
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                        headingNode.requestFocus();
+                        return KeyEventResult.handled;
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft && index == 0) {
+                        final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+                        if (navbarPosition == NavbarPosition.left) {
+                          final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+                          if (focusNavbar != null) {
+                            focusNavbar();
+                            return KeyEventResult.handled;
+                          }
+                        }
+                        return KeyEventResult.handled; // Cap on left
+                      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight && index == childCrew.length - 1) {
+                        return KeyEventResult.handled; // Cap on right
+                      }
+                    }
+                    return KeyEventResult.ignored;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+
+  Widget _buildStudioFallback(BuildContext context, String name) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.25),
+            Theme.of(context).colorScheme.secondary.withValues(alpha: 0.05),
+            Colors.transparent,
+          ],
+          stops: const [0.0, 0.5, 1.0],
+        ),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            name.toUpperCase(),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _studiosTab(BuildContext context, AggregatedItem item) {
+    // Only the library's own studios can be filtered, so build the cards from
+    // those and reuse a TMDB logo whenever a studio name matches one.
+    final tmdbLogoByName = <String, String>{};
+    for (final company in _tmdbStudios) {
+      final logo = company.imageUrl;
+      if (logo != null) {
+        tmdbLogoByName[company.name.trim().toLowerCase()] = logo;
+      }
+    }
+    final studios = <({String name, String? logoUrl})>[];
+    for (final s in item.studios) {
+      final name = s['Name']?.toString() ?? '';
+      if (name.isEmpty) continue;
+      studios.add((
+        name: name,
+        logoUrl: tmdbLogoByName[name.trim().toLowerCase()],
+      ));
+    }
+    if (studios.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final isMobile = _landscape == false;
+    final desktopScale = widget.prefs.get(UserPreferences.desktopUiScale).scaleFactor;
+    final cardWidth = isMobile ? 120.0 : 160.0 * desktopScale;
+    final cardHeight = isMobile ? 80.0 : 100.0 * desktopScale;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: SizedBox(
+        height: cardHeight + 20,
+        child: Focus(
+          canRequestFocus: false,
+          onFocusChange: (focused) {
+            if (focused && mounted) {
+              widget.onToggleNavbar?.call(false);
+            } else if (!focused && mounted) {
+              widget.onToggleNavbar?.call(true);
+            }
+          },
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+              _focusSelectedTab();
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            itemCount: studios.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              final studio = studios[index];
+              final name = studio.name;
+              final imageUrl = studio.logoUrl;
+
+              return FocusableWrapper(
+                focusNode: index == 0 ? _studiosFirstFocusNode : null,
+                onSelect: name.isNotEmpty
+                    ? () => context.push(Destinations.studio(name))
+                    : null,
+                borderRadius: 12,
+                suppressFocusGlow: true,
+                onNavigateUp: _focusSelectedTab,
+                onNavigateRight: index == studios.length - 1 ? () {} : null,
+                child: Container(
+                  width: cardWidth,
+                  height: cardHeight,
+                  decoration: BoxDecoration(
+                    borderRadius: AppRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: AppRadius.circular(12),
+                    child: imageUrl != null
+                        ? OfflineAwareImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.contain,
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                color: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                child: Image(
+                                  image: imageProvider,
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            },
+                            placeholder: (context, url) => _buildStudioFallback(context, name),
+                            errorWidget: (context, url, error) => _buildStudioFallback(context, name),
+                          )
+                        : _buildStudioFallback(context, name),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _moviesTab(BuildContext context, List<AggregatedItem> movies, {FocusNode? focusNode}) {
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: FilmographyRow(
+        items: movies,
+        imageApi: _vm.imageApi,
+        prefs: widget.prefs,
+        firstFocusNode: focusNode ?? _personMoviesFirstFocusNode,
+        onItemKeyEvent: (index, event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _focusSelectedTab();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+      ),
+    );
+  }
+
+  Widget _seriesTab(BuildContext context, List<AggregatedItem> series, {FocusNode? focusNode}) {
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: FilmographyRow(
+        items: series,
+        imageApi: _vm.imageApi,
+        prefs: widget.prefs,
+        firstFocusNode: focusNode ?? _personSeriesFirstFocusNode,
+        onItemKeyEvent: (index, event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _focusSelectedTab();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+      ),
+    );
+  }
+
+  Widget _seerrAppearancesTab(BuildContext context, List<SeerrDiscoverItem> items) {
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: SeerrAppearancesRow(
+        items: items,
+        prefs: widget.prefs,
+        firstFocusNode: _personSeerrAppearancesFirstFocusNode,
+        onItemKeyEvent: (index, event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _focusSelectedTab();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+      ),
+    );
+  }
+
+  Widget _seerrCrewCreditsTab(BuildContext context, List<SeerrDiscoverItem> items) {
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: SeerrCrewCreditsRow(
+        items: items,
+        prefs: widget.prefs,
+        firstFocusNode: _personSeerrCrewCreditsFirstFocusNode,
+        onItemKeyEvent: (index, event) {
+          if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _focusSelectedTab();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+      ),
+    );
+  }
+
+  Widget _chaptersTab(BuildContext context, AggregatedItem item) {
+    if (item.chapters.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          _focusSelectedTab();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: DetailChaptersRow(
+        item: item,
+        imageApi: _vm.imageApi,
+        onPlayFromChapter: widget.onPlayFromChapter ?? (_) {},
+        firstItemFocusNode: _chaptersFirstFocusNode,
+      ),
+    );
+  }
+
+  Widget _extrasTab(BuildContext context, AggregatedItem item, List<AggregatedItem> items, FocusNode? firstItemFocusNode) => SizedBox(
+        height: 200,
+        child: Focus(
+          canRequestFocus: false,
+          onFocusChange: (focused) {
+            if (focused && mounted) {
+              widget.onToggleNavbar?.call(false);
+            } else if (!focused && mounted) {
+              widget.onToggleNavbar?.call(true);
+            }
+          },
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+              _focusSelectedTab();
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: DetailFeaturesRow(
+            items: items,
+            imageApi: _vm.imageApi,
+            prefs: widget.prefs,
+            firstItemFocusNode: firstItemFocusNode,
+          ),
+        ),
+      );
+
+  Widget _collectionsTab(BuildContext context, AggregatedItem item) {
+    final collections = _vm.parentCollections;
+    if (collections.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    if (collections.length == 1) {
+      return _mediaGrid(context, collections.first.items,
+          firstFocusNode: _collectionFirstFocusNode);
+    }
+
+    final isMobile = _landscape == false;
+    final desktopScale = _desktopUiScale(prefs: widget.prefs);
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          _focusSelectedTab();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: collections.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 32),
+        itemBuilder: (context, index) {
+          final col = collections[index];
+          final rowFocusNode = _collectionRowFocusNodeFor(col.id);
+
+          return Builder(
+            builder: (rowContext) {
+              return Focus(
+                canRequestFocus: false,
+                onFocusChange: (focused) {
+                  if (focused) {
+                    Scrollable.ensureVisible(
+                      rowContext,
+                      alignment: 0.20,
+                      duration: const Duration(milliseconds: 150),
+                    );
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      col.name,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 12),
+                    DetailSimilarRow(
+                      items: col.items,
+                      imageApi: _vm.imageApi,
+                      prefs: widget.prefs,
+                      customCardWidth: isMobile ? 96.0 : 120.0 * desktopScale,
+                      customHeight: isMobile ? 182.0 : 225.0 * desktopScale,
+                      onItemLongPress: widget.onBackdropItemFocused,
+                      firstItemFocusNode: rowFocusNode,
+                      onItemKeyEvent: (itemIndex, event) {
+                        if (event is KeyDownEvent) {
+                          if (event.logicalKey == LogicalKeyboardKey.arrowLeft &&
+                              itemIndex == 0) {
+                            final navbarPosition =
+                                widget.prefs.get(UserPreferences.navbarPosition);
+                            if (navbarPosition == NavbarPosition.left) {
+                              final focusNavbar =
+                                  NavigationLayout.focusNavbarNotifier.value;
+                              if (focusNavbar != null) {
+                                focusNavbar();
+                                return KeyEventResult.handled;
+                              }
+                            }
+                          }
+                          if (event.logicalKey == LogicalKeyboardKey.arrowRight &&
+                              itemIndex == col.items.length - 1) {
+                            return KeyEventResult.handled;
+                          }
+                          if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                            if (index > 0) {
+                              _collectionRowFocusNodeFor(collections[index - 1].id).requestFocus();
+                              return KeyEventResult.handled;
+                            } else {
+                              _focusSelectedTab();
+                              return KeyEventResult.handled;
+                            }
+                          }
+                          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                            if (index < collections.length - 1) {
+                              _collectionRowFocusNodeFor(collections[index + 1].id).requestFocus();
+                              return KeyEventResult.handled;
+                            }
+                          }
+                        }
+                        return KeyEventResult.ignored;
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  AggregatedItem? _getRelevantEpisode(AggregatedItem item) {
+    if (item.type == 'Episode') return item;
+    if (item.type == 'Series') {
+      if (_vm.nextUp != null) {
+        return _vm.nextUp;
+      }
+      if (_vm.seriesEpisodes.isNotEmpty) {
+        try {
+          return _vm.seriesEpisodes.firstWhere((e) => !e.isPlayed);
+        } catch (_) {
+          return _vm.seriesEpisodes.first;
+        }
+      }
+    } else if (item.type == 'Season') {
+      if (_vm.episodes.isNotEmpty) {
+        return _vm.episodes.first;
+      }
+    }
+    return null;
+  }
+
+  Widget _detailsTab(BuildContext context, AggregatedItem item) {
+    final targetItem = _getRelevantEpisode(item) ?? item;
+    final mediaSource = selectedMediaSourceForItem(targetItem, widget.selectedMediaSourceId);
+    final isPlayable = targetItem.type != 'Series' && targetItem.type != 'Season' && targetItem.type != 'Person';
+
+    if (isPlayable && mediaSource != null) {
+      final List<Map<String, dynamic>> rawStreams = (mediaSource['MediaStreams'] as List?)
+              ?.whereType<Map>()
+              .map((e) => e.cast<String, dynamic>())
+              .toList() ??
+          [];
+      final audioStreams = rawStreams.where((s) => s['Type'] == 'Audio').toList();
+      final subtitleStreams = rawStreams.where((s) => s['Type'] == 'Subtitle').toList();
+      
+      final hasButtons = audioStreams.length > 2 || subtitleStreams.length > 2;
+      return Focus(
+        canRequestFocus: false,
+        onFocusChange: (focused) {
+          if (focused && mounted) {
+            widget.onToggleNavbar?.call(false);
+          } else if (!focused && mounted) {
+            widget.onToggleNavbar?.call(true);
+          }
+        },
+        child: _DetailsContainer(
+          isScrollable: hasButtons,
+          hasAudioButton: audioStreams.length > 2,
+          hasSubtitleButton: subtitleStreams.length > 2,
+          audioButtonFocusNode: _audioShowAllFocusNode,
+          subtitleButtonFocusNode: _subtitleShowAllFocusNode,
+          canRequestFocus: true,
+          focusNode: _detailsTabFocusNode,
+          onNavigateUp: _focusSelectedTab,
+          onSelect: hasButtons
+              ? () {
+                  if (audioStreams.length > 2) {
+                    _audioShowAllFocusNode.requestFocus();
+                  } else if (subtitleStreams.length > 2) {
+                    _subtitleShowAllFocusNode.requestFocus();
+                  }
+                }
+              : null,
+          child: _buildFileInformation(context, targetItem, mediaSource),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildFileInformation(
+    BuildContext context,
+    AggregatedItem item,
+    Map<String, dynamic> mediaSource,
+  ) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final textTheme = theme.textTheme;
+
+    // File name and Size
+    final sizeBytes = mediaSource['Size'] as int? ?? 0;
+    final String formattedSize;
+    if (sizeBytes > 0) {
+      final double mb = sizeBytes / (1024 * 1024);
+      if (mb > 999) {
+        formattedSize = '${(mb / 1024).toStringAsFixed(2)} GB';
+      } else {
+        formattedSize = '${mb.toStringAsFixed(0)} MB';
+      }
+    } else {
+      formattedSize = 'Unknown Size';
+    }
+
+    final String path = mediaSource['Path'] as String? ?? '';
+    final String fileName = path.split('/').last.split('\\').last;
+    final String container = mediaSource['Container']?.toString().toUpperCase() ?? 'Unknown';
+
+    // Parse streams
+    final List<Map<String, dynamic>> rawStreams = (mediaSource['MediaStreams'] as List?)
+            ?.whereType<Map>()
+            .map((e) => e.cast<String, dynamic>())
+            .toList() ??
+        [];
+
+    final videoStreams = rawStreams.where((s) => s['Type'] == 'Video').toList();
+    final audioStreams = rawStreams.where((s) => s['Type'] == 'Audio').toList();
+    final subtitleStreams = rawStreams.where((s) => s['Type'] == 'Subtitle').toList();
+
+    // Video "Greatest Hits"
+    final List<String> videoDetails = [];
+    if (videoStreams.isNotEmpty) {
+      final v = videoStreams.first;
+      final codec = v['Codec']?.toString().toUpperCase() ?? 'Unknown Codec';
+      final profile = v['Profile']?.toString();
+      final width = v['Width']?.toString();
+      final height = v['Height']?.toString();
+      final frameRate = v['RealFrameRate'] ?? v['AverageFrameRate'];
+      final bitDepth = v['BitDepth'] as int?;
+      final videoRange = v['VideoRange']?.toString();
+      final videoRangeType = v['VideoRangeType']?.toString();
+
+      var videoStr = codec;
+      if (profile != null && profile.isNotEmpty) videoStr += ' ($profile)';
+      videoDetails.add(videoStr);
+
+      if (width != null && height != null) {
+        videoDetails.add('$width x $height');
+      }
+
+      if (frameRate != null) {
+        final fr = double.tryParse(frameRate.toString());
+        if (fr != null) {
+          videoDetails.add('${fr.toStringAsFixed(3)} fps');
+        }
+      }
+
+      if (bitDepth != null) {
+        videoDetails.add('$bitDepth-bit');
+      }
+
+      if (videoRange != null && videoRange.isNotEmpty) {
+        var rangeStr = videoRange;
+        if (videoRangeType != null && videoRangeType.isNotEmpty) {
+          rangeStr += ' ($videoRangeType)';
+        }
+        videoDetails.add(rangeStr);
+      }
+    }
+
+    String formatLang(String? code) {
+      if (code == null || code.isEmpty) return 'Unknown';
+      return code.toUpperCase();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.fileInformation,
+          style: textTheme.titleMedium?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // File name details card
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.04),
+            borderRadius: AppRadius.circular(8),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                fileName,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.fileSizeFormat(formattedSize, container),
+                style: textTheme.bodySmall?.copyWith(color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        if (videoDetails.isNotEmpty) ...[
+          _buildInfoRow(
+            'Video',
+            Text(
+              videoDetails.join('  •  '),
+              style: textTheme.bodyMedium?.copyWith(
+                color: Colors.white.withValues(alpha: 0.9),
+                height: 1.3,
+              ),
+            ),
+            textTheme,
+          ),
+          const SizedBox(height: 10),
+        ],
+
+        if (audioStreams.isNotEmpty) ...[
+          _buildInfoRow(
+            l10n.audio,
+            Text.rich(
+              TextSpan(
+                children: [
+                  ...((_audioExpanded || audioStreams.length <= 2)
+                          ? audioStreams
+                          : audioStreams.take(2))
+                      .toList()
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    final idx = entry.key;
+                    final a = entry.value;
+                    final activeAudioIndex = _vm.selectedAudioIndex ??
+                        audioStreams.firstWhere((s) => s['IsDefault'] == true, orElse: () => audioStreams.first)['Index'] as int?;
+                    final title = a['DisplayTitle'] ?? a['Codec']?.toString().toUpperCase();
+                    final lang = formatLang(a['Language']);
+                    final isDefault = a['IsDefault'] == true ? ' [${l10n.defaultLabel}]' : '';
+                    final isSelected = a['Index'] == activeAudioIndex;
+
+                    return [
+                      if (idx > 0) const TextSpan(text: '\n'),
+                      TextSpan(
+                        text: '$title ($lang)$isDefault',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withValues(alpha: isSelected ? 1.0 : 0.7),
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          decoration: isSelected ? TextDecoration.underline : TextDecoration.none,
+                          decorationColor: AppColorScheme.accent,
+                          decorationThickness: 1.5,
+                          height: 1.3,
+                        ),
+                      ),
+                    ];
+                  }).expand((e) => e),
+                ],
+              ),
+            ),
+            textTheme,
+          ),
+          if (audioStreams.length > 2) ...[
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const SizedBox(width: 90),
+                FocusableWrapper(
+                  focusNode: _audioShowAllFocusNode,
+                  onSelect: () => setState(() => _audioExpanded = !_audioExpanded),
+                  borderRadius: 6,
+                  suppressFocusGlow: true,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    child: Text(
+                      _audioExpanded ? l10n.showLess : l10n.showAllAudioTracks(audioStreams.length),
+                      style: TextStyle(
+                        color: AppColorScheme.accent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+        ],
+
+        if (subtitleStreams.isNotEmpty) ...[
+          _buildInfoRow(
+            l10n.subtitles,
+            Text.rich(
+              TextSpan(
+                children: [
+                  ...((_subtitlesExpanded || subtitleStreams.length <= 2)
+                          ? subtitleStreams
+                          : subtitleStreams.take(2))
+                      .toList()
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    final idx = entry.key;
+                    final s = entry.value;
+                    final activeSubtitleIndex = _vm.selectedSubtitleIndex ??
+                        subtitleStreams.firstWhere((s) => s['IsDefault'] == true, orElse: () => subtitleStreams.first)['Index'] as int?;
+                    final title = s['DisplayTitle'] ?? s['Codec']?.toString().toUpperCase();
+                    final lang = formatLang(s['Language']);
+                    final isDefault = s['IsDefault'] == true ? ' [${l10n.defaultLabel}]' : '';
+                    final isForced = s['IsForced'] == true ? ' [${l10n.forced}]' : '';
+                    final isSelected = s['Index'] == activeSubtitleIndex;
+
+                    return [
+                      if (idx > 0) const TextSpan(text: '\n'),
+                      TextSpan(
+                        text: '$title ($lang)$isDefault$isForced',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withValues(alpha: isSelected ? 1.0 : 0.7),
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          decoration: isSelected ? TextDecoration.underline : TextDecoration.none,
+                          decorationColor: AppColorScheme.accent,
+                          decorationThickness: 1.5,
+                          height: 1.3,
+                        ),
+                      ),
+                    ];
+                  }).expand((e) => e),
+                ],
+              ),
+            ),
+            textTheme,
+          ),
+          if (subtitleStreams.length > 2) ...[
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const SizedBox(width: 90),
+                FocusableWrapper(
+                  focusNode: _subtitleShowAllFocusNode,
+                  onSelect: () => setState(() => _subtitlesExpanded = !_subtitlesExpanded),
+                  borderRadius: 6,
+                  suppressFocusGlow: true,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    child: Text(
+                      _subtitlesExpanded ? l10n.showLess : l10n.showAllSubtitleTracks(subtitleStreams.length),
+                      style: TextStyle(
+                        color: AppColorScheme.accent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+        ],
+
+        const SizedBox(height: 12),
+        _buildDirectPlaySection(context, item, textTheme),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, Widget child, TextTheme textTheme) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 90,
+          child: Text(
+            label,
+            style: textTheme.bodyMedium?.copyWith(
+              color: Colors.white54,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Expanded(
+          child: child,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDirectPlaySection(BuildContext context, AggregatedItem item, TextTheme textTheme) {
+    final l10n = AppLocalizations.of(context);
+    if (_loadingPlaybackInfo) {
+      return Row(
+        children: [
+          const SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white70),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            l10n.checkingDirectPlay,
+            style: textTheme.bodySmall?.copyWith(color: Colors.white54),
+          ),
+        ],
+      );
+    }
+
+    if (_playbackInfo == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (_playbackInfo!.mediaSources.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final source = _playbackInfo!.mediaSources.firstWhere(
+      (s) => s.id == widget.selectedMediaSourceId || widget.selectedMediaSourceId == null,
+      orElse: () => _playbackInfo!.mediaSources.first,
+    );
+
+    final canDirectPlay = source.supportsDirectPlay;
+    final reasons = source.transcodingReasons;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              l10n.directPlayCapabilityLabel,
+              style: textTheme.bodyMedium?.copyWith(
+                color: Colors.white54,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              canDirectPlay ? l10n.yes : l10n.no,
+              style: textTheme.bodyMedium?.copyWith(
+                color: canDirectPlay ? const Color(0xFF2E7D32) : const Color(0xFFD32F2F),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        if (!canDirectPlay && reasons.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: reasons.map((r) {
+                final readable = _formatTranscodeReason(r, l10n);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    '• $readable',
+                    style: textTheme.bodySmall?.copyWith(
+                      color: Colors.white70,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  String _formatTranscodeReason(String reason, AppLocalizations l10n) {
+    return switch (reason) {
+      'ContainerNotSupported' => l10n.transcodeContainerNotSupported,
+      'VideoCodecNotSupported' => l10n.transcodeVideoCodecNotSupported,
+      'AudioCodecNotSupported' => l10n.transcodeAudioCodecNotSupported,
+      'SubtitleCodecNotSupported' => l10n.transcodeSubtitleCodecNotSupported,
+      'AudioProfileNotSupported' => l10n.transcodeAudioProfileNotSupported,
+      'VideoProfileNotSupported' => l10n.transcodeVideoProfileNotSupported,
+      'VideoLevelNotSupported' => l10n.transcodeVideoLevelNotSupported,
+      'VideoResolutionNotSupported' => l10n.transcodeVideoResolutionNotSupported,
+      'VideoBitDepthNotSupported' => l10n.transcodeVideoBitDepthNotSupported,
+      'VideoFramerateNotSupported' => l10n.transcodeVideoFramerateNotSupported,
+      'ContainerBitrateExceedsLimit' => l10n.transcodeContainerBitrateExceedsLimit,
+      'VideoBitrateExceedsLimit' => l10n.transcodeVideoBitrateExceedsLimit,
+      'AudioBitrateExceedsLimit' => l10n.transcodeAudioBitrateExceedsLimit,
+      'AudioChannelsNotSupported' => l10n.transcodeAudioChannelsNotSupported,
+      _ => reason,
+    };
+  }
+
+  Widget _itemGrid(List<AggregatedItem> items, {double aspectRatio = 2 / 3, FocusNode? focusNode}) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 12.0;
+        const desiredWidth = 150.0;
+        final crossAxisCount =
+            ((constraints.maxWidth + spacing) / (desiredWidth + spacing))
+                .floor()
+                .clamp(2, 8);
+        final cellWidth =
+            (constraints.maxWidth - (crossAxisCount - 1) * spacing) /
+                crossAxisCount;
+        final cardRatio = aspectRatio;
+        const textHeight = 44.0;
+        final childAspectRatio =
+            cellWidth / (cellWidth / cardRatio + textHeight);
+        return Focus(
+          canRequestFocus: false,
+          onFocusChange: (focused) {
+            if (focused && mounted) {
+              widget.onToggleNavbar?.call(false);
+            } else if (!focused && mounted) {
+              widget.onToggleNavbar?.call(true);
+            }
+          },
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+              _focusSelectedTab();
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemCount: items.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: spacing,
+              mainAxisSpacing: spacing,
+              childAspectRatio: childAspectRatio,
+            ),
+            itemBuilder: (context, i) {
+              final entry = items[i];
+              return MediaCard(
+                title: entry.name,
+                focusNode: i == 0 ? (focusNode ?? _gridFirstFocusNode) : null,
+                imageUrl: _imageUrl(entry),
+                width: double.infinity,
+                aspectRatio: cardRatio,
+                isPlayed: entry.isPlayed,
+                isFavorite: entry.isFavorite,
+                itemType: entry.type,
+                watchedBehavior:
+                    widget.prefs.get(UserPreferences.watchedIndicatorBehavior),
+                onTap: () {
+                  if (entry.serverId == 'seerr') {
+                    final mediaType = entry.seerrMediaType ??
+                        (entry.type == 'Series' ? 'tv' : 'movie');
+                    SinglePush.push(
+                      context,
+                      Destinations.seerrMedia(entry.id, mediaType: mediaType),
+                    );
+                  } else {
+                    context.push(
+                      Destinations.item(entry.id, serverId: entry.serverId),
+                    );
+                  }
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _similarTab(BuildContext context, List<AggregatedItem> items) =>
+      _mediaGrid(context, items, firstFocusNode: _similarFirstFocusNode);
+
+  /// Responsive poster grid shared by the Similar tab and the collection
+  /// Movies/Shows tabs. Columns scale to width; d-pad uses default geometric
+  /// traversal, the top row escapes up to the tab bar, and cards scroll into
+  /// view on focus so rows below the fold stay reachable.
+  Widget _mediaGrid(
+    BuildContext context,
+    List<AggregatedItem> items, {
+    FocusNode? firstFocusNode,
+  }) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    const cardRatio = 2 / 3;
+
+    final grid = LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 12.0;
+        final columns = (constraints.maxWidth / (_landscape ? 160.0 : 130.0))
+            .floor()
+            .clamp(3, _landscape ? 10 : 6);
+        final cardWidth =
+            (((constraints.maxWidth - spacing * (columns - 1)) / columns)
+                .floorToDouble())
+            .clamp(0.0, 260.0 * _desktopUiScale(prefs: widget.prefs));
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 16,
+          children: [
+            for (var i = 0; i < items.length; i++)
+              Builder(
+                builder: (cellContext) {
+                  final entry = items[i];
+                  final topRow = i < columns;
+                  return MediaCard(
+                    title: entry.name,
+                    imageUrl: _imageUrl(entry),
+                    width: cardWidth,
+                    aspectRatio: cardRatio,
+                    isPlayed: entry.isPlayed,
+                    isFavorite: entry.isFavorite,
+                    itemType: entry.type,
+                    focusNode: i == 0 ? firstFocusNode : null,
+                    onFocus: () => Scrollable.ensureVisible(
+                      cellContext,
+                      alignment: 0.5,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                    ),
+                    onKeyEvent: topRow
+                        ? (node, event) {
+                            if (event is KeyDownEvent &&
+                                event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                              _focusSelectedTab();
+                              return KeyEventResult.handled;
+                            }
+                            return KeyEventResult.ignored;
+                          }
+                        : null,
+                    watchedBehavior: widget.prefs
+                        .get(UserPreferences.watchedIndicatorBehavior),
+                    onTap: () {
+                      if (entry.serverId == 'seerr') {
+                        final mediaType = entry.seerrMediaType ??
+                            (entry.type == 'Series' ? 'tv' : 'movie');
+                        SinglePush.push(
+                          context,
+                          Destinations.seerrMedia(entry.id, mediaType: mediaType),
+                        );
+                      } else {
+                        context.push(
+                          Destinations.item(entry.id, serverId: entry.serverId),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
+          ],
+        );
+      },
+    );
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: grid,
+      ),
+    );
+  }
+
+  Widget _tracksTab(BuildContext context, AggregatedItem item) {
+    final canManagePlaylistTracks = item.type == 'Playlist' && _vm.canManagePlaylistTracks;
+
+    final listWidget = DetailTrackList(
+      tracks: _vm.tracks,
+      imageApi: _vm.imageApi,
+      isAudiobook: _isAudiobook(item),
+      isPlaylist: item.type == 'Playlist',
+      groupByDisc: item.type == 'MusicAlbum',
+      getFocusNode: (id) =>
+          _trackFocusNodes.putIfAbsent(id, () => FocusNode()),
+      onPlayTrack: (index) => _playTrack(context, index),
+      reorderable: canManagePlaylistTracks,
+      onReorder: canManagePlaylistTracks
+          ? (oldIndex, newIndex) {
+              var target = newIndex;
+              if (target > oldIndex) {
+                target -= 1;
+              }
+              _vm.reorderPlaylistTrack(oldIndex, target);
+            }
+          : null,
+      onRemoveFromPlaylist: canManagePlaylistTracks
+          ? (track) => _vm.removeTrackFromPlaylist(track)
+          : null,
+      onMoveUp: canManagePlaylistTracks
+          ? (index) => _vm.reorderPlaylistTrack(index, index - 1)
+          : null,
+      onMoveDown: canManagePlaylistTracks
+          ? (index) => _vm.reorderPlaylistTrack(index, index + 1)
+          : null,
+      onFirstTrackUp: () => widget.initialFocusNode?.requestFocus(),
+      onTrackFocused: widget.onBackdropItemFocused,
+    );
+
+    return Focus(
+      canRequestFocus: false,
+      onFocusChange: (focused) {
+        if (focused && mounted) {
+          widget.onToggleNavbar?.call(false);
+        } else if (!focused && mounted) {
+          widget.onToggleNavbar?.call(true);
+        }
+      },
+      onKeyEvent: (node, event) {
+        if (item.type == 'Playlist' || item.type == 'MusicAlbum') {
+          return KeyEventResult.ignored;
+        }
+        if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          _focusSelectedTab();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: (item.type == 'Playlist' || item.type == 'MusicAlbum')
+          ? Align(
+              alignment: Alignment.topLeft,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: listWidget,
+              ),
+            )
+          : listWidget,
+    );
+  }
+
+  Future<void> _playTrack(BuildContext context, int index) async {
+    final manager = GetIt.instance<PlaybackManager>();
+    await manager.playItems(_vm.tracks, startIndex: index);
+    if (!context.mounted) return;
+    final isAudio = _vm.tracks.every(_isAudioItem);
+    context.push(isAudio ? Destinations.audioPlayer : Destinations.videoPlayer);
+  }
+
+  Future<void> _playPlaylistTrack(BuildContext context, int index) async {
+    final manager = GetIt.instance<PlaybackManager>();
+    await manager.playItems(_vm.playlistItems, startIndex: index);
+    if (!context.mounted) return;
+    final isAudio = _vm.playlistItems.every(_isAudioItem);
+    context.push(isAudio ? Destinations.audioPlayer : Destinations.videoPlayer);
+  }
+
+  String _getCollectionSortLabel(CollectionSortOption option, AppLocalizations l10n) {
+    return switch (option) {
+      CollectionSortOption.alphabetical => l10n.sortAlphabetical,
+      CollectionSortOption.releaseAscending => l10n.sortReleaseAscending,
+      CollectionSortOption.releaseDescending => l10n.sortReleaseDescending,
+      CollectionSortOption.custom => l10n.sortCustomDragDrop,
+    };
+  }
+
+  void _showCollectionSortDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1E1E24),
+          title: Text(
+            l10n.playlistSortOptions,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: CollectionSortOption.values.map((option) {
+              final active = _vm.collectionSort == option;
+              return Focus(
+                onKeyEvent: (_, event) {
+                  if (isActivateKey(event)) {
+                    _vm.setCollectionSort(option);
+                    Navigator.of(context).pop();
+                    return KeyEventResult.handled;
+                  }
+                  return KeyEventResult.ignored;
+                },
+                child: Builder(
+                  builder: (context) {
+                    final focused = Focus.of(context).hasFocus;
+                    return InkWell(
+                      onTap: () {
+                        _vm.setCollectionSort(option);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: focused
+                              ? Colors.white12
+                              : Colors.transparent,
+                          borderRadius: AppRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              active
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_off,
+                              color: active
+                                  ? AppColorScheme.accent
+                                  : Colors.white54,
+                            ),
+                            const SizedBox(width: 16),
+                            Text(
+                              _getCollectionSortLabel(option, l10n),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: active
+                                        ? AppColorScheme.accent
+                                        : Colors.white,
+                                    fontWeight: active
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Shadow>? _neonTextGlow(double blurRadius) =>
+      ThemeRegistry.active.id == ThemeRegistry.neonPulseId
+          ? [Shadow(color: AppColorScheme.accent, blurRadius: blurRadius)]
+          : null;
+
+  Widget _buildHero(BuildContext context, AggregatedItem item) {
+    final textTheme = Theme.of(context).textTheme;
+    final isEpisode = item.type == 'Episode';
+    final isSeason = item.type == 'Season';
+    final logoTag = item.logoImageTag ?? (isEpisode ? item.seriesLogoImageTag : null);
+    final logoId = logoTag != null ? (item.logoImageTag != null ? item.id : item.seriesId) : null;
+    final overview = cleanOverview(item.overview?.trim());
+    final hideTitleAndLogo = _landscape && _buildUpNext(context, item) != null;
+    final hasUpNext = _landscape && _buildUpNext(context, item) != null;
+    final showRatings = _vm.ratings.isNotEmpty ||
+        item.communityRating != null ||
+        item.criticRating != null;
+
+    final desktopScale = _desktopUiScale(prefs: widget.prefs);
+    final logoScaleFactor = desktopScale > 1.1 ? 0.70 : 1.0;
+
+    if (item.type == 'Person') {
+      final profileUrl = _imageUrl(item);
+      final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+      final focusColor = Color(widget.prefs.get(UserPreferences.focusColor).colorValue);
+      final profileBorderColor = isNeon ? AppColorScheme.accent : focusColor;
+
+
+      final avatar = Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: profileBorderColor, width: 3.0),
+        ),
+        child: CircleAvatar(
+          radius: 60.0,
+          backgroundColor: Colors.white.withValues(alpha: 0.1),
+          backgroundImage: profileUrl != null
+              ? offlineAwareImageProvider(profileUrl)
+              : null,
+          child: profileUrl == null
+              ? const Icon(Icons.person, color: Colors.white54, size: 48)
+              : null,
+        ),
+      );
+
+      final personInfo = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            item.name,
+            style: textTheme.displaySmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+          PersonDates(item: item),
+          if (item.productionLocations.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              item.productionLocations.first,
+              style: textTheme.bodyMedium?.copyWith(
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ],
+      );
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: hasUpNext ? MainAxisSize.max : MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              avatar,
+              const SizedBox(width: 24),
+              Expanded(child: personInfo),
+            ],
+          ),
+          if (overview.isNotEmpty) ...[
+            const SizedBox(height: 24),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: _landscape ? 850.0 : double.infinity,
+              ),
+              child: ExpandableBiography(
+                text: overview,
+                toggleFocusNode: _overviewFocusNode,
+                onArrowDown: () {
+                  widget.initialFocusNode?.requestFocus();
+                },
+                onArrowUp: () {
+                  NavigationLayout.focusNavbarNotifier.value?.call();
+                },
+                onArrowLeft: () {
+                  final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+                  if (navbarPosition == NavbarPosition.left) {
+                    NavigationLayout.focusNavbarNotifier.value?.call();
+                  }
+                },
+                onCollapse: widget.onCollapseBiography,
+                style: textTheme.bodyMedium?.copyWith(
+                  height: 1.45,
+                  color: AppColorScheme.onSurface.withValues(alpha: 0.85),
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 24),
+          Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onFocusChange: (focused) {
+              if (focused) {
+                widget.onToggleNavbar?.call(true);
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(
+                    0.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              }
+            },
+            child: DetailActionButtons(
+              viewModel: _vm,
+              itemId: item.id,
+              selectedMediaSourceId: widget.selectedMediaSourceId,
+              onSelectedMediaSourceChanged: widget.onSelectedMediaSourceChanged,
+              tvPlayFocusNode: widget.initialFocusNode,
+              downTarget: _tabNode(_selectedTab >= 0 ? _selectedTab : 0),
+              upTarget: _overviewFocusNode,
+              autoPlay: widget.autoPlay,
+              modernStyle: true,
+              fullWidthPrimary: !_landscape,
+              maxVisibleButtonsOverride: null,
+              onArrowRightAtEnd: _landscape ? _focusRightOfActions : null,
+              actionRowRightFocusNode: _actionRowRightFocusNode,
+              onFocusExtra: (_) {},
+            ),
+          ),
+        ],
+      );
+    }
+
+    final isMusicAlbumOrPlaylist = item.type == 'Playlist' || item.type == 'MusicAlbum';
+    final isAudiobookOrBook = item.type == 'AudioBook' ||
+        item.type == 'Book' ||
+        (item.type == 'Audio' && item.isAudioLike) ||
+        item.isAudiobook;
+
+    if (isMusicAlbumOrPlaylist || isAudiobookOrBook) {
+      final l10n = AppLocalizations.of(context);
+      final coverUrl = _imageUrl(item);
+      final isBookLayout = isAudiobookOrBook || item.type == 'Book';
+      final coverImage = Container(
+        width: 180,
+        height: isBookLayout ? 240 : 180,
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.circular(12),
+          border: Border.all(
+            color: AppColorScheme.onSurface.withValues(alpha: 0.18),
+            width: 2.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: AppRadius.circular(10),
+          child: coverUrl != null
+              ? OfflineAwareImage(
+                  imageUrl: coverUrl,
+                  fit: BoxFit.cover,
+                )
+              : Container(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  child: Icon(
+                    isBookLayout
+                        ? Icons.menu_book
+                        : (item.type == 'MusicAlbum' ? Icons.album : Icons.playlist_play),
+                    color: Colors.white24,
+                    size: 64,
+                  ),
+                ),
+        ),
+      );
+
+      final authorOrArtistName = isBookLayout
+          ? (_getAuthorName(item) ?? item.albumArtist)
+          : item.albumArtist;
+
+      final playlistInfo = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: _landscape ? 600 : (MediaQuery.sizeOf(context).width - 40),
+            ),
+            child: MarqueeText(
+              text: item.name,
+              style: textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                shadows: _neonTextGlow(12),
+              ) ?? const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28),
+            ),
+          ),
+          if (authorOrArtistName != null && authorOrArtistName.trim().isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Focus(
+              focusNode: _artistFocusNode,
+              onKeyEvent: (node, event) {
+                if (event is KeyDownEvent) {
+                  if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                    widget.initialFocusNode?.requestFocus();
+                    return KeyEventResult.handled;
+                  }
+                  if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                    return KeyEventResult.handled;
+                  }
+                }
+                if (isActivateKey(event)) {
+                  final artistId = item.albumArtists.isNotEmpty
+                      ? item.albumArtists.first['Id']?.toString()
+                      : null;
+                  if (artistId != null) {
+                    context.push(
+                      Destinations.item(artistId, serverId: item.serverId),
+                    );
+                  }
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              },
+              child: Builder(
+                builder: (context) {
+                  final focused = Focus.of(context).hasFocus;
+                  return GestureDetector(
+                    onTap: () {
+                      final artistId = item.albumArtists.isNotEmpty
+                          ? item.albumArtists.first['Id']?.toString()
+                          : null;
+                      if (artistId != null) {
+                        context.push(
+                          Destinations.item(artistId, serverId: item.serverId),
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        borderRadius: AppRadius.circular(4),
+                        border: focused
+                            ? Border.fromBorderSide(
+                                ThemeRegistry.active.borders.focusBorder.copyWith(
+                                  color: AppColorScheme.accent,
+                                  width: 1.5,
+                                ),
+                              )
+                            : null,
+                      ),
+                      child: Text(
+                        authorOrArtistName,
+                        style: textTheme.titleMedium?.copyWith(
+                          color: AppColorScheme.accent,
+                          fontWeight: FontWeight.bold,
+                          shadows: _neonTextGlow(8),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Text(
+            () {
+              final parts = <String>[];
+              if (item.productionYear != null) {
+                parts.add(item.productionYear.toString());
+              }
+              final runtime = item.runtime;
+              if (isBookLayout && runtime != null && runtime.inMinutes > 0) {
+                parts.add(_formatDuration(runtime));
+              } else if (!isBookLayout && _vm.tracks.isNotEmpty) {
+                final count = _vm.tracks.length;
+                parts.add(l10n.trackCount(count));
+              }
+              if (isAudiobookOrBook) {
+                parts.add(l10n.audiobooks);
+              }
+              if (item.genres.isNotEmpty) {
+                final genresList = item.genres.take(2);
+                parts.add(genresList.join(', '));
+              }
+              return parts.join(' • ');
+            }(),
+            style: textTheme.bodyMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onFocusChange: (focused) {
+              if (focused) {
+                widget.onToggleNavbar?.call(true);
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(
+                    0.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              }
+            },
+            child: DetailActionButtons(
+              viewModel: _vm,
+              itemId: item.id,
+              selectedMediaSourceId: widget.selectedMediaSourceId,
+              onSelectedMediaSourceChanged: widget.onSelectedMediaSourceChanged,
+              tvPlayFocusNode: widget.initialFocusNode,
+              downTarget: _vm.tracks.isNotEmpty
+                  ? _trackFocusNodes.putIfAbsent(_vm.tracks.first.id, () => FocusNode())
+                  : null,
+              upTarget:
+                  authorOrArtistName != null && authorOrArtistName.trim().isNotEmpty
+                      ? _artistFocusNode
+                      : null,
+              autoPlay: widget.autoPlay,
+              modernStyle: true,
+              fullWidthPrimary: !_landscape,
+              maxVisibleButtonsOverride: _landscape ? 10 : null,
+              onArrowRightAtEnd: null,
+              actionRowRightFocusNode: _actionRowRightFocusNode,
+              onFocusExtra: (_) {},
+            ),
+          ),
+        ],
+      );
+
+      if (_landscape) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            coverImage,
+            const SizedBox(width: 28),
+            Expanded(child: playlistInfo),
+          ],
+        );
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(child: coverImage),
+          const SizedBox(height: 20),
+          playlistInfo,
+        ],
+      );
+    }
+
+    final selectedSource = selectedMediaSourceForItem(item, widget.selectedMediaSourceId);
+    final showTech = widget.prefs.get(UserPreferences.detailShowTechnicalDetails);
+    final techRow = showTech ? _buildTechnicalDetailsRow(context, item, selectedSource) : null;
+
+    final Column childrenCol = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: hasUpNext ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        if (!hideTitleAndLogo) ...[
+          if (isSeason && _seriesLogoTag != null && _seriesLogoId != null) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                LogoView(
+                  imageUrl: _vm.imageApi
+                      .getLogoImageUrl(_seriesLogoId!, maxWidth: 200, tag: _seriesLogoTag),
+                  maxHeight: 50 * logoScaleFactor,
+                  maxWidth: 150 * logoScaleFactor,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  item.name,
+                  style: (_landscape
+                          ? textTheme.displaySmall
+                          : textTheme.headlineMedium)
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          ] else if (isEpisode) ...[
+            if (_seriesLogoTag != null && _seriesLogoId != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: LogoView(
+                  imageUrl: _vm.imageApi
+                      .getLogoImageUrl(_seriesLogoId!, maxWidth: 350, tag: _seriesLogoTag),
+                  maxHeight: (_landscape ? 90 : 64) * logoScaleFactor,
+                  maxWidth: (_landscape ? 360 : 260) * logoScaleFactor,
+                ),
+              ),
+            ] else if (item.seriesName != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  item.seriesName!,
+                  style: textTheme.labelLarge?.copyWith(
+                    color: AppColorScheme.onSurface.withValues(alpha: 0.7),
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+            ],
+            Text(
+              item.name,
+              style: (_landscape
+                      ? textTheme.displaySmall
+                      : textTheme.headlineMedium)
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ] else if (logoTag != null && logoId != null) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LogoView(
+                    imageUrl: _vm.imageApi
+                        .getLogoImageUrl(logoId, maxWidth: 350, tag: logoTag),
+                    maxHeight: (_landscape ? 75 : 64) * logoScaleFactor,
+                    maxWidth: (_landscape ? 300 : 260) * logoScaleFactor,
+                  ),
+                  if (item.mediaSources.length > 1) ...[
+                    const SizedBox(width: 16),
+                    () {
+                      final versionName = selectedSource?['Name'] as String? ?? 'Default';
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColorScheme.accent.withValues(alpha: 0.15),
+                          borderRadius: AppRadius.circular(4),
+                          border: Border.all(
+                            color: AppColorScheme.accent.withValues(alpha: 0.4),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          versionName,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: AppColorScheme.accent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }(),
+                  ],
+                ],
+              ),
+            ),
+          ] else ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  item.name,
+                  style: (_landscape
+                          ? textTheme.displaySmall
+                          : textTheme.headlineMedium)
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                if (item.mediaSources.length > 1) ...[
+                  const SizedBox(width: 16),
+                  () {
+                    final versionName = selectedSource?['Name'] as String? ?? 'Default';
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColorScheme.accent.withValues(alpha: 0.15),
+                        borderRadius: AppRadius.circular(4),
+                        border: Border.all(
+                          color: AppColorScheme.accent.withValues(alpha: 0.4),
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        versionName,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: AppColorScheme.accent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }(),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 6),
+          _metadataRow(context, item, selectedSource),
+          if (techRow != null) ...[
+            const SizedBox(height: 6),
+            techRow,
+          ],
+          if (showRatings) ...[
+            const SizedBox(height: 6),
+            RatingsRow(
+              ratings: _vm.ratings,
+              communityRating: item.communityRating,
+              criticRating: item.criticRating,
+              enableAdditionalRatings:
+                  widget.prefs.get(UserPreferences.enableAdditionalRatings),
+              enabledRatings: widget.prefs.get(UserPreferences.enabledRatings),
+              showLabels: widget.prefs.get(UserPreferences.showRatingLabels),
+              showBadges: widget.prefs.get(UserPreferences.showRatingBadges),
+            ),
+          ],
+          const SizedBox(height: 6),
+        ],
+        if (item.tagline != null && item.tagline!.trim().isNotEmpty) ...[
+          if (!hideTitleAndLogo)
+            const SizedBox(height: 8),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: _landscape ? 800 : double.infinity),
+            child: Text(
+              item.tagline!.trim(),
+              style: textTheme.titleSmall?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: AppColorScheme.onSurface.withValues(alpha: 0.9),
+              ),
+            ),
+          ),
+        ],
+        if (overview.isNotEmpty) ...[
+          if (!hideTitleAndLogo || (item.tagline != null && item.tagline!.trim().isNotEmpty))
+            const SizedBox(height: 8),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: _landscape ? 800 : double.infinity,
+            ),
+            child: ExpandableBiography(
+              text: overview,
+              toggleFocusNode: _overviewFocusNode,
+              onArrowDown: () {
+                widget.initialFocusNode?.requestFocus();
+              },
+              onArrowUp: () {
+                NavigationLayout.focusNavbarNotifier.value?.call();
+              },
+              onArrowLeft: () {
+                final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+                if (navbarPosition == NavbarPosition.left) {
+                  NavigationLayout.focusNavbarNotifier.value?.call();
+                }
+              },
+              onArrowRight: hasUpNext
+                  ? () => _upNextFocusNode.requestFocus()
+                  : null,
+              onCollapse: widget.onCollapseBiography,
+              style: textTheme.bodyMedium?.copyWith(
+                height: 1.45,
+                color: AppColorScheme.onSurface.withValues(alpha: 0.85),
+              ),
+            ),
+          ),
+        ],
+        SizedBox(height: techRow != null ? 12 : 24),
+        Focus(
+          canRequestFocus: false,
+          skipTraversal: true,
+          onFocusChange: (focused) {
+            if (focused) {
+              widget.onToggleNavbar?.call(true);
+              if (_scrollController.hasClients) {
+                _scrollController.animateTo(
+                  0.0,
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                );
+              }
+            }
+          },
+          child: DetailActionButtons(
+            viewModel: _vm,
+            itemId: item.id,
+            selectedMediaSourceId: widget.selectedMediaSourceId,
+            onSelectedMediaSourceChanged: widget.onSelectedMediaSourceChanged,
+            tvPlayFocusNode: widget.initialFocusNode,
+            downTarget: _showCollectionStrip(item)
+                ? _collectionStripFirstFocusNode
+                : _tabNode(_selectedTab >= 0 ? _selectedTab : 0),
+            upTarget: _overviewFocusNode,
+            autoPlay: widget.autoPlay,
+            modernStyle: true,
+            fullWidthPrimary: !_landscape,
+            maxVisibleButtonsOverride: null,
+            rowMaxWidth: _landscape
+                ? ModernLandscapeLayout.heroWidthFor(
+                    MediaQuery.sizeOf(context),
+                    hasUpNext: hasUpNext,
+                    isBoxSet: item.type == 'BoxSet',
+                  )
+                : null,
+            onArrowRightAtEnd: _landscape ? _focusRightOfActions : null,
+            actionRowRightFocusNode: _actionRowRightFocusNode,
+            extraFirstFocusNode: _extraFirstFocusNode,
+            onFocusExtra: (_) {},
+            actionsExpanded: widget.actionsExpanded,
+            onActionsExpandedChanged: widget.onActionsExpandedChanged,
+          ),
+        ),
+        if (_showCollectionStrip(item)) ...[
+          const SizedBox(height: 20),
+          MovieCollectionStripView(
+            strip: _vm.movieCollection!,
+            firstFocusNode: _collectionStripFirstFocusNode,
+            onNavigateUp: () => widget.initialFocusNode?.requestFocus(),
+            onNavigateDown: () =>
+                _tabNode(_selectedTab >= 0 ? _selectedTab : 0).requestFocus(),
+            maxWidth: _landscape
+                ? ModernLandscapeLayout.heroWidthFor(
+                    MediaQuery.sizeOf(context),
+                    hasUpNext: hasUpNext,
+                    isBoxSet: false,
+                  )
+                : null,
+            onSelect: (part) => unawaited(_openCollectionPart(context, part)),
+          ),
+        ],
+      ],
+    );
+
+    return childrenCol;
+  }
+
+  bool _showCollectionStrip(AggregatedItem item) =>
+      item.type == 'Movie' && (_vm.movieCollection?.others.isNotEmpty ?? false);
+
+  /// Owned parts open their own detail page (which shows the strip again
+  /// without itself); missing ones run Download Now for that movie (the
+  /// public build opens the movie's Seerr page instead).
+  Future<void> _openCollectionPart(
+    BuildContext context,
+    CollectionPart part,
+  ) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    switch (part.state) {
+      case CollectionPartState.owned:
+        final id = part.jellyfinItemId;
+        if (id == null) return;
+        await context.push(Destinations.item(id, serverId: _vm.item?.serverId));
+      case CollectionPartState.missing:
+      case CollectionPartState.requested:
+        if (!DownloadFeatures.downloadNow) {
+          // No Download Now: the Seerr page, where the movie can be requested.
+          await context.push(
+            Destinations.seerrMedia(part.tmdbId.toString(), mediaType: 'movie'),
+          );
+          if (mounted) unawaited(_vm.loadMovieCollection(refresh: true));
+          return;
+        }
+        await DownloadNowButton.run(
+          context,
+          tmdbId: part.tmdbId,
+          mediaType: 'movie',
+          title: part.title,
+          year: part.year,
+        );
+        if (mounted) unawaited(_vm.loadMovieCollection(refresh: true));
+      case CollectionPartState.downloading:
+        messenger?.showSnackBar(SnackBar(
+          content: Text('"${part.title}" lastes allerede ned'),
+        ));
+      case CollectionPartState.unreleased:
+        messenger?.showSnackBar(SnackBar(
+          content: Text(appL10n().tgNotReleasedYet(part.title)),
+        ));
+    }
+  }
+
+  Widget _metadataRow(BuildContext context, AggregatedItem item, Map<String, dynamic>? selectedMediaSource) {
+    final l10n = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final muted = AppColorScheme.onSurface.withValues(alpha: 0.75);
+    final style = textTheme.bodyMedium?.copyWith(color: muted);
+
+    final pieces = <Widget>[];
+    void addText(String? value) {
+      if (value == null || value.isEmpty) return;
+      pieces.add(Text(value, style: style));
+    }
+
+    addText(item.productionYear?.toString());
+    addText(item.officialRating);
+    if (item.type == 'Series' && item.childCount != null) {
+      addText(l10n.seasonCount(item.childCount!));
+    }
+    if (item.type == 'Season') {
+      final epCount = _vm.episodes.length > 0 ? _vm.episodes.length : (item.childCount ?? 0);
+      if (epCount > 0) {
+        addText(l10n.episodeCount(epCount));
+      }
+    }
+    if (item.type == 'Episode') {
+      final s = item.parentIndexNumber;
+      final e = item.indexNumber;
+      if (s != null && e != null) {
+        addText('S${s}:E$e');
+      }
+    }
+    final status = item.status;
+    if (item.type == 'Series' && status != null && status.isNotEmpty) {
+      pieces.add(_statusBadge(context, status));
+    }
+    var runtime = _runtimeForItem(item, selectedMediaSource);
+    if (runtime == null && item.type == 'Season' && _vm.episodes.isNotEmpty) {
+      var totalMs = 0;
+      for (final ep in _vm.episodes) {
+        totalMs += ep.runtime?.inMilliseconds ?? 0;
+      }
+      if (totalMs > 0) {
+        runtime = Duration(milliseconds: totalMs);
+      }
+    }
+    if (runtime != null && item.type != 'Series') {
+      pieces.add(
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.schedule, size: 14, color: muted),
+            const SizedBox(width: 4),
+            Text(_formatDuration(runtime), style: style),
+          ],
+        ),
+      );
+      final position = item.playbackPosition ?? Duration.zero;
+      var remaining = runtime - position;
+      if (remaining.isNegative || remaining == Duration.zero) {
+        remaining = runtime;
+      }
+      final use24 = GetIt.instance<UserPreferences>().get(
+        UserPreferences.use24HourClock,
+      );
+      final end = _endsAt(item, runtime, use24Hour: use24);
+      if (end != null && item.type != 'Series') {
+        addText(l10n.endsAt(end));
+      }
+    }
+    if (item.genres.isNotEmpty) {
+      addText(item.genres.take(3).join(' · '));
+    }
+    if (pieces.isEmpty) return const SizedBox.shrink();
+
+    final separated = <Widget>[];
+    for (var i = 0; i < pieces.length; i++) {
+      if (i > 0) {
+        separated.add(Text('·', style: style));
+      }
+      separated.add(pieces[i]);
+    }
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 6,
+      children: separated,
+    );
+  }
+
+  Widget _statusBadge(BuildContext context, String status) {
+    final isEnded = status.toLowerCase() == 'ended';
+    final color =
+        isEnded ? const Color(0xFFB71C1C) : const Color(0xFF2E7D32);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: JellyfinTokens.shapes.smallRadius,
+      ),
+      child: Text(
+        status,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+      ),
+    );
+  }
+
+  Widget _techChip(ThemeData theme, String label) {
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(
+          ThemeRegistry.active.borders.chipBorder.copyWith(
+            color: isNeon
+                ? AppColorScheme.accent.withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.3),
+          ),
+        ),
+        borderRadius: AppRadius.circular(4),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: isNeon
+              ? AppColorScheme.onSurface
+              : Colors.white.withValues(alpha: 0.8),
+          shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+        ),
+      ),
+    );
+  }
+
+  Widget? _buildTechnicalDetailsRow(
+    BuildContext context,
+    AggregatedItem item,
+    Map<String, dynamic>? selectedMediaSource,
+  ) {
+    final theme = Theme.of(context);
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+    final muted = AppColorScheme.onSurface.withValues(alpha: 0.75);
+    final style = theme.textTheme.bodyMedium?.copyWith(color: muted);
+
+    final tech = technicalDetailsFor(item, selectedMediaSource);
+    final badges = tech.badges;
+
+    final pieces = <Widget>[];
+
+    if (tech.formattedSize != null) {
+      pieces.add(
+        Text(
+          tech.formattedSize!,
+          style: style?.copyWith(
+            fontWeight: FontWeight.w700,
+            shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+          ),
+        ),
+      );
+    }
+
+    if (badges.isNotEmpty) {
+      if (pieces.isNotEmpty) {
+        pieces.add(
+          Text(
+            ' · ',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: isNeon
+                  ? AppColorScheme.onSurface.withValues(alpha: 0.6)
+                  : Colors.white.withValues(alpha: 0.5),
+              shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+            ),
+          ),
+        );
+      }
+      pieces.addAll(
+        badges.map((b) => _techChip(theme, b)),
+      );
+    }
+
+    if (pieces.isEmpty) return null;
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 6,
+      children: pieces,
+    );
+  }
+
+  Widget? _buildUpNext(BuildContext context, AggregatedItem item) {
+    // Queried several times per build but inserted once; build it once.
+    if (!_upNextResolvedThisBuild) {
+      _upNextCard = _computeUpNext(context, item);
+      _upNextResolvedThisBuild = true;
+    }
+    return _upNextCard;
+  }
+
+  Widget? _computeUpNext(BuildContext context, AggregatedItem item) {
+    const supported = {'Series', 'Season', 'BoxSet'};
+    if (!supported.contains(item.type)) return null;
+    final isBoxSet = item.type == 'BoxSet';
+
+    final l10n = AppLocalizations.of(context);
+    AggregatedItem? episode;
+    String? customLabel;
+
+    if (item.type == 'Season') {
+      if (_vm.episodes.isEmpty) return null;
+      final seasonAllWatched = _vm.episodes.every((e) => e.isPlayed);
+      final seasonAllUnwatched = _vm.episodes.every((e) => !e.isPlayed && (e.playedPercentage == null || e.playedPercentage == 0));
+      if (seasonAllWatched) {
+        episode = _vm.episodes[0];
+        customLabel = l10n.rewatchSeasonEpisode(item.indexNumber ?? 0, 1);
+      } else if (!seasonAllUnwatched) {
+        try {
+          episode = _vm.episodes.firstWhere((e) => !e.isPlayed);
+        } catch (_) {}
+      }
+    } else if (item.type == 'BoxSet') {
+      episode = _vm.nextUp;
+      if (episode != null) {
+        final playedAll = _vm.playlistItems.every((item) => item.rawData['UserData']?['Played'] == true);
+        if (playedAll) {
+          customLabel = l10n.rewatchPlaylist;
+        }
+      }
+    } else {
+      episode = _vm.nextUp;
+      if (episode == null && _vm.seriesEpisodes.isNotEmpty) {
+        try {
+          episode = _vm.seriesEpisodes.firstWhere((e) => !e.isPlayed);
+        } catch (_) {
+          episode = _vm.seriesEpisodes.first;
+          final s = episode.parentIndexNumber ?? 1;
+          final e = episode.indexNumber ?? 1;
+          customLabel = l10n.rewatchSeasonEpisode(s, e);
+        }
+      }
+    }
+
+    if (episode == null) return null;
+
+    final s = episode.parentIndexNumber;
+    final e = episode.indexNumber;
+    final code = (s != null && e != null) ? 'S$s:E$e' : null;
+    final title = code != null ? '$code - ${episode.name}' : episode.name;
+    final combinedLabel = customLabel != null
+        ? '$customLabel - ${episode.name}'
+        : '${l10n.nextUp} - $title';
+    final progress = (episode.playedPercentage ?? 0) / 100.0;
+    return UpNextCard(
+      label: combinedLabel,
+      title: '',
+      description: episode.overview?.trim(),
+      imageUrl: _imageUrl(episode),
+      progress: progress,
+      remainingLabel: _remainingLabel(episode, l10n),
+      focusNode: _upNextFocusNode,
+      minimal: isBoxSet,
+      width: isBoxSet ? 200.0 : double.infinity,
+      onNavigateLeft: () {
+        if (_overviewFocusNode.context != null && _overviewFocusNode.canRequestFocus) {
+          _overviewFocusNode.requestFocus();
+        } else if (_actionRowRightFocusNode.context != null && _actionRowRightFocusNode.canRequestFocus) {
+          _actionRowRightFocusNode.requestFocus();
+        } else {
+          widget.initialFocusNode?.requestFocus();
+        }
+      },
+      onNavigateDown: _focusSelectedTab,
+      onTap: () async {
+        final manager = GetIt.instance<PlaybackManager>();
+        final hasProgress = (episode!.playbackPosition?.inMilliseconds ?? 0) > 0 ||
+                            (episode.playedPercentage ?? 0) > 0;
+        await manager.playItems(
+          [episode],
+          startPosition: hasProgress
+              ? (episode.playbackPosition ?? Duration.zero)
+              : Duration.zero,
+        );
+        if (context.mounted) {
+          final destination = manager.playbackDeferredToExternalPlayer
+              ? Destinations.externalPlayer
+              : Destinations.videoPlayer;
+          unawaited(context.push(destination));
+        }
+      },
+    );
+  }
+
+  String? _remainingLabel(AggregatedItem episode, AppLocalizations l10n) {
+    final runtime = episode.runtime;
+    if (runtime == null || runtime.inSeconds <= 0) return null;
+    final position = episode.playbackPosition ?? Duration.zero;
+    final remaining = runtime - position;
+    if (remaining.inMinutes <= 0) return null;
+    return l10n.timeRemaining(_formatDuration(remaining));
+  }
+
+  String _formatDuration(Duration d) {
+    final h = d.inHours;
+    final m = d.inMinutes % 60;
+    if (h > 0) return m > 0 ? '${h}h ${m}m' : '${h}h';
+    return '${m}m';
+  }
+
+  /// Full-bleed cinematic backdrop owned by the Modern screen (deliberately
+  /// ignores the global backdrop-hide / blur prefs; no blur). In landscape the
+  /// image is right-aligned and embedded into the page with layered scrims: a
+  /// strong left-to-right gradient keeping the left content readable, a
+  /// bottom-to-top gradient blending the lower UI into the background, and a
+  /// subtle edge vignette. In portrait it fades from the top into the content.
+  Widget _buildBackdrop(bool landscape, String? backdropUrl) {
+    final base = AppColorScheme.background;
+    final item = _vm.item;
+    final url = backdropUrl ?? (item?.type == 'Person' ? (_randomBackdropUrl ?? _imageUrl(item!)) : null);
+    final blurAmount = widget.prefs
+        .get(UserPreferences.detailsBackgroundBlurAmount)
+        .toDouble();
+    final opacityFactor = blurAmount / 25.0;
+    final maxAlpha = item?.type == 'Person' ? 0.40 : 0.80;
+    final alpha = opacityFactor * maxAlpha;
+    final gradientScale = 0.3 + 0.7 * opacityFactor;
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ColoredBox(color: base),
+        if (url != null && url.isNotEmpty) ...[
+          OfflineAwareImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            alignment:
+                landscape ? Alignment.centerRight : Alignment.topCenter,
+            fadeInDuration: const Duration(milliseconds: 250),
+            errorWidget: (context, url, error) => const SizedBox.shrink(),
+          ),
+          if (item?.type == 'Person' && _randomBackdropUrl == null)
+            Positioned.fill(
+              child: GlassSettings.blursBackdrop
+                  ? BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: GlassSettings.capSigma(12),
+                        sigmaY: GlassSettings.capSigma(12),
+                      ),
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.2),
+                      ),
+                    )
+                  : Container(color: Colors.black.withValues(alpha: 0.35)),
+            ),
+          ColoredBox(
+            color: Colors.black.withValues(
+              alpha: alpha,
+            ),
+          ),
+        ],
+        if (landscape) ...[
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  base.withValues(alpha: gradientScale),
+                  base.withValues(alpha: 0.90 * gradientScale),
+                  base.withValues(alpha: 0.45 * gradientScale),
+                  base.withValues(alpha: 0.0),
+                ],
+                stops: const [0.0, 0.35, 0.60, 0.85],
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  base.withValues(alpha: gradientScale),
+                  base.withValues(alpha: 0.80 * gradientScale),
+                  base.withValues(alpha: 0.0),
+                ],
+                stops: const [0.0, 0.45, 0.80],
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 1.05,
+                colors: [
+                  base.withValues(alpha: 0.0),
+                  base.withValues(alpha: 0.0),
+                  base.withValues(alpha: 0.32 * gradientScale),
+                ],
+                stops: const [0.0, 0.7, 1.0],
+              ),
+            ),
+          ),
+        ] else
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  base.withValues(alpha: 0.15 * gradientScale),
+                  base.withValues(alpha: 0.55 * gradientScale),
+                  base,
+                ],
+                stops: const [0.0, 0.55, 1.0],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  String? _imageUrl(AggregatedItem item) {
+    final tag = item.primaryImageTag;
+    if (tag != null && !item.id.startsWith('tmdb:')) {
+      return _vm.imageApi.getPrimaryImageUrl(item.id, maxHeight: 360, tag: tag);
+    }
+    final posterPath = item.rawData['PosterPath'] as String?;
+    if (posterPath != null && posterPath.isNotEmpty) {
+      return 'https://image.tmdb.org/t/p/w342$posterPath';
+    }
+    final profilePath = item.rawData['ProfilePath'] as String?;
+    if (profilePath != null && profilePath.isNotEmpty) {
+      return 'https://image.tmdb.org/t/p/w500$profilePath';
+    }
+    return null;
+  }
+
+  void _selectTab(int index) {
+    if (index == _selectedTab) {
+      // With Expanded Tabs on, reselecting the current tab never collapses.
+      if (!_expandedTabs) {
+        setState(() => _selectedTab = -1);
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            0.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      }
+      return;
+    }
+
+    final wasCollapsed = _selectedTab < 0;
+    setState(() => _selectedTab = index);
+    if (index >= 0 && !_expandedTabs && wasCollapsed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          final desktopScale = _desktopUiScale(prefs: widget.prefs);
+          _scrollController.animateTo(
+            260.0 * desktopScale,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final item = _vm.item;
+    if (item == null) return const SizedBox.shrink();
+    _upNextResolvedThisBuild = false;
+
+    if (item.type == 'Series') {
+      _vm.loadAllSeriesEpisodes();
+    }
+
+    final l10n = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final desktopScale = _desktopUiScale(prefs: widget.prefs);
+    final logoScaleFactor = desktopScale > 1.1 ? 0.70 : 1.0;
+
+    _landscape = PlatformDetection.isTV ||
+        PlatformDetection.useDesktopUi ||
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
+    final tabs = _tabsFor(item, l10n);
+    final isMusicAlbumOrPlaylist = item.type == 'Playlist' || item.type == 'MusicAlbum';
+    if (isMusicAlbumOrPlaylist) {
+      _selectedTab = 0;
+    } else if (_selectedTab >= tabs.length) {
+      _selectedTab = _expandedTabs ? 0 : -1;
+    }
+
+    if (tabs.isNotEmpty && _selectedTab >= 0 && _selectedTab < tabs.length && tabs[_selectedTab].label == l10n.details) {
+      final targetItem = _getRelevantEpisode(item) ?? item;
+      final isPlayable = targetItem.type != 'Series' && targetItem.type != 'Season' && targetItem.type != 'Person';
+      if (isPlayable) {
+        _loadPlaybackInfo(targetItem);
+      }
+    }
+
+    final tabContent = (tabs.isEmpty || _selectedTab < 0)
+        ? const SizedBox.shrink()
+        : tabs[_selectedTab].builder(context, item);
+
+    final tabBar = DetailsTabBar(
+      pill: true,
+      labels: [for (final t in tabs) t.label],
+      selectedIndex: _selectedTab,
+      onSelect: _selectTab,
+      focusNodeFor: _tabNode,
+      onExitLeft: () {
+        final isTvSection = item.type == 'Season' || item.type == 'Series';
+        if (isTvSection && widget.actionsExpanded) {
+          // If More row is open, go to first extra button (Watched/Unwatched)
+          _extraFirstFocusNode.requestFocus();
+          return;
+        }
+        final navbarPosition = widget.prefs.get(UserPreferences.navbarPosition);
+        if (navbarPosition == NavbarPosition.left) {
+          final focusNavbar = NavigationLayout.focusNavbarNotifier.value;
+          if (focusNavbar != null) {
+            focusNavbar();
+            return;
+          }
+        }
+        // Default: focus Play/Resume button
+        widget.initialFocusNode?.requestFocus();
+      },
+      onExitUp: () => widget.initialFocusNode?.requestFocus(),
+      onNavigateDown: _onTabBarNavigateDown,
+    );
+
+    final Widget tabBarWidget;
+    if (isMusicAlbumOrPlaylist) {
+      tabBarWidget = Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Text(
+          item.type == 'Playlist' ? l10n.playlist : l10n.trackList,
+          style: textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            shadows: _neonTextGlow(10),
+          ),
+        ),
+      );
+    } else {
+      tabBarWidget = tabBar;
+    }
+
+    // Isolate hero art and backdrop into their own layers so scrolling content
+    // does not re-rasterize them; the backdrop repaints only when its URL swaps.
+    final hero = RepaintBoundary(child: _buildHero(context, item));
+    final upNext = _buildUpNext(context, item);
+    final backdrop = RepaintBoundary(
+      child: ValueListenableBuilder<String?>(
+        valueListenable: widget.backdropUrl,
+        builder: (context, backdropUrl, _) =>
+            _buildBackdrop(_landscape, backdropUrl),
+      ),
+    );
+    final topInset = TopToolbar.baseHeightFor(context);
+
+    final isEpisode = item.type == 'Episode';
+    final logoTag = item.logoImageTag ?? (isEpisode ? item.seriesLogoImageTag : null);
+    final logoId = logoTag != null ? (item.logoImageTag != null ? item.id : item.seriesId) : null;
+
+    final showRatings = _vm.ratings.isNotEmpty ||
+        item.communityRating != null ||
+        item.criticRating != null;
+
+    final selectedSource = selectedMediaSourceForItem(item, widget.selectedMediaSourceId);
+
+    final Widget? aboveHeroWidget = (_landscape && upNext != null)
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 24),
+              if (logoTag != null && logoId != null) ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LogoView(
+                      imageUrl: _vm.imageApi
+                          .getLogoImageUrl(logoId, maxWidth: 350, tag: logoTag),
+                      maxHeight: 75 * logoScaleFactor,
+                      maxWidth: 300 * logoScaleFactor,
+                    ),
+                    if (item.mediaSources.length > 1) ...[
+                      const SizedBox(width: 16),
+                      () {
+                        final versionName = selectedSource?['Name'] as String? ?? 'Default';
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColorScheme.accent.withValues(alpha: 0.15),
+                            borderRadius: AppRadius.circular(4),
+                            border: Border.all(
+                              color: AppColorScheme.accent.withValues(alpha: 0.4),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            versionName,
+                            style: textTheme.bodySmall?.copyWith(
+                              color: AppColorScheme.accent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }(),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 6),
+              ] else ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      item.name,
+                      style: textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    if (item.mediaSources.length > 1) ...[
+                      const SizedBox(width: 16),
+                      () {
+                        final versionName = selectedSource?['Name'] as String? ?? 'Default';
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColorScheme.accent.withValues(alpha: 0.15),
+                            borderRadius: AppRadius.circular(4),
+                            border: Border.all(
+                              color: AppColorScheme.accent.withValues(alpha: 0.4),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            versionName,
+                            style: textTheme.bodySmall?.copyWith(
+                              color: AppColorScheme.accent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }(),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 6),
+              ],
+              _metadataRow(context, item, selectedSource),
+              if (showRatings) ...[
+                const SizedBox(height: 6),
+                RatingsRow(
+                  ratings: _vm.ratings,
+                  communityRating: item.communityRating,
+                  criticRating: item.criticRating,
+                  enableAdditionalRatings:
+                      widget.prefs.get(UserPreferences.enableAdditionalRatings),
+                  enabledRatings: widget.prefs.get(UserPreferences.enabledRatings),
+                  showLabels: widget.prefs.get(UserPreferences.showRatingLabels),
+                  showBadges: widget.prefs.get(UserPreferences.showRatingBadges),
+                ),
+              ],
+            ],
+          )
+        : null;
+
+    return _landscape
+        ? ModernLandscapeLayout(
+            backdrop: backdrop,
+            hero: hero,
+            upNext: upNext,
+            tabBar: tabBarWidget,
+            tabContent: tabContent,
+            topInset: topInset,
+            scrollController: _scrollController,
+            aboveHero: aboveHeroWidget,
+            isBoxSet: item.type == 'BoxSet',
+          )
+        : ModernPortraitLayout(
+            backdrop: backdrop,
+            hero: hero,
+            upNext: upNext,
+            tabBar: tabBarWidget,
+            tabContent: tabContent,
+            topInset: topInset,
+          );
+  }
+}
+
+class _ModernTab {
+  final String label;
+  final Widget Function(BuildContext, AggregatedItem) builder;
+  const _ModernTab(this.label, this.builder);
+}
+
+class _DetailsContainer extends StatefulWidget {
+  final Widget child;
+  final bool isScrollable;
+  final bool hasAudioButton;
+  final bool hasSubtitleButton;
+  final FocusNode audioButtonFocusNode;
+  final FocusNode subtitleButtonFocusNode;
+  final bool canRequestFocus;
+  final FocusNode? focusNode;
+  final VoidCallback? onNavigateUp;
+  final VoidCallback? onSelect;
+
+  const _DetailsContainer({
+    required this.child,
+    required this.isScrollable,
+    required this.hasAudioButton,
+    required this.hasSubtitleButton,
+    required this.audioButtonFocusNode,
+    required this.subtitleButtonFocusNode,
+    required this.canRequestFocus,
+    this.focusNode,
+    this.onNavigateUp,
+    this.onSelect,
+  });
+
+  @override
+  State<_DetailsContainer> createState() => _DetailsContainerState();
+}
+
+class _DetailsContainerState extends State<_DetailsContainer> with FocusStateMixin {
+  final ScrollController _scrollController = ScrollController();
+  bool _hasInterceptor = false;
+
+  void _registerBackInterceptor() {
+    if (_hasInterceptor) return;
+    _hasInterceptor = true;
+    InlineBackInterceptor.push(_handleBack);
+  }
+
+  void _unregisterBackInterceptor() {
+    if (!_hasInterceptor) return;
+    _hasInterceptor = false;
+    InlineBackInterceptor.remove(_handleBack);
+  }
+
+  void _handleBack() {
+    widget.onNavigateUp?.call();
+  }
+
+  @override
+  void dispose() {
+    _unregisterBackInterceptor();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final focusColor = Color(
+      GetIt.instance<UserPreferences>()
+          .get(UserPreferences.focusColor)
+          .colorValue,
+    );
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+
+    return Focus(
+      focusNode: widget.focusNode,
+      canRequestFocus: widget.canRequestFocus,
+      onFocusChange: (focused) {
+        setFocused(focused);
+        if (focused) {
+          _registerBackInterceptor();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              Scrollable.ensureVisible(
+                context,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                alignment: 0.0,
+              );
+            }
+          });
+        } else {
+          _unregisterBackInterceptor();
+        }
+      },
+      onKeyEvent: (_, event) {
+        if (event.logicalKey.isBackKey) {
+          if (event is KeyDownEvent) {
+            widget.onNavigateUp?.call();
+          }
+          return KeyEventResult.handled;
+        }
+
+        // onKeyEvent always passes this handler its own node, so read the
+        // actually-focused descendant to know which child is active.
+        final focused = FocusManager.instance.primaryFocus;
+
+        if (event is KeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.enter ||
+              event.logicalKey == LogicalKeyboardKey.select) {
+            if (focused == widget.audioButtonFocusNode ||
+                focused == widget.subtitleButtonFocusNode) {
+              return KeyEventResult.ignored;
+            }
+            if (widget.onSelect != null) {
+              widget.onSelect!();
+              return KeyEventResult.handled;
+            }
+          }
+        }
+
+        if (event is KeyDownEvent || event is KeyRepeatEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            if (focused == widget.focusNode) {
+              if (widget.isScrollable) {
+                final maxScroll = _scrollController.position.maxScrollExtent;
+                final currentScroll = _scrollController.offset;
+                if (currentScroll < maxScroll) {
+                  _scrollController.animateTo(
+                    (currentScroll + 60.0).clamp(0.0, maxScroll),
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.easeOut,
+                  );
+                  return KeyEventResult.handled;
+                }
+              }
+              if (widget.hasAudioButton) {
+                widget.audioButtonFocusNode.requestFocus();
+              } else if (widget.hasSubtitleButton) {
+                widget.subtitleButtonFocusNode.requestFocus();
+              }
+              return KeyEventResult.handled;
+            } else if (focused == widget.audioButtonFocusNode) {
+              if (widget.hasSubtitleButton) {
+                widget.subtitleButtonFocusNode.requestFocus();
+              }
+              return KeyEventResult.handled;
+            } else if (focused == widget.subtitleButtonFocusNode) {
+              return KeyEventResult.handled;
+            }
+          } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            if (focused == widget.focusNode) {
+              if (widget.isScrollable) {
+                final currentScroll = _scrollController.offset;
+                if (currentScroll > 0.0) {
+                  _scrollController.animateTo(
+                    (currentScroll - 60.0).clamp(0.0, double.infinity),
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.easeOut,
+                  );
+                  return KeyEventResult.handled;
+                }
+              }
+              return KeyEventResult.handled;
+            } else if (focused == widget.audioButtonFocusNode) {
+              widget.focusNode?.requestFocus();
+              return KeyEventResult.handled;
+            } else if (focused == widget.subtitleButtonFocusNode) {
+              if (widget.hasAudioButton) {
+                widget.audioButtonFocusNode.requestFocus();
+              } else {
+                widget.focusNode?.requestFocus();
+              }
+              return KeyEventResult.handled;
+            }
+          }
+        }
+        return KeyEventResult.ignored;
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        constraints: const BoxConstraints(maxHeight: 400),
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.circular(12),
+          border: Border.all(
+            color: showFocusBorder
+                ? (isNeon ? AppColorScheme.accent : focusColor)
+                : Colors.white.withValues(alpha: 0.08),
+            width: showFocusBorder ? 1.5 : 1.0,
+          ),
+          color: Colors.white.withValues(alpha: 0.02),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: widget.isScrollable
+            ? SingleChildScrollView(
+                controller: _scrollController,
+                child: widget.child,
+              )
+            : widget.child,
+      ),
+    );
+  }
+}
+
+Duration? _runtimeForItem(
+  AggregatedItem item,
+  Map<String, dynamic>? mediaSource,
+) {
+  final ticks = mediaSource?['RunTimeTicks'];
+  if (ticks is num && ticks > 0) {
+    return Duration(microseconds: (ticks ~/ 10));
+  }
+  return item.runtime;
+}
+
+String? _endsAt(
+  AggregatedItem item,
+  Duration? runtime, {
+  required bool use24Hour,
+}) {
+  if (runtime == null) {
+    return null;
+  }
+  final percentage = item.playedPercentage;
+  final Duration left;
+  if (percentage != null && percentage > 0) {
+    left = Duration(
+      microseconds: (runtime.inMicroseconds * (1.0 - percentage / 100.0)).round(),
+    );
+  } else {
+    left = runtime;
+  }
+  final end = DateTime.now().add(left);
+  final hour = end.hour;
+  final minute = end.minute.toString().padLeft(2, '0');
+  if (use24Hour) {
+    return '${hour.toString().padLeft(2, '0')}:$minute';
+  }
+  final amPm = hour >= 12 ? 'PM' : 'AM';
+  final h12 = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+  return '$h12:$minute $amPm';
+}
+
+const extraCategoriesOrder = [
+  'extras',
+  'behindTheScenes',
+  'deletedScenes',
+  'featurettes',
+  'interviews',
+  'scenes',
+  'shorts',
+  'trailers',
+];
+
+String getExtraCategory(AggregatedItem item) {
+  final extraType = item.rawData['ExtraType'] as String?;
+  if (extraType == null) return 'extras';
+  switch (extraType) {
+    case 'BehindTheScenes':
+      return 'behindTheScenes';
+    case 'DeletedScene':
+      return 'deletedScenes';
+    case 'Featurette':
+      return 'featurettes';
+    case 'Interview':
+      return 'interviews';
+    case 'Scene':
+      return 'scenes';
+    case 'Short':
+      return 'shorts';
+    case 'Trailer':
+      return 'trailers';
+    default:
+      return 'extras';
+  }
+}
+
+String getExtraCategoryLabel(String key, AppLocalizations l10n) {
+  switch (key) {
+    case 'behindTheScenes':
+      return l10n.behindTheScenes;
+    case 'deletedScenes':
+      return l10n.deletedScenes;
+    case 'featurettes':
+      return l10n.featurettes;
+    case 'interviews':
+      return l10n.interviews;
+    case 'scenes':
+      return l10n.scenes;
+    case 'shorts':
+      return l10n.shorts;
+    case 'trailers':
+      return l10n.trailers;
+    case 'extras':
+    default:
+      return l10n.extras;
+  }
+}

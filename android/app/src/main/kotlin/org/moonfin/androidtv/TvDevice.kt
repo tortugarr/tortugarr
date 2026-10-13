@@ -25,9 +25,21 @@ fun isTelevisionOrNull(context: Context): Boolean? {
     val uiModeType = runCatching {
         (context.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager)?.currentModeType
     }.getOrNull()
-    if (uiModeType == Configuration.UI_MODE_TYPE_TELEVISION) return true
+    // A handheld reporting the television ui mode on its own was enough to put
+    // the leanback UI on a phone for the whole session, so this weaker signal
+    // now only counts when nothing reports a touchscreen. A check that goes
+    // unanswered is left alone so a real television cant land in the phone UI.
+    if (uiModeType == Configuration.UI_MODE_TYPE_TELEVISION &&
+        hasTouchscreenOrNull(context) != true
+    ) {
+        return true
+    }
 
     return if (hasLeanback == false && uiModeType != null) false else null
 }
+
+private fun hasTouchscreenOrNull(context: Context): Boolean? = runCatching {
+    context.packageManager.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)
+}.getOrNull()
 
 fun isTelevision(context: Context): Boolean = isTelevisionOrNull(context) == true

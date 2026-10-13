@@ -22,6 +22,11 @@ class ServerRepository {
   List<Server> get servers => List.unmodifiable(_servers);
   Stream<ServerAdditionState> get additionState => _stateController.stream;
 
+  /// The most recent server that couldn't be added, for a caller that only
+  /// sees the null result.
+  ServerUnableToConnect? get lastFailure => _lastFailure;
+  ServerUnableToConnect? _lastFailure;
+
   static const _defaultPorts = [8096, 8920];
 
   Future<void> loadStoredServers() async {
@@ -59,6 +64,7 @@ class ServerRepository {
   }
 
   Future<Server?> addServer(String address) async {
+    final enteredAddress = address;
     address = normalizeServerBaseUrl(address.trim());
     if (address.isEmpty) {
       return null;
@@ -71,6 +77,7 @@ class ServerRepository {
     String? lastErrorType;
     int? lastStatusCode;
     String? lastErrorMessage;
+    String? untrustedCandidate;
 
     for (final candidate in candidates) {
       try {
@@ -84,8 +91,14 @@ class ServerRepository {
         );
         if (existingIndex >= 0) {
           final existing = _servers[existingIndex];
+          final displayAddress = serverDisplayAddress(
+            enteredAddress: enteredAddress,
+            resolvedAddress: existing.address,
+          );
           final updated = existing.copyWith(
             name: info['ServerName'] as String? ?? existing.name,
+            displayAddress: displayAddress,
+            clearDisplayAddress: displayAddress == null,
             version: info['Version'] as String? ?? existing.version,
             serverType: serverType,
             dateLastAccessed: DateTime.now(),
@@ -98,10 +111,15 @@ class ServerRepository {
           return updated;
         }
 
+        final displayAddress = serverDisplayAddress(
+          enteredAddress: enteredAddress,
+          resolvedAddress: serverAddress,
+        );
         final server = Server(
           id: const Uuid().v4(),
-          name: info['ServerName'] as String? ?? address,
+          name: info['ServerName'] as String? ?? displayAddress ?? address,
           address: serverAddress,
+          displayAddress: displayAddress,
           version: info['Version'] as String? ?? '',
           serverType: serverType,
           loginDisclaimer: info['LoginDisclaimer'] as String?,
@@ -121,6 +139,7 @@ class ServerRepository {
         lastErrorType = e.type.name;
         lastStatusCode = status;
         lastErrorMessage = detail;
+        if (isUntrustedCertificate(e)) untrustedCandidate ??= candidate;
       } catch (e) {
         lastCandidate = candidate;
         lastErrorType = 'exception';
@@ -129,15 +148,16 @@ class ServerRepository {
       }
     }
 
-    _stateController.add(
-      ServerUnableToConnect(
-        candidatesTried: candidates,
-        lastCandidate: lastCandidate,
-        lastErrorType: lastErrorType,
-        lastStatusCode: lastStatusCode,
-        lastErrorMessage: lastErrorMessage,
-      ),
+    final failure = ServerUnableToConnect(
+      candidatesTried: candidates,
+      lastCandidate: lastCandidate,
+      lastErrorType: lastErrorType,
+      lastStatusCode: lastStatusCode,
+      lastErrorMessage: lastErrorMessage,
+      untrustedCandidate: untrustedCandidate,
     );
+    _lastFailure = failure;
+    _stateController.add(failure);
     return null;
   }
 

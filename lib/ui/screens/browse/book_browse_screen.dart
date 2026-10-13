@@ -24,8 +24,10 @@ import '../../widgets/book/book_stats_band.dart';
 import '../../widgets/book/discover/book_discover_tab.dart';
 import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/focus/focusable_wrapper.dart';
+import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../widgets/focus/locked_focus_row.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../widgets/bottom_nav/bottom_navbar.dart';
 import '../../widgets/navigation_layout.dart';
 
 class BookBrowseScreen extends StatefulWidget {
@@ -67,11 +69,13 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
       collectionType: widget.collectionType,
     );
     _vm.addListener(_onChanged);
+    _prefs.addListener(_onChanged);
     _vm.load();
   }
 
   @override
   void dispose() {
+    _prefs.removeListener(_onChanged);
     _vm.removeListener(_onChanged);
     _vm.dispose();
     _heroCtaFocusNode.dispose();
@@ -123,7 +127,7 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
       context.push(Destinations.folder(item.id, serverId: item.serverId));
       return;
     }
-    if (type == 'Book') {
+    if (type == 'Book' || item.isComic) {
       context.push(Destinations.book(item.id, serverId: item.serverId));
       return;
     }
@@ -185,8 +189,11 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
 
   List<BookStat> _stats(AppLocalizations l10n) => [
     if (_vm.isMixedLibrary) ...[
-      BookStat(label: l10n.books, count: _vm.bookCount),
-      BookStat(label: l10n.audiobooks, count: _vm.audiobookCount),
+      if (_vm.bookCount > 0) BookStat(label: l10n.books, count: _vm.bookCount),
+      if (_vm.audiobookCount > 0)
+        BookStat(label: l10n.audiobooks, count: _vm.audiobookCount),
+      if (_vm.comicCount > 0)
+        BookStat(label: l10n.comics, count: _vm.comicCount),
     ] else
       BookStat(
         label: _vm.isAudiobookLibrary ? l10n.audiobooks : l10n.books,
@@ -206,16 +213,21 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
     return Scaffold(
       backgroundColor: AppColorScheme.background,
       body: NavigationLayout(
+        activeRoute: '/books/${widget.libraryId}',
         showBackButton: true,
         child: _vm.isLoading
-            ? Center(
-                child: CircularProgressIndicator(color: AppColorScheme.accent),
+            ? const SkeletonLibraryGrid(
+                cardWidth: 160,
+                aspectRatio: 2 / 3,
               )
             : RefreshIndicator(
                 onRefresh: _vm.refresh,
-                child: ListView(
-                  padding: const EdgeInsets.only(bottom: 120),
-                  children: _buildSections(context),
+                child: BottomNavPadded(
+                  fallback: 120,
+                  builder: (_, bottom) => ListView(
+                    padding: EdgeInsets.only(bottom: bottom),
+                    children: _buildSections(context),
+                  ),
                 ),
               ),
       ),
@@ -226,8 +238,12 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
     final l10n = AppLocalizations.of(context);
     final topReserve = MediaQuery.paddingOf(context).top + 56;
     final featured = _vm.featuredItem;
-    final showScope = _vm.isMixedLibrary && _tab == 0;
-    final rows = _tab == 0 ? _vm.rows : const <HomeRow>[];
+    // _tab can still hold the Discover index after the setting is turned off,
+    // so the rest of this method reads the clamped value.
+    final showDiscover = _prefs.get(UserPreferences.showBookDiscoverTab);
+    final tab = showDiscover ? _tab : 0;
+    final showScope = _vm.isMixedLibrary && tab == 0;
+    final rows = tab == 0 ? _vm.rows : const <HomeRow>[];
 
     // Rebuild the vertical focus chain to match this build's composition.
     final entries = <RowFocusEntry>[
@@ -235,7 +251,8 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
         RowFocusEntry.node(_heroCtaFocusNode, containerKey: _heroContainerKey),
       if (showScope)
         RowFocusEntry.node(_scopeFocusNode, containerKey: _scopeContainerKey),
-      RowFocusEntry.node(_tabsFocusNode, containerKey: _tabsContainerKey),
+      if (showDiscover)
+        RowFocusEntry.node(_tabsFocusNode, containerKey: _tabsContainerKey),
       for (final row in rows)
         RowFocusEntry.row(
           _rowKey(row.id),
@@ -246,7 +263,7 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
     var entryIndex = 0;
     final heroIndex = featured != null ? entryIndex++ : -1;
     final scopeIndex = showScope ? entryIndex++ : -1;
-    final tabsIndex = entryIndex++;
+    final tabsIndex = showDiscover ? entryIndex++ : -1;
     final firstRowIndex = entryIndex;
 
     return [
@@ -268,6 +285,7 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
               child: BookScopeFilter(
                 value: _vm.scope,
                 onChanged: _vm.setScope,
+                availableScopes: _vm.availableScopes,
                 focusNode: _scopeFocusNode,
                 onVerticalNavigation: (isUp) =>
                     _moveVertical(scopeIndex, isUp),
@@ -275,40 +293,81 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
             ),
           ),
         ),
-      Padding(
-        key: _tabsContainerKey,
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
-        child: FocusableWrapper(
-          focusNode: _tabsFocusNode,
-          borderRadius: 22,
-          descendantsAreFocusable: false,
-          onSelect: () => setState(() => _tab = _tab == 0 ? 1 : 0),
-          onNavigateLeft: () {
-            if (_tab != 0) setState(() => _tab = 0);
-          },
-          onNavigateRight: () {
-            if (_tab != 1) setState(() => _tab = 1);
-          },
-          onNavigateUp: () => _moveVertical(tabsIndex, true),
-          onNavigateDown: () => _moveVertical(tabsIndex, false),
-          child: BookSegmentedControl(
-            labels: [l10n.library, l10n.discover],
-            selectedIndex: _tab,
-            onChanged: (v) => setState(() => _tab = v),
+      if (showDiscover)
+        Padding(
+          key: _tabsContainerKey,
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+          child: FocusableWrapper(
+            focusNode: _tabsFocusNode,
+            borderRadius: 22,
+            descendantsAreFocusable: false,
+            onSelect: () => setState(() => _tab = _tab == 0 ? 1 : 0),
+            onNavigateLeft: () {
+              if (_tab != 0) setState(() => _tab = 0);
+            },
+            onNavigateRight: () {
+              if (_tab != 1) setState(() => _tab = 1);
+            },
+            onNavigateUp: () => _moveVertical(tabsIndex, true),
+            onNavigateDown: () => _moveVertical(tabsIndex, false),
+            child: BookSegmentedControl(
+              labels: [l10n.library, l10n.discover],
+              selectedIndex: tab,
+              onChanged: (v) => setState(() => _tab = v),
+            ),
           ),
         ),
-      ),
-      if (_tab == 0)
-        ...[
-          for (var i = 0; i < rows.length; i++)
-            _buildShelf(rows[i], l10n, firstRowIndex + i),
-        ]
-      else
+      if (tab == 1)
         BookDiscoverTab(
           libraryId: widget.libraryId,
           isAudiobook: _vm.isAudiobookLibrary,
-        ),
+        )
+      else ...[
+        if (rows.isNotEmpty)
+          for (var i = 0; i < rows.length; i++)
+            _buildShelf(rows[i], l10n, firstRowIndex + i)
+        else
+          _buildEmptyState(l10n),
+      ],
     ];
+  }
+
+  Widget _buildEmptyState(AppLocalizations l10n) {
+    final onSurface = AppColorScheme.onSurface;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.auto_stories_outlined,
+              size: 56,
+              color: onSurface.withValues(alpha: 0.35),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.noBooksFound,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: onSurface.withValues(alpha: 0.85),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.noBooksFoundDescription,
+              style: TextStyle(
+                fontSize: 14,
+                color: onSurface.withValues(alpha: 0.5),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildHero(
@@ -372,6 +431,7 @@ class _BookBrowseScreenState extends State<BookBrowseScreen> {
       imageUrlFor: _vm.bookImageUrl,
       subtitleFor: _vm.bookSubtitle,
       isAudiobookFor: _vm.isAudiobookItem,
+      isComicFor: _vm.isComicItem,
       remainingFor: _vm.remainingFor,
     );
   }

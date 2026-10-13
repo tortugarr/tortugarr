@@ -1,7 +1,7 @@
 name: "Bug: Seerr"
 description: Report a Seerr integration issue
 title: "[Seerr] "
-labels: ["Bug", "Seer"]
+labels: ["Bug", "Seerr"]
 body:
   - type: input
     id: app_version
@@ -25,7 +25,6 @@ body:
         - macOS
         - Windows
         - Linux
-        - Tizen
     validations:
       required: true
 
@@ -45,6 +44,17 @@ body:
       description: "e.g. Pixel 8, iPhone 15, MacBook Air M2, etc."
     validations:
       required: false
+
+  - type: dropdown
+    id: server_type
+    attributes:
+      label: Server
+      description: The media server Moonfin is signed in to
+      options:
+        - Jellyfin
+        - Emby
+    validations:
+      required: true
 
   - type: dropdown
     id: connection_type

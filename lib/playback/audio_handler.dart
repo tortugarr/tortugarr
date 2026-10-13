@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' hide RepeatMode;
 import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
@@ -11,8 +12,11 @@ import 'package:server_core/server_core.dart';
 import '../data/models/aggregated_item.dart';
 import '../data/services/audiobook_resume_service.dart';
 import '../data/services/media_server_client_factory.dart';
+import '../util/audio_artwork_url.dart';
+import '../platform/pip_service.dart';
 import '../util/platform_detection.dart';
 import '../preference/user_preferences.dart';
+import 'aether_backend.dart';
 import 'car_artwork.dart';
 import 'headless_session_bootstrap.dart';
 import 'last_playback_session_store.dart';
@@ -41,6 +45,8 @@ class MoonfinAudioHandler extends BaseAudioHandler
   bool _sessionActive = false;
   bool _resumeAfterInterruption = false;
 
+  AetherBackend? _engineNowPlaying;
+
   MoonfinAudioHandler(
     this._manager,
     this._clientFactory,
@@ -49,6 +55,7 @@ class MoonfinAudioHandler extends BaseAudioHandler
   ) {
     _bindStreams();
     unawaited(_attachAndroidInterruptions());
+    _attachEngineNowPlaying();
     // Resolve the artwork provider authority before the first now-playing push
     // so its artUri can be wrapped; harmless no-op off Android.
     unawaited(CarArtwork.instance.ensureReady());
@@ -97,6 +104,17 @@ class MoonfinAudioHandler extends BaseAudioHandler
           _updateAudioSession();
         }
       }),
+      // Closing Picture in Picture on iOS takes down the shared Now Playing
+      // entry it borrowed, which leaves headphone and lock screen controls
+      // dead. A fresh media item makes the platform side rewrite the whole
+      // entry, not only the fields that changed.
+      if (PlatformDetection.isIOS)
+        GetIt.instance<PipService>().onPiPChanged
+            .where((inPiP) => !inPiP)
+            .listen((_) {
+              _pushPlaybackState();
+              _pushMediaItemForCurrentTrack();
+            }),
     ]);
   }
 
@@ -255,6 +273,34 @@ class MoonfinAudioHandler extends BaseAudioHandler
     } catch (_) {}
   }
 
+  // iOS music plays on the engine's own Now Playing session, which the system
+  // shows in place of this handler's entry. Its presses come back here so they
+  // do what ours would. Like the listener above, this outlives stop().
+  void _attachEngineNowPlaying() {
+    if (!PlatformDetection.isIOS ||
+        !GetIt.instance.isRegistered<AetherBackend>()) {
+      return;
+    }
+    final engine = _engineNowPlaying = GetIt.instance<AetherBackend>();
+    engine.remoteCommandStream.listen((command) {
+      switch (command['event']) {
+        case 'play':
+          unawaited(play());
+        case 'pause':
+          unawaited(pause());
+        case 'seek':
+          final positionMs = (command['positionMs'] as num?)?.toInt();
+          if (positionMs != null) {
+            unawaited(seek(Duration(milliseconds: positionMs)));
+          }
+        case 'next':
+          unawaited(skipToNext());
+        case 'previous':
+          unawaited(skipToPrevious());
+      }
+    });
+  }
+
   void _pushPlaybackState() {
     final s = _manager.state;
     final q = _manager.queueService;
@@ -360,7 +406,16 @@ class MoonfinAudioHandler extends BaseAudioHandler
       mediaItem.add(null);
       return;
     }
-    mediaItem.add(_mediaItemFor(raw));
+    final item = _mediaItemFor(raw);
+    mediaItem.add(item);
+    unawaited(
+      _engineNowPlaying?.setNowPlaying(
+        title: item.title,
+        artist: item.artist ?? '',
+        artworkUrl: item.artUri?.toString(),
+        hasNext: _manager.queueService.hasNext,
+      ),
+    );
     // The wrapped artUri is only readable once its host is on the provider's
     // allowlist.
     unawaited(CarArtwork.instance.persistHosts());
@@ -377,18 +432,11 @@ class MoonfinAudioHandler extends BaseAudioHandler
 
   MediaItem _mediaItemFor(AggregatedItem item) {
     final client = _clientFor(item);
-    String? artUri;
-    try {
-      final albumTag = item.albumPrimaryImageTag;
-      final albumId = item.albumId;
-      if (item.type == 'Audio' && albumTag != null && albumId != null) {
-        artUri = client.imageApi
-            .getPrimaryImageUrl(albumId, maxHeight: 300, tag: albumTag);
-      } else if (item.primaryImageTag != null) {
-        artUri = client.imageApi
-            .getPrimaryImageUrl(item.id, maxHeight: 300, tag: item.primaryImageTag);
-      }
-    } catch (_) {}
+    final artUri = audioArtUrl(
+      item,
+      clientFactory: _clientFactory,
+      maxHeight: 300,
+    );
 
     final String? artistName;
     if (item.type == 'Episode') {
@@ -463,13 +511,74 @@ class MoonfinAudioHandler extends BaseAudioHandler
     String parentMediaId, [
     Map<String, dynamic>? options,
   ]) async {
+    // A message opened from the root shows itself once, as a playable row
+    // that taps through to playFromMediaId, rather than as itself again.
+    if (MediaBrowseService.isMessageId(parentMediaId)) {
+      return [_browse.messageItem(parentMediaId).copyWith(playable: true)];
+    }
+
     // An uncaught throw here means onLoadChildren never answers and the car
     // shows an endless spinner, so always return something.
+    final List<MediaItem> items;
     try {
-      return await _browse.getChildren(parentMediaId, options);
+      items = await _browse.getChildren(parentMediaId, options);
     } catch (_) {
       return const [];
     }
+
+    final isRoot = parentMediaId == AudioService.browsableRootId;
+    final message = items.length == 1 &&
+            MediaBrowseService.isMessageId(items.single.id)
+        ? items.single
+        : null;
+    if (message == null) {
+      if (isRoot) _clearCarError();
+      return items;
+    }
+    if (isRoot) {
+      // Google's full screen error wants a null root, which audio_service
+      // can't send, and cars show an empty root as "no media". So the message
+      // stays a folder here, where its title heads the screen, and the error
+      // state reaches hosts that surface it another way. Only with nothing
+      // loaded, so a failed listing never covers a song that's playing.
+      if (_manager.queueService.currentItem == null) _pushCarError(message);
+      return items;
+    }
+    // audio_service turns anything not playable into a folder, which would
+    // hide the message behind a tap. Playable, it shows in the list.
+    return [message.copyWith(playable: true)];
+  }
+
+  // PlaybackStateCompat error codes, which audio_service passes through but
+  // doesn't name.
+  static const _errorCodeAppError = 1;
+  static const _errorCodeAuthenticationExpired = 3;
+
+  bool _showingCarError = false;
+
+  void _pushCarError(MediaItem message) {
+    final errorCode = message.id == MediaBrowseService.signInMessageId
+        ? _errorCodeAuthenticationExpired
+        : _errorCodeAppError;
+    if (_manager.queueService.currentItem != null) {
+      // A non-fatal error rides on the real state, so a song keeps its
+      // controls and playing state, and the next push clears it. The position
+      // is refreshed because copyWith restamps the update time.
+      playbackState.add(playbackState.value.copyWith(
+        updatePosition: _manager.state.position,
+        errorCode: errorCode,
+        errorMessage: message.title,
+      ));
+      return;
+    }
+    _showingCarError = true;
+    _pushErrorState(message.title, errorCode: errorCode);
+  }
+
+  void _clearCarError() {
+    if (!_showingCarError) return;
+    _showingCarError = false;
+    _pushPlaybackState();
   }
 
   @override
@@ -500,20 +609,38 @@ class MoonfinAudioHandler extends BaseAudioHandler
     Map<String, dynamic>? extras,
   ]) async {
     _ensureBound();
-    if (mediaId.startsWith('msg|')) {
-      _pushErrorState('Open Moonfin on your phone to sign in');
+    if (MediaBrowseService.isMessageId(mediaId)) {
+      _pushCarError(_browse.messageItem(mediaId));
       return;
     }
     final request = await _browse.resolvePlayRequest(mediaId);
     if (request == null) {
-      _pushErrorState('This item is unavailable right now');
+      _pushErrorState(_unavailableMessage);
       return;
     }
-    await _manager.playItems(
-      request.items,
-      startIndex: request.startIndex,
-      startPosition: request.startPosition,
-    );
+    await _playForCar(request);
+  }
+
+  static const _unavailableMessage = 'This item is unavailable right now';
+
+  // A throw here would leave the car on a silent "playing" with nothing to say
+  // why. Only a request that got no answer blames the server.
+  Future<void> _playForCar(PlayRequest request) async {
+    try {
+      await _manager.playItems(
+        request.items,
+        startIndex: request.startIndex,
+        startPosition: request.startPosition,
+      );
+    } catch (e) {
+      final unreachable =
+          e is TimeoutException || (e is DioException && e.response == null);
+      _pushErrorState(
+        unreachable
+            ? _browse.messageItem(MediaBrowseService.offlineMessageId).title
+            : _unavailableMessage,
+      );
+    }
   }
 
   // Android's media-resumption flow sends prepareFromMediaId followed by play.
@@ -535,11 +662,7 @@ class MoonfinAudioHandler extends BaseAudioHandler
       _pushErrorState('Nothing found for "$query"');
       return;
     }
-    await _manager.playItems(
-      request.items,
-      startIndex: request.startIndex,
-      startPosition: request.startPosition,
-    );
+    await _playForCar(request);
   }
 
   @override
@@ -549,11 +672,12 @@ class MoonfinAudioHandler extends BaseAudioHandler
   ]) =>
       _browse.search(query);
 
-  void _pushErrorState(String message) {
+  void _pushErrorState(String message, {int? errorCode}) {
     playbackState.add(PlaybackState(
       controls: const [],
       systemActions: const {},
       processingState: AudioProcessingState.error,
+      errorCode: errorCode,
       errorMessage: message,
       playing: false,
     ));

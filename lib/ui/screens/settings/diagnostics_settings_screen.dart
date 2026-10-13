@@ -4,13 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/services/log_service.dart';
-import '../../../data/services/media_server_client_factory.dart';
 import '../../../preference/user_preferences.dart';
+import '../../../util/artwork_timing.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import 'settings_app_bar.dart';
 
 class DiagnosticsSettingsScreen extends StatefulWidget {
@@ -29,6 +31,7 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
 
   Future<void> _sendReport() async {
     setState(() => _uploading = true);
+    ArtworkTimings.prepareReport();
     try {
       final fileName = await _log.uploadToServer();
       if (!mounted) return;
@@ -39,13 +42,15 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      _showSnack('Could not send report: $e');
+      final detail = describeError(e, AppLocalizations.of(context));
+      _showSnack('Could not send report: $detail');
     } finally {
       if (mounted) setState(() => _uploading = false);
     }
   }
 
   Future<void> _copyAll() async {
+    ArtworkTimings.prepareReport();
     await Clipboard.setData(ClipboardData(text: _log.exportText()));
     _showSnack('Logs copied to clipboard');
   }
@@ -67,17 +72,7 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
       ..showSnackBar(SnackBar(content: Text(message)));
   }
 
-  bool get _supportsUpload {
-    if (!GetIt.instance.isRegistered<MediaServerClientFactory>()) return false;
-    try {
-      return GetIt.instance<MediaServerClientFactory>()
-              .getActiveClient()
-              .clientLogApi !=
-          null;
-    } catch (_) {
-      return false;
-    }
-  }
+  bool get _supportsUpload => _log.canUploadToServer;
 
   Future<void> _pickFilter() async {
     final selected = await showFocusRestoringModalBottomSheet<_FilterChoice>(
@@ -147,11 +142,20 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
               const _Section(title: 'Logging'),
               SwitchPreferenceTile(
                 preference: UserPreferences.diagnosticLoggingEnabled,
-                title: 'Enable diagnostic logging',
+                title: 'Diagnostic Logging',
                 subtitle:
                     'Capture media, Seerr login, network and other '
                     'diagnostics so they can be sent to the server as a report.',
                 icon: Icons.bug_report,
+              ),
+              SwitchPreferenceTile(
+                preference: UserPreferences.crashReportsEnabled,
+                title: 'Send Crash Reports to Server',
+                subtitle:
+                    'Save a report when the app crashes and send it to your '
+                    'own server the next time it connects. Nothing is sent '
+                    'anywhere else.',
+                icon: Icons.report_outlined,
               ),
               _Section(
                 title: enabled
@@ -218,16 +222,16 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
               childCount: entries.length,
             ),
           ),
-        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 24 + MediaQuery.paddingOf(context).bottom),
+        ),
       ],
     );
   }
 
   String _sendSubtitle(bool enabled) {
     if (!enabled) return 'Enable diagnostic logging first.';
-    if (!_supportsUpload) {
-      return 'The active server does not support report uploads.';
-    }
+    if (!_supportsUpload) return _log.uploadUnavailableReason;
     if (_log.entryCount == 0) return 'No entries captured yet.';
     return 'Upload the captured logs to the active server.';
   }
@@ -283,6 +287,7 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
     LogCategory.auth => 'Authentication',
     LogCategory.playback => 'Playback',
     LogCategory.sync => 'Sync',
+    LogCategory.artwork => 'Artwork',
   };
 }
 

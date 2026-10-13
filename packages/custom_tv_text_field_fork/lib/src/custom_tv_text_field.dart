@@ -1,7 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'keyboard_controller.dart';
+
+const MethodChannel _appleTvSystemChannel = MethodChannel(
+  'moonfin/appletv_system',
+);
+
+/// Only the tvOS runner answers [_appleTvSystemChannel]. This reads the define
+/// the app builds tvOS with, so the native path folds away everywhere else
+/// rather than waiting on a call that can only fail.
+const bool _hasAppleTvSystemChannel = bool.fromEnvironment('MOONFIN_TVOS');
 
 enum TextFieldType {
   email,
@@ -124,10 +135,12 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
   final ValueNotifier<String?> _errorText = ValueNotifier<String?>(null);
   final FocusNode _keyboardFocusNode = FocusNode();
   final FocusNode _systemInputFocusNode = FocusNode();
+  final GlobalKey _caretKey = GlobalKey(debugLabel: 'tvFieldCaret');
   FocusNode? _focusToRestoreAfterOverlay;
   BuildContext? _keyboardOverlayContext;
 
   bool _useSystemImeSession = false;
+  bool _nativeSystemImePending = false;
 
   bool get _isSystemImeActive => _useSystemImeSession;
 
@@ -193,21 +206,49 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
     widget.controller.addListener(_onTextChanged);
     _systemInputFocusNode.addListener(_onSystemInputFocusChanged);
     _systemInputFocusNode.canRequestFocus = false;
+    _systemInputFocusNode.onKeyEvent = _handleArmedFieldKey;
+  }
+
+  KeyEventResult _handleArmedFieldKey(FocusNode node, KeyEvent event) {
+    final key = event.logicalKey;
+    final leavesField =
+        _useSystemImeSession &&
+        widget.maxLines == 1 &&
+        (event is KeyDownEvent || event is KeyRepeatEvent) &&
+        (key == LogicalKeyboardKey.arrowUp ||
+            key == LogicalKeyboardKey.arrowDown);
+    if (leavesField) _deactivateSystemIme();
+    return KeyEventResult.ignored;
   }
 
   void _onTextChanged() {
-    _scrollToEnd();
+    _scrollToCursor();
   }
 
-  void _scrollToEnd() {
+  /// Keeps the caret in view, following it wherever it sits in the text
+  /// rather than always chasing the end of the line.
+  void _scrollToCursor() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
+      if (!mounted || !_scrollController.hasClients) return;
+
+      final caretRender = widget.maxLines == 1
+          ? _caretKey.currentContext?.findRenderObject()
+          : null;
+      if (caretRender != null && caretRender.attached) {
+        _scrollController.position.ensureVisible(
+          caretRender,
+          alignment: 0.5,
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
         );
+        return;
       }
+
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
     });
   }
 
@@ -243,6 +284,9 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
   }
 
   void _onKeyboardStateChanged() {
+    // A caret move on its own changes no text, but the view still needs
+    // to follow it.
+    _scrollToCursor();
     if (!_keyboardController.isVisible && _isOverlayOpen.value) {
       _isOverlayOpen.value = false;
       if (widget.popParentOnKeyboardClose &&
@@ -283,7 +327,7 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
     widget.onVisibilityChanged?.call(visible);
   }
 
-  late final VoidCallback _closeHandle = closeKeyboard;
+  void _closeHandle() => closeKeyboard(submit: false);
 
   /// Removes first so repeated visibility notifications can't stack duplicate
   /// handles for the same field.
@@ -300,7 +344,7 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
     if (widget.isFocused != oldWidget.isFocused) {
       if (widget.isFocused) {
         _blinkController.repeat(reverse: true);
-        _scrollToEnd();
+        _scrollToCursor();
       } else {
         _blinkController.stop();
       }
@@ -348,9 +392,9 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
     if (!_isOverlayOpen.value) _showKeyboardOverlay();
   }
 
-  void closeKeyboard() {
+  void closeKeyboard({bool submit = true}) {
     if (_keyboardController.isVisible) {
-      _keyboardController.hide(true);
+      _keyboardController.hide(submit);
       return;
     }
     _deactivateSystemIme();
@@ -373,21 +417,28 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
       });
     }
 
-    _requestSystemInputFocus();
+    unawaited(_requestSystemInputFocus());
     _notifyVisibilityChanged();
   }
 
   void _deactivateSystemIme() {
     if (!_useSystemImeSession) return;
 
+    final inputHeldFocus = _systemInputFocusNode.hasFocus;
+    final nativeSystemImePending = _nativeSystemImePending;
+    _nativeSystemImePending = false;
+
     setState(() {
       _useSystemImeSession = false;
     });
     _notifyVisibilityChanged();
 
+    if (nativeSystemImePending) unawaited(_hideNativeSystemIme());
+
     _systemInputFocusNode.unfocus();
     _systemInputFocusNode.canRequestFocus = false;
 
+    if (!inputHeldFocus) return;
     try {
       final parentFocus = Focus.of(context);
       if (parentFocus.canRequestFocus) {
@@ -396,7 +447,49 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
     } catch (_) {}
   }
 
-  void _requestSystemInputFocus() {
+  /// Takes the runner's keyboard down. A runner with no field to take down
+  /// leaves this in the state it asks for, and a teardown path is the wrong
+  /// place to raise that.
+  Future<void> _hideNativeSystemIme() async {
+    try {
+      await _appleTvSystemChannel.invokeMethod<void>('hideTextInput');
+    } catch (_) {}
+  }
+
+  Future<void> _requestSystemInputFocus() async {
+    if (!_hasAppleTvSystemChannel) {
+      _requestFlutterSystemInputFocus();
+      return;
+    }
+    if (_nativeSystemImePending) return;
+    _nativeSystemImePending = true;
+    try {
+      final value = await _appleTvSystemChannel
+          .invokeMethod<String>('showTextInput', <String, Object>{
+            'text': widget.controller.text,
+            'hint': widget.hint,
+            'purpose': widget.inputPurpose.name,
+            'obscureText': widget.obscureText,
+          });
+      if (!mounted || !_useSystemImeSession || !_nativeSystemImePending) return;
+
+      _nativeSystemImePending = false;
+      if (value == null) return;
+      widget.controller.text = value;
+      _submitSystemIme(value);
+      return;
+    } on MissingPluginException {
+      // The runner has no native field, so fall back to the Flutter path.
+    } on PlatformException {
+      // The native field could not be presented, so fall back as well.
+    }
+
+    if (!mounted || !_useSystemImeSession || !_nativeSystemImePending) return;
+    _nativeSystemImePending = false;
+    _requestFlutterSystemInputFocus();
+  }
+
+  void _requestFlutterSystemInputFocus() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_useSystemImeSession) return;
       _systemInputFocusNode.requestFocus();
@@ -422,6 +515,12 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
         });
       });
     });
+  }
+
+  void _submitSystemIme(String value) {
+    if (!_useSystemImeSession) return;
+    _deactivateSystemIme();
+    widget.onFieldSubmitted?.call(value);
   }
 
   TextInputType _systemKeyboardType() {
@@ -458,6 +557,7 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
       },
     ).whenComplete(() {
       _keyboardOverlayContext = null;
+      if (!mounted) return;
       _isOverlayOpen.value = false;
       if (_keyboardController.isVisible) {
         _keyboardController.hide(false);
@@ -475,6 +575,10 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
 
   @override
   void dispose() {
+    if (_nativeSystemImePending) {
+      _nativeSystemImePending = false;
+      unawaited(_hideNativeSystemIme());
+    }
     if (isKeyboardVisible) {
       CustomTVTextField.isKeyboardVisibleNotifier.value = false;
     }
@@ -529,10 +633,7 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
                             ),
-                            onSubmitted: (value) {
-                              widget.onFieldSubmitted?.call(value);
-                              _deactivateSystemIme();
-                            },
+                            onSubmitted: _submitSystemIme,
                           ),
                         ),
                       ),
@@ -547,6 +648,10 @@ class CustomTVTextFieldState extends State<CustomTVTextField>
                           _keyboardController.isVisible ||
                           _isSystemImeActive,
                       showCursor: _keyboardController.isVisible || _isSystemImeActive,
+                      cursorIndex: _keyboardController.isVisible
+                          ? _keyboardController.cursor
+                          : null,
+                      caretKey: _caretKey,
                       blinkAnimation: _blinkAnimation,
                       hasError: error != null,
                       scrollController: _scrollController,
@@ -582,6 +687,10 @@ class _FieldDisplay extends StatelessWidget {
   final CustomTVTextField widget;
   final bool hasFocus;
   final bool showCursor;
+
+  /// Caret position in code units, or null to sit at the end of the text.
+  final int? cursorIndex;
+  final GlobalKey caretKey;
   final Animation<double> blinkAnimation;
   final bool hasError;
   final ScrollController scrollController;
@@ -590,6 +699,8 @@ class _FieldDisplay extends StatelessWidget {
     required this.widget,
     required this.hasFocus,
     required this.showCursor,
+    required this.cursorIndex,
+    required this.caretKey,
     required this.blinkAnimation,
     required this.scrollController,
     this.hasError = false,
@@ -656,30 +767,46 @@ class _FieldDisplay extends StatelessWidget {
               valueListenable: widget.controller,
               builder: (context, value, _) {
                 final isEmpty = value.text.isEmpty;
-                final displayText = isEmpty
-                    ? null
-                    : (widget.obscureText ? _maskText(value.text) : value.text);
+
+                final cursorSpan = WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Visibility(
+                    visible: showCursor,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: _Cursor(
+                      key: caretKey,
+                      animation: blinkAnimation,
+                      height: fontSize * 1.1,
+                    ),
+                  ),
+                );
+
+                // The caret splits the text at the editing position, so
+                // characters land and delete where the user put it.
+                final splitAt = (cursorIndex ?? value.text.length).clamp(
+                  0,
+                  value.text.length,
+                );
+                final beforeRaw = value.text.substring(0, splitAt);
+                final afterRaw = value.text.substring(splitAt);
+                final before = widget.obscureText
+                    ? _maskText(beforeRaw)
+                    : beforeRaw;
+                final after = widget.obscureText
+                    ? _maskText(afterRaw)
+                    : afterRaw;
 
                 final textSpan = TextSpan(
                   children: [
-                    TextSpan(
-                      text: isEmpty ? widget.hint : displayText,
-                      style: isEmpty ? hintStyle : textStyle,
-                    ),
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Visibility(
-                        visible: showCursor,
-                        maintainSize: true,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        child: _Cursor(
-                          key: const ValueKey('field_cursor'),
-                          animation: blinkAnimation,
-                          height: fontSize * 1.1,
-                        ),
-                      ),
-                    ),
+                    if (isEmpty)
+                      TextSpan(text: widget.hint, style: hintStyle)
+                    else if (before.isNotEmpty)
+                      TextSpan(text: before, style: textStyle),
+                    cursorSpan,
+                    if (after.isNotEmpty)
+                      TextSpan(text: after, style: textStyle),
                   ],
                 );
 

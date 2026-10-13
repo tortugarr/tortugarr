@@ -1,3 +1,5 @@
+import 'letterbox_crop.dart';
+
 enum SubtitleRendererMode { native, assOverlay }
 
 /// A caption track the player found inside the video itself, like the CEA-608
@@ -47,6 +49,15 @@ class EmbeddedCaptionTrack {
   }
 }
 
+/// Whether the chosen external subtitle is still being prepared, retries
+/// included. False also covers a canceled or failed load, so it doesn't mean
+/// the subtitle arrived, and it never waits for a cue to show. Backends opt in
+/// by implementing this interface.
+abstract interface class SubtitleLoadingBackend {
+  bool get isSubtitleLoading;
+  Stream<bool> get subtitleLoadingStream;
+}
+
 abstract class PlayerBackend {
   Future<void> play(
     dynamic mediaItem, {
@@ -71,6 +82,14 @@ abstract class PlayerBackend {
   Stream<bool> get bufferingStream;
   Stream<bool> get completedStream;
   Stream<Map<String, dynamic>>? get errorStream => null;
+
+  /// Whether the player has been told to play. Null on engines that don't
+  /// expose their own intent, and callers then fall back to "not playing".
+  ///
+  /// This exists because `isPlaying` is derived: a viewer pause, a starved
+  /// stream and a transient audio focus loss all read as not playing. Only a
+  /// starved stream leaves this true.
+  bool? get playWhenReady => null;
 
   Map<String, dynamic> getDeviceProfile({bool useProgressiveTranscode = false});
 
@@ -108,6 +127,12 @@ abstract class PlayerBackend {
 
   bool get supportsRuntimeTrackSelection;
 
+  /// Whether a direct-played source can switch audio tracks in place through
+  /// [setAudioTrack]. When true the manager skips the PlaybackInfo round trip
+  /// and player rebuild that a re-resolve costs, since every embedded track is
+  /// already in the stream.
+  bool get supportsDirectPlayAudioSwitch => false;
+
   int? get activeSubtitleTrackIndex => null;
 
   Future<int?> getActiveSubtitleTrackIndexAsync() async => null;
@@ -138,10 +163,46 @@ abstract class PlayerBackend {
   /// through [disableSubtitleTrack], the same as any other subtitle.
   Future<void> setEmbeddedCaptionTrack(int id) async {}
 
+  /// Picks a live stream back up after the player ran out of media, returning
+  /// whether it could. A live source has no end, so reaching one means the
+  /// source starved, and the cheapest answer is to re-open it where the stream
+  /// is now rather than tear the server session down. False means the engine
+  /// did nothing, and the caller must escalate rather than wait for a recovery
+  /// that is never coming.
+  Future<bool> resumeLiveEdge() async => false;
+
   /// Fires when the player's own track list changes. Captions carried inside
   /// the video turn up part way through playback, so a menu built when the
   /// stream started has to be rebuilt when this fires.
   Stream<void> get tracksChangedStream => const Stream.empty();
+
+  /// How long this player usually takes to render again after a seek. Only
+  /// paces how often SyncPlay may correct: the cost it actually compensates
+  /// for is measured from the player, never taken from here.
+  Duration get typicalSeekLatency => const Duration(milliseconds: 1500);
+
+  /// The longest a seek on this player may plausibly take. SyncPlay treats a
+  /// gap larger than this as the client being genuinely late rather than as
+  /// the seek still landing, and stops waiting on a seek that exceeds it.
+  /// Backends that restart a transcode to seek need this much higher than the
+  /// in-buffer seek a desktop player does.
+  Duration get maxSeekLatency => const Duration(seconds: 8);
+
+  /// Whether the rate can be changed a few percent mid-playback without the
+  /// audio dropping or glitching. mpv and ExoPlayer stretch audio in place;
+  /// the AVPlayer-based engines rebuild the audio pipeline on every rate write
+  /// and cannot pass Dolby audio through at anything but 1x. SyncPlay only
+  /// nudges the rate where this is true, and holds the player instead where
+  /// it is not.
+  bool get supportsSmoothRateChange => true;
+
+  /// Detect encoded letterbox and crop it. Cover-zoom is not this.
+  ///
+  /// Desktop libmpv and Android Media3 ship a cropper. Aether / Tizen / HTML
+  /// return [UnsupportedLetterboxCropper] until they implement [LetterboxCropper].
+  LetterboxCropper get letterboxCropper => const UnsupportedLetterboxCropper();
+
+  bool get supportsLetterboxCrop => letterboxCropper.isSupported;
 
   void dispose();
 }

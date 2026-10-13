@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/models/aggregated_item.dart';
+import '../../../util/focus/input_mode_tracker.dart';
+import '../../../util/platform_detection.dart';
 import '../overlay_sheet.dart';
 import 'context_action.dart';
 import 'focus_theme.dart';
@@ -11,11 +13,23 @@ Future<void> showContextMenu(
   BuildContext context,
   AggregatedItem item, {
   VoidCallback? onChanged,
+  CollectionRemovalContext? collectionRemoval,
 }) {
-  final actions = contextActionsFor(context, item, onChanged: onChanged);
+  final actions = contextActionsFor(
+    context,
+    item,
+    onChanged: onChanged,
+    collectionRemoval: collectionRemoval,
+  );
   if (actions.isEmpty) return Future<void>.value();
+  // A pointer opened this from a spot on screen, so put it there. A remote or
+  // a touch has no such spot and keeps the centered menu.
+  final anchor = PlatformDetection.useDesktopUi
+      ? InputModeTracker.lastPointerDownPosition
+      : null;
   return OverlaySheetController.show<void>(
     context,
+    anchor: anchor,
     builder: (sheetContext) =>
         _ContextMenu(item: item, actions: actions),
   );
@@ -75,37 +89,58 @@ class _ContextMenu extends StatelessWidget {
   }
 }
 
-class _ActionRow extends StatelessWidget {
+class _ActionRow extends StatefulWidget {
   final ItemContextAction action;
   final bool autofocus;
 
   const _ActionRow({required this.action, required this.autofocus});
 
   @override
+  State<_ActionRow> createState() => _ActionRowState();
+}
+
+class _ActionRowState extends State<_ActionRow> {
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return FocusableButton(
-      autofocus: autofocus,
-      borderRadius: 6,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      onPressed: () async {
-        await OverlaySheetController.closeAdaptive<void>(
-          context,
-          restoreFocus: true,
-        );
-        await action.onSelect();
-      },
-      child: Row(
-        children: [
-          Icon(action.icon, size: 22, color: theme.colorScheme.onSurface),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              action.label,
-              style: theme.textTheme.bodyLarge,
+    final action = widget.action;
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      // Focus follows the pointer so the row under the mouse lights up the way
+      // the row under the remote does, rather than the menu sitting inert.
+      onEnter: (_) => _focusNode.requestFocus(),
+      child: FocusableButton(
+        focusNode: _focusNode,
+        autofocus: widget.autofocus,
+        borderRadius: 6,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        onPressed: () async {
+          await OverlaySheetController.closeAdaptive<void>(
+            context,
+            restoreFocus: true,
+          );
+          await action.onSelect();
+        },
+        child: Row(
+          children: [
+            Icon(action.icon, size: 22, color: theme.colorScheme.onSurface),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                action.label,
+                style: theme.textTheme.bodyLarge,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -20,6 +20,9 @@ class ImdbExternalListItem {
   final double? rating;
   final String? userRating;
 
+  /// The certification Moonbase looked up on TMDB, or null when it has none.
+  final String? officialRating;
+
   ImdbExternalListItem({
     required this.imdbId,
     this.tmdbId = '',
@@ -31,6 +34,7 @@ class ImdbExternalListItem {
     this.popularity,
     this.rating,
     this.userRating,
+    this.officialRating,
   });
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +48,7 @@ class ImdbExternalListItem {
         'popularity': popularity,
         'rating': rating,
         'userRating': userRating,
+        'officialRating': officialRating,
       };
 
   factory ImdbExternalListItem.fromJson(Map<String, dynamic> json) =>
@@ -58,13 +63,14 @@ class ImdbExternalListItem {
         popularity: (json['popularity'] as num?)?.toDouble(),
         rating: (json['rating'] as num?)?.toDouble(),
         userRating: json['userRating'] as String?,
+        officialRating: json['officialRating'] as String?,
       );
 }
 
 class CustomExternalListsService {
   final Dio _dio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 15),
-    receiveTimeout: const Duration(seconds: 15),
+    receiveTimeout: const Duration(seconds: 45),
   ));
 
   CustomExternalListsService();
@@ -99,7 +105,11 @@ class CustomExternalListsService {
     }
   }
 
-  Future<List<ImdbExternalListItem>> fetchCustomRow(HomeSectionConfig config, {bool forceRefresh = false}) async {
+  Future<List<ImdbExternalListItem>> fetchCustomRow(
+    HomeSectionConfig config, {
+    bool forceRefresh = false,
+    bool throwOnError = false,
+  }) async {
     final sectionId = config.pluginSection;
     if (sectionId == null || sectionId.isEmpty) return [];
 
@@ -181,6 +191,7 @@ class CustomExternalListsService {
         final year = (rawItem['productionYear'] ?? rawItem['ProductionYear'] ?? rawItem['year'] ?? rawItem['Year']) as int?;
         final itemType = (rawItem['type'] ?? rawItem['Type']) as String? ?? 'Movie';
         final userRating = (rawItem['userRating'] ?? rawItem['UserRating']) as String?;
+        final officialRating = (rawItem['officialRating'] ?? rawItem['OfficialRating']) as String?;
         // The popularity and rating sort options rely on these two fields.
         final rating =
             ((rawItem['rating'] ?? rawItem['Rating']) as num?)?.toDouble();
@@ -200,6 +211,7 @@ class CustomExternalListsService {
             userRating: userRating,
             rating: rating,
             popularity: popularity,
+            officialRating: officialRating,
           ));
         }
       }
@@ -210,12 +222,16 @@ class CustomExternalListsService {
 
       return _applySorting(items, config);
     } catch (e) {
+      if (throwOnError) rethrow;
       debugPrint('[CustomService] Fetch failed from server. Falling back to local cache: $e');
       return loadCustomRowFromCache(config);
     }
   }
 
   // --- Caching ---
+
+  static const cacheMaxAge = Duration(hours: 24);
+
   Future<File> cacheFile(HomeSectionConfig config) async {
     final dir = PlatformDetection.isAppleTV
         ? await getApplicationCacheDirectory()
@@ -234,18 +250,36 @@ class CustomExternalListsService {
     }
   }
 
-  Future<List<ImdbExternalListItem>> loadCustomRowFromCache(HomeSectionConfig config) async {
+  /// [maxAge] is for callers that mean to go to the network when the row is
+  /// old. The fallbacks below leave it unset, since a stale row beats an empty
+  /// one when the server cant be reached.
+  Future<List<ImdbExternalListItem>> loadCustomRowFromCache(
+    HomeSectionConfig config, {
+    Duration? maxAge,
+  }) async {
     try {
       final file = await cacheFile(config);
       if (file.existsSync()) {
+        try {
+          final lastModified = file.lastModifiedSync();
+          if (maxAge != null &&
+              DateTime.now().difference(lastModified) > maxAge) {
+            return [];
+          }
+        } catch (_) {}
         final content = await file.readAsString();
         final decoded = jsonDecode(content) as List;
         final items = decoded
             .map((item) => ImdbExternalListItem.fromJson(item as Map<String, dynamic>))
             .toList();
-        final hasOldCache = decoded.any((item) => item is Map && !item.containsKey('backdropUrl'));
+        final hasOldCache = decoded.any((item) =>
+            item is Map && (!item.containsKey('backdropUrl') || !item.containsKey('officialRating')));
         final hasBuggyCache = items.any((item) => item.imdbId.isEmpty && item.tmdbId.isEmpty);
-        if (hasOldCache || hasBuggyCache) {
+        // Older plugins sent IMDb chart titles with the poster standing in for the backdrop
+        // and no TMDB id, so that copy is dropped to pick up both once the server has them.
+        final hasPosterBackdrops = items.any((item) =>
+            (item.backdropUrl ?? '').isNotEmpty && item.backdropUrl == item.posterUrl);
+        if (hasOldCache || hasBuggyCache || hasPosterBackdrops) {
           debugPrint('[CustomService] Invalid or buggy custom row cache detected, invalidating...');
           try {
             await file.delete();

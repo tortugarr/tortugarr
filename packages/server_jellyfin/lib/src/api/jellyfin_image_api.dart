@@ -5,6 +5,10 @@ class JellyfinImageApi implements ImageApi {
 
   JellyfinImageApi(this._baseUrl);
 
+  /// Left out, the server encodes artwork at quality 100, three times the
+  /// bytes of 90 for no difference at the sizes the app paints.
+  static const _artworkQuality = '90';
+
   String _buildQuery(Map<String, String> params) {
     if (params.isEmpty) return '';
     return '?${params.entries.map((e) => '${e.key}=${e.value}').join('&')}';
@@ -20,6 +24,7 @@ class JellyfinImageApi implements ImageApi {
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
       if (maxHeight != null) 'maxHeight': maxHeight.toString(),
+      'quality': _artworkQuality,
       'tag': ?tag,
     });
     return '$_baseUrl/Items/$itemId/Images/Primary$query';
@@ -35,6 +40,7 @@ class JellyfinImageApi implements ImageApi {
     final idx = index ?? 0;
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
+      'quality': _artworkQuality,
       'tag': ?tag,
     });
     return '$_baseUrl/Items/$itemId/Images/Backdrop/$idx$query';
@@ -74,6 +80,7 @@ class JellyfinImageApi implements ImageApi {
   }) {
     final query = _buildQuery({
       if (maxWidth != null) 'maxWidth': maxWidth.toString(),
+      'quality': _artworkQuality,
       'tag': ?tag,
     });
     return '$_baseUrl/Items/$itemId/Images/Thumb$query';

@@ -5,6 +5,7 @@ import 'package:playback_emby/playback_emby.dart';
 import 'package:playback_jellyfin/playback_jellyfin.dart';
 import 'package:server_core/server_core.dart';
 
+import '../../../preference/user_preferences.dart';
 import '../../../util/platform_detection.dart';
 import '../../models/aggregated_item.dart';
 import '../media_server_client_factory.dart';
@@ -14,6 +15,13 @@ import 'cast_transport_controls.dart';
 import 'native_cast_channel.dart';
 import 'receiver_device_profiles.dart';
 
+/// Subtitles off arrives as -1, which is the absence of a pick rather than a
+/// pick. Counting it as one forced every cast onto the no-direct-play path
+/// for nothing. The -1 itself still goes to the server, where it keeps the
+/// transcode from burning in whatever subtitle the server would default to.
+bool isExplicitSubtitlePick(int? subtitleStreamIndex) =>
+    subtitleStreamIndex != null && subtitleStreamIndex >= 0;
+
 class GoogleCastProvider implements CastProvider, CastTransportControls {
   final NativeCastChannel _native;
   final MediaServerClientFactory _clientFactory;
@@ -21,6 +29,16 @@ class GoogleCastProvider implements CastProvider, CastTransportControls {
   static final Logger _logger = Logger();
 
   const GoogleCastProvider(this._native, this._clientFactory);
+
+  // The receiver pulls the stream itself, so the ceiling that matters is the
+  // one the user set for their own network, the same value the local players
+  // read. Unset leaves the profile on its own default.
+  int? get _maxBitrateMbps {
+    if (!GetIt.instance.isRegistered<UserPreferences>()) return null;
+    return int.tryParse(
+      GetIt.instance<UserPreferences>().get(UserPreferences.maxBitrate),
+    );
+  }
 
   MediaStreamResolver _resolverForClient(MediaServerClient client) {
     return switch (client.serverType) {
@@ -35,20 +53,53 @@ class GoogleCastProvider implements CastProvider, CastTransportControls {
     String? mediaSourceId,
     int? audioStreamIndex,
     int? subtitleStreamIndex,
-  }) {
+  }) async {
     // An explicit track pick forces a transcode so the server applies it,
     // since the receiver has no track selection of its own.
     final hasExplicitIndices =
-        audioStreamIndex != null || subtitleStreamIndex != null;
-    return _resolverForClient(client).resolve(
-      item,
-      deviceProfile: chromecastDeviceProfile(),
-      mediaSourceId: mediaSourceId,
-      audioStreamIndex: audioStreamIndex,
-      subtitleStreamIndex: subtitleStreamIndex,
-      enableDirectPlay: !hasExplicitIndices,
-      enableDirectStream: !hasExplicitIndices,
-    );
+        audioStreamIndex != null || isExplicitSubtitlePick(subtitleStreamIndex);
+    final resolver = _resolverForClient(client);
+
+    Future<StreamResolutionResult> attempt({required bool open}) =>
+        resolver.resolve(
+          item,
+          deviceProfile: chromecastDeviceProfile(
+            maxBitrateMbps: _maxBitrateMbps,
+          ),
+          mediaSourceId: mediaSourceId,
+          audioStreamIndex: audioStreamIndex,
+          subtitleStreamIndex: subtitleStreamIndex,
+          enableDirectPlay: open || !hasExplicitIndices,
+          enableDirectStream: open || !hasExplicitIndices,
+        );
+
+    try {
+      final resolution = await attempt(open: false);
+      castDiag(
+        'resolved ${item.id}: ${resolution.playMethod.name}, '
+        'container=${resolution.container ?? '?'}, '
+        'explicitTracks=$hasExplicitIndices',
+      );
+      return resolution;
+    } catch (e) {
+      // A pick is worth less than the cast itself. Whatever refused the
+      // constrained request gets one open retry, where the server is free to
+      // offer anything, before the failure reaches the user.
+      if (!hasExplicitIndices) {
+        castDiag('resolve failed for ${item.id}', error: e);
+        rethrow;
+      }
+      castDiag(
+        'constrained resolve failed for ${item.id}, retrying open',
+        error: e,
+      );
+      final retry = await attempt(open: true);
+      castDiag(
+        'open retry for ${item.id}: ${retry.playMethod.name}, '
+        'container=${retry.container ?? '?'}',
+      );
+      return retry;
+    }
   }
 
   // The receiver picks its player from the MIME type, since the stream URL
@@ -129,16 +180,26 @@ class GoogleCastProvider implements CastProvider, CastTransportControls {
       );
     }
 
-    await _native.startGoogleCastSession(
-      targetId: target.id,
-      streamUrl: streamUrl,
-      contentType: _contentTypeFor(resolution),
-      title: item.name,
-      subtitle: item.overview,
-      posterUrl: _posterUrlFor(client, item),
-      queueItems: queuePayload.length > 1 ? queuePayload : null,
-      startPositionTicks: startPositionTicks,
+    final contentType = _contentTypeFor(resolution);
+    castDiag(
+      'loading on ${target.id}: $contentType, '
+      'queue=${queuePayload.length}, url=$streamUrl',
     );
+    try {
+      await _native.startGoogleCastSession(
+        targetId: target.id,
+        streamUrl: streamUrl,
+        contentType: contentType,
+        title: item.name,
+        subtitle: item.overview,
+        posterUrl: _posterUrlFor(client, item),
+        queueItems: queuePayload.length > 1 ? queuePayload : null,
+        startPositionTicks: startPositionTicks,
+      );
+    } catch (e) {
+      castDiag('native cast load failed', error: e);
+      rethrow;
+    }
   }
 
   @override

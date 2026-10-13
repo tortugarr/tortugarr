@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+
+import 'platform_detection.dart';
 
 /// On-disk layout for native game playback.
 ///
 /// ROMs can always be fetched from the server again, so they live in the cache
-/// directory the OS is free to reclaim. Saves and BIOS files can't: a cache
-/// clear would wipe someone's progress, so those live in support storage.
+/// directory the OS is free to reclaim. Saves and BIOS files go to support
+/// storage instead, out of reach of a cache clear.
 class GameStorage {
   const GameStorage._();
 
@@ -22,23 +25,37 @@ class GameStorage {
     return dir;
   }
 
-  /// Holds one folder per cached game, keyed by library and game id.
+  /// Support storage, or the cache directory on tvOS, which refuses to create
+  /// Application Support at all. Files there are reclaimable with everything
+  /// else, which save states survive because the player pushes them to the
+  /// server on exit, and BIOS files download again on demand.
+  static Future<Directory> _durableRoot() => PlatformDetection.isAppleTV
+      ? getApplicationCacheDirectory()
+      : getApplicationSupportDirectory();
+
+  /// Holds one folder per cached game, keyed by library and a fixed-length
+  /// digest of the game id. Keeping this component bounded avoids exceeding
+  /// path-length limits in libretro cores.
   static Future<Directory> romsRoot() async =>
       _dir(await getApplicationCacheDirectory(), 'games/cache');
 
   static Future<Directory> romDir(String libraryId, String gameId) async =>
-      _dir(await romsRoot(), '$libraryId/$gameId');
+      _dir(await romsRoot(), '$libraryId/${_gameDirectoryKey(gameId)}');
+
+  static String _gameDirectoryKey(String gameId) =>
+      sha256.convert(utf8.encode(gameId)).toString();
 
   static Future<Directory> systemDir() async =>
-      _dir(await getApplicationSupportDirectory(), 'games/system');
+      _dir(await _durableRoot(), 'games/system');
 
   static Future<Directory> saveDir() async =>
-      _dir(await getApplicationSupportDirectory(), 'games/saves');
+      _dir(await _durableRoot(), 'games/saves');
 
   /// Moves saves and BIOS files off the cache directory, where earlier builds
   /// put them. Costs two directory checks once everything has moved.
   static Future<void> migrateOffCache() async {
     final cacheRoot = await getApplicationCacheDirectory();
+    if (p.equals(cacheRoot.path, (await _durableRoot()).path)) return;
     for (final name in ['saves', 'system']) {
       final legacy = Directory('${cacheRoot.path}/games/$name');
       if (!await legacy.exists()) continue;

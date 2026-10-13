@@ -8,11 +8,14 @@ class PlayerState {
   final _durationController = StreamController<Duration>.broadcast();
   final _bufferController = StreamController<Duration>.broadcast();
   final _bufferingController = StreamController<bool>.broadcast();
+  final _subtitleLoadingController = StreamController<bool>.broadcast();
   final _repeatModeController = StreamController<RepeatMode>.broadcast();
   final _shuffleController = StreamController<bool>.broadcast();
 
   bool _isPlaying = false;
   bool _isBuffering = false;
+  bool _isSubtitleLoading = false;
+  bool? _playWhenReady;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
   Duration _buffer = Duration.zero;
@@ -22,6 +25,19 @@ class PlayerState {
 
   bool get isPlaying => _isPlaying;
   bool get isBuffering => _isBuffering;
+  bool get isSubtitleLoading => _isSubtitleLoading;
+
+  /// Whether the player has been told to play. Null on engines that don't
+  /// report their own intent.
+  ///
+  /// [isPlaying] reads false for a viewer pause, a starved stream and a
+  /// transient audio focus loss alike. Only a starved stream leaves this
+  /// true, so anything that has to spot a stall wants this, not [isPlaying].
+  bool? get playWhenReady => _playWhenReady;
+
+  /// Whether the viewer paused. Falls back to "not playing" on an engine that
+  /// reports no intent, which is what every caller used to assume.
+  bool get isPaused => !(_playWhenReady ?? _isPlaying);
   Duration get position => _position;
   Duration get duration => _duration;
   Duration get buffer => _buffer;
@@ -34,6 +50,7 @@ class PlayerState {
   Stream<Duration> get durationStream => _durationController.stream;
   Stream<Duration> get bufferStream => _bufferController.stream;
   Stream<bool> get bufferingStream => _bufferingController.stream;
+  Stream<bool> get subtitleLoadingStream => _subtitleLoadingController.stream;
   Stream<RepeatMode> get repeatModeStream => _repeatModeController.stream;
   Stream<bool> get shuffleStream => _shuffleController.stream;
 
@@ -43,10 +60,20 @@ class PlayerState {
     _playingController.add(playing);
   }
 
+  void setPlayWhenReady(bool? playWhenReady) {
+    _playWhenReady = playWhenReady;
+  }
+
   void setBuffering(bool buffering) {
     if (_isBuffering == buffering) return;
     _isBuffering = buffering;
     _bufferingController.add(buffering);
+  }
+
+  void setSubtitleLoading(bool loading) {
+    if (_isSubtitleLoading == loading) return;
+    _isSubtitleLoading = loading;
+    _subtitleLoadingController.add(loading);
   }
 
   void setPosition(Duration position) {
@@ -86,12 +113,15 @@ class PlayerState {
   void reset() {
     _isPlaying = false;
     _isBuffering = false;
+    _isSubtitleLoading = false;
+    _playWhenReady = null;
     _position = Duration.zero;
     _duration = Duration.zero;
     _buffer = Duration.zero;
     _playbackSpeed = 1.0;
     _playingController.add(false);
     _bufferingController.add(false);
+    _subtitleLoadingController.add(false);
     _positionController.add(Duration.zero);
     _durationController.add(Duration.zero);
     _bufferController.add(Duration.zero);
@@ -103,6 +133,7 @@ class PlayerState {
     _durationController.close();
     _bufferController.close();
     _bufferingController.close();
+    _subtitleLoadingController.close();
     _repeatModeController.close();
     _shuffleController.close();
   }

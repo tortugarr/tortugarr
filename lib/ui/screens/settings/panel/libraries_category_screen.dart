@@ -20,12 +20,12 @@ class _LibrariesCategoryScreen extends StatelessWidget {
                 onTap: () =>
                     context.pushSettingsScreen(const LibraryVisibilityScreen()),
               ),
-              SwitchPreferenceTile(
-                preference: UserPreferences.enableFolderView,
-                title: l10n.enableFolderView,
-                subtitle: l10n.showFolderBrowsingOption,
-                icon: Icons.folder,
-                onChanged: _pushPersonalizationSync,
+              _TvSettingsListTile(
+                leading: const Icon(Icons.swap_vert),
+                title: Text(l10n.libraryOrder),
+                subtitle: Text(l10n.libraryOrderSubtitle),
+                onTap: () =>
+                    context.pushSettingsScreen(const LibraryOrderScreen()),
               ),
               SwitchPreferenceTile(
                 preference: UserPreferences.enableMultiServerLibraries,
@@ -34,6 +34,18 @@ class _LibrariesCategoryScreen extends StatelessWidget {
                 icon: Icons.dns,
                 onChanged: _pushPersonalizationSync,
               ),
+              SwitchPreferenceTile(
+                preference: UserPreferences.showBookDiscoverTab,
+                title: l10n.showBookDiscoverTab,
+                subtitle: l10n.showBookDiscoverTabDescription,
+                icon: Icons.explore,
+                onChanged: _pushPersonalizationSync,
+              ),
+            ],
+          ),
+          _SectionHeader(l10n.libraryView),
+          adaptiveListSection(
+            children: [
               SwitchPreferenceTile(
                 preference: UserPreferences.groupItemsIntoCollections,
                 title: l10n.groupItemsIntoCollections,

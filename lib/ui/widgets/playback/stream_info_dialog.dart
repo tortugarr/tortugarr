@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../../util/focus/key_event_utils.dart';
 import '../track_selector_dialog.dart';
 
 Future<void> showStreamInfoDialog({
@@ -12,6 +12,10 @@ Future<void> showStreamInfoDialog({
   required String title,
   required List<Map<String, dynamic>> streamInfoSections,
   double maxWidth = 560,
+
+  /// Optional buttons under the sections, laid out in a row.
+  List<({String label, IconData icon, VoidCallback onPressed})> actions =
+      const [],
 }) async {
   final l10n = AppLocalizations.of(context);
 
@@ -26,6 +30,10 @@ Future<void> showStreamInfoDialog({
     color: Colors.white,
     fontSize: 13,
     fontWeight: FontWeight.w600,
+  );
+  final actionStyle = OutlinedButton.styleFrom(
+    foregroundColor: Colors.white,
+    side: ThemeRegistry.active.borders.chipBorder,
   );
 
   Widget infoRow(String label, String value, {bool highlight = false}) {
@@ -65,40 +73,7 @@ Future<void> showStreamInfoDialog({
   Widget body(ScrollController controller) {
     return Focus(
       autofocus: true,
-      onKeyEvent: (node, event) {
-        if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
-          return KeyEventResult.ignored;
-        }
-
-        const step = 120.0;
-        final key = event.logicalKey;
-        if (key == LogicalKeyboardKey.arrowDown) {
-          final max = controller.position.maxScrollExtent;
-          final target = (controller.offset + step).clamp(0.0, max);
-          unawaited(
-            controller.animateTo(
-              target,
-              duration: const Duration(milliseconds: 120),
-              curve: Curves.easeOut,
-            ),
-          );
-          return KeyEventResult.handled;
-        }
-        if (key == LogicalKeyboardKey.arrowUp) {
-          final max = controller.position.maxScrollExtent;
-          final target = (controller.offset - step).clamp(0.0, max);
-          unawaited(
-            controller.animateTo(
-              target,
-              duration: const Duration(milliseconds: 120),
-              curve: Curves.easeOut,
-            ),
-          );
-          return KeyEventResult.handled;
-        }
-
-        return KeyEventResult.ignored;
-      },
+      onKeyEvent: arrowScrollHandler(controller),
       child: ListView(
         controller: controller,
         children: [
@@ -117,6 +92,28 @@ Future<void> showStreamInfoDialog({
                   );
                 })),
           ],
+          if (actions.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.spaceLg,
+                AppSpacing.spaceMd,
+                AppSpacing.spaceLg,
+                0,
+              ),
+              child: Wrap(
+                spacing: AppSpacing.spaceMd,
+                runSpacing: AppSpacing.spaceSm,
+                children: [
+                  for (final action in actions)
+                    OutlinedButton.icon(
+                      onPressed: action.onPressed,
+                      icon: Icon(action.icon),
+                      label: Text(action.label),
+                      style: actionStyle,
+                    ),
+                ],
+              ),
+            ),
           const SizedBox(height: AppSpacing.spaceLg),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
 
 import '../data/services/log_service.dart';
+import '../util/platform_detection.dart';
 import 'audio_capability_profile.dart';
 
 class PlaybackProfileDiagnostics {
@@ -21,7 +22,7 @@ class PlaybackProfileDiagnostics {
   void logPlaybackDecision({
     required PlaybackDecisionContext context,
     required AudioCapabilityProfile audioCapabilityProfile,
-    required Map<String, dynamic> media3Capabilities,
+    required Map<String, dynamic> deviceAudioCapabilities,
     required List<String> audioSpdifCodecs,
     Map<String, dynamic> audioPreferenceContext = const <String, dynamic>{},
   }) {
@@ -50,6 +51,15 @@ class PlaybackProfileDiagnostics {
       'mediaSourceId': resolution.mediaSourceId,
       'playMethod': resolution.playMethod.name,
       'transcodingReasons': List<String>.from(resolution.transcodingReasons),
+      // Kept out of transcodingReasons on purpose: that list is the server's,
+      // and an empty one beside a transcode is itself the signal that this
+      // client refused.
+      'clientTranscodeReason': context.clientTranscodeReason,
+      'directPlayVerdict': <String, dynamic>{
+        'requestedByClient': resolution.directPlayRequested,
+        'offeredByServer': resolution.serverOfferedDirectPlay,
+        'sourceBitrate': resolution.sourceBitrate,
+      },
       'selectedAudioStreamIndex': context.audioStreamIndex,
       'selectedSubtitleStreamIndex': context.subtitleStreamIndex,
       'container': (resolution.container ?? '').toUpperCase(),
@@ -58,10 +68,56 @@ class PlaybackProfileDiagnostics {
       'videoProfile': _streamString(videoStream, 'Profile'),
       'videoLevel': _streamLevel(videoStream),
       'videoRange': _streamVideoRange(videoStream, resolution),
+      // What the decoder can handle, and what a "VideoRangeTypeNotSupported"
+      // transcode reason must trace back to. Not what the TV can display,
+      // which is the block below.
+      'videoRangeCapabilities': <String, dynamic>{
+        'hdr10': PlatformDetection.supportsHevcHdr10,
+        'hdr10Plus': PlatformDetection.supportsHevcHdr10Plus,
+        'dolbyVision': PlatformDetection.supportsHevcDolbyVision,
+        'dolbyVisionEl': PlatformDetection.supportsHevcDolbyVisionEl,
+        'dvProfile5': PlatformDetection.supportsDoViProfile5,
+        'dvProfile7': PlatformDetection.supportsDoViProfile7,
+        'dvProfile8': PlatformDetection.supportsDoViProfile8,
+      },
+      // What the panel says it can show, which is a different question from
+      // what the decoder can produce. Sitting next to the decoder block on
+      // purpose: a decoder that does Dolby Vision beside a display that does
+      // not is the shape of a display probe that never got an answer.
+      'displayHdrCapabilities': <String, dynamic>{
+        'probed': PlatformDetection.hasDisplayHdrCapabilities,
+        'hdrTypes': PlatformDetection.displayHdrTypesSnapshot,
+        'anyHdr': PlatformDetection.supportsAnyHdr,
+        'hdr10': PlatformDetection.supportsHdr10,
+        'hdr10Plus': PlatformDetection.supportsHdr10PlusDisplay,
+        'dolbyVision': PlatformDetection.supportsDolbyVision,
+      },
+      // What the decoder probe claimed, which is what the profile advertises,
+      // and so what the server copies a stream through on. A decoder that
+      // rejects a format it was handed disagrees with one of these.
+      'videoCodecCapabilities': <String, dynamic>{
+        'avc': PlatformDetection.supportsAvc,
+        'avcLevel': PlatformDetection.avcMainLevel,
+        'avcHigh10': PlatformDetection.supportsAvcHigh10,
+        'avcHigh10Level': PlatformDetection.avcHigh10Level,
+        'hevc': PlatformDetection.supportsHevc,
+        'hevcLevel': PlatformDetection.hevcMainLevel,
+        'hevcMain10': PlatformDetection.supportsHevcMain10,
+        'hevcMain10Level': PlatformDetection.hevcMain10Level,
+        'av1': PlatformDetection.supportsAv1,
+        'av1Main10': PlatformDetection.supportsAv1Main10,
+      },
+      // Empty off Android. Says which budget a report was gathered under,
+      // which is otherwise invisible once a device is held back.
+      'deviceMemory': PlatformDetection.deviceMemory,
       'audioCodec': _streamCodec(audioStream),
       'audioProfile': _streamString(audioStream, 'Profile'),
       'audioChannels': _streamChannels(audioStream),
       'subtitleCodec': _streamCodec(subtitleStream),
+      // Every subtitle the server offered, paired with the track number the
+      // backend is asked for. A track that plays the wrong language shows up
+      // here as a stream whose ordinal points at a different row.
+      'subtitleTracks': _subtitleTracks(context),
       'allowedAudioCodecs': allowedAudioCodecs,
       'hlsMpegTsAudioCodecs': hlsAudioTargets['mpegts'] ?? const <String>[],
       'hlsFmp4AudioCodecs': hlsAudioTargets['fmp4'] ?? const <String>[],
@@ -74,7 +130,9 @@ class PlaybackProfileDiagnostics {
       'audioCapabilities': audioCapabilityProfile.toMap(),
       'activeRouteType': audioCapabilityProfile.activeRouteType.name,
       'routeSupportsHdAudio': audioCapabilityProfile.routeSupportsHdAudio,
-      'media3Capabilities': Map<String, dynamic>.from(media3Capabilities),
+      'deviceAudioCapabilities': Map<String, dynamic>.from(
+        deviceAudioCapabilities,
+      ),
       'maxStreamingBitrate': context.maxStreamingBitrate,
     };
 
@@ -155,6 +213,49 @@ class PlaybackProfileDiagnostics {
     }
 
     return null;
+  }
+
+  /// The subtitle rows the viewer picks from, each with the track number the
+  /// backend gets asked for. The ordinal is worked out the same way playback
+  /// works it out, so a mapping that has drifted is visible here rather than
+  /// only on screen.
+  List<Map<String, dynamic>> _subtitleTracks(PlaybackDecisionContext context) {
+    final resolution = context.resolution;
+    final streams = resolution.mediaStreams;
+    if (streams.isEmpty) return const <Map<String, dynamic>>[];
+
+    final stripped =
+        resolution.playMethod == StreamPlayMethod.transcode ||
+        resolution.playMethod == StreamPlayMethod.directStream ||
+        !context.backend.demuxesEmbeddedSubtitles;
+    final externals = resolution.externalSubtitles;
+
+    final tracks = <Map<String, dynamic>>[];
+    for (final stream in streams) {
+      if ((stream['Type'] as String?)?.toLowerCase() != 'subtitle') continue;
+      final index = stream['Index'];
+      if (index is! int) continue;
+      final deliveredExternally = externals.any((s) => s.streamIndex == index);
+      tracks.add(<String, dynamic>{
+        'index': index,
+        'language': _streamString(stream, 'Language'),
+        'title': _streamString(stream, 'DisplayTitle'),
+        'codec': _streamCodec(stream),
+        'isExternal': stream['IsExternal'] == true,
+        'isForced': stream['IsForced'] == true,
+        'isHearingImpaired': stream['IsHearingImpaired'] == true,
+        'deliveryMethod': _streamString(stream, 'DeliveryMethod'),
+        'deliveredExternally': deliveredExternally,
+        'backendTrackId': TrackOrdinalMapper.mpvTrackIdForStream(
+          streamIndex: index,
+          type: 'Subtitle',
+          mediaStreams: streams,
+          externalSubtitles: externals,
+          embeddedStripped: stripped,
+        ),
+      });
+    }
+    return tracks;
   }
 
   Map<String, dynamic>? _firstStreamOfType(

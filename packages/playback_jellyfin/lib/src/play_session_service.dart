@@ -39,6 +39,8 @@ class PlaySessionService implements PlayerService {
     bool isPaused = false,
     int? audioStreamIndex,
     int? subtitleStreamIndex,
+    int? volumeLevel,
+    bool? isMuted,
   }) async {
     final report = PlaybackProgressReport(
       itemId: MediaStreamResolver.extractItemId(mediaItem),
@@ -48,6 +50,8 @@ class PlaySessionService implements PlayerService {
       isPaused: isPaused,
       audioStreamIndex: audioStreamIndex,
       subtitleStreamIndex: subtitleStreamIndex,
+      volumeLevel: volumeLevel,
+      isMuted: isMuted ?? false,
     );
     await _client.playbackApi.reportPlaybackProgress(report.toJson());
     _armExitBeacon(mediaItem, resolution, position.inMicroseconds * 10);
@@ -57,8 +61,9 @@ class PlaySessionService implements PlayerService {
   Future<void> onPlaybackStop(
     dynamic mediaItem,
     StreamResolutionResult resolution,
-    Duration position,
-  ) async {
+    Duration position, {
+    bool releaseLiveStream = true,
+  }) async {
     PlaybackExitBeacon.disarm();
     final report = _stopReport(
       mediaItem,
@@ -77,7 +82,7 @@ class PlaySessionService implements PlayerService {
     }
 
     final liveStreamId = resolution.liveStreamId;
-    if (liveStreamId != null && liveStreamId.isNotEmpty) {
+    if (releaseLiveStream && liveStreamId != null && liveStreamId.isNotEmpty) {
       try {
         await _client.playbackApi.closeLiveStream(liveStreamId);
       } catch (_) {}

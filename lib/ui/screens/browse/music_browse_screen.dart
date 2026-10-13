@@ -24,6 +24,7 @@ import '../../widgets/fullscreen_backdrop_switcher.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../util/home_row_title_localizer.dart';
 import '../../widgets/overlay_sheet.dart';
+import '../../widgets/skeleton/skeleton_music_browse.dart';
 
 Color get _navyBackground => AppColorScheme.background;
 
@@ -250,11 +251,7 @@ class _MusicBrowseScreenState extends State<MusicBrowseScreen> {
               const SizedBox(height: 10),
               Expanded(
                 child: _vm.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppColorScheme.accent,
-                        ),
-                      )
+                    ? const SkeletonMusicBrowse()
                     : RefreshIndicator(
                         onRefresh: _vm.refresh,
                         child: LayoutBuilder(
@@ -1171,9 +1168,6 @@ class _MusicSquareCardState extends State<_MusicSquareCard>
                                 ? OfflineAwareImage(
                                     imageUrl: widget.imageUrl!,
                                     fit: BoxFit.cover,
-                                    fadeInDuration: const Duration(
-                                      milliseconds: 200,
-                                    ),
                                     errorWidget: (_, _, _) => _albumPlaceholder(),
                                   )
                                 : _albumPlaceholder(),

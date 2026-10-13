@@ -8,7 +8,6 @@ class _AutomationQueueScreen extends StatefulWidget {
 }
 
 class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
-  static const _promptSkipSegments = 'intro:askToSkip,outro:askToSkip';
   late final UserPreferences _prefs;
 
   @override
@@ -29,20 +28,46 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
     setState(() {});
   }
 
+  /// The three choices for one segment type, each carrying the whole
+  /// preference value.
+  ///
+  /// The selected action maps back to [current] verbatim rather than to a
+  /// freshly serialised string, so the picker still marks it as selected
+  /// when the stored value lists its types in some other order.
+  Map<String, String> _segmentActionOptions(
+    AppLocalizations l10n,
+    String current,
+    Map<MediaSegmentType, MediaSegmentAction> actions,
+    MediaSegmentType type,
+  ) {
+    final selected = actions[type] ?? MediaSegmentAction.nothing;
+    String valueFor(MediaSegmentAction action) => action == selected
+        ? current
+        : withMediaSegmentAction(current, type, action);
+    return {
+      valueFor(MediaSegmentAction.askToSkip): l10n.settingsPromptUser,
+      valueFor(MediaSegmentAction.skip): l10n.settingsSkip,
+      valueFor(MediaSegmentAction.nothing): l10n.settingsDoNothing,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final nextUpBehavior = _prefs.get(UserPreferences.nextUpBehavior);
     final mediaSegmentActions = _prefs.get(UserPreferences.mediaSegmentActions);
+    final segmentActions = parseMediaSegmentActions(mediaSegmentActions);
+    final promptsForAnySegment = segmentActions.values.any(
+      (action) => action == MediaSegmentAction.askToSkip,
+    );
     final showNextUpOptions = nextUpBehavior != NextUpBehavior.disabled;
+    // Gated on the outro, since this replaces the Skip Outro button.
     final showReplaceSkipOutroWithNextUp =
-        showNextUpOptions && mediaSegmentActions == _promptSkipSegments;
+        showNextUpOptions &&
+        segmentActions[MediaSegmentType.outro] == MediaSegmentAction.askToSkip;
 
     return Scaffold(
-      appBar: buildSettingsAppBar(
-        context,
-        Text(l10n.settingsAutomationAndQueue),
-      ),
+      appBar: buildSettingsAppBar(context, Text(l10n.skippingAndAutoplay)),
       body: ListView(
         children: [
           _SectionHeader(l10n.playbackEnhancements),
@@ -54,18 +79,33 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
                 subtitle: l10n.settingsCinemaModeSubtitle,
                 icon: Icons.movie_filter,
               ),
-              StringPickerPreferenceTile(
-                preference: UserPreferences.mediaSegmentActions,
-                title: l10n.settingsSkipIntrosAndOutros,
-                icon: Icons.content_cut,
-                options: {
-                  _promptSkipSegments: l10n.settingsPromptUser,
-                  'intro:skip,outro:skip': l10n.settingsSkip,
-                  'intro:doNothing,outro:doNothing': l10n.settingsDoNothing,
-                },
+              SwitchPreferenceTile(
+                preference: UserPreferences.cinemaModeEpisodesEnabled,
+                title: l10n.settingsCinemaModeEpisodes,
+                subtitle: l10n.settingsCinemaModeEpisodesSubtitle,
+                icon: Icons.live_tv,
               ),
-              if (mediaSegmentActions == _promptSkipSegments ||
-                  showNextUpOptions)
+              // Every type writes to the one preference, so each tile is
+              // keyed on the current value. The tiles seed their notifier in
+              // initState, so without the key a tile left over from the
+              // previous value would keep showing it and overwrite a
+              // sibling's change on the next pick.
+              for (final type in configurableMediaSegmentTypes)
+                StringPickerPreferenceTile(
+                  key: ValueKey(
+                    'segmentAction_${type.name}_$mediaSegmentActions',
+                  ),
+                  preference: UserPreferences.mediaSegmentActions,
+                  title: l10n.settingsMediaSegmentTypeAction(type.displayName),
+                  icon: Icons.content_cut,
+                  options: _segmentActionOptions(
+                    l10n,
+                    mediaSegmentActions,
+                    segmentActions,
+                    type,
+                  ),
+                ),
+              if (promptsForAnySegment || showNextUpOptions)
                 EnumPreferenceTile<MediaSegmentCountdown>(
                   preference: UserPreferences.mediaSegmentCountdown,
                   title: l10n.settingsMediaSegmentCountdown,
@@ -76,6 +116,17 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
                     MediaSegmentCountdown.timer => l10n.settingsTimer,
                     MediaSegmentCountdown.both => l10n.settingsBoth,
                     MediaSegmentCountdown.none => l10n.settingsNone,
+                  },
+                ),
+              if (promptsForAnySegment)
+                EnumPreferenceTile<MediaSegmentAutoHide>(
+                  preference: UserPreferences.mediaSegmentAutoHide,
+                  title: l10n.settingsSkipButtonAutoHide,
+                  description: l10n.settingsSkipButtonAutoHideDescription,
+                  icon: Icons.visibility_off_outlined,
+                  labelOf: (v) => switch (v) {
+                    MediaSegmentAutoHide.off => l10n.off,
+                    _ => l10n.secondsValue(v.seconds),
                   },
                 ),
             ],

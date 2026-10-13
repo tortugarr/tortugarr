@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:server_core/server_core.dart';
 import 'package:dio/dio.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import '../../../navigation/destinations.dart';
 import '../admin_plugin_version_utils.dart';
 import '../../../widgets/adaptive/adaptive_dialog.dart';
 import '../providers/admin_user_providers.dart';
 import '../widgets/admin_form_styles.dart';
-import 'plugin_web_settings_screen.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../util/error_message.dart';
 import '../../../../util/platform_detection.dart';
 
 final _packageInfoProvider = FutureProvider.family<PackageInfo?, String>((
@@ -67,16 +66,13 @@ class _AdminPluginDetailScreenState
       ref.invalidate(adminInstalledPluginsProvider);
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         final message = switch (e) {
           DioException(response: final response)
               when response?.statusCode == 404 =>
-            AppLocalizations.of(context).adminPluginDetailToggle404,
-          DioException() => AppLocalizations.of(
-            context,
-          ).adminPluginDetailToggleDioError,
-          _ => AppLocalizations.of(
-            context,
-          ).adminPluginToggleFailed(e.toString()),
+            l10n.adminPluginDetailToggle404,
+          DioException() => l10n.adminPluginDetailToggleDioError,
+          _ => l10n.adminPluginToggleFailed(describeError(e, l10n)),
         };
         ScaffoldMessenger.of(
           context,
@@ -128,14 +124,9 @@ class _AdminPluginDetailScreenState
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(
-                context,
-              ).adminPluginUninstallFailed(e.toString()),
-            ),
-          ),
+          SnackBar(content: Text(l10n.adminPluginUninstallFailed(describeError(e, l10n)))),
         );
       }
     }
@@ -172,14 +163,9 @@ class _AdminPluginDetailScreenState
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(
-                context,
-              ).adminPluginUpdateFailed(e.toString()),
-            ),
-          ),
+          SnackBar(content: Text(l10n.adminPluginUpdateFailed(describeError(e, l10n)))),
         );
       }
     }
@@ -199,12 +185,8 @@ class _AdminPluginDetailScreenState
   }
 
   Uri _pluginHtmlSettingsUri(String configPageName) {
-    // Load the config page through the jellyfin-web app (legacy hash route) so
-    // it renders inside the styled shell. The explicit index.html keeps the
-    // path distinct from the bootstrap page (/web/) so the credential-priming
-    // location.replace performs a real navigation instead of a hash-only change.
     final encoded = Uri.encodeComponent(configPageName);
-    return Uri.parse('$_webBaseUrl/web/index.html#!/configurationpage?name=$encoded');
+    return Uri.parse('$_webBaseUrl/web/#/configurationpage?name=$encoded');
   }
 
   Future<String?> _resolveConfigurationPageName(PluginInfo plugin) async {
@@ -215,7 +197,7 @@ class _AdminPluginDetailScreenState
     }
 
     final uri = Uri.parse('$_webBaseUrl/web/ConfigurationPages');
-    final httpClient = HttpClient();
+    final httpClient = HttpClient()..userAgent = serverUserAgent;
     try {
       final request = await httpClient.getUrl(uri);
       request.headers.set('X-Emby-Token', token);
@@ -260,9 +242,11 @@ class _AdminPluginDetailScreenState
     }
   }
 
+  /// A plugin's settings page is the server's own web client, written for a
+  /// desktop browser and signed in by its own session, so it opens in the
+  /// browser rather than a web view the app would have to sign into itself.
   Future<void> _openHtmlSettings(PluginInfo plugin) async {
-    final client = GetIt.instance<MediaServerClient>();
-    final token = client.accessToken;
+    final token = GetIt.instance<MediaServerClient>().accessToken;
     if (token == null || token.isEmpty) {
       if (!mounted) {
         return;
@@ -276,23 +260,6 @@ class _AdminPluginDetailScreenState
       return;
     }
 
-    PublicSystemInfo? systemInfo;
-    try {
-      final publicInfoJson = await client.systemApi.getPublicSystemInfo();
-      systemInfo = PublicSystemInfo.fromJson(publicInfoJson);
-    } catch (_) {
-      systemInfo = null;
-    }
-
-    final parsedBaseUri = Uri.tryParse(client.baseUrl);
-    final fallbackServerLabel = parsedBaseUri?.host ?? 'Jellyfin';
-    final serverId = (systemInfo?.id.trim().isNotEmpty ?? false)
-        ? systemInfo!.id.trim()
-        : fallbackServerLabel;
-    final serverName = (systemInfo?.serverName.trim().isNotEmpty ?? false)
-        ? systemInfo!.serverName.trim()
-        : fallbackServerLabel;
-
     final configPageName =
         await _resolveConfigurationPageName(plugin) ?? plugin.name;
     if (!mounted) {
@@ -300,33 +267,21 @@ class _AdminPluginDetailScreenState
     }
 
     final uri = _pluginHtmlSettingsUri(configPageName);
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) => PluginWebSettingsScreen(
-          configurationPageUri: uri,
-          serverBaseUrl: client.baseUrl,
-          accessToken: token,
-          userId: client.userId,
-          serverId: serverId,
-          serverName: serverName,
-          title: AppLocalizations.of(
-            context,
-          ).adminPluginDetailSettingsTitle(plugin.name),
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).adminCouldNotOpenUrl(uri.toString()),
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _backButton(BuildContext context) {
-    return IconButton(
-      tooltip: AppLocalizations.of(context).adminDrawerPlugins,
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => context.go(Destinations.adminPlugins),
-    );
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final pluginsAsync = ref.watch(adminInstalledPluginsProvider);
     final packageInfoAsync = ref.watch(_packageInfoProvider(widget.pluginId));
 
@@ -336,11 +291,7 @@ class _AdminPluginDetailScreenState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              AppLocalizations.of(
-                context,
-              ).adminPluginLoadFailed(error.toString()),
-            ),
+            Text(l10n.adminPluginLoadFailed(describeError(error, l10n))),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () => ref.invalidate(adminInstalledPluginsProvider),
@@ -379,20 +330,12 @@ class _AdminPluginDetailScreenState
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
         children: [
-          Row(
-            children: [
-              _backButton(context),
-              const SizedBox(width: 4),
-              Expanded(
-                child: adminScreenHeader(
-                  context,
-                  title: plugin.name,
-                  subtitle: AppLocalizations.of(context)
-                      .adminPluginVersion(plugin.version),
-                  icon: Icons.extension_outlined,
-                ),
-              ),
-            ],
+          adminScreenHeader(
+            context,
+            title: plugin.name,
+            subtitle: AppLocalizations.of(context)
+                .adminPluginVersion(plugin.version),
+            icon: Icons.extension_outlined,
           ),
           if (statusBanner != null) ...[
             statusBanner,
@@ -473,8 +416,6 @@ class _AdminPluginDetailScreenState
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _backButton(context),
-            const SizedBox(width: 4),
             _PluginImage(
               imageUrl: plugin.hasImage
                   ? _pluginImageUrl(plugin)
@@ -605,6 +546,7 @@ class _PluginImage extends StatelessWidget {
       borderRadius: AppRadius.circular(12),
       child: Image.network(
         imageUrl!,
+        headers: serverImageHeaders,
         width: size,
         height: size,
         fit: BoxFit.cover,

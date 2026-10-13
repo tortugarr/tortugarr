@@ -5,8 +5,10 @@ import 'package:moonfin_design/moonfin_design.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:server_core/server_core.dart';
 
+import '../../../data/repositories/media_bar_repository.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../../preference/user_preferences.dart';
+import '../../../util/device_performance.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/settings/settings_section_header.dart';
@@ -27,8 +29,12 @@ class MediaBarSettingsScreen extends StatefulWidget {
 }
 
 class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
-  final _store = GetIt.instance<PreferenceStore>();
+  // Media bar settings are stored per server and user, and only
+  // UserPreferences reaches that scoped key. Writing straight to the store
+  // lands on a bare key nothing else reads and startup drops.
+  final _prefs = GetIt.instance<UserPreferences>();
   static const _validAutoAdvanceIntervals = <int>{5000, 10000, 15000, 30000};
+  static const _collectionFetchLimit = 200;
   bool _selectorOpen = false;
   late final PreferenceBinding<String> _mediaBarModeBinding;
 
@@ -36,17 +42,17 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
   void initState() {
     super.initState();
     _mediaBarModeBinding = PreferenceBinding(
-      _store,
+      GetIt.instance<PreferenceStore>(),
       UserPreferences.mediaBarMode,
     );
-    final current = _store.get(UserPreferences.mediaBarMode);
+    final current = _prefs.get(UserPreferences.mediaBarMode);
     final normalized = UserPreferences.normalizeMediaBarMode(current);
     if (current != normalized) {
-      _store.set(UserPreferences.mediaBarMode, normalized);
+      _prefs.set(UserPreferences.mediaBarMode, normalized);
     }
-    final currentInterval = _store.get(UserPreferences.mediaBarIntervalMs);
+    final currentInterval = _prefs.get(UserPreferences.mediaBarIntervalMs);
     if (!_validAutoAdvanceIntervals.contains(currentInterval)) {
-      _store.set(UserPreferences.mediaBarIntervalMs, 10000);
+      _prefs.set(UserPreferences.mediaBarIntervalMs, 10000);
     }
   }
 
@@ -57,13 +63,13 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
   }
 
   List<String> _splitCsv(Preference<String> pref) {
-    return _store.get(pref).split(',').where((s) => s.isNotEmpty).toList();
+    return _prefs.get(pref).split(',').where((s) => s.isNotEmpty).toList();
   }
 
   void _saveCsv(Preference<String> pref, List<String> values) {
-    _store.set(pref, values.join(','));
+    _prefs.set(pref, values.join(','));
     _pushSync();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _pushSync() {
@@ -74,42 +80,62 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
     }
   }
 
+  /// Offers [options] for [pref], starting from what is stored and writing the
+  /// choice back. [truncated] says the fetch was capped, so the dialog is not
+  /// showing everything the server has.
+  Future<void> _pickSources({
+    required Preference<String> pref,
+    required String title,
+    required Map<String, String> options,
+    bool truncated = false,
+  }) async {
+    final split = reconcileSources(
+      stored: _splitCsv(pref).toSet(),
+      available: options.keys.toSet(),
+      truncated: truncated,
+    );
+    if (split.stale.isNotEmpty) {
+      _saveCsv(pref, split.listed.toList());
+    }
+
+    if (!mounted) return;
+    final result = await _showMultiSelectDialog(
+      title: title,
+      items: options,
+      selected: split.listed,
+    );
+    if (result != null) {
+      // The dialog only knows what it was shown, so anything held back goes
+      // in again rather than being lost on confirm.
+      _saveCsv(pref, [...result, ...split.unlisted]);
+    }
+  }
+
   Future<void> _showLibrarySelector() async {
     if (_selectorOpen) return;
     _selectorOpen = true;
     final l10n = AppLocalizations.of(context);
     final client = GetIt.instance<MediaServerClient>();
-    final selected = _splitCsv(UserPreferences.mediaBarLibraryIds).toSet();
 
     try {
       final response = await client.userViewsApi.getUserViews();
       final items = (response['Items'] as List? ?? [])
           .cast<Map<String, dynamic>>()
-          .where((item) {
-            final type = item['CollectionType'] as String?;
-            return type == 'movies' || type == 'tvshows' || type == null;
-          })
+          .where(
+            (item) =>
+                supportsMediaBarLibrary(item, const ['movies', 'tvshows']),
+          )
           .toList();
 
-      final availableIds = items.map((i) => i['Id']?.toString() ?? '').toSet();
-      final pruned = selected.intersection(availableIds);
-      if (pruned.length != selected.length) {
-        _saveCsv(UserPreferences.mediaBarLibraryIds, pruned.toList());
-      }
-
-      if (!mounted) return;
-      final result = await _showMultiSelectDialog(
+      await _pickSources(
+        pref: UserPreferences.mediaBarLibraryIds,
         title: l10n.sourceLibraries,
-        items: {
+        options: {
           for (final item in items)
             item['Id']?.toString() ?? '':
                 item['Name'] as String? ?? l10n.unknown,
         },
-        selected: pruned,
       );
-      if (result != null) {
-        _saveCsv(UserPreferences.mediaBarLibraryIds, result.toList());
-      }
     } catch (_) {
     } finally {
       _selectorOpen = false;
@@ -121,7 +147,6 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
     _selectorOpen = true;
     final l10n = AppLocalizations.of(context);
     final client = GetIt.instance<MediaServerClient>();
-    final selected = _splitCsv(UserPreferences.mediaBarCollectionIds).toSet();
 
     try {
       final response = await client.itemsApi.getItems(
@@ -129,30 +154,23 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
         sortBy: 'SortName',
         sortOrder: 'Ascending',
         recursive: true,
-        limit: 200,
+        limit: _collectionFetchLimit,
       );
       final items = (response['Items'] as List? ?? [])
           .cast<Map<String, dynamic>>();
 
-      final availableIds = items.map((i) => i['Id']?.toString() ?? '').toSet();
-      final pruned = selected.intersection(availableIds);
-      if (pruned.length != selected.length) {
-        _saveCsv(UserPreferences.mediaBarCollectionIds, pruned.toList());
-      }
-
-      if (!mounted) return;
-      final result = await _showMultiSelectDialog(
+      await _pickSources(
+        pref: UserPreferences.mediaBarCollectionIds,
         title: l10n.sourceCollections,
-        items: {
+        options: {
           for (final item in items)
             item['Id']?.toString() ?? '':
                 item['Name'] as String? ?? l10n.unknown,
         },
-        selected: pruned,
+        // A full page back means there are probably more collections than the
+        // dialog is showing.
+        truncated: items.length >= _collectionFetchLimit,
       );
-      if (result != null) {
-        _saveCsv(UserPreferences.mediaBarCollectionIds, result.toList());
-      }
     } catch (_) {
     } finally {
       _selectorOpen = false;
@@ -164,39 +182,23 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
     _selectorOpen = true;
     final l10n = AppLocalizations.of(context);
     final client = GetIt.instance<MediaServerClient>();
-    final selected = _splitCsv(UserPreferences.mediaBarExcludedGenres).toSet();
 
     try {
       final response = await client.itemsApi.getGenres(
         sortBy: 'SortName',
         sortOrder: 'Ascending',
       );
-      final items = (response['Items'] as List? ?? [])
-          .cast<Map<String, dynamic>>();
+      final names = (response['Items'] as List? ?? [])
+          .cast<Map<String, dynamic>>()
+          .map((item) => (item['Name'] as String? ?? '').trim())
+          .where((name) => name.isNotEmpty)
+          .toSet();
 
-      final names =
-          items
-              .map((item) => (item['Name'] as String? ?? '').trim())
-              .where((name) => name.isNotEmpty)
-              .toSet()
-              .toList()
-            ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-
-      final available = names.toSet();
-      final pruned = selected.intersection(available);
-      if (pruned.length != selected.length) {
-        _saveCsv(UserPreferences.mediaBarExcludedGenres, pruned.toList());
-      }
-
-      if (!mounted) return;
-      final result = await _showMultiSelectDialog(
+      await _pickSources(
+        pref: UserPreferences.mediaBarExcludedGenres,
         title: l10n.excludedGenres,
-        items: {for (final name in names) name: name},
-        selected: pruned,
+        options: {for (final name in names) name: name},
       );
-      if (result != null) {
-        _saveCsv(UserPreferences.mediaBarExcludedGenres, result.toList());
-      }
     } catch (_) {
     } finally {
       _selectorOpen = false;
@@ -274,7 +276,10 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                                       autofocus: i == 0,
                                       dense: true,
                                       visualDensity: VisualDensity.compact,
-                                      contentPadding: EdgeInsets.zero,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                          ),
                                       controlAffinity:
                                           ListTileControlAffinity.leading,
                                       title: Text(e.value),
@@ -339,6 +344,9 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
 
   Widget _buildContent(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final trailersHeldBack =
+        GetIt.instance<UserPreferences>().resolveDevicePerformanceTier() ==
+        DevicePerformanceTier.reduced;
     return withCleanSettingsTypography(
       context,
       Scaffold(
@@ -357,9 +365,11 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                     UserPreferences.mediaBarModeMoonfin:
                         l10n.mediaBarModeMoonfin,
                     UserPreferences.mediaBarModeMakd: l10n.mediaBarModeMakd,
-                    UserPreferences.mediaBarModeBookshelf: 'Bookshelf',
-                    UserPreferences.mediaBarModeGallery: 'Gallery',
-                    UserPreferences.mediaBarModeBanner: 'Banner',
+                    UserPreferences.mediaBarModeBookshelf:
+                        l10n.mediaBarModeBookshelf,
+                    UserPreferences.mediaBarModeGallery: l10n.mediaBarModeGallery,
+                    UserPreferences.mediaBarModeBanner: l10n.mediaBarModeBanner,
+                    UserPreferences.mediaBarModeAya: l10n.mediaBarModeAya,
                     UserPreferences.mediaBarModeOff: l10n.mediaBarModeOff,
                   },
                   onChanged: _pushSync,
@@ -372,6 +382,20 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                     'both': l10n.moviesAndTvShows,
                     'movies': l10n.moviesOnly,
                     'tvshows': l10n.tvShowsOnly,
+                  },
+                  onChanged: _pushSync,
+                ),
+                StringPickerPreferenceTile(
+                  preference: UserPreferences.mediaBarSourceType,
+                  title: l10n.mediaBarSourceType,
+                  icon: Icons.auto_awesome_motion,
+                  options: {
+                    UserPreferences.mediaBarSourceRandom:
+                        l10n.mediaBarSourceRandom,
+                    UserPreferences.mediaBarSourceRecentlyAdded:
+                        l10n.recentlyAdded,
+                    UserPreferences.mediaBarSourceRecentlyReleased:
+                        l10n.recentlyReleased,
                   },
                   onChanged: _pushSync,
                 ),
@@ -396,12 +420,8 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
             adaptiveListSection(
               children: [
                 _MediaBarActionTile(
-                  leading: Image.asset(
-                    'assets/icons/clapperboard.png',
-                    width: 24,
-                    height: 24,
-                    color: AppColorScheme.onSurface,
-                    fit: BoxFit.contain,
+                  icon: const ImageIcon(
+                    AssetImage('assets/icons/clapperboard.png'),
                   ),
                   title: Text(l10n.sourceLibraries),
                   subtitle: Text(
@@ -414,7 +434,7 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                   onTap: _showLibrarySelector,
                 ),
                 _MediaBarActionTile(
-                  leading: const Icon(Icons.collections_bookmark),
+                  icon: const Icon(Icons.collections_bookmark),
                   title: Text(l10n.sourceCollections),
                   subtitle: Text(
                     _sourceSubtitle(
@@ -426,7 +446,7 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                   onTap: _showCollectionSelector,
                 ),
                 _MediaBarActionTile(
-                  leading: const Icon(Icons.label_off),
+                  icon: const Icon(Icons.label_off),
                   title: Text(l10n.excludedGenres),
                   subtitle: Text(
                     _sourceSubtitle(
@@ -463,6 +483,37 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                 ),
               ],
             ),
+
+            SettingsSectionHeader(l10n.trailers),
+            adaptiveListSection(
+              children: [
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mediaBarTrailerPreview,
+                  title: l10n.trailerPreview,
+                  // The switch would otherwise read as on while nothing
+                  // plays, so say why.
+                  subtitle: trailersHeldBack
+                      ? l10n.trailerPreviewHeldBack
+                      : l10n.autoPlayTrailers,
+                  icon: Icons.movie_outlined,
+                  onChanged: _pushSync,
+                ),
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mediaBarTrailerAudio,
+                  title: l10n.trailerAudio,
+                  subtitle: l10n.enableTrailerAudio,
+                  icon: Icons.volume_up,
+                  onChanged: _pushSync,
+                ),
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mediaBarTrailerCaptions,
+                  title: l10n.trailerCaptions,
+                  subtitle: l10n.trailerCaptionsDescription,
+                  icon: Icons.closed_caption_outlined,
+                  onChanged: _pushSync,
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -471,13 +522,13 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
 }
 
 class _MediaBarActionTile extends StatelessWidget {
-  final Widget leading;
+  final Widget icon;
   final Widget title;
   final Widget subtitle;
   final VoidCallback? onTap;
 
   const _MediaBarActionTile({
-    required this.leading,
+    required this.icon,
     required this.title,
     required this.subtitle,
     this.onTap,
@@ -486,14 +537,41 @@ class _MediaBarActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TvFocusHighlight(
-      builder: (ctx, _) => ListTile(
+      builder: (ctx, focused) => ListTile(
         focusColor: Colors.transparent,
         hoverColor: Colors.transparent,
-        leading: leading,
+        leading: buildSettingsLeadingIconShell(
+          context,
+          icon: icon,
+          focused: focused,
+          iconColor: focused && settingsTileInvertsOnFocus
+              ? AppColors.black.withValues(alpha: 0.54)
+              : AppColorScheme.onSurface.withValues(alpha: 0.78),
+        ),
         title: title,
         subtitle: subtitle,
         onTap: onTap,
       ),
     );
   }
+}
+
+/// Splits stored source ids against the ones the server just listed.
+///
+/// An id the server did not list is gone, so the picker forgets it. A capped
+/// fetch proves nothing about what it left out, so those ids are held back and
+/// stored again instead.
+@visibleForTesting
+({Set<String> listed, Set<String> unlisted, Set<String> stale})
+reconcileSources({
+  required Set<String> stored,
+  required Set<String> available,
+  required bool truncated,
+}) {
+  final missing = stored.difference(available);
+  return (
+    listed: stored.intersection(available),
+    unlisted: truncated ? missing : const <String>{},
+    stale: truncated ? const <String>{} : missing,
+  );
 }

@@ -1,0 +1,1 @@
+int osMajorVersion() => 0;

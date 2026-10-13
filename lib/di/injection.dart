@@ -12,13 +12,16 @@ import '../data/database/offline_database.dart';
 import '../data/offline/offline_catalog.dart';
 import '../data/repositories/offline_repository.dart';
 import '../data/services/connectivity_service.dart';
+import '../data/services/crash_report_service.dart';
 import '../data/services/log_service.dart';
 import '../data/services/media_server_client_factory.dart';
 import '../data/services/recent_searches_store.dart';
+import '../data/services/pending_rating_store.dart';
 import '../data/services/storage_path_service.dart';
 import '../platform/web_runtime_config.dart';
 import '../preference/preference_constants.dart';
 import '../preference/user_preferences.dart';
+import '../util/app_beta.dart';
 import '../util/platform_detection.dart';
 import 'modules/app_module.dart';
 import 'modules/auth_module.dart';
@@ -188,24 +191,6 @@ Future<void> _migrateLegacyBitrateCap(PreferenceStore store) async {
   await store.setBool(migrationKey, true);
 }
 
-Future<void> _migrateAndroidTvPassthroughDefaults(
-  PreferenceStore store,
-) async {
-  const migrationKey = 'pref_audio_passthrough_defaults_android_tv_v1';
-
-  if (!PlatformDetection.isAndroid || !PlatformDetection.isTV) {
-    return;
-  }
-
-  if (store.getBool(migrationKey) == true) {
-    return;
-  }
-
-  await store.setBool(UserPreferences.audioPrefsAutoDetected.key, false);
-
-  await store.setBool(migrationKey, true);
-}
-
 Future<void> _migrateAndroidMobileStereoAacFallbackDefault(
   PreferenceStore store,
 ) async {
@@ -275,12 +260,10 @@ Future<void> migrateAudioPreferenceSplit(PreferenceStore store) async {
   if (legacyOn(_legacyDtsEnabledKey)) {
     await setBoolIfMissing(UserPreferences.dtsCorePassthroughEnabled, true);
     await setBoolIfMissing(UserPreferences.dtsHdPassthroughEnabled, true);
-    await setBoolIfMissing(UserPreferences.dtsXPassthroughEnabled, true);
     carriedOver = true;
   }
   if (legacyOn(_legacyTrueHdEnabledKey)) {
     await setBoolIfMissing(UserPreferences.trueHdPassthroughEnabled, true);
-    await setBoolIfMissing(UserPreferences.trueHdAtmosPassthroughEnabled, true);
     carriedOver = true;
   }
 
@@ -289,19 +272,15 @@ Future<void> migrateAudioPreferenceSplit(PreferenceStore store) async {
       store.getString(_legacyAudioBehaviorKey) ==
           _legacyAudioBehaviorDownmixValue;
   if (wasDownmix) {
+    await setBoolIfMissing(UserPreferences.downmixToStereo, true);
     await setEnumIfMissing(
-      UserPreferences.audioOutputMode,
-      AudioOutputMode.forceStereo,
+      UserPreferences.audioPassthroughMode,
+      AudioPassthroughMode.disabled,
     );
-  }
-
-  final migratedPreset = carriedOver
-      ? AudioPassthroughPreset.advanced
-      : (wasDownmix ? AudioPassthroughPreset.stereo : null);
-  if (migratedPreset != null) {
+  } else if (carriedOver) {
     await setEnumIfMissing(
-      UserPreferences.audioPassthroughPreset,
-      migratedPreset,
+      UserPreferences.audioPassthroughMode,
+      AudioPassthroughMode.manual,
     );
   }
 
@@ -333,27 +312,125 @@ Future<void> migrateAudioPreferenceSplit(PreferenceStore store) async {
   await store.setBool(migrationKey, true);
 }
 
-// Minimal DI for background isolates like the Watch Next worker. This must not
-// call registerPlaybackModule: constructing Media3PlayerBackend subscribes to
-// the process-global moonfin/media3_video_events channel and would hijack the
-// foreground engine's event sink, freezing the player OSD mid-playback.
-Future<void> configureBackgroundDependencies() async {
+// Retired keys from the preset era, read raw because the prefs no longer exist.
+const _oldPresetKey = 'pref_audio_passthrough_preset';
+const _oldOutputModeKey = 'audio_output_mode';
+const _oldToggleKeys = <String>[
+  'pref_passthrough_ac3',
+  'pref_passthrough_eac3',
+  'pref_passthrough_eac3_joc',
+  'pref_passthrough_dts_core',
+  'pref_passthrough_dts_hd',
+  'pref_passthrough_dts_x',
+  'pref_passthrough_truehd',
+  'pref_passthrough_truehd_atmos',
+];
+
+/// Folds the retired preset, output mode, and variant toggles into the
+/// passthrough mode and downmix prefs. The five base toggle keys keep their
+/// stored values. The variant keys are left behind, since a variant-only ON
+/// was a no-op once its base toggle was off.
+Future<void> migrateAudioPassthroughMode(PreferenceStore store) async {
+  if (store.getBool(UserPreferences.audioModeMigrated.key) == true) {
+    return;
+  }
+
+  final preset = store.getString(_oldPresetKey);
+  final outputMode = store.getString(_oldOutputModeKey);
+  final anyToggleSet = _oldToggleKeys.any(store.containsKey);
+
+  final AudioPassthroughMode mode;
+  var downmix = false;
+  if (preset == 'stereo' || outputMode == 'forceStereo') {
+    // The old stereo path meant no passthrough plus a local downmix.
+    mode = AudioPassthroughMode.disabled;
+    downmix = true;
+  } else if (preset == 'advanced' || anyToggleSet) {
+    // Hand-managed toggles keep their intent. Absent base keys get filled
+    // from the probe after startup detection.
+    mode = AudioPassthroughMode.manual;
+  } else {
+    mode = AudioPassthroughMode.auto;
+  }
+
+  if (mode != AudioPassthroughMode.auto &&
+      !store.containsKey(UserPreferences.audioPassthroughMode.key)) {
+    await store.setString(UserPreferences.audioPassthroughMode.key, mode.name);
+  }
+  if (downmix && !store.containsKey(UserPreferences.downmixToStereo.key)) {
+    await store.setBool(UserPreferences.downmixToStereo.key, true);
+  }
+
+  await store.setBool(UserPreferences.audioModeMigrated.key, true);
+}
+
+const _legacyTrickPlayEnabledKey = 'trick_play_enabled';
+
+/// The old on/off switch became the trickPlayMode enum. Only an explicit off
+/// is carried over, since the new default is on.
+Future<void> migrateTrickplayPreferenceConsolidation(
+  PreferenceStore store,
+) async {
+  const migrationKey = 'pref_trickplay_consolidation_v1';
+  if (store.getBool(migrationKey) == true) {
+    return;
+  }
+
+  if (!store.containsKey(UserPreferences.trickPlayMode.key) &&
+      store.getBool(_legacyTrickPlayEnabledKey) == false) {
+    await store.setString(
+      UserPreferences.trickPlayMode.key,
+      TrickplayMode.disabled.name,
+    );
+  }
+
+  await store.setBool(migrationKey, true);
+}
+
+/// The offline downloads storage plus what `setActiveServerClient` needs to
+/// wrap a client around it: shared by the app and the Android auto-download
+/// worker's headless engine, so the two cannot drift.
+void registerOfflineStorage() {
+  final storagePath = StoragePathService();
+  getIt.registerSingleton<StoragePathService>(storagePath);
+  getIt.registerSingleton<OfflineDatabase>(OfflineDatabase(openConnection()));
+  final offlineRepo = OfflineRepository(getIt<OfflineDatabase>());
+  getIt.registerSingleton<OfflineRepository>(offlineRepo);
+  getIt.registerSingleton<OfflineCatalog>(OfflineCatalog(offlineRepo));
+  getIt.registerLazySingleton<PendingRatingStore>(
+    () => PendingRatingStore(getIt<PreferenceStore>()),
+  );
+}
+
+/// Minimal DI for background isolates like the Watch Next worker: what a
+/// headless engine needs to restore a session. With [offline] it also brings
+/// up the downloads storage, enough for `setActiveServerClient` to build a
+/// download service.
+///
+/// This must not call registerPlaybackModule: constructing
+/// Media3PlayerBackend subscribes to the process-global
+/// moonfin/media3_video_events channel and would hijack the foreground
+/// engine's event sink, freezing the player OSD mid-playback.
+Future<void> configureBackgroundDependencies({bool offline = false}) async {
   if (getIt.isRegistered<DeviceInfo>()) return;
 
   final preferenceStore = PreferenceStore();
   await preferenceStore.init();
 
   final deviceId = preferenceStore.getString('device_id') ?? const Uuid().v4();
+  final appVersion = await _resolveAppVersion();
+  setServerUserAgentVersion(appVersion);
   getIt.registerSingleton<DeviceInfo>(
     DeviceInfo(
       id: deviceId,
       name: await _resolveDeviceName(),
       appName: _clientName(),
-      appVersion: await _resolveAppVersion(),
+      appVersion: appVersion,
     ),
   );
 
   registerPreferenceModule(preferenceStore);
+  if (offline) registerOfflineStorage();
   registerServerModule();
   registerAuthModule();
   await getIt<AuthenticationStore>().init();
@@ -362,12 +439,15 @@ Future<void> configureBackgroundDependencies() async {
 Future<void> configureDependencies() async {
   final preferenceStore = PreferenceStore();
   await preferenceStore.init();
+  await AppBeta.load();
   final appVersion = await _resolveAppVersion();
+  setServerUserAgentVersion(appVersion);
   await _migrateLegacyBitrateCap(preferenceStore);
-  await _migrateAndroidTvPassthroughDefaults(preferenceStore);
   await _migrateAndroidMobileStereoAacFallbackDefault(preferenceStore);
   await _migrateAndroidMobileAudioDefaults(preferenceStore);
   await migrateAudioPreferenceSplit(preferenceStore);
+  await migrateAudioPassthroughMode(preferenceStore);
+  await migrateTrickplayPreferenceConsolidation(preferenceStore);
 
   var deviceId = preferenceStore.getString('device_id');
   if (deviceId == null) {
@@ -391,16 +471,9 @@ Future<void> configureDependencies() async {
     () => RecentSearchesStore(preferenceStore),
   );
 
-  final storagePath = StoragePathService();
-  getIt.registerSingleton<StoragePathService>(storagePath);
-  getIt.registerSingleton<OfflineDatabase>(OfflineDatabase(openConnection()));
-  final offlineRepo = OfflineRepository(getIt<OfflineDatabase>());
-  getIt.registerSingleton<OfflineRepository>(offlineRepo);
-  await _migrateIosPaths(offlineRepo);
-
-  final offlineCatalog = OfflineCatalog(offlineRepo);
-  getIt.registerSingleton<OfflineCatalog>(offlineCatalog);
-  await offlineCatalog.warm();
+  registerOfflineStorage();
+  await _migrateIosPaths(getIt<OfflineRepository>());
+  await getIt<OfflineCatalog>().warm();
 
   final connectivityService = ConnectivityService();
   connectivityService.initialize();
@@ -417,6 +490,13 @@ Future<void> configureDependencies() async {
       getIt<UserPreferences>(),
       getIt<MediaServerClientFactory>(),
       getIt<DeviceInfo>(),
+    ),
+  );
+
+  getIt.registerSingleton<CrashReportService>(
+    CrashReportService(
+      getIt<UserPreferences>(),
+      getIt<MediaServerClientFactory>(),
     ),
   );
 }

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "defaultServerUrl": null,
+  "discoveryProxyUrl": null,
+  "enableWebRtcScan": true,
+  "brandingName": "Moonfin",
+  "pluginMode": false,
+  "forcedServerUrl": null
+}

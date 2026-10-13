@@ -7,6 +7,25 @@ class EmbyItemsApi implements ItemsApi {
 
   EmbyItemsApi(this._dio, this._getUserId);
 
+  /// Field names with no Emby equivalent, dropped here rather than at every
+  /// call site because a name Emby has never heard of turns down the whole
+  /// request. ItemCounts is a Jellyfin name, and the counts it asks for
+  /// already come back on Emby's items by name results.
+  static const _unknownToEmbyFields = <String>{'ItemCounts'};
+
+  static String? _knownFields(String? fields) {
+    if (fields == null) return null;
+    if (!_unknownToEmbyFields.any(fields.contains)) return fields;
+    final kept = fields
+        .split(',')
+        .map((field) => field.trim())
+        .where(
+          (field) => field.isNotEmpty && !_unknownToEmbyFields.contains(field),
+        )
+        .join(',');
+    return kept.isEmpty ? null : kept;
+  }
+
   bool _shouldRetryCollectionFallback(int statusCode) {
     return statusCode == 400 ||
         statusCode == 404 ||
@@ -48,6 +67,19 @@ class EmbyItemsApi implements ItemsApi {
     String? maxOfficialRating,
     bool? hasParentalRating,
     String? anyProviderIdEquals,
+    List<String>? officialRatings,
+    List<int>? years,
+    List<String>? videoTypes,
+    List<String>? audioLanguages,
+    List<String>? subtitleLanguages,
+    bool? hasSubtitles,
+    bool? hasTrailer,
+    bool? hasSpecialFeature,
+    bool? hasThemeSong,
+    bool? hasThemeVideo,
+    bool? isHd,
+    bool? is4K,
+    bool? is3D,
   }) async {
     final queryParams = {
       'ParentId': ?parentId,
@@ -62,7 +94,7 @@ class EmbyItemsApi implements ItemsApi {
       'Limit': ?limit,
       'Recursive': ?recursive,
       'SearchTerm': ?searchTerm,
-      'Fields': ?fields,
+      'Fields': ?_knownFields(fields),
       if (personIds != null) 'PersonIds': personIds.join(','),
       if (artistIds != null) 'ArtistIds': artistIds.join(','),
       if (filters != null) 'Filters': filters.join(','),
@@ -70,7 +102,26 @@ class EmbyItemsApi implements ItemsApi {
       'NameStartsWith': ?nameStartsWith,
       'NameLessThan': ?nameLessThan,
       if (genreIds != null) 'GenreIds': genreIds.join(','),
-      if (genres != null) 'Genres': genres.join(','),
+      // Genres, ratings and tags are pipe delimited so a value holding a comma
+      // still arrives whole.
+      if (genres != null && genres.isNotEmpty) 'Genres': genres.join('|'),
+      if (officialRatings != null && officialRatings.isNotEmpty)
+        'OfficialRatings': officialRatings.join('|'),
+      if (years != null && years.isNotEmpty) 'Years': years.join(','),
+      if (videoTypes != null && videoTypes.isNotEmpty)
+        'VideoTypes': videoTypes.join(','),
+      if (audioLanguages != null && audioLanguages.isNotEmpty)
+        'AudioLanguages': audioLanguages.join(','),
+      if (subtitleLanguages != null && subtitleLanguages.isNotEmpty)
+        'SubtitleLanguages': subtitleLanguages.join(','),
+      'HasSubtitles': ?hasSubtitles,
+      'HasTrailer': ?hasTrailer,
+      'HasSpecialFeature': ?hasSpecialFeature,
+      'HasThemeSong': ?hasThemeSong,
+      'HasThemeVideo': ?hasThemeVideo,
+      'IsHD': ?isHd,
+      'Is4K': ?is4K,
+      'Is3D': ?is3D,
       'IsFavorite': ?isFavorite,
       'CollapseBoxSetItems': ?collapseBoxSetItems,
       'EnableTotalRecordCount': ?enableTotalRecordCount,
@@ -99,6 +150,17 @@ class EmbyItemsApi implements ItemsApi {
   }
 
   @override
+  Future<QueryFilterValues> getQueryFilters({
+    String? parentId,
+    List<String>? includeItemTypes,
+  }) => readQueryFilters(
+    _dio,
+    userId: _getUserId(),
+    parentId: parentId,
+    includeItemTypes: includeItemTypes,
+  );
+
+  @override
   Future<Map<String, dynamic>> getPersons({
     required String searchTerm,
     int? limit,
@@ -111,7 +173,7 @@ class EmbyItemsApi implements ItemsApi {
         'UserId': _getUserId(),
         'SearchTerm': searchTerm,
         'Limit': ?limit,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         'EnableImageTypes': ?enableImageTypes,
       },
     );
@@ -129,7 +191,7 @@ class EmbyItemsApi implements ItemsApi {
       '/Users/$userId/Items/$itemId',
       queryParameters: {
         if (mediaSourceId != null) 'mediaSourceId': mediaSourceId,
-        if (fields != null && fields.isNotEmpty) 'Fields': fields,
+        'Fields': ?_knownFields(fields),
       },
     );
     return response.data as Map<String, dynamic>;
@@ -152,10 +214,15 @@ class EmbyItemsApi implements ItemsApi {
   Future<Map<String, dynamic>> getSimilarItems(
     String itemId, {
     int? limit,
+    String? bypass,
   }) async {
+    final params = <String, dynamic>{
+      'Limit': ?limit,
+      'bypass': ?bypass,
+    };
     final response = await _dio.get(
       '/Items/$itemId/Similar',
-      queryParameters: {'Limit': ?limit},
+      queryParameters: params,
     );
     return response.data as Map<String, dynamic>;
   }
@@ -164,6 +231,7 @@ class EmbyItemsApi implements ItemsApi {
   Future<Map<String, dynamic>> getNextUp({
     String? seriesId,
     String? parentId,
+    int? startIndex,
     int? limit,
     String? fields,
     bool? enableResumable,
@@ -180,11 +248,16 @@ class EmbyItemsApi implements ItemsApi {
         'UserId': userId,
         'SeriesId': ?seriesId,
         'ParentId': ?parentId,
+        'StartIndex': ?startIndex,
         'Limit': ?limit,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         'EnableResumable': ?enableResumable,
         'EnableImageTypes': ?enableImageTypes,
         'ImageTypeLimit': ?imageTypeLimit,
+        // Emby 4.10 answers a Next Up that isn't scoped to one series with an
+        // empty list unless it's asked for the legacy one, which is the same
+        // list its own home screen shows. Older servers ignore the flag.
+        if (seriesId == null) 'LegacyNextUp': true,
       },
     );
     return response.data as Map<String, dynamic>;
@@ -194,6 +267,8 @@ class EmbyItemsApi implements ItemsApi {
   Future<Map<String, dynamic>> getResumeItems({
     String? parentId,
     List<String>? includeItemTypes,
+    String? mediaTypes,
+    int? startIndex,
     int? limit,
     String? fields,
     String? enableImageTypes,
@@ -206,8 +281,11 @@ class EmbyItemsApi implements ItemsApi {
         'ParentId': ?parentId,
         if (includeItemTypes != null)
           'IncludeItemTypes': includeItemTypes.join(','),
+        if (mediaTypes != null)
+          'MediaTypes': mediaTypes,
+        'StartIndex': ?startIndex,
         'Limit': ?limit,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         'EnableImageTypes': ?enableImageTypes,
         'ImageTypeLimit': ?imageTypeLimit,
       },
@@ -232,7 +310,7 @@ class EmbyItemsApi implements ItemsApi {
         if (includeItemTypes != null)
           'IncludeItemTypes': includeItemTypes.join(','),
         if (limit != null) 'Limit': limit,
-        if (fields != null) 'Fields': fields,
+        'Fields': ?_knownFields(fields),
         if (enableImageTypes != null) 'EnableImageTypes': enableImageTypes,
         if (imageTypeLimit != null) 'ImageTypeLimit': imageTypeLimit,
       },
@@ -255,15 +333,18 @@ class EmbyItemsApi implements ItemsApi {
     String? fields,
     String? enableImageTypes,
     int? imageTypeLimit,
+    bool recursive = false,
   }) async {
+    final userId = _getUserId();
     final response = await _dio.get(
-      '/Items',
+      '/Users/$userId/Items',
       queryParameters: {
         if (parentId != null) 'ParentId': parentId,
+        if (recursive) 'Recursive': true,
         if (includeItemTypes != null)
           'IncludeItemTypes': includeItemTypes.join(','),
         if (limit != null) 'Limit': limit,
-        if (fields != null) 'Fields': fields,
+        'Fields': ?_knownFields(fields),
         if (enableImageTypes != null) 'EnableImageTypes': enableImageTypes,
         if (imageTypeLimit != null) 'ImageTypeLimit': imageTypeLimit,
         'SortBy' : 'PremiereDate',
@@ -271,19 +352,21 @@ class EmbyItemsApi implements ItemsApi {
         'MaxPremiereDate': DateTime.now().toUtc().toIso8601String(),
       },
     );
-
-    // /Items/Latest returns a bare array, so normalize it into the
-    // same shape as /Items so all callers stay unchanged.
-    final data = response.data;
-    if (data is List) {
-      return {'Items': data, 'TotalRecordCount': data.length};
-    }
-    return data as Map<String, dynamic>;
+    return response.data as Map<String, dynamic>;
   }
 
   @override
-  Future<Map<String, dynamic>> getSeasons(String seriesId) async {
-    final response = await _dio.get('/Shows/$seriesId/Seasons');
+  Future<Map<String, dynamic>> getSeasons(
+    String seriesId, {
+    String? fields,
+  }) async {
+    final response = await _dio.get(
+      '/Shows/$seriesId/Seasons',
+      queryParameters: {
+        'Fields': ?_knownFields(fields),
+        'UserId': _getUserId(),
+      },
+    );
     return response.data as Map<String, dynamic>;
   }
 
@@ -295,7 +378,7 @@ class EmbyItemsApi implements ItemsApi {
   }) async {
     final response = await _dio.get(
       '/Shows/$seriesId/Episodes',
-      queryParameters: {'SeasonId': ?seasonId, 'Fields': ?fields},
+      queryParameters: {'SeasonId': ?seasonId, 'Fields': ?_knownFields(fields)},
     );
     return response.data as Map<String, dynamic>;
   }
@@ -355,7 +438,7 @@ class EmbyItemsApi implements ItemsApi {
         'StartIndex': ?startIndex,
         'Limit': ?limit,
         'Recursive': ?recursive,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         'NameStartsWith': ?nameStartsWith,
         'NameLessThan': ?nameLessThan,
         'IsFavorite': ?isFavorite,
@@ -388,7 +471,7 @@ class EmbyItemsApi implements ItemsApi {
         'StartIndex': ?startIndex,
         'Limit': ?limit,
         'Recursive': ?recursive,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         'NameStartsWith': ?nameStartsWith,
         'NameLessThan': ?nameLessThan,
         'IsFavorite': ?isFavorite,
@@ -398,7 +481,11 @@ class EmbyItemsApi implements ItemsApi {
   }
 
   @override
-  Future<Map<String, dynamic>> getPlaylistItems(String playlistId) async {
+  Future<Map<String, dynamic>> getPlaylistItems(
+    String playlistId, {
+    int? startIndex,
+    int? limit,
+  }) async {
     final response = await _dio.get(
       '/Playlists/$playlistId/Items',
       queryParameters: {
@@ -406,6 +493,8 @@ class EmbyItemsApi implements ItemsApi {
             'BasicSyncInfo,PrimaryImageAspectRatio,RunTimeTicks,Artists,AlbumArtist,IndexNumber,MediaType,PlaylistItemId,BackdropImageTags,ParentBackdropImageTags,ParentBackdropItemId,SeriesName,ParentIndexNumber,Genres,Chapters,Overview,UserData,MediaStreams',
         'EnableImageTypes': 'Primary,Backdrop,Logo,Thumb',
         'ImageTypeLimit': 1,
+        'StartIndex': ?startIndex,
+        'Limit': ?limit,
       },
     );
     return response.data as Map<String, dynamic>;
@@ -514,6 +603,17 @@ class EmbyItemsApi implements ItemsApi {
   }
 
   @override
+  Future<void> removeFromCollection(
+    String collectionId,
+    List<String> itemIds,
+  ) async {
+    await _dio.delete(
+      '/Collections/$collectionId/Items',
+      queryParameters: {'Ids': itemIds.join(',')},
+    );
+  }
+
+  @override
   Future<void> removeFromPlaylist(
     String playlistId,
     List<String> entryIds,
@@ -566,13 +666,45 @@ class EmbyItemsApi implements ItemsApi {
       '/Genres',
       queryParameters: {
         'ParentId': ?parentId,
+        // Defaulted rather than left to callers. Without a user the server
+        // answers across every library, including ones this account can't see.
+        'UserId': userId ?? _getUserId(),
+        'SortBy': ?sortBy,
+        'SortOrder': ?sortOrder,
+        'StartIndex': ?startIndex,
+        'Limit': ?limit,
+        'Recursive': ?recursive,
+        'Fields': ?_knownFields(fields),
+        if (includeItemTypes != null && includeItemTypes.isNotEmpty)
+          'IncludeItemTypes': includeItemTypes.join(','),
+      },
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getStudios({
+    String? parentId,
+    String? userId,
+    String? sortBy,
+    String? sortOrder,
+    int? startIndex,
+    int? limit,
+    bool? recursive,
+    String? fields,
+    List<String>? includeItemTypes,
+  }) async {
+    final response = await _dio.get(
+      '/Studios',
+      queryParameters: {
+        'ParentId': ?parentId,
         'UserId': ?userId,
         'SortBy': ?sortBy,
         'SortOrder': ?sortOrder,
         'StartIndex': ?startIndex,
         'Limit': ?limit,
         'Recursive': ?recursive,
-        'Fields': ?fields,
+        'Fields': ?_knownFields(fields),
         if (includeItemTypes != null && includeItemTypes.isNotEmpty)
           'IncludeItemTypes': includeItemTypes.join(','),
       },
@@ -643,6 +775,7 @@ class EmbyItemsApi implements ItemsApi {
     final chapters = (item['Chapters'] as List?) ?? const [];
     if (chapters.isEmpty) return const [];
 
+    final chapterStarts = <int>[];
     int? introStart;
     int? introEnd;
     int? creditsStart;
@@ -650,14 +783,28 @@ class EmbyItemsApi implements ItemsApi {
       if (raw is! Map) continue;
       final ticks = (raw['StartPositionTicks'] as num?)?.toInt();
       if (ticks == null) continue;
-      switch (raw['MarkerType']?.toString()) {
-        case 'IntroStart':
+      chapterStarts.add(ticks);
+      switch (_markerType(raw['MarkerType'])) {
+        case 'introstart':
           introStart ??= ticks;
-        case 'IntroEnd':
+        case 'introend':
           introEnd ??= ticks;
-        case 'CreditsStart':
+        case 'creditsstart':
           creditsStart ??= ticks;
       }
+    }
+
+    // Plenty of episodes carry a start marker and never an end one. The
+    // chapter that follows is where the intro handed over to the episode, so
+    // it stands in for the missing marker. One with nothing after it stays
+    // unbounded rather than guessing a length.
+    if (introStart != null && introEnd == null) {
+      final start = introStart;
+      int? next;
+      for (final ticks in chapterStarts) {
+        if (ticks > start && (next == null || ticks < next)) next = ticks;
+      }
+      introEnd = next;
     }
 
     final segments = <Map<String, dynamic>>[];
@@ -686,21 +833,48 @@ class EmbyItemsApi implements ItemsApi {
     return segments;
   }
 
+  // Declaration order matters, since a marker sent as a number is read as an
+  // index into this.
+  static const _markerTypes = [
+    'chapter',
+    'introstart',
+    'introend',
+    'creditsstart',
+  ];
+
+  /// The chapter marker in lower case, or null for one worth nothing here.
+  /// Markers arrive as their enum name, but a server is free to send the
+  /// ordinal instead and then no name ever matches, so both are read.
+  static String? _markerType(Object? raw) {
+    if (raw == null) return null;
+    if (raw is num) {
+      final index = raw.toInt();
+      return index >= 0 && index < _markerTypes.length
+          ? _markerTypes[index]
+          : null;
+    }
+    final name = raw.toString().trim().toLowerCase();
+    return _markerTypes.contains(name) ? name : null;
+  }
+
   @override
   Future<List<Map<String, dynamic>>> searchRemoteSubtitles(
     String itemId, {
     required String language,
     bool? isPerfectMatch,
   }) async {
-    throw UnsupportedError(
-      'Remote subtitle search is only supported for Jellyfin servers.',
+    final response = await _dio.get(
+      '/Items/$itemId/RemoteSearch/Subtitles/$language',
+      queryParameters: {'IsPerfectMatch': ?isPerfectMatch},
     );
+    return ((response.data as List?) ?? const [])
+        .whereType<Map>()
+        .map((e) => e.cast<String, dynamic>())
+        .toList(growable: false);
   }
 
   @override
   Future<void> downloadRemoteSubtitle(String itemId, String subtitleId) async {
-    throw UnsupportedError(
-      'Remote subtitle download is only supported for Jellyfin servers.',
-    );
+    await _dio.post('/Items/$itemId/RemoteSearch/Subtitles/$subtitleId');
   }
 }

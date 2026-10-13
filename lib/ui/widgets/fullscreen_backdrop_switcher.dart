@@ -8,13 +8,20 @@ class FullscreenBackdropSwitcher extends StatefulWidget {
   final Duration fadeInDuration;
   final Widget Function(String imageUrl)? imageBuilder;
 
+  /// A full-screen backdrop is the one image the screen is about, so its
+  /// fetch goes ahead of the cards built alongside it. Callers that supply
+  /// [imageBuilder] set the lane on their own image.
+  final ImageFetchPriority priority;
+
   const FullscreenBackdropSwitcher({
     super.key,
     required this.imageUrl,
     required this.duration,
     this.alignment = Alignment.topCenter,
-    this.fadeInDuration = const Duration(milliseconds: 300),
+    // The load fade. The crossfade between two backdrops is [duration].
+    this.fadeInDuration = Duration.zero,
     this.imageBuilder,
+    this.priority = ImageFetchPriority.high,
   });
 
   @override
@@ -28,18 +35,33 @@ class _FullscreenBackdropSwitcherState extends State<FullscreenBackdropSwitcher>
 
   String? _currentUrl;
   String? _incomingUrl;
+  String? _pendingUrl;
 
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(vsync: this, duration: widget.duration);
+
     _currentUrl = widget.imageUrl;
+
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && mounted) {
-        setState(() {
-          _currentUrl = _incomingUrl;
-          _incomingUrl = null;
-        });
+      if (status != AnimationStatus.completed || !mounted) {
+        return;
+      }
+
+      final pending = _pendingUrl;
+
+      final shouldContinue = pending != null && pending != _incomingUrl;
+
+      setState(() {
+        _currentUrl = _incomingUrl;
+        _incomingUrl = shouldContinue ? pending : null;
+        _pendingUrl = null;
+      });
+
+      if (shouldContinue) {
+        _controller.forward(from: 0);
       }
     });
   }
@@ -47,21 +69,45 @@ class _FullscreenBackdropSwitcherState extends State<FullscreenBackdropSwitcher>
   @override
   void didUpdateWidget(FullscreenBackdropSwitcher oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.duration != widget.duration) {
+      _controller.duration = widget.duration;
+    }
+
     final next = widget.imageUrl;
     final shown = _incomingUrl ?? _currentUrl;
-    if (next == shown) return;
 
-    if (next == null) {
-      // Cleared: drop both layers immediately.
-      _controller.stop();
-      setState(() {
-        _currentUrl = null;
-        _incomingUrl = null;
-      });
+    if (next == shown) {
+      _pendingUrl = null;
       return;
     }
 
-    setState(() => _incomingUrl = next);
+    if (next == _pendingUrl) {
+      return;
+    }
+
+    if (next == null) {
+      // Cleared: drop all backdrop state immediately.
+      _controller.stop();
+
+      setState(() {
+        _currentUrl = null;
+        _incomingUrl = null;
+        _pendingUrl = null;
+      });
+
+      return;
+    }
+
+    if (_controller.isAnimating) {
+      _pendingUrl = next;
+      return;
+    }
+
+    setState(() {
+      _incomingUrl = next;
+    });
+
     _controller.forward(from: 0);
   }
 
@@ -78,6 +124,12 @@ class _FullscreenBackdropSwitcherState extends State<FullscreenBackdropSwitcher>
           fit: BoxFit.cover,
           alignment: widget.alignment,
           fadeInDuration: widget.fadeInDuration,
+          // A backdrop covers the whole screen, so on a portrait phone it
+          // paints far wider than the screen. The aspect lets the decode
+          // bound follow the painted width instead of the box width.
+          sourceAspectRatio: 16 / 9,
+          maxDecodeWidth: ArtworkDecode.maxSourceWidth,
+          priority: widget.priority,
           errorWidget: (_, _, _) => const SizedBox.shrink(),
         );
   }

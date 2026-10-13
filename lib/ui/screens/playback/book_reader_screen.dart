@@ -13,7 +13,10 @@ import 'package:rar/rar.dart';
 import 'package:server_core/server_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pdfrx/pdfrx.dart';
+
+import '../../../util/relative_time_label.dart';
 import '../../../util/webview_environment.dart';
+
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -30,7 +33,9 @@ import '../../../data/services/reader_settings_store.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/insecure_certificates.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../../l10n/current_app_localizations.dart';
+import '../../../util/system_ui.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
 import '../../widgets/reader/reader_chrome_bar.dart';
 import '../../widgets/reader/reader_contents_hub.dart';
@@ -61,7 +66,7 @@ enum _ComicLayout { single, double, vertical }
 enum _ComicDirection { ltr, rtl }
 
 class _BookReaderScreenState extends State<BookReaderScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, ImmersiveSystemUi {
   AggregatedItem? _item;
   String? _extension;
   String? _error;
@@ -133,13 +138,11 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   bool get _epubIsRtl => Directionality.of(context) == TextDirection.rtl;
 
-  ReaderThemeColors get _fixedLayoutChromeColors => ReaderThemeColors(
-    background: _invertFixedLayout
-        ? const Color(0xFFF2F2F2)
-        : const Color(0xFF0A0A0A),
-    foreground: _invertFixedLayout ? const Color(0xFF1A1A1A) : Colors.white,
-    link: const Color(0xFF6FA8FF),
-    isDark: !_invertFixedLayout,
+  static const _fixedLayoutChromeColors = ReaderThemeColors(
+    background: Color(0xFF0A0A0A),
+    foreground: Colors.white,
+    link: Color(0xFF6FA8FF),
+    isDark: true,
   );
 
   Widget _readerDimWarmthOverlay() {
@@ -314,7 +317,6 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     WidgetsBinding.instance.removeObserver(this);
     _comicStateSaveDebounce?.cancel();
     _pdfPageSaveDebounce?.cancel();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     _pageController.dispose();
     _comicTransformController.dispose();
     _comicVerticalController.dispose();
@@ -391,7 +393,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       final l10n = AppLocalizations.of(context);
       setState(() {
         _loading = false;
-        _error = l10n.failedToLoadBookDetails('$e');
+        _error = l10n.failedToLoadBookDetails(describeError(e, l10n));
       });
     }
   }
@@ -427,7 +429,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       _epubThemeCache.clear();
     });
 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    setImmersive(false);
     _resetComicZoom();
 
     try {
@@ -583,9 +585,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       final l10n = AppLocalizations.of(context);
       setState(() {
         _mode = _ReaderMode.fallback;
-        _fallbackMessage = l10n.failedToOpenInAppReader('$e');
+        _fallbackMessage = l10n.failedToOpenInAppReader(describeError(e, l10n));
         _fallbackExternalUri = fallbackUriCandidate;
-        _error = l10n.failedToOpenInAppReader('$e');
+        _error = l10n.failedToOpenInAppReader(describeError(e, l10n));
       });
     } finally {
       if (mounted) {
@@ -925,18 +927,14 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     setState(() {
       _overlayVisible = !_overlayVisible;
     });
-    if (_overlayVisible) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    }
+    setImmersive(!_overlayVisible);
   }
 
   Future<Uri> _resolveReadableUri(
     List<Uri> uris,
     Map<String, String> headers,
   ) async {
-    final client = HttpClient();
+    final client = HttpClient()..userAgent = serverUserAgent;
     final l10n = AppLocalizations.of(context);
     try {
       HttpException? lastError;
@@ -1432,12 +1430,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   }
 
   String _formatBookmarkDate(DateTime dt, AppLocalizations l10n) {
-    final now = DateTime.now();
-    final diff = now.difference(dt);
-    if (diff.inMinutes < 1) return l10n.justNow;
-    if (diff.inHours < 1) return l10n.minutesAgo(diff.inMinutes);
-    if (diff.inDays < 1) return l10n.hoursAgo(diff.inHours);
-    if (diff.inDays < 7) return l10n.daysAgo(diff.inDays);
+    if (DateTime.now().difference(dt).inDays < 7) {
+      return relativeTimeLabel(l10n, dt);
+    }
     return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
   }
 
@@ -1546,8 +1541,12 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   Future<void> _previousComicPage() =>
       _goToComicPage(_currentComicPage - _comicNavigationStep);
 
+  /// Anything above a whisker over 1 counts as zoomed, since a pinch rarely
+  /// lands exactly back on 1.
+  bool get _comicZoomed => _comicZoom > 1.01;
+
   void _handleComicTap(TapUpDetails details) {
-    if (_comicZoom > 1.01) {
+    if (_comicZoomed) {
       _toggleOverlay();
       return;
     }
@@ -1590,7 +1589,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   }
 
   void _toggleComicZoom() {
-    if (_comicZoom > 1.01) {
+    if (_comicZoomed) {
       _resetComicZoom();
     } else {
       _setComicZoom(2.2);
@@ -1886,34 +1885,20 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     return chapters;
   }
 
+  static const _fixedLayoutInvertMatrix = <double>[
+    -1, 0, 0, 0, 255,
+    0, -1, 0, 0, 255,
+    0, 0, -1, 0, 255,
+    0, 0, 0, 1, 0,
+  ];
+
   Widget _maybeInvertFixedLayout(Widget child) {
     if (!_invertFixedLayout) {
       return child;
     }
 
     return ColorFiltered(
-      colorFilter: const ColorFilter.matrix(<double>[
-        -1,
-        0,
-        0,
-        0,
-        255,
-        0,
-        -1,
-        0,
-        0,
-        255,
-        0,
-        0,
-        -1,
-        0,
-        255,
-        0,
-        0,
-        0,
-        1,
-        0,
-      ]),
+      colorFilter: const ColorFilter.matrix(_fixedLayoutInvertMatrix),
       child: child,
     );
   }
@@ -1956,7 +1941,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       }
 
       setState(() {
-        _error = l10n.failedToUpdateReadState('$e');
+        _error = l10n.failedToUpdateReadState(describeError(e, l10n));
       });
     } finally {
       if (mounted) {
@@ -2133,7 +2118,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     final title = item?.name ?? l10n.bookReader;
 
     return Scaffold(
-      backgroundColor: _invertFixedLayout ? Colors.white : Colors.black,
+      backgroundColor: Colors.black,
       body: _loadingContent
           ? const Center(child: CircularProgressIndicator())
           : _comicEntries.isEmpty
@@ -2243,6 +2228,10 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         child: PageView.builder(
           controller: _pageController,
           reverse: _comicDirection == _ComicDirection.rtl,
+          // A page view that keeps its scrolling wins the drag, so a zoomed
+          // page never moves. Giving the gesture up while zoomed lets the
+          // drag pan the page, and normal zoom brings paging back.
+          physics: _comicZoomed ? const NeverScrollableScrollPhysics() : null,
           itemCount: _comicViewportCount,
           onPageChanged: (viewportIndex) {
             final pageIndex = _pageIndexFromViewport(viewportIndex);

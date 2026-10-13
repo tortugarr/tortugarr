@@ -1,0 +1,11573 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Modern Greek (`el`).
+class AppLocalizationsEl extends AppLocalizations {
+  AppLocalizationsEl([String locale = 'el']) : super(locale);
+
+  @override
+  String get appTitle => 'Tortugarr';
+
+  @override
+  String get accountPreferences => 'ΠΡΟΤΙΜΗΣΕΙΣ ΛΟΓΑΡΙΑΣΜΟΥ';
+
+  @override
+  String get interfaceLanguage => 'Γλώσσα περιβάλλοντος';
+
+  @override
+  String get systemLanguageDefault => 'Προεπιλογή συστήματος';
+
+  @override
+  String get signIn => 'Είσοδος';
+
+  @override
+  String get empty => 'Κενό';
+
+  @override
+  String connectingToServer(String serverName) {
+    return 'Σύνδεση στο $serverName';
+  }
+
+  @override
+  String get quickConnect => 'Quick Connect';
+
+  @override
+  String get password => 'Σύνθημα';
+
+  @override
+  String get username => 'Όνομα χρήστη';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get quickConnectInstruction =>
+      'Εισαγάγετε αυτόν τον κωδικό στον πίνακα ελέγχου ιστού του διακομιστή σας:';
+
+  @override
+  String get waitingForAuthorization => 'Αναμονή για εξουσιοδότηση...';
+
+  @override
+  String get back => 'Πίσω';
+
+  @override
+  String get serverUnavailable => 'Ο διακομιστής δεν είναι διαθέσιμος';
+
+  @override
+  String get loginFailed => 'Η σύνδεση απέτυχε';
+
+  @override
+  String quickConnectUnavailable(String detail) {
+    return 'Το QuickConnect δεν είναι διαθέσιμο: $detail';
+  }
+
+  @override
+  String quickConnectUnavailableWithStatus(String status, String detail) {
+    return 'Το QuickConnect δεν είναι διαθέσιμο ($status): $detail';
+  }
+
+  @override
+  String get whosWatching => 'Ποιος παρακολουθεί;';
+
+  @override
+  String get addUser => 'Προσθήκη χρήστη';
+
+  @override
+  String get selectServer => 'Επιλογή Διακομιστή';
+
+  @override
+  String appVersionFooter(String version) {
+    return 'Tortugarr έκδοση $version';
+  }
+
+  @override
+  String get savedServers => 'Αποθηκευμένοι διακομιστές';
+
+  @override
+  String get discoveredServers => 'Διακομιστές που ανακαλύφθηκαν';
+
+  @override
+  String get noneFound => 'Δεν βρέθηκε κανένα';
+
+  @override
+  String get unableToConnectToServer =>
+      'Δεν είναι δυνατή η σύνδεση με τον διακομιστή';
+
+  @override
+  String get addServer => 'Προσθήκη διακομιστή';
+
+  @override
+  String get embyConnect => 'Emby Συνδεθείτε';
+
+  @override
+  String get removeServer => 'Κατάργηση διακομιστή';
+
+  @override
+  String removeServerConfirmation(String serverName) {
+    return 'Κατάργηση του \"$serverName\" από τους διακομιστές σας;';
+  }
+
+  @override
+  String get cancel => 'Ακύρωση';
+
+  @override
+  String get remove => 'Αφαίρεση';
+
+  @override
+  String get connectToServer => 'Σύνδεση στον διακομιστή';
+
+  @override
+  String get serverAddress => 'Διεύθυνση διακομιστή';
+
+  @override
+  String get serverAddressHint => 'https://your-server.example.com';
+
+  @override
+  String get connect => 'Συνδέω';
+
+  @override
+  String get secureStorageUnavailable =>
+      'Μη διαθέσιμος ασφαλής χώρος αποθήκευσης';
+
+  @override
+  String get secureStorageUnavailableMessage =>
+      'Ο Tortugarr δεν μπόρεσε να αποκτήσει πρόσβαση στο μπρελόκ του συστήματός σας. Η σύνδεση μπορεί να συνεχιστεί, αλλά η ασφαλής αποθήκευση διακριτικών ενδέχεται να μην είναι διαθέσιμη μέχρι να ξεκλειδωθεί το μπρελόκ.';
+
+  @override
+  String get ok => 'ΕΝΤΑΞΕΙ';
+
+  @override
+  String get settingsAppearanceTheme => 'Θέμα εφαρμογής';
+
+  @override
+  String get detailScreenStyle => 'Στυλ οθόνης λεπτομερειών';
+
+  @override
+  String get detailScreenStyleSubtitle =>
+      'Το Κλασικό είναι η αρχική, κεντραρισμένη διάταξη του Tortugarr. Το Μοντέρνο είναι μια προσαρμοστική, κινηματογραφική διάταξη.';
+
+  @override
+  String get detailScreenStyleNotflix => 'Κλασικό';
+
+  @override
+  String get detailScreenStyleModern => 'Μοντέρνο';
+
+  @override
+  String get expandedTabs => 'Αναπτυγμένες καρτέλες';
+
+  @override
+  String get expandedTabsSubtitle =>
+      'Αυτόματη εμφάνιση του περιεχομένου των καρτελών κατά την περιήγηση. Απενεργοποιήστε το για να ανοίγετε και να κλείνετε κάθε καρτέλα χειροκίνητα.';
+
+  @override
+  String get showTechnicalDetails => 'Εμφάνιση τεχνικών λεπτομερειών;';
+
+  @override
+  String get showTechnicalDetailsSubtitle =>
+      'Εμφάνιση κωδικοποιητή, ανάλυσης και πληροφοριών ροής στη σύνοψη του banner';
+
+  @override
+  String get recommendationSystem => 'Σύστημα προτάσεων';
+
+  @override
+  String get recommendationSystemSubtitle =>
+      'Χρησιμοποιήστε τον αλγόριθμο τοπικής βιβλιοθήκης «Προτάσεις Tortugarr» ή τις διαδικτυακές μετρήσεις ομοιότητας του TMDb. Σημείωση: οι διαδικτυακές προτάσεις απαιτούν ενσωμάτωση με το Seerr.';
+
+  @override
+  String get recommendationSystemNotflix => 'Προτάσεις Tortugarr';
+
+  @override
+  String get recommendationSystemTmdb => 'Ομοιότητα TMDb';
+
+  @override
+  String get recommendationsApplyParentalRatingCap =>
+      'Εφαρμογή ορίου γονικής διαβάθμισης;';
+
+  @override
+  String get recommendationsApplyParentalRatingCapSubtitle =>
+      'Περιορισμός των προτάσεων του Tortugarr με βάση τη γονική διαβάθμιση του επιλεγμένου περιεχομένου';
+
+  @override
+  String get interfaceStyle => 'Στυλ περιβάλλοντος';
+
+  @override
+  String get interfaceStyleSubtitle =>
+      'Το Αυτόματο προσαρμόζεται στη συσκευή σας. Επιλέξτε Apple ή Material για να επιβάλετε μια εμφάνιση.';
+
+  @override
+  String get interfaceStyleAutomatic => 'Αυτόματο';
+
+  @override
+  String get interfaceStyleApple => 'Apple';
+
+  @override
+  String get interfaceStyleMaterial => 'Material';
+
+  @override
+  String get glassQuality => 'Ποιότητα γυαλιού';
+
+  @override
+  String get glassQualitySubtitle =>
+      'Το Αυτόματο επιλέγει το καλύτερο εφέ γυαλιού για αυτήν τη συσκευή. Το Πλήρες επιβάλλει πραγματικό θόλωμα· το Μειωμένο χρησιμοποιεί ένα ελαφρύ γυαλί που εξοικονομεί ενέργεια GPU.';
+
+  @override
+  String get glassQualityAuto => 'Αυτόματο';
+
+  @override
+  String get glassQualityFull => 'Πλήρες';
+
+  @override
+  String get glassQualityReduced => 'Μειωμένο';
+
+  @override
+  String get settingsAppearanceThemeSubtitle =>
+      'Εφαρμόστε ένα πλήρως προσαρμοσμένο θέμα και επιλέξτε ανάμεσα σε περιβάλλον χρήστη εμπνευσμένο από την Apple ή το Material.';
+
+  @override
+  String get customThemeTitle => 'Προσαρμοσμένο θέμα';
+
+  @override
+  String get customThemeSubtitle =>
+      'Τα προσαρμοσμένα θέματα αλλάζουν τα οπτικά στοιχεία σε όλο το Tortugarr. Επιλέξτε μία από αυτές τις επιλογές που ταιριάζει στο στυλ σας.';
+
+  @override
+  String get keyboardPreferSystemIme => 'Προτιμήστε το πληκτρολόγιο συστήματος';
+
+  @override
+  String get keyboardPreferSystemImeDescription =>
+      'Χρησιμοποιήστε τη μέθοδο εισαγωγής της συσκευής σας από προεπιλογή για την εισαγωγή κειμένου';
+
+  @override
+  String get themeNotflix => 'Tortugarr';
+
+  @override
+  String get themeNotflixSubtitle =>
+      'Η τρέχουσα εμφάνιση Tortugarr που όλοι έχετε αγαπήσει.';
+
+  @override
+  String get themeNeonPulse => 'Neon Pulse';
+
+  @override
+  String get themeNeonPulseSubtitle =>
+      'Στυλ Synthwave με ματζέντα λάμψη, κυανό κείμενο και ισχυρότερη αντίθεση χρωμίου';
+
+  @override
+  String get themeGlass => 'Γυαλί';
+
+  @override
+  String get themeGlassSubtitle =>
+      'Στυλ υγρού γυαλιού με φόντο μεταβαλλόμενης διαβάθμισης, παγωμένες επιφάνειες και μπλε χρώμα τονισμού της Apple';
+
+  @override
+  String get theme8BitHero => 'Ήρωας 8-bit';
+
+  @override
+  String get theme8BitHeroSubtitle =>
+      'Ρετρό στυλ pixel-art με χοντροκομμένη παλέτα, τετράγωνα περιγράμματα, έντονες σκιές και γραμματοσειρά pixel';
+
+  @override
+  String get embyConnectSignInSubtitle =>
+      'Συνδεθείτε με τον λογαριασμό σας Emby Σύνδεση';
+
+  @override
+  String get emailOrUsername => 'email ή όνομα χρήστη';
+
+  @override
+  String get selectAServer => 'Επιλέξτε έναν διακομιστή';
+
+  @override
+  String get tryAgain => 'Δοκιμάστε ξανά';
+
+  @override
+  String get noLinkedServers =>
+      'Δεν υπάρχουν διακομιστές συνδεδεμένοι σε αυτόν τον λογαριασμό Emby Σύνδεση';
+
+  @override
+  String get invalidEmbyConnectCredentials =>
+      'Μη έγκυρα Emby Διαπιστευτήρια σύνδεσης';
+
+  @override
+  String get invalidEmbyConnectLogin =>
+      'Μη έγκυρο Emby Σύνδεση ονόματος χρήστη ή κωδικού πρόσβασης';
+
+  @override
+  String get embyConnectExchangeNotSupported =>
+      'Ο διακομιστής δεν υποστηρίζει Emby Συνδέστε την ανταλλαγή';
+
+  @override
+  String get embyConnectNetworkError =>
+      'Σφάλμα δικτύου κατά την επικοινωνία με τον Emby Σύνδεση ή τον επιλεγμένο διακομιστή';
+
+  @override
+  String get loadingLinkedServers => 'Φόρτωση συνδεδεμένων διακομιστών...';
+
+  @override
+  String get connectingToServerEllipsis => 'Σύνδεση με διακομιστή...';
+
+  @override
+  String get noReachableAddress => 'Δεν παρέχεται προσβάσιμη διεύθυνση';
+
+  @override
+  String get invalidServerExchangeResponse =>
+      'Μη έγκυρη απάντηση από το τελικό σημείο ανταλλαγής διακομιστή';
+
+  @override
+  String unableToConnectTo(String target) {
+    return 'Δεν είναι δυνατή η σύνδεση στο $target';
+  }
+
+  @override
+  String get exitApp => 'Έξοδος από Tortugarr;';
+
+  @override
+  String get exitAppConfirmation => 'Είστε βέβαιοι ότι θέλετε να βγείτε;';
+
+  @override
+  String get exit => 'Εξοδος';
+
+  @override
+  String get gameMenu => 'Μενού';
+
+  @override
+  String get gamePaused => 'Σε παύση';
+
+  @override
+  String get gameSaveState => 'Αποθήκευση κατάστασης';
+
+  @override
+  String get games => 'Παιχνίδια';
+
+  @override
+  String get gameLoadState => 'Φόρτωση κατάστασης';
+
+  @override
+  String get gameFastForward => 'Γρήγορη προώθηση';
+
+  @override
+  String get gameEmulatorSettings => 'Ρυθμίσεις εξομοιωτή';
+
+  @override
+  String get gameNoCoreOptions =>
+      'Αυτός ο πυρήνας δεν διαθέτει ρυθμιζόμενες επιλογές.';
+
+  @override
+  String get gameHoldToOpenMenu => 'Κρατήστε πατημένο για άνοιγμα του μενού';
+
+  @override
+  String get gamePlaybackUnsupported =>
+      'Η αναπαραγωγή παιχνιδιών δεν υποστηρίζεται ακόμη σε αυτήν τη συσκευή.';
+
+  @override
+  String get noHomeRowsLoaded => 'Δεν ήταν δυνατή η φόρτωση των αρχικών σειρών';
+
+  @override
+  String get noHomeRowsHint =>
+      'Δοκιμάστε να ανανεώσετε ή να μειώσετε τις ενεργές οικιακές ενότητες.';
+
+  @override
+  String get retryHomeRows => 'Δοκιμάστε ξανά τις αρχικές σειρές';
+
+  @override
+  String get guide => 'Οδηγός';
+
+  @override
+  String get recordings => 'Εγγραφές';
+
+  @override
+  String get schedule => 'Πρόγραμμα';
+
+  @override
+  String get series => 'Σειρές';
+
+  @override
+  String get noItemsFound => 'Δεν βρέθηκαν στοιχεία';
+
+  @override
+  String get home => 'Αρχική';
+
+  @override
+  String get browseAll => 'Περιήγηση σε όλα';
+
+  @override
+  String get genres => 'Είδη';
+
+  @override
+  String get collectionPlaceholder =>
+      'Τα στοιχεία της συλλογής θα εμφανιστούν εδώ';
+
+  @override
+  String get browseByLetter => 'Περιήγηση κατά Letter';
+
+  @override
+  String get alphabeticalBrowsePlaceholder =>
+      'Εδώ θα εμφανιστεί η αλφαβητική περιήγηση';
+
+  @override
+  String get suggestions => 'Προτάσεις';
+
+  @override
+  String get suggestionsPlaceholder =>
+      'Τα προτεινόμενα στοιχεία θα εμφανιστούν εδώ';
+
+  @override
+  String get failedToLoadLibraries => 'Αποτυχία φόρτωσης βιβλιοθηκών';
+
+  @override
+  String get noLibrariesFound => 'Δεν βρέθηκαν βιβλιοθήκες';
+
+  @override
+  String get library => 'Βιβλιοθήκη';
+
+  @override
+  String get displaySettings => 'Ρυθμίσεις οθόνης';
+
+  @override
+  String get allGenres => 'Όλα τα είδη';
+
+  @override
+  String get noGenresFound => 'Δεν βρέθηκαν είδη';
+
+  @override
+  String failedToLoadFolderError(String error) {
+    return 'Η φόρτωση του φακέλου απέτυχε: $error';
+  }
+
+  @override
+  String get thisFolderIsEmpty => 'Αυτός ο φάκελος είναι κενός';
+
+  @override
+  String itemCountLabel(int count) {
+    return '$count αντικείμενα';
+  }
+
+  @override
+  String get failedToLoadFavorites => 'Η φόρτωση των αγαπημένων απέτυχε';
+
+  @override
+  String get retry => 'Δοκιμάζω πάλι';
+
+  @override
+  String get noFavoritesYet => 'Δεν υπάρχουν ακόμα αγαπημένα';
+
+  @override
+  String get favorites => 'Αγαπημένα';
+
+  @override
+  String totalCountItems(int count) {
+    return '$count Είδη';
+  }
+
+  @override
+  String get continuing => 'Συνεχίζοντας';
+
+  @override
+  String get ended => 'Τελείωσε';
+
+  @override
+  String get sortAndFilter => 'Ταξινόμηση & Φιλτράρισμα';
+
+  @override
+  String get type => 'Τύπος';
+
+  @override
+  String get sortBy => 'Ταξινόμηση κατά';
+
+  @override
+  String get display => 'Προβολή';
+
+  @override
+  String get imageType => 'Τύπος εικόνας';
+
+  @override
+  String get posterSize => 'Μέγεθος αφίσας';
+
+  @override
+  String get small => 'Μικρό';
+
+  @override
+  String get medium => 'Μέσον';
+
+  @override
+  String get large => 'Μεγάλο';
+
+  @override
+  String get extraLarge => 'Πολύ μεγάλο';
+
+  @override
+  String libraryGenresTitle(String name) {
+    return '$name — Είδη';
+  }
+
+  @override
+  String get views => 'Απόψεις';
+
+  @override
+  String get albums => 'Άλμπουμ';
+
+  @override
+  String get albumArtists => 'Καλλιτέχνες άλμπουμ';
+
+  @override
+  String get artists => 'Καλλιτέχνες';
+
+  @override
+  String get bookmarks => 'Σελιδοδείκτες';
+
+  @override
+  String get noSavedBookmarks =>
+      'Δεν υπάρχουν ακόμη αποθηκευμένοι σελιδοδείκτες για αυτόν τον τίτλο.';
+
+  @override
+  String get openBook => 'Ανοίξτε το βιβλίο';
+
+  @override
+  String get chapter => 'Κεφάλαιο';
+
+  @override
+  String get page => 'Σελίδα';
+
+  @override
+  String get bookmark => 'Σελιδοδείκτης';
+
+  @override
+  String get justNow => 'Μόλις τώρα';
+
+  @override
+  String minutesAgo(int count) {
+    return '${count}m πριν';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '${count}h πριν';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '${count}d πριν';
+  }
+
+  @override
+  String get discoverySubjects => 'Θέματα Ανακάλυψης';
+
+  @override
+  String get pickDiscoverySubjects =>
+      'Επιλέξτε ποιο θέμα θα εμφανίζεται στο Discover.';
+
+  @override
+  String get apply => 'Εφαρμογή';
+
+  @override
+  String get openLink => 'Ανοίξτε τον σύνδεσμο';
+
+  @override
+  String get scanWithYourPhone => 'Σάρωση με το τηλέφωνό σας';
+
+  @override
+  String get audiobookGenres => 'Είδη ακουστικών βιβλίων';
+
+  @override
+  String get pickAudiobookGenres =>
+      'Επιλέξτε ποια είδη θα εμφανίζονται στο Audiobook Discover.';
+
+  @override
+  String get discoverAudiobooks => 'Ανακαλύψτε ηχητικά βιβλία';
+
+  @override
+  String get librivoxDescription =>
+      'Δημοφιλείς τίτλοι δημόσιου τομέα από LibriVox.';
+
+  @override
+  String titlesCount(int count) {
+    return '$count τίτλοι';
+  }
+
+  @override
+  String get scrollLeft => 'Κάντε κύλιση αριστερά';
+
+  @override
+  String get scrollRight => 'Κάντε κύλιση προς τα δεξιά';
+
+  @override
+  String get couldNotLoadGenre =>
+      'Δεν ήταν δυνατή η φόρτωση αυτού του είδους αυτήν τη στιγμή.';
+
+  @override
+  String get continueReading => 'Συνεχίστε την ανάγνωση';
+
+  @override
+  String get savedHighlights => 'Αποθηκευμένα Κύρια σημεία';
+
+  @override
+  String get continueListening => 'Συνεχίστε να ακούτε';
+
+  @override
+  String get listen => 'Ακούω';
+
+  @override
+  String get resume => 'Συνέχεια';
+
+  @override
+  String get failedToLoadLibrary => 'Η φόρτωση της βιβλιοθήκης απέτυχε';
+
+  @override
+  String get popularNow => 'Δημοφιλές τώρα';
+
+  @override
+  String get savedForLater => 'Αποθηκεύτηκε για αργότερα';
+
+  @override
+  String get topListens => 'Κορυφαία ακούσματα';
+
+  @override
+  String get unreadDiscoveries => 'Μη αναγνωσμένες ανακαλύψεις';
+
+  @override
+  String get pickUpAgain => 'Σήκωσε ξανά';
+
+  @override
+  String get bookHighlightsDescription =>
+      'Τα βιβλία σας με τις καλύτερες στιγμές, τα αγαπημένα ή την πρόοδο στην ανάγνωση.';
+
+  @override
+  String get handPickedFromLibrary => 'Διαλεγμένο από τη βιβλιοθήκη σας.';
+
+  @override
+  String get handPickedFromListeningQueue =>
+      'Επιλεγμένα με το χέρι από την ουρά ακρόασης.';
+
+  @override
+  String get booksWithHighlights =>
+      'Βιβλία με κορυφαίες στιγμές, αγαπημένα ή πρόοδο στην ανάγνωση.';
+
+  @override
+  String get jumpBackNarration =>
+      'Μεταβείτε ξανά στην αφήγηση χωρίς να κυνηγήσετε τον τόπο σας.';
+
+  @override
+  String get unreadBooksReady =>
+      'Αδιάβαστα βιβλία έτοιμα για την επόμενη ήσυχη ώρα.';
+
+  @override
+  String get quickAccessFavorites =>
+      'Γρήγορη πρόσβαση στα βιβλία στα οποία επιστρέφετε συνεχώς.';
+
+  @override
+  String get searchAudiobooks => 'Αναζήτηση ηχητικών βιβλίων';
+
+  @override
+  String get searchYourLibrary => 'Αναζητήστε τη βιβλιοθήκη σας';
+
+  @override
+  String get pickUpStory => 'Συνεχίστε την ιστορία από εκεί που σταματήσατε';
+
+  @override
+  String get savedPlacesChapters =>
+      'Τα αποθηκευμένα μέρη και τα ημιτελή κεφάλαιά σας';
+
+  @override
+  String authorsCount(int count) {
+    return '$count συγγραφείς';
+  }
+
+  @override
+  String genresCount(int count) {
+    return '$count είδη';
+  }
+
+  @override
+  String percentCompleted(int percent) {
+    return 'Το $percent% ολοκληρώθηκε';
+  }
+
+  @override
+  String get readyWhenYouAre => 'Έτοιμος όταν είσαι';
+
+  @override
+  String get details => 'Καθέκαστα';
+
+  @override
+  String get listeningRoom => 'Αίθουσα Ακρόασης';
+
+  @override
+  String get bookmarksAndProgress => 'Σελιδοδείκτες & Πρόοδος';
+
+  @override
+  String titlesArrangedForBrowsing(int count) {
+    return '$count οι τίτλοι είναι διατεταγμένοι για ανάγνωση-πρώτη περιήγηση.';
+  }
+
+  @override
+  String get titles => 'Τίτλοι';
+
+  @override
+  String get allTitles => 'Όλοι οι τίτλοι';
+
+  @override
+  String get authors => 'Συγγραφείς';
+
+  @override
+  String get browseByAuthor => 'Περιήγηση κατά συγγραφέα';
+
+  @override
+  String get browseByGenre => 'Περιήγηση κατά είδος';
+
+  @override
+  String get discover => 'Ανακαλύπτω';
+
+  @override
+  String get trendingTitlesOpenLibrary =>
+      'Τάσεις τίτλων ανά θέμα από Open Library.';
+
+  @override
+  String get noBookmarkedItems => 'Δεν υπάρχουν ακόμα στοιχεία σελιδοδείκτη';
+
+  @override
+  String get nothingMatchesSection =>
+      'Τίποτα δεν ταιριάζει με αυτήν την ενότητα ακόμα. Δοκιμάστε μια άλλη καρτέλα ή επιστρέψτε μετά την ολοκλήρωση του συγχρονισμού της βιβλιοθήκης.';
+
+  @override
+  String get audiobooks => 'Ηχητικά βιβλία';
+
+  @override
+  String noLabelFound(String label) {
+    return 'Δεν βρέθηκε $label';
+  }
+
+  @override
+  String get folder => 'Ντοσιέ';
+
+  @override
+  String get filters => 'Φίλτρα';
+
+  @override
+  String get readingStatus => 'Κατάσταση ανάγνωσης';
+
+  @override
+  String get playedStatus => 'Κατάσταση αναπαραγωγής';
+
+  @override
+  String get readStatus => 'Ανάγνωση';
+
+  @override
+  String get watched => 'Παρακολουθημένα';
+
+  @override
+  String get unread => 'Αδιάβαστος';
+
+  @override
+  String get unwatched => 'Μη παρακολουθημένα';
+
+  @override
+  String get seriesStatus => 'Κατάσταση σειράς';
+
+  @override
+  String get allLibraries => 'Όλες οι Βιβλιοθήκες';
+
+  @override
+  String get books => 'Βιβλία';
+
+  @override
+  String get latestBooks => 'Πρόσφατα βιβλία';
+
+  @override
+  String get latestAudiobooks => 'Πρόσφατα ηχητικά βιβλία';
+
+  @override
+  String bookSeriesItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count βιβλία',
+      one: '1 βιβλίο',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookFormatBook => 'Βιβλίο';
+
+  @override
+  String get bookFormatAudiobook => 'Ηχητικό βιβλίο';
+
+  @override
+  String bookPercentRead(int percent) {
+    return '$percent% αναγνωσμένο';
+  }
+
+  @override
+  String bookTimeLeft(String time) {
+    return 'Απομένουν $time';
+  }
+
+  @override
+  String get bookHeroRead => 'Ανάγνωση';
+
+  @override
+  String get bookHeroListen => 'Ακρόαση';
+
+  @override
+  String get author => 'Συγγραφέας';
+
+  @override
+  String get unknownAuthor => 'Άγνωστος συγγραφέας';
+
+  @override
+  String get uncategorized => 'Χωρίς κατηγοριοποίηση';
+
+  @override
+  String get overview => 'Επισκόπηση';
+
+  @override
+  String get noLibrivoxDescription =>
+      'Δεν παρέχεται ακόμη περιγραφή από τον LibriVox για αυτόν τον τίτλο.';
+
+  @override
+  String get readers => 'Αναγνώστες';
+
+  @override
+  String get openLinks => 'Ανοίξτε τους συνδέσμους';
+
+  @override
+  String get librivoxPage => 'Σελίδα LibriVox';
+
+  @override
+  String get internetArchive => 'Αρχείο Διαδικτύου';
+
+  @override
+  String get rssFeed => 'Ροή RSS';
+
+  @override
+  String get downloadZip => 'Λήψη Zip';
+
+  @override
+  String sectionCountLabel(int count) {
+    return 'ενότητες $count';
+  }
+
+  @override
+  String firstPublished(int year) {
+    return 'Πρώτη δημοσίευση $year';
+  }
+
+  @override
+  String get noOpenLibraryOverview =>
+      'Δεν διατίθεται ακόμη επισκόπηση από τον Open Library για αυτόν τον τίτλο.';
+
+  @override
+  String get subjects => 'Θέματα';
+
+  @override
+  String get all => 'Ολοι';
+
+  @override
+  String booksCount(int count) {
+    return '$count βιβλία';
+  }
+
+  @override
+  String get couldNotLoadSubject =>
+      'Δεν ήταν δυνατή η φόρτωση αυτού του θέματος αυτήν τη στιγμή.';
+
+  @override
+  String get audiobookDetails => 'Λεπτομέρειες ηχητικού βιβλίου';
+
+  @override
+  String authorsCountTitle(int count) {
+    return '$count Συγγραφείς';
+  }
+
+  @override
+  String audiobookCountLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ηχητικά βιβλία',
+      one: '1 ηχητικό βιβλίο',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trackList => 'Λίστα κομματιών';
+
+  @override
+  String get itemListPlaceholder => 'Η λίστα στοιχείων θα εμφανιστεί εδώ';
+
+  @override
+  String get failedToLoad => 'Αποτυχία φόρτωσης';
+
+  @override
+  String get delete => 'Διαγραφή';
+
+  @override
+  String get save => 'Αποθήκευση';
+
+  @override
+  String get moreLikeThis => 'Περισσότερα σαν αυτό';
+
+  @override
+  String get castAndCrew => 'Ηθοποιοί και συντελεστές';
+
+  @override
+  String get collection => 'Συλλογή';
+
+  @override
+  String get episodes => 'Επεισόδια';
+
+  @override
+  String get nextUp => 'Επόμενο';
+
+  @override
+  String get seasons => 'Κύκλοι';
+
+  @override
+  String get chapters => 'Κεφάλαια';
+
+  @override
+  String get features => 'Χαρακτηριστικά';
+
+  @override
+  String get movies => 'Κινηματογράφος';
+
+  @override
+  String get musicVideos => 'Μουσικά βίντεο';
+
+  @override
+  String get other => 'Αλλος';
+
+  @override
+  String get discography => 'Δισκογραφία';
+
+  @override
+  String get similarArtists => 'Παρόμοιοι Καλλιτέχνες';
+
+  @override
+  String get tableOfContents => 'Πίνακας περιεχομένων';
+
+  @override
+  String get tracklist => 'Λίστα κομματιών';
+
+  @override
+  String discNumber(int number) {
+    return 'Δίσκος $number';
+  }
+
+  @override
+  String get biography => 'Βιογραφία';
+
+  @override
+  String get authorDetails => 'Στοιχεία συγγραφέα';
+
+  @override
+  String get noOverviewAvailable =>
+      'Δεν υπάρχει διαθέσιμη επισκόπηση για αυτόν τον τίτλο ακόμα.';
+
+  @override
+  String get noBiographyAvailable =>
+      'Δεν υπάρχει διαθέσιμη βιογραφία για αυτόν τον συγγραφέα.';
+
+  @override
+  String get noBooksFound => 'Δεν βρέθηκαν βιβλία για αυτόν τον συγγραφέα.';
+
+  @override
+  String get unableToLoadAuthorDetails =>
+      'Δεν είναι δυνατή η φόρτωση των στοιχείων του συγγραφέα αυτήν τη στιγμή.';
+
+  @override
+  String published(int year) {
+    return 'Δημοσιεύτηκε $year';
+  }
+
+  @override
+  String get publicationDateUnknown => 'Άγνωστη ημερομηνία δημοσίευσης';
+
+  @override
+  String seasonCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count σεζόν',
+      one: '1 σεζόν',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String endsAt(String time) {
+    return 'Τελειώνει στις $time';
+  }
+
+  @override
+  String get items => 'Στοιχεία';
+
+  @override
+  String get extras => 'Πρόσθετα';
+
+  @override
+  String get behindTheScenes => 'Παρασκήνια';
+
+  @override
+  String get deletedScenes => 'Διαγραμμένες σκηνές';
+
+  @override
+  String get featurettes => 'Αφιερώματα';
+
+  @override
+  String get interviews => 'Συνεντεύξεις';
+
+  @override
+  String get scenes => 'Σκηνές';
+
+  @override
+  String get shorts => 'Ταινίες μικρού μήκους';
+
+  @override
+  String get trailers => 'Τρέιλερ';
+
+  @override
+  String timeRemaining(String time) {
+    return 'Απομένουν $time';
+  }
+
+  @override
+  String endsIn(String time) {
+    return 'Τελειώνει σε $time';
+  }
+
+  @override
+  String get view => 'Θέα';
+
+  @override
+  String get resumeReading => 'Συνέχιση της ανάγνωσης';
+
+  @override
+  String get read => 'Ανάγνωση';
+
+  @override
+  String resumeFrom(String position) {
+    return 'Βιογραφικό από $position';
+  }
+
+  @override
+  String get play => 'Αναπαραγωγή';
+
+  @override
+  String get startOver => 'Ξεκινήστε από την αρχή';
+
+  @override
+  String get restart => 'Επανεκκίνηση';
+
+  @override
+  String get readOffline => 'Διαβάστε εκτός σύνδεσης';
+
+  @override
+  String get playOffline => 'Αναπαραγωγή εκτός σύνδεσης';
+
+  @override
+  String get audio => 'Ήχος';
+
+  @override
+  String get subtitles => 'Υπότιτλοι';
+
+  @override
+  String get version => 'Έκδοση';
+
+  @override
+  String get cast => 'Μετάδοση';
+
+  @override
+  String get castMembers => 'Διανομή ρόλων';
+
+  @override
+  String get trailer => 'Τρέιλερ';
+
+  @override
+  String get finished => 'Πεπερασμένος';
+
+  @override
+  String get favorited => 'Αγαπημένο';
+
+  @override
+  String get favorite => 'Αγαπημένα';
+
+  @override
+  String get playlist => 'Λίστα αναπαραγωγής';
+
+  @override
+  String get downloaded => 'Λήφθηκε';
+
+  @override
+  String get finalizingDownload => 'Ολοκλήρωση…';
+
+  @override
+  String get downloadAll => 'Λήψη όλων';
+
+  @override
+  String get download => 'Λήψη';
+
+  @override
+  String get deleteDownloaded => 'Διαγραφή Λήφθηκε';
+
+  @override
+  String get goToSeries => 'Μεταβείτε στη σειρά';
+
+  @override
+  String get editMetadata => 'Επεξεργασία Μεταδεδομένων';
+
+  @override
+  String get less => 'Λιγότερα';
+
+  @override
+  String get more => 'Περισσότερα';
+
+  @override
+  String get deleteItem => 'Διαγραφή Αντικειμένου';
+
+  @override
+  String get deletePlaylist => 'Διαγραφή λίστας αναπαραγωγής';
+
+  @override
+  String get deletePlaylistMessage =>
+      'Διαγραφή αυτής της λίστας αναπαραγωγής από τον διακομιστή;';
+
+  @override
+  String get deleteItemMessage =>
+      'Διαγραφή αυτού του στοιχείου από τον διακομιστή;';
+
+  @override
+  String get failedToDeletePlaylist =>
+      'Η διαγραφή της λίστας αναπαραγωγής απέτυχε';
+
+  @override
+  String get failedToDeleteItem => 'Η διαγραφή του στοιχείου απέτυχε';
+
+  @override
+  String failedToDeleteItemWithError(String error) {
+    return 'Η διαδικασία διαγραφής απέτυχε με το ακόλουθο σφάλμα: $error';
+  }
+
+  @override
+  String get renamePlaylist => 'Μετονομασία λίστας αναπαραγωγής';
+
+  @override
+  String get playlistName => 'Όνομα λίστας αναπαραγωγής';
+
+  @override
+  String get deleteDownloadedAlbum => 'Διαγραφή ληφθέντος άλμπουμ';
+
+  @override
+  String deleteDownloadedTracksMessage(String title) {
+    return 'Να διαγραφούν τα ληφθέντα κομμάτια για το \"$title\";';
+  }
+
+  @override
+  String get downloadedTracksDeleted => 'Τα ληφθέντα κομμάτια διαγράφηκαν';
+
+  @override
+  String get downloadedTracksDeleteFailed =>
+      'Δεν ήταν δυνατή η διαγραφή ορισμένων κομματιών που λήφθηκαν';
+
+  @override
+  String get noTracksLoaded => 'Δεν φορτώθηκαν κομμάτια';
+
+  @override
+  String noItemsLoaded(String itemLabel) {
+    return 'Δεν έχει φορτωθεί το $itemLabel';
+  }
+
+  @override
+  String downloadingTitle(String title, int count) {
+    return 'Λήψη $title ($count στοιχεία)...';
+  }
+
+  @override
+  String deleteConfirmMessage(String name) {
+    return 'Είστε βέβαιοι ότι θέλετε να διαγράψετε το \"$name\" από τον διακομιστή; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.';
+  }
+
+  @override
+  String get itemDeleted => 'Το στοιχείο διαγράφηκε';
+
+  @override
+  String get noPlayableTrailerFound =>
+      'Δεν βρέθηκε τρέιλερ με δυνατότητα αναπαραγωγής.';
+
+  @override
+  String unsupportedBookFormat(String extension) {
+    return 'Μη υποστηριζόμενη μορφή βιβλίου: .$extension';
+  }
+
+  @override
+  String get audioTrack => 'Κομμάτι ήχου';
+
+  @override
+  String get subtitleTrack => 'Κομμάτι υπότιτλων';
+
+  @override
+  String get none => 'Κανένα';
+
+  @override
+  String get downloadSubtitlesLabel => 'Κατεβάστε υπότιτλους...';
+
+  @override
+  String get searchOpenSubtitlesPlugin =>
+      'Αναζήτηση χρησιμοποιώντας την προσθήκη OpenSubtitles';
+
+  @override
+  String get downloadSubtitles => 'Κατεβάστε υπότιτλους';
+
+  @override
+  String get selectedSubtitleInvalid =>
+      'Ο επιλεγμένος υπότιτλος δεν είναι έγκυρος.';
+
+  @override
+  String subtitleDownloadedSelected(String name) {
+    return 'Έγινε λήψη και επιλεγμένος υπότιτλος: $name';
+  }
+
+  @override
+  String get subtitleDownloadedPending =>
+      'Έγινε λήψη του υπότιτλου. Μπορεί να χρειαστεί λίγος χρόνος για να εμφανιστεί ενώ το Jellyfin ανανεώνει το στοιχείο.';
+
+  @override
+  String noRemoteSubtitlesFound(String language) {
+    return 'Δεν βρέθηκαν απομακρυσμένοι υπότιτλοι για το $language.';
+  }
+
+  @override
+  String get selectVersion => 'Επιλέξτε Έκδοση';
+
+  @override
+  String versionNumber(int number) {
+    return 'Έκδοση $number';
+  }
+
+  @override
+  String get downloadAllQuality => 'Λήψη όλων — Ποιότητα';
+
+  @override
+  String get downloadQuality => 'Ποιότητα λήψης';
+
+  @override
+  String get originalFileNoReencoding =>
+      'Αρχικό αρχείο, χωρίς επανακωδικοποίηση';
+
+  @override
+  String get originalFilesNoReencoding =>
+      'Αρχικά αρχεία, χωρίς επανακωδικοποίηση';
+
+  @override
+  String get noEpisodesLoaded => 'Δεν φορτώθηκαν επεισόδια';
+
+  @override
+  String downloadingItem(String name, String quality) {
+    return 'Λήψη $name ($quality)...';
+  }
+
+  @override
+  String get deleteDownloadedFiles => 'Διαγραφή ληφθέντων αρχείων';
+
+  @override
+  String deleteLocalFilesMessage(String typeLabel) {
+    return 'Διαγραφή τοπικών αρχείων για $typeLabel;\n\nΑυτό θα ελευθερώσει χώρο αποθήκευσης. Μπορείτε να κάνετε ξανά λήψη αργότερα.';
+  }
+
+  @override
+  String get downloadedFilesDeleted => 'Τα ληφθέντα αρχεία διαγράφηκαν';
+
+  @override
+  String get failedToDeleteFiles => 'Αποτυχία διαγραφής αρχείων';
+
+  @override
+  String get deleteFiles => 'Διαγραφή Αρχείων';
+
+  @override
+  String get director => 'ΔΙΕΥΘΥΝΤΗΣ';
+
+  @override
+  String get directors => 'ΣΚΗΝΟΘΕΣΙΑ';
+
+  @override
+  String get writer => 'ΣΕΝΑΡΙΟ';
+
+  @override
+  String get writers => 'ΣΕΝΑΡΙΟΓΡΑΦΟΙ';
+
+  @override
+  String get studio => 'ΣΤΟΥΝΤΙΟ';
+
+  @override
+  String studioMoreCount(int count) {
+    return '+$count περισσότερα';
+  }
+
+  @override
+  String totalEpisodes(int count) {
+    return '$count Επεισόδια';
+  }
+
+  @override
+  String episodeProgress(int watched, int total) {
+    return '$watched / $total';
+  }
+
+  @override
+  String episodeLabel(int number) {
+    return 'Επεισόδιο $number';
+  }
+
+  @override
+  String chapterNumber(int number) {
+    return 'Κεφάλαιο $number';
+  }
+
+  @override
+  String trackCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count κομμάτια',
+      one: '1 κομμάτι',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chapterCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count κεφάλαια',
+      one: '1 κεφάλαιο',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String born(String date) {
+    return 'Γεννήθηκε $date';
+  }
+
+  @override
+  String died(String date) {
+    return 'Πέθανε $date';
+  }
+
+  @override
+  String age(int age) {
+    return 'Ηλικία $age';
+  }
+
+  @override
+  String get showLess => 'Εμφάνιση Λιγότερο';
+
+  @override
+  String get readMore => 'Διαβάστε περισσότερα';
+
+  @override
+  String get shuffle => 'Τυχαία αναπαραγωγή';
+
+  @override
+  String get shuffleAll => 'Τυχαία Αναπαραγωγή';
+
+  @override
+  String get shuffleAllMusic => 'Τυχαία αναπαραγωγή όλης της μουσικής';
+
+  @override
+  String get carSignInPrompt => 'Συνδεθείτε στο Tortugarr από το τηλέφωνό σας';
+
+  @override
+  String get carServerUnreachable =>
+      'Δεν είναι δυνατή η σύνδεση με τον διακομιστή σας';
+
+  @override
+  String downloadsCount(int count) {
+    return '$count λήψεις';
+  }
+
+  @override
+  String get perfectMatch => 'Τέλειο ταίρι';
+
+  @override
+  String channelsCount(int count) {
+    return '$count καν.';
+  }
+
+  @override
+  String get mono => 'Μονοφωνικό';
+
+  @override
+  String get stereo => 'Στερεοφωνικό';
+
+  @override
+  String remoteSubtitlePermissionError(String action) {
+    return 'Ο απομακρυσμένος υπότιτλος $action απαιτεί την άδεια διαχείρισης υποτίτλων Jellyfin για αυτόν τον χρήστη.';
+  }
+
+  @override
+  String remoteSubtitleNotFoundError(String action) {
+    return 'Αυτό το στοιχείο δεν βρέθηκε στον διακομιστή για απομακρυσμένους υπότιτλους $action.';
+  }
+
+  @override
+  String remoteSubtitleDetailError(String action, String detail) {
+    return 'Ο απομακρυσμένος υπότιτλος $action απέτυχε: $detail';
+  }
+
+  @override
+  String remoteSubtitleHttpError(String action, int status) {
+    return 'Ο απομακρυσμένος υπότιτλος $action απέτυχε (HTTP $status).';
+  }
+
+  @override
+  String remoteSubtitleGenericError(String action) {
+    return 'Απέτυχε ο απομακρυσμένος υπότιτλος $action.';
+  }
+
+  @override
+  String deleteSeriesFiles(String name) {
+    return 'όλα τα ληφθέντα επεισόδια για το \"$name\"';
+  }
+
+  @override
+  String get deleteSeasonFiles => 'όλα τα ληφθέντα επεισόδια αυτής της σεζόν';
+
+  @override
+  String get stillWatching => 'Ακόμα παρακολουθείτε;';
+
+  @override
+  String get unableToLoadTrailerStream =>
+      'Δεν είναι δυνατή η φόρτωση της ροής τρέιλερ.';
+
+  @override
+  String get trailerTimedOut =>
+      'Το χρονικό όριο του τρέιλερ έληξε κατά τη φόρτωση.';
+
+  @override
+  String get playbackFailedForTrailer =>
+      'Η αναπαραγωγή απέτυχε για αυτό το τρέιλερ.';
+
+  @override
+  String photoCountOf(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get castingUnavailableOffline =>
+      'Η μετάδοση δεν είναι διαθέσιμη κατά την αναπαραγωγή εκτός σύνδεσης.';
+
+  @override
+  String castActionFailed(String label, String error) {
+    return 'Η ενέργεια $label απέτυχε: $error';
+  }
+
+  @override
+  String failedToSetCastVolume(String error) {
+    return 'Αποτυχία ορισμού έντασης μετάδοσης: $error';
+  }
+
+  @override
+  String castControlsTitle(String label) {
+    return '$label Στοιχεία ελέγχου';
+  }
+
+  @override
+  String get deviceVolume => 'Ένταση συσκευής';
+
+  @override
+  String get unavailable => 'Δυσεύρετος';
+
+  @override
+  String get pause => 'Παύση';
+
+  @override
+  String get syncPosition => 'Θέση συγχρονισμού';
+
+  @override
+  String stopCast(String label) {
+    return 'Διακοπή $label';
+  }
+
+  @override
+  String get queueIsEmpty => 'Η ουρά είναι άδεια';
+
+  @override
+  String trackNumber(int number) {
+    return 'Παρακολούθηση $number';
+  }
+
+  @override
+  String get remotePlayback => 'Απομακρυσμένη αναπαραγωγή';
+
+  @override
+  String get castingToGoogleCast => 'Μετάδοση στο Google Cast';
+
+  @override
+  String get castingViaAirPlay => 'Μετάδοση μέσω AirPlay';
+
+  @override
+  String get castingViaDlna => 'Μετάδοση μέσω DLNA';
+
+  @override
+  String secondsCount(int seconds) {
+    return '$seconds δευτερόλεπτα';
+  }
+
+  @override
+  String get longPressToUnlock => 'Πατήστε παρατεταμένα για ξεκλείδωμα';
+
+  @override
+  String get off => 'Ανενεργό';
+
+  @override
+  String streamTypeFallback(String streamType, int number) {
+    return '$streamType $number';
+  }
+
+  @override
+  String get auto => 'Αυτο';
+
+  @override
+  String bitrateValueMbps(int mbps) {
+    return '$mbps Mbps';
+  }
+
+  @override
+  String get bitrateOverride => 'Παράκαμψη ρυθμού bit';
+
+  @override
+  String get audioDelay => 'Καθυστέρηση ήχου';
+
+  @override
+  String delayMinusMs(int value) {
+    return '-${value}ms';
+  }
+
+  @override
+  String delayPlusMs(int value) {
+    return '+${value}ms';
+  }
+
+  @override
+  String get subtitleDelay => 'Καθυστέρηση υπότιτλων';
+
+  @override
+  String get reset => 'Επαναφορά';
+
+  @override
+  String get unknown => 'Αγνωστος';
+
+  @override
+  String get playbackInformation => 'Πληροφορίες αναπαραγωγής';
+
+  @override
+  String get playback => 'Αναπαραγωγή';
+
+  @override
+  String get playMethod => 'Μέθοδος παιχνιδιού';
+
+  @override
+  String get directPlay => 'Απευθείας αναπαραγωγή';
+
+  @override
+  String get directStream => 'Απευθείας ροή';
+
+  @override
+  String get transcoding => 'Διακωδικοποίηση';
+
+  @override
+  String get transcodeReasons => 'Λόγοι διακωδικοποίησης';
+
+  @override
+  String get player => 'Πρόγραμμα αναπαραγωγής';
+
+  @override
+  String get container => 'Δοχείο';
+
+  @override
+  String get bitrate => 'Ρυθμός bit';
+
+  @override
+  String get video => 'Βίντεο';
+
+  @override
+  String get resolution => 'Ψήφισμα';
+
+  @override
+  String get hdr => 'HDR';
+
+  @override
+  String get codec => 'Κωδικοποιητής';
+
+  @override
+  String get videoBitrate => 'Ρυθμός bit βίντεο';
+
+  @override
+  String get track => 'Κομμάτι';
+
+  @override
+  String get channels => 'Κανάλια';
+
+  @override
+  String get audioBitrate => 'Ρυθμός bit ήχου';
+
+  @override
+  String get sampleRate => 'Ποσοστό δείγματος';
+
+  @override
+  String get format => 'Σχήμα και διάταξις βιβλίου';
+
+  @override
+  String get external => 'Εξωτερικός';
+
+  @override
+  String get embedded => 'Ενσωματωμένο';
+
+  @override
+  String castSessionError(String protocol) {
+    return 'Σφάλμα συνεδρίας $protocol';
+  }
+
+  @override
+  String failedToLoadBookDetails(String error) {
+    return 'Η φόρτωση των λεπτομερειών του βιβλίου απέτυχε: $error';
+  }
+
+  @override
+  String get epubUnavailableOnPlatform =>
+      'Η απόδοση EPUB εντός εφαρμογής δεν είναι ακόμη διαθέσιμη σε αυτήν την πλατφόρμα.';
+
+  @override
+  String formatCannotRenderInApp(String extension) {
+    return 'Αυτή η μορφή (.$extension) δεν μπορεί ακόμη να αποδοθεί εντός εφαρμογής.';
+  }
+
+  @override
+  String get embeddedRenderingUnavailable =>
+      'Η απόδοση ενσωματωμένου εγγράφου δεν είναι διαθέσιμη σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get couldNotOpenExternalViewer =>
+      'Δεν ήταν δυνατό το άνοιγμα της εξωτερικής προβολής.';
+
+  @override
+  String failedToOpenInAppReader(String error) {
+    return 'Απέτυχε το άνοιγμα του προγράμματος ανάγνωσης εντός εφαρμογής: $error';
+  }
+
+  @override
+  String bookmarkAlreadySaved(String label) {
+    return 'Ο σελιδοδείκτης έχει ήδη αποθηκευτεί στο $label.';
+  }
+
+  @override
+  String bookmarkAdded(String label) {
+    return 'Προστέθηκε σελιδοδείκτης: $label';
+  }
+
+  @override
+  String get noBookmarksYet =>
+      'Δεν υπάρχουν ακόμα σελιδοδείκτες.\nΠατήστε το εικονίδιο σελιδοδείκτη ενώ διαβάζετε για να αποθηκεύσετε τη θέση σας.';
+
+  @override
+  String get noTableOfContentsAvailable =>
+      'Δεν υπάρχει διαθέσιμος πίνακας περιεχομένων';
+
+  @override
+  String pageLabel(int number) {
+    return 'Σελίδα $number';
+  }
+
+  @override
+  String get position => 'Θέση';
+
+  @override
+  String get bookReader => 'Αναγνώστης Βιβλίων';
+
+  @override
+  String formatExtension(String extension) {
+    return 'Μορφή: .$extension';
+  }
+
+  @override
+  String percentRead(String percent) {
+    return '$percent% διαβάστηκε';
+  }
+
+  @override
+  String get updating => 'Ενημέρωση...';
+
+  @override
+  String get markUnread => 'Επισήμανση ως μη αναγνωσμένο';
+
+  @override
+  String get markAsRead => 'Επισήμανση ως αναγνωσμένο';
+
+  @override
+  String get reloadReader => 'Επαναφόρτωση προγράμματος ανάγνωσης';
+
+  @override
+  String get noPagesFound => 'Δεν βρέθηκαν σελίδες.';
+
+  @override
+  String get failedToDecodePageImage =>
+      'Απέτυχε η αποκωδικοποίηση της εικόνας της σελίδας.';
+
+  @override
+  String resetZoom(String zoom) {
+    return 'Επαναφορά ζουμ (${zoom}x)';
+  }
+
+  @override
+  String get singlePage => 'Ενιαία Σελίδα';
+
+  @override
+  String get twoPageSpread => 'Διάδοση σε δύο σελίδες';
+
+  @override
+  String get addBookmark => 'Προσθήκη σελιδοδείκτη';
+
+  @override
+  String get bookmarksEllipsis => 'Σελιδοδείκτες...';
+
+  @override
+  String get markedAsRead => 'Επισημάνθηκε ως αναγνωσμένο';
+
+  @override
+  String get markedAsUnread => 'Επισημάνθηκε ως μη αναγνωσμένο';
+
+  @override
+  String failedToUpdateReadState(String error) {
+    return 'Απέτυχε η ενημέρωση της κατάστασης ανάγνωσης: $error';
+  }
+
+  @override
+  String get themeSystem => 'Θέμα: Σύστημα';
+
+  @override
+  String get themeLight => 'Θέμα: Φως';
+
+  @override
+  String get themeDark => 'Θέμα: Σκοτεινό';
+
+  @override
+  String get themeSepia => 'Θέμα: Σέπια';
+
+  @override
+  String get invertColorsFixedLayout => 'Αντιστροφή χρωμάτων (σταθερή διάταξη)';
+
+  @override
+  String get invertColorsPdf => 'Αντιστροφή χρωμάτων (PDF)';
+
+  @override
+  String get preparingInAppReader =>
+      'Προετοιμασία προγράμματος ανάγνωσης εντός εφαρμογής...';
+
+  @override
+  String get pdfDataNotAvailable => 'Τα δεδομένα PDF δεν είναι διαθέσιμα.';
+
+  @override
+  String get readerFallbackModeActive =>
+      'Ενεργή εναλλακτική λειτουργία αναγνώστη';
+
+  @override
+  String platformCannotHostDocumentEngine(String extension) {
+    return 'Αυτή η πλατφόρμα δεν μπορεί να φιλοξενήσει τη μηχανή ενσωματωμένων εγγράφων για αρχεία $extension.';
+  }
+
+  @override
+  String get reloadReaderPlatformHint =>
+      'Χρησιμοποιήστε το Reload Reader μετά τη μετάβαση σε έναν υποστηριζόμενο στόχο πλατφόρμας (Android, iOS, macOS).';
+
+  @override
+  String get openExternally => 'Άνοιγμα Εξωτερικά';
+
+  @override
+  String get noEpubChaptersFound => 'Δεν βρέθηκαν κεφάλαια EPUB.';
+
+  @override
+  String get readerNotReady => 'Ο αναγνώστης δεν είναι έτοιμος.';
+
+  @override
+  String get seriesRecordings => 'Ηχογραφήσεις σειράς';
+
+  @override
+  String get now => 'Τώρα';
+
+  @override
+  String get sports => 'Αθλητισμός';
+
+  @override
+  String get news => 'Νέα';
+
+  @override
+  String get kids => 'Μικρόκοσμος';
+
+  @override
+  String get premiere => 'Πρεμιέρα';
+
+  @override
+  String get guideTimeline => 'Οδηγός Χρονοδιάγραμμα';
+
+  @override
+  String failedToLoadGuide(String error) {
+    return 'Η φόρτωση του οδηγού απέτυχε: $error';
+  }
+
+  @override
+  String get noChannelsFound => 'Δεν βρέθηκαν κανάλια';
+
+  @override
+  String get liveBadge => 'ΖΩ';
+
+  @override
+  String guideNextProgram(String time, String title) {
+    return 'Επόμενο: $time  $title';
+  }
+
+  @override
+  String guideMinutesLeft(int minutes) {
+    return 'Απομένουν $minutesλ';
+  }
+
+  @override
+  String guideHoursLeft(int hours) {
+    return 'Απομένουν $hoursω';
+  }
+
+  @override
+  String guideHoursMinutesLeft(int hours, int minutes) {
+    return 'Απομένουν $hoursω $minutesλ';
+  }
+
+  @override
+  String get movie => 'Ταινία';
+
+  @override
+  String get removedFromFavoriteChannels =>
+      'Καταργήθηκε από τα αγαπημένα κανάλια';
+
+  @override
+  String get addedToFavoriteChannels => 'Προστέθηκε στα αγαπημένα κανάλια';
+
+  @override
+  String get failedToUpdateFavoriteChannel =>
+      'Η ενημέρωση του αγαπημένου καναλιού απέτυχε';
+
+  @override
+  String get unfavoriteChannel => 'Μη αγαπημένο κανάλι';
+
+  @override
+  String get favoriteChannel => 'Αγαπημένο κανάλι';
+
+  @override
+  String get record => 'Εγγραφή';
+
+  @override
+  String get cancelRecordingAction => 'Ακύρωση εγγραφής';
+
+  @override
+  String get programSetToRecord => 'Το πρόγραμμα έχει ρυθμιστεί για εγγραφή';
+
+  @override
+  String get recordingCancelled => 'Η εγγραφή ακυρώθηκε';
+
+  @override
+  String get unableToCreateRecording =>
+      'Δεν είναι δυνατή η δημιουργία εγγραφής';
+
+  @override
+  String get watch => 'Παρακολούθηση';
+
+  @override
+  String get close => 'Κλείσιμο';
+
+  @override
+  String failedToPlayChannel(String name) {
+    return 'Αποτυχία αναπαραγωγής $name';
+  }
+
+  @override
+  String get failedToLoadRecordings => 'Αποτυχία φόρτωσης εγγραφών';
+
+  @override
+  String get scheduledInNext24Hours => 'Προγραμματισμένο στις επόμενες 24 ώρες';
+
+  @override
+  String get recentRecordings => 'Πρόσφατες ηχογραφήσεις';
+
+  @override
+  String get tvSeries => 'Τηλεοπτική σειρά';
+
+  @override
+  String get failedToLoadSchedule => 'Η φόρτωση του προγράμματος απέτυχε';
+
+  @override
+  String get noScheduledRecordings => 'Δεν υπάρχουν προγραμματισμένες εγγραφές';
+
+  @override
+  String get cancelRecording => 'Ακύρωση εγγραφής;';
+
+  @override
+  String cancelScheduledRecordingOf(String name) {
+    return 'Να ακυρωθεί η προγραμματισμένη εγγραφή του \"$name\";';
+  }
+
+  @override
+  String get no => 'Όχι';
+
+  @override
+  String get yesCancel => 'Ναι, Ακύρωση';
+
+  @override
+  String get failedToCancelRecording => 'Η ακύρωση της εγγραφής απέτυχε';
+
+  @override
+  String get failedToLoadSeriesRecordings =>
+      'Αποτυχία φόρτωσης εγγραφών σειράς';
+
+  @override
+  String get noSeriesRecordings => 'Δεν υπάρχουν εγγραφές σειράς';
+
+  @override
+  String get cancelSeriesRecording => 'Ακύρωση εγγραφής σειράς';
+
+  @override
+  String get cancelSeriesRecordingQuestion => 'Ακύρωση εγγραφής σειράς;';
+
+  @override
+  String stopRecordingName(String name) {
+    return 'Διακοπή εγγραφής \"$name\";';
+  }
+
+  @override
+  String get failedToCancelSeriesRecording =>
+      'Η ακύρωση της εγγραφής σειράς απέτυχε';
+
+  @override
+  String get searchThisLibrary => 'Αναζήτηση αυτής της βιβλιοθήκης...';
+
+  @override
+  String get searchEllipsis => 'Ερευνα...';
+
+  @override
+  String noResultsForQuery(String query) {
+    return 'Δεν υπάρχουν αποτελέσματα για \"$query\"';
+  }
+
+  @override
+  String searchFailedError(String error) {
+    return 'Η αναζήτηση απέτυχε: $error';
+  }
+
+  @override
+  String get seerr => 'Seerr';
+
+  @override
+  String get seerrAccountType => 'Τύπος λογαριασμού Seerr';
+
+  @override
+  String get jellyfinAccount => 'Jellyfin';
+
+  @override
+  String get localAccount => 'Τοπικός';
+
+  @override
+  String get savedMedia => 'Αποθηκευμένα μέσα';
+
+  @override
+  String get tvShows => 'Τηλεοπτικές εκπομπές';
+
+  @override
+  String get music => 'Μουσική';
+
+  @override
+  String get musicAlbums => 'Μουσικά άλμπουμ';
+
+  @override
+  String get noMediaInFilter => 'Δεν υπάρχουν μέσα σε αυτό το φίλτρο';
+
+  @override
+  String get noDownloadedMediaYet => 'Δεν έχουν ληφθεί ακόμη πολυμέσα';
+
+  @override
+  String get browseLibrary => 'Περιήγηση στη βιβλιοθήκη';
+
+  @override
+  String get deleteDownload => 'Διαγραφή λήψης';
+
+  @override
+  String removeItemAndFiles(String name) {
+    return 'Κατάργηση του \"$name\" και των αρχείων του;';
+  }
+
+  @override
+  String tracksCount(int count) {
+    return '$count κομμάτια';
+  }
+
+  @override
+  String get album => 'Αλμπουμ';
+
+  @override
+  String get playAlbum => 'Αναπαραγωγή άλμπουμ';
+
+  @override
+  String failedToLoadAlbum(String error) {
+    return 'Η φόρτωση του άλμπουμ απέτυχε: $error';
+  }
+
+  @override
+  String noDownloadedTracksForAlbum(String name) {
+    return 'Δεν βρέθηκαν ληφθέντα κομμάτια για $name.';
+  }
+
+  @override
+  String get season => 'Κύκλος';
+
+  @override
+  String get errorLoadingEpisodes => 'Σφάλμα κατά τη φόρτωση επεισοδίων';
+
+  @override
+  String get noDownloadedEpisodes => 'Δεν υπάρχουν ληφθέντα επεισόδια';
+
+  @override
+  String get deleteEpisode => 'Διαγραφή επεισοδίου';
+
+  @override
+  String removeName(String name) {
+    return 'Κατάργηση του \"$name\";';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes ελάχ';
+  }
+
+  @override
+  String seasonEpisodeLabel(int season, int episode) {
+    return 'Σ$season Ε$episode';
+  }
+
+  @override
+  String episodeNumber(int number) {
+    return 'Επεισόδιο $number';
+  }
+
+  @override
+  String get seriesNotFound => 'Η σειρά δεν βρέθηκε';
+
+  @override
+  String get errorLoadingSeries => 'Σφάλμα κατά τη φόρτωση της σειράς';
+
+  @override
+  String get downloadedEpisodes => 'Λήψη επεισοδίων';
+
+  @override
+  String seasonNumber(int number) {
+    return 'Σεζόν $number';
+  }
+
+  @override
+  String seasonChip(int number) {
+    return 'Σ$number';
+  }
+
+  @override
+  String get specials => 'Ειδικά';
+
+  @override
+  String get deleteSeason => 'Διαγραφή σεζόν';
+
+  @override
+  String deleteAllEpisodesInSeason(String season) {
+    return 'Διαγραφή όλων των ληφθέντων επεισοδίων στο $season;';
+  }
+
+  @override
+  String episodeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count επεισόδια',
+      one: '1 επεισόδιο',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageManagement => 'Διαχείριση αποθήκευσης';
+
+  @override
+  String get storageBreakdown => 'Ανάλυση αποθήκευσης';
+
+  @override
+  String get downloadedItems => 'Λήψη αντικειμένων';
+
+  @override
+  String get storageLimit => 'Όριο αποθήκευσης';
+
+  @override
+  String get noLimit => 'Κανένα όριο';
+
+  @override
+  String get deleteAllDownloads => 'Διαγραφή όλων των λήψεων';
+
+  @override
+  String get deleteAllDownloadsWarning =>
+      'Αυτό θα καταργήσει όλα τα ληφθέντα αρχεία πολυμέσων και δεν μπορεί να αναιρεθεί.';
+
+  @override
+  String get deleteAll => 'Διαγραφή όλων';
+
+  @override
+  String get deleteSelected => 'Διαγραφή επιλεγμένων';
+
+  @override
+  String deleteSelectedCount(int count) {
+    return 'Διαγραφή $count ληφθέντων στοιχείων;';
+  }
+
+  @override
+  String get musicAndAudiobooks => 'Μουσική και ηχητικά βιβλία';
+
+  @override
+  String get images => 'εικόνες';
+
+  @override
+  String get database => 'Βάση δεδομένων';
+
+  @override
+  String ofStorageLimit(String limit) {
+    return 'του ορίου $limit';
+  }
+
+  @override
+  String get settings => 'Ρυθμίσεις';
+
+  @override
+  String get settingsSearchHint => 'Ρυθμίσεις αναζήτησης';
+
+  @override
+  String get authentication => 'Πιστοποίηση';
+
+  @override
+  String get autoLoginServerManagement =>
+      'Αυτόματη σύνδεση, διαχείριση διακομιστή';
+
+  @override
+  String get pinCode => 'Κωδικός PIN';
+
+  @override
+  String get setUpPinCodeProtection => 'Ρύθμιση προστασίας κωδικού PIN';
+
+  @override
+  String get parentalControls => 'Γονικός έλεγχος';
+
+  @override
+  String get contentRatingRestrictions =>
+      'Περιορισμοί αξιολόγησης περιεχομένου';
+
+  @override
+  String get bitRateResolutionBehavior => 'Ρυθμός bit, ανάλυση, συμπεριφορά';
+
+  @override
+  String get languageSizeAppearance => 'Γλώσσα, μέγεθος, εμφάνιση';
+
+  @override
+  String get qualityStorage => 'Ποιότητα, αποθήκευση';
+
+  @override
+  String get serverSyncAndPluginStatus =>
+      'Συγχρονισμός διακομιστή και κατάσταση προσθήκης';
+
+  @override
+  String get mediaRequestIntegration => 'Ενσωμάτωση αιτημάτων πολυμέσων';
+
+  @override
+  String get switchServer => 'Εναλλαγή διακομιστή';
+
+  @override
+  String get signOut => 'Αποσύνδεση';
+
+  @override
+  String get versionLicenses => 'Έκδοση, άδειες';
+
+  @override
+  String get account => 'Λογαριασμός';
+
+  @override
+  String get signInAndSecurity => 'Είσοδος και ασφάλεια';
+
+  @override
+  String get administration => 'Διαχείριση';
+
+  @override
+  String get serverSettingsUsersLibraries =>
+      'Ρυθμίσεις διακομιστή, χρήστες, βιβλιοθήκες';
+
+  @override
+  String get customization => 'Προσαρμογή';
+
+  @override
+  String get themeAndLayout => 'Θέμα και διάταξη';
+
+  @override
+  String get videoAndSubtitles => 'Βίντεο και υπότιτλοι';
+
+  @override
+  String get integrations => 'Ενσωματώσεις';
+
+  @override
+  String get pluginAndRequests => 'Πρόσθετο και αιτήματα';
+
+  @override
+  String get customizeAccountPlaybackInterface =>
+      'Προσαρμόστε τη συμπεριφορά λογαριασμού, αναπαραγωγής και διεπαφής';
+
+  @override
+  String optionsCount(int count) {
+    return 'Επιλογές $count';
+  }
+
+  @override
+  String get themeAndAppearance => 'Θέμα & Εμφάνιση';
+
+  @override
+  String get focusBorderColor => 'Εστίαση χρώματος περιγράμματος';
+
+  @override
+  String get watchedIndicators => 'Παρακολούθησαν δείκτες';
+
+  @override
+  String get always => 'Πάντοτε';
+
+  @override
+  String get hideUnwatched => 'Απόκρυψη Unwatched';
+
+  @override
+  String get episodesOnly => 'Μόνο επεισόδια';
+
+  @override
+  String get never => 'Ποτέ';
+
+  @override
+  String get focusExpansionAnimation => 'Κινούμενη εικόνα επέκτασης εστίασης';
+
+  @override
+  String get desktopUiScale => 'Κλίμακα διεπαφής επιφάνειας εργασίας';
+
+  @override
+  String get scaleFocusedCards =>
+      'Κλίμακα εστιασμένες ή τοποθετημένες κάρτες και πλακίδια';
+
+  @override
+  String get backgroundBackdrops => 'Φόντο φόντο';
+
+  @override
+  String get showBackdropImages =>
+      'Εμφάνιση εικόνων φόντου πίσω από το περιεχόμενο';
+
+  @override
+  String get seriesThumbnails => 'Μικρογραφίες σειράς';
+
+  @override
+  String get seriesThumbnailsDescription =>
+      'Για τις τηλεοπτικές σειρές, χρησιμοποιήστε το κύριο εικαστικό της σειράς αντί για τη μικρογραφία του επεισοδίου.';
+
+  @override
+  String get homeRowInfoOverlay =>
+      'Επικάλυψη πληροφοριών σειράς αρχικής σελίδας';
+
+  @override
+  String get showTitleMetadataOnHomeRows =>
+      'Εμφάνιση τίτλου και μεταδεδομένων κατά την περιήγηση σε αρχικές σειρές';
+
+  @override
+  String get clockDisplay => 'Οθόνη ρολογιού';
+
+  @override
+  String get inMenus => 'Στα Μενού';
+
+  @override
+  String get inVideo => 'Σε βίντεο';
+
+  @override
+  String get seasonalEffects => 'Εποχιακά Εφέ';
+
+  @override
+  String get seasonalEffectsDescription =>
+      'Οπτικά εφέ και εποχιακές διακοσμήσεις';
+
+  @override
+  String get snow => 'Χιόνι';
+
+  @override
+  String get fireworks => 'Πυροτεχνήματα';
+
+  @override
+  String get confetti => 'Κομφετί';
+
+  @override
+  String get fallingLeaves => 'Πτώση Φύλλων';
+
+  @override
+  String get themeMusic => 'Θεματική Μουσική';
+
+  @override
+  String get playThemeMusicOnDetailPages =>
+      'Αναπαραγωγή θεματικής μουσικής σε σελίδες λεπτομερειών';
+
+  @override
+  String get themeMusicVolume => 'Τόμος μουσικής θέματος';
+
+  @override
+  String get themeMusicSettingsSubtitle =>
+      'Σελίδες λεπτομερειών, σειρές αρχικής και ένταση';
+
+  @override
+  String percentValue(int value) {
+    return '$value%';
+  }
+
+  @override
+  String get themeMusicOnHomeRows => 'Θεματική μουσική στις αρχικές σειρές';
+
+  @override
+  String get playWhenBrowsingHomeScreen =>
+      'Αναπαραγωγή κατά την περιήγηση στην αρχική οθόνη';
+
+  @override
+  String get loopThemeMusic => 'Επανάληψη μουσικής θέματος';
+
+  @override
+  String get loopThemeMusicSubtitle =>
+      'Επανάληψη του κομματιού αντί για μία μόνο αναπαραγωγή';
+
+  @override
+  String get detailsBackgroundBlur => 'Λεπτομέρειες Θάμπωμα φόντου';
+
+  @override
+  String get detailsBackgroundOpacity => 'Διαφάνεια Φόντου Λεπτομερειών';
+
+  @override
+  String pixelValue(int value) {
+    return '${value}px';
+  }
+
+  @override
+  String get browsingBackgroundBlur => 'Θάμπωμα φόντου περιήγησης';
+
+  @override
+  String get maxStreamingBitrate => 'Μέγιστος ρυθμός μετάδοσης bit ροής';
+
+  @override
+  String get maxResolution => 'Μέγιστη Ανάλυση';
+
+  @override
+  String get playerZoomMode =>
+      'Λειτουργία Μεγέθυνσης Προγράμματος Αναπαραγωγής';
+
+  @override
+  String get settingsScrollWheelAction => 'Ροδέλα ποντικιού';
+
+  @override
+  String get settingsScrollWheelActionDescription =>
+      'Επιλέξτε τι κάνει η κύλιση της ροδέλας του ποντικιού πάνω από το βίντεο κατά την αναπαραγωγή.';
+
+  @override
+  String get scrollWheelActionOff => 'Ανενεργό';
+
+  @override
+  String get scrollWheelActionSeek => 'Μετακίνηση (εμπρός / πίσω)';
+
+  @override
+  String get scrollWheelActionVolume => 'Ένταση';
+
+  @override
+  String get playerTooltipVolume => 'Ένταση';
+
+  @override
+  String get fit => 'Κατάλληλος';
+
+  @override
+  String get autoCrop => 'Αυτόματη περικοπή';
+
+  @override
+  String get stretch => 'Τέντωμα';
+
+  @override
+  String get refreshRateSwitching => 'Εναλλαγή ρυθμού ανανέωσης';
+
+  @override
+  String get disabled => 'Απενεργοποιημένο';
+
+  @override
+  String get scaleOnTv => 'Κλίμακα στην τηλεόραση';
+
+  @override
+  String get scaleOnDevice => 'Κλίμακα στη συσκευή';
+
+  @override
+  String get trickPlay => 'Trick Play';
+
+  @override
+  String get showPreviewThumbnailsWhenSeeking =>
+      'Εμφάνιση μικρογραφιών προεπισκόπησης κατά την αναζήτηση';
+
+  @override
+  String get showDescriptionOnPause => 'Εμφάνιση Περιγραφής σε Παύση';
+
+  @override
+  String get dimVideoShowOverview =>
+      'Χαμηλώστε το βίντεο και εμφανίστε κείμενο επισκόπησης κατά την παύση';
+
+  @override
+  String get osdLockButton => 'Κουμπί κλειδώματος OSD';
+
+  @override
+  String get osdLockButtonDescription =>
+      'Εμφάνιση ενός κουμπιού κλειδώματος που εμποδίζει την είσοδο αφής μέχρι να πατηθεί παρατεταμένα';
+
+  @override
+  String get osdButtons => 'Κουμπιά Αναπαραγωγής';
+
+  @override
+  String get osdButtonsDescription =>
+      'Επιλέξτε ποια κουμπιά θα εμφανίζει το πρόγραμμα αναπαραγωγής';
+
+  @override
+  String get osdButtonsSectionDescription =>
+      'Τα στοιχεία ελέγχου αναπαραγωγής εμφανίζονται πάντα. Όλα τα υπόλοιπα εξαρτώνται από εσάς, και κάθε τύπος συσκευής διατηρεί τη δική του λίστα.';
+
+  @override
+  String get detailButtons => 'Κουμπιά Λειτουργιών';
+
+  @override
+  String get detailButtonsDescription =>
+      'Επιλέξτε ποια κουμπιά θα εμφανίζονται στην οθόνη λεπτομερειών';
+
+  @override
+  String get detailButtonsSectionDescription =>
+      'Η αναπαραγωγή είναι πάντα στην πρώτη θέση και τα κλειδωμένα κουμπιά εμφανίζονται πάντα. Όλα τα υπόλοιπα εξαρτώνται από εσάς, και κάθε τύπος συσκευής διατηρεί τη δική της λίστα.';
+
+  @override
+  String get moveUp => 'Μετακίνηση προς τα πάνω';
+
+  @override
+  String get moveDown => 'Μετακίνηση προς τα κάτω';
+
+  @override
+  String get buttonOrderHint =>
+      'Χρησιμοποιήστε τα βέλη για να αλλάξετε τη σειρά. Στο τηλεχειριστήριο, τα βέλη αριστερά και δεξιά μετακινούν το επιλεγμένο κουμπί. Αν απενεργοποιήσετε ένα κουμπί, αυτό μετακινείται κάτω από τα υπόλοιπα.';
+
+  @override
+  String get orientationLock => 'Κλείδωμα Προσανατολισμού';
+
+  @override
+  String get fullscreen => 'Πλήρης Οθόνη';
+
+  @override
+  String get audioBehavior => 'Συμπεριφορά ήχου';
+
+  @override
+  String get downmixToStereo => 'Downmix σε Stereo';
+
+  @override
+  String get defaultAudioLanguage => 'Προεπιλεγμένη γλώσσα ήχου';
+
+  @override
+  String get fallbackAudioLanguage => 'Εφεδρική γλώσσα ήχου';
+
+  @override
+  String get preferDefaultAudioTrack =>
+      'Προτίμηση προεπιλεγμένου κομματιού ήχου';
+
+  @override
+  String get preferDefaultAudioTrackDescription =>
+      'Προτίμηση του πρωτότυπου κομματιού ήχου έναντι της μεταγλώττισης.';
+
+  @override
+  String get preferAudioDescription =>
+      'Προτίμηση κομματιών ακουστικής περιγραφής';
+
+  @override
+  String get preferAudioDescriptionDescription =>
+      'Προτίμηση των κομματιών ακουστικής περιγραφής έναντι των κανονικών κομματιών.';
+
+  @override
+  String get transcodingAudio => 'Διακωδικοποίηση (ήχος)';
+
+  @override
+  String get directStreamRemux => 'Απευθείας ροή (επανασυσκευασία)';
+
+  @override
+  String get transcodingBitrateOrResolution =>
+      'Διακωδικοποίηση (ρυθμός bit ή ανάλυση)';
+
+  @override
+  String get transcodingVideoAndAudio => 'Διακωδικοποίηση (βίντεο και ήχος)';
+
+  @override
+  String get transcodingVideo => 'Διακωδικοποίηση (βίντεο)';
+
+  @override
+  String get autoServerDefault => 'Αυτόματο (Προεπιλογή διακομιστή)';
+
+  @override
+  String get english => 'αγγλικός';
+
+  @override
+  String get spanish => 'ισπανικά';
+
+  @override
+  String get french => 'Γάλλος';
+
+  @override
+  String get german => 'Γερμανός';
+
+  @override
+  String get italian => 'ιταλικά';
+
+  @override
+  String get portuguese => 'Πορτογάλος';
+
+  @override
+  String get japanese => 'Ιαπωνικά';
+
+  @override
+  String get korean => 'κορεάτης';
+
+  @override
+  String get chinese => 'κινέζικα';
+
+  @override
+  String get russian => 'ρωσικός';
+
+  @override
+  String get arabic => 'αραβικός';
+
+  @override
+  String get hindi => 'Χίντι';
+
+  @override
+  String get dutch => 'Ολλανδός';
+
+  @override
+  String get swedish => 'σουηδικά';
+
+  @override
+  String get norwegian => 'Νορβηγός';
+
+  @override
+  String get danish => 'δανικός';
+
+  @override
+  String get finnish => 'φινλανδικός';
+
+  @override
+  String get polish => 'Στίλβωση';
+
+  @override
+  String get ac3Passthrough => 'Διέλευση AC3';
+
+  @override
+  String get dtsPassthrough => 'Διέλευση DTS';
+
+  @override
+  String get trueHdSupport => 'Υποστήριξη TrueHD';
+
+  @override
+  String get enableDtsPassthrough =>
+      'Ήχος bitstream DTS μόνο σε AVR. απαιτεί υποστήριξη δέκτη και κομμάτι πηγής DTS';
+
+  @override
+  String get enableTrueHdAudio =>
+      'Ενεργοποίηση ήχου TrueHD (ενδέχεται να μην λειτουργεί σε όλες τις πλατφόρμες)';
+
+  @override
+  String get settingsAudioOutputMode => 'Λειτουργία εξόδου ήχου';
+
+  @override
+  String get settingsAudioOutputModeDescription =>
+      'Επιλέξτε τον τρόπο αποκωδικοποίησης του ήχου. Η Διέλευση AVR στέλνει ακατέργαστες ροές Dolby/DTS στον δέκτη σας· η Αυτόματη ή η Μείξη αποκωδικοποιεί τοπικά.';
+
+  @override
+  String get settingsAudioOutputModeAvrPassthrough => 'Διέλευση AVR';
+
+  @override
+  String get settingsAudioFallbackCodec => 'Εναλλακτικός κωδικοποιητής ήχου';
+
+  @override
+  String get settingsAudioFallbackCodecDescription =>
+      'Επιλέξτε τη μορφή προορισμού για τη διακωδικοποίηση πολυκάναλου ήχου όταν η ροή προέλευσης δεν μπορεί να αναπαραχθεί απευθείας ή να περάσει με διέλευση.';
+
+  @override
+  String get settingsAudioFallbackCodecAuto =>
+      'Αυτόματος εντοπισμός\n(Συνιστάται)';
+
+  @override
+  String get settingsAudioFallbackCodecAac => 'AAC\n(Προεπιλογή)';
+
+  @override
+  String get settingsAudioFallbackCodecAc3 => 'AC3\n(Dolby Digital)';
+
+  @override
+  String get settingsAudioFallbackCodecEac3 => 'EAC3\n(Dolby Digital Plus)';
+
+  @override
+  String get settingsAudioFallbackCodecTrueHd => 'TrueHD\n(Χωρίς απώλειες)';
+
+  @override
+  String get settingsAudioFallbackCodecMp3 => 'MP3\n(Μόνο στερεοφωνικό)';
+
+  @override
+  String get settingsAudioFallbackCodecOpus => 'Opus\n(Αποδοτικό)';
+
+  @override
+  String get settingsAudioFallbackCodecFlac => 'FLAC\n(Χωρίς απώλειες)';
+
+  @override
+  String get settingsMaxAudioChannels => 'Μέγιστα κανάλια ήχου';
+
+  @override
+  String get settingsMaxAudioChannelsDescription =>
+      'Ρυθμίστε τον μέγιστο αριθμό καναλιών της ηχητικής σας εγκατάστασης. Οι πολυκάναλες ροές που υπερβαίνουν αυτό το όριο θα υποστούν μείξη ή διακωδικοποίηση.';
+
+  @override
+  String get settingsMaxAudioChannelsAuto =>
+      'Αυτόματος εντοπισμός\n(Προεπιλογή υλικού)';
+
+  @override
+  String get settingsMaxAudioChannelsMono => '1.0 Μονοφωνικό';
+
+  @override
+  String get settingsMaxAudioChannelsStereo => '2.0 Στερεοφωνικό';
+
+  @override
+  String get settingsMaxAudioChannels3_0 => '3.0 / 2.1 Περιβάλλων ήχος';
+
+  @override
+  String get settingsMaxAudioChannels4_0 => '4.0 / 3.1 Τετραφωνικό';
+
+  @override
+  String get settingsMaxAudioChannels5_0 => '5.0 / 4.1 Περιβάλλων ήχος';
+
+  @override
+  String get settingsMaxAudioChannels5_1 => '5.1 Περιβάλλων ήχος';
+
+  @override
+  String get settingsMaxAudioChannels6_1 => '6.1 Περιβάλλων ήχος';
+
+  @override
+  String get settingsMaxAudioChannels7_1 => '7.1 Περιβάλλων ήχος';
+
+  @override
+  String get settingsAudioPassthroughAdvanced =>
+      'Passthrough (Για προχωρημένους)';
+
+  @override
+  String get settingsAudioCodecPassthrough => 'Διέλευση κωδικοποιητή';
+
+  @override
+  String get settingsAudioCodecPassthroughDescription =>
+      'Ενεργοποίηση μόνο μορφών που υποστηρίζει ο νεροχύτης AVR ή HDMI.';
+
+  @override
+  String get settingsAudioEac3Passthrough => 'Διέλευση EAC3';
+
+  @override
+  String get settingsAudioEac3JocPassthrough => 'Διέλευση EAC3 JOC (Atmos)';
+
+  @override
+  String get settingsAudioDtsCorePassthrough => 'Διέλευση DTS Core';
+
+  @override
+  String get settingsAudioDtsHdPassthrough => 'Διέλευση DTS-HD MA';
+
+  @override
+  String get settingsAudioTrueHdPassthrough => 'Διέλευση TrueHD';
+
+  @override
+  String get settingsAudioTrueHdAtmosPassthrough => 'Διέλευση TrueHD Atmos';
+
+  @override
+  String get settingsAudioBitstreamEac3ToExternalDecoder =>
+      'Bitstream Dolby Digital Plus (EAC3) σε εξωτερικό αποκωδικοποιητή.';
+
+  @override
+  String get settingsAudioBitstreamEac3JocToExternalDecoder =>
+      'Bitstream Dolby Atmos μέσω EAC3 (JOC) σε εξωτερικό αποκωδικοποιητή.';
+
+  @override
+  String get settingsAudioBitstreamDtsHdToExternalDecoder =>
+      'Bitstream DTS-HD MA (περιλαμβάνει πυρήνα DTS) σε εξωτερικό αποκωδικοποιητή.';
+
+  @override
+  String get settingsAudioBitstreamTrueHdAtmosToExternalDecoder =>
+      'Bitstream Dolby TrueHD με μεταδεδομένα Atmos σε εξωτερικό αποκωδικοποιητή.';
+
+  @override
+  String get settingsDetectedAudioCapabilities =>
+      'Εντοπισμένες δυνατότητες ήχου';
+
+  @override
+  String get settingsDetectedAudioCapabilitiesUnavailable =>
+      'Δεν διατίθεται ακόμη στιγμιότυπο δυνατότητας χρόνου εκτέλεσης.';
+
+  @override
+  String get settingsAudioRouteLabel => 'Διαδρομή';
+
+  @override
+  String get settingsAudioDecodeLabel => 'Αποκρυπτογραφώ';
+
+  @override
+  String get settingsAudioPassthroughLabel => 'Διέλευση';
+
+  @override
+  String get settingsAudioHdRoute => 'Διαδρομή ήχου HD';
+
+  @override
+  String get settingsAudioRouteHdmi => 'HDMI';
+
+  @override
+  String get settingsAudioRouteArc => 'ARC';
+
+  @override
+  String get settingsAudioRouteEarc => 'eARC';
+
+  @override
+  String get settingsAudioRouteBluetooth => 'Bluetooth';
+
+  @override
+  String get settingsAudioRouteSpeaker => 'Ομιλητής';
+
+  @override
+  String get settingsAudioRouteHeadphones => 'Ακουστικά';
+
+  @override
+  String settingsAudioPcmChannels(int count) {
+    return '$count καν. PCM';
+  }
+
+  @override
+  String get settingsAudioDiagnostics => 'Διαγνωστικά';
+
+  @override
+  String get settingsAudioDiagnosticsVideoLevel => 'Επίπεδο βίντεο';
+
+  @override
+  String get settingsAudioDiagnosticsVideoRange => 'Εύρος βίντεο';
+
+  @override
+  String get settingsAudioDiagnosticsSubtitleCodec => 'Κωδικοποιητής υποτίτλων';
+
+  @override
+  String get settingsAudioDiagnosticsAllowedAudioCodecs =>
+      'Επιτρεπόμενοι κωδικοποιητές ήχου';
+
+  @override
+  String get settingsAudioDiagnosticsHlsMpegTsAudioCodecs =>
+      'Κωδικοποιητές ήχου HLS MPEG-TS';
+
+  @override
+  String get settingsAudioDiagnosticsHlsFmp4AudioCodecs =>
+      'Κωδικοποιητές ήχου HLS fMP4';
+
+  @override
+  String get settingsAudioDiagnosticsAudioSpdifPassthrough =>
+      'διέλευση audio-spdif';
+
+  @override
+  String get settingsAudioDiagnosticsActiveAudioRoute => 'Ενεργή διαδρομή ήχου';
+
+  @override
+  String get settingsAudioDiagnosticsRouteHdAudioSupport =>
+      'Υποστήριξη ήχου διαδρομής HD';
+
+  @override
+  String get nightMode => 'Νυχτερινή λειτουργία';
+
+  @override
+  String get compressDynamicRange => 'Συμπίεση δυναμικού εύρους';
+
+  @override
+  String get advancedMpv => 'Για προχωρημένους mpv';
+
+  @override
+  String get enableCustomMpvConf => 'Ενεργοποίηση Προσαρμοσμένης mpv.conf';
+
+  @override
+  String get applyMpvConfBeforePlayback =>
+      'Εφαρμόστε ένα mpv.conf που καθορίζεται από το χρήστη πριν από την έναρξη της αναπαραγωγής';
+
+  @override
+  String get unsafeAdvancedMpvOptions => 'Μη ασφαλείς σύνθετες επιλογές mpv';
+
+  @override
+  String get unsafeMpvOptionsDescription =>
+      'Επιτρέψτε ένα ευρύτερο σύνολο επιλογών mpv. Μπορεί να διακόψει τη συμπεριφορά αναπαραγωγής.';
+
+  @override
+  String get hardwareDecoding => 'Αποκωδικοποίηση υλικού';
+
+  @override
+  String get hardwareDecodingSubtitle =>
+      'Μπορεί να βελτιώσει την απόδοση, αλλά μπορεί να προκαλέσει προβλήματα αναπαραγωγής σε ορισμένες συσκευές.';
+
+  @override
+  String get nextUpAndQueuing => 'Επόμενο Up & ουρά';
+
+  @override
+  String get nextUpDisplay => 'Επόμενη Επόμενη Εμφάνιση';
+
+  @override
+  String get extended => 'Εκτεταμένη';
+
+  @override
+  String get minimal => 'Ελάχιστος';
+
+  @override
+  String get nextUpTimeout => 'Χρονικό όριο επόμενου χρόνου';
+
+  @override
+  String secondsValue(int value) {
+    return '$valueδ';
+  }
+
+  @override
+  String get mediaQueuing => 'Ουρά πολυμέσων';
+
+  @override
+  String get autoQueueNextEpisodes => 'Αυτόματη ουρά επόμενων επεισοδίων';
+
+  @override
+  String get stillWatchingPrompt => 'Εξακολουθεί να παρακολουθεί την προτροπή';
+
+  @override
+  String afterEpisodesAndHours(int episodes, double hours) {
+    return 'Μετά από $episodes επεισόδια / ${hours}h';
+  }
+
+  @override
+  String get resumeAndSkip => 'Βιογραφικό & Παράλειψη';
+
+  @override
+  String get resumeRewind => 'Επαναφορά κατά τη συνέχιση';
+
+  @override
+  String get unpauseRewind => 'Κατάργηση παύσης επαναφοράς';
+
+  @override
+  String get fiveSeconds => '5 δευτερόλεπτα';
+
+  @override
+  String get tenSeconds => '10 δευτερόλεπτα';
+
+  @override
+  String get fifteenSeconds => '15 δευτερόλεπτα';
+
+  @override
+  String get thirtySeconds => '30 δευτερόλεπτα';
+
+  @override
+  String get skipBackLength => 'Παράλειψη πίσω μήκους';
+
+  @override
+  String get skipForwardLength => 'Παράλειψη μήκους προς τα εμπρός';
+
+  @override
+  String get customMpvConfPath => 'Προσαρμοσμένη διαδρομή mpv.conf';
+
+  @override
+  String get notSetMpvConf =>
+      'Δεν έχει οριστεί. Το Tortugarr θα δοκιμάσει ένα προεπιλεγμένο mpv.conf στους φακέλους εφαρμογής/δεδομένων.';
+
+  @override
+  String get selectMpvConf => 'Επιλέξτε mpv.conf';
+
+  @override
+  String get pathToMpvConf => '/διαδρομή/προς/mpv.conf';
+
+  @override
+  String get subtitleStyleDescription =>
+      'Οι ρυθμίσεις στυλ (μέγεθος, χρώμα, μετατόπιση) ισχύουν για υπότιτλους που βασίζονται σε κείμενο (SRT, VTT, TTML). Οι υπότιτλοι ASS/SSA χρησιμοποιούν το δικό τους ενσωματωμένο στυλ, εκτός εάν είναι απενεργοποιημένο το \"ASS/SSA Direct Play\". Οι υπότιτλοι Bitmap (PGS, DVB, VobSub) δεν μπορούν να επανασχεδιαστούν.';
+
+  @override
+  String get defaultSubtitleLanguage => 'Προεπιλεγμένη γλώσσα υπότιτλων';
+
+  @override
+  String get defaultToNoSubtitles => 'Προεπιλογή σε Χωρίς υπότιτλους';
+
+  @override
+  String get turnOffSubtitlesByDefault =>
+      'Απενεργοποιήστε τους υπότιτλους από προεπιλογή';
+
+  @override
+  String get subtitleSize => 'Μέγεθος υπότιτλων';
+
+  @override
+  String get textFillColor => 'Χρώμα πλήρωσης κειμένου';
+
+  @override
+  String get backgroundColor => 'Χρώμα φόντου';
+
+  @override
+  String get textStrokeColor => 'Χρώμα περιγράμματος κειμένου';
+
+  @override
+  String get subtitleCustomization => 'Προσαρμογή υπότιτλων';
+
+  @override
+  String get subtitleCustomizationDescription =>
+      'Προσαρμόστε την εμφάνιση των υπότιτλων';
+
+  @override
+  String get subtitleMode => 'Λειτουργία υπότιτλων';
+
+  @override
+  String get subtitleModeFlagged => 'Με σήμανση';
+
+  @override
+  String get subtitleModeAlways => 'Πάντα';
+
+  @override
+  String get subtitleModeForeign => 'Ξενόγλωσσα';
+
+  @override
+  String get subtitleModeForced => 'Εξαναγκασμένα';
+
+  @override
+  String get subtitleModeFlaggedDescription =>
+      'Αναπαράγει τα κομμάτια που έχουν σήμανση «default» ή «forced» στα μεταδεδομένα του αρχείου πολυμέσων.';
+
+  @override
+  String get subtitleModeAlwaysDescription =>
+      'Φορτώνει και εμφανίζει αυτόματα τους υπότιτλους κάθε φορά που ξεκινά ένα βίντεο.';
+
+  @override
+  String get subtitleModeForeignDescription =>
+      'Ενεργοποιεί αυτόματα τους υπότιτλους αν το προεπιλεγμένο κομμάτι ήχου είναι σε ξένη γλώσσα.';
+
+  @override
+  String get subtitleModeForcedDescription =>
+      'Φορτώνει μόνο τους υπότιτλους που φέρουν ρητή σήμανση με την ένδειξη μεταδεδομένων «forced».';
+
+  @override
+  String get subtitleModeNoneDescription =>
+      'Απενεργοποιεί εντελώς την αυτόματη φόρτωση υπότιτλων.';
+
+  @override
+  String get fallbackSubtitleLanguage => 'Εφεδρική γλώσσα υπότιτλων';
+
+  @override
+  String get subtitleStream => 'Ροή υπότιτλων';
+
+  @override
+  String get subtitlePreviewText =>
+      'Η γρήγορη καφετιά αλεπού πηδά πάνω από το τεμπέλικο σκυλί';
+
+  @override
+  String get verticalOffset => 'Κάθετη μετατόπιση';
+
+  @override
+  String get pgsDirectPlay => 'Απευθείας αναπαραγωγή PGS';
+
+  @override
+  String get directPlayPgsSubtitles => 'Άμεση αναπαραγωγή υπότιτλων PGS';
+
+  @override
+  String get assSsaDirectPlay => 'Απευθείας αναπαραγωγή ASS/SSA';
+
+  @override
+  String get directPlayAssSsaSubtitles =>
+      'Απευθείας αναπαραγωγή υπότιτλων ASS/SSA';
+
+  @override
+  String get white => 'Λευκό';
+
+  @override
+  String get black => 'Μαύρος';
+
+  @override
+  String get yellow => 'Κίτρινος';
+
+  @override
+  String get green => 'Πράσινος';
+
+  @override
+  String get cyan => 'κυανό';
+
+  @override
+  String get red => 'Κόκκινος';
+
+  @override
+  String get transparent => 'Διαφανής';
+
+  @override
+  String get semiTransparentBlack => 'Ημιδιάφανο Μαύρο';
+
+  @override
+  String get global => 'Καθολικός';
+
+  @override
+  String get desktop => 'Επιτραπέζιος υπολογιστής';
+
+  @override
+  String get mobile => 'Κινητός';
+
+  @override
+  String get tv => 'τηλεόραση';
+
+  @override
+  String loadedProfileSettings(String profile) {
+    return 'Φορτώθηκαν οι ρυθμίσεις προφίλ $profile.';
+  }
+
+  @override
+  String failedToLoadProfileSettings(String profile) {
+    return 'Η φόρτωση των ρυθμίσεων προφίλ $profile απέτυχε.';
+  }
+
+  @override
+  String syncedSettingsToProfile(String profile) {
+    return 'Συγχρονίστηκαν οι τοπικές ρυθμίσεις με το προφίλ $profile.';
+  }
+
+  @override
+  String get customizationProfile => 'Προφίλ προσαρμογής';
+
+  @override
+  String get customizationProfileDescription =>
+      'Επιλέξτε το προφίλ για φόρτωση, επεξεργασία και συγχρονισμό. Το καθολικό ισχύει παντού, εκτός εάν το προφίλ συσκευής το παρακάμψει. Η πράσινη κουκκίδα σηματοδοτεί το τρέχον προφίλ της συσκευής σας.';
+
+  @override
+  String get loadProfile => 'Φόρτωση προφίλ';
+
+  @override
+  String get syncing => 'Συγχρονισμός...';
+
+  @override
+  String get syncToProfile => 'Συγχρονισμός στο προφίλ';
+
+  @override
+  String get resetProfile => 'Reset Profile';
+
+  @override
+  String resetProfileTitle(String profile) {
+    return 'Reset $profile?';
+  }
+
+  @override
+  String resetProfileDescription(String profile) {
+    return 'This deletes the $profile profile from the server and puts every synced setting on this device back to its default.';
+  }
+
+  @override
+  String get resetGlobalProfileDescription =>
+      'This deletes every saved profile from the server and puts every synced setting on this device back to its default.';
+
+  @override
+  String profileReset(String profile) {
+    return 'Reset $profile profile to defaults.';
+  }
+
+  @override
+  String get resetRatingsTitle => 'Reset ratings?';
+
+  @override
+  String get resetRatingsDescription =>
+      'This puts every ratings setting back to its default, including which sources show and the order they appear in.';
+
+  @override
+  String get ratingsReset => 'Reset ratings to defaults.';
+
+  @override
+  String failedToResetProfile(String profile) {
+    return 'Failed to reset $profile profile.';
+  }
+
+  @override
+  String get profileSyncHidden => 'Συγχρονισμός προφίλ κρυφός';
+
+  @override
+  String get enablePluginSyncDescription =>
+      'Ενεργοποιήστε το Server Plugin Sync στις ρυθμίσεις Plugin για να εμφανίζονται τα στοιχεία ελέγχου προφίλ εδώ.';
+
+  @override
+  String get quality => 'Ποιότητα';
+
+  @override
+  String get defaultDownloadQuality => 'Προεπιλεγμένη ποιότητα λήψης';
+
+  @override
+  String get network => 'Δίκτυο';
+
+  @override
+  String get wifiOnlyDownloads => 'Λήψεις μόνο με WiFi';
+
+  @override
+  String get reportDownloadsActivity => 'Εμφάνιση λήψεων στον διακομιστή';
+
+  @override
+  String get reportDownloadsActivitySubtitle =>
+      'Επιτρέψτε στον διαχειριστή του διακομιστή να βλέπει τις διακωδικοποιημένες λήψεις σας στον πίνακα ελέγχου';
+
+  @override
+  String get onlyDownloadOnWifi => 'Λήψη μόνο όταν είναι συνδεδεμένο σε WiFi';
+
+  @override
+  String get storage => 'Αποθήκευση';
+
+  @override
+  String get storageUsed => 'Αποθήκευση που χρησιμοποιείται';
+
+  @override
+  String get manage => 'Διαχειρίζομαι';
+
+  @override
+  String get calculating => 'Υπολογιστικός...';
+
+  @override
+  String get downloadLocation => 'Λήψη τοποθεσίας';
+
+  @override
+  String get defaultLabel => 'Αθέτηση';
+
+  @override
+  String get saveToDownloadsFolder => 'Αποθήκευση στο φάκελο Λήψεις';
+
+  @override
+  String get downloadsVisibleToOtherApps =>
+      'Λήψεις/Tortugarr — ορατές σε άλλες εφαρμογές';
+
+  @override
+  String get dangerZone => 'Επικίνδυνη Ζώνη';
+
+  @override
+  String get clearAllDownloads => 'Εκκαθάριση όλων των λήψεων';
+
+  @override
+  String get original => 'Πρωτότυπο';
+
+  @override
+  String get changeDownloadLocation => 'Αλλαγή τοποθεσίας λήψης';
+
+  @override
+  String get changeDownloadLocationDescription =>
+      'Οι νέες λήψεις θα αποθηκευτούν στον επιλεγμένο φάκελο. Οι υπάρχουσες λήψεις θα παραμείνουν στην τρέχουσα θέση τους και η διαχείριση τους είναι δυνατή από τις ρυθμίσεις αποθήκευσης.';
+
+  @override
+  String get confirm => 'Επιβεβαιώνω';
+
+  @override
+  String get cannotWriteToFolder =>
+      'Δεν είναι δυνατή η εγγραφή στον επιλεγμένο φάκελο. Επιλέξτε διαφορετική τοποθεσία ή παραχωρήστε δικαιώματα αποθήκευσης.';
+
+  @override
+  String get saveToDownloadsFolderQuestion =>
+      'Αποθήκευση στο φάκελο \"Λήψεις\";';
+
+  @override
+  String get saveToDownloadsFolderDescription =>
+      'Τα ληφθέντα πολυμέσα θα αποθηκευτούν στο Downloads/Tortugarr στη συσκευή σας. Αυτά τα αρχεία θα είναι ορατά σε άλλες εφαρμογές, όπως η γκαλερί ή το πρόγραμμα αναπαραγωγής μουσικής.\n\nΟι υπάρχουσες λήψεις θα παραμείνουν στην τρέχουσα θέση τους.';
+
+  @override
+  String get transcodingTimeRemainingUnavailable =>
+      'Κωδικοποίηση: Ο εναπομένων χρόνος δεν είναι διαθέσιμος';
+
+  @override
+  String get enable => 'Καθιστώ ικανό';
+
+  @override
+  String get clearAllDownloadsWarning =>
+      'Αυτό θα διαγράψει όλα τα ληφθέντα μέσα και δεν μπορεί να αναιρεθεί.';
+
+  @override
+  String get clearAll => 'Εκκαθάριση όλων';
+
+  @override
+  String get navigationStyle => 'Στυλ πλοήγησης';
+
+  @override
+  String get topBar => 'Επάνω γραμμή';
+
+  @override
+  String get leftSidebar => 'Αριστερή πλευρική γραμμή';
+
+  @override
+  String get showShuffleButton => 'Εμφάνιση κουμπιού τυχαίας αναπαραγωγής';
+
+  @override
+  String get showGenresButton => 'Κουμπί εμφάνισης ειδών';
+
+  @override
+  String get showFavoritesButton => 'Εμφάνιση κουμπιού αγαπημένων';
+
+  @override
+  String get showLibrariesInToolbar => 'Εμφάνιση βιβλιοθηκών στο Toolbar';
+
+  @override
+  String get navbarAlwaysExpanded => 'Πάντα αναπτυγμένες ετικέτες πλοήγησης';
+
+  @override
+  String get showSeerrButton => 'Εμφάνιση κουμπιού Seerr';
+
+  @override
+  String get navbarOpacity => 'Αδιαφάνεια γραμμής πλοήγησης';
+
+  @override
+  String get navbarColor => 'Χρώμα γραμμής πλοήγησης';
+
+  @override
+  String get gray => 'Γκρί';
+
+  @override
+  String get darkBlue => 'Σκούρο Μπλε';
+
+  @override
+  String get purple => 'Μωβ';
+
+  @override
+  String get teal => 'Βάσκας';
+
+  @override
+  String get navy => 'Ναυτικό';
+
+  @override
+  String get charcoal => 'Ξυλάνθρακας';
+
+  @override
+  String get brown => 'Καστανός';
+
+  @override
+  String get darkRed => 'Σκούρο κόκκινο';
+
+  @override
+  String get darkGreen => 'Σκούρο Πράσινο';
+
+  @override
+  String get slate => 'Σχιστόλιθος';
+
+  @override
+  String get indigo => 'Ινδικό';
+
+  @override
+  String get libraryDisplay => 'Εμφάνιση βιβλιοθήκης';
+
+  @override
+  String get posterLabel => 'Αφίσα';
+
+  @override
+  String get thumbnailLabel => 'Μικρογραφία';
+
+  @override
+  String get bannerLabel => 'Σημαία';
+
+  @override
+  String get overridePerLibrarySettings =>
+      'Παράκαμψη των ρυθμίσεων ανά βιβλιοθήκη';
+
+  @override
+  String get applyImageTypeToAllLibraries =>
+      'Εφαρμογή τύπου εικόνας σε όλες τις βιβλιοθήκες';
+
+  @override
+  String get multiServerLibraries => 'Βιβλιοθήκες πολλών διακομιστών';
+
+  @override
+  String get showLibrariesFromAllServers =>
+      'Εμφάνιση βιβλιοθηκών από όλους τους συνδεδεμένους διακομιστές';
+
+  @override
+  String get enableFolderView => 'Ενεργοποίηση Προβολή φακέλου';
+
+  @override
+  String get showFolderBrowsingOption => 'Εμφάνιση επιλογής περιήγησης φακέλου';
+
+  @override
+  String get groupItemsIntoCollections => 'Ομαδοποίηση στοιχείων σε συλλογές';
+
+  @override
+  String get hideCollectionAssociatedItems =>
+      'Απόκρυψη των στοιχείων βιβλιοθήκης που ανήκουν σε συλλογή κατά την περιήγηση στις βιβλιοθήκες';
+
+  @override
+  String get groupItemsIntoCollectionsDialogTitle =>
+      'Ειδοποίηση ομαδοποίησης βιβλιοθήκης';
+
+  @override
+  String get groupItemsIntoCollectionsDialogMessage =>
+      'Για να χρησιμοποιήσετε αυτήν τη ρύθμιση, βεβαιωθείτε ότι οι ρυθμίσεις βιβλιοθήκης «Ομαδοποίηση ταινιών σε συλλογές» ή/και «Ομαδοποίηση σειρών σε συλλογές» είναι ενεργοποιημένες στις ρυθμίσεις Εμφάνισης της βιβλιοθήκης σας, στον διακομιστή Jellyfin ή Emby.';
+
+  @override
+  String get libraryVisibility => 'Βιβλιοθήκη Ορατότητα';
+
+  @override
+  String get libraryVisibilityDescription =>
+      'Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Tortugarr για να τεθούν σε ισχύ οι αλλαγές.';
+
+  @override
+  String get showInNavigation => 'Εμφάνιση στην πλοήγηση';
+
+  @override
+  String get showInLatestMedia =>
+      'Εμφάνιση στα πρόσφατα προστεθέντα/κυκλοφορηθέντα μέσα';
+
+  @override
+  String get sourceLibraries => 'Βιβλιοθήκες Πηγών';
+
+  @override
+  String get sourceCollections => 'Συλλογές Πηγών';
+
+  @override
+  String get excludedGenres => 'Εξαιρούμενα είδη';
+
+  @override
+  String get selectAll => 'Επιλέξτε Όλα';
+
+  @override
+  String itemsSelected(int count) {
+    return 'Επιλέχτηκε το $count';
+  }
+
+  @override
+  String get mediaBar => 'Γραμμή πολυμέσων';
+
+  @override
+  String get mediaSources => 'Πηγές Πολυμέσων';
+
+  @override
+  String get behavior => 'Συμπεριφορά';
+
+  @override
+  String get seconds => 'δευτερόλεπτα';
+
+  @override
+  String get localPreviews => 'Τοπικές προεπισκοπήσεις';
+
+  @override
+  String get localPreviewsDescription =>
+      'Διαμόρφωση προεπισκοπήσεων τρέιλερ, πολυμέσων και ήχου.';
+
+  @override
+  String get mediaBarMode => 'Στυλ μπαρ πολυμέσων';
+
+  @override
+  String get mediaBarModeDescription =>
+      'Επιλέξτε ανάμεσα σε διάφορα στυλ γραμμής πολυμέσων ή απενεργοποιήστε τη γραμμή πολυμέσων';
+
+  @override
+  String get mediaBarModeNotflix => 'Tortugarr';
+
+  @override
+  String get mediaBarModeMakd => 'MakD';
+
+  @override
+  String get mediaBarModeOff => 'Ανενεργό';
+
+  @override
+  String get enableMediaBar => 'Ενεργοποιήστε τη γραμμή πολυμέσων';
+
+  @override
+  String get showFeaturedContentSlideshow =>
+      'Εμφάνιση παρουσίασης επιλεγμένου περιεχομένου στο σπίτι';
+
+  @override
+  String get contentType => 'Τύπος περιεχομένου';
+
+  @override
+  String get moviesAndTvShows => 'Ταινίες & τηλεοπτικές εκπομπές';
+
+  @override
+  String get moviesOnly => 'Μόνο ταινίες';
+
+  @override
+  String get tvShowsOnly => 'Μόνο τηλεοπτικές εκπομπές';
+
+  @override
+  String get itemCount => 'Πλήθος αντικειμένων';
+
+  @override
+  String get noneSelected => 'Καμία επιλεγμένη';
+
+  @override
+  String get noneExcluded => 'Δεν αποκλείεται κανένα';
+
+  @override
+  String get autoAdvance => 'Αυτόματη προώθηση';
+
+  @override
+  String get autoAdvanceSlides => 'Αυτόματη μετάβαση στην επόμενη διαφάνεια';
+
+  @override
+  String get autoAdvanceInterval => 'Διάστημα αυτόματης προώθησης';
+
+  @override
+  String get trailerPreview => 'Προεπισκόπηση τρέιλερ';
+
+  @override
+  String get autoPlayTrailers =>
+      'Αυτόματη αναπαραγωγή τρέιλερ στη γραμμή πολυμέσων μετά από 3 δευτερόλεπτα';
+
+  @override
+  String get trailerAudio => 'Ήχος τρέιλερ';
+
+  @override
+  String get enableTrailerAudio =>
+      'Ενεργοποίηση ήχου για τα τρέιλερ στη γραμμή πολυμέσων';
+
+  @override
+  String get trailerCaptions => 'Υπότιτλοι Τρέιλερ';
+
+  @override
+  String get trailerCaptionsDescription =>
+      'Εμφάνιση υπότιτλων στα τρέιλερ του YouTube στη γραμμή πολυμέσων';
+
+  @override
+  String get episodePreview => 'Προεπισκόπηση επεισοδίου';
+
+  @override
+  String get mediaPreview => 'Προεπισκόπηση πολυμέσων';
+
+  @override
+  String get episodePreviewDescription =>
+      'Αναπαραγωγή ενσωματωμένης προεπισκόπησης 30 δευτερολέπτων σε κάρτες στις οποίες έχει γίνει εστίαση, στις οποίες έχει τοποθετηθεί ο δείκτης του ποντικιού ή στις οποίες έχει γίνει παρατεταμένο άγγιγμα';
+
+  @override
+  String get mediaPreviewDescription =>
+      'Αναπαραγωγή ενσωματωμένης προεπισκόπησης 30 δευτερολέπτων σε κάρτες στις οποίες έχει γίνει εστίαση, στις οποίες έχει τοποθετηθεί ο δείκτης του ποντικιού ή στις οποίες έχει γίνει παρατεταμένο άγγιγμα';
+
+  @override
+  String get previewAudio => 'Προεπισκόπηση ήχου';
+
+  @override
+  String get enablePreviewAudio =>
+      'Ενεργοποίηση ήχου για προεπισκοπήσεις πολυμέσων';
+
+  @override
+  String get latestMedia => 'Πρόσφατα Προστεθέντα Πολυμέσα';
+
+  @override
+  String get recentlyReleased => 'Πρόσφατα κυκλοφόρησε';
+
+  @override
+  String get myMedia => 'Τα Μέσα μου';
+
+  @override
+  String get myMediaSmall => 'Τα πολυμέσα μου (μικρά)';
+
+  @override
+  String get continueWatching => 'Συνεχίστε την παρακολούθηση';
+
+  @override
+  String get resumeAudio => 'Συνέχιση ήχου';
+
+  @override
+  String get resumeBooks => 'Βιβλία βιογραφικών';
+
+  @override
+  String get activeRecordings => 'Ενεργές Ηχογραφήσεις';
+
+  @override
+  String get playlists => 'Λίστες αναπαραγωγής';
+
+  @override
+  String get liveTV => 'Ζωντανή τηλεόραση';
+
+  @override
+  String get homeSections => 'Αρχική Ενότητες';
+
+  @override
+  String get resetToDefaults => 'Επαναφορά στις προεπιλογές';
+
+  @override
+  String get homeRowPosterSize => 'Μέγεθος αφίσας αρχικής σειράς';
+
+  @override
+  String get perRowImageTypeSelection => 'Επιλογή τύπου εικόνας ανά σειρά';
+
+  @override
+  String get configureImageTypeForEachRow =>
+      'Διαμορφώστε τον τύπο εικόνας για κάθε ενεργοποιημένη αρχική σειρά';
+
+  @override
+  String get mergeContinueWatchingAndNextUp =>
+      'Συγχώνευση Continue Watching και Next Up';
+
+  @override
+  String get combineBothRows =>
+      'Συνδυάστε και τις δύο σειρές σε ένα ενιαίο αρχικό τμήμα';
+
+  @override
+  String get nextUpMaxDays => 'Μέγιστος αριθμός ημερών στο Next Up';
+
+  @override
+  String get nextUpMaxDaysDescription =>
+      'Πόσο καιρό παραμένει μια εκπομπή στο Next Up μετά την τελευταία φορά που την παρακολουθήσατε';
+
+  @override
+  String daysValue(int days) {
+    return '$days ημέρες';
+  }
+
+  @override
+  String get fullScreenRows => 'Αναπτυγμένες σειρές αρχικής';
+
+  @override
+  String get fullScreenRowsDescription =>
+      'Περιορισμός των σειρών της αρχικής σε 1 σειρά ανά οθόνη';
+
+  @override
+  String get homeRowsPadding => 'Home Row Padding';
+
+  @override
+  String get homeRowsPaddingDescription =>
+      'Customize padding between home rows';
+
+  @override
+  String get perRowImageType => 'Τύπος εικόνας ανά σειρά';
+
+  @override
+  String get perRowSettings => 'Ρυθμίσεις ανά σειρά';
+
+  @override
+  String get autoLogin => 'Αυτόματη σύνδεση';
+
+  @override
+  String get lastUser => 'Τελευταίος χρήστης';
+
+  @override
+  String get currentUser => 'Τρέχων χρήστης';
+
+  @override
+  String get alwaysAuthenticate => 'Πάντα έλεγχος ταυτότητας';
+
+  @override
+  String get requirePasswordWithToken =>
+      'Απαιτείται κωδικός πρόσβασης ακόμη και με αποθηκευμένο διακριτικό';
+
+  @override
+  String get confirmExit => 'Επιβεβαιώστε την έξοδο';
+
+  @override
+  String get showConfirmationBeforeExiting =>
+      'Εμφάνιση επιβεβαίωσης πριν από την έξοδο';
+
+  @override
+  String get blockContentWithRatings =>
+      'Αποκλεισμός περιεχομένου με τις ακόλουθες αξιολογήσεις:';
+
+  @override
+  String get noContentRatingsFound =>
+      'Δεν βρέθηκαν ακόμη αξιολογήσεις περιεχομένου σε αυτόν τον διακομιστή.';
+
+  @override
+  String get couldNotLoadServerRatings =>
+      'Δεν ήταν δυνατή η φόρτωση των αξιολογήσεων διακομιστή. Εμφάνιση μόνο αποθηκευμένων αξιολογήσεων.';
+
+  @override
+  String get couldNotRefreshRatings =>
+      'Δεν ήταν δυνατή η ανανέωση των αξιολογήσεων από τον διακομιστή. Εμφάνιση αποθηκευμένων αξιολογήσεων.';
+
+  @override
+  String get enablePinCode => 'Ενεργοποίηση κωδικού PIN';
+
+  @override
+  String get requirePinToAccess =>
+      'Απαιτείται PIN για πρόσβαση στον λογαριασμό σας';
+
+  @override
+  String get changePin => 'Αλλαγή PIN';
+
+  @override
+  String get setNewPinCode => 'Ορίστε έναν νέο κωδικό PIN';
+
+  @override
+  String get removePin => 'Αφαίρεση PIN';
+
+  @override
+  String get removePinProtection => 'Αφαιρέστε την προστασία κωδικού PIN';
+
+  @override
+  String get screensaver => 'Προφύλαξη οθόνης';
+
+  @override
+  String get inAppScreensaver => 'Προφύλαξη οθόνης εντός εφαρμογής';
+
+  @override
+  String get enableBuiltInScreensaver =>
+      'Ενεργοποιήστε την ενσωματωμένη προφύλαξη οθόνης';
+
+  @override
+  String get mode => 'Λειτουργία';
+
+  @override
+  String get libraryArt => 'Τέχνη βιβλιοθήκης';
+
+  @override
+  String get logo => 'Λογότυπο';
+
+  @override
+  String get clock => 'Ρολόι';
+
+  @override
+  String get timeout => 'Χρονικό όριο';
+
+  @override
+  String minutesShort(int minutes) {
+    return '$minutes ελάχ';
+  }
+
+  @override
+  String get dimmingLevel => 'Επίπεδο θαμπώματος';
+
+  @override
+  String get maxAgeRating => 'Μέγιστη βαθμολογία ηλικίας';
+
+  @override
+  String get any => 'Κάθε';
+
+  @override
+  String agePlusValue(int age) {
+    return '$age+';
+  }
+
+  @override
+  String get requireAgeRating => 'Απαιτείται ηλικιακή αξιολόγηση';
+
+  @override
+  String get onlyShowRatedContent =>
+      'Εμφάνιση μόνο βαθμολογημένου περιεχομένου';
+
+  @override
+  String get showClock => 'Εμφάνιση ρολογιού';
+
+  @override
+  String get displayClockDuringScreensaver =>
+      'Εμφάνιση ρολογιού κατά την προφύλαξη οθόνης';
+
+  @override
+  String get clockModeStatic => 'Στατικό';
+
+  @override
+  String get clockModeBouncing => 'Αναπηδώμενο';
+
+  @override
+  String get rottenTomatoesCritics => 'Rotten Tomatoes (Κριτικοί)';
+
+  @override
+  String get rottenTomatoesAudience => 'Rotten Tomatoes (Κοινό)';
+
+  @override
+  String get imdb => 'IMDb';
+
+  @override
+  String get tmdb => 'TMDB';
+
+  @override
+  String get metacritic => 'Μετακριτικό';
+
+  @override
+  String get metacriticUser => 'Metacritic (Χρήστης)';
+
+  @override
+  String get trakt => 'Trakt';
+
+  @override
+  String get letterboxd => 'Γραμματοκιβώτιο';
+
+  @override
+  String get myAnimeList => 'MyAnimeList';
+
+  @override
+  String get aniList => 'AniList';
+
+  @override
+  String get communityRating => 'Βαθμολογία κοινότητας';
+
+  @override
+  String get ratings => 'Ακροαματικότητα';
+
+  @override
+  String get additionalRatings => 'Πρόσθετες αξιολογήσεις';
+
+  @override
+  String get showMdbListAndTmdbRatings =>
+      'Εμφάνιση αξιολογήσεων MDBList και TMDB';
+
+  @override
+  String get ratingLabels => 'Ετικέτες αξιολόγησης';
+
+  @override
+  String get showLabelsNextToIcons =>
+      'Εμφάνιση ετικετών δίπλα στα εικονίδια αξιολόγησης';
+
+  @override
+  String get ratingBadges => 'Σήματα αξιολόγησης';
+
+  @override
+  String get showDecorativeBadges =>
+      'Εμφάνιση διακοσμητικών σημάτων πίσω από τις αξιολογήσεις';
+
+  @override
+  String get episodeRatings => 'Βαθμολογίες επεισοδίου';
+
+  @override
+  String get showRatingsOnEpisodes =>
+      'Εμφάνιση αξιολογήσεων σε μεμονωμένα επεισόδια';
+
+  @override
+  String get ratingSources => 'Πηγές αξιολόγησης';
+
+  @override
+  String get ratingSourcesDescription =>
+      'Ενεργοποιήστε και αναδιατάξτε τις πηγές αξιολόγησης που εμφανίζονται σε όλη την εφαρμογή';
+
+  @override
+  String get pluginLabel => 'Πρόσθετο Moonbase';
+
+  @override
+  String get pluginDetected => 'Εντοπίστηκε πρόσθετο';
+
+  @override
+  String get pluginNotDetected => 'Το πρόσθετο δεν εντοπίστηκε';
+
+  @override
+  String get pluginDetectedDescription =>
+      'Εντοπίστηκε προσθήκη διακομιστή. Ο συγχρονισμός ενεργοποιείται αυτόματα την πρώτη φορά που εντοπίζεται η προσθήκη.';
+
+  @override
+  String get pluginNotDetectedDescription =>
+      'Η προσθήκη διακομιστή δεν έχει εντοπιστεί αυτήν τη στιγμή. Οι τοπικές ρυθμίσεις εξακολουθούν να χρησιμοποιούν τις αποθηκευμένες τιμές ή τις ενσωματωμένες προεπιλογές τους.';
+
+  @override
+  String pluginStatusVersion(String status, String version) {
+    return '$status\nΈκδοση: $version';
+  }
+
+  @override
+  String get availableServices => 'Διαθέσιμες Υπηρεσίες';
+
+  @override
+  String get serverPluginSync => 'Συγχρονισμός προσθηκών διακομιστή';
+
+  @override
+  String get syncSettingsWithPlugin =>
+      'Συγχρονισμός ρυθμίσεων με την προσθήκη διακομιστή';
+
+  @override
+  String get whatSyncControls => 'Τι στοιχεία ελέγχου συγχρονισμού';
+
+  @override
+  String get syncControlsDescription =>
+      'Ο συγχρονισμός ελέγχει μόνο εάν οι ρυθμίσεις που υποστηρίζονται από πρόσθετα προωθούνται και αποσύρονται από τον διακομιστή. Οι ενέργειες επιλογής προφίλ και συγχρονισμού προφίλ βρίσκονται στις ρυθμίσεις προσαρμογής όταν ο συγχρονισμός προσθηκών είναι ενεργοποιημένος.';
+
+  @override
+  String get recentRequests => 'Πρόσφατα αιτήματα';
+
+  @override
+  String get recentlyAdded => 'Προστέθηκε πρόσφατα';
+
+  @override
+  String get trending => 'Τάσεις';
+
+  @override
+  String get popularMovies => 'Δημοφιλείς ταινίες';
+
+  @override
+  String get movieGenres => 'Είδη ταινιών';
+
+  @override
+  String get upcomingMovies => 'Προσεχείς ταινίες';
+
+  @override
+  String get studios => 'Στούντιο';
+
+  @override
+  String get popularSeries => 'Δημοφιλείς σειρές';
+
+  @override
+  String get seriesGenres => 'Είδη σειράς';
+
+  @override
+  String get upcomingSeries => 'Ερχόμενη Σειρά';
+
+  @override
+  String get networks => 'Δίκτυα';
+
+  @override
+  String get seerrDiscoveryRows => 'Σειρές ανακάλυψης Seerr';
+
+  @override
+  String get yourWatchlist => 'Η λίστα παρακολούθησής σας';
+
+  @override
+  String get resetRowsToDefaults => 'Επαναφέρετε τις σειρές στις προεπιλογές';
+
+  @override
+  String get enableSeerr => 'Ενεργοποίηση Seerr';
+
+  @override
+  String get showSeerrInNavigation =>
+      'Εμφάνιση Seerr στην πλοήγηση (απαιτείται προσθήκη διακομιστή)';
+
+  @override
+  String get seerrUnavailable =>
+      'Μη διαθέσιμο επειδή η υποστήριξη της προσθήκης διακομιστή Seerr είναι απενεργοποιημένη.';
+
+  @override
+  String get nsfwFilter => 'Φίλτρο NSFW';
+
+  @override
+  String get hideAdultContent =>
+      'Απόκρυψη περιεχομένου για ενηλίκους στα αποτελέσματα';
+
+  @override
+  String get seerrNotificationsSection => 'Ειδοποιήσεις';
+
+  @override
+  String get seerrNotifyNewRequestsTitle => 'Ειδοποιήσεις νέων αιτημάτων';
+
+  @override
+  String get seerrNotifyNewRequestsSubtitle =>
+      'Να ειδοποιούμαι όταν κάποιος υποβάλλει αίτημα';
+
+  @override
+  String get seerrNotifyLibraryAddedTitle => 'Ενημερώσεις αιτημάτων';
+
+  @override
+  String get seerrNotifyLibraryAddedSubtitle =>
+      'Εγκρίθηκε, απορρίφθηκε και προστέθηκε στη βιβλιοθήκη σας';
+
+  @override
+  String get seerrNotifyIssuesTitle => 'Ενημερώσεις ζητημάτων';
+
+  @override
+  String get seerrNotifyIssuesSubtitle =>
+      'Νέα ζητήματα, απαντήσεις και επιλύσεις';
+
+  @override
+  String get seerrNotifyNewMediaTitle => 'Προστέθηκαν νέα πολυμέσα';
+
+  @override
+  String get seerrNotifyNewMediaSubtitle =>
+      'Οτιδήποτε νέο έχει προστεθεί στη βιβλιοθήκη του διακομιστή';
+
+  @override
+  String loggedInAs(String username) {
+    return 'Συνδεθήκατε ως: $username';
+  }
+
+  @override
+  String get discoverRows => 'Σελίδα ανακάλυψης Seerr';
+
+  @override
+  String get discoverRowsDescriptionPlugin =>
+      'Ενεργοποιήστε τις σειρές που θέλετε να βλέπετε στην κύρια σελίδα του Seerr. Σύρετε για αναδιάταξη. Η προσαρμοσμένη σειρά συγχρονίζεται με το Moonbase.';
+
+  @override
+  String get discoverRowsDescription =>
+      'Ενεργοποιήστε τις σειρές που θέλετε να βλέπετε στην κύρια σελίδα του Seerr. Σύρετε για αναδιάταξη. Η προσαρμοσμένη σειρά συγχρονίζεται με το Moonbase.';
+
+  @override
+  String get enabled => 'Ενεργοποιημένο';
+
+  @override
+  String get hidden => 'Κεκρυμμένος';
+
+  @override
+  String get aboutTitle => 'Σχετικά με';
+
+  @override
+  String versionValue(String version) {
+    return 'Έκδοση $version';
+  }
+
+  @override
+  String get openSourceLicenses => 'Άδειες ανοιχτού κώδικα';
+
+  @override
+  String get sourceCode => 'Πηγαίος κώδικας';
+
+  @override
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
+
+  @override
+  String get checkForUpdatesNow => 'Ελέγξτε για ενημερώσεις τώρα';
+
+  @override
+  String get checksLatestDesktopRelease =>
+      'Ελέγχει την τελευταία έκδοση για υπολογιστές για αυτήν την πλατφόρμα';
+
+  @override
+  String get youAreUpToDate => 'Είστε ενημερωμένοι.';
+
+  @override
+  String get couldNotCheckForUpdates =>
+      'Δεν ήταν δυνατός ο έλεγχος για ενημερώσεις αυτήν τη στιγμή.';
+
+  @override
+  String get noCompatibleUpdate =>
+      'Δεν βρέθηκε συμβατό πακέτο ενημέρωσης για αυτήν την πλατφόρμα.';
+
+  @override
+  String get updateChecksNotSupported =>
+      'Οι έλεγχοι ενημέρωσης δεν υποστηρίζονται σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get updateNotificationsDisabled =>
+      'Οι ειδοποιήσεις ενημέρωσης είναι απενεργοποιημένες.';
+
+  @override
+  String get pleaseWaitBeforeChecking => 'Περιμένετε πριν ελέγξετε ξανά.';
+
+  @override
+  String get latestUpdateAlreadyShown =>
+      'Η τελευταία ενημέρωση εμφανίστηκε ήδη.';
+
+  @override
+  String get updateAvailable => 'Διαθέσιμη ενημέρωση.';
+
+  @override
+  String updateAvailableVersion(String version) {
+    return 'Διαθέσιμη ενημέρωση: v$version';
+  }
+
+  @override
+  String get updateNotifications => 'Ενημέρωση ειδοποιήσεων';
+
+  @override
+  String get showWhenUpdatesAvailable =>
+      'Εμφάνιση πότε είναι διαθέσιμες ενημερώσεις';
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'v$version Διαθέσιμο';
+  }
+
+  @override
+  String get readReleaseNotes => 'Διαβάστε τις Σημειώσεις Έκδοσης';
+
+  @override
+  String get downloadingUpdate => 'Λήψη ενημέρωσης...';
+
+  @override
+  String get updateDownloadFailed =>
+      'Η λήψη της ενημέρωσης απέτυχε. Δοκιμάστε ξανά.';
+
+  @override
+  String get openReleasesPage => 'Ανοίξτε τη σελίδα εκδόσεων';
+
+  @override
+  String get navigation => 'Πλοήγηση';
+
+  @override
+  String get watchedIndicatorsBackdrops => 'Παρακολούθησαν δείκτες, σκηνικά';
+
+  @override
+  String get focusColorWatchedIndicatorsBackdrops =>
+      'Χρώμα εστίασης, δείκτες παρακολούθησης, σκηνικά';
+
+  @override
+  String get navbarStyleToolbarAppearance =>
+      'Στυλ γραμμής πλοήγησης, κουμπιά γραμμής εργαλείων, εμφάνιση';
+
+  @override
+  String get reorderToggleHomeRows =>
+      'Αναδιάταξη και εναλλαγή τόσο των σειρών αρχικής οθόνης της βιβλιοθήκης όσο και των εξωτερικών σειρών';
+
+  @override
+  String get featuredContentAppearance => 'Επιλεγμένο περιεχόμενο, εμφάνιση';
+
+  @override
+  String get posterSizeImageTypeFolderView =>
+      'Μέγεθος αφίσας, τύπος εικόνας, προβολή φακέλου';
+
+  @override
+  String get mdbListTmdbRatingSources => 'MDBList, TMDB και πηγές αξιολόγησης';
+
+  @override
+  String gbValue(String value) {
+    return '$value GB';
+  }
+
+  @override
+  String mbValue(int value) {
+    return '$value MB';
+  }
+
+  @override
+  String get imageCacheLimit => 'Όριο προσωρινής μνήμης εικόνων';
+
+  @override
+  String get clearImageCache => 'Εκκαθάριση προσωρινής μνήμης εικόνων';
+
+  @override
+  String get imageCacheCleared => 'Η προσωρινή μνήμη εικόνων εκκαθαρίστηκε';
+
+  @override
+  String get clear => 'Εκκαθάριση';
+
+  @override
+  String get browse => 'Ξεφυλλίζω';
+
+  @override
+  String get noResults => 'Κανένα αποτέλεσμα';
+
+  @override
+  String get seerrAvailableStatus => 'Διαθέσιμος';
+
+  @override
+  String get seerrRequestedStatus => 'Ζητήθηκε';
+
+  @override
+  String seerrDownloadingPercent(int percent) {
+    return 'Λήψη · $percent%';
+  }
+
+  @override
+  String get seerrImportingStatus => 'Εισαγωγή';
+
+  @override
+  String itemsCount(int count) {
+    return '$count Είδη';
+  }
+
+  @override
+  String get seerrSettings => 'Ρυθμίσεις Seerr';
+
+  @override
+  String get requestMore => 'Ζητήστε περισσότερα';
+
+  @override
+  String get requestMore4k => 'Request More in 4K';
+
+  @override
+  String get request => 'Αίτηση';
+
+  @override
+  String get request4k => 'Request 4K';
+
+  @override
+  String get requested4k => '4K Requested';
+
+  @override
+  String get cancelRequest => 'Ακύρωση αιτήματος';
+
+  @override
+  String get cancelRequest4k => 'Cancel 4K Request';
+
+  @override
+  String get playInNotflix => 'Αναπαραγωγή στο Tortugarr';
+
+  @override
+  String requestedByName(String name) {
+    return 'Ζητήθηκε από $name';
+  }
+
+  @override
+  String get approve => 'Εγκρίνω';
+
+  @override
+  String get declineAction => 'Πτώση';
+
+  @override
+  String get similar => 'Παρόμοια';
+
+  @override
+  String get recommendations => 'συστάσεις';
+
+  @override
+  String cancelRequestForTitle(String title) {
+    return 'Ακύρωση αιτήματος για \"$title\";';
+  }
+
+  @override
+  String cancelCountRequestsForTitle(int count, String title) {
+    return 'Να ακυρωθούν τα αιτήματα $count για \"$title\";';
+  }
+
+  @override
+  String get keep => 'Διατήρηση';
+
+  @override
+  String get itemNotFoundInLibrary =>
+      'Το αντικείμενο δεν βρέθηκε στη βιβλιοθήκη σας Tortugarr';
+
+  @override
+  String get errorSearchingLibrary => 'Σφάλμα αναζήτησης στη βιβλιοθήκη';
+
+  @override
+  String budgetAmount(String amount) {
+    return 'Προϋπολογισμός: \$$amount';
+  }
+
+  @override
+  String revenueAmount(String amount) {
+    return 'Έσοδα: \$$amount';
+  }
+
+  @override
+  String seasonsCount(int count, String label) {
+    return '$count $label';
+  }
+
+  @override
+  String requestSeriesOrMovie(String type) {
+    return 'Αίτημα $type';
+  }
+
+  @override
+  String requestSeriesOrMovie4k(String type) {
+    return 'Request 4K $type';
+  }
+
+  @override
+  String get submitRequest => 'Υποβολή Αίτησης';
+
+  @override
+  String get allSeasons => 'Όλες τις εποχές';
+
+  @override
+  String get advancedOptions => 'Προηγμένες Επιλογές';
+
+  @override
+  String get noServiceServersConfigured =>
+      'Δεν έχουν διαμορφωθεί διακομιστές υπηρεσιών';
+
+  @override
+  String get server => 'Υπηρέτης';
+
+  @override
+  String get qualityProfile => 'Προφίλ ποιότητας';
+
+  @override
+  String get rootFolder => 'Ριζικός φάκελος';
+
+  @override
+  String get showMore => 'Εμφάνιση περισσότερων';
+
+  @override
+  String get appearances => 'Εμφανίσεις';
+
+  @override
+  String get crewSection => 'Πλήρωμα';
+
+  @override
+  String ageValue(int age) {
+    return 'ηλικία $age';
+  }
+
+  @override
+  String get noRequests => 'Κανένα αίτημα';
+
+  @override
+  String get pendingStatus => 'Εκκρεμής';
+
+  @override
+  String get declinedStatus => 'Απορρίφθηκε';
+
+  @override
+  String get partiallyAvailable => 'Μερικώς Διαθέσιμο';
+
+  @override
+  String get downloadingStatus => 'Λήψη';
+
+  @override
+  String get approvedStatus => 'Εγκρίθηκε';
+
+  @override
+  String get notRequestedStatus => 'Δεν ζητήθηκε';
+
+  @override
+  String get blocklistedStatus => 'Στη λίστα αποκλεισμού';
+
+  @override
+  String get deletedStatus => 'Διαγράφηκε';
+
+  @override
+  String get failedStatus => 'Απέτυχε';
+
+  @override
+  String get processingStatus => 'Σε επεξεργασία';
+
+  @override
+  String modifiedByName(String name) {
+    return 'Τροποποιήθηκε από $name';
+  }
+
+  @override
+  String get completedStatus => 'Ολοκληρώθηκε';
+
+  @override
+  String get requestErrorDuplicate => 'Αυτός ο τίτλος έχει ήδη ζητηθεί';
+
+  @override
+  String get requestErrorQuota => 'Συμπληρώθηκε το όριο αιτημάτων';
+
+  @override
+  String get requestErrorBlocklisted =>
+      'Αυτός ο τίτλος είναι σε λίστα αποκλεισμού';
+
+  @override
+  String get requestErrorNoSeasons => 'Δεν απομένουν σεζόν για αίτημα';
+
+  @override
+  String get requestErrorPermission =>
+      'Δεν έχετε δικαίωμα να υποβάλετε αυτό το αίτημα';
+
+  @override
+  String get seerrRequestsTitle => 'Αιτήματα';
+
+  @override
+  String get seerrIssuesTitle => 'Ζητήματα';
+
+  @override
+  String get sortNewest => 'Νεότερα';
+
+  @override
+  String get sortLastModified => 'Τελευταία τροποποίηση';
+
+  @override
+  String get noIssues => 'Κανένα ζήτημα';
+
+  @override
+  String movieQuotaRemaining(int remaining, int limit) {
+    return 'Απομένουν $remaining από $limit αιτήματα ταινιών';
+  }
+
+  @override
+  String seasonQuotaRemaining(int remaining, int limit) {
+    return 'Απομένουν $remaining από $limit αιτήματα σεζόν';
+  }
+
+  @override
+  String partOfCollectionName(String name) {
+    return 'Μέρος του $name';
+  }
+
+  @override
+  String get viewCollection => 'Προβολή συλλογής';
+
+  @override
+  String get requestCollection => 'Αίτημα συλλογής';
+
+  @override
+  String collectionMoviesSummary(int total, int available) {
+    return '$total ταινίες · $available διαθέσιμες';
+  }
+
+  @override
+  String requestMoviesCount(int count) {
+    return 'Αίτημα για $count ταινίες';
+  }
+
+  @override
+  String requestingProgress(int current, int total) {
+    return 'Υποβολή αιτήματος $current από $total...';
+  }
+
+  @override
+  String requestedMoviesCount(int count) {
+    return 'Ζητήθηκαν $count ταινίες';
+  }
+
+  @override
+  String requestedMoviesPartial(int ok, int total) {
+    return 'Ζητήθηκαν $ok από $total ταινίες';
+  }
+
+  @override
+  String get collectionAllRequested =>
+      'Όλες οι ταινίες είναι ήδη διαθέσιμες ή έχουν ζητηθεί';
+
+  @override
+  String get reportIssue => 'Αναφορά ζητήματος';
+
+  @override
+  String get issueTypeVideo => 'Βίντεο';
+
+  @override
+  String get issueTypeAudio => 'Ήχος';
+
+  @override
+  String get whatsWrong => 'Τι πρόβλημα υπάρχει;';
+
+  @override
+  String get allEpisodes => 'Όλα τα επεισόδια';
+
+  @override
+  String get episode => 'Επεισόδιο';
+
+  @override
+  String get openStatus => 'Ανοιχτό';
+
+  @override
+  String get resolvedStatus => 'Επιλύθηκε';
+
+  @override
+  String get resolveAction => 'Επίλυση';
+
+  @override
+  String get reopenAction => 'Επανάνοιγμα';
+
+  @override
+  String reportedByName(String name) {
+    return 'Αναφέρθηκε από $name';
+  }
+
+  @override
+  String commentsCount(int count) {
+    return '$count σχόλια';
+  }
+
+  @override
+  String get addComment => 'Προσθήκη σχολίου';
+
+  @override
+  String get deleteIssueConfirm => 'Διαγραφή αυτού του ζητήματος;';
+
+  @override
+  String get submitReport => 'Υποβολή αναφοράς';
+
+  @override
+  String get tmdbScore => 'Βαθμολογία TMDB';
+
+  @override
+  String get releaseDateLabel => 'Ημερομηνία κυκλοφορίας';
+
+  @override
+  String get firstAirDateLabel => 'Ραντεβού πρώτου αέρα';
+
+  @override
+  String get revenueLabel => 'Πρόσοδος';
+
+  @override
+  String get runtimeLabel => 'Χρόνος εκτέλεσης';
+
+  @override
+  String get budgetLabel => 'Προϋπολογισμός';
+
+  @override
+  String get originalLanguageLabel => 'Γλώσσα Πρωτότυπου';
+
+  @override
+  String get seasonsLabel => 'Κύκλοι';
+
+  @override
+  String get episodesLabel => 'Επεισόδια';
+
+  @override
+  String get access => 'Πρόσβαση';
+
+  @override
+  String get add => 'Προσθήκη';
+
+  @override
+  String get address => 'Διεύθυνση';
+
+  @override
+  String get analytics => 'Αναλυτικά στοιχεία';
+
+  @override
+  String get catalog => 'Κατάλογος';
+
+  @override
+  String get content => 'Περιεχόμενο';
+
+  @override
+  String get copy => 'Αντίγραφο';
+
+  @override
+  String get create => 'Δημιουργώ';
+
+  @override
+  String get disable => 'Καθιστώ ανίκανο';
+
+  @override
+  String get done => 'Τέλος';
+
+  @override
+  String get edit => 'Επεξεργασία';
+
+  @override
+  String get encoding => 'Κωδικοποίηση';
+
+  @override
+  String get error => 'Σφάλμα';
+
+  @override
+  String get forward => 'Εμπρός';
+
+  @override
+  String get general => 'Γενικά';
+
+  @override
+  String get go => 'Πάω';
+
+  @override
+  String get install => 'Εγκαθιστώ';
+
+  @override
+  String get installed => 'Εγκατεστημένο';
+
+  @override
+  String get interval => 'Διάστημα';
+
+  @override
+  String get name => 'Ονομα';
+
+  @override
+  String get networking => 'Δικτύωση';
+
+  @override
+  String get next => 'Επόμενο';
+
+  @override
+  String get path => 'Μονοπάτι';
+
+  @override
+  String get paused => 'Σε παύση';
+
+  @override
+  String get permissions => 'Άδειες';
+
+  @override
+  String get processing => 'Επεξεργασία';
+
+  @override
+  String get profile => 'Προφίλ';
+
+  @override
+  String get provider => 'Προμηθευτής';
+
+  @override
+  String get refresh => 'Φρεσκάρω';
+
+  @override
+  String get remote => 'Τηλεχειριστήριο';
+
+  @override
+  String get rename => 'Μετονομάζω';
+
+  @override
+  String get revoke => 'Ανακαλώ';
+
+  @override
+  String get role => 'Ρόλος';
+
+  @override
+  String get root => 'Ρίζα';
+
+  @override
+  String get run => 'Τρέξιμο';
+
+  @override
+  String get search => 'Αναζήτηση';
+
+  @override
+  String get select => 'Επιλέγω';
+
+  @override
+  String get send => 'Στέλνω';
+
+  @override
+  String get sessions => 'Συνεδρίες';
+
+  @override
+  String get set => 'Σειρά';
+
+  @override
+  String get status => 'Κατάσταση';
+
+  @override
+  String get stop => 'Διακοπή';
+
+  @override
+  String get streaming => 'Ροή';
+
+  @override
+  String get time => 'Φορά';
+
+  @override
+  String get trickplay => 'Trickplay';
+
+  @override
+  String get uninstall => 'Απεγκατάσταση';
+
+  @override
+  String get up => 'Επάνω';
+
+  @override
+  String get update => 'Εκσυγχρονίζω';
+
+  @override
+  String get upload => 'Μεταφόρτωση';
+
+  @override
+  String get unmute => 'Κατάργηση σίγασης';
+
+  @override
+  String get mute => 'Σίγαση';
+
+  @override
+  String get branding => 'Επωνυμία';
+
+  @override
+  String get adminDrawerDashboard => 'Ταμπλό';
+
+  @override
+  String get adminDrawerAnalytics => 'Αναλυτικά στοιχεία';
+
+  @override
+  String get adminDrawerSettings => 'Ρυθμίσεις';
+
+  @override
+  String get adminDrawerBranding => 'Επωνυμία';
+
+  @override
+  String get adminDrawerUsers => 'Χρήστες';
+
+  @override
+  String get adminDrawerLibraries => 'Βιβλιοθήκες';
+
+  @override
+  String get adminDrawerDisplay => 'Εμφάνιση';
+
+  @override
+  String get adminDrawerMetadata => 'Μεταδεδομένα';
+
+  @override
+  String get adminDrawerNfo => 'Ρυθμίσεις NFO';
+
+  @override
+  String get adminDrawerTranscoding => 'Διακωδικοποίηση';
+
+  @override
+  String get adminDrawerResume => 'Συνέχεια';
+
+  @override
+  String get adminDrawerStreaming => 'Ροή';
+
+  @override
+  String get adminDrawerTrickplay => 'Trickplay';
+
+  @override
+  String get adminDrawerDevices => 'Συσκευές';
+
+  @override
+  String get adminDrawerActivity => 'Δραστηριότητα';
+
+  @override
+  String get adminDrawerNetworking => 'Δικτύωση';
+
+  @override
+  String get adminDrawerApiKeys => 'Κλειδιά API';
+
+  @override
+  String get adminDrawerBackups => 'Αντίγραφα ασφαλείας';
+
+  @override
+  String get adminDrawerLogs => 'κούτσουρα';
+
+  @override
+  String get adminDrawerScheduledTasks => 'Προγραμματισμένες εργασίες';
+
+  @override
+  String get adminDrawerPlugins => 'Πρόσθετα';
+
+  @override
+  String get adminDrawerRepositories => 'Αποθετήρια';
+
+  @override
+  String get adminDrawerLiveTv => 'Ζωντανή τηλεόραση';
+
+  @override
+  String get adminExitTooltip => 'Έξοδος από το Admin';
+
+  @override
+  String get adminDashboardLoadFailed => 'Η φόρτωση του πίνακα ελέγχου απέτυχε';
+
+  @override
+  String get adminMediaOverview => 'Επισκόπηση πολυμέσων';
+
+  @override
+  String get adminMediaTotalsError =>
+      'Δεν ήταν δυνατή η φόρτωση των συνόλων μέσων διακομιστή.';
+
+  @override
+  String get adminMediaOverviewSubtitle =>
+      'Μια γρήγορη ανάγνωση για το πόσο περιεχόμενο υπάρχει σε αυτόν τον διακομιστή.';
+
+  @override
+  String adminPluginUpdatesAvailable(int count) {
+    return 'Διαθέσιμες ενημερώσεις προσθηκών: $count';
+  }
+
+  @override
+  String adminPluginsRequiringRestart(int count) {
+    return 'Πρόσθετα που απαιτούν επανεκκίνηση: $count';
+  }
+
+  @override
+  String adminFailedScheduledTasks(int count) {
+    return 'Αποτυχημένες προγραμματισμένες εργασίες: $count';
+  }
+
+  @override
+  String adminRecentAlertEntries(int count) {
+    return 'Πρόσφατες καταχωρίσεις προειδοποίησης/λάθους: $count';
+  }
+
+  @override
+  String get analyticsMediaDistribution => 'Διανομή μέσων';
+
+  @override
+  String get analyticsVideoCodecs => 'Κωδικοποιητές βίντεο';
+
+  @override
+  String get analyticsAudioCodecs => 'Κωδικοποιητές ήχου';
+
+  @override
+  String get analyticsContainers => 'Εμπορευματοκιβώτια';
+
+  @override
+  String get analyticsTopGenres => 'Κορυφαία είδη';
+
+  @override
+  String get analyticsReleaseYears => 'Χρόνια κυκλοφορίας';
+
+  @override
+  String get analyticsContentRatings => 'Αξιολογήσεις περιεχομένου';
+
+  @override
+  String get analyticsRuntimeBuckets => 'Κάδοι χρόνου εκτέλεσης';
+
+  @override
+  String get analyticsFileFormats => 'Μορφές αρχείων';
+
+  @override
+  String get analyticsNoData => 'Δεν υπάρχουν διαθέσιμα δεδομένα.';
+
+  @override
+  String get adminServerInfo => 'Πληροφορίες διακομιστή';
+
+  @override
+  String get adminRestartPending => 'Επανεκκίνηση σε εκκρεμότητα';
+
+  @override
+  String get adminServerPaths => 'Διαδρομές διακομιστή';
+
+  @override
+  String get adminServerActions => 'Ενέργειες διακομιστή';
+
+  @override
+  String get adminRestartServer => 'Επανεκκινήστε τον διακομιστή';
+
+  @override
+  String get adminShutdownServer => 'Διακομιστής τερματισμού λειτουργίας';
+
+  @override
+  String get adminScanLibraries => 'Σάρωση βιβλιοθηκών';
+
+  @override
+  String get adminLibraryScanStarted => 'Η σάρωση της βιβλιοθήκης ξεκίνησε';
+
+  @override
+  String errorGeneric(String error) {
+    return 'Σφάλμα: $error';
+  }
+
+  @override
+  String get adminServerRebootInProgress =>
+      'Επανεκκίνηση διακομιστή σε εξέλιξη';
+
+  @override
+  String get adminServerRebootMessage =>
+      'Επανεκκίνηση διακομιστή σε εξέλιξη, κάντε επανεκκίνηση Tortugarr';
+
+  @override
+  String get adminActiveSessions => 'Ενεργές συνεδρίες';
+
+  @override
+  String get adminSessionsLoadFailed => 'Αποτυχία φόρτωσης συνεδριών';
+
+  @override
+  String get adminNoActiveSessions => 'Δεν υπάρχουν ενεργές συνεδρίες';
+
+  @override
+  String get adminRecentActivity => 'Πρόσφατη Δραστηριότητα';
+
+  @override
+  String get adminNoRecentActivity => 'Καμία πρόσφατη δραστηριότητα';
+
+  @override
+  String adminCommandFailed(String error) {
+    return 'Η εντολή απέτυχε: $error';
+  }
+
+  @override
+  String get adminSendMessage => 'Αποστολή μηνύματος';
+
+  @override
+  String get adminMessageTextHint => 'Κείμενο μηνύματος';
+
+  @override
+  String get adminSetVolume => 'Ρύθμιση έντασης';
+
+  @override
+  String get sessionPrev => 'Προηγ';
+
+  @override
+  String get sessionRewind => 'Πίσω';
+
+  @override
+  String get sessionForward => 'Εμπρός';
+
+  @override
+  String get sessionNext => 'Επόμενο';
+
+  @override
+  String get sessionVolumeDown => 'τόμος -';
+
+  @override
+  String get sessionVolumeUp => 'Τόμος +';
+
+  @override
+  String get uhd4k => '4Κ';
+
+  @override
+  String get nowPlaying => 'Παίζει τώρα';
+
+  @override
+  String get volume => 'Ένταση';
+
+  @override
+  String get actions => 'Δράσεις';
+
+  @override
+  String get videoCodec => 'Κωδικοποιητής βίντεο';
+
+  @override
+  String get audioCodec => 'Κωδικοποιητής ήχου';
+
+  @override
+  String get hwAccel => 'Επιτάχυνση υλικού';
+
+  @override
+  String get completion => 'Ολοκλήρωση';
+
+  @override
+  String get direct => 'Απευθείας';
+
+  @override
+  String get adminDisconnect => 'Αποσυνδέω';
+
+  @override
+  String get adminClearDates => 'Καθαρές ημερομηνίες';
+
+  @override
+  String get adminActivitySeverityAll => 'Όλα τα επίπεδα σοβαρότητας';
+
+  @override
+  String get adminActivityDateRange => 'Εύρος ημερομηνιών';
+
+  @override
+  String adminActivityLoadFailed(String error) {
+    return 'Η φόρτωση του αρχείου καταγραφής δραστηριότητας απέτυχε: $error';
+  }
+
+  @override
+  String get adminNoActivityEntries =>
+      'Δεν υπάρχουν καταχωρήσεις δραστηριότητας';
+
+  @override
+  String get adminEditDeviceName => 'Επεξεργασία ονόματος συσκευής';
+
+  @override
+  String get adminCustomName => 'Προσαρμοσμένο όνομα';
+
+  @override
+  String get adminDeviceNameUpdated => 'Το όνομα συσκευής ενημερώθηκε';
+
+  @override
+  String adminDeviceUpdateFailed(String error) {
+    return 'Η ενημέρωση της συσκευής απέτυχε: $error';
+  }
+
+  @override
+  String get adminDeleteDevice => 'Διαγραφή συσκευής';
+
+  @override
+  String get adminDeviceDeleted => 'Η συσκευή διαγράφηκε';
+
+  @override
+  String adminDeviceDeleteFailed(String error) {
+    return 'Αποτυχία διαγραφής συσκευής: $error';
+  }
+
+  @override
+  String adminRemoveDeviceConfirm(String name) {
+    return 'Κατάργηση της συσκευής \'$name\'; Ο χρήστης θα χρειαστεί να συνδεθεί ξανά σε αυτήν τη συσκευή.';
+  }
+
+  @override
+  String get adminDeleteAllDevices => 'Διαγραφή όλων των συσκευών';
+
+  @override
+  String adminDeleteAllDevicesConfirm(int count) {
+    return 'Κατάργηση $count συσκευών; Οι χρήστες που επηρεάζονται θα χρειαστεί να συνδεθούν ξανά. Η τρέχουσα συσκευή σας δεν επηρεάζεται.';
+  }
+
+  @override
+  String get adminDevicesDeletedAll => 'Οι συσκευές καταργήθηκαν';
+
+  @override
+  String adminDevicesDeletedPartial(int count) {
+    return 'Ορισμένες συσκευές καταργήθηκαν· $count δεν ήταν δυνατό να καταργηθούν.';
+  }
+
+  @override
+  String get adminDevicesLoadFailed => 'Αποτυχία φόρτωσης συσκευών';
+
+  @override
+  String get adminSearchDevices => 'Αναζήτηση συσκευών';
+
+  @override
+  String get adminThisDevice => 'Αυτή η Συσκευή';
+
+  @override
+  String get adminEditName => 'Επεξεργασία ονόματος';
+
+  @override
+  String get adminLibrariesLoadFailed => 'Αποτυχία φόρτωσης βιβλιοθηκών';
+
+  @override
+  String get adminNoLibraries => 'Δεν έχουν διαμορφωθεί βιβλιοθήκες';
+
+  @override
+  String get adminScanAllLibraries => 'Σάρωση όλων των βιβλιοθηκών';
+
+  @override
+  String get adminAddLibrary => 'Προσθήκη βιβλιοθήκης';
+
+  @override
+  String adminScanFailed(String error) {
+    return 'Αποτυχία έναρξης σάρωσης: $error';
+  }
+
+  @override
+  String get adminRenameLibrary => 'Μετονομασία Βιβλιοθήκης';
+
+  @override
+  String get adminNewName => 'Νέο όνομα';
+
+  @override
+  String adminLibraryRenamed(String name) {
+    return 'Η βιβλιοθήκη μετονομάστηκε σε \"$name\"';
+  }
+
+  @override
+  String adminRenameFailed(String error) {
+    return 'Αποτυχία μετονομασίας: $error';
+  }
+
+  @override
+  String get adminDeleteLibrary => 'Διαγραφή βιβλιοθήκης';
+
+  @override
+  String adminLibraryDeleted(String name) {
+    return 'Η βιβλιοθήκη \"$name\" διαγράφηκε';
+  }
+
+  @override
+  String adminLibraryDeleteFailed(String error) {
+    return 'Απέτυχε η διαγραφή της βιβλιοθήκης: $error';
+  }
+
+  @override
+  String adminAddPathFailed(String error) {
+    return 'Αποτυχία προσθήκης διαδρομής: $error';
+  }
+
+  @override
+  String get adminRemovePath => 'Κατάργηση διαδρομής';
+
+  @override
+  String adminRemovePathConfirm(String path) {
+    return 'Κατάργηση του \"$path\" από αυτήν τη βιβλιοθήκη;';
+  }
+
+  @override
+  String adminRemovePathFailed(String error) {
+    return 'Αποτυχία κατάργησης διαδρομής: $error';
+  }
+
+  @override
+  String get adminLibraryOptionsSaved =>
+      'Οι επιλογές της βιβλιοθήκης αποθηκεύτηκαν';
+
+  @override
+  String adminLibraryOptionsSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης επιλογών: $error';
+  }
+
+  @override
+  String get adminLibraryLoadFailed => 'Η φόρτωση της βιβλιοθήκης απέτυχε';
+
+  @override
+  String get adminNoMediaPaths => 'Δεν έχουν διαμορφωθεί διαδρομές μέσων';
+
+  @override
+  String get adminAddPath => 'Προσθήκη διαδρομής';
+
+  @override
+  String get adminBrowseFilesystem =>
+      'Περιήγηση στο σύστημα αρχείων διακομιστή:';
+
+  @override
+  String get adminSaveOptions => 'Αποθήκευση Επιλογών';
+
+  @override
+  String get adminPreferredMetadataLanguage =>
+      'Προτιμώμενη γλώσσα μεταδεδομένων';
+
+  @override
+  String get adminMetadataLanguageHint => 'π.χ. en, de, fr';
+
+  @override
+  String get adminMetadataCountryCode => 'Κωδικός χώρας μεταδεδομένων';
+
+  @override
+  String get adminMetadataCountryHint => 'π.χ. ΗΠΑ, ΓΕ, Γαλλία';
+
+  @override
+  String get adminLibraryTabPaths => 'Διαδρομές';
+
+  @override
+  String get adminLibraryTabOptions => 'Επιλογές';
+
+  @override
+  String get adminLibraryTabDownloaders => 'Προγράμματα λήψης';
+
+  @override
+  String get adminLibMetadataSavers => 'Προγράμματα αποθήκευσης μεταδεδομένων';
+
+  @override
+  String get adminLibSubtitleDownloaders => 'Προγράμματα λήψης υπότιτλων';
+
+  @override
+  String get adminLibLyricDownloaders => 'Προγράμματα λήψης στίχων';
+
+  @override
+  String adminLibMetadataDownloadersFor(String type) {
+    return 'Προγράμματα λήψης μεταδεδομένων: $type';
+  }
+
+  @override
+  String adminLibImageFetchersFor(String type) {
+    return 'Προγράμματα ανάκτησης εικόνων: $type';
+  }
+
+  @override
+  String get adminLibNoDownloaders =>
+      'Αυτός ο διακομιστής δεν παρέχει προγράμματα λήψης για αυτόν τον τύπο βιβλιοθήκης.';
+
+  @override
+  String get adminLibrarySectionGeneral => 'Γενικά';
+
+  @override
+  String get adminLibrarySectionMetadata => 'Μεταδεδομένα';
+
+  @override
+  String get adminLibrarySectionEmbedded => 'Ενσωματωμένες πληροφορίες';
+
+  @override
+  String get adminLibrarySectionSubtitles => 'Υπότιτλοι';
+
+  @override
+  String get adminLibrarySectionImages => 'Εικόνες';
+
+  @override
+  String get adminLibrarySectionSeries => 'Σειρές';
+
+  @override
+  String get adminLibrarySectionMusic => 'Μουσική';
+
+  @override
+  String get adminLibrarySectionMovies => 'Ταινίες';
+
+  @override
+  String get adminLibRealtimeMonitor =>
+      'Ενεργοποίηση παρακολούθησης σε πραγματικό χρόνο';
+
+  @override
+  String get adminLibRealtimeMonitorHint =>
+      'Εντοπισμός αλλαγών στα αρχεία και αυτόματη επεξεργασία τους.';
+
+  @override
+  String get adminLibArchiveMediaFiles =>
+      'Αντιμετώπιση των αρχειοθηκών ως αρχείων πολυμέσων';
+
+  @override
+  String get adminLibEnablePhotos => 'Εμφάνιση φωτογραφιών';
+
+  @override
+  String get adminLibSaveLocalMetadata =>
+      'Αποθήκευση εξωφύλλων στους φακέλους πολυμέσων';
+
+  @override
+  String get adminLibRefreshInterval => 'Αυτόματη ανανέωση μεταδεδομένων';
+
+  @override
+  String get adminLibRefreshNever => 'Ποτέ';
+
+  @override
+  String get adminLibDefault => 'Προεπιλογή';
+
+  @override
+  String get adminLibDisplayTitle => 'Εμφάνιση';
+
+  @override
+  String get adminLibDisplaySection => 'Εμφάνιση βιβλιοθήκης';
+
+  @override
+  String get adminLibFolderView =>
+      'Εμφάνιση προβολής φακέλων για την εμφάνιση απλών φακέλων πολυμέσων';
+
+  @override
+  String get adminLibSpecialsInSeasons =>
+      'Εμφάνιση των ειδικών επεισοδίων μέσα στις σεζόν όπου προβλήθηκαν';
+
+  @override
+  String get adminLibGroupMovies => 'Ομαδοποίηση ταινιών σε συλλογές';
+
+  @override
+  String get adminLibGroupShows => 'Ομαδοποίηση σειρών σε συλλογές';
+
+  @override
+  String get adminLibExternalSuggestions =>
+      'Εμφάνιση εξωτερικού περιεχομένου στις προτάσεις';
+
+  @override
+  String get adminLibDateAddedSection => 'Συμπεριφορά ημερομηνίας προσθήκης';
+
+  @override
+  String get adminLibDateAddedLabel => 'Χρήση ημερομηνίας προσθήκης από';
+
+  @override
+  String get adminLibDateAddedImport => 'Ημερομηνία σάρωσης στη βιβλιοθήκη';
+
+  @override
+  String get adminLibDateAddedFile => 'Ημερομηνία δημιουργίας του αρχείου';
+
+  @override
+  String get adminLibMetadataTitle => 'Μεταδεδομένα και εικόνες';
+
+  @override
+  String get adminLibMetadataLangSection => 'Προτιμώμενη γλώσσα μεταδεδομένων';
+
+  @override
+  String get adminLibChaptersSection => 'Κεφάλαια';
+
+  @override
+  String get adminLibDummyChapterDuration =>
+      'Διάρκεια εικονικών κεφαλαίων (δευτερόλεπτα)';
+
+  @override
+  String get adminLibDummyChapterDurationHint =>
+      'Διάρκεια των κεφαλαίων που δημιουργούνται για πολυμέσα χωρίς κεφάλαια. Ορίστε 0 για απενεργοποίηση.';
+
+  @override
+  String get adminLibChapterImageResolution => 'Ανάλυση εικόνας κεφαλαίου';
+
+  @override
+  String get adminLibNfoTitle => 'Ρυθμίσεις NFO';
+
+  @override
+  String get adminLibNfoHelp =>
+      'Τα μεταδεδομένα NFO είναι συμβατά με το Kodi και παρόμοιες εφαρμογές. Οι ρυθμίσεις ισχύουν για όλες τις βιβλιοθήκες που αποθηκεύουν μεταδεδομένα NFO.';
+
+  @override
+  String get adminLibKodiUser =>
+      'Χρήστης για τον οποίο αποθηκεύονται τα δεδομένα παρακολούθησης στα αρχεία NFO';
+
+  @override
+  String get adminLibSaveImagePaths =>
+      'Αποθήκευση των διαδρομών εικόνων μέσα στα αρχεία NFO';
+
+  @override
+  String get adminLibPathSubstitution =>
+      'Ενεργοποίηση αντικατάστασης διαδρομών για τις διαδρομές εικόνων NFO';
+
+  @override
+  String get adminLibExtraThumbs =>
+      'Αντιγραφή των εικόνων extrafanart σε φάκελο extrathumbs';
+
+  @override
+  String get adminLibNone => 'Κανένα';
+
+  @override
+  String adminLibRefreshDays(int days) {
+    return '$days ημέρες';
+  }
+
+  @override
+  String get adminLibEmbeddedTitles => 'Χρήση ενσωματωμένων τίτλων';
+
+  @override
+  String get adminLibEmbeddedExtrasTitles =>
+      'Χρήση ενσωματωμένων τίτλων για τα πρόσθετα';
+
+  @override
+  String get adminLibEmbeddedEpisodeInfos =>
+      'Χρήση ενσωματωμένων πληροφοριών επεισοδίου';
+
+  @override
+  String get adminLibAllowEmbeddedSubtitles =>
+      'Να επιτρέπονται οι ενσωματωμένοι υπότιτλοι';
+
+  @override
+  String get adminLibEmbeddedAllowAll => 'Όλοι';
+
+  @override
+  String get adminLibEmbeddedAllowText => 'Μόνο κειμένου';
+
+  @override
+  String get adminLibEmbeddedAllowImage => 'Μόνο εικόνας';
+
+  @override
+  String get adminLibEmbeddedAllowNone => 'Κανένα';
+
+  @override
+  String get adminLibSkipIfEmbeddedSubs =>
+      'Παράλειψη της λήψης αν υπάρχουν ενσωματωμένοι υπότιτλοι';
+
+  @override
+  String get adminLibSkipIfAudioMatches =>
+      'Παράλειψη της λήψης αν το κομμάτι ήχου ταιριάζει με τη γλώσσα λήψης';
+
+  @override
+  String get adminLibRequirePerfectMatch =>
+      'Απαίτηση απόλυτης αντιστοίχισης υπότιτλων';
+
+  @override
+  String get adminLibSaveSubtitlesWithMedia =>
+      'Αποθήκευση των υπότιτλων στους φακέλους πολυμέσων';
+
+  @override
+  String get adminLibChapterImageExtraction => 'Εξαγωγή εικόνων κεφαλαίων';
+
+  @override
+  String get adminLibChapterImagesDuringScan =>
+      'Εξαγωγή εικόνων κεφαλαίων κατά τη σάρωση της βιβλιοθήκης';
+
+  @override
+  String get adminLibTrickplayExtraction =>
+      'Ενεργοποίηση εξαγωγής εικόνων trickplay';
+
+  @override
+  String get adminLibTrickplayDuringScan =>
+      'Εξαγωγή εικόνων trickplay κατά τη σάρωση της βιβλιοθήκης';
+
+  @override
+  String get adminLibSaveTrickplayWithMedia =>
+      'Αποθήκευση των εικόνων trickplay στους φακέλους πολυμέσων';
+
+  @override
+  String get adminLibAutomaticSeriesGrouping =>
+      'Αυτόματη συγχώνευση των σειρών που είναι μοιρασμένες σε πολλούς φακέλους';
+
+  @override
+  String get adminLibSeasonZeroName => 'Εμφανιζόμενο όνομα της σεζόν μηδέν';
+
+  @override
+  String get adminLibLufsScan =>
+      'Ενεργοποίηση σάρωσης LUFS για κανονικοποίηση ήχου';
+
+  @override
+  String get adminLibPreferNonstandardArtist =>
+      'Προτίμηση της μη τυπικής ετικέτας καλλιτεχνών';
+
+  @override
+  String get adminLibAutoAddToCollection =>
+      'Αυτόματη προσθήκη ταινιών σε συλλογές';
+
+  @override
+  String get adminLibraryNameRequired => 'Απαιτείται το όνομα της βιβλιοθήκης';
+
+  @override
+  String adminLibraryCreateFailed(String error) {
+    return 'Αποτυχία δημιουργίας βιβλιοθήκης: $error';
+  }
+
+  @override
+  String get adminLibraryName => 'Όνομα βιβλιοθήκης';
+
+  @override
+  String get adminSelectedPaths => 'Επιλεγμένα μονοπάτια:';
+
+  @override
+  String get adminNoPathsAdded =>
+      'Δεν προστέθηκαν διαδρομές (μπορεί να προστεθεί αργότερα)';
+
+  @override
+  String get adminCreateLibrary => 'Δημιουργία βιβλιοθήκης';
+
+  @override
+  String get paths => 'Διαδρομές:';
+
+  @override
+  String get adminDisableUser => 'Απενεργοποίηση χρήστη';
+
+  @override
+  String get adminEnableUser => 'Ενεργοποίηση χρήστη';
+
+  @override
+  String adminDisableUserConfirm(String name) {
+    return 'Απενεργοποίηση $name; Δεν θα μπορούν να συνδεθούν.';
+  }
+
+  @override
+  String adminEnableUserConfirm(String name) {
+    return 'Ενεργοποίηση $name; Θα μπορούν να συνδεθούν ξανά.';
+  }
+
+  @override
+  String adminUserDisabled(String name) {
+    return 'Ο χρήστης \"$name\" απενεργοποιήθηκε';
+  }
+
+  @override
+  String adminUserEnabled(String name) {
+    return 'Ο χρήστης \"$name\" ενεργοποιήθηκε';
+  }
+
+  @override
+  String adminUserPolicyUpdateFailed(String error) {
+    return 'Η ενημέρωση της πολιτικής χρήστη απέτυχε: $error';
+  }
+
+  @override
+  String get adminUsersLoadFailed => 'Η φόρτωση των χρηστών απέτυχε';
+
+  @override
+  String get adminSearchUsers => 'Αναζήτηση χρηστών';
+
+  @override
+  String get adminEditUser => 'Επεξεργασία χρήστη';
+
+  @override
+  String get adminAddUser => 'Προσθήκη χρήστη';
+
+  @override
+  String adminUserCreateFailed(String error) {
+    return 'Αποτυχία δημιουργίας χρήστη: $error';
+  }
+
+  @override
+  String get adminCreateUser => 'Δημιουργία χρήστη';
+
+  @override
+  String get adminPasswordOptional => 'Κωδικός πρόσβασης (προαιρετικό)';
+
+  @override
+  String get adminUsernameRequired =>
+      'Το όνομα χρήστη δεν μπορεί να είναι κενό';
+
+  @override
+  String get adminNoProfileChanges =>
+      'Δεν υπάρχουν αλλαγές προφίλ για αποθήκευση';
+
+  @override
+  String get adminProfileSaved => 'Το προφίλ αποθηκεύτηκε';
+
+  @override
+  String adminSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης: $error';
+  }
+
+  @override
+  String get adminPermissionsSaved => 'Τα δικαιώματα αποθηκεύτηκαν';
+
+  @override
+  String get adminPasswordsMismatch => 'Οι κωδικοί πρόσβασης δεν ταιριάζουν';
+
+  @override
+  String adminFailed(String error) {
+    return 'Απέτυχε: $error';
+  }
+
+  @override
+  String get adminUserLoadFailed => 'Η φόρτωση του χρήστη απέτυχε';
+
+  @override
+  String get adminBackToUsers => 'Επιστροφή στους Χρήστες';
+
+  @override
+  String get adminSaveProfile => 'Αποθήκευση προφίλ';
+
+  @override
+  String get adminDeleteUser => 'Διαγραφή χρήστη';
+
+  @override
+  String get admin => 'Διαχειρ';
+
+  @override
+  String get adminFullAccessWarning =>
+      'Οι διαχειριστές έχουν πλήρη πρόσβαση στον διακομιστή. Χορηγήστε με προσοχή.';
+
+  @override
+  String get administrator => 'Διαχειριστής';
+
+  @override
+  String get adminHiddenUser => 'Κρυφός χρήστης';
+
+  @override
+  String get adminAllowMediaPlayback =>
+      'Να επιτρέπεται η αναπαραγωγή πολυμέσων';
+
+  @override
+  String get adminAllowAudioTranscoding =>
+      'Να επιτρέπεται η διακωδικοποίηση ήχου';
+
+  @override
+  String get adminAllowVideoTranscoding =>
+      'Να επιτρέπεται η διακωδικοποίηση βίντεο';
+
+  @override
+  String get adminAllowRemuxing => 'Επιτρέψτε την εκ νέου ανάμιξη';
+
+  @override
+  String get adminForceRemoteTranscoding =>
+      'Αναγκαστική διακωδικοποίηση απομακρυσμένης πηγής';
+
+  @override
+  String get adminAllowContentDeletion =>
+      'Να επιτρέπεται η διαγραφή περιεχομένου';
+
+  @override
+  String get adminAllowContentDownloading =>
+      'Να επιτρέπεται η λήψη περιεχομένου';
+
+  @override
+  String get adminAllowPublicSharing => 'Να επιτρέπεται η δημόσια κοινή χρήση';
+
+  @override
+  String get adminAllowRemoteControl =>
+      'Επιτρέψτε τον απομακρυσμένο έλεγχο άλλων χρηστών';
+
+  @override
+  String get adminAllowSharedDeviceControl =>
+      'Να επιτρέπεται ο έλεγχος της κοινόχρηστης συσκευής';
+
+  @override
+  String get adminAllowRemoteAccess => 'Επιτρέψτε την απομακρυσμένη πρόσβαση';
+
+  @override
+  String get adminRemoteBitrateLimit =>
+      'Όριο ρυθμού bit απομακρυσμένου πελάτη (bps)';
+
+  @override
+  String get adminLeaveEmptyNoLimit => 'Αφήστε κενό χωρίς όριο';
+
+  @override
+  String get adminMaxActiveSessions => 'Μέγιστος αριθμός ενεργών συνεδριών';
+
+  @override
+  String get adminAllowLiveTvAccess =>
+      'Να επιτρέπεται η πρόσβαση σε ζωντανή τηλεόραση';
+
+  @override
+  String get adminAllowLiveTvManagement =>
+      'Να επιτρέπεται η διαχείριση ζωντανής τηλεόρασης';
+
+  @override
+  String get adminAllowCollectionManagement =>
+      'Να επιτρέπεται η διαχείριση συλλογής';
+
+  @override
+  String get adminAllowSubtitleManagement =>
+      'Να επιτρέπεται η διαχείριση υποτίτλων';
+
+  @override
+  String get adminAllowLyricManagement => 'Επιτρέψτε τη διαχείριση στίχων';
+
+  @override
+  String get adminSavePermissions => 'Αποθήκευση Δικαιωμάτων';
+
+  @override
+  String get adminEnableAllLibraryAccess =>
+      'Ενεργοποίηση πρόσβασης σε όλες τις βιβλιοθήκες';
+
+  @override
+  String get adminSaveAccess => 'Αποθήκευση πρόσβασης';
+
+  @override
+  String get adminChangePassword => 'Αλλαγή κωδικού πρόσβασης';
+
+  @override
+  String get adminNewPassword => 'Νέος κωδικός πρόσβασης';
+
+  @override
+  String get adminConfirmPassword => 'Επιβεβαίωση κωδικού πρόσβασης';
+
+  @override
+  String get adminSetPassword => 'Ορισμός κωδικού πρόσβασης';
+
+  @override
+  String get adminResetPassword => 'Επαναφορά κωδικού πρόσβασης';
+
+  @override
+  String get adminPasswordReset => 'Επαναφορά κωδικού πρόσβασης';
+
+  @override
+  String get adminPasswordUpdated => 'Ο κωδικός ενημερώθηκε';
+
+  @override
+  String get adminUserSettings => 'Ρυθμίσεις χρήστη';
+
+  @override
+  String get adminLibraryAccess => 'Πρόσβαση στη βιβλιοθήκη';
+
+  @override
+  String get adminDeviceAndChannelAccess => 'Πρόσβαση συσκευής και καναλιού';
+
+  @override
+  String get adminEnableAllDevices =>
+      'Ενεργοποιήστε την πρόσβαση σε όλες τις συσκευές';
+
+  @override
+  String get adminEnableAllChannels =>
+      'Ενεργοποιήστε την πρόσβαση σε όλα τα κανάλια';
+
+  @override
+  String get adminParentalControl => 'Γονικός έλεγχος';
+
+  @override
+  String get adminMaxParentalRating => 'Μέγιστη επιτρεπόμενη γονική διαβάθμιση';
+
+  @override
+  String get adminMaxParentalRatingHint =>
+      'Το περιεχόμενο με υψηλότερη διαβάθμιση θα αποκρύπτεται από αυτόν τον χρήστη.';
+
+  @override
+  String get adminParentalRatingNone => 'Καμία';
+
+  @override
+  String get adminBlockUnratedItems =>
+      'Αποκλεισμός των στοιχείων χωρίς διαβάθμιση ή με μη αναγνωρισμένες πληροφορίες διαβάθμισης';
+
+  @override
+  String get adminUnratedBook => 'Βιβλία';
+
+  @override
+  String get adminUnratedChannelContent => 'Κανάλια';
+
+  @override
+  String get adminUnratedLiveTvChannel => 'Ζωντανή τηλεόραση';
+
+  @override
+  String get adminUnratedMovie => 'Ταινίες';
+
+  @override
+  String get adminUnratedMusic => 'Μουσική';
+
+  @override
+  String get adminUnratedTrailer => 'Τρέιλερ';
+
+  @override
+  String get adminUnratedSeries => 'Σειρές';
+
+  @override
+  String get adminAccessSchedules => 'Προγράμματα πρόσβασης';
+
+  @override
+  String get adminAccessSchedulesHint =>
+      'Να επιτρέπεται η πρόσβαση μόνο κατά τις προγραμματισμένες ώρες παρακάτω. Όταν δεν έχει οριστεί πρόγραμμα, η πρόσβαση επιτρέπεται όλη την ημέρα.';
+
+  @override
+  String get adminAddSchedule => 'Προσθήκη προγράμματος';
+
+  @override
+  String get adminScheduleDay => 'Ημέρα';
+
+  @override
+  String get adminScheduleStart => 'Έναρξη';
+
+  @override
+  String get adminScheduleEnd => 'Λήξη';
+
+  @override
+  String get adminDayEveryday => 'Κάθε μέρα';
+
+  @override
+  String get adminDayWeekday => 'Καθημερινή';
+
+  @override
+  String get adminDayWeekend => 'Σαββατοκύριακο';
+
+  @override
+  String get adminDaySunday => 'Κυριακή';
+
+  @override
+  String get adminDayMonday => 'Δευτέρα';
+
+  @override
+  String get adminDayTuesday => 'Τρίτη';
+
+  @override
+  String get adminDayWednesday => 'Τετάρτη';
+
+  @override
+  String get adminDayThursday => 'Πέμπτη';
+
+  @override
+  String get adminDayFriday => 'Παρασκευή';
+
+  @override
+  String get adminDaySaturday => 'Σάββατο';
+
+  @override
+  String get adminAllowedTags => 'Επιτρεπόμενες ετικέτες';
+
+  @override
+  String get adminAllowedTagsHint =>
+      'Εμφανίζεται μόνο το περιεχόμενο με αυτές τις ετικέτες. Αφήστε το κενό για να επιτρέπονται όλα.';
+
+  @override
+  String get adminBlockedTags => 'Αποκλεισμένες ετικέτες';
+
+  @override
+  String get adminBlockedTagsHint =>
+      'Το περιεχόμενο με αυτές τις ετικέτες αποκρύπτεται από αυτόν τον χρήστη.';
+
+  @override
+  String get adminAddTag => 'Προσθήκη ετικέτας';
+
+  @override
+  String get adminEnabledDevices => 'Ενεργοποιημένες συσκευές';
+
+  @override
+  String get adminEnabledChannels => 'Ενεργοποιημένα κανάλια';
+
+  @override
+  String get adminAuthProvider => 'Πάροχος ταυτοποίησης';
+
+  @override
+  String get adminPasswordResetProvider =>
+      'Πάροχος επαναφοράς κωδικού πρόσβασης';
+
+  @override
+  String get adminLoginAttemptsBeforeLockout =>
+      'Μέγιστος αριθμός αποτυχημένων προσπαθειών σύνδεσης πριν από το κλείδωμα';
+
+  @override
+  String get adminLoginAttemptsHint =>
+      'Ορίστε 0 για την προεπιλογή ή -1 για απενεργοποίηση του κλειδώματος.';
+
+  @override
+  String get adminSyncPlayAccess => 'Πρόσβαση SyncPlay';
+
+  @override
+  String get adminSyncPlayCreateAndJoin =>
+      'Να επιτρέπεται η δημιουργία ομάδων και η συμμετοχή σε αυτές';
+
+  @override
+  String get adminSyncPlayJoin => 'Να επιτρέπεται η συμμετοχή σε ομάδες';
+
+  @override
+  String get adminSyncPlayNone => 'Χωρίς πρόσβαση';
+
+  @override
+  String get adminContentDeletionFolders =>
+      'Να επιτρέπεται η διαγραφή περιεχομένου από';
+
+  @override
+  String get adminResetPasswordWarning =>
+      'Αυτό θα αφαιρέσει τον κωδικό πρόσβασης. Ο χρήστης θα μπορεί να συνδεθεί χωρίς κωδικό πρόσβασης.';
+
+  @override
+  String adminServerReturnedHttp(int status) {
+    return 'Ο διακομιστής επέστρεψε HTTP $status';
+  }
+
+  @override
+  String adminDeleteUserConfirm(String name) {
+    return 'Είστε βέβαιοι ότι θέλετε να διαγράψετε το $name;';
+  }
+
+  @override
+  String adminUserDeleted(String name) {
+    return 'Ο χρήστης \"$name\" διαγράφηκε';
+  }
+
+  @override
+  String adminUserDeleteFailed(String error) {
+    return 'Αποτυχία διαγραφής χρήστη: $error';
+  }
+
+  @override
+  String get adminCreateApiKey => 'Δημιουργία κλειδιού API';
+
+  @override
+  String get adminAppName => 'Όνομα εφαρμογής';
+
+  @override
+  String get adminApiKeyCreated => 'Δημιουργήθηκε το κλειδί API';
+
+  @override
+  String get adminApiKeyCreatedNoToken =>
+      'Το κλειδί δημιουργήθηκε με επιτυχία. Ο διακομιστής δεν επέστρεψε το διακριτικό. Ελέγξτε τα κλειδιά API του διακομιστή.';
+
+  @override
+  String get adminKeyCopied => 'Το κλειδί αντιγράφηκε στο πρόχειρο';
+
+  @override
+  String adminApiKeyCreateFailed(String error) {
+    return 'Αποτυχία δημιουργίας κλειδιού: $error';
+  }
+
+  @override
+  String get adminKeyTokenMissing =>
+      'Λείπει το διακριτικό κλειδιού από την απάντηση διακομιστή';
+
+  @override
+  String get adminRevokeApiKey => 'Ανάκληση κλειδιού API';
+
+  @override
+  String adminRevokeKeyConfirm(String name) {
+    return 'Ανάκληση κλειδιού για $name;';
+  }
+
+  @override
+  String get adminApiKeyRevoked => 'Το κλειδί API ανακλήθηκε';
+
+  @override
+  String adminApiKeyRevokeFailed(String error) {
+    return 'Απέτυχε η ανάκληση του κλειδιού: $error';
+  }
+
+  @override
+  String get adminApiKeysLoadFailed => 'Αποτυχία φόρτωσης κλειδιών API';
+
+  @override
+  String get adminApiKeysTitle => 'Κλειδιά API';
+
+  @override
+  String get adminCreateKey => 'Δημιουργία κλειδιού';
+
+  @override
+  String get adminNoApiKeys => 'Δεν βρέθηκαν κλειδιά API';
+
+  @override
+  String get adminUnknownApp => 'Άγνωστη εφαρμογή';
+
+  @override
+  String adminApiKeyTokenCreated(String token, String created) {
+    return 'Token: $token\\nΔημιουργήθηκε: $created';
+  }
+
+  @override
+  String get adminBackupOptionsTitle => 'Δημιουργία αντιγράφου ασφαλείας';
+
+  @override
+  String get adminBackupInclude =>
+      'Επιλέξτε τι θα περιλαμβάνεται στο αντίγραφο ασφαλείας.';
+
+  @override
+  String get adminBackupDatabase => 'Βάση δεδομένων';
+
+  @override
+  String get adminBackupDatabaseAlways => 'Περιλαμβάνεται πάντα';
+
+  @override
+  String get adminBackupMetadata => 'Μεταδεδομένα';
+
+  @override
+  String get adminBackupSubtitles => 'Υπότιτλοι';
+
+  @override
+  String get adminBackupTrickplay => 'Εικόνες trickplay';
+
+  @override
+  String get adminCreatingBackup => 'Δημιουργία αντιγράφου ασφαλείας...';
+
+  @override
+  String get adminBackupCreated =>
+      'Το αντίγραφο ασφαλείας δημιουργήθηκε με επιτυχία';
+
+  @override
+  String adminBackupCreateFailed(String error) {
+    return 'Αποτυχία δημιουργίας αντιγράφου ασφαλείας: $error';
+  }
+
+  @override
+  String get adminBackupPathMissing =>
+      'Λείπει η εφεδρική διαδρομή στην απόκριση διακομιστή';
+
+  @override
+  String adminBackupManifest(String name) {
+    return 'Μανιφέστο: $name';
+  }
+
+  @override
+  String adminManifestLoadFailed(String error) {
+    return 'Η φόρτωση της δήλωσης απέτυχε: $error';
+  }
+
+  @override
+  String get adminConfirmRestore => 'Επιβεβαιώστε την Επαναφορά';
+
+  @override
+  String get adminRestoringBackup => 'Επαναφορά αντιγράφου ασφαλείας...';
+
+  @override
+  String adminRestoreFailed(String error) {
+    return 'Αποτυχία επαναφοράς του αντιγράφου ασφαλείας: $error';
+  }
+
+  @override
+  String get adminBackupsLoadFailed => 'Αποτυχία φόρτωσης αντιγράφων ασφαλείας';
+
+  @override
+  String get adminCreateBackup => 'Δημιουργία αντιγράφων ασφαλείας';
+
+  @override
+  String get adminNoBackups => 'Δεν βρέθηκαν αντίγραφα ασφαλείας';
+
+  @override
+  String get adminViewDetails => 'Προβολή λεπτομερειών';
+
+  @override
+  String get restore => 'Επαναφέρω';
+
+  @override
+  String get adminLogsLoadFailed =>
+      'Αποτυχία φόρτωσης αρχείων καταγραφής διακομιστή';
+
+  @override
+  String get adminNoLogFiles => 'Δεν βρέθηκαν αρχεία καταγραφής';
+
+  @override
+  String get adminLogCopied => 'Το αρχείο καταγραφής αντιγράφηκε στο πρόχειρο';
+
+  @override
+  String get adminSaveLogFile => 'Αποθήκευση αρχείου καταγραφής';
+
+  @override
+  String adminSavedTo(String path) {
+    return 'Αποθηκεύτηκε στο $path';
+  }
+
+  @override
+  String adminFileSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης του αρχείου: $error';
+  }
+
+  @override
+  String adminLogFileLoadFailed(String fileName) {
+    return 'Αποτυχία φόρτωσης $fileName';
+  }
+
+  @override
+  String get adminSearchInLog => 'Αναζήτηση στο log';
+
+  @override
+  String get adminNoMatchingLines => 'Δεν υπάρχουν αντίστοιχες γραμμές';
+
+  @override
+  String adminTasksLoadFailed(String error) {
+    return 'Αποτυχία φόρτωσης εργασιών: $error';
+  }
+
+  @override
+  String get adminNoScheduledTasks => 'Δεν βρέθηκαν προγραμματισμένες εργασίες';
+
+  @override
+  String get adminNoTasksMatchFilter =>
+      'Καμία εργασία δεν ταιριάζει με το τρέχον φίλτρο';
+
+  @override
+  String adminTaskStartFailed(String error) {
+    return 'Απέτυχε η έναρξη της εργασίας: $error';
+  }
+
+  @override
+  String adminTaskStopFailed(String error) {
+    return 'Η διακοπή της εργασίας απέτυχε: $error';
+  }
+
+  @override
+  String adminTaskLoadFailed(String error) {
+    return 'Η φόρτωση της εργασίας απέτυχε: $error';
+  }
+
+  @override
+  String get adminRunNow => 'Τρέξτε τώρα';
+
+  @override
+  String adminTriggerRemoveFailed(String error) {
+    return 'Αποτυχία κατάργησης κανόνα ετικέτας: $error';
+  }
+
+  @override
+  String adminTriggerAddFailed(String error) {
+    return 'Αποτυχία προσθήκης κανόνα ετικέτας: $error';
+  }
+
+  @override
+  String get adminLastExecution => 'Τελευταία Εκτέλεση';
+
+  @override
+  String get adminTriggers => 'Ενεργοποιητές';
+
+  @override
+  String get adminAddTrigger => 'Προσθήκη σκανδάλης';
+
+  @override
+  String get adminNoTriggers => 'Δεν έχουν διαμορφωθεί κανόνες ετικέτας';
+
+  @override
+  String get adminTriggerType => 'Τύπος σκανδάλης';
+
+  @override
+  String get adminTimeLimit => 'Χρονικό όριο (προαιρετικό)';
+
+  @override
+  String get adminNoLimit => 'Κανένα όριο';
+
+  @override
+  String adminHours(String hours) {
+    return '$hours ώρα(ες)';
+  }
+
+  @override
+  String get adminDayOfWeek => 'Ημέρα της εβδομάδας';
+
+  @override
+  String get adminSearchPlugins => 'Αναζήτηση προσθηκών...';
+
+  @override
+  String adminPluginToggleFailed(String error) {
+    return 'Αποτυχία εναλλαγής προσθήκης: $error';
+  }
+
+  @override
+  String get adminUninstallPlugin => 'Απεγκατάσταση πρόσθετου';
+
+  @override
+  String adminUninstallPluginConfirm(String name) {
+    return 'Είστε βέβαιοι ότι θέλετε να απεγκαταστήσετε το \"$name\";';
+  }
+
+  @override
+  String adminPluginUninstallFailed(String error) {
+    return 'Η απεγκατάσταση της προσθήκης απέτυχε: $error';
+  }
+
+  @override
+  String adminPackageInstallFailed(String error) {
+    return 'Αποτυχία εγκατάστασης πακέτου: $error';
+  }
+
+  @override
+  String adminPluginUpdateFailed(String error) {
+    return 'Η εγκατάσταση της ενημέρωσης απέτυχε: $error';
+  }
+
+  @override
+  String adminPluginsLoadFailed(String error) {
+    return 'Αποτυχία φόρτωσης προσθηκών: $error';
+  }
+
+  @override
+  String get adminNoPluginsMatchSearch =>
+      'Δεν υπάρχουν πρόσθετα που να αντιστοιχούν στην αναζήτησή σας';
+
+  @override
+  String get adminNoPluginsInstalled => 'Δεν έχουν εγκατασταθεί πρόσθετα';
+
+  @override
+  String adminInstallUpdate(String version) {
+    return 'Εγκατάσταση ενημέρωσης (v$version)';
+  }
+
+  @override
+  String adminCatalogLoadFailed(String error) {
+    return 'Η φόρτωση του καταλόγου απέτυχε: $error';
+  }
+
+  @override
+  String get adminNoPackagesMatchSearch =>
+      'Δεν υπάρχουν πακέτα που να αντιστοιχούν στην αναζήτησή σας';
+
+  @override
+  String get adminNoPackagesAvailable => 'Δεν υπάρχουν διαθέσιμα πακέτα';
+
+  @override
+  String get adminExperimentalIntegration => 'Πειραματική Ένταξη';
+
+  @override
+  String get adminExperimentalWarning =>
+      'Η ενσωμάτωση ρυθμίσεων προσθηκών είναι ακόμα πειραματική. Ορισμένες σελίδες ρυθμίσεων ενδέχεται να μην αποδίδονται σωστά.';
+
+  @override
+  String get continueAction => 'Συνεχίζω';
+
+  @override
+  String adminPluginRemoveAfterRestart(String name) {
+    return 'Το \"$name\" θα αφαιρεθεί μετά την επανεκκίνηση του διακομιστή';
+  }
+
+  @override
+  String adminUninstallFailed(String error) {
+    return 'Η απεγκατάσταση απέτυχε: $error';
+  }
+
+  @override
+  String adminPluginUpdating(String name, String version) {
+    return 'Ενημέρωση \"$name\" σε v$version...';
+  }
+
+  @override
+  String get adminMissingAuthToken =>
+      'Δεν είναι δυνατό το άνοιγμα των ρυθμίσεων: λείπει το διακριτικό ελέγχου ταυτότητας.';
+
+  @override
+  String adminPluginLoadFailed(String error) {
+    return 'Η φόρτωση της προσθήκης απέτυχε: $error';
+  }
+
+  @override
+  String get adminPluginNotFound => 'Το πρόσθετο δεν βρέθηκε';
+
+  @override
+  String adminPluginVersion(String version) {
+    return 'Έκδοση $version';
+  }
+
+  @override
+  String get adminEnablePlugin => 'Ενεργοποίηση προσθήκης';
+
+  @override
+  String get adminPluginSettingsPage => 'Σελίδα ρυθμίσεων προσθήκης';
+
+  @override
+  String get adminRevisionHistory => 'Ιστορικό αναθεώρησης';
+
+  @override
+  String get adminNoChangelog =>
+      'Δεν υπάρχει διαθέσιμο αρχείο καταγραφής αλλαγών.';
+
+  @override
+  String get adminRemoveRepository => 'Κατάργηση αποθετηρίου';
+
+  @override
+  String adminRemoveRepositoryConfirm(String name) {
+    return 'Είστε βέβαιοι ότι θέλετε να καταργήσετε το \"$name\";';
+  }
+
+  @override
+  String adminRepositoriesSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης αποθετηρίων: $error';
+  }
+
+  @override
+  String adminRepositoriesLoadFailed(String error) {
+    return 'Απέτυχε η φόρτωση των αποθετηρίων: $error';
+  }
+
+  @override
+  String get adminRepositoryNameHint => 'π.χ. Jellyfin Σταθερό';
+
+  @override
+  String get adminRepositoryUrl => 'URL αποθετηρίου';
+
+  @override
+  String get adminAddEntry => 'Προσθήκη καταχώρισης';
+
+  @override
+  String get adminInvalidUrl => 'Μη έγκυρη διεύθυνση URL';
+
+  @override
+  String adminPluginSettingsLoadFailed(String error) {
+    return 'Δεν είναι δυνατή η φόρτωση ρυθμίσεων προσθήκης: $error';
+  }
+
+  @override
+  String adminCouldNotOpenUrl(String uri) {
+    return 'Δεν ήταν δυνατό το άνοιγμα $uri';
+  }
+
+  @override
+  String get adminOpenInBrowser => 'Άνοιγμα στο πρόγραμμα περιήγησης';
+
+  @override
+  String get adminOpenExternally => 'Ανοίξτε εξωτερικά';
+
+  @override
+  String get adminGeneralSettings => 'Γενικές Ρυθμίσεις';
+
+  @override
+  String get adminServerName => 'Όνομα διακομιστή';
+
+  @override
+  String get adminPreferredMetadataCountry => 'Προτιμώμενη χώρα μεταδεδομένων';
+
+  @override
+  String get adminCachePath => 'Διαδρομή προσωρινής μνήμης';
+
+  @override
+  String get adminMetadataPath => 'Διαδρομή μεταδεδομένων';
+
+  @override
+  String get adminLibraryScanConcurrency => 'Συγχρονισμός σάρωσης βιβλιοθήκης';
+
+  @override
+  String get adminParallelImageEncodingLimit =>
+      'Όριο κωδικοποίησης παράλληλης εικόνας';
+
+  @override
+  String get adminSlowResponseThreshold => 'Κατώφλι αργής απόκρισης (ms)';
+
+  @override
+  String get adminBrandingSaved => 'Οι ρυθμίσεις επωνυμίας αποθηκεύτηκαν';
+
+  @override
+  String get adminBrandingLoadFailed =>
+      'Η φόρτωση των ρυθμίσεων επωνυμίας απέτυχε';
+
+  @override
+  String get adminLoginDisclaimer => 'Αποποίηση ευθυνών σύνδεσης';
+
+  @override
+  String get adminLoginDisclaimerHint =>
+      'HTML εμφανίζεται κάτω από τη φόρμα σύνδεσης';
+
+  @override
+  String get adminCustomCss => 'Προσαρμοσμένο CSS';
+
+  @override
+  String get adminCustomCssHint =>
+      'Εφαρμόστηκε προσαρμοσμένο CSS στη διεπαφή ιστού';
+
+  @override
+  String get adminEnableSplashScreen => 'Ενεργοποίηση εκκίνησης οθόνης';
+
+  @override
+  String get adminStreamingSaved => 'Οι ρυθμίσεις ροής αποθηκεύτηκαν';
+
+  @override
+  String get adminStreamingLoadFailed => 'Αποτυχία φόρτωσης ρυθμίσεων ροής';
+
+  @override
+  String get adminStreamingDescription =>
+      'Ορίστε παγκόσμια όρια ρυθμού bit ροής για απομακρυσμένες συνδέσεις.';
+
+  @override
+  String get adminRemoteBitrateLimitMbps =>
+      'Όριο ρυθμού bit απομακρυσμένου πελάτη (Mbps)';
+
+  @override
+  String get adminLeaveEmptyForUnlimited => 'Αφήστε κενό ή 0 για απεριόριστο';
+
+  @override
+  String get adminPlaybackSaved => 'Οι ρυθμίσεις αναπαραγωγής αποθηκεύτηκαν';
+
+  @override
+  String get adminPlaybackLoadFailed =>
+      'Αποτυχία φόρτωσης ρυθμίσεων αναπαραγωγής';
+
+  @override
+  String get adminPlaybackTranscoding => 'Αναπαραγωγή / Μετακωδικοποίηση';
+
+  @override
+  String get adminHardwareAcceleration => 'Επιτάχυνση υλικού';
+
+  @override
+  String get adminVaapiDevice => 'Συσκευή VA-API';
+
+  @override
+  String get adminEnableHardwareEncoding => 'Ενεργοποίηση κωδικοποίησης υλικού';
+
+  @override
+  String get adminEnableHardwareDecoding =>
+      'Ενεργοποίηση αποκωδικοποίησης υλικού για:';
+
+  @override
+  String get adminEncodingThreads => 'Κωδικοποίηση νημάτων';
+
+  @override
+  String get adminAutomatic => '0 = αυτόματο';
+
+  @override
+  String get adminTranscodingTempPath =>
+      'Διαδρομή θερμοκρασίας διακωδικοποίησης';
+
+  @override
+  String get adminEnableFallbackFont =>
+      'Ενεργοποίηση εναλλακτικής γραμματοσειράς';
+
+  @override
+  String get adminFallbackFontPath => 'Εναλλακτική διαδρομή γραμματοσειράς';
+
+  @override
+  String get adminAllowSegmentDeletion => 'Να επιτρέπεται η διαγραφή τμήματος';
+
+  @override
+  String get adminSegmentKeepSeconds => 'Διατήρηση τμήματος (δευτερόλεπτα)';
+
+  @override
+  String get adminThrottleBuffering => 'Ρυθμιστικό γκάζι';
+
+  @override
+  String get adminTrickplaySaved => 'Οι ρυθμίσεις του Trickplay αποθηκεύτηκαν';
+
+  @override
+  String get adminTrickplayLoadFailed =>
+      'Αποτυχία φόρτωσης ρυθμίσεων Trickplay';
+
+  @override
+  String get adminEnableHardwareAcceleration =>
+      'Ενεργοποίηση επιτάχυνσης υλικού';
+
+  @override
+  String get adminEnableKeyFrameExtraction =>
+      'Ενεργοποίηση εξαγωγής μόνο πλαισίου κλειδιού';
+
+  @override
+  String get adminKeyFrameSubtitle => 'Ταχύτερη αλλά χαμηλότερη ακρίβεια';
+
+  @override
+  String get adminScanBehavior => 'Συμπεριφορά σάρωσης';
+
+  @override
+  String get adminProcessPriority => 'Προτεραιότητα διαδικασίας';
+
+  @override
+  String get adminImageSettings => 'Ρυθμίσεις εικόνας';
+
+  @override
+  String get adminIntervalMs => 'Διάστημα (ms)';
+
+  @override
+  String get adminCaptureFrameSubtitle => 'Πόσο συχνά γίνεται λήψη καρέ';
+
+  @override
+  String get adminWidthResolutions => 'Αναλύσεις πλάτους';
+
+  @override
+  String get adminTileWidth => 'Πλάτος πλακιδίων';
+
+  @override
+  String get adminTileHeight => 'Ύψος πλακιδίων';
+
+  @override
+  String get adminQualitySubtitle =>
+      'Χαμηλότερες τιμές = καλύτερη ποιότητα, μεγαλύτερα αρχεία';
+
+  @override
+  String get adminProcessThreads => 'Νήματα επεξεργασίας';
+
+  @override
+  String get adminResumeSaved => 'Οι ρυθμίσεις συνέχισης αποθηκεύτηκαν';
+
+  @override
+  String get adminResumeLoadFailed =>
+      'Η φόρτωση των ρυθμίσεων συνέχισης απέτυχε';
+
+  @override
+  String get adminResumeDescription =>
+      'Διαμορφώστε πότε το περιεχόμενο θα πρέπει να επισημαίνεται ως μερική αναπαραγωγή ή πλήρη αναπαραγωγή.';
+
+  @override
+  String get adminMinResumePercentage => 'Ελάχιστο ποσοστό βιογραφικού';
+
+  @override
+  String get adminMinResumeSubtitle =>
+      'Για να αποθηκευτεί η πρόοδος, το περιεχόμενο πρέπει να αναπαραχθεί πέρα από αυτό το ποσοστό';
+
+  @override
+  String get adminMaxResumePercentage => 'Μέγιστο ποσοστό βιογραφικού';
+
+  @override
+  String get adminMaxResumeSubtitle =>
+      'Μετά από αυτό το ποσοστό, το περιεχόμενο θεωρείται ότι έχει παιχτεί πλήρως';
+
+  @override
+  String get adminMinResumeDuration =>
+      'Ελάχιστη διάρκεια βιογραφικού (δευτερόλεπτα)';
+
+  @override
+  String get adminMinResumeDurationSubtitle =>
+      'Αντικείμενα μικρότερα από αυτό δεν μπορούν να συνεχιστούν';
+
+  @override
+  String get adminMinAudiobookResume =>
+      'Ελάχιστο ποσοστό βιογραφικού ήχου βιβλίου';
+
+  @override
+  String get adminMaxAudiobookResume =>
+      'Μέγιστο ποσοστό βιογραφικού ήχου βιβλίου';
+
+  @override
+  String get adminNetworkingSaved =>
+      'Οι ρυθμίσεις δικτύου αποθηκεύτηκαν. Ενδέχεται να απαιτείται επανεκκίνηση διακομιστή.';
+
+  @override
+  String get adminNetworkingLoadFailed => 'Αποτυχία φόρτωσης ρυθμίσεων δικτύου';
+
+  @override
+  String get adminNetworkingWarning =>
+      'Οι αλλαγές στις ρυθμίσεις δικτύου ενδέχεται να απαιτούν επανεκκίνηση διακομιστή.';
+
+  @override
+  String get adminEnableRemoteAccess => 'Ενεργοποίηση απομακρυσμένης πρόσβασης';
+
+  @override
+  String get ports => 'λιμάνια';
+
+  @override
+  String get adminHttpPort => 'Θύρα HTTP';
+
+  @override
+  String get adminHttpsPort => 'Θύρα HTTPS';
+
+  @override
+  String get adminPublicHttpsPort => 'Δημόσια θύρα HTTPS';
+
+  @override
+  String get adminBaseUrl => 'Βασική διεύθυνση URL';
+
+  @override
+  String get adminBaseUrlHint => 'π.χ. /jellyfin';
+
+  @override
+  String get https => 'HTTPS';
+
+  @override
+  String get adminEnableHttps => 'Ενεργοποίηση HTTPS';
+
+  @override
+  String get adminLocalNetwork => 'Τοπικό δίκτυο';
+
+  @override
+  String get adminLocalNetworkAddresses => 'Διευθύνσεις τοπικού δικτύου';
+
+  @override
+  String get adminKnownProxies => 'Γνωστοί πληρεξούσιοι';
+
+  @override
+  String get adminRemoteIpFilter => 'Φίλτρο απομακρυσμένου IP';
+
+  @override
+  String get adminRemoteIpFilterEntries => 'Απομακρυσμένο φίλτρο IP';
+
+  @override
+  String get adminCertificatePath => 'Διαδρομή πιστοποιητικού';
+
+  @override
+  String get whitelist => 'Λευκή λίστα';
+
+  @override
+  String get blacklist => 'Προγράφω';
+
+  @override
+  String get notSet => 'Δεν έχει οριστεί';
+
+  @override
+  String get adminMetadataSaved => 'Τα μεταδεδομένα αποθηκεύτηκαν';
+
+  @override
+  String adminMetadataLoadFailed(String error) {
+    return 'Αποτυχία φόρτωσης μεταδεδομένων: $error';
+  }
+
+  @override
+  String adminMetadataSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης μεταδεδομένων: $error';
+  }
+
+  @override
+  String get adminRefreshMetadata => 'Ανανέωση μεταδεδομένων';
+
+  @override
+  String get recursive => 'Αναδρομικό';
+
+  @override
+  String get adminReplaceAllMetadata => 'Αντικαταστήστε όλα τα μεταδεδομένα';
+
+  @override
+  String get adminReplaceAllImages => 'Αντικατάσταση όλων των εικόνων';
+
+  @override
+  String get adminMetadataRefreshRequested => 'Ζητήθηκε ανανέωση μεταδεδομένων';
+
+  @override
+  String adminMetadataRefreshFailed(String error) {
+    return 'Αποτυχία ανανέωσης μεταδεδομένων: $error';
+  }
+
+  @override
+  String get adminNoRemoteMatches =>
+      'Δεν βρέθηκαν απομακρυσμένες αντιστοιχίσεις';
+
+  @override
+  String get adminRemoteResults => 'Απομακρυσμένα αποτελέσματα';
+
+  @override
+  String get adminRemoteMetadataApplied =>
+      'Εφαρμόστηκαν απομακρυσμένα μεταδεδομένα';
+
+  @override
+  String adminRemoteSearchFailed(String error) {
+    return 'Η απομακρυσμένη αναζήτηση απέτυχε: $error';
+  }
+
+  @override
+  String get adminUpdateContentType => 'Ενημέρωση τύπου περιεχομένου';
+
+  @override
+  String get adminContentType => 'Τύπος περιεχομένου';
+
+  @override
+  String get adminContentTypeUpdated => 'Ο τύπος περιεχομένου ενημερώθηκε';
+
+  @override
+  String adminContentTypeUpdateFailed(String error) {
+    return 'Αποτυχία ενημέρωσης τύπου περιεχομένου: $error';
+  }
+
+  @override
+  String get adminMetadataEditorLoadFailed =>
+      'Η φόρτωση του προγράμματος επεξεργασίας μεταδεδομένων απέτυχε';
+
+  @override
+  String get adminNoPeopleEntries => 'Δεν υπάρχουν καταχωρήσεις ατόμων';
+
+  @override
+  String get adminNoExternalIds =>
+      'Δεν υπάρχουν διαθέσιμα εξωτερικά αναγνωριστικά';
+
+  @override
+  String adminImageUpdated(String imageType) {
+    return 'Η εικόνα $imageType ενημερώθηκε';
+  }
+
+  @override
+  String adminImageDownloadFailed(String error) {
+    return 'Η λήψη της εικόνας απέτυχε: $error';
+  }
+
+  @override
+  String get adminUnsupportedImageFormat => 'Μη υποστηριζόμενη μορφή εικόνας';
+
+  @override
+  String get adminImageReadFailed =>
+      'Αποτυχία ανάγνωσης της επιλεγμένης εικόνας';
+
+  @override
+  String adminImageUploaded(String imageType) {
+    return 'Η εικόνα $imageType ανέβηκε';
+  }
+
+  @override
+  String adminImageUploadFailed(String error) {
+    return 'Αποτυχία μεταφόρτωσης εικόνας: $error';
+  }
+
+  @override
+  String adminDeleteImage(String imageType) {
+    return 'Διαγραφή εικόνας $imageType';
+  }
+
+  @override
+  String adminImageDeleted(String imageType) {
+    return 'Η εικόνα $imageType διαγράφηκε';
+  }
+
+  @override
+  String adminImageDeleteFailed(String error) {
+    return 'Αποτυχία διαγραφής εικόνας: $error';
+  }
+
+  @override
+  String get adminAllProviders => 'Όλοι οι πάροχοι';
+
+  @override
+  String get adminNoRemoteImages => 'Δεν βρέθηκαν απομακρυσμένες εικόνες';
+
+  @override
+  String adminTunerDiscoveryFailed(String error) {
+    return 'Η ανακάλυψη δέκτη απέτυχε: $error';
+  }
+
+  @override
+  String get adminAddTuner => 'Προσθήκη δέκτη';
+
+  @override
+  String get adminEditTuner => 'Επεξεργασία δέκτη';
+
+  @override
+  String get adminTunerTypeM3u => 'Δέκτης M3U';
+
+  @override
+  String get adminTunerTypeHdHomerun => 'HDHomeRun';
+
+  @override
+  String get adminTunerFileOrUrl => 'Αρχείο ή URL';
+
+  @override
+  String get adminTunerIpAddress => 'Διεύθυνση IP του δέκτη';
+
+  @override
+  String get adminTunerFriendlyName => 'Εμφανιζόμενο όνομα';
+
+  @override
+  String get adminTunerUserAgent => 'Πράκτορας χρήστη';
+
+  @override
+  String get adminTunerCount => 'Όριο ταυτόχρονων συνδέσεων';
+
+  @override
+  String get adminTunerCountHelp =>
+      'Ο μέγιστος αριθμός ροών που επιτρέπει ταυτόχρονα ο δέκτης. Ορίστε 0 για απεριόριστες.';
+
+  @override
+  String get adminTunerFallbackBitrate => 'Εφεδρικός μέγιστος ρυθμός bit ροής';
+
+  @override
+  String get adminTunerImportFavoritesOnly =>
+      'Εισαγωγή μόνο των αγαπημένων καναλιών';
+
+  @override
+  String get adminTunerAllowHwTranscoding =>
+      'Να επιτρέπεται η διακωδικοποίηση με υλικό';
+
+  @override
+  String get adminTunerAllowFmp4 =>
+      'Να επιτρέπεται το κοντέινερ διακωδικοποίησης fMP4';
+
+  @override
+  String get adminTunerAllowStreamSharing =>
+      'Να επιτρέπεται η κοινή χρήση ροής';
+
+  @override
+  String get adminTunerEnableStreamLooping => 'Ενεργοποίηση επανάληψης ροής';
+
+  @override
+  String get adminTunerIgnoreDts => 'Παράβλεψη DTS';
+
+  @override
+  String get adminTunerReadAtNativeFramerate =>
+      'Ανάγνωση της εισόδου στον εγγενή ρυθμό καρέ';
+
+  @override
+  String get adminEditProvider => 'Επεξεργασία παρόχου';
+
+  @override
+  String get adminProviderXmltv => 'XMLTV';
+
+  @override
+  String get adminProviderSchedulesDirect => 'Schedules Direct';
+
+  @override
+  String get adminXmltvPath => 'Αρχείο ή URL';
+
+  @override
+  String get adminXmltvMoviePrefix => 'Πρόθεμα ταινιών';
+
+  @override
+  String get adminXmltvMovieCategories => 'Κατηγορίες ταινιών';
+
+  @override
+  String get adminXmltvCategoriesHelp =>
+      'Διαχωρίστε τις κατηγορίες με κάθετη γραμμή.';
+
+  @override
+  String get adminXmltvKidsCategories => 'Κατηγορίες παιδικών';
+
+  @override
+  String get adminXmltvNewsCategories => 'Κατηγορίες ειδήσεων';
+
+  @override
+  String get adminXmltvSportsCategories => 'Κατηγορίες αθλητικών';
+
+  @override
+  String get adminSdUsername => 'Όνομα χρήστη';
+
+  @override
+  String get adminSdPassword => 'Κωδικός πρόσβασης';
+
+  @override
+  String get adminSdCountry => 'Χώρα';
+
+  @override
+  String get adminSdCountrySelect => 'Επιλέξτε χώρα';
+
+  @override
+  String get adminSdPostalCode => 'Ταχυδρομικός κώδικας';
+
+  @override
+  String get adminSdGetListings => 'Λήψη προγράμματος';
+
+  @override
+  String get adminSdListings => 'Πρόγραμμα';
+
+  @override
+  String get adminEnableAllTuners => 'Ενεργοποίηση όλων των δεκτών';
+
+  @override
+  String get adminTunerType => 'Τύπος δέκτη';
+
+  @override
+  String get adminTunerAdded => 'Προστέθηκε ο δέκτης';
+
+  @override
+  String adminTunerAddFailed(String error) {
+    return 'Αποτυχία προσθήκης δέκτη: $error';
+  }
+
+  @override
+  String get adminAddGuideProvider => 'Προσθήκη παρόχου οδηγού';
+
+  @override
+  String get adminProviderType => 'Τύπος παρόχου';
+
+  @override
+  String get adminProviderAdded => 'Προστέθηκε πάροχος';
+
+  @override
+  String adminProviderAddFailed(String error) {
+    return 'Αποτυχία προσθήκης παρόχου: $error';
+  }
+
+  @override
+  String adminTunerRemoveFailed(String error) {
+    return 'Αποτυχία κατάργησης του δέκτη: $error';
+  }
+
+  @override
+  String get adminTunerResetRequested => 'Ζητήθηκε επαναφορά δέκτη';
+
+  @override
+  String adminTunerResetFailed(String error) {
+    return 'Η επαναφορά του δέκτη απέτυχε: $error';
+  }
+
+  @override
+  String get adminTunerResetNotSupported =>
+      'Αυτός ο τύπος δέκτη δεν υποστηρίζει επαναφορά.';
+
+  @override
+  String adminProviderRemoveFailed(String error) {
+    return 'Αποτυχία κατάργησης παρόχου: $error';
+  }
+
+  @override
+  String get adminRecordingSettings => 'Ρυθμίσεις εγγραφής';
+
+  @override
+  String get adminPrePadding => 'Προκατασκευή (λεπτά)';
+
+  @override
+  String get adminPostPadding => 'Μετά την πλήρωση (λεπτά)';
+
+  @override
+  String get adminRecordingPath => 'Διαδρομή εγγραφής';
+
+  @override
+  String get adminSeriesRecordingPath => 'Διαδρομή εγγραφής σειράς';
+
+  @override
+  String get adminMovieRecordingPath => 'Διαδρομή εγγραφής ταινιών';
+
+  @override
+  String get adminGuideDays => 'Ημέρες δεδομένων οδηγού';
+
+  @override
+  String get adminGuideDaysAuto => 'Αυτόματο';
+
+  @override
+  String adminGuideDaysValue(int days) {
+    return '$days ημέρες';
+  }
+
+  @override
+  String get adminRecordingPostProcessor =>
+      'Διαδρομή εφαρμογής μετεπεξεργασίας';
+
+  @override
+  String get adminRecordingPostProcessorArgs => 'Ορίσματα μετεπεξεργαστή';
+
+  @override
+  String get adminSaveRecordingNfo =>
+      'Αποθήκευση μεταδεδομένων NFO της εγγραφής';
+
+  @override
+  String get adminSaveRecordingImages => 'Αποθήκευση εικόνων της εγγραφής';
+
+  @override
+  String get adminLiveTvSectionTiming => 'Χρονισμός';
+
+  @override
+  String get adminLiveTvSectionPaths => 'Διαδρομές εγγραφών';
+
+  @override
+  String get adminLiveTvSectionPostProcessing => 'Μετεπεξεργασία';
+
+  @override
+  String adminGuideDaysDisplay(String value) {
+    return 'Δεδομένα οδηγού: $value';
+  }
+
+  @override
+  String get adminRecordingSettingsSaved =>
+      'Οι ρυθμίσεις εγγραφής αποθηκεύτηκαν';
+
+  @override
+  String adminSettingsSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης ρυθμίσεων: $error';
+  }
+
+  @override
+  String get adminSetChannelMappings => 'Ορίστε τις αντιστοιχίσεις καναλιών';
+
+  @override
+  String get adminMappingJson => 'Χαρτογράφηση JSON';
+
+  @override
+  String get adminMappingJsonHint =>
+      'Παράδειγμα: αντιστοιχίσεις ωφέλιμου φορτίου JSON';
+
+  @override
+  String get adminChannelMappingsUpdated =>
+      'Οι αντιστοιχίσεις καναλιών ενημερώθηκαν';
+
+  @override
+  String adminMappingsUpdateFailed(String error) {
+    return 'Αποτυχία ενημέρωσης αντιστοιχίσεων: $error';
+  }
+
+  @override
+  String get adminLiveTvLoadFailed =>
+      'Η φόρτωση της διαχείρισης ζωντανής τηλεόρασης απέτυχε';
+
+  @override
+  String get adminTunerDevices => 'Συσκευές δέκτη';
+
+  @override
+  String get adminNoTunerHosts =>
+      'Δεν έχουν διαμορφωθεί κεντρικοί υπολογιστές δέκτη';
+
+  @override
+  String get adminGuideProviders => 'Πάροχοι οδηγών';
+
+  @override
+  String get adminRefreshGuideData => 'Ανανέωση δεδομένων οδηγού';
+
+  @override
+  String get adminGuideRefreshStarted =>
+      'Η ανανέωση των δεδομένων οδηγού ξεκίνησε';
+
+  @override
+  String get adminGuideRefreshUnavailable =>
+      'Η εργασία ανανέωσης του οδηγού δεν είναι διαθέσιμη σε αυτόν τον διακομιστή.';
+
+  @override
+  String get adminAddProvider => 'Προσθήκη παρόχου';
+
+  @override
+  String get adminNoListingProviders =>
+      'Δεν έχουν διαμορφωθεί πάροχοι καταχώρισης';
+
+  @override
+  String adminRecordingPathDisplay(String path) {
+    return 'Διαδρομή εγγραφής: $path';
+  }
+
+  @override
+  String adminSeriesPathDisplay(String path) {
+    return 'Διαδρομή σειράς: $path';
+  }
+
+  @override
+  String adminPrePaddingDisplay(int minutes) {
+    return 'Προκατασκευή: $minutes ελάχ';
+  }
+
+  @override
+  String adminPostPaddingDisplay(int minutes) {
+    return 'Post-padding: $minutes ελάχ';
+  }
+
+  @override
+  String get adminTunerDiscovery => 'Ανακάλυψη δέκτη';
+
+  @override
+  String get adminChannelMappings => 'Αντιστοιχίσεις καναλιών';
+
+  @override
+  String get adminNoDiscoveredTuners => 'Δεν έχουν ανακαλυφθεί ακόμη δέκτες';
+
+  @override
+  String get adminSettingsSaved => 'Οι ρυθμίσεις αποθηκεύτηκαν';
+
+  @override
+  String get adminBackupsNotAvailable =>
+      'Τα αντίγραφα ασφαλείας δεν είναι διαθέσιμα σε αυτήν την έκδοση διακομιστή.';
+
+  @override
+  String get adminRestoreWarning1 =>
+      'Η επαναφορά θα αντικαταστήσει ΟΛΑ τα τρέχοντα δεδομένα διακομιστή με τα εφεδρικά δεδομένα.';
+
+  @override
+  String get adminRestoreWarning2 =>
+      'Οι τρέχουσες ρυθμίσεις διακομιστή, οι χρήστες και τα δεδομένα της βιβλιοθήκης θα αντικατασταθούν.';
+
+  @override
+  String get adminRestoreWarning3 =>
+      'Ο διακομιστής θα επανεκκινήσει μετά την επαναφορά.';
+
+  @override
+  String adminRestoreConfirmMessage(String name) {
+    return 'Επαναφορά αντιγράφου ασφαλείας $name τώρα;';
+  }
+
+  @override
+  String get adminRestoreRequested =>
+      'Ζητήθηκε επαναφορά. Η επανεκκίνηση του διακομιστή ενδέχεται να αποσυνδέσει αυτήν την περίοδο λειτουργίας.';
+
+  @override
+  String get adminBackupsTitle => 'Αντίγραφα ασφαλείας';
+
+  @override
+  String get adminUnknownDate => 'Άγνωστη ημερομηνία';
+
+  @override
+  String get adminUnnamedBackup => 'Ανώνυμη δημιουργία αντιγράφων ασφαλείας';
+
+  @override
+  String get adminLiveTvNotAvailable =>
+      'Η διαχείριση ζωντανής τηλεόρασης δεν είναι διαθέσιμη σε αυτήν την έκδοση διακομιστή.';
+
+  @override
+  String get adminLiveTvTitle => 'Διαχείριση ζωντανής τηλεόρασης';
+
+  @override
+  String get adminApply => 'Εφαρμογή';
+
+  @override
+  String get adminNotSet => 'Δεν έχει οριστεί';
+
+  @override
+  String get adminReset => 'Επαναφορά';
+
+  @override
+  String get adminLogsTitle => 'Αρχεία καταγραφής διακομιστή';
+
+  @override
+  String get adminLogsNewestFirst => 'Πρώτα τα νεότερα';
+
+  @override
+  String get adminLogsOldestFirst => 'Πρώτος παλαιότερος';
+
+  @override
+  String get adminLogsJustNow => 'Μόλις τώρα';
+
+  @override
+  String adminLogsMinutesAgo(int minutes) {
+    return '${minutes}m πριν';
+  }
+
+  @override
+  String adminLogsHoursAgo(int hours) {
+    return '${hours}h πριν';
+  }
+
+  @override
+  String adminLogsDaysAgo(int days) {
+    return '${days}d πριν';
+  }
+
+  @override
+  String adminLogViewerLoadFailed(String fileName) {
+    return 'Αποτυχία φόρτωσης $fileName';
+  }
+
+  @override
+  String adminLogViewerMatches(int count) {
+    return '$count ταιριάζει';
+  }
+
+  @override
+  String get adminLogViewerNoMatches => 'Δεν υπάρχουν αντίστοιχες γραμμές';
+
+  @override
+  String get adminMetadataEditorTitle => 'Επεξεργαστής Μεταδεδομένων';
+
+  @override
+  String get adminMetadataIdentify => 'Αναγνώριση';
+
+  @override
+  String get adminMetadataType => 'Τύπος';
+
+  @override
+  String get adminMetadataDetails => 'Καθέκαστα';
+
+  @override
+  String get adminMetadataExternalIds => 'Εξωτερικές ταυτότητες';
+
+  @override
+  String get adminMetadataImages => 'εικόνες';
+
+  @override
+  String get adminMetadataFieldTitle => 'Τίτλος';
+
+  @override
+  String get adminMetadataFieldSortTitle => 'Ταξινόμηση τίτλου';
+
+  @override
+  String get adminMetadataFieldOriginalTitle => 'Πρωτότυπος τίτλος';
+
+  @override
+  String get adminMetadataFieldPremiereDate =>
+      'Ημερομηνία πρεμιέρας (ΕΕΕΕ-ΜΜ-ΗΗ)';
+
+  @override
+  String get adminMetadataFieldEndDate => 'Ημερομηνία λήξης (ΕΕΕΕ-ΜΜ-ΗΗ)';
+
+  @override
+  String get adminMetadataFieldProductionYear => 'Έτος παραγωγής';
+
+  @override
+  String get adminMetadataFieldOfficialRating => 'Επίσημη βαθμολογία';
+
+  @override
+  String get adminMetadataFieldCommunityRating => 'Βαθμολογία κοινότητας';
+
+  @override
+  String get adminMetadataFieldCriticRating => 'Αξιολόγηση της κριτικής';
+
+  @override
+  String get adminMetadataFieldTagline => 'Περιγραφή';
+
+  @override
+  String get adminMetadataFieldOverview => 'Επισκόπηση';
+
+  @override
+  String get adminMetadataGenres => 'Είδη';
+
+  @override
+  String get adminMetadataTags => 'Ετικέτες';
+
+  @override
+  String get adminMetadataStudios => 'Στούντιο';
+
+  @override
+  String get adminMetadataPeople => 'Ανθρωποι';
+
+  @override
+  String get adminMetadataAddGenre => 'Προσθήκη είδους';
+
+  @override
+  String get adminMetadataAddTag => 'Προσθήκη ετικέτας';
+
+  @override
+  String get adminMetadataAddStudio => 'Προσθήκη στούντιο';
+
+  @override
+  String get adminMetadataAddPerson => 'Προσθήκη ατόμου';
+
+  @override
+  String get adminMetadataEditPerson => 'Επεξεργασία προσώπου';
+
+  @override
+  String get adminMetadataRole => 'Ρόλος';
+
+  @override
+  String get adminMetadataImagePrimary => 'Πρωταρχικός';
+
+  @override
+  String get adminMetadataImageBackdrop => 'σκηνικό';
+
+  @override
+  String get adminMetadataImageLogo => 'Λογότυπο';
+
+  @override
+  String get adminMetadataImageBanner => 'Σημαία';
+
+  @override
+  String get adminMetadataImageThumb => 'Αντίχειρας';
+
+  @override
+  String get adminMetadataRecursive => 'Αναδρομικό';
+
+  @override
+  String get adminMetadataProvider => 'Προμηθευτής';
+
+  @override
+  String adminMetadataImageUpdated(String imageType) {
+    return 'Η εικόνα $imageType ενημερώθηκε';
+  }
+
+  @override
+  String adminMetadataImageUploaded(String imageType) {
+    return 'Η εικόνα $imageType ανέβηκε';
+  }
+
+  @override
+  String adminMetadataImageDeleted(String imageType) {
+    return 'Η εικόνα $imageType διαγράφηκε';
+  }
+
+  @override
+  String adminMetadataImageDownloadFailed(String error) {
+    return 'Η λήψη της εικόνας απέτυχε: $error';
+  }
+
+  @override
+  String get adminMetadataImageReadFailed =>
+      'Αποτυχία ανάγνωσης της επιλεγμένης εικόνας';
+
+  @override
+  String adminMetadataImageUploadFailed(String error) {
+    return 'Αποτυχία μεταφόρτωσης εικόνας: $error';
+  }
+
+  @override
+  String adminMetadataDeleteImageTitle(String imageType) {
+    return 'Διαγραφή εικόνας $imageType';
+  }
+
+  @override
+  String get adminMetadataDeleteImageContent =>
+      'Αυτό αφαιρεί την τρέχουσα εικόνα από το στοιχείο.';
+
+  @override
+  String adminMetadataImageDeleteFailed(String error) {
+    return 'Αποτυχία διαγραφής εικόνας: $error';
+  }
+
+  @override
+  String adminMetadataChooseImage(String imageType) {
+    return 'Επιλέξτε την εικόνα $imageType';
+  }
+
+  @override
+  String get adminMetadataUpload => 'Μεταφόρτωση';
+
+  @override
+  String get adminMetadataUpdate => 'Εκσυγχρονίζω';
+
+  @override
+  String get adminMetadataRemoteImage => 'Απομακρυσμένη εικόνα';
+
+  @override
+  String get adminPluginsInstalled => 'Εγκατεστημένο';
+
+  @override
+  String get adminPluginsCatalog => 'Κατάλογος';
+
+  @override
+  String get adminPluginsActive => 'Ενεργός';
+
+  @override
+  String get adminPluginsRestart => 'Επανεκκίνηση';
+
+  @override
+  String get adminPluginsNoSearchResults =>
+      'Δεν υπάρχουν πρόσθετα που να αντιστοιχούν στην αναζήτησή σας';
+
+  @override
+  String get adminPluginsNoneInstalled => 'Δεν έχουν εγκατασταθεί πρόσθετα';
+
+  @override
+  String adminPluginsUpdateAvailable(String version) {
+    return 'Διαθέσιμη ενημέρωση: v$version';
+  }
+
+  @override
+  String get adminPluginsUpdateAvailableGeneric => 'Διαθέσιμη ενημέρωση';
+
+  @override
+  String get adminPluginsPendingRemoval =>
+      'Εκκρεμεί αφαίρεση μετά την επανεκκίνηση';
+
+  @override
+  String get adminPluginsChangesPending =>
+      'Αλλαγές σε εκκρεμότητα επανεκκίνησης';
+
+  @override
+  String get adminPluginsEnable => 'Καθιστώ ικανό';
+
+  @override
+  String get adminPluginsDisable => 'Καθιστώ ανίκανο';
+
+  @override
+  String get adminPluginsInstallUpdate => 'Εγκαταστήστε την ενημέρωση';
+
+  @override
+  String adminPluginsInstallUpdateVersioned(String version) {
+    return 'Εγκατάσταση ενημέρωσης (v$version)';
+  }
+
+  @override
+  String get adminPluginsCatalogNoSearchResults =>
+      'Δεν υπάρχουν πακέτα που να αντιστοιχούν στην αναζήτησή σας';
+
+  @override
+  String get adminPluginsCatalogEmpty => 'Δεν υπάρχουν διαθέσιμα πακέτα';
+
+  @override
+  String adminPluginsInstalling(String name) {
+    return 'Το \"$name\" εγκαθίσταται...';
+  }
+
+  @override
+  String get adminPluginDetailExperimental => 'Πειραματική Ένταξη';
+
+  @override
+  String get adminPluginDetailExperimentalContent =>
+      'Η ενσωμάτωση ρυθμίσεων προσθηκών είναι ακόμα πειραματική. Ορισμένα πεδία ή διατάξεις ενδέχεται να μην αποδίδονται ακόμα σωστά.';
+
+  @override
+  String get adminPluginDetailToggle404 =>
+      'Αποτυχία εναλλαγής προσθήκης. Ο διακομιστής δεν μπόρεσε να βρει αυτήν την έκδοση προσθήκης. Δοκιμάστε να ανανεώσετε προσθήκες και μετά δοκιμάστε ξανά.';
+
+  @override
+  String get adminPluginDetailToggleDioError =>
+      'Αποτυχία εναλλαγής προσθήκης. Ελέγξτε τα αρχεία καταγραφής διακομιστή για λεπτομέρειες.';
+
+  @override
+  String adminPluginDetailSettingsTitle(String name) {
+    return '$name Ρυθμίσεις';
+  }
+
+  @override
+  String get adminPluginDetailDetails => 'Καθέκαστα';
+
+  @override
+  String get adminPluginDetailDeveloper => 'Προγραμματιστής';
+
+  @override
+  String get adminPluginDetailRepository => 'Αποθήκη';
+
+  @override
+  String get adminPluginDetailBundled => 'Πακέτο';
+
+  @override
+  String get adminPluginDetailEnablePlugin => 'Ενεργοποίηση προσθήκης';
+
+  @override
+  String get adminPluginDetailRestartRequired =>
+      'Απαιτείται επανεκκίνηση διακομιστή για να τεθούν σε ισχύ οι αλλαγές.';
+
+  @override
+  String get adminPluginDetailRemovalPending =>
+      'Αυτό το πρόσθετο θα αφαιρεθεί μετά την επανεκκίνηση του διακομιστή.';
+
+  @override
+  String get adminPluginDetailMalfunctioned =>
+      'Αυτή η προσθήκη έχει δυσλειτουργήσει και ενδέχεται να μην λειτουργεί σωστά.';
+
+  @override
+  String get adminPluginDetailNotSupported =>
+      'Αυτή η προσθήκη δεν υποστηρίζεται από την τρέχουσα έκδοση διακομιστή.';
+
+  @override
+  String get adminPluginDetailSuperseded =>
+      'Αυτή η προσθήκη έχει αντικατασταθεί από μια νεότερη έκδοση.';
+
+  @override
+  String adminReposLoadFailed(String error) {
+    return 'Απέτυχε η φόρτωση των αποθετηρίων: $error';
+  }
+
+  @override
+  String get adminReposRemoveTitle => 'Κατάργηση αποθετηρίου';
+
+  @override
+  String adminReposRemoveConfirm(String name) {
+    return 'Είστε βέβαιοι ότι θέλετε να καταργήσετε το \"$name\";';
+  }
+
+  @override
+  String get adminReposRemove => 'Αφαίρεση';
+
+  @override
+  String adminReposSaveFailed(String error) {
+    return 'Αποτυχία αποθήκευσης αποθετηρίων: $error';
+  }
+
+  @override
+  String get adminReposEmpty => 'Δεν έχουν διαμορφωθεί αποθετήρια';
+
+  @override
+  String get adminReposEmptySubtitle =>
+      'Προσθέστε ένα αποθετήριο για να περιηγηθείτε στις διαθέσιμες προσθήκες';
+
+  @override
+  String get adminReposUnnamed => '(ανώνυμος)';
+
+  @override
+  String get adminReposEditTitle => 'Επεξεργασία αποθετηρίου';
+
+  @override
+  String get adminReposAddTitle => 'Προσθήκη αποθετηρίου';
+
+  @override
+  String get adminReposUrl => 'URL αποθετηρίου';
+
+  @override
+  String get adminReposNameHint => 'π.χ. Jellyfin Σταθερό';
+
+  @override
+  String get adminPluginSettingsInvalidUrl => 'Μη έγκυρη διεύθυνση URL';
+
+  @override
+  String get adminGeneralSettingsTitle => 'Γενικές Ρυθμίσεις';
+
+  @override
+  String get adminGeneralMetadataLanguage => 'Προτιμώμενη γλώσσα μεταδεδομένων';
+
+  @override
+  String get adminGeneralMetadataLanguageHint => 'π.χ. en, de, fr';
+
+  @override
+  String get adminGeneralMetadataCountry => 'Προτιμώμενη χώρα μεταδεδομένων';
+
+  @override
+  String get adminGeneralMetadataCountryHint => 'π.χ. ΗΠΑ, ΓΕ, Γαλλία';
+
+  @override
+  String get adminGeneralLibraryScanConcurrency =>
+      'Συγχρονισμός σάρωσης βιβλιοθήκης';
+
+  @override
+  String get adminGeneralImageEncodingLimit =>
+      'Όριο κωδικοποίησης παράλληλης εικόνας';
+
+  @override
+  String get adminUnknownError => 'Άγνωστο σφάλμα';
+
+  @override
+  String get adminBrowse => 'Ξεφυλλίζω';
+
+  @override
+  String get adminCloseBrowser => 'Κλείστε το πρόγραμμα περιήγησης';
+
+  @override
+  String get adminNetworkingTitle => 'Δικτύωση';
+
+  @override
+  String get adminNetworkingRestartWarning =>
+      'Οι αλλαγές στις ρυθμίσεις δικτύου ενδέχεται να απαιτούν επανεκκίνηση διακομιστή.';
+
+  @override
+  String get adminNetworkingRemoteAccess =>
+      'Ενεργοποίηση απομακρυσμένης πρόσβασης';
+
+  @override
+  String get adminNetworkingPorts => 'λιμάνια';
+
+  @override
+  String get adminNetworkingHttpPort => 'Θύρα HTTP';
+
+  @override
+  String get adminNetworkingHttpsPort => 'Θύρα HTTPS';
+
+  @override
+  String get adminNetworkingEnableHttps => 'Ενεργοποίηση HTTPS';
+
+  @override
+  String get adminNetworkingLocalNetwork => 'Τοπικό δίκτυο';
+
+  @override
+  String get adminNetworkingLocalAddresses => 'Διευθύνσεις τοπικού δικτύου';
+
+  @override
+  String get adminNetworkingAddressHint => 'π.χ. 192.168.1.0/24';
+
+  @override
+  String get adminNetworkingKnownProxies => 'Γνωστοί πληρεξούσιοι';
+
+  @override
+  String get adminNetworkingProxyHint => 'π.χ. 10.0.0.1';
+
+  @override
+  String get adminNetworkingWhitelist => 'Λευκή λίστα';
+
+  @override
+  String get adminNetworkingBlacklist => 'Προγράφω';
+
+  @override
+  String get adminNetworkingAddEntry => 'Προσθήκη καταχώρισης';
+
+  @override
+  String get adminBrandingTitle => 'Επωνυμία';
+
+  @override
+  String get adminBrandingLoginDisclaimer => 'Αποποίηση ευθυνών σύνδεσης';
+
+  @override
+  String get adminBrandingLoginDisclaimerHint =>
+      'HTML εμφανίζεται κάτω από τη φόρμα σύνδεσης';
+
+  @override
+  String get adminBrandingCustomCss => 'Προσαρμοσμένο CSS';
+
+  @override
+  String get adminBrandingCustomCssHint =>
+      'Εφαρμόστηκε προσαρμοσμένο CSS στη διεπαφή ιστού';
+
+  @override
+  String get adminBrandingEnableSplash => 'Ενεργοποίηση εκκίνησης οθόνης';
+
+  @override
+  String get adminBrandingSplashUpload => 'Μεταφόρτωση εικόνας';
+
+  @override
+  String get adminBrandingSplashUploaded => 'Η οθόνη έναρξης ενημερώθηκε';
+
+  @override
+  String get adminBrandingSplashUploadFailed =>
+      'Η μεταφόρτωση της οθόνης έναρξης απέτυχε';
+
+  @override
+  String get adminBrandingSplashDeleted => 'Η οθόνη έναρξης καταργήθηκε';
+
+  @override
+  String get adminBrandingNoSplash => 'Καμία προσαρμοσμένη οθόνη έναρξης';
+
+  @override
+  String get adminPlaybackHwAccel => 'Επιτάχυνση υλικού';
+
+  @override
+  String get adminPlaybackHwAccelLabel => 'Επιτάχυνση υλικού';
+
+  @override
+  String get adminPlaybackEnableHwEncoding =>
+      'Ενεργοποίηση κωδικοποίησης υλικού';
+
+  @override
+  String get adminPlaybackEnableHwDecoding =>
+      'Ενεργοποίηση αποκωδικοποίησης υλικού για:';
+
+  @override
+  String get adminPlaybackQsvDevice => 'Συσκευή QSV';
+
+  @override
+  String get adminPlaybackEnhancedNvdec =>
+      'Ενεργοποίηση του βελτιωμένου αποκωδικοποιητή NVDEC';
+
+  @override
+  String get adminPlaybackPreferNativeDecoder =>
+      'Προτίμηση του εγγενούς αποκωδικοποιητή υλικού του συστήματος';
+
+  @override
+  String get adminPlaybackColorDepth =>
+      'Βάθος χρώματος αποκωδικοποίησης υλικού';
+
+  @override
+  String get adminPlaybackColorDepth10Hevc => 'Αποκωδικοποίηση HEVC 10-bit';
+
+  @override
+  String get adminPlaybackColorDepth10Vp9 => 'Αποκωδικοποίηση VP9 10-bit';
+
+  @override
+  String get adminPlaybackColorDepth10HevcRext =>
+      'Αποκωδικοποίηση HEVC RExt 8/10-bit';
+
+  @override
+  String get adminPlaybackColorDepth12HevcRext =>
+      'Αποκωδικοποίηση HEVC RExt 12-bit';
+
+  @override
+  String get adminPlaybackHwEncodingSection => 'Κωδικοποίηση με υλικό';
+
+  @override
+  String get adminPlaybackAllowHevcEncoding =>
+      'Να επιτρέπεται η κωδικοποίηση HEVC';
+
+  @override
+  String get adminPlaybackAllowAv1Encoding =>
+      'Να επιτρέπεται η κωδικοποίηση AV1';
+
+  @override
+  String get adminPlaybackIntelLowPowerH264 =>
+      'Ενεργοποίηση του κωδικοποιητή Intel H.264 χαμηλής κατανάλωσης';
+
+  @override
+  String get adminPlaybackIntelLowPowerHevc =>
+      'Ενεργοποίηση του κωδικοποιητή Intel HEVC χαμηλής κατανάλωσης';
+
+  @override
+  String get adminPlaybackToneMapping => 'Χαρτογράφηση τόνων';
+
+  @override
+  String get adminPlaybackEnableTonemapping =>
+      'Ενεργοποίηση χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackEnableVppTonemapping =>
+      'Ενεργοποίηση χαρτογράφησης τόνων VPP';
+
+  @override
+  String get adminPlaybackEnableVtTonemapping =>
+      'Ενεργοποίηση χαρτογράφησης τόνων VideoToolbox';
+
+  @override
+  String get adminPlaybackTonemappingAlgorithm =>
+      'Αλγόριθμος χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackTonemappingMode => 'Λειτουργία χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackTonemappingRange => 'Εύρος χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackTonemappingDesat => 'Αποκορεσμός χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackTonemappingPeak => 'Κορυφή χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackTonemappingParam => 'Παράμετρος χαρτογράφησης τόνων';
+
+  @override
+  String get adminPlaybackVppTonemappingBrightness =>
+      'Φωτεινότητα χαρτογράφησης τόνων VPP';
+
+  @override
+  String get adminPlaybackVppTonemappingContrast =>
+      'Αντίθεση χαρτογράφησης τόνων VPP';
+
+  @override
+  String get adminPlaybackPresetsQuality => 'Προρυθμίσεις και ποιότητα';
+
+  @override
+  String get adminPlaybackEncoderPreset => 'Προρύθμιση κωδικοποιητή';
+
+  @override
+  String get adminPlaybackH264Crf => 'CRF κωδικοποίησης H.264';
+
+  @override
+  String get adminPlaybackH265Crf => 'CRF κωδικοποίησης H.265 (HEVC)';
+
+  @override
+  String get adminPlaybackDeinterlaceMethod => 'Μέθοδος αποδιαπλοκής';
+
+  @override
+  String get adminPlaybackDeinterlaceDoubleRate =>
+      'Διπλασιασμός του ρυθμού καρέ κατά την αποδιαπλοκή';
+
+  @override
+  String get adminPlaybackAudioSection => 'Ήχος';
+
+  @override
+  String get adminPlaybackEnableAudioVbr =>
+      'Ενεργοποίηση κωδικοποίησης ήχου VBR';
+
+  @override
+  String get adminPlaybackDownmixBoost => 'Ενίσχυση μείξης ήχου';
+
+  @override
+  String get adminPlaybackDownmixAlgorithm => 'Αλγόριθμος στερεοφωνικής μείξης';
+
+  @override
+  String get adminPlaybackMaxMuxingQueue => 'Μέγιστο μέγεθος ουράς πολυπλεξίας';
+
+  @override
+  String get adminPlaybackAutoOption => 'Αυτόματο';
+
+  @override
+  String get adminPlaybackEncoding => 'Κωδικοποίηση';
+
+  @override
+  String get adminPlaybackEncodingThreads => 'Κωδικοποίηση νημάτων';
+
+  @override
+  String get adminPlaybackFallbackFont =>
+      'Ενεργοποίηση εναλλακτικής γραμματοσειράς';
+
+  @override
+  String get adminPlaybackFallbackFontPath =>
+      'Εναλλακτική διαδρομή γραμματοσειράς';
+
+  @override
+  String get adminPlaybackStreaming => 'Ροή';
+
+  @override
+  String get adminResumeVideo => 'Βίντεο';
+
+  @override
+  String get adminResumeAudiobooks => 'Ηχητικά βιβλία';
+
+  @override
+  String get adminResumeMinAudiobookPct =>
+      'Ελάχιστο ποσοστό βιογραφικού ήχου βιβλίου';
+
+  @override
+  String get adminResumeMaxAudiobookPct =>
+      'Μέγιστο ποσοστό βιογραφικού ήχου βιβλίου';
+
+  @override
+  String get adminStreamingBitrateLimit =>
+      'Όριο ρυθμού bit απομακρυσμένου πελάτη (Mbps)';
+
+  @override
+  String get adminStreamingBitrateLimitHint =>
+      'Αφήστε κενό ή 0 για απεριόριστο';
+
+  @override
+  String get adminTrickplayHwAccel => 'Ενεργοποίηση επιτάχυνσης υλικού';
+
+  @override
+  String get adminTrickplayHwEncoding => 'Ενεργοποίηση κωδικοποίησης υλικού';
+
+  @override
+  String get adminTrickplayKeyFrameOnly =>
+      'Ενεργοποίηση εξαγωγής μόνο πλαισίου κλειδιού';
+
+  @override
+  String get adminTrickplayKeyFrameOnlySubtitle =>
+      'Ταχύτερη αλλά χαμηλότερη ακρίβεια';
+
+  @override
+  String get adminTrickplayNonBlocking => 'Μη Αποκλεισμός';
+
+  @override
+  String get adminTrickplayBlocking => 'Μπλοκάρισμα';
+
+  @override
+  String get adminTrickplayPriorityHigh => 'Ψηλά';
+
+  @override
+  String get adminTrickplayPriorityAboveNormal => 'Πάνω από το κανονικό';
+
+  @override
+  String get adminTrickplayPriorityNormal => 'Κανονικός';
+
+  @override
+  String get adminTrickplayPriorityBelowNormal => 'Κάτω από το κανονικό';
+
+  @override
+  String get adminTrickplayPriorityIdle => 'Αεργος';
+
+  @override
+  String get adminTrickplayImageSettings => 'Ρυθμίσεις εικόνας';
+
+  @override
+  String get adminTrickplayInterval => 'Διάστημα (ms)';
+
+  @override
+  String get adminTrickplayIntervalSubtitle => 'Πόσο συχνά γίνεται λήψη καρέ';
+
+  @override
+  String get adminTrickplayWidthResolutionsHint =>
+      'Πλάτη pixel διαχωρισμένα με κόμματα (π.χ. 320)';
+
+  @override
+  String get adminTrickplayQuality => 'Ποιότητα';
+
+  @override
+  String get adminTrickplayQScale => 'Κλίμακα ποιότητας';
+
+  @override
+  String get adminTrickplayQScaleSubtitle =>
+      'Χαμηλότερες τιμές = καλύτερη ποιότητα, μεγαλύτερα αρχεία';
+
+  @override
+  String get adminTrickplayJpegQuality => 'Ποιότητα JPEG';
+
+  @override
+  String get adminTrickplayProcessing => 'Επεξεργασία';
+
+  @override
+  String get adminTasksEmpty => 'Δεν βρέθηκαν προγραμματισμένες εργασίες';
+
+  @override
+  String get adminTasksNoFilterMatch =>
+      'Καμία εργασία δεν ταιριάζει με το τρέχον φίλτρο';
+
+  @override
+  String get adminTaskCancelling => 'Ακύρωση...';
+
+  @override
+  String get adminTaskRunning => 'Τρέξιμο...';
+
+  @override
+  String get adminTaskNeverRun => 'Μην τρέχετε ποτέ';
+
+  @override
+  String get adminTaskStop => 'Διακοπή';
+
+  @override
+  String get adminRunningTasks => 'Εργασίες σε εξέλιξη';
+
+  @override
+  String get adminTaskRun => 'Τρέξιμο';
+
+  @override
+  String get adminTaskDetailLastExecution => 'Τελευταία Εκτέλεση';
+
+  @override
+  String get adminTaskDetailStarted => 'Ξεκίνησε';
+
+  @override
+  String get adminTaskDetailEnded => 'Τελείωσε';
+
+  @override
+  String get adminTaskDetailDuration => 'Διάρκεια';
+
+  @override
+  String get adminTaskDetailErrorLabel => 'Σφάλμα:';
+
+  @override
+  String adminTaskTriggerDaily(String time) {
+    return 'Καθημερινά στο $time';
+  }
+
+  @override
+  String adminTaskTriggerWeekly(String day, String time) {
+    return 'Κάθε $day στο $time';
+  }
+
+  @override
+  String adminTaskTriggerInterval(String duration) {
+    return 'Κάθε $duration';
+  }
+
+  @override
+  String get adminTaskTriggerStartup => 'Κατά την εκκίνηση της εφαρμογής';
+
+  @override
+  String get adminTaskTriggerTypeDaily => 'Καθημερινά';
+
+  @override
+  String get adminTaskTriggerTypeWeekly => 'Εβδομαδιαίος';
+
+  @override
+  String get adminTaskTriggerTypeInterval => 'Σε ένα διάστημα';
+
+  @override
+  String get adminTaskTriggerIntervalLabel => 'Διάστημα';
+
+  @override
+  String get adminTaskTriggerEveryHour => 'Κάθε ώρα';
+
+  @override
+  String get adminTaskTriggerEvery6Hours => 'Κάθε 6 ώρες';
+
+  @override
+  String get adminTaskTriggerEvery12Hours => 'Κάθε 12 ώρες';
+
+  @override
+  String get adminTaskTriggerEvery24Hours => 'Κάθε 24 ώρες';
+
+  @override
+  String get adminTaskTriggerEvery2Days => 'Κάθε 2 μέρες';
+
+  @override
+  String adminTaskTriggerHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ώρες',
+      one: '1 ώρα',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminTaskTriggerTime => 'Φορά';
+
+  @override
+  String get adminTaskTriggerNoLimit => 'Κανένα όριο';
+
+  @override
+  String get adminActivityJustNow => 'Μόλις τώρα';
+
+  @override
+  String get adminActivityLastHour => 'Τελευταία ώρα';
+
+  @override
+  String get adminActivityToday => 'Σήμερα';
+
+  @override
+  String get adminActivityYesterday => 'Εχθές';
+
+  @override
+  String get adminActivityOlder => 'Πιο παλιά';
+
+  @override
+  String adminActivityDaysAgo(int days) {
+    return '${days}d πριν';
+  }
+
+  @override
+  String adminActivityHoursAgo(int hours) {
+    return '${hours}h πριν';
+  }
+
+  @override
+  String adminActivityMinutesAgo(int minutes) {
+    return '${minutes}m πριν';
+  }
+
+  @override
+  String get adminActivityNow => 'τώρα';
+
+  @override
+  String adminActivityMinutesShort(int minutes) {
+    return '$minutesλ';
+  }
+
+  @override
+  String adminActivityHoursShort(int hours) {
+    return '$hoursω';
+  }
+
+  @override
+  String adminActivityDaysShort(int days) {
+    return '$daysη';
+  }
+
+  @override
+  String adminActivityDateShort(int month, int day) {
+    return '$day/$month';
+  }
+
+  @override
+  String get adminTrickplayDescription =>
+      'Διαμορφώστε τη δημιουργία εικόνων trickplay για μικρογραφίες προεπισκόπησης αναζήτησης.';
+
+  @override
+  String get adminNetworkingPublicHttpsPort => 'Δημόσια θύρα HTTPS';
+
+  @override
+  String get adminNetworkingBaseUrl => 'Βασική διεύθυνση URL';
+
+  @override
+  String get adminNetworkingBaseUrlHint => 'π.χ. /jellyfin';
+
+  @override
+  String get adminNetworkingHttps => 'HTTPS';
+
+  @override
+  String get adminNetworkingPublicHttpPort => 'Δημόσια θύρα HTTP';
+
+  @override
+  String get adminNetworkingRequireHttps => 'Απαίτηση HTTPS';
+
+  @override
+  String get adminNetworkingRequireHttpsHint =>
+      'Ανακατεύθυνση όλων των απομακρυσμένων αιτημάτων σε HTTPS. Δεν έχει καμία επίδραση αν ο διακομιστής δεν διαθέτει έγκυρο πιστοποιητικό.';
+
+  @override
+  String get adminNetworkingCertPassword => 'Κωδικός πρόσβασης πιστοποιητικού';
+
+  @override
+  String get adminNetworkingIpSettings => 'Ρυθμίσεις IP';
+
+  @override
+  String get adminNetworkingEnableIpv4 => 'Ενεργοποίηση IPv4';
+
+  @override
+  String get adminNetworkingEnableIpv6 => 'Ενεργοποίηση IPv6';
+
+  @override
+  String get adminNetworkingAutoDiscovery =>
+      'Ενεργοποίηση αυτόματης αντιστοίχισης θυρών';
+
+  @override
+  String get adminNetworkingLocalSubnets => 'Δίκτυα LAN';
+
+  @override
+  String get adminNetworkingLocalSubnetsHint =>
+      'Λίστα διευθύνσεων IP ή υποδικτύων CIDR, χωρισμένων με κόμμα ή ανά γραμμή, που θεωρούνται μέρος του τοπικού δικτύου.';
+
+  @override
+  String get adminNetworkingPublishedUris => 'Δημοσιευμένα URI διακομιστή';
+
+  @override
+  String get adminNetworkingPublishedUriHint =>
+      'Αντιστοιχίστε ένα υποδίκτυο ή μια διεύθυνση σε δημοσιευμένο URL, π.χ. all=https://example.com';
+
+  @override
+  String get adminNetworkingCertPath => 'Διαδρομή πιστοποιητικού';
+
+  @override
+  String get adminNetworkingRemoteIpFilter => 'Φίλτρο απομακρυσμένου IP';
+
+  @override
+  String get adminNetworkingRemoteIpFilterLabel => 'Απομακρυσμένο φίλτρο IP';
+
+  @override
+  String get adminPlaybackVaapiDevice => 'Συσκευή VA-API';
+
+  @override
+  String get adminPlaybackAutomatic => '0 = αυτόματο';
+
+  @override
+  String get adminPlaybackTranscodeTempPath =>
+      'Διαδρομή θερμοκρασίας διακωδικοποίησης';
+
+  @override
+  String get adminPlaybackSegmentDeletion =>
+      'Να επιτρέπεται η διαγραφή τμήματος';
+
+  @override
+  String get adminPlaybackSegmentKeep => 'Διατήρηση τμήματος (δευτερόλεπτα)';
+
+  @override
+  String get adminPlaybackThrottleBuffering => 'Ρυθμιστικό γκάζι';
+
+  @override
+  String get adminPlaybackThrottleDelay =>
+      'Καθυστέρηση περιορισμού (δευτερόλεπτα)';
+
+  @override
+  String get adminPlaybackEnableSubtitleExtraction =>
+      'Να επιτρέπεται η εξαγωγή υπότιτλων κατά την αναπαραγωγή';
+
+  @override
+  String get adminResumeMinPct => 'Ελάχιστο ποσοστό βιογραφικού';
+
+  @override
+  String get adminResumeMinPctSubtitle =>
+      'Για να αποθηκευτεί η πρόοδος, το περιεχόμενο πρέπει να αναπαραχθεί πέρα από αυτό το ποσοστό';
+
+  @override
+  String get adminResumeMaxPct => 'Μέγιστο ποσοστό βιογραφικού';
+
+  @override
+  String get adminResumeMaxPctSubtitle =>
+      'Μετά από αυτό το ποσοστό, το περιεχόμενο θεωρείται ότι έχει παιχτεί πλήρως';
+
+  @override
+  String get adminResumeMinDuration =>
+      'Ελάχιστη διάρκεια βιογραφικού (δευτερόλεπτα)';
+
+  @override
+  String get adminResumeMinDurationSubtitle =>
+      'Αντικείμενα μικρότερα από αυτό δεν μπορούν να συνεχιστούν';
+
+  @override
+  String get adminTrickplayScanBehavior => 'Συμπεριφορά σάρωσης';
+
+  @override
+  String get adminTrickplayProcessPriority => 'Προτεραιότητα διαδικασίας';
+
+  @override
+  String get adminTrickplayTileWidth => 'Πλάτος πλακιδίων';
+
+  @override
+  String get adminTrickplayTileHeight => 'Ύψος πλακιδίων';
+
+  @override
+  String get adminTrickplayProcessThreads => 'Νήματα επεξεργασίας';
+
+  @override
+  String get adminTrickplayWidthResolutions => 'Αναλύσεις πλάτους';
+
+  @override
+  String get adminMetadataDefault => 'Αθέτηση';
+
+  @override
+  String get adminMetadataContentTypeUpdated =>
+      'Ο τύπος περιεχομένου ενημερώθηκε';
+
+  @override
+  String adminMetadataContentTypeFailed(String error) {
+    return 'Αποτυχία ενημέρωσης τύπου περιεχομένου: $error';
+  }
+
+  @override
+  String get adminGeneralSlowResponseThreshold =>
+      'Κατώφλι αργής απόκρισης (ms)';
+
+  @override
+  String get adminGeneralEnableSlowResponse =>
+      'Ενεργοποίηση προειδοποιήσεων αργής απόκρισης';
+
+  @override
+  String get adminGeneralQuickConnect => 'Ενεργοποίηση του Quick Connect';
+
+  @override
+  String get adminGeneralSectionServer => 'Διακομιστής';
+
+  @override
+  String get adminGeneralSectionMetadata => 'Μεταδεδομένα';
+
+  @override
+  String get adminGeneralSectionPaths => 'Διαδρομές';
+
+  @override
+  String get adminGeneralSectionPerformance => 'Επιδόσεις';
+
+  @override
+  String get adminGeneralCachePath => 'Διαδρομή προσωρινής μνήμης';
+
+  @override
+  String get adminGeneralMetadataPath => 'Διαδρομή μεταδεδομένων';
+
+  @override
+  String get adminGeneralServerName => 'Όνομα διακομιστή';
+
+  @override
+  String get adminGeneralDisplayLanguage => 'Προτιμώμενη γλώσσα εμφάνισης';
+
+  @override
+  String get adminSettingsLoadFailed => 'Αποτυχία φόρτωσης ρυθμίσεων';
+
+  @override
+  String get adminDiscover => 'Ανακαλύπτω';
+
+  @override
+  String adminChannelMappingsUpdateFailed(String error) {
+    return 'Αποτυχία ενημέρωσης αντιστοιχίσεων: $error';
+  }
+
+  @override
+  String adminTimeLimitDuration(String duration) {
+    return 'Χρονικό όριο: $duration';
+  }
+
+  @override
+  String get folders => 'Φάκελοι';
+
+  @override
+  String get libraries => 'Βιβλιοθήκες';
+
+  @override
+  String get syncPlay => 'SyncPlay';
+
+  @override
+  String get syncPlayDisabledTitle => 'Το SyncPlay απενεργοποιήθηκε';
+
+  @override
+  String get syncPlayDisabledMessage =>
+      'Ενεργοποιήστε το SyncPlay στις Ρυθμίσεις για να χρησιμοποιήσετε τη συγχρονισμένη αναπαραγωγή.';
+
+  @override
+  String get syncPlayServerUnsupportedTitle =>
+      'Ο διακομιστής δεν υποστηρίζεται';
+
+  @override
+  String get syncPlayServerUnsupportedMessage =>
+      'Το SyncPlay απαιτεί διακομιστή Jellyfin. Ο τρέχων διακομιστής δεν το υποστηρίζει.';
+
+  @override
+  String get syncPlayGroupFallbackName => 'SyncPlay Ομάδα';
+
+  @override
+  String get syncPlayGroupTooltip => 'SyncPlay ομάδα';
+
+  @override
+  String syncPlayParticipantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# συμμετέχοντες',
+      one: '# συμμετέχων',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get syncPlayIgnoreWait => 'Αγνοήστε την αναμονή';
+
+  @override
+  String get syncPlayIgnoreWaitSubtitle =>
+      'Μην κρατάτε ψηλά την ομάδα ενώ αυτή η συσκευή βρίσκεται σε προσωρινή μνήμη';
+
+  @override
+  String get syncPlayContinueLocallyNoWait =>
+      'Συνεχίστε τοπικά χωρίς να περιμένετε αργά μέλη';
+
+  @override
+  String get syncPlayRepeat => 'Επαναλαμβάνω';
+
+  @override
+  String get syncPlayRepeatOne => 'Ενας';
+
+  @override
+  String get syncPlayShuffleModeShuffled => 'Ανακατεμένα';
+
+  @override
+  String get syncPlayShuffleModeSorted => 'Ταξινομημένο';
+
+  @override
+  String get syncPlaySyncCurrentQueue =>
+      'Συγχρονισμός της τρέχουσας ουράς αναπαραγωγής';
+
+  @override
+  String get syncPlaySyncCurrentQueueSubtitle =>
+      'Αντικαταστήστε την ουρά ομάδας με αυτό που παίζει τοπικά';
+
+  @override
+  String get syncPlayLeaveGroup => 'Αποχώρηση από την ομάδα';
+
+  @override
+  String get syncPlayGroupQueue => 'Ομαδική ουρά';
+
+  @override
+  String syncPlayQueueItemFallback(int index) {
+    return 'Αντικείμενο $index';
+  }
+
+  @override
+  String get syncPlayPlayNow => 'Αναπαραγωγή τώρα';
+
+  @override
+  String get syncPlayCreateNewGroup => 'Δημιουργήστε μια νέα ομάδα';
+
+  @override
+  String get syncPlayGroupName => 'Όνομα ομάδας';
+
+  @override
+  String get syncPlayDefaultGroupName => 'Η ομάδα μου SyncPlay';
+
+  @override
+  String get syncPlayCreateGroup => 'Δημιουργία ομάδας';
+
+  @override
+  String get syncPlayAvailableGroups => 'Διαθέσιμες ομάδες';
+
+  @override
+  String get syncPlayNoGroupsAvailable => 'Δεν υπάρχουν διαθέσιμες ομάδες';
+
+  @override
+  String get syncPlayJoinGroupQuestion => 'Εγγραφείτε στην ομάδα SyncPlay;';
+
+  @override
+  String get syncPlayJoinGroupWarning =>
+      'Η συμμετοχή σε μια ομάδα SyncPlay μπορεί να αντικαταστήσει την τρέχουσα ουρά αναπαραγωγής. Συνεχίζω;';
+
+  @override
+  String get syncPlayJoin => 'Ενώνω';
+
+  @override
+  String get syncPlayStateIdle => 'Αεργος';
+
+  @override
+  String get syncPlayStateWaiting => 'Αναμονή';
+
+  @override
+  String get syncPlayStatePaused => 'Σε παύση';
+
+  @override
+  String get syncPlayStatePlaying => 'Αναπαράγεται';
+
+  @override
+  String syncPlayUserJoinedGroup(String userName) {
+    return 'Ο $userName έγινε μέλος της ομάδας SyncPlay';
+  }
+
+  @override
+  String syncPlayUserLeftGroup(String userName) {
+    return '$userName αριστερά από την ομάδα SyncPlay';
+  }
+
+  @override
+  String get syncPlayAccessDeniedTitle => 'Δεν επιτρέπεται η πρόσβαση SyncPlay';
+
+  @override
+  String get syncPlayAccessDeniedMessage =>
+      'Δεν έχετε πρόσβαση σε ένα ή περισσότερα στοιχεία σε αυτήν την ομάδα SyncPlay. Ζητήστε από τον κάτοχο της ομάδας να επαληθεύσει τα δικαιώματα βιβλιοθήκης ή να επιλέξει διαφορετική ουρά.';
+
+  @override
+  String syncPlaySyncingPlaybackToGroup(String groupName) {
+    return 'Συγχρονισμός αναπαραγωγής με $groupName';
+  }
+
+  @override
+  String get voiceSearchUnavailable =>
+      'Η φωνητική αναζήτηση δεν είναι διαθέσιμη.';
+
+  @override
+  String get dolbyVisionDirectPlayFailedTitle =>
+      'Dolby Vision Η άμεση αναπαραγωγή απέτυχε';
+
+  @override
+  String get dolbyVisionDirectPlayFailedMessage =>
+      'Η απευθείας αναπαραγωγή απέτυχε να ξεκινήσει για αυτήν τη ροή Dolby Vision. Δοκιμάστε ξανά τη χρήση διακωδικοποίησης διακομιστή;';
+
+  @override
+  String get retryWithTranscode => 'Δοκιμάστε ξανά με transcode';
+
+  @override
+  String get dolbyVisionNotSupportedTitle => 'Dolby Vision Δεν υποστηρίζεται';
+
+  @override
+  String get dolbyVisionNotSupportedMessage =>
+      'Αυτή η συσκευή δεν μπορεί να αποκωδικοποιήσει απευθείας το περιεχόμενο Dolby Vision. Χρησιμοποιήστε εναλλακτικό HDR10 ή ζητήστε διακωδικοποίηση διακομιστή.';
+
+  @override
+  String get rememberMyChoice => 'Θυμηθείτε την επιλογή μου';
+
+  @override
+  String get playHdr10Fallback => 'Αναπαραγωγή με εναλλακτική επιλογή HDR10';
+
+  @override
+  String get requestTranscode => 'Ζητήστε διακωδικοποίηση';
+
+  @override
+  String integrationRowsDiscoveredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Βρέθηκαν # σειρές',
+      one: 'Βρέθηκε # σειρά',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seeAll => 'Δείτε όλα';
+
+  @override
+  String get noItems => 'Δεν υπάρχουν στοιχεία';
+
+  @override
+  String get switchUser => 'Εναλλαγή χρήστη';
+
+  @override
+  String get remoteControl => 'Τηλεχειριστήριο';
+
+  @override
+  String get mediaBarLoading => 'Φόρτωση γραμμής πολυμέσων...';
+
+  @override
+  String get mediaBarError => 'Η φόρτωση της γραμμής πολυμέσων απέτυχε';
+
+  @override
+  String get offlineServerUnavailable =>
+      'Συνδέθηκε στο διαδίκτυο, αλλά ο τρέχων διακομιστής δεν είναι διαθέσιμος.';
+
+  @override
+  String get offlineNoInternet =>
+      'Είστε εκτός σύνδεσης. Διατίθεται μόνο περιεχόμενο λήψης.';
+
+  @override
+  String get offlineFileNotAvailable => 'Το αρχείο δεν είναι διαθέσιμο';
+
+  @override
+  String get offlineSwitchServer => 'Εναλλαγή διακομιστή';
+
+  @override
+  String get offlineSavedMedia => 'Αποθηκευμένα μέσα';
+
+  @override
+  String get offlineBannerTitle => 'Είστε εκτός σύνδεσης';
+
+  @override
+  String get offlineBannerSubtitle => 'Εμφανίζονται οι λήψεις σας';
+
+  @override
+  String get offlineBannerAction => 'Λήψεις';
+
+  @override
+  String get serverUnreachableBannerTitle =>
+      'Δεν είναι δυνατή η σύνδεση με τον διακομιστή σας';
+
+  @override
+  String get serverUnreachableBannerSubtitle =>
+      'Αναπαραγωγή από τις λήψεις μέχρι να επανέλθει';
+
+  @override
+  String get castGoogleCast => 'Google Cast';
+
+  @override
+  String get castAirPlay => 'AirPlay';
+
+  @override
+  String get castDlna => 'DLNA';
+
+  @override
+  String get castRemotePlayback => 'Απομακρυσμένη αναπαραγωγή';
+
+  @override
+  String castControlFailed(String error) {
+    return 'Ο έλεγχος μετάδοσης απέτυχε: $error';
+  }
+
+  @override
+  String castKindControls(String kind) {
+    return '$kind Στοιχεία ελέγχου';
+  }
+
+  @override
+  String get castDeviceVolume => 'Ένταση συσκευής';
+
+  @override
+  String get castVolumeUnavailable => 'Δυσεύρετος';
+
+  @override
+  String castStopKind(String kind) {
+    return 'Διακοπή $kind';
+  }
+
+  @override
+  String get audioLabel => 'Ήχος';
+
+  @override
+  String get subtitlesLabel => 'Υπότιτλοι';
+
+  @override
+  String get pinConfirmTitle => 'Επιβεβαίωση PIN';
+
+  @override
+  String get pinSetTitle => 'Ορισμός PIN';
+
+  @override
+  String get pinEnterTitle => 'Εισαγάγετε το PIN';
+
+  @override
+  String get pinReenterToConfirm =>
+      'Εισαγάγετε ξανά το PIN σας για επιβεβαίωση';
+
+  @override
+  String pinEnterNDigit(int length) {
+    return 'Εισαγάγετε ένα ψηφίο PIN $length';
+  }
+
+  @override
+  String pinEnterYourNDigit(int length) {
+    return 'Εισαγάγετε το $length-ψηφίο PIN σας';
+  }
+
+  @override
+  String get pinIncorrect => 'Λανθασμένο PIN';
+
+  @override
+  String get pinMismatch => 'Τα PIN δεν ταιριάζουν';
+
+  @override
+  String get pinForgot => 'Ξεχάσατε το PIN;';
+
+  @override
+  String get pinClear => 'Εκκαθάριση';
+
+  @override
+  String get pinBackspace => 'Διαγραφή';
+
+  @override
+  String get quickConnectAuthorized => 'Εγκρίθηκε το αίτημα Quick Connect.';
+
+  @override
+  String get quickConnectInvalidOrExpired =>
+      'Ο κωδικός Quick Connect δεν είναι έγκυρος ή έχει λήξει.';
+
+  @override
+  String get quickConnectNotSupported =>
+      'Το Quick Connect δεν υποστηρίζεται σε αυτόν τον διακομιστή.';
+
+  @override
+  String get quickConnectAuthorizeFailed =>
+      'Απέτυχε η εξουσιοδότηση του κωδικού Quick Connect.';
+
+  @override
+  String get quickConnectDisabled =>
+      'Το Quick Connect είναι απενεργοποιημένο σε αυτόν τον διακομιστή.';
+
+  @override
+  String get quickConnectForbidden =>
+      'Ο λογαριασμός σας δεν μπορεί να εξουσιοδοτήσει αυτό το αίτημα Quick Connect.';
+
+  @override
+  String get quickConnectNotFound =>
+      'Ο κωδικός Quick Connect δεν βρέθηκε. Δοκιμάστε έναν νέο κωδικό.';
+
+  @override
+  String quickConnectFailedWithMessage(String message) {
+    return 'Το Quick Connect απέτυχε: $message';
+  }
+
+  @override
+  String get quickConnectEnterCode => 'Εισαγάγετε κωδικό';
+
+  @override
+  String get quickConnectAuthorize => 'Εξουσιοδοτώ';
+
+  @override
+  String remoteCommandFailed(String error) {
+    return 'Η εντολή απέτυχε: $error';
+  }
+
+  @override
+  String get remoteControlTitle => 'Τηλεχειριστήριο';
+
+  @override
+  String get remoteFailedToLoadSessions => 'Αποτυχία φόρτωσης συνεδριών';
+
+  @override
+  String get remoteNoSessions => 'Δεν υπάρχουν ελεγχόμενες συνεδρίες';
+
+  @override
+  String get remoteStartPlayback => 'Ξεκινήστε την αναπαραγωγή σε άλλη συσκευή';
+
+  @override
+  String get unknownUser => 'Αγνωστος';
+
+  @override
+  String get unknownItem => 'Αγνωστος';
+
+  @override
+  String get remoteNothingPlaying => 'Δεν παίζει τίποτα σε αυτή τη συνεδρία';
+
+  @override
+  String get castingStarted => 'Η μετάδοση ξεκίνησε σε επιλεγμένη συσκευή';
+
+  @override
+  String castingFailed(String error) {
+    return 'Αποτυχία έναρξης μετάδοσης: $error';
+  }
+
+  @override
+  String get noRemoteDevices =>
+      'Δεν υπάρχουν διαθέσιμες συσκευές απομακρυσμένης αναπαραγωγής.';
+
+  @override
+  String get noRemoteDevicesIos =>
+      'Δεν υπάρχουν διαθέσιμες συσκευές απομακρυσμένης αναπαραγωγής.\n\nΣε iOS, οι στόχοι AirPlay ενδέχεται να μην είναι διαθέσιμοι στον προσομοιωτή.';
+
+  @override
+  String get trackActionPlayNext => 'Αναπαραγωγή επόμενου';
+
+  @override
+  String get trackActionAddToQueue => 'Προσθήκη στην ουρά';
+
+  @override
+  String get trackActionAddToPlaylist => 'Προσθήκη στη λίστα αναπαραγωγής';
+
+  @override
+  String get trackActionCancelDownload => 'Ακύρωση λήψης';
+
+  @override
+  String get trackActionDeleteFromPlaylist =>
+      'Διαγραφή από τη λίστα αναπαραγωγής';
+
+  @override
+  String get trackActionMoveUp => 'Μετακίνηση προς τα επάνω';
+
+  @override
+  String get trackActionMoveDown => 'Μετακίνηση προς τα κάτω';
+
+  @override
+  String get trackActionRemoveFromFavorites => 'Αφαίρεση από τα Αγαπημένα';
+
+  @override
+  String get trackActionAddToFavorites => 'Προσθήκη στα Αγαπημένα';
+
+  @override
+  String get trackActionGoToAlbum => 'Μετάβαση στο Άλμπουμ';
+
+  @override
+  String get trackActionGoToArtist => 'Μεταβείτε στον Καλλιτέχνη';
+
+  @override
+  String trackActionDownloading(String name) {
+    return 'Λήψη $name...';
+  }
+
+  @override
+  String get trackActionDeletedFile => 'Διαγράφηκε το ληφθέν αρχείο';
+
+  @override
+  String get trackActionDeleteFileFailed =>
+      'Δεν ήταν δυνατή η διαγραφή του ληφθέντος αρχείου';
+
+  @override
+  String get shuffleBy => 'Ανακάτεμα από';
+
+  @override
+  String get shuffleSelectLibrary => 'Επιλέξτε Βιβλιοθήκη';
+
+  @override
+  String get shuffleSelectGenre => 'Επιλέξτε Είδος';
+
+  @override
+  String get shuffleLibrary => 'Βιβλιοθήκη';
+
+  @override
+  String get shuffleGenre => 'Είδος';
+
+  @override
+  String get shuffleNoLibraries =>
+      'Δεν υπάρχουν διαθέσιμες συμβατές βιβλιοθήκες.';
+
+  @override
+  String get shuffleNoGenres =>
+      'Δεν βρέθηκαν είδη για αυτήν τη λειτουργία τυχαίας αναπαραγωγής.';
+
+  @override
+  String get posterDisplayTitle => 'Προβολή';
+
+  @override
+  String get posterImageType => 'Τύπος εικόνας';
+
+  @override
+  String get imageTypePoster => 'Αφίσα';
+
+  @override
+  String get imageTypeThumbnail => 'Μικρογραφία';
+
+  @override
+  String get imageTypeBanner => 'Σημαία';
+
+  @override
+  String get playlistAddFailed => 'Αποτυχία προσθήκης στη λίστα αναπαραγωγής';
+
+  @override
+  String get playlistCreateFailed => 'Η δημιουργία λίστας αναπαραγωγής απέτυχε';
+
+  @override
+  String get playlistNew => 'Νέα λίστα αναπαραγωγής';
+
+  @override
+  String get playlistCreate => 'Δημιουργώ';
+
+  @override
+  String get playlistCreateNew => 'Δημιουργία νέας λίστας αναπαραγωγής';
+
+  @override
+  String get playlistNoneFound => 'Δεν βρέθηκαν λίστες αναπαραγωγής';
+
+  @override
+  String get addToPlaylist => 'Προσθήκη στη λίστα αναπαραγωγής';
+
+  @override
+  String get lyricsNotAvailable => 'Δεν υπάρχουν διαθέσιμοι στίχοι';
+
+  @override
+  String get upNext => 'Επόμενο';
+
+  @override
+  String get playNext => 'Αναπαραγωγή επόμενου';
+
+  @override
+  String get stillWatchingContent =>
+      'Η αναπαραγωγή έχει διακοπεί. Παρακολουθείς ακόμα;';
+
+  @override
+  String get stillWatchingStop => 'Διακοπή';
+
+  @override
+  String get stillWatchingContinue => 'Συνεχίζω';
+
+  @override
+  String skipSegment(String segment) {
+    return 'Παράλειψη $segment';
+  }
+
+  @override
+  String get liveTv => 'Ζωντανή τηλεόραση';
+
+  @override
+  String get continueWatchingAndNextUp =>
+      'Συνεχίστε την παρακολούθηση & Επόμενο';
+
+  @override
+  String downloadingBatchProgress(int current, int total, String fileName) {
+    return 'Λήψη $current/$total — $fileName';
+  }
+
+  @override
+  String downloadingFile(String fileName) {
+    return 'Λήψη $fileName';
+  }
+
+  @override
+  String get nextEpisode => 'Επόμενο Επεισόδιο';
+
+  @override
+  String get moreFromThisSeason => 'Περισσότερα από αυτή τη σεζόν';
+
+  @override
+  String get playerTooltipPlaybackSpeed => 'Ταχύτητα αναπαραγωγής';
+
+  @override
+  String get playerTooltipCastControls => 'Χειριστήρια Cast';
+
+  @override
+  String get playerTooltipPlaybackQuality => 'Ρυθμός bit';
+
+  @override
+  String get playerTooltipEnterFullscreen => 'Μπείτε σε πλήρη οθόνη';
+
+  @override
+  String get playerTooltipExitFullscreen => 'Έξοδος από πλήρη οθόνη';
+
+  @override
+  String get playerTooltipFloatOnTop => 'Να εμφανίζεται στην επιφάνεια';
+
+  @override
+  String get playerTooltipExitFloatOnTop =>
+      'Απενεργοποιήστε το float στην κορυφή';
+
+  @override
+  String get playerTooltipLockLandscape => 'Τοπίο κλειδαριάς';
+
+  @override
+  String get playerTooltipUnlockOrientation => 'Επιτρέψτε την περιστροφή';
+
+  @override
+  String get playerTooltipPrevious => 'Προηγούμενο';
+
+  @override
+  String get playerTooltipSeekBack => 'Αναζητήστε πίσω';
+
+  @override
+  String get playerTooltipSeekForward => 'Αναζητήστε μπροστά';
+
+  @override
+  String get contextMenuMarkWatched => 'Επισήμανση ως παρακολούθησης';
+
+  @override
+  String get contextMenuMarkUnwatched => 'Επισήμανση ως απαρατήρητος';
+
+  @override
+  String get contextMenuAddToFavorites => 'Προσθήκη στα Αγαπημένα';
+
+  @override
+  String get contextMenuRemoveFromFavorites => 'Αφαίρεση από τα Αγαπημένα';
+
+  @override
+  String get contextMenuGoToSeries => 'Μεταβείτε στη σειρά';
+
+  @override
+  String get contextMenuHideFromContinueWatching =>
+      'Απόκρυψη από τη Συνέχιση παρακολούθησης';
+
+  @override
+  String get contextMenuHideFromNextUp => 'Απόκρυψη από τα Επόμενα';
+
+  @override
+  String get contextMenuAddToCollection => 'Προσθήκη σε συλλογή';
+
+  @override
+  String get settingsAdministrationSubtitle =>
+      'Πρόσβαση στον πίνακα διαχείρισης διακομιστή';
+
+  @override
+  String get settingsAccountSecurity => 'Λογαριασμός & Ασφάλεια';
+
+  @override
+  String get settingsAccountSecuritySubtitle =>
+      'Έλεγχος ταυτότητας, κωδικός PIN και γονικοί έλεγχοι';
+
+  @override
+  String get settingsPersonalization => 'Εξατομίκευση';
+
+  @override
+  String get settingsPersonalizationSubtitle =>
+      'Θέμα, πλοήγηση, αρχικές σειρές και ορατότητα βιβλιοθήκης';
+
+  @override
+  String get settingsDynamicContent => 'Δυναμικό περιεχόμενο';
+
+  @override
+  String get settingsDynamicContentSubtitle =>
+      'Γραμμή πολυμέσων και οπτικές επικαλύψεις';
+
+  @override
+  String get settingsPlaybackSyncplay => 'Αναπαραγωγή & SyncPlay';
+
+  @override
+  String get settingsPlaybackSyncplaySubtitle =>
+      'Ρυθμίσεις ήχου/βίντεο, υπότιτλοι, λήψεις και στοιχεία ελέγχου SyncPlay';
+
+  @override
+  String get settingsIntegrationsSubtitle =>
+      'Συγχρονισμός προσθηκών, Seerr, αξιολογήσεις και πολλά άλλα';
+
+  @override
+  String get settingsAboutSubtitle =>
+      'Έκδοση εφαρμογής, νομικές πληροφορίες και πιστώσεις';
+
+  @override
+  String get settingsAuthenticationSection => 'ΠΙΣΤΟΠΟΙΗΣΗ';
+
+  @override
+  String get settingsSortServersBy => 'Ταξινόμηση διακομιστών κατά';
+
+  @override
+  String get settingsLastUsed => 'Τελευταία χρήση';
+
+  @override
+  String get settingsAlphabetical => 'Αλφαβητικός';
+
+  @override
+  String get settingsConnectionSection => 'ΣΥΝΔΕΣΗ';
+
+  @override
+  String get settingsAllowSelfSignedCerts =>
+      'Να επιτρέπονται τα αυτο-υπογεγραμμένα πιστοποιητικά';
+
+  @override
+  String get settingsAllowSelfSignedCertsSubtitle =>
+      'Εμπιστοσύνη σε διακομιστές που χρησιμοποιούν αυτο-υπογεγραμμένα πιστοποιητικά TLS ή πιστοποιητικά ιδιωτικής CA. Ενεργοποιήστε το μόνο για διακομιστές που ελέγχετε εσείς. Απενεργοποιεί την επαλήθευση πιστοποιητικών για όλες τις συνδέσεις.';
+
+  @override
+  String get settingsPrivacyAndSafetySection => 'ΑΠΟΡΡΗΤΟ ΚΑΙ ΑΣΦΑΛΕΙΑ';
+
+  @override
+  String get settingsBlockedRatings => 'Αποκλεισμένες αξιολογήσεις';
+
+  @override
+  String get settingsGeneralStyle => 'Γενικό Στυλ';
+
+  @override
+  String get settingsGeneralStyleSubtitle =>
+      'Θεματικά στοιχεία, φόντα και δείκτες παρακολούθησης';
+
+  @override
+  String get settingsDetailsScreen => 'Οθόνη λεπτομερειών';
+
+  @override
+  String get settingsDetailsScreenSubtitle =>
+      'Στυλ, θόλωμα φόντου και συμπεριφορά καρτελών';
+
+  @override
+  String get settingsHomePage => 'Αρχική Σελίδα';
+
+  @override
+  String get settingsHomePageSubtitle =>
+      'Ενότητες, τύποι εικόνων, επικαλύψεις και προεπισκοπήσεις πολυμέσων';
+
+  @override
+  String get settingsLibrariesSubtitle =>
+      'Ορατότητα βιβλιοθήκης, προβολή φακέλου και συμπεριφορά πολλών διακομιστών';
+
+  @override
+  String get settingsTwentyFourHourClock => '24ωρο ρολόι';
+
+  @override
+  String get settingsTwentyFourHourClockSubtitle =>
+      'Χρησιμοποιήστε τη μορφοποίηση ώρας 24 ωρών όπου κι αν εμφανίζεται το ρολόι';
+
+  @override
+  String get settingsShowShuffleButtonInNavigation =>
+      'Εμφάνιση του κουμπιού τυχαίας αναπαραγωγής στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsShowGenresButtonInNavigation =>
+      'Εμφάνιση του κουμπιού ειδών στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsShowFavoritesButtonInNavigation =>
+      'Εμφάνιση του κουμπιού αγαπημένων στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsShowLibrariesButtonInNavigation =>
+      'Εμφάνιση του κουμπιού βιβλιοθήκες στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsShowSeerrButtonInNavigation =>
+      'Εμφάνιση του κουμπιού Seerr στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsAlwaysExpandNavbarLabels =>
+      'Πάντα εμφάνιση των ετικετών κειμένου στην επάνω γραμμή πλοήγησης';
+
+  @override
+  String get settingsLibraryVisibilitySubtitle =>
+      'Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Tortugarr για να τεθούν σε ισχύ οι αλλαγές.';
+
+  @override
+  String get settingsMediaBarAndLocalPreviews =>
+      'Γραμμή πολυμέσων και τοπικές προεπισκοπήσεις';
+
+  @override
+  String get settingsVisualOverlays => 'Οπτικές επικαλύψεις';
+
+  @override
+  String get settingsSeasonalSurprise => 'Εποχιακή Έκπληξη';
+
+  @override
+  String get settingsMetadataAndRatings => 'Μεταδεδομένα & Βαθμολογίες';
+
+  @override
+  String get settingsPluginScreenDescription =>
+      'Το Moonbase παρέχει ενσωματώσεις από την πλευρά του διακομιστή, συμπεριλαμβανομένων πρόσθετων πηγών αξιολόγησης, αιτημάτων Seerr και συγχρονισμένων προτιμήσεων.';
+
+  @override
+  String get settingsOfflineDownloads => 'Λήψεις εκτός σύνδεσης';
+
+  @override
+  String get useNativeEmulator => 'Native Emulation';
+
+  @override
+  String get useNativeEmulatorSubtitle =>
+      'Παίξτε παιχνίδια με εγγενείς πυρήνες αντί για το πρόγραμμα αναπαραγωγής ιστού EmulatorJS';
+
+  @override
+  String get emulatorCores => 'Πυρήνες Εξομοιωτή';
+
+  @override
+  String get emulatorCoresSubtitle =>
+      'Λήψη συστημάτων για την εκτέλεση παιχνιδιών σε εγγενή μορφή';
+
+  @override
+  String get emulatorCoresDescription =>
+      'Επιλέξτε ποια συστήματα θέλετε να εγκαταστήσετε. Οι πυρήνες παρέχονται από το project libretro και επιτρέπουν την εκτέλεση των παιχνιδιών σε εγγενή περιβάλλον αντί για το περιβάλλον ενός προγράμματος περιήγησης.';
+
+  @override
+  String get emulatorCoreDownloading => 'Λήψη';
+
+  @override
+  String get emulatorCoreUnavailable =>
+      'Δεν είναι διαθέσιμο για αυτή τη συσκευή';
+
+  @override
+  String get emulatorCoreDownloadFailed =>
+      'Δεν ήταν δυνατή η λήψη του πυρήνα. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.';
+
+  @override
+  String get downloadedGames => 'Ληφθέντα Παιχνίδια';
+
+  @override
+  String get downloadedGamesSubtitle =>
+      'Απελευθερώστε χώρο που καταλαμβάνουν τα αρχεία παιχνιδιών';
+
+  @override
+  String get downloadedGamesDescription =>
+      'Τα παιχνίδια αντιγράφονται σε αυτή τη συσκευή πριν ξεκινήσει η αναπαραγωγή τους. Διαγράψτε αυτά που έχετε ολοκληρώσει για να ελευθερώσετε χώρο. Τα αποθηκευμένα δεδομένα διατηρούνται στον διακομιστή και δεν διαγράφονται.';
+
+  @override
+  String get downloadedGamesEmpty =>
+      'Δεν έχει γίνει λήψη κανένα παιχνιδιού σε αυτή τη συσκευή μέχρι στιγμής.';
+
+  @override
+  String downloadedGamesTotal(int count, String size) {
+    return '$count παιχνίδια, $size';
+  }
+
+  @override
+  String get removeAllDownloadedGames => 'Διαγραφή Όλων';
+
+  @override
+  String removeDownloadedGameConfirm(String title) {
+    return 'Θέλετε να διαγράψετε το $title από αυτή τη συσκευή; Θα γίνει εκ νέου λήψη την επόμενη φορά που θα το αναπαράγετε.';
+  }
+
+  @override
+  String get removeAllDownloadedGamesConfirm =>
+      'Θέλετε να διαγράψετε όλα τα παιχνίδια που έχετε κατεβάσει από αυτή τη συσκευή; Θα γίνουν εκ νέου λήψη την επόμενη φορά που θα τα παίξετε.';
+
+  @override
+  String get settingsHigh => 'Ψηλά';
+
+  @override
+  String get settingsLow => 'Χαμηλός';
+
+  @override
+  String get settingsCustomPath => 'Προσαρμοσμένη διαδρομή';
+
+  @override
+  String get settingsEnterDownloadFolderPath =>
+      'Εισαγάγετε τη διαδρομή του φακέλου λήψης';
+
+  @override
+  String get settingsConcurrentDownloads => 'Ταυτόχρονες λήψεις';
+
+  @override
+  String get settingsConcurrentDownloadsDescription =>
+      'Μέγιστος αριθμός στοιχείων για λήψη ταυτόχρονα.';
+
+  @override
+  String get settingsAppInfo => 'ΠΛΗΡΟΦΟΡΙΕΣ ΕΦΑΡΜΟΓΗΣ';
+
+  @override
+  String get settingsReportAnIssue => 'Αναφορά προβλήματος';
+
+  @override
+  String get settingsReportAnIssueSubtitle =>
+      'Ανοίξτε το πρόγραμμα παρακολούθησης προβλημάτων στο GitHub';
+
+  @override
+  String get settingsJoinDiscord => 'Εγγραφείτε Discord';
+
+  @override
+  String get settingsJoinDiscordSubtitle => 'Συζήτηση με την κοινότητα';
+
+  @override
+  String get settingsJoinTheDiscord => 'Εγγραφείτε στο Discord';
+
+  @override
+  String get settingsSupportNotflix => 'Υποστήριξη Tortugarr';
+
+  @override
+  String get settingsSupportNotflixSubtitle =>
+      'Δωρίστε έναν καφέ στον προγραμματιστή';
+
+  @override
+  String get settingsLegal => 'ΝΟΜΙΚΟΣ';
+
+  @override
+  String get settingsLicenses => 'Άδειες';
+
+  @override
+  String get settingsOpenSourceLicenseNotices =>
+      'Ειδοποιήσεις άδειας ανοιχτού κώδικα';
+
+  @override
+  String get settingsPrivacyPolicy => 'Πολιτική Απορρήτου';
+
+  @override
+  String get settingsPrivacyPolicySubtitle =>
+      'Πώς χειρίζεται ο Tortugarr τα δεδομένα σας';
+
+  @override
+  String get settingsCheckForUpdates => 'Ελέγξτε για Ενημερώσεις';
+
+  @override
+  String get settingsCheckForUpdatesSubtitle =>
+      'Ελέγξτε για την πιο πρόσφατη έκδοση Tortugarr';
+
+  @override
+  String get settingsPoweredByFlutter => 'Με την υποστήριξη του Flutter';
+
+  @override
+  String settingsLicenseNoticesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# ειδοποιήσεις άδειας',
+      one: '# ειδοποίηση άδειας',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsBoth => 'Και οι δύο';
+
+  @override
+  String get settingsShuffleContentTypeFilter =>
+      'Τυχαία αναπαραγωγή φίλτρου τύπου περιεχομένου';
+
+  @override
+  String get settingsVideoPlaybackPreferences =>
+      'Προτιμήσεις αναπαραγωγής βίντεο';
+
+  @override
+  String get settingsVideoPlaybackPreferencesSubtitle =>
+      'Βασική μηχανή βίντεο και ρυθμίσεις ποιότητας ροής';
+
+  @override
+  String get settingsAudioPreferences => 'Προτιμήσεις ήχου';
+
+  @override
+  String get settingsAudioPreferencesSubtitle =>
+      'Επιλογές κομματιών ήχου, επεξεργασίας και διέλευσης';
+
+  @override
+  String get settingsAutomationAndQueue => 'Αυτοματισμός & Ουρά';
+
+  @override
+  String get settingsAutomationAndQueueSubtitle =>
+      'Αυτοματοποιημένη αναπαραγωγή και αλληλουχία';
+
+  @override
+  String get settingsOfflineDownloadsSubtitle =>
+      'Ποιότητα λήψης, όρια αποθηκευτικού χώρου και μέγεθος ουράς';
+
+  @override
+  String get settingsSyncplaySubtitle =>
+      'Λογική συγχρονισμού για ομαδικές συνεδρίες';
+
+  @override
+  String get settingsAdvancedOptionsSubtitle =>
+      'Εξειδικευμένα χαρακτηριστικά αναπαραγωγής. Χρησιμοποιήστε το με προσοχή, καθώς ορισμένες επιλογές μπορεί να προκαλέσουν προβλήματα αναπαραγωγής';
+
+  @override
+  String get settingsSkipIntrosAndOutros => 'Παράλειψη εισαγωγών και εξόδων;';
+
+  @override
+  String get settingsMediaSegmentCountdown =>
+      'Αντίστροφη μέτρηση τμήματος πολυμέσων';
+
+  @override
+  String get settingsProgressBar => 'Γραμμή προόδου';
+
+  @override
+  String get settingsTimer => 'Χρονόμετρο';
+
+  @override
+  String get settingsNone => 'Κανένα';
+
+  @override
+  String get settingsPromptUser => 'Προτροπή χρήστη';
+
+  @override
+  String get settingsSkip => 'Παραλείπω';
+
+  @override
+  String get settingsDoNothing => 'Μην κάνετε τίποτα';
+
+  @override
+  String get settingsMaxBitrateDescription =>
+      'Κλείστε τον ρυθμό μετάδοσης bit ροής. Το περιεχόμενο πάνω από αυτό το όριο θα διακωδικοποιηθεί ώστε να ταιριάζει.';
+
+  @override
+  String get settingsMaxResolutionDescription =>
+      'Περιορίστε τη μέγιστη ανάλυση που θα ζητήσει η συσκευή αναπαραγωγής. Το περιεχόμενο υψηλότερης ανάλυσης θα αποκωδικοποιηθεί.';
+
+  @override
+  String get settingsPlayerZoomDescription =>
+      'Πώς πρέπει να κλιμακωθεί το βίντεο ώστε να ταιριάζει στην οθόνη.';
+
+  @override
+  String get settingsPlaybackEngineAndroidTv =>
+      'Μηχανή αναπαραγωγής (Android TV)';
+
+  @override
+  String get settingsPlaybackEngineAndroidTvDescription =>
+      'Επιλέξτε την προεπιλεγμένη μηχανή αναπαραγωγής σε συσκευές Android TV. Οι αλλαγές ισχύουν για την επόμενη περίοδο λειτουργίας αναπαραγωγής.';
+
+  @override
+  String get settingsPlaybackEngineMedia3Recommended => 'Media3 (προτείνεται)';
+
+  @override
+  String get settingsPlaybackEngineMedia3Legacy => 'Media3 (παλαιού τύπου)';
+
+  @override
+  String get settingsPlaybackEngineMpvLegacy => 'mpv (παλαιού τύπου)';
+
+  @override
+  String get settingsPlaybackEngineMpvRecommended => 'mpv (προτείνεται)';
+
+  @override
+  String get settingsDolbyVisionFallback => 'Dolby Vision Επιστροφή';
+
+  @override
+  String get settingsDolbyVisionFallbackDescription =>
+      'Συμπεριφορά για τίτλους Dolby Vision σε συσκευές χωρίς αποκωδικοποίηση Dolby Vision.';
+
+  @override
+  String get settingsAskEachTime => 'Ρωτήστε κάθε φορά';
+
+  @override
+  String get settingsPreferHdr10Fallback => 'Προτιμήστε το εναλλακτικό HDR10';
+
+  @override
+  String get settingsPreferServerTranscode =>
+      'Προτιμήστε τη διακωδικοποίηση διακομιστή';
+
+  @override
+  String get settingsDolbyVisionProfile7DirectPlay =>
+      'Dolby Vision Προφίλ 7 Απευθείας αναπαραγωγή';
+
+  @override
+  String get settingsDolbyVisionProfile7DirectPlayDescription =>
+      'Ελέγχει εάν οι ροές επιπέδου βελτίωσης προφίλ 7 Dolby Vision θα πρέπει να κατευθύνουν την αναπαραγωγή.';
+
+  @override
+  String get settingsAutoAftkrtEnabled => 'Αυτόματο (AFTKRT ενεργοποιημένο)';
+
+  @override
+  String get settingsEnabledOnThisDevice =>
+      'Ενεργοποιήθηκε σε αυτήν τη συσκευή';
+
+  @override
+  String get settingsDisabledPreferTranscode =>
+      'Απενεργοποιημένο (προτιμώ διακωδικοποίηση)';
+
+  @override
+  String get settingsResumeRewindDescription =>
+      'Κατά τη συνέχιση της αναπαραγωγής (από τη Συνέχεια παρακολούθησης ή μια σελίδα στοιχείου πολυμέσων), πόσα δευτερόλεπτα πρέπει να επαναληφθούν;';
+
+  @override
+  String get settingsUnpauseRewindDescription =>
+      'Κατά τη συνέχιση της αναπαραγωγής αφού πατήσετε το κουμπί παύσης, πόσα δευτερόλεπτα πρέπει να επαναληφθούν;';
+
+  @override
+  String get settingsSkipBackLengthDescription =>
+      'Πόσα δευτερόλεπτα για να επιστρέψετε μετά το πάτημα του κουμπιού επαναφοράς.';
+
+  @override
+  String get settingsOneSecond => '1 δευτερόλεπτο';
+
+  @override
+  String get settingsThreeSeconds => '3 δευτερόλεπτα';
+
+  @override
+  String get settingsFortyFiveSeconds => '45 δευτερόλεπτα';
+
+  @override
+  String get settingsSixtySeconds => '60 δευτερόλεπτα';
+
+  @override
+  String get settingsSkipForwardLengthDescription =>
+      'Πόσα δευτερόλεπτα να μεταπηδήσετε προς τα εμπρός αφού πατήσετε το κουμπί γρήγορης προώθησης.';
+
+  @override
+  String get settingsBitstreamAc3ToExternalDecoder =>
+      'Bitstream AC3 σε εξωτερικό αποκωδικοποιητή';
+
+  @override
+  String get settingsCinemaMode => 'Λειτουργία κινηματογράφου';
+
+  @override
+  String get settingsCinemaModeSubtitle =>
+      'Αναπαραγωγή τρέιλερ/προ-διαφημίσεων πριν από την κύρια προβολή';
+
+  @override
+  String get settingsNextUpDisplayDescription =>
+      'Το Extended εμφανίζει μια πλήρη κάρτα με εξώφυλλο επεισοδίου και περιγραφή. Το Minimal δείχνει μια συμπαγή επικάλυψη αντίστροφης μέτρησης. Το Disabled αποκρύπτει εντελώς το μήνυμα.';
+
+  @override
+  String get settingsShort => 'Μικρός';
+
+  @override
+  String get settingsLong => 'Μακρύς';
+
+  @override
+  String get settingsVeryLong => 'Πολύ Μακρύ';
+
+  @override
+  String get settingsVideoStartDelay => 'Καθυστέρηση έναρξης βίντεο';
+
+  @override
+  String settingsMillisecondsValue(int value) {
+    return '$value ms';
+  }
+
+  @override
+  String get settingsLiveTvDirect => 'Απευθείας ζωντανή τηλεόραση';
+
+  @override
+  String get settingsLiveTvDirectSubtitle =>
+      'Ενεργοποίηση απευθείας αναπαραγωγής για ζωντανή τηλεόραση';
+
+  @override
+  String get settingsOpenGroups => 'Ανοίξτε τις Ομάδες';
+
+  @override
+  String get settingsOpenGroupsSubtitle =>
+      'Δημιουργήστε, εγγραφείτε ή διαχειριστείτε ομάδες SyncPlay';
+
+  @override
+  String get settingsSyncplayEnabled => 'SyncPlay Ενεργοποιήθηκε';
+
+  @override
+  String get settingsSyncplayEnabledSubtitle =>
+      'Ενεργοποιήστε τις λειτουργίες ομαδικής παρακολούθησης';
+
+  @override
+  String get settingsSyncplayButton => 'Κουμπί SyncPlay';
+
+  @override
+  String get settingsSyncplayButtonSubtitle =>
+      'Εμφανίστε το κουμπί SyncPlay στη γραμμή πλοήγησης';
+
+  @override
+  String get settingsSyncplayAdvancedCorrection => 'Προηγμένη διόρθωση';
+
+  @override
+  String get settingsSyncplayAdvancedCorrectionSubtitle =>
+      'Ενεργοποίηση λεπτομερούς λογικής συγχρονισμού';
+
+  @override
+  String get settingsSyncplaySyncCorrection => 'Διόρθωση συγχρονισμού';
+
+  @override
+  String get settingsSyncplaySyncCorrectionSubtitle =>
+      'Προσαρμόστε αυτόματα την αναπαραγωγή για να παραμείνετε συγχρονισμένοι';
+
+  @override
+  String get settingsSyncplaySpeedToSync => 'Ταχύτητα για συγχρονισμό';
+
+  @override
+  String get settingsSyncplaySpeedToSyncSubtitle =>
+      'Χρησιμοποιήστε τη ρύθμιση ταχύτητας αναπαραγωγής για συγχρονισμό';
+
+  @override
+  String get settingsSyncplaySkipToSync => 'Μετάβαση στο Συγχρονισμός';
+
+  @override
+  String get settingsSyncplaySkipToSyncSubtitle =>
+      'Χρησιμοποιήστε την αναζήτηση για συγχρονισμό';
+
+  @override
+  String get settingsSyncplayMinimumSpeedDelay =>
+      'Καθυστέρηση ελάχιστης ταχύτητας';
+
+  @override
+  String get settingsSyncplayMaximumSpeedDelay =>
+      'Καθυστέρηση μέγιστης ταχύτητας';
+
+  @override
+  String get settingsSyncplaySpeedDuration => 'Διάρκεια ταχύτητας';
+
+  @override
+  String get settingsSyncplayMinimumSkipDelay =>
+      'Ελάχιστη καθυστέρηση παράλειψης';
+
+  @override
+  String get settingsSyncplayExtraOffset => 'Πρόσθετη αντιστάθμιση SyncPlay';
+
+  @override
+  String get onNow => 'Στο Τώρα';
+
+  @override
+  String get collections => 'Συλλογές';
+
+  @override
+  String get lastPlayed => 'Τελευταία αναπαραγωγή';
+
+  @override
+  String libraryNameWithServer(String libraryName, String serverName) {
+    return '$libraryName ($serverName)';
+  }
+
+  @override
+  String latestLibraryName(String libraryName) {
+    return 'Πρόσφατα προστέθηκε το $libraryName';
+  }
+
+  @override
+  String recentlyReleasedLibraryName(String libraryName) {
+    return 'Πρόσφατες κυκλοφορίες: $libraryName';
+  }
+
+  @override
+  String get autoplayNextEpisode =>
+      'Αυτόματη αναπαραγωγή του επόμενου επεισοδίου';
+
+  @override
+  String get autoplayNextEpisodeSubtitle =>
+      'Αυτόματη αναπαραγωγή του επόμενου επεισοδίου, όταν είναι διαθέσιμο.';
+
+  @override
+  String get skipSilenceTitle => 'Παράλειψη σιωπής';
+
+  @override
+  String get skipSilenceSubtitle =>
+      'Αυτόματη παράβλεψη σιωπηρών τμημάτων ήχου όταν υποστηρίζονται από τη ροή.';
+
+  @override
+  String get allowExternalAudioEffectsTitle =>
+      'Επιτρέψτε εξωτερικά ηχητικά εφέ';
+
+  @override
+  String get allowExternalAudioEffectsSubtitle =>
+      'Να επιτρέπεται στις εφαρμογές ισοσταθμιστή και εφέ (π.χ. Wavelet) να προσαρτώνται σε περιόδους αναπαραγωγής Media3.';
+
+  @override
+  String get disableTunnelingTitle => 'Απενεργοποίηση σήραγγας';
+
+  @override
+  String get disableTunnelingSubtitle =>
+      'Αναγκαστική αναπαραγωγή χωρίς σήραγγα. Χρήσιμο σε συσκευές με ασυνέχειες ήχου/εικόνας με σήραγγα.';
+
+  @override
+  String get enableTunnelingTitle => 'Ενεργοποίηση διοχέτευσης';
+
+  @override
+  String get enableTunnelingSubtitle =>
+      'Για προχωρημένους. Δρομολογεί τον ήχο και το βίντεο μέσω μιας συζευγμένης διαδρομής υλικού. Είναι απενεργοποιημένο από προεπιλογή επειδή προκαλεί διακοπές ήχου/βίντεο σε ορισμένες συσκευές.';
+
+  @override
+  String get mapDolbyVisionP7Title =>
+      'Χαρτογράφηση Dolby Vision προφίλ 7 στο HEVC';
+
+  @override
+  String get mapDolbyVisionP7Subtitle =>
+      'Αναπαραγωγή ροών Dolby Vision προφίλ 7 ως HEVC συμβατό με HDR10 σε συσκευές που δεν υποστηρίζουν Dolby Vision.';
+
+  @override
+  String get subtitlesUseEmbeddedStyles =>
+      'Χρησιμοποιήστε ενσωματωμένα στυλ υπότιτλων';
+
+  @override
+  String get subtitlesUseEmbeddedStylesSubtitle =>
+      'Εφαρμόστε χρώματα, γραμματοσειρές και τοποθέτηση ενσωματωμένων στο κομμάτι υπότιτλων. Απενεργοποιήστε τη χρήση των προτιμήσεων στυλ υπότιτλων.';
+
+  @override
+  String get subtitlesUseEmbeddedFontSizes =>
+      'Χρησιμοποιήστε ενσωματωμένα μεγέθη γραμματοσειράς υπότιτλων';
+
+  @override
+  String get subtitlesUseEmbeddedFontSizesSubtitle =>
+      'Εφαρμόστε υποδείξεις μεγέθους γραμματοσειράς που είναι ενσωματωμένες στο κομμάτι υπότιτλων. Απενεργοποιήστε τη χρήση του μεγέθους υποτίτλων από τις προτιμήσεις στυλ σας.';
+
+  @override
+  String get showMediaDetailsOnLibraryPage => 'Εμφάνιση λεπτομερειών πολυμέσων';
+
+  @override
+  String get showMediaDetailsOnLibraryPageDescription =>
+      'Εμφάνιση των λεπτομερειών του επιλεγμένου στοιχείου στο επάνω μέρος των σελίδων της Βιβλιοθήκης.';
+
+  @override
+  String get hideBackdropsInLibraries =>
+      'Απόκρυψη των εικόνων φόντου κατά την περιήγηση;';
+
+  @override
+  String get useDetailedSubHeadings =>
+      'Χρησιμοποιήστε λεπτομερείς υποεπικεφαλίδες';
+
+  @override
+  String get useDetailedSubHeadingsDescription =>
+      'Εμφάνιση λεπτομερούς ή ελάχιστου υπογράμματος στις σελίδες της Βιβλιοθήκης.';
+
+  @override
+  String get savedThemesDeleteDialogTitle => 'Διαγραφή αποθηκευμένου θέματος;';
+
+  @override
+  String savedThemesDeleteDialogMessage(String themeName) {
+    return 'Κατάργηση του \"$themeName\" από αυτήν την προσωρινή μνήμη της συσκευής;';
+  }
+
+  @override
+  String get themeStore => 'Κατάστημα θεμάτων';
+
+  @override
+  String get themeStoreSubtitle =>
+      'Περιηγηθείτε και αποθηκεύστε θέματα της κοινότητας';
+
+  @override
+  String get themeStoreDescription =>
+      'Αποθηκεύστε ένα θέμα για να το χρησιμοποιείτε όπως τα υπόλοιπα αποθηκευμένα θέματά σας.';
+
+  @override
+  String get themeStoreEmpty =>
+      'Δεν υπάρχουν διαθέσιμα θέματα αυτήν τη στιγμή.';
+
+  @override
+  String get themeStoreLoadFailed =>
+      'Δεν ήταν δυνατή η φόρτωση του Καταστήματος θεμάτων. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.';
+
+  @override
+  String get themeStoreSave => 'Αποθήκευση';
+
+  @override
+  String get themeStoreSaveAndApply => 'Αποθήκευση και εφαρμογή';
+
+  @override
+  String get themeStoreSaved => 'Αποθηκεύτηκε';
+
+  @override
+  String get themeStoreInvalidMessage =>
+      'Δεν ήταν δυνατή η φόρτωση αυτού του θέματος.';
+
+  @override
+  String themeStoreSavedMessage(String themeName) {
+    return 'Αποθηκεύτηκε το «$themeName».';
+  }
+
+  @override
+  String savedThemesDeletedMessage(String themeName) {
+    return 'Διαγράφηκε το \"$themeName\" από αυτήν τη συσκευή.';
+  }
+
+  @override
+  String savedThemesDeleteFailedMessage(String themeName) {
+    return 'Δεν ήταν δυνατή η διαγραφή του \"$themeName\".';
+  }
+
+  @override
+  String get savedThemesTitle => 'Αποθηκευμένα θέματα';
+
+  @override
+  String get savedThemesDescription =>
+      'Αυτά είναι θέματα που έχουν ληφθεί από την προσθήκη Tortugarr για τον τρέχοντα διακομιστή. Η διαγραφή καταργεί μόνο αυτό το τοπικό αντίγραφο.';
+
+  @override
+  String get savedThemesEmpty =>
+      'Δεν βρέθηκαν αποθηκευμένα θέματα για αυτόν τον διακομιστή.';
+
+  @override
+  String savedThemesCurrentThemeId(String themeId) {
+    return '$themeId • Αυτήν τη στιγμή ενεργό';
+  }
+
+  @override
+  String get savedThemesDeleteTooltip => 'Διαγραφή αποθηκευμένου θέματος';
+
+  @override
+  String get savedThemesManageSubtitle =>
+      'Διαχειριστείτε τα ληφθέντα θέματα προσθηκών σε αυτήν τη συσκευή';
+
+  @override
+  String get themeEditor => 'Επεξεργαστής θεμάτων';
+
+  @override
+  String get themeEditorSubtitle =>
+      'Ανοίξτε το πρόγραμμα επεξεργασίας θεμάτων Tortugarr στο πρόγραμμα περιήγησής σας';
+
+  @override
+  String get homeScreen => 'Αρχική οθόνη';
+
+  @override
+  String get bottomBar => 'Μπάρα κάτω';
+
+  @override
+  String get homeRowsStyleClassic => 'Κλασσικός';
+
+  @override
+  String get homeRowsStyleModern => 'Σύγχρονος';
+
+  @override
+  String get homeRowsSection => 'Αρχικές Σειρές';
+
+  @override
+  String get homeRowDisplay => 'Εμφάνιση σειρών αρχικής';
+
+  @override
+  String get homeRowSections => 'Ενότητες σειρών αρχικής';
+
+  @override
+  String get homeRowToggles => 'Διακόπτες σειρών αρχικής';
+
+  @override
+  String get homeRowTogglesSubtitle =>
+      'Ενεργοποίηση ή απενεργοποίηση των κατηγοριών σειρών αρχικής που βασίζονται σε βιβλιοθήκες';
+
+  @override
+  String get homeRowTogglesDescription =>
+      'Ενεργοποιήστε τους παρακάτω διακόπτες για να εμφανίζονται οι σειρές στις Ενότητες αρχικής.';
+
+  @override
+  String get rowsType => 'Τύπος σειρών';
+
+  @override
+  String get rowsTypeDescription =>
+      'Το Classic διατηρεί τον τύπο εικόνας ανά σειρά και την επικάλυψη πληροφοριών. Το Modern χρησιμοποιεί σειρές από πορτραίτο σε φόντο.';
+
+  @override
+  String get displayFavoritesRows => 'Εμφάνιση αγαπημένων σειρών';
+
+  @override
+  String get displayFavoritesRowsSubtitle =>
+      'Εμφάνιση αγαπημένων ταινιών, σειρών και άλλων αγαπημένων σειρών στις Αρχικές ενότητες.';
+
+  @override
+  String get favoritesRowSorting => 'Ταξινόμηση σειρών αγαπημένων';
+
+  @override
+  String get favoritesRowSortingDescription =>
+      'Ταξινομήστε τις αγαπημένες σειρές κατά ημερομηνία προσθήκης, ημερομηνία κυκλοφορίας, αλφαβητικά και άλλα.';
+
+  @override
+  String get displayCollectionsRows => 'Εμφάνιση σειρών συλλογών';
+
+  @override
+  String get displayCollectionsRowsSubtitle =>
+      'Εμφάνιση σειρών Συλλογών στις Αρχικές ενότητες.';
+
+  @override
+  String get collectionsRowSorting => 'Συλλογές Ταξινόμηση σειρών';
+
+  @override
+  String get collectionsRowSortingDescription =>
+      'Ταξινόμηση σειρών Συλλογών κατά ημερομηνία προσθήκης, ημερομηνία κυκλοφορίας, αλφαβητικά και άλλα.';
+
+  @override
+  String get displayGenresRows => 'Εμφάνιση σειρών ειδών';
+
+  @override
+  String get displayGenresRowsSubtitle =>
+      'Εμφάνιση σειρών Ειδών στις Αρχικές ενότητες.';
+
+  @override
+  String get genresRowSorting => 'Είδη Ταξινόμηση σειρών';
+
+  @override
+  String get genresRowSortingDescription =>
+      'Ταξινόμηση σειρών Ειδών κατά ημερομηνία προσθήκης, ημερομηνία κυκλοφορίας, αλφαβητικά και άλλα.';
+
+  @override
+  String get genresRowItems => 'Είδη Στοιχείων σειρών';
+
+  @override
+  String get genresRowItemsDescription =>
+      'Εμφάνιση Ταινιών, Σειρών ή και των δύο στις σειρές Ειδών.';
+
+  @override
+  String get displayPlaylistsRows => 'Εμφάνιση σειρών λιστών αναπαραγωγής';
+
+  @override
+  String get displayPlaylistsRowsSubtitle =>
+      'Εμφάνιση των σειρών λιστών αναπαραγωγής στις Ενότητες αρχικής.';
+
+  @override
+  String get playlistsRowSorting => 'Ταξινόμηση σειρών λιστών αναπαραγωγής';
+
+  @override
+  String get playlistsRowSortingDescription =>
+      'Ταξινομήστε τις σειρές λιστών αναπαραγωγής κατά ημερομηνία προσθήκης, ημερομηνία κυκλοφορίας, αλφαβητικά και άλλα.';
+
+  @override
+  String get displayAudioRows => 'Εμφάνιση σειρών ήχου';
+
+  @override
+  String get displayAudioRowsSubtitle =>
+      'Εμφάνιση των σειρών ήχου στις Ενότητες αρχικής.';
+
+  @override
+  String get audioRowsSorting => 'Ταξινόμηση σειρών ήχου';
+
+  @override
+  String get audioRowsSortingDescription =>
+      'Ταξινομήστε τις σειρές ήχου κατά ημερομηνία προσθήκης, ημερομηνία κυκλοφορίας, αλφαβητικά και άλλα.';
+
+  @override
+  String get audioPlaylists => 'Λίστες αναπαραγωγής ήχου';
+
+  @override
+  String get appearance => 'Εμφάνιση';
+
+  @override
+  String get layout => 'Διάταξη';
+
+  @override
+  String get theme => 'Θέμα';
+
+  @override
+  String get keyboard => 'Πληκτρολόγιο';
+
+  @override
+  String get navButtons => 'Κουμπιά';
+
+  @override
+  String get rendering => 'Απόδοση';
+
+  @override
+  String get mpvConfiguration => 'Διαμόρφωση MPV';
+
+  @override
+  String get cardSize => 'Μέγεθος κάρτας';
+
+  @override
+  String get externalPlayerApp => 'Εξωτερική εφαρμογή αναπαραγωγής';
+
+  @override
+  String get externalPlayerAppDescription =>
+      'Ορίστε εξωτερικό πρόγραμμα αναπαραγωγής για να ενεργοποιηθεί η επιλογή αναπαραγωγής με παρατεταμένο πάτημα';
+
+  @override
+  String get externalPlayerAskEachTimeSubtitle =>
+      'Εμφάνιση του επιλογέα εφαρμογής κατά την έναρξη της αναπαραγωγής.';
+
+  @override
+  String get loadingInstalledPlayers => 'Φόρτωση εγκατεστημένων παικτών...';
+
+  @override
+  String get connection => 'Σύνδεση';
+
+  @override
+  String get audioTranscodeTarget => 'Στόχος διακωδικοποίησης ήχου';
+
+  @override
+  String get passthrough => 'Διέλευση';
+
+  @override
+  String get supportedOnThisDevice => 'Υποστηρίζεται σε αυτήν τη συσκευή';
+
+  @override
+  String get notSupportedOnThisDevice =>
+      'Δεν υποστηρίζεται σε αυτήν τη συσκευή';
+
+  @override
+  String get settingsAudioDtsXPassthrough => 'Διέλευση DTS:X (DTS UHD)';
+
+  @override
+  String get settingsAudioBitstreamDtsXToExternalDecoder =>
+      'Bitstream DTS:X (DTS UHD) σε εξωτερικό αποκωδικοποιητή.';
+
+  @override
+  String get settingsAudioTrueHdJocPassthrough =>
+      'Διέλευση TrueHD με Atmos (JOC)';
+
+  @override
+  String get mediaPlayerBehavior => 'Συμπεριφορά Media Player';
+
+  @override
+  String get playbackEnhancements => 'Βελτιώσεις αναπαραγωγής';
+
+  @override
+  String get alwaysOn => 'Πάντα αναμμένο.';
+
+  @override
+  String get replaceSkipOutroWithNextUpDisplay =>
+      'Αντικαταστήστε το Skip Outro με το Next Up Display';
+
+  @override
+  String get replaceSkipOutroWithNextUpDisplaySubtitle =>
+      'Εμφάνιση της επικάλυψης Next Up αντί για το κουμπί Skip Outro.';
+
+  @override
+  String get playerRouting => 'Δρομολόγηση παίκτη';
+
+  @override
+  String get preferSoftwareDecoders =>
+      'Προτιμήστε τους αποκωδικοποιητές λογισμικού';
+
+  @override
+  String get preferSoftwareDecodersSubtitle =>
+      'Χρησιμοποιήστε FFmpeg (ήχος) και libgav1 (AV1) πριν από αποκωδικοποιητές υλικού. Απενεργοποιήστε εάν διακοπεί η μετάδοση ήχου HDMI.';
+
+  @override
+  String get useExternalPlayer =>
+      'Χρησιμοποιήστε εξωτερική συσκευή αναπαραγωγής';
+
+  @override
+  String get useExternalPlayerSubtitle =>
+      'Ανοίξτε την αναπαραγωγή βίντεο στην επιλεγμένη εξωτερική εφαρμογή στο Android TV.';
+
+  @override
+  String get automaticQueuing => 'Αυτόματη ουρά';
+
+  @override
+  String get preferSdhSubtitles => 'Προτιμήστε υπότιτλους SDH';
+
+  @override
+  String get preferSdhSubtitlesSubtitle =>
+      'Δώστε προτεραιότητα στα κομμάτια υποτίτλων SDH/CC κατά την αυτόματη επιλογή.';
+
+  @override
+  String get webDiagnostics => 'Διαγνωστικά Web';
+
+  @override
+  String get webDiagnosticsTitle => 'Tortugarr Διαγνωστικά Ιστού';
+
+  @override
+  String get webDiagnosticsIntro =>
+      'Χρησιμοποιήστε αυτήν τη σελίδα για να διαγνώσετε προβλήματα συνδεσιμότητας του προγράμματος περιήγησης (CORS, μικτό περιεχόμενο και ρυθμίσεις εντοπισμού).';
+
+  @override
+  String get webDiagnosticsDetectedMixedContentFailure =>
+      'Εντοπίστηκε αποτυχία μικτού περιεχομένου';
+
+  @override
+  String get webDiagnosticsDetectedCorsPreflightFailure =>
+      'Εντοπίστηκε αποτυχία CORS/Προκαταρκτικής πτήσης';
+
+  @override
+  String get webDiagnosticsMixedContentFailureBody =>
+      'Ο Tortugarr εντόπισε μια σελίδα HTTPS που προσπαθεί να καλέσει μια διεύθυνση URL διακομιστή HTTP. Τα προγράμματα περιήγησης αποκλείουν αυτό το αίτημα πριν φτάσει στον διακομιστή σας.';
+
+  @override
+  String get webDiagnosticsCorsFailureBody =>
+      'Ο Tortugarr εντόπισε μια αποτυχία αιτήματος σε επίπεδο προγράμματος περιήγησης που συνήθως προκαλείται από έλλειψη κεφαλίδων CORS ή προκαταρκτικής πτήσης στον διακομιστή πολυμέσων.';
+
+  @override
+  String webDiagnosticsTargetUrl(String url) {
+    return 'Διεύθυνση URL στόχου: $url';
+  }
+
+  @override
+  String webDiagnosticsDetail(String detail) {
+    return 'Λεπτομέρεια: $detail';
+  }
+
+  @override
+  String get webDiagnosticsCurrentRuntimeContext =>
+      'Τρέχον περιβάλλον χρόνου εκτέλεσης';
+
+  @override
+  String get webDiagnosticsOrigin => 'Προέλευση';
+
+  @override
+  String get webDiagnosticsScheme => 'Σχέδιο';
+
+  @override
+  String get webDiagnosticsPluginMode => 'Λειτουργία προσθήκης';
+
+  @override
+  String get webDiagnosticsWebRtcScan => 'Σάρωση WebRTC';
+
+  @override
+  String get webDiagnosticsForcedServerUrl =>
+      'Αναγκαστική διεύθυνση URL διακομιστή';
+
+  @override
+  String get webDiagnosticsDefaultServerUrl =>
+      'Προεπιλεγμένη διεύθυνση URL διακομιστή';
+
+  @override
+  String get webDiagnosticsDiscoveryProxyUrl =>
+      'Διεύθυνση URL διακομιστή μεσολάβησης Discovery';
+
+  @override
+  String get notConfigured => 'δεν έχει ρυθμιστεί';
+
+  @override
+  String get webDiagnosticsMixedContent => 'Μικτό Περιεχόμενο';
+
+  @override
+  String get webDiagnosticsMixedContentDetected =>
+      'Αυτή η σελίδα φορτώνεται μέσω HTTPS, αλλά μία ή περισσότερες διαμορφωμένες διευθύνσεις URL είναι HTTP. Τα προγράμματα περιήγησης εμποδίζουν τις σελίδες HTTPS να καλούν HTTP API.';
+
+  @override
+  String get webDiagnosticsMixedContentFix =>
+      'Διόρθωση: εξυπηρετήστε τον διακομιστή πολυμέσων ή το τελικό σημείο του διακομιστή μεσολάβησης μέσω HTTPS ή φορτώστε το Tortugarr μέσω HTTP μόνο σε αξιόπιστα τοπικά δίκτυα.';
+
+  @override
+  String get webDiagnosticsNoMixedContentDetected =>
+      'Δεν εντοπίστηκε προφανής διαμόρφωση μικτού περιεχομένου από τις τρέχουσες ρυθμίσεις χρόνου εκτέλεσης.';
+
+  @override
+  String get webDiagnosticsCorsChecklist => 'Λίστα ελέγχου CORS';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem1 =>
+      '• Να επιτρέπεται η προέλευση του προγράμματος περιήγησης στο Access-Control-Allow-Origin.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem2 =>
+      '• Συμπεριλάβετε Εξουσιοδότηση, X-Emby-Εξουσιοδότηση και X-Emby-Token στο Access-Control-Allow-Headers.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem3 =>
+      '• Εκθέστε το Content-Range και το Accept-Ranges για συμπεριφορά ροής και αναζήτησης.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem4 =>
+      '• Επιστροφή 204 στις OPTIONS αιτήματα προκαταρκτικής πτήσης.';
+
+  @override
+  String get webDiagnosticsHeaderSnippetTitle =>
+      'Παράδειγμα αποσπάσματος κεφαλίδας (στυλ nginx)';
+
+  @override
+  String get note => 'Σημείωμα';
+
+  @override
+  String get webDiagnosticsNonWebNote =>
+      'Αυτή η διαδρομή διάγνωσης προορίζεται για εκδόσεις ιστού. Εάν το βλέπετε σε άλλη πλατφόρμα, αυτοί οι έλεγχοι ενδέχεται να μην ισχύουν.';
+
+  @override
+  String get backToServerSelect => 'Επιστροφή στον διακομιστή Επιλογή';
+
+  @override
+  String get signOutAllUsers => 'Αποσύνδεση όλων των χρηστών';
+
+  @override
+  String get voiceSearchPermissionPermanentlyDenied =>
+      'Η άδεια μικροφώνου απορρίπτεται οριστικά. Ενεργοποιήστε το στις ρυθμίσεις συστήματος.';
+
+  @override
+  String get voiceSearchPermissionRequired =>
+      'Απαιτείται άδεια μικροφώνου για φωνητική αναζήτηση.';
+
+  @override
+  String get voiceSearchNoMatch => 'Δεν το έπιασα. Προσπαθήστε ξανά.';
+
+  @override
+  String get voiceSearchNoSpeechDetected => 'Δεν εντοπίστηκε ομιλία.';
+
+  @override
+  String get voiceSearchMicrophoneError => 'Σφάλμα μικροφώνου.';
+
+  @override
+  String get voiceSearchNeedsInternet =>
+      'Η φωνητική αναζήτηση χρειάζεται διαδίκτυο.';
+
+  @override
+  String get voiceSearchServiceBusy =>
+      'Η φωνητική υπηρεσία είναι απασχολημένη. Προσπαθήστε ξανά.';
+
+  @override
+  String get microphonePermissionPermanentlyDenied =>
+      'Η άδεια μικροφώνου απορρίπτεται οριστικά.';
+
+  @override
+  String get microphonePermissionDenied =>
+      'Η άδεια μικροφώνου δεν επιτρέπεται.';
+
+  @override
+  String get speechRecognitionUnavailable =>
+      'Η αναγνώριση ομιλίας δεν είναι διαθέσιμη σε αυτήν τη συσκευή.';
+
+  @override
+  String get openIosRoutePicker => 'Ανοίξτε το εργαλείο επιλογής διαδρομής iOS';
+
+  @override
+  String get airPlayRoutePickerUnavailable =>
+      'Το εργαλείο επιλογής διαδρομής AirPlay δεν είναι διαθέσιμο σε αυτήν τη συσκευή.';
+
+  @override
+  String get videos => 'Βίντεο';
+
+  @override
+  String get programs => 'Προγράμματα';
+
+  @override
+  String get songs => 'Τραγούδια';
+
+  @override
+  String get photoAlbums => 'Άλμπουμ φωτογραφιών';
+
+  @override
+  String get photos => 'Φωτογραφίες';
+
+  @override
+  String get people => 'Ανθρωποι';
+
+  @override
+  String get recentlyReleasedEpisodes => 'Επεισόδια που κυκλοφόρησαν πρόσφατα';
+
+  @override
+  String get watchAgain => 'Παρακολουθήστε ξανά';
+
+  @override
+  String get guestAppearances => 'Εμφανίσεις καλεσμένων';
+
+  @override
+  String get appearancesSeerr => 'Εμφανίσεις (Seerr)';
+
+  @override
+  String get crewContributionsSeerr => 'Συμμετοχές συντελεστών (Seerr)';
+
+  @override
+  String get watchWithGroup => 'Παρακολουθήστε με ομάδα';
+
+  @override
+  String get errors => 'Σφάλματα';
+
+  @override
+  String get warnings => 'Προειδοποιήσεις';
+
+  @override
+  String get disk => 'Δίσκος';
+
+  @override
+  String get openInBrowser => 'Άνοιγμα στο πρόγραμμα περιήγησης';
+
+  @override
+  String get embeddedBrowserNotAvailable =>
+      'Το ενσωματωμένο πρόγραμμα περιήγησης δεν είναι διαθέσιμο σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get adminRestartServerConfirmation =>
+      'Είστε βέβαιοι ότι θέλετε να κάνετε επανεκκίνηση του διακομιστή;';
+
+  @override
+  String get adminShutdownServerConfirmation =>
+      'Είστε βέβαιοι ότι θέλετε να τερματίσετε τη λειτουργία του διακομιστή; Θα χρειαστεί να το επανεκκινήσετε χειροκίνητα.';
+
+  @override
+  String get internal => 'Εσωτερικός';
+
+  @override
+  String get idle => 'Αεργος';
+
+  @override
+  String get os => 'OS';
+
+  @override
+  String get adminNoUsersFound => 'Δεν βρέθηκαν χρήστες';
+
+  @override
+  String get adminNoUsersMatchSearch =>
+      'Κανένας χρήστης δεν αντιστοιχεί στην αναζήτησή σας';
+
+  @override
+  String get adminNoDevicesFound => 'Δεν βρέθηκαν συσκευές';
+
+  @override
+  String get adminNoDevicesMatchCurrentFilters =>
+      'Καμία συσκευή δεν ταιριάζει με τα τρέχοντα φίλτρα';
+
+  @override
+  String get passwordSet => 'Σύνολο κωδικών πρόσβασης';
+
+  @override
+  String get noPasswordConfigured => 'Δεν έχει διαμορφωθεί κωδικός πρόσβασης';
+
+  @override
+  String get remoteAccess => 'Απομακρυσμένη πρόσβαση';
+
+  @override
+  String get localOnly => 'Μόνο τοπικά';
+
+  @override
+  String get adminMediaAnalyticsLoadFailed =>
+      'Η φόρτωση των αναλυτικών στοιχείων πολυμέσων απέτυχε';
+
+  @override
+  String get analyticsCombinedAcrossLibraries =>
+      'Συνδυασμένα αναλυτικά στοιχεία σε όλες τις βιβλιοθήκες πολυμέσων.';
+
+  @override
+  String get analyticsTopArtists => 'Κορυφαίοι καλλιτέχνες';
+
+  @override
+  String get analyticsTopAuthors => 'Κορυφαίοι Συγγραφείς';
+
+  @override
+  String get analyticsTopContributors => 'Κορυφαίοι Συντελεστές';
+
+  @override
+  String analyticsLibrariesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count βιβλιοθήκες',
+      one: '1 βιβλιοθήκη',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get analyticsNoIndexedMediaTotals =>
+      'Δεν υπάρχουν ακόμη διαθέσιμα σύνολα μέσων με ευρετήριο για αυτήν την επιλογή.';
+
+  @override
+  String get analyticsLibraryDetails => 'Στοιχεία βιβλιοθήκης';
+
+  @override
+  String get analyticsLibraryBreakdown => 'Ανάλυση βιβλιοθήκης';
+
+  @override
+  String get analyticsNoLibrariesAvailable =>
+      'Δεν υπάρχουν διαθέσιμες βιβλιοθήκες.';
+
+  @override
+  String get adminServerAdministrationTitle => 'Διαχείριση διακομιστή';
+
+  @override
+  String get adminServerPathData => 'Δεδομένα';
+
+  @override
+  String get adminServerPathImageCache => 'Προσωρινή μνήμη εικόνων';
+
+  @override
+  String get adminServerPathCache => 'Κρύπτη';
+
+  @override
+  String get adminServerPathLogs => 'κούτσουρα';
+
+  @override
+  String get adminServerPathMetadata => 'Μεταδεδομένα';
+
+  @override
+  String get adminServerPathTranscode => 'Διακωδικοποίηση';
+
+  @override
+  String get adminServerPathWeb => 'Ιστός';
+
+  @override
+  String get adminNoServerPathsReturned =>
+      'Δεν επιστράφηκαν διαδρομές διακομιστή από αυτόν τον διακομιστή.';
+
+  @override
+  String adminPercentUsed(int percent) {
+    return 'Χρησιμοποιείται $percent%';
+  }
+
+  @override
+  String get userActivity => 'Δραστηριότητα χρήστη';
+
+  @override
+  String get systemEvents => 'Συμβάντα συστήματος';
+
+  @override
+  String get needsAttention => 'Χρειάζεται προσοχή';
+
+  @override
+  String get adminDrawerSectionServer => 'Υπηρέτης';
+
+  @override
+  String get adminDrawerSectionPlayback => 'Αναπαραγωγή';
+
+  @override
+  String get adminDrawerSectionDevices => 'Συσκευές';
+
+  @override
+  String get adminDrawerSectionAdvanced => 'Προχωρημένος';
+
+  @override
+  String get adminDrawerSectionPlugins => 'Πρόσθετα';
+
+  @override
+  String get adminDrawerSectionLiveTv => 'Ζωντανή τηλεόραση';
+
+  @override
+  String get homeVideos => 'Αρχική Βίντεο';
+
+  @override
+  String get mixedContent => 'Μικτό Περιεχόμενο';
+
+  @override
+  String get homeVideosAndPhotos => 'Αρχική Βίντεο & Φωτογραφίες';
+
+  @override
+  String get mixedMoviesAndShows => 'Μικτές ταινίες και εκπομπές';
+
+  @override
+  String get intelQuickSync => 'Intel Quick Sync';
+
+  @override
+  String get rockchipMpp => 'Rockchip MPP';
+
+  @override
+  String get dolbyVision => 'Dolby Vision';
+
+  @override
+  String get noRecordingsFound => 'Δεν βρέθηκαν εγγραφές';
+
+  @override
+  String noImagePagesFoundInArchive(String extension) {
+    return 'Δεν βρέθηκαν σελίδες εικόνων μέσα στο αρχείο .$extension.';
+  }
+
+  @override
+  String embeddedRendererFailed(int code, String description) {
+    return 'Η ενσωματωμένη απόδοση απόδοσης απέτυχε ($code): $description';
+  }
+
+  @override
+  String epubRendererFailed(int code, String description) {
+    return 'Η απόδοση EPUB απέτυχε ($code): $description';
+  }
+
+  @override
+  String missingLocalFileForReader(String uri) {
+    return 'Λείπει τοπικό αρχείο για τον αναγνώστη: $uri';
+  }
+
+  @override
+  String httpStatusWhileOpeningBookData(int status, String uri) {
+    return 'HTTP $status κατά το άνοιγμα δεδομένων βιβλίου από $uri';
+  }
+
+  @override
+  String get noReadableBookEndpointAvailable =>
+      'Δεν υπάρχει διαθέσιμο τελικό σημείο αναγνώσιμου βιβλίου';
+
+  @override
+  String unsupportedComicArchiveFormat(String extension) {
+    return 'Μη υποστηριζόμενη μορφή αρχείου κόμικ: .$extension';
+  }
+
+  @override
+  String get cbrExtractionPluginUnavailable =>
+      'Το πρόσθετο εξαγωγής CBR δεν είναι διαθέσιμο σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get failedToExtractCbrArchive => 'Απέτυχε η εξαγωγή του αρχείου .cbr.';
+
+  @override
+  String get cb7ExtractionUnavailable =>
+      'Η εξαγωγή CB7 δεν είναι διαθέσιμη σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get cb7ExtractionPluginUnavailable =>
+      'Το πρόσθετο εξαγωγής CB7 δεν είναι διαθέσιμο σε αυτήν την πλατφόρμα.';
+
+  @override
+  String get closeGenrePanel => 'Κλείσιμο του πίνακα ειδών';
+
+  @override
+  String get loadingShuffle => 'Φόρτωση τυχαίας αναπαραγωγής...';
+
+  @override
+  String get libraryShuffleLabel => 'ΤΥΧΑΙΑ ΑΠΟ ΒΙΒΛΙΟΘΗΚΗ';
+
+  @override
+  String get randomShuffleLabel => 'ΤΥΧΑΙΑ ΕΠΙΛΟΓΗ';
+
+  @override
+  String get genresShuffleLabel => 'ΤΥΧΑΙΑ ΑΠΟ ΕΙΔΗ';
+
+  @override
+  String get autoHdrSwitching => 'Αυτόματη εναλλαγή HDR';
+
+  @override
+  String get autoHdrSwitchingDescription =>
+      'Ενεργοποιήστε αυτόματα το HDR για αναπαραγωγή βίντεο HDR και επαναφέρετε τη λειτουργία προβολής κατά την έξοδο.';
+
+  @override
+  String get whenFullscreen => 'Σε πλήρη οθόνη';
+
+  @override
+  String get changeArtwork => 'Αλλαγή γραφικών';
+
+  @override
+  String get missing => 'Λείπει';
+
+  @override
+  String get transcodingLimits => 'Όρια διακωδικοποίησης';
+
+  @override
+  String get clearAllArtworkButton => 'Εκκαθάριση όλων των γραφικών;';
+
+  @override
+  String get clearAllArtworkWarning =>
+      'Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα ληφθέντα γραφικά;';
+
+  @override
+  String get confirmClear => 'Επιβεβαίωση εκκαθάρισης';
+
+  @override
+  String confirmClearMessage(String itemType) {
+    return 'Είστε βέβαιοι ότι θέλετε να διαγράψετε το εξής: $itemType;';
+  }
+
+  @override
+  String get uploadButton => 'Μεταφόρτωση;';
+
+  @override
+  String get resolutionLabel => 'Ανάλυση: ';
+
+  @override
+  String get onlyShowInterfaceLanguage =>
+      'Εμφάνιση μόνο των γραφικών στη γλώσσα του περιβάλλοντος';
+
+  @override
+  String get confirmClearAll => 'Επιβεβαίωση εκκαθάρισης όλων';
+
+  @override
+  String get imageUploadSuccess => 'Η εικόνα μεταφορτώθηκε με επιτυχία!';
+
+  @override
+  String imageUploadFailed(String error) {
+    return 'Η μεταφόρτωση της εικόνας απέτυχε: $error';
+  }
+
+  @override
+  String imageDownloadFailed(String error) {
+    return 'Ο ορισμός της εικόνας απέτυχε: $error';
+  }
+
+  @override
+  String imageDeleteFailed(String error) {
+    return 'Η διαγραφή της εικόνας απέτυχε: $error';
+  }
+
+  @override
+  String clearAllArtworkFailed(String error) {
+    return 'Η εκκαθάριση όλων των γραφικών απέτυχε: $error';
+  }
+
+  @override
+  String get yes => 'Ναι';
+
+  @override
+  String get posterCategory => 'Αφίσα';
+
+  @override
+  String get backdropsCategory => 'Εικόνες φόντου';
+
+  @override
+  String get bannerCategory => 'Banner';
+
+  @override
+  String get logoCategory => 'Λογότυπο';
+
+  @override
+  String get thumbnailCategory => 'Μικρογραφία';
+
+  @override
+  String get artCategory => 'Εικαστικό';
+
+  @override
+  String get discArtCategory => 'Εικαστικό δίσκου';
+
+  @override
+  String get screenshotCategory => 'Στιγμιότυπο';
+
+  @override
+  String get boxCoverCategory => 'Εξώφυλλο κουτιού';
+
+  @override
+  String get boxRearCoverCategory => 'Οπισθόφυλλο κουτιού';
+
+  @override
+  String get menuArtCategory => 'Εικαστικό μενού';
+
+  @override
+  String get confirmItemPoster => 'αφίσα';
+
+  @override
+  String get confirmItemBackdrop => 'εικόνα φόντου';
+
+  @override
+  String get confirmItemBanner => 'banner';
+
+  @override
+  String get confirmItemLogo => 'λογότυπο';
+
+  @override
+  String get confirmItemThumbnail => 'μικρογραφία';
+
+  @override
+  String get confirmItemArt => 'εικαστικό';
+
+  @override
+  String get confirmItemDiscArt => 'εικαστικό δίσκου';
+
+  @override
+  String get confirmItemScreenshot => 'στιγμιότυπο';
+
+  @override
+  String get confirmItemBoxCover => 'εξώφυλλο κουτιού';
+
+  @override
+  String get confirmItemBoxRearCover => 'οπισθόφυλλο κουτιού';
+
+  @override
+  String get confirmItemMenuArt => 'εικαστικό μενού';
+
+  @override
+  String get resolutionAll => 'Όλες';
+
+  @override
+  String get resolutionHigh => 'Υψηλή (1080p+)';
+
+  @override
+  String get resolutionMedium => 'Μεσαία (720p)';
+
+  @override
+  String get resolutionLow => 'Χαμηλή (<720p)';
+
+  @override
+  String get sources => 'Πηγές';
+
+  @override
+  String get audiobookChapters => 'Κεφάλαια';
+
+  @override
+  String get audiobookBookmarks => 'Σελιδοδείκτες';
+
+  @override
+  String get audiobookNotes => 'Σημειώσεις';
+
+  @override
+  String get audiobookQueue => 'Ουρά';
+
+  @override
+  String get audiobookTimeline => 'Χρονολόγιο';
+
+  @override
+  String get audiobookTimelineEmpty => 'Το χρονολόγιο είναι κενό';
+
+  @override
+  String get audiobookFocusedTimeline => 'Εστιασμένο χρονολόγιο';
+
+  @override
+  String get audiobookExportBookmarks => 'Εξαγωγή σελιδοδεικτών';
+
+  @override
+  String get audiobookExportNotes => 'Εξαγωγή σημειώσεων';
+
+  @override
+  String get audiobookExportAll => 'Εξαγωγή όλων';
+
+  @override
+  String audiobookExportSuccess(String path) {
+    return 'Έγινε εξαγωγή στο $path';
+  }
+
+  @override
+  String audiobookExportFailed(String error) {
+    return 'Η εξαγωγή απέτυχε: $error';
+  }
+
+  @override
+  String get audiobookLyrics => 'Στίχοι';
+
+  @override
+  String get audiobookAddBookmark => 'Προσθήκη σελιδοδείκτη';
+
+  @override
+  String get audiobookAddNote => 'Προσθήκη σημείωσης';
+
+  @override
+  String get audiobookEditNote => 'Επεξεργασία σημείωσης';
+
+  @override
+  String get audiobookNoteHint => 'Γράψτε μια σημείωση για αυτό το σημείο';
+
+  @override
+  String get audiobookSleepTimer => 'Χρονοδιακόπτης ύπνου';
+
+  @override
+  String get audiobookSleepOff => 'Ανενεργό';
+
+  @override
+  String get audiobookSleepEndOfChapter => 'Τέλος κεφαλαίου';
+
+  @override
+  String get audiobookSleepCustom => 'Προσαρμοσμένος';
+
+  @override
+  String audiobookSleepRemaining(String remaining) {
+    return 'Απομένουν $remaining';
+  }
+
+  @override
+  String audiobookSleepMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count λεπτά',
+      one: '1 λεπτό',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get audiobookPlaybackSpeed => 'Ταχύτητα αναπαραγωγής';
+
+  @override
+  String get audiobookRemainingTime => 'Απομένει';
+
+  @override
+  String get audiobookElapsedTime => 'Πέρασε';
+
+  @override
+  String audiobookSkipBackSeconds(int seconds) {
+    return 'Πίσω $secondsδ';
+  }
+
+  @override
+  String audiobookSkipForwardSeconds(int seconds) {
+    return 'Μπροστά $secondsδ';
+  }
+
+  @override
+  String get audiobookPreviousChapter => 'Προηγούμενο κεφάλαιο';
+
+  @override
+  String get audiobookNextChapter => 'Επόμενο κεφάλαιο';
+
+  @override
+  String audiobookChapterIndicator(int current, int total) {
+    return 'Κεφάλαιο $current από $total';
+  }
+
+  @override
+  String get audiobookNoChapters => 'Χωρίς κεφάλαια';
+
+  @override
+  String get audiobookNoBookmarks => 'Δεν υπάρχουν ακόμα σελιδοδείκτες';
+
+  @override
+  String get audiobookNoNotes => 'Δεν υπάρχουν ακόμα σημειώσεις';
+
+  @override
+  String audiobookBookmarkAdded(String position) {
+    return 'Προστέθηκε σελιδοδείκτης στο $position';
+  }
+
+  @override
+  String get audiobookSpeedReset => 'Επαναφορά σε 1.0x';
+
+  @override
+  String audiobookSpeedCustomLabel(String value) {
+    return '${value}x';
+  }
+
+  @override
+  String get audiobookSave => 'Αποθήκευση';
+
+  @override
+  String get audiobookCancel => 'Ακύρωση';
+
+  @override
+  String get audiobookDelete => 'Διαγραφή';
+
+  @override
+  String get subtitlePreferences => 'Προτιμήσεις υπότιτλων';
+
+  @override
+  String get subtitlePreferencesDescription =>
+      'Αλλάξτε τις λειτουργίες υπότιτλων, τις προεπιλεγμένες γλώσσες, την εμφάνιση και τις επιλογές απόδοσης.';
+
+  @override
+  String get subtitleRendering => 'Απόδοση υπότιτλων';
+
+  @override
+  String get displayOptions => 'Επιλογές εμφάνισης';
+
+  @override
+  String get releaseDateAscending => 'Ημερομηνία κυκλοφορίας (αύξουσα)';
+
+  @override
+  String get releaseDateDescending => 'Ημερομηνία κυκλοφορίας (φθίνουσα)';
+
+  @override
+  String get groupContributions => 'Ομαδοποίηση συμμετοχών';
+
+  @override
+  String get groupMultipleRoles => 'Ομαδοποίηση πολλαπλών ρόλων';
+
+  @override
+  String get libraryWriteAccessWarningTitle =>
+      'Προειδοποίηση δικαιωμάτων εγγραφής βιβλιοθήκης';
+
+  @override
+  String get libraryWriteAccessHowToFix => 'Πώς να το διορθώσετε:';
+
+  @override
+  String get libraryWriteAccessFixSteps =>
+      '1. Παραχωρήστε δικαιώματα εγγραφής στον χρήστη της υπηρεσίας Jellyfin (π.χ. jellyfin ή Docker PUID/PGID) για τους φακέλους της βιβλιοθήκης πολυμέσων σας στον διακομιστή.\n\n2. Εναλλακτικά, μεταβείτε στον Πίνακα ελέγχου του Jellyfin -> Βιβλιοθήκες, επεξεργαστείτε αυτήν τη βιβλιοθήκη και απενεργοποιήστε την επιλογή «Αποθήκευση εξωφύλλων στους φακέλους πολυμέσων», ώστε τα εξώφυλλα να αποθηκεύονται στην εσωτερική βάση δεδομένων του Jellyfin.';
+
+  @override
+  String get dismiss => 'Απόρριψη';
+
+  @override
+  String libraryWriteAccessProactiveBody(
+    String libraryName,
+    String failedPath,
+  ) {
+    return 'Η βιβλιοθήκη σας «\'$libraryName\'» έχει ρυθμιστεί να αποθηκεύει τα εξώφυλλα απευθείας στους φακέλους πολυμέσων (η επιλογή «Αποθήκευση εξωφύλλων στους φακέλους πολυμέσων» είναι ενεργοποιημένη). Ωστόσο, το Jellyfin έλεγξε τα δικαιώματα εγγραφής και δεν έχει άδεια να γράψει αρχεία σε αυτόν τον κατάλογο:\n\n$failedPath';
+  }
+
+  @override
+  String get libraryWriteAccessReactiveBody =>
+      'Φαίνεται ότι το Jellyfin δεν κατάφερε να ενημερώσει τα εξώφυλλα. Η βιβλιοθήκη σας έχει ρυθμιστεί να αποθηκεύει τα εξώφυλλα απευθείας στους φακέλους πολυμέσων (η επιλογή «Αποθήκευση εξωφύλλων στους φακέλους πολυμέσων» είναι ενεργοποιημένη). Αυτό το σφάλμα συνήθως προκύπτει όταν η διεργασία του διακομιστή Jellyfin δεν έχει άδεια να γράψει αρχεία στους καταλόγους πολυμέσων σας.';
+
+  @override
+  String get externalLists => 'Εξωτερικές λίστες';
+
+  @override
+  String get replay => 'Επανάληψη';
+
+  @override
+  String get fileInformation => 'Πληροφορίες αρχείου';
+
+  @override
+  String fileSizeFormat(Object size, Object format) {
+    return 'Μέγεθος: $size  •  Μορφή: $format';
+  }
+
+  @override
+  String showAllAudioTracks(int count) {
+    return 'Εμφάνιση όλων των κομματιών ήχου ($count)';
+  }
+
+  @override
+  String showAllSubtitleTracks(int count) {
+    return 'Εμφάνιση όλων των κομματιών υπότιτλων ($count)';
+  }
+
+  @override
+  String get checkingDirectPlay =>
+      'Έλεγχος δυνατότητας απευθείας αναπαραγωγής...';
+
+  @override
+  String get directPlayCapabilityLabel => 'Δυνατότητα απευθείας αναπαραγωγής: ';
+
+  @override
+  String get forced => 'Εξαναγκασμένο';
+
+  @override
+  String get transcodeContainerNotSupported =>
+      'Η μορφή κοντέινερ δεν υποστηρίζεται από το πρόγραμμα αναπαραγωγής.';
+
+  @override
+  String get transcodeVideoCodecNotSupported =>
+      'Ο κωδικοποιητής βίντεο δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeAudioCodecNotSupported =>
+      'Ο κωδικοποιητής ήχου δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeSubtitleCodecNotSupported =>
+      'Η μορφή υπότιτλων δεν υποστηρίζεται (απαιτείται εγγραφή στην εικόνα).';
+
+  @override
+  String get transcodeAudioProfileNotSupported =>
+      'Το προφίλ ήχου δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeVideoProfileNotSupported =>
+      'Το προφίλ βίντεο δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeVideoLevelNotSupported =>
+      'Το επίπεδο βίντεο δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeVideoResolutionNotSupported =>
+      'Η ανάλυση του βίντεο δεν υποστηρίζεται από αυτήν τη συσκευή.';
+
+  @override
+  String get transcodeVideoBitDepthNotSupported =>
+      'Το βάθος bit του βίντεο δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeVideoFramerateNotSupported =>
+      'Ο ρυθμός καρέ του βίντεο δεν υποστηρίζεται.';
+
+  @override
+  String get transcodeContainerBitrateExceedsLimit =>
+      'Ο ρυθμός bit του αρχείου υπερβαίνει το όριο ροής του προγράμματος αναπαραγωγής.';
+
+  @override
+  String get transcodeVideoBitrateExceedsLimit =>
+      'Ο ρυθμός bit του βίντεο υπερβαίνει το όριο ροής.';
+
+  @override
+  String get transcodeAudioBitrateExceedsLimit =>
+      'Ο ρυθμός bit του ήχου υπερβαίνει το όριο ροής.';
+
+  @override
+  String get transcodeAudioChannelsNotSupported =>
+      'Ο αριθμός των καναλιών ήχου δεν υποστηρίζεται.';
+
+  @override
+  String get sortAlphabetical => 'Αλφαβητικά';
+
+  @override
+  String get sortReleaseAscending => 'Σειρά κυκλοφορίας (αύξουσα)';
+
+  @override
+  String get sortReleaseDescending => 'Σειρά κυκλοφορίας (φθίνουσα)';
+
+  @override
+  String get sortCustomDragDrop => 'Προσαρμοσμένη (μεταφορά και απόθεση)';
+
+  @override
+  String get playlistSortOptions => 'Επιλογές ταξινόμησης λίστας αναπαραγωγής';
+
+  @override
+  String get resetSort => 'Επαναφορά ταξινόμησης';
+
+  @override
+  String rewatchSeasonEpisode(int season, int episode) {
+    return 'Νέα παρακολούθηση Σ$season:Ε$episode';
+  }
+
+  @override
+  String get rewatchPlaylist => 'Νέα παρακολούθηση λίστας αναπαραγωγής';
+
+  @override
+  String get noSubtitlesFound => 'Δεν βρέθηκαν υπότιτλοι.';
+
+  @override
+  String get adminControls => 'Στοιχεία ελέγχου διαχειριστή';
+
+  @override
+  String get impellerRendering => 'Μηχανή απόδοσης (Impeller)';
+
+  @override
+  String get impellerRenderingSubtitle =>
+      'Το Impeller είναι ο σύγχρονος επεξεργαστής απόδοσης GPU του Flutter, για πιο ομαλά κινούμενα γραφικά και λιγότερα κολλήματα. Σε ορισμένα TV box και παλαιότερες GPU μπορεί να προκαλέσει προβλήματα εμφάνισης ή μαύρο βίντεο· απενεργοποιήστε το αν παρατηρήσετε κάτι τέτοιο. Το Αυτόματο επιλέγει την καλύτερη προεπιλογή για τη συσκευή σας. Επανεκκινήστε το Tortugarr για να εφαρμοστεί.';
+
+  @override
+  String get impellerAuto => 'Αυτόματο';
+
+  @override
+  String get impellerOn => 'Ενεργό';
+
+  @override
+  String get impellerOff => 'Ανενεργό';
+
+  @override
+  String get impellerRestartTitle => 'Απαιτείται επανεκκίνηση';
+
+  @override
+  String get impellerRestartMessage =>
+      'Το Tortugarr πρέπει να επανεκκινήσει για να αλλάξει η μηχανή απόδοσης. Κλείστε την εφαρμογή τώρα και ανοίξτε την ξανά για να εφαρμοστεί.';
+
+  @override
+  String get impellerCloseNow => 'Κλείσιμο εφαρμογής τώρα';
+
+  @override
+  String get adminRefreshLibrary => 'Ανανέωση βιβλιοθήκης';
+
+  @override
+  String get adminRefreshAllLibraries => 'Ανανέωση όλων των βιβλιοθηκών';
+
+  @override
+  String get adminRepoSortDateOldest =>
+      'Ημερομηνία προσθήκης (παλαιότερα πρώτα)';
+
+  @override
+  String get adminRepoSortDateNewest => 'Ημερομηνία προσθήκης (νεότερα πρώτα)';
+
+  @override
+  String get adminRepoSortNameAsc => 'Αλφαβητικά (Α έως Ω)';
+
+  @override
+  String get adminRepoSortNameDesc => 'Αλφαβητικά (Ω έως Α)';
+
+  @override
+  String adminAnalyticsLoadingProgress(int percentage) {
+    return 'Φόρτωση αναλυτικών στοιχείων διακομιστή... $percentage%';
+  }
+
+  @override
+  String get adminLibChapterImageResolutionMatchSource => 'Ίδια με την πηγή';
+
+  @override
+  String get imdbTop250Movies => 'IMDb: Κορυφαίες 250 ταινίες';
+
+  @override
+  String get imdbTop250TvShows => 'IMDb: Κορυφαίες 250 τηλεοπτικές σειρές';
+
+  @override
+  String get imdbMostPopularMovies => 'IMDb: Δημοφιλέστερες ταινίες';
+
+  @override
+  String get imdbMostPopularTvShows =>
+      'IMDb: Δημοφιλέστερες τηλεοπτικές σειρές';
+
+  @override
+  String get imdbLowestRatedMovies =>
+      'IMDb: Ταινίες με τη χαμηλότερη βαθμολογία';
+
+  @override
+  String get imdbTopEnglishMovies => 'IMDb: Κορυφαίες αγγλόφωνες ταινίες';
+
+  @override
+  String get addToWatchlist => 'Προσθήκη στη λίστα παρακολούθησης';
+
+  @override
+  String get removeFromWatchlist => 'Κατάργηση από τη λίστα παρακολούθησης';
+
+  @override
+  String get watchlistUpdateFailed =>
+      'Δεν ήταν δυνατή η ενημέρωση της λίστας παρακολούθησης';
+
+  @override
+  String get adminSearchParameters => 'Παράμετροι Αναζήτησης';
+
+  @override
+  String get adminCurrentMetadata => 'Τρέχοντα Μεταδεδομένα';
+
+  @override
+  String get adminLabelYear => 'Έτος';
+
+  @override
+  String get adminLabelImdbId => 'Αναγνωριστικό IMDb';
+
+  @override
+  String get adminLabelTmdbMovieId => 'Αναγνωριστικό Ταινίας TheMovieDb';
+
+  @override
+  String get adminLabelTmdbBoxSetId =>
+      'Αναγνωριστικό Συλλογής Ταινιών TheMovieDb';
+
+  @override
+  String get adminLabelTvdbBoxSetId => 'Αναγνωριστικό Συλλογής Ταινιών TheTVDB';
+
+  @override
+  String get adminLabelTvdbId => 'Αριθμητικό Αναγνωριστικό TheTVDB';
+
+  @override
+  String get adminLabelTvdbSlug => 'TheTVDB Slug Αναγνωριστικό Ταινίας';
+
+  @override
+  String get adminReplaceImages => 'Αντικατάσταση υπαρχουσών εικόνων';
+
+  @override
+  String get adminBackToSearch => 'Επιστροφή στα Κριτήρια Αναζήτησης';
+
+  @override
+  String get grouping => 'Grouping';
+
+  @override
+  String get groupByType => 'Group by Type';
+
+  @override
+  String get playlistTypes => 'Playlist Types';
+
+  @override
+  String get playlistTypeVideo => 'Video';
+
+  @override
+  String get playlistTypeAudio => 'Audio (Music)';
+
+  @override
+  String get playlistTypeAudiobook => 'Audiobook';
+
+  @override
+  String get playlistTypeBook => 'Book';
+
+  @override
+  String get playlistTypePhoto => 'Photo';
+
+  @override
+  String get playlistTypeMixed => 'Mixed';
+
+  @override
+  String get videoPlaylistsSection => 'Video Playlists';
+
+  @override
+  String get audioPlaylistsSection => 'Audio Playlists';
+
+  @override
+  String get audiobookPlaylistsSection => 'Audiobook Playlists';
+
+  @override
+  String get bookPlaylistsSection => 'Book Playlists';
+
+  @override
+  String get photoPlaylistsSection => 'Photo Playlists';
+
+  @override
+  String get mixedPlaylistsSection => 'Mixed Playlists';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Λείπει';
+
+  @override
+  String get tgComing => 'Έρχεται';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Έρχεται $date';
+  }
+
+  @override
+  String get tgDownloading => 'Λήψη σε εξέλιξη';
+
+  @override
+  String get tgReadySoon => 'Έτοιμο σύντομα';
+
+  @override
+  String get tgRequested => 'Ζητήθηκε';
+
+  @override
+  String get tgClose => 'Κλείσιμο';
+
+  @override
+  String get tgCancel => 'Ακύρωση';
+
+  @override
+  String get tgBack => 'Πίσω';
+
+  @override
+  String get tgYes => 'Ναι';
+
+  @override
+  String get tgNo => 'Όχι';
+
+  @override
+  String get tgSearch => 'Αναζήτηση';
+
+  @override
+  String get tgHide => 'Απόκρυψη';
+
+  @override
+  String get tgAll => 'Όλα';
+
+  @override
+  String get tgNone => 'Κανένα';
+
+  @override
+  String get tgMovies => 'Ταινίες';
+
+  @override
+  String get tgSeries => 'Σειρές';
+
+  @override
+  String get tgMovieTag => 'Ταινία';
+
+  @override
+  String get tgSeriesTag => 'Σειρά';
+
+  @override
+  String get tgCanTakeAMinute => 'Μπορεί να πάρει έως ένα λεπτό';
+
+  @override
+  String get tgToday => 'σήμερα';
+
+  @override
+  String get tgYesterday => 'χθες';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'πριν από $days ημέρες';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'πριν από $months μήνες';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'πριν από $years χρόνια';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'πριν από $years χρόνια και $months μήνες';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Εύρεση υπότιτλων';
+
+  @override
+  String get tgFreeUpSpace => 'Απελευθέρωση χώρου';
+
+  @override
+  String get tgDownloads => 'Λήψεις';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Λήψεις ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '«$title»: η λήψη δεν περιείχε αρχείο βίντεο ($files). Αφαιρέθηκε και μπλοκαρίστηκε – δοκιμάστε άλλο αρχείο.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '«$title»: η λήψη δεν περιείχε αρχείο βίντεο ($files), αλλά δεν ήταν δυνατή η αυτόματη αφαίρεσή της.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Προβλήθηκε $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Πατήστε για εύρεση αρχείων';
+
+  @override
+  String get tgWholeSeason => 'Ολόκληρος κύκλος';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Λείπουν $count επεισόδια – βρείτε πακέτο κύκλου';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Προσθέστε στο Sonarr για να δείτε τα επεισόδια που λείπουν';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Η σειρά προστίθεται χωρίς να κατεβάσει τίποτα από μόνη της';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Τα επεισόδια που λείπουν δεν μπορούν να εμφανιστούν τώρα';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Πατήστε για νέα προσπάθεια';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Πακέτο κύκλου';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Παρακολούθηση κύκλου $season';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Να κατεβάσει το Sonarr τα επεισόδια που λείπουν από τον κύκλο $season τώρα;\n\nΌχι: μόνο τα νέα επεισόδια θα λαμβάνονται όταν κυκλοφορούν.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Το Sonarr αναζητά τον κύκλο $season';
+  }
+
+  @override
+  String get tgMonitored => 'Παρακολουθείται';
+
+  @override
+  String get tgNotMonitored => 'Δεν παρακολουθείται';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return 'Κύκλος $season: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return 'Λείπει: $label';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return 'Το $code δεν έχει προβληθεί ακόμα.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return 'Το $code δεν έχει προβληθεί ακόμα – έρχεται $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return 'Το $code κατεβαίνει ήδη.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return 'Το $code κατέβηκε και θα εμφανιστεί σύντομα στη βιβλιοθήκη.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Αναζήτηση για $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return 'κύκλος $season';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Ολόκληρος $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return 'Κύκλος $season – κανένα επεισόδιο στη βιβλιοθήκη';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'Η σειρά δεν έχει TVDB id, οπότε το Sonarr δεν μπορεί να τη βρει.';
+
+  @override
+  String get tgAddingToSonarr => 'Προσθήκη στο Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Δεν ήταν δυνατή η προσθήκη της σειράς στο Sonarr. Δοκιμάστε ξανά αργότερα.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Αποστολή «$label» για λήψη …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Η λήψη δεν ξεκίνησε: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return 'Το «$label» κατεβαίνει ($size). Θα εμφανιστεί στη βιβλιοθήκη όταν ολοκληρωθεί.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Δεν ήταν δυνατή η επικοινωνία με το Sonarr. Δοκιμάστε ξανά σε λίγο.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Δεν βρέθηκαν χρησιμοποιήσιμα αρχεία. Δοκιμάστε ξανά αργότερα – συχνά εμφανίζονται νέα μετά από λίγες ώρες.';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count αρχεία';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count αρχεία – $recommended ταιριάζουν στο προφίλ ποιότητας, τα υπόλοιπα είναι στο τέλος';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Εκτός προφίλ ποιότητας';
+
+  @override
+  String get tgLargerThanProfile => 'Μεγαλύτερο από όσο επιτρέπει το προφίλ';
+
+  @override
+  String get tgSmallerThanProfile => 'Μικρότερο από όσο επιτρέπει το προφίλ';
+
+  @override
+  String get tgAlreadyExists => 'Υπάρχει ήδη';
+
+  @override
+  String get tgMayNotFitDisk => 'Μπορεί να μη χωρέσει στον δίσκο';
+
+  @override
+  String get tgSonarrUnreachable =>
+      'Δεν ήταν δυνατή η επικοινωνία με το Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Δεν ήταν δυνατή η επικοινωνία με το Sonarr στο $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Το Sonarr δεν δέχτηκε την αλλαγή';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Ο κύκλος παρακολουθείται, αλλά το Sonarr δεν ξεκίνησε την αναζήτηση';
+
+  @override
+  String get tgSonarrCantSearch =>
+      'Το Sonarr δεν μπόρεσε να κάνει αναζήτηση τώρα';
+
+  @override
+  String get tgSearchExpired =>
+      'Το αποτέλεσμα αναζήτησης έληξε – αναζητήστε ξανά';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Το Sonarr δεν δέχτηκε τη λήψη (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Το Sonarr δεν έχει τη σειρά';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Δεν ήταν δυνατή η αλλαγή της παρακολούθησης: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Το Jellyfin δεν αναγνώρισε τη σειρά (χωρίς TVDB ή TMDB id)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Κάτι πήγε στραβά: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Το αρχείο δεν διαχειρίζεται από Radarr/Sonarr και το Jellyfin έχει μόνο πρόσβαση ανάγνωσης στον φάκελο. Διαγράψτε το από τη διαχείριση αρχείων.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Το Sonarr δεν είναι διαθέσιμο ή η σειρά δεν έχει προστεθεί εκεί. Η λήψη ανά επεισόδιο απαιτεί Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Τα επιλεγμένα επεισόδια δεν βρέθηκαν στο Sonarr για το «$title» (βρέθηκαν $count επεισόδια συνολικά). Προσθέστε τη σειρά στο Sonarr και δοκιμάστε ξανά.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Μέρος της συλλογής ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  βλέπετε το μέρος $current από $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return 'Μέρος $number από $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Άγνωστος τίτλος';
+
+  @override
+  String get tgMovieCollection => 'Συλλογή ταινιών';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return 'Το «$title» δεν έχει κυκλοφορήσει ακόμα';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Βίντεο';
+
+  @override
+  String get tgScreensaverModeLogo => 'Λογότυπο';
+
+  @override
+  String get tgScreensaverSound => 'Ήχος προφύλαξης οθόνης';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Ανενεργό: τα τρέιλερ της προφύλαξης οθόνης παίζουν χωρίς ήχο';
+
+  @override
+  String get tgScreensaverLogo => 'Λογότυπο';
+
+  @override
+  String get tgLogoBadge => 'Σήμα Tortugarr';
+
+  @override
+  String get tgLogoVhs => 'Παπαγάλος σε κασέτες VHS';
+
+  @override
+  String get tgLogoSign => 'Παπαγάλος σε ταμπέλα';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'ΚΡΥΦΟ · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Χώρος δίσκου';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Απελευθερώστε χώρο για νέες λήψεις';
+
+  @override
+  String get tgAdultTitle => 'Ταινίες για ενήλικες (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Εμφάνιση ή απόκρυψη της βιβλιοθήκης XXX (PIN)';
+
+  @override
+  String get tgHideForeign => 'Απόκρυψη ξένου περιεχομένου';
+
+  @override
+  String get tgHideForeignOn =>
+      'Ενεργό: τα Τάσεις και Δημοφιλή δείχνουν μόνο αγγλικά, νορβηγικά, σουηδικά, δανικά, γερμανικά και γαλλικά';
+
+  @override
+  String get tgHideForeignOff =>
+      'Ανενεργό: τα Τάσεις και Δημοφιλή δείχνουν όλες τις γλώσσες';
+
+  @override
+  String get tgShowHidden => 'Εμφάνιση των κρυφών';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Ενεργό: οι τίτλοι που θα κρύβονταν εμφανίζονται με κόκκινο σήμα ΚΡΥΦΟ';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Αντιμετώπιση προβλημάτων: εμφάνιση κρυφών τίτλων με κόκκινο σήμα αντί για αφαίρεση';
+
+  @override
+  String get tgShowAllSubLangs => 'Εμφάνιση όλων των γλωσσών υπότιτλων';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Ενεργό: το μενού υπότιτλων δείχνει όλες τις γλώσσες';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Ανενεργό: το μενού υπότιτλων δείχνει μόνο νορβηγικά και αγγλικά';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Ανενεργό: το μενού υποτίτλων δείχνει μόνο τις γλώσσες που επιλέξατε';
+
+  @override
+  String get tgSubtitleLanguages => 'Γλώσσες υποτίτλων';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Εμφανίζονται στο μενού υποτίτλων: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Ήχος προεπισκόπησης';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Ενεργό: το κλιπ που παίζει όταν σταματάτε σε έναν τίτλο έχει ήχο';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Ανενεργό: τα κλιπ παίζουν χωρίς ήχο όσο περιηγείστε';
+
+  @override
+  String get tgScreensaver => 'Προφύλαξη οθόνης';
+
+  @override
+  String get tgScreensaverSubtitle => 'Βίντεο ή λογότυπο, ήχος και εικόνα';
+
+  @override
+  String get tgShowMissingEpisodes => 'Εμφάνιση επεισοδίων που λείπουν';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Ενεργό: οι κύκλοι δείχνουν τα επεισόδια που δεν έχετε, έτοιμα για λήψη';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Ανενεργό: οι κύκλοι δείχνουν μόνο τα επεισόδια που έχετε';
+
+  @override
+  String get tgShowCollections => 'Εμφάνιση συλλογών ταινιών';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Ενεργό: οι ταινίες δείχνουν τις υπόλοιπες ταινίες της συλλογής, μαζί με αυτές που σας λείπουν';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Ανενεργό: η σελίδα της ταινίας δεν δείχνει τη συλλογή';
+
+  @override
+  String get tgNoActiveDownloads => 'Καμία ενεργή λήψη.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Επιλέξτε μια λήψη για να ανοίξετε τα αιτήματα.';
+
+  @override
+  String get tgRefreshLibrary => 'Ανανέωση βιβλιοθήκης';
+
+  @override
+  String get tgAskingJellyfinScan =>
+      'Ζητείται από το Jellyfin να σαρώσει τη βιβλιοθήκη …';
+
+  @override
+  String get tgHideAll => 'Απόκρυψη όλων';
+
+  @override
+  String get tgImporting => 'Εισαγωγή';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Αυτός ο τίτλος δεν διαχειρίζεται από Radarr/Sonarr, οπότε το Bazarr δεν μπορεί να βρει υπότιτλους για αυτόν.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Δεν ήταν δυνατή η επικοινωνία με το Bazarr. Δοκιμάστε ξανά σε λίγο.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Δεν βρέθηκε τίποτα ακόμα. Το Bazarr ξαναπροσπαθεί αυτόματα κάθε μέρα, ή μπορείτε να επιλέξετε εσείς.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Βρέθηκαν $languages – μπορεί να πάρει λίγο μέχρι να εμφανιστούν στο μενού υπότιτλων.';
+  }
+
+  @override
+  String get tgAnd => 'και';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Λήφθηκαν – μπορεί να πάρει λίγο μέχρι να εμφανιστούν στο μενού υπότιτλων.';
+
+  @override
+  String get tgAskingBazarr => 'Ερώτηση στο Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Τα έχετε όλα';
+
+  @override
+  String get tgSearchAutoNow => 'Αυτόματη αναζήτηση τώρα';
+
+  @override
+  String get tgSearchingUpToMinute =>
+      'Αναζήτηση … μπορεί να πάρει έως ένα λεπτό';
+
+  @override
+  String get tgPickYourself => 'Επιλέξτε εσείς';
+
+  @override
+  String get tgAskingProviders =>
+      'Ερώτηση στους παρόχους υπότιτλων … μπορεί να πάρει έως ένα λεπτό';
+
+  @override
+  String get tgNoProviderSubs =>
+      'Κανένας πάροχος δεν έχει υπότιτλους για αυτό ακόμα.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: διαθέσιμοι';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: λείπουν';
+  }
+
+  @override
+  String get tgNoReleaseName => '(χωρίς όνομα release)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · για άτομα με προβλήματα ακοής';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Νορβηγικά';
+
+  @override
+  String get tgLangEnglish => 'Αγγλικά';
+
+  @override
+  String get tgBazarrUnknownTitle =>
+      'Το Bazarr δεν γνωρίζει ακόμα αυτόν τον τίτλο';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Το Bazarr απάντησε με σφάλμα (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Λίγος χώρος στο $drive: ($free ελεύθερα). Η λήψη μπορεί να σταματήσει — ενημερώστε όποιον διαχειρίζεται τον διακομιστή.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Δεν ήταν δυνατή η επικοινωνία με το qBittorrent για έλεγχο του χώρου';
+
+  @override
+  String get tgNotEnoughSpace => 'Ανεπαρκής χώρος';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: έχει $free ελεύθερα';
+  }
+
+  @override
+  String get tgCopyInDownloads =>
+      'Αντίγραφο στο Downloads · υπάρχει ήδη στη βιβλιοθήκη';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Τελευταία προβολή $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Δεν έχει προβληθεί · προστέθηκε $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Δεν έχει προβληθεί';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Δεν βρέθηκε τίποτα στο $drive: που να μπορεί να διαγραφεί με ασφάλεια (όλα είναι πρόσφατα προστεθειμένα, πρόσφατα προβεβλημένα ή αγαπημένα).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Διαγραφή $count τίτλων;',
+      one: 'Διαγραφή 1 τίτλου;',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size θα διαγραφούν οριστικά. Δεν μπορεί να αναιρεθεί.';
+  }
+
+  @override
+  String get tgYesDelete => 'Ναι, διαγραφή';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Διαγραφή $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: έχει τώρα $free ελεύθερα';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Διαγράφηκαν $count τίτλοι',
+      one: 'Διαγράφηκε 1 τίτλος',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Διαγράφηκαν $count, απέτυχαν: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Απελευθέρωση $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Αντίγραφα λήψεων';
+
+  @override
+  String get tgLookingForUnwatched =>
+      'Αναζήτηση για όσα δεν έχουν προβληθεί εδώ και πολύ καιρό …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Πρόταση: $size · αρκετός χώρος ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Πρόταση: $size από $target που χρειάζονται';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Επιλέξτε ένα για να πείτε όχι — η επόμενη πρόταση έρχεται αυτόματα.';
+
+  @override
+  String get tgOtherCandidates => 'Άλλες επιλογές';
+
+  @override
+  String get tgDownloadAnyway => 'Λήψη ούτως ή άλλως';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Διαγραφή $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: έχει $free ελεύθερα.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Το αρχείο είναι $size και πιάνει διπλό χώρο (λήψη + αντίγραφο στη βιβλιοθήκη), πλέον $buffer ως απόθεμα.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Το αρχείο είναι $size, πλέον $buffer ως απόθεμα.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Οι λήψεις σε εξέλιξη χρειάζονται ακόμα $size.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Λείπουν $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Βρέθηκαν μόνο αρχεία που δημοσιεύτηκαν πριν την ψηφιακή κυκλοφορία της ταινίας ($count) — είναι σχεδόν πάντα ψεύτικα.';
+  }
+
+  @override
+  String get tgNoDigitalDate =>
+      'δεν έχει ακόμα ημερομηνία ψηφιακής κυκλοφορίας';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'κυκλοφορεί ψηφιακά στις $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Δεν έχει κυκλοφορήσει ψηφιακά ακόμα';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return 'Το «$title» $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Ό,τι υπάρχει τώρα είναι συνήθως εγγραφή από κινηματογράφο ή άλλη ταινία με το ίδιο όνομα. Μερικές φορές υπάρχει μια πρώιμη κόπια σε χαμηλότερη ποιότητα, συχνά με ενσωματωμένους υπότιτλους. Η «Εμφάνιση αρχείων ούτως ή άλλως» δείχνει τι υπάρχει. Το Radarr κατεβάζει μόνο του τη σωστή έκδοση όταν κυκλοφορήσει.';
+
+  @override
+  String get tgShowFilesAnyway => 'Εμφάνιση αρχείων ούτως ή άλλως';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Επιλέξτε κύκλους και επεισόδια';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: χωρίς πληροφορίες επεισοδίων';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Ισχύει για κάθε συσκευή που χρησιμοποιεί αυτόν τον λογαριασμό';
+
+  @override
+  String get tgNoXxxLibrary => 'Δεν βρέθηκε βιβλιοθήκη με όνομα XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Αναζήτηση κάθε λέξης ξεχωριστά … (μπορεί να πάρει μισό λεπτό)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return 'Το «$title» ($size) στάλθηκε στο qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Η λήψη απέτυχε: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return 'Το «$title» δεν περιείχε αρχείο βίντεο και αφαιρέθηκε.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return 'Το «$title» δεν περιείχε αρχείο βίντεο και ΔΕΝ αφαιρέθηκε.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Αναζήτηση νέων XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Όνομα, στούντιο …';
+
+  @override
+  String get tgChecking => 'Έλεγχος …';
+
+  @override
+  String get tgXxxVisible =>
+      'Ορατό τώρα. Το XXX εμφανίζεται στις βιβλιοθήκες, στην αναζήτηση και στην αρχική οθόνη.';
+
+  @override
+  String get tgXxxHidden =>
+      'Κρυφό. Το XXX δεν εμφανίζεται πουθενά στην εφαρμογή.';
+
+  @override
+  String get tgShowWithPin => 'Εμφάνιση (PIN)';
+
+  @override
+  String get tgChangePin => 'Αλλαγή PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Δεν ήταν δυνατή η λήψη της λίστας βιβλιοθηκών (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Δεν ήταν δυνατή η λήψη των ρυθμίσεων χρήστη (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Το Jellyfin απέρριψε την αλλαγή (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Η διαγραφή απέτυχε (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Δεν ήταν δυνατή η προσθήκη του «$title» στο qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return 'κύκλος $season, επεισόδιο $episode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Αναζήτηση στο Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Αναζητήστε ταινίες και σειρές (π.χ. «Lost S02E05»)';
+
+  @override
+  String get tgMissingInThisSeason => 'Λείπουν σε αυτόν τον κύκλο';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Λείπουν οι κύκλοι',
+      one: 'Λείπει ο κύκλος',
+    );
+    return '$_temp0 $list - ανοίξτε τη σειρά για να δείτε όλους τους κύκλους';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Το Tortugarr στο GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Πηγαίος κώδικας, εκδόσεις και αναφορές προβλημάτων';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Το Tortugarr βασίζεται στο Moonfin (GPL), από τους προγραμματιστές του Moonfin.';
+
+  @override
+  String get tgCredits => 'Ευχαριστίες';
+
+  @override
+  String get tgCreditsThanks =>
+      'Με ταπεινή ευγνωμοσύνη: χωρίς αυτά τα έργα και τους ανθρώπους πίσω τους, το Tortugarr δεν θα υπήρχε.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Just OdWar420 and Claude, building what should have existed from the start.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Η εφαρμογή στην οποία βασίζεται το Tortugarr (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Διακομιστής πολυμέσων';
+
+  @override
+  String get tgCreditSeerr => 'Ανακάλυψη και αιτήματα';
+
+  @override
+  String get tgCreditRadarr => 'Ταινίες';
+
+  @override
+  String get tgCreditSonarr => 'Σειρές';
+
+  @override
+  String get tgCreditProwlarr => 'Διαχείριση indexers';
+
+  @override
+  String get tgCreditBazarr => 'Υπότιτλοι';
+
+  @override
+  String get tgCreditFlareSolverr => 'Βοηθός Cloudflare για indexers';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Πρόγραμμα λήψεων, προεπιλογή του εγκαταστάτη';
+
+  @override
+  String get tgCreditTmdb => 'Δεδομένα ταινιών και σειρών, αφίσες και εικόνες';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Υπότιτλοι, μέσω Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Αυτό το προϊόν χρησιμοποιεί το TMDB API, αλλά δεν είναι εγκεκριμένο ή πιστοποιημένο από το TMDB.';
+
+  @override
+  String get tgLoadingLogoSize => 'Μέγεθος λογότυπου φόρτωσης';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Το λογότυπο που περιστρέφεται όσο φορτώνει ένα βίντεο';
+
+  @override
+  String get tgDiscoveryLanguages => 'Γλώσσες στα Τάσεις και Δημοφιλή';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Εμφανίζονται: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Ενεργό: τα Τάσεις και Δημοφιλή δείχνουν μόνο τις γλώσσες που επιλέξατε';
+
+  @override
+  String get tgShowLanguageBadges => 'Εμφάνιση σημάτων γλώσσας';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Ενεργό: οι τίτλοι δείχνουν τη γλώσσα τους (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Ανενεργό: χωρίς σήματα γλώσσας στους τίτλους';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
+}

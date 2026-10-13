@@ -1,6 +1,7 @@
 package org.moonfin.androidtv
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
@@ -16,6 +17,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.content.res.Configuration
 import android.graphics.drawable.Icon
+import android.hardware.display.DisplayManager
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
@@ -26,9 +28,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.os.PowerManager
+import android.os.SystemClock
 import android.util.Rational
-import android.view.Display
-import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import androidx.mediarouter.media.MediaRouteSelector
@@ -48,16 +49,24 @@ import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.images.WebImage
 import com.ryanheise.audioservice.AudioServiceActivity
+import com.ryanheise.audioservice.AudioServicePlugin
+import com.ryanheise.audioservice.AudioServiceState
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayOutputStream
+import kotlin.concurrent.thread
 
 import android.hardware.input.InputManager
 import org.flame_engine.gamepads_android.GamepadsCompatibleActivity
 
 class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
 
+    // Never invoked: kept only so the gamepads_android plugin's
+    // GamepadsCompatibleActivity.registerKeyEventHandler call below has
+    // somewhere to store its callback. See dispatchKeyEvent's comment for why
+    // calling it per key event was removed.
     private var keyHandler: ((KeyEvent) -> Boolean)? = null
     private var motionHandler: ((MotionEvent) -> Boolean)? = null
 
@@ -81,8 +90,17 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     private var audioCapsEventsChannel: EventChannel? = null
     private var audioCapsSink: EventChannel.EventSink? = null
     private var audioDeviceCallback: AudioDeviceCallback? = null
+    private var displayCapsEventsChannel: EventChannel? = null
+    private var displayCapsSink: EventChannel.EventSink? = null
+    private var displayListener: DisplayManager.DisplayListener? = null
     private var castStatusListener: SessionManagerListener<CastSession>? = null
     private var castDiscoveryCallback: MediaRouter.Callback? = null
+
+    // A receiver is published by both the MediaRouter and the MediaRouter2
+    // provider service, so it arrives once per provider under ids that differ
+    // only in their provider prefix. Keyed on the receiver itself, the picker
+    // lists each device once.
+    private val emittedCastReceivers = mutableSetOf<String>()
     private var dlnaChannel: MethodChannel? = null
     private var dlnaEventsChannel: EventChannel? = null
     private var dlnaController: DlnaController? = null
@@ -90,20 +108,39 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     private var externalPlayerPendingResult: MethodChannel.Result? = null
     private var gamepadChannel: MethodChannel? = null
     private var libretroBridge: LibretroBridge? = null
+    // Native path: constructed alongside libretroBridge in configureFlutterEngine
+    // (it needs that instance to reach nativeSetMask). Nullable rather than
+    // lateinit since dispatchKeyEvent can run before the engine is configured.
+    private var nativePad: NativePadInput? = null
+    // GameInputRouter is deliberately Android-free, so the Activity owns the
+    // registration and forwards.
+    private val gameInputManager by lazy {
+        getSystemService(Context.INPUT_SERVICE) as? InputManager
+    }
+
+    private val gameInputDeviceListener = object : InputManager.InputDeviceListener {
+        override fun onInputDeviceAdded(deviceId: Int) {}
+
+        override fun onInputDeviceRemoved(deviceId: Int) =
+            gameInputRouter.onDeviceRemoved(deviceId)
+
+        override fun onInputDeviceChanged(deviceId: Int) =
+            gameInputRouter.onDeviceChanged(deviceId)
+    }
+
+    private val gameInputRouter = GameInputRouter(object : GameInputRouter.Callbacks {
+        override fun onEmulatorButton(label: String, pressed: Boolean, device: Map<String, String>?) {
+            sendGamepadButton(label, pressed, device)
+        }
+
+        override fun onEmulatorKeyboard(keyCode: Int) = sendEmulatorKeyboardKey(keyCode)
+
+        override fun onNavigate(axis: String, direction: String) = sendGamepadNavigate(axis, direction)
+    })
     private var watchNextChannel: MethodChannel? = null
     private var watchNextPublisher: WatchNextPublisher? = null
     private var previewChannelPublisher: PreviewChannelPublisher? = null
     private var pendingDeepLink: String? = null
-    private var gameActive = false
-    private var hatX = 0
-    private var hatY = 0
-
-    // Kept separate from hatX/hatY on purpose. Sharing them would let a
-    // UI-navigation value leak into the emulator's edge detector, which would
-    // then read the first in-game press as a hold already in progress and
-    // never send its matching button-up.
-    private var navX = 0
-    private var navY = 0
     private var pipEnabled = false
     private val handler = Handler(Looper.getMainLooper())
     private var dismissRunnable: Runnable? = null
@@ -112,6 +149,41 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     private var castMediaListener: RemoteMediaClient.Listener? = null
     private var castProgressListener: RemoteMediaClient.ProgressListener? = null
     private var castErrorReported = false
+
+    // The Handler half of a BurstCoalescer: one pending runnable, replaced on
+    // every event, so the trigger that reaches the emit is the burst's last.
+    private inner class DebouncedEmit(
+        private val coalescer: BurstCoalescer,
+        private val emit: (String) -> Unit,
+    ) {
+        private var pending: Runnable? = null
+
+        fun schedule(trigger: String) {
+            val at = coalescer.onEvent(SystemClock.uptimeMillis())
+            pending?.let { handler.removeCallbacks(it) }
+            val runnable = Runnable {
+                pending = null
+                coalescer.fired()
+                emit(trigger)
+            }
+            pending = runnable
+            handler.postAtTime(runnable, at)
+        }
+
+        fun cancel() {
+            pending?.let { handler.removeCallbacks(it) }
+            pending = null
+            coalescer.fired()
+        }
+    }
+
+    private val displayEmit = DebouncedEmit(
+        BurstCoalescer(DISPLAY_EMIT_DEBOUNCE_MS, DISPLAY_EMIT_MAX_WAIT_MS),
+    ) { trigger -> emitDisplayCapabilities(trigger) }
+
+    private val audioEmit = DebouncedEmit(
+        BurstCoalescer(AUDIO_EMIT_DEBOUNCE_MS, AUDIO_EMIT_MAX_WAIT_MS),
+    ) { emitAudioCapabilities() }
 
     private fun emitAudioCapabilities() {
         audioCapsSink?.success(AudioCapabilities.query(this))
@@ -125,9 +197,11 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             }
         }
         audioDeviceCallback = null
+        audioEmit.cancel()
     }
 
     companion object {
+        private var engineHandedToActivity: FlutterEngine? = null
         private const val CHANNEL = "org.moonfin.androidtv/pip"
         private const val CAST_CHANNEL = "com.moonfin/native_cast"
         private const val CAST_EVENTS_CHANNEL = "com.moonfin/native_cast_events"
@@ -141,6 +215,16 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         private const val WATCH_NEXT_CHANNEL = WatchNextWorker.CHANNEL
         private const val AUDIO_CAPS_EVENTS_CHANNEL =
             "org.moonfin.androidtv/audioCapabilitiesEvents"
+        private const val DISPLAY_CAPS_EVENTS_CHANNEL =
+            "org.moonfin.androidtv/displayCapabilitiesEvents"
+        private const val DISPLAY_EMIT_DEBOUNCE_MS = 750L
+        private const val DISPLAY_EMIT_MAX_WAIT_MS = 3_000L
+        // The HDMI audio route drops and returns between 1.8 and 3.2 s apart
+        // when the link renegotiates at playback start and stop, so the
+        // debounce has to outlast that gap or the removal escapes on its own
+        // as a stereo, no-passthrough answer.
+        private const val AUDIO_EMIT_DEBOUNCE_MS = 4_000L
+        private const val AUDIO_EMIT_MAX_WAIT_MS = 12_000L
         private const val EXTERNAL_PLAYER_PROXY_REQUEST_CODE = 17115
         private const val EXTRA_EXTERNAL_PLAYER_LAUNCH_INTENT = "moonfin.external_player.launch_intent"
         private const val EXTRA_EXTERNAL_PLAYER_ERROR_CODE = "moonfin.external_player.error_code"
@@ -162,26 +246,36 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         private const val API_MPV_RESULT_ID = "is.xyz.mpv.MPVActivity.result"
     }
 
+    // Both facts are fixed for the life of the device, unlike availMem, which
+    // would make a feature come and go between launches. totalMem stays a Long
+    // on the wire: narrowing it to Int overflows to negative above 2 GB.
+    private fun deviceMemory(): Map<String, Any> {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val info = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(info)
+        return mapOf(
+            "totalMem" to info.totalMem,
+            "lowRam" to activityManager.isLowRamDevice,
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
     private fun getDisplayHdrTypes(): List<String> {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            return emptyList()
+        return DisplayCapabilities.query(this, "pull")["types"] as? List<String>
+            ?: emptyList()
+    }
+
+    private fun emitDisplayCapabilities(trigger: String) {
+        displayCapsSink?.success(DisplayCapabilities.query(this, trigger))
+    }
+
+    private fun unregisterDisplayListener() {
+        displayListener?.let { listener ->
+            (getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager)
+                ?.unregisterDisplayListener(listener)
         }
-        val currentDisplay = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            display
-        } else {
-            @Suppress("DEPRECATION")
-            windowManager.defaultDisplay
-        }
-        val hdrTypes = currentDisplay?.hdrCapabilities?.supportedHdrTypes ?: return emptyList()
-        return hdrTypes.map { type ->
-            when (type) {
-                Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION -> "DOLBY_VISION"
-                Display.HdrCapabilities.HDR_TYPE_HDR10 -> "HDR10"
-                Display.HdrCapabilities.HDR_TYPE_HDR10_PLUS -> "HDR10_PLUS"
-                Display.HdrCapabilities.HDR_TYPE_HLG -> "HLG"
-                else -> type.toString()
-            }
-        }
+        displayListener = null
+        displayEmit.cancel()
     }
 
     private val pipReceiver = object : BroadcastReceiver() {
@@ -204,11 +298,13 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        discardHeadlessEngine()
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             runCatching { window.colorMode = ActivityInfo.COLOR_MODE_HDR }
         }
         deepLinkFrom(intent)?.let { pendingDeepLink = it }
+        gameInputManager?.registerInputDeviceListener(gameInputDeviceListener, null)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -228,28 +324,92 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         return "moonfin://item?$query"
     }
 
+    // audio_service boots the app on an engine of its own whenever something
+    // binds the media service with no Activity around, a car head unit or a
+    // media button for instance, then hands that engine to the next Activity.
+    // By then TV detection, the codec probes and the screensaver timer have
+    // all settled for an Activity that wasn't there, so unless it's busy
+    // playing the launch starts over on a fresh engine. The media service
+    // keeps answering until the new engine configures it.
+    private fun discardHeadlessEngine() {
+        val cache = FlutterEngineCache.getInstance()
+        val id = AudioServicePlugin.getFlutterEngineId()
+        val cached = cache.get(id) ?: return
+        if (cached === engineHandedToActivity || AudioServiceState.isPlaying()) return
+        cache.remove(id)
+        cached.destroy()
+        // The next engine is built synchronously in super.onCreate, so no car
+        // call can land between this and its attach.
+        AudioServiceState.markFlutterNotReady()
+    }
+
     // Null travels back to Dart as "ask again" rather than as "not a TV".
     private fun isTvDevice(): Boolean? = isTelevisionOrNull(this)
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        engineHandedToActivity = flutterEngine
 
-        libretroBridge = LibretroBridge(flutterEngine)
+        val bridge = LibretroBridge(
+            flutterEngine,
+            onActiveChanged = { active -> nativePad?.setActive(active) },
+            onBeforeResume = { nativePad?.releaseHeldInput() },
+            onControllerTypeChanged = { nativePad?.onControllerTypeChanged() },
+        )
+        libretroBridge = bridge
+        nativePad = NativePadInput(
+            bridge,
+            handler,
+            this,
+            object : NativePadInput.Callbacks {
+                override fun onControllerMappingKey(keyCode: Int, device: Map<String, Any?>) =
+                    sendControllerMappingKey(keyCode, device)
+
+                override fun onControllerDiagnosticsAxes(payload: Map<String, Any?>) =
+                    sendControllerDiagnosticsAxes(payload)
+
+                override fun onControllerDiagnosticsButton(payload: Map<String, Any?>) =
+                    sendControllerDiagnosticsButton(payload)
+            },
+        )
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             MediaStoreHelper.CHANNEL,
         ).setMethodCallHandler(MediaStoreHelper(this))
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            DeviceStorageHelper.CHANNEL,
+        ).setMethodCallHandler(DeviceStorageHelper())
 
+        val exitHistory = ProcessExitHistory.get(this)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             PLATFORM_CHANNEL,
         ).setMethodCallHandler { call, result ->
             when (call.method) {
+                // Reading a crash record can mean parsing its tombstone, so it
+                // stays off the main thread.
+                "previousExits" -> thread(name = "moonfin-exit-history") {
+                    val exits = exitHistory.takeUnreportedExits()
+                    handler.post { result.success(exits) }
+                }
+                "setProcessState" -> {
+                    exitHistory.setAppState(call.argument<String>("state") ?: "")
+                    result.success(null)
+                }
                 "isTvDevice" -> {
                     result.success(isTvDevice())
                 }
                 "displayHdrTypes" -> result.success(getDisplayHdrTypes())
+                "displayCapabilities" -> {
+                    // The caller stamps why it asked, so the probe log can tell
+                    // a launch answer from a resume or retry one.
+                    val trigger = call.argument<String>("trigger") ?: "pull"
+                    result.success(DisplayCapabilities.query(this, trigger))
+                }
+                "buildFingerprint" -> result.success(Build.FINGERPRINT)
+                "uptimeMillis" -> result.success(SystemClock.uptimeMillis())
                 "dolbyVisionCodecCapabilities" -> {
                     result.success(MediaCodecCapabilities.queryDolbyVisionCapabilities())
                 }
@@ -264,6 +424,9 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                 }
                 "audioCapabilities" -> {
                     result.success(AudioCapabilities.query(this))
+                }
+                "deviceMemory" -> {
+                    result.success(deviceMemory())
                 }
                 "exitApp" -> {
                     result.success(true)
@@ -284,16 +447,50 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         gamepadChannel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "setActive" -> {
-                    gameActive = call.argument<Boolean>("active") ?: false
-                    // Reset on every transition, in both directions. Otherwise
-                    // the first press after the switch reads as a hold already
-                    // in progress and gets dropped.
-                    hatX = 0
-                    hatY = 0
-                    navX = 0
-                    navY = 0
+                    gameInputRouter.setGameActive(call.argument<Boolean>("active") ?: false)
                     result.success(true)
                 }
+                "setEmulatorControlsActive" -> {
+                    gameInputRouter.setEmulatorControlsActive(call.argument<Boolean>("active") ?: false)
+                    result.success(true)
+                }
+                "setNavigationEnabled" -> {
+                    gameInputRouter.setNavigationEnabled(call.argument<Boolean>("enabled") ?: false)
+                    result.success(true)
+                }
+                "setControllerMapping" -> {
+                    nativePad?.setControllerMappings(call.argument<String>("mapping") ?: "{}")
+                    result.success(true)
+                }
+                "setControllerAssignments" -> {
+                    nativePad?.setControllerAssignments(call.argument<String>("assignments") ?: "{}")
+                    result.success(true)
+                }
+                "setStickSnap" -> {
+                    val modes = call.argument<Map<String, String>>("modes") ?: emptyMap()
+                    nativePad?.setStickSnap(modes)
+                    result.success(true)
+                }
+                "setControllerMappingCapture" -> {
+                    nativePad?.setCapture(
+                        call.argument<Boolean>("active") ?: false,
+                        call.argument<String>("connectionId") ?: call.argument<String>("deviceId"),
+                    )
+                    result.success(true)
+                }
+                "setControllerDiagnostics" -> {
+                    nativePad?.setDiagnostics(
+                        call.argument<Boolean>("active") ?: false,
+                        call.argument<String>("connectionId"),
+                    )
+                    result.success(true)
+                }
+                "setOverlayOpen" -> {
+                    libretroBridge?.overlayOpen = call.argument<Boolean>("open") ?: false
+                    result.success(true)
+                }
+                "getGamepadDevices" -> result.success(gameInputRouter.gamepadDevices())
+                "getNativeGamepadDevices" -> result.success(nativePad?.nativeGamepadDevices() ?: emptyList<Any>())
                 else -> result.notImplemented()
             }
         }
@@ -515,7 +712,10 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
 
         // Re-probe audio capabilities whenever the audio route changes (e.g. an
         // AVR is powered on after launch) and push the fresh result to Dart so
-        // the device profile self-heals without an app restart.
+        // the device profile self-heals without an app restart. A link
+        // renegotiating mid-playback reports the sink removed and then added
+        // again, and answering the removal would tell Dart the box has stereo
+        // speakers, so only the trailing edge of a burst is probed.
         audioCapsEventsChannel = EventChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             AUDIO_CAPS_EVENTS_CHANNEL,
@@ -529,11 +729,11 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                     val callback = object : AudioDeviceCallback() {
                         override fun onAudioDevicesAdded(
                             addedDevices: Array<out AudioDeviceInfo>?,
-                        ) = emitAudioCapabilities()
+                        ) = audioEmit.schedule("added")
 
                         override fun onAudioDevicesRemoved(
                             removedDevices: Array<out AudioDeviceInfo>?,
-                        ) = emitAudioCapabilities()
+                        ) = audioEmit.schedule("removed")
                     }
                     audioDeviceCallback = callback
                     audioManager?.registerAudioDeviceCallback(
@@ -546,6 +746,48 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             override fun onCancel(arguments: Any?) {
                 unregisterAudioDeviceCallback()
                 audioCapsSink = null
+            }
+        })
+
+        // The display side of the same self-healing story. A box that launched
+        // before its TV or AVR woke up has no way to learn the panel does HDR
+        // after all, so without this it keeps forcing a transcode on every
+        // Dolby Vision item until the app is restarted.
+        displayCapsEventsChannel = EventChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            DISPLAY_CAPS_EVENTS_CHANNEL,
+        )
+        displayCapsEventsChannel?.setStreamHandler(object : EventChannel.StreamHandler {
+            override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                displayCapsSink = events
+                val displayManager =
+                    getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager
+                // No display id filter. A sink waking up can arrive as a remove
+                // and re-add under a brand new id, which is exactly the event
+                // worth reacting to, so anything the system reports is probed.
+                // onDisplayChanged also fires for rotation, refresh rate and
+                // brightness, so a waking chain arrives as a burst and only
+                // the trailing edge of it describes settled hardware.
+                val listener = object : DisplayManager.DisplayListener {
+                    override fun onDisplayAdded(displayId: Int) =
+                        displayEmit.schedule("added")
+
+                    override fun onDisplayRemoved(displayId: Int) =
+                        displayEmit.schedule("removed")
+
+                    override fun onDisplayChanged(displayId: Int) =
+                        displayEmit.schedule("changed")
+                }
+                displayListener = listener
+                displayManager?.registerDisplayListener(
+                    listener,
+                    Handler(Looper.getMainLooper()),
+                )
+            }
+
+            override fun onCancel(arguments: Any?) {
+                unregisterDisplayListener()
+                displayCapsSink = null
             }
         })
 
@@ -600,6 +842,29 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             }
         }
 
+        // Shared with iOS: Dart drives the periodic auto-download check
+        // through this channel; the worker answers on the same one.
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            AutoDownloadWorker.REFRESH_CHANNEL,
+        ).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "configure" -> {
+                    val enabled = call.argument<Boolean>("enabled") ?: false
+                    val wifiOnly = call.argument<Boolean>("wifiOnly") ?: false
+                    if (enabled && !isTelevision(applicationContext)) {
+                        AutoDownloadWorker.schedule(applicationContext, wifiOnly)
+                    } else {
+                        AutoDownloadWorker.cancel(applicationContext)
+                    }
+                    result.success(null)
+                }
+                "refreshStatus" ->
+                    result.success(AutoDownloadWorker.refreshStatus(applicationContext))
+                else -> result.notImplemented()
+            }
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 pipReceiver,
@@ -623,127 +888,59 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         }
     }
 
-    // While a game is running, the emulator lives in a WebView that owns key focus and the
-    // System WebView does not reliably expose the Gamepad API. Capture the pad at the Activity
-    // level (top of the dispatch chain, before any view) and forward RetroPad buttons to Dart,
-    // which injects them into the core. Consumed only while active so app navigation is intact
-    // otherwise; button events are also consumed in-game so they never reach Flutter focus.
+    // Native libretro sessions are checked first and own the pad end-to-end:
+    // no binder IPC, no boxing, no Dart channel crossing per event (see
+    // NativePadInput). Everything else -- home screen navigation and
+    // EmulatorJS's WebView, which owns key focus but can't reliably read the
+    // Gamepad API -- goes through GameInputRouter, captured here at the top
+    // of the dispatch chain before any view sees it.
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (gameActive || libretroBridge?.isActive == true) {
-            if (libretroBridge?.isActive == true &&
-                event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 &&
-                (event.keyCode == KeyEvent.KEYCODE_MENU ||
-                    event.keyCode == KeyEvent.KEYCODE_BUTTON_MODE)
-            ) {
-                libretroBridge?.onMenu()
-                return true
-            }
-            val index = retroPadIndex(event.keyCode)
-            if (index != null) {
-                if (event.repeatCount == 0 &&
-                    (event.action == KeyEvent.ACTION_DOWN || event.action == KeyEvent.ACTION_UP)
-                ) {
-                    sendGamepadButton(index, event.action == KeyEvent.ACTION_DOWN)
-                }
-                return true
-            }
-        }
-        keyHandler?.invoke(event)
+        val pad = nativePad
+        if (pad != null && pad.active && pad.onKey(event)) return true
+        if (gameInputRouter.onKeyEvent(event)) return true
+        // A native session decides for itself what a pad button does, so the
+        // gate waits for it to finish.
+        if (pad?.active != true && gameInputRouter.blocksNavigation(event)) return true
+        // keyHandler is the gamepads_android plugin's registration
+        // (GamepadsCompatibleActivity.registerKeyEventHandler), which forwards
+        // to the xyz.luan/gamepads channel's Gamepads.normalizedEvents stream.
+        // Verified before deleting the call: nothing in this app subscribes to
+        // that stream on Android -- GamepadNavigationScope.isSupported and
+        // native_game_player_screen's _readsGamepadsInDart both exclude
+        // Android (that path is Windows/Linux only; Android reads pad buttons
+        // as real key events here and the stick via registerMotionEventHandler
+        // below, whose return value IS consulted). Its own return value was
+        // already discarded unconditionally, so invoking it per key event was
+        // pure dead work. The registration method itself stays: the plugin
+        // casts this Activity to GamepadsCompatibleActivity and calls it
+        // unconditionally, so the interface member must remain implemented.
         return super.dispatchKeyEvent(event)
     }
 
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
-        if ((gameActive || libretroBridge?.isActive == true) &&
-            event.source and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK &&
-            event.action == MotionEvent.ACTION_MOVE
-        ) {
-            val x = axisDirection(event, MotionEvent.AXIS_HAT_X, MotionEvent.AXIS_X)
-            if (x != hatX) {
-                if (hatX == -1) sendGamepadButton(6, false)
-                if (hatX == 1) sendGamepadButton(7, false)
-                if (x == -1) sendGamepadButton(6, true)
-                if (x == 1) sendGamepadButton(7, true)
-                hatX = x
-            }
-            val y = axisDirection(event, MotionEvent.AXIS_HAT_Y, MotionEvent.AXIS_Y)
-            if (y != hatY) {
-                if (hatY == -1) sendGamepadButton(4, false)
-                if (hatY == 1) sendGamepadButton(5, false)
-                if (y == -1) sendGamepadButton(4, true)
-                if (y == 1) sendGamepadButton(5, true)
-                hatY = y
-            }
-            return true
-        }
-
-        // Outside a game the left stick drives UI focus. The d-pad needs no
-        // help, because Android already turns the hat into KEYCODE_DPAD_* key
-        // events. Only the stick is invisible to Flutter, arriving as motion.
-        if (!gameActive &&
-            event.source and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK &&
-            event.action == MotionEvent.ACTION_MOVE
-        ) {
-            val x = stickDirection(event, MotionEvent.AXIS_X)
-            if (x != navX) {
-                navX = x
-                sendGamepadNavigate("h", if (x == -1) "left" else if (x == 1) "right" else "none")
-            }
-            val y = stickDirection(event, MotionEvent.AXIS_Y)
-            if (y != navY) {
-                navY = y
-                sendGamepadNavigate("v", if (y == -1) "up" else if (y == 1) "down" else "none")
-            }
-            // Not consumed, since other views may still want the motion event.
-        }
+        val pad = nativePad
+        if (pad != null && pad.active && pad.onMotion(event)) return true
+        if (gameInputRouter.onMotionEvent(event)) return true
         if (motionHandler?.invoke(event) == true) {
             return true
         }
         return super.dispatchGenericMotionEvent(event)
     }
 
-    // Hardware keycode -> libretro RetroPad index. Face-button positions map by layout
-    // (bottom=B0, right=A8, left=Y1, top=X9). D-pad keycodes and keyboard arrows both count so
-    // controllers and keyboards drive gameplay.
-    private fun retroPadIndex(keyCode: Int): Int? = when (keyCode) {
-        KeyEvent.KEYCODE_DPAD_UP -> 4
-        KeyEvent.KEYCODE_DPAD_DOWN -> 5
-        KeyEvent.KEYCODE_DPAD_LEFT -> 6
-        KeyEvent.KEYCODE_DPAD_RIGHT -> 7
-        // Remote OK button; acts as the primary action in-game and select in the overlay.
-        KeyEvent.KEYCODE_DPAD_CENTER -> 0
-        KeyEvent.KEYCODE_ENTER -> 0
-        KeyEvent.KEYCODE_BUTTON_A -> 0
-        KeyEvent.KEYCODE_BUTTON_B -> 8
-        KeyEvent.KEYCODE_BUTTON_X -> 1
-        KeyEvent.KEYCODE_BUTTON_Y -> 9
-        KeyEvent.KEYCODE_BUTTON_START -> 3
-        KeyEvent.KEYCODE_BUTTON_SELECT -> 2
-        KeyEvent.KEYCODE_BUTTON_L1 -> 10
-        KeyEvent.KEYCODE_BUTTON_R1 -> 11
-        KeyEvent.KEYCODE_BUTTON_THUMBL -> 14
-        KeyEvent.KEYCODE_BUTTON_THUMBR -> 15
-        else -> null
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (!hasFocus) nativePad?.releaseHeldInput()
     }
 
-    // -1 / 0 / +1 from a HAT axis, falling back to the analog stick past a deadzone.
-    private fun axisDirection(event: MotionEvent, hatAxis: Int, stickAxis: Int): Int {
-        val hat = event.getAxisValue(hatAxis)
-        if (hat <= -0.5f) return -1
-        if (hat >= 0.5f) return 1
-        val stick = event.getAxisValue(stickAxis)
-        if (stick <= -0.5f) return -1
-        if (stick >= 0.5f) return 1
-        return 0
-    }
-
-    // -1 / 0 / +1 from an analog stick axis alone. Separate from axisDirection,
-    // which falls back from the hat to the stick. UI navigation has to ignore
-    // the hat, or every d-pad press would move focus twice.
-    private fun stickDirection(event: MotionEvent, stickAxis: Int): Int {
-        val stick = event.getAxisValue(stickAxis)
-        if (stick <= -0.5f) return -1
-        if (stick >= 0.5f) return 1
-        return 0
+    override fun onPause() {
+        // Both before super, and both required. releaseHeldInput drops buttons
+        // physically held as the app goes away, so they cannot fire on resume.
+        // onHostPause pauses the core and drops the surface while the consumer
+        // is still alive, rather than after it has gone away - see
+        // LibretroBridge.onHostPause.
+        nativePad?.releaseHeldInput()
+        libretroBridge?.onHostPause()
+        super.onPause()
     }
 
     // The axis is "h" or "v" so Dart can tell which one a "none" recentre came
@@ -757,20 +954,57 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         }
     }
 
-    private fun sendGamepadButton(index: Int, pressed: Boolean) {
-        val bridge = libretroBridge
-        if (bridge?.isActive == true) {
-            bridge.onButton(index, pressed)
-            return
-        }
+    private fun sendGamepadButton(label: String, pressed: Boolean, device: Map<String, String>?) {
         runOnUiThread {
-            gamepadChannel?.invokeMethod("onButton", mapOf("index" to index, "pressed" to pressed))
+            gamepadChannel?.invokeMethod(
+                "onButton",
+                mapOf(
+                    "label" to label,
+                    "pressed" to pressed,
+                    "device" to device,
+                ),
+            )
+        }
+    }
+
+    private fun sendControllerMappingKey(keyCode: Int, device: Map<String, Any?>) {
+        runOnUiThread {
+            gamepadChannel?.invokeMethod(
+                "onControllerMappingKey",
+                mapOf(
+                    "keyCode" to keyCode,
+                    "device" to device,
+                ),
+            )
+        }
+    }
+
+    private fun sendControllerDiagnosticsAxes(payload: Map<String, Any?>) {
+        runOnUiThread {
+            gamepadChannel?.invokeMethod("onControllerDiagnosticsAxes", payload)
+        }
+    }
+
+    private fun sendControllerDiagnosticsButton(payload: Map<String, Any?>) {
+        runOnUiThread {
+            gamepadChannel?.invokeMethod("onControllerDiagnosticsButton", payload)
+        }
+    }
+
+    private fun sendEmulatorKeyboardKey(keyCode: Int) {
+        runOnUiThread {
+            gamepadChannel?.invokeMethod("onKeyboard", mapOf("keyCode" to keyCode))
         }
     }
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        requestEnterPiPIfEligible()
+        // A dream or a call taking the foreground never reaches here, which
+        // is what separates walking away from the screensaver coming on. PiP
+        // keeps the player on screen, so that is not walking away either.
+        if (!requestEnterPiPIfEligible()) {
+            methodChannel?.invokeMethod("onUserLeftApp", null)
+        }
     }
 
     override fun onPictureInPictureRequested(): Boolean {
@@ -816,6 +1050,10 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
 
     override fun onResume() {
         super.onResume()
+        // Re-attach the emulator's output surface on devices where Flutter's
+        // SurfaceProducer callbacks never fire (API 24-28). A no-op everywhere
+        // else - the bridge stands down as soon as it sees a real callback.
+        libretroBridge?.onHostResume()
         if (isInPictureInPictureMode) return
         dismissRunnable?.let {
             handler.removeCallbacks(it)
@@ -867,6 +1105,21 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
 
     override fun onDestroy() {
         val shouldTerminateProcess = isFinishing && !isChangingConfigurations
+        // Process-wide InputManager registration: without this the listener
+        // keeps this Activity alive across every recreation.
+        gameInputManager?.unregisterInputDeviceListener(gameInputDeviceListener)
+        // A native game may still be running. When the process also dies below
+        // this is redundant but harmless; when it doesn't - e.g. the system
+        // destroys this stopped activity to reclaim memory while a foreground
+        // service (AudioService) keeps the process alive.
+        // Without it they leak into the next activity instance.
+        // stop() is idempotent, so calling it here even when nothing is loaded,
+        // or when killProcess() runs moments later, is safe.
+        libretroBridge?.stop()
+        // After stop(), so its onActiveChanged(false) can still reach
+        // setActive(false) on a live pad.
+        nativePad?.dispose()
+        nativePad = null
         dismissRunnable?.let { handler.removeCallbacks(it) }
         pendingCastTimeout?.let { handler.removeCallbacks(it) }
         val castContext = runCatching { CastContext.getSharedInstance(this) }.getOrNull()
@@ -885,6 +1138,10 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         castEventsChannel?.setStreamHandler(null)
         unregisterAudioDeviceCallback()
         audioCapsEventsChannel?.setStreamHandler(null)
+        // DisplayManagerGlobal holds registrations process wide, so without
+        // this the listener keeps this Activity alive across every recreation.
+        unregisterDisplayListener()
+        displayCapsEventsChannel?.setStreamHandler(null)
         dlnaController?.onDestroy()
         dlnaChannel?.setMethodCallHandler(null)
         dlnaEventsChannel?.setStreamHandler(null)
@@ -908,18 +1165,9 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     }
 
     private fun discoverGoogleCastTargets(): List<Map<String, Any>> {
-        val selector = MediaRouteSelector.Builder()
-            .addControlCategory(
-                CastMediaControlIntent.categoryForCast(
-                    CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID,
-                ),
-            )
-            .build()
-
+        val selector = castRouteSelector()
         val mediaRouter = MediaRouter.getInstance(this)
-        val routes = mediaRouter.routes.filter { route ->
-            route.isEnabled && route.matchesSelector(selector)
-        }
+        val routes = dedupedCastRoutes(mediaRouter.routes, selector)
 
         return routes.map { route ->
             mapOf(
@@ -947,6 +1195,7 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         runOnUiThread {
             val mediaRouter = MediaRouter.getInstance(this)
             val selector = castRouteSelector()
+            emittedCastReceivers.clear()
             if (castDiscoveryCallback == null) {
                 val callback = object : MediaRouter.Callback() {
                     override fun onRouteAdded(router: MediaRouter, route: MediaRouter.RouteInfo) {
@@ -964,7 +1213,9 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                     MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN,
                 )
             }
-            mediaRouter.routes.forEach { emitCastRouteFound(it, selector) }
+            dedupedCastRoutes(mediaRouter.routes, selector).forEach {
+                emitCastRouteFound(it, selector)
+            }
         }
     }
 
@@ -973,11 +1224,28 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             val callback = castDiscoveryCallback ?: return@runOnUiThread
             MediaRouter.getInstance(this).removeCallback(callback)
             castDiscoveryCallback = null
+            emittedCastReceivers.clear()
         }
     }
 
+    // Route ids carry the publishing provider ahead of a colon and the receiver
+    // after it, so the receiver alone is what tells two devices apart.
+    private fun castReceiverKey(routeId: String): String =
+        routeId.substringAfterLast(':', routeId)
+
+    // Filtering before the dedupe matters: distinctBy keeps whichever route it
+    // meets first, so a route that fails the selector would otherwise take the
+    // slot for a receiver and leave the matching one unlisted.
+    private fun dedupedCastRoutes(
+        routes: List<MediaRouter.RouteInfo>,
+        selector: MediaRouteSelector,
+    ): List<MediaRouter.RouteInfo> = routes
+        .filter { it.isEnabled && it.matchesSelector(selector) }
+        .distinctBy { castReceiverKey(it.id) }
+
     private fun emitCastRouteFound(route: MediaRouter.RouteInfo, selector: MediaRouteSelector) {
         if (!route.isEnabled || !route.matchesSelector(selector)) return
+        if (!emittedCastReceivers.add(castReceiverKey(route.id))) return
         castEventsSink?.success(
             mapOf(
                 "kind" to "googleCast",

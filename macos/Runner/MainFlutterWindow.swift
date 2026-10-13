@@ -2,16 +2,29 @@ import Cocoa
 import FlutterMacOS
 import moonfin_game_host
 
+/// Keeps Intel Macs on Skia. Impeller became the macOS default in Flutter 3.47
+/// and garbles text, flickers and lags on Intel GPUs (flutter/flutter#191538).
+/// enableImpeller is a private FlutterDartProject getter, but it's the only
+/// per-architecture switch since the FLTEnableImpeller plist key applies to
+/// every Mac and release builds ignore engine switches.
+final class MoonfinDartProject: FlutterDartProject {
+  #if arch(x86_64)
+  @objc var enableImpeller: Bool { false }
+  #endif
+}
+
 class MainFlutterWindow: NSWindow {
   private var sfSymbolChannel: FlutterMethodChannel?
   private var downloadDirChannel: FlutterMethodChannel?
   private var gameChannel: NativeGameChannel?
   private var aetherVideoChannel: AetherVideoChannel?
+  private var themeMusicChannel: AppleTvThemeMusicChannel?
+  private var previewChannel: AppleTvPreviewChannel?
   // Retained so the security-scoped access stays open for the session.
   private var accessedDownloadURL: URL?
 
   override func awakeFromNib() {
-    let flutterViewController = FlutterViewController()
+    let flutterViewController = FlutterViewController(project: MoonfinDartProject())
     let minimumWindowSize = NSSize(width: 1200, height: 760)
     self.minSize = minimumWindowSize
 
@@ -185,6 +198,13 @@ class MainFlutterWindow: NSWindow {
           aetherChannel?.player ?? AetherPlayerWrapper()
         }),
       withId: MacosAetherVideoViewFactory.viewType)
+
+    // Trailers, row previews and theme music, on the same channels the other
+    // Apple platforms use.
+    self.themeMusicChannel = AppleTvThemeMusicChannel(messenger: messenger)
+    let previewRegistrar = flutterViewController.registrar(forPlugin: "moonfin_appletv_preview")
+    self.previewChannel = AppleTvPreviewChannel(
+      messenger: messenger, textures: previewRegistrar.textures)
 
     super.awakeFromNib()
   }

@@ -6,6 +6,9 @@ import 'package:playback_core/playback_core.dart';
 import '../../auth/repositories/session_repository.dart';
 import '../../auth/repositories/user_repository.dart';
 import '../../data/services/connectivity_service.dart';
+import '../../data/services/media_server_client_factory.dart';
+import '../../data/services/remote_search_session.dart';
+import '../../data/services/retro_artwork/retro_artwork_activity_gate.dart';
 import '../../di/injection.dart';
 import '../../playback/external_player_policy.dart';
 import '../../preference/user_preferences.dart';
@@ -23,13 +26,13 @@ import '../screens/browse/all_genres_screen.dart';
 import '../screens/browse/collection_screen.dart';
 import '../screens/browse/favorites_screen.dart';
 import '../screens/browse/folder_browse_screen.dart';
-import '../screens/browse/folder_view_screen.dart';
 import '../screens/browse/library_browse_screen.dart';
 import '../screens/browse/library_genres_screen.dart';
 import '../screens/browse/library_letters_screen.dart';
 import '../screens/browse/library_suggestions_screen.dart';
 import '../screens/browse/book_browse_screen.dart';
 import '../screens/browse/music_browse_screen.dart';
+import '../../data/models/tmdb_item_ref.dart';
 import '../screens/detail/item_detail_screen.dart';
 import '../screens/games/game_library_screen.dart';
 import '../screens/games/game_system_screen.dart';
@@ -41,7 +44,6 @@ import '../screens/home/home_screen.dart';
 import '../screens/seerr/seerr_browse_screen.dart';
 import '../screens/seerr/seerr_collection_screen.dart';
 import '../screens/seerr/seerr_discover_screen.dart';
-import '../screens/seerr/seerr_media_detail_screen.dart';
 import '../screens/seerr/seerr_person_screen.dart';
 import '../screens/seerr/seerr_requests_screen.dart';
 import '../screens/livetv/live_tv_channel_player_loader.dart';
@@ -64,6 +66,8 @@ import '../screens/playback/appletv_player_host_screen.dart';
 import '../screens/playback/appletv_livetv_player_host_screen.dart';
 import '../screens/search/search_screen.dart';
 import '../screens/settings/settings_side_panel.dart';
+import '../screens/setup/setup_wizard_gate.dart';
+import '../screens/setup/setup_wizard_screen.dart';
 import '../screens/admin/admin_shell_screen.dart';
 import '../screens/admin/admin_content_analytics_screen.dart';
 import '../screens/admin/admin_dashboard_screen.dart';
@@ -109,6 +113,20 @@ const _authRoutes = {
   Destinations.login,
 };
 
+/// Whether first-run setup still has something to ask about.
+///
+/// Runs on every navigation, so it does no more than read preferences. It
+/// answers false for anything it can't decide cheaply, since letting somebody
+/// through to Home costs nothing next to stranding them outside it.
+bool _shouldRunSetupWizard() {
+  try {
+    final client = GetIt.instance<MediaServerClientFactory>().getActiveClient();
+    return GetIt.instance<SetupWizardGate>().shouldRun(client);
+  } catch (_) {
+    return false;
+  }
+}
+
 /// Surfaces that genuinely need the server. Everything else works offline
 /// against the downloads catalog.
 bool _isOfflineBlocked(String path) {
@@ -128,7 +146,7 @@ bool _shouldRedirectVideoToExternalPlayer(String path) {
     return false;
   }
 
-  if (!(PlatformDetection.isAndroid && PlatformDetection.isTV)) {
+  if (!PlatformDetection.isAndroid) {
     return false;
   }
 
@@ -157,7 +175,11 @@ CustomTransitionPage<T> _opaqueFullScreenPage<T>({
     // go_router only auto-names builder-based routes, not pageBuilder ones.
     name: state.name ?? state.uri.path,
     opaque: true,
-    barrierColor: Colors.black,
+    // No barrier on Windows. The route is opaque with a zero-length
+    // transition, so the barrier is never visible - but it paints an opaque
+    // black ModalBarrier under the page, which would paint out the video
+    // behind the transparent player screen native HDR output relies on.
+    barrierColor: PlatformDetection.isWindows ? null : Colors.black,
     transitionDuration: Duration.zero,
     reverseTransitionDuration: Duration.zero,
     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
@@ -170,7 +192,9 @@ final appRouter = GoRouter(
   initialLocation: Destinations.startup,
   observers: [
     FocusRouteObserver(),
+    RetroArtworkRouteObserver.instance,
     routeLifecycleObserver,
+    pageRouteLifecycleObserver,
     PlayerRouteObserver.instance,
   ],
   redirect: (context, state) {
@@ -182,11 +206,28 @@ final appRouter = GoRouter(
       return Destinations.startup;
     }
 
+    // Has to sit above every other rule and below the signed-out one: the
+    // wizard needs a user to set up, and nothing else is worth showing until
+    // it has had its turn. Exempting its own path is what stops it redirecting
+    // to itself forever.
+    if (path != Destinations.setup && _shouldRunSetupWizard()) {
+      return Destinations.setup;
+    }
+
     if (path.startsWith('/admin')) {
       final user = getIt<UserRepository>().currentUser;
       if (user == null || !user.isAdministrator) {
         return Destinations.home;
       }
+    }
+
+    // The hard gate for Kids Mode. Hiding a nav entry is presentation, but a
+    // deep link reaches these screens without one.
+    if (getIt<UserPreferences>().get(UserPreferences.kidsModeEnabled) &&
+        (path.startsWith('/admin') ||
+            path.startsWith('/seerr') ||
+            path.startsWith('/live-tv'))) {
+      return Destinations.home;
     }
 
     final connectivity = GetIt.instance<ConnectivityService>();
@@ -212,6 +253,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: Destinations.serverSelect,
       builder: (context, state) => const ServerSelectScreen(),
+    ),
+    GoRoute(
+      path: Destinations.setup,
+      builder: (context, state) => const SetupWizardScreen(),
     ),
     GoRoute(
       path: Destinations.embyConnect,
@@ -258,6 +303,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: Destinations.search,
       builder: (context, state) => SearchScreen(
+        key: state.extra is RemoteSearchSession ? ObjectKey(state.extra) : null,
+        remoteSearch: state.extra is RemoteSearchSession
+            ? state.extra as RemoteSearchSession
+            : null,
         initialQuery: state.uri.queryParameters['query'],
         scopedLibraryId: state.uri.queryParameters['libraryId'],
       ),
@@ -314,7 +363,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: Destinations.folderView,
-      builder: (context, state) => const FolderViewScreen(),
+      builder: (context, state) => const FolderBrowseScreen(folderId: 'root'),
     ),
     GoRoute(
       path: Destinations.folderBrowse,
@@ -381,11 +430,15 @@ final appRouter = GoRouter(
         final itemId = state.pathParameters['itemId']!;
         final serverId = state.uri.queryParameters['serverId'];
         final autoPlay = state.uri.queryParameters['autoPlay'] == 'true';
+        final contextSeasonId = state.uri.queryParameters['seasonContext'];
         return ItemDetailScreen(
-          key: ValueKey(itemId),
+          // The browsed season decides which episode list this screen loads, so
+          // a change of context has to remount rather than reuse the view model.
+          key: ValueKey('$itemId|${contextSeasonId ?? ''}'),
           itemId: itemId,
           serverId: serverId,
           autoPlay: autoPlay,
+          contextSeasonId: contextSeasonId,
         );
       },
       routes: [
@@ -443,24 +496,29 @@ final appRouter = GoRouter(
         final gameId = state.pathParameters['gameId']!;
         final core = state.uri.queryParameters['core'] ?? 'nes';
         final startFresh = state.uri.queryParameters['fresh'] == '1';
+        final forceEmulatorJs =
+            state.uri.queryParameters['backend'] == 'emulatorjs';
+        final hardwareRenderingEnabled = state.uri.queryParameters['hw'] != '0';
         return _opaqueFullScreenPage<void>(
           state: state,
           // Native libretro or the EmulatorJS WebView: forced where only one
           // backend works (tvOS and Linux native), the user's choice elsewhere,
           // and per game where native can't play the system but the WebView can
           // (a PSP or N64 title on the bundled Apple targets).
-          child: usesNativeGameBackendFor(core)
+          child: !forceEmulatorJs && usesNativeGameBackendFor(core)
               ? NativeGamePlayerScreen(
                   libraryId: libraryId,
                   gameId: gameId,
                   core: core,
                   gameName: state.uri.queryParameters['name'],
                   startFresh: startFresh,
+                  hardwareRenderingEnabled: hardwareRenderingEnabled,
                 )
               : GameEmulatorScreen(
                   libraryId: libraryId,
                   gameId: gameId,
                   core: core,
+                  romFileName: state.uri.queryParameters['romFile'],
                   biosId: state.uri.queryParameters['bios'],
                   gameName: state.uri.queryParameters['name'],
                   startFresh: startFresh,
@@ -525,10 +583,7 @@ final appRouter = GoRouter(
                 channelId: state.uri.queryParameters['channelId'] ?? '',
               );
             }
-            return _opaqueFullScreenPage<void>(
-              state: state,
-              child: child,
-            );
+            return _opaqueFullScreenPage<void>(state: state, child: child);
           },
         ),
       ],
@@ -601,6 +656,7 @@ final appRouter = GoRouter(
 
     // Admin
     ShellRoute(
+      navigatorKey: AdminShellScreen.navigatorKey,
       builder: (context, state, child) => AdminShellScreen(child: child),
       routes: [
         GoRoute(
@@ -772,10 +828,15 @@ final appRouter = GoRouter(
     GoRoute(
       path: Destinations.seerrMediaDetail,
       builder: (context, state) {
-        final itemId = state.pathParameters['itemId']!;
-        return SeerrMediaDetailScreen(
-          itemId: itemId,
-          mediaType: state.uri.queryParameters['mediaType'],
+        final rawId = state.pathParameters['itemId']!;
+        final kind = state.uri.queryParameters['mediaType'] == 'tv'
+            ? TmdbItemKind.tv
+            : TmdbItemKind.movie;
+        final ref = TmdbItemRef.tryParse(rawId) ?? TmdbItemRef(kind, rawId);
+        return ItemDetailScreen(
+          key: ValueKey(ref.itemId),
+          itemId: ref.itemId,
+          seerrTitle: state.uri.queryParameters['title'],
         );
       },
     ),
@@ -791,7 +852,7 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final personId = state.pathParameters['personId']!;
         final prefs = GetIt.instance<UserPreferences>();
-        if (prefs.get(UserPreferences.detailScreenStyle) == DetailScreenStyle.modern) {
+        if (prefs.get(UserPreferences.detailScreenStyle) != DetailScreenStyle.classic) {
           return ItemDetailScreen(
             key: ValueKey('tmdb:$personId'),
             itemId: 'tmdb:$personId',
@@ -800,7 +861,6 @@ final appRouter = GoRouter(
         return SeerrPersonScreen(personId: personId);
       },
     ),
-
   ],
 );
 
@@ -809,14 +869,13 @@ class PlayerRouteObserver extends NavigatorObserver {
   final ValueNotifier<bool> isPlayerActive = ValueNotifier<bool>(false);
   final List<Route<dynamic>> _playerRoutes = [];
 
+  /// The name of the topmost player route, while one is on screen.
+  String? get activePlayerRoute =>
+      _playerRoutes.isEmpty ? null : _playerRoutes.last.settings.name;
+
   bool _isPlayer(Route<dynamic> route) {
     final name = route.settings.name;
-    return name != null &&
-        (name.startsWith('/player/') ||
-         name.startsWith('/game-player/') ||
-         name == '/live-tv/player' ||
-         name == Destinations.audioPlayer ||
-         name == Destinations.videoPlayer);
+    return name != null && Destinations.isPlayerRoute(name);
   }
 
   @override
@@ -852,5 +911,85 @@ class PlayerRouteObserver extends NavigatorObserver {
       _playerRoutes.add(newRoute);
     }
     isPlayerActive.value = _playerRoutes.isNotEmpty;
+  }
+}
+
+/// Drives the one global artwork coverage blocker from the effective top route.
+/// Hidden game screens never clear the blocker themselves, so popping or
+/// disposing a lower screen cannot reopen artwork work under gameplay/dialogs.
+class RetroArtworkRouteObserver extends NavigatorObserver {
+  RetroArtworkRouteObserver({RetroArtworkActivityGate? activityGate})
+    : _activityGate = activityGate;
+
+  static final instance = RetroArtworkRouteObserver();
+
+  final RetroArtworkActivityGate? _activityGate;
+  final List<Route<dynamic>> _routes = <Route<dynamic>>[];
+
+  RetroArtworkActivityGate? get _gate {
+    if (_activityGate != null) return _activityGate;
+    if (!GetIt.instance.isRegistered<RetroArtworkActivityGate>()) return null;
+    return GetIt.instance<RetroArtworkActivityGate>();
+  }
+
+  bool _isArtworkRoute(Route<dynamic>? route) {
+    final name = route?.settings.name;
+    return name != null &&
+        (name.startsWith('/games/') || name.startsWith('/game/'));
+  }
+
+  /// Non-opaque routes (dialogs, popups, bottom sheets -- e.g. the "Choose
+  /// player" picker) sit on top of the screen beneath without hiding it, so
+  /// they must not flip coverage themselves. Only an opaque route (a real
+  /// page navigation, including into gameplay) actually covers the artwork
+  /// screen.
+  bool _isOpaque(Route<dynamic> route) =>
+      route is! ModalRoute<dynamic> || route.opaque;
+
+  void _sync() {
+    Route<dynamic>? topmostOpaque;
+    for (final route in _routes.reversed) {
+      if (_isOpaque(route)) {
+        topmostOpaque = route;
+        break;
+      }
+    }
+    _gate?.setRouteCovered(
+      topmostOpaque == null || !_isArtworkRoute(topmostOpaque),
+      owner: this,
+    );
+  }
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _routes.add(route);
+    _sync();
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _routes.remove(route);
+    _sync();
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _routes.remove(route);
+    _sync();
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    final oldIndex = oldRoute == null ? -1 : _routes.indexOf(oldRoute);
+    if (oldIndex >= 0) {
+      if (newRoute == null) {
+        _routes.removeAt(oldIndex);
+      } else {
+        _routes[oldIndex] = newRoute;
+      }
+    } else if (newRoute != null) {
+      _routes.add(newRoute);
+    }
+    _sync();
   }
 }

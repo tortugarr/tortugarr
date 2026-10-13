@@ -1,5 +1,41 @@
 import '../../data/models/home_row.dart';
 import '../../l10n/app_localizations.dart';
+import '../../preference/preference_constants.dart';
+
+/// The Seerr page builds its rows from the type alone, so it localizes the
+/// title here rather than carrying one around.
+String localizeSeerrRowTitle(SeerrRowType type, AppLocalizations l10n) =>
+    switch (type) {
+      SeerrRowType.shortcuts => l10n.seerrShortcutsRow,
+      SeerrRowType.recentRequests => l10n.recentRequests,
+      SeerrRowType.recentlyAdded => l10n.recentlyAdded,
+      SeerrRowType.yourWatchlist => l10n.yourWatchlist,
+      SeerrRowType.trending => l10n.trending,
+      SeerrRowType.popularMovies => l10n.popularMovies,
+      SeerrRowType.movieGenres => l10n.movieGenres,
+      SeerrRowType.upcomingMovies => l10n.upcomingMovies,
+      SeerrRowType.studios => l10n.studios,
+      SeerrRowType.popularSeries => l10n.popularSeries,
+      SeerrRowType.seriesGenres => l10n.seriesGenres,
+      SeerrRowType.upcomingSeries => l10n.upcomingSeries,
+      SeerrRowType.networks => l10n.networks,
+    };
+
+/// The seasonal row is titled after the holiday Moonbase picked, which it names
+/// by id.
+String seasonalHolidayTitle(String holiday, AppLocalizations l10n) =>
+    switch (holiday) {
+      'newYear' => l10n.holidayNewYear,
+      'valentines' => l10n.holidayValentines,
+      'easter' => l10n.holidayEaster,
+      'pride' => l10n.holidayPride,
+      'halloween' => l10n.holidayHalloween,
+      'thanksgiving' => l10n.holidayThanksgiving,
+      'christmas' => l10n.holidayChristmas,
+      'lunarNewYear' => l10n.holidayLunarNewYear,
+      'diwali' => l10n.holidayDiwali,
+      _ => l10n.seasonalRow,
+    };
 
 String localizeHomeRowTitle({
   required HomeRow row,
@@ -36,6 +72,8 @@ String localizeHomeRowTitle({
       return l10n.liveTv;
     case 'liveTvOnNow':
       return l10n.onNow;
+    case 'liveTvFavorites':
+      return l10n.favoriteChannels;
     case 'activeRecordings':
       return l10n.activeRecordings;
     case 'radarr_calendar':
@@ -54,6 +92,8 @@ String localizeHomeRowTitle({
       return l10n.popularSeries;
     case 'seerr_upcoming_series':
       return l10n.upcomingSeries;
+    case 'seerr_shortcuts':
+      return l10n.seerrShortcutsRow;
     case 'seerr_trending':
       return l10n.trending;
     case 'seerr_movie_genres':
@@ -74,6 +114,9 @@ String localizeHomeRowTitle({
   if (row.id.startsWith('albumartist_')) return l10n.albumArtists;
   if (row.id.startsWith('musicartist_')) return l10n.artists;
   if (row.id.startsWith('musicalbum_')) return l10n.albums;
+  if (row.id.startsWith('latestBooks_')) return l10n.latestBooks;
+  if (row.id.startsWith('latestAudiobooks_')) return l10n.latestAudiobooks;
+  if (row.id.startsWith('latestComics_')) return l10n.latestComics;
 
   if (row.id.startsWith('latest_')) {
     return _localizeLatestRowTitle(row.title, l10n);

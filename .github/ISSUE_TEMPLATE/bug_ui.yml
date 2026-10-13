@@ -25,7 +25,6 @@ body:
         - macOS
         - Windows
         - Linux
-        - Tizen
     validations:
       required: true
 
@@ -43,6 +42,17 @@ body:
     attributes:
       label: Device model
       description: "e.g. Pixel 8, iPhone 15, MacBook Air M2, etc."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: server_type
+    attributes:
+      label: Server
+      description: The media server Moonfin is signed in to
+      options:
+        - Jellyfin
+        - Emby
     validations:
       required: true
 
@@ -87,7 +97,10 @@ body:
   - type: textarea
     id: screenshots
     attributes:
-      label: Screenshots / recordings (optional)
-      description: Attach a screenshot or screen recording if it helps.
+      label: Screenshots / recordings
+      description: |
+        Drag an image or a short screen recording into this box. UI issues are very hard to act on from a description alone.
+        If the problem is motion (a jump, flicker, or focus landing in the wrong place), a recording is far more useful than a still.
+        If you genuinely can't capture one, say why here instead.
     validations:
-      required: false
+      required: true

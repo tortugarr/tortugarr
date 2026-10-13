@@ -2,7 +2,9 @@ param(
   # Target architecture. 'x64' keeps the original behavior byte-identical;
   # 'arm64' builds the native ARM64 installer on a windows-11-arm runner.
   [ValidateSet('x64', 'arm64')]
-  [string]$Architecture = 'x64'
+  [string]$Architecture = 'x64',
+
+  [switch]$Store
 )
 
 $ErrorActionPreference = 'Stop'
@@ -48,6 +50,18 @@ function Get-FlutterCommand {
   if ($flutterCmd) { return $flutterCmd.Source }
 
   throw "Flutter not found. Install Flutter or add it to PATH."
+}
+
+function Get-DartCommand {
+  param([string]$FlutterExe)
+
+  $candidate = Join-Path (Split-Path -Parent $FlutterExe) "dart.bat"
+  if (Test-Path $candidate) { return $candidate }
+
+  $dartCmd = Get-Command dart -ErrorAction SilentlyContinue
+  if ($dartCmd) { return $dartCmd.Source }
+
+  throw "Dart not found next to $FlutterExe or on PATH."
 }
 
 function Get-NormalizedVersion {
@@ -197,6 +211,40 @@ function Copy-VcpkgRuntimeDlls {
   }
 }
 
+function Copy-VcRuntimeDlls {
+  param(
+    [string]$ReleaseDir,
+    [string]$Architecture = 'x64'
+  )
+
+  # moonfin.exe and the plugin DLLs link the Visual C++ runtime dynamically.
+  # Shipping it next to the exe means a machine with a missing or outdated
+  # redistributable still loads the version these binaries were built against.
+  $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
+  if (-not (Test-Path $vswhere)) {
+    throw "vswhere.exe not found at $vswhere. Install Visual Studio with the Desktop development with C++ workload."
+  }
+
+  $vsPath = & $vswhere -latest -products * -property installationPath
+  if ([string]::IsNullOrWhiteSpace($vsPath)) {
+    throw "No Visual Studio installation found by vswhere."
+  }
+
+  $crtDir = Get-ChildItem -Path (Join-Path $vsPath "VC\Redist\MSVC\*\$Architecture\Microsoft.VC*.CRT") -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Parent.Parent.Name -match '^\d+(\.\d+)+$' } |
+    Sort-Object { [Version]$_.Parent.Parent.Name } -Descending |
+    Select-Object -First 1
+  if (-not $crtDir) {
+    throw "Visual C++ runtime for $Architecture not found under $vsPath\VC\Redist\MSVC"
+  }
+
+  foreach ($dll in Get-ChildItem -Path $crtDir.FullName -Filter *.dll -File) {
+    Copy-Item -Path $dll.FullName -Destination (Join-Path $ReleaseDir $dll.Name) -Force
+  }
+
+  Write-Host "Bundled Visual C++ runtime from $($crtDir.FullName)"
+}
+
 function Get-AppVersion {
   $pubspecPath = Join-Path $repoRoot "pubspec.yaml"
   if (-not (Test-Path $pubspecPath)) {
@@ -291,6 +339,9 @@ Source: "$ReleaseDir\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs c
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
+[Registry]
+Root: HKCU; Subkey: "Software\Classes\moonfin"; Flags: dontcreatekey uninsdeletekey
+
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
 "@
@@ -299,7 +350,11 @@ Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: no
 }
 
 $flutterExe = Get-FlutterCommand
-$isccExe = Get-IsccPath
+if ($Store) {
+  $dartExe = Get-DartCommand -FlutterExe $flutterExe
+} else {
+  $isccExe = Get-IsccPath
+}
 $appVersion = Get-AppVersion
 # x64 keeps the original "Moonfin_Windows_v<version>" name; arm64 follows the same
 # scheme with a "WindowsARM64" platform token.
@@ -308,6 +363,10 @@ if ($Architecture -eq 'arm64') {
 } else {
   $installerBaseName = "Moonfin_Windows_v$appVersion"
 }
+# Named outside Moonfin_* so the release job doesn't attach it, since an
+# unsigned MSIX only installs through the Store.
+$storePackageBaseName = $installerBaseName -replace '^Moonfin_', 'MoonfinStore_'
+$distributionChannel = if ($Store) { 'msstore' } else { 'windows' }
 
 Push-Location $repoRoot
 try {
@@ -324,7 +383,7 @@ try {
   Invoke-CheckedCommand -Name "flutter pub get" -FilePath $flutterExe -Arguments @("pub", "get")
 
   Write-Host "Building Windows $Architecture release..."
-  Invoke-CheckedCommand -Name "flutter build windows" -FilePath $flutterExe -Arguments @("build", "windows", "--release", "--dart-define=DISTRIBUTION_CHANNEL=windows")
+  Invoke-CheckedCommand -Name "flutter build windows" -FilePath $flutterExe -Arguments @("build", "windows", "--release", "--dart-define=DISTRIBUTION_CHANNEL=$distributionChannel")
 
   $releaseDir = Join-Path $repoRoot "build\windows\$Architecture\runner\Release"
   $releaseExe = Join-Path $releaseDir "moonfin.exe"
@@ -333,6 +392,30 @@ try {
   }
 
   Copy-VcpkgRuntimeDlls -VcpkgRoot $env:VCPKG_ROOT -ReleaseDir $releaseDir -Triplet $vcpkgTriplet
+  Copy-VcRuntimeDlls -ReleaseDir $releaseDir -Architecture $Architecture
+
+  if ($Store) {
+    $rootMsix = Join-Path $repoRoot "$storePackageBaseName.msix"
+
+    # msix's own build would leave out the vcpkg and Visual C++ runtime DLLs,
+    # so it packs the Release folder built above instead.
+    Write-Host "Building Microsoft Store MSIX..."
+    Invoke-CheckedCommand -Name "msix:create" -FilePath $dartExe -Arguments @(
+      "run", "msix:create",
+      "--store",
+      "--build-windows", "false",
+      "--architecture", $Architecture,
+      "--output-path", $repoRoot,
+      "--output-name", $storePackageBaseName
+    )
+
+    if (-not (Test-Path $rootMsix)) {
+      throw "Store package not found at expected path: $rootMsix"
+    }
+
+    Write-Host "Store package created:" $rootMsix
+    return
+  }
 
   $outputDir = Join-Path $repoRoot "build\windows\installer"
   $iconPath = Join-Path $repoRoot "windows\runner\resources\app_icon.ico"

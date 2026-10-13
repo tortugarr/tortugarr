@@ -2396,7 +2396,7 @@
             }
         }
     },
-    "durationMinutes": "{minutes} mín.",
+    "durationMinutes": "{minutes} min.",
     "@durationMinutes": {
         "description": "Duration in minutes",
         "placeholders": {
@@ -6335,7 +6335,7 @@
     "@subtitleCustomizationDescription": {
         "description": "Subtitle for the subtitle customization tile"
     },
-    "subtitlePreviewText": "El rápido zorro marrón salta sobre el perro perezoso.",
+    "subtitlePreviewText": "El rápido zorro marrón salta sobre el perro perezoso",
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
@@ -6581,7 +6581,7 @@
     "settingsTwentyFourHourClock": "Reloj de 24 horas",
     "settingsTwentyFourHourClockSubtitle": "Utilice el formato de hora de 24 horas dondequiera que se muestre el reloj",
     "settingsShowShuffleButtonInNavigation": "Mostrar el botón de reproducción aleatoria en la barra de navegación",
-    "settingsShowGenresButtonInNavigation": "Mostrar el botón de géneros en la barra de navegación.",
+    "settingsShowGenresButtonInNavigation": "Mostrar el botón de géneros en la barra de navegación",
     "settingsShowFavoritesButtonInNavigation": "Mostrar el botón de favoritos en la barra de navegación",
     "settingsShowLibrariesButtonInNavigation": "Mostrar el botón de bibliotecas en la barra de navegación",
     "settingsLibraryVisibilitySubtitle": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Moonfin para que los cambios surtan efecto.",
@@ -6630,8 +6630,8 @@
     "settingsAutomationAndQueue": "Automatización y cola",
     "settingsAutomationAndQueueSubtitle": "Reproducción y secuenciación automatizadas",
     "settingsOfflineDownloadsSubtitle": "Calidad de descarga, límites de almacenamiento y tamaño de la cola",
-    "settingsSyncplaySubtitle": "Lógica de sincronización para sesiones grupales.",
-    "settingsAdvancedOptionsSubtitle": "Funciones de reproductor especializadas. Úselo con precaución, ya que algunas opciones pueden causar problemas de reproducción.",
+    "settingsSyncplaySubtitle": "Lógica de sincronización para sesiones grupales",
+    "settingsAdvancedOptionsSubtitle": "Funciones de reproductor especializadas. Úselo con precaución, ya que algunas opciones pueden causar problemas de reproducción",
     "settingsSkipIntrosAndOutros": "¿Saltar introducciones y finales?",
     "settingsPromptUser": "Preguntar al usuario",
     "settingsSkip": "Saltar",
@@ -6650,7 +6650,7 @@
     "settingsPreferServerTranscode": "Prefiere la transcodificación del servidor",
     "settingsDolbyVisionProfile7DirectPlay": "Dolby Vision Perfil 7 Reproducción directa",
     "settingsDolbyVisionProfile7DirectPlayDescription": "Controla si las transmisiones de capa de mejora del perfil 7 de Dolby Vision deben dirigir la reproducción.",
-    "settingsAutoAftkrtEnabled": "Automático (AFTKRT habilitado)",
+    "settingsAutoAftkrtEnabled": "Automático",
     "settingsEnabledOnThisDevice": "Habilitado en este dispositivo",
     "settingsDisabledPreferTranscode": "Deshabilitado (prefiero transcodificar)",
     "settingsResumeRewindDescription": "Al reanudar la reproducción (desde Continuar viendo o desde una página de elementos multimedia), ¿cuántos segundos se deben rebobinar?",
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Eliminar tema guardado",
     "savedThemesManageSubtitle": "Administrar temas de complementos descargados en este dispositivo",
     "themeEditor": "Editor de temas",
-    "themeEditorSubtitle": "Abra el editor de temas Moonfin en su navegador.",
+    "themeEditorSubtitle": "Abra el editor de temas Moonfin en su navegador",
     "homeScreen": "Pantalla de inicio",
     "bottomBar": "Barra inferior",
     "homeRowsStyleClassic": "Clásico",
@@ -7748,10 +7748,6 @@
     "settingsAudioFallbackCodecEac3": "EAC3\n(Dolby Digital Plus)",
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
-    },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(Sin pérdida)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
     },
     "settingsAudioFallbackCodecMp3": "MP3\n(Solo estéreo)",
     "@settingsAudioFallbackCodecMp3": {
@@ -9005,5 +9001,23 @@
     "imdbMostPopularMovies": "Películas más populares de IMDb",
     "imdbMostPopularTvShows": "Series más populares de IMDb",
     "imdbLowestRatedMovies": "Películas peor valoradas de IMDb",
-    "imdbTopEnglishMovies": "Películas en inglés mejor valoradas de IMDb"
+    "imdbTopEnglishMovies": "Películas en inglés mejor valoradas de IMDb",
+    "failedToDeleteItemWithError": "La operación de borrado falló con el siguiente error: {error}",
+    "@failedToDeleteItemWithError": {
+        "description": "Error message when item deletion fails, including the specific error details",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Permission denied"
+            }
+        }
+    },
+    "homeRowsPadding": "Separación de filas en Inicio",
+    "@homeRowsPadding": {
+        "description": "Title for home rows padding setting"
+    },
+    "homeRowsPaddingDescription": "Personalizar el espaciado entre filas de inicio",
+    "@homeRowsPaddingDescription": {
+        "description": "Description for home rows padding setting"
+    }
 }

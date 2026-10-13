@@ -24,9 +24,12 @@ import '../../widgets/fullscreen_backdrop_switcher.dart';
 import '../../widgets/media_card.dart';
 import '../../widgets/navigation_layout.dart';
 import '../../widgets/overlay_sheet.dart';
+import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/rating_display.dart';
 import '../../widgets/sliding_pill_tabs.dart';
+import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 
 Color get _navyBackground => AppColorScheme.background;
 const _horizontalPadding = 60.0;
@@ -50,7 +53,8 @@ class FavoritesScreen extends StatefulWidget {
   State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMixin<FavoritesScreen> {
+class _FavoritesScreenState extends State<FavoritesScreen>
+    with GridFocusNodeMixin<FavoritesScreen>, WidgetsBindingObserver {
   late final FavoritesViewModel _vm;
   final _scrollController = ScrollController();
   final _prefs = GetIt.instance<UserPreferences>();
@@ -75,6 +79,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
     _vm.addListener(_onChanged);
     _vm.load();
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addObserver(this);
     _backgroundSub = _backgroundService.backgroundStream.listen((url) {
       if (mounted) setState(() => _backdropUrl = url);
     });
@@ -84,6 +89,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
 
   @override
   void dispose() {
+    _resizeCheckDebounce?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _backgroundSub?.cancel();
     _scrollController.dispose();
     _vm.removeListener(_onChanged);
@@ -92,6 +99,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
     _tabsFocusNode.dispose();
     disposeGridFocusNodes();
     super.dispose();
+  }
+
+  Timer? _resizeCheckDebounce;
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    _resizeCheckDebounce?.cancel();
+    _resizeCheckDebounce = Timer(const Duration(milliseconds: 150), () {
+      if (!mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _onScroll();
+      });
+    });
   }
 
   int _lastGridItemsLength = 0;
@@ -103,10 +124,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
     return _vm.rowItems[types[_selectedTab]] ?? const [];
   }
 
+  /// The list the grid focus nodes are keyed on.
+  List<AggregatedItem> get _focusTrackedItems =>
+      _vm.viewStyle == FavoritesViewStyle.library
+      ? _vm.gridItems
+      : _currentTabItems();
+
   void _maybeBumpGridVersion() {
-    final current = _vm.viewStyle == FavoritesViewStyle.library
-        ? _vm.gridItems
-        : _currentTabItems();
+    final current = _focusTrackedItems;
     final length = current.length;
     final firstId = length == 0 ? null : current.first.id;
     if (length != _lastGridItemsLength || firstId != _lastGridFirstItemId) {
@@ -130,6 +155,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
   void _onChanged() {
     if (mounted) setState(() {});
     _maybeBumpGridVersion();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _onScroll();
+    });
   }
 
   void _onItemFocused(AggregatedItem item) {
@@ -335,13 +363,18 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
       }
     }
     if (_vm.imageType == ImageType.thumb && item.backdropImageTags.isNotEmpty) {
-      return api.getBackdropImageUrl(item.id, maxWidth: maxWidth);
+      return api.getBackdropImageUrl(
+        item.id,
+        maxWidth: maxWidth,
+        tag: item.backdropImageTags.first,
+      );
     }
     return item.primaryImageTag != null
         ? api.getPrimaryImageUrl(
             item.id,
             maxWidth: maxWidth,
             maxHeight: maxHeight,
+            tag: item.primaryImageTag,
           )
         : null;
   }
@@ -350,7 +383,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
   Widget build(BuildContext context) => RequestInitialFocus(
     targetNode:
         _vm.viewStyle == FavoritesViewStyle.home ? _tabsFocusNode : null,
-    child: _buildContent(context),
+    child: QuickReturnWrapper(
+      scrollController: _scrollController,
+      // cleanupGridFocusNodes disposes node 0 once the list empties, and the
+      // wrapper would keep holding it, so pass nothing instead.
+      topFocusNode: _focusTrackedItems.isNotEmpty
+          ? getGridItemFocusNode(0)
+          : null,
+      child: _buildContent(context),
+    ),
   );
 
   Widget _buildContent(BuildContext context) {
@@ -399,15 +440,18 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
 
   Widget _buildBody() {
     return switch (_vm.state) {
-      FavoritesState.loading => Center(
-        child: CircularProgressIndicator(color: AppColorScheme.accent),
+      FavoritesState.loading => SkeletonLibraryGrid(
+        cardWidth: _cardWidth(),
+        aspectRatio: _gridBaseAspectRatio(),
       ),
       FavoritesState.error => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _vm.errorMessage ?? AppLocalizations.of(context).failedToLoadFavorites,
+              _vm.isNetworkError
+                  ? AppLocalizations.of(context).unableToConnectToServer
+                  : describeError(_vm.error!, AppLocalizations.of(context)),
               style: const TextStyle(color: Colors.white),
             ),
             const SizedBox(height: 16),
@@ -517,19 +561,27 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
         );
         final desktopTextScale = MediaQuery.textScalerOf(context).scale(1.0);
         final textHeight = (hasSubtitles ? 42.0 : 24.0) * desktopTextScale;
-        final childAspectRatio = cellWidth / (cellWidth / ar + textHeight);
+        final imageHeight = cellWidth / ar;
+        final upwardGrowth = focusExpansion && !isMobile
+            ? (imageHeight * (MediaCard.focusScale - 1))
+            : 0.0;
+        final baseRowSpacing = 16.0;
+        final rowSpacing = baseRowSpacing + upwardGrowth;
+        final baseTopPadding = 18.0;
+        final topPadding = baseTopPadding + upwardGrowth;
+        final childAspectRatio = cellWidth / (imageHeight + textHeight);
 
         return GridView.builder(
           controller: _scrollController,
           padding: EdgeInsets.fromLTRB(
             horizontalPadding,
-            12,
+            topPadding,
             horizontalPadding,
             32,
           ),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
-            mainAxisSpacing: 8,
+            mainAxisSpacing: rowSpacing,
             crossAxisSpacing: spacing,
             childAspectRatio: childAspectRatio,
           ),
@@ -566,6 +618,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
     final item = items[index];
     final itemAspectRatio = _itemAspectRatio(item);
     return MediaCard(
+      animeMarkerItemId: item.id,
       title: item.name,
       subtitle: _cardSubtitle(item),
       imageUrl: _imageUrl(
@@ -608,6 +661,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
           item.id,
           serverId: item.serverId,
           type: item.type,
+          channelId: item.channelId,
         ),
       ),
     );
@@ -653,22 +707,30 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
         );
         final desktopTextScale = MediaQuery.textScalerOf(context).scale(1.0);
         final textHeight = (hasSubtitles ? 42.0 : 24.0) * desktopTextScale;
-        final childAspectRatio = cellWidth / (cellWidth / ar + textHeight);
+        final imageHeight = cellWidth / ar;
         final focusColor = Color(
           _prefs.get(UserPreferences.focusColor).colorValue,
         );
         final focusExpansion = _prefs.get(UserPreferences.cardFocusExpansion);
+        final upwardGrowth = focusExpansion && !isMobile
+            ? (imageHeight * (MediaCard.focusScale - 1))
+            : 0.0;
+        final baseRowSpacing = 16.0;
+        final rowSpacing = baseRowSpacing + upwardGrowth;
+        final baseTopPadding = 18.0;
+        final topPadding = baseTopPadding + upwardGrowth;
+        final childAspectRatio = cellWidth / (imageHeight + textHeight);
         final suppressFocusGlow = ThemeRegistry.active.borders.focusGlow.isNotEmpty;
 
         return CustomScrollView(
           controller: _scrollController,
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(gridPadding, 8, gridPadding, 16),
+              padding: EdgeInsets.fromLTRB(gridPadding, topPadding, gridPadding, 16),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 8,
+                  mainAxisSpacing: rowSpacing,
                   crossAxisSpacing: spacing,
                   childAspectRatio: childAspectRatio,
                 ),
@@ -743,6 +805,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> with GridFocusNodeMix
                         item.id,
                         serverId: item.serverId,
                         type: item.type,
+                        channelId: item.channelId,
                       ),
                     ),
                   );
@@ -962,6 +1025,7 @@ class _FocusedItemHud extends StatelessWidget {
                     ratings: ratings,
                     communityRating: item!.communityRating,
                     criticRating: item!.criticRating,
+                    personalRating: item!.personalRating,
                     enableAdditionalRatings: enableAdditionalRatings,
                     enabledRatings: enabledRatings,
                     showLabels: showLabels,
@@ -1186,7 +1250,7 @@ class _SortDialogState extends State<_SortDialog> {
             ),
             Divider(color: dividerColor),
             _sectionHeader(AppLocalizations.of(context).sortBy),
-            for (final option in LibrarySortBy.values)
+            for (final option in LibrarySortBy.itemsApiValues)
               _radioTile(
                 label: option.displayName,
                 selected: vm.sortBy == option,
@@ -1318,7 +1382,7 @@ class _DisplaySettingsDialogState extends State<_DisplaySettingsDialog> {
             if (vm.imageType != ImageType.banner) ...[
               Divider(color: dividerColor),
               _sectionHeader(AppLocalizations.of(context).posterSize),
-              for (final size in PosterSize.values)
+              for (final size in PosterSize.gridValues)
                 _posterSizeRadioTile(vm, size),
             ],
           ],
@@ -1387,7 +1451,7 @@ class _DisplaySettingsDialogState extends State<_DisplaySettingsDialog> {
       PosterSize.small => l10n.small,
       PosterSize.medium => l10n.medium,
       PosterSize.large => l10n.large,
-      PosterSize.extraLarge => l10n.extraLarge,
+      PosterSize.extraLarge || PosterSize.grandparents => l10n.extraLarge,
     };
     return InkWell(
       onTap: () => vm.setPosterSize(size),

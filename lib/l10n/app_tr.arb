@@ -33,7 +33,7 @@
     "@quickConnectInstruction": {
         "description": "Instruction text for Quick Connect code entry"
     },
-    "waitingForAuthorization": "Yetkilendirme bekleniyor...",
+    "waitingForAuthorization": "Yetkilendirme bekleniyor…",
     "@waitingForAuthorization": {
         "description": "Quick Connect polling status text"
     },
@@ -49,7 +49,7 @@
     "@loginFailed": {
         "description": "Generic login failure message"
     },
-    "quickConnectUnavailable": "QuickConnect kullanılamıyor: {detail}",
+    "quickConnectUnavailable": "Hızlı Bağlantı Kullanılamıyor: {detail}",
     "@quickConnectUnavailable": {
         "description": "Quick Connect generic error message",
         "placeholders": {
@@ -58,7 +58,7 @@
             }
         }
     },
-    "quickConnectUnavailableWithStatus": "QuickConnect kullanılamıyor ({status}): {detail}",
+    "quickConnectUnavailableWithStatus": "Hızlı Bağlantı kullanılamıyor ({status}): {detail}",
     "@quickConnectUnavailableWithStatus": {
         "description": "Quick Connect error message with HTTP status info",
         "placeholders": {
@@ -224,11 +224,11 @@
     "@embyConnectNetworkError": {
         "description": "Generic network error during Emby Connect flow"
     },
-    "loadingLinkedServers": "Bağlantılı sunucular yükleniyor...",
+    "loadingLinkedServers": "Bağlantılı sunucular yükleniyor…",
     "@loadingLinkedServers": {
         "description": "Status text while fetching Emby Connect server list"
     },
-    "connectingToServerEllipsis": "Sunucuya bağlanılıyor...",
+    "connectingToServerEllipsis": "Sunucuya bağlanılıyor…",
     "@connectingToServerEllipsis": {
         "description": "Status text while connecting to a selected server"
     },
@@ -1230,7 +1230,7 @@
             }
         }
     },
-    "downloadingTitle": "{title} indiriliyor ({count} öge)...",
+    "downloadingTitle": "{title} indiriliyor ({count} öge)…",
     "@downloadingTitle": {
         "description": "Snackbar message when downloading album tracks",
         "placeholders": {
@@ -1280,7 +1280,7 @@
     "@none": {
         "description": "Option label for no subtitle selected"
     },
-    "downloadSubtitlesLabel": "Altyazıları indir...",
+    "downloadSubtitlesLabel": "Altyazıları indir…",
     "@downloadSubtitlesLabel": {
         "description": "Label for the download subtitles option"
     },
@@ -1351,7 +1351,7 @@
     "@noEpisodesLoaded": {
         "description": "Message when no episodes are available for download"
     },
-    "downloadingItem": "{name} indiriliyor ({quality})...",
+    "downloadingItem": "{name} indiriliyor ({quality})…",
     "@downloadingItem": {
         "description": "Snackbar message when downloading an item",
         "placeholders": {
@@ -1974,7 +1974,7 @@
             }
         }
     },
-    "updating": "Güncelleniyor...",
+    "updating": "Güncelleniyor…",
     "@updating": {
         "description": "Button label while updating"
     },
@@ -2019,7 +2019,7 @@
     "@addBookmark": {
         "description": "Tooltip for add bookmark button"
     },
-    "bookmarksEllipsis": "Yer imleri...",
+    "bookmarksEllipsis": "Yer imleri…",
     "@bookmarksEllipsis": {
         "description": "Menu item to view bookmarks"
     },
@@ -2064,7 +2064,7 @@
     "@invertColorsPdf": {
         "description": "Menu item to invert colors for PDF"
     },
-    "preparingInAppReader": "Uygulama içi okuyucu hazırlanıyor...",
+    "preparingInAppReader": "Uygulama içi okuyucu hazırlanıyor…",
     "@preparingInAppReader": {
         "description": "Loading text while reader is being prepared"
     },
@@ -2265,11 +2265,11 @@
     "@failedToCancelSeriesRecording": {
         "description": "Error when cancelling a series recording fails"
     },
-    "searchThisLibrary": "Bu kütüphaneyi arayın...",
+    "searchThisLibrary": "Bu kütüphaneyi arayın…",
     "@searchThisLibrary": {
         "description": "Search hint when scoped to a specific library"
     },
-    "searchEllipsis": "Ara...",
+    "searchEllipsis": "Ara…",
     "@searchEllipsis": {
         "description": "Search hint placeholder"
     },
@@ -2295,7 +2295,7 @@
     "@seerr": {
         "description": "Seerr brand name"
     },
-    "savedMedia": "Kayıtlı Medya",
+    "savedMedia": "İndirilenler",
     "@savedMedia": {
         "description": "Header title for saved/downloaded media screen"
     },
@@ -3218,7 +3218,7 @@
     "@loadProfile": {
         "description": "Button to load a profile"
     },
-    "syncing": "Senkronize ediliyor...",
+    "syncing": "Senkronize ediliyor…",
     "@syncing": {
         "description": "Label while syncing"
     },
@@ -3266,7 +3266,7 @@
     "@manage": {
         "description": "Button to manage storage"
     },
-    "calculating": "Hesaplanıyor...",
+    "calculating": "Hesaplanıyor…",
     "@calculating": {
         "description": "Label while calculating"
     },
@@ -4858,7 +4858,7 @@
     "adminApiKeysLoadFailed": "API anahtarları yüklenemedi",
     "adminCreateKey": "Anahtar Oluştur",
     "adminNoApiKeys": "API anahtarı bulunamadı",
-    "adminCreatingBackup": "Yedek oluşturuluyor...",
+    "adminCreatingBackup": "Yedek oluşturuluyor…",
     "adminBackupCreated": "Yedekleme başarıyla oluşturuldu",
     "adminBackupCreateFailed": "Yedek oluşturulamadı: {error}",
     "@adminBackupCreateFailed": {
@@ -4886,7 +4886,7 @@
         }
     },
     "adminConfirmRestore": "Geri Yüklemeyi Onayla",
-    "adminRestoringBackup": "Yedekleme geri yükleniyor...",
+    "adminRestoringBackup": "Yedekleme geri yükleniyor…",
     "adminRestoreFailed": "Yedek geri yüklenemedi: {error}",
     "@adminRestoreFailed": {
         "placeholders": {
@@ -4997,7 +4997,7 @@
         }
     },
     "adminDayOfWeek": "Haftanın günü",
-    "adminSearchPlugins": "Eklentileri ara...",
+    "adminSearchPlugins": "Eklentileri ara…",
     "adminPluginToggleFailed": "Eklenti durumu değiştirilemedi: {error}",
     "@adminPluginToggleFailed": {
         "placeholders": {
@@ -5086,7 +5086,7 @@
             }
         }
     },
-    "adminPluginUpdating": "\"{name}\", v{version} sürümüne güncelleniyor...",
+    "adminPluginUpdating": "\"{name}\", v{version} sürümüne güncelleniyor…",
     "@adminPluginUpdating": {
         "placeholders": {
             "name": {
@@ -5683,7 +5683,7 @@
     },
     "adminPluginsCatalogNoSearchResults": "Aramanızla eşleşen paket yok",
     "adminPluginsCatalogEmpty": "Mevcut paket yok",
-    "adminPluginsInstalling": "\"{name}\" yükleniyor...",
+    "adminPluginsInstalling": "\"{name}\" yükleniyor…",
     "@adminPluginsInstalling": {
         "placeholders": {
             "name": {
@@ -5815,8 +5815,8 @@
     "adminTrickplayProcessing": "İşleme",
     "adminTasksEmpty": "Zamanlanmış görev bulunamadı",
     "adminTasksNoFilterMatch": "Geçerli filtreyle eşleşen görev yok",
-    "adminTaskCancelling": "İptal...",
-    "adminTaskRunning": "Çalışıyor...",
+    "adminTaskCancelling": "İptal Ediliyor…",
+    "adminTaskRunning": "Çalışıyor…",
     "adminTaskNeverRun": "Asla çalışma",
     "adminTaskStop": "Durdur",
     "adminTaskRun": "Çalıştır",
@@ -6002,12 +6002,12 @@
     "noItems": "Öğe yok",
     "switchUser": "Kullanıcıyı Değiştir",
     "remoteControl": "Uzaktan kumanda",
-    "mediaBarLoading": "Medya çubuğu yükleniyor...",
+    "mediaBarLoading": "Medya çubuğu yükleniyor…",
     "mediaBarError": "Medya çubuğu yüklenemedi",
     "offlineServerUnavailable": "İnternete bağlı, ancak mevcut sunucu kullanılamıyor.",
     "offlineNoInternet": "Çevrimdışısınız. Yalnızca indirilen içerik kullanılabilir.",
     "offlineSwitchServer": "Sunucuyu Değiştir",
-    "offlineSavedMedia": "Kayıtlı Medya",
+    "offlineSavedMedia": "İndirilenler",
     "castGoogleCast": "Google Cast",
     "castAirPlay": "AirPlay",
     "castDlna": "DLNA",
@@ -6065,14 +6065,14 @@
     "pinForgot": "PIN'inizi mi unuttunuz?",
     "pinClear": "Temizle",
     "pinBackspace": "Geri tuşu",
-    "quickConnectAuthorized": "Quick Connect isteği onaylandı.",
-    "quickConnectInvalidOrExpired": "Quick Connect kodu geçersiz veya süresi dolmuş.",
-    "quickConnectNotSupported": "Quick Connect bu sunucuda desteklenmiyor.",
-    "quickConnectAuthorizeFailed": "Quick Connect kodu yetkilendirilemedi.",
-    "quickConnectDisabled": "Quick Connect bu sunucuda devre dışı bırakıldı.",
-    "quickConnectForbidden": "Hesabınız bu Quick Connect isteğine yetki veremez.",
-    "quickConnectNotFound": "Quick Connect kodu bulunamadı. Yeni bir kod deneyin.",
-    "quickConnectFailedWithMessage": "Quick Connect başarısız oldu: {message}",
+    "quickConnectAuthorized": "Hızlı Bağlantı isteği onaylandı.",
+    "quickConnectInvalidOrExpired": "Hızlı Bağlantı kodu geçersiz veya süresi dolmuş.",
+    "quickConnectNotSupported": "Hızlı Bağlantı bu sunucuda desteklenmiyor.",
+    "quickConnectAuthorizeFailed": "Hızlı Bağlantı kodu yetkilendirilemedi.",
+    "quickConnectDisabled": "Hızlı Bağlantı bu sunucuda devre dışı bırakıldı.",
+    "quickConnectForbidden": "Hesabınız bu Hızlı Bağlantı isteğine yetki veremez.",
+    "quickConnectNotFound": "Hızlı Bağlantı kodu bulunamadı. Yeni bir kod deneyin.",
+    "quickConnectFailedWithMessage": "Hızlı Bağlantı başarısız oldu: {message}",
     "@quickConnectFailedWithMessage": {
         "placeholders": {
             "message": {
@@ -6119,7 +6119,7 @@
     "trackActionAddToFavorites": "Favorilere Ekle",
     "trackActionGoToAlbum": "Albüme Git",
     "trackActionGoToArtist": "Sanatçıya Git",
-    "trackActionDownloading": "{name} indiriliyor...",
+    "trackActionDownloading": "{name} indiriliyor…",
     "@trackActionDownloading": {
         "placeholders": {
             "name": {
@@ -6328,7 +6328,7 @@
     "@readReleaseNotes": {
         "description": "Option to read the release notes in a browser"
     },
-    "downloadingUpdate": "Güncelleme indiriliyor...",
+    "downloadingUpdate": "Güncelleme indiriliyor…",
     "@downloadingUpdate": {
         "description": "Label shown while an update is being downloaded"
     },
@@ -6618,9 +6618,9 @@
     "settingsPreferServerTranscode": "Sunucu kod dönüştürmesini tercih et",
     "settingsDolbyVisionProfile7DirectPlay": "Dolby Vision Profil 7 Doğrudan Oynatma",
     "settingsDolbyVisionProfile7DirectPlayDescription": "Dolby Vision profil 7 geliştirme katmanı akışlarının oynatmayı yönlendirmesi gerekip gerekmediğini kontrol eder.",
-    "settingsAutoAftkrtEnabled": "Otomatik (AFTKRT etkin)",
-    "settingsEnabledOnThisDevice": "Bu cihazda etkinleştirildi",
-    "settingsDisabledPreferTranscode": "Devre dışı (kod dönüştürmeyi tercih edin)",
+    "settingsAutoAftkrtEnabled": "Otomatik",
+    "settingsEnabledOnThisDevice": "Etkinleştirildi",
+    "settingsDisabledPreferTranscode": "Devre dışı",
     "settingsResumeRewindDescription": "Oynatmayı devam ettirirken (İzlemeye Devam Et'ten veya bir medya öğesi sayfasından), kaç saniye geri sarılmalıdır?",
     "settingsUnpauseRewindDescription": "Duraklatma tuşuna bastıktan sonra oynatmaya devam edilirken kaç saniye geri sarılmalıdır?",
     "settingsSkipBackLengthDescription": "Geri sarma tuşuna bastıktan sonra kaç saniye geri atlanır.",
@@ -6795,7 +6795,7 @@
     "@settingsAudioFallbackCodec": {
         "description": "Setting for fallback audio codec"
     },
-    "settingsAudioPassthroughAdvanced": "Doğrudan Geçiş(Passthrough) (Gelişmiş)",
+    "settingsAudioPassthroughAdvanced": "Doğrudan Geçiş (Passthrough) (Gelişmiş)",
     "@settingsAudioPassthroughAdvanced": {
         "description": "Section title for advanced passthrough controls"
     },
@@ -6974,11 +6974,11 @@
     "@disableTunnelingSubtitle": {
         "description": "Setting subtitle for disable tunneling"
     },
-    "mapDolbyVisionP7Title": "Dolby Vision profil 7'yi HEVC ile eşleştir",
+    "mapDolbyVisionP7Title": "Dolby Vision profil 7'yi her zaman HDR10 olarak oynat",
     "@mapDolbyVisionP7Title": {
         "description": "Setting title: play DV P7 as HDR10 HEVC on non-DV devices"
     },
-    "mapDolbyVisionP7Subtitle": "Dolby Vision profil 7 akışlarını, DV desteklemeyen cihazlarda HDR10 uyumlu HEVC olarak oynat.",
+    "mapDolbyVisionP7Subtitle": "Profil 8 dönüşümünü atla ve Dolby Vision profil 7 akışlarını HDR10 uyumlu HEVC formatına indirge. Dönüştürülen akışlar hatalı görünüyorsa bunu kullanın.",
     "@mapDolbyVisionP7Subtitle": {
         "description": "Setting subtitle for DV P7 to HEVC mapping"
     },
@@ -7075,7 +7075,7 @@
     "cardSize": "Ana Sayfa Satırı Kart Gösterim Boyutu",
     "externalPlayerApp": "Harici oynatıcı",
     "externalPlayerAskEachTimeSubtitle": "Oynatma başladığında uygulama seçiciyi göster.",
-    "loadingInstalledPlayers": "Yüklü oynatıcılar yükleniyor...",
+    "loadingInstalledPlayers": "Yüklü oynatıcılar yükleniyor…",
     "connection": "Bağlantı",
     "audioTranscodeTarget": "Ses Yeniden Kodlama Hedefi",
     "passthrough": "Doğrudan Geçiş (Passthrough)",
@@ -7301,7 +7301,7 @@
     "cb7ExtractionUnavailable": "CB7 çıkarma işlemi bu platformda mevcut değil.",
     "cb7ExtractionPluginUnavailable": "CB7 çıkarma eklentisi bu platformda mevcut değil.",
     "closeGenrePanel": "Tür panelini kapat",
-    "loadingShuffle": "Karışık liste yükleniyor...",
+    "loadingShuffle": "Karışık liste yükleniyor…",
     "libraryShuffleLabel": "KÜTÜPHANEYİ KARIŞTIR",
     "randomShuffleLabel": "RASTGELE KARIŞTIR",
     "genresShuffleLabel": "TÜRLERİ KARIŞTIR",
@@ -7398,10 +7398,6 @@
     "settingsAudioFallbackCodecEac3": "EAC3\n(Dolby Digital Plus)",
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
-    },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(Kayıpsız)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
     },
     "settingsAudioFallbackCodecMp3": "MP3\n(Sadece Stereo)",
     "@settingsAudioFallbackCodecMp3": {
@@ -8006,7 +8002,7 @@
     "adminPlaybackTonemappingMode": "Ton eşleme modu",
     "adminPlaybackTonemappingRange": "Ton eşleme aralığı",
     "adminPlaybackTonemappingDesat": "Ton eşleme doygunluk azaltma",
-    "adminGeneralQuickConnect": "Quick Connect'i Etkinleştir",
+    "adminGeneralQuickConnect": "Hızlı Bağlantıyı Etkinleştir",
     "adminGeneralSectionServer": "Sunucu",
     "adminGeneralSectionMetadata": "Meta Veri",
     "adminGeneralSectionPaths": "Yollar",
@@ -8061,7 +8057,7 @@
             }
         }
     },
-    "checkingDirectPlay": "Doğrudan Oynatma uyumluluğu kontrol ediliyor...",
+    "checkingDirectPlay": "Doğrudan Oynatma uyumluluğu kontrol ediliyor…",
     "directPlayCapabilityLabel": "Doğrudan Oynatma Uyumluluğu: ",
     "seerrNotifyNewRequestsTitle": "Yeni keşfet bildirimleri",
     "@seerrNotifyNewRequestsTitle": {
@@ -8554,7 +8550,7 @@
     "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Moonfin Recommends"
     },
-    "recommendationSystemSubtitle": "Moonfin Önerileri yerel kütüphane algoritmasını veya çevrimiçi TMDb Benzerlik Metriklerini kullanın. Not: Çevrimiçi öneriler Seerr entegrasyonu gerektirir.",
+    "recommendationSystemSubtitle": "Moonfin Önerileri yerel kütüphane algoritmasını, Jellyfin Önerileri sunucu motorunu veya çevrimiçi TMDb Benzerlik Metriklerini kullanın. Not: Çevrimiçi öneriler Seerr entegrasyonu gerektirir.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
@@ -8575,7 +8571,7 @@
     "@detailScreenStyleModern": {
         "description": "Detail screen style option: the responsive cinematic layout"
     },
-    "detailScreenStyleSubtitle": "Klasik, orijinal ortalanmış Moonfin düzenidir. Modern ise duyarlı sinematik bir düzendir.",
+    "detailScreenStyleSubtitle": "Klasik, orijinal ortalanmış Moonfin düzenidir. Modern, duyarlı sinematik bir düzendir. Spotlight, açılır içerik kartlarına sahip, ana görsel odaklı bir düzendir. Nouveau, bölümlerin sayfa boyunca alt alta sıralandığı tam ekran bir düzendir. Minimalist ise sadece kapak görselinden, tek bir oynatma butonundan ve bölümlerden oluşur.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -8600,7 +8596,7 @@
     "@items": {
         "description": "Tab label for the items in a collection/box set"
     },
-    "detailScreenStyle": "Detay Görüntüleme Stili",
+    "detailScreenStyle": "Detay Ekranı Stili",
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
@@ -8817,7 +8813,7 @@
             }
         }
     },
-    "requestingProgress": "İsteniyor: {current} / {total}...",
+    "requestingProgress": "İsteniyor: {current} / {total}…",
     "@requestingProgress": {
         "description": "Progress label while collection requests are submitted",
         "placeholders": {
@@ -9303,5 +9299,2107 @@
     "mixedPlaylistsSection": "Karışık Oynatma Listesi",
     "@mixedPlaylistsSection": {
         "description": "Section header above mixed playlists when Group by Type is enabled"
+    },
+    "resetProfile": "Profili Sıfırla",
+    "@resetProfile": {
+        "description": "Button to reset a profile to defaults"
+    },
+    "resetProfileTitle": "{profile} sıfırlansın mı?",
+    "@resetProfileTitle": {
+        "description": "Title of the dialog confirming a profile reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetProfileDescription": "Bu işlem {profile} profilini sunucudan siler ve bu cihazdaki tüm eşitlenmiş ayarları varsayılan değerlerine döndürür.",
+    "@resetProfileDescription": {
+        "description": "Body of the dialog confirming a device profile reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetGlobalProfileDescription": "Bu işlem sunucudaki tüm kayıtlı profilleri siler ve bu cihazdaki tüm eşitlenmiş ayarları varsayılan değerlerine döndürür.",
+    "@resetGlobalProfileDescription": {
+        "description": "Body of the dialog confirming a global profile reset"
+    },
+    "profileReset": "{profile} profilini varsayılana sıfırla.",
+    "@profileReset": {
+        "description": "Message after a profile was reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetRatingsTitle": "Puanları sıfırla?",
+    "@resetRatingsTitle": {
+        "description": "Title of the dialog confirming a ratings reset"
+    },
+    "resetRatingsDescription": "Bu işlem, hangi kaynakların görüneceği ve görünüm sıralaması dahil olmak üzere tüm puanlama ayarlarını varsayılan değerlerine döndürür.",
+    "@resetRatingsDescription": {
+        "description": "Body of the dialog confirming a ratings reset"
+    },
+    "ratingsReset": "Puanları varsayılana sıfırla.",
+    "@ratingsReset": {
+        "description": "Message after the ratings settings were reset"
+    },
+    "failedToResetProfile": "{profile} profili sıfırlanamadı.",
+    "@failedToResetProfile": {
+        "description": "Message when a profile reset failed",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "requestMore4k": "4K Olarak Daha Fazla İste",
+    "@requestMore4k": {
+        "description": "Button to request more seasons in 4K, shown next to the non-4K Request More button"
+    },
+    "request4k": "4K İste",
+    "@request4k": {
+        "description": "Button to submit a 4K media request, shown next to the non-4K Request button"
+    },
+    "requested4k": "4K İstendi",
+    "@requested4k": {
+        "description": "Disabled label shown when a 4K request already exists and the user cannot cancel it"
+    },
+    "cancelRequest4k": "4K İsteğini İptal Et",
+    "@cancelRequest4k": {
+        "description": "Button/dialog title to cancel a 4K media request"
+    },
+    "requestSeriesOrMovie4k": "4K {type} İste",
+    "@requestSeriesOrMovie4k": {
+        "description": "Bottom sheet title for requesting media in 4K",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "oledMode": "OLED Modu",
+    "@oledMode": {
+        "description": "Label for the setting that deepens blacks and enriches artwork on OLED displays"
+    },
+    "oledModeSubtitle": "Siyahları derinleştirin ve görselleri zenginleştirin. OLED ekranlarda en iyisi.",
+    "@oledModeSubtitle": {
+        "description": "Explanation under the OLED Mode setting"
+    },
+    "oledModeSubtle": "Hafif",
+    "@oledModeSubtle": {
+        "description": "OLED Mode level that darkens surfaces gently and lightly enriches artwork"
+    },
+    "oledModeVivid": "Canlı",
+    "@oledModeVivid": {
+        "description": "OLED Mode level that uses pure black surfaces and the strongest artwork enrichment"
+    },
+    "settingsAudioPassthroughMode": "Doğrudan Geçiş (Passthrough)",
+    "@settingsAudioPassthroughMode": {
+        "description": "Title of the audio passthrough mode selector"
+    },
+    "settingsAudioPassthroughModeDescription": "Sıkıştırılmış surround sesinin TV'nize veya alıcınıza nasıl ulaştığı.",
+    "settingsAudioPassthroughModeDisabled": "Devre dışı (her zaman bu cihazda çözülecek)",
+    "settingsAudioPassthroughModeAuto": "Otomatik (algılanan cihaz desteğiyle eşleştir)",
+    "settingsAudioPassthroughModeManual": "Manuel (aşağıdaki formatları seçin)",
+    "settingsDownmixToStereoDescription": "Çözülen tüm sesleri iki kanala (stereo) dönüştür.",
+    "settingsAudioEac3IncludesAtmos": "Bitstream E-AC-3, Dolby Atmos (JOC) dahil.",
+    "settingsAudioDtsHdIncludesDtsX": "Bitstream DTS-HD, DTS:X dahil.",
+    "settingsAudioTrueHdIncludesAtmos": "Bitstream TrueHD, Dolby Atmos dahil.",
+    "settingsShowAudioDecoderBanner": "Ses kod çözücüyü göster",
+    "@settingsShowAudioDecoderBanner": {
+        "description": "Toggle for the in-player audio decoder banner"
+    },
+    "settingsShowAudioDecoderBannerDescription": "Oynatma başladığında sesi işleyen kod çözücünün adını kısaca belirtir.",
+    "@settingsShowAudioDecoderBannerDescription": {
+        "description": "Description for the in-player audio decoder banner toggle"
+    },
+    "mergeRecentRowsByType": "Son Satırları Türe Göre Birleştir",
+    "@mergeRecentRowsByType": {
+        "description": "Setting for merging recently added and recently released libraries by media type"
+    },
+    "mergeRecentRowsByTypeDescription": "Son Eklenenler ve Son Çıkanlar ana sayfa satırları için aynı türdeki ayrı kütüphaneleri birleştirin.",
+    "@mergeRecentRowsByTypeDescription": {
+        "description": "Description for merging recent home rows by media type"
+    },
+    "libraryView": "Kütüphane Görünümü",
+    "@libraryView": {
+        "description": "Section title for library view settings"
+    },
+    "collectionsRowShowEpisodes": "Tekil Bölümleri Göster",
+    "collectionsRowShowEpisodesSubtitle": "Her bölümü ayrı ayrı göstermek için dizileri genişlet.",
+    "playlistsRowShowEpisodes": "Tekil Bölümleri Göster",
+    "playlistsRowShowEpisodesSubtitle": "Her bölümü ayrı ayrı göstermek için dizileri genişlet.",
+    "playbackTimeDisplay": "İlerleme Çubuğu Süresi",
+    "@playbackTimeDisplay": {
+        "description": "Setting title for what is shown next to the playback progress bar"
+    },
+    "settingsPlaybackTimeDisplayDescription": "Oynatma ilerleme çubuğunun etrafında hangi zaman etiketlerinin görüneceğini seçin.",
+    "@settingsPlaybackTimeDisplayDescription": {
+        "description": "Setting description for the progress bar time option"
+    },
+    "playbackTimeTotal": "Toplam süre",
+    "@playbackTimeTotal": {
+        "description": "Progress bar time option showing the full runtime"
+    },
+    "playbackTimeRemaining": "Kalan süre",
+    "@playbackTimeRemaining": {
+        "description": "Progress bar time option showing how much is left to play"
+    },
+    "playbackTimeEndsAt": "Bitiş Saati",
+    "@playbackTimeEndsAt": {
+        "description": "Progress bar time option showing the clock time playback finishes"
+    },
+    "playbackTimeElapsed": "Geçen süre",
+    "@playbackTimeElapsed": {
+        "description": "Progress bar time option showing how far into the item playback is"
+    },
+    "playbackTimeVideoSection": "Video Oynatıcı",
+    "@playbackTimeVideoSection": {
+        "description": "Section header above the video progress bar time slots"
+    },
+    "playbackTimeMusicSection": "Müzik Oynatıcı",
+    "@playbackTimeMusicSection": {
+        "description": "Section header above the music progress bar time option"
+    },
+    "playbackTimeSlotDescription": "Burada ne gösterileceğini seçin veya gizleyin.",
+    "@playbackTimeSlotDescription": {
+        "description": "Setting description for a single progress bar time slot"
+    },
+    "playbackTimeAboveBarLeft": "Çubuğun üstünde, sol",
+    "@playbackTimeAboveBarLeft": {
+        "description": "Progress bar time slot above the bar on the left"
+    },
+    "playbackTimeAboveBarCenter": "Çubuğun üstünde, orta",
+    "@playbackTimeAboveBarCenter": {
+        "description": "Progress bar time slot above the bar in the center"
+    },
+    "playbackTimeAboveBarRight": "Çubuğun üstünde, sağ",
+    "@playbackTimeAboveBarRight": {
+        "description": "Progress bar time slot above the bar on the right"
+    },
+    "playbackTimeBelowBarLeft": "Çubuğun altında, sol",
+    "@playbackTimeBelowBarLeft": {
+        "description": "Progress bar time slot below the bar on the left"
+    },
+    "playbackTimeBelowBarCenter": "Çubuğun altında, orta",
+    "@playbackTimeBelowBarCenter": {
+        "description": "Progress bar time slot below the bar in the center"
+    },
+    "playbackTimeBelowBarRight": "Çubuğun altında, sağ",
+    "@playbackTimeBelowBarRight": {
+        "description": "Progress bar time slot below the bar on the right"
+    },
+    "settingsMusicPlaybackTimeDescription": "Müzik ilerleme çubuğunun sağ tarafında ne gösterileceğini seçin.",
+    "@settingsMusicPlaybackTimeDescription": {
+        "description": "Setting description for the music progress bar time option"
+    },
+    "scrollDirection": "Kaydırma Yönü",
+    "@scrollDirection": {
+        "description": "Section header for scroll direction selection in library display settings"
+    },
+    "scrollDirectionVertical": "Dikey",
+    "@scrollDirectionVertical": {
+        "description": "Library scroll direction option: vertical grid (default)"
+    },
+    "scrollDirectionHorizontal": "Yatay",
+    "@scrollDirectionHorizontal": {
+        "description": "Library scroll direction option: horizontal grid for ultrawide displays"
+    },
+    "scrollToTop": "En Başa Kaydır",
+    "@scrollToTop": {
+        "description": "Tooltip for the button that returns a scrolled list to the top"
+    },
+    "sdCard": "SD Kart",
+    "@sdCard": {
+        "description": "Download location option for a removable storage volume"
+    },
+    "downloadLocationLimitedByAndroid": "Android, Moonfin uygulamasının yalnızca kendi sahip olduğu klasörlere yazmasına izin veriyor ve bu cihazda çıkarılabilir depolama alanı yok. İndirmelerin diğer uygulamaların erişebileceği bir yere kaydedilmesi için yukarıdaki 'İndirilenler klasörüne kaydet' seçeneğini açın.",
+    "@downloadLocationLimitedByAndroid": {
+        "description": "Note shown when the only download location Android allows is the default one"
+    },
+    "tags": "Etiketler",
+    "@tags": {
+        "description": "Heading for the keyword tags a title is filed under"
+    },
+    "genresAndTags": "Türler ve Etiketler",
+    "@genresAndTags": {
+        "description": "Button and dialog title for browsing a title's genres, networks and tags"
+    },
+    "manageRequests": "İstekleri Yönet",
+    "@manageRequests": {
+        "description": "Details screen button opening the pending requests to approve or decline"
+    },
+    "watchlist": "İzleme Listesi",
+    "@watchlist": {
+        "description": "Details screen button adding the title to the Seerr watchlist"
+    },
+    "onWatchlist": "İzleme Listesinde",
+    "@onWatchlist": {
+        "description": "Details screen button label when the title is already on the Seerr watchlist"
+    },
+    "settingsCinemaModeEpisodes": "Bölümler için Sinema Modu",
+    "@settingsCinemaModeEpisodes": {
+        "description": "Settings toggle label. Extends Cinema Mode, which plays pre-roll videos before playback, to TV episodes as well as films. 'Cinema Mode' is the app's feature name."
+    },
+    "settingsCinemaModeEpisodesSubtitle": "Ayrıca TV bölümlerinden önce tanıtım videoları (ön gösterimler) oynat",
+    "@settingsCinemaModeEpisodesSubtitle": {
+        "description": "Subtitle for the Cinema Mode for episodes toggle. A 'preroll' is a short video (trailer, bumper) played before the main video starts."
+    },
+    "groupByTitle": "Grupla",
+    "@groupByTitle": {
+        "description": "Dialog title and button label for library group by options"
+    },
+    "groupByDecade": "On yıl (Yıl)",
+    "@groupByDecade": {
+        "description": "Option to group library items by release decade"
+    },
+    "groupByParentalRating": "Ebeveyn Derecelendirmesi",
+    "@groupByParentalRating": {
+        "description": "Option to group library items by parental rating"
+    },
+    "groupByStudio": "Stüdyo",
+    "@groupByStudio": {
+        "description": "Option to group library items by production studio"
+    },
+    "showAlphabeticalFilters": "Alfabeyi Göster",
+    "@showAlphabeticalFilters": {
+        "description": "Checkbox label for toggling alphabetical picker visibility in Sort and Filter options"
+    },
+    "seerrSeriesContinuing": "Dizi Devam Ediyor · Gelecek Sezonlar Talep Edilebilir",
+    "@seerrSeriesContinuing": {
+        "description": "Banner in the Seerr request dialog for a continuing series whose aired seasons are all in the library"
+    },
+    "settingsSkipButtonAutoHide": "Atla Butonunu Otomatik Gizle",
+    "@settingsSkipButtonAutoHide": {
+        "description": "Setting label for automatically dismissing the skip intro and outro button after a delay"
+    },
+    "settingsSkipButtonAutoHideDescription": "İntro ve jenerik atlama butonunu birkaç saniye sonra otomatik olarak gizle.",
+    "personalRatingStyle": "Kişisel derecelendirme tarzı",
+    "@personalRatingStyle": {
+        "description": "Selects how personal ratings are displayed and entered on media details."
+    },
+    "personalRatingThumbs": "Beğen / Beğenme",
+    "@personalRatingThumbs": {
+        "description": "Personal rating style using like and dislike actions."
+    },
+    "personalRatingStars": "5 yıldız",
+    "@personalRatingStars": {
+        "description": "Personal rating style using a five-star scale."
+    },
+    "personalRatingNumeric": "10 üzerinden sayısal puan",
+    "@personalRatingNumeric": {
+        "description": "Personal rating style using a numeric score out of ten."
+    },
+    "rate": "Puan",
+    "@rate": {
+        "description": "Action that opens the personal rating control."
+    },
+    "like": "Beğen",
+    "@like": {
+        "description": "Personal rating action for a positive rating."
+    },
+    "dislike": "Beğenme",
+    "@dislike": {
+        "description": "Personal rating action for a negative rating."
+    },
+    "personalRatingClear": "Derecelendirmeyi Sil",
+    "@personalRatingClear": {
+        "description": "Action that removes the personal rating from the media item."
+    },
+    "personalRatingRated": "Derecelendirilmiş",
+    "@personalRatingRated": {
+        "description": "Tooltip for a media item that has a numeric personal rating."
+    },
+    "personalRatingSaveFailed": "Derecelendirme kaydedilemedi",
+    "@personalRatingSaveFailed": {
+        "description": "Error shown when saving a personal rating fails."
+    },
+    "increase": "Yükselme",
+    "@increase": {
+        "description": "Action that increases a numeric personal rating."
+    },
+    "decrease": "Azalma",
+    "@decrease": {
+        "description": "Action that decreases a numeric personal rating."
+    },
+    "personalRatingOutOfTen": "{rating} / 10",
+    "@personalRatingOutOfTen": {
+        "description": "Numeric personal rating displayed on a scale out of ten.",
+        "placeholders": {
+            "rating": {
+                "type": "String"
+            }
+        }
+    },
+    "personalRatingOutOfFive": "{rating} / 5",
+    "@personalRatingOutOfFive": {
+        "description": "Personal rating displayed on a five-star scale.",
+        "placeholders": {
+            "rating": {
+                "type": "String"
+            }
+        }
+    },
+    "ascending": "Artan",
+    "sortOrder": "Sıralama Düzeni",
+    "favoritesRowSortOrderDescription": "Favoriler satırlarını artan veya azalan sırada sıralayın.",
+    "studiosRowSortingDescription": "Stüdyo satırı isme göre, son eklenenlere göre ve daha fazlasına göre sıralanır.",
+    "showHeader": "Göster",
+    "genresRowSortOrderDescription": "Türler satırlarını artan veya azalan sırada sıralayın.",
+    "studiosRowSorting": "Stüdyo Satırı Sıralaması",
+    "deselectAllStudios": "Tümünün Seçimini Kaldır",
+    "collectionsRowSortOrderDescription": "Koleksiyonlar satırlarını artan veya azalan sırada sıralayın.",
+    "displayStudiosRows": "Stüdyo Satırını Göster",
+    "displayStudiosRowsSubtitle": "Stüdyo satırını Ana Sayfa Bölümlerinde göster.",
+    "studiosRowSortOrderDescription": "Artan veya azalan sıralama düzenini seçin.",
+    "selectStudiosToInclude": "Dahil Edilecek Stüdyoları Seçin",
+    "selectStudiosToIncludeDescription": "Ana satıra hangi stüdyoların dahil edileceğini seçin.",
+    "selectAllStudios": "Tümünü Seç",
+    "tvStudiosFilter": "TV Stüdyoları",
+    "movieStudiosFilter": "Film Stüdyoları",
+    "selectedStudiosFilter": "Seçilen Stüdyolar",
+    "unselectedStudiosFilter": "Seçilmemiş Stüdyolar",
+    "filtersHeader": "Filtreler",
+    "playlistsRowSortOrderDescription": "Oynatma listesi satırlarını artan veya azalan sırada sıralayın.",
+    "audioRowsSortOrderDescription": "Ses satırlarını artan veya azalan sırada sıralayın.",
+    "descending": "Azalan",
+    "interfaceLayout": "Arayüz Düzeni",
+    "@interfaceLayout": {
+        "description": "Setting to override which UI layout the app uses"
+    },
+    "interfaceLayoutSubtitle": "Bu cihaz için algılanan düzen yanlış okunduğunda geçersiz kılın. Değişikliklerin etkili olması için Moonfin'i yeniden başlatın.",
+    "@interfaceLayoutSubtitle": {
+        "description": "Subtitle for the interface layout setting"
+    },
+    "interfaceLayoutAutomatic": "Otomatik",
+    "@interfaceLayoutAutomatic": {
+        "description": "Interface layout option: detect from the device"
+    },
+    "interfaceLayoutTv": "Televizyon",
+    "@interfaceLayoutTv": {
+        "description": "Interface layout option: 10-foot TV layout"
+    },
+    "interfaceLayoutDesktop": "Masaüstü",
+    "@interfaceLayoutDesktop": {
+        "description": "Interface layout option: desktop layout"
+    },
+    "interfaceLayoutPhone": "Telefon",
+    "@interfaceLayoutPhone": {
+        "description": "Interface layout option: phone layout"
+    },
+    "starring": "BAŞROLDE",
+    "@starring": {
+        "description": "Metadata label for the leading cast"
+    },
+    "recordSeries": "Diziyi Kaydet",
+    "@recordSeries": {
+        "description": "Button label to record every showing of a live TV series"
+    },
+    "seriesSetToRecord": "Dizi kaydedilmek üzere ayarlandı",
+    "@seriesSetToRecord": {
+        "description": "Snackbar confirmation after scheduling a live TV series recording"
+    },
+    "seriesRecordingCancelled": "Dizi kaydı iptal edildi",
+    "@seriesRecordingCancelled": {
+        "description": "Snackbar confirmation after cancelling a live TV series recording"
+    },
+    "unableToCreateSeriesRecording": "Dizi kaydı oluşturulamıyor",
+    "@unableToCreateSeriesRecording": {
+        "description": "Error when creating a live TV series recording fails"
+    },
+    "mixedRowsOnly": "Yalnızca karışık satırlar",
+    "@mixedRowsOnly": {
+        "description": "Option: only show the label on rows holding both movies and series"
+    },
+    "playerSwipeGestures": "Ses ve Parlaklık Kaydırma Hareketleri",
+    "@playerSwipeGestures": {
+        "description": "Setting for player swipe gestures"
+    },
+    "playerSwipeGesturesDescription": "Parlaklığı değiştirmek için sol tarafta, sesi değiştirmek için sağ tarafta oynatıcı üzerinde yukarı veya aşağı kaydırın",
+    "@playerSwipeGesturesDescription": {
+        "description": "Description for player swipe gestures"
+    },
+    "mediaBarModeBookshelf": "Kitaplık",
+    "@mediaBarModeBookshelf": {
+        "description": "Media bar style option: Bookshelf"
+    },
+    "mediaBarModeGallery": "Galeri",
+    "@mediaBarModeGallery": {
+        "description": "Media bar style option: Gallery"
+    },
+    "mediaBarModeBanner": "Afiş",
+    "@mediaBarModeBanner": {
+        "description": "Media bar style option: Banner"
+    },
+    "mediaBarModeAya": "Aya",
+    "@mediaBarModeAya": {
+        "description": "Media bar style option: Aya"
+    },
+    "mediaBarSourceType": "Kaynak",
+    "@mediaBarSourceType": {
+        "description": "Setting for which titles the media bar draws from"
+    },
+    "mediaBarSourceRandom": "Rastgele",
+    "@mediaBarSourceRandom": {
+        "description": "Media bar source: any eligible title"
+    },
+    "recentlyReleasedSeriesType": "Son Çıkan Diziler Göre Sırala",
+    "@recentlyReleasedSeriesType": {
+        "description": "Setting for sorting series in recently released series row"
+    },
+    "recentlyReleasedSeriesTypeDescription": "Son çıkan diziler ana sayfa satırlarını diziye, son sezona veya son bölüm yayın tarihine göre sırala",
+    "@recentlyReleasedSeriesTypeDescription": {
+        "description": "Description for recently released series type setting"
+    },
+    "favoriteChannels": "Favori Kanallar",
+    "@favoriteChannels": {
+        "description": "Home row: favourited live TV channels"
+    },
+    "personalRatingMine": "Derecelendirmem",
+    "@personalRatingMine": {
+        "description": "Label under the viewer's own rating in the ratings row."
+    },
+    "filterInProgress": "Devam Ediyor",
+    "@filterInProgress": {
+        "description": "Library filter for items the viewer has started but not finished."
+    },
+    "filterUnreleased": "Yayınlanmadı",
+    "@filterUnreleased": {
+        "description": "Series status filter for shows that have not started airing."
+    },
+    "filterTrailers": "Fragmanlar",
+    "@filterTrailers": {
+        "description": "Library filter for items that have a trailer."
+    },
+    "filterExtras": "Özel Özellikler",
+    "@filterExtras": {
+        "description": "Library filter for items that have bonus features."
+    },
+    "filterThemeSongs": "Tema Şarkıları",
+    "@filterThemeSongs": {
+        "description": "Library filter for items that have a theme song."
+    },
+    "filterThemeVideos": "Tema Videoları",
+    "@filterThemeVideos": {
+        "description": "Library filter for items that have a theme video."
+    },
+    "source": "Kaynak",
+    "@source": {
+        "description": "Heading for the disc source filters in the library filter picker."
+    },
+    "years": "Yıllar",
+    "@years": {
+        "description": "Heading for the release year filters in the library filter picker."
+    },
+    "audioLanguage": "Ses Dili",
+    "@audioLanguage": {
+        "description": "Heading for the audio language filters in the library filter picker."
+    },
+    "subtitleLanguage": "Altyazı Dili",
+    "@subtitleLanguage": {
+        "description": "Heading for the subtitle language filters in the library filter picker."
+    },
+    "clearFilters": "Filtreyi Temizle",
+    "@clearFilters": {
+        "description": "Action that turns every library filter back off."
+    },
+    "seerrShortcutsRow": "Seerr Gözat",
+    "@seerrShortcutsRow": {
+        "description": "Title of the Seerr shortcuts row that jumps to Discover, Movies, Series, Requests and Issues."
+    },
+    "seerrReleased": "Yayınlandı",
+    "@seerrReleased": {
+        "description": "Heading for the release window filter in the Seerr browse dialog."
+    },
+    "seerrMinRating": "Minimum Decerelendirme",
+    "@seerrMinRating": {
+        "description": "Heading for the TMDB score floor filter in the Seerr browse dialog."
+    },
+    "seerrMinVotes": "Minimum Oy",
+    "@seerrMinVotes": {
+        "description": "Heading for the TMDB vote count floor filter in the Seerr browse dialog."
+    },
+    "seerrOriginalLanguage": "Orijinal Dil",
+    "@seerrOriginalLanguage": {
+        "description": "Heading for the original language filter in the Seerr browse dialog."
+    },
+    "seerrRuntime": "Süre",
+    "@seerrRuntime": {
+        "description": "Heading for the runtime window filter in the Seerr browse dialog."
+    },
+    "subtitleHdrSeparate": "Ayrı HDR Stili",
+    "@subtitleHdrSeparate": {
+        "description": "Toggle for a second subtitle appearance used only while HDR is playing."
+    },
+    "subtitleHdrSeparateSubtitle": "HDR'de beyaz renkler SDR'ye göre çok daha parlaktır; bu nedenle buradaki daha sönük bir stil göz almasını (parlama yapar) engeller",
+    "@subtitleHdrSeparateSubtitle": {
+        "description": "Explains why a separate HDR subtitle style is worth setting."
+    },
+    "scrollSensitivity": "Kaydırma Hassasiyeti",
+    "@scrollSensitivity": {
+        "description": "Title of the desktop setting that scales mouse wheel scrolling."
+    },
+    "scrollSensitivitySubtitle": "Fare tekerleğinin bir çentik (tık) hareketle ne kadar kaydıracağı",
+    "@scrollSensitivitySubtitle": {
+        "description": "Explains the desktop scroll sensitivity slider."
+    },
+    "mediaDetailsAndSpoilers": "Medya Ayrıntıları ve Spoiler'lar",
+    "@mediaDetailsAndSpoilers": {
+        "description": "Section header for media details and spoiler settings"
+    },
+    "hideDetailsMediaDescription": "Ayrıntılar Sayfasında Medya Açıklamasını Gizle",
+    "@hideDetailsMediaDescription": {
+        "description": "Setting title to hide media description on details screen"
+    },
+    "hideDetailsMediaDescriptionSubtitle": "Film veya bölüm açıklama metnini gizler.",
+    "@hideDetailsMediaDescriptionSubtitle": {
+        "description": "Description for setting to hide media description on details page"
+    },
+    "detailUseSeriesThumbnails": "Ayrıntılar Sayfasında Dizi Küçük Resimlerini Kullan",
+    "@detailUseSeriesThumbnails": {
+        "description": "Setting title to replace thumbnails on Classic details page with series thumbnail"
+    },
+    "detailUseSeriesThumbnailsSubtitle": "Klasik ayrıntılar sayfasındaki tüm küçük resimleri dizi küçük resmiyle değiştir",
+    "@detailUseSeriesThumbnailsSubtitle": {
+        "description": "Description for setting to use series thumbnails on Classic details page"
+    },
+    "hideHomeMediaDescription": "Ana Sayfada Medya Açıklamasını Gizle",
+    "@hideHomeMediaDescription": {
+        "description": "Setting title to hide media description on home screen"
+    },
+    "hideHomeMediaDescriptionSubtitle": "Film veya bölüm açıklama metnini gizler.",
+    "@hideHomeMediaDescriptionSubtitle": {
+        "description": "Description for setting to hide media description on home screen"
+    },
+    "continueWatchingAndNextUpHeader": "İzlemeye Devam Et ve Sonraki Bölümler",
+    "@continueWatchingAndNextUpHeader": {
+        "description": "Header for settings section containing Continue Watching and Next Up options"
+    },
+    "setupSkip": "Kurulumu Atla",
+    "@setupSkip": {
+        "description": "Leaves the first-run setup wizard without answering anything"
+    },
+    "setupNavbarQuestion": "Gezinme çubuğu nereye gitsin?",
+    "@setupNavbarQuestion": {
+        "description": "Setup question asking where the navigation bar should sit"
+    },
+    "setupMediaBarQuestion": "Ana ekranınızın üst kısmı nasıl görünmeli?",
+    "@setupMediaBarQuestion": {
+        "description": "Setup wizard question for the media bar style"
+    },
+    "setupHomeRowsQuestion": "Satırlarınız nasıl görünmeli?",
+    "@setupHomeRowsQuestion": {
+        "description": "Setup wizard question for the home row style"
+    },
+    "setupDetailQuestion": "Bir film veya dizi açıldığında nasıl görünmeli?",
+    "@setupDetailQuestion": {
+        "description": "Setup wizard question for the detail screen style"
+    },
+    "setupTourQuestion": "Hazırsınız. İşte burada yer alan diğer şeyler.",
+    "@setupTourQuestion": {
+        "description": "Heading of the final setup wizard screen"
+    },
+    "setupStyleClassic": "Klasik",
+    "@setupStyleClassic": {
+        "description": "Name of the original layout, offered in the setup wizard"
+    },
+    "setupStyleModern": "Modern",
+    "@setupStyleModern": {
+        "description": "Name of the newer layout, offered in the setup wizard"
+    },
+    "setupRowsClassicHint": "Kompakt. Ekranda aynı anda daha fazla satır.",
+    "@setupRowsClassicHint": {
+        "description": "What the classic home row style gives you"
+    },
+    "setupRowsModernHint": "Başlıkları altında olan daha büyük kartlar.",
+    "@setupRowsModernHint": {
+        "description": "What the modern home row style gives you"
+    },
+    "setupDetailClassicHint": "Her şey tek bir yığın halinde ortalanmış.",
+    "@setupDetailClassicHint": {
+        "description": "What the classic detail screen style gives you"
+    },
+    "setupDetailModernHint": "Sinematik, oyuncu kadrosu ve ekstralar için sekmelerle birlikte.",
+    "@setupDetailModernHint": {
+        "description": "What the modern detail screen style gives you"
+    },
+    "setupPickALook": "Bir görünüm seçin",
+    "@setupPickALook": {
+        "description": "Label above the theme swatches on the final setup screen"
+    },
+    "setupTourMoreHeader": "Ayarlarda bekleyen daha çok şey var",
+    "@setupTourMoreHeader": {
+        "description": "Heading of the closing setup screen block that lists features found in settings"
+    },
+    "setupTourBulletRequests": "Seerr istekleri",
+    "@setupTourBulletRequests": {
+        "description": "Bullet on the closing setup screen for the Seerr request feature"
+    },
+    "setupTourBulletSyncPlay": "SyncPlay birlikte izleme etkinlikleri",
+    "@setupTourBulletSyncPlay": {
+        "description": "Bullet on the closing setup screen for SyncPlay"
+    },
+    "setupTourBulletThemes": "Özel Temalar",
+    "@setupTourBulletThemes": {
+        "description": "Bullet on the closing setup screen for custom themes"
+    },
+    "setupTourBulletDownloads": "Çevrimdışı indirmeler",
+    "@setupTourBulletDownloads": {
+        "description": "Bullet on the closing setup screen for downloads"
+    },
+    "setupTourBulletMore": "Ve çok daha fazlası",
+    "@setupTourBulletMore": {
+        "description": "Closing bullet on the setup screen settings list"
+    },
+    "runSetupAgain": "Kurulumu yeniden çalıştır",
+    "@runSetupAgain": {
+        "description": "Starts the first-run setup wizard again from settings"
+    },
+    "queuedDownload": "Sırada",
+    "@queuedDownload": {
+        "description": "Status label for a download waiting in the queue for a free download slot"
+    },
+    "manual": "Elle",
+    "@manual": {
+        "description": "Option: manual"
+    },
+    "autoDetect": "Otomatik Tespit Et",
+    "@autoDetect": {
+        "description": "Option: detect the value automatically"
+    },
+    "tvOfflineDownloads": "Çevrimdışı indirmeleri etkinleştir",
+    "@tvOfflineDownloads": {
+        "description": "TV-only toggle in the Offline Downloads settings: offer download actions on item pages"
+    },
+    "tvOfflineDownloadsSubtitle": "Öğe sayfalarında indirme işlemlerini göster",
+    "@tvOfflineDownloadsSubtitle": {
+        "description": "Subtitle for the TV-only offline downloads toggle"
+    },
+    "adminMetadataFieldCustomRating": "Özel derecelendirme",
+    "adminMetadataFieldDisplayOrder": "Görüntüleme sırası",
+    "adminMetadataDisplayOrderAired": "Yayın tarihi",
+    "adminMetadataDisplayOrderOriginalAirDate": "Orijinal yayın tarihi",
+    "adminMetadataDisplayOrderAbsolute": "Mutlak Sıralama",
+    "adminMetadataDisplayOrderDvd": "DVD",
+    "adminMetadataDisplayOrderDigital": "Dijital",
+    "adminMetadataDisplayOrderStoryArc": "Hikaye Örgüsü",
+    "adminMetadataDisplayOrderProduction": "Yapım Sırası",
+    "adminMetadataDisplayOrderTv": "TV",
+    "adminMetadataDisplayOrderAlternate": "Alternatif",
+    "adminMetadataDisplayOrderRegional": "Bölgesel",
+    "adminMetadataDisplayOrderAlternateDvd": "Alternatif DVD",
+    "adminMetadataDisplayOrderDateModified": "Değiştirilme Tarihi",
+    "adminMetadataDisplayOrderSortName": "Sıralama Adı",
+    "adminMetadataDisplayOrderReleaseDate": "Yayınlanma Tarihi",
+    "adminMetadataSettings": "Metaveri Ayarları",
+    "adminMetadataDownloadLanguage": "Tercih edilen indirme dili",
+    "adminMetadataCountryRegion": "Ülke / Bölge",
+    "adminMetadataInheritHelp": "Ayarı üst öğeden veya sunucu varsayılanından devralmak için bunu Varsayılan olarak bırakın.",
+    "adminMetadataField3DFormat": "3D format",
+    "adminMetadataPersonKindUnknown": "Bilinmeyen",
+    "adminMetadataPersonKindActor": "Aktör",
+    "adminMetadataPersonKindDirector": "Yönetmen",
+    "adminMetadataPersonKindComposer": "Besteci",
+    "adminMetadataPersonKindWriter": "Yazar",
+    "adminMetadataPersonKindGuestStar": "Konuk Oyuncu",
+    "adminMetadataPersonKindProducer": "Yapımcı",
+    "adminMetadataPersonKindConductor": "Şef",
+    "adminMetadataPersonKindLyricist": "Söz Yazarı",
+    "adminMetadataPersonKindArranger": "Aranjör",
+    "adminMetadataPersonKindEngineer": "Mühendis",
+    "adminMetadataPersonKindMixer": "Miksaj",
+    "adminMetadataPersonKindRemixer": "Remiks Yapan",
+    "adminMetadataPersonKindCreator": "Yaratıcı",
+    "adminMetadataPersonKindArtist": "Sanatçı",
+    "adminMetadataPersonKindAlbumArtist": "Albüm Sanatçısı",
+    "adminMetadataPersonKindAuthor": "Yazar",
+    "adminMetadataPersonKindIllustrator": "Çizer",
+    "adminMetadataPersonKindPenciller": "Kurşun Kalem Çizeri",
+    "adminMetadataPersonKindInker": "Mürekkep Çizeri",
+    "adminMetadataPersonKindColorist": "Renklendirici",
+    "adminMetadataPersonKindLetterer": "Harf Dizgici",
+    "adminMetadataPersonKindCoverArtist": "Kapak Çizeri",
+    "adminMetadataPersonKindEditor": "Editör",
+    "adminMetadataPersonKindTranslator": "Çevirmen",
+    "adminMetadataPersonKindNarrator": "Anlatıcı",
+    "adminMetadataAirDays": "Yayın Günleri",
+    "adminMetadataLockItem": "Gelecekteki üstveri değişikliklerini önlemek için bu öğeyi kilitle",
+    "adminMetadataEnabledFields": "Etkin Alanlar",
+    "adminMetadataEnabledFieldsHelp": "Bir alanı kilitlemek ve verilerinin değiştirilmesini önlemek için tikini kaldırın.",
+    "adminMetadataLockFieldName": "İsim",
+    "adminMetadataLockFieldOverview": "Özet",
+    "adminMetadataLockFieldGenres": "Türler",
+    "adminMetadataLockFieldOfficialRating": "Ebeveyn Derecelendirmesi",
+    "adminMetadataLockFieldCast": "Kişiler",
+    "adminMetadataLockFieldProductionLocations": "Çekim Yerleri",
+    "adminMetadataLockFieldBirthLocation": "Doğum Yeri",
+    "adminMetadataLockFieldRuntime": "Süre",
+    "adminMetadataLockFieldStudios": "Stüdyolar",
+    "adminMetadataLockFieldTags": "Etiketler",
+    "adminPluginsRestartRequired": "Yeniden başlatma gerekli",
+    "@adminPluginsRestartRequired": {
+        "description": "Label for the installed-plugin filter showing changes that require a server restart"
+    },
+    "adminPluginsNoneActive": "Etkin eklenti yok",
+    "@adminPluginsNoneActive": {
+        "description": "Empty state for the active installed-plugin filter"
+    },
+    "adminPluginsNoneRequireRestart": "Hiçbir eklenti sunucunun yeniden başlatılmasını gerektirmiyor",
+    "@adminPluginsNoneRequireRestart": {
+        "description": "Empty state for the installed-plugin filter showing changes that require a server restart"
+    },
+    "emulatorCoreResetSettings": "{system} ayarlarını varsayılana sıfırla",
+    "@emulatorCoreResetSettings": {
+        "description": "Semantic label for the button that resets one core's saved emulator settings",
+        "placeholders": {
+            "system": {
+                "type": "String"
+            }
+        }
+    },
+    "emulatorCoreSettingsReset": "Ayarlar varsayılana sıfırlandı.",
+    "@emulatorCoreSettingsReset": {
+        "description": "Snackbar shown after resetting a core's saved emulator settings"
+    },
+    "emulatorCoreResetSettingsFailed": "Ayarlar sıfırlanamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+    "@emulatorCoreResetSettingsFailed": {
+        "description": "Snackbar shown when resetting a core's saved emulator settings fails"
+    },
+    "settingsMediaSegmentTypeAction": "{segment} Bölüm",
+    "@settingsMediaSegmentTypeAction": {
+        "description": "Setting label for what to do with one type of media segment",
+        "placeholders": {
+            "segment": {
+                "type": "String"
+            }
+        }
+    },
+    "openTrailersExternally": "Fragmanları Harici Uygulamada Aç",
+    "@openTrailersExternally": {
+        "description": "Details screen setting that hands trailers to the system"
+    },
+    "openTrailersExternallySubtitle": "Fragmanlar yerleşik oynatıcı yerine YouTube uygulamasında veya tarayıcıda açılır",
+    "@openTrailersExternallySubtitle": {
+        "description": "Subtitle for the external trailers setting"
+    },
+    "controller": "Kontrolcü",
+    "@controller": {
+        "description": "Settings section header for game controller options"
+    },
+    "gamepadNavigation": "Kontrolcü Gezinmesi",
+    "@gamepadNavigation": {
+        "description": "Settings label for the switch that lets a game controller move focus and select items"
+    },
+    "gamepadNavigationDescription": "Bağlı bir oyun kolunun odaklanmayı değiştirmesine ve öğeleri seçmesine izin ver",
+    "@gamepadNavigationDescription": {
+        "description": "Settings subtitle for the gamepad navigation switch"
+    },
+    "searchingSubtitles": "Altyazı aranıyor…",
+    "@searchingSubtitles": {
+        "description": "Shown while a remote subtitle search is running"
+    },
+    "downloadingSubtitle": "Altyazı indiriliyor…",
+    "@downloadingSubtitle": {
+        "description": "Shown while a chosen subtitle is downloaded and the server is picking it up"
+    },
+    "aiTranslated": "Yapay Zeka Çevirisi",
+    "@aiTranslated": {
+        "description": "Label for a remote subtitle the provider marked as AI translated"
+    },
+    "machineTranslated": "Makine Çevirisi",
+    "@machineTranslated": {
+        "description": "Label for a remote subtitle the provider marked as machine translated"
+    },
+    "hearingImpaired": "SDH",
+    "@hearingImpaired": {
+        "description": "Label for a remote subtitle marked as hearing impaired"
+    },
+    "framerateFps": "{rate} fps",
+    "@framerateFps": {
+        "description": "Framerate of a remote subtitle, shown in its detail line",
+        "placeholders": {
+            "rate": {
+                "type": "String"
+            }
+        }
+    },
+    "trickplayDisplayStyleSingle": "Tek Küçük Resim",
+    "@trickplayDisplayStyleSingle": {
+        "description": "Trickplay display style option: one thumbnail at the scrub position"
+    },
+    "trickplayDisplayStyleStrip": "Film Şeridi",
+    "@trickplayDisplayStyleStrip": {
+        "description": "Trickplay display style option: a row of 5 thumbnails around the scrub position"
+    },
+    "trickplayModeFull": "Tam Ekran",
+    "@trickplayModeFull": {
+        "description": "Trickplay mode option: temporarily replaces the video with the trickplay image while scrubbing"
+    },
+    "trickplaySettingsPreviewHint": "Gezinmek için kaydırıcıyı sürükleyin",
+    "@trickplaySettingsPreviewHint": {
+        "description": "Hint shown below the live trickplay settings preview"
+    },
+    "trickplayPreviewScale": "Önizleme Boyutu",
+    "@trickplayPreviewScale": {
+        "description": "Setting for the size of the trickplay seek preview"
+    },
+    "trickplayVerticalOffset": "Arama Çubuğundan Uzaklık",
+    "@trickplayVerticalOffset": {
+        "description": "Setting for the vertical position of the trickplay seek preview relative to the seekbar"
+    },
+    "trickplayFollowScrubPosition": "Arama Konumunu Takip Et",
+    "@trickplayFollowScrubPosition": {
+        "description": "Setting for whether the trickplay preview horizontally tracks the scrub handle"
+    },
+    "trickplayFollowScrubPositionSubtitle": "Ortada sabit kalmak yerine, sarma yaparken arama çubuğu boyunca slaytları önizle",
+    "@trickplayFollowScrubPositionSubtitle": {
+        "description": "Description for the trickplay follow-scrub-position setting"
+    },
+    "seerrDownloading": "İndiriliyor",
+    "@seerrDownloading": {
+        "description": "Seerr download bar label when the server reports no usable file sizes"
+    },
+    "seerrDownloadingSize": "İndiriliyor · {done} / {total}",
+    "@seerrDownloadingSize": {
+        "description": "Label above the Seerr download progress bar when byte counts are known",
+        "placeholders": {
+            "done": {
+                "type": "String"
+            },
+            "total": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrDownloadedOfTotal": "{done} / {total}",
+    "@seerrDownloadedOfTotal": {
+        "description": "Short form of the Seerr download label, used when the card is too narrow for the verb",
+        "placeholders": {
+            "done": {
+                "type": "String"
+            },
+            "total": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrPercentValue": "%{percent}",
+    "@seerrPercentValue": {
+        "description": "Standalone percentage shown at the end of the Seerr download bar label",
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    },
+    "serverMessages": "Mesajlar",
+    "@serverMessages": {
+        "description": "Menu button and window title for messages sent by the server admin"
+    },
+    "serverMessagesEmpty": "Sunucunuzdan henüz mesaj yok",
+    "@serverMessagesEmpty": {
+        "description": "Shown in the messages window when the server has sent nothing"
+    },
+    "serverMessagesMarkAllRead": "Hepsini okundu işaretle",
+    "@serverMessagesMarkAllRead": {
+        "description": "Button in the messages window that marks every message as read"
+    },
+    "serverMessagesShowButton": "Mesajlar butonunu göster",
+    "@serverMessagesShowButton": {
+        "description": "Setting that shows or hides the messages button in the menu"
+    },
+    "serverMessagesShowButtonSubtitle": "Sunucu yöneticiniz tarafından gönderilen mesajlar için menüye bir düğme ekler",
+    "@serverMessagesShowButtonSubtitle": {
+        "description": "Explains the setting that shows or hides the messages button"
+    },
+    "performanceMode": "Performans",
+    "@performanceMode": {
+        "description": "Label for the device performance setting"
+    },
+    "performanceModeSubtitle": "Otomatik bu cihazı ölçer ve hafızası yetersiz olanları kısıtlar; bu sayede bellekte daha az görsel tutar ve fragmanları sabit resim olarak bırakır. Bir sonraki başlatmada tamamen geçerli olur.",
+    "@performanceModeSubtitle": {
+        "description": "Explanation under the device performance setting"
+    },
+    "performanceModeAuto": "Otomatik",
+    "@performanceModeAuto": {
+        "description": "Performance option: measure the device"
+    },
+    "performanceModeStandard": "Standart",
+    "@performanceModeStandard": {
+        "description": "Performance option: never hold back"
+    },
+    "performanceModeReduced": "Azaltılmış",
+    "@performanceModeReduced": {
+        "description": "Performance option: always hold back"
+    },
+    "trailerPreviewHeldBack": "Bu cihaz için Performans \"Azaltılmış\" olarak ayarlandığından kapalı",
+    "@trailerPreviewHeldBack": {
+        "description": "Shown under the trailer preview switch when the device tier suppresses trailers"
+    },
+    "showMpvStats": "MPV İstatistiklerini Göster (Shift+I)",
+    "@showMpvStats": {
+        "description": "Button in the stream info sheet that shows mpv's own statistics overlay; Shift+I is the keyboard shortcut"
+    },
+    "hideMpvStats": "MPV İstatistiklerini Gizle (Shift+I)",
+    "@hideMpvStats": {
+        "description": "Button in the stream info sheet that hides mpv's own statistics overlay; Shift+I is the keyboard shortcut"
+    },
+    "hdrOutput": "HDR çıkışı",
+    "@hdrOutput": {
+        "description": "Stream info label for whether HDR is reaching the display untouched"
+    },
+    "hdrOutputActive": "Aktif— {format}",
+    "@hdrOutputActive": {
+        "description": "Stream info value when HDR passthrough is running, e.g. 'Active — HDR10 (PQ, BT.2020)'",
+        "placeholders": {
+            "format": {
+                "type": "String"
+            }
+        }
+    },
+    "hdrOutputActiveTonemapped": "Aktif — bu ekran için SDR'a ton eşlemesi yapıldı",
+    "@hdrOutputActiveTonemapped": {
+        "description": "Stream info value when native output is engaged but the window sits on a display without HDR, so the renderer is tone-mapping"
+    },
+    "hdrOutputDisplayNotHdr": "Devre dışı — ekran HDR modunda değil",
+    "@hdrOutputDisplayNotHdr": {
+        "description": "Stream info value when the display has not been switched into HDR"
+    },
+    "hdrOutputContentSdr": "Devre dışı — içerik SDR",
+    "@hdrOutputContentSdr": {
+        "description": "Stream info value when the title itself is not HDR"
+    },
+    "hdrOutputDisabled": "Devre dışı — ayarlardan kapatıldı",
+    "@hdrOutputDisabled": {
+        "description": "Stream info value when the native HDR output preference is off"
+    },
+    "hdrOutputFailed": "Devre dışı — başlatılamadı, standart yol kullanılıyor",
+    "@hdrOutputFailed": {
+        "description": "Stream info value when the native HDR window could not be created"
+    },
+    "nativeHdrOutput": "Yerel HDR çıkışı",
+    "@nativeHdrOutput": {
+        "description": "Settings label for sending HDR to the display untouched"
+    },
+    "nativeHdrOutputDescription": "HDR videoyu SDR'a dönüştürmek yerine ekrana olduğu gibi gönderir. Yalnızca ekran zaten HDR modundayken ve oynatılan içerik HDR olduğunda kullanılır.",
+    "@nativeHdrOutputDescription": {
+        "description": "Settings description for native HDR output"
+    },
+    "animeMarkerFiller": "Filtre",
+    "@animeMarkerFiller": {
+        "description": "Badge on an anime episode that is filler, meaning it is not adapted from the source manga"
+    },
+    "animeMarkerMixed": "Karışık",
+    "@animeMarkerMixed": {
+        "description": "Badge on an anime episode that mixes source material with filler, so it still contains story"
+    },
+    "animeMarkerAnimeCanon": "Anime Canon",
+    "@animeMarkerAnimeCanon": {
+        "description": "Badge on an anime episode that is not in the source manga but is part of the anime's own continuity"
+    },
+    "animeMarkerMangaCanon": "Manga Canon",
+    "@animeMarkerMangaCanon": {
+        "description": "Badge on an anime episode adapted from the source manga"
+    },
+    "animeMarkerSubbed": "Altyazılı",
+    "@animeMarkerSubbed": {
+        "description": "Badge on an anime episode or season whose only audio is Japanese, so it is watched with subtitles"
+    },
+    "animeMarkerDubbed": "Dublajlı",
+    "@animeMarkerDubbed": {
+        "description": "Badge on an anime episode or season that has an audio track in a language other than Japanese"
+    },
+    "animeMarkerSubbedAndDubbed": "Altyazılı/Dublajlı",
+    "@animeMarkerSubbedAndDubbed": {
+        "description": "Badge on anime that carries both the original Japanese audio and a dub, so it can be watched either way"
+    },
+    "animeMarkerPending": "Bekleniyor",
+    "@animeMarkerPending": {
+        "description": "Badge on an anime episode whose filler information the server has matched but not downloaded yet"
+    },
+    "animeMarkerRecap": "Özet",
+    "@animeMarkerRecap": {
+        "description": "Badge on an anime episode that recaps earlier episodes"
+    },
+    "detailScreenStyleSpotlight": "Spotlight",
+    "@detailScreenStyleSpotlight": {
+        "description": "Detail screen style option: the hero-first layout with summary cards that open grid modals"
+    },
+    "spotlightMoreActions": "Daha Fazla İşlem",
+    "@spotlightMoreActions": {
+        "description": "Tooltip/semantics of the spotlight ellipsis button and the title of the overflow actions menu it opens"
+    },
+    "spotlightCastCrewStudios": "Oyuncular, Ekip ve Stüdyolar",
+    "@spotlightCastCrewStudios": {
+        "description": "Title of the spotlight summary card that opens the people and studios modal"
+    },
+    "spotlightChaptersExtras": "Bölümler ve Ekstralar",
+    "@spotlightChaptersExtras": {
+        "description": "Title of the spotlight summary card that opens the chapters and special features modal"
+    },
+    "spotlightSimilarRecommendations": "Benzerler ve Öneriler",
+    "@spotlightSimilarRecommendations": {
+        "description": "Title of the spotlight summary card that opens the similar titles and recommendations modal"
+    },
+    "spotlightSeasonsEpisodes": "Sezonlar ve Bölümler",
+    "@spotlightSeasonsEpisodes": {
+        "description": "Title of the spotlight summary card that opens the seasons grid modal for a series"
+    },
+    "spotlightMoreEpisodes": "Daha Fazla Bölümler",
+    "@spotlightMoreEpisodes": {
+        "description": "Title of the spotlight summary card listing the other episodes of the season"
+    },
+    "spotlightFilmography": "Filmografi",
+    "@spotlightFilmography": {
+        "description": "Title of the spotlight summary card that opens a person's filmography modal"
+    },
+    "spotlightCollectionsCard": "Koleksiyonlar",
+    "@spotlightCollectionsCard": {
+        "description": "Title of the spotlight summary card that opens the parent collections modal"
+    },
+    "spotlightPlaylistOrder": "Oynatma Listesi Sırası",
+    "@spotlightPlaylistOrder": {
+        "description": "Title of the spotlight summary card that opens the ordered box set playlist modal"
+    },
+    "spotlightMoviesAndShows": "Filmler & Diziler",
+    "@spotlightMoviesAndShows": {
+        "description": "Subtitle of the spotlight similar and recommendations card"
+    },
+    "spotlightSimilarSeerr": "Benzerleri (Seerr)",
+    "@spotlightSimilarSeerr": {
+        "description": "Header of the Seerr similar-titles section when it appears beside the library's own similar section"
+    },
+    "spotlightRecommendationsSeerr": "Öneriler (Seerr)",
+    "@spotlightRecommendationsSeerr": {
+        "description": "Header of the Seerr recommendations section when it appears in the Spotlight recommendations modal"
+    },
+    "spotlightPeopleCount": "{count, plural, =1{1 kişi} other{{count} kişi}}",
+    "@spotlightPeopleCount": {
+        "description": "Count fragment on spotlight summary cards: people",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightFactsCount": "{count, plural, =1{1 bilgi} other{{count} bilgi}}",
+    "@spotlightFactsCount": {
+        "description": "Count fragment on spotlight summary cards: Seerr facts",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightTagsCount": "{count, plural, =1{1 etiket} other{{count} etiket}}",
+    "@spotlightTagsCount": {
+        "description": "Count fragment on spotlight summary cards: genres, networks and keywords",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightStudiosCount": "{count, plural, =1{1 stüdyo} other{{count} stüdyo}}",
+    "@spotlightStudiosCount": {
+        "description": "Count fragment on spotlight summary cards: studios",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightChaptersCount": "{count, plural, =1{1 bölüm} other{{count} bölüm}}",
+    "@spotlightChaptersCount": {
+        "description": "Count fragment on spotlight summary cards: chapters",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightExtrasCount": "{count, plural, =1{1 ekstra} other{{count} ekstra}}",
+    "@spotlightExtrasCount": {
+        "description": "Count fragment on spotlight summary cards: extras/special features",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightSeasonsCount": "{count, plural, =1{1 sezon} other{{count} sezon}}",
+    "@spotlightSeasonsCount": {
+        "description": "Count fragment on spotlight summary cards: seasons",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightEpisodesCount": "{count, plural, =1{1 bölüm} other{{count} bölüm}}",
+    "@spotlightEpisodesCount": {
+        "description": "Count fragment on spotlight summary cards: episodes",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightMoviesCount": "{count, plural, =1{1 film} other{{count} film}}",
+    "@spotlightMoviesCount": {
+        "description": "Count fragment on spotlight summary cards: movies",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightShowsCount": "{count, plural, =1{1 dizi} other{{count} dizi}}",
+    "@spotlightShowsCount": {
+        "description": "Count fragment on spotlight summary cards: series/shows",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightTracksCount": "{count, plural, =1{1 parça} other{{count} parça}}",
+    "@spotlightTracksCount": {
+        "description": "Count fragment on spotlight summary cards: audio tracks",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightItemsCount": "{count, plural, =1{1 öğe} other{{count} öğe}}",
+    "@spotlightItemsCount": {
+        "description": "Count fragment on spotlight summary cards: generic items",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightAlbumsCount": "{count, plural, =1{1 albüm} other{{count} albüm}}",
+    "@spotlightAlbumsCount": {
+        "description": "Count fragment on spotlight summary cards: albums",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightCollectionsCount": "{count, plural, =1{1 koleksiyon} other{{count} koleksiyon}}",
+    "@spotlightCollectionsCount": {
+        "description": "Count fragment on spotlight summary cards: collections",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "spotlightTitlesCount": "{count, plural, =1{1 başlık} other{{count} başlık}}",
+    "@spotlightTitlesCount": {
+        "description": "Count fragment on the spotlight similar card: titles across the library and Seerr sections",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "detailScreenStyleNouveau": "Nouveau",
+    "@detailScreenStyleNouveau": {
+        "description": "Detail screen style option: nouveau full-screen layout with integrated sections"
+    },
+    "detailScreenStyleMinimalist": "Minimalist",
+    "@detailScreenStyleMinimalist": {
+        "description": "Detail screen style option: artwork, one play button and the episodes, and the style Kids Mode always shows"
+    },
+    "recommendationSystemJellyfin": "Jellyfin Önerileri",
+    "@recommendationSystemJellyfin": {
+        "description": "Recommendation system option: Jellyfin Recommends"
+    },
+    "latestComics": "Son Eklenen Çizgi Romanlar",
+    "@latestComics": {
+        "description": "Row title for recently added comics in the book library"
+    },
+    "comics": "Çizgi Romanlar",
+    "@comics": {
+        "description": "Label for comic media format or section"
+    },
+    "bookFormatComic": "Çizgi Roman",
+    "@bookFormatComic": {
+        "description": "Semantic label for the comic format badge on library cards"
+    },
+    "noBooksFoundDescription": "Bu kitaplıkta henüz hiçbir kitap, sesli kitap veya çizgi roman bulunmuyor.",
+    "@noBooksFoundDescription": {
+        "description": "Description shown when a books library has no items"
+    },
+    "queuedMoreCount": "{count, plural, =1{1 öğe daha sıraya eklendi} other{{count} öğe daha sıraya eklendi}}",
+    "@queuedMoreCount": {
+        "description": "Row under the active downloads list standing in for queued items not shown individually",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "downloadScopeTitle": "İndirilecekler",
+    "@downloadScopeTitle": {
+        "description": "Title of the sheet asking whether to download all or only unwatched items"
+    },
+    "downloadAllEpisodes": "Tüm bölümler",
+    "@downloadAllEpisodes": {
+        "description": "Download scope option: every episode of a series or season"
+    },
+    "downloadUnwatchedEpisodes": "Tüm izlenmemiş bölümler",
+    "@downloadUnwatchedEpisodes": {
+        "description": "Download scope option: only episodes not yet marked as watched"
+    },
+    "downloadAllMovies": "Tüm filmler",
+    "@downloadAllMovies": {
+        "description": "Download scope option: every movie in a collection"
+    },
+    "downloadUnwatchedMovies": "Tüm izlenmemiş filmler",
+    "@downloadUnwatchedMovies": {
+        "description": "Download scope option: only collection movies not yet marked as watched"
+    },
+    "downloadScopeLoading": "Öğeler yükleniyor...",
+    "@downloadScopeLoading": {
+        "description": "Subtitle shown in the download scope sheet while the item list is being fetched"
+    },
+    "downloadScopeLoadFailed": "İndirilecek öğeler yüklenemedi",
+    "@downloadScopeLoadFailed": {
+        "description": "Snackbar shown when the item list for a batch download could not be fetched"
+    },
+    "downloadEstimateTotal": "Toplam ~{size}",
+    "@downloadEstimateTotal": {
+        "description": "Estimated total download size for a batch, e.g. '~1.2 GB total'",
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadBytesOfTotal": "{received} of {total}",
+    "@downloadBytesOfTotal": {
+        "description": "Transfer status of a running download, e.g. '1.2 GB of 4.6 GB'",
+        "placeholders": {
+            "received": {
+                "type": "String"
+            },
+            "total": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadSpeed": "{speed}/s",
+    "@downloadSpeed": {
+        "description": "Transfer rate of a running download, e.g. '25.3 MB/s'",
+        "placeholders": {
+            "speed": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadSizeTotal": "Toplam {size}",
+    "@downloadSizeTotal": {
+        "description": "Exact total file size of a batch of original files, e.g. '12.4 GB total'",
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadEstimateUnknownCount": "{count} bilinmeyen",
+    "@downloadEstimateUnknownCount": {
+        "description": "Appended to a batch size estimate when some items had no runtime to estimate from",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "keyboardShortcutsTitle": "Klavye kısayolları",
+    "@keyboardShortcutsTitle": {
+        "description": "Title of the screen and dialog that list every keyboard shortcut"
+    },
+    "keyboardShortcutsSubtitle": "Uygulama, video oynatıcı ve okuyucu için kısayollar",
+    "@keyboardShortcutsSubtitle": {
+        "description": "Subtitle of the About tile that opens the keyboard shortcut list"
+    },
+    "keyboardShortcutsPlayerHint": "Video oynatılırken oynatıcıdan çıkmadan bu listeyi görmek için ? veya F1 tuşuna basın.",
+    "@keyboardShortcutsPlayerHint": {
+        "description": "Footnote on the keyboard shortcuts settings screen"
+    },
+    "keyboardShortcutsSectionApp": "Her Yerde",
+    "@keyboardShortcutsSectionApp": {
+        "description": "Keyboard shortcut section for keys that work on every screen"
+    },
+    "keyboardShortcutsSectionAppScope": "Herhangi bir ekranda",
+    "@keyboardShortcutsSectionAppScope": {
+        "description": "Under the Everywhere section title: when those keys apply"
+    },
+    "keyboardShortcutsSectionPlayer": "Video Oynatıcı",
+    "@keyboardShortcutsSectionPlayer": {
+        "description": "Keyboard shortcut section for the video player"
+    },
+    "keyboardShortcutsSectionPlayerScope": "Bir video açık, oynatılıyor veya duraklatılmışken",
+    "@keyboardShortcutsSectionPlayerScope": {
+        "description": "Under the Video player section title: when those keys apply"
+    },
+    "keyboardShortcutsSectionReader": "Kitap ve çizgi roman okuyucusu",
+    "@keyboardShortcutsSectionReader": {
+        "description": "Keyboard shortcut section for the ebook and comic reader"
+    },
+    "keyboardShortcutsSectionReaderScope": "Kitap ve çizgi roman okuyucusundayken",
+    "@keyboardShortcutsSectionReaderScope": {
+        "description": "Under the reader section title: when those keys apply"
+    },
+    "keyNameArrowKeys": "Yön tuşları",
+    "@keyNameArrowKeys": {
+        "description": "Key cap label standing for the four arrow keys"
+    },
+    "keyNameSpace": "Space",
+    "@keyNameSpace": {
+        "description": "Key cap label for the space bar"
+    },
+    "keyNameEnter": "Enter",
+    "@keyNameEnter": {
+        "description": "Key cap label for the Enter key"
+    },
+    "keyNameEsc": "Esc",
+    "@keyNameEsc": {
+        "description": "Key cap label for the Escape key"
+    },
+    "keyNameAlt": "Alt",
+    "@keyNameAlt": {
+        "description": "Key cap label for the Alt modifier"
+    },
+    "keyNameBackspace": "Backspace",
+    "@keyNameBackspace": {
+        "description": "Key cap label for the Backspace key"
+    },
+    "keyNamePageUp": "Page Up",
+    "@keyNamePageUp": {
+        "description": "Key cap label for the Page Up key"
+    },
+    "keyNamePageDown": "Page Down",
+    "@keyNamePageDown": {
+        "description": "Key cap label for the Page Down key"
+    },
+    "keyNameHome": "Home",
+    "@keyNameHome": {
+        "description": "Key cap label for the Home key"
+    },
+    "keyNameEnd": "End",
+    "@keyNameEnd": {
+        "description": "Key cap label for the End key"
+    },
+    "keyNameShift": "Shift",
+    "@keyNameShift": {
+        "description": "Key cap label for the Shift modifier"
+    },
+    "keyNameCtrl": "Ctrl",
+    "@keyNameCtrl": {
+        "description": "Key cap label for the Control modifier"
+    },
+    "keyNameScrollWheel": "Fare tekerleği",
+    "@keyNameScrollWheel": {
+        "description": "Key cap label standing for the mouse scroll wheel"
+    },
+    "shortcutMoveFocus": "Öğeler arasında gezin",
+    "@shortcutMoveFocus": {
+        "description": "What the arrow keys do outside the player"
+    },
+    "shortcutActivate": "Seçili öğeyi aç",
+    "@shortcutActivate": {
+        "description": "What Enter does outside the player"
+    },
+    "shortcutGoBack": "Geri git",
+    "@shortcutGoBack": {
+        "description": "What Esc and Backspace do outside the player"
+    },
+    "shortcutToggleFullscreen": "Tam ekranı aç yada kapat",
+    "@shortcutToggleFullscreen": {
+        "description": "F11 and Alt+Enter anywhere, F in the player"
+    },
+    "shortcutQuit": "Moonfin'den çık",
+    "@shortcutQuit": {
+        "description": "What Ctrl+Q does on desktop"
+    },
+    "shortcutPlayPause": "Oynat veya duraklat",
+    "@shortcutPlayPause": {
+        "description": "Player shortcut action"
+    },
+    "shortcutShowControlsOrPlayPause": "Kontrolleri göster veya açıksa oynat/duraklat",
+    "@shortcutShowControlsOrPlayPause": {
+        "description": "What Enter does in the player"
+    },
+    "shortcutSeekBack": "Geri sar (büyük atlamalar için basılı tut)",
+    "@shortcutSeekBack": {
+        "description": "Player shortcut action. The step is the skip back length from settings"
+    },
+    "shortcutSeekForward": "İleri sar (büyük atlamalar için basılı tut)",
+    "@shortcutSeekForward": {
+        "description": "Player shortcut action. The step is the skip forward length from settings"
+    },
+    "shortcutVolumeUp": "Sesi yükselt",
+    "@shortcutVolumeUp": {
+        "description": "Player shortcut action"
+    },
+    "shortcutVolumeDown": "Sesi alçalt",
+    "@shortcutVolumeDown": {
+        "description": "Player shortcut action"
+    },
+    "shortcutMute": "Sesi kapat yada sesi aç",
+    "@shortcutMute": {
+        "description": "Player shortcut action"
+    },
+    "shortcutToggleSubtitles": "Altyazıyı aç yada kapat",
+    "@shortcutToggleSubtitles": {
+        "description": "Player shortcut action"
+    },
+    "shortcutSlower": "Yavaşlat",
+    "@shortcutSlower": {
+        "description": "Player shortcut action"
+    },
+    "shortcutFaster": "Hızlandır",
+    "@shortcutFaster": {
+        "description": "Player shortcut action"
+    },
+    "shortcutPlaybackInfo": "Oynatma bilgilerini göster",
+    "@shortcutPlaybackInfo": {
+        "description": "Player shortcut action"
+    },
+    "shortcutMpvStats": "mpv istatistiklerini aç yada kapat",
+    "@shortcutMpvStats": {
+        "description": "Player shortcut action, Windows only"
+    },
+    "shortcutLeaveFullscreenOrStop": "Tam ekrandan çık veya tam ekranda değilse durdur",
+    "@shortcutLeaveFullscreenOrStop": {
+        "description": "What Esc does in the player"
+    },
+    "shortcutStopPlayback": "Oynatmayı durdur",
+    "@shortcutStopPlayback": {
+        "description": "Player shortcut action"
+    },
+    "shortcutNextItem": "Sonraki öğe",
+    "@shortcutNextItem": {
+        "description": "Player shortcut action for the next-track media key"
+    },
+    "uiScaleGrandfather": "Büyükbaba",
+    "@uiScaleGrandfather": {
+        "description": "UI scaling option above extra large"
+    },
+    "shortcutPreviousItem": "Önceki öğe",
+    "@shortcutPreviousItem": {
+        "description": "Player shortcut action for the previous-track media key"
+    },
+    "shortcutShowShortcuts": "Bu listeyi göster",
+    "@shortcutShowShortcuts": {
+        "description": "What ? and F1 do in the player"
+    },
+    "shortcutNextPage": "Sonraki sayfa",
+    "@shortcutNextPage": {
+        "description": "Reader shortcut action"
+    },
+    "shortcutPreviousPage": "Önceki sayfa",
+    "@shortcutPreviousPage": {
+        "description": "Reader shortcut action"
+    },
+    "shortcutScrollPage": "Sayfayı kaydır (e-kitaplar)",
+    "@shortcutScrollPage": {
+        "description": "What the up and down arrows do in the ebook reader"
+    },
+    "shortcutFirstPage": "İlk sayfa veya bölüm başı",
+    "@shortcutFirstPage": {
+        "description": "Reader shortcut action"
+    },
+    "shortcutLastPage": "Son sayfa veya bölüm sonu",
+    "@shortcutLastPage": {
+        "description": "Reader shortcut action"
+    },
+    "shortcutZoom": "Yakınlaştır veya uzaklaştır (çizgi romanlar)",
+    "@shortcutZoom": {
+        "description": "Reader shortcut action"
+    },
+    "shortcutResetZoom": "Yakınlaştırmayı sıfırla (çizgi romanlar)",
+    "@shortcutResetZoom": {
+        "description": "Reader shortcut action"
+    },
+    "guideRepeatBadge": "Tekrar",
+    "@guideRepeatBadge": {
+        "description": "Short badge label shown on a rerun in the guide hero band"
+    },
+    "noProgramData": "Program verisi yok",
+    "@noProgramData": {
+        "description": "Guide cell label for a real EPG schedule gap, not a genre-filtered program"
+    },
+    "watchChannelLive": "Kanalı canlı izle",
+    "@watchChannelLive": {
+        "description": "Button label to tune a channel live when the selected program is not the one that will play (ended or upcoming)"
+    },
+    "activeDownloads": "Aktif İndirilenler",
+    "@activeDownloads": {
+        "description": "Tab title for downloads that are transferring or queued"
+    },
+    "savedMediaCount": "{count, plural, =1{1 öğe} other{{count} öğe}}",
+    "@savedMediaCount": {
+        "description": "How many downloads the saved media list holds, shown beside the total size",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "savedMediaOfLimit": "{used} / {limit}",
+    "@savedMediaOfLimit": {
+        "description": "Storage used against the configured limit, for example '56.4 GB of 80 GB'",
+        "placeholders": {
+            "used": {
+                "type": "String"
+            },
+            "limit": {
+                "type": "String"
+            }
+        }
+    },
+    "savedMediaSelectItems": "Seçili öğeler",
+    "@savedMediaSelectItems": {
+        "description": "Overflow menu entry that turns on multi-select in the saved media list"
+    },
+    "savedMediaNoDownloads": "Henüz kaydedilen yok",
+    "@savedMediaNoDownloads": {
+        "description": "Empty state title when no downloads are on the device"
+    },
+    "savedMediaNoDownloadsDetail": "Başlattığınız indirmeler burada görünür ve internet bağlantısı olmadan oynatılabilir.",
+    "@savedMediaNoDownloadsDetail": {
+        "description": "Empty state body when no downloads are on the device"
+    },
+    "savedMediaNoActiveDownloads": "Şu anda hiçbir şey indirilmiyor",
+    "@savedMediaNoActiveDownloads": {
+        "description": "Empty state for the active downloads tab"
+    },
+    "savedMediaNoResults": "Bu aramayla eşleşen indirme yok",
+    "@savedMediaNoResults": {
+        "description": "Empty state when a search over saved media matches nothing"
+    },
+    "savedMediaPlayFromStart": "Baştan başlat",
+    "@savedMediaPlayFromStart": {
+        "description": "Row menu action that restarts a partly watched download from the beginning"
+    },
+    "savedMediaGoToDetails": "Detaylara git",
+    "@savedMediaGoToDetails": {
+        "description": "Row menu action that opens the item's detail screen"
+    },
+    "savedMediaDeleteDownload": "İndirmeyi sil",
+    "@savedMediaDeleteDownload": {
+        "description": "Row menu action that removes one downloaded file from the device"
+    },
+    "savedMediaDeleteSeason": "{season} Sil",
+    "@savedMediaDeleteSeason": {
+        "description": "Menu action that removes every saved episode of one season",
+        "placeholders": {
+            "season": {
+                "type": "String"
+            }
+        }
+    },
+    "savedMediaDeleteEpisodes": "{count, plural, =1{1 bölüm sil} other{{count} bölüm sil}}",
+    "@savedMediaDeleteEpisodes": {
+        "description": "Menu action that removes every saved episode of one series",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "savedMediaOpenShow": "Diziyi aç",
+    "@savedMediaOpenShow": {
+        "description": "Row menu action that opens a saved show's seasons and episodes"
+    },
+    "savedMediaPlayNextUnwatched": "Sonraki izlenmemiş bölümü oynat",
+    "@savedMediaPlayNextUnwatched": {
+        "description": "Row menu action that plays the earliest unwatched saved episode of a show"
+    },
+    "savedMediaRead": "Oku",
+    "@savedMediaRead": {
+        "description": "Row menu action that opens a downloaded book in the reader"
+    },
+    "savedMediaCancelDownload": "İndirmeyi iptal et",
+    "@savedMediaCancelDownload": {
+        "description": "Row menu action that stops a running or queued transfer"
+    },
+    "sortBySize": "Boyut",
+    "@sortBySize": {
+        "description": "Sort option: largest download first"
+    },
+    "sortByName": "İsim",
+    "@sortByName": {
+        "description": "Sort option: alphabetical by title"
+    },
+    "sortByDateAdded": "Eklenme tarihi",
+    "@sortByDateAdded": {
+        "description": "Sort option: most recently downloaded first"
+    },
+    "loadingAnimation": "Yüklenme Animasyonu",
+    "@loadingAnimation": {
+        "description": "Setting title for custom loading animation"
+    },
+    "loadingAnimationDescription": "Moonfin genelinde kullanılan yükleme animasyonlarını özelleştir",
+    "@loadingAnimationDescription": {
+        "description": "Description for loading animation customization settings"
+    },
+    "loadingAnimationConfiguration": "Yüklenme Animasyonu Ayarları",
+    "@loadingAnimationConfiguration": {
+        "description": "Subtitle header for loading animation settings"
+    },
+    "loadingAnimationImage": "Resim",
+    "@loadingAnimationImage": {
+        "description": "Title for loading animation image selection"
+    },
+    "loadingAnimationImageMoonfinLogo": "Moonfin Logo",
+    "@loadingAnimationImageMoonfinLogo": {
+        "description": "Loading animation image option: Moonfin Logo"
+    },
+    "loadingAnimationImageSpinner": "Yükleme çarkı",
+    "@loadingAnimationImageSpinner": {
+        "description": "Loading animation image option: Spinner"
+    },
+    "loadingAnimationImageRunner": "Kayan çizgi",
+    "@loadingAnimationImageRunner": {
+        "description": "Loading animation image option: Runner"
+    },
+    "loadingAnimationImageMoonPhases": "Ay Evreleri",
+    "@loadingAnimationImageMoonPhases": {
+        "description": "Loading animation image option: Moon Phases"
+    },
+    "loadingAnimationImageMoonfinPhases": "Moonfin Evreleri",
+    "@loadingAnimationImageMoonfinPhases": {
+        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+    },
+    "loadingAnimationImageNeonfinPhases": "Neonfin Evreleri",
+    "@loadingAnimationImageNeonfinPhases": {
+        "description": "Loading animation image option: Neonfin Phases in neon colors"
+    },
+    "loadingAnimationSize": "Animasyon Boyutu",
+    "@loadingAnimationSize": {
+        "description": "Title for loading animation size selection"
+    },
+    "loadingAnimationSizeThumbnail": "Küçük Resim",
+    "@loadingAnimationSizeThumbnail": {
+        "description": "Loading animation size option: Thumbnail"
+    },
+    "loadingAnimationSizeSmall": "Küçük",
+    "@loadingAnimationSizeSmall": {
+        "description": "Loading animation size option: Small"
+    },
+    "loadingAnimationSizeMedium": "Orta",
+    "@loadingAnimationSizeMedium": {
+        "description": "Loading animation size option: Medium"
+    },
+    "loadingAnimationSizeLarge": "Büyük",
+    "@loadingAnimationSizeLarge": {
+        "description": "Loading animation size option: Large"
+    },
+    "loadingAnimationPosition": "Animasyon Konumu",
+    "@loadingAnimationPosition": {
+        "description": "Title for loading animation position selection"
+    },
+    "loadingAnimationPositionTopLeft": "Üst Sol",
+    "@loadingAnimationPositionTopLeft": {
+        "description": "Loading animation position: Top-Left"
+    },
+    "loadingAnimationPositionTopCenter": "Üst Orta",
+    "@loadingAnimationPositionTopCenter": {
+        "description": "Loading animation position: Top-Center"
+    },
+    "loadingAnimationPositionTopRight": "Üst Sağ",
+    "@loadingAnimationPositionTopRight": {
+        "description": "Loading animation position: Top-Right"
+    },
+    "loadingAnimationPositionMiddleLeft": "Orta Sol",
+    "@loadingAnimationPositionMiddleLeft": {
+        "description": "Loading animation position: Middle-Left"
+    },
+    "loadingAnimationPositionMiddle": "Orta",
+    "@loadingAnimationPositionMiddle": {
+        "description": "Loading animation position: Middle"
+    },
+    "loadingAnimationPositionMiddleRight": "Orta Sağ",
+    "@loadingAnimationPositionMiddleRight": {
+        "description": "Loading animation position: Middle-Right"
+    },
+    "loadingAnimationPositionBottomLeft": "Alt Sol",
+    "@loadingAnimationPositionBottomLeft": {
+        "description": "Loading animation position: Bottom-Left"
+    },
+    "loadingAnimationPositionBottomCenter": "Alt Orta",
+    "@loadingAnimationPositionBottomCenter": {
+        "description": "Loading animation position: Bottom-Center"
+    },
+    "loadingAnimationPositionBottomRight": "Alt Sağ",
+    "@loadingAnimationPositionBottomRight": {
+        "description": "Loading animation position: Bottom-Right"
+    },
+    "loadingAnimationPositionBouncing": "Zıplayan",
+    "@loadingAnimationPositionBouncing": {
+        "description": "Loading animation position: Bouncing DVD screensaver style"
+    },
+    "loadingAnimationSpeed": "Animasyon Hızı",
+    "@loadingAnimationSpeed": {
+        "description": "Title for loading animation speed selection"
+    },
+    "loadingAnimationSpeedSlow": "Yavaş",
+    "@loadingAnimationSpeedSlow": {
+        "description": "Loading animation speed option: Slow"
+    },
+    "loadingAnimationSpeedModerate": "Orta",
+    "@loadingAnimationSpeedModerate": {
+        "description": "Loading animation speed option: Moderate"
+    },
+    "loadingAnimationSpeedFast": "Hızlı",
+    "@loadingAnimationSpeedFast": {
+        "description": "Loading animation speed option: Fast"
+    },
+    "loadingAnimationSpeedUltra": "Ultra",
+    "@loadingAnimationSpeedUltra": {
+        "description": "Loading animation speed option: Ultra"
+    },
+    "showLoadingAnimationText": "Yazı Gözüksün Mü?",
+    "@showLoadingAnimationText": {
+        "description": "Setting toggle for showing loading animation text"
+    },
+    "loadingAnimationPreview": "Önizleme",
+    "@loadingAnimationPreview": {
+        "description": "Label for loading animation preview window"
+    },
+    "cropBlackBars": "Siyah bantları kırp",
+    "@cropBlackBars": {
+        "description": "Setting to detect and crop encoded letterbox/pillarbox bars"
+    },
+    "settingsCropBlackBarsDescription": "Kodlanmış siyah bantları tespit et, kırp ve ekranı doldur.",
+    "@settingsCropBlackBarsDescription": {
+        "description": "Description for the crop black bars playback setting"
+    },
+    "trickplayPauseWhileScrubbing": "Kaydırırken duraklat",
+    "@trickplayPauseWhileScrubbing": {
+        "description": "Setting for whether seeking pauses playback so the trickplay preview holds still"
+    },
+    "trickplayPauseWhileScrubbingSubtitle": "Kaydırma sırasında oynatma duraklatılır ve oynat tuşuna bastığınızda devam eder. Oynatmayı kesmeden doğrudan yeni konuma atlamak için bu ayarı kapatın",
+    "@trickplayPauseWhileScrubbingSubtitle": {
+        "description": "Description for the trickplay pause-while-scrubbing setting"
+    },
+    "showChapterMarkers": "Bölüm İşaretleri",
+    "@showChapterMarkers": {
+        "description": "Setting label for drawing a mark per chapter on the player seek bar"
+    },
+    "showChapterMarkersDescription": "İlerleme çubuğunda bölüm başlangıçlarını işaretle",
+    "@showChapterMarkersDescription": {
+        "description": "Description for the chapter marks setting"
+    },
+    "actionButtonsOnScreen": "Ekrandaki eylem düğmeleri",
+    "@actionButtonsOnScreen": {
+        "description": "Setting title for choosing how many action buttons are visible before overflowing into More Actions"
+    },
+    "actionButtonsOnScreenDescription": "Diğer Eylemler menüsüne taşınmadan önce kaç eylem düğmesinin gösterileceğini belirleyin.",
+    "@actionButtonsOnScreenDescription": {
+        "description": "Subtitle explaining how action buttons overflow into More Actions"
+    },
+    "actionButtonsOnScreenAuto": "Otomatik (Tema Varsayılanı)",
+    "@actionButtonsOnScreenAuto": {
+        "description": "Option showing theme default number of action buttons"
+    },
+    "actionButtonsOnScreenPlayOnly": "1 (Sadece Oynat)",
+    "@actionButtonsOnScreenPlayOnly": {
+        "description": "Option showing only the play action button on screen"
+    },
+    "actionButtonsOnScreenAll": "Tümü (Yatay Kaydırma)",
+    "@actionButtonsOnScreenAll": {
+        "description": "Option showing all action buttons in a horizontal scrollable row"
+    },
+    "detailMetadata": "Meta Veri Satırı",
+    "@detailMetadata": {
+        "description": "Settings screen for choosing and reordering details screen metadata items"
+    },
+    "detailMetadataDescription": "Detaylar ekranında gösterilecek meta verileri seçin ve sıralayın",
+    "@detailMetadataDescription": {
+        "description": "Subtitle for the details metadata settings tile"
+    },
+    "detailMetadataSectionDescription": "Meta veri öğelerini açıp kapatın ve detaylar ekranındaki görünüm sırasını düzenleyin. Her cihaz türü kendi listesini ayrı tutar.",
+    "@detailMetadataSectionDescription": {
+        "description": "Explains how to customize and reorder details screen metadata items"
+    },
+    "detailMetadataYear": "Yayın Yılı",
+    "@detailMetadataYear": {
+        "description": "Item label for release or production year in metadata row"
+    },
+    "detailMetadataParentalRating": "Yaş Sınırı",
+    "@detailMetadataParentalRating": {
+        "description": "Item label for parental content rating in metadata row"
+    },
+    "detailMetadataRuntimeAndSeasons": "Süre & Sezonlar",
+    "@detailMetadataRuntimeAndSeasons": {
+        "description": "Item label for runtime or season/episode counts in metadata row"
+    },
+    "detailMetadataStatus": "Dizi Durumu",
+    "@detailMetadataStatus": {
+        "description": "Item label for series status badge in metadata row"
+    },
+    "detailMetadataStatusSubtitle": "Dizinin devam ettiğini, sona erdiğini veya geri döneceğini gösterir",
+    "@detailMetadataStatusSubtitle": {
+        "description": "Subtitle explaining the series status metadata badge"
+    },
+    "detailMetadataGenres": "Türler",
+    "@detailMetadataGenres": {
+        "description": "Item label for genre tags in metadata row"
+    },
+    "detailMetadataSeerrAvailability": "Seerr Durumu",
+    "@detailMetadataSeerrAvailability": {
+        "description": "Item label for Seerr request and availability badge in metadata row"
+    },
+    "detailMetadataSeerrAvailabilitySubtitle": "Seerr üzerindeki talep ve medya durumunu gösterir",
+    "@detailMetadataSeerrAvailabilitySubtitle": {
+        "description": "Subtitle explaining the Seerr availability metadata badge"
+    },
+    "detailMetadataUpcomingEpisodeDate": "Gelecek Bölümler",
+    "@detailMetadataUpcomingEpisodeDate": {
+        "description": "Item label for upcoming episode air date badge in metadata row"
+    },
+    "detailMetadataUpcomingEpisodeDateSubtitle": "Sonarr ve TMDB kullanarak gelecek yayın tarihlerini gösterir",
+    "@detailMetadataUpcomingEpisodeDateSubtitle": {
+        "description": "Subtitle describing data sources for upcoming episode air dates in metadata row"
+    },
+    "upcomingEpisodeNext": "Sonraki: {date} (S{season}:E{episode})",
+    "@upcomingEpisodeNext": {
+        "description": "Formatted badge text for an upcoming episode release date",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "season": {
+                "type": "int"
+            },
+            "episode": {
+                "type": "int"
+            }
+        }
+    },
+    "upcomingEpisodeToday": "Bugün",
+    "@upcomingEpisodeToday": {
+        "description": "Upcoming episode airs today"
+    },
+    "upcomingEpisodeTomorrow": "Yarın",
+    "@upcomingEpisodeTomorrow": {
+        "description": "Upcoming episode airs tomorrow"
+    },
+    "settingsAudioPassthroughOutput": "Doğrudan Geçiş (Passthrough) çıkışı",
+    "@settingsAudioPassthroughOutput": {
+        "description": "Title of the RAW-vs-IEC passthrough packer selector (Android TV, Media3 engine)"
+    },
+    "settingsAudioPassthroughOutputDescription": "HDMI bağlantısı için bit akışlarını kimin paketleyeceğini belirleyin. Bu cihazda doğrudan geçiş (passthrough) sırasında ses gelmiyorsa veya kesilmeler oluyorsa uygulama paketleyicisini deneyin.",
+    "settingsAudioPassthroughOutputPlatform": "Otomatik, sistem paketleyicisi (AudioTrack RAW)",
+    "settingsAudioPassthroughOutputIec": "Uygulama paketleyicisi (AudioTrack IEC)",
+    "settingsAudioPassthroughOutputIecLabel": "Uygulama (IEC)",
+    "semiTransparentWhite": "Yarı şeffaf Beyaz",
+    "@semiTransparentWhite": {
+        "description": "Color: semi-transparent white"
+    },
+    "lightGray": "Açık Gri",
+    "@lightGray": {
+        "description": "Color: light gray"
+    },
+    "darkGray": "Koyu Gri",
+    "@darkGray": {
+        "description": "Color: dark gray"
+    },
+    "blue": "Mavi",
+    "@blue": {
+        "description": "Color: blue"
+    },
+    "magenta": "Macenta",
+    "@magenta": {
+        "description": "Color: magenta"
+    },
+    "showLiveTvButton": "Canlı TV Butonunu Göster",
+    "@showLiveTvButton": {
+        "description": "Setting for showing live TV button"
+    },
+    "showDownloadsButton": "İndirilenler Butonunu Göster",
+    "@showDownloadsButton": {
+        "description": "Setting for showing downloads button"
+    },
+    "screensaverGeneralSettings": "Genel Ayarlar",
+    "@screensaverGeneralSettings": {
+        "description": "Section header for screensaver general settings"
+    },
+    "screensaverVisualComponents": "Görsel Bileşenler",
+    "@screensaverVisualComponents": {
+        "description": "Section header for screensaver visual components"
+    },
+    "screensaverLibraryContent": "Kütüphane İçeriği",
+    "@screensaverLibraryContent": {
+        "description": "Section header for screensaver library content"
+    },
+    "screensaverBackdrop": "Arka Plan",
+    "@screensaverBackdrop": {
+        "description": "Setting for screensaver backdrop"
+    },
+    "screensaverBackdropBlack": "Siyah",
+    "@screensaverBackdropBlack": {
+        "description": "Screensaver backdrop: Black"
+    },
+    "screensaverBackdropMoonfin": "Moonfin",
+    "@screensaverBackdropMoonfin": {
+        "description": "Screensaver backdrop: Moonfin"
+    },
+    "screensaverBackdropCalm": "Sakin",
+    "@screensaverBackdropCalm": {
+        "description": "Screensaver backdrop: Calm"
+    },
+    "screensaverBackdropNeonPulse": "Neon Pulse",
+    "@screensaverBackdropNeonPulse": {
+        "description": "Screensaver backdrop: Neon Pulse"
+    },
+    "screensaverBackdropAurora": "Aurora",
+    "@screensaverBackdropAurora": {
+        "description": "Screensaver backdrop: Aurora"
+    },
+    "screensaverAdditionalComponent": "Ek Bileşen",
+    "@screensaverAdditionalComponent": {
+        "description": "Setting for screensaver additional component"
+    },
+    "screensaverComponentMoonfinLogo": "Moonfin Logo",
+    "@screensaverComponentMoonfinLogo": {
+        "description": "Screensaver component: Moonfin Logo"
+    },
+    "screensaverComponentRunner": "Kayan Yazı",
+    "@screensaverComponentRunner": {
+        "description": "Screensaver component: Runner"
+    },
+    "screensaverComponentMovement": "Bileşen Hareketi",
+    "@screensaverComponentMovement": {
+        "description": "Setting for screensaver component movement"
+    },
+    "screensaverComponentPosition": "Bileşen Pozisyonu",
+    "@screensaverComponentPosition": {
+        "description": "Setting for screensaver component position"
+    },
+    "screensaverComponentSize": "Bileşen Boyutu",
+    "@screensaverComponentSize": {
+        "description": "Setting for screensaver component size"
+    },
+    "screensaverSourceLibrariesDefault": "Tümü (Varsayılan)",
+    "@screensaverSourceLibrariesDefault": {
+        "description": "Subtitle when no source libraries are explicitly filtered in screensaver"
+    },
+    "showMissingCollectionItems": "Eksik Koleksiyon Öğelerini Göster",
+    "@showMissingCollectionItems": {
+        "description": "Setting title to show missing items from Seerr on Collection pages"
+    },
+    "showMissingCollectionItemsDesc": "Eksik öğeleri Koleksiyon sayfalarına dahil et",
+    "@showMissingCollectionItemsDesc": {
+        "description": "Setting subtitle explaining that missing items will be included on Collection pages"
+    },
+    "showSeerrAvailabilityBadges": "Seerr Durum Rozetlerini Göster",
+    "@showSeerrAvailabilityBadges": {
+        "description": "Setting title for showing Seerr availability badges on media details pages"
+    },
+    "showSeerrAvailabilityBadgesDescription": "Medya detay sayfalarında sezon durum rozetlerini göster",
+    "@showSeerrAvailabilityBadgesDescription": {
+        "description": "Setting description for showing Seerr availability badges on media details pages"
+    },
+    "requestedByLabel": "Talep Eden",
+    "@requestedByLabel": {
+        "description": "Label above the name of whoever requested media, where the name sits on its own line"
+    },
+    "kidsMode": "Çocuk Modu",
+    "@kidsMode": {
+        "description": "Label for the setting that strips the app back to what a child needs"
+    },
+    "kidsModeSubtitle": "Uygulamayı sadeleştir ve çıkışı PIN ile kilitle",
+    "@kidsModeSubtitle": {
+        "description": "Explanation under the Kids Mode setting"
+    },
+    "kidsModeExit": "Çocuk Modundan Çık",
+    "@kidsModeExit": {
+        "description": "Settings entry that turns Kids Mode off, shown while Kids Mode is on"
+    },
+    "kidsModeExitSubtitle": "Tam uygulamaya dönmek için PIN'inizi girin",
+    "@kidsModeExitSubtitle": {
+        "description": "Explanation under the Exit Kids Mode entry"
+    },
+    "pinTryAgainIn": "Çok fazla deneme. {wait} sonra tekrar deneyin.",
+    "@pinTryAgainIn": {
+        "description": "Shown when PIN entry is locked after repeated wrong guesses",
+        "placeholders": {
+            "wait": {
+                "type": "String",
+                "example": "30s"
+            }
+        }
+    },
+    "contextMenuRemoveFromCollection": "Koleksiyondan Sil",
+    "@contextMenuRemoveFromCollection": {
+        "description": "Context menu action to remove an item from the collection whose page it is shown on"
+    },
+    "removeFromCollectionConfirm": "{item} öğesi {collection} koleksiyonundan kaldırılsın mı? Öğe kütüphanenizde kalır.",
+    "@removeFromCollectionConfirm": {
+        "description": "Confirmation shown before removing an item from a collection",
+        "placeholders": {
+            "item": {
+                "type": "String"
+            },
+            "collection": {
+                "type": "String"
+            }
+        }
+    },
+    "removeFromCollectionFailed": "Koleksiyondan kaldırılamadı",
+    "@removeFromCollectionFailed": {
+        "description": "Error shown when removing an item from a collection fails"
+    },
+    "itemBlockedByParentalControls": "Bu öğe mevcut değil",
+    "@itemBlockedByParentalControls": {
+        "description": "Shown instead of a title whose rating the viewer has blocked. Deliberately says nothing about what the title is."
+    },
+    "blockedRatingsCeilingHint": "Bir derecelendirmeyi engellemek, ondan daha yüksek olanları da engeller.",
+    "@blockedRatingsCeilingHint": {
+        "description": "Explains that the blocked ratings list works as a ceiling"
+    },
+    "blockedRatingsUnrankedSection": "Sadece kendini engeller",
+    "@blockedRatingsUnrankedSection": {
+        "description": "Heading for ratings the app can't rank, which block only the exact rating rather than everything above it"
+    },
+    "settingsShowLiveTvButtonInNavigation": "Sunucuda Canlı TV kütüphanesi varsa gezinme çubuğunda Canlı TV düğmesini göster",
+    "uiScaleGrandparents": "Yaşlılar İçin",
+    "@uiScaleGrandparents": {
+        "description": "UI scaling option above extra large"
+    },
+    "uiScaleGreatGrandparents": "Çok Yaşlılar İçin",
+    "@uiScaleGreatGrandparents": {
+        "description": "UI scaling option above Grandparents"
+    },
+    "playbackStreamLost": "Oynatma durdu ve kurtarılamadı.",
+    "@playbackStreamLost": {
+        "description": "Shown in place of an internal sentinel error code when playback gives up trying to recover a stalled or starved stream"
+    },
+    "liveReconnecting": "Yeniden bağlanılıyor… ({attempt}/{total})",
+    "@liveReconnecting": {
+        "description": "Overlay shown while a live channel's bounded recovery is retrying",
+        "placeholders": {
+            "attempt": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
     }
 }

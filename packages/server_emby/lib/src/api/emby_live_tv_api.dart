@@ -34,6 +34,11 @@ class EmbyLiveTvApi implements LiveTvApi {
     DateTime? startDate,
     DateTime? endDate,
     List<String>? channelIds,
+    bool? isMovie,
+    bool? isSeries,
+    bool? isSports,
+    bool? isNews,
+    bool? isKids,
     String? fields,
     bool? enableTotalRecordCount,
     bool? enableImages,
@@ -51,6 +56,11 @@ class EmbyLiveTvApi implements LiveTvApi {
     final common = <String, dynamic>{
       if (startDate != null) 'MinEndDate': startDate.toUtc().toIso8601String(),
       if (endDate != null) 'MaxStartDate': endDate.toUtc().toIso8601String(),
+      'IsMovie': ?isMovie,
+      'IsSeries': ?isSeries,
+      'IsSports': ?isSports,
+      'IsNews': ?isNews,
+      'IsKids': ?isKids,
       'Fields': ?fields,
       'EnableTotalRecordCount': ?enableTotalRecordCount,
       'EnableImages': ?enableImages,
@@ -84,6 +94,18 @@ class EmbyLiveTvApi implements LiveTvApi {
     final response = await _dio.get(
       '/LiveTv/Programs/Recommended',
       queryParameters: {'Limit': ?limit, 'IsAiring': ?isAiring},
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getProgram(
+    String programId, {
+    String? userId,
+  }) async {
+    final response = await _dio.get(
+      '/LiveTv/Programs/${Uri.encodeComponent(programId)}',
+      queryParameters: {'UserId': ?userId},
     );
     return response.data as Map<String, dynamic>;
   }
@@ -124,21 +146,34 @@ class EmbyLiveTvApi implements LiveTvApi {
 
   @override
   Future<void> createTimer(String programId) async {
-    Map<String, dynamic> payload;
+    await _dio.post('/LiveTv/Timers', data: await _timerDefaults(programId));
+  }
+
+  @override
+  Future<void> createSeriesTimer(String programId) async {
+    await _dio.post(
+      '/LiveTv/SeriesTimers',
+      data: await _timerDefaults(programId),
+    );
+  }
+
+  /// The server's own defaults for a program, which both kinds of timer post
+  /// straight back. A server that wont hand them over still takes a bare
+  /// program id.
+  Future<Map<String, dynamic>> _timerDefaults(String programId) async {
     try {
       final defaults = await _dio.get(
         '/LiveTv/Timers/Defaults',
         queryParameters: {'ProgramId': programId},
       );
-      payload = Map<String, dynamic>.from(
+      final payload = Map<String, dynamic>.from(
         (defaults.data as Map?)?.cast<String, dynamic>() ??
             <String, dynamic>{},
       );
-      payload.putIfAbsent('ProgramId', () => programId);
+      return payload..putIfAbsent('ProgramId', () => programId);
     } catch (_) {
-      payload = {'ProgramId': programId};
+      return {'ProgramId': programId};
     }
-    await _dio.post('/LiveTv/Timers', data: payload);
   }
 
   @override

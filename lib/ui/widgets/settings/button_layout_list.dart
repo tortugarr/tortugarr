@@ -18,12 +18,14 @@ class ButtonLayoutEntry {
   const ButtonLayoutEntry({
     required this.id,
     required this.title,
+    this.subtitle,
     required this.icon,
     this.canHide = true,
   });
 
   final String id;
   final String title;
+  final String? subtitle;
   final IconData icon;
 
   /// A button the row always keeps. It still moves, it just has no switch.
@@ -33,6 +35,9 @@ class ButtonLayoutEntry {
 /// The rows of a settings screen that decides which buttons one row of the app
 /// shows and in what order. A remote moves a button with left and right, a
 /// pointer uses the arrows on each row.
+///
+/// A [ButtonLayout] without order preferences only switches things on and off,
+/// so its rows keep the order they were declared in and offer no arrows.
 class ButtonLayoutList extends StatefulWidget {
   const ButtonLayoutList({
     super.key,
@@ -69,12 +74,17 @@ class _ButtonLayoutListState extends State<ButtonLayoutList> {
   // soon as a neighbour writes, and the next write would undo the neighbour.
   Set<String> get _hidden => widget.layout.hidden(_prefs);
 
+  bool get _reorderable => widget.layout.isReorderable;
+
   /// The rows as they appear, with the buttons still switched on above the
   /// rest. Keeping the two apart means arranging only happens among the
-  /// buttons that actually reach the screen.
-  List<ButtonLayoutEntry> _rows(Set<String> hidden) => widget.layout
-      .ordered(widget.entries, (entry) => entry.id, _prefs)
-      .sortedEnabledAboveDisabled((entry) => !hidden.contains(entry.id));
+  /// buttons that actually reach the screen. A list that can't be arranged
+  /// stays put, so a row doesn't jump away from the remote that switched it.
+  List<ButtonLayoutEntry> _rows(Set<String> hidden) => _reorderable
+      ? widget.layout
+            .ordered(widget.entries, (entry) => entry.id, _prefs)
+            .sortedEnabledAboveDisabled((entry) => !hidden.contains(entry.id))
+      : widget.entries;
 
   void _setShown(ButtonLayoutEntry entry, bool shown) {
     final ids = _hidden.toList();
@@ -82,6 +92,9 @@ class _ButtonLayoutListState extends State<ButtonLayoutList> {
       ids.remove(entry.id);
     } else if (!ids.contains(entry.id)) {
       ids.add(entry.id);
+    }
+    if (entry.id == 'download' && PlatformDetection.isTV) {
+      unawaited(_prefs.set(UserPreferences.tvOfflineDownloads, shown));
     }
     unawaited(
       _prefs
@@ -132,9 +145,14 @@ class _ButtonLayoutListState extends State<ButtonLayoutList> {
     });
   }
 
-  Widget _buildRow(List<ButtonLayoutEntry> rows, int shownCount, int index) {
+  Widget _buildRow(
+    List<ButtonLayoutEntry> rows,
+    Set<String> hidden,
+    int shownCount,
+    int index,
+  ) {
     final entry = rows[index];
-    final isShown = index < shownCount;
+    final isShown = !hidden.contains(entry.id);
     // A button only moves within its own group, so the arrows stop at the line
     // between what the row shows and what it leaves out.
     final groupStart = isShown ? 0 : shownCount;
@@ -145,6 +163,7 @@ class _ButtonLayoutListState extends State<ButtonLayoutList> {
       entry: entry,
       focusNode: _focusNodeFor(entry.id),
       shown: isShown,
+      reorderable: _reorderable,
       isFirst: index == groupStart,
       isLast: index == groupEnd,
       onShownChanged: (value) => _setShown(entry, value),
@@ -167,7 +186,7 @@ class _ButtonLayoutListState extends State<ButtonLayoutList> {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (var index = 0; index < rows.length; index++)
-              _buildRow(rows, shownCount, index),
+              _buildRow(rows, hidden, shownCount, index),
           ],
         );
       },
@@ -181,6 +200,7 @@ class _ButtonLayoutRow extends StatelessWidget {
     required this.entry,
     required this.focusNode,
     required this.shown,
+    required this.reorderable,
     required this.isFirst,
     required this.isLast,
     required this.onShownChanged,
@@ -191,6 +211,7 @@ class _ButtonLayoutRow extends StatelessWidget {
   final ButtonLayoutEntry entry;
   final FocusNode focusNode;
   final bool shown;
+  final bool reorderable;
   final bool isFirst;
   final bool isLast;
   final ValueChanged<bool> onShownChanged;
@@ -206,7 +227,7 @@ class _ButtonLayoutRow extends StatelessWidget {
       _toggle();
       return KeyEventResult.handled;
     }
-    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    if (event is! KeyDownEvent || !reorderable) return KeyEventResult.ignored;
     if (event.logicalKey.isLeftKey && !isFirst) {
       onMoveUp();
       return KeyEventResult.handled;
@@ -248,6 +269,8 @@ class _ButtonLayoutRow extends StatelessWidget {
               iconColor: iconColor,
             ),
             title: Text(entry.title),
+            subtitle: entry.subtitle != null ? Text(entry.subtitle!) : null,
+            titleAlignment: ListTileTitleAlignment.center,
             onTap: !isTv && entry.canHide ? _toggle : null,
             // A remote works the whole row from the outside, so nothing in
             // here should collect a highlight of its own.
@@ -256,16 +279,18 @@ class _ButtonLayoutRow extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.keyboard_arrow_up),
-                    tooltip: l10n.moveUp,
-                    onPressed: isFirst ? null : onMoveUp,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    tooltip: l10n.moveDown,
-                    onPressed: isLast ? null : onMoveDown,
-                  ),
+                  if (reorderable) ...[
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_arrow_up),
+                      tooltip: l10n.moveUp,
+                      onPressed: isFirst ? null : onMoveUp,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      tooltip: l10n.moveDown,
+                      onPressed: isLast ? null : onMoveDown,
+                    ),
+                  ],
                   if (entry.canHide)
                     Switch.adaptive(value: shown, onChanged: onShownChanged)
                   else

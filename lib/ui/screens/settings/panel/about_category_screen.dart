@@ -5,7 +5,7 @@ class _AboutCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appVersion = GetIt.instance<DeviceInfo>().appVersion;
+    final appVersion = AppBeta.label(GetIt.instance<DeviceInfo>().appVersion);
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: buildSettingsAppBar(context, Text(l10n.aboutTitle)),
@@ -53,7 +53,7 @@ class _AboutCategoryScreen extends StatelessWidget {
                 subtitle: Text(l10n.settingsReportAnIssueSubtitle),
                 onTap: () => showQrOrLaunch(
                   context,
-                  url: 'https://github.com/Moonfin-Client/Moonfin-Core/issues',
+                  url: 'https://github.com/tortugarr/tortugarr/issues',
                   title: l10n.settingsReportAnIssue,
                 ),
               ),
@@ -67,6 +67,25 @@ class _AboutCategoryScreen extends StatelessWidget {
                 onTap: () => context.pushSettingsScreen(
                   const DiagnosticsSettingsScreen(),
                 ),
+              ),
+              if (PlatformDetection.useDesktopUi)
+                _TvSettingsListTile(
+                  leading: const Icon(Icons.keyboard_outlined),
+                  title: Text(l10n.keyboardShortcutsTitle),
+                  subtitle: Text(l10n.keyboardShortcutsSubtitle),
+                  onTap: () => context.pushSettingsScreen(
+                    const _KeyboardShortcutsScreen(),
+                  ),
+                ),
+              _TvSettingsListTile(
+                leading: const Icon(Icons.auto_awesome),
+                title: Text(l10n.runSetupAgain),
+                // Asking again on purpose says more than the stored answers do,
+                // so a deliberate re-run offers every question back.
+                onTap: () {
+                  GetIt.instance<SetupWizardGate>().beginRerun();
+                  context.navigateTopLevel(Destinations.setup);
+                },
               ),
               _TvSettingsListTile(
                 leading: const Icon(Icons.forum),

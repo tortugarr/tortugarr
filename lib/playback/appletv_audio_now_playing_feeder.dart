@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
-import 'package:server_core/server_core.dart';
 
 import '../data/models/aggregated_item.dart';
 import '../data/services/media_server_client_factory.dart';
-import 'appletv_mpv_backend.dart';
+import '../util/audio_artwork_url.dart';
+import 'appletv_backend.dart';
 
 /// Keeps the tvOS system Now Playing card (and Siri Remote / Control Center
 /// transport) fed for MUSIC.
@@ -21,14 +20,14 @@ class AppleTvAudioNowPlayingFeeder {
   AppleTvAudioNowPlayingFeeder({
     required PlaybackManager manager,
     required MediaServerClientFactory clientFactory,
-    required AppleTvMpvBackend backend,
+    required AppleTvBackend backend,
   })  : _manager = manager,
         _clientFactory = clientFactory,
         _backend = backend;
 
   final PlaybackManager _manager;
   final MediaServerClientFactory _clientFactory;
-  final AppleTvMpvBackend _backend;
+  final AppleTvBackend _backend;
   final _subs = <StreamSubscription>[];
 
   void start() {
@@ -37,6 +36,7 @@ class AppleTvAudioNowPlayingFeeder {
       s.playingStream.listen((_) => _push()),
       s.durationStream.listen((_) => _push()),
       _manager.queueService.queueChangedStream.listen((_) => _push()),
+      _backend.uiActionStream.listen(_handleCommand),
     ]);
   }
 
@@ -45,6 +45,28 @@ class AppleTvAudioNowPlayingFeeder {
       sub.cancel();
     }
     _subs.clear();
+  }
+
+  // Video presses go to its player screen, but music has no screen of its own
+  // to take them, so they're handled here.
+  void _handleCommand(Map<String, dynamic> command) {
+    final raw = _manager.queueService.currentItem;
+    if (raw is! AggregatedItem || !raw.isAudioLike) return;
+    switch (command['event']) {
+      case 'play':
+        unawaited(_manager.resume());
+      case 'pause':
+        unawaited(_manager.pause());
+      case 'seek':
+        final positionMs = (command['positionMs'] as num?)?.toInt();
+        if (positionMs != null) {
+          unawaited(_manager.seekTo(Duration(milliseconds: positionMs)));
+        }
+      case 'next':
+        unawaited(_manager.next());
+      case 'previous':
+        unawaited(_manager.previous());
+    }
   }
 
   void _push() {
@@ -60,7 +82,7 @@ class AppleTvAudioNowPlayingFeeder {
       topTitle: raw.name,
       topSubtitle: artist,
       chapters: const [],
-      hasPrevious: _manager.queueService.hasPrevious,
+      hasPrevious: true,
       hasNext: _manager.queueService.hasNext,
       skipForwardMs: 0,
       skipBackMs: 0,
@@ -70,21 +92,9 @@ class AppleTvAudioNowPlayingFeeder {
     ));
   }
 
-  String? _artUrl(AggregatedItem item) {
-    try {
-      final client = _clientFactory.getClientIfExists(item.serverId) ??
-          GetIt.instance<MediaServerClient>();
-      final albumTag = item.albumPrimaryImageTag;
-      final albumId = item.albumId;
-      if (item.type == 'Audio' && albumTag != null && albumId != null) {
-        return client.imageApi
-            .getPrimaryImageUrl(albumId, maxHeight: 600, tag: albumTag);
-      }
-      if (item.primaryImageTag != null) {
-        return client.imageApi
-            .getPrimaryImageUrl(item.id, maxHeight: 600, tag: item.primaryImageTag);
-      }
-    } catch (_) {}
-    return null;
-  }
+  String? _artUrl(AggregatedItem item) => audioArtUrl(
+        item,
+        clientFactory: _clientFactory,
+        maxHeight: 600,
+      );
 }

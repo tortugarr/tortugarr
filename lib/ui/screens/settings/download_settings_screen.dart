@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,24 +9,32 @@ import 'package:get_it/get_it.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../data/database/offline_database.dart';
 import '../../../data/models/download_quality.dart';
 import '../../../data/providers/offline_providers.dart';
+import '../../../data/services/auto_download_service.dart';
+import '../../../data/services/background_download_coordinator.dart';
 import '../../../data/services/download_service.dart';
 import '../../../data/services/macos_download_dir.dart';
 import '../../../data/services/storage_path_service.dart';
 import '../../../di/providers.dart';
+import '../../../platform/background_refresh.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/download_utils.dart';
 import '../../../util/platform_detection.dart';
+import '../../../util/relative_time_label.dart';
 import '../../../util/tv_image_cache_stub.dart'
     if (dart.library.io) '../../../util/tv_image_cache_io.dart';
 import '../../../l10n/app_localizations.dart';
-import '../downloads/downloads_panel.dart';
+import 'settings_app_bar.dart';
 import '../../widgets/adaptive/adaptive_dialog.dart';
 import '../../widgets/adaptive/adaptive_list_section.dart';
 import '../../widgets/overlay_sheet.dart';
+import '../../widgets/focus/dpad_list_tile.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
+import '../../widgets/settings/preference_tiles.dart';
+import '../../widgets/settings/settings_section_header.dart';
 
 class DownloadSettingsScreen extends ConsumerWidget {
   const DownloadSettingsScreen({super.key});
@@ -43,111 +52,157 @@ class DownloadSettingsScreen extends ConsumerWidget {
     final imageCacheLimitMb = prefs.get(UserPreferences.imageCacheLimitMb);
     final concurrentCount = prefs.get(UserPreferences.downloadConcurrentCount);
     final customPath = prefs.get(UserPreferences.customDownloadPath);
+    final tvOfflineDownloads = prefs.get(UserPreferences.tvOfflineDownloads);
     final storage = ref.watch(storageUsedProvider);
     final l10n = AppLocalizations.of(context);
+    final downloads = PlatformDetection.supportsOfflineDownloads;
 
     return withCleanSettingsTypography(
       context,
       Scaffold(
-        appBar: AppBar(title: Text(l10n.download)),
+        appBar: buildSettingsAppBar(context, Text(l10n.storageAndDownloads)),
         body: ListView(
           children: [
-            _Section(title: l10n.quality),
-            adaptiveListSection(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.high_quality),
-                  title: Text(l10n.defaultDownloadQuality),
-                  subtitle: Text(_qualityLabel(qualityName)),
-                  onTap: () => _pickQuality(context, prefs, qualityName),
-                ),
-              ],
-            ),
-
-            _Section(title: l10n.network),
-            adaptiveListSection(
-              children: [
-                if (!PlatformDetection.useDesktopUi)
-                  SwitchListTile.adaptive(
-                    secondary: const Icon(Icons.wifi),
-                    title: Text(l10n.wifiOnlyDownloads),
-                    subtitle: Text(l10n.onlyDownloadOnWifi),
-                    value: wifiOnly,
+            // The discovery point for the whole feature on TV: the panel
+            // stays reachable while the item-page actions wait for opt-in.
+            if (PlatformDetection.isTV && downloads)
+              adaptiveListSection(
+                children: [
+                  DpadSwitchListTile(
+                    useSettingsIconShell: true,
+                    secondary: const Icon(Icons.download_for_offline),
+                    title: Text(l10n.tvOfflineDownloads),
+                    subtitle: Text(l10n.tvOfflineDownloadsSubtitle),
+                    value: tvOfflineDownloads,
                     onChanged: (v) =>
-                        prefs.set(UserPreferences.downloadWifiOnly, v),
+                        prefs.set(UserPreferences.tvOfflineDownloads, v),
                   ),
-                if (!PlatformDetection.isWeb)
-                  SwitchListTile.adaptive(
-                    secondary: const Icon(Icons.podcasts),
-                    title: Text(l10n.reportDownloadsActivity),
-                    subtitle: Text(l10n.reportDownloadsActivitySubtitle),
-                    value: reportActivity,
-                    onChanged: (v) => prefs.set(
-                        UserPreferences.reportDownloadsAsActivity, v),
+                ],
+              ),
+            if (downloads) ...[
+              SettingsSectionHeader(l10n.quality),
+              adaptiveListSection(
+                children: [
+                  DpadListTile(
+                    autofocus: true,
+                    useSettingsIconShell: true,
+                    leading: const Icon(Icons.high_quality),
+                    title: Text(l10n.defaultDownloadQuality),
+                    subtitle: Text(_qualityLabel(qualityName)),
+                    onTap: () => showQualityPicker(context, prefs, qualityName),
                   ),
-                ListTile(
-                  leading: const Icon(Icons.queue),
-                  title: Text(l10n.settingsConcurrentDownloads),
-                  subtitle: Text(l10n.settingsConcurrentDownloadsDescription),
-                  trailing: Text('$concurrentCount'),
-                  onTap: () =>
-                      _pickConcurrentDownloads(context, prefs, concurrentCount),
+                ],
+              ),
+
+              SettingsSectionHeader(l10n.network),
+              adaptiveListSection(
+                children: [
+                  if (!PlatformDetection.useDesktopUi)
+                    DpadSwitchListTile(
+                      useSettingsIconShell: true,
+                      secondary: const Icon(Icons.wifi),
+                      title: Text(l10n.wifiOnlyDownloads),
+                      subtitle: Text(l10n.onlyDownloadOnWifi),
+                      value: wifiOnly,
+                      onChanged: (v) =>
+                          prefs.set(UserPreferences.downloadWifiOnly, v),
+                    ),
+                  if (!PlatformDetection.isWeb)
+                    DpadSwitchListTile(
+                      useSettingsIconShell: true,
+                      secondary: const Icon(Icons.podcasts),
+                      title: Text(l10n.reportDownloadsActivity),
+                      subtitle: Text(l10n.reportDownloadsActivitySubtitle),
+                      value: reportActivity,
+                      onChanged: (v) =>
+                          prefs.set(UserPreferences.reportDownloadsAsActivity, v),
+                    ),
+                  DpadListTile(
+                    useSettingsIconShell: true,
+                    leading: const Icon(Icons.queue),
+                    title: Text(l10n.settingsConcurrentDownloads),
+                    subtitle: Text(l10n.settingsConcurrentDownloadsDescription),
+                    trailing: Text('$concurrentCount'),
+                    onTap: () =>
+                        _pickConcurrentDownloads(context, prefs, concurrentCount),
+                  ),
+                ],
+              ),
+              if (GetIt.instance.isRegistered<AutoDownloadService>()) ...[
+                SettingsSectionHeader(l10n.smartDownloadsSection),
+                _SmartDownloadsSettings(
+                  prefs: prefs,
+                  service: GetIt.instance<AutoDownloadService>(),
+                ),
+                SettingsSectionHeader(l10n.autoDownloadSection),
+                _AutoDownloadSettings(
+                  prefs: prefs,
+                  service: GetIt.instance<AutoDownloadService>(),
                 ),
               ],
-            ),
-            _Section(title: l10n.storage),
+            ],
+            SettingsSectionHeader(l10n.storage),
             adaptiveListSection(
               children: [
-                storage.when(
-                  data: (bytes) => ListTile(
-                    leading: const Icon(Icons.storage),
-                    title: Text(l10n.storageUsed),
-                    subtitle: Text(formatBytes(bytes)),
-                    trailing: TextButton(
-                      child: Text(l10n.manage),
-                      onPressed: () => showDownloadsDialog(context),
+                if (downloads) ...[
+                  storage.when(
+                    // Reporting only, since storage is managed from the
+                    // downloads list.
+                    data: (bytes) => DpadListTile(
+                      useSettingsIconShell: true,
+                      leading: const Icon(Icons.storage),
+                      title: Text(l10n.storageUsed),
+                      subtitle: Text(formatBytes(bytes)),
                     ),
+                    loading: () => DpadListTile(
+                      useSettingsIconShell: true,
+                      leading: const Icon(Icons.storage),
+                      title: Text(l10n.storageUsed),
+                      subtitle: Text(l10n.calculating),
+                    ),
+                    error: (_, _) => const SizedBox.shrink(),
                   ),
-                  loading: () => ListTile(
-                    leading: const Icon(Icons.storage),
-                    title: Text(l10n.storageUsed),
-                    subtitle: Text(l10n.calculating),
-                  ),
-                  error: (_, _) => const SizedBox.shrink(),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.data_usage),
-                  title: Text(l10n.storageLimit),
-                  subtitle: Text(
-                    storageLimitMb == 0
-                        ? l10n.noLimit
-                        : l10n.gbValue(
-                            (storageLimitMb / 1024).toStringAsFixed(1),
-                          ),
-                  ),
-                  onTap: () =>
-                      _pickStorageLimit(context, prefs, storageLimitMb),
-                ),
-                if (PlatformDetection.isAndroid)
-                  SwitchListTile.adaptive(
-                    secondary: const Icon(Icons.folder_open),
-                    title: Text(l10n.saveToDownloadsFolder),
-                    subtitle: Text(l10n.downloadsVisibleToOtherApps),
-                    value: customPath == 'mediastore',
-                    onChanged: (v) => _toggleMediaStore(context, prefs, v),
-                  ),
-                if (PlatformDetection.useDesktopUi ||
-                    (PlatformDetection.isAndroid && customPath != 'mediastore'))
-                  ListTile(
-                    leading: const Icon(Icons.folder_special),
-                    title: Text(l10n.downloadLocation),
+                  DpadListTile(
+                    useSettingsIconShell: true,
+                    leading: const Icon(Icons.data_usage),
+                    title: Text(l10n.storageLimit),
                     subtitle: Text(
-                      customPath.isEmpty ? l10n.defaultLabel : customPath,
+                      storageLimitMb == 0
+                          ? l10n.noLimit
+                          : l10n.gbValue(
+                              (storageLimitMb / 1024).toStringAsFixed(1),
+                            ),
                     ),
-                    onTap: () => _pickFolder(context, prefs),
+                    onTap: () =>
+                        showStorageLimitPicker(context, prefs, storageLimitMb),
                   ),
+                  if (PlatformDetection.isAndroid)
+                    DpadSwitchListTile(
+                      useSettingsIconShell: true,
+                      secondary: const Icon(Icons.folder_open),
+                      title: Text(l10n.saveToDownloadsFolder),
+                      subtitle: Text(l10n.downloadsVisibleToOtherApps),
+                      value: customPath == 'mediastore',
+                      onChanged: (v) => _toggleMediaStore(context, prefs, v),
+                    ),
+                  if (PlatformDetection.useDesktopUi ||
+                      (PlatformDetection.isAndroid && customPath != 'mediastore'))
+                    DpadListTile(
+                      useSettingsIconShell: true,
+                      leading: const Icon(Icons.folder_special),
+                      title: Text(l10n.downloadLocation),
+                      subtitle: Text(
+                        customPath.isEmpty ? l10n.defaultLabel : customPath,
+                      ),
+                      onTap: () => PlatformDetection.isAndroid
+                          ? _pickAndroidLocation(context, prefs, customPath)
+                          : _pickFolder(context, prefs),
+                    ),
+                ],
                 if (!PlatformDetection.isWeb) ...[
-                  ListTile(
+                  DpadListTile(
+                    useSettingsIconShell: true,
+                    autofocus: !downloads,
                     leading: const Icon(Icons.image_outlined),
                     title: Text(l10n.imageCacheLimit),
                     subtitle: Text(
@@ -158,7 +213,8 @@ class DownloadSettingsScreen extends ConsumerWidget {
                     onTap: () =>
                         _pickImageCacheLimit(context, prefs, imageCacheLimitMb),
                   ),
-                  ListTile(
+                  DpadListTile(
+                    useSettingsIconShell: true,
                     leading: const Icon(Icons.cleaning_services_outlined),
                     title: Text(l10n.clearImageCache),
                     trailing: const Icon(Icons.chevron_right),
@@ -168,22 +224,25 @@ class DownloadSettingsScreen extends ConsumerWidget {
               ],
             ),
 
-            _Section(title: l10n.dangerZone),
-            adaptiveListSection(
-              children: [
-                ListTile(
-                  leading: Icon(
-                    Icons.delete_forever,
-                    color: AppColorScheme.statusRequested,
+            if (downloads) ...[
+              SettingsSectionHeader(l10n.dangerZone),
+              adaptiveListSection(
+                children: [
+                  DpadListTile(
+                    useSettingsIconShell: true,
+                    leading: Icon(
+                      Icons.delete_forever,
+                      color: AppColorScheme.statusRequested,
+                    ),
+                    title: Text(
+                      l10n.clearAllDownloads,
+                      style: TextStyle(color: AppColorScheme.statusRequested),
+                    ),
+                    onTap: () => _confirmClearAll(context),
                   ),
-                  title: Text(
-                    l10n.clearAllDownloads,
-                    style: TextStyle(color: AppColorScheme.statusRequested),
-                  ),
-                  onTap: () => _confirmClearAll(context),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -198,25 +257,73 @@ class DownloadSettingsScreen extends ConsumerWidget {
         'Original';
   }
 
-  void _pickQuality(
+  static void showQualityPicker(
     BuildContext context,
     UserPreferences prefs,
     String current,
   ) {
+    final values = DownloadQuality.values;
+    final hasCurrent = values.any((quality) => quality.name == current);
+    if (PlatformDetection.isTV) {
+      showFocusRestoringModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (ctx) => SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(ctx).height * 0.9,
+            ),
+            child: DpadRadioGroup<String>(
+              groupValue: current,
+              onChanged: (v) {
+                if (v != null) {
+                  prefs.set(UserPreferences.defaultDownloadQuality, v);
+                }
+                Navigator.pop(ctx);
+              },
+              child: ListView(
+                shrinkWrap: true,
+                children: values
+                    .map(
+                      (q) => DpadRadioListTile<String>(
+                        autofocus: q.name == current ||
+                            (!hasCurrent && q == values.first),
+                        title: Text(q.label),
+                        subtitle: Text(
+                          q.isTranscoded
+                              ? '${q.estimatedSizePerHour} • ${q.encodingInfo}'
+                              : q.estimatedSizePerHour,
+                        ),
+                        value: q.name,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+
     showFocusRestoringModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
-        child: RadioGroup<String>(
+        child: DpadRadioGroup<String>(
           groupValue: current,
           onChanged: (v) {
-            if (v != null) prefs.set(UserPreferences.defaultDownloadQuality, v);
+            if (v != null) {
+              prefs.set(UserPreferences.defaultDownloadQuality, v);
+            }
             Navigator.pop(ctx);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: DownloadQuality.values
+            children: values
                 .map(
-                  (q) => RadioListTile<String>(
+                  (q) => DpadRadioListTile<String>(
+                    autofocus:
+                        q.name == current || (!hasCurrent && q == values.first),
                     title: Text(q.label),
                     subtitle: Text(
                       q.isTranscoded
@@ -233,27 +340,80 @@ class DownloadSettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _pickStorageLimit(
+  static void showStorageLimitPicker(
     BuildContext context,
     UserPreferences prefs,
     int current,
   ) {
     final l10n = AppLocalizations.of(context);
-    final values = [0, 1024, 2048, 5120, 10240, 20480, 51200, 102400];
+    final values = <int>{
+      0,
+      1024,
+      2048,
+      5120,
+      10240,
+      20480,
+      51200,
+      102400,
+      current,
+    }.toList()..sort();
+    if (PlatformDetection.isTV) {
+      showFocusRestoringModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (ctx) => SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(ctx).height * 0.9,
+            ),
+            child: DpadRadioGroup<int>(
+              groupValue: current,
+              onChanged: (v) {
+                if (v != null) {
+                  prefs.set(UserPreferences.downloadStorageLimitMb, v);
+                }
+                Navigator.pop(ctx);
+              },
+              child: ListView(
+                shrinkWrap: true,
+                children: values
+                    .map(
+                      (mb) => DpadRadioListTile<int>(
+                        autofocus: mb == current,
+                        title: Text(
+                          mb == 0
+                              ? l10n.noLimit
+                              : l10n.gbValue((mb / 1024).toStringAsFixed(0)),
+                        ),
+                        value: mb,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+
     showFocusRestoringModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
-        child: RadioGroup<int>(
+        child: DpadRadioGroup<int>(
           groupValue: current,
           onChanged: (v) {
-            if (v != null) prefs.set(UserPreferences.downloadStorageLimitMb, v);
+            if (v != null) {
+              prefs.set(UserPreferences.downloadStorageLimitMb, v);
+            }
             Navigator.pop(ctx);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: values
                 .map(
-                  (mb) => RadioListTile<int>(
+                  (mb) => DpadRadioListTile<int>(
+                    autofocus: mb == current,
                     title: Text(
                       mb == 0
                           ? l10n.noLimit
@@ -279,7 +439,7 @@ class DownloadSettingsScreen extends ConsumerWidget {
     showFocusRestoringModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
-        child: RadioGroup<int>(
+        child: DpadRadioGroup<int>(
           groupValue: current,
           onChanged: (v) {
             if (v != null) {
@@ -292,7 +452,9 @@ class DownloadSettingsScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: values
                 .map(
-                  (mb) => RadioListTile<int>(
+                  (mb) => DpadRadioListTile<int>(
+                    autofocus:
+                        mb == current || (!values.contains(current) && mb == 0),
                     title: Text(mb == 0 ? l10n.noLimit : l10n.mbValue(mb)),
                     value: mb,
                   ),
@@ -309,10 +471,11 @@ class DownloadSettingsScreen extends ConsumerWidget {
     UserPreferences prefs,
     int current,
   ) {
+    final hasCurrent = current >= 1 && current <= 8;
     showFocusRestoringModalBottomSheet(
       context: context,
       builder: (ctx) => SafeArea(
-        child: RadioGroup<int>(
+        child: DpadRadioGroup<int>(
           groupValue: current,
           onChanged: (v) {
             if (v != null) {
@@ -324,7 +487,11 @@ class DownloadSettingsScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               for (var n = 1; n <= 8; n++)
-                RadioListTile<int>(title: Text('$n'), value: n),
+                DpadRadioListTile<int>(
+                  autofocus: n == current || (!hasCurrent && n == 1),
+                  title: Text('$n'),
+                  value: n,
+                ),
             ],
           ),
         ),
@@ -336,9 +503,9 @@ class DownloadSettingsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     await clearImageDiskCache();
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.imageCacheCleared)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.imageCacheCleared)));
   }
 
   Future<void> _pickFolder(BuildContext context, UserPreferences prefs) async {
@@ -361,6 +528,129 @@ class DownloadSettingsScreen extends ConsumerWidget {
     if (!context.mounted) return;
 
     final l10n = AppLocalizations.of(context);
+    if (!await _confirmLocationChange(context)) return;
+
+    final storage = GetIt.instance<StoragePathService>();
+    // On macOS the bookmark carries write access, so the probe would fail
+    // outside the security scope. Other desktops probe the raw path.
+    if (bookmark == null && !await storage.canWriteTo(result)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.cannotWriteToFolder)));
+      }
+      return;
+    }
+
+    final oldRoot = await storage.getOfflineRoot();
+    if (bookmark != null) {
+      await prefs.set(UserPreferences.customDownloadPathBookmark, bookmark);
+    }
+    await prefs.set(UserPreferences.customDownloadPath, result);
+    storage.clearCache();
+    unawaited(_onDownloadLocationChanged(oldRoot));
+  }
+
+  /// Picks between the folders Android allows, which is the default plus
+  /// whatever [StoragePathService.getRemovableDownloadDirs] turns up. The
+  /// system folder picker hands back paths the app then can't write to.
+  Future<void> _pickAndroidLocation(
+    BuildContext context,
+    UserPreferences prefs,
+    String current,
+  ) async {
+    final sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
+    if (!context.mounted) return;
+    // Android 10 and below still write through raw file paths, so the system
+    // folder picker leads somewhere usable there.
+    if (sdkInt <= 29) return _pickFolder(context, prefs);
+
+    final storage = GetIt.instance<StoragePathService>();
+    final removable = await storage.getRemovableDownloadDirs();
+    if (!context.mounted) return;
+    final hasCurrentRemovable = removable.any((dir) => dir.path == current);
+
+    final l10n = AppLocalizations.of(context);
+    final choice = await showFocusRestoringModalBottomSheet<String>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: DpadRadioGroup<String>(
+          groupValue: current,
+          onChanged: (v) {
+            if (v != null) Navigator.pop(ctx, v);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DpadRadioListTile<String>(
+                autofocus: current.isEmpty || !hasCurrentRemovable,
+                title: Text(l10n.defaultLabel),
+                value: '',
+              ),
+              for (final dir in removable)
+                DpadRadioListTile<String>(
+                  autofocus: current == dir.path,
+                  title: Text(l10n.sdCard),
+                  subtitle: Text(dir.path),
+                  value: dir.path,
+                ),
+              if (removable.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  child: Text(
+                    l10n.downloadLocationLimitedByAndroid,
+                    style: Theme.of(ctx).textTheme.bodySmall,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (choice == null || choice == current || !context.mounted) return;
+    if (!await _confirmLocationChange(context)) return;
+
+    if (choice.isNotEmpty && !await storage.canWriteTo(choice)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.cannotWriteToFolder)));
+      }
+      return;
+    }
+
+    final oldRoot = await storage.getOfflineRoot();
+    await prefs.set(UserPreferences.customDownloadPath, choice);
+    storage.clearCache();
+    unawaited(_onDownloadLocationChanged(oldRoot));
+  }
+
+  /// Clears out the old root's staging folder and points the download engine
+  /// at the new root, so staged bytes land on the same volume as their
+  /// destination. The sweep applies the same protective filter as the startup
+  /// sweep, so an in-flight download finishing into the old root keeps its
+  /// staging file.
+  Future<void> _onDownloadLocationChanged(Directory oldRoot) async {
+    final oldStaging = Directory(
+      '${oldRoot.path}/${StoragePathService.stagingDirName}',
+    );
+    final getIt = GetIt.instance;
+    if (getIt.isRegistered<DownloadService>()) {
+      await getIt<DownloadService>().sweepStagingDir(dir: oldStaging);
+    }
+    try {
+      if (await oldStaging.exists() && await oldStaging.list().isEmpty) {
+        await oldStaging.delete();
+      }
+    } catch (_) {}
+    if (getIt.isRegistered<BackgroundDownloadCoordinator>()) {
+      await getIt<BackgroundDownloadCoordinator>().applyStagingDirectory();
+    }
+  }
+
+  /// Existing downloads stay where they are, so the move is worth confirming.
+  Future<bool> _confirmLocationChange(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showFocusRestoringDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
@@ -378,25 +668,7 @@ class DownloadSettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (confirmed != true) return;
-
-    final storage = GetIt.instance<StoragePathService>();
-    // On macOS the bookmark carries write access, so the probe would fail
-    // outside the security scope. Other desktops probe the raw path.
-    if (bookmark == null && !await storage.canWriteTo(result)) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.cannotWriteToFolder)));
-      }
-      return;
-    }
-
-    if (bookmark != null) {
-      await prefs.set(UserPreferences.customDownloadPathBookmark, bookmark);
-    }
-    await prefs.set(UserPreferences.customDownloadPath, result);
-    storage.clearCache();
+    return confirmed == true;
   }
 
   Future<void> _toggleMediaStore(
@@ -405,8 +677,11 @@ class DownloadSettingsScreen extends ConsumerWidget {
     bool enable,
   ) async {
     if (!enable) {
+      final storage = GetIt.instance<StoragePathService>();
+      final oldRoot = await storage.getOfflineRoot();
       await prefs.set(UserPreferences.customDownloadPath, '');
-      GetIt.instance<StoragePathService>().clearCache();
+      storage.clearCache();
+      unawaited(_onDownloadLocationChanged(oldRoot));
       return;
     }
 
@@ -448,8 +723,11 @@ class DownloadSettingsScreen extends ConsumerWidget {
       }
     }
 
+    final storage = GetIt.instance<StoragePathService>();
+    final oldRoot = await storage.getOfflineRoot();
     await prefs.set(UserPreferences.customDownloadPath, 'mediastore');
-    GetIt.instance<StoragePathService>().clearCache();
+    storage.clearCache();
+    unawaited(_onDownloadLocationChanged(oldRoot));
   }
 
   Future<void> _confirmClearAll(BuildContext context) async {
@@ -481,20 +759,324 @@ class DownloadSettingsScreen extends ConsumerWidget {
   }
 }
 
-class _Section extends StatelessWidget {
-  final String title;
-  const _Section({required this.title});
+/// The smart downloads switch and how many episodes it keeps ready. It has
+/// no Check now of its own, since the one in automatic downloads runs both.
+class _SmartDownloadsSettings extends StatelessWidget {
+  const _SmartDownloadsSettings({required this.prefs, required this.service});
+
+  final UserPreferences prefs;
+  final AutoDownloadService service;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.primary,
+    final l10n = AppLocalizations.of(context);
+    final enabled = prefs.get(UserPreferences.smartDownloadsEnabled);
+
+    return adaptiveListSection(
+      children: [
+        DpadSwitchListTile(
+          useSettingsIconShell: true,
+          secondary: const Icon(Icons.skip_next),
+          title: Text(l10n.smartDownloadsEnable),
+          subtitle: Text(l10n.smartDownloadsEnableSubtitle),
+          value: enabled,
+          onChanged: service.setSmartDownloadsEnabled,
+        ),
+        if (enabled)
+          SliderPreferenceTile(
+            preference: UserPreferences.smartDownloadsKeepReady,
+            title: l10n.smartDownloadsKeepReady,
+            icon: Icons.playlist_play,
+            min: 1,
+            max: 10,
+            divisions: 9,
+            labelOf: l10n.smartDownloadsKeepReadySubtitle,
+            onChangeEnd: () => _onKeepReadyChanged(context),
+          ),
+      ],
+    );
+  }
+
+  /// Lowering the number never deletes anything, which a user expecting the
+  /// extra episodes to go would not guess, so it says so.
+  void _onKeepReadyChanged(BuildContext context) {
+    final applied = prefs.get(UserPreferences.smartDownloadsAppliedKeepReady);
+    if (prefs.get(UserPreferences.smartDownloadsKeepReady) <
+        (applied > 0 ? applied : 1)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).smartDownloadsKeepReadyLowered,
+          ),
+        ),
+      );
+    }
+    service.onKeepReadyChanged();
+  }
+}
+
+/// The auto-download group: global rules, background refresh, a manual check
+/// with the last result, and the followed series.
+class _AutoDownloadSettings extends StatefulWidget {
+  const _AutoDownloadSettings({required this.prefs, required this.service});
+
+  final UserPreferences prefs;
+  final AutoDownloadService service;
+
+  @override
+  State<_AutoDownloadSettings> createState() => _AutoDownloadSettingsState();
+}
+
+class _AutoDownloadSettingsState extends State<_AutoDownloadSettings> {
+  static const _keepChoices = [1, 2, 3, 5, 10, 0];
+
+  /// Never, right away, a day, a week: the choices Plex offers.
+  static const _deleteAfterChoices = [-1, 0, 24, 24 * 7];
+
+  late Future<String> _refreshStatus;
+  late Stream<List<AutoDownloadSubscription>> _subscriptions;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshStatus = BackgroundRefresh.instance.refreshStatus();
+    // Created once: the parent rebuilds on every preference change and a
+    // new stream per build would re-run the query and flicker.
+    _subscriptions = widget.service.watchSubscriptions();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final prefs = widget.prefs;
+    final service = widget.service;
+    final enabled = prefs.get(UserPreferences.autoDownloadEnabled);
+    final keep = prefs.get(UserPreferences.autoDownloadKeepUnwatched);
+    final deleteAfterHours = prefs.get(
+      UserPreferences.autoDownloadDeleteAfterHours,
+    );
+    final backgroundRefresh = prefs.get(
+      UserPreferences.autoDownloadBackgroundRefresh,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        adaptiveListSection(
+          children: [
+            DpadSwitchListTile(
+              useSettingsIconShell: true,
+              secondary: const Icon(Icons.autorenew),
+              title: Text(l10n.autoDownloadEnable),
+              subtitle: Text(l10n.autoDownloadEnableSubtitle),
+              value: enabled,
+              onChanged: (v) =>
+                  prefs.set(UserPreferences.autoDownloadEnabled, v),
+            ),
+            DpadListTile(
+              useSettingsIconShell: true,
+              leading: const Icon(Icons.filter_list),
+              title: Text(l10n.autoDownloadKeepUnwatched),
+              subtitle: Text(l10n.autoDownloadKeepUnwatchedSubtitle(keep)),
+              trailing: Text(keep == 0 ? l10n.autoDownloadKeepAll : '$keep'),
+              onTap: () => _pickKeepUnwatched(context, keep),
+            ),
+            DpadListTile(
+              useSettingsIconShell: true,
+              leading: const Icon(Icons.delete_sweep_outlined),
+              title: Text(l10n.autoDownloadDelete),
+              subtitle: Text(l10n.autoDownloadDeleteSubtitle),
+              trailing: Text(_deleteAfterLabel(l10n, deleteAfterHours)),
+              onTap: () => _pickDeleteAfter(context, deleteAfterHours),
+            ),
+            FutureBuilder<String>(
+              future: _refreshStatus,
+              builder: (context, snapshot) {
+                final denied =
+                    snapshot.data == 'denied' || snapshot.data == 'restricted';
+                return DpadSwitchListTile(
+                  useSettingsIconShell: true,
+                  secondary: const Icon(Icons.schedule),
+                  title: Text(l10n.autoDownloadBackgroundRefresh),
+                  subtitle: Text(
+                    denied
+                        ? (PlatformDetection.isAndroid
+                              ? l10n.autoDownloadBackgroundRestrictedAndroid
+                              : l10n.autoDownloadBackgroundRefreshDenied)
+                        : l10n.autoDownloadBackgroundRefreshSubtitle,
+                  ),
+                  value: backgroundRefresh,
+                  onChanged: (v) => prefs.set(
+                    UserPreferences.autoDownloadBackgroundRefresh,
+                    v,
+                  ),
+                );
+              },
+            ),
+            ListenableBuilder(
+              listenable: service,
+              builder: (context, _) => DpadListTile(
+                useSettingsIconShell: true,
+                leading: const Icon(Icons.refresh),
+                title: Text(l10n.autoDownloadCheckNow),
+                subtitle: Text(
+                  service.isRunning
+                      ? l10n.autoDownloadChecking
+                      : _lastRunLabel(l10n, service.lastRun),
+                ),
+                enabled:
+                    (enabled ||
+                        prefs.get(UserPreferences.smartDownloadsEnabled)) &&
+                    !service.isRunning,
+                onTap: () =>
+                    service.runCheck(trigger: AutoDownloadTrigger.manual),
+              ),
+            ),
+          ],
+        ),
+        SettingsSectionHeader(l10n.autoDownloadFollowedSeries),
+        StreamBuilder<List<AutoDownloadSubscription>>(
+          stream: _subscriptions,
+          builder: (context, snapshot) {
+            final subscriptions = snapshot.data ?? const [];
+            if (subscriptions.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                child: Text(
+                  l10n.autoDownloadNoSubscriptions,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              );
+            }
+            return adaptiveListSection(
+              children: [
+                for (final subscription in subscriptions)
+                  DpadListTile(
+                    useSettingsIconShell: true,
+                    leading: const Icon(Icons.tv),
+                    title: Text(subscription.seriesName),
+                    subtitle: Text(_subscriptionLabel(l10n, subscription)),
+                    trailing: IconButton(
+                      tooltip: l10n.autoDownloadRemove,
+                      icon: const Icon(Icons.close),
+                      onPressed: () =>
+                          service.unsubscribe(subscription.seriesId),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  String _subscriptionLabel(
+    AppLocalizations l10n,
+    AutoDownloadSubscription subscription,
+  ) {
+    final preset = DownloadQuality.fromName(subscription.qualityPreset);
+    final quality = AutoDownloadService.isForegroundOnly(preset)
+        ? '${preset.label} • ${l10n.autoDownloadForegroundOnly}'
+        : preset.label;
+    final checkedAt = subscription.lastCheckedAt;
+    if (checkedAt == null) return '$quality • ${l10n.autoDownloadNeverChecked}';
+    final check = _checkLabel(
+      l10n,
+      at: checkedAt,
+      queued: subscription.lastQueuedCount,
+      error: subscription.lastError,
+    );
+    return '$quality • $check';
+  }
+
+  String _lastRunLabel(AppLocalizations l10n, AutoDownloadRunSummary? run) {
+    if (run == null) return l10n.autoDownloadNeverChecked;
+    final label = _checkLabel(
+      l10n,
+      at: run.at,
+      queued: run.queued,
+      error: run.error,
+    );
+    if (run.waitingForWifi) {
+      return '$label • ${l10n.autoDownloadWaitingForWifi}';
+    }
+    if (run.storageFull) return '$label • ${l10n.autoDownloadStorageFull}';
+    return label;
+  }
+
+  String _checkLabel(
+    AppLocalizations l10n, {
+    required DateTime at,
+    required int queued,
+    required String? error,
+  }) {
+    final when = relativeTimeLabel(l10n, at);
+    return error != null
+        ? l10n.autoDownloadLastCheckFailed(when, error)
+        : l10n.autoDownloadLastCheck(when, queued);
+  }
+
+  String _deleteAfterLabel(AppLocalizations l10n, int hours) => switch (hours) {
+    < 0 => l10n.autoDownloadDeleteNever,
+    0 => l10n.autoDownloadDeleteImmediately,
+    < 24 * 7 => l10n.autoDownloadDeleteAfterDay,
+    _ => l10n.autoDownloadDeleteAfterWeek,
+  };
+
+  void _pickDeleteAfter(BuildContext context, int current) {
+    final l10n = AppLocalizations.of(context);
+    showFocusRestoringModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: DpadRadioGroup<int>(
+          groupValue: current,
+          onChanged: (v) {
+            if (v != null) {
+              widget.prefs.set(UserPreferences.autoDownloadDeleteAfterHours, v);
+            }
+            Navigator.pop(ctx);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final hours in _deleteAfterChoices)
+                DpadRadioListTile<int>(
+                  autofocus: hours == current,
+                  title: Text(_deleteAfterLabel(l10n, hours)),
+                  value: hours,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _pickKeepUnwatched(BuildContext context, int current) {
+    final l10n = AppLocalizations.of(context);
+    showFocusRestoringModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: DpadRadioGroup<int>(
+          groupValue: current,
+          onChanged: (v) {
+            if (v != null) {
+              widget.prefs.set(UserPreferences.autoDownloadKeepUnwatched, v);
+            }
+            Navigator.pop(ctx);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final n in _keepChoices)
+                DpadRadioListTile<int>(
+                  autofocus: n == current,
+                  title: Text(n == 0 ? l10n.autoDownloadKeepAll : '$n'),
+                  value: n,
+                ),
+            ],
+          ),
         ),
       ),
     );

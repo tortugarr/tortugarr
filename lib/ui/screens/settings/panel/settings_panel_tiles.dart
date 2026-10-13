@@ -440,7 +440,6 @@ class _ShuffleContentTypePickerTileState
   static const _fallbackKey = 'both';
 
   late final PreferenceBinding<String> _binding;
-  late final PreferenceBinding<bool> _showShuffleButtonBinding;
   bool _pickerOpen = false;
 
   @override
@@ -450,16 +449,11 @@ class _ShuffleContentTypePickerTileState
       GetIt.instance<PreferenceStore>(),
       UserPreferences.shuffleContentType,
     );
-    _showShuffleButtonBinding = PreferenceBinding(
-      GetIt.instance<PreferenceStore>(),
-      UserPreferences.showShuffleButton,
-    );
   }
 
   @override
   void dispose() {
     _binding.dispose();
-    _showShuffleButtonBinding.dispose();
     super.dispose();
   }
 
@@ -475,31 +469,22 @@ class _ShuffleContentTypePickerTileState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return ValueListenableBuilder<bool>(
-      valueListenable: _showShuffleButtonBinding,
-      builder: (context, showShuffleButton, _) {
-        if (!showShuffleButton) {
-          return const SizedBox.shrink();
+    return ValueListenableBuilder<String>(
+      valueListenable: _binding,
+      builder: (context, value, _) {
+        final normalized = _normalize(value);
+        if (normalized != value) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted || _binding.value == normalized) return;
+            _binding.value = normalized;
+            widget.onChanged?.call();
+          });
         }
-
-        return ValueListenableBuilder<String>(
-          valueListenable: _binding,
-          builder: (context, value, _) {
-            final normalized = _normalize(value);
-            if (normalized != value) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (!mounted || _binding.value == normalized) return;
-                _binding.value = normalized;
-                widget.onChanged?.call();
-              });
-            }
-            return _TvSettingsListTile(
-              leading: const Icon(Icons.shuffle),
-              title: Text(l10n.settingsShuffleContentTypeFilter),
-              subtitle: Text(_label(normalized, l10n)),
-              onTap: () => _showPicker(context, normalized),
-            );
-          },
+        return _TvSettingsListTile(
+          leading: const Icon(Icons.shuffle),
+          title: Text(l10n.settingsShuffleContentTypeFilter),
+          subtitle: Text(_label(normalized, l10n)),
+          onTap: () => _showPicker(context, normalized),
         );
       },
     );

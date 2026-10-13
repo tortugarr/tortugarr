@@ -1,0 +1,144 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:moonfin/ui/navigation/destinations.dart';
+
+void main() {
+  group('a player route', () {
+    test('records an explicit hardware-rendering opt-out', () {
+      expect(
+        Destinations.gamePlayerOf(
+          'library',
+          'game',
+          core: 'n64',
+          hardwareRenderingEnabled: false,
+        ),
+        contains('hw=0'),
+      );
+      expect(
+        Destinations.gamePlayerOf('library', 'game', core: 'n64'),
+        isNot(contains('hw=0')),
+      );
+    });
+
+    test('covers every fullscreen playback screen', () {
+      for (final path in [
+        Destinations.videoPlayer,
+        Destinations.externalPlayer,
+        Destinations.audioPlayer,
+        Destinations.liveTvPlayer,
+        Destinations.trailerPlayer,
+        '/player/book/item1',
+        '/player/photo/item1',
+        '/player/next-up/item1',
+        '/player/still-watching/item1',
+        '/game-player/lib1/game1',
+      ]) {
+        expect(Destinations.isPlayerRoute(path), isTrue, reason: path);
+      }
+    });
+
+    test('leaves the rest of the app out', () {
+      for (final path in [
+        Destinations.home,
+        Destinations.search,
+        Destinations.liveTv,
+        Destinations.liveTvGuide,
+        '/item/item1',
+        '/game/lib1/game1',
+        '/games/lib1',
+      ]) {
+        expect(Destinations.isPlayerRoute(path), isFalse, reason: path);
+      }
+    });
+  });
+
+  group('the shared playback manager', () {
+    test('plays the video, audio, external and live TV players', () {
+      for (final path in [
+        Destinations.videoPlayer,
+        Destinations.audioPlayer,
+        Destinations.externalPlayer,
+        Destinations.liveTvPlayer,
+      ]) {
+        expect(
+          Destinations.playsThroughPlaybackManager(path),
+          isTrue,
+          reason: path,
+        );
+      }
+    });
+
+    test('is left alone by the screens with their own player', () {
+      for (final path in [
+        Destinations.trailerPlayer,
+        '/player/book/item1',
+        '/player/photo/item1',
+        '/game-player/lib1/game1',
+      ]) {
+        expect(
+          Destinations.playsThroughPlaybackManager(path),
+          isFalse,
+          reason: path,
+        );
+        expect(Destinations.isPlayerRoute(path), isTrue, reason: path);
+      }
+    });
+  });
+
+  group('a signed out route', () {
+    test('covers where signing out and switching user land', () {
+      for (final path in [
+        Destinations.startup,
+        Destinations.serverSelect,
+        Destinations.server,
+        Destinations.login,
+      ]) {
+        expect(Destinations.isSignedOutRoute(path), isTrue, reason: path);
+      }
+    });
+
+    test('leaves the signed in app out', () {
+      for (final path in [
+        Destinations.home,
+        Destinations.search,
+        Destinations.videoPlayer,
+        '/item/item1',
+      ]) {
+        expect(Destinations.isSignedOutRoute(path), isFalse, reason: path);
+      }
+    });
+  });
+
+  group('the back key', () {
+    test('is left to the screens that read it themselves', () {
+      expect(Destinations.routeReadsBackKey(Destinations.videoPlayer), isTrue);
+      expect(Destinations.routeReadsBackKey('/game-player/lib1/game1'), isTrue);
+    });
+
+    test('is still handled for the playback screens that do not', () {
+      for (final path in [
+        Destinations.audioPlayer,
+        Destinations.externalPlayer,
+        Destinations.liveTvPlayer,
+        Destinations.trailerPlayer,
+        '/player/book/item1',
+        '/player/photo/item1',
+        '/player/next-up/item1',
+        '/player/still-watching/item1',
+      ]) {
+        expect(Destinations.routeReadsBackKey(path), isFalse, reason: path);
+        expect(Destinations.isPlayerRoute(path), isTrue, reason: path);
+      }
+    });
+
+    test('is handled everywhere outside playback', () {
+      for (final path in [
+        Destinations.home,
+        '/item/item1',
+        '/game/lib1/game1',
+        '/game-players',
+      ]) {
+        expect(Destinations.routeReadsBackKey(path), isFalse, reason: path);
+      }
+    });
+  });
+}

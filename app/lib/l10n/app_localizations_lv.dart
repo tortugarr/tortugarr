@@ -1,0 +1,11460 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Latvian (`lv`).
+class AppLocalizationsLv extends AppLocalizations {
+  AppLocalizationsLv([String locale = 'lv']) : super(locale);
+
+  @override
+  String get appTitle => 'Tortugarr';
+
+  @override
+  String get accountPreferences => 'KONTA PREFERENCES';
+
+  @override
+  String get interfaceLanguage => 'Saskarnes valoda';
+
+  @override
+  String get systemLanguageDefault => 'Sistēmas noklusējums';
+
+  @override
+  String get signIn => 'Pierakstīties';
+
+  @override
+  String get empty => 'Tukšs';
+
+  @override
+  String connectingToServer(String serverName) {
+    return 'Savienojuma izveide ar $serverName';
+  }
+
+  @override
+  String get quickConnect => 'Quick Connect';
+
+  @override
+  String get password => 'Parole';
+
+  @override
+  String get username => 'Lietotājvārds';
+
+  @override
+  String get email => 'E-pasts';
+
+  @override
+  String get quickConnectInstruction =>
+      'Ievadiet šo kodu sava servera tīmekļa informācijas panelī:';
+
+  @override
+  String get waitingForAuthorization => 'Gaida autorizāciju...';
+
+  @override
+  String get back => 'Atpakaļ';
+
+  @override
+  String get serverUnavailable => 'Serveris nav pieejams';
+
+  @override
+  String get loginFailed => 'Pieteikšanās neizdevās';
+
+  @override
+  String quickConnectUnavailable(String detail) {
+    return 'QuickConnect nav pieejams: $detail';
+  }
+
+  @override
+  String quickConnectUnavailableWithStatus(String status, String detail) {
+    return 'QuickConnect nav pieejams ($status): $detail';
+  }
+
+  @override
+  String get whosWatching => 'Kurš skatās?';
+
+  @override
+  String get addUser => 'Pievienot lietotāju';
+
+  @override
+  String get selectServer => 'Izvēlieties Serveris';
+
+  @override
+  String appVersionFooter(String version) {
+    return 'Tortugarr versija $version';
+  }
+
+  @override
+  String get savedServers => 'Saglabātie serveri';
+
+  @override
+  String get discoveredServers => 'Atklātie serveri';
+
+  @override
+  String get noneFound => 'Nav atrasts neviens';
+
+  @override
+  String get unableToConnectToServer => 'Nevar izveidot savienojumu ar serveri';
+
+  @override
+  String get addServer => 'Pievienot serveri';
+
+  @override
+  String get embyConnect => 'Emby Savienot';
+
+  @override
+  String get removeServer => 'Noņemt serveri';
+
+  @override
+  String removeServerConfirmation(String serverName) {
+    return 'Vai noņemt \"$serverName\" no saviem serveriem?';
+  }
+
+  @override
+  String get cancel => 'Atcelt';
+
+  @override
+  String get remove => 'Noņemt';
+
+  @override
+  String get connectToServer => 'Izveidojiet savienojumu ar serveri';
+
+  @override
+  String get serverAddress => 'Servera adrese';
+
+  @override
+  String get serverAddressHint => 'https://your-server.example.com';
+
+  @override
+  String get connect => 'Savienot';
+
+  @override
+  String get secureStorageUnavailable => 'Droša krātuve nav pieejama';
+
+  @override
+  String get secureStorageUnavailableMessage =>
+      'Tortugarr nevarēja piekļūt jūsu sistēmas atslēgu piekariņam. Pieteikšanos var turpināt, taču droša marķiera krātuve var nebūt pieejama, kamēr atslēgu piekariņš nav atbloķēts.';
+
+  @override
+  String get ok => 'Labi';
+
+  @override
+  String get settingsAppearanceTheme => 'Lietotnes motīvs';
+
+  @override
+  String get detailScreenStyle => 'Detaļu ekrāna stils';
+
+  @override
+  String get detailScreenStyleSubtitle =>
+      'Klasiskais ir oriģinālais centrētais Tortugarr izkārtojums. Modernais ir adaptīvs kinematogrāfisks izkārtojums.';
+
+  @override
+  String get detailScreenStyleNotflix => 'Klasiskais';
+
+  @override
+  String get detailScreenStyleModern => 'Modernais';
+
+  @override
+  String get expandedTabs => 'Izvērstas cilnes';
+
+  @override
+  String get expandedTabsSubtitle =>
+      'Automātiski rādīt cilnes saturu, pārlūkojot cilnes. Izslēdziet, lai katru cilni atvērtu un aizvērtu manuāli.';
+
+  @override
+  String get showTechnicalDetails => 'Rādīt tehnisko informāciju?';
+
+  @override
+  String get showTechnicalDetailsSubtitle =>
+      'Rādīt kodeka, izšķirtspējas un straumes informāciju bannera kopsavilkumā';
+
+  @override
+  String get recommendationSystem => 'Ieteikumu sistēma';
+
+  @override
+  String get recommendationSystemSubtitle =>
+      'Izmantojiet Tortugarr Recommends vietējās bibliotēkas algoritmu vai tiešsaistes TMDB līdzības rādītājus. Piezīme: tiešsaistes ieteikumiem nepieciešama Seerr integrācija.';
+
+  @override
+  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+
+  @override
+  String get recommendationSystemTmdb => 'TMDb līdzība';
+
+  @override
+  String get recommendationsApplyParentalRatingCap =>
+      'Piemērot vecuma ierobežojuma slieksni?';
+
+  @override
+  String get recommendationsApplyParentalRatingCapSubtitle =>
+      'Ierobežot Tortugarr Recommends ieteikumus atbilstoši izvēlētā satura vecuma ierobežojumam';
+
+  @override
+  String get interfaceStyle => 'Saskarnes stils';
+
+  @override
+  String get interfaceStyleSubtitle =>
+      'Automātiskais pielāgojas jūsu ierīcei. Izvēlieties Apple vai Material, lai noteiktu konkrētu izskatu.';
+
+  @override
+  String get interfaceStyleAutomatic => 'Automātiskais';
+
+  @override
+  String get interfaceStyleApple => 'Apple';
+
+  @override
+  String get interfaceStyleMaterial => 'Material';
+
+  @override
+  String get glassQuality => 'Stikla kvalitāte';
+
+  @override
+  String get glassQualitySubtitle =>
+      'Automātiskais izvēlas šai ierīcei piemērotāko stikla efektu. Pilnais ieslēdz īstu izplūdumu; Samazinātais izmanto vieglu stiklu, kas taupa GPU jaudu.';
+
+  @override
+  String get glassQualityAuto => 'Automātiski';
+
+  @override
+  String get glassQualityFull => 'Pilns';
+
+  @override
+  String get glassQualityReduced => 'Samazināts';
+
+  @override
+  String get settingsAppearanceThemeSubtitle =>
+      'Pārslēdzieties starp Tortugarr un Neon Pulse, nerestartējot lietotni';
+
+  @override
+  String get customThemeTitle => 'Pielāgota tēma';
+
+  @override
+  String get customThemeSubtitle =>
+      'Pielāgotas tēmas maina vizuālos elementus visā Tortugarr lietotnē. Izvēlieties vienu no šīm iespējām atbilstoši savam stilam.';
+
+  @override
+  String get keyboardPreferSystemIme => 'Dod priekšroku sistēmas tastatūrai';
+
+  @override
+  String get keyboardPreferSystemImeDescription =>
+      'Teksta ievadei pēc noklusējuma izmantojiet ierīces ievades metodi';
+
+  @override
+  String get themeNotflix => 'Tortugarr';
+
+  @override
+  String get themeNotflixSubtitle =>
+      'Pašreizējais Tortugarr izskats, ko jūs visi esat iemīlējuši';
+
+  @override
+  String get themeNeonPulse => 'Neona pulss';
+
+  @override
+  String get themeNeonPulseSubtitle =>
+      'Synthwave stils ar fuksīna mirdzumu, ciāna tekstu un spēcīgāku hroma kontrastu';
+
+  @override
+  String get themeGlass => 'Stikls';
+
+  @override
+  String get themeGlassSubtitle =>
+      'Šķidra stikla stils ar plūstošu gradienta fonu, matētām virsmām un Apple zilo akcentu';
+
+  @override
+  String get theme8BitHero => '8 bitu varonis';
+
+  @override
+  String get theme8BitHeroSubtitle =>
+      'Retro pikseļu mākslas stils ar rupju paleti, kvadrātveida apmalēm, asām ēnām un pikseļu fontu';
+
+  @override
+  String get embyConnectSignInSubtitle =>
+      'Pierakstieties ar savu Emby Connect kontu';
+
+  @override
+  String get emailOrUsername => 'E-pasts vai lietotājvārds';
+
+  @override
+  String get selectAServer => 'Izvēlieties serveri';
+
+  @override
+  String get tryAgain => 'Mēģiniet vēlreiz';
+
+  @override
+  String get noLinkedServers =>
+      'Ar šo Emby Connect kontu nav saistīts neviens serveris';
+
+  @override
+  String get invalidEmbyConnectCredentials =>
+      'Nederīgi Emby Connect akreditācijas dati';
+
+  @override
+  String get invalidEmbyConnectLogin =>
+      'Nederīgs Emby Connect lietotājvārds vai parole';
+
+  @override
+  String get embyConnectExchangeNotSupported =>
+      'Serveris neatbalsta Emby Connect apmaiņu';
+
+  @override
+  String get embyConnectNetworkError =>
+      'Tīkla kļūda, sazinoties ar Emby Connect vai atlasīto serveri';
+
+  @override
+  String get loadingLinkedServers => 'Notiek saistīto serveru ielāde...';
+
+  @override
+  String get connectingToServerEllipsis =>
+      'Notiek savienojuma izveide ar serveri...';
+
+  @override
+  String get noReachableAddress => 'Nav norādīta sasniedzama adrese';
+
+  @override
+  String get invalidServerExchangeResponse =>
+      'Nederīga atbilde no servera apmaiņas galapunkta';
+
+  @override
+  String unableToConnectTo(String target) {
+    return 'Nevar izveidot savienojumu ar $target';
+  }
+
+  @override
+  String get exitApp => 'Vai iziet no Tortugarr?';
+
+  @override
+  String get exitAppConfirmation => 'Vai tiešām vēlaties iziet?';
+
+  @override
+  String get exit => 'Iziet';
+
+  @override
+  String get gameMenu => 'Izvēlne';
+
+  @override
+  String get gamePaused => 'Pauzēts';
+
+  @override
+  String get gameSaveState => 'Saglabāt stāvokli';
+
+  @override
+  String get games => 'Spēles';
+
+  @override
+  String get gameLoadState => 'Ielādēt stāvokli';
+
+  @override
+  String get gameFastForward => 'Paātrināt';
+
+  @override
+  String get gameEmulatorSettings => 'Emulatora iestatījumi';
+
+  @override
+  String get gameNoCoreOptions => 'Šim kodolam nav pielāgojamu opciju.';
+
+  @override
+  String get gameHoldToOpenMenu => 'Turiet, lai atvērtu izvēlni';
+
+  @override
+  String get gamePlaybackUnsupported =>
+      'Spēles šajā ierīcē pagaidām netiek atbalstītas.';
+
+  @override
+  String get noHomeRowsLoaded => 'Nevarēja ielādēt nevienu sākuma rindu';
+
+  @override
+  String get noHomeRowsHint =>
+      'Mēģiniet atsvaidzināt vai samazināt aktīvās mājas sadaļas.';
+
+  @override
+  String get retryHomeRows => 'Mēģiniet vēlreiz sākuma rindas';
+
+  @override
+  String get guide => 'Ceļvedis';
+
+  @override
+  String get recordings => 'Ieraksti';
+
+  @override
+  String get schedule => 'Grafiks';
+
+  @override
+  String get series => 'Seriāli';
+
+  @override
+  String get noItemsFound => 'Nav atrasts neviens vienums';
+
+  @override
+  String get home => 'Sākums';
+
+  @override
+  String get browseAll => 'Pārlūkot visu';
+
+  @override
+  String get genres => 'Žanri';
+
+  @override
+  String get collectionPlaceholder => 'Šeit parādīsies kolekcijas vienumi';
+
+  @override
+  String get browseByLetter => 'Pārlūkot pēc burtiem';
+
+  @override
+  String get alphabeticalBrowsePlaceholder =>
+      'Šeit tiks parādīta alfabētiskā pārlūkošana';
+
+  @override
+  String get suggestions => 'Ieteikumi';
+
+  @override
+  String get suggestionsPlaceholder => 'Šeit tiks parādīti ieteiktie vienumi';
+
+  @override
+  String get failedToLoadLibraries => 'Neizdevās ielādēt bibliotēkas';
+
+  @override
+  String get noLibrariesFound => 'Nav atrasta neviena bibliotēka';
+
+  @override
+  String get library => 'Bibliotēka';
+
+  @override
+  String get displaySettings => 'Displeja iestatījumi';
+
+  @override
+  String get allGenres => 'Visi žanri';
+
+  @override
+  String get noGenresFound => 'Nav atrasts neviens žanrs';
+
+  @override
+  String failedToLoadFolderError(String error) {
+    return 'Neizdevās ielādēt mapi: $error';
+  }
+
+  @override
+  String get thisFolderIsEmpty => 'Šī mape ir tukša';
+
+  @override
+  String itemCountLabel(int count) {
+    return '$count vienumus';
+  }
+
+  @override
+  String get failedToLoadFavorites => 'Neizdevās ielādēt izlasi';
+
+  @override
+  String get retry => 'Mēģiniet vēlreiz';
+
+  @override
+  String get noFavoritesYet => 'Izlases vēl nav';
+
+  @override
+  String get favorites => 'Izlase';
+
+  @override
+  String totalCountItems(int count) {
+    return '$count Vienumi';
+  }
+
+  @override
+  String get continuing => 'Turpinot';
+
+  @override
+  String get ended => 'Beigās';
+
+  @override
+  String get sortAndFilter => 'Kārtot un filtrēt';
+
+  @override
+  String get type => 'Tips';
+
+  @override
+  String get sortBy => 'Kārtot pēc';
+
+  @override
+  String get display => 'Displejs';
+
+  @override
+  String get imageType => 'Attēla veids';
+
+  @override
+  String get posterSize => 'Plakāta izmērs';
+
+  @override
+  String get small => 'Mazs';
+
+  @override
+  String get medium => 'Vidēja';
+
+  @override
+  String get large => 'Liels';
+
+  @override
+  String get extraLarge => 'Īpaši liels';
+
+  @override
+  String libraryGenresTitle(String name) {
+    return '$name — Žanri';
+  }
+
+  @override
+  String get views => 'Skati';
+
+  @override
+  String get albums => 'Albumi';
+
+  @override
+  String get albumArtists => 'Albuma mākslinieki';
+
+  @override
+  String get artists => 'Izpildītāji';
+
+  @override
+  String get bookmarks => 'Grāmatzīmes';
+
+  @override
+  String get noSavedBookmarks =>
+      'Šim nosaukumam vēl nav saglabātu grāmatzīmju.';
+
+  @override
+  String get openBook => 'Atvērt grāmatu';
+
+  @override
+  String get chapter => 'nodaļa';
+
+  @override
+  String get page => 'Lapa';
+
+  @override
+  String get bookmark => 'Grāmatzīme';
+
+  @override
+  String get justNow => 'Tikai tagad';
+
+  @override
+  String minutesAgo(int count) {
+    return 'Pirms $count@min';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return 'Pirms $count@h';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '${count}d pirms';
+  }
+
+  @override
+  String get discoverySubjects => 'Atklāšanas priekšmeti';
+
+  @override
+  String get pickDiscoverySubjects =>
+      'Izvēlieties, kuras tēmu plūsmas rādīt programmā Discover.';
+
+  @override
+  String get apply => 'Lietot';
+
+  @override
+  String get openLink => 'Atveriet saiti';
+
+  @override
+  String get scanWithYourPhone => 'Skenējiet ar tālruni';
+
+  @override
+  String get audiobookGenres => 'Audiogrāmatu žanri';
+
+  @override
+  String get pickAudiobookGenres =>
+      'Izvēlieties, kurus žanrus rādīt programmā Audiobook Discover.';
+
+  @override
+  String get discoverAudiobooks => 'Atklājiet audiogrāmatas';
+
+  @override
+  String get librivoxDescription =>
+      'Populāri publiskā domēna nosaukumi no LibriVox.';
+
+  @override
+  String titlesCount(int count) {
+    return '$count virsraksti';
+  }
+
+  @override
+  String get scrollLeft => 'Ritiniet pa kreisi';
+
+  @override
+  String get scrollRight => 'Ritiniet pa labi';
+
+  @override
+  String get couldNotLoadGenre => 'Pašlaik nevarēja ielādēt šo žanru.';
+
+  @override
+  String get continueReading => 'Turpināt lasīt';
+
+  @override
+  String get savedHighlights => 'Saglabātie svarīgākie punkti';
+
+  @override
+  String get continueListening => 'Turpināt Klausīties';
+
+  @override
+  String get listen => 'Klausies';
+
+  @override
+  String get resume => 'Turpināt';
+
+  @override
+  String get failedToLoadLibrary => 'Neizdevās ielādēt bibliotēku';
+
+  @override
+  String get popularNow => 'Šobrīd populārs';
+
+  @override
+  String get savedForLater => 'Saglabāts Vēlāk';
+
+  @override
+  String get topListens => 'Populārākie klausījumi';
+
+  @override
+  String get unreadDiscoveries => 'Nelasīti atklājumi';
+
+  @override
+  String get pickUpAgain => 'Paņemiet vēlreiz';
+
+  @override
+  String get bookHighlightsDescription =>
+      'Jūsu grāmatas ar svarīgākajām vietām, izlasi vai lasīšanas progresu.';
+
+  @override
+  String get handPickedFromLibrary => 'Ar rokām izvēlēta no jūsu bibliotēkas.';
+
+  @override
+  String get handPickedFromListeningQueue =>
+      'Ar rokām atlasīts no jūsu klausīšanās rindas.';
+
+  @override
+  String get booksWithHighlights =>
+      'Grāmatas ar svarīgākajām vietām, izlasi vai lasīšanas progresu.';
+
+  @override
+  String get jumpBackNarration =>
+      'Atgriezieties stāstījumā, nemeklējot savu vietu.';
+
+  @override
+  String get unreadBooksReady =>
+      'Nelasītas grāmatas gatavas nākamajai klusajai stundai.';
+
+  @override
+  String get quickAccessFavorites =>
+      'Ātra piekļuve grāmatām, pie kurām atgriežaties.';
+
+  @override
+  String get searchAudiobooks => 'Meklēt audiogrāmatas';
+
+  @override
+  String get searchYourLibrary => 'Meklējiet savā bibliotēkā';
+
+  @override
+  String get pickUpStory => 'Turpiniet stāstu no vietas, kur to pārtraucāt';
+
+  @override
+  String get savedPlacesChapters =>
+      'Jūsu saglabātās vietas un nepabeigtās nodaļas';
+
+  @override
+  String authorsCount(int count) {
+    return '$count autori';
+  }
+
+  @override
+  String genresCount(int count) {
+    return '$count žanri';
+  }
+
+  @override
+  String percentCompleted(int percent) {
+    return '$percent% pabeigts';
+  }
+
+  @override
+  String get readyWhenYouAre => 'Gatavs, kad esi';
+
+  @override
+  String get details => 'Sīkāka informācija';
+
+  @override
+  String get listeningRoom => 'Klausīšanās telpa';
+
+  @override
+  String get bookmarksAndProgress => 'Grāmatzīmes un norise';
+
+  @override
+  String titlesArrangedForBrowsing(int count) {
+    return '$count virsraksti, kas sakārtoti lasīšanai vispirms.';
+  }
+
+  @override
+  String get titles => 'Nosaukumi';
+
+  @override
+  String get allTitles => 'Visi nosaukumi';
+
+  @override
+  String get authors => 'Autori';
+
+  @override
+  String get browseByAuthor => 'Pārlūkot pēc autora';
+
+  @override
+  String get browseByGenre => 'Pārlūkot pēc žanra';
+
+  @override
+  String get discover => 'Atklājiet';
+
+  @override
+  String get trendingTitlesOpenLibrary =>
+      'Populārākie nosaukumi pēc tēmas no Open Library.';
+
+  @override
+  String get noBookmarkedItems => 'Vēl nav grāmatzīmēs pievienotu vienumu';
+
+  @override
+  String get nothingMatchesSection =>
+      'Šai sadaļai vēl nekas neatbilst. Izmēģiniet citu cilni vai atgriezieties pēc bibliotēkas sinhronizācijas pabeigšanas.';
+
+  @override
+  String get audiobooks => 'Audiogrāmatas';
+
+  @override
+  String noLabelFound(String label) {
+    return 'Nav atrasts neviens $label';
+  }
+
+  @override
+  String get folder => 'Mape';
+
+  @override
+  String get filters => 'Filtri';
+
+  @override
+  String get readingStatus => 'Lasīšanas statuss';
+
+  @override
+  String get playedStatus => 'Spēlēts statuss';
+
+  @override
+  String get readStatus => 'Lasīt';
+
+  @override
+  String get watched => 'Noskatīts';
+
+  @override
+  String get unread => 'Nelasīts';
+
+  @override
+  String get unwatched => 'Nenoskatīts';
+
+  @override
+  String get seriesStatus => 'Sērijas statuss';
+
+  @override
+  String get allLibraries => 'Visas bibliotēkas';
+
+  @override
+  String get books => 'Grāmatas';
+
+  @override
+  String get latestBooks => 'Jaunākās grāmatas';
+
+  @override
+  String get latestAudiobooks => 'Jaunākās audiogrāmatas';
+
+  @override
+  String bookSeriesItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count grāmatas',
+      one: '$count grāmata',
+      zero: '$count grāmatu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookFormatBook => 'Grāmata';
+
+  @override
+  String get bookFormatAudiobook => 'Audiogrāmata';
+
+  @override
+  String bookPercentRead(int percent) {
+    return 'Izlasīts $percent%';
+  }
+
+  @override
+  String bookTimeLeft(String time) {
+    return 'Atlicis $time';
+  }
+
+  @override
+  String get bookHeroRead => 'Lasīt';
+
+  @override
+  String get bookHeroListen => 'Klausīties';
+
+  @override
+  String get author => 'Autors';
+
+  @override
+  String get unknownAuthor => 'Nezināms autors';
+
+  @override
+  String get uncategorized => 'Bez kategorijas';
+
+  @override
+  String get overview => 'Pārskats';
+
+  @override
+  String get noLibrivoxDescription =>
+      'LibriVox šim nosaukumam vēl nav sniedzis aprakstu.';
+
+  @override
+  String get readers => 'Lasītāji';
+
+  @override
+  String get openLinks => 'Atveriet saites';
+
+  @override
+  String get librivoxPage => 'LibriVox lapa';
+
+  @override
+  String get internetArchive => 'Interneta arhīvs';
+
+  @override
+  String get rssFeed => 'RSS plūsma';
+
+  @override
+  String get downloadZip => 'Lejupielādēt Zip';
+
+  @override
+  String sectionCountLabel(int count) {
+    return '$count sadaļas';
+  }
+
+  @override
+  String firstPublished(int year) {
+    return 'Pirmo reizi publicēts $year';
+  }
+
+  @override
+  String get noOpenLibraryOverview =>
+      'Par šo nosaukumu vēl nav pieejams pārskats no Open Library.';
+
+  @override
+  String get subjects => 'Priekšmeti';
+
+  @override
+  String get all => 'Visi';
+
+  @override
+  String booksCount(int count) {
+    return '$count grāmatas';
+  }
+
+  @override
+  String get couldNotLoadSubject => 'Pašlaik nevarēja ielādēt šo tēmu.';
+
+  @override
+  String get audiobookDetails => 'Sīkāka informācija par audiogrāmatu';
+
+  @override
+  String authorsCountTitle(int count) {
+    return '$count Autori';
+  }
+
+  @override
+  String audiobookCountLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count audiogrāmatas',
+      one: '$count audiogrāmata',
+      zero: '$count audiogrāmatu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trackList => 'Dziesmu saraksts';
+
+  @override
+  String get itemListPlaceholder => 'Šeit parādīsies preču saraksts';
+
+  @override
+  String get failedToLoad => 'Neizdevās ielādēt';
+
+  @override
+  String get delete => 'Dzēst';
+
+  @override
+  String get save => 'Saglabāt';
+
+  @override
+  String get moreLikeThis => 'Vairāk kā šis';
+
+  @override
+  String get castAndCrew => 'Aktieri un komanda';
+
+  @override
+  String get collection => 'Kolekcija';
+
+  @override
+  String get episodes => 'Epizodes';
+
+  @override
+  String get nextUp => 'Nākamais Uz augšu';
+
+  @override
+  String get seasons => 'Sezonas';
+
+  @override
+  String get chapters => 'Nodaļas';
+
+  @override
+  String get features => 'Funkcijas';
+
+  @override
+  String get movies => 'Filmas';
+
+  @override
+  String get musicVideos => 'Mūzikas video';
+
+  @override
+  String get other => 'Cits';
+
+  @override
+  String get discography => 'Diskogrāfija';
+
+  @override
+  String get similarArtists => 'Līdzīgi mākslinieki';
+
+  @override
+  String get tableOfContents => 'Satura rādītājs';
+
+  @override
+  String get tracklist => 'Dziesmu saraksts';
+
+  @override
+  String discNumber(int number) {
+    return 'Disks $number';
+  }
+
+  @override
+  String get biography => 'Biogrāfija';
+
+  @override
+  String get authorDetails => 'Sīkāka informācija par autoru';
+
+  @override
+  String get noOverviewAvailable =>
+      'Par šo nosaukumu vēl nav pieejams pārskats.';
+
+  @override
+  String get noBiographyAvailable => 'Šim autoram nav pieejama biogrāfija.';
+
+  @override
+  String get noBooksFound => 'Šim autoram nav atrasta neviena grāmata.';
+
+  @override
+  String get unableToLoadAuthorDetails =>
+      'Pašlaik nevar ielādēt autora informāciju.';
+
+  @override
+  String published(int year) {
+    return 'Publicēts $year';
+  }
+
+  @override
+  String get publicationDateUnknown => 'Publicēšanas datums nav zināms';
+
+  @override
+  String seasonCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sezonas',
+      one: '$count sezona',
+      zero: '$count sezonu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String endsAt(String time) {
+    return 'Beidzas $time';
+  }
+
+  @override
+  String get items => 'Vienumi';
+
+  @override
+  String get extras => 'Papildmateriāli';
+
+  @override
+  String get behindTheScenes => 'Aizkulises';
+
+  @override
+  String get deletedScenes => 'Izgrieztās ainas';
+
+  @override
+  String get featurettes => 'Sižeti par filmu';
+
+  @override
+  String get interviews => 'Intervijas';
+
+  @override
+  String get scenes => 'Ainas';
+
+  @override
+  String get shorts => 'Īsfilmas';
+
+  @override
+  String get trailers => 'Treileri';
+
+  @override
+  String timeRemaining(String time) {
+    return 'Atlicis $time';
+  }
+
+  @override
+  String endsIn(String time) {
+    return 'Beigsies pēc $time';
+  }
+
+  @override
+  String get view => 'Skatīt';
+
+  @override
+  String get resumeReading => 'Atsākt lasīšanu';
+
+  @override
+  String get read => 'Lasīt';
+
+  @override
+  String resumeFrom(String position) {
+    return 'Atsākt no $position';
+  }
+
+  @override
+  String get play => 'Atskaņot';
+
+  @override
+  String get startOver => 'Sāciet no jauna';
+
+  @override
+  String get restart => 'Restartēt';
+
+  @override
+  String get readOffline => 'Lasiet bezsaistē';
+
+  @override
+  String get playOffline => 'Spēlējiet bezsaistē';
+
+  @override
+  String get audio => 'Audio';
+
+  @override
+  String get subtitles => 'Subtitri';
+
+  @override
+  String get version => 'Versija';
+
+  @override
+  String get cast => 'Apraidīt';
+
+  @override
+  String get castMembers => 'Cast';
+
+  @override
+  String get trailer => 'Treileris';
+
+  @override
+  String get finished => 'Pabeigts';
+
+  @override
+  String get favorited => 'Pievienots izlasei';
+
+  @override
+  String get favorite => 'Mīļākais';
+
+  @override
+  String get playlist => 'Atskaņošanas saraksts';
+
+  @override
+  String get downloaded => 'Lejupielādēts';
+
+  @override
+  String get finalizingDownload => 'Finalizing…';
+
+  @override
+  String get downloadAll => 'Lejupielādēt visu';
+
+  @override
+  String get download => 'Lejupielādēt';
+
+  @override
+  String get deleteDownloaded => 'Dzēst lejupielādēto';
+
+  @override
+  String get goToSeries => 'Dodieties uz sēriju';
+
+  @override
+  String get editMetadata => 'Rediģēt metadatus';
+
+  @override
+  String get less => 'Mazāk';
+
+  @override
+  String get more => 'Vairāk';
+
+  @override
+  String get deleteItem => 'Dzēst vienumu';
+
+  @override
+  String get deletePlaylist => 'Dzēst atskaņošanas sarakstu';
+
+  @override
+  String get deletePlaylistMessage =>
+      'Vai dzēst šo atskaņošanas sarakstu no servera?';
+
+  @override
+  String get deleteItemMessage => 'Vai dzēst šo vienumu no servera?';
+
+  @override
+  String get failedToDeletePlaylist =>
+      'Neizdevās izdzēst atskaņošanas sarakstu';
+
+  @override
+  String get failedToDeleteItem => 'Neizdevās izdzēst vienumu';
+
+  @override
+  String failedToDeleteItemWithError(String error) {
+    return 'Deletion operation failed with the following error: $error';
+  }
+
+  @override
+  String get renamePlaylist => 'Pārdēvēt atskaņošanas sarakstu';
+
+  @override
+  String get playlistName => 'Atskaņošanas saraksta nosaukums';
+
+  @override
+  String get deleteDownloadedAlbum => 'Dzēst lejupielādēto albumu';
+
+  @override
+  String deleteDownloadedTracksMessage(String title) {
+    return 'Vai dzēst \"$title\" lejupielādētos ierakstus?';
+  }
+
+  @override
+  String get downloadedTracksDeleted => 'Lejupielādētie ieraksti ir izdzēsti';
+
+  @override
+  String get downloadedTracksDeleteFailed =>
+      'Dažus lejupielādētos ierakstus nevarēja izdzēst';
+
+  @override
+  String get noTracksLoaded => 'Nav ielādēts neviens ieraksts';
+
+  @override
+  String noItemsLoaded(String itemLabel) {
+    return 'Nav ielādēts neviens $itemLabel';
+  }
+
+  @override
+  String downloadingTitle(String title, int count) {
+    return 'Notiek $title ($count vienumu) lejupielāde...';
+  }
+
+  @override
+  String deleteConfirmMessage(String name) {
+    return 'Vai tiešām vēlaties dzēst \"$name\" no servera? Šo darbību nevar atsaukt.';
+  }
+
+  @override
+  String get itemDeleted => 'Vienums izdzēsts';
+
+  @override
+  String get noPlayableTrailerFound =>
+      'Nav atrasts neviens atskaņojams reklāmkadri.';
+
+  @override
+  String unsupportedBookFormat(String extension) {
+    return 'Neatbalstīts grāmatas formāts: .$extension';
+  }
+
+  @override
+  String get audioTrack => 'Audio celiņš';
+
+  @override
+  String get subtitleTrack => 'Subtitru celiņš';
+
+  @override
+  String get none => 'Nav';
+
+  @override
+  String get downloadSubtitlesLabel => 'Lejupielādēt subtitrus...';
+
+  @override
+  String get searchOpenSubtitlesPlugin =>
+      'Meklējiet, izmantojot spraudni OpenSubtitles';
+
+  @override
+  String get downloadSubtitles => 'Lejupielādēt subtitrus';
+
+  @override
+  String get selectedSubtitleInvalid => 'Atlasītie subtitri nav derīgi.';
+
+  @override
+  String subtitleDownloadedSelected(String name) {
+    return 'Subtitri lejupielādēti un atlasīti: $name';
+  }
+
+  @override
+  String get subtitleDownloadedPending =>
+      'Subtitri lejupielādēti. Var paiet kāds brīdis, līdz tas tiks parādīts, kamēr Jellyfin atsvaidzinās vienumu.';
+
+  @override
+  String noRemoteSubtitlesFound(String language) {
+    return 'Nav atrasti attālināti subtitri vaicājumam $language.';
+  }
+
+  @override
+  String get selectVersion => 'Atlasiet Versija';
+
+  @override
+  String versionNumber(int number) {
+    return 'Versija $number';
+  }
+
+  @override
+  String get downloadAllQuality => 'Lejupielādēt visu — kvalitāte';
+
+  @override
+  String get downloadQuality => 'Lejupielādes kvalitāte';
+
+  @override
+  String get originalFileNoReencoding =>
+      'Oriģinālais fails, bez atkārtotas kodēšanas';
+
+  @override
+  String get originalFilesNoReencoding =>
+      'Oriģinālie faili, bez atkārtotas kodēšanas';
+
+  @override
+  String get noEpisodesLoaded => 'Nav ielādēta neviena sērija';
+
+  @override
+  String downloadingItem(String name, String quality) {
+    return 'Notiek lejupielāde $name ($quality)...';
+  }
+
+  @override
+  String get deleteDownloadedFiles => 'Dzēst lejupielādētos failus';
+
+  @override
+  String deleteLocalFilesMessage(String typeLabel) {
+    return 'Vai dzēst vietējos failus $typeLabel?\n\nTas atbrīvos vietu krātuvē. Vēlāk varat atkārtoti lejupielādēt.';
+  }
+
+  @override
+  String get downloadedFilesDeleted => 'Lejupielādētie faili ir izdzēsti';
+
+  @override
+  String get failedToDeleteFiles => 'Neizdevās izdzēst failus';
+
+  @override
+  String get deleteFiles => 'Dzēst failus';
+
+  @override
+  String get director => 'DIREKTORS';
+
+  @override
+  String get directors => 'REŽISORI';
+
+  @override
+  String get writer => 'SCENĀRISTS';
+
+  @override
+  String get writers => 'SCENĀRISTI';
+
+  @override
+  String get studio => 'STUDIJA';
+
+  @override
+  String studioMoreCount(int count) {
+    return '+$count vairāk';
+  }
+
+  @override
+  String totalEpisodes(int count) {
+    return '$count Epizodes';
+  }
+
+  @override
+  String episodeProgress(int watched, int total) {
+    return '$watched / $total';
+  }
+
+  @override
+  String episodeLabel(int number) {
+    return 'Sērija $number';
+  }
+
+  @override
+  String chapterNumber(int number) {
+    return 'nodaļa $number';
+  }
+
+  @override
+  String trackCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count celiņi',
+      one: '$count celiņš',
+      zero: '$count celiņu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chapterCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nodaļas',
+      one: '$count nodaļa',
+      zero: '$count nodaļu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String born(String date) {
+    return 'Dzimis $date';
+  }
+
+  @override
+  String died(String date) {
+    return 'Miris $date';
+  }
+
+  @override
+  String age(int age) {
+    return 'Vecums $age';
+  }
+
+  @override
+  String get showLess => 'Rādīt mazāk';
+
+  @override
+  String get readMore => 'Lasīt vairāk';
+
+  @override
+  String get shuffle => 'Jaukt';
+
+  @override
+  String get shuffleAll => 'Shuffle All';
+
+  @override
+  String get shuffleAllMusic => 'Jaukt visu mūziku';
+
+  @override
+  String get carSignInPrompt => 'Pierakstieties Tortugarr savā tālrunī';
+
+  @override
+  String get carServerUnreachable => 'Nevar sasniegt serveri';
+
+  @override
+  String downloadsCount(int count) {
+    return '$count lejupielādes';
+  }
+
+  @override
+  String get perfectMatch => 'Perfekta sakritība';
+
+  @override
+  String channelsCount(int count) {
+    return '$count kan.';
+  }
+
+  @override
+  String get mono => 'Mono';
+
+  @override
+  String get stereo => 'Stereo';
+
+  @override
+  String remoteSubtitlePermissionError(String action) {
+    return 'Lai izmantotu attālo apakšvirsrakstu $action, šim lietotājam ir nepieciešama Jellyfin subtitru pārvaldības atļauja.';
+  }
+
+  @override
+  String remoteSubtitleNotFoundError(String action) {
+    return 'Šo vienumu nevarēja atrast serverī attālajam apakšvirsrakstam $action.';
+  }
+
+  @override
+  String remoteSubtitleDetailError(String action, String detail) {
+    return 'Tālvadības apakšvirsraksts $action neizdevās: $detail';
+  }
+
+  @override
+  String remoteSubtitleHttpError(String action, int status) {
+    return 'Attālais apakšvirsraksts $action neizdevās (HTTP $status).';
+  }
+
+  @override
+  String remoteSubtitleGenericError(String action) {
+    return 'Neizdevās izveidot $action attālos subtitrus.';
+  }
+
+  @override
+  String deleteSeriesFiles(String name) {
+    return 'visas lejupielādētās sērijas \"$name\"';
+  }
+
+  @override
+  String get deleteSeasonFiles => 'visas šīs sezonas lejupielādētās sērijas';
+
+  @override
+  String get stillWatching => 'Vai joprojām skatāties?';
+
+  @override
+  String get unableToLoadTrailerStream => 'Nevar ielādēt reklāmkadru straumi.';
+
+  @override
+  String get trailerTimedOut => 'Iekraušanas laikā piekabei iestājās noildze.';
+
+  @override
+  String get playbackFailedForTrailer =>
+      'Šī reklāmkadru atskaņošana neizdevās.';
+
+  @override
+  String photoCountOf(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get castingUnavailableOffline =>
+      'Bezsaistes atskaņošanas laikā apraide nav pieejama.';
+
+  @override
+  String castActionFailed(String label, String error) {
+    return '$label darbība neizdevās: $error';
+  }
+
+  @override
+  String failedToSetCastVolume(String error) {
+    return 'Neizdevās iestatīt apraides skaļumu: $error';
+  }
+
+  @override
+  String castControlsTitle(String label) {
+    return '$label vadīklas';
+  }
+
+  @override
+  String get deviceVolume => 'Ierīces skaļums';
+
+  @override
+  String get unavailable => 'Nav pieejams';
+
+  @override
+  String get pause => 'Pauze';
+
+  @override
+  String get syncPosition => 'Sinhronizācijas pozīcija';
+
+  @override
+  String stopCast(String label) {
+    return 'Apturēt $label';
+  }
+
+  @override
+  String get queueIsEmpty => 'Rinda ir tukša';
+
+  @override
+  String trackNumber(int number) {
+    return 'Izsekot $number';
+  }
+
+  @override
+  String get remotePlayback => 'Attālā atskaņošana';
+
+  @override
+  String get castingToGoogleCast => 'Notiek apraide uz Google Cast';
+
+  @override
+  String get castingViaAirPlay => 'Apraide, izmantojot AirPlay';
+
+  @override
+  String get castingViaDlna => 'Apraide, izmantojot DLNA';
+
+  @override
+  String secondsCount(int seconds) {
+    return '$seconds sekundes';
+  }
+
+  @override
+  String get longPressToUnlock => 'Turiet nospiestu, lai atbloķētu';
+
+  @override
+  String get off => 'Izslēgts';
+
+  @override
+  String streamTypeFallback(String streamType, int number) {
+    return '$streamType $number';
+  }
+
+  @override
+  String get auto => 'Automātiski';
+
+  @override
+  String bitrateValueMbps(int mbps) {
+    return '$mbps Mb/s';
+  }
+
+  @override
+  String get bitrateOverride => 'Bitu pārraides ātruma ignorēšana';
+
+  @override
+  String get audioDelay => 'Audio aizkave';
+
+  @override
+  String delayMinusMs(int value) {
+    return '-$value ms';
+  }
+
+  @override
+  String delayPlusMs(int value) {
+    return '+$value ms';
+  }
+
+  @override
+  String get subtitleDelay => 'Subtitru aizkave';
+
+  @override
+  String get reset => 'Atiestatīt';
+
+  @override
+  String get unknown => 'Nezināms';
+
+  @override
+  String get playbackInformation => 'Atskaņošanas informācija';
+
+  @override
+  String get playback => 'Atskaņošana';
+
+  @override
+  String get playMethod => 'Spēlēšanas metode';
+
+  @override
+  String get directPlay => 'Tiešā atskaņošana';
+
+  @override
+  String get directStream => 'Tiešā straume';
+
+  @override
+  String get transcoding => 'Pārkodēšana';
+
+  @override
+  String get transcodeReasons => 'Pārkodēšanas iemesli';
+
+  @override
+  String get player => 'Atskaņotājs';
+
+  @override
+  String get container => 'Konteiners';
+
+  @override
+  String get bitrate => 'Bitu pārraides ātrums';
+
+  @override
+  String get video => 'Video';
+
+  @override
+  String get resolution => 'Izšķirtspēja';
+
+  @override
+  String get hdr => 'HDR';
+
+  @override
+  String get codec => 'Kodeks';
+
+  @override
+  String get videoBitrate => 'Video bitu pārraides ātrums';
+
+  @override
+  String get track => 'Celiņš';
+
+  @override
+  String get channels => 'Kanāli';
+
+  @override
+  String get audioBitrate => 'Audio bitu pārraides ātrums';
+
+  @override
+  String get sampleRate => 'Izlases ātrums';
+
+  @override
+  String get format => 'Formāts';
+
+  @override
+  String get external => 'Ārējais';
+
+  @override
+  String get embedded => 'Iegults';
+
+  @override
+  String castSessionError(String protocol) {
+    return '$protocol sesijas kļūda';
+  }
+
+  @override
+  String failedToLoadBookDetails(String error) {
+    return 'Neizdevās ielādēt grāmatas informāciju: $error';
+  }
+
+  @override
+  String get epubUnavailableOnPlatform =>
+      'EPUB renderēšana lietotnē vēl nav pieejama šajā platformā.';
+
+  @override
+  String formatCannotRenderInApp(String extension) {
+    return 'Šo formātu (.$extension) vēl nevar renderēt lietotnē.';
+  }
+
+  @override
+  String get embeddedRenderingUnavailable =>
+      'Iegultā dokumentu renderēšana šajā platformā nav pieejama.';
+
+  @override
+  String get couldNotOpenExternalViewer => 'Nevarēja atvērt ārējo skatītāju.';
+
+  @override
+  String failedToOpenInAppReader(String error) {
+    return 'Neizdevās atvērt lietotnes lasītāju: $error';
+  }
+
+  @override
+  String bookmarkAlreadySaved(String label) {
+    return 'Grāmatzīme jau ir saglabāta $label.';
+  }
+
+  @override
+  String bookmarkAdded(String label) {
+    return 'Pievienota grāmatzīme: $label';
+  }
+
+  @override
+  String get noBookmarksYet =>
+      'Vēl nav nevienas grāmatzīmes.\nLasīšanas laikā pieskarieties grāmatzīmes ikonai, lai saglabātu savu pozīciju.';
+
+  @override
+  String get noTableOfContentsAvailable => 'Nav pieejams satura rādītājs';
+
+  @override
+  String pageLabel(int number) {
+    return 'Lapa $number';
+  }
+
+  @override
+  String get position => 'Pozīcija';
+
+  @override
+  String get bookReader => 'Grāmatu lasītājs';
+
+  @override
+  String formatExtension(String extension) {
+    return 'Formāts: .$extension';
+  }
+
+  @override
+  String percentRead(String percent) {
+    return '$percent% lasīts';
+  }
+
+  @override
+  String get updating => 'Notiek atjaunināšana...';
+
+  @override
+  String get markUnread => 'Atzīmēt kā nelasītu';
+
+  @override
+  String get markAsRead => 'Atzīmēt kā lasītu';
+
+  @override
+  String get reloadReader => 'Pārlādēt lasītāju';
+
+  @override
+  String get noPagesFound => 'Nav atrasta neviena lapa.';
+
+  @override
+  String get failedToDecodePageImage => 'Neizdevās atšifrēt lapas attēlu.';
+
+  @override
+  String resetZoom(String zoom) {
+    return 'Atiestatīt tālummaiņu (${zoom}x)';
+  }
+
+  @override
+  String get singlePage => 'Viena lapa';
+
+  @override
+  String get twoPageSpread => 'Divu lappušu izkliede';
+
+  @override
+  String get addBookmark => 'Pievienot grāmatzīmi';
+
+  @override
+  String get bookmarksEllipsis => 'Grāmatzīmes...';
+
+  @override
+  String get markedAsRead => 'Atzīmēts kā izlasīts';
+
+  @override
+  String get markedAsUnread => 'Atzīmēts kā nelasīts';
+
+  @override
+  String failedToUpdateReadState(String error) {
+    return 'Neizdevās atjaunināt lasīšanas stāvokli: $error';
+  }
+
+  @override
+  String get themeSystem => 'Tēma: Sistēma';
+
+  @override
+  String get themeLight => 'Tēma: Gaisma';
+
+  @override
+  String get themeDark => 'Tēma: Tumšs';
+
+  @override
+  String get themeSepia => 'Tēma: Sēpija';
+
+  @override
+  String get invertColorsFixedLayout => 'Invertēt krāsas (fiksēts izkārtojums)';
+
+  @override
+  String get invertColorsPdf => 'Invertēt krāsas (PDF)';
+
+  @override
+  String get preparingInAppReader =>
+      'Notiek lietotnes lasītāja sagatavošana...';
+
+  @override
+  String get pdfDataNotAvailable => 'PDF dati nav pieejami.';
+
+  @override
+  String get readerFallbackModeActive => 'Aktīvs lasītāja atkāpšanās režīms';
+
+  @override
+  String platformCannotHostDocumentEngine(String extension) {
+    return 'Šī platforma nevar mitināt iegulto dokumentu programmu $extension failiem.';
+  }
+
+  @override
+  String get reloadReaderPlatformHint =>
+      'Izmantojiet Reload Reader pēc pārslēgšanās uz atbalstītu platformas mērķi (Android, iOS, macOS).';
+
+  @override
+  String get openExternally => 'Atvērt ārēji';
+
+  @override
+  String get noEpubChaptersFound => 'Nav atrasta neviena EPUB nodaļa.';
+
+  @override
+  String get readerNotReady => 'Lasītājs nav gatavs.';
+
+  @override
+  String get seriesRecordings => 'Sērijas ieraksti';
+
+  @override
+  String get now => 'Tagad';
+
+  @override
+  String get sports => 'Sports';
+
+  @override
+  String get news => 'Jaunumi';
+
+  @override
+  String get kids => 'Bērni';
+
+  @override
+  String get premiere => 'Pirmizrāde';
+
+  @override
+  String get guideTimeline => 'Ceļvedis laika skala';
+
+  @override
+  String failedToLoadGuide(String error) {
+    return 'Neizdevās ielādēt rokasgrāmatu: $error';
+  }
+
+  @override
+  String get noChannelsFound => 'Nav atrasts neviens kanāls';
+
+  @override
+  String get liveBadge => 'TIEŠRAIDĒ';
+
+  @override
+  String guideNextProgram(String time, String title) {
+    return 'Nākamā: $time  $title';
+  }
+
+  @override
+  String guideMinutesLeft(int minutes) {
+    return 'Atlicis $minutes min';
+  }
+
+  @override
+  String guideHoursLeft(int hours) {
+    return 'Atlicis $hours h';
+  }
+
+  @override
+  String guideHoursMinutesLeft(int hours, int minutes) {
+    return 'Atlicis $hours h $minutes min';
+  }
+
+  @override
+  String get movie => 'Filma';
+
+  @override
+  String get removedFromFavoriteChannels =>
+      'Noņemts no iecienītākajiem kanāliem';
+
+  @override
+  String get addedToFavoriteChannels => 'Pievienots iecienītākajiem kanāliem';
+
+  @override
+  String get failedToUpdateFavoriteChannel =>
+      'Neizdevās atjaunināt iecienītāko kanālu';
+
+  @override
+  String get unfavoriteChannel => 'Neiecienīts kanāls';
+
+  @override
+  String get favoriteChannel => 'Mīļākais kanāls';
+
+  @override
+  String get record => 'Ierakstīt';
+
+  @override
+  String get cancelRecordingAction => 'Atcelt ierakstīšanu';
+
+  @override
+  String get programSetToRecord => 'Programma iestatīta ierakstīšanai';
+
+  @override
+  String get recordingCancelled => 'Ieraksts atcelts';
+
+  @override
+  String get unableToCreateRecording => 'Nevar izveidot ierakstu';
+
+  @override
+  String get watch => 'Skatīties';
+
+  @override
+  String get close => 'Aizvērt';
+
+  @override
+  String failedToPlayChannel(String name) {
+    return 'Neizdevās atskaņot $name';
+  }
+
+  @override
+  String get failedToLoadRecordings => 'Neizdevās ielādēt ierakstus';
+
+  @override
+  String get scheduledInNext24Hours => 'Plānots nākamo 24 stundu laikā';
+
+  @override
+  String get recentRecordings => 'Jaunākie ieraksti';
+
+  @override
+  String get tvSeries => 'TV seriāls';
+
+  @override
+  String get failedToLoadSchedule => 'Neizdevās ielādēt grafiku';
+
+  @override
+  String get noScheduledRecordings => 'Nav ieplānotu ierakstu';
+
+  @override
+  String get cancelRecording => 'Vai atcelt ierakstīšanu?';
+
+  @override
+  String cancelScheduledRecordingOf(String name) {
+    return 'Vai atcelt ieplānoto \"$name\" ierakstīšanu?';
+  }
+
+  @override
+  String get no => 'Nē';
+
+  @override
+  String get yesCancel => 'Jā, Atcelt';
+
+  @override
+  String get failedToCancelRecording => 'Neizdevās atcelt ierakstīšanu';
+
+  @override
+  String get failedToLoadSeriesRecordings =>
+      'Neizdevās ielādēt sērijas ierakstus';
+
+  @override
+  String get noSeriesRecordings => 'Nav sēriju ierakstu';
+
+  @override
+  String get cancelSeriesRecording => 'Atcelt sērijas ierakstīšanu';
+
+  @override
+  String get cancelSeriesRecordingQuestion =>
+      'Vai atcelt sērijas ierakstīšanu?';
+
+  @override
+  String stopRecordingName(String name) {
+    return 'Vai pārtraukt ierakstīšanu \"$name\"?';
+  }
+
+  @override
+  String get failedToCancelSeriesRecording =>
+      'Neizdevās atcelt sērijas ierakstīšanu';
+
+  @override
+  String get searchThisLibrary => 'Meklēt šajā bibliotēkā...';
+
+  @override
+  String get searchEllipsis => 'Meklēt...';
+
+  @override
+  String noResultsForQuery(String query) {
+    return 'Nav rezultātu vaicājumam \"$query\"';
+  }
+
+  @override
+  String searchFailedError(String error) {
+    return 'Meklēšana neizdevās: $error';
+  }
+
+  @override
+  String get seerr => 'Seerr';
+
+  @override
+  String get seerrAccountType => 'Seerr konta veids';
+
+  @override
+  String get jellyfinAccount => 'Jellyfin';
+
+  @override
+  String get localAccount => 'Vietējais';
+
+  @override
+  String get savedMedia => 'Saglabātie multivides līdzekļi';
+
+  @override
+  String get tvShows => 'TV šovi';
+
+  @override
+  String get music => 'Mūzika';
+
+  @override
+  String get musicAlbums => 'Mūzikas albumi';
+
+  @override
+  String get noMediaInFilter => 'Šajā filtrā nav multivides';
+
+  @override
+  String get noDownloadedMediaYet => 'Vēl nav lejupielādēta multivide';
+
+  @override
+  String get browseLibrary => 'Pārlūkot bibliotēku';
+
+  @override
+  String get deleteDownload => 'Dzēst lejupielādi';
+
+  @override
+  String removeItemAndFiles(String name) {
+    return 'Vai noņemt \"$name\" un tā failus?';
+  }
+
+  @override
+  String tracksCount(int count) {
+    return '$count dziesmas';
+  }
+
+  @override
+  String get album => 'Albums';
+
+  @override
+  String get playAlbum => 'Atskaņot albumu';
+
+  @override
+  String failedToLoadAlbum(String error) {
+    return 'Neizdevās ielādēt albumu: $error';
+  }
+
+  @override
+  String noDownloadedTracksForAlbum(String name) {
+    return '$name nav atrasts neviens lejupielādēts ieraksts.';
+  }
+
+  @override
+  String get season => 'Sezona';
+
+  @override
+  String get errorLoadingEpisodes => 'Ielādējot sērijas, radās kļūda';
+
+  @override
+  String get noDownloadedEpisodes => 'Nav lejupielādētu sēriju';
+
+  @override
+  String get deleteEpisode => 'Dzēst sēriju';
+
+  @override
+  String removeName(String name) {
+    return 'Vai noņemt \"$name\"?';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String seasonEpisodeLabel(int season, int episode) {
+    return 'S$season E$episode';
+  }
+
+  @override
+  String episodeNumber(int number) {
+    return 'Sērija $number';
+  }
+
+  @override
+  String get seriesNotFound => 'Sērija nav atrasta';
+
+  @override
+  String get errorLoadingSeries => 'Ielādējot sēriju, radās kļūda';
+
+  @override
+  String get downloadedEpisodes => 'Lejupielādētās sērijas';
+
+  @override
+  String seasonNumber(int number) {
+    return 'Sezona $number';
+  }
+
+  @override
+  String seasonChip(int number) {
+    return 'S$number';
+  }
+
+  @override
+  String get specials => 'Īpašie piedāvājumi';
+
+  @override
+  String get deleteSeason => 'Dzēst sezonu';
+
+  @override
+  String deleteAllEpisodesInSeason(String season) {
+    return 'Vai dzēst visas lejupielādētās sērijas $season?';
+  }
+
+  @override
+  String episodeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count epizodes',
+      one: '$count epizode',
+      zero: '$count epizožu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageManagement => 'Krātuves pārvaldība';
+
+  @override
+  String get storageBreakdown => 'Krātuves sadalījums';
+
+  @override
+  String get downloadedItems => 'Lejupielādētie vienumi';
+
+  @override
+  String get storageLimit => 'Krātuves ierobežojums';
+
+  @override
+  String get noLimit => 'Nav ierobežojumu';
+
+  @override
+  String get deleteAllDownloads => 'Dzēst visas lejupielādes';
+
+  @override
+  String get deleteAllDownloadsWarning =>
+      'Tādējādi tiks noņemti visi lejupielādētie multivides faili, un darbību nevarēs atsaukt.';
+
+  @override
+  String get deleteAll => 'Dzēst visu';
+
+  @override
+  String get deleteSelected => 'Dzēst atlasītos';
+
+  @override
+  String deleteSelectedCount(int count) {
+    return 'Vai dzēst $count lejupielādētos vienumus?';
+  }
+
+  @override
+  String get musicAndAudiobooks => 'Mūzika un audiogrāmatas';
+
+  @override
+  String get images => 'Attēli';
+
+  @override
+  String get database => 'Datu bāze';
+
+  @override
+  String ofStorageLimit(String limit) {
+    return 'no $limit ierobežojuma';
+  }
+
+  @override
+  String get settings => 'Iestatījumi';
+
+  @override
+  String get settingsSearchHint => 'Search settings';
+
+  @override
+  String get authentication => 'Autentifikācija';
+
+  @override
+  String get autoLoginServerManagement =>
+      'Automātiska pieteikšanās, servera pārvaldība';
+
+  @override
+  String get pinCode => 'PIN kods';
+
+  @override
+  String get setUpPinCodeProtection => 'Iestatiet PIN koda aizsardzību';
+
+  @override
+  String get parentalControls => 'Vecāku kontrole';
+
+  @override
+  String get contentRatingRestrictions => 'Satura vērtējuma ierobežojumi';
+
+  @override
+  String get bitRateResolutionBehavior =>
+      'Bitu pārraides ātrums, izšķirtspēja, uzvedība';
+
+  @override
+  String get languageSizeAppearance => 'Valoda, izmērs, izskats';
+
+  @override
+  String get qualityStorage => 'Kvalitāte, uzglabāšana';
+
+  @override
+  String get serverSyncAndPluginStatus =>
+      'Servera sinhronizācija un spraudņa statuss';
+
+  @override
+  String get mediaRequestIntegration => 'Multivides pieprasījumu integrācija';
+
+  @override
+  String get switchServer => 'Pārslēgt serveri';
+
+  @override
+  String get signOut => 'Izrakstīties';
+
+  @override
+  String get versionLicenses => 'Versija, licences';
+
+  @override
+  String get account => 'Konts';
+
+  @override
+  String get signInAndSecurity => 'Pierakstīšanās un drošība';
+
+  @override
+  String get administration => 'Administrācija';
+
+  @override
+  String get serverSettingsUsersLibraries =>
+      'Servera iestatījumi, lietotāji, bibliotēkas';
+
+  @override
+  String get customization => 'Pielāgošana';
+
+  @override
+  String get themeAndLayout => 'Tēma un izkārtojums';
+
+  @override
+  String get videoAndSubtitles => 'Video un subtitri';
+
+  @override
+  String get integrations => 'Integrācijas';
+
+  @override
+  String get pluginAndRequests => 'Spraudnis un pieprasījumi';
+
+  @override
+  String get customizeAccountPlaybackInterface =>
+      'Pielāgojiet konta, atskaņošanas un saskarnes darbību';
+
+  @override
+  String optionsCount(int count) {
+    return '$count opcijas';
+  }
+
+  @override
+  String get themeAndAppearance => 'Tēma un izskats';
+
+  @override
+  String get focusBorderColor => 'Fokusa apmales krāsa';
+
+  @override
+  String get watchedIndicators => 'Noskatītie rādītāji';
+
+  @override
+  String get always => 'Vienmēr';
+
+  @override
+  String get hideUnwatched => 'Paslēpt neskatītos';
+
+  @override
+  String get episodesOnly => 'Tikai epizodes';
+
+  @override
+  String get never => 'Nekad';
+
+  @override
+  String get focusExpansionAnimation => 'Fokusa paplašināšanas animācija';
+
+  @override
+  String get desktopUiScale => 'Darbvirsmas lietotāja interfeisa mērogs';
+
+  @override
+  String get scaleFocusedCards =>
+      'Mērogojiet fokusētas vai kursora kārtis un flīzes';
+
+  @override
+  String get backgroundBackdrops => 'Fona foni';
+
+  @override
+  String get showBackdropImages => 'Rādīt fona kolāžas attēlus aiz satura';
+
+  @override
+  String get seriesThumbnails => 'Sērijas sīktēli';
+
+  @override
+  String get seriesThumbnailsDescription =>
+      'Tikai epizodes: izmantojiet sērijas mākslas darbus, kas atbilst katram rindu attēla veidam';
+
+  @override
+  String get homeRowInfoOverlay => 'Sākuma rindas informācijas pārklājums';
+
+  @override
+  String get showTitleMetadataOnHomeRows =>
+      'Rādīt nosaukumu un metadatus, pārlūkojot sākuma rindas';
+
+  @override
+  String get clockDisplay => 'Pulksteņa displejs';
+
+  @override
+  String get inMenus => 'Izvēlnēs';
+
+  @override
+  String get inVideo => 'Videoklipā';
+
+  @override
+  String get seasonalEffects => 'Sezonas efekti';
+
+  @override
+  String get seasonalEffectsDescription =>
+      'Vizuālie efekti un sezonas dekorācijas';
+
+  @override
+  String get snow => 'Sniegs';
+
+  @override
+  String get fireworks => 'Uguņošana';
+
+  @override
+  String get confetti => 'Konfeti';
+
+  @override
+  String get fallingLeaves => 'Krītošās lapas';
+
+  @override
+  String get themeMusic => 'Tēma Mūzika';
+
+  @override
+  String get playThemeMusicOnDetailPages =>
+      'Atskaņojiet motīvu mūziku detalizētās informācijas lapās';
+
+  @override
+  String get themeMusicVolume => 'Tēma Mūzikas apjoms';
+
+  @override
+  String get themeMusicSettingsSubtitle =>
+      'Detaļu lapas, sākuma ekrāna rindas un skaļums';
+
+  @override
+  String percentValue(int value) {
+    return '$value%';
+  }
+
+  @override
+  String get themeMusicOnHomeRows => 'Motīvā mūzika sākuma rindās';
+
+  @override
+  String get playWhenBrowsingHomeScreen => 'Atskaņot, pārlūkojot sākuma ekrānu';
+
+  @override
+  String get loopThemeMusic => 'Atkārtot tēmas mūziku';
+
+  @override
+  String get loopThemeMusicSubtitle =>
+      'Atkārtot celiņu, nevis atskaņot to vienu reizi';
+
+  @override
+  String get detailsBackgroundBlur => 'Sīkāka informācija Fona aizmiglojums';
+
+  @override
+  String get detailsBackgroundOpacity => 'Details Background Opacity';
+
+  @override
+  String pixelValue(int value) {
+    return '$value px';
+  }
+
+  @override
+  String get browsingBackgroundBlur => 'Pārlūkošanas fona aizmiglojums';
+
+  @override
+  String get maxStreamingBitrate =>
+      'Maksimālais straumēšanas bitu pārraides ātrums';
+
+  @override
+  String get maxResolution => 'Maksimālā izšķirtspēja';
+
+  @override
+  String get playerZoomMode => 'Spēlētāja tālummaiņas režīms';
+
+  @override
+  String get settingsScrollWheelAction => 'Peles ritenītis';
+
+  @override
+  String get settingsScrollWheelActionDescription =>
+      'Izvēlieties, ko atskaņošanas laikā dara peles ritenīša ritināšana virs video.';
+
+  @override
+  String get scrollWheelActionOff => 'Izslēgts';
+
+  @override
+  String get scrollWheelActionSeek => 'Pārtīt (uz priekšu / atpakaļ)';
+
+  @override
+  String get scrollWheelActionVolume => 'Skaļums';
+
+  @override
+  String get playerTooltipVolume => 'Skaļums';
+
+  @override
+  String get fit => 'Fit';
+
+  @override
+  String get autoCrop => 'Automātiskā apgriešana';
+
+  @override
+  String get stretch => 'Izstiepties';
+
+  @override
+  String get refreshRateSwitching => 'Atsvaidzes intensitātes pārslēgšana';
+
+  @override
+  String get disabled => 'Atspējots';
+
+  @override
+  String get scaleOnTv => 'Mērogs televizorā';
+
+  @override
+  String get scaleOnDevice => 'Mērogs ierīcē';
+
+  @override
+  String get trickPlay => 'Triku spēle';
+
+  @override
+  String get showPreviewThumbnailsWhenSeeking =>
+      'Rādīt priekšskatījuma sīktēlus, kad meklējat';
+
+  @override
+  String get showDescriptionOnPause => 'Rādīt aprakstu pauzē';
+
+  @override
+  String get dimVideoShowOverview =>
+      'Aptumšot video un rādīt kopsavilkuma tekstu, kamēr tas ir apturēts';
+
+  @override
+  String get osdLockButton => 'OSD bloķēšanas poga';
+
+  @override
+  String get osdLockButtonDescription =>
+      'Rādīt bloķēšanas pogu, kas bloķē skāriena ievadi, līdz tiek ilgi nospiesta';
+
+  @override
+  String get osdButtons => 'Player Buttons';
+
+  @override
+  String get osdButtonsDescription => 'Choose which buttons the player shows';
+
+  @override
+  String get osdButtonsSectionDescription =>
+      'Playback controls are always shown. Everything below is up to you, and each kind of device keeps its own list.';
+
+  @override
+  String get detailButtons => 'Action Buttons';
+
+  @override
+  String get detailButtonsDescription =>
+      'Choose which buttons the details screen shows';
+
+  @override
+  String get detailButtonsSectionDescription =>
+      'Play is always first and the locked buttons are always shown. Everything else is up to you, and each kind of device keeps its own list.';
+
+  @override
+  String get moveUp => 'Move Up';
+
+  @override
+  String get moveDown => 'Move Down';
+
+  @override
+  String get buttonOrderHint =>
+      'Use the arrows to change the order. On a remote, left and right move the highlighted button. Switching one off drops it below the rest.';
+
+  @override
+  String get orientationLock => 'Orientation Lock';
+
+  @override
+  String get fullscreen => 'Fullscreen';
+
+  @override
+  String get audioBehavior => 'Audio uzvedība';
+
+  @override
+  String get downmixToStereo => 'Samaisa uz stereo';
+
+  @override
+  String get defaultAudioLanguage => 'Noklusējuma audio valoda';
+
+  @override
+  String get fallbackAudioLanguage => 'Rezerves audio valoda';
+
+  @override
+  String get preferDefaultAudioTrack => 'Priekšroka noklusējuma audio celiņam';
+
+  @override
+  String get preferDefaultAudioTrackDescription =>
+      'Dot priekšroku oriģinālajam audio celiņam, nevis lokalizētam dublējumam.';
+
+  @override
+  String get preferAudioDescription => 'Priekšroka audioaprakstu celiņiem';
+
+  @override
+  String get preferAudioDescriptionDescription =>
+      'Dot priekšroku audioaprakstu celiņiem, nevis parastajiem celiņiem.';
+
+  @override
+  String get transcodingAudio => 'Pārkodēšana (audio)';
+
+  @override
+  String get directStreamRemux => 'Tiešā straume (Remux)';
+
+  @override
+  String get transcodingBitrateOrResolution =>
+      'Pārkodēšana (bitu pārraides ātrums vai izšķirtspēja)';
+
+  @override
+  String get transcodingVideoAndAudio => 'Pārkodēšana (video un audio)';
+
+  @override
+  String get transcodingVideo => 'Pārkodēšana (video)';
+
+  @override
+  String get autoServerDefault => 'Automātiski (servera noklusējums)';
+
+  @override
+  String get english => 'angļu valoda';
+
+  @override
+  String get spanish => 'spāņu valoda';
+
+  @override
+  String get french => 'franču valoda';
+
+  @override
+  String get german => 'vācu';
+
+  @override
+  String get italian => 'itāļu valoda';
+
+  @override
+  String get portuguese => 'portugāļu';
+
+  @override
+  String get japanese => 'japāņi';
+
+  @override
+  String get korean => 'korejiešu';
+
+  @override
+  String get chinese => 'ķīniešu';
+
+  @override
+  String get russian => 'krievu valoda';
+
+  @override
+  String get arabic => 'arābu';
+
+  @override
+  String get hindi => 'hindi';
+
+  @override
+  String get dutch => 'holandiešu valoda';
+
+  @override
+  String get swedish => 'zviedru';
+
+  @override
+  String get norwegian => 'norvēģu';
+
+  @override
+  String get danish => 'dāņu';
+
+  @override
+  String get finnish => 'somu';
+
+  @override
+  String get polish => 'poļu';
+
+  @override
+  String get ac3Passthrough => 'AC3 caurlaide';
+
+  @override
+  String get dtsPassthrough => 'DTS caurlaide';
+
+  @override
+  String get trueHdSupport => 'TrueHD atbalsts';
+
+  @override
+  String get enableDtsPassthrough =>
+      'Bitu plūsmas DTS audio tikai AVR; nepieciešams uztvērēja atbalsts un DTS avota celiņš';
+
+  @override
+  String get enableTrueHdAudio =>
+      'Iespējot TrueHD audio (var nedarboties visās platformās)';
+
+  @override
+  String get settingsAudioOutputMode => 'Audio izvades režīms';
+
+  @override
+  String get settingsAudioOutputModeDescription =>
+      'Izvēlieties, kā tiek dekodēts audio. „AVR caurlaide“ sūta neapstrādātas Dolby / DTS straumes uz uztvērēju; „Automātiski“ vai „Samiksēšana“ dekodē lokāli.';
+
+  @override
+  String get settingsAudioOutputModeAvrPassthrough => 'AVR caurlaide';
+
+  @override
+  String get settingsAudioFallbackCodec => 'Audio atkāpšanās kodeks';
+
+  @override
+  String get settingsAudioFallbackCodecDescription =>
+      'Izvēlieties formātu, uz kuru pārkodēt daudzkanālu audio, ja avota straumi nevar atskaņot tieši vai pārraidīt bez izmaiņām.';
+
+  @override
+  String get settingsAudioFallbackCodecAuto =>
+      'Automātiska noteikšana\n(ieteicams)';
+
+  @override
+  String get settingsAudioFallbackCodecAac => 'AAC\n(noklusējums)';
+
+  @override
+  String get settingsAudioFallbackCodecAc3 => 'AC3\n(Dolby Digital)';
+
+  @override
+  String get settingsAudioFallbackCodecEac3 => 'EAC3\n(Dolby Digital Plus)';
+
+  @override
+  String get settingsAudioFallbackCodecTrueHd => 'TrueHD\n(bez zudumiem)';
+
+  @override
+  String get settingsAudioFallbackCodecMp3 => 'MP3\n(tikai stereo)';
+
+  @override
+  String get settingsAudioFallbackCodecOpus => 'Opus\n(efektīvs)';
+
+  @override
+  String get settingsAudioFallbackCodecFlac => 'FLAC\n(bez zudumiem)';
+
+  @override
+  String get settingsMaxAudioChannels => 'Maksimālais audio kanālu skaits';
+
+  @override
+  String get settingsMaxAudioChannelsDescription =>
+      'Norādiet savas audio sistēmas maksimālo kanālu skaitu. Daudzkanālu straumes, kas pārsniedz šo ierobežojumu, tiks samiksētas vai pārkodētas.';
+
+  @override
+  String get settingsMaxAudioChannelsAuto =>
+      'Automātiska noteikšana\n(aparatūras noklusējums)';
+
+  @override
+  String get settingsMaxAudioChannelsMono => '1.0 Mono';
+
+  @override
+  String get settingsMaxAudioChannelsStereo => '2.0 Stereo';
+
+  @override
+  String get settingsMaxAudioChannels3_0 => '3.0 / 2.1 telpiskā skaņa';
+
+  @override
+  String get settingsMaxAudioChannels4_0 => '4.0 / 3.1 kvadrofoniskā';
+
+  @override
+  String get settingsMaxAudioChannels5_0 => '5.0 / 4.1 telpiskā skaņa';
+
+  @override
+  String get settingsMaxAudioChannels5_1 => '5.1 telpiskā skaņa';
+
+  @override
+  String get settingsMaxAudioChannels6_1 => '6.1 telpiskā skaņa';
+
+  @override
+  String get settingsMaxAudioChannels7_1 => '7.1 telpiskā skaņa';
+
+  @override
+  String get settingsAudioPassthroughAdvanced => 'Passthrough (papildu)';
+
+  @override
+  String get settingsAudioCodecPassthrough => 'Kodeku caurlaide';
+
+  @override
+  String get settingsAudioCodecPassthroughDescription =>
+      'Iespējojiet tikai tos formātus, kurus atbalsta jūsu AVR vai HDMI izlietne.';
+
+  @override
+  String get settingsAudioEac3Passthrough => 'EAC3 caurlaide';
+
+  @override
+  String get settingsAudioEac3JocPassthrough => 'EAC3 JOC (Atmos) caurlaide';
+
+  @override
+  String get settingsAudioDtsCorePassthrough => 'DTS Core caurlaide';
+
+  @override
+  String get settingsAudioDtsHdPassthrough => 'DTS-HD MA caurlaide';
+
+  @override
+  String get settingsAudioTrueHdPassthrough => 'TrueHD caurlaide';
+
+  @override
+  String get settingsAudioTrueHdAtmosPassthrough => 'TrueHD Atmos caurlaide';
+
+  @override
+  String get settingsAudioBitstreamEac3ToExternalDecoder =>
+      'Bitu plūsma Dolby Digital Plus (EAC3) uz ārējo dekodētāju.';
+
+  @override
+  String get settingsAudioBitstreamEac3JocToExternalDecoder =>
+      'Bitu plūsma Dolby Atmos, izmantojot EAC3 (JOC), uz ārējo dekodētāju.';
+
+  @override
+  String get settingsAudioBitstreamDtsHdToExternalDecoder =>
+      'Bitu plūsmas DTS-HD MA (ietver DTS kodolu) uz ārējo dekodētāju.';
+
+  @override
+  String get settingsAudioBitstreamTrueHdAtmosToExternalDecoder =>
+      'Bitu plūsma Dolby TrueHD ar Atmos metadatiem uz ārējo dekodētāju.';
+
+  @override
+  String get settingsDetectedAudioCapabilities => 'Atklātas audio iespējas';
+
+  @override
+  String get settingsDetectedAudioCapabilitiesUnavailable =>
+      'Vēl nav pieejams izpildlaika iespēju momentuzņēmums.';
+
+  @override
+  String get settingsAudioRouteLabel => 'Maršruts';
+
+  @override
+  String get settingsAudioDecodeLabel => 'Atšifrēt';
+
+  @override
+  String get settingsAudioPassthroughLabel => 'Caurlaide';
+
+  @override
+  String get settingsAudioHdRoute => 'HD audio maršruts';
+
+  @override
+  String get settingsAudioRouteHdmi => 'HDMI';
+
+  @override
+  String get settingsAudioRouteArc => 'ARC';
+
+  @override
+  String get settingsAudioRouteEarc => 'eARC';
+
+  @override
+  String get settingsAudioRouteBluetooth => 'Bluetooth';
+
+  @override
+  String get settingsAudioRouteSpeaker => 'Skaļrunis';
+
+  @override
+  String get settingsAudioRouteHeadphones => 'Austiņas';
+
+  @override
+  String settingsAudioPcmChannels(int count) {
+    return '$count kan. PCM';
+  }
+
+  @override
+  String get settingsAudioDiagnostics => 'Diagnostika';
+
+  @override
+  String get settingsAudioDiagnosticsVideoLevel => 'Video līmenis';
+
+  @override
+  String get settingsAudioDiagnosticsVideoRange => 'Video diapazons';
+
+  @override
+  String get settingsAudioDiagnosticsSubtitleCodec => 'Subtitru kodeks';
+
+  @override
+  String get settingsAudioDiagnosticsAllowedAudioCodecs =>
+      'Atļautie audio kodeki';
+
+  @override
+  String get settingsAudioDiagnosticsHlsMpegTsAudioCodecs =>
+      'HLS MPEG-TS audio kodeki';
+
+  @override
+  String get settingsAudioDiagnosticsHlsFmp4AudioCodecs =>
+      'HLS fMP4 audio kodeki';
+
+  @override
+  String get settingsAudioDiagnosticsAudioSpdifPassthrough =>
+      'audio-spdif caurlaide';
+
+  @override
+  String get settingsAudioDiagnosticsActiveAudioRoute =>
+      'Aktīvais audio maršruts';
+
+  @override
+  String get settingsAudioDiagnosticsRouteHdAudioSupport =>
+      'Maršruta HD audio atbalsts';
+
+  @override
+  String get nightMode => 'Nakts režīms';
+
+  @override
+  String get compressDynamicRange => 'Saspiest dinamisko diapazonu';
+
+  @override
+  String get advancedMpv => 'Uzlabots mpv';
+
+  @override
+  String get enableCustomMpvConf => 'Iespējot pielāgoto mpv.conf';
+
+  @override
+  String get applyMpvConfBeforePlayback =>
+      'Pirms atskaņošanas sākuma lietojiet lietotāja norādītu mpv.conf';
+
+  @override
+  String get unsafeAdvancedMpvOptions => 'Nedrošas papildu mpv opcijas';
+
+  @override
+  String get unsafeMpvOptionsDescription =>
+      'Atļaut plašāku mpv opciju kopu. Var traucēt atskaņošanas darbību.';
+
+  @override
+  String get hardwareDecoding => 'Aparatūras dekodēšana';
+
+  @override
+  String get hardwareDecodingSubtitle =>
+      'Var uzlabot veiktspēju, taču dažās ierīcēs var rasties atskaņošanas problēmas.';
+
+  @override
+  String get nextUpAndQueuing => 'Nākamais augšā un rindā';
+
+  @override
+  String get nextUpDisplay => 'Nākamais displejs';
+
+  @override
+  String get extended => 'Pagarināts';
+
+  @override
+  String get minimal => 'Minimāli';
+
+  @override
+  String get nextUpTimeout => 'Nākamais Up Timeout';
+
+  @override
+  String secondsValue(int value) {
+    return '$value s';
+  }
+
+  @override
+  String get mediaQueuing => 'Multivides rinda';
+
+  @override
+  String get autoQueueNextEpisodes => 'Automātiski iestatīt nākamās sērijas';
+
+  @override
+  String get stillWatchingPrompt => 'Joprojām skatos uzvedni';
+
+  @override
+  String afterEpisodesAndHours(int episodes, double hours) {
+    return 'Pēc $episodes epizodēm / ${hours}h';
+  }
+
+  @override
+  String get resumeAndSkip => 'Atsākt un izlaist';
+
+  @override
+  String get resumeRewind => 'Atsākt attīšanu';
+
+  @override
+  String get unpauseRewind => 'Attīt atpakaļ';
+
+  @override
+  String get fiveSeconds => '5 sekundes';
+
+  @override
+  String get tenSeconds => '10 sekundes';
+
+  @override
+  String get fifteenSeconds => '15 sekundes';
+
+  @override
+  String get thirtySeconds => '30 sekundes';
+
+  @override
+  String get skipBackLength => 'Izlaist atpakaļ garumu';
+
+  @override
+  String get skipForwardLength => 'Izlaist garumu uz priekšu';
+
+  @override
+  String get customMpvConfPath => 'Pielāgots mpv.conf ceļš';
+
+  @override
+  String get notSetMpvConf =>
+      'Nav iestatīts. Tortugarr izmēģinās noklusējuma mpv.conf lietotņu/datu mapēs.';
+
+  @override
+  String get selectMpvConf => 'Atlasiet mpv.conf';
+
+  @override
+  String get pathToMpvConf => '/path/to/mpv.conf';
+
+  @override
+  String get subtitleStyleDescription =>
+      'Stila iestatījumi (izmērs, krāsa, nobīde) attiecas uz teksta subtitriem (SRT, VTT, TTML). ASS/SSA subtitriem tiek izmantots savs iegultais stils, ja vien nav izslēgta ASS/SSA tiešā atskaņošana. Bitkartes subtitrus (PGS, DVB, VobSub) nevar pārveidot.';
+
+  @override
+  String get defaultSubtitleLanguage => 'Noklusējuma subtitru valoda';
+
+  @override
+  String get defaultToNoSubtitles => 'Pēc noklusējuma nav subtitru';
+
+  @override
+  String get turnOffSubtitlesByDefault =>
+      'Pēc noklusējuma izslēdziet subtitrus';
+
+  @override
+  String get subtitleSize => 'Subtitru lielums';
+
+  @override
+  String get textFillColor => 'Teksta aizpildījuma krāsa';
+
+  @override
+  String get backgroundColor => 'Fona krāsa';
+
+  @override
+  String get textStrokeColor => 'Teksta gājiena krāsa';
+
+  @override
+  String get subtitleCustomization => 'Subtitru pielāgošana';
+
+  @override
+  String get subtitleCustomizationDescription => 'Pielāgojiet subtitru izskatu';
+
+  @override
+  String get subtitleMode => 'Subtitru režīms';
+
+  @override
+  String get subtitleModeFlagged => 'Atzīmētie';
+
+  @override
+  String get subtitleModeAlways => 'Vienmēr';
+
+  @override
+  String get subtitleModeForeign => 'Svešvaloda';
+
+  @override
+  String get subtitleModeForced => 'Piespiedu';
+
+  @override
+  String get subtitleModeFlaggedDescription =>
+      'Atskaņo celiņus, kas multivides faila metadatos atzīmēti kā „default“ vai „forced“.';
+
+  @override
+  String get subtitleModeAlwaysDescription =>
+      'Automātiski ielādē un rāda subtitrus katru reizi, kad sākas video.';
+
+  @override
+  String get subtitleModeForeignDescription =>
+      'Automātiski ieslēdz subtitrus, ja noklusējuma audio celiņš ir svešvalodā.';
+
+  @override
+  String get subtitleModeForcedDescription =>
+      'Ielādē tikai subtitrus, kas nepārprotami atzīmēti ar „forced“ metadatu karodziņu.';
+
+  @override
+  String get subtitleModeNoneDescription =>
+      'Pilnībā atspējo automātisku subtitru ielādi.';
+
+  @override
+  String get fallbackSubtitleLanguage => 'Rezerves subtitru valoda';
+
+  @override
+  String get subtitleStream => 'Subtitru straume';
+
+  @override
+  String get subtitlePreviewText => 'Ātrā brūnā lapsa lec pāri slinkajam sunim';
+
+  @override
+  String get verticalOffset => 'Vertikālā nobīde';
+
+  @override
+  String get pgsDirectPlay => 'PGS tiešā spēle';
+
+  @override
+  String get directPlayPgsSubtitles => 'Tiešā atskaņošana PGS subtitriem';
+
+  @override
+  String get assSsaDirectPlay => 'ASS/SSA tiešā atskaņošana';
+
+  @override
+  String get directPlayAssSsaSubtitles =>
+      'Tiešā atskaņošana ASS/SSA subtitriem';
+
+  @override
+  String get white => 'Balts';
+
+  @override
+  String get black => 'Melns';
+
+  @override
+  String get yellow => 'Dzeltens';
+
+  @override
+  String get green => 'Zaļš';
+
+  @override
+  String get cyan => 'Ciāna';
+
+  @override
+  String get red => 'Sarkans';
+
+  @override
+  String get transparent => 'Caurspīdīgs';
+
+  @override
+  String get semiTransparentBlack => 'Daļēji caurspīdīgs melns';
+
+  @override
+  String get global => 'Globāli';
+
+  @override
+  String get desktop => 'Darbvirsma';
+
+  @override
+  String get mobile => 'Mobilais';
+
+  @override
+  String get tv => 'TV';
+
+  @override
+  String loadedProfileSettings(String profile) {
+    return 'Ielādēti $profile profila iestatījumi.';
+  }
+
+  @override
+  String failedToLoadProfileSettings(String profile) {
+    return 'Neizdevās ielādēt $profile profila iestatījumus.';
+  }
+
+  @override
+  String syncedSettingsToProfile(String profile) {
+    return 'Vietējie iestatījumi sinhronizēti ar $profile profilu.';
+  }
+
+  @override
+  String get customizationProfile => 'Pielāgošanas profils';
+
+  @override
+  String get customizationProfileDescription =>
+      'Izvēlieties profilu, ko ielādēt, rediģēt un sinhronizēt. Globālais ir spēkā visur, ja vien ierīces profils to neaizstāda. Zaļais punkts apzīmē jūsu pašreizējo ierīces profilu.';
+
+  @override
+  String get loadProfile => 'Ielādēt profilu';
+
+  @override
+  String get syncing => 'Sinhronizē...';
+
+  @override
+  String get syncToProfile => 'Sinhronizēt ar profilu';
+
+  @override
+  String get resetProfile => 'Reset Profile';
+
+  @override
+  String resetProfileTitle(String profile) {
+    return 'Reset $profile?';
+  }
+
+  @override
+  String resetProfileDescription(String profile) {
+    return 'This deletes the $profile profile from the server and puts every synced setting on this device back to its default.';
+  }
+
+  @override
+  String get resetGlobalProfileDescription =>
+      'This deletes every saved profile from the server and puts every synced setting on this device back to its default.';
+
+  @override
+  String profileReset(String profile) {
+    return 'Reset $profile profile to defaults.';
+  }
+
+  @override
+  String get resetRatingsTitle => 'Reset ratings?';
+
+  @override
+  String get resetRatingsDescription =>
+      'This puts every ratings setting back to its default, including which sources show and the order they appear in.';
+
+  @override
+  String get ratingsReset => 'Reset ratings to defaults.';
+
+  @override
+  String failedToResetProfile(String profile) {
+    return 'Failed to reset $profile profile.';
+  }
+
+  @override
+  String get profileSyncHidden => 'Profila sinhronizācija ir paslēpta';
+
+  @override
+  String get enablePluginSyncDescription =>
+      'Iespējojiet servera spraudņa sinhronizāciju spraudņa iestatījumos, lai šeit rādītu profila vadīklas.';
+
+  @override
+  String get quality => 'Kvalitāte';
+
+  @override
+  String get defaultDownloadQuality => 'Noklusējuma lejupielādes kvalitāte';
+
+  @override
+  String get network => 'Tīkls';
+
+  @override
+  String get wifiOnlyDownloads => 'Tikai WiFi lejupielādes';
+
+  @override
+  String get reportDownloadsActivity => 'Rādīt lejupielādes serverī';
+
+  @override
+  String get reportDownloadsActivitySubtitle =>
+      'Ļaut servera administratoram redzēt jūsu pārkodētās lejupielādes vadības panelī';
+
+  @override
+  String get onlyDownloadOnWifi =>
+      'Lejupielādējiet tikai tad, kad ir izveidots savienojums ar WiFi';
+
+  @override
+  String get storage => 'Uzglabāšana';
+
+  @override
+  String get storageUsed => 'Uzglabāšana Lietota';
+
+  @override
+  String get manage => 'Pārvaldīt';
+
+  @override
+  String get calculating => 'Notiek aprēķināšana...';
+
+  @override
+  String get downloadLocation => 'Lejupielādes atrašanās vieta';
+
+  @override
+  String get defaultLabel => 'Noklusējums';
+
+  @override
+  String get saveToDownloadsFolder => 'Saglabāt mapē Lejupielādes';
+
+  @override
+  String get downloadsVisibleToOtherApps =>
+      'Lejupielādes/Tortugarr — redzams citām lietotnēm';
+
+  @override
+  String get dangerZone => 'Bīstamā zona';
+
+  @override
+  String get clearAllDownloads => 'Notīrīt visas lejupielādes';
+
+  @override
+  String get original => 'Oriģināls';
+
+  @override
+  String get changeDownloadLocation => 'Mainiet lejupielādes vietu';
+
+  @override
+  String get changeDownloadLocationDescription =>
+      'Jaunās lejupielādes tiks saglabātas atlasītajā mapē. Esošās lejupielādes paliks to pašreizējā atrašanās vietā, un tās var pārvaldīt krātuves iestatījumos.';
+
+  @override
+  String get confirm => 'Apstiprināt';
+
+  @override
+  String get cannotWriteToFolder =>
+      'Nevar rakstīt atlasītajā mapē. Lūdzu, izvēlieties citu atrašanās vietu vai piešķiriet krātuves atļaujas.';
+
+  @override
+  String get saveToDownloadsFolderQuestion => 'Vai saglabāt mapē Lejupielādes?';
+
+  @override
+  String get saveToDownloadsFolderDescription =>
+      'Lejupielādētie multivide tiks saglabāti jūsu ierīces mapē Lejupielādes/Tortugarr. Šie faili būs redzami citām lietotnēm, piemēram, jūsu galerijai vai mūzikas atskaņotājam.\n\nEsošās lejupielādes paliks to pašreizējā atrašanās vietā.';
+
+  @override
+  String get transcodingTimeRemainingUnavailable =>
+      'Transcoding: Time Remaining Unavailable';
+
+  @override
+  String get enable => 'Iespējot';
+
+  @override
+  String get clearAllDownloadsWarning =>
+      'Tādējādi tiks dzēsti visi lejupielādētie multivides līdzekļi, un darbību nevarēs atsaukt.';
+
+  @override
+  String get clearAll => 'Notīrīt visu';
+
+  @override
+  String get navigationStyle => 'Navigācijas stils';
+
+  @override
+  String get topBar => 'Augšējā josla';
+
+  @override
+  String get leftSidebar => 'Kreisā sānjosla';
+
+  @override
+  String get showShuffleButton => 'Rādīt jaukšanas pogu';
+
+  @override
+  String get showGenresButton => 'Poga Rādīt žanrus';
+
+  @override
+  String get showFavoritesButton => 'Rādīt pogu Izlase';
+
+  @override
+  String get showLibrariesInToolbar => 'Rādīt bibliotēkas rīkjoslā';
+
+  @override
+  String get navbarAlwaysExpanded =>
+      'Vienmēr rādīt navigācijas joslas nosaukumus';
+
+  @override
+  String get showSeerrButton => 'Rādīt Seerr pogu';
+
+  @override
+  String get navbarOpacity => 'Navigācijas joslas necaurredzamība';
+
+  @override
+  String get navbarColor => 'Navigbar Krāsa';
+
+  @override
+  String get gray => 'Pelēks';
+
+  @override
+  String get darkBlue => 'Tumši zils';
+
+  @override
+  String get purple => 'Violeta';
+
+  @override
+  String get teal => 'Zilganzaļa';
+
+  @override
+  String get navy => 'Tumši zila';
+
+  @override
+  String get charcoal => 'Ogles';
+
+  @override
+  String get brown => 'Brūns';
+
+  @override
+  String get darkRed => 'Tumši Sarkans';
+
+  @override
+  String get darkGreen => 'Tumši zaļš';
+
+  @override
+  String get slate => 'Šīferis';
+
+  @override
+  String get indigo => 'Indigo';
+
+  @override
+  String get libraryDisplay => 'Bibliotēkas displejs';
+
+  @override
+  String get posterLabel => 'Plakāts';
+
+  @override
+  String get thumbnailLabel => 'Sīktēls';
+
+  @override
+  String get bannerLabel => 'Reklāmkarogs';
+
+  @override
+  String get overridePerLibrarySettings =>
+      'Ignorēt katras bibliotēkas iestatījumus';
+
+  @override
+  String get applyImageTypeToAllLibraries =>
+      'Lietojiet attēla veidu visām bibliotēkām';
+
+  @override
+  String get multiServerLibraries => 'Vairāku serveru bibliotēkas';
+
+  @override
+  String get showLibrariesFromAllServers =>
+      'Rādīt bibliotēkas no visiem pievienotajiem serveriem';
+
+  @override
+  String get enableFolderView => 'Iespējot mapju skatu';
+
+  @override
+  String get showFolderBrowsingOption => 'Rādīt mapju pārlūkošanas opciju';
+
+  @override
+  String get groupItemsIntoCollections => 'Grupēt vienumus kolekcijās';
+
+  @override
+  String get hideCollectionAssociatedItems =>
+      'Pārlūkojot bibliotēkas, slēpt ar kolekcijām saistītos bibliotēkas vienumus';
+
+  @override
+  String get groupItemsIntoCollectionsDialogTitle =>
+      'Paziņojums par bibliotēkas grupēšanu';
+
+  @override
+  String get groupItemsIntoCollectionsDialogMessage =>
+      'Lai izmantotu šo iestatījumu, savā Jellyfin vai Emby serverī bibliotēkas attēlošanas iestatījumos iespējojiet bibliotēkas opciju „Grupēt filmas kolekcijās“ un/vai „Grupēt seriālus kolekcijās“.';
+
+  @override
+  String get libraryVisibility => 'Bibliotēkas redzamība';
+
+  @override
+  String get libraryVisibilityDescription =>
+      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.';
+
+  @override
+  String get showInNavigation => 'Rādīt navigācijā';
+
+  @override
+  String get showInLatestMedia => 'Rādīt jaunākajos medijos';
+
+  @override
+  String get sourceLibraries => 'Avotu bibliotēkas';
+
+  @override
+  String get sourceCollections => 'Avotu kolekcijas';
+
+  @override
+  String get excludedGenres => 'Izslēgtie žanri';
+
+  @override
+  String get selectAll => 'Atlasiet visu';
+
+  @override
+  String itemsSelected(int count) {
+    return '$count atlasīts';
+  }
+
+  @override
+  String get mediaBar => 'Multivides josla';
+
+  @override
+  String get mediaSources => 'Multivides avoti';
+
+  @override
+  String get behavior => 'Uzvedība';
+
+  @override
+  String get seconds => 'sekundes';
+
+  @override
+  String get localPreviews => 'Vietējie priekšskatījumi';
+
+  @override
+  String get localPreviewsDescription =>
+      'Konfigurējiet reklāmkadrus, multivides un audio priekšskatījumus.';
+
+  @override
+  String get mediaBarMode => 'Multivides joslas stils';
+
+  @override
+  String get mediaBarModeDescription =>
+      'Izvēlieties starp dažādiem multivides joslas stiliem vai izslēdziet multivides joslu';
+
+  @override
+  String get mediaBarModeNotflix => 'Tortugarr';
+
+  @override
+  String get mediaBarModeMakd => 'MakD';
+
+  @override
+  String get mediaBarModeOff => 'Izslēgts';
+
+  @override
+  String get enableMediaBar => 'Iespējot multivides joslu';
+
+  @override
+  String get showFeaturedContentSlideshow =>
+      'Rādīt piedāvātā satura slaidrādi sākumlapā';
+
+  @override
+  String get contentType => 'Satura veids';
+
+  @override
+  String get moviesAndTvShows => 'Filmas un TV šovi';
+
+  @override
+  String get moviesOnly => 'Tikai filmas';
+
+  @override
+  String get tvShowsOnly => 'Tikai TV pārraides';
+
+  @override
+  String get itemCount => 'Preču skaits';
+
+  @override
+  String get noneSelected => 'Nav atlasīts neviens';
+
+  @override
+  String get noneExcluded => 'Neviens nav izslēgts';
+
+  @override
+  String get autoAdvance => 'Automātiskā pāreja';
+
+  @override
+  String get autoAdvanceSlides => 'Automātiski pāriet uz nākamo slaidu';
+
+  @override
+  String get autoAdvanceInterval => 'Automātiskās pārejas intervāls';
+
+  @override
+  String get trailerPreview => 'Reklāmkadru priekšskatījums';
+
+  @override
+  String get autoPlayTrailers =>
+      'Automātiski atskaņojiet reklāmkadrus multivides joslā pēc 3 sekundēm';
+
+  @override
+  String get trailerAudio => 'Treilera audio';
+
+  @override
+  String get enableTrailerAudio => 'Iespējot treileru audio multivides joslā';
+
+  @override
+  String get trailerCaptions => 'Trailer Captions';
+
+  @override
+  String get trailerCaptionsDescription =>
+      'Show captions on YouTube trailers in the media bar';
+
+  @override
+  String get episodePreview => 'Sērijas priekšskatījums';
+
+  @override
+  String get mediaPreview => 'Multivides priekšskatījums';
+
+  @override
+  String get episodePreviewDescription =>
+      'Atskaņojiet 30 sekunžu iekļautu priekšskatījumu fokusētās, kursoru novietotās vai ilgi nospiestās kartēs';
+
+  @override
+  String get mediaPreviewDescription =>
+      'Atskaņojiet 30 sekunžu iekļauto priekšskatījumu fokusētās, kursoru novietotās vai ilgi nospiestās kartēs';
+
+  @override
+  String get previewAudio => 'Audio priekšskatījums';
+
+  @override
+  String get enablePreviewAudio =>
+      'Iespējot audio reklāmkadru un sēriju priekšskatījumiem';
+
+  @override
+  String get latestMedia => 'Jaunākie mediji';
+
+  @override
+  String get recentlyReleased => 'Nesen Izlaists';
+
+  @override
+  String get myMedia => 'Mani mediji';
+
+  @override
+  String get myMediaSmall => 'Mani multivide (mazi)';
+
+  @override
+  String get continueWatching => 'Turpināt skatīties';
+
+  @override
+  String get resumeAudio => 'Atsākt audio';
+
+  @override
+  String get resumeBooks => 'Atsākt grāmatas';
+
+  @override
+  String get activeRecordings => 'Aktīvie ieraksti';
+
+  @override
+  String get playlists => 'Atskaņošanas saraksti';
+
+  @override
+  String get liveTV => 'TV tiešraide';
+
+  @override
+  String get homeSections => 'Sākuma sadaļas';
+
+  @override
+  String get resetToDefaults => 'Atiestatīt uz noklusējuma iestatījumiem';
+
+  @override
+  String get homeRowPosterSize => 'Sākuma rindas plakāta izmērs';
+
+  @override
+  String get perRowImageTypeSelection => 'Katrai rindai attēla veida izvēle';
+
+  @override
+  String get configureImageTypeForEachRow =>
+      'Konfigurējiet attēla veidu katrai iespējotajai sākuma rindai';
+
+  @override
+  String get mergeContinueWatchingAndNextUp =>
+      'Apvienojiet Turpināt skatīšanos un Tālāk';
+
+  @override
+  String get combineBothRows => 'Apvienojiet abas rindas vienā sākuma sadaļā';
+
+  @override
+  String get nextUpMaxDays => 'Max days in Next Up';
+
+  @override
+  String get nextUpMaxDaysDescription =>
+      'How long a show stays in Next Up after you last watched it';
+
+  @override
+  String daysValue(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get fullScreenRows => 'Izvērstas sākuma ekrāna rindas';
+
+  @override
+  String get fullScreenRowsDescription =>
+      'Rādīt tikai vienu sākuma ekrāna rindu';
+
+  @override
+  String get homeRowsPadding => 'Home Row Padding';
+
+  @override
+  String get homeRowsPaddingDescription =>
+      'Customize padding between home rows';
+
+  @override
+  String get perRowImageType => 'Rindas attēla veids';
+
+  @override
+  String get perRowSettings => 'Iestatījumi katrā rindā';
+
+  @override
+  String get autoLogin => 'Automātiska pieteikšanās';
+
+  @override
+  String get lastUser => 'Pēdējais lietotājs';
+
+  @override
+  String get currentUser => 'Pašreizējais lietotājs';
+
+  @override
+  String get alwaysAuthenticate => 'Vienmēr autentificēt';
+
+  @override
+  String get requirePasswordWithToken =>
+      'Pieprasīt paroli pat ar saglabātu marķieri';
+
+  @override
+  String get confirmExit => 'Apstipriniet izeju';
+
+  @override
+  String get showConfirmationBeforeExiting =>
+      'Rādīt apstiprinājumu pirms iziešanas';
+
+  @override
+  String get blockContentWithRatings => 'Bloķēt saturu ar šādiem vērtējumiem:';
+
+  @override
+  String get noContentRatingsFound =>
+      'Šajā serverī vēl nav atrasts neviens satura vērtējums.';
+
+  @override
+  String get couldNotLoadServerRatings =>
+      'Nevarēja ielādēt servera vērtējumus. Tiek rādīti tikai saglabātie vērtējumi.';
+
+  @override
+  String get couldNotRefreshRatings =>
+      'Nevarēja atsvaidzināt vērtējumus no servera. Tiek rādīti saglabātie vērtējumi.';
+
+  @override
+  String get enablePinCode => 'Iespējot PIN kodu';
+
+  @override
+  String get requirePinToAccess => 'Pieprasīt PIN, lai piekļūtu savam kontam';
+
+  @override
+  String get changePin => 'Mainīt PIN';
+
+  @override
+  String get setNewPinCode => 'Iestatiet jaunu PIN kodu';
+
+  @override
+  String get removePin => 'Noņemiet PIN';
+
+  @override
+  String get removePinProtection => 'Noņemiet PIN koda aizsardzību';
+
+  @override
+  String get screensaver => 'Ekrānsaudzētājs';
+
+  @override
+  String get inAppScreensaver => 'Lietotnē iebūvēts ekrānsaudzētājs';
+
+  @override
+  String get enableBuiltInScreensaver => 'Iespējojiet iebūvēto ekrānsaudzētāju';
+
+  @override
+  String get mode => 'Režīms';
+
+  @override
+  String get libraryArt => 'Bibliotēka Art';
+
+  @override
+  String get logo => 'Logotips';
+
+  @override
+  String get clock => 'Pulkstenis';
+
+  @override
+  String get timeout => 'Taimauts';
+
+  @override
+  String minutesShort(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get dimmingLevel => 'Aptumšošanas līmenis';
+
+  @override
+  String get maxAgeRating => 'Maksimālais vecuma ierobežojums';
+
+  @override
+  String get any => 'Jebkurš';
+
+  @override
+  String agePlusValue(int age) {
+    return '$age+';
+  }
+
+  @override
+  String get requireAgeRating => 'Nepieciešams vecuma ierobežojums';
+
+  @override
+  String get onlyShowRatedContent => 'Rādīt tikai novērtēto saturu';
+
+  @override
+  String get showClock => 'Rādīt pulksteni';
+
+  @override
+  String get displayClockDuringScreensaver =>
+      'Parādīt pulksteni ekrānsaudzētāja laikā';
+
+  @override
+  String get clockModeStatic => 'Statisks';
+
+  @override
+  String get clockModeBouncing => 'Lecošs';
+
+  @override
+  String get rottenTomatoesCritics => 'Sapuvuši tomāti (kritiķi)';
+
+  @override
+  String get rottenTomatoesAudience => 'Rotten Tomatoes (auditorija)';
+
+  @override
+  String get imdb => 'IMDb';
+
+  @override
+  String get tmdb => 'TMDB';
+
+  @override
+  String get metacritic => 'Metakritisks';
+
+  @override
+  String get metacriticUser => 'Metacritic (lietotājs)';
+
+  @override
+  String get trakt => 'Trakt';
+
+  @override
+  String get letterboxd => 'Pastkastīte';
+
+  @override
+  String get myAnimeList => 'MyAnimeList';
+
+  @override
+  String get aniList => 'AniList';
+
+  @override
+  String get communityRating => 'Kopienas vērtējums';
+
+  @override
+  String get ratings => 'Vērtējumi';
+
+  @override
+  String get additionalRatings => 'Papildu vērtējumi';
+
+  @override
+  String get showMdbListAndTmdbRatings => 'Rādīt MDBList un TMDB vērtējumus';
+
+  @override
+  String get ratingLabels => 'Vērtējuma etiķetes';
+
+  @override
+  String get showLabelsNextToIcons => 'Rādīt iezīmes blakus vērtējuma ikonām';
+
+  @override
+  String get ratingBadges => 'Vērtējuma nozīmītes';
+
+  @override
+  String get showDecorativeBadges =>
+      'Parādiet dekoratīvas emblēmas aiz vērtējumiem';
+
+  @override
+  String get episodeRatings => 'Sēriju vērtējumi';
+
+  @override
+  String get showRatingsOnEpisodes => 'Rādīt vērtējumus atsevišķām sērijām';
+
+  @override
+  String get ratingSources => 'Vērtējumu avoti';
+
+  @override
+  String get ratingSourcesDescription =>
+      'Iespējojiet un pārkārtojiet visā lietotnē rādītos vērtēšanas avotus';
+
+  @override
+  String get pluginLabel => 'Moonbase spraudnis';
+
+  @override
+  String get pluginDetected => 'Spraudnis konstatēts';
+
+  @override
+  String get pluginNotDetected => 'Spraudnis nav noteikts';
+
+  @override
+  String get pluginDetectedDescription =>
+      'Konstatēts servera spraudnis. Sinhronizācija tiek iespējota automātiski, kad spraudnis tiek atrasts pirmo reizi.';
+
+  @override
+  String get pluginNotDetectedDescription =>
+      'Servera spraudnis pašlaik nav atklāts. Vietējie iestatījumi joprojām izmanto to saglabātās vērtības vai iebūvētos noklusējuma iestatījumus.';
+
+  @override
+  String pluginStatusVersion(String status, String version) {
+    return '$status\nVersija: $version';
+  }
+
+  @override
+  String get availableServices => 'Pieejamie pakalpojumi';
+
+  @override
+  String get serverPluginSync => 'Servera spraudņa sinhronizācija';
+
+  @override
+  String get syncSettingsWithPlugin =>
+      'Sinhronizējiet iestatījumus ar servera spraudni';
+
+  @override
+  String get whatSyncControls => 'Kādas sinhronizācijas vadīklas';
+
+  @override
+  String get syncControlsDescription =>
+      'Sinhronizācija kontrolē tikai to, vai spraudņu atbalstītie iestatījumi tiek nosūtīti uz serveri un izņemti no tā. Profila atlase un profila sinhronizācijas darbības atrodas pielāgošanas iestatījumos, kad ir iespējota spraudņa sinhronizācija.';
+
+  @override
+  String get recentRequests => 'Jaunākie pieprasījumi';
+
+  @override
+  String get recentlyAdded => 'Nesen pievienots';
+
+  @override
+  String get trending => 'Tendences';
+
+  @override
+  String get popularMovies => 'Populāras filmas';
+
+  @override
+  String get movieGenres => 'Filmu žanri';
+
+  @override
+  String get upcomingMovies => 'Gaidāmās filmas';
+
+  @override
+  String get studios => 'Studijas';
+
+  @override
+  String get popularSeries => 'Populārs seriāls';
+
+  @override
+  String get seriesGenres => 'Sērijas žanri';
+
+  @override
+  String get upcomingSeries => 'Gaidāmā sērija';
+
+  @override
+  String get networks => 'Tīkli';
+
+  @override
+  String get seerrDiscoveryRows => 'Seerr atklāšanas rindas';
+
+  @override
+  String get yourWatchlist => 'Your Watchlist';
+
+  @override
+  String get resetRowsToDefaults =>
+      'Atiestatīt rindas uz noklusējuma iestatījumiem';
+
+  @override
+  String get enableSeerr => 'Iespējot Seerr';
+
+  @override
+  String get showSeerrInNavigation =>
+      'Rādīt Seerr navigācijā (nepieciešams servera spraudnis)';
+
+  @override
+  String get seerrUnavailable =>
+      'Nav pieejams, jo servera spraudņa Seerr atbalsts ir atspējots.';
+
+  @override
+  String get nsfwFilter => 'NSFW filtrs';
+
+  @override
+  String get hideAdultContent =>
+      'Paslēpt rezultātos pieaugušajiem paredzētu saturu';
+
+  @override
+  String get seerrNotificationsSection => 'Paziņojumi';
+
+  @override
+  String get seerrNotifyNewRequestsTitle =>
+      'Paziņojumi par jauniem pieprasījumiem';
+
+  @override
+  String get seerrNotifyNewRequestsSubtitle =>
+      'Paziņot, kad kāds iesniedz pieprasījumu';
+
+  @override
+  String get seerrNotifyLibraryAddedTitle => 'Pieprasījumu jaunumi';
+
+  @override
+  String get seerrNotifyLibraryAddedSubtitle =>
+      'Apstiprināts, noraidīts un pievienots jūsu bibliotēkai';
+
+  @override
+  String get seerrNotifyIssuesTitle => 'Problēmu jaunumi';
+
+  @override
+  String get seerrNotifyIssuesSubtitle =>
+      'Jaunas problēmas, atbildes un risinājumi';
+
+  @override
+  String get seerrNotifyNewMediaTitle => 'New media added';
+
+  @override
+  String get seerrNotifyNewMediaSubtitle =>
+      'Anything new added to the server library';
+
+  @override
+  String loggedInAs(String username) {
+    return 'Pieteicies kā: $username';
+  }
+
+  @override
+  String get discoverRows => 'Seerr atklāšanas lapa';
+
+  @override
+  String get discoverRowsDescriptionPlugin =>
+      'Iespējojiet rindas, ko rādīt Seerr galvenajā lapā. Velciet, lai pārkārtotu. Pielāgotā kārtība tiek sinhronizēta ar Moonbase.';
+
+  @override
+  String get discoverRowsDescription =>
+      'Iespējojiet rindas, ko rādīt Seerr galvenajā lapā. Velciet, lai pārkārtotu. Pielāgotā kārtība tiek sinhronizēta ar Moonbase.';
+
+  @override
+  String get enabled => 'Iespējots';
+
+  @override
+  String get hidden => 'Slēpts';
+
+  @override
+  String get aboutTitle => 'Par';
+
+  @override
+  String versionValue(String version) {
+    return 'Versija $version';
+  }
+
+  @override
+  String get openSourceLicenses => 'Atvērtā pirmkoda licences';
+
+  @override
+  String get sourceCode => 'Avota kods';
+
+  @override
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
+
+  @override
+  String get checkForUpdatesNow => 'Pārbaudiet atjauninājumus tūlīt';
+
+  @override
+  String get checksLatestDesktopRelease =>
+      'Pārbauda šīs platformas jaunāko darbvirsmas versiju';
+
+  @override
+  String get youAreUpToDate => 'Jūs esat lietas kursā.';
+
+  @override
+  String get couldNotCheckForUpdates =>
+      'Pašlaik nevarēja pārbaudīt atjauninājumus.';
+
+  @override
+  String get noCompatibleUpdate =>
+      'Šai platformai nav atrasta saderīga atjauninājumu pakotne.';
+
+  @override
+  String get updateChecksNotSupported =>
+      'Atjauninājumu pārbaudes šajā platformā netiek atbalstītas.';
+
+  @override
+  String get updateNotificationsDisabled =>
+      'Atjaunināšanas paziņojumi ir atspējoti.';
+
+  @override
+  String get pleaseWaitBeforeChecking =>
+      'Lūdzu, uzgaidiet pirms atkārtotas pārbaudes.';
+
+  @override
+  String get latestUpdateAlreadyShown =>
+      'Pēdējais atjauninājums jau tika parādīts.';
+
+  @override
+  String get updateAvailable => 'Pieejams atjauninājums.';
+
+  @override
+  String updateAvailableVersion(String version) {
+    return 'Atjauninājums pieejams: v$version';
+  }
+
+  @override
+  String get updateNotifications => 'Atjaunināt paziņojumus';
+
+  @override
+  String get showWhenUpdatesAvailable => 'Rādīt, kad ir pieejami atjauninājumi';
+
+  @override
+  String updateAvailableTitle(String version) {
+    return 'v$version Pieejams';
+  }
+
+  @override
+  String get readReleaseNotes => 'Izlasiet izlaiduma piezīmes';
+
+  @override
+  String get downloadingUpdate => 'Notiek atjauninājuma lejupielāde...';
+
+  @override
+  String get updateDownloadFailed =>
+      'Atjaunināšanas lejupielāde neizdevās. Lūdzu, mēģiniet vēlreiz.';
+
+  @override
+  String get openReleasesPage => 'Atveriet laidienu lapu';
+
+  @override
+  String get navigation => 'Navigācija';
+
+  @override
+  String get watchedIndicatorsBackdrops => 'Noskatīti rādītāji, foni';
+
+  @override
+  String get focusColorWatchedIndicatorsBackdrops =>
+      'Fokusa krāsa, skatītie indikatori, foni';
+
+  @override
+  String get navbarStyleToolbarAppearance =>
+      'Navigācijas joslas stils, rīkjoslas pogas, izskats';
+
+  @override
+  String get reorderToggleHomeRows => 'Pārkārtot un pārslēgt sākuma rindas';
+
+  @override
+  String get featuredContentAppearance => 'Piedāvātais saturs, izskats';
+
+  @override
+  String get posterSizeImageTypeFolderView =>
+      'Plakāta izmērs, attēla veids, mapes skats';
+
+  @override
+  String get mdbListTmdbRatingSources => 'MDBList, TMDB un reitingu avoti';
+
+  @override
+  String gbValue(String value) {
+    return '$value GB';
+  }
+
+  @override
+  String mbValue(int value) {
+    return '$value MB';
+  }
+
+  @override
+  String get imageCacheLimit => 'Attēlu kešatmiņas ierobežojums';
+
+  @override
+  String get clearImageCache => 'Notīrīt attēlu kešatmiņu';
+
+  @override
+  String get imageCacheCleared => 'Attēlu kešatmiņa notīrīta';
+
+  @override
+  String get clear => 'Notīrīt';
+
+  @override
+  String get browse => 'Pārlūkot';
+
+  @override
+  String get noResults => 'Nav rezultātu';
+
+  @override
+  String get seerrAvailableStatus => 'Pieejams';
+
+  @override
+  String get seerrRequestedStatus => 'Pieprasīts';
+
+  @override
+  String seerrDownloadingPercent(int percent) {
+    return 'Lejupielādē · $percent%';
+  }
+
+  @override
+  String get seerrImportingStatus => 'Importē';
+
+  @override
+  String itemsCount(int count) {
+    return '$count Vienumi';
+  }
+
+  @override
+  String get seerrSettings => 'Seerr iestatījumi';
+
+  @override
+  String get requestMore => 'Pieprasīt vairāk';
+
+  @override
+  String get requestMore4k => 'Request More in 4K';
+
+  @override
+  String get request => 'Pieprasīt';
+
+  @override
+  String get request4k => 'Request 4K';
+
+  @override
+  String get requested4k => '4K Requested';
+
+  @override
+  String get cancelRequest => 'Atcelt pieprasījumu';
+
+  @override
+  String get cancelRequest4k => 'Cancel 4K Request';
+
+  @override
+  String get playInNotflix => 'Spēlē Tortugarr';
+
+  @override
+  String requestedByName(String name) {
+    return 'Pieprasīja $name';
+  }
+
+  @override
+  String get approve => 'Apstiprināt';
+
+  @override
+  String get declineAction => 'Noraidīt';
+
+  @override
+  String get similar => 'Līdzīgi';
+
+  @override
+  String get recommendations => 'Ieteikumi';
+
+  @override
+  String cancelRequestForTitle(String title) {
+    return 'Vai atcelt pieprasījumu “$title”?';
+  }
+
+  @override
+  String cancelCountRequestsForTitle(int count, String title) {
+    return 'Vai atcelt $count pieprasījumus par \"$title\"?';
+  }
+
+  @override
+  String get keep => 'Saglabāt';
+
+  @override
+  String get itemNotFoundInLibrary =>
+      'Vienums nav atrasts jūsu Tortugarr bibliotēkā';
+
+  @override
+  String get errorSearchingLibrary => 'Meklējot bibliotēku, radās kļūda';
+
+  @override
+  String budgetAmount(String amount) {
+    return 'Budžets: \$$amount';
+  }
+
+  @override
+  String revenueAmount(String amount) {
+    return 'Ieņēmumi: \$$amount';
+  }
+
+  @override
+  String seasonsCount(int count, String label) {
+    return '$count $label';
+  }
+
+  @override
+  String requestSeriesOrMovie(String type) {
+    return 'Pieprasīt $type';
+  }
+
+  @override
+  String requestSeriesOrMovie4k(String type) {
+    return 'Request 4K $type';
+  }
+
+  @override
+  String get submitRequest => 'Iesniedziet pieprasījumu';
+
+  @override
+  String get allSeasons => 'Visas sezonas';
+
+  @override
+  String get advancedOptions => 'Papildu opcijas';
+
+  @override
+  String get noServiceServersConfigured =>
+      'Nav konfigurēts neviens pakalpojumu serveris';
+
+  @override
+  String get server => 'Serveris';
+
+  @override
+  String get qualityProfile => 'Kvalitātes profils';
+
+  @override
+  String get rootFolder => 'Saknes mape';
+
+  @override
+  String get showMore => 'Rādīt vairāk';
+
+  @override
+  String get appearances => 'Filmogrāfija';
+
+  @override
+  String get crewSection => 'Apkalpe';
+
+  @override
+  String ageValue(int age) {
+    return 'vecums $age';
+  }
+
+  @override
+  String get noRequests => 'Nav pieprasījumu';
+
+  @override
+  String get pendingStatus => 'Gaida';
+
+  @override
+  String get declinedStatus => 'Noraidīts';
+
+  @override
+  String get partiallyAvailable => 'Daļēji pieejams';
+
+  @override
+  String get downloadingStatus => 'Notiek lejupielāde';
+
+  @override
+  String get approvedStatus => 'Apstiprināts';
+
+  @override
+  String get notRequestedStatus => 'Nav pieprasīts';
+
+  @override
+  String get blocklistedStatus => 'Bloķēts sarakstā';
+
+  @override
+  String get deletedStatus => 'Izdzēsts';
+
+  @override
+  String get failedStatus => 'Neizdevās';
+
+  @override
+  String get processingStatus => 'Apstrādā';
+
+  @override
+  String modifiedByName(String name) {
+    return 'Mainīja $name';
+  }
+
+  @override
+  String get completedStatus => 'Pabeigts';
+
+  @override
+  String get requestErrorDuplicate => 'Šis nosaukums jau ir pieprasīts';
+
+  @override
+  String get requestErrorQuota => 'Sasniegts pieprasījumu ierobežojums';
+
+  @override
+  String get requestErrorBlocklisted => 'Šis nosaukums ir bloķēto sarakstā';
+
+  @override
+  String get requestErrorNoSeasons =>
+      'Nav palikusi neviena sezona, ko pieprasīt';
+
+  @override
+  String get requestErrorPermission =>
+      'Jums nav atļaujas veikt šo pieprasījumu';
+
+  @override
+  String get seerrRequestsTitle => 'Pieprasījumi';
+
+  @override
+  String get seerrIssuesTitle => 'Problēmas';
+
+  @override
+  String get sortNewest => 'Jaunākie';
+
+  @override
+  String get sortLastModified => 'Pēdējoreiz mainīts';
+
+  @override
+  String get noIssues => 'Nav problēmu';
+
+  @override
+  String movieQuotaRemaining(int remaining, int limit) {
+    return 'Atlikuši $remaining no $limit filmu pieprasījumiem';
+  }
+
+  @override
+  String seasonQuotaRemaining(int remaining, int limit) {
+    return 'Atlikuši $remaining no $limit sezonu pieprasījumiem';
+  }
+
+  @override
+  String partOfCollectionName(String name) {
+    return 'Pieder kolekcijai $name';
+  }
+
+  @override
+  String get viewCollection => 'Skatīt kolekciju';
+
+  @override
+  String get requestCollection => 'Pieprasīt kolekciju';
+
+  @override
+  String collectionMoviesSummary(int total, int available) {
+    return 'Filmas: $total · pieejamas: $available';
+  }
+
+  @override
+  String requestMoviesCount(int count) {
+    return 'Pieprasīt filmas ($count)';
+  }
+
+  @override
+  String requestingProgress(int current, int total) {
+    return 'Pieprasa $current no $total...';
+  }
+
+  @override
+  String requestedMoviesCount(int count) {
+    return 'Pieprasītas filmas ($count)';
+  }
+
+  @override
+  String requestedMoviesPartial(int ok, int total) {
+    return 'Pieprasītas $ok no $total filmām';
+  }
+
+  @override
+  String get collectionAllRequested =>
+      'Visas filmas jau ir pieejamas vai pieprasītas';
+
+  @override
+  String get reportIssue => 'Ziņot par problēmu';
+
+  @override
+  String get issueTypeVideo => 'Video';
+
+  @override
+  String get issueTypeAudio => 'Audio';
+
+  @override
+  String get whatsWrong => 'Kas nav kārtībā?';
+
+  @override
+  String get allEpisodes => 'Visas epizodes';
+
+  @override
+  String get episode => 'Epizode';
+
+  @override
+  String get openStatus => 'Atvērta';
+
+  @override
+  String get resolvedStatus => 'Atrisināta';
+
+  @override
+  String get resolveAction => 'Atrisināt';
+
+  @override
+  String get reopenAction => 'Atvērt atkārtoti';
+
+  @override
+  String reportedByName(String name) {
+    return 'Ziņoja $name';
+  }
+
+  @override
+  String commentsCount(int count) {
+    return 'Komentāri: $count';
+  }
+
+  @override
+  String get addComment => 'Pievienot komentāru';
+
+  @override
+  String get deleteIssueConfirm => 'Dzēst šo problēmu?';
+
+  @override
+  String get submitReport => 'Iesniegt ziņojumu';
+
+  @override
+  String get tmdbScore => 'TMDB rezultāts';
+
+  @override
+  String get releaseDateLabel => 'Izdošanas datums';
+
+  @override
+  String get firstAirDateLabel => 'Pirmais ētera datums';
+
+  @override
+  String get revenueLabel => 'Ieņēmumi';
+
+  @override
+  String get runtimeLabel => 'Izpildes laiks';
+
+  @override
+  String get budgetLabel => 'Budžets';
+
+  @override
+  String get originalLanguageLabel => 'Oriģinālvaloda';
+
+  @override
+  String get seasonsLabel => 'Sezonas';
+
+  @override
+  String get episodesLabel => 'Epizodes';
+
+  @override
+  String get access => 'Piekļuve';
+
+  @override
+  String get add => 'Pievienot';
+
+  @override
+  String get address => 'Adrese';
+
+  @override
+  String get analytics => 'Analītika';
+
+  @override
+  String get catalog => 'Katalogs';
+
+  @override
+  String get content => 'Saturs';
+
+  @override
+  String get copy => 'Kopēt';
+
+  @override
+  String get create => 'Izveidot';
+
+  @override
+  String get disable => 'Atspējot';
+
+  @override
+  String get done => 'Gatavs';
+
+  @override
+  String get edit => 'Rediģēt';
+
+  @override
+  String get encoding => 'Kodēšana';
+
+  @override
+  String get error => 'Kļūda';
+
+  @override
+  String get forward => 'Uz priekšu';
+
+  @override
+  String get general => 'Vispārīgi';
+
+  @override
+  String get go => 'Aiziet';
+
+  @override
+  String get install => 'Instalējiet';
+
+  @override
+  String get installed => 'Uzstādīts';
+
+  @override
+  String get interval => 'Intervāls';
+
+  @override
+  String get name => 'Vārds';
+
+  @override
+  String get networking => 'Tīklošana';
+
+  @override
+  String get next => 'Tālāk';
+
+  @override
+  String get path => 'Ceļš';
+
+  @override
+  String get paused => 'Pauzēts';
+
+  @override
+  String get permissions => 'Atļaujas';
+
+  @override
+  String get processing => 'Apstrāde';
+
+  @override
+  String get profile => 'Profils';
+
+  @override
+  String get provider => 'Pakalpojumu sniedzējs';
+
+  @override
+  String get refresh => 'Atsvaidzināt';
+
+  @override
+  String get remote => 'Attālināts';
+
+  @override
+  String get rename => 'Pārdēvēt';
+
+  @override
+  String get revoke => 'Atsaukt';
+
+  @override
+  String get role => 'Loma';
+
+  @override
+  String get root => 'Sakne';
+
+  @override
+  String get run => 'Skrien';
+
+  @override
+  String get search => 'Meklēt';
+
+  @override
+  String get select => 'Izvēlieties';
+
+  @override
+  String get send => 'Sūtīt';
+
+  @override
+  String get sessions => 'Sesijas';
+
+  @override
+  String get set => 'Iestatīt';
+
+  @override
+  String get status => 'Statuss';
+
+  @override
+  String get stop => 'Apturēt';
+
+  @override
+  String get streaming => 'Straumēšana';
+
+  @override
+  String get time => 'Laiks';
+
+  @override
+  String get trickplay => 'Trickplay';
+
+  @override
+  String get uninstall => 'Atinstalēt';
+
+  @override
+  String get up => 'Uz augšu';
+
+  @override
+  String get update => 'Atjaunināt';
+
+  @override
+  String get upload => 'Augšupielādēt';
+
+  @override
+  String get unmute => 'Ieslēgt skaņu';
+
+  @override
+  String get mute => 'Izslēgt skaņu';
+
+  @override
+  String get branding => 'Brendings';
+
+  @override
+  String get adminDrawerDashboard => 'Informācijas panelis';
+
+  @override
+  String get adminDrawerAnalytics => 'Analītika';
+
+  @override
+  String get adminDrawerSettings => 'Iestatījumi';
+
+  @override
+  String get adminDrawerBranding => 'Brendings';
+
+  @override
+  String get adminDrawerUsers => 'Lietotāji';
+
+  @override
+  String get adminDrawerLibraries => 'Bibliotēkas';
+
+  @override
+  String get adminDrawerDisplay => 'Attēlošana';
+
+  @override
+  String get adminDrawerMetadata => 'Metadati';
+
+  @override
+  String get adminDrawerNfo => 'NFO iestatījumi';
+
+  @override
+  String get adminDrawerTranscoding => 'Pārkodēšana';
+
+  @override
+  String get adminDrawerResume => 'Turpināt';
+
+  @override
+  String get adminDrawerStreaming => 'Straumēšana';
+
+  @override
+  String get adminDrawerTrickplay => 'Trickplay';
+
+  @override
+  String get adminDrawerDevices => 'Ierīces';
+
+  @override
+  String get adminDrawerActivity => 'Aktivitāte';
+
+  @override
+  String get adminDrawerNetworking => 'Tīklošana';
+
+  @override
+  String get adminDrawerApiKeys => 'API atslēgas';
+
+  @override
+  String get adminDrawerBackups => 'Dublējumkopijas';
+
+  @override
+  String get adminDrawerLogs => 'Baļķi';
+
+  @override
+  String get adminDrawerScheduledTasks => 'Plānotie uzdevumi';
+
+  @override
+  String get adminDrawerPlugins => 'Spraudņi';
+
+  @override
+  String get adminDrawerRepositories => 'Krātuves';
+
+  @override
+  String get adminDrawerLiveTv => 'TV tiešraide';
+
+  @override
+  String get adminExitTooltip => 'Iziet no Admin';
+
+  @override
+  String get adminDashboardLoadFailed =>
+      'Neizdevās ielādēt informācijas paneli';
+
+  @override
+  String get adminMediaOverview => 'Plašsaziņas līdzekļu pārskats';
+
+  @override
+  String get adminMediaTotalsError =>
+      'Nevarēja ielādēt servera multivides kopsummas.';
+
+  @override
+  String get adminMediaOverviewSubtitle =>
+      'Īsa informācija par to, cik daudz satura ir šajā serverī.';
+
+  @override
+  String adminPluginUpdatesAvailable(int count) {
+    return 'Pieejami spraudņa atjauninājumi: $count';
+  }
+
+  @override
+  String adminPluginsRequiringRestart(int count) {
+    return 'Spraudņi, kuriem nepieciešama restartēšana: $count';
+  }
+
+  @override
+  String adminFailedScheduledTasks(int count) {
+    return 'Neizdevās ieplānotie uzdevumi: $count';
+  }
+
+  @override
+  String adminRecentAlertEntries(int count) {
+    return 'Jaunākie brīdinājumu/kļūdu ieraksti: $count';
+  }
+
+  @override
+  String get analyticsMediaDistribution => 'Mediju izplatīšana';
+
+  @override
+  String get analyticsVideoCodecs => 'Video kodeki';
+
+  @override
+  String get analyticsAudioCodecs => 'Audio kodeki';
+
+  @override
+  String get analyticsContainers => 'Konteineri';
+
+  @override
+  String get analyticsTopGenres => 'Populārākie žanri';
+
+  @override
+  String get analyticsReleaseYears => 'Izlaiduma gadi';
+
+  @override
+  String get analyticsContentRatings => 'Satura vērtējumi';
+
+  @override
+  String get analyticsRuntimeBuckets => 'Izpildes laika segmenti';
+
+  @override
+  String get analyticsFileFormats => 'Failu formāti';
+
+  @override
+  String get analyticsNoData => 'Dati nav pieejami.';
+
+  @override
+  String get adminServerInfo => 'Servera informācija';
+
+  @override
+  String get adminRestartPending => 'Restartēšana gaida';
+
+  @override
+  String get adminServerPaths => 'Servera ceļi';
+
+  @override
+  String get adminServerActions => 'Servera darbības';
+
+  @override
+  String get adminRestartServer => 'Restartējiet serveri';
+
+  @override
+  String get adminShutdownServer => 'Izslēgšanas serveris';
+
+  @override
+  String get adminScanLibraries => 'Bibliotēku skenēšana';
+
+  @override
+  String get adminLibraryScanStarted => 'Sākta bibliotēkas skenēšana';
+
+  @override
+  String errorGeneric(String error) {
+    return 'Kļūda: $error';
+  }
+
+  @override
+  String get adminServerRebootInProgress => 'Notiek servera atsāknēšana';
+
+  @override
+  String get adminServerRebootMessage =>
+      'Notiek servera atsāknēšana, lūdzu, restartējiet Tortugarr';
+
+  @override
+  String get adminActiveSessions => 'Aktīvās sesijas';
+
+  @override
+  String get adminSessionsLoadFailed => 'Neizdevās ielādēt sesijas';
+
+  @override
+  String get adminNoActiveSessions => 'Nav aktīvu sesiju';
+
+  @override
+  String get adminRecentActivity => 'Pēdējā darbība';
+
+  @override
+  String get adminNoRecentActivity => 'Nav pēdējo darbību';
+
+  @override
+  String adminCommandFailed(String error) {
+    return 'Komanda neizdevās: $error';
+  }
+
+  @override
+  String get adminSendMessage => 'Nosūtīt ziņu';
+
+  @override
+  String get adminMessageTextHint => 'Ziņas teksts';
+
+  @override
+  String get adminSetVolume => 'Iestatīt skaļumu';
+
+  @override
+  String get sessionPrev => 'Iepriekšējā';
+
+  @override
+  String get sessionRewind => 'Attīt atpakaļ';
+
+  @override
+  String get sessionForward => 'Patīt uz priekšu';
+
+  @override
+  String get sessionNext => 'Nākamais';
+
+  @override
+  String get sessionVolumeDown => 'Skaļ. –';
+
+  @override
+  String get sessionVolumeUp => 'Skaļ. +';
+
+  @override
+  String get uhd4k => '4K';
+
+  @override
+  String get nowPlaying => 'Tagad spēlē';
+
+  @override
+  String get volume => 'Skaļums';
+
+  @override
+  String get actions => 'Darbības';
+
+  @override
+  String get videoCodec => 'Video kodeks';
+
+  @override
+  String get audioCodec => 'Audio kodeks';
+
+  @override
+  String get hwAccel => 'Aparat. paātrin.';
+
+  @override
+  String get completion => 'Pabeigšana';
+
+  @override
+  String get direct => 'Tieša';
+
+  @override
+  String get adminDisconnect => 'Atvienot';
+
+  @override
+  String get adminClearDates => 'Skaidri datumi';
+
+  @override
+  String get adminActivitySeverityAll => 'Visi nopietnības līmeņi';
+
+  @override
+  String get adminActivityDateRange => 'Datumu diapazons';
+
+  @override
+  String adminActivityLoadFailed(String error) {
+    return 'Neizdevās ielādēt darbību žurnālu: $error';
+  }
+
+  @override
+  String get adminNoActivityEntries => 'Nav darbību ierakstu';
+
+  @override
+  String get adminEditDeviceName => 'Rediģēt ierīces nosaukumu';
+
+  @override
+  String get adminCustomName => 'Pielāgots nosaukums';
+
+  @override
+  String get adminDeviceNameUpdated => 'Ierīces nosaukums ir atjaunināts';
+
+  @override
+  String adminDeviceUpdateFailed(String error) {
+    return 'Neizdevās atjaunināt ierīci: $error';
+  }
+
+  @override
+  String get adminDeleteDevice => 'Dzēst ierīci';
+
+  @override
+  String get adminDeviceDeleted => 'Ierīce izdzēsta';
+
+  @override
+  String adminDeviceDeleteFailed(String error) {
+    return 'Neizdevās izdzēst ierīci: $error';
+  }
+
+  @override
+  String adminRemoveDeviceConfirm(String name) {
+    return 'Noņemt ierīci “$name”? Lietotājam būs atkārtoti jāpierakstās šajā ierīcē.';
+  }
+
+  @override
+  String get adminDeleteAllDevices => 'Dzēst visas ierīces';
+
+  @override
+  String adminDeleteAllDevicesConfirm(int count) {
+    return 'Noņemt ierīces ($count)? Skartajiem lietotājiem būs atkārtoti jāpierakstās. Jūsu pašreizējā ierīce netiks skarta.';
+  }
+
+  @override
+  String get adminDevicesDeletedAll => 'Ierīces noņemtas';
+
+  @override
+  String adminDevicesDeletedPartial(int count) {
+    return 'Dažas ierīces noņemtas; $count nevarēja noņemt.';
+  }
+
+  @override
+  String get adminDevicesLoadFailed => 'Neizdevās ielādēt ierīces';
+
+  @override
+  String get adminSearchDevices => 'Meklēt ierīces';
+
+  @override
+  String get adminThisDevice => 'Šī Ierīce';
+
+  @override
+  String get adminEditName => 'Rediģēt nosaukumu';
+
+  @override
+  String get adminLibrariesLoadFailed => 'Neizdevās ielādēt bibliotēkas';
+
+  @override
+  String get adminNoLibraries => 'Nav konfigurēta neviena bibliotēka';
+
+  @override
+  String get adminScanAllLibraries => 'Skenējiet visas bibliotēkas';
+
+  @override
+  String get adminAddLibrary => 'Pievienot bibliotēku';
+
+  @override
+  String adminScanFailed(String error) {
+    return 'Neizdevās sākt skenēšanu: $error';
+  }
+
+  @override
+  String get adminRenameLibrary => 'Pārdēvēt bibliotēku';
+
+  @override
+  String get adminNewName => 'Jauns nosaukums';
+
+  @override
+  String adminLibraryRenamed(String name) {
+    return 'Bibliotēka pārdēvēta par $name';
+  }
+
+  @override
+  String adminRenameFailed(String error) {
+    return 'Neizdevās pārdēvēt: $error';
+  }
+
+  @override
+  String get adminDeleteLibrary => 'Dzēst bibliotēku';
+
+  @override
+  String adminLibraryDeleted(String name) {
+    return 'Bibliotēka \"$name\" ir izdzēsta';
+  }
+
+  @override
+  String adminLibraryDeleteFailed(String error) {
+    return 'Neizdevās izdzēst bibliotēku: $error';
+  }
+
+  @override
+  String adminAddPathFailed(String error) {
+    return 'Neizdevās pievienot ceļu: $error';
+  }
+
+  @override
+  String get adminRemovePath => 'Noņemt ceļu';
+
+  @override
+  String adminRemovePathConfirm(String path) {
+    return 'Vai noņemt \"$path\" no šīs bibliotēkas?';
+  }
+
+  @override
+  String adminRemovePathFailed(String error) {
+    return 'Neizdevās noņemt ceļu: $error';
+  }
+
+  @override
+  String get adminLibraryOptionsSaved => 'Bibliotēkas opcijas ir saglabātas';
+
+  @override
+  String adminLibraryOptionsSaveFailed(String error) {
+    return 'Neizdevās saglabāt opcijas: $error';
+  }
+
+  @override
+  String get adminLibraryLoadFailed => 'Neizdevās ielādēt bibliotēku';
+
+  @override
+  String get adminNoMediaPaths => 'Nav konfigurēti multivides ceļi';
+
+  @override
+  String get adminAddPath => 'Pievienot ceļu';
+
+  @override
+  String get adminBrowseFilesystem => 'Pārlūkot servera failu sistēmu:';
+
+  @override
+  String get adminSaveOptions => 'Saglabāt opcijas';
+
+  @override
+  String get adminPreferredMetadataLanguage => 'Vēlamā metadatu valoda';
+
+  @override
+  String get adminMetadataLanguageHint => 'piem. lv, de, fr';
+
+  @override
+  String get adminMetadataCountryCode => 'Metadatu valsts kods';
+
+  @override
+  String get adminMetadataCountryHint => 'piem. ASV, DE, FR';
+
+  @override
+  String get adminLibraryTabPaths => 'Ceļi';
+
+  @override
+  String get adminLibraryTabOptions => 'Opcijas';
+
+  @override
+  String get adminLibraryTabDownloaders => 'Lejupielādes avoti';
+
+  @override
+  String get adminLibMetadataSavers => 'Metadatu saglabātāji';
+
+  @override
+  String get adminLibSubtitleDownloaders => 'Subtitru lejupielādes avoti';
+
+  @override
+  String get adminLibLyricDownloaders => 'Dziesmu tekstu lejupielādes avoti';
+
+  @override
+  String adminLibMetadataDownloadersFor(String type) {
+    return 'Metadatu lejupielādes avoti: $type';
+  }
+
+  @override
+  String adminLibImageFetchersFor(String type) {
+    return 'Attēlu avoti: $type';
+  }
+
+  @override
+  String get adminLibNoDownloaders =>
+      'Šis serveris nepiedāvā lejupielādes avotus šāda veida bibliotēkai.';
+
+  @override
+  String get adminLibrarySectionGeneral => 'Vispārīgi';
+
+  @override
+  String get adminLibrarySectionMetadata => 'Metadati';
+
+  @override
+  String get adminLibrarySectionEmbedded => 'Iegultā informācija';
+
+  @override
+  String get adminLibrarySectionSubtitles => 'Subtitri';
+
+  @override
+  String get adminLibrarySectionImages => 'Attēli';
+
+  @override
+  String get adminLibrarySectionSeries => 'Seriāli';
+
+  @override
+  String get adminLibrarySectionMusic => 'Mūzika';
+
+  @override
+  String get adminLibrarySectionMovies => 'Filmas';
+
+  @override
+  String get adminLibRealtimeMonitor => 'Iespējot uzraudzību reāllaikā';
+
+  @override
+  String get adminLibRealtimeMonitorHint =>
+      'Noteikt failu izmaiņas un apstrādāt tās automātiski.';
+
+  @override
+  String get adminLibArchiveMediaFiles =>
+      'Uzskatīt arhīvus par multivides failiem';
+
+  @override
+  String get adminLibEnablePhotos => 'Rādīt fotoattēlus';
+
+  @override
+  String get adminLibSaveLocalMetadata =>
+      'Saglabāt vāka attēlus multivides mapēs';
+
+  @override
+  String get adminLibRefreshInterval => 'Automātiska metadatu atsvaidzināšana';
+
+  @override
+  String get adminLibRefreshNever => 'Nekad';
+
+  @override
+  String get adminLibDefault => 'Noklusējums';
+
+  @override
+  String get adminLibDisplayTitle => 'Attēlošana';
+
+  @override
+  String get adminLibDisplaySection => 'Bibliotēkas attēlošana';
+
+  @override
+  String get adminLibFolderView =>
+      'Rādīt mapju skatu ar vienkāršām multivides mapēm';
+
+  @override
+  String get adminLibSpecialsInSeasons =>
+      'Rādīt speciālās epizodes tajās sezonās, kurās tās tika rādītas';
+
+  @override
+  String get adminLibGroupMovies => 'Grupēt filmas kolekcijās';
+
+  @override
+  String get adminLibGroupShows => 'Grupēt seriālus kolekcijās';
+
+  @override
+  String get adminLibExternalSuggestions => 'Rādīt ārējo saturu ieteikumos';
+
+  @override
+  String get adminLibDateAddedSection => 'Pievienošanas datuma darbība';
+
+  @override
+  String get adminLibDateAddedLabel => 'Pievienošanas datumu ņemt no';
+
+  @override
+  String get adminLibDateAddedImport => 'Bibliotēkā skenēšanas datums';
+
+  @override
+  String get adminLibDateAddedFile => 'Faila izveides datums';
+
+  @override
+  String get adminLibMetadataTitle => 'Metadati un attēli';
+
+  @override
+  String get adminLibMetadataLangSection => 'Vēlamā metadatu valoda';
+
+  @override
+  String get adminLibChaptersSection => 'Nodaļas';
+
+  @override
+  String get adminLibDummyChapterDuration => 'Fiktīvo nodaļu ilgums (sekundēs)';
+
+  @override
+  String get adminLibDummyChapterDurationHint =>
+      'To nodaļu ilgums, kas ģenerētas multividei bez nodaļām. Iestatiet 0, lai atspējotu.';
+
+  @override
+  String get adminLibChapterImageResolution => 'Nodaļu attēlu izšķirtspēja';
+
+  @override
+  String get adminLibNfoTitle => 'NFO iestatījumi';
+
+  @override
+  String get adminLibNfoHelp =>
+      'NFO metadati ir saderīgi ar Kodi un līdzīgām lietotnēm. Iestatījumi attiecas uz visām bibliotēkām, kas saglabā NFO metadatus.';
+
+  @override
+  String get adminLibKodiUser =>
+      'Lietotājs, kura skatīšanās dati tiks saglabāti NFO failos';
+
+  @override
+  String get adminLibSaveImagePaths => 'Saglabāt attēlu ceļus NFO failos';
+
+  @override
+  String get adminLibPathSubstitution =>
+      'Iespējot ceļu aizstāšanu NFO attēlu ceļiem';
+
+  @override
+  String get adminLibExtraThumbs =>
+      'Kopēt extrafanart attēlus mapē extrathumbs';
+
+  @override
+  String get adminLibNone => 'Nav';
+
+  @override
+  String adminLibRefreshDays(int days) {
+    return '$days d.';
+  }
+
+  @override
+  String get adminLibEmbeddedTitles => 'Izmantot iegultos nosaukumus';
+
+  @override
+  String get adminLibEmbeddedExtrasTitles =>
+      'Izmantot iegultos papildmateriālu nosaukumus';
+
+  @override
+  String get adminLibEmbeddedEpisodeInfos =>
+      'Izmantot iegulto epizožu informāciju';
+
+  @override
+  String get adminLibAllowEmbeddedSubtitles => 'Atļaut iegultos subtitrus';
+
+  @override
+  String get adminLibEmbeddedAllowAll => 'Atļaut visus';
+
+  @override
+  String get adminLibEmbeddedAllowText => 'Tikai tekstu';
+
+  @override
+  String get adminLibEmbeddedAllowImage => 'Tikai attēlus';
+
+  @override
+  String get adminLibEmbeddedAllowNone => 'Nav';
+
+  @override
+  String get adminLibSkipIfEmbeddedSubs =>
+      'Izlaist lejupielādi, ja ir iegultie subtitri';
+
+  @override
+  String get adminLibSkipIfAudioMatches =>
+      'Izlaist lejupielādi, ja audio celiņa valoda sakrīt ar lejupielādes valodu';
+
+  @override
+  String get adminLibRequirePerfectMatch =>
+      'Pieprasīt precīzu subtitru atbilstību';
+
+  @override
+  String get adminLibSaveSubtitlesWithMedia =>
+      'Saglabāt subtitrus multivides mapēs';
+
+  @override
+  String get adminLibChapterImageExtraction => 'Iegūt nodaļu attēlus';
+
+  @override
+  String get adminLibChapterImagesDuringScan =>
+      'Iegūt nodaļu attēlus bibliotēkas skenēšanas laikā';
+
+  @override
+  String get adminLibTrickplayExtraction =>
+      'Iespējot Trickplay attēlu iegūšanu';
+
+  @override
+  String get adminLibTrickplayDuringScan =>
+      'Iegūt Trickplay attēlus bibliotēkas skenēšanas laikā';
+
+  @override
+  String get adminLibSaveTrickplayWithMedia =>
+      'Saglabāt Trickplay attēlus multivides mapēs';
+
+  @override
+  String get adminLibAutomaticSeriesGrouping =>
+      'Automātiski apvienot seriālus, kas izvietoti vairākās mapēs';
+
+  @override
+  String get adminLibSeasonZeroName => 'Nulltās sezonas attēlojamais nosaukums';
+
+  @override
+  String get adminLibLufsScan => 'Iespējot LUFS skenēšanu audio normalizēšanai';
+
+  @override
+  String get adminLibPreferNonstandardArtist =>
+      'Dot priekšroku nestandarta izpildītāju tagam';
+
+  @override
+  String get adminLibAutoAddToCollection =>
+      'Automātiski pievienot filmas kolekcijām';
+
+  @override
+  String get adminLibraryNameRequired => 'Jānorāda bibliotēkas nosaukums';
+
+  @override
+  String adminLibraryCreateFailed(String error) {
+    return 'Neizdevās izveidot bibliotēku: $error';
+  }
+
+  @override
+  String get adminLibraryName => 'Bibliotēkas nosaukums';
+
+  @override
+  String get adminSelectedPaths => 'Atlasītie ceļi:';
+
+  @override
+  String get adminNoPathsAdded =>
+      'Nav pievienots neviens ceļš (var pievienot vēlāk)';
+
+  @override
+  String get adminCreateLibrary => 'Izveidot bibliotēku';
+
+  @override
+  String get paths => 'Ceļi:';
+
+  @override
+  String get adminDisableUser => 'Atspējot lietotāju';
+
+  @override
+  String get adminEnableUser => 'Iespējot lietotāju';
+
+  @override
+  String adminDisableUserConfirm(String name) {
+    return 'Vai atspējot $name? Viņi nevarēs pierakstīties.';
+  }
+
+  @override
+  String adminEnableUserConfirm(String name) {
+    return 'Vai iespējot $name? Viņi varēs pierakstīties vēlreiz.';
+  }
+
+  @override
+  String adminUserDisabled(String name) {
+    return 'Lietotājs \"$name\" ir atspējots';
+  }
+
+  @override
+  String adminUserEnabled(String name) {
+    return 'Lietotājs \"$name\" ir iespējots';
+  }
+
+  @override
+  String adminUserPolicyUpdateFailed(String error) {
+    return 'Neizdevās atjaunināt lietotāja politiku: $error';
+  }
+
+  @override
+  String get adminUsersLoadFailed => 'Neizdevās ielādēt lietotājus';
+
+  @override
+  String get adminSearchUsers => 'Meklēt lietotājus';
+
+  @override
+  String get adminEditUser => 'Rediģēt lietotāju';
+
+  @override
+  String get adminAddUser => 'Pievienot lietotāju';
+
+  @override
+  String adminUserCreateFailed(String error) {
+    return 'Neizdevās izveidot lietotāju: $error';
+  }
+
+  @override
+  String get adminCreateUser => 'Izveidot lietotāju';
+
+  @override
+  String get adminPasswordOptional => 'Parole (pēc izvēles)';
+
+  @override
+  String get adminUsernameRequired => 'Lietotājvārda lauks nedrīkst būt tukšs';
+
+  @override
+  String get adminNoProfileChanges => 'Nav saglabājamu profila izmaiņu';
+
+  @override
+  String get adminProfileSaved => 'Profils saglabāts';
+
+  @override
+  String adminSaveFailed(String error) {
+    return 'Neizdevās saglabāt: $error';
+  }
+
+  @override
+  String get adminPermissionsSaved => 'Atļaujas saglabātas';
+
+  @override
+  String get adminPasswordsMismatch => 'Paroles nesakrīt';
+
+  @override
+  String adminFailed(String error) {
+    return 'Neizdevās: $error';
+  }
+
+  @override
+  String get adminUserLoadFailed => 'Neizdevās ielādēt lietotāju';
+
+  @override
+  String get adminBackToUsers => 'Atpakaļ uz lietotājiem';
+
+  @override
+  String get adminSaveProfile => 'Saglabāt profilu';
+
+  @override
+  String get adminDeleteUser => 'Dzēst lietotāju';
+
+  @override
+  String get admin => 'Administrators';
+
+  @override
+  String get adminFullAccessWarning =>
+      'Administratoriem ir pilnīga piekļuve serverim. Piešķiriet piesardzīgi.';
+
+  @override
+  String get administrator => 'Administrators';
+
+  @override
+  String get adminHiddenUser => 'Slēpts lietotājs';
+
+  @override
+  String get adminAllowMediaPlayback => 'Atļaut multivides atskaņošanu';
+
+  @override
+  String get adminAllowAudioTranscoding => 'Atļaut audio pārkodēšanu';
+
+  @override
+  String get adminAllowVideoTranscoding => 'Atļaut video pārkodēšanu';
+
+  @override
+  String get adminAllowRemuxing => 'Atļaut sajaukšanu';
+
+  @override
+  String get adminForceRemoteTranscoding =>
+      'Piespiedu attālā avota pārkodēšana';
+
+  @override
+  String get adminAllowContentDeletion => 'Atļaut satura dzēšanu';
+
+  @override
+  String get adminAllowContentDownloading => 'Atļaut satura lejupielādi';
+
+  @override
+  String get adminAllowPublicSharing => 'Atļaut publisku kopīgošanu';
+
+  @override
+  String get adminAllowRemoteControl =>
+      'Atļaut tālvadības pulti citiem lietotājiem';
+
+  @override
+  String get adminAllowSharedDeviceControl =>
+      'Atļaut koplietotu ierīces vadību';
+
+  @override
+  String get adminAllowRemoteAccess => 'Atļaut attālo piekļuvi';
+
+  @override
+  String get adminRemoteBitrateLimit =>
+      'Attālā klienta bitu pārraides ātruma ierobežojums (bps)';
+
+  @override
+  String get adminLeaveEmptyNoLimit => 'Atstājiet tukšu bez ierobežojumiem';
+
+  @override
+  String get adminMaxActiveSessions => 'Maksimālais aktīvo sesiju skaits';
+
+  @override
+  String get adminAllowLiveTvAccess => 'Atļaut piekļuvi TV tiešraidei';
+
+  @override
+  String get adminAllowLiveTvManagement => 'Atļaut tiešraides pārvaldību';
+
+  @override
+  String get adminAllowCollectionManagement => 'Atļaut kolekcijas pārvaldību';
+
+  @override
+  String get adminAllowSubtitleManagement => 'Atļaut subtitru pārvaldību';
+
+  @override
+  String get adminAllowLyricManagement => 'Atļaut dziesmu tekstu pārvaldību';
+
+  @override
+  String get adminSavePermissions => 'Saglabāt atļaujas';
+
+  @override
+  String get adminEnableAllLibraryAccess =>
+      'Iespējot piekļuvi visām bibliotēkām';
+
+  @override
+  String get adminSaveAccess => 'Saglabāt piekļuvi';
+
+  @override
+  String get adminChangePassword => 'Mainīt paroli';
+
+  @override
+  String get adminNewPassword => 'Jauna parole';
+
+  @override
+  String get adminConfirmPassword => 'Apstipriniet paroli';
+
+  @override
+  String get adminSetPassword => 'Iestatīt paroli';
+
+  @override
+  String get adminResetPassword => 'Atiestatīt paroli';
+
+  @override
+  String get adminPasswordReset => 'Paroles atiestatīšana';
+
+  @override
+  String get adminPasswordUpdated => 'Parole atjaunināta';
+
+  @override
+  String get adminUserSettings => 'Lietotāja iestatījumi';
+
+  @override
+  String get adminLibraryAccess => 'Piekļuve bibliotēkai';
+
+  @override
+  String get adminDeviceAndChannelAccess => 'Piekļuve ierīcei un kanālam';
+
+  @override
+  String get adminEnableAllDevices => 'Iespējot piekļuvi visām ierīcēm';
+
+  @override
+  String get adminEnableAllChannels => 'Iespējot piekļuvi visiem kanāliem';
+
+  @override
+  String get adminParentalControl => 'Vecāku kontrole';
+
+  @override
+  String get adminMaxParentalRating =>
+      'Maksimālais atļautais vecuma ierobežojums';
+
+  @override
+  String get adminMaxParentalRatingHint =>
+      'Saturs ar augstāku ierobežojumu šim lietotājam tiks paslēpts.';
+
+  @override
+  String get adminParentalRatingNone => 'Nav';
+
+  @override
+  String get adminBlockUnratedItems =>
+      'Bloķēt vienumus bez vecuma ierobežojuma informācijas vai ar neatpazītu informāciju';
+
+  @override
+  String get adminUnratedBook => 'Grāmatas';
+
+  @override
+  String get adminUnratedChannelContent => 'Kanāli';
+
+  @override
+  String get adminUnratedLiveTvChannel => 'Tiešraides TV';
+
+  @override
+  String get adminUnratedMovie => 'Filmas';
+
+  @override
+  String get adminUnratedMusic => 'Mūzika';
+
+  @override
+  String get adminUnratedTrailer => 'Treileri';
+
+  @override
+  String get adminUnratedSeries => 'Seriāli';
+
+  @override
+  String get adminAccessSchedules => 'Piekļuves grafiki';
+
+  @override
+  String get adminAccessSchedulesHint =>
+      'Atļaut piekļuvi tikai turpmāk norādītajos grafika laikos. Ja grafiks nav iestatīts, piekļuve ir atļauta visu diennakti.';
+
+  @override
+  String get adminAddSchedule => 'Pievienot grafiku';
+
+  @override
+  String get adminScheduleDay => 'Diena';
+
+  @override
+  String get adminScheduleStart => 'Sākums';
+
+  @override
+  String get adminScheduleEnd => 'Beigas';
+
+  @override
+  String get adminDayEveryday => 'Katru dienu';
+
+  @override
+  String get adminDayWeekday => 'Darba diena';
+
+  @override
+  String get adminDayWeekend => 'Nedēļas nogale';
+
+  @override
+  String get adminDaySunday => 'Svētdiena';
+
+  @override
+  String get adminDayMonday => 'Pirmdiena';
+
+  @override
+  String get adminDayTuesday => 'Otrdiena';
+
+  @override
+  String get adminDayWednesday => 'Trešdiena';
+
+  @override
+  String get adminDayThursday => 'Ceturtdiena';
+
+  @override
+  String get adminDayFriday => 'Piektdiena';
+
+  @override
+  String get adminDaySaturday => 'Sestdiena';
+
+  @override
+  String get adminAllowedTags => 'Atļautie tagi';
+
+  @override
+  String get adminAllowedTagsHint =>
+      'Tiek rādīts tikai saturs ar šiem tagiem. Atstājiet tukšu, lai atļautu visu.';
+
+  @override
+  String get adminBlockedTags => 'Bloķētie tagi';
+
+  @override
+  String get adminBlockedTagsHint =>
+      'Saturs ar šiem tagiem šim lietotājam tiek paslēpts.';
+
+  @override
+  String get adminAddTag => 'Pievienot tagu';
+
+  @override
+  String get adminEnabledDevices => 'Iespējotās ierīces';
+
+  @override
+  String get adminEnabledChannels => 'Iespējotie kanāli';
+
+  @override
+  String get adminAuthProvider => 'Autentifikācijas nodrošinātājs';
+
+  @override
+  String get adminPasswordResetProvider =>
+      'Paroles atiestatīšanas nodrošinātājs';
+
+  @override
+  String get adminLoginAttemptsBeforeLockout =>
+      'Maksimālais neveiksmīgo pieteikšanās mēģinājumu skaits pirms bloķēšanas';
+
+  @override
+  String get adminLoginAttemptsHint =>
+      'Iestatiet 0 noklusējuma vērtībai vai -1, lai atspējotu bloķēšanu.';
+
+  @override
+  String get adminSyncPlayAccess => 'SyncPlay piekļuve';
+
+  @override
+  String get adminSyncPlayCreateAndJoin =>
+      'Atļaut veidot grupas un tām pievienoties';
+
+  @override
+  String get adminSyncPlayJoin => 'Atļaut pievienoties grupām';
+
+  @override
+  String get adminSyncPlayNone => 'Nav piekļuves';
+
+  @override
+  String get adminContentDeletionFolders => 'Atļaut satura dzēšanu no';
+
+  @override
+  String get adminResetPasswordWarning =>
+      'Tas noņems paroli. Lietotājs varēs pieteikties bez paroles.';
+
+  @override
+  String adminServerReturnedHttp(int status) {
+    return 'Serveris atgrieza HTTP $status';
+  }
+
+  @override
+  String adminDeleteUserConfirm(String name) {
+    return 'Vai tiešām vēlaties dzēst $name?';
+  }
+
+  @override
+  String adminUserDeleted(String name) {
+    return 'Lietotājs \"$name\" ir izdzēsts';
+  }
+
+  @override
+  String adminUserDeleteFailed(String error) {
+    return 'Neizdevās izdzēst lietotāju: $error';
+  }
+
+  @override
+  String get adminCreateApiKey => 'Izveidojiet API atslēgu';
+
+  @override
+  String get adminAppName => 'Lietotnes nosaukums';
+
+  @override
+  String get adminApiKeyCreated => 'API atslēga ir izveidota';
+
+  @override
+  String get adminApiKeyCreatedNoToken =>
+      'Atslēga ir veiksmīgi izveidota. Serveris neatdeva marķieri. Pārbaudiet servera API atslēgas.';
+
+  @override
+  String get adminKeyCopied => 'Atslēga ir kopēta starpliktuvē';
+
+  @override
+  String adminApiKeyCreateFailed(String error) {
+    return 'Neizdevās izveidot atslēgu: $error';
+  }
+
+  @override
+  String get adminKeyTokenMissing => 'Servera atbildē trūkst atslēgas marķiera';
+
+  @override
+  String get adminRevokeApiKey => 'Atsaukt API atslēgu';
+
+  @override
+  String adminRevokeKeyConfirm(String name) {
+    return 'Vai atsaukt $name atslēgu?';
+  }
+
+  @override
+  String get adminApiKeyRevoked => 'API atslēga atsaukta';
+
+  @override
+  String adminApiKeyRevokeFailed(String error) {
+    return 'Neizdevās atsaukt atslēgu: $error';
+  }
+
+  @override
+  String get adminApiKeysLoadFailed => 'Neizdevās ielādēt API atslēgas';
+
+  @override
+  String get adminApiKeysTitle => 'API atslēgas';
+
+  @override
+  String get adminCreateKey => 'Izveidot atslēgu';
+
+  @override
+  String get adminNoApiKeys => 'Nav atrasta neviena API atslēga';
+
+  @override
+  String get adminUnknownApp => 'Nezināma lietotne';
+
+  @override
+  String adminApiKeyTokenCreated(String token, String created) {
+    return 'Tokens: $token\\nIzveidots: $created';
+  }
+
+  @override
+  String get adminBackupOptionsTitle => 'Izveidot dublējumu';
+
+  @override
+  String get adminBackupInclude => 'Izvēlieties, ko iekļaut dublējumā.';
+
+  @override
+  String get adminBackupDatabase => 'Datubāze';
+
+  @override
+  String get adminBackupDatabaseAlways => 'Vienmēr iekļauts';
+
+  @override
+  String get adminBackupMetadata => 'Metadati';
+
+  @override
+  String get adminBackupSubtitles => 'Subtitri';
+
+  @override
+  String get adminBackupTrickplay => 'Trickplay attēli';
+
+  @override
+  String get adminCreatingBackup => 'Notiek dublējuma izveide...';
+
+  @override
+  String get adminBackupCreated => 'Dublējums ir veiksmīgi izveidots';
+
+  @override
+  String adminBackupCreateFailed(String error) {
+    return 'Neizdevās izveidot dublējumu: $error';
+  }
+
+  @override
+  String get adminBackupPathMissing => 'Servera atbildē trūkst rezerves ceļa';
+
+  @override
+  String adminBackupManifest(String name) {
+    return 'Manifests: $name';
+  }
+
+  @override
+  String adminManifestLoadFailed(String error) {
+    return 'Neizdevās ielādēt manifestu: $error';
+  }
+
+  @override
+  String get adminConfirmRestore => 'Apstipriniet Atjaunot';
+
+  @override
+  String get adminRestoringBackup => 'Notiek dublējuma atjaunošana...';
+
+  @override
+  String adminRestoreFailed(String error) {
+    return 'Neizdevās atjaunot dublējumu: $error';
+  }
+
+  @override
+  String get adminBackupsLoadFailed => 'Neizdevās ielādēt dublējumus';
+
+  @override
+  String get adminCreateBackup => 'Izveidot dublējumu';
+
+  @override
+  String get adminNoBackups => 'Dublējumkopijas nav atrastas';
+
+  @override
+  String get adminViewDetails => 'Skatīt detaļas';
+
+  @override
+  String get restore => 'Atjaunot';
+
+  @override
+  String get adminLogsLoadFailed => 'Neizdevās ielādēt servera žurnālus';
+
+  @override
+  String get adminNoLogFiles => 'Nav atrasts neviens žurnālfails';
+
+  @override
+  String get adminLogCopied => 'Žurnāls ir kopēts starpliktuvē';
+
+  @override
+  String get adminSaveLogFile => 'Saglabājiet žurnāla failu';
+
+  @override
+  String adminSavedTo(String path) {
+    return 'Saglabāts $path';
+  }
+
+  @override
+  String adminFileSaveFailed(String error) {
+    return 'Neizdevās saglabāt failu: $error';
+  }
+
+  @override
+  String adminLogFileLoadFailed(String fileName) {
+    return 'Neizdevās ielādēt $fileName';
+  }
+
+  @override
+  String get adminSearchInLog => 'Meklēt žurnālā';
+
+  @override
+  String get adminNoMatchingLines => 'Nav atbilstošu līniju';
+
+  @override
+  String adminTasksLoadFailed(String error) {
+    return 'Neizdevās ielādēt uzdevumus: $error';
+  }
+
+  @override
+  String get adminNoScheduledTasks => 'Nav atrasts neviens ieplānots uzdevums';
+
+  @override
+  String get adminNoTasksMatchFilter =>
+      'Neviens uzdevums neatbilst pašreizējam filtram';
+
+  @override
+  String adminTaskStartFailed(String error) {
+    return 'Neizdevās sākt uzdevumu: $error';
+  }
+
+  @override
+  String adminTaskStopFailed(String error) {
+    return 'Neizdevās apturēt uzdevumu: $error';
+  }
+
+  @override
+  String adminTaskLoadFailed(String error) {
+    return 'Neizdevās ielādēt uzdevumu: $error';
+  }
+
+  @override
+  String get adminRunNow => 'Skrien tūlīt';
+
+  @override
+  String adminTriggerRemoveFailed(String error) {
+    return 'Neizdevās noņemt aktivizētāju: $error';
+  }
+
+  @override
+  String adminTriggerAddFailed(String error) {
+    return 'Neizdevās pievienot aktivizētāju: $error';
+  }
+
+  @override
+  String get adminLastExecution => 'Pēdējā izpilde';
+
+  @override
+  String get adminTriggers => 'Trigeri';
+
+  @override
+  String get adminAddTrigger => 'Pievienot trigeri';
+
+  @override
+  String get adminNoTriggers => 'Nav konfigurēts neviens aktivizētājs';
+
+  @override
+  String get adminTriggerType => 'Trigera veids';
+
+  @override
+  String get adminTimeLimit => 'Laika ierobežojums (pēc izvēles)';
+
+  @override
+  String get adminNoLimit => 'Nav ierobežojumu';
+
+  @override
+  String adminHours(String hours) {
+    return '$hours stunda(s)';
+  }
+
+  @override
+  String get adminDayOfWeek => 'Nedēļas diena';
+
+  @override
+  String get adminSearchPlugins => 'Meklēt spraudņus...';
+
+  @override
+  String adminPluginToggleFailed(String error) {
+    return 'Neizdevās pārslēgt spraudni: $error';
+  }
+
+  @override
+  String get adminUninstallPlugin => 'Atinstalējiet spraudni';
+
+  @override
+  String adminUninstallPluginConfirm(String name) {
+    return 'Vai tiešām vēlaties atinstalēt \"$name\"?';
+  }
+
+  @override
+  String adminPluginUninstallFailed(String error) {
+    return 'Neizdevās atinstalēt spraudni: $error';
+  }
+
+  @override
+  String adminPackageInstallFailed(String error) {
+    return 'Neizdevās instalēt pakotni: $error';
+  }
+
+  @override
+  String adminPluginUpdateFailed(String error) {
+    return 'Neizdevās instalēt atjauninājumu: $error';
+  }
+
+  @override
+  String adminPluginsLoadFailed(String error) {
+    return 'Neizdevās ielādēt spraudņus: $error';
+  }
+
+  @override
+  String get adminNoPluginsMatchSearch =>
+      'Neviens spraudnis neatbilst jūsu meklēšanas vaicājumam';
+
+  @override
+  String get adminNoPluginsInstalled => 'Nav instalēts neviens spraudnis';
+
+  @override
+  String adminInstallUpdate(String version) {
+    return 'Instalējiet atjauninājumu (v$version)';
+  }
+
+  @override
+  String adminCatalogLoadFailed(String error) {
+    return 'Neizdevās ielādēt katalogu: $error';
+  }
+
+  @override
+  String get adminNoPackagesMatchSearch =>
+      'Neviena pakotne neatbilst jūsu meklēšanas vaicājumam';
+
+  @override
+  String get adminNoPackagesAvailable => 'Paciņas nav pieejamas';
+
+  @override
+  String get adminExperimentalIntegration => 'Eksperimentālā integrācija';
+
+  @override
+  String get adminExperimentalWarning =>
+      'Spraudņa iestatījumu integrācija joprojām ir eksperimentāla. Dažas iestatījumu lapas var netikt renderētas pareizi.';
+
+  @override
+  String get continueAction => 'Turpināt';
+
+  @override
+  String adminPluginRemoveAfterRestart(String name) {
+    return '\"$name\" tiks noņemts pēc servera restartēšanas';
+  }
+
+  @override
+  String adminUninstallFailed(String error) {
+    return 'Neizdevās atinstalēt: $error';
+  }
+
+  @override
+  String adminPluginUpdating(String name, String version) {
+    return 'Notiek \"$name\" atjaunināšana uz v$version...';
+  }
+
+  @override
+  String get adminMissingAuthToken =>
+      'Nevar atvērt iestatījumus: trūkst autentifikācijas pilnvaras.';
+
+  @override
+  String adminPluginLoadFailed(String error) {
+    return 'Neizdevās ielādēt spraudni: $error';
+  }
+
+  @override
+  String get adminPluginNotFound => 'Spraudnis nav atrasts';
+
+  @override
+  String adminPluginVersion(String version) {
+    return 'Versija $version';
+  }
+
+  @override
+  String get adminEnablePlugin => 'Iespējot spraudni';
+
+  @override
+  String get adminPluginSettingsPage => 'Spraudņa iestatījumu lapa';
+
+  @override
+  String get adminRevisionHistory => 'Pārskatīšanas vēsture';
+
+  @override
+  String get adminNoChangelog => 'Nav pieejams izmaiņu žurnāls.';
+
+  @override
+  String get adminRemoveRepository => 'Noņemt repozitoriju';
+
+  @override
+  String adminRemoveRepositoryConfirm(String name) {
+    return 'Vai tiešām vēlaties noņemt \"$name\"?';
+  }
+
+  @override
+  String adminRepositoriesSaveFailed(String error) {
+    return 'Neizdevās saglabāt krātuves: $error';
+  }
+
+  @override
+  String adminRepositoriesLoadFailed(String error) {
+    return 'Neizdevās ielādēt krātuves: $error';
+  }
+
+  @override
+  String get adminRepositoryNameHint => 'piem. Jellyfin Stable';
+
+  @override
+  String get adminRepositoryUrl => 'Repozitorija URL';
+
+  @override
+  String get adminAddEntry => 'Pievienot ierakstu';
+
+  @override
+  String get adminInvalidUrl => 'Nederīgs URL';
+
+  @override
+  String adminPluginSettingsLoadFailed(String error) {
+    return 'Nevar ielādēt spraudņa iestatījumus: $error';
+  }
+
+  @override
+  String adminCouldNotOpenUrl(String uri) {
+    return 'Nevarēja atvērt $uri';
+  }
+
+  @override
+  String get adminOpenInBrowser => 'Atvērt pārlūkprogrammā';
+
+  @override
+  String get adminOpenExternally => 'Atvērt ārēji';
+
+  @override
+  String get adminGeneralSettings => 'Vispārīgi iestatījumi';
+
+  @override
+  String get adminServerName => 'Servera nosaukums';
+
+  @override
+  String get adminPreferredMetadataCountry => 'Vēlamā metadatu valsts';
+
+  @override
+  String get adminCachePath => 'Kešatmiņas ceļš';
+
+  @override
+  String get adminMetadataPath => 'Metadatu ceļš';
+
+  @override
+  String get adminLibraryScanConcurrency =>
+      'Bibliotēkas skenēšanas vienlaicīgums';
+
+  @override
+  String get adminParallelImageEncodingLimit =>
+      'Paralēlā attēla kodēšanas ierobežojums';
+
+  @override
+  String get adminSlowResponseThreshold => 'Lēnas reakcijas slieksnis (ms)';
+
+  @override
+  String get adminBrandingSaved => 'Zīmola iestatījumi ir saglabāti';
+
+  @override
+  String get adminBrandingLoadFailed => 'Neizdevās ielādēt zīmola iestatījumus';
+
+  @override
+  String get adminLoginDisclaimer => 'Pieteikšanās atruna';
+
+  @override
+  String get adminLoginDisclaimerHint =>
+      'HTML tiek parādīts zem pieteikšanās veidlapas';
+
+  @override
+  String get adminCustomCss => 'Pielāgots CSS';
+
+  @override
+  String get adminCustomCssHint =>
+      'Pielāgots CSS, kas tiek lietots tīmekļa saskarnē';
+
+  @override
+  String get adminEnableSplashScreen => 'Iespējot uzplaiksnījumu ekrānu';
+
+  @override
+  String get adminStreamingSaved => 'Straumēšanas iestatījumi ir saglabāti';
+
+  @override
+  String get adminStreamingLoadFailed =>
+      'Neizdevās ielādēt straumēšanas iestatījumus';
+
+  @override
+  String get adminStreamingDescription =>
+      'Iestatiet globālos straumēšanas bitu pārraides ātruma ierobežojumus attāliem savienojumiem.';
+
+  @override
+  String get adminRemoteBitrateLimitMbps =>
+      'Attālā klienta bitu pārraides ātruma ierobežojums (Mb/s)';
+
+  @override
+  String get adminLeaveEmptyForUnlimited =>
+      'Atstājiet tukšu vai 0, lai neierobežotu';
+
+  @override
+  String get adminPlaybackSaved => 'Atskaņošanas iestatījumi ir saglabāti';
+
+  @override
+  String get adminPlaybackLoadFailed =>
+      'Neizdevās ielādēt atskaņošanas iestatījumus';
+
+  @override
+  String get adminPlaybackTranscoding => 'Atskaņošana / pārkodēšana';
+
+  @override
+  String get adminHardwareAcceleration => 'Aparatūras paātrinājums';
+
+  @override
+  String get adminVaapiDevice => 'VA-API ierīce';
+
+  @override
+  String get adminEnableHardwareEncoding => 'Iespējot aparatūras kodējumu';
+
+  @override
+  String get adminEnableHardwareDecoding => 'Iespējot aparatūras dekodēšanu:';
+
+  @override
+  String get adminEncodingThreads => 'Kodēšanas pavedieni';
+
+  @override
+  String get adminAutomatic => '0 = automātiski';
+
+  @override
+  String get adminTranscodingTempPath => 'Pārkodēšanas temp ceļš';
+
+  @override
+  String get adminEnableFallbackFont => 'Iespējot atkāpšanās fontu';
+
+  @override
+  String get adminFallbackFontPath => 'Atkāpšanās fonta ceļš';
+
+  @override
+  String get adminAllowSegmentDeletion => 'Atļaut segmenta dzēšanu';
+
+  @override
+  String get adminSegmentKeepSeconds => 'Segmenta saglabāšana (sekundēs)';
+
+  @override
+  String get adminThrottleBuffering => 'Droseles buferizācija';
+
+  @override
+  String get adminTrickplaySaved => 'Trickplay iestatījumi ir saglabāti';
+
+  @override
+  String get adminTrickplayLoadFailed =>
+      'Neizdevās ielādēt Trickplay iestatījumus';
+
+  @override
+  String get adminEnableHardwareAcceleration =>
+      'Iespējot aparatūras paātrinājumu';
+
+  @override
+  String get adminEnableKeyFrameExtraction =>
+      'Iespējot tikai atslēgas rāmja izvilkšanu';
+
+  @override
+  String get adminKeyFrameSubtitle => 'Ātrāka, bet zemāka precizitāte';
+
+  @override
+  String get adminScanBehavior => 'Skenēšanas uzvedība';
+
+  @override
+  String get adminProcessPriority => 'Procesa prioritāte';
+
+  @override
+  String get adminImageSettings => 'Attēla iestatījumi';
+
+  @override
+  String get adminIntervalMs => 'Intervāls (ms)';
+
+  @override
+  String get adminCaptureFrameSubtitle => 'Cik bieži uzņemt kadrus';
+
+  @override
+  String get adminWidthResolutions => 'Platuma izšķirtspējas';
+
+  @override
+  String get adminTileWidth => 'Flīžu platums';
+
+  @override
+  String get adminTileHeight => 'Flīžu augstums';
+
+  @override
+  String get adminQualitySubtitle =>
+      'Zemākas vērtības = labāka kvalitāte, lielāki faili';
+
+  @override
+  String get adminProcessThreads => 'Apstrādājiet pavedienus';
+
+  @override
+  String get adminResumeSaved => 'Atsākšanas iestatījumi ir saglabāti';
+
+  @override
+  String get adminResumeLoadFailed =>
+      'Neizdevās ielādēt atsākšanas iestatījumus';
+
+  @override
+  String get adminResumeDescription =>
+      'Konfigurējiet, kad saturs ir jāatzīmē kā daļēji vai pilnībā atskaņots.';
+
+  @override
+  String get adminMinResumePercentage => 'Minimālais atsākšanas procents';
+
+  @override
+  String get adminMinResumeSubtitle =>
+      'Lai saglabātu progresu, saturs ir jāatskaņo, pārsniedzot šo procentuālo daļu';
+
+  @override
+  String get adminMaxResumePercentage => 'Maksimālais atsākšanas procents';
+
+  @override
+  String get adminMaxResumeSubtitle =>
+      'Pēc šī procentuālā daudzuma saturs tiek uzskatīts par pilnībā atskaņotu';
+
+  @override
+  String get adminMinResumeDuration =>
+      'Minimālais atsākšanas ilgums (sekundēs)';
+
+  @override
+  String get adminMinResumeDurationSubtitle =>
+      'Vienumus, kas ir īsāki par šo, nevar atsākt';
+
+  @override
+  String get adminMinAudiobookResume =>
+      'Minimālais audiogrāmatas atsākšanas procents';
+
+  @override
+  String get adminMaxAudiobookResume =>
+      'Maksimālais audiogrāmatas atsākšanas procents';
+
+  @override
+  String get adminNetworkingSaved =>
+      'Tīkla iestatījumi ir saglabāti. Var būt nepieciešama servera restartēšana.';
+
+  @override
+  String get adminNetworkingLoadFailed =>
+      'Neizdevās ielādēt tīkla iestatījumus';
+
+  @override
+  String get adminNetworkingWarning =>
+      'Lai veiktu izmaiņas tīkla iestatījumos, var būt nepieciešama servera restartēšana.';
+
+  @override
+  String get adminEnableRemoteAccess => 'Iespējot attālo piekļuvi';
+
+  @override
+  String get ports => 'Ostas';
+
+  @override
+  String get adminHttpPort => 'HTTP ports';
+
+  @override
+  String get adminHttpsPort => 'HTTPS ports';
+
+  @override
+  String get adminPublicHttpsPort => 'Publisks HTTPS ports';
+
+  @override
+  String get adminBaseUrl => 'Pamata URL';
+
+  @override
+  String get adminBaseUrlHint => 'piem. /jellyfin';
+
+  @override
+  String get https => 'HTTPS';
+
+  @override
+  String get adminEnableHttps => 'Iespējot HTTPS';
+
+  @override
+  String get adminLocalNetwork => 'Vietējais tīkls';
+
+  @override
+  String get adminLocalNetworkAddresses => 'Vietējā tīkla adreses';
+
+  @override
+  String get adminKnownProxies => 'Zināmi starpniekserveri';
+
+  @override
+  String get adminRemoteIpFilter => 'Attālais IP filtrs';
+
+  @override
+  String get adminRemoteIpFilterEntries => 'Attālais IP filtrs';
+
+  @override
+  String get adminCertificatePath => 'Sertifikāta ceļš';
+
+  @override
+  String get whitelist => 'Baltais saraksts';
+
+  @override
+  String get blacklist => 'Melnais saraksts';
+
+  @override
+  String get notSet => 'Nav iestatīts';
+
+  @override
+  String get adminMetadataSaved => 'Metadati saglabāti';
+
+  @override
+  String adminMetadataLoadFailed(String error) {
+    return 'Neizdevās ielādēt metadatus: $error';
+  }
+
+  @override
+  String adminMetadataSaveFailed(String error) {
+    return 'Neizdevās saglabāt metadatus: $error';
+  }
+
+  @override
+  String get adminRefreshMetadata => 'Atsvaidziniet metadatus';
+
+  @override
+  String get recursive => 'Rekursīvs';
+
+  @override
+  String get adminReplaceAllMetadata => 'Aizstāt visus metadatus';
+
+  @override
+  String get adminReplaceAllImages => 'Aizstāt visus attēlus';
+
+  @override
+  String get adminMetadataRefreshRequested =>
+      'Pieprasīta metadatu atsvaidzināšana';
+
+  @override
+  String adminMetadataRefreshFailed(String error) {
+    return 'Neizdevās atsvaidzināt metadatus: $error';
+  }
+
+  @override
+  String get adminNoRemoteMatches =>
+      'Nav atrasta neviena attālināta atbilstība';
+
+  @override
+  String get adminRemoteResults => 'Attālinātie rezultāti';
+
+  @override
+  String get adminRemoteMetadataApplied => 'Lietoti attālie metadati';
+
+  @override
+  String adminRemoteSearchFailed(String error) {
+    return 'Attālā meklēšana neizdevās: $error';
+  }
+
+  @override
+  String get adminUpdateContentType => 'Atjaunināt satura veidu';
+
+  @override
+  String get adminContentType => 'Satura veids';
+
+  @override
+  String get adminContentTypeUpdated => 'Satura veids atjaunināts';
+
+  @override
+  String adminContentTypeUpdateFailed(String error) {
+    return 'Neizdevās atjaunināt satura veidu: $error';
+  }
+
+  @override
+  String get adminMetadataEditorLoadFailed =>
+      'Neizdevās ielādēt metadatu redaktoru';
+
+  @override
+  String get adminNoPeopleEntries => 'Nav personu ierakstu';
+
+  @override
+  String get adminNoExternalIds => 'Ārējie ID nav pieejami';
+
+  @override
+  String adminImageUpdated(String imageType) {
+    return '$imageType attēls ir atjaunināts';
+  }
+
+  @override
+  String adminImageDownloadFailed(String error) {
+    return 'Neizdevās lejupielādēt attēlu: $error';
+  }
+
+  @override
+  String get adminUnsupportedImageFormat => 'Neatbalstīts attēla formāts';
+
+  @override
+  String get adminImageReadFailed => 'Neizdevās nolasīt atlasīto attēlu';
+
+  @override
+  String adminImageUploaded(String imageType) {
+    return '$imageType attēls ir augšupielādēts';
+  }
+
+  @override
+  String adminImageUploadFailed(String error) {
+    return 'Neizdevās augšupielādēt attēlu: $error';
+  }
+
+  @override
+  String adminDeleteImage(String imageType) {
+    return 'Dzēst $imageType attēlu';
+  }
+
+  @override
+  String adminImageDeleted(String imageType) {
+    return '$imageType attēls ir izdzēsts';
+  }
+
+  @override
+  String adminImageDeleteFailed(String error) {
+    return 'Neizdevās izdzēst attēlu: $error';
+  }
+
+  @override
+  String get adminAllProviders => 'Visi pakalpojumu sniedzēji';
+
+  @override
+  String get adminNoRemoteImages => 'Nav atrasts neviens attālais attēls';
+
+  @override
+  String adminTunerDiscoveryFailed(String error) {
+    return 'Uztvērēja atklāšana neizdevās: $error';
+  }
+
+  @override
+  String get adminAddTuner => 'Pievienojiet uztvērēju';
+
+  @override
+  String get adminEditTuner => 'Rediģēt uztvērēju';
+
+  @override
+  String get adminTunerTypeM3u => 'M3U uztvērējs';
+
+  @override
+  String get adminTunerTypeHdHomerun => 'HDHomeRun';
+
+  @override
+  String get adminTunerFileOrUrl => 'Fails vai URL';
+
+  @override
+  String get adminTunerIpAddress => 'Uztvērēja IP adrese';
+
+  @override
+  String get adminTunerFriendlyName => 'Draudzīgais nosaukums';
+
+  @override
+  String get adminTunerUserAgent => 'Lietotāja aģents';
+
+  @override
+  String get adminTunerCount => 'Vienlaicīgo savienojumu ierobežojums';
+
+  @override
+  String get adminTunerCountHelp =>
+      'Maksimālais straumju skaits, ko uztvērējs atļauj vienlaikus. Iestatiet 0, lai būtu neierobežots.';
+
+  @override
+  String get adminTunerFallbackBitrate =>
+      'Rezerves maksimālais straumēšanas bitu ātrums';
+
+  @override
+  String get adminTunerImportFavoritesOnly => 'Importēt tikai izlases kanālus';
+
+  @override
+  String get adminTunerAllowHwTranscoding => 'Atļaut aparatūras pārkodēšanu';
+
+  @override
+  String get adminTunerAllowFmp4 => 'Atļaut fMP4 pārkodēšanas konteineru';
+
+  @override
+  String get adminTunerAllowStreamSharing => 'Atļaut straumes koplietošanu';
+
+  @override
+  String get adminTunerEnableStreamLooping => 'Iespējot straumes atkārtošanu';
+
+  @override
+  String get adminTunerIgnoreDts => 'Ignorēt DTS';
+
+  @override
+  String get adminTunerReadAtNativeFramerate =>
+      'Nolasīt ievadi ar dabisko kadru nomaiņas ātrumu';
+
+  @override
+  String get adminEditProvider => 'Rediģēt nodrošinātāju';
+
+  @override
+  String get adminProviderXmltv => 'XMLTV';
+
+  @override
+  String get adminProviderSchedulesDirect => 'Schedules Direct';
+
+  @override
+  String get adminXmltvPath => 'Fails vai URL';
+
+  @override
+  String get adminXmltvMoviePrefix => 'Filmu prefikss';
+
+  @override
+  String get adminXmltvMovieCategories => 'Filmu kategorijas';
+
+  @override
+  String get adminXmltvCategoriesHelp =>
+      'Vairākas kategorijas atdaliet ar vertikālu svītru.';
+
+  @override
+  String get adminXmltvKidsCategories => 'Bērnu kategorijas';
+
+  @override
+  String get adminXmltvNewsCategories => 'Ziņu kategorijas';
+
+  @override
+  String get adminXmltvSportsCategories => 'Sporta kategorijas';
+
+  @override
+  String get adminSdUsername => 'Lietotājvārds';
+
+  @override
+  String get adminSdPassword => 'Parole';
+
+  @override
+  String get adminSdCountry => 'Valsts';
+
+  @override
+  String get adminSdCountrySelect => 'Izvēlieties valsti';
+
+  @override
+  String get adminSdPostalCode => 'Pasta indekss';
+
+  @override
+  String get adminSdGetListings => 'Iegūt sarakstus';
+
+  @override
+  String get adminSdListings => 'Saraksti';
+
+  @override
+  String get adminEnableAllTuners => 'Iespējot visus uztvērējus';
+
+  @override
+  String get adminTunerType => 'Uztvērēja tips';
+
+  @override
+  String get adminTunerAdded => 'Pievienots uztvērējs';
+
+  @override
+  String adminTunerAddFailed(String error) {
+    return 'Neizdevās pievienot uztvērēju: $error';
+  }
+
+  @override
+  String get adminAddGuideProvider => 'Pievienot ceļveža nodrošinātāju';
+
+  @override
+  String get adminProviderType => 'Pakalpojumu sniedzēja veids';
+
+  @override
+  String get adminProviderAdded => 'Pakalpojumu sniedzējs ir pievienots';
+
+  @override
+  String adminProviderAddFailed(String error) {
+    return 'Neizdevās pievienot pakalpojumu sniedzēju: $error';
+  }
+
+  @override
+  String adminTunerRemoveFailed(String error) {
+    return 'Neizdevās noņemt uztvērēju: $error';
+  }
+
+  @override
+  String get adminTunerResetRequested => 'Pieprasīta uztvērēja atiestatīšana';
+
+  @override
+  String adminTunerResetFailed(String error) {
+    return 'Neizdevās atiestatīt uztvērēju: $error';
+  }
+
+  @override
+  String get adminTunerResetNotSupported =>
+      'Šāda veida uztvērējs neatbalsta atiestatīšanu.';
+
+  @override
+  String adminProviderRemoveFailed(String error) {
+    return 'Neizdevās noņemt pakalpojumu sniedzēju: $error';
+  }
+
+  @override
+  String get adminRecordingSettings => 'Ierakstīšanas iestatījumi';
+
+  @override
+  String get adminPrePadding => 'Iepriekšējais polsterējums (minūtes)';
+
+  @override
+  String get adminPostPadding => 'Pēcaizpildīšana (minūtes)';
+
+  @override
+  String get adminRecordingPath => 'Ierakstīšanas ceļš';
+
+  @override
+  String get adminSeriesRecordingPath => 'Sērijas ierakstīšanas ceļš';
+
+  @override
+  String get adminMovieRecordingPath => 'Filmu ierakstīšanas ceļš';
+
+  @override
+  String get adminGuideDays => 'Programmas datu dienas';
+
+  @override
+  String get adminGuideDaysAuto => 'Automātiski';
+
+  @override
+  String adminGuideDaysValue(int days) {
+    return '$days d.';
+  }
+
+  @override
+  String get adminRecordingPostProcessor =>
+      'Pēcapstrādes lietojumprogrammas ceļš';
+
+  @override
+  String get adminRecordingPostProcessorArgs => 'Pēcapstrādes argumenti';
+
+  @override
+  String get adminSaveRecordingNfo => 'Saglabāt ierakstu NFO metadatus';
+
+  @override
+  String get adminSaveRecordingImages => 'Saglabāt ierakstu attēlus';
+
+  @override
+  String get adminLiveTvSectionTiming => 'Laiks';
+
+  @override
+  String get adminLiveTvSectionPaths => 'Ierakstīšanas ceļi';
+
+  @override
+  String get adminLiveTvSectionPostProcessing => 'Pēcapstrāde';
+
+  @override
+  String adminGuideDaysDisplay(String value) {
+    return 'Programmas dati: $value';
+  }
+
+  @override
+  String get adminRecordingSettingsSaved =>
+      'Ierakstīšanas iestatījumi saglabāti';
+
+  @override
+  String adminSettingsSaveFailed(String error) {
+    return 'Neizdevās saglabāt iestatījumus: $error';
+  }
+
+  @override
+  String get adminSetChannelMappings => 'Iestatiet kanālu kartējumus';
+
+  @override
+  String get adminMappingJson => 'JSON kartēšana';
+
+  @override
+  String get adminMappingJsonHint =>
+      'Piemērs: JSON lietderīgās slodzes kartēšana';
+
+  @override
+  String get adminChannelMappingsUpdated => 'Kanālu kartējumi ir atjaunināti';
+
+  @override
+  String adminMappingsUpdateFailed(String error) {
+    return 'Neizdevās atjaunināt kartējumus: $error';
+  }
+
+  @override
+  String get adminLiveTvLoadFailed =>
+      'Neizdevās ielādēt TV tiešraides administrāciju';
+
+  @override
+  String get adminTunerDevices => 'Uztvērēja ierīces';
+
+  @override
+  String get adminNoTunerHosts =>
+      'Nav konfigurēts neviens uztvērēja saimniekdators';
+
+  @override
+  String get adminGuideProviders => 'Ceļvežu sniedzēji';
+
+  @override
+  String get adminRefreshGuideData => 'Atsvaidzināt programmas datus';
+
+  @override
+  String get adminGuideRefreshStarted =>
+      'Uzsākta programmas datu atsvaidzināšana';
+
+  @override
+  String get adminGuideRefreshUnavailable =>
+      'Programmas atsvaidzināšanas uzdevums šajā serverī nav pieejams.';
+
+  @override
+  String get adminAddProvider => 'Pievienot nodrošinātāju';
+
+  @override
+  String get adminNoListingProviders =>
+      'Nav konfigurēts neviens ierakstu nodrošinātājs';
+
+  @override
+  String adminRecordingPathDisplay(String path) {
+    return 'Ierakstīšanas ceļš: $path';
+  }
+
+  @override
+  String adminSeriesPathDisplay(String path) {
+    return 'Sērijas ceļš: $path';
+  }
+
+  @override
+  String adminPrePaddingDisplay(int minutes) {
+    return 'Iepriekšējais pildījums: $minutes min';
+  }
+
+  @override
+  String adminPostPaddingDisplay(int minutes) {
+    return 'Pēcpildījums: $minutes min';
+  }
+
+  @override
+  String get adminTunerDiscovery => 'Uztvērēja atklāšana';
+
+  @override
+  String get adminChannelMappings => 'Kanālu kartējumi';
+
+  @override
+  String get adminNoDiscoveredTuners => 'Vēl nav atklātu uztvērēju';
+
+  @override
+  String get adminSettingsSaved => 'Iestatījumi saglabāti';
+
+  @override
+  String get adminBackupsNotAvailable =>
+      'Dublējumkopijas šajā servera versijā nav pieejamas.';
+
+  @override
+  String get adminRestoreWarning1 =>
+      'Atjaunojot, VISI pašreizējie servera dati tiks aizstāti ar rezerves datiem.';
+
+  @override
+  String get adminRestoreWarning2 =>
+      'Pašreizējie servera iestatījumi, lietotāji un bibliotēkas dati tiks pārrakstīti.';
+
+  @override
+  String get adminRestoreWarning3 =>
+      'Pēc atjaunošanas serveris tiks restartēts.';
+
+  @override
+  String adminRestoreConfirmMessage(String name) {
+    return 'Vai atjaunot dublējumu $name tūlīt?';
+  }
+
+  @override
+  String get adminRestoreRequested =>
+      'Pieprasīta atjaunošana. Servera restartēšana var atvienot šo sesiju.';
+
+  @override
+  String get adminBackupsTitle => 'Dublējumkopijas';
+
+  @override
+  String get adminUnknownDate => 'Nezināms datums';
+
+  @override
+  String get adminUnnamedBackup => 'Dublējums bez nosaukuma';
+
+  @override
+  String get adminLiveTvNotAvailable =>
+      'TV tiešraides administrēšana šajā servera versijā nav pieejama.';
+
+  @override
+  String get adminLiveTvTitle => 'TV tiešraides administrācija';
+
+  @override
+  String get adminApply => 'Lietot';
+
+  @override
+  String get adminNotSet => 'Nav iestatīts';
+
+  @override
+  String get adminReset => 'Atiestatīt';
+
+  @override
+  String get adminLogsTitle => 'Servera žurnāli';
+
+  @override
+  String get adminLogsNewestFirst => 'Jaunākie vispirms';
+
+  @override
+  String get adminLogsOldestFirst => 'Vecākais pirmais';
+
+  @override
+  String get adminLogsJustNow => 'Tikai tagad';
+
+  @override
+  String adminLogsMinutesAgo(int minutes) {
+    return 'Pirms $minutes@min';
+  }
+
+  @override
+  String adminLogsHoursAgo(int hours) {
+    return 'Pirms $hours@h';
+  }
+
+  @override
+  String adminLogsDaysAgo(int days) {
+    return '${days}d pirms';
+  }
+
+  @override
+  String adminLogViewerLoadFailed(String fileName) {
+    return 'Neizdevās ielādēt $fileName';
+  }
+
+  @override
+  String adminLogViewerMatches(int count) {
+    return '$count atbilst';
+  }
+
+  @override
+  String get adminLogViewerNoMatches => 'Nav atbilstošu līniju';
+
+  @override
+  String get adminMetadataEditorTitle => 'Metadatu redaktors';
+
+  @override
+  String get adminMetadataIdentify => 'Identificēt';
+
+  @override
+  String get adminMetadataType => 'Tips';
+
+  @override
+  String get adminMetadataDetails => 'Sīkāka informācija';
+
+  @override
+  String get adminMetadataExternalIds => 'Ārējie ID';
+
+  @override
+  String get adminMetadataImages => 'Attēli';
+
+  @override
+  String get adminMetadataFieldTitle => 'Nosaukums';
+
+  @override
+  String get adminMetadataFieldSortTitle => 'Kārtot virsrakstu';
+
+  @override
+  String get adminMetadataFieldOriginalTitle => 'Oriģinālais nosaukums';
+
+  @override
+  String get adminMetadataFieldPremiereDate =>
+      'Pirmizrādes datums (GGGG-MM-DD)';
+
+  @override
+  String get adminMetadataFieldEndDate => 'Beigu datums (GGGG-MM-DD)';
+
+  @override
+  String get adminMetadataFieldProductionYear => 'Ražošanas gads';
+
+  @override
+  String get adminMetadataFieldOfficialRating => 'Oficiālais vērtējums';
+
+  @override
+  String get adminMetadataFieldCommunityRating => 'Kopienas vērtējums';
+
+  @override
+  String get adminMetadataFieldCriticRating => 'Kritiķu vērtējums';
+
+  @override
+  String get adminMetadataFieldTagline => 'Sauklis';
+
+  @override
+  String get adminMetadataFieldOverview => 'Pārskats';
+
+  @override
+  String get adminMetadataGenres => 'Žanri';
+
+  @override
+  String get adminMetadataTags => 'Tagi';
+
+  @override
+  String get adminMetadataStudios => 'Studijas';
+
+  @override
+  String get adminMetadataPeople => 'Cilvēki';
+
+  @override
+  String get adminMetadataAddGenre => 'Pievienojiet žanru';
+
+  @override
+  String get adminMetadataAddTag => 'Pievienot tagu';
+
+  @override
+  String get adminMetadataAddStudio => 'Pievienojiet studiju';
+
+  @override
+  String get adminMetadataAddPerson => 'Pievienot personu';
+
+  @override
+  String get adminMetadataEditPerson => 'Rediģēt personu';
+
+  @override
+  String get adminMetadataRole => 'Loma';
+
+  @override
+  String get adminMetadataImagePrimary => 'Primārais';
+
+  @override
+  String get adminMetadataImageBackdrop => 'Fons';
+
+  @override
+  String get adminMetadataImageLogo => 'Logotips';
+
+  @override
+  String get adminMetadataImageBanner => 'Reklāmkarogs';
+
+  @override
+  String get adminMetadataImageThumb => 'Īkšķis';
+
+  @override
+  String get adminMetadataRecursive => 'Rekursīvs';
+
+  @override
+  String get adminMetadataProvider => 'Pakalpojumu sniedzējs';
+
+  @override
+  String adminMetadataImageUpdated(String imageType) {
+    return '$imageType attēls ir atjaunināts';
+  }
+
+  @override
+  String adminMetadataImageUploaded(String imageType) {
+    return '$imageType attēls ir augšupielādēts';
+  }
+
+  @override
+  String adminMetadataImageDeleted(String imageType) {
+    return '$imageType attēls ir izdzēsts';
+  }
+
+  @override
+  String adminMetadataImageDownloadFailed(String error) {
+    return 'Neizdevās lejupielādēt attēlu: $error';
+  }
+
+  @override
+  String get adminMetadataImageReadFailed =>
+      'Neizdevās nolasīt atlasīto attēlu';
+
+  @override
+  String adminMetadataImageUploadFailed(String error) {
+    return 'Neizdevās augšupielādēt attēlu: $error';
+  }
+
+  @override
+  String adminMetadataDeleteImageTitle(String imageType) {
+    return 'Dzēst $imageType attēlu';
+  }
+
+  @override
+  String get adminMetadataDeleteImageContent =>
+      'Tādējādi no vienuma tiek noņemts pašreizējais attēls.';
+
+  @override
+  String adminMetadataImageDeleteFailed(String error) {
+    return 'Neizdevās izdzēst attēlu: $error';
+  }
+
+  @override
+  String adminMetadataChooseImage(String imageType) {
+    return 'Izvēlieties $imageType attēlu';
+  }
+
+  @override
+  String get adminMetadataUpload => 'Augšupielādēt';
+
+  @override
+  String get adminMetadataUpdate => 'Atjaunināt';
+
+  @override
+  String get adminMetadataRemoteImage => 'Attālināts attēls';
+
+  @override
+  String get adminPluginsInstalled => 'Uzstādīts';
+
+  @override
+  String get adminPluginsCatalog => 'Katalogs';
+
+  @override
+  String get adminPluginsActive => 'Aktīvs';
+
+  @override
+  String get adminPluginsRestart => 'Restartēt';
+
+  @override
+  String get adminPluginsNoSearchResults =>
+      'Neviens spraudnis neatbilst jūsu meklēšanas vaicājumam';
+
+  @override
+  String get adminPluginsNoneInstalled => 'Nav instalēts neviens spraudnis';
+
+  @override
+  String adminPluginsUpdateAvailable(String version) {
+    return 'Atjauninājums pieejams: v$version';
+  }
+
+  @override
+  String get adminPluginsUpdateAvailableGeneric => 'Pieejams atjauninājums';
+
+  @override
+  String get adminPluginsPendingRemoval => 'Gaida noņemšanu pēc restartēšanas';
+
+  @override
+  String get adminPluginsChangesPending => 'Izmaiņas gaida restartēšanu';
+
+  @override
+  String get adminPluginsEnable => 'Iespējot';
+
+  @override
+  String get adminPluginsDisable => 'Atspējot';
+
+  @override
+  String get adminPluginsInstallUpdate => 'Instalējiet atjauninājumu';
+
+  @override
+  String adminPluginsInstallUpdateVersioned(String version) {
+    return 'Instalējiet atjauninājumu (v$version)';
+  }
+
+  @override
+  String get adminPluginsCatalogNoSearchResults =>
+      'Neviena pakotne neatbilst jūsu meklēšanas vaicājumam';
+
+  @override
+  String get adminPluginsCatalogEmpty => 'Paciņas nav pieejamas';
+
+  @override
+  String adminPluginsInstalling(String name) {
+    return '\"$name\" tiek instalēts...';
+  }
+
+  @override
+  String get adminPluginDetailExperimental => 'Eksperimentālā integrācija';
+
+  @override
+  String get adminPluginDetailExperimentalContent =>
+      'Spraudņa iestatījumu integrācija joprojām ir eksperimentāla. Daži lauki vai izkārtojumi vēl var netikt renderēti pareizi.';
+
+  @override
+  String get adminPluginDetailToggle404 =>
+      'Neizdevās pārslēgt spraudni. Serveris nevarēja atrast šo spraudņa versiju. Mēģiniet atsvaidzināt spraudņus un pēc tam mēģiniet vēlreiz.';
+
+  @override
+  String get adminPluginDetailToggleDioError =>
+      'Neizdevās pārslēgt spraudni. Lūdzu, pārbaudiet servera žurnālus, lai iegūtu sīkāku informāciju.';
+
+  @override
+  String adminPluginDetailSettingsTitle(String name) {
+    return '$name Iestatījumi';
+  }
+
+  @override
+  String get adminPluginDetailDetails => 'Sīkāka informācija';
+
+  @override
+  String get adminPluginDetailDeveloper => 'Izstrādātājs';
+
+  @override
+  String get adminPluginDetailRepository => 'Repozitorijs';
+
+  @override
+  String get adminPluginDetailBundled => 'Komplektā';
+
+  @override
+  String get adminPluginDetailEnablePlugin => 'Iespējot spraudni';
+
+  @override
+  String get adminPluginDetailRestartRequired =>
+      'Lai izmaiņas stātos spēkā, ir jārestartē serveris.';
+
+  @override
+  String get adminPluginDetailRemovalPending =>
+      'Šis spraudnis tiks noņemts pēc servera restartēšanas.';
+
+  @override
+  String get adminPluginDetailMalfunctioned =>
+      'Šis spraudnis ir nepareizi darbojies un var nedarboties pareizi.';
+
+  @override
+  String get adminPluginDetailNotSupported =>
+      'Pašreizējā servera versija šo spraudni neatbalsta.';
+
+  @override
+  String get adminPluginDetailSuperseded =>
+      'Šis spraudnis ir aizstāts ar jaunāku versiju.';
+
+  @override
+  String adminReposLoadFailed(String error) {
+    return 'Neizdevās ielādēt krātuves: $error';
+  }
+
+  @override
+  String get adminReposRemoveTitle => 'Noņemt repozitoriju';
+
+  @override
+  String adminReposRemoveConfirm(String name) {
+    return 'Vai tiešām vēlaties noņemt \"$name\"?';
+  }
+
+  @override
+  String get adminReposRemove => 'Noņemt';
+
+  @override
+  String adminReposSaveFailed(String error) {
+    return 'Neizdevās saglabāt krātuves: $error';
+  }
+
+  @override
+  String get adminReposEmpty => 'Nav konfigurētu repozitoriju';
+
+  @override
+  String get adminReposEmptySubtitle =>
+      'Pievienojiet repozitoriju, lai pārlūkotu pieejamos spraudņus';
+
+  @override
+  String get adminReposUnnamed => '(bez nosaukuma)';
+
+  @override
+  String get adminReposEditTitle => 'Rediģēt repozitoriju';
+
+  @override
+  String get adminReposAddTitle => 'Pievienot repozitoriju';
+
+  @override
+  String get adminReposUrl => 'Repozitorija URL';
+
+  @override
+  String get adminReposNameHint => 'piem. Jellyfin Stable';
+
+  @override
+  String get adminPluginSettingsInvalidUrl => 'Nederīgs URL';
+
+  @override
+  String get adminGeneralSettingsTitle => 'Vispārīgi iestatījumi';
+
+  @override
+  String get adminGeneralMetadataLanguage => 'Vēlamā metadatu valoda';
+
+  @override
+  String get adminGeneralMetadataLanguageHint => 'piem. lv, de, fr';
+
+  @override
+  String get adminGeneralMetadataCountry => 'Vēlamā metadatu valsts';
+
+  @override
+  String get adminGeneralMetadataCountryHint => 'piem. ASV, DE, FR';
+
+  @override
+  String get adminGeneralLibraryScanConcurrency =>
+      'Bibliotēkas skenēšanas vienlaicīgums';
+
+  @override
+  String get adminGeneralImageEncodingLimit =>
+      'Paralēlā attēla kodēšanas ierobežojums';
+
+  @override
+  String get adminUnknownError => 'Nezināma kļūda';
+
+  @override
+  String get adminBrowse => 'Pārlūkot';
+
+  @override
+  String get adminCloseBrowser => 'Aizveriet pārlūkprogrammu';
+
+  @override
+  String get adminNetworkingTitle => 'Tīklošana';
+
+  @override
+  String get adminNetworkingRestartWarning =>
+      'Lai veiktu izmaiņas tīkla iestatījumos, var būt nepieciešama servera restartēšana.';
+
+  @override
+  String get adminNetworkingRemoteAccess => 'Iespējot attālo piekļuvi';
+
+  @override
+  String get adminNetworkingPorts => 'Ostas';
+
+  @override
+  String get adminNetworkingHttpPort => 'HTTP ports';
+
+  @override
+  String get adminNetworkingHttpsPort => 'HTTPS ports';
+
+  @override
+  String get adminNetworkingEnableHttps => 'Iespējot HTTPS';
+
+  @override
+  String get adminNetworkingLocalNetwork => 'Vietējais tīkls';
+
+  @override
+  String get adminNetworkingLocalAddresses => 'Vietējā tīkla adreses';
+
+  @override
+  String get adminNetworkingAddressHint => 'piem. 192.168.1.0/24';
+
+  @override
+  String get adminNetworkingKnownProxies => 'Zināmi starpniekserveri';
+
+  @override
+  String get adminNetworkingProxyHint => 'piem. 10.0.0.1';
+
+  @override
+  String get adminNetworkingWhitelist => 'Baltais saraksts';
+
+  @override
+  String get adminNetworkingBlacklist => 'Melnais saraksts';
+
+  @override
+  String get adminNetworkingAddEntry => 'Pievienot ierakstu';
+
+  @override
+  String get adminBrandingTitle => 'Brendings';
+
+  @override
+  String get adminBrandingLoginDisclaimer => 'Pieteikšanās atruna';
+
+  @override
+  String get adminBrandingLoginDisclaimerHint =>
+      'HTML tiek parādīts zem pieteikšanās veidlapas';
+
+  @override
+  String get adminBrandingCustomCss => 'Pielāgots CSS';
+
+  @override
+  String get adminBrandingCustomCssHint =>
+      'Pielāgots CSS, kas tiek lietots tīmekļa saskarnē';
+
+  @override
+  String get adminBrandingEnableSplash => 'Iespējot uzplaiksnījumu ekrānu';
+
+  @override
+  String get adminBrandingSplashUpload => 'Augšupielādēt attēlu';
+
+  @override
+  String get adminBrandingSplashUploaded => 'Sveiciena ekrāns atjaunināts';
+
+  @override
+  String get adminBrandingSplashUploadFailed =>
+      'Neizdevās augšupielādēt sveiciena ekrānu';
+
+  @override
+  String get adminBrandingSplashDeleted => 'Sveiciena ekrāns noņemts';
+
+  @override
+  String get adminBrandingNoSplash => 'Nav pielāgota sveiciena ekrāna';
+
+  @override
+  String get adminPlaybackHwAccel => 'Aparatūras paātrinājums';
+
+  @override
+  String get adminPlaybackHwAccelLabel => 'Aparatūras paātrinājums';
+
+  @override
+  String get adminPlaybackEnableHwEncoding => 'Iespējot aparatūras kodējumu';
+
+  @override
+  String get adminPlaybackEnableHwDecoding => 'Iespējot aparatūras dekodēšanu:';
+
+  @override
+  String get adminPlaybackQsvDevice => 'QSV ierīce';
+
+  @override
+  String get adminPlaybackEnhancedNvdec => 'Iespējot uzlaboto NVDEC dekodētāju';
+
+  @override
+  String get adminPlaybackPreferNativeDecoder =>
+      'Dot priekšroku sistēmas aparatūras dekodētājam';
+
+  @override
+  String get adminPlaybackColorDepth => 'Aparatūras dekodēšanas krāsu dziļums';
+
+  @override
+  String get adminPlaybackColorDepth10Hevc => '10 bitu HEVC dekodēšana';
+
+  @override
+  String get adminPlaybackColorDepth10Vp9 => '10 bitu VP9 dekodēšana';
+
+  @override
+  String get adminPlaybackColorDepth10HevcRext =>
+      'HEVC RExt 8/10 bitu dekodēšana';
+
+  @override
+  String get adminPlaybackColorDepth12HevcRext =>
+      'HEVC RExt 12 bitu dekodēšana';
+
+  @override
+  String get adminPlaybackHwEncodingSection => 'Aparatūras kodēšana';
+
+  @override
+  String get adminPlaybackAllowHevcEncoding => 'Atļaut HEVC kodēšanu';
+
+  @override
+  String get adminPlaybackAllowAv1Encoding => 'Atļaut AV1 kodēšanu';
+
+  @override
+  String get adminPlaybackIntelLowPowerH264 =>
+      'Iespējot Intel mazjaudas H.264 kodētāju';
+
+  @override
+  String get adminPlaybackIntelLowPowerHevc =>
+      'Iespējot Intel mazjaudas HEVC kodētāju';
+
+  @override
+  String get adminPlaybackToneMapping => 'Toņu kartēšana';
+
+  @override
+  String get adminPlaybackEnableTonemapping => 'Iespējot toņu kartēšanu';
+
+  @override
+  String get adminPlaybackEnableVppTonemapping => 'Iespējot VPP toņu kartēšanu';
+
+  @override
+  String get adminPlaybackEnableVtTonemapping =>
+      'Iespējot VideoToolbox toņu kartēšanu';
+
+  @override
+  String get adminPlaybackTonemappingAlgorithm => 'Toņu kartēšanas algoritms';
+
+  @override
+  String get adminPlaybackTonemappingMode => 'Toņu kartēšanas režīms';
+
+  @override
+  String get adminPlaybackTonemappingRange => 'Toņu kartēšanas diapazons';
+
+  @override
+  String get adminPlaybackTonemappingDesat =>
+      'Toņu kartēšanas piesātinājuma samazināšana';
+
+  @override
+  String get adminPlaybackTonemappingPeak => 'Toņu kartēšanas maksimums';
+
+  @override
+  String get adminPlaybackTonemappingParam => 'Toņu kartēšanas parametrs';
+
+  @override
+  String get adminPlaybackVppTonemappingBrightness =>
+      'VPP toņu kartēšanas spilgtums';
+
+  @override
+  String get adminPlaybackVppTonemappingContrast =>
+      'VPP toņu kartēšanas kontrasts';
+
+  @override
+  String get adminPlaybackPresetsQuality => 'Sagataves un kvalitāte';
+
+  @override
+  String get adminPlaybackEncoderPreset => 'Kodētāja sagatave';
+
+  @override
+  String get adminPlaybackH264Crf => 'H.264 kodēšanas CRF';
+
+  @override
+  String get adminPlaybackH265Crf => 'H.265 (HEVC) kodēšanas CRF';
+
+  @override
+  String get adminPlaybackDeinterlaceMethod => 'Rindpārlēces novēršanas metode';
+
+  @override
+  String get adminPlaybackDeinterlaceDoubleRate =>
+      'Dubultot kadru nomaiņas ātrumu, novēršot rindpārlēci';
+
+  @override
+  String get adminPlaybackAudioSection => 'Audio';
+
+  @override
+  String get adminPlaybackEnableAudioVbr => 'Iespējot audio VBR kodēšanu';
+
+  @override
+  String get adminPlaybackDownmixBoost => 'Audio samiksēšanas pastiprinājums';
+
+  @override
+  String get adminPlaybackDownmixAlgorithm => 'Stereo samiksēšanas algoritms';
+
+  @override
+  String get adminPlaybackMaxMuxingQueue =>
+      'Maksimālais multipleksēšanas rindas izmērs';
+
+  @override
+  String get adminPlaybackAutoOption => 'Automātiski';
+
+  @override
+  String get adminPlaybackEncoding => 'Kodēšana';
+
+  @override
+  String get adminPlaybackEncodingThreads => 'Kodēšanas pavedieni';
+
+  @override
+  String get adminPlaybackFallbackFont => 'Iespējot atkāpšanās fontu';
+
+  @override
+  String get adminPlaybackFallbackFontPath => 'Atkāpšanās fonta ceļš';
+
+  @override
+  String get adminPlaybackStreaming => 'Straumēšana';
+
+  @override
+  String get adminResumeVideo => 'Video';
+
+  @override
+  String get adminResumeAudiobooks => 'Audiogrāmatas';
+
+  @override
+  String get adminResumeMinAudiobookPct =>
+      'Minimālais audiogrāmatas atsākšanas procents';
+
+  @override
+  String get adminResumeMaxAudiobookPct =>
+      'Maksimālais audiogrāmatas atsākšanas procents';
+
+  @override
+  String get adminStreamingBitrateLimit =>
+      'Attālā klienta bitu pārraides ātruma ierobežojums (Mb/s)';
+
+  @override
+  String get adminStreamingBitrateLimitHint =>
+      'Atstājiet tukšu vai 0, lai neierobežotu';
+
+  @override
+  String get adminTrickplayHwAccel => 'Iespējot aparatūras paātrinājumu';
+
+  @override
+  String get adminTrickplayHwEncoding => 'Iespējot aparatūras kodējumu';
+
+  @override
+  String get adminTrickplayKeyFrameOnly =>
+      'Iespējot tikai atslēgas rāmja izvilkšanu';
+
+  @override
+  String get adminTrickplayKeyFrameOnlySubtitle =>
+      'Ātrāka, bet zemāka precizitāte';
+
+  @override
+  String get adminTrickplayNonBlocking => 'Nebloķējošs';
+
+  @override
+  String get adminTrickplayBlocking => 'Bloķēšana';
+
+  @override
+  String get adminTrickplayPriorityHigh => 'Augsts';
+
+  @override
+  String get adminTrickplayPriorityAboveNormal => 'Virs parastā';
+
+  @override
+  String get adminTrickplayPriorityNormal => 'Normāls';
+
+  @override
+  String get adminTrickplayPriorityBelowNormal => 'Zem normas';
+
+  @override
+  String get adminTrickplayPriorityIdle => 'Dīkstāvē';
+
+  @override
+  String get adminTrickplayImageSettings => 'Attēla iestatījumi';
+
+  @override
+  String get adminTrickplayInterval => 'Intervāls (ms)';
+
+  @override
+  String get adminTrickplayIntervalSubtitle => 'Cik bieži uzņemt kadrus';
+
+  @override
+  String get adminTrickplayWidthResolutionsHint =>
+      'Ar komatu atdalīti pikseļu platumi (piem., 320)';
+
+  @override
+  String get adminTrickplayQuality => 'Kvalitāte';
+
+  @override
+  String get adminTrickplayQScale => 'Kvalitātes skala';
+
+  @override
+  String get adminTrickplayQScaleSubtitle =>
+      'Zemākas vērtības = labāka kvalitāte, lielāki faili';
+
+  @override
+  String get adminTrickplayJpegQuality => 'JPEG kvalitāte';
+
+  @override
+  String get adminTrickplayProcessing => 'Apstrāde';
+
+  @override
+  String get adminTasksEmpty => 'Nav atrasts neviens ieplānots uzdevums';
+
+  @override
+  String get adminTasksNoFilterMatch =>
+      'Neviens uzdevums neatbilst pašreizējam filtram';
+
+  @override
+  String get adminTaskCancelling => 'Notiek atcelšana...';
+
+  @override
+  String get adminTaskRunning => 'Skriešana...';
+
+  @override
+  String get adminTaskNeverRun => 'Nekad neskrien';
+
+  @override
+  String get adminTaskStop => 'Apturēt';
+
+  @override
+  String get adminRunningTasks => 'Aktīvie uzdevumi';
+
+  @override
+  String get adminTaskRun => 'Skrien';
+
+  @override
+  String get adminTaskDetailLastExecution => 'Pēdējā izpilde';
+
+  @override
+  String get adminTaskDetailStarted => 'Sākts';
+
+  @override
+  String get adminTaskDetailEnded => 'Beigās';
+
+  @override
+  String get adminTaskDetailDuration => 'Ilgums';
+
+  @override
+  String get adminTaskDetailErrorLabel => 'Kļūda:';
+
+  @override
+  String adminTaskTriggerDaily(String time) {
+    return 'Katru dienu $time';
+  }
+
+  @override
+  String adminTaskTriggerWeekly(String day, String time) {
+    return 'Ik pēc $day $time';
+  }
+
+  @override
+  String adminTaskTriggerInterval(String duration) {
+    return 'Katru $duration';
+  }
+
+  @override
+  String get adminTaskTriggerStartup => 'Lietojumprogrammas palaišanas laikā';
+
+  @override
+  String get adminTaskTriggerTypeDaily => 'Ikdienas';
+
+  @override
+  String get adminTaskTriggerTypeWeekly => 'Iknedēļas';
+
+  @override
+  String get adminTaskTriggerTypeInterval => 'Uz intervālu';
+
+  @override
+  String get adminTaskTriggerIntervalLabel => 'Intervāls';
+
+  @override
+  String get adminTaskTriggerEveryHour => 'Katru stundu';
+
+  @override
+  String get adminTaskTriggerEvery6Hours => 'Ik pēc 6 stundām';
+
+  @override
+  String get adminTaskTriggerEvery12Hours => 'Ik pēc 12 stundām';
+
+  @override
+  String get adminTaskTriggerEvery24Hours => 'Ik pēc 24 stundām';
+
+  @override
+  String get adminTaskTriggerEvery2Days => 'Ik pēc 2 dienām';
+
+  @override
+  String adminTaskTriggerHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count stundas',
+      one: '$count stunda',
+      zero: '$count stundu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminTaskTriggerTime => 'Laiks';
+
+  @override
+  String get adminTaskTriggerNoLimit => 'Nav ierobežojumu';
+
+  @override
+  String get adminActivityJustNow => 'Tikai tagad';
+
+  @override
+  String get adminActivityLastHour => 'Pēdējā stunda';
+
+  @override
+  String get adminActivityToday => 'Šodien';
+
+  @override
+  String get adminActivityYesterday => 'vakar';
+
+  @override
+  String get adminActivityOlder => 'Vecāks';
+
+  @override
+  String adminActivityDaysAgo(int days) {
+    return '${days}d pirms';
+  }
+
+  @override
+  String adminActivityHoursAgo(int hours) {
+    return 'Pirms $hours@h';
+  }
+
+  @override
+  String adminActivityMinutesAgo(int minutes) {
+    return 'Pirms $minutes@min';
+  }
+
+  @override
+  String get adminActivityNow => 'tagad';
+
+  @override
+  String adminActivityMinutesShort(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String adminActivityHoursShort(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String adminActivityDaysShort(int days) {
+    return '$days d.';
+  }
+
+  @override
+  String adminActivityDateShort(int month, int day) {
+    return '$month-$day';
+  }
+
+  @override
+  String get adminTrickplayDescription =>
+      'Konfigurējiet Trickplay attēlu ģenerēšanu pārtīšanas priekšskatījuma sīktēliem.';
+
+  @override
+  String get adminNetworkingPublicHttpsPort => 'Publisks HTTPS ports';
+
+  @override
+  String get adminNetworkingBaseUrl => 'Pamata URL';
+
+  @override
+  String get adminNetworkingBaseUrlHint => 'piem. /jellyfin';
+
+  @override
+  String get adminNetworkingHttps => 'HTTPS';
+
+  @override
+  String get adminNetworkingPublicHttpPort => 'Publiskais HTTP ports';
+
+  @override
+  String get adminNetworkingRequireHttps => 'Pieprasīt HTTPS';
+
+  @override
+  String get adminNetworkingRequireHttpsHint =>
+      'Novirzīt visus attālinātos pieprasījumus uz HTTPS. Nedarbojas, ja serverim nav derīga sertifikāta.';
+
+  @override
+  String get adminNetworkingCertPassword => 'Sertifikāta parole';
+
+  @override
+  String get adminNetworkingIpSettings => 'IP iestatījumi';
+
+  @override
+  String get adminNetworkingEnableIpv4 => 'Iespējot IPv4';
+
+  @override
+  String get adminNetworkingEnableIpv6 => 'Iespējot IPv6';
+
+  @override
+  String get adminNetworkingAutoDiscovery =>
+      'Iespējot automātisku portu kartēšanu';
+
+  @override
+  String get adminNetworkingLocalSubnets => 'LAN tīkli';
+
+  @override
+  String get adminNetworkingLocalSubnetsHint =>
+      'Ar komatiem vai jaunām rindām atdalīts IP adrešu vai CIDR apakštīklu saraksts, ko uzskata par vietējo tīklu.';
+
+  @override
+  String get adminNetworkingPublishedUris => 'Publicētie servera URI';
+
+  @override
+  String get adminNetworkingPublishedUriHint =>
+      'Kartējiet apakštīklu vai adresi uz publicētu URL, piem. all=https://example.com';
+
+  @override
+  String get adminNetworkingCertPath => 'Sertifikāta ceļš';
+
+  @override
+  String get adminNetworkingRemoteIpFilter => 'Attālais IP filtrs';
+
+  @override
+  String get adminNetworkingRemoteIpFilterLabel => 'Attālais IP filtrs';
+
+  @override
+  String get adminPlaybackVaapiDevice => 'VA-API ierīce';
+
+  @override
+  String get adminPlaybackAutomatic => '0 = automātiski';
+
+  @override
+  String get adminPlaybackTranscodeTempPath => 'Pārkodēšanas temp ceļš';
+
+  @override
+  String get adminPlaybackSegmentDeletion => 'Atļaut segmenta dzēšanu';
+
+  @override
+  String get adminPlaybackSegmentKeep => 'Segmenta saglabāšana (sekundēs)';
+
+  @override
+  String get adminPlaybackThrottleBuffering => 'Droseles buferizācija';
+
+  @override
+  String get adminPlaybackThrottleDelay => 'Ierobežošanas aizture (sekundēs)';
+
+  @override
+  String get adminPlaybackEnableSubtitleExtraction =>
+      'Atļaut subtitru iegūšanu reāllaikā';
+
+  @override
+  String get adminResumeMinPct => 'Minimālais atsākšanas procents';
+
+  @override
+  String get adminResumeMinPctSubtitle =>
+      'Lai saglabātu progresu, saturs ir jāatskaņo, pārsniedzot šo procentuālo daļu';
+
+  @override
+  String get adminResumeMaxPct => 'Maksimālais atsākšanas procents';
+
+  @override
+  String get adminResumeMaxPctSubtitle =>
+      'Pēc šī procentuālā daudzuma saturs tiek uzskatīts par pilnībā atskaņotu';
+
+  @override
+  String get adminResumeMinDuration =>
+      'Minimālais atsākšanas ilgums (sekundēs)';
+
+  @override
+  String get adminResumeMinDurationSubtitle =>
+      'Vienumus, kas ir īsāki par šo, nevar atsākt';
+
+  @override
+  String get adminTrickplayScanBehavior => 'Skenēšanas uzvedība';
+
+  @override
+  String get adminTrickplayProcessPriority => 'Procesa prioritāte';
+
+  @override
+  String get adminTrickplayTileWidth => 'Flīžu platums';
+
+  @override
+  String get adminTrickplayTileHeight => 'Flīžu augstums';
+
+  @override
+  String get adminTrickplayProcessThreads => 'Apstrādājiet pavedienus';
+
+  @override
+  String get adminTrickplayWidthResolutions => 'Platuma izšķirtspējas';
+
+  @override
+  String get adminMetadataDefault => 'Noklusējums';
+
+  @override
+  String get adminMetadataContentTypeUpdated => 'Satura veids atjaunināts';
+
+  @override
+  String adminMetadataContentTypeFailed(String error) {
+    return 'Neizdevās atjaunināt satura veidu: $error';
+  }
+
+  @override
+  String get adminGeneralSlowResponseThreshold =>
+      'Lēnas reakcijas slieksnis (ms)';
+
+  @override
+  String get adminGeneralEnableSlowResponse =>
+      'Iespējot brīdinājumus par lēnu atbildi';
+
+  @override
+  String get adminGeneralQuickConnect => 'Iespējot Quick Connect';
+
+  @override
+  String get adminGeneralSectionServer => 'Serveris';
+
+  @override
+  String get adminGeneralSectionMetadata => 'Metadati';
+
+  @override
+  String get adminGeneralSectionPaths => 'Ceļi';
+
+  @override
+  String get adminGeneralSectionPerformance => 'Veiktspēja';
+
+  @override
+  String get adminGeneralCachePath => 'Kešatmiņas ceļš';
+
+  @override
+  String get adminGeneralMetadataPath => 'Metadatu ceļš';
+
+  @override
+  String get adminGeneralServerName => 'Servera nosaukums';
+
+  @override
+  String get adminGeneralDisplayLanguage => 'Vēlamā attēlošanas valoda';
+
+  @override
+  String get adminSettingsLoadFailed => 'Neizdevās ielādēt iestatījumus';
+
+  @override
+  String get adminDiscover => 'Atklājiet';
+
+  @override
+  String adminChannelMappingsUpdateFailed(String error) {
+    return 'Neizdevās atjaunināt kartējumus: $error';
+  }
+
+  @override
+  String adminTimeLimitDuration(String duration) {
+    return 'Laika ierobežojums: $duration';
+  }
+
+  @override
+  String get folders => 'Mapes';
+
+  @override
+  String get libraries => 'Bibliotēkas';
+
+  @override
+  String get syncPlay => 'SyncPlay';
+
+  @override
+  String get syncPlayDisabledTitle => 'SyncPlay ir atspējota';
+
+  @override
+  String get syncPlayDisabledMessage =>
+      'Iestatījumos iespējojiet SyncPlay, lai izmantotu sinhronizētu atskaņošanu.';
+
+  @override
+  String get syncPlayServerUnsupportedTitle => 'Serveris netiek atbalstīts';
+
+  @override
+  String get syncPlayServerUnsupportedMessage =>
+      'SyncPlay ir nepieciešams Jellyfin serveris. Pašreizējais serveris to neatbalsta.';
+
+  @override
+  String get syncPlayGroupFallbackName => 'SyncPlay grupa';
+
+  @override
+  String get syncPlayGroupTooltip => 'SyncPlay grupa';
+
+  @override
+  String syncPlayParticipantCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# dalībnieki',
+      one: '# dalībnieks',
+      zero: '# dalībnieku',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get syncPlayIgnoreWait => 'Ignorēt gaidīšanu';
+
+  @override
+  String get syncPlayIgnoreWaitSubtitle =>
+      'Neturiet grupu augšā, kamēr šī ierīce veic buferizāciju';
+
+  @override
+  String get syncPlayContinueLocallyNoWait =>
+      'Turpiniet lokāli, negaidot lēnos dalībniekus';
+
+  @override
+  String get syncPlayRepeat => 'Atkārtojiet';
+
+  @override
+  String get syncPlayRepeatOne => 'Viens';
+
+  @override
+  String get syncPlayShuffleModeShuffled => 'Sajaukts';
+
+  @override
+  String get syncPlayShuffleModeSorted => 'Sakārtots';
+
+  @override
+  String get syncPlaySyncCurrentQueue =>
+      'Sinhronizēt pašreizējo atskaņošanas rindu';
+
+  @override
+  String get syncPlaySyncCurrentQueueSubtitle =>
+      'Aizstāt grupas rindu ar to, kas tiek atskaņots lokāli';
+
+  @override
+  String get syncPlayLeaveGroup => 'Pamest grupu';
+
+  @override
+  String get syncPlayGroupQueue => 'Grupas rinda';
+
+  @override
+  String syncPlayQueueItemFallback(int index) {
+    return 'Vienums $index';
+  }
+
+  @override
+  String get syncPlayPlayNow => 'Spēlējiet tagad';
+
+  @override
+  String get syncPlayCreateNewGroup => 'Izveidojiet jaunu grupu';
+
+  @override
+  String get syncPlayGroupName => 'Grupas nosaukums';
+
+  @override
+  String get syncPlayDefaultGroupName => 'Mana SyncPlay grupa';
+
+  @override
+  String get syncPlayCreateGroup => 'Izveidot grupu';
+
+  @override
+  String get syncPlayAvailableGroups => 'Pieejamās grupas';
+
+  @override
+  String get syncPlayNoGroupsAvailable => 'Nav pieejama neviena grupa';
+
+  @override
+  String get syncPlayJoinGroupQuestion => 'Vai pievienoties SyncPlay grupai?';
+
+  @override
+  String get syncPlayJoinGroupWarning =>
+      'Pievienošanās SyncPlay grupai var aizstāt pašreizējo atskaņošanas rindu. Vai turpināt?';
+
+  @override
+  String get syncPlayJoin => 'Pievienojieties';
+
+  @override
+  String get syncPlayStateIdle => 'Dīkstāvē';
+
+  @override
+  String get syncPlayStateWaiting => 'Gaida';
+
+  @override
+  String get syncPlayStatePaused => 'Pauzēts';
+
+  @override
+  String get syncPlayStatePlaying => 'Spēlē';
+
+  @override
+  String syncPlayUserJoinedGroup(String userName) {
+    return '$userName pievienojās SyncPlay grupai';
+  }
+
+  @override
+  String syncPlayUserLeftGroup(String userName) {
+    return '$userName pameta SyncPlay grupu';
+  }
+
+  @override
+  String get syncPlayAccessDeniedTitle => 'SyncPlay piekļuve liegta';
+
+  @override
+  String get syncPlayAccessDeniedMessage =>
+      'Jums nav piekļuves vienam vai vairākiem šīs SyncPlay grupas vienumiem. Lūdziet grupas īpašniekam pārbaudīt bibliotēkas atļaujas vai izvēlēties citu rindu.';
+
+  @override
+  String syncPlaySyncingPlaybackToGroup(String groupName) {
+    return 'Notiek atskaņošanas sinhronizēšana ar $groupName';
+  }
+
+  @override
+  String get voiceSearchUnavailable => 'Balss meklēšana nav pieejama.';
+
+  @override
+  String get dolbyVisionDirectPlayFailedTitle =>
+      'Dolby Vision Direct Play neizdevās';
+
+  @override
+  String get dolbyVisionDirectPlayFailedMessage =>
+      'Neizdevās sākt tiešo atskaņošanu šai Dolby Vision straumei. Vai mēģināt vēlreiz izmantot servera pārkodēšanu?';
+
+  @override
+  String get retryWithTranscode => 'Mēģiniet vēlreiz, izmantojot pārkodēšanu';
+
+  @override
+  String get dolbyVisionNotSupportedTitle => 'Dolby Vision netiek atbalstīts';
+
+  @override
+  String get dolbyVisionNotSupportedMessage =>
+      'Šī ierīce nevar tieši atšifrēt Dolby Vision saturu. Izmantojiet HDR10 atkāpšanos vai pieprasiet servera pārkodēšanu.';
+
+  @override
+  String get rememberMyChoice => 'Atcerieties manu izvēli';
+
+  @override
+  String get playHdr10Fallback => 'Atskaņojiet HDR10 atkāpšanos';
+
+  @override
+  String get requestTranscode => 'Pieprasīt pārkodēšanu';
+
+  @override
+  String integrationRowsDiscoveredCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'atrastas # rindas',
+      one: 'atrasta # rinda',
+      zero: 'atrasts # rindu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get seeAll => 'Skatīt visu';
+
+  @override
+  String get noItems => 'Nav vienumu';
+
+  @override
+  String get switchUser => 'Pārslēgt lietotāju';
+
+  @override
+  String get remoteControl => 'Tālvadības pults';
+
+  @override
+  String get mediaBarLoading => 'Notiek multivides joslas ielāde...';
+
+  @override
+  String get mediaBarError => 'Multivides joslu neizdevās ielādēt';
+
+  @override
+  String get offlineServerUnavailable =>
+      'Izveidots savienojums ar internetu, bet pašreizējais serveris nav pieejams.';
+
+  @override
+  String get offlineNoInternet =>
+      'Jūs esat bezsaistē. Ir pieejams tikai lejupielādētais saturs.';
+
+  @override
+  String get offlineFileNotAvailable => 'Fails nav pieejams';
+
+  @override
+  String get offlineSwitchServer => 'Pārslēgt serveri';
+
+  @override
+  String get offlineSavedMedia => 'Saglabātie multivides līdzekļi';
+
+  @override
+  String get offlineBannerTitle => 'Jūs esat bezsaistē';
+
+  @override
+  String get offlineBannerSubtitle => 'Tiek rādītas jūsu lejupielādes';
+
+  @override
+  String get offlineBannerAction => 'Lejupielādes';
+
+  @override
+  String get serverUnreachableBannerTitle => 'Nevar sasniegt serveri';
+
+  @override
+  String get serverUnreachableBannerSubtitle =>
+      'Līdz servera atjaunošanai atskaņo no lejupielādēm';
+
+  @override
+  String get castGoogleCast => 'Google Cast';
+
+  @override
+  String get castAirPlay => 'AirPlay';
+
+  @override
+  String get castDlna => 'DLNA';
+
+  @override
+  String get castRemotePlayback => 'Attālā atskaņošana';
+
+  @override
+  String castControlFailed(String error) {
+    return 'Apraides vadība neizdevās: $error';
+  }
+
+  @override
+  String castKindControls(String kind) {
+    return '$kind vadīklas';
+  }
+
+  @override
+  String get castDeviceVolume => 'Ierīces skaļums';
+
+  @override
+  String get castVolumeUnavailable => 'Nav pieejams';
+
+  @override
+  String castStopKind(String kind) {
+    return 'Apturēt $kind';
+  }
+
+  @override
+  String get audioLabel => 'Audio';
+
+  @override
+  String get subtitlesLabel => 'Subtitri';
+
+  @override
+  String get pinConfirmTitle => 'Apstipriniet PIN';
+
+  @override
+  String get pinSetTitle => 'Iestatiet PIN';
+
+  @override
+  String get pinEnterTitle => 'Ievadiet PIN';
+
+  @override
+  String get pinReenterToConfirm =>
+      'Atkārtoti ievadiet savu PIN, lai apstiprinātu';
+
+  @override
+  String pinEnterNDigit(int length) {
+    return 'Ievadiet $length ciparu PIN';
+  }
+
+  @override
+  String pinEnterYourNDigit(int length) {
+    return 'Ievadiet savu $length ciparu PIN';
+  }
+
+  @override
+  String get pinIncorrect => 'Nepareizs PIN';
+
+  @override
+  String get pinMismatch => 'PIN kodi nesakrīt';
+
+  @override
+  String get pinForgot => 'Aizmirsāt PIN?';
+
+  @override
+  String get pinClear => 'Notīrīt';
+
+  @override
+  String get pinBackspace => 'Atpakaļatkāpe';
+
+  @override
+  String get quickConnectAuthorized =>
+      'Quick Connect pieprasījums apstiprināts.';
+
+  @override
+  String get quickConnectInvalidOrExpired =>
+      'Quick Connect kods nav derīgs vai tam beidzies termiņš.';
+
+  @override
+  String get quickConnectNotSupported =>
+      'Šis serveris neatbalsta Quick Connect.';
+
+  @override
+  String get quickConnectAuthorizeFailed =>
+      'Neizdevās apstiprināt Quick Connect kodu.';
+
+  @override
+  String get quickConnectDisabled => 'Šajā serverī Quick Connect ir atspējots.';
+
+  @override
+  String get quickConnectForbidden =>
+      'Jūsu konts nevar apstiprināt šo Quick Connect pieprasījumu.';
+
+  @override
+  String get quickConnectNotFound =>
+      'Quick Connect kods netika atrasts. Mēģiniet jaunu kodu.';
+
+  @override
+  String quickConnectFailedWithMessage(String message) {
+    return 'Quick Connect neizdevās: $message';
+  }
+
+  @override
+  String get quickConnectEnterCode => 'Ievadiet kodu';
+
+  @override
+  String get quickConnectAuthorize => 'Autorizēt';
+
+  @override
+  String remoteCommandFailed(String error) {
+    return 'Komanda neizdevās: $error';
+  }
+
+  @override
+  String get remoteControlTitle => 'Tālvadības pults';
+
+  @override
+  String get remoteFailedToLoadSessions => 'Neizdevās ielādēt sesijas';
+
+  @override
+  String get remoteNoSessions => 'Nav kontrolējamu sesiju';
+
+  @override
+  String get remoteStartPlayback => 'Sāciet atskaņošanu citā ierīcē';
+
+  @override
+  String get unknownUser => 'Nezināms';
+
+  @override
+  String get unknownItem => 'Nezināms';
+
+  @override
+  String get remoteNothingPlaying => 'Šajā sesijā nekas netiek atskaņots';
+
+  @override
+  String get castingStarted => 'Apraide tika sākta atlasītajā ierīcē';
+
+  @override
+  String castingFailed(String error) {
+    return 'Neizdevās sākt apraidi: $error';
+  }
+
+  @override
+  String get noRemoteDevices => 'Nav pieejamas attālās atskaņošanas ierīces.';
+
+  @override
+  String get noRemoteDevicesIos =>
+      'Nav pieejamas attālās atskaņošanas ierīces.\n\nOperētājsistēmā iOS simulatorā AirPlay mērķi var nebūt pieejami.';
+
+  @override
+  String get trackActionPlayNext => 'Spēlēt nākamo';
+
+  @override
+  String get trackActionAddToQueue => 'Pievienot rindai';
+
+  @override
+  String get trackActionAddToPlaylist => 'Pievienot atskaņošanas sarakstam';
+
+  @override
+  String get trackActionCancelDownload => 'Atcelt lejupielādi';
+
+  @override
+  String get trackActionDeleteFromPlaylist => 'Dzēst no atskaņošanas saraksta';
+
+  @override
+  String get trackActionMoveUp => 'Pārvietot uz augšu';
+
+  @override
+  String get trackActionMoveDown => 'Pārvietot uz leju';
+
+  @override
+  String get trackActionRemoveFromFavorites => 'Noņemt no izlases';
+
+  @override
+  String get trackActionAddToFavorites => 'Pievienot izlasei';
+
+  @override
+  String get trackActionGoToAlbum => 'Dodieties uz albumu';
+
+  @override
+  String get trackActionGoToArtist => 'Dodieties uz Mākslinieks';
+
+  @override
+  String trackActionDownloading(String name) {
+    return 'Notiek lejupielāde $name...';
+  }
+
+  @override
+  String get trackActionDeletedFile => 'Izdzēsts lejupielādētais fails';
+
+  @override
+  String get trackActionDeleteFileFailed =>
+      'Nevarēja izdzēst lejupielādēto failu';
+
+  @override
+  String get shuffleBy => 'Jauktā secībā pēc';
+
+  @override
+  String get shuffleSelectLibrary => 'Atlasiet Bibliotēka';
+
+  @override
+  String get shuffleSelectGenre => 'Izvēlieties Žanrs';
+
+  @override
+  String get shuffleLibrary => 'Bibliotēka';
+
+  @override
+  String get shuffleGenre => 'Žanrs';
+
+  @override
+  String get shuffleNoLibraries => 'Nav pieejama neviena saderīga bibliotēka.';
+
+  @override
+  String get shuffleNoGenres =>
+      'Šim jaukšanas režīmam netika atrasts neviens žanrs.';
+
+  @override
+  String get posterDisplayTitle => 'Displejs';
+
+  @override
+  String get posterImageType => 'Attēla veids';
+
+  @override
+  String get imageTypePoster => 'Plakāts';
+
+  @override
+  String get imageTypeThumbnail => 'Sīktēls';
+
+  @override
+  String get imageTypeBanner => 'Reklāmkarogs';
+
+  @override
+  String get playlistAddFailed => 'Neizdevās pievienot atskaņošanas sarakstam';
+
+  @override
+  String get playlistCreateFailed => 'Neizdevās izveidot atskaņošanas sarakstu';
+
+  @override
+  String get playlistNew => 'Jauns atskaņošanas saraksts';
+
+  @override
+  String get playlistCreate => 'Izveidot';
+
+  @override
+  String get playlistCreateNew => 'Izveidojiet jaunu atskaņošanas sarakstu';
+
+  @override
+  String get playlistNoneFound => 'Nav atrasts neviens atskaņošanas saraksts';
+
+  @override
+  String get addToPlaylist => 'Pievienot atskaņošanas sarakstam';
+
+  @override
+  String get lyricsNotAvailable => 'Dziesmu vārdi nav pieejami';
+
+  @override
+  String get upNext => 'Uz augšu Nākamais';
+
+  @override
+  String get playNext => 'Spēlēt nākamo';
+
+  @override
+  String get stillWatchingContent =>
+      'Atskaņošana ir apturēta. Vai jūs joprojām skatāties?';
+
+  @override
+  String get stillWatchingStop => 'Apturēt';
+
+  @override
+  String get stillWatchingContinue => 'Turpināt';
+
+  @override
+  String skipSegment(String segment) {
+    return 'Izlaist $segment';
+  }
+
+  @override
+  String get liveTv => 'TV tiešraide';
+
+  @override
+  String get continueWatchingAndNextUp => 'Turpināt skatīties un nākamais';
+
+  @override
+  String downloadingBatchProgress(int current, int total, String fileName) {
+    return 'Notiek lejupielāde $current/$total — $fileName';
+  }
+
+  @override
+  String downloadingFile(String fileName) {
+    return 'Notiek lejupielāde $fileName';
+  }
+
+  @override
+  String get nextEpisode => 'Nākamā sērija';
+
+  @override
+  String get moreFromThisSeason => 'Vairāk no šīs sezonas';
+
+  @override
+  String get playerTooltipPlaybackSpeed => 'Atskaņošanas ātrums';
+
+  @override
+  String get playerTooltipCastControls => 'Cast vadīklas';
+
+  @override
+  String get playerTooltipPlaybackQuality => 'Bitu pārraides ātrums';
+
+  @override
+  String get playerTooltipEnterFullscreen => 'Ieiet pilnekrāna režīmā';
+
+  @override
+  String get playerTooltipExitFullscreen => 'Iziet pilnekrāna režīmā';
+
+  @override
+  String get playerTooltipFloatOnTop => 'Uzpeld virsū';
+
+  @override
+  String get playerTooltipExitFloatOnTop => 'Atspējot pludiņu augšpusē';
+
+  @override
+  String get playerTooltipLockLandscape => 'Bloķēt ainavu';
+
+  @override
+  String get playerTooltipUnlockOrientation => 'Atļaut rotāciju';
+
+  @override
+  String get playerTooltipPrevious => 'Iepriekšējais';
+
+  @override
+  String get playerTooltipSeekBack => 'Meklējiet atpakaļ';
+
+  @override
+  String get playerTooltipSeekForward => 'Meklējiet uz priekšu';
+
+  @override
+  String get contextMenuMarkWatched => 'Atzīmēt kā skatītu';
+
+  @override
+  String get contextMenuMarkUnwatched => 'Atzīmēt kā neskatītu';
+
+  @override
+  String get contextMenuAddToFavorites => 'Pievienot izlasei';
+
+  @override
+  String get contextMenuRemoveFromFavorites => 'Noņemt no izlases';
+
+  @override
+  String get contextMenuGoToSeries => 'Dodieties uz sēriju';
+
+  @override
+  String get contextMenuHideFromContinueWatching =>
+      'Slēpt no “Turpināt skatīties”';
+
+  @override
+  String get contextMenuHideFromNextUp => 'Slēpt no “Nākamais”';
+
+  @override
+  String get contextMenuAddToCollection => 'Pievienot kolekcijai';
+
+  @override
+  String get settingsAdministrationSubtitle =>
+      'Piekļūstiet servera administrācijas panelim';
+
+  @override
+  String get settingsAccountSecurity => 'Konts un drošība';
+
+  @override
+  String get settingsAccountSecuritySubtitle =>
+      'Autentifikācija, PIN kods un vecāku kontrole';
+
+  @override
+  String get settingsPersonalization => 'Personalizēšana';
+
+  @override
+  String get settingsPersonalizationSubtitle =>
+      'Motīvs, navigācija, sākuma rindas un bibliotēkas redzamība';
+
+  @override
+  String get settingsDynamicContent => 'Dinamisks saturs';
+
+  @override
+  String get settingsDynamicContentSubtitle =>
+      'Multivides josla un vizuālie pārklājumi';
+
+  @override
+  String get settingsPlaybackSyncplay => 'Atskaņošana un SyncPlay';
+
+  @override
+  String get settingsPlaybackSyncplaySubtitle =>
+      'Audio/video iestatījumi, subtitri, lejupielādes un SyncPlay vadīklas';
+
+  @override
+  String get settingsIntegrationsSubtitle =>
+      'Spraudņu sinhronizācija, Seerr, vērtējumi un citi';
+
+  @override
+  String get settingsAboutSubtitle =>
+      'Lietotnes versija, juridiskā informācija un kredīti';
+
+  @override
+  String get settingsAuthenticationSection => 'AUTENTIKĀCIJA';
+
+  @override
+  String get settingsSortServersBy => 'Kārtot serverus pēc';
+
+  @override
+  String get settingsLastUsed => 'Pēdējo reizi lietots';
+
+  @override
+  String get settingsAlphabetical => 'Alfabētiskā secībā';
+
+  @override
+  String get settingsConnectionSection => 'SAVIENOJUMS';
+
+  @override
+  String get settingsAllowSelfSignedCerts =>
+      'Atļaut pašparakstītus sertifikātus';
+
+  @override
+  String get settingsAllowSelfSignedCertsSubtitle =>
+      'Uzticēties serveriem, kas izmanto pašparakstītus vai privātas CA TLS sertifikātus. Iespējojiet tikai saviem serveriem. Tas atspējo sertifikātu pārbaudi visiem savienojumiem.';
+
+  @override
+  String get settingsPrivacyAndSafetySection => 'PRIVĀTUMS UN DROŠĪBA';
+
+  @override
+  String get settingsBlockedRatings => 'Bloķētie vērtējumi';
+
+  @override
+  String get settingsGeneralStyle => 'Vispārējais stils';
+
+  @override
+  String get settingsGeneralStyleSubtitle =>
+      'Motīvu akcenti, foni, skatītie indikatori un motīvu mūzika';
+
+  @override
+  String get settingsDetailsScreen => 'Detaļu ekrāns';
+
+  @override
+  String get settingsDetailsScreenSubtitle =>
+      'Stils, fona izplūdums un ciļņu darbība';
+
+  @override
+  String get settingsHomePage => 'Mājas lapa';
+
+  @override
+  String get settingsHomePageSubtitle =>
+      'Sadaļas, attēlu veidi, pārklājumi un multivides priekšskatījumi';
+
+  @override
+  String get settingsLibrariesSubtitle =>
+      'Bibliotēkas redzamība, mapju skats un vairāku serveru darbība';
+
+  @override
+  String get settingsTwentyFourHourClock => '24 stundu pulkstenis';
+
+  @override
+  String get settingsTwentyFourHourClockSubtitle =>
+      'Izmantojiet 24 stundu laika formatējumu visur, kur tiek rādīts pulkstenis';
+
+  @override
+  String get settingsShowShuffleButtonInNavigation =>
+      'Parādiet jaukšanas pogu navigācijas joslā';
+
+  @override
+  String get settingsShowGenresButtonInNavigation =>
+      'Rādīt žanru pogu navigācijas joslā';
+
+  @override
+  String get settingsShowFavoritesButtonInNavigation =>
+      'Parādiet izlases pogu navigācijas joslā';
+
+  @override
+  String get settingsShowLibrariesButtonInNavigation =>
+      'Parādiet bibliotēkas pogu navigācijas joslā';
+
+  @override
+  String get settingsShowSeerrButtonInNavigation =>
+      'Rādīt Seerr pogu navigācijas joslā';
+
+  @override
+  String get settingsAlwaysExpandNavbarLabels =>
+      'Vienmēr rādīt teksta nosaukumus augšējā navigācijas joslā';
+
+  @override
+  String get settingsLibraryVisibilitySubtitle =>
+      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.';
+
+  @override
+  String get settingsMediaBarAndLocalPreviews =>
+      'Multivides josla un vietējie priekšskatījumi';
+
+  @override
+  String get settingsVisualOverlays => 'Vizuālie pārklājumi';
+
+  @override
+  String get settingsSeasonalSurprise => 'Sezonas pārsteigums';
+
+  @override
+  String get settingsMetadataAndRatings => 'Metadati un vērtējumi';
+
+  @override
+  String get settingsPluginScreenDescription =>
+      'Moonbase nodrošina servera puses integrāciju, tostarp papildu reitingu avotus, Seerr pieprasījumus un sinhronizētās preferences.';
+
+  @override
+  String get settingsOfflineDownloads => 'Bezsaistes lejupielādes';
+
+  @override
+  String get useNativeEmulator => 'Native Emulation';
+
+  @override
+  String get useNativeEmulatorSubtitle =>
+      'Play games with native cores instead of the EmulatorJS web player';
+
+  @override
+  String get emulatorCores => 'Emulator Cores';
+
+  @override
+  String get emulatorCoresSubtitle => 'Download systems to play games natively';
+
+  @override
+  String get emulatorCoresDescription =>
+      'Choose which systems to install. Cores are provided by the libretro project and let games run natively instead of in a browser view.';
+
+  @override
+  String get emulatorCoreDownloading => 'Downloading';
+
+  @override
+  String get emulatorCoreUnavailable => 'Not available for this device';
+
+  @override
+  String get emulatorCoreDownloadFailed =>
+      'Could not download the core. Check your connection and try again.';
+
+  @override
+  String get downloadedGames => 'Downloaded Games';
+
+  @override
+  String get downloadedGamesSubtitle => 'Free up space used by game files';
+
+  @override
+  String get downloadedGamesDescription =>
+      'Games are copied to this device before they play. Remove the ones you have finished to free up space. Saves are kept on the server and are not deleted.';
+
+  @override
+  String get downloadedGamesEmpty =>
+      'No games have been downloaded to this device yet.';
+
+  @override
+  String downloadedGamesTotal(int count, String size) {
+    return '$count games, $size';
+  }
+
+  @override
+  String get removeAllDownloadedGames => 'Remove All';
+
+  @override
+  String removeDownloadedGameConfirm(String title) {
+    return 'Remove $title from this device? It will download again the next time you play it.';
+  }
+
+  @override
+  String get removeAllDownloadedGamesConfirm =>
+      'Remove all downloaded games from this device? They will download again the next time you play them.';
+
+  @override
+  String get settingsHigh => 'Augsts';
+
+  @override
+  String get settingsLow => 'Zems';
+
+  @override
+  String get settingsCustomPath => 'Pielāgots ceļš';
+
+  @override
+  String get settingsEnterDownloadFolderPath =>
+      'Ievadiet lejupielādes mapes ceļu';
+
+  @override
+  String get settingsConcurrentDownloads => 'Vienlaicīgas lejupielādes';
+
+  @override
+  String get settingsConcurrentDownloadsDescription =>
+      'Maksimālais vienlaikus lejupielādējamo vienumu skaits.';
+
+  @override
+  String get settingsAppInfo => 'LIETOTNES INFORMĀCIJA';
+
+  @override
+  String get settingsReportAnIssue => 'Ziņot par problēmu';
+
+  @override
+  String get settingsReportAnIssueSubtitle =>
+      'Atveriet problēmu izsekotāju vietnē GitHub';
+
+  @override
+  String get settingsJoinDiscord => 'Pievienojieties Discord';
+
+  @override
+  String get settingsJoinDiscordSubtitle => 'Tērzējiet ar kopienu';
+
+  @override
+  String get settingsJoinTheDiscord => 'Pievienojieties Discord';
+
+  @override
+  String get settingsSupportNotflix => 'Atbalstiet Tortugarr';
+
+  @override
+  String get settingsSupportNotflixSubtitle => 'Uzsauciet izstrādātājam kafiju';
+
+  @override
+  String get settingsLegal => 'JURIDISKĀS';
+
+  @override
+  String get settingsLicenses => 'Licences';
+
+  @override
+  String get settingsOpenSourceLicenseNotices =>
+      'Atvērtā koda licences paziņojumi';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privātuma politika';
+
+  @override
+  String get settingsPrivacyPolicySubtitle =>
+      'Kā Tortugarr apstrādā jūsu datus';
+
+  @override
+  String get settingsCheckForUpdates => 'Pārbaudiet atjauninājumus';
+
+  @override
+  String get settingsCheckForUpdatesSubtitle =>
+      'Pārbaudiet jaunāko Tortugarr versiju';
+
+  @override
+  String get settingsPoweredByFlutter => 'Darbojas ar Flutter';
+
+  @override
+  String settingsLicenseNoticesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# licences paziņojumi',
+      one: '# licences paziņojums',
+      zero: '# licenču paziņojumu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsBoth => 'Abi';
+
+  @override
+  String get settingsShuffleContentTypeFilter =>
+      'Satura tipa filtrs jauktā secībā';
+
+  @override
+  String get settingsVideoPlaybackPreferences =>
+      'Video atskaņošanas preferences';
+
+  @override
+  String get settingsVideoPlaybackPreferencesSubtitle =>
+      'Pamata video dzinējs un straumēšanas kvalitātes iestatījumi';
+
+  @override
+  String get settingsAudioPreferences => 'Audio preferences';
+
+  @override
+  String get settingsAudioPreferencesSubtitle =>
+      'Audio celiņi, apstrāde un caurlaides iespējas';
+
+  @override
+  String get settingsAutomationAndQueue => 'Automatizācija un rinda';
+
+  @override
+  String get settingsAutomationAndQueueSubtitle =>
+      'Automatizēta atskaņošana un secība';
+
+  @override
+  String get settingsOfflineDownloadsSubtitle =>
+      'Lejupielādes kvalitāte, krātuves ierobežojumi un rindas lielums';
+
+  @override
+  String get settingsSyncplaySubtitle => 'Sinhronizācijas loģika grupu sesijām';
+
+  @override
+  String get settingsAdvancedOptionsSubtitle =>
+      'Specializētas atskaņotāja funkcijas. Izmantojiet piesardzīgi, jo dažas opcijas var izraisīt atskaņošanas problēmas';
+
+  @override
+  String get settingsSkipIntrosAndOutros =>
+      'Vai izlaist ievadus un noslēgumus?';
+
+  @override
+  String get settingsMediaSegmentCountdown =>
+      'Multivides segmenta atpakaļskaitīšana';
+
+  @override
+  String get settingsProgressBar => 'Progresa josla';
+
+  @override
+  String get settingsTimer => 'Taimeris';
+
+  @override
+  String get settingsNone => 'Nav';
+
+  @override
+  String get settingsPromptUser => 'Pamudināt lietotāju';
+
+  @override
+  String get settingsSkip => 'Izlaist';
+
+  @override
+  String get settingsDoNothing => 'Nedariet neko';
+
+  @override
+  String get settingsMaxBitrateDescription =>
+      'Ierobežojiet straumēšanas bitu pārraides ātrumu. Saturs, kas pārsniedz šo slieksni, tiks pārkodēts, lai tas ietilptu.';
+
+  @override
+  String get settingsMaxResolutionDescription =>
+      'Ierobežojiet maksimālo izšķirtspēju, ko atskaņotājs pieprasīs. Augstākas izšķirtspējas saturs tiks pārkodēts uz leju.';
+
+  @override
+  String get settingsPlayerZoomDescription =>
+      'Kā video mērogot, lai tas atbilstu ekrānam.';
+
+  @override
+  String get settingsPlaybackEngineAndroidTv => 'Playback Engine (Android TV)';
+
+  @override
+  String get settingsPlaybackEngineAndroidTvDescription =>
+      'Izvēlieties noklusējuma atskaņošanas programmu Android TV ierīcēs. Izmaiņas attiecas uz nākamo atskaņošanas sesiju.';
+
+  @override
+  String get settingsPlaybackEngineMedia3Recommended => 'Media3 (ieteicams)';
+
+  @override
+  String get settingsPlaybackEngineMedia3Legacy => 'Media3 (mantots)';
+
+  @override
+  String get settingsPlaybackEngineMpvLegacy => 'mpv (mantots)';
+
+  @override
+  String get settingsPlaybackEngineMpvRecommended => 'mpv (ieteicams)';
+
+  @override
+  String get settingsDolbyVisionFallback => 'Dolby Vision atkāpšanās';
+
+  @override
+  String get settingsDolbyVisionFallbackDescription =>
+      'Dolby Vision nosaukumu darbība ierīcēs bez Dolby Vision dekodēšanas.';
+
+  @override
+  String get settingsAskEachTime => 'Jautājiet katru reizi';
+
+  @override
+  String get settingsPreferHdr10Fallback =>
+      'Dodiet priekšroku HDR10 atkāpšanās režīmam';
+
+  @override
+  String get settingsPreferServerTranscode =>
+      'Dod priekšroku servera pārkodēšanai';
+
+  @override
+  String get settingsDolbyVisionProfile7DirectPlay =>
+      'Dolby Vision Profile 7 tiešā atskaņošana';
+
+  @override
+  String get settingsDolbyVisionProfile7DirectPlayDescription =>
+      'Kontrolē, vai Dolby Vision 7. profila uzlabošanas slāņa straumēm ir jāvirza atskaņošana.';
+
+  @override
+  String get settingsAutoAftkrtEnabled => 'Automātiski (AFTKRT iespējots)';
+
+  @override
+  String get settingsEnabledOnThisDevice => 'Iespējots šajā ierīcē';
+
+  @override
+  String get settingsDisabledPreferTranscode => 'Atspējots (vēlams pārkodēt)';
+
+  @override
+  String get settingsResumeRewindDescription =>
+      'Cik sekundes vajadzētu attīt, atsākot atskaņošanu (no Turpināt skatīšanos vai multivides vienuma lapas)?';
+
+  @override
+  String get settingsUnpauseRewindDescription =>
+      'Cik sekundes vajadzētu attīt, atsākot atskaņošanu pēc pauzes pogas nospiešanas?';
+
+  @override
+  String get settingsSkipBackLengthDescription =>
+      'Cik sekundes pāriet atpakaļ pēc attīšanas pogas nospiešanas.';
+
+  @override
+  String get settingsOneSecond => '1 sekunde';
+
+  @override
+  String get settingsThreeSeconds => '3 sekundes';
+
+  @override
+  String get settingsFortyFiveSeconds => '45 sekundes';
+
+  @override
+  String get settingsSixtySeconds => '60 sekundes';
+
+  @override
+  String get settingsSkipForwardLengthDescription =>
+      'Cik sekundes, lai pārietu uz priekšu pēc pārtīšanas pogas nospiešanas.';
+
+  @override
+  String get settingsBitstreamAc3ToExternalDecoder =>
+      'Bitu plūsma AC3 ārējam dekodētājam';
+
+  @override
+  String get settingsCinemaMode => 'Kino režīms';
+
+  @override
+  String get settingsCinemaModeSubtitle =>
+      'Pirms galvenās funkcijas atskaņojiet reklāmkadrus/prerolls';
+
+  @override
+  String get settingsNextUpDisplayDescription =>
+      'Paplašinātajā versijā tiek rādīta pilna kartīte ar sērijas noformējumu un aprakstu. Minimāls parāda kompaktu atpakaļskaitīšanas pārklājumu. Atspējots, uzvedne tiek paslēpta pilnībā.';
+
+  @override
+  String get settingsShort => 'Īss';
+
+  @override
+  String get settingsLong => 'Garš';
+
+  @override
+  String get settingsVeryLong => 'Ļoti garš';
+
+  @override
+  String get settingsVideoStartDelay => 'Video sākuma aizkave';
+
+  @override
+  String settingsMillisecondsValue(int value) {
+    return '$value ms';
+  }
+
+  @override
+  String get settingsLiveTvDirect => 'TV tiešraide';
+
+  @override
+  String get settingsLiveTvDirectSubtitle =>
+      'Iespējot tiešo atskaņošanu TV tiešraidei';
+
+  @override
+  String get settingsOpenGroups => 'Atveriet Grupas';
+
+  @override
+  String get settingsOpenGroupsSubtitle =>
+      'Izveidojiet SyncPlay grupas, pievienojieties tām vai pārvaldiet tās';
+
+  @override
+  String get settingsSyncplayEnabled => 'SyncPlay iespējots';
+
+  @override
+  String get settingsSyncplayEnabledSubtitle =>
+      'Iespējot grupas skatīšanās funkcijas';
+
+  @override
+  String get settingsSyncplayButton => 'SyncPlay poga';
+
+  @override
+  String get settingsSyncplayButtonSubtitle =>
+      'Parādiet pogu SyncPlay navigācijas joslā';
+
+  @override
+  String get settingsSyncplayAdvancedCorrection => 'Papildu korekcija';
+
+  @override
+  String get settingsSyncplayAdvancedCorrectionSubtitle =>
+      'Iespējot precīzas sinhronizācijas loģiku';
+
+  @override
+  String get settingsSyncplaySyncCorrection => 'Sinhronizācijas korekcija';
+
+  @override
+  String get settingsSyncplaySyncCorrectionSubtitle =>
+      'Automātiski pielāgojiet atskaņošanu, lai saglabātu sinhronizāciju';
+
+  @override
+  String get settingsSyncplaySpeedToSync => 'Sinhronizācijas ātrums';
+
+  @override
+  String get settingsSyncplaySpeedToSyncSubtitle =>
+      'Lai sinhronizētu, izmantojiet atskaņošanas ātruma regulēšanu';
+
+  @override
+  String get settingsSyncplaySkipToSync => 'Pāriet uz sinhronizāciju';
+
+  @override
+  String get settingsSyncplaySkipToSyncSubtitle =>
+      'Izmantojiet meklēšanu, lai sinhronizētu';
+
+  @override
+  String get settingsSyncplayMinimumSpeedDelay => 'Minimālā ātruma aizkave';
+
+  @override
+  String get settingsSyncplayMaximumSpeedDelay => 'Maksimālā ātruma aizkave';
+
+  @override
+  String get settingsSyncplaySpeedDuration => 'Ātruma ilgums';
+
+  @override
+  String get settingsSyncplayMinimumSkipDelay => 'Minimālā izlaišanas aizkave';
+
+  @override
+  String get settingsSyncplayExtraOffset => 'SyncPlay papildu nobīde';
+
+  @override
+  String get onNow => 'Ieslēgts Tagad';
+
+  @override
+  String get collections => 'Kolekcijas';
+
+  @override
+  String get lastPlayed => 'Pēdējo reizi spēlēts';
+
+  @override
+  String libraryNameWithServer(String libraryName, String serverName) {
+    return '$libraryName ($serverName)';
+  }
+
+  @override
+  String latestLibraryName(String libraryName) {
+    return 'Jaunākais $libraryName';
+  }
+
+  @override
+  String recentlyReleasedLibraryName(String libraryName) {
+    return 'Nesen izdots: $libraryName';
+  }
+
+  @override
+  String get autoplayNextEpisode => 'Automātiski atskaņot nākamo sēriju';
+
+  @override
+  String get autoplayNextEpisodeSubtitle =>
+      'Automātiski atskaņot nākamo sēriju, kad tā ir pieejama.';
+
+  @override
+  String get skipSilenceTitle => 'Izlaist klusumu';
+
+  @override
+  String get skipSilenceSubtitle =>
+      'Automātiski izlaist klusos audio segmentus, ja to atbalsta straume.';
+
+  @override
+  String get allowExternalAudioEffectsTitle => 'Atļaut ārējos audio efektus';
+
+  @override
+  String get allowExternalAudioEffectsSubtitle =>
+      'Atļaut ekvalaizera un efektu lietotnēm (piem., Wavelet) pievienoties Media3 atskaņošanas sesijām.';
+
+  @override
+  String get disableTunnelingTitle => 'Atspējot tunelēšanu';
+
+  @override
+  String get disableTunnelingSubtitle =>
+      'Piespiedu atskaņošana bez tunelēšanas. Noderīga ierīcēm ar tunelēšanas audio/video pārtraukumiem.';
+
+  @override
+  String get enableTunnelingTitle => 'Iespējot tunelēšanu';
+
+  @override
+  String get enableTunnelingSubtitle =>
+      'Paplašināts. Novirza audio un video caur saistītu aparatūras ceļu. Pēc noklusējuma izslēgts, jo dažās ierīcēs tas rada audio un video pārrāvumus.';
+
+  @override
+  String get mapDolbyVisionP7Title => 'Kartē Dolby Vision profilu 7 ar HEVC';
+
+  @override
+  String get mapDolbyVisionP7Subtitle =>
+      'Atskaņojiet Dolby Vision profila 7 straumes kā ar HDR10 saderīgu HEVC ierīcēs, kas nav DV.';
+
+  @override
+  String get subtitlesUseEmbeddedStyles =>
+      'Izmantojiet iegultos subtitru stilus';
+
+  @override
+  String get subtitlesUseEmbeddedStylesSubtitle =>
+      'Lietojiet subtitru celiņā iegultās krāsas, fontus un novietojumu. Atspējojiet, lai tā vietā izmantotu subtitru stila preferences.';
+
+  @override
+  String get subtitlesUseEmbeddedFontSizes =>
+      'Izmantojiet iegultos subtitru fontu izmērus';
+
+  @override
+  String get subtitlesUseEmbeddedFontSizesSubtitle =>
+      'Lietojiet subtitru celiņā iegultos fonta lieluma ieteikumus. Atspējojiet, lai izmantotu subtitru izmēru no jūsu stila preferencēm.';
+
+  @override
+  String get showMediaDetailsOnLibraryPage => 'Rādīt multivides informāciju';
+
+  @override
+  String get showMediaDetailsOnLibraryPageDescription =>
+      'Rādīt izvēlētā vienuma informāciju bibliotēkas lapu augšdaļā.';
+
+  @override
+  String get hideBackdropsInLibraries =>
+      'Slēpt fona attēlus pārlūkošanas laikā?';
+
+  @override
+  String get useDetailedSubHeadings =>
+      'Izmantojiet detalizētus apakšvirsrakstus';
+
+  @override
+  String get useDetailedSubHeadingsDescription =>
+      'Rādīt detalizētu vai minimālu apakšrindu bibliotēkas lapās.';
+
+  @override
+  String get savedThemesDeleteDialogTitle => 'Vai dzēst saglabāto motīvu?';
+
+  @override
+  String savedThemesDeleteDialogMessage(String themeName) {
+    return 'Vai noņemt \"$themeName\" no šīs ierīces kešatmiņas?';
+  }
+
+  @override
+  String get themeStore => 'Tēmu veikals';
+
+  @override
+  String get themeStoreSubtitle => 'Pārlūkojiet un saglabājiet kopienas tēmas';
+
+  @override
+  String get themeStoreDescription =>
+      'Saglabājiet tēmu, lai to izmantotu tāpat kā citas saglabātās tēmas.';
+
+  @override
+  String get themeStoreEmpty => 'Pašlaik nav pieejama neviena tēma.';
+
+  @override
+  String get themeStoreLoadFailed =>
+      'Neizdevās ielādēt tēmu veikalu. Pārbaudiet savienojumu un mēģiniet vēlreiz.';
+
+  @override
+  String get themeStoreSave => 'Saglabāt';
+
+  @override
+  String get themeStoreSaveAndApply => 'Saglabāt un lietot';
+
+  @override
+  String get themeStoreSaved => 'Saglabāts';
+
+  @override
+  String get themeStoreInvalidMessage => 'Šo tēmu neizdevās ielādēt.';
+
+  @override
+  String themeStoreSavedMessage(String themeName) {
+    return 'Saglabāts “$themeName”.';
+  }
+
+  @override
+  String savedThemesDeletedMessage(String themeName) {
+    return 'Izdzēsts \"$themeName\" no šīs ierīces.';
+  }
+
+  @override
+  String savedThemesDeleteFailedMessage(String themeName) {
+    return 'Nevarēja izdzēst \"$themeName\".';
+  }
+
+  @override
+  String get savedThemesTitle => 'Saglabātie motīvi';
+
+  @override
+  String get savedThemesDescription =>
+      'Tie ir motīvi, kas lejupielādēti no pašreizējā servera spraudņa Tortugarr. Dzēšot, tiek noņemta tikai šī vietējā kopija.';
+
+  @override
+  String get savedThemesEmpty =>
+      'Šim serverim netika atrasts neviens saglabāts motīvs.';
+
+  @override
+  String savedThemesCurrentThemeId(String themeId) {
+    return '$themeId • Pašlaik aktīvs';
+  }
+
+  @override
+  String get savedThemesDeleteTooltip => 'Dzēst saglabāto motīvu';
+
+  @override
+  String get savedThemesManageSubtitle =>
+      'Pārvaldiet šajā ierīcē lejupielādētos spraudņu motīvus';
+
+  @override
+  String get themeEditor => 'Tēmas redaktors';
+
+  @override
+  String get themeEditorSubtitle =>
+      'Pārlūkprogrammā atveriet Tortugarr motīvu redaktoru';
+
+  @override
+  String get homeScreen => 'Sākuma ekrāns';
+
+  @override
+  String get bottomBar => 'Apakšējā josla';
+
+  @override
+  String get homeRowsStyleClassic => 'Klasika';
+
+  @override
+  String get homeRowsStyleModern => 'Mūsdienīgs';
+
+  @override
+  String get homeRowsSection => 'Sākuma rindas';
+
+  @override
+  String get homeRowDisplay => 'Sākuma ekrāna rindu attēlošana';
+
+  @override
+  String get homeRowSections => 'Sākuma ekrāna rindu sadaļas';
+
+  @override
+  String get homeRowToggles => 'Sākuma ekrāna rindu slēdži';
+
+  @override
+  String get homeRowTogglesSubtitle =>
+      'Iespējojiet vai atspējojiet uz bibliotēkām balstītas sākuma ekrāna rindu kategorijas';
+
+  @override
+  String get homeRowTogglesDescription =>
+      'Iespējojiet turpmākos slēdžus, lai rindas tiktu rādītas sākuma ekrāna sadaļās.';
+
+  @override
+  String get rowsType => 'Rindu veids';
+
+  @override
+  String get rowsTypeDescription =>
+      'Classic saglabā katras rindas attēla veidu un informācijas pārklājumu. Modern izmanto rindas no portreta uz fonu.';
+
+  @override
+  String get displayFavoritesRows => 'Parādīt izlases rindas';
+
+  @override
+  String get displayFavoritesRowsSubtitle =>
+      'Rādīt iecienītākās filmas, seriālus un citas iecienītākās rindas sākuma sadaļās.';
+
+  @override
+  String get favoritesRowSorting => 'Izlases rindu kārtošana';
+
+  @override
+  String get favoritesRowSortingDescription =>
+      'Kārtot izlases rindas pēc pievienošanas datuma, izlaišanas datuma, alfabēta un daudz ko citu.';
+
+  @override
+  String get displayCollectionsRows => 'Parādīt kolekciju rindas';
+
+  @override
+  String get displayCollectionsRowsSubtitle =>
+      'Rādīt kolekciju rindas sākuma sadaļās.';
+
+  @override
+  String get collectionsRowSorting => 'Kolekciju rindu šķirošana';
+
+  @override
+  String get collectionsRowSortingDescription =>
+      'Kārtot kolekciju rindas pēc pievienošanas datuma, izlaišanas datuma, alfabēta un daudz ko citu.';
+
+  @override
+  String get displayGenresRows => 'Rādīt žanru rindas';
+
+  @override
+  String get displayGenresRowsSubtitle => 'Rādīt Žanru rindas sākuma sadaļās.';
+
+  @override
+  String get genresRowSorting => 'Žanri rindu šķirošana';
+
+  @override
+  String get genresRowSortingDescription =>
+      'Kārtot Žanru rindas pēc pievienošanas datuma, izlaišanas datuma, alfabēta un daudz ko citu.';
+
+  @override
+  String get genresRowItems => 'Žanri Rindas vienumi';
+
+  @override
+  String get genresRowItemsDescription =>
+      'Rādīt filmas, seriālus vai abus rindās Žanri.';
+
+  @override
+  String get displayPlaylistsRows => 'Rādīt atskaņošanas sarakstu rindas';
+
+  @override
+  String get displayPlaylistsRowsSubtitle =>
+      'Rādīt atskaņošanas sarakstu rindas sākuma ekrāna sadaļās.';
+
+  @override
+  String get playlistsRowSorting => 'Atskaņošanas sarakstu rindu kārtošana';
+
+  @override
+  String get playlistsRowSortingDescription =>
+      'Kārtojiet atskaņošanas sarakstu rindas pēc pievienošanas datuma, izdošanas datuma, alfabēta un citiem kritērijiem.';
+
+  @override
+  String get displayAudioRows => 'Rādīt audio rindas';
+
+  @override
+  String get displayAudioRowsSubtitle =>
+      'Rādīt audio rindas sākuma ekrāna sadaļās.';
+
+  @override
+  String get audioRowsSorting => 'Audio rindu kārtošana';
+
+  @override
+  String get audioRowsSortingDescription =>
+      'Kārtojiet audio rindas pēc pievienošanas datuma, izdošanas datuma, alfabēta un citiem kritērijiem.';
+
+  @override
+  String get audioPlaylists => 'Audio atskaņošanas saraksti';
+
+  @override
+  String get appearance => 'Izskats';
+
+  @override
+  String get layout => 'Izkārtojums';
+
+  @override
+  String get theme => 'Tēma';
+
+  @override
+  String get keyboard => 'Tastatūra';
+
+  @override
+  String get navButtons => 'Pogas';
+
+  @override
+  String get rendering => 'Renderēšana';
+
+  @override
+  String get mpvConfiguration => 'MPV konfigurācija';
+
+  @override
+  String get cardSize => 'Kartes izmērs';
+
+  @override
+  String get externalPlayerApp => 'Ārējā atskaņotāja lietotne';
+
+  @override
+  String get externalPlayerAppDescription =>
+      'Iestatiet ārējo atskaņotāju, lai iespējotu atskaņošanu ar ilgu piespiešanu';
+
+  @override
+  String get externalPlayerAskEachTimeSubtitle =>
+      'Rādīt lietotņu atlasītāju, kad sākas atskaņošana.';
+
+  @override
+  String get loadingInstalledPlayers =>
+      'Notiek instalēto atskaņotāju ielāde...';
+
+  @override
+  String get connection => 'Savienojums';
+
+  @override
+  String get audioTranscodeTarget => 'Audio pārkodēšanas mērķis';
+
+  @override
+  String get passthrough => 'Caurlaide';
+
+  @override
+  String get supportedOnThisDevice => 'Atbalstīts šajā ierīcē';
+
+  @override
+  String get notSupportedOnThisDevice => 'Netiek atbalstīts šajā ierīcē';
+
+  @override
+  String get settingsAudioDtsXPassthrough => 'DTS:X (DTS UHD) caurlaide';
+
+  @override
+  String get settingsAudioBitstreamDtsXToExternalDecoder =>
+      'Bitu plūsma DTS:X (DTS UHD) uz ārējo dekodētāju.';
+
+  @override
+  String get settingsAudioTrueHdJocPassthrough =>
+      'TrueHD ar Atmos (JOC) caurlaidi';
+
+  @override
+  String get mediaPlayerBehavior => 'Multivides atskaņotāja uzvedība';
+
+  @override
+  String get playbackEnhancements => 'Atskaņošanas uzlabojumi';
+
+  @override
+  String get alwaysOn => 'Vienmēr ieslēgts.';
+
+  @override
+  String get replaceSkipOutroWithNextUpDisplay =>
+      'Nomainiet Skip Outro ar nākamo displeju';
+
+  @override
+  String get replaceSkipOutroWithNextUpDisplaySubtitle =>
+      'Rādīt pārklājumu Next Up, nevis pogu Izlaist Outro.';
+
+  @override
+  String get playerRouting => 'Spēlētāja maršrutēšana';
+
+  @override
+  String get preferSoftwareDecoders =>
+      'Dodiet priekšroku programmatūras dekodētājiem';
+
+  @override
+  String get preferSoftwareDecodersSubtitle =>
+      'Pirms aparatūras dekodētājiem izmantojiet FFmpeg (audio) un libgav1 (AV1). Atspējot, ja pārtrūkst HDMI audio caurlaide.';
+
+  @override
+  String get useExternalPlayer => 'Izmantojiet ārējo atskaņotāju';
+
+  @override
+  String get useExternalPlayerSubtitle =>
+      'Atveriet video atskaņošanu Android TV atlasītajā ārējā lietotnē.';
+
+  @override
+  String get automaticQueuing => 'Automātiskā rindā';
+
+  @override
+  String get preferSdhSubtitles => 'Dodiet priekšroku SDH subtitriem';
+
+  @override
+  String get preferSdhSubtitlesSubtitle =>
+      'Veicot automātisko atlasi, piešķiriet prioritāti SDH/CC subtitru celiņiem.';
+
+  @override
+  String get webDiagnostics => 'Web diagnostika';
+
+  @override
+  String get webDiagnosticsTitle => 'Tortugarr Tīmekļa diagnostika';
+
+  @override
+  String get webDiagnosticsIntro =>
+      'Izmantojiet šo lapu, lai diagnosticētu pārlūkprogrammas savienojamības problēmas (CORS, jaukts saturs un atklāšanas iestatījumi).';
+
+  @override
+  String get webDiagnosticsDetectedMixedContentFailure =>
+      'Konstatēta jaukta satura kļūme';
+
+  @override
+  String get webDiagnosticsDetectedCorsPreflightFailure =>
+      'Konstatēta CORS/pirmslidojuma kļūme';
+
+  @override
+  String get webDiagnosticsMixedContentFailureBody =>
+      'Tortugarr atklāja HTTPS lapu, kas mēģina izsaukt HTTP servera URL. Pārlūkprogrammas bloķē šo pieprasījumu, pirms tas sasniedz jūsu serveri.';
+
+  @override
+  String get webDiagnosticsCorsFailureBody =>
+      'Tortugarr atklāja pārlūkprogrammas līmeņa pieprasījuma kļūmi, ko parasti izraisa trūkstošas ​​CORS vai pirmspārbaudes galvenes multivides serverī.';
+
+  @override
+  String webDiagnosticsTargetUrl(String url) {
+    return 'Mērķa URL: $url';
+  }
+
+  @override
+  String webDiagnosticsDetail(String detail) {
+    return 'Detalizēta informācija: $detail';
+  }
+
+  @override
+  String get webDiagnosticsCurrentRuntimeContext =>
+      'Pašreizējais izpildlaika konteksts';
+
+  @override
+  String get webDiagnosticsOrigin => 'Izcelsme';
+
+  @override
+  String get webDiagnosticsScheme => 'Shēma';
+
+  @override
+  String get webDiagnosticsPluginMode => 'Spraudņa režīms';
+
+  @override
+  String get webDiagnosticsWebRtcScan => 'WebRTC skenēšana';
+
+  @override
+  String get webDiagnosticsForcedServerUrl => 'Piespiedu servera URL';
+
+  @override
+  String get webDiagnosticsDefaultServerUrl => 'Noklusējuma servera URL';
+
+  @override
+  String get webDiagnosticsDiscoveryProxyUrl =>
+      'Atklāšanas starpniekservera URL';
+
+  @override
+  String get notConfigured => 'nav konfigurēts';
+
+  @override
+  String get webDiagnosticsMixedContent => 'Jaukts saturs';
+
+  @override
+  String get webDiagnosticsMixedContentDetected =>
+      'Šī lapa tiek ielādēta, izmantojot HTTPS, bet viens vai vairāki konfigurētie URL ir HTTP. Pārlūkprogrammas neļauj HTTPS lapām izsaukt HTTP API.';
+
+  @override
+  String get webDiagnosticsMixedContentFix =>
+      'Labojums: apkalpojiet multivides serveri vai starpniekservera galapunktu, izmantojot HTTPS, vai ielādējiet Tortugarr, izmantojot HTTP, tikai uzticamos lokālos tīklos.';
+
+  @override
+  String get webDiagnosticsNoMixedContentDetected =>
+      'Pašreizējos izpildlaika iestatījumos nav konstatēta acīmredzama jaukta satura konfigurācija.';
+
+  @override
+  String get webDiagnosticsCorsChecklist => 'CORS kontrolsaraksts';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem1 =>
+      '• Atļaut pārlūkprogrammas izcelsmi sadaļā Access-Control-Allow-Origin.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem2 =>
+      '• Sadaļā Access-Control-Allow-Headers iekļaujiet autorizāciju, X-Emby-Authorization un X-Emby-Token.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem3 =>
+      '• Atklājiet satura diapazonu un akceptēt diapazonus straumēšanai un meklēšanai.';
+
+  @override
+  String get webDiagnosticsCorsChecklistItem4 =>
+      '• Atgrieziet 204. pie OPTIONS pirmslidojuma pieprasījumiem.';
+
+  @override
+  String get webDiagnosticsHeaderSnippetTitle =>
+      'Galvenes fragmenta piemērs (nginx stilā)';
+
+  @override
+  String get note => 'Piezīme';
+
+  @override
+  String get webDiagnosticsNonWebNote =>
+      'Šis diagnostikas maršruts ir paredzēts tīmekļa būvēšanai. Ja to redzat citā platformā, šīs pārbaudes var nebūt spēkā.';
+
+  @override
+  String get backToServerSelect => 'Atpakaļ uz serveri Izvēlieties';
+
+  @override
+  String get signOutAllUsers => 'Izrakstīties no visiem lietotājiem';
+
+  @override
+  String get voiceSearchPermissionPermanentlyDenied =>
+      'Mikrofona atļauja ir neatgriezeniski liegta. Iespējojiet to sistēmas iestatījumos.';
+
+  @override
+  String get voiceSearchPermissionRequired =>
+      'Balss meklēšanai ir nepieciešama mikrofona atļauja.';
+
+  @override
+  String get voiceSearchNoMatch => 'To nesapratu. Mēģiniet vēlreiz.';
+
+  @override
+  String get voiceSearchNoSpeechDetected => 'Runa nav konstatēta.';
+
+  @override
+  String get voiceSearchMicrophoneError => 'Mikrofona kļūda.';
+
+  @override
+  String get voiceSearchNeedsInternet =>
+      'Balss meklēšanai nepieciešams internets.';
+
+  @override
+  String get voiceSearchServiceBusy =>
+      'Balss pakalpojums ir aizņemts. Mēģiniet vēlreiz.';
+
+  @override
+  String get microphonePermissionPermanentlyDenied =>
+      'Mikrofona atļauja ir neatgriezeniski liegta.';
+
+  @override
+  String get microphonePermissionDenied => 'Mikrofona atļauja ir liegta.';
+
+  @override
+  String get speechRecognitionUnavailable =>
+      'Runas atpazīšana šajā ierīcē nav pieejama.';
+
+  @override
+  String get openIosRoutePicker => 'Atveriet iOS maršruta atlasītāju';
+
+  @override
+  String get airPlayRoutePickerUnavailable =>
+      'AirPlay maršruta atlasītājs šajā ierīcē nav pieejams.';
+
+  @override
+  String get videos => 'Videoklipi';
+
+  @override
+  String get programs => 'Programmas';
+
+  @override
+  String get songs => 'Dziesmas';
+
+  @override
+  String get photoAlbums => 'Fotoalbumi';
+
+  @override
+  String get photos => 'Fotogrāfijas';
+
+  @override
+  String get people => 'Cilvēki';
+
+  @override
+  String get recentlyReleasedEpisodes => 'Nesen iznākušās sērijas';
+
+  @override
+  String get watchAgain => 'Skatīties vēlreiz';
+
+  @override
+  String get guestAppearances => 'Viesu uzstāšanās';
+
+  @override
+  String get appearancesSeerr => 'Parādīšanās (Seerr)';
+
+  @override
+  String get crewContributionsSeerr => 'Filmēšanas grupas darbi (Seerr)';
+
+  @override
+  String get watchWithGroup => 'Skatieties kopā ar grupu';
+
+  @override
+  String get errors => 'Kļūdas';
+
+  @override
+  String get warnings => 'Brīdinājumi';
+
+  @override
+  String get disk => 'Disks';
+
+  @override
+  String get openInBrowser => 'Atvērt pārlūkprogrammā';
+
+  @override
+  String get embeddedBrowserNotAvailable =>
+      'Iegultā pārlūkprogramma šajā platformā nav pieejama.';
+
+  @override
+  String get adminRestartServerConfirmation =>
+      'Vai tiešām vēlaties restartēt serveri?';
+
+  @override
+  String get adminShutdownServerConfirmation =>
+      'Vai tiešām vēlaties izslēgt serveri? Jums tas būs jārestartē manuāli.';
+
+  @override
+  String get internal => 'Iekšējā';
+
+  @override
+  String get idle => 'Dīkstāvē';
+
+  @override
+  String get os => 'OS';
+
+  @override
+  String get adminNoUsersFound => 'Nav atrasts neviens lietotājs';
+
+  @override
+  String get adminNoUsersMatchSearch =>
+      'Neviens lietotājs neatbilst jūsu meklēšanas vaicājumam';
+
+  @override
+  String get adminNoDevicesFound => 'Netika atrasta neviena ierīce';
+
+  @override
+  String get adminNoDevicesMatchCurrentFilters =>
+      'Neviena ierīce neatbilst pašreizējiem filtriem';
+
+  @override
+  String get passwordSet => 'Parole iestatīta';
+
+  @override
+  String get noPasswordConfigured => 'Parole nav konfigurēta';
+
+  @override
+  String get remoteAccess => 'Attālā piekļuve';
+
+  @override
+  String get localOnly => 'Tikai vietējais';
+
+  @override
+  String get adminMediaAnalyticsLoadFailed =>
+      'Neizdevās ielādēt multivides analīzi';
+
+  @override
+  String get analyticsCombinedAcrossLibraries =>
+      'Apvienotā analīze visās multivides bibliotēkās.';
+
+  @override
+  String get analyticsTopArtists => 'Labākie mākslinieki';
+
+  @override
+  String get analyticsTopAuthors => 'Populārākie autori';
+
+  @override
+  String get analyticsTopContributors => 'Aktīvākie līdzstrādnieki';
+
+  @override
+  String analyticsLibrariesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bibliotēkas',
+      one: '$count bibliotēka',
+      zero: '$count bibliotēku',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get analyticsNoIndexedMediaTotals =>
+      'Šai atlasei vēl nav pieejama neviena indeksētā multivides kopsumma.';
+
+  @override
+  String get analyticsLibraryDetails => 'Bibliotēkas informācija';
+
+  @override
+  String get analyticsLibraryBreakdown => 'Bibliotēkas sadalījums';
+
+  @override
+  String get analyticsNoLibrariesAvailable => 'Bibliotēkas nav pieejamas.';
+
+  @override
+  String get adminServerAdministrationTitle => 'Servera administrēšana';
+
+  @override
+  String get adminServerPathData => 'Dati';
+
+  @override
+  String get adminServerPathImageCache => 'Attēlu kešatmiņa';
+
+  @override
+  String get adminServerPathCache => 'Kešatmiņa';
+
+  @override
+  String get adminServerPathLogs => 'Baļķi';
+
+  @override
+  String get adminServerPathMetadata => 'Metadati';
+
+  @override
+  String get adminServerPathTranscode => 'Pārkodēt';
+
+  @override
+  String get adminServerPathWeb => 'Web';
+
+  @override
+  String get adminNoServerPathsReturned =>
+      'Šis serveris neatgrieza nevienu servera ceļu.';
+
+  @override
+  String adminPercentUsed(int percent) {
+    return '$percent% izmantoti';
+  }
+
+  @override
+  String get userActivity => 'Lietotāja darbība';
+
+  @override
+  String get systemEvents => 'Sistēmas notikumi';
+
+  @override
+  String get needsAttention => 'Nepieciešama uzmanība';
+
+  @override
+  String get adminDrawerSectionServer => 'Serveris';
+
+  @override
+  String get adminDrawerSectionPlayback => 'Atskaņošana';
+
+  @override
+  String get adminDrawerSectionDevices => 'Ierīces';
+
+  @override
+  String get adminDrawerSectionAdvanced => 'Paplašināti';
+
+  @override
+  String get adminDrawerSectionPlugins => 'Spraudņi';
+
+  @override
+  String get adminDrawerSectionLiveTv => 'Tiešraides TV';
+
+  @override
+  String get homeVideos => 'Mājas video';
+
+  @override
+  String get mixedContent => 'Jaukts saturs';
+
+  @override
+  String get homeVideosAndPhotos => 'Mājas video un fotoattēli';
+
+  @override
+  String get mixedMoviesAndShows => 'Jauktas filmas un seriāli';
+
+  @override
+  String get intelQuickSync => 'Intel Quick Sync';
+
+  @override
+  String get rockchipMpp => 'Rockchip MPP';
+
+  @override
+  String get dolbyVision => 'Dolby Vision';
+
+  @override
+  String get noRecordingsFound => 'Ieraksti nav atrasti';
+
+  @override
+  String noImagePagesFoundInArchive(String extension) {
+    return 'Arhīvā .$extension nav atrasta neviena attēla lappuse.';
+  }
+
+  @override
+  String embeddedRendererFailed(int code, String description) {
+    return 'Iegultajam renderētājam radās kļūda ($code): $description';
+  }
+
+  @override
+  String epubRendererFailed(int code, String description) {
+    return 'EPUB renderētājam radās kļūda ($code): $description';
+  }
+
+  @override
+  String missingLocalFileForReader(String uri) {
+    return 'Trūkst lokālā faila lasītājam: $uri';
+  }
+
+  @override
+  String httpStatusWhileOpeningBookData(int status, String uri) {
+    return 'HTTP $status, atverot grāmatas datus no $uri';
+  }
+
+  @override
+  String get noReadableBookEndpointAvailable =>
+      'Nav pieejams neviens lasāms grāmatas galapunkts';
+
+  @override
+  String unsupportedComicArchiveFormat(String extension) {
+    return 'Neatbalstīts komiksu arhīva formāts: .$extension';
+  }
+
+  @override
+  String get cbrExtractionPluginUnavailable =>
+      'CBR izpakošanas spraudnis šajā platformā nav pieejams.';
+
+  @override
+  String get failedToExtractCbrArchive => 'Neizdevās izpakot .cbr arhīvu.';
+
+  @override
+  String get cb7ExtractionUnavailable =>
+      'CB7 izpakošana šajā platformā nav pieejama.';
+
+  @override
+  String get cb7ExtractionPluginUnavailable =>
+      'CB7 izpakošanas spraudnis šajā platformā nav pieejams.';
+
+  @override
+  String get closeGenrePanel => 'Aizvērt žanru paneli';
+
+  @override
+  String get loadingShuffle => 'Ielādē jaukšanu...';
+
+  @override
+  String get libraryShuffleLabel => 'BIBLIOTĒKAS JAUKŠANA';
+
+  @override
+  String get randomShuffleLabel => 'NEJAUŠA JAUKŠANA';
+
+  @override
+  String get genresShuffleLabel => 'ŽANRU JAUKŠANA';
+
+  @override
+  String get autoHdrSwitching => 'Automātiska HDR pārslēgšana';
+
+  @override
+  String get autoHdrSwitchingDescription =>
+      'Automātiski ieslēgt HDR HDR video atskaņošanai un pēc iziešanas atjaunot ekrāna režīmu.';
+
+  @override
+  String get whenFullscreen => 'Pilnekrāna režīmā';
+
+  @override
+  String get changeArtwork => 'Mainīt vāka attēlu';
+
+  @override
+  String get missing => 'Trūkst';
+
+  @override
+  String get transcodingLimits => 'Pārkodēšanas ierobežojumi';
+
+  @override
+  String get clearAllArtworkButton => 'Notīrīt visus vāka attēlus?';
+
+  @override
+  String get clearAllArtworkWarning =>
+      'Vai tiešām vēlaties notīrīt visus lejupielādētos vāka attēlus?';
+
+  @override
+  String get confirmClear => 'Apstiprināt notīrīšanu';
+
+  @override
+  String confirmClearMessage(String itemType) {
+    return 'Vai tiešām vēlaties notīrīt šo vienumu: $itemType?';
+  }
+
+  @override
+  String get uploadButton => 'Augšupielādēt?';
+
+  @override
+  String get resolutionLabel => 'Izšķirtspēja: ';
+
+  @override
+  String get onlyShowInterfaceLanguage =>
+      'Rādīt tikai saskarnes valodas vāka attēlus';
+
+  @override
+  String get confirmClearAll => 'Apstiprināt visu notīrīšanu';
+
+  @override
+  String get imageUploadSuccess => 'Attēls veiksmīgi augšupielādēts!';
+
+  @override
+  String imageUploadFailed(String error) {
+    return 'Neizdevās augšupielādēt attēlu: $error';
+  }
+
+  @override
+  String imageDownloadFailed(String error) {
+    return 'Neizdevās iestatīt attēlu: $error';
+  }
+
+  @override
+  String imageDeleteFailed(String error) {
+    return 'Neizdevās dzēst attēlu: $error';
+  }
+
+  @override
+  String clearAllArtworkFailed(String error) {
+    return 'Neizdevās notīrīt visus vāka attēlus: $error';
+  }
+
+  @override
+  String get yes => 'Jā';
+
+  @override
+  String get posterCategory => 'Plakāts';
+
+  @override
+  String get backdropsCategory => 'Fona attēli';
+
+  @override
+  String get bannerCategory => 'Baneris';
+
+  @override
+  String get logoCategory => 'Logotips';
+
+  @override
+  String get thumbnailCategory => 'Sīktēls';
+
+  @override
+  String get artCategory => 'Grafika';
+
+  @override
+  String get discArtCategory => 'Diska grafika';
+
+  @override
+  String get screenshotCategory => 'Ekrānuzņēmums';
+
+  @override
+  String get boxCoverCategory => 'Kastītes vāks';
+
+  @override
+  String get boxRearCoverCategory => 'Kastītes aizmugurējais vāks';
+
+  @override
+  String get menuArtCategory => 'Izvēlnes grafika';
+
+  @override
+  String get confirmItemPoster => 'plakāts';
+
+  @override
+  String get confirmItemBackdrop => 'fona attēls';
+
+  @override
+  String get confirmItemBanner => 'baneris';
+
+  @override
+  String get confirmItemLogo => 'logotips';
+
+  @override
+  String get confirmItemThumbnail => 'sīktēls';
+
+  @override
+  String get confirmItemArt => 'grafika';
+
+  @override
+  String get confirmItemDiscArt => 'diska grafika';
+
+  @override
+  String get confirmItemScreenshot => 'ekrānuzņēmums';
+
+  @override
+  String get confirmItemBoxCover => 'kastītes vāks';
+
+  @override
+  String get confirmItemBoxRearCover => 'kastītes aizmugurējais vāks';
+
+  @override
+  String get confirmItemMenuArt => 'izvēlnes grafika';
+
+  @override
+  String get resolutionAll => 'Visas';
+
+  @override
+  String get resolutionHigh => 'Augsta (1080p+)';
+
+  @override
+  String get resolutionMedium => 'Vidēja (720p)';
+
+  @override
+  String get resolutionLow => 'Zema (<720p)';
+
+  @override
+  String get sources => 'Avoti';
+
+  @override
+  String get audiobookChapters => 'Nodaļas';
+
+  @override
+  String get audiobookBookmarks => 'Grāmatzīmes';
+
+  @override
+  String get audiobookNotes => 'Piezīmes';
+
+  @override
+  String get audiobookQueue => 'Rinda';
+
+  @override
+  String get audiobookTimeline => 'Laika josla';
+
+  @override
+  String get audiobookTimelineEmpty => 'Laika josla ir tukša';
+
+  @override
+  String get audiobookFocusedTimeline => 'Fokusētā laika josla';
+
+  @override
+  String get audiobookExportBookmarks => 'Eksportēt grāmatzīmes';
+
+  @override
+  String get audiobookExportNotes => 'Eksportēt piezīmes';
+
+  @override
+  String get audiobookExportAll => 'Eksportēt visu';
+
+  @override
+  String audiobookExportSuccess(String path) {
+    return 'Eksportēts uz $path';
+  }
+
+  @override
+  String audiobookExportFailed(String error) {
+    return 'Eksportēšana neizdevās: $error';
+  }
+
+  @override
+  String get audiobookLyrics => 'Dziesmu teksti';
+
+  @override
+  String get audiobookAddBookmark => 'Pievienot grāmatzīmi';
+
+  @override
+  String get audiobookAddNote => 'Pievienot piezīmi';
+
+  @override
+  String get audiobookEditNote => 'Rediģēt piezīmi';
+
+  @override
+  String get audiobookNoteHint => 'Uzrakstiet piezīmi šim brīdim';
+
+  @override
+  String get audiobookSleepTimer => 'Miega taimeris';
+
+  @override
+  String get audiobookSleepOff => 'Izslēgts';
+
+  @override
+  String get audiobookSleepEndOfChapter => 'Nodaļas beigās';
+
+  @override
+  String get audiobookSleepCustom => 'Pielāgots';
+
+  @override
+  String audiobookSleepRemaining(String remaining) {
+    return 'Atlicis $remaining';
+  }
+
+  @override
+  String audiobookSleepMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count min',
+      one: '1 min',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get audiobookPlaybackSpeed => 'Atskaņošanas ātrums';
+
+  @override
+  String get audiobookRemainingTime => 'Atlicis';
+
+  @override
+  String get audiobookElapsedTime => 'Pagājis';
+
+  @override
+  String audiobookSkipBackSeconds(int seconds) {
+    return 'Atpakaļ $seconds s';
+  }
+
+  @override
+  String audiobookSkipForwardSeconds(int seconds) {
+    return 'Uz priekšu $seconds s';
+  }
+
+  @override
+  String get audiobookPreviousChapter => 'Iepriekšējā nodaļa';
+
+  @override
+  String get audiobookNextChapter => 'Nākamā nodaļa';
+
+  @override
+  String audiobookChapterIndicator(int current, int total) {
+    return '$current. nodaļa no $total';
+  }
+
+  @override
+  String get audiobookNoChapters => 'Nav nodaļu';
+
+  @override
+  String get audiobookNoBookmarks => 'Vēl nav grāmatzīmju';
+
+  @override
+  String get audiobookNoNotes => 'Vēl nav piezīmju';
+
+  @override
+  String audiobookBookmarkAdded(String position) {
+    return 'Grāmatzīme pievienota pie $position';
+  }
+
+  @override
+  String get audiobookSpeedReset => 'Atiestatīt uz 1.0x';
+
+  @override
+  String audiobookSpeedCustomLabel(String value) {
+    return '${value}x';
+  }
+
+  @override
+  String get audiobookSave => 'Saglabāt';
+
+  @override
+  String get audiobookCancel => 'Atcelt';
+
+  @override
+  String get audiobookDelete => 'Dzēst';
+
+  @override
+  String get subtitlePreferences => 'Subtitru preferences';
+
+  @override
+  String get subtitlePreferencesDescription =>
+      'Mainiet subtitru režīmus, noklusējuma valodas, izskatu un renderēšanas opcijas.';
+
+  @override
+  String get subtitleRendering => 'Subtitru renderēšana';
+
+  @override
+  String get displayOptions => 'Attēlošanas opcijas';
+
+  @override
+  String get releaseDateAscending => 'Izdošanas datums (augoši)';
+
+  @override
+  String get releaseDateDescending => 'Izdošanas datums (dilstoši)';
+
+  @override
+  String get groupContributions => 'Grupēt darbus';
+
+  @override
+  String get groupMultipleRoles => 'Grupēt vairākas lomas';
+
+  @override
+  String get libraryWriteAccessWarningTitle =>
+      'Brīdinājums par bibliotēkas rakstīšanas piekļuvi';
+
+  @override
+  String get libraryWriteAccessHowToFix => 'Kā to novērst:';
+
+  @override
+  String get libraryWriteAccessFixSteps =>
+      '1. Piešķiriet Jellyfin pakalpojuma lietotājam (piem., jellyfin vai Docker PUID/PGID) rakstīšanas atļaujas serverī esošajām multivides bibliotēkas mapēm.\n\n2. Vai arī dodieties uz Jellyfin vadības paneli -> Bibliotēkas, rediģējiet šo bibliotēku un atspējojiet opciju “Saglabāt vāka attēlus multivides mapēs”, lai vāka attēli tiktu glabāti Jellyfin iekšējā datubāzē.';
+
+  @override
+  String get dismiss => 'Noraidīt';
+
+  @override
+  String libraryWriteAccessProactiveBody(
+    String libraryName,
+    String failedPath,
+  ) {
+    return 'Jūsu bibliotēka “$libraryName” ir konfigurēta saglabāt vāka attēlus tieši multivides mapēs (opcija “Saglabāt vāka attēlus multivides mapēs” ir iespējota). Tomēr Jellyfin pārbaudīja rakstīšanas piekļuvi un tam nav atļaujas rakstīt failus šajā direktorijā:\n\n$failedPath';
+  }
+
+  @override
+  String get libraryWriteAccessReactiveBody =>
+      'Šķiet, ka Jellyfin neizdevās atjaunināt vāka attēlu. Jūsu bibliotēka ir konfigurēta saglabāt vāka attēlus tieši multivides mapēs (opcija “Saglabāt vāka attēlus multivides mapēs” ir iespējota). Šī kļūda parasti rodas, kad Jellyfin servera procesam nav atļaujas rakstīt failus jūsu multivides direktorijās.';
+
+  @override
+  String get externalLists => 'Ārējie saraksti';
+
+  @override
+  String get replay => 'Atskaņot no jauna';
+
+  @override
+  String get fileInformation => 'Faila informācija';
+
+  @override
+  String fileSizeFormat(Object size, Object format) {
+    return 'Izmērs: $size  •  Formāts: $format';
+  }
+
+  @override
+  String showAllAudioTracks(int count) {
+    return 'Rādīt visus audio celiņus ($count)';
+  }
+
+  @override
+  String showAllSubtitleTracks(int count) {
+    return 'Rādīt visus subtitru celiņus ($count)';
+  }
+
+  @override
+  String get checkingDirectPlay => 'Pārbauda tiešās atskaņošanas iespēju...';
+
+  @override
+  String get directPlayCapabilityLabel => 'Tiešās atskaņošanas iespēja: ';
+
+  @override
+  String get forced => 'Piespiedu';
+
+  @override
+  String get transcodeContainerNotSupported =>
+      'Atskaņotājs neatbalsta konteinera formātu.';
+
+  @override
+  String get transcodeVideoCodecNotSupported =>
+      'Video kodeks netiek atbalstīts.';
+
+  @override
+  String get transcodeAudioCodecNotSupported =>
+      'Audio kodeks netiek atbalstīts.';
+
+  @override
+  String get transcodeSubtitleCodecNotSupported =>
+      'Subtitru formāts netiek atbalstīts (nepieciešama iededzināšana).';
+
+  @override
+  String get transcodeAudioProfileNotSupported =>
+      'Audio profils netiek atbalstīts.';
+
+  @override
+  String get transcodeVideoProfileNotSupported =>
+      'Video profils netiek atbalstīts.';
+
+  @override
+  String get transcodeVideoLevelNotSupported =>
+      'Video līmenis netiek atbalstīts.';
+
+  @override
+  String get transcodeVideoResolutionNotSupported =>
+      'Šī ierīce neatbalsta video izšķirtspēju.';
+
+  @override
+  String get transcodeVideoBitDepthNotSupported =>
+      'Video bitu dziļums netiek atbalstīts.';
+
+  @override
+  String get transcodeVideoFramerateNotSupported =>
+      'Video kadru nomaiņas ātrums netiek atbalstīts.';
+
+  @override
+  String get transcodeContainerBitrateExceedsLimit =>
+      'Faila bitu ātrums pārsniedz atskaņotāja straumēšanas ierobežojumu.';
+
+  @override
+  String get transcodeVideoBitrateExceedsLimit =>
+      'Video bitu ātrums pārsniedz straumēšanas ierobežojumu.';
+
+  @override
+  String get transcodeAudioBitrateExceedsLimit =>
+      'Audio bitu ātrums pārsniedz straumēšanas ierobežojumu.';
+
+  @override
+  String get transcodeAudioChannelsNotSupported =>
+      'Audio kanālu skaits netiek atbalstīts.';
+
+  @override
+  String get sortAlphabetical => 'Pēc alfabēta';
+
+  @override
+  String get sortReleaseAscending => 'Izdošanas secība (augoši)';
+
+  @override
+  String get sortReleaseDescending => 'Izdošanas secība (dilstoši)';
+
+  @override
+  String get sortCustomDragDrop => 'Pielāgota (velkot un nometot)';
+
+  @override
+  String get playlistSortOptions => 'Atskaņošanas saraksta kārtošanas opcijas';
+
+  @override
+  String get resetSort => 'Atiestatīt kārtošanu';
+
+  @override
+  String rewatchSeasonEpisode(int season, int episode) {
+    return 'Skatīties atkārtoti S$season:E$episode';
+  }
+
+  @override
+  String get rewatchPlaylist => 'Skatīties atskaņošanas sarakstu atkārtoti';
+
+  @override
+  String get noSubtitlesFound => 'Subtitri nav atrasti.';
+
+  @override
+  String get adminControls => 'Administratora vadīklas';
+
+  @override
+  String get impellerRendering => 'Renderēšanas dzinējs (Impeller)';
+
+  @override
+  String get impellerRenderingSubtitle =>
+      'Impeller ir Flutter modernais GPU renderētājs, kas nodrošina plūstošākas animācijas un mazāku raustīšanos. Dažās TV pierīcēs un vecākos GPU tas var radīt traucējumus vai melnu attēlu; tādā gadījumā izslēdziet to. “Automātiski” izvēlas jūsu ierīcei piemērotāko noklusējumu. Lai lietotu izmaiņas, restartējiet Tortugarr.';
+
+  @override
+  String get impellerAuto => 'Automātiski';
+
+  @override
+  String get impellerOn => 'Ieslēgts';
+
+  @override
+  String get impellerOff => 'Izslēgts';
+
+  @override
+  String get impellerRestartTitle => 'Nepieciešams restarts';
+
+  @override
+  String get impellerRestartMessage =>
+      'Lai mainītu renderēšanas dzinēju, Tortugarr ir jārestartē. Aizveriet lietotni tagad un atveriet to no jauna.';
+
+  @override
+  String get impellerCloseNow => 'Aizvērt lietotni tagad';
+
+  @override
+  String get adminRefreshLibrary => 'Atsvaidzināt bibliotēku';
+
+  @override
+  String get adminRefreshAllLibraries => 'Atsvaidzināt visas bibliotēkas';
+
+  @override
+  String get adminRepoSortDateOldest =>
+      'Pievienošanas datums (vecākie vispirms)';
+
+  @override
+  String get adminRepoSortDateNewest =>
+      'Pievienošanas datums (jaunākie vispirms)';
+
+  @override
+  String get adminRepoSortNameAsc => 'Pēc alfabēta (no A līdz Z)';
+
+  @override
+  String get adminRepoSortNameDesc => 'Pēc alfabēta (no Z līdz A)';
+
+  @override
+  String adminAnalyticsLoadingProgress(int percentage) {
+    return 'Ielādē servera analītiku... $percentage%';
+  }
+
+  @override
+  String get adminLibChapterImageResolutionMatchSource => 'Kā avotam';
+
+  @override
+  String get imdbTop250Movies => 'IMDb 250 labākās filmas';
+
+  @override
+  String get imdbTop250TvShows => 'IMDb 250 labākie seriāli';
+
+  @override
+  String get imdbMostPopularMovies => 'IMDb populārākās filmas';
+
+  @override
+  String get imdbMostPopularTvShows => 'IMDb populārākie seriāli';
+
+  @override
+  String get imdbLowestRatedMovies => 'IMDb zemāk novērtētās filmas';
+
+  @override
+  String get imdbTopEnglishMovies =>
+      'IMDb augstāk novērtētās filmas angļu valodā';
+
+  @override
+  String get addToWatchlist => 'Add to Watchlist';
+
+  @override
+  String get removeFromWatchlist => 'Remove from Watchlist';
+
+  @override
+  String get watchlistUpdateFailed => 'Couldn\'t update watchlist';
+
+  @override
+  String get adminSearchParameters => 'Search Parameters';
+
+  @override
+  String get adminCurrentMetadata => 'Current Metadata';
+
+  @override
+  String get adminLabelYear => 'Year';
+
+  @override
+  String get adminLabelImdbId => 'IMDb Id';
+
+  @override
+  String get adminLabelTmdbMovieId => 'TheMovieDb Movie Id';
+
+  @override
+  String get adminLabelTmdbBoxSetId => 'TheMovieDb Box Set Id';
+
+  @override
+  String get adminLabelTvdbBoxSetId => 'TheTVDB Box Set Id';
+
+  @override
+  String get adminLabelTvdbId => 'TheTVDB Numerical Id';
+
+  @override
+  String get adminLabelTvdbSlug => 'TheTVDB Slug Movie Id';
+
+  @override
+  String get adminReplaceImages => 'Replace existing images';
+
+  @override
+  String get adminBackToSearch => 'Back to Search Criteria';
+
+  @override
+  String get grouping => 'Grouping';
+
+  @override
+  String get groupByType => 'Group by Type';
+
+  @override
+  String get playlistTypes => 'Playlist Types';
+
+  @override
+  String get playlistTypeVideo => 'Video';
+
+  @override
+  String get playlistTypeAudio => 'Audio (Music)';
+
+  @override
+  String get playlistTypeAudiobook => 'Audiobook';
+
+  @override
+  String get playlistTypeBook => 'Book';
+
+  @override
+  String get playlistTypePhoto => 'Photo';
+
+  @override
+  String get playlistTypeMixed => 'Mixed';
+
+  @override
+  String get videoPlaylistsSection => 'Video Playlists';
+
+  @override
+  String get audioPlaylistsSection => 'Audio Playlists';
+
+  @override
+  String get audiobookPlaylistsSection => 'Audiobook Playlists';
+
+  @override
+  String get bookPlaylistsSection => 'Book Playlists';
+
+  @override
+  String get photoPlaylistsSection => 'Photo Playlists';
+
+  @override
+  String get mixedPlaylistsSection => 'Mixed Playlists';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Trūkst';
+
+  @override
+  String get tgComing => 'Drīzumā';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Gaidāms $date';
+  }
+
+  @override
+  String get tgDownloading => 'Lejupielādē';
+
+  @override
+  String get tgReadySoon => 'Drīz būs gatavs';
+
+  @override
+  String get tgRequested => 'Pieprasīts';
+
+  @override
+  String get tgClose => 'Aizvērt';
+
+  @override
+  String get tgCancel => 'Atcelt';
+
+  @override
+  String get tgBack => 'Atpakaļ';
+
+  @override
+  String get tgYes => 'Jā';
+
+  @override
+  String get tgNo => 'Nē';
+
+  @override
+  String get tgSearch => 'Meklēt';
+
+  @override
+  String get tgHide => 'Paslēpt';
+
+  @override
+  String get tgAll => 'Visi';
+
+  @override
+  String get tgNone => 'Neviens';
+
+  @override
+  String get tgMovies => 'Filmas';
+
+  @override
+  String get tgSeries => 'Seriāli';
+
+  @override
+  String get tgMovieTag => 'Filma';
+
+  @override
+  String get tgSeriesTag => 'Seriāls';
+
+  @override
+  String get tgCanTakeAMinute => 'Var aizņemt līdz minūtei';
+
+  @override
+  String get tgToday => 'šodien';
+
+  @override
+  String get tgYesterday => 'vakar';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'pirms $days dienām';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'pirms $months mēn.';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'pirms $years g.';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'pirms $years g. un $months mēn.';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Atrast subtitrus';
+
+  @override
+  String get tgFreeUpSpace => 'Atbrīvot vietu';
+
+  @override
+  String get tgDownloads => 'Lejupielādes';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Lejupielādes ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '„$title”: lejupielādē nebija video faila ($files). Tā ir noņemta un bloķēta – izmēģiniet citu failu.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '„$title”: lejupielādē nebija video faila ($files), bet to neizdevās noņemt automātiski.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Pārraidīts $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Pieskarieties, lai atrastu failus';
+
+  @override
+  String get tgWholeSeason => 'Visa sezona';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Trūkst $count epizožu – atrodiet visas sezonas paketi';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Pievienojiet Sonarr, lai redzētu trūkstošās epizodes';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Seriāls tiek pievienots, pats neko nelejupielādējot';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Trūkstošās epizodes šobrīd nevar parādīt';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Pieskarieties, lai mēģinātu vēlreiz';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Sezonas pakete';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Uzraudzīt $season. sezonu';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Vai Sonarr tagad jāielādē trūkstošās $season. sezonas epizodes?\n\nNē: tiks ielādētas tikai jaunās epizodes, kad tās iznāks.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr meklē $season. sezonu';
+  }
+
+  @override
+  String get tgMonitored => 'Uzraudzīts';
+
+  @override
+  String get tgNotMonitored => 'Netiek uzraudzīts';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '$season. sezona: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return 'Trūkst: $label';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code vēl nav pārraidīta.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code vēl nav pārraidīta – gaidāma $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code jau tiek lejupielādēta.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code ir lejupielādēta un drīz parādīsies bibliotēkā.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Meklē: $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '$season. sezona';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Visa $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '$season. sezona – bibliotēkā nav epizožu';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'Seriālam nav TVDB ID, tāpēc Sonarr to nevar atrast.';
+
+  @override
+  String get tgAddingToSonarr => 'Pievieno Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Neizdevās pievienot seriālu Sonarr. Mēģiniet vēlāk.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Sūta „$label” lejupielādei …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Lejupielāde nesākās: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '„$label” tiek lejupielādēts ($size). Pēc pabeigšanas tas parādīsies bibliotēkā.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Neizdevās sazināties ar Sonarr. Mēģiniet vēlreiz nedaudz vēlāk.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Netika atrasti izmantojami faili. Mēģiniet vēlāk – jauni bieži parādās pēc dažām stundām.';
+
+  @override
+  String tgFilesCount(int count) {
+    return 'Faili: $count';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return 'Faili: $count – $recommended atbilst kvalitātes profilam, pārējie ir apakšā';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Neatbilst kvalitātes profilam';
+
+  @override
+  String get tgLargerThanProfile => 'Lielāks, nekā profils atļauj';
+
+  @override
+  String get tgSmallerThanProfile => 'Mazāks, nekā profils atļauj';
+
+  @override
+  String get tgAlreadyExists => 'Jau eksistē';
+
+  @override
+  String get tgMayNotFitDisk => 'Var neietilpt diskā';
+
+  @override
+  String get tgSonarrUnreachable => 'Neizdevās sazināties ar Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Neizdevās sazināties ar Sonarr adresē $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr nepieņēma izmaiņas';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Sezona tiek uzraudzīta, bet Sonarr nesāka meklēšanu';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr šobrīd nevar meklēt';
+
+  @override
+  String get tgSearchExpired =>
+      'Meklēšanas rezultāta derīgums ir beidzies – meklējiet vēlreiz';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr nepieņēma lejupielādi (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr nav šī seriāla';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Neizdevās mainīt uzraudzību: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin neatpazina seriālu (nav TVDB vai TMDB ID)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Kaut kas nogāja greizi: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Failu nepārvalda Radarr/Sonarr, un Jellyfin mapei ir tikai lasīšanas piekļuve. Izdzēsiet to failu pārvaldniekā.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr nav sasniedzams vai seriāls tur nav pievienots. Lejupielādei pa epizodēm ir nepieciešams Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Sonarr neizdevās atrast izvēlētās „$title” epizodes (kopā atrastas $count epizodes). Pievienojiet seriālu Sonarr un mēģiniet vēlreiz.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Daļa no kolekcijas ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  jūs skatāties $current. daļu no $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '$number. daļa no $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Nezināms nosaukums';
+
+  @override
+  String get tgMovieCollection => 'Filmu kolekcija';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '„$title” vēl nav iznākusi';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Video';
+
+  @override
+  String get tgScreensaverModeLogo => 'Logotips';
+
+  @override
+  String get tgScreensaverSound => 'Ekrānsaudzētāja skaņa';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Izslēgts: ekrānsaudzētāja treileri tiek atskaņoti bez skaņas';
+
+  @override
+  String get tgScreensaverLogo => 'Logotips';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr emblēma';
+
+  @override
+  String get tgLogoVhs => 'Papagailis uz VHS kasetēm';
+
+  @override
+  String get tgLogoSign => 'Papagailis uz izkārtnes';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'PASLĒPTS · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Vieta diskā';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Atbrīvojiet vietu jaunām lejupielādēm';
+
+  @override
+  String get tgAdultTitle => 'Pieaugušo filmas (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Rādīt vai paslēpt XXX bibliotēku (PIN)';
+
+  @override
+  String get tgHideForeign => 'Paslēpt ārzemju saturu';
+
+  @override
+  String get tgHideForeignOn =>
+      'Ieslēgts: „Aktuāli” un „Populāri” rāda tikai angļu, norvēģu, zviedru, dāņu, vācu un franču valodas saturu';
+
+  @override
+  String get tgHideForeignOff =>
+      'Izslēgts: „Aktuāli” un „Populāri” rāda visu valodu saturu';
+
+  @override
+  String get tgShowHidden => 'Rādīt, kas ir paslēpts';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Ieslēgts: nosaukumi, kas tiktu paslēpti, tiek rādīti ar sarkanu atzīmi PASLĒPTS';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Problēmu novēršana: rādīt paslēptos nosaukumus ar sarkanu atzīmi, nevis noņemt tos';
+
+  @override
+  String get tgShowAllSubLangs => 'Rādīt visas subtitru valodas';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Ieslēgts: subtitru izvēlnē tiek rādītas visas valodas';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Izslēgts: subtitru izvēlnē tiek rādīta tikai norvēģu un angļu valoda';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Izslēgts: subtitru izvēlne rāda tikai izvēlētās valodas';
+
+  @override
+  String get tgSubtitleLanguages => 'Subtitru valodas';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Rāda subtitru izvēlnē: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Priekšskatījuma skaņa';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Ieslēgts: klipam, kas tiek atskaņots, apstājoties uz nosaukuma, ir skaņa';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Izslēgts: pārlūkojot klipi tiek atskaņoti bez skaņas';
+
+  @override
+  String get tgScreensaver => 'Ekrānsaudzētājs';
+
+  @override
+  String get tgScreensaverSubtitle => 'Video vai logotips, skaņa un attēls';
+
+  @override
+  String get tgShowMissingEpisodes => 'Rādīt trūkstošās epizodes';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Ieslēgts: sezonās tiek rādītas epizodes, kuru jums nav, gatavas lejupielādei';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Izslēgts: sezonās tiek rādītas tikai tās epizodes, kuras jums ir';
+
+  @override
+  String get tgShowCollections => 'Rādīt filmu kolekcijas';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Ieslēgts: filmām tiek rādītas pārējās kolekcijas filmas, arī tās, kuru jums trūkst';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Izslēgts: filmas lapā kolekcija netiek rādīta';
+
+  @override
+  String get tgNoActiveDownloads => 'Nav aktīvu lejupielāžu.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Izvēlieties lejupielādi, lai atvērtu pieprasījumus.';
+
+  @override
+  String get tgRefreshLibrary => 'Atsvaidzināt bibliotēku';
+
+  @override
+  String get tgAskingJellyfinScan => 'Lūdz Jellyfin skenēt bibliotēku …';
+
+  @override
+  String get tgHideAll => 'Paslēpt visu';
+
+  @override
+  String get tgImporting => 'Importē';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Šo nosaukumu nepārvalda Radarr/Sonarr, tāpēc Bazarr tam nevar atrast subtitrus.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Neizdevās sazināties ar Bazarr. Mēģiniet vēlreiz nedaudz vēlāk.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Pagaidām nekas nav atrasts. Bazarr katru dienu automātiski mēģina vēlreiz, vai arī varat izvēlēties pats.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Atrasts: $languages – var paiet brīdis, līdz tie parādās subtitru izvēlnē.';
+  }
+
+  @override
+  String get tgAnd => 'un';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Lejupielādēts – var paiet brīdis, līdz tie parādās subtitru izvēlnē.';
+
+  @override
+  String get tgAskingBazarr => 'Vaicā Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Ir visi';
+
+  @override
+  String get tgSearchAutoNow => 'Meklēt automātiski tagad';
+
+  @override
+  String get tgSearchingUpToMinute => 'Meklē … var aizņemt līdz minūtei';
+
+  @override
+  String get tgPickYourself => 'Izvēlēties pašam';
+
+  @override
+  String get tgAskingProviders =>
+      'Vaicā subtitru avotiem … var aizņemt līdz minūtei';
+
+  @override
+  String get tgNoProviderSubs =>
+      'Nevienam avotam vēl nav subtitru šim nosaukumam.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: ir';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: trūkst';
+  }
+
+  @override
+  String get tgNoReleaseName => '(bez izlaiduma nosaukuma)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · vājdzirdīgajiem';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Norvēģu';
+
+  @override
+  String get tgLangEnglish => 'Angļu';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr šo nosaukumu vēl nepazīst';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr atbildēja ar kļūdu (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Diskā $drive: ir maz vietas (brīvi $free). Lejupielāde var apstāties — pasakiet tam, kurš uztur serveri.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Neizdevās sazināties ar qBittorrent, lai pārbaudītu vietu';
+
+  @override
+  String get tgNotEnoughSpace => 'Nepietiek vietas';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: brīvi $free';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Kopija mapē „Downloads” · jau ir bibliotēkā';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Pēdējoreiz skatīts $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Nekad nav skatīts · pievienots $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Nekad nav skatīts';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Diskā $drive: netika atrasts nekas, ko varētu droši izdzēst (viss ir nesen pievienots, nesen skatīts vai izlasē).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dzēst $count nosaukumus?',
+      one: 'Dzēst $count nosaukumu?',
+      zero: 'Dzēst $count nosaukumus?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size tiks neatgriezeniski izdzēsti. To nevar atsaukt.';
+  }
+
+  @override
+  String get tgYesDelete => 'Jā, dzēst';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Dzēš $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: tagad brīvi $free';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Izdzēsti $count nosaukumi',
+      one: 'Izdzēsts $count nosaukums',
+      zero: 'Izdzēsti $count nosaukumi',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Izdzēsti: $count, neizdevās: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Atbrīvot $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Lejupielāžu kopijas';
+
+  @override
+  String get tgLookingForUnwatched => 'Meklē to, kas ilgi nav skatīts …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Ieteikums: $size · vietas pietiek ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Ieteikums: $size no nepieciešamajiem $target';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Izvēlieties vienu, lai pasacītu nē — nākamais ieteikums parādīsies automātiski.';
+
+  @override
+  String get tgOtherCandidates => 'Citi kandidāti';
+
+  @override
+  String get tgDownloadAnyway => 'Lejupielādēt tomēr';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Dzēst $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: brīvi $free.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Fails ir $size un aizņem divreiz vairāk vietas (lejupielāde + kopija bibliotēkā), plus $buffer rezervē.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Fails ir $size, plus $buffer rezervē.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Notiekošajām lejupielādēm vajag vēl $size.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Pietrūkst $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Atrasti tikai faili, kas publicēti pirms filmas digitālās iznākšanas ($count) — tie gandrīz vienmēr ir viltoti.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'vēl nav digitālā izlaiduma datuma';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'digitāli iznāk $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Digitāli vēl nav iznākusi';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '„$title” $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Tas, kas šobrīd ir pieejams, parasti ir kinoteātra ieraksts vai cita filma ar tādu pašu nosaukumu. Dažkārt ir agrīna kopija zemākā kvalitātē, bieži ar iededzinātiem subtitriem. „Tomēr rādīt failus” parāda, kas ir pieejams. Radarr pats ielādēs pareizo versiju, kad tā iznāks.';
+
+  @override
+  String get tgShowFilesAnyway => 'Tomēr rādīt failus';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Izvēlieties sezonas un epizodes';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: nav informācijas par epizodēm';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Attiecas uz visām ierīcēm, kas izmanto šo kontu';
+
+  @override
+  String get tgNoXxxLibrary => 'Netika atrasta bibliotēka ar nosaukumu XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Meklē katru vārdu atsevišķi … (var aizņemt pusminūti)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '„$title” ($size) nosūtīts uz qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Lejupielāde neizdevās: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '„$title” nebija video faila, un tas ir noņemts.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '„$title” nebija video faila, un tas NAV noņemts.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Meklēt jaunu XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Nosaukums, studija …';
+
+  @override
+  String get tgChecking => 'Pārbauda …';
+
+  @override
+  String get tgXxxVisible =>
+      'Tagad redzams. XXX tiek rādīts bibliotēkās, meklēšanā un sākuma ekrānā.';
+
+  @override
+  String get tgXxxHidden => 'Paslēpts. XXX lietotnē nekur netiek rādīts.';
+
+  @override
+  String get tgShowWithPin => 'Rādīt (PIN)';
+
+  @override
+  String get tgChangePin => 'Mainīt PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Neizdevās iegūt bibliotēku sarakstu (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Neizdevās iegūt lietotāja iestatījumus (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin noraidīja izmaiņas (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Dzēšana neizdevās (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Neizdevās pievienot „$title” qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '$season. sezona, $episode. epizode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Meklēt Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Meklējiet filmas un seriālus (piem., „Lost S02E05”)';
+
+  @override
+  String get tgMissingInThisSeason => 'Trūkst šajā sezonā';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Trūkst sezonu',
+      one: 'Trūkst sezonas',
+      zero: 'Trūkst sezonu',
+    );
+    return '$_temp0 $list - atveriet seriālu, lai redzētu visas sezonas';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr vietnē GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Pirmkods, laidieni un kļūdu ziņojumi';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr ir veidots uz Moonfin (GPL) bāzes, ko izstrādājuši Moonfin izstrādātāji.';
+
+  @override
+  String get tgCredits => 'Pateicības';
+
+  @override
+  String get tgCreditsThanks =>
+      'Ar pazemīgu pateicību: bez šiem projektiem un cilvēkiem, kas stāv aiz tiem, Tortugarr nebūtu.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Just OdWar420 and Claude, building what should have existed from the start.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Lietotne, uz kuras bāzes veidots Tortugarr (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Multivides serveris';
+
+  @override
+  String get tgCreditSeerr => 'Atklāšana un pieprasījumi';
+
+  @override
+  String get tgCreditRadarr => 'Filmas';
+
+  @override
+  String get tgCreditSonarr => 'Seriāli';
+
+  @override
+  String get tgCreditProwlarr => 'Indeksētāju pārvaldnieks';
+
+  @override
+  String get tgCreditBazarr => 'Subtitri';
+
+  @override
+  String get tgCreditFlareSolverr => 'Cloudflare palīgs indeksētājiem';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Lejupielādes klients, instalētāja noklusējums';
+
+  @override
+  String get tgCreditTmdb => 'Filmu un seriālu dati, plakāti un attēli';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Subtitri, iegūti caur Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Šis produkts izmanto TMDB API, bet TMDB to nav apstiprinājis vai sertificējis.';
+
+  @override
+  String get tgLoadingLogoSize => 'Ielādes logotipa izmērs';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Rotējošais logotips, kamēr ielādējas video';
+
+  @override
+  String get tgDiscoveryLanguages => 'Valodas sadaļās Tendences un Populāri';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Rāda: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Ieslēgts: Tendences un Populāri rāda tikai izvēlētās valodas';
+
+  @override
+  String get tgShowLanguageBadges => 'Rādīt valodas zīmes';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Ieslēgts: nosaukumi rāda savu valodu (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Izslēgts: nosaukumiem nav valodas zīmju';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
+}

@@ -16,6 +16,7 @@ enum OsdButton {
   favorite('favorite'),
   speed('speed'),
   chapters('chapters'),
+  episodes('episodes'),
   subtitles('subtitles'),
   audio('audio'),
   castAndCrew('castAndCrew'),
@@ -53,6 +54,7 @@ enum OsdButton {
     OsdButton.favorite => Icons.favorite_border,
     OsdButton.speed => Icons.speed_rounded,
     OsdButton.chapters => Icons.bookmark_outline_rounded,
+    OsdButton.episodes => Icons.video_library_outlined,
     OsdButton.subtitles => Icons.subtitles_outlined,
     OsdButton.audio => Icons.audiotrack_outlined,
     OsdButton.castAndCrew => Icons.people_outline_rounded,
@@ -72,6 +74,7 @@ enum OsdButton {
     OsdButton.favorite => l10n.favorite,
     OsdButton.speed => l10n.playerTooltipPlaybackSpeed,
     OsdButton.chapters => l10n.chapters,
+    OsdButton.episodes => l10n.episodes,
     OsdButton.subtitles => l10n.subtitles,
     OsdButton.audio => l10n.audio,
     OsdButton.castAndCrew => l10n.castAndCrew,
@@ -85,6 +88,22 @@ enum OsdButton {
     OsdButton.fullscreen => l10n.fullscreen,
     OsdButton.floatOnTop => l10n.playerTooltipFloatOnTop,
   };
+}
+
+/// The buttons the row should draw, in the order the user put them in.
+///
+/// The tvOS OSD is native and builds its own row, so it gets handed the
+/// arrangement as ids rather than reading the preferences itself.
+List<String> visibleOsdButtonIds(UserPreferences prefs) {
+  final hidden = osdButtonLayout.hidden(prefs);
+  return [
+    for (final button in osdButtonLayout.ordered(
+      OsdButton.values,
+      (button) => button.id,
+      prefs,
+    ))
+      if (button.isOffered && !hidden.contains(button.id)) button.id,
+  ];
 }
 
 final osdButtonLayout = ButtonLayout(

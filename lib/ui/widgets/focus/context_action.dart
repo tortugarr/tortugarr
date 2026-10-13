@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moonfin_design/moonfin_design.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../auth/repositories/user_repository.dart';
 import '../../../data/models/aggregated_item.dart';
 import '../../../data/repositories/item_mutation_repository.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../../preference/user_preferences.dart';
+import '../../../util/home_refresh_helper.dart';
+import '../../../util/item_watch_state.dart';
 import '../../navigation/destinations.dart';
 import '../add_to_collection_dialog.dart';
 import '../add_to_playlist_dialog.dart';
+import '../adaptive/adaptive_dialog.dart';
 import '../change_artwork_dialog.dart';
 import '../identify_dialog.dart';
+import '../overlay_sheet.dart';
 
 class ItemContextAction {
   final IconData icon;
@@ -24,6 +30,17 @@ class ItemContextAction {
     required this.icon,
     required this.label,
     required this.onSelect,
+  });
+}
+
+/// The collection a context menu was opened from, when there is one.
+class CollectionRemovalContext {
+  final String collectionName;
+  final Future<void> Function(AggregatedItem item) remove;
+
+  const CollectionRemovalContext({
+    required this.collectionName,
+    required this.remove,
   });
 }
 
@@ -50,6 +67,7 @@ List<ItemContextAction> contextActionsFor(
   BuildContext context,
   AggregatedItem item, {
   VoidCallback? onChanged,
+  CollectionRemovalContext? collectionRemoval,
 }) {
   final l10n = AppLocalizations.of(context);
   final mutations = GetIt.instance<ItemMutationRepository>();
@@ -78,6 +96,20 @@ List<ItemContextAction> contextActionsFor(
       type == 'BoxSet';
 
   if (isMediaType) {
+    // First so a remote lands on it with no extra presses. The detail screen
+    // does the playing, which keeps the next episode lookup for a series and
+    // the external player preference working the way the Play button does.
+    actions.add(ItemContextAction(
+      icon: Icons.play_arrow,
+      label: watchStateOf(item).hasProgress ? l10n.resume : l10n.play,
+      onSelect: () async {
+        if (!context.mounted) return;
+        context.push(
+          Destinations.item(item.id, serverId: item.serverId, autoPlay: true),
+        );
+      },
+    ));
+
     actions.add(ItemContextAction(
       icon: item.isPlayed
           ? Icons.visibility_off_outlined
@@ -106,7 +138,7 @@ List<ItemContextAction> contextActionsFor(
             await prefs.hideFromContinueWatching(item.id);
           }
           try {
-            await client.userLibraryApi.unmarkPlayed(item.id);
+            await mutations.setPlayed(item.id, isPlayed: false);
           } catch (_) {}
           onChanged?.call();
         },
@@ -124,7 +156,7 @@ List<ItemContextAction> contextActionsFor(
           await prefs.hideFromNextUp(item.seriesId!);
           await prefs.hideFromContinueWatching(item.seriesId!);
           try {
-            await client.userLibraryApi.unmarkPlayed(item.id);
+            await mutations.setPlayed(item.id, isPlayed: false);
           } catch (_) {}
           onChanged?.call();
         },
@@ -158,6 +190,22 @@ List<ItemContextAction> contextActionsFor(
           }
         },
       ));
+
+      // Only for the collection whose page this menu was opened from. An item
+      // can belong to several, and pulling it out of one the user isn't
+      // looking at would be a surprise.
+      if (collectionRemoval != null) {
+        actions.add(ItemContextAction(
+          icon: Icons.playlist_remove,
+          label: l10n.contextMenuRemoveFromCollection,
+          onSelect: () => _confirmAndRemoveFromCollection(
+            context,
+            item,
+            collectionRemoval,
+            onChanged: onChanged,
+          ),
+        ));
+      }
     }
 
     actions.add(ItemContextAction(
@@ -183,6 +231,7 @@ List<ItemContextAction> contextActionsFor(
         onSelect: () async {
           try {
             await mutations.refreshMetadata(item.id);
+            refreshHomeRows(followUp: true);
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(l10n.adminMetadataRefreshRequested)),
@@ -217,7 +266,11 @@ List<ItemContextAction> contextActionsFor(
           } catch (e) {
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.adminMetadataRefreshFailed('$e'))),
+              SnackBar(
+                content: Text(
+                  l10n.adminMetadataRefreshFailed(describeError(e, l10n)),
+                ),
+              ),
             );
           }
         },
@@ -262,7 +315,9 @@ List<ItemContextAction> contextActionsFor(
           type == 'CollectionFolder' ||
           type == 'UserView' ||
           type == 'Genre' ||
-          type == 'MusicGenre') &&
+          type == 'MusicGenre' ||
+          type == 'Studio' ||
+          type == 'Network') &&
       client.serverType == ServerType.jellyfin &&
       isAdminUser;
 
@@ -295,4 +350,60 @@ List<ItemContextAction> contextActionsFor(
   }
 
   return actions;
+}
+
+/// Asks first, then pulls [item] out of the collection the menu was opened
+/// from. The item stays in the library, so the confirm stays plain rather
+/// than destructive.
+Future<void> _confirmAndRemoveFromCollection(
+  BuildContext context,
+  AggregatedItem item,
+  CollectionRemovalContext removal, {
+  required VoidCallback? onChanged,
+}) async {
+  final l10n = AppLocalizations.of(context);
+  final confirmed = await showFocusRestoringDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog.adaptive(
+      backgroundColor: const Color(0xFF171717),
+      title: Text(
+        l10n.contextMenuRemoveFromCollection,
+        style: const TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        l10n.removeFromCollectionConfirm(item.name, removal.collectionName),
+        style: const TextStyle(color: Colors.white70),
+      ),
+      actions: [
+        adaptiveDialogAction(
+          onPressed: () => Navigator.pop(ctx, false),
+          focusRingColor: AppColorScheme.accent,
+          child: Text(l10n.cancel),
+        ),
+        adaptiveDialogAction(
+          onPressed: () => Navigator.pop(ctx, true),
+          focusRingColor: AppColorScheme.accent,
+          child: Text(
+            l10n.remove,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true || !context.mounted) return;
+
+  try {
+    await removal.remove(item);
+    onChanged?.call();
+  } catch (e) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '${l10n.removeFromCollectionFailed}: ${describeError(e, l10n)}',
+        ),
+      ),
+    );
+  }
 }

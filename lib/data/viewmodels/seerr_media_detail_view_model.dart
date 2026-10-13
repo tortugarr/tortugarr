@@ -1,12 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
 
 import '../../preference/seerr_preferences.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_download_progress.dart';
 import '../services/seerr/seerr_error.dart';
+
+/// Reads one flag out of Seerr's public settings.
+///
+/// A server too old to know about a flag leaves it out of the payload rather
+/// than sending false, so absence means no opinion and [fallback] stands. That
+/// matters for the 4K flags: reading silence as switched off hid the 4K
+/// request control from everyone on those builds.
+@visibleForTesting
+bool seerrPublicFlag(
+  Map<String, dynamic> settings,
+  String key, {
+  required bool fallback,
+}) => settings.containsKey(key) ? settings[key] == true : fallback;
 
 /// One quality track (HD or 4K) of a title: its media status, the requests
 /// for that track, and the flags the UI reads. Seerr stores the two
@@ -21,6 +35,11 @@ class SeerrQualityStatus {
   final bool canManageRequests;
   final int? currentUserId;
 
+  /// What Seerr reports per season, when it reports anything. Older servers and
+  /// movie payloads leave this empty, which is why [seasonStatus] can fall back
+  /// to the request list.
+  final List<SeerrSeasonAvailability> seasonAvailability;
+
   const SeerrQualityStatus({
     required this.is4k,
     required this.status,
@@ -29,6 +48,7 @@ class SeerrQualityStatus {
     required this.download,
     required this.canManageRequests,
     required this.currentUserId,
+    this.seasonAvailability = const [],
   });
 
   factory SeerrQualityStatus.of({
@@ -56,6 +76,8 @@ class SeerrQualityStatus {
       ),
       canManageRequests: canManageRequests,
       currentUserId: currentUserId,
+      seasonAvailability:
+          mediaInfo?.seasons ?? const <SeerrSeasonAvailability>[],
     );
   }
 
@@ -73,6 +95,18 @@ class SeerrQualityStatus {
 
   bool get hasExistingRequest => activeRequests.isNotEmpty;
 
+  /// Whether the title or one of its seasons is still on its way into the
+  /// library on this track, waiting on approval, a download or the import.
+  bool get isInFlight =>
+      isPending ||
+      isProcessing ||
+      download != null ||
+      seasonAvailability.any((s) {
+        final seasonState = is4k ? s.status4k : s.status;
+        return seasonState == SeerrMediaStatus.pending ||
+            seasonState == SeerrMediaStatus.processing;
+      });
+
   /// Seerr's delete rule: a request manager may remove any open request, and
   /// everyone else only their own while it is still pending. Offering more
   /// than that gets a 401 back from the server instead of a cancel.
@@ -88,11 +122,17 @@ class SeerrQualityStatus {
         .toList();
   }
 
+  /// Seasons an open request already covers.
+  ///
+  /// A completed request isn't one of them. It says the season arrived once,
+  /// not that it is still there, so a season that has since been removed can
+  /// be requested again.
   Set<int> get requestedSeasons {
     final seasons = <int>{};
     for (final r in requests) {
       if (r.status == SeerrRequest.statusDeclined ||
-          r.status == SeerrRequest.statusFailed) {
+          r.status == SeerrRequest.statusFailed ||
+          r.status == SeerrRequest.statusCompleted) {
         continue;
       }
       if (r.seasons != null) {
@@ -103,11 +143,58 @@ class SeerrQualityStatus {
     }
     return seasons;
   }
+
+  /// Seasons the library already holds for this track, fully or partially.
+  Set<int> get availableSeasons => {
+        for (final s in seasonAvailability)
+          if (SeerrMediaStatus.isAvailable(is4k ? s.status4k : s.status))
+            s.seasonNumber,
+      };
+
+  /// Seasons the request sheet may not offer: already in the library or
+  /// already spoken for by an open request.
+  Set<int> get unavailableOrRequestedSeasons =>
+      {...requestedSeasons, ...availableSeasons};
+
+  /// Season number to media status (2 pending, 3 processing, 4 partial,
+  /// 5 available) for this quality track, so a series can show where it stands
+  /// season by season rather than only as a whole.
+  ///
+  /// Deliberately separate from [unavailableOrRequestedSeasons], which answers
+  /// the narrower "may this season still be requested" question the request
+  /// sheet asks.
+  Map<int, int> get seasonStatus {
+    final byNumber = <int, int>{};
+
+    // What the server says, wherever it says anything.
+    for (final s in seasonAvailability) {
+      final status = (is4k ? s.status4k : s.status) ?? 0;
+      if (status > 1) byNumber[s.seasonNumber] = status;
+    }
+
+    // Anything the server didn't cover falls back to the request it came from.
+    for (final r in requests) {
+      if (r.status == SeerrRequest.statusDeclined ||
+          r.status == SeerrRequest.statusFailed) {
+        continue;
+      }
+      final derived = switch (r.status) {
+        SeerrRequest.statusCompleted => 5,
+        SeerrRequest.statusApproved => 3,
+        _ => 2,
+      };
+      for (final s in r.seasons ?? const <SeerrSeasonRequest>[]) {
+        byNumber.putIfAbsent(s.seasonNumber, () => derived);
+      }
+    }
+
+    return byNumber;
+  }
 }
 
 class SeerrMediaDetailState {
   final bool isLoading;
-  final String? error;
+  final Object? error;
   final SeerrMovieDetails? movie;
   final SeerrTvDetails? tv;
   final List<SeerrDiscoverItem> similar;
@@ -233,7 +320,7 @@ class SeerrMediaDetailState {
 
   SeerrMediaDetailState copyWith({
     bool? isLoading,
-    String? error,
+    Object? error,
     SeerrMovieDetails? movie,
     SeerrTvDetails? tv,
     List<SeerrDiscoverItem>? similar,
@@ -274,41 +361,79 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
   SeerrMediaDetailState _state = const SeerrMediaDetailState();
   SeerrMediaDetailState get state => _state;
 
+  bool _relatedLoadComplete = false;
+  bool get relatedLoadComplete => _relatedLoadComplete;
+
   // Whether the server has a default 4K Radarr or Sonarr. These start true so
   // that until the fetch lands, or if it fails, 4K stays gated on permission
   // alone rather than disappearing.
   bool _movie4kEnabled = true;
   bool _series4kEnabled = true;
 
-  Timer? _downloadPollTimer;
+  static const _downloadPollInterval = Duration(seconds: 15);
+  static const _waitingPollInterval = Duration(seconds: 30);
+
+  Timer? _statusPollTimer;
+  Duration? _statusPollInterval;
+  bool _isDisposed = false;
 
   SeerrMediaDetailViewModel(this._repo, this._prefs);
 
   @override
+  void notifyListeners() {
+    if (_isDisposed) {
+      return;
+    }
+
+    super.notifyListeners();
+  }
+
+  @override
   void dispose() {
-    _downloadPollTimer?.cancel();
+    _isDisposed = true;
+    _statusPollTimer?.cancel();
     super.dispose();
   }
 
-  /// Keep a refresh timer running only while a download is active, so the
-  /// progress bars advance without leaving and reopening the screen.
-  void _syncDownloadPolling() {
-    if (_state.hdDownload != null || _state.download4k != null) {
-      _downloadPollTimer ??= Timer.periodic(
-        const Duration(seconds: 15),
-        (_) => _pollDownloadStatus(),
-      );
-    } else {
-      _downloadPollTimer?.cancel();
-      _downloadPollTimer = null;
+  /// How often the open page refetches the title, or null once nothing is on
+  /// its way. A download moves every few seconds, while a request waiting on
+  /// approval or on the library scan changes far less often.
+  static Duration? _statusPollIntervalFor(SeerrMediaDetailState state) {
+    final hd = state.hd;
+    final uhd = state.uhd;
+    if (hd.download != null || uhd.download != null) {
+      return _downloadPollInterval;
     }
+    if (hd.isInFlight || uhd.isInFlight) return _waitingPollInterval;
+    return null;
+  }
+
+  /// Keeps the refresh running from the request until the title lands, so the
+  /// progress and the Play button show up without leaving the page.
+  void _syncStatusPolling() {
+    // A fetch that lands after the page closed must not start a new timer.
+    if (_isDisposed) return;
+    final interval = _statusPollIntervalFor(_state);
+    if (interval == _statusPollInterval) return;
+    _statusPollTimer?.cancel();
+    _statusPollInterval = interval;
+    _statusPollTimer = interval == null
+        ? null
+        : Timer.periodic(interval, (_) => _pollStatus());
   }
 
   /// Quiet details refetch that only swaps the media payload. It never touches
   /// isRequesting or requestSuccess, so no snackbar fires, and failures are
   /// ignored so a flaky tick never surfaces error UI.
-  Future<void> _pollDownloadStatus() async {
+  Future<void> _pollStatus() async {
     if (_state.isLoading || _state.isRequesting || _state.tmdbId == 0) return;
+    // Nobody is looking at the page while the app is in the background.
+    if (WidgetsBinding.instance.lifecycleState
+        case AppLifecycleState.paused ||
+            AppLifecycleState.hidden ||
+            AppLifecycleState.detached) {
+      return;
+    }
     try {
       if (_state.isTv) {
         final details = await _repo.getTvDetails(_state.tmdbId);
@@ -323,7 +448,7 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
     } catch (_) {
       // Leave the details as-is and let the next tick retry.
     }
-    _syncDownloadPolling();
+    _syncStatusPolling();
   }
 
   void clearFeedback() {
@@ -339,15 +464,40 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
   Future<void> _loadPublicSettings() async {
     try {
       final settings = await _repo.getPublicSettings();
-      _movie4kEnabled = settings['movie4kEnabled'] == true;
-      _series4kEnabled = settings['series4kEnabled'] == true;
+      _movie4kEnabled = seerrPublicFlag(
+        settings,
+        'movie4kEnabled',
+        fallback: _movie4kEnabled,
+      );
+      _series4kEnabled = seerrPublicFlag(
+        settings,
+        'series4kEnabled',
+        fallback: _series4kEnabled,
+      );
       notifyListeners();
     } catch (_) {
       // Keep the permissive defaults.
     }
   }
 
+  /// The search hit of the kind that was asked for.
+  ///
+  /// Seerr ranks a search by popularity across every kind of media, so the
+  /// first hit for a film can easily be a series of the same name.
+  @visibleForTesting
+  static SeerrDiscoverItem bestSearchMatch(
+    List<SeerrDiscoverItem> results,
+    String mediaType,
+  ) {
+    for (final result in results) {
+      if (result.mediaType == mediaType) return result;
+    }
+    return results.first;
+  }
+
   Future<void> load(String itemId, String mediaType, {String? title}) async {
+    _relatedLoadComplete = false;
+
     _state = const SeerrMediaDetailState(isLoading: true);
     notifyListeners();
 
@@ -364,8 +514,17 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
       String resolvedMediaType = mediaType;
 
       if (itemId.startsWith('tt')) {
+        // The IMDb id names exactly one title, so it is asked first. A title
+        // search is a guess and only stands in when the id turns up nothing.
         SeerrDiscoverPage? searchPage;
-        if (title != null && title.isNotEmpty) {
+        try {
+          searchPage = await _repo.search(itemId);
+        } catch (e) {
+          debugPrint('[SeerrDetail] Search by IMDb ID failed: $e');
+        }
+        if ((searchPage == null || searchPage.results.isEmpty) &&
+            title != null &&
+            title.isNotEmpty) {
           try {
             searchPage = await _repo.search(title);
           } catch (e) {
@@ -373,20 +532,16 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
           }
         }
         if (searchPage == null || searchPage.results.isEmpty) {
-          try {
-            searchPage = await _repo.search(itemId);
-          } catch (e) {
-            debugPrint('[SeerrDetail] Search by IMDb ID failed: $e');
-          }
-        }
-        if (searchPage == null || searchPage.results.isEmpty) {
           throw Exception('Media not found on Seerr');
         }
-        final firstResult = searchPage.results.first;
-        tmdbId = firstResult.id;
-        resolvedMediaType = firstResult.mediaType ?? mediaType;
+        final match = bestSearchMatch(searchPage.results, mediaType);
+        tmdbId = match.id;
+        resolvedMediaType = match.mediaType ?? mediaType;
       } else {
-        final parsed = int.tryParse(itemId);
+        // Only the media kinds. A person id reaching here is a routing
+        // mistake, and stripping it would quietly load an unrelated title.
+        final cleanId = itemId.replaceAll(RegExp(r'^tmdb:(?:movie:|tv:)?'), '');
+        final parsed = int.tryParse(cleanId);
         if (parsed == null) {
           throw Exception('Invalid media ID');
         }
@@ -435,10 +590,10 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      _state = SeerrMediaDetailState(error: e.toString());
+      _state = SeerrMediaDetailState(error: e);
     }
     notifyListeners();
-    _syncDownloadPolling();
+    _syncStatusPolling();
   }
 
   Future<void> _loadRelated(int tmdbId, String mediaType) async {
@@ -453,11 +608,14 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
       ]);
 
       _state = _state.copyWith(
-        similar: futures[0].results,
-        recommendations: futures[1].results,
+        similar: futures[0].results.where((i) => !i.isBlacklisted).toList(),
+        recommendations:
+            futures[1].results.where((i) => !i.isBlacklisted).toList(),
       );
-      notifyListeners();
     } catch (_) {
+    } finally {
+      _relatedLoadComplete = true;
+      notifyListeners();
     }
   }
 
@@ -635,7 +793,7 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
         requestSuccess: successMessage,
       );
     }
-    _syncDownloadPolling();
+    _syncStatusPolling();
   }
 
   Future<void> toggleWatchlist() async {

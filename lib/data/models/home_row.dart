@@ -9,6 +9,7 @@ enum HomeRowType {
   favorites,
   collections,
   genres,
+  studios,
   libraryTiles,
   libraryTilesSmall,
   playlists,
@@ -20,6 +21,7 @@ enum HomeRowType {
   activeRecordings,
   mediaBar,
   pluginDynamic,
+  liveTvFavorites,
 }
 
 class HomeRow {

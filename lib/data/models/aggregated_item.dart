@@ -26,11 +26,20 @@ class AggregatedItem {
   String? get sortName => rawData['SortName'] as String?;
   String? get type => rawData['Type'] as String?;
 
+  /// The channel a live TV program belongs to. Read through toString because
+  /// Emby returns numeric ids.
+  String? get channelId => rawData['ChannelId']?.toString();
+
   /// Whether this item is music/audio content (track, audiobook, or any item
   /// whose server MediaType is Audio). Used to decide when to show the music
   /// mini-player and when to keep the audio media session alive.
   bool get isAudioLike =>
       type == 'Audio' || type == 'AudioBook' || rawData['MediaType'] == 'Audio';
+
+  /// Whether the item is a container/folder on the server.
+  bool get isFolder =>
+      rawData['IsFolder'] == true || (childCount ?? 0) > 0;
+
   bool get canDelete => rawData['CanDelete'] as bool? ?? false;
   String? get seriesName => rawData['SeriesName'] as String?;
   int? get productionYear => _toInt(rawData['ProductionYear']);
@@ -67,6 +76,9 @@ class AggregatedItem {
 
   String? get primaryImageItemId => rawData['PrimaryImageItemId']?.toString();
 
+  double? get primaryImageAspectRatio =>
+      (rawData['PrimaryImageAspectRatio'] as num?)?.toDouble();
+
   List<String> get backdropImageTags => _toListOfStrings(rawData['BackdropImageTags']);
 
   String? get parentBackdropItemId =>
@@ -91,6 +103,14 @@ class AggregatedItem {
 
   bool get isFavorite => _userData?['IsFavorite'] as bool? ?? false;
 
+  /// A numeric personal rating at or above this counts as liked when the
+  /// server holds a score without an explicit thumb.
+  static const likedRatingThreshold = 6.5;
+
+  double? get personalRating => (_userData?['Rating'] as num?)?.toDouble();
+
+  bool? get personalRatingLikes => _userData?['Likes'] as bool?;
+
   int? get playbackPositionTicks => _toInt(_userData?['PlaybackPositionTicks']);
 
   Duration? get playbackPosition => playbackPositionTicks != null
@@ -109,6 +129,16 @@ class AggregatedItem {
   }
 
   String? get subtitle {
+    if (type == 'Program' || type == 'LiveTvProgram') {
+      final episodeTitle = (rawData['EpisodeTitle'] as String?)
+          ?.replaceAll(r'\"', '"')
+          .trim();
+      if (episodeTitle != null &&
+          episodeTitle.isNotEmpty &&
+          episodeTitle != name.trim()) {
+        return episodeTitle;
+      }
+    }
     final customSubtitle = rawData['Subtitle'] as String?;
     if (customSubtitle != null && customSubtitle.isNotEmpty) {
       return customSubtitle;
@@ -181,6 +211,18 @@ class AggregatedItem {
     return v != null ? DateTime.tryParse(v) : null;
   }
 
+  /// When the user last played the item, per the server.
+  DateTime? get lastPlayedDate {
+    final v = _userData?['LastPlayedDate'] as String?;
+    return v != null ? DateTime.tryParse(v) : null;
+  }
+
+  /// When the server added the item to its library.
+  DateTime? get dateCreated {
+    final v = rawData['DateCreated'] as String?;
+    return v != null ? DateTime.tryParse(v) : null;
+  }
+
   DateTime? get endDate {
     final v = rawData['EndDate'] as String?;
     return v != null ? DateTime.tryParse(v) : null;
@@ -228,7 +270,52 @@ class AggregatedItem {
   List<Map<String, dynamic>> get remoteTrailers =>
       _toListOfMaps(rawData['RemoteTrailers']);
 
+  /// Trailers stored alongside the media, counted by the server.
+  ///
+  /// A trailers folder, a bare trailer file and a name ending in a trailer
+  /// suffix all land in this one count, so it answers for every layout the
+  /// server recognizes.
+  int get localTrailerCount => _toInt(rawData['LocalTrailerCount']) ?? 0;
+
   List<Map<String, dynamic>> get chapters => _toListOfMaps(rawData['Chapters']);
+
+  static const _comicExtensions = {'cbz', 'cbr', 'cb7', 'cbt'};
+
+  /// Whether this item is a comic / graphic novel (archive or server Comic type).
+  bool get isComic {
+    final t = (type ?? '').toLowerCase();
+    if (t == 'comic') return true;
+    final container = (rawData['Container'] as String? ?? '').toLowerCase();
+    if (_comicExtensions.contains(container)) return true;
+    for (final source in mediaSources) {
+      final sc = (source['Container'] as String? ?? '').toLowerCase();
+      if (_comicExtensions.contains(sc)) return true;
+      final path =
+          (source['Path'] as String? ?? source['Name'] as String? ?? '')
+              .toLowerCase();
+      final dot = path.lastIndexOf('.');
+      if (dot >= 0 && dot < path.length - 1) {
+        if (_comicExtensions.contains(path.substring(dot + 1))) return true;
+      }
+    }
+    for (final candidate in [
+      rawData['Path'],
+      rawData['FileName'],
+      rawData['FilePath'],
+      rawData['Name'],
+      name,
+    ]) {
+      if (candidate is String && candidate.isNotEmpty) {
+        final lower = candidate.toLowerCase();
+        final dot = lower.lastIndexOf('.');
+        if (dot >= 0 && dot < lower.length - 1) {
+          final ext = lower.substring(dot + 1).split('?').first;
+          if (_comicExtensions.contains(ext)) return true;
+        }
+      }
+    }
+    return false;
+  }
 
   /// Whether this item should use the audiobook player experience.
   ///
@@ -239,6 +326,11 @@ class AggregatedItem {
   bool get isAudiobook {
     final t = (type ?? '').toLowerCase();
     if (t == 'audiobook') return true;
+    if (isComic) return false;
+    final mediaType = (rawData['MediaType'] as String? ?? '').toLowerCase();
+    // A books library holds readable books next to audio, so a Book that is
+    // not audio stays a book whatever the collection says below.
+    if (t == 'book' && mediaType != 'audio') return false;
     final collectionType =
         (rawData['CollectionType'] as String? ?? '').toLowerCase();
     if (collectionType == 'audiobooks' || collectionType == 'books') {
@@ -249,7 +341,6 @@ class AggregatedItem {
     if (parentCollectionType == 'audiobooks' || parentCollectionType == 'books') {
       return true;
     }
-    final mediaType = (rawData['MediaType'] as String? ?? '').toLowerCase();
     if (mediaType == 'audio' && (rawData['Chapters'] as List?)?.isNotEmpty == true) {
       // Audio items with chapter metadata are very likely audiobooks.
       final runtimeTicks = runTimeTicks ?? 0;

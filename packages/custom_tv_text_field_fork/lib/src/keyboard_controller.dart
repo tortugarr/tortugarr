@@ -9,12 +9,20 @@ enum KeyboardType { alphabetic, numeric }
 
 enum InputPurpose { text, search, url, email, username, password, numeric }
 
+/// Physical letter arrangement, picked from the app locale so French and
+/// German speakers get the rows their muscle memory expects.
+enum KeyboardLayoutVariant { qwerty, azerty, qwertz }
+
 typedef KeyboardSuggestionBuilder = Future<List<String>> Function(String query);
 
 class KeyboardController extends ChangeNotifier {
   String _text = '';
+  int _cursor = 0;
 
   String get text => _text;
+
+  /// Caret position in code units, 0 to text.length.
+  int get cursor => _cursor;
 
   bool _isVisible = false;
 
@@ -24,43 +32,78 @@ class KeyboardController extends ChangeNotifier {
   Function(bool shouldPop)? onKeyboardClosed;
   VoidCallback? onRequestSystemKeyboard;
 
-  void addCharacter(String character) {
-    _text += character;
+  void _commit() {
     notifyListeners();
     onTextChanged?.call(_text);
   }
+
+  /// Length of the character ending at [index], so a surrogate pair is
+  /// deleted and stepped over as one unit.
+  int _stepBefore(int index) {
+    if (index >= 2 &&
+        _isLowSurrogate(_text.codeUnitAt(index - 1)) &&
+        _isHighSurrogate(_text.codeUnitAt(index - 2))) {
+      return 2;
+    }
+    return 1;
+  }
+
+  int _stepAfter(int index) {
+    if (index <= _text.length - 2 &&
+        _isHighSurrogate(_text.codeUnitAt(index)) &&
+        _isLowSurrogate(_text.codeUnitAt(index + 1))) {
+      return 2;
+    }
+    return 1;
+  }
+
+  static bool _isHighSurrogate(int codeUnit) =>
+      codeUnit >= 0xD800 && codeUnit <= 0xDBFF;
+
+  static bool _isLowSurrogate(int codeUnit) =>
+      codeUnit >= 0xDC00 && codeUnit <= 0xDFFF;
+
+  void addCharacter(String character) => insertText(character);
 
   void insertText(String value) {
     if (value.isEmpty) return;
-    _text += value;
-    notifyListeners();
-    onTextChanged?.call(_text);
+    _text = _text.substring(0, _cursor) + value + _text.substring(_cursor);
+    _cursor += value.length;
+    _commit();
   }
 
   void backspace() {
-    if (_text.isNotEmpty) {
-      _text = _text.substring(0, _text.length - 1);
-      notifyListeners();
-      onTextChanged?.call(_text);
-    }
+    if (_cursor == 0) return;
+    final step = _stepBefore(_cursor);
+    _text = _text.substring(0, _cursor - step) + _text.substring(_cursor);
+    _cursor -= step;
+    _commit();
   }
 
   void clear() {
+    if (_text.isEmpty && _cursor == 0) return;
     _text = '';
-    notifyListeners();
-    onTextChanged?.call(_text);
+    _cursor = 0;
+    _commit();
   }
 
-  void addSpace() {
-    _text += ' ';
+  void addSpace() => insertText(' ');
+
+  void moveCursor(int direction) {
+    final next = direction < 0
+        ? _cursor - (_cursor > 0 ? _stepBefore(_cursor) : 0)
+        : _cursor + (_cursor < _text.length ? _stepAfter(_cursor) : 0);
+    if (next == _cursor) return;
+    _cursor = next;
+    // The text is unchanged, so listeners repaint but the field's
+    // onTextChanged callback stays quiet.
     notifyListeners();
-    onTextChanged?.call(_text);
   }
 
   void setText(String value) {
     _text = value;
-    notifyListeners();
-    onTextChanged?.call(_text);
+    _cursor = value.length;
+    _commit();
   }
 
   void requestSystemKeyboard() {
@@ -82,26 +125,100 @@ class KeyboardController extends ChangeNotifier {
 }
 
 class KeyboardLayouts {
-  static const List<List<String>> alphabeticLower = [
+  /// Shared bottom row: type switch, the two characters worth a dedicated
+  /// key everywhere, space, caret movement, paste, system keyboard, done.
+  static const List<String> _bottomRow = [
+    '123',
+    '@',
+    '.',
+    'SPACE',
+    'CURSORL',
+    'CURSORR',
+    'PASTE',
+    'IME',
+    'DONE',
+  ];
+
+  static const List<List<String>> _lowerQwerty = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', "'"],
     ['SHIFT', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', 'BACKSPACE'],
-    ['123', '.', '?', 'SPACE', '-', '@', 'IME', 'DONE'],
+    _bottomRow,
   ];
 
-  static const List<List<String>> alphabeticUpper = [
-    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '"'],
-    ['SHIFT', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', 'BACKSPACE'],
-    ['123', '.', '?', 'SPACE', '-', '@', 'IME', 'DONE'],
+  static const List<List<String>> _lowerAzerty = [
+    ['a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm'],
+    ['SHIFT', 'w', 'x', 'c', 'v', 'b', 'n', "'", ',', 'BACKSPACE'],
+    _bottomRow,
+  ];
+
+  static const List<List<String>> _lowerQwertz = [
+    ['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', "'"],
+    ['SHIFT', 'y', 'x', 'c', 'v', 'b', 'n', 'm', ',', 'BACKSPACE'],
+    _bottomRow,
   ];
 
   static const List<List<String>> numeric = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['!', '@', '#', r'$', '%', '^', '&', '*', '(', ')'],
-    ['?', '~', r'\', ';', "'", '"', ',', '.', '/', 'BACKSPACE'],
-    ['ABC', '[', ']', 'SPACE', '_', '+', 'IME', 'DONE'],
+    ['-', '_', '=', '+', ';', ':', "'", '?', '/', 'BACKSPACE'],
+    ['ABC', ',', '.', 'SPACE', 'CURSORL', 'CURSORR', 'PASTE', 'IME', 'DONE'],
   ];
+
+  /// Large targets for PINs and ports, phone dialer arrangement.
+  static const List<List<String>> numberPad = [
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['.', '0', 'BACKSPACE'],
+    ['CURSORL', 'CURSORR', 'DONE'],
+  ];
+
+  static final Map<KeyboardLayoutVariant, List<List<String>>> _upperCache = {};
+
+  static List<List<String>> lowerFor(KeyboardLayoutVariant variant) {
+    switch (variant) {
+      case KeyboardLayoutVariant.qwerty:
+        return _lowerQwerty;
+      case KeyboardLayoutVariant.azerty:
+        return _lowerAzerty;
+      case KeyboardLayoutVariant.qwertz:
+        return _lowerQwertz;
+    }
+  }
+
+  static List<List<String>> upperFor(KeyboardLayoutVariant variant) {
+    return _upperCache.putIfAbsent(
+      variant,
+      () => lowerFor(variant)
+          .map((row) => row.map(_shiftKey).toList(growable: false))
+          .toList(growable: false),
+    );
+  }
+
+  static String _shiftKey(String key) {
+    if (key.length > 1) return key;
+    if (key == "'") return '"';
+    return key.toUpperCase();
+  }
+
+  static KeyboardLayoutVariant variantForLocale(Locale? locale) {
+    switch (locale?.languageCode) {
+      case 'fr':
+        return KeyboardLayoutVariant.azerty;
+      case 'de':
+      case 'cs':
+      case 'sk':
+      case 'hu':
+      case 'hr':
+      case 'sl':
+        return KeyboardLayoutVariant.qwertz;
+      default:
+        return KeyboardLayoutVariant.qwerty;
+    }
+  }
 
   static const Map<String, List<String>> alternateCharacters = {
     'a': ['a', 'à', 'á', 'â', 'ä', 'ã', 'å', 'æ'],
@@ -126,11 +243,18 @@ class KeyboardLayouts {
     'Z': ['Z', 'Ž', 'Ź', 'Ż'],
     '.': ['.', '!', '?', ',', ';', ':'],
     ',': [',', ';', ':'],
-    '?': ['?', '¿'],
+    '?': ['?', '!', '¿', '¡'],
+    '!': ['!', '¡'],
     '-': ['-', '_', '–', '—'],
+    '_': ['_', '-'],
     '@': ['@', '.com', '.net', '.org'],
     '"': ['"', "'"],
     "'": ["'", '"'],
+    '(': ['(', '[', '{', '<'],
+    ')': [')', ']', '}', '>'],
+    '/': ['/', r'\', '|'],
+    '=': ['=', '~', '≠'],
+    ':': [':', ';'],
   };
 }
 
@@ -138,11 +262,13 @@ class _KeyboardChip {
   final String label;
   final String value;
   final bool submitOnTap;
+  final bool replaceOnTap;
 
   const _KeyboardChip({
     required this.label,
     required this.value,
     this.submitOnTap = false,
+    this.replaceOnTap = false,
   });
 }
 
@@ -181,6 +307,8 @@ class CustomKeyboardState extends State<CustomKeyboard> {
   bool _pendingAlternateSelect = false;
   bool _alternateAwaitingSelectRelease = false;
 
+  KeyboardLayoutVariant _layoutVariant = KeyboardLayoutVariant.qwerty;
+
   Timer? _suggestionsDebounce;
   int _suggestionRequestGeneration = 0;
   String _lastControllerText = '';
@@ -190,28 +318,67 @@ class CustomKeyboardState extends State<CustomKeyboard> {
       ? ''
       : _currentLayout[_selectedRow.value][_selectedCol.value];
 
+  bool get _usesNumberPad => widget.inputPurpose == InputPurpose.numeric;
+
   List<List<String>> get _currentLayout {
+    if (_usesNumberPad) {
+      return KeyboardLayouts.numberPad;
+    }
     if (_activeType.value == KeyboardType.numeric) {
       return KeyboardLayouts.numeric;
     }
     return _isShifted.value
-        ? KeyboardLayouts.alphabeticUpper
-        : KeyboardLayouts.alphabeticLower;
+        ? KeyboardLayouts.upperFor(_layoutVariant)
+        : KeyboardLayouts.lowerFor(_layoutVariant);
+  }
+
+  /// Recent entries as chips, filtered down as typing narrows them.
+  List<_KeyboardChip> _recentChips({
+    bool submitOnTap = false,
+    bool replaceOnTap = false,
+  }) {
+    final query = widget.keyboardController.text.trim().toLowerCase();
+    final unique = <String>[];
+    final seen = <String>{};
+
+    for (final entry in widget.recentSuggestions) {
+      final value = entry.trim();
+      if (value.isEmpty) continue;
+      final normalized = value.toLowerCase();
+      if (normalized == query) continue;
+      if (query.isNotEmpty && !normalized.contains(query)) continue;
+      if (seen.add(normalized)) {
+        unique.add(value);
+      }
+      if (unique.length >= 5) break;
+    }
+
+    return unique
+        .map(
+          (value) => _KeyboardChip(
+            label: value,
+            value: value,
+            submitOnTap: submitOnTap,
+            replaceOnTap: replaceOnTap,
+          ),
+        )
+        .toList(growable: false);
   }
 
   List<_KeyboardChip> get _contextChips {
     switch (widget.inputPurpose) {
       case InputPurpose.url:
-        return const [
-          _KeyboardChip(label: 'https://', value: 'https://'),
-          _KeyboardChip(label: 'http://', value: 'http://'),
-          _KeyboardChip(label: 'www.', value: 'www.'),
-          _KeyboardChip(label: 'jellyfin', value: 'jellyfin'),
-          _KeyboardChip(label: '.com', value: '.com'),
-          _KeyboardChip(label: '.org', value: '.org'),
-          _KeyboardChip(label: '.net', value: '.net'),
-          _KeyboardChip(label: ':8096', value: ':8096'),
-          _KeyboardChip(label: '/', value: '/'),
+        return [
+          ..._recentChips(replaceOnTap: true),
+          const _KeyboardChip(label: 'https://', value: 'https://'),
+          const _KeyboardChip(label: 'http://', value: 'http://'),
+          const _KeyboardChip(label: 'www.', value: 'www.'),
+          const _KeyboardChip(label: 'jellyfin', value: 'jellyfin'),
+          const _KeyboardChip(label: '.com', value: '.com'),
+          const _KeyboardChip(label: '.org', value: '.org'),
+          const _KeyboardChip(label: '.net', value: '.net'),
+          const _KeyboardChip(label: ':8096', value: ':8096'),
+          const _KeyboardChip(label: '/', value: '/'),
         ];
       case InputPurpose.email:
         return const [
@@ -222,6 +389,10 @@ class CustomKeyboardState extends State<CustomKeyboard> {
           _KeyboardChip(label: '.com', value: '.com'),
           _KeyboardChip(label: '.', value: '.'),
         ];
+      case InputPurpose.username:
+        // Picking a remembered name fills the field and moves on, the same
+        // flow as tapping a search suggestion.
+        return _recentChips(submitOnTap: true);
       case InputPurpose.search:
         final query = widget.keyboardController.text.trim();
         final source = query.isEmpty
@@ -248,7 +419,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
             )
             .toList(growable: false);
       case InputPurpose.text:
-      case InputPurpose.username:
+      // Passwords never surface stored values on screen.
       case InputPurpose.password:
       case InputPurpose.numeric:
         return const [];
@@ -262,6 +433,18 @@ class CustomKeyboardState extends State<CustomKeyboard> {
     _lastControllerText = widget.keyboardController.text;
     widget.keyboardController.addListener(_onControllerTextChanged);
     _refreshSearchSuggestions(immediate: true);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final variant = KeyboardLayouts.variantForLocale(
+      Localizations.maybeLocaleOf(context),
+    );
+    if (variant != _layoutVariant) {
+      _layoutVariant = variant;
+      _resetSelection();
+    }
   }
 
   @override
@@ -434,7 +617,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
       final chipIndex = _selectedChip.value.clamp(0, chips.length - 1);
       final chip = chips[chipIndex];
-      if (chip.submitOnTap) {
+      if (chip.submitOnTap || chip.replaceOnTap) {
         widget.keyboardController.setText(chip.value);
       } else {
         widget.keyboardController.insertText(chip.value);
@@ -458,6 +641,15 @@ class CustomKeyboardState extends State<CustomKeyboard> {
       case 'SHIFT':
         _isShifted.value = !_isShifted.value;
         break;
+      case 'CURSORL':
+        controller.moveCursor(-1);
+        break;
+      case 'CURSORR':
+        controller.moveCursor(1);
+        break;
+      case 'PASTE':
+        _pasteFromClipboard();
+        break;
       case 'DONE':
         controller.hide(true);
         break;
@@ -472,6 +664,23 @@ class CustomKeyboardState extends State<CustomKeyboard> {
         controller.addCharacter(key);
         break;
     }
+  }
+
+  Future<void> _pasteFromClipboard() async {
+    String? value;
+    try {
+      value = (await Clipboard.getData(Clipboard.kTextPlain))?.text;
+    } catch (_) {
+      return;
+    }
+    if (!mounted || value == null) return;
+    // Line breaks have no home in a single line field, and clipboard
+    // managers love trailing ones.
+    final sanitized = value
+        .replaceAll(RegExp(r'[\r\n]+$'), '')
+        .replaceAll(RegExp(r'[\r\n]+'), ' ');
+    if (sanitized.isEmpty) return;
+    widget.keyboardController.insertText(sanitized);
   }
 
   List<String>? _alternatesForKey(String key) =>
@@ -505,6 +714,12 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
     final next = (_alternateIndex.value + delta) % options.length;
     _alternateIndex.value = next < 0 ? next + options.length : next;
+  }
+
+  /// Keys that act again on every repeat while select is held down.
+  bool get _selectedKeyRepeats {
+    final key = _selectedKey;
+    return key == 'BACKSPACE' || key == 'CURSORL' || key == 'CURSORR';
   }
 
   void _startSelectHold() {
@@ -651,6 +866,8 @@ class CustomKeyboardState extends State<CustomKeyboard> {
       if (_pendingAlternateSelect && _selectedRow.value >= 0) {
         _pendingAlternateSelect = false;
         _openAlternatesForKey(_selectedKey);
+      } else if (_selectedRow.value >= 0 && _selectedKeyRepeats) {
+        _onAction();
       }
       return KeyEventResult.handled;
     }
@@ -723,7 +940,9 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                   child: GestureDetector(
                     onTap: () {},
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 820),
+                      constraints: BoxConstraints(
+                        maxWidth: _usesNumberPad ? 320 : 820,
+                      ),
                       child: Material(
                         color: palette.panel,
                         elevation: 8,
@@ -732,7 +951,9 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                           borderRadius: palette.panelRadius,
                           side: palette.panelBorder,
                         ),
-                        clipBehavior: Clip.antiAlias,
+                        // No clip, so the alternate character popup can float
+                        // above the panel edge for keys on the top row.
+                        clipBehavior: Clip.none,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
                           child: Focus(
@@ -778,6 +999,8 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                                                   ),
                                                 _KeyboardGrid(
                                                   layout: _currentLayout,
+                                                  uniformKeySpans:
+                                                      _usesNumberPad,
                                                   selectedRow: _selectedRow,
                                                   selectedCol: _selectedCol,
                                                   isShifted: _isShifted,
@@ -800,8 +1023,17 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                                                             row;
                                                         _selectedCol.value =
                                                             col;
+                                                        final key =
+                                                            _currentLayout[row][col];
+                                                        if (key ==
+                                                            'BACKSPACE') {
+                                                          widget
+                                                              .keyboardController
+                                                              .clear();
+                                                          return;
+                                                        }
                                                         _openAlternatesForKey(
-                                                          _currentLayout[row][col],
+                                                          key,
                                                         );
                                                       },
                                                   onAlternateTapped: (index) {
@@ -930,6 +1162,7 @@ class _ContextChipBar extends StatelessWidget {
 
 class _KeyboardGrid extends StatelessWidget {
   final List<List<String>> layout;
+  final bool uniformKeySpans;
   final ValueListenable<int> selectedRow;
   final ValueListenable<int> selectedCol;
   final ValueListenable<bool> isShifted;
@@ -942,6 +1175,7 @@ class _KeyboardGrid extends StatelessWidget {
 
   const _KeyboardGrid({
     required this.layout,
+    required this.uniformKeySpans,
     required this.selectedRow,
     required this.selectedCol,
     required this.isShifted,
@@ -954,7 +1188,8 @@ class _KeyboardGrid extends StatelessWidget {
   });
 
   double _getKeyUnitSpan(String key) {
-    if (key == 'SPACE') return 3.0;
+    if (uniformKeySpans) return 1.0;
+    if (key == 'SPACE') return 2.4;
     if (['123', 'ABC', 'DONE', 'IME'].contains(key)) return 1.22;
     return 1.0;
   }
@@ -1053,20 +1288,23 @@ class _KeyboardKey extends StatelessWidget {
     required this.onAlternateTapped,
   });
 
+  bool get _hasAlternates =>
+      (KeyboardLayouts.alternateCharacters[label]?.length ?? 0) > 1;
+
   @override
   Widget build(BuildContext context) {
     final borderRadius = palette.chipRadius;
 
     return GestureDetector(
       onTap: onTap,
-      onLongPress: KeyboardLayouts.alternateCharacters.containsKey(label)
-          ? onLongPress
-          : null,
+      onLongPress: _hasAlternates || label == 'BACKSPACE' ? onLongPress : null,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 90),
+            curve: Curves.easeOut,
             width: width,
             height: 40,
             margin: margin,
@@ -1078,7 +1316,29 @@ class _KeyboardKey extends StatelessWidget {
               ),
               boxShadow: isSelected ? palette.focusGlow : null,
             ),
-            child: Center(child: _buildContent(context)),
+            child: Stack(
+              children: [
+                Center(child: _buildContent(context)),
+                // A quiet marker that holding this key opens more characters.
+                if (_hasAlternates)
+                  Positioned(
+                    top: 5,
+                    right: 6,
+                    child: Container(
+                      width: 3.5,
+                      height: 3.5,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color:
+                            (isSelected
+                                    ? palette.textOnSelected
+                                    : palette.textMuted)
+                                .withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
           if (alternateOptions != null && alternateOptions!.isNotEmpty)
             Positioned(
@@ -1100,6 +1360,12 @@ class _KeyboardKey extends StatelessWidget {
     switch (label) {
       case 'BACKSPACE':
         return Icon(Icons.backspace_outlined, color: color, size: 18);
+      case 'PASTE':
+        return Icon(Icons.content_paste_rounded, color: color, size: 16);
+      case 'CURSORL':
+        return Icon(Icons.keyboard_arrow_left, color: color, size: 22);
+      case 'CURSORR':
+        return Icon(Icons.keyboard_arrow_right, color: color, size: 22);
       case 'DONE':
         return Icon(
           Icons.check_circle_outline,
@@ -1168,6 +1434,13 @@ class _AlternateCharacterPopup extends StatelessWidget {
         color: palette.panel,
         borderRadius: palette.panelRadius,
         border: Border.fromBorderSide(palette.panelBorder),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.4),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1176,8 +1449,9 @@ class _AlternateCharacterPopup extends StatelessWidget {
           return GestureDetector(
             onTap: () => onOptionTapped(index),
             child: Container(
-              width: 36,
+              constraints: const BoxConstraints(minWidth: 36),
               height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               margin: EdgeInsets.only(
                 right: index < options.length - 1 ? 6 : 0,
               ),

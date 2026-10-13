@@ -9,16 +9,18 @@ import '../models/aggregated_library.dart';
 Future<List<AggregatedLibrary>> loadUserViews(
   MediaServerClient client, {
   bool includeHidden = false,
-}) async {
-  final response =
-      await client.userViewsApi.getUserViews(includeHidden: includeHidden);
+}) async => _parseUserViews(
+  await client.userViewsApi.getUserViews(includeHidden: includeHidden),
+);
+
+List<AggregatedLibrary> _parseUserViews(Map<String, dynamic> response) {
   final items = response['Items'] as List? ?? [];
 
-  return items.map((item) {
-    final data = item as Map<String, dynamic>;
+  return items.whereType<Map>().map((item) {
+    final data = item.cast<String, dynamic>();
     return AggregatedLibrary(
       id: data['Id']?.toString() ?? '',
-      name: data['Name'] as String,
+      name: data['Name']?.toString() ?? '',
       collectionType: data['CollectionType'] as String? ?? '',
       serverId: data['ServerId']?.toString() ?? '',
       primaryImageAspectRatio: (data['PrimaryImageAspectRatio'] as num?)
@@ -54,8 +56,14 @@ Future<Map<String, dynamic>> loadVisibleUserViews(
   final response = await viewsFuture;
 
   if (excludes == null) return client.userViewsApi.getUserViews();
-  if (excludes.isEmpty) return response;
+  return _filterExcludedViews(response, excludes);
+}
 
+Map<String, dynamic> _filterExcludedViews(
+  Map<String, dynamic> response,
+  Set<String> excludes,
+) {
+  if (excludes.isEmpty) return response;
   final items = (response['Items'] as List? ?? [])
       .where(
         (item) => !excludes.contains(
@@ -70,10 +78,12 @@ class UserViewsRepository extends ChangeNotifier {
   final MediaServerClient _client;
   UserConfiguration? _cachedConfig;
 
-  // Concurrent callers share one in-flight request so a burst of reloads
-  // costs a single round trip.
+  // Concurrent callers share one in-flight request, so home mounting with
+  // several rows and the nav chrome all asking at once costs one round trip
+  // instead of a socket each.
   Future<List<AggregatedLibrary>>? _inFlightViews;
-  Future<List<AggregatedLibrary>>? _inFlightViewsIncludingHidden;
+  Future<Map<String, dynamic>>? _inFlightHiddenResponse;
+  Future<UserConfiguration>? _inFlightConfig;
 
   UserViewsRepository(this._client);
 
@@ -82,14 +92,26 @@ class UserViewsRepository extends ChangeNotifier {
         _client,
       ).whenComplete(() => _inFlightViews = null);
 
-  Future<List<AggregatedLibrary>> getAllViewsIncludingHidden() =>
-      _inFlightViewsIncludingHidden ??= loadUserViews(
-        _client,
-        includeHidden: true,
-      ).whenComplete(() => _inFlightViewsIncludingHidden = null);
+  Future<Map<String, dynamic>> _hiddenResponse() =>
+      _inFlightHiddenResponse ??= _client.userViewsApi
+          .getUserViews(includeHidden: true)
+          .whenComplete(() => _inFlightHiddenResponse = null);
+
+  Future<List<AggregatedLibrary>> getAllViewsIncludingHidden() async =>
+      _parseUserViews(await _hiddenResponse());
+
+  /// The raw views response with anything hidden from My Media removed, for
+  /// callers that build rows straight from the server shape.
+  Future<Map<String, dynamic>> getVisibleViewsResponse() async {
+    final responseFuture = _hiddenResponse();
+    final excludes = await _excludesFrom(cachedUserConfiguration());
+    final response = await responseFuture;
+    if (excludes == null) return _client.userViewsApi.getUserViews();
+    return _filterExcludedViews(response, excludes);
+  }
 
   Future<List<AggregatedLibrary>> getUserViews() async {
-    final excludes = await _excludesFrom(_getUserConfig());
+    final excludes = await _excludesFrom(cachedUserConfiguration());
     if (excludes == null) return getAllViews();
 
     final views = await getAllViewsIncludingHidden();
@@ -97,15 +119,22 @@ class UserViewsRepository extends ChangeNotifier {
     return views.where((v) => !excludes.contains(v.id)).toList();
   }
 
-  Future<UserConfiguration> _getUserConfig() async {
-    _cachedConfig ??= await _client.usersApi.getUserConfiguration();
-    return _cachedConfig!;
-  }
+  /// The configuration as last read, fetching it once when nothing is cached.
+  Future<UserConfiguration> cachedUserConfiguration() => _cachedConfig != null
+      ? Future.value(_cachedConfig)
+      : getUserConfiguration();
 
-  Future<UserConfiguration> getUserConfiguration() async {
-    _cachedConfig = await _client.usersApi.getUserConfiguration();
-    return _cachedConfig!;
-  }
+  /// What the user hid from My Media, read from the cached configuration so a
+  /// caller can ask on every row without a round trip each time. Empty when
+  /// nothing is hidden or the list cant be read.
+  Future<Set<String>> getMyMediaExcludes() async =>
+      await _excludesFrom(cachedUserConfiguration()) ?? const {};
+
+  Future<UserConfiguration> getUserConfiguration() =>
+      _inFlightConfig ??= _client.usersApi
+          .getUserConfiguration()
+          .then((config) => _cachedConfig = config)
+          .whenComplete(() => _inFlightConfig = null);
 
   Future<void> updateUserConfiguration(UserConfiguration config) async {
     await _client.usersApi.updateUserConfiguration(config);

@@ -48,40 +48,49 @@ class DetailsTabBar extends StatelessWidget {
     this.wrap = false,
   });
 
-  _DetailsTabItem _buildTabItem(int i, {Key? key}) => _DetailsTabItem(
-        key: key,
-        label: labels[i],
-        isSelected: selectedIndex == i,
-        segmented: segmented,
-        pill: pill,
-        focusNode: focusNodeFor(i),
-        onSelect: () => onSelect(i),
-        onNavigateDown:
-            onNavigateDown != null ? () => onNavigateDown!(i) : null,
-        onNavigateUp: onExitUp,
-        onNavigateLeft: () {
-          if (i > 0) {
-            focusNodeFor(i - 1).requestFocus();
-            return true;
-          }
-          if (onExitLeft != null) {
-            onExitLeft!();
-            return true;
-          }
-          return false;
-        },
-        onNavigateRight: () {
-          if (i < labels.length - 1) {
-            focusNodeFor(i + 1).requestFocus();
-          }
-        },
-      );
+  _DetailsTabItem _buildTabItem(BuildContext context, int i, {Key? key}) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    void step(int delta) => focusNodeFor(i + delta).requestFocus();
+    return _DetailsTabItem(
+      key: key,
+      label: labels[i],
+      isSelected: selectedIndex == i,
+      segmented: segmented,
+      pill: pill,
+      focusNode: focusNodeFor(i),
+      onSelect: () => onSelect(i),
+      onNavigateDown:
+          onNavigateDown != null ? () => onNavigateDown!(i) : null,
+      onNavigateUp: onExitUp,
+      // The escape follows the physical key, matching the other tab rows: a
+      // Left press that can't step any further leaves through onExitLeft,
+      // whichever index sits at that edge.
+      onNavigateLeft: () {
+        final delta = isRtl ? 1 : -1;
+        if (i + delta >= 0 && i + delta < labels.length) {
+          step(delta);
+          return true;
+        }
+        if (onExitLeft != null) {
+          onExitLeft!();
+          return true;
+        }
+        return false;
+      },
+      onNavigateRight: () {
+        final delta = isRtl ? -1 : 1;
+        if (i + delta >= 0 && i + delta < labels.length) {
+          step(delta);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     if (pill) return _PillTabBar(this);
 
-    _DetailsTabItem item(int i) => _buildTabItem(i);
+    _DetailsTabItem item(int i) => _buildTabItem(context, i);
 
     if (segmented) {
       final container = Container(
@@ -507,9 +516,10 @@ class _PillTabBarState extends State<_PillTabBar> {
     final thumbColor = glass ? onSurface.withValues(alpha: 0.22) : accent;
 
     final hasThumb = selectedIndex >= 0 && selectedIndex < _widths.length;
-    var thumbLeft = 0.0;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    var thumbOffset = 0.0;
     for (var i = 0; i < selectedIndex && i < _widths.length; i++) {
-      thumbLeft += _widths[i];
+      thumbOffset += _widths[i];
     }
 
     final stack = Stack(
@@ -520,7 +530,8 @@ class _PillTabBarState extends State<_PillTabBar> {
             curve: Curves.easeOutCubic,
             top: 0,
             bottom: 0,
-            left: thumbLeft,
+            left: isRtl ? null : thumbOffset,
+            right: isRtl ? thumbOffset : null,
             width: _widths[selectedIndex],
             child: Container(
               decoration: BoxDecoration(
@@ -541,7 +552,7 @@ class _PillTabBarState extends State<_PillTabBar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (var i = 0; i < _labels.length; i++)
-              _config._buildTabItem(i, key: _segmentKeys[i]),
+              _config._buildTabItem(context, i, key: _segmentKeys[i]),
           ],
         ),
       ],
@@ -566,14 +577,14 @@ class _PillTabBarState extends State<_PillTabBar> {
     return LayoutBuilder(
       builder: (context, constraints) {
         // Hug the content when it fits, cap at the available width and let the
-        // segments scroll inside when they overflow. The 16px covers the pane's
-        // all(3) padding plus a small buffer so the last segment is not clipped.
+        // segments scroll inside when they overflow. The 6px covers the pane's
+        // all(3) padding (3px start + 3px end) so the pill hugs the content symmetrically.
         final available = constraints.maxWidth;
         if (_widths.isEmpty || !available.isFinite) return pane;
-        final content = _widths.fold<double>(0, (sum, w) => sum + w) + 16.0;
+        final content = _widths.fold<double>(0, (sum, w) => sum + w) + 6.0;
         final pillWidth = content < available ? content : available;
         return Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: SizedBox(width: pillWidth, child: pane),
         );
       },

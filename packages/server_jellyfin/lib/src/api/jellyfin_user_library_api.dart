@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:server_core/server_core.dart';
-import 'jellyfin_item_fields.dart';
 
 class JellyfinUserLibraryApi implements UserLibraryApi {
   final Dio _dio;
 
   JellyfinUserLibraryApi(this._dio);
+
+  @override
+  bool get supportsNumericUserRatings => true;
 
   @override
   Future<void> markFavorite(String itemId) async {
@@ -35,6 +37,14 @@ class JellyfinUserLibraryApi implements UserLibraryApi {
   }
 
   @override
+  Future<void> updateNumericUserRating(
+    String itemId, {
+    required double rating,
+  }) async {
+    await _dio.post('/UserItems/$itemId/UserData', data: {'Rating': rating});
+  }
+
+  @override
   Future<void> deleteUserRating(String itemId) async {
     await _dio.delete('/UserItems/$itemId/Rating');
   }
@@ -42,7 +52,7 @@ class JellyfinUserLibraryApi implements UserLibraryApi {
   @override
   Future<Map<String, dynamic>> getItem(String itemId) async {
     final response = await _dio.get('/Items/$itemId', queryParameters: {
-      'Fields': kItemFields,
+      'Fields': kDetailItemFields,
     });
     return response.data as Map<String, dynamic>;
   }

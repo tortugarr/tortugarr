@@ -113,6 +113,7 @@ class AppleTvPlaybackPromptController {
   int consecutiveEpisodes = 0;
   DateTime? _suppressSeekPromptsUntil;
   Timer? _nextUpTimer;
+  Timer? _skipSegmentAutoHideTimer;
   bool _skipSegmentVisible = false;
   Duration? _skipTo;
   MediaSegmentType? _skipSegmentType;
@@ -266,6 +267,9 @@ class AppleTvPlaybackPromptController {
     unawaited(_commands.exitPlayback());
   }
 
+  /// A viewer reaching for the remote has answered the prompt's question.
+  void _noteViewerActivity() => consecutiveEpisodes = 0;
+
   /// Returns true when the advance may proceed. Playback is paused before the
   /// prompt shows and the queue never advances until the user answers, so the
   /// next episode can never start playing under the modal.
@@ -373,6 +377,16 @@ class AppleTvPlaybackPromptController {
           segmentEndMs: result.segment!.end.inMilliseconds,
         ),
       );
+      final autoHide = _prefs.get(UserPreferences.mediaSegmentAutoHide);
+      if (autoHide.seconds > 0) {
+        _skipSegmentAutoHideTimer = Timer(
+          Duration(seconds: autoHide.seconds),
+          () {
+            if (_disposed || !_skipSegmentVisible) return;
+            _clearSkipSegment();
+          },
+        );
+      }
     } else if (result.isNone && _skipSegmentVisible) {
       _clearSkipSegment();
     }
@@ -380,6 +394,7 @@ class AppleTvPlaybackPromptController {
 
   void handleSkipSegment() {
     if (_disposed) return;
+    _noteViewerActivity();
 
     final replaceSkipOutroWithNextUp = _prefs.get(
       UserPreferences.replaceSkipOutroWithNextUp,
@@ -420,6 +435,7 @@ class AppleTvPlaybackPromptController {
   /// through a segment doesn't pop stale prompts.
   void onUserSeeked() {
     if (_disposed) return;
+    _noteViewerActivity();
 
     final until = _now().add(_seekPromptSuppressionDuration);
     final currentUntil = _suppressSeekPromptsUntil;
@@ -449,6 +465,8 @@ class AppleTvPlaybackPromptController {
   }
 
   void _clearSkipSegmentState() {
+    _skipSegmentAutoHideTimer?.cancel();
+    _skipSegmentAutoHideTimer = null;
     _skipSegmentVisible = false;
     _skipTo = null;
     _skipSegmentType = null;
@@ -464,6 +482,8 @@ class AppleTvPlaybackPromptController {
     _disposed = true;
     _nextUpTimer?.cancel();
     _nextUpTimer = null;
+    _skipSegmentAutoHideTimer?.cancel();
+    _skipSegmentAutoHideTimer = null;
     final completer = _stillWatchingCompleter;
     if (completer != null && !completer.isCompleted) {
       // The awaiting code checks the disposed flag after this resolves, so

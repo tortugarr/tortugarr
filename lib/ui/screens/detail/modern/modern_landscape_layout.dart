@@ -3,16 +3,18 @@ import 'package:get_it/get_it.dart';
 import '../../../../preference/preference_constants.dart';
 import '../../../../preference/user_preferences.dart';
 import '../../../../util/platform_detection.dart';
+import '../../../widgets/bottom_nav/bottom_navbar.dart';
 
 /// Arranges the Modern detail pieces for landscape (TV, desktop, any landscape
 /// device): full-bleed backdrop, a left hero column, a floating Up Next card on
 /// the right, and a bottom band with the tab bar + active tab content. Pure
-/// arrangement; all pieces are built by the host.
+/// arrangement. The host builds every piece and leaves [tabBar] out when there
+/// are no tabs.
 class ModernLandscapeLayout extends StatelessWidget {
   final Widget backdrop;
   final Widget hero;
   final Widget? upNext;
-  final Widget tabBar;
+  final Widget? tabBar;
   final Widget tabContent;
   final double topInset;
   final ScrollController? scrollController;
@@ -60,18 +62,17 @@ class ModernLandscapeLayout extends StatelessWidget {
       children: [
         backdrop,
         SafeArea(
+          bottom: false,
           child: SingleChildScrollView(
             controller: scrollController,
             physics: PlatformDetection.isTV ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
-            padding: EdgeInsets.only(top: (hasUpNext ? topInset - 24 : topInset - 12) / scale),
+            padding: EdgeInsets.only(
+              top: (hasUpNext ? topInset - 24 : topInset - 12) / scale,
+              bottom: bottomContentInset(context),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (aboveHero != null && !(isBoxSet && hasUpNext))
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(leftPadding, (hasUpNext ? 2.0 : 8.0) / scale, 40, 0),
-                    child: aboveHero!,
-                  ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(leftPadding, 10 / scale, 40, 0),
                   child: Row(
@@ -79,41 +80,42 @@ class ModernLandscapeLayout extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: heroWidth,
-                        child: (isBoxSet && hasUpNext)
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (aboveHero != null) aboveHero!,
-                                  const SizedBox(height: 10),
-                                  hero,
-                                ],
-                              )
-                            : hero,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ?aboveHero,
+                            if (aboveHero != null) const SizedBox(height: 10),
+                            hero,
+                          ],
+                        ),
                       ),
-                      if (upNext != null) ...[
-                        const SizedBox(width: 24),
+                      if (upNext != null)
                         Expanded(
                           child: Align(
-                            alignment: Alignment.topRight,
+                            alignment: isBoxSet ? Alignment.topRight : Alignment.topCenter,
                             child: Padding(
-                              padding: EdgeInsets.only(top: isBoxSet ? 24.0 / scale : 0.0),
+                              padding: EdgeInsets.only(
+                                top: isBoxSet
+                                    ? 24.0 / scale
+                                    : (aboveHero != null ? 48.0 / scale : 0.0),
+                              ),
                               child: ConstrainedBox(
                                 constraints:
-                                    const BoxConstraints(maxWidth: 410),
+                                    const BoxConstraints(maxWidth: 310),
                                 child: upNext,
                               ),
                             ),
                           ),
                         ),
-                      ],
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(leftPadding, 16 / scale, 40, 8 / scale),
-                  child: tabBar,
-                ),
+                if (tabBar != null)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(leftPadding, 16 / scale, 40, 8 / scale),
+                    child: tabBar,
+                  ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                     leftPadding,

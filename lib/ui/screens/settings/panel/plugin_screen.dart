@@ -51,8 +51,6 @@ class _PluginScreenState extends State<_PluginScreen> {
       context,
       Builder(
         builder: (context) {
-          final theme = Theme.of(context);
-          final colorScheme = theme.colorScheme;
           final l10n = AppLocalizations.of(context);
           return FocusScope(
             node: _pluginScope,
@@ -60,11 +58,10 @@ class _PluginScreenState extends State<_PluginScreen> {
             child: Scaffold(
               appBar: buildSettingsAppBar(
                 context,
-                Text(l10n.pluginLabel),
+                Text(l10n.settingsSync),
                 actions: [
                   IconButton(
                     focusNode: _refreshFocusNode,
-                    autofocus: true,
                     icon: const Icon(Icons.refresh),
                     onPressed: () async {
                       if (GetIt.instance.isRegistered<MediaServerClient>()) {
@@ -90,39 +87,10 @@ class _PluginScreenState extends State<_PluginScreen> {
               ),
               body: ListView(
                 controller: _scrollController,
-                padding: const EdgeInsets.only(bottom: 48),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerLow,
-                        borderRadius: AppRadius.circular(16),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.extension,
-                            size: 20,
-                            color: colorScheme.primary,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              l10n.settingsPluginScreenDescription,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const PluginSettingsSection(),
-                ],
+                padding: EdgeInsets.only(
+                  bottom: 48 + MediaQuery.paddingOf(context).bottom,
+                ),
+                children: const [PluginSettingsSection()],
               ),
             ),
           );

@@ -8,20 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tvos/flutter_tvos.dart'
-    show TvRemoteController, TvRemoteConfig;
+    show TvRemoteController, TvRemoteConfig, FlutterTvosPlatform;
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:playback_core/playback_core.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'auth/repositories/session_repository.dart';
+import 'data/models/achievement_models.dart';
 import 'data/models/aggregated_item.dart';
+import 'data/services/achievements_service.dart';
 import 'data/services/cast/cast_service.dart';
 import 'data/services/connectivity_service.dart';
 import 'data/services/download_service.dart';
 import 'data/services/seerr_notification_service.dart';
 import 'data/services/plugin_sync_service.dart';
+import 'data/services/server_messages_service.dart';
+import 'data/services/retro_artwork/retro_artwork_data_source.dart';
 import 'data/services/theme_music_service.dart';
+import 'data/services/deep_link_service.dart';
 import 'data/services/topshelf_service.dart';
 import 'data/services/watch_next_service.dart';
 import 'di/providers.dart';
@@ -30,16 +35,25 @@ import 'preference/preference_constants.dart' show GlassSettledQuality;
 import 'preference/user_preferences.dart';
 import 'syncplay/syncplay_manager.dart';
 import 'ui/navigation/app_router.dart';
+import 'ui/navigation/deferred_route_pop.dart';
 import 'ui/navigation/deep_link_navigator.dart';
+import 'ui/navigation/destinations.dart';
 import 'ui/navigation/home_refresh_bus.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/theme/app_theme_controller.dart';
 import 'ui/widgets/app_update_banner.dart';
 import 'ui/widgets/cast_mini_player.dart';
+import 'ui/widgets/video_mini_player.dart';
+import 'ui/screens/settings/achievements_screen.dart';
+import 'ui/widgets/floating_notification.dart';
 import 'ui/widgets/offline_banner.dart';
+import 'ui/widgets/settings/settings_panel.dart';
+import 'ui/widgets/server_messages_dialog.dart';
 import 'ui/widgets/exit_confirmation_dialog.dart';
+import 'ui/widgets/keyboard_shortcuts/keyboard_shortcut_reference.dart';
 import 'ui/screensaver/screensaver_controller.dart';
 import 'ui/screensaver/screensaver_host.dart';
+import 'util/achievement_icons.dart';
 import 'util/app_exit.dart';
 import 'util/focus/dpad_keys.dart';
 import 'util/focus/siri_remote_glide.dart';
@@ -49,11 +63,13 @@ import 'util/focus/input_mode_tracker.dart';
 import 'util/idiom/app_ui_idiom.dart';
 import 'util/idiom/glass_capability.dart';
 import 'util/platform_detection.dart';
+import 'util/tv_ui_scale.dart';
 import 'ui/widgets/overlay_sheet.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'util/focus/key_event_utils.dart';
 import 'util/focus/gamepad/gamepad_navigation_scope.dart';
-import 'ui/widgets/focus/request_initial_focus.dart';
+import 'util/focus/gamepad/gamepad_key_synthesizer.dart';
+import 'util/focus/open_popup.dart';
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 
 class MoonfinApp extends StatefulWidget {
@@ -66,6 +82,7 @@ class MoonfinApp extends StatefulWidget {
 class _MoonfinAppState extends State<MoonfinApp> {
   late final UserPreferences _prefs;
   late final AppThemeController _themeController;
+  final DeepLinkService _deepLinks = DeepLinkService();
   Locale? _lastResolvedLocale;
 
   @override
@@ -82,6 +99,15 @@ class _MoonfinAppState extends State<MoonfinApp> {
     _prefs.addListener(_syncGlassFromPrefs);
     if (PlatformDetection.isAppleTV) {
       TopShelfService().startDeepLinkListener(navigateWhenReady);
+      if (!FlutterTvosPlatform.isTvos) {
+        // The package gates init on Platform.operatingSystem being tvos and
+        // this build reports ios, so init returns early and leaves the remote
+        // unconfigured and never forwarding touches. Our own check is a build
+        // time define and is the one to trust here, and flipping the test hook
+        // is the only way past that guard.
+        // ignore: invalid_use_of_visible_for_testing_member
+        TvRemoteController.debugForceTvosForTesting = true;
+      }
       TvRemoteController.instance.init();
       // Both engine swipe detectors are pushed out of reach so SiriRemoteGlide
       // can drive focus from the raw touch stream instead. Clicks stay native,
@@ -95,11 +121,16 @@ class _MoonfinAppState extends State<MoonfinApp> {
         keyRepeatInitialDelay: Duration(milliseconds: 450),
         keyRepeatInterval: Duration(milliseconds: 180),
       );
+      _syncSiriRemoteFromPrefs();
+      _prefs.addListener(_syncSiriRemoteFromPrefs);
       SiriRemoteGlide.instance.attach();
     }
     if (PlatformDetection.isAndroid && PlatformDetection.isTV) {
       WatchNextService().startDeepLinkListener(navigateWhenReady);
     }
+    // OS-registered moonfin:// links. The service no-ops on platforms without
+    // an app_links backend.
+    _deepLinks.startListener(navigateWhenReady);
   }
 
   void _syncThemeFromPrefs() {
@@ -112,6 +143,12 @@ class _MoonfinAppState extends State<MoonfinApp> {
     if (AppUiIdiomResolver.current != before && mounted) {
       setState(() {});
     }
+  }
+
+  void _syncSiriRemoteFromPrefs() {
+    SiriRemoteGlide.instance.sensitivity = _prefs.get(
+      UserPreferences.siriRemoteSwipeSensitivity,
+    );
   }
 
   void _syncGlassFromPrefs() {
@@ -142,11 +179,13 @@ class _MoonfinAppState extends State<MoonfinApp> {
 
   void _onGlassQualityChanged(GlassQuality from, GlassQuality to) {
     GlassCapability.onAdaptiveQualityChanged(from, to);
-    unawaited(_prefs.set(UserPreferences.glassSettledQuality, switch (to) {
-      GlassQuality.minimal => GlassSettledQuality.minimal,
-      GlassQuality.standard => GlassSettledQuality.standard,
-      GlassQuality.premium => GlassSettledQuality.premium,
-    }));
+    unawaited(
+      _prefs.set(UserPreferences.glassSettledQuality, switch (to) {
+        GlassQuality.minimal => GlassSettledQuality.minimal,
+        GlassQuality.standard => GlassSettledQuality.standard,
+        GlassQuality.premium => GlassSettledQuality.premium,
+      }),
+    );
     // GlassBackdrop reads GlassSettings.cheapBackdrop in build, so a
     // throttle step needs a shell rebuild to collapse or restore the bloom.
     if (mounted) setState(() {});
@@ -181,6 +220,8 @@ class _MoonfinAppState extends State<MoonfinApp> {
     _prefs.removeListener(_syncLocaleFromPrefs);
     _prefs.removeListener(_syncIdiomFromPrefs);
     _prefs.removeListener(_syncGlassFromPrefs);
+    _prefs.removeListener(_syncSiriRemoteFromPrefs);
+    _deepLinks.dispose();
     _themeController.dispose();
     super.dispose();
   }
@@ -227,10 +268,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
                 final hidePlayer =
                     path.startsWith('/player/') ||
                     path == '/live-tv/player' ||
-                    path == '/' ||
-                    path == '/server-select' ||
-                    path == '/server' ||
-                    path == '/login';
+                    Destinations.isSignedOutRoute(path);
 
                 final overlay = Overlay(
                   initialEntries: [
@@ -259,6 +297,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
                             ),
                             if (!hidePlayer)
                               const RepaintBoundary(child: CastMiniPlayer()),
+                            if (!hidePlayer) const VideoMiniPlayer(),
                           ],
                         );
                         final glass = AppColorScheme.isGlass;
@@ -271,11 +310,14 @@ class _MoonfinAppState extends State<MoonfinApp> {
                           fit: StackFit.expand,
                           children: [
                             Positioned.fill(
-                              child: glass
-                                  ? GlassBackdrop(
-                                      animated: GlassSettings.animatedBackdrop,
-                                    )
-                                  : const SizedBox.shrink(),
+                              child: VideoMiniPlayerHoleClip(
+                                child: glass
+                                    ? GlassBackdrop(
+                                        animated:
+                                            GlassSettings.animatedBackdrop,
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
                             ),
                             shell,
                             if (PlatformDetection.isTV) const ScreensaverHost(),
@@ -322,13 +364,14 @@ class _MoonfinAppState extends State<MoonfinApp> {
                   ],
                 );
 
-                final mainChild = PlatformDetection.isAppleTV
-                    ? _TvUiScale(child: overlay)
-                    : overlay;
-
                 return ListenableBuilder(
                   listenable: _prefs,
                   builder: (context, _) {
+                    // Read here rather than hoisted above the builder, so a
+                    // change to the interface layout override is picked up.
+                    final mainChild = PlatformDetection.isTV
+                        ? TvUiScale(child: overlay)
+                        : overlay;
                     final scale = _prefs
                         .get(UserPreferences.desktopUiScale)
                         .scaleFactor;
@@ -375,10 +418,17 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
   final FocusNode _focusNode = FocusNode(debugLabel: 'GlobalShortcutScope');
   final ScreensaverController _screensaverController =
       GetIt.instance<ScreensaverController>();
-  final bool _trackMouseThumbHistory = PlatformDetection.isDesktop || kIsWeb;
+  // Not on web. The browser maps the thumb buttons to its own history, which
+  // pops the router too, so handling them here as well moves back twice for a
+  // single click.
+  final bool _trackMouseThumbHistory = PlatformDetection.isDesktop;
   final List<String> _routeHistory = [];
   late final KeyEventCallback _hardwareKeyHandler;
   Timer? _geometrySaveTimer;
+  // Windows answers isMaximized() from an uninitialized WINDOWPLACEMENT and
+  // returns whatever was on the stack, so the state is tracked from the window
+  // events instead, seeded with the state the window was restored into.
+  bool _isMaximized = false;
   int _routeHistoryIndex = -1;
   DateTime? _lastMouseThumbNavAt;
   String? _pendingRouteHistoryLocation;
@@ -400,6 +450,10 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
     }
     WidgetsBinding.instance.addObserver(this);
     if (PlatformDetection.isDesktop) {
+      final prefs = GetIt.instance<UserPreferences>();
+      _isMaximized =
+          prefs.get(UserPreferences.windowMaximized) &&
+          !prefs.get(UserPreferences.windowFullscreen);
       windowManager.addListener(this);
       unawaited(windowManager.setPreventClose(true));
     }
@@ -572,6 +626,7 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       return true;
     }
     if (DialogBackSuppressor.consume()) return true;
+    if (CustomTVTextField.closeTopKeyboard()) return true;
     if (OverlaySheetController.closeTopSheet()) return true;
     if (InlineBackInterceptor.handleBack()) return true;
     if (_isPlayerRoute()) return false;
@@ -591,16 +646,48 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
     return false;
   }
 
-  bool _isPlayerRoute() {
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
-    return path.startsWith('/player/') ||
-        path == '/live-tv/player' ||
-        path.startsWith('/game-player/');
+  /// A player is pushed over whichever tab launched it, so the router's uri
+  /// stays on that tab. Only the match list names what is actually on screen.
+  String _currentRoutePath() {
+    final matches = appRouter.routerDelegate.currentConfiguration.matches;
+    if (matches.isEmpty) return '';
+    return matches.last.matchedLocation;
   }
 
-  bool _isHomeRoute() {
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
-    return path == '/home';
+  bool _isPlayerRoute() => Destinations.isPlayerRoute(_currentRoutePath());
+
+  bool _routeReadsBackKey() =>
+      Destinations.routeReadsBackKey(_currentRoutePath());
+
+  bool _isHomeRoute() => _currentRoutePath() == Destinations.home;
+
+  bool _shortcutsDialogOpen = false;
+
+  /// The shortcut list for wherever the user is. Pressing the key again
+  /// closes it rather than stacking another. The book reader sits under the
+  /// player path, so it is checked first.
+  void _showKeyboardShortcuts() {
+    final navContext = appRouter.routerDelegate.navigatorKey.currentContext;
+    if (navContext == null || !navContext.mounted) return;
+    if (_shortcutsDialogOpen) {
+      Navigator.of(navContext, rootNavigator: true).pop();
+      return;
+    }
+    final KeyboardShortcutContext shownIn;
+    if (_currentRoutePath().startsWith('/player/book/')) {
+      shownIn = KeyboardShortcutContext.reader;
+    } else if (_isPlayerRoute()) {
+      shownIn = KeyboardShortcutContext.player;
+    } else {
+      shownIn = KeyboardShortcutContext.browse;
+    }
+    _shortcutsDialogOpen = true;
+    unawaited(
+      showKeyboardShortcutsDialog(
+        navContext,
+        shownIn: shownIn,
+      ).whenComplete(() => _shortcutsDialogOpen = false),
+    );
   }
 
   bool _isEditingText() {
@@ -616,6 +703,11 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
   }
 
   bool _onHardwareKeyEvent(KeyEvent event) {
+    // This runs before anything can mark the press, so it only clears a mark
+    // an earlier press left behind.
+    if (event is KeyDownEvent && event.logicalKey.isBackKey) {
+      DialogBackSuppressor.newBackPress();
+    }
     if (PlatformDetection.isTV &&
         _screensaverController.handleKeyEvent(event)) {
       return true;
@@ -632,6 +724,7 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
 
     final isBackspace = key == LogicalKeyboardKey.backspace;
     if (key.isBackKey) {
+      final fromRemote = GamepadKeySynthesizer.isRemote(event.physicalKey);
       if (isBackspace && _isEditingText()) {
         return false;
       }
@@ -640,6 +733,16 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       // key handling of its own, so without it the route pops out from under
       // an open keyboard.
       if (CustomTVTextField.closeTopKeyboard()) {
+        if (PlatformDetection.isAndroid && key == LogicalKeyboardKey.goBack) {
+          DialogBackSuppressor.markDismissed();
+        }
+        return true;
+      }
+      // Dismiss a receiving phone's keyboard before leaving its page.
+      if (fromRemote &&
+          _isEditingText() &&
+          View.of(context).viewInsets.bottom > 0) {
+        FocusManager.instance.primaryFocus?.unfocus();
         return true;
       }
       if (OverlaySheetController.closeTopSheet()) {
@@ -651,7 +754,27 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
         }
         return true;
       }
-      if (_isPlayerRoute()) {
+      final focus = FocusManager.instance.primaryFocus;
+      final popup = openPopupFor(
+        focus: focus,
+        root: appRouter.routerDelegate.navigatorKey.currentState,
+      );
+      if (popup != null) {
+        // The focus tree sees every key after the handlers here, whatever they
+        // return, and a popup holding focus closes itself from there through
+        // its own back handler or the framework's dismiss action. Acting on it
+        // here as well would pop twice, so the handler only stands aside.
+        if (focusIsInside(focus, popup.route)) {
+          return false;
+        }
+        // Focus wandered out of the popup, so nothing else will close it.
+        unawaited(popup.navigator.maybePop());
+        if (PlatformDetection.isAndroid && key == LogicalKeyboardKey.goBack) {
+          DialogBackSuppressor.markDismissed();
+        }
+        return true;
+      }
+      if (_routeReadsBackKey()) {
         return false;
       }
       if (appRouter.canPop()) {
@@ -661,17 +784,26 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
         if (PlatformDetection.isAndroid && key == LogicalKeyboardKey.goBack) {
           return true;
         }
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          appRouter.pop();
-        });
+        scheduleRoutePop(appRouter, isMounted: () => mounted);
       } else if (!_exitDialogShowing) {
+        // A server remote only navigates, it can't quit the app it's driving.
+        if (fromRemote) return true;
         if (PlatformDetection.isAndroid && key == LogicalKeyboardKey.goBack) {
           return true;
         }
         _exitDialogShowing = true;
         unawaited(_showExitConfirmation());
       }
+      return true;
+    }
+
+    // ? and F1 list the keyboard shortcuts on every screen, trimmed to the
+    // ones that work where the user is. ? is a character, so a text field
+    // keeps it. F1 isn't, so it still opens the list there.
+    if (!PlatformDetection.isTV &&
+        isShowShortcutsKey(key) &&
+        (key == LogicalKeyboardKey.f1 || !_isEditingText())) {
+      _showKeyboardShortcuts();
       return true;
     }
 
@@ -787,8 +919,10 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       final prefs = GetIt.instance<UserPreferences>();
       final isFullScreen = await windowManager.isFullScreen();
       await prefs.set(UserPreferences.windowFullscreen, isFullScreen);
-      // Keep the last windowed bounds; don't save fullscreen size as the window size.
-      if (isFullScreen) return;
+      await prefs.set(UserPreferences.windowMaximized, _isMaximized);
+      // Keep the last windowed bounds. Neither state reports the size the
+      // window would return to, so saving either would lose the real one.
+      if (isFullScreen || _isMaximized) return;
       final size = await windowManager.getSize();
       final pos = await windowManager.getPosition();
       await prefs.set(UserPreferences.windowWidth, size.width);
@@ -807,10 +941,16 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
 
   @override
   void onWindowEvent(String eventName) {
+    _isMaximized = FullscreenHelper.maximizedAfterWindowEvent(
+      eventName,
+      _isMaximized,
+    );
     if (eventName == 'move' ||
         eventName == 'resize' ||
         eventName == 'moved' ||
         eventName == 'resized' ||
+        eventName == 'maximize' ||
+        eventName == 'unmaximize' ||
         eventName == 'enter-full-screen' ||
         eventName == 'leave-full-screen') {
       _scheduleSaveGeometry();
@@ -856,15 +996,7 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
         keys.contains(LogicalKeyboardKey.altRight);
 
     if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) && !altPressed) {
-      final targetContext =
-          FocusManager.instance.primaryFocus?.context ?? context;
-      final activated = Actions.maybeInvoke(
-        targetContext,
-        const ActivateIntent(),
-      );
-      return activated == null
-          ? KeyEventResult.ignored
-          : KeyEventResult.handled;
+      return activateFocusedTarget(context);
     }
 
     return KeyEventResult.ignored;
@@ -900,6 +1032,9 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
   bool? _wasServerReachable;
   StreamSubscription<SyncPlayUiEvent>? _syncPlayEventsSub;
   StreamSubscription<String>? _downloadErrorSub;
+  StreamSubscription<ChatThread>? _chatMessageSub;
+  StreamSubscription<AchievementUnlocks>? _unlockSub;
+  StreamSubscription<SeerrNotificationEvent>? _seerrNotificationSub;
 
   @override
   void initState() {
@@ -908,26 +1043,37 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     ref.read(syncPlayRuntimeCoordinatorProvider);
     final manager = ref.read(syncPlayManagerProvider);
     _syncPlayEventsSub = manager.uiEvents.listen(_handleSyncPlayEvent);
-    if (GetIt.instance.isRegistered<PluginSyncService>()) {
-      GetIt.instance<PluginSyncService>().onAdminMessage = _handleAdminMessage;
-      if (GetIt.instance.isRegistered<SeerrNotificationService>()) {
-        final notificationService =
-            GetIt.instance<SeerrNotificationService>();
-        GetIt.instance<PluginSyncService>().onSeerrNotification =
-            (title, body, route, {requestId, isRequest = false}) =>
-                notificationService.show(
-                  title,
-                  body,
-                  route,
-                  requestId: requestId,
-                  isRequest: isRequest,
-                );
-      }
+    if (GetIt.instance.isRegistered<PluginSyncService>() &&
+        GetIt.instance.isRegistered<SeerrNotificationService>()) {
+      final notificationService = GetIt.instance<SeerrNotificationService>();
+      _seerrNotificationSub = GetIt.instance<PluginSyncService>()
+          .seerrNotifications
+          .listen(
+            (event) => notificationService.show(
+              event.title,
+              event.body,
+              event.route,
+              requestId: event.requestId,
+              isRequest: event.isRequest,
+            ),
+          );
+    }
+    if (GetIt.instance.isRegistered<ServerMessagesService>()) {
+      GetIt.instance<ServerMessagesService>().addListener(
+        _handleServerMessagesChanged,
+      );
     }
     if (GetIt.instance.isRegistered<DownloadService>()) {
       _downloadErrorSub = GetIt.instance<DownloadService>().errors.listen(
         _handleDownloadError,
       );
+    }
+    if (GetIt.instance.isRegistered<AchievementsService>()) {
+      final achievements = GetIt.instance<AchievementsService>();
+      _chatMessageSub = achievements.incomingMessages.listen(
+        _handleIncomingChat,
+      );
+      _unlockSub = achievements.unlocks.listen(_handleUnlocks);
     }
   }
 
@@ -936,9 +1082,13 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     WidgetsBinding.instance.removeObserver(this);
     _syncPlayEventsSub?.cancel();
     _downloadErrorSub?.cancel();
-    if (GetIt.instance.isRegistered<PluginSyncService>()) {
-      GetIt.instance<PluginSyncService>().onAdminMessage = null;
-      GetIt.instance<PluginSyncService>().onSeerrNotification = null;
+    _chatMessageSub?.cancel();
+    _unlockSub?.cancel();
+    _seerrNotificationSub?.cancel();
+    if (GetIt.instance.isRegistered<ServerMessagesService>()) {
+      GetIt.instance<ServerMessagesService>().removeListener(
+        _handleServerMessagesChanged,
+      );
     }
     super.dispose();
   }
@@ -952,6 +1102,7 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
       _backgroundAwareSession?.onAppBackgrounded();
     } else if (state == AppLifecycleState.resumed) {
       coordinator.appDidBecomeActive();
+      RetroArtworkDataSourceFactory.notifyAppResumed();
       _backgroundAwareSession?.onAppResumed();
       if (GetIt.instance.isRegistered<ConnectivityService>()) {
         GetIt.instance<ConnectivityService>().onAppResumed();
@@ -1018,20 +1169,96 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     );
   }
 
-  void _handleAdminMessage(String message) {
-    if (!mounted) return;
+  bool _onPlayerRoute() {
+    final matches = appRouter.routerDelegate.currentConfiguration.matches;
+    final path = matches.isEmpty ? '' : matches.last.matchedLocation;
+    return Destinations.isPlayerRoute(path);
+  }
 
-    final navContext =
-        appRouter.routerDelegate.navigatorKey.currentContext ?? context;
-    if (!navContext.mounted) {
+  /// A banner for a chat message from a friend. Tapping it opens the chat.
+  void _handleIncomingChat(ChatThread thread) {
+    if (GetIt.instance<UserPreferences>().get(
+          UserPreferences.muteChatBannersDuringPlayback,
+        ) &&
+        _onPlayerRoute()) {
       return;
     }
-
-    showFocusRestoringDialog<void>(
-      context: navContext,
-      barrierDismissible: false,
-      builder: (ctx) => _AdminMessageDialog(message: message),
+    final navContext = _navigatorContext();
+    if (navContext == null) return;
+    final l10n = AppLocalizations.of(navContext);
+    FloatingNotification.show(
+      navContext,
+      l10n.chatNewMessageFrom(thread.name),
+      thread.lastIsPhoto ? l10n.chatPhoto : thread.lastMessage,
+      () => SettingsPanel.open(navContext, FriendChatScreen.forThread(thread)),
     );
+  }
+
+  /// Banners for badges the user just unlocked. The plugin's grouping setting
+  /// decides between one banner for the lot and one each, shown in turn so
+  /// they don't stack. Tapping one opens the achievements.
+  void _handleUnlocks(AchievementUnlocks unlocks) {
+    if (unlocks.muteDuringPlayback && _onPlayerRoute()) return;
+    final navContext = _navigatorContext();
+    if (navContext == null) return;
+    final l10n = AppLocalizations.of(navContext);
+    final badges = unlocks.badges;
+
+    void show(String title, String body, IconData icon) {
+      final context = _navigatorContext();
+      if (context == null) return;
+      FloatingNotification.show(
+        context,
+        title,
+        body,
+        () => SettingsPanel.open(context, const AchievementsScreen()),
+        icon: icon,
+      );
+    }
+
+    if (unlocks.grouped && badges.length > 1) {
+      final top = badges.reduce((a, b) => b.score > a.score ? b : a);
+      final names = badges.take(3).map((b) => b.title).join(', ');
+      show(
+        l10n.achievementsUnlockedCount(badges.length),
+        badges.length > 3
+            ? '$names ${l10n.achievementsUnlockedMore(badges.length - 3)}'
+            : names,
+        achievementIcon(top.icon),
+      );
+      return;
+    }
+    for (var i = 0; i < badges.length; i++) {
+      final badge = badges[i];
+      Future<void>.delayed(
+        FloatingNotification.displayDuration * i,
+        () => show(
+          l10n.achievementsUnlockedNotification,
+          badge.title,
+          achievementIcon(badge.icon),
+        ),
+      );
+    }
+  }
+
+  BuildContext? _navigatorContext() {
+    if (!mounted) return null;
+    final navContext =
+        appRouter.routerDelegate.navigatorKey.currentContext ?? context;
+    return navContext.mounted ? navContext : null;
+  }
+
+  /// Opens the messages window for messages the admin marked as "open the
+  /// window". Nothing else opens on its own.
+  void _handleServerMessagesChanged() {
+    final service = GetIt.instance<ServerMessagesService>();
+    if (service.pendingPopups.isEmpty) return;
+
+    final navContext = _navigatorContext();
+    if (navContext == null) return;
+
+    service.markPopupsRead();
+    showServerMessagesDialog(navContext);
   }
 
   /// Fires whenever server reachability flips (either way) so home swaps
@@ -1071,190 +1298,5 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     _wasOnline = isOnline;
 
     return widget.child;
-  }
-}
-
-class _AdminMessageDialog extends StatefulWidget {
-  final String message;
-
-  const _AdminMessageDialog({required this.message});
-
-  @override
-  State<_AdminMessageDialog> createState() => _AdminMessageDialogState();
-}
-
-class _AdminMessageDialogState extends State<_AdminMessageDialog> {
-  final _okFocusNode = FocusNode(debugLabel: 'AdminMessageOkButton');
-  final _dialogScopeNode = FocusScopeNode(
-    debugLabel: 'AdminMessageDialogScope',
-  );
-  bool _focused = false;
-
-  @override
-  void dispose() {
-    _okFocusNode.dispose();
-    _dialogScopeNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return FocusScope(
-      node: _dialogScopeNode,
-      autofocus: true,
-      onKeyEvent: (node, event) {
-        if (!event.isActionable) {
-          return KeyEventResult.ignored;
-        }
-
-        final key = event.logicalKey;
-        if (key.isDirectional) {
-          if (!_okFocusNode.hasFocus && _okFocusNode.canRequestFocus) {
-            _okFocusNode.requestFocus();
-          }
-          return KeyEventResult.handled;
-        }
-
-        return KeyEventResult.ignored;
-      },
-      child: RequestInitialFocus(
-        targetNode: _okFocusNode,
-        child: Dialog(
-          backgroundColor: Colors.transparent,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColorScheme.isGlass
-                    ? const Color(0xD90E1117)
-                    : AppColorScheme.surface,
-                borderRadius: AppRadius.circular(
-                  AppColorScheme.isGlass ? 20 : 16,
-                ),
-                border: Border.fromBorderSide(
-                  AppColorScheme.isGlass
-                      ? const BorderSide(color: Color(0x33FFFFFF), width: 1)
-                      : ThemeRegistry.active.borders.chipBorder,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.campaign_outlined,
-                    size: 40,
-                    color: AppColorScheme.accent,
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    l10n.adminSendMessage,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      color: AppColorScheme.onSurface,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.message,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: AppColorScheme.onSurface.withValues(alpha: 0.7),
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Focus(
-                    focusNode: _okFocusNode,
-                    autofocus: true,
-                    onFocusChange: (f) => setState(() => _focused = f),
-                    onKeyEvent: (node, event) => handleOneShotSelect(event, () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    }),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _focused
-                              ? AppColorScheme.onSurface
-                              : AppColorScheme.onSurface.withValues(alpha: 0.1),
-                          borderRadius: AppRadius.circular(8),
-                        ),
-                        child: Text(
-                          l10n.ok,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: _focused
-                                ? AppColors.black
-                                : AppColorScheme.onSurface,
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TvUiScale extends StatelessWidget {
-  const _TvUiScale({required this.child});
-
-  final Widget child;
-
-  static const double _targetScale = 1.45;
-  static const double _designWidth = 1920 / _targetScale;
-
-  @override
-  Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final realSize = mq.size;
-    if (realSize.width <= 0) {
-      return child;
-    }
-    final scale = realSize.width / _designWidth;
-    final logicalSize = Size(realSize.width / scale, realSize.height / scale);
-    EdgeInsets scaleInsets(EdgeInsets insets, {bool zeroTop = false}) =>
-        EdgeInsets.fromLTRB(
-          insets.left / scale,
-          zeroTop ? 0 : insets.top / scale,
-          insets.right / scale,
-          insets.bottom / scale,
-        );
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: SizedBox(
-        width: logicalSize.width,
-        height: logicalSize.height,
-        child: MediaQuery(
-          data: mq.copyWith(
-            size: logicalSize,
-            devicePixelRatio: mq.devicePixelRatio * scale,
-            padding: scaleInsets(mq.padding, zeroTop: true),
-            viewPadding: scaleInsets(mq.viewPadding, zeroTop: true),
-            viewInsets: scaleInsets(mq.viewInsets),
-          ),
-          child: child,
-        ),
-      ),
-    );
   }
 }

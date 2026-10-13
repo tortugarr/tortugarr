@@ -1,0 +1,798 @@
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:playback_core/playback_core.dart';
+
+class _TestBackend extends Fake implements PlayerBackend {
+  final _errors = StreamController<Map<String, dynamic>>.broadcast();
+  Completer<void>? playGate;
+  final List<String> playedUrls = <String>[];
+  final List<Duration> startPositions = <Duration>[];
+  int stopCalls = 0;
+  bool playing = false;
+  Duration currentPosition = Duration.zero;
+
+  @override
+  Duration get position => currentPosition;
+
+  @override
+  Duration get duration =>
+      playing ? const Duration(minutes: 30) : Duration.zero;
+
+  @override
+  Duration get buffer => Duration.zero;
+
+  @override
+  bool get isPlaying => playing;
+
+  @override
+  double get playbackSpeed => 1.0;
+
+  @override
+  bool get isBuffering => false;
+
+  @override
+  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+
+  @override
+  Stream<Duration> get durationStream => const Stream<Duration>.empty();
+
+  @override
+  Stream<Duration> get bufferStream => const Stream<Duration>.empty();
+
+  @override
+  Stream<bool> get playingStream => const Stream<bool>.empty();
+
+  @override
+  Stream<bool> get bufferingStream => const Stream<bool>.empty();
+
+  @override
+  Stream<bool> get completedStream => const Stream<bool>.empty();
+
+  @override
+  Stream<Map<String, dynamic>>? get errorStream => _errors.stream;
+
+  void emitError(Map<String, dynamic> event) => _errors.add(event);
+
+  @override
+  bool get supportsRuntimeTrackSelection => false;
+
+  @override
+  bool get canRenderBitmapSubtitles => false;
+
+  @override
+  bool get requiresStartupMediaReadyCheck => false;
+
+  @override
+  bool get nativelyHandlesStartPosition => true;
+
+  @override
+  Map<String, dynamic> getDeviceProfile({
+    bool useProgressiveTranscode = false,
+  }) => <String, dynamic>{};
+
+  @override
+  Future<void> play(
+    dynamic mediaItem, {
+    Duration startPosition = Duration.zero,
+  }) async {
+    playedUrls.add((mediaItem as Map<String, dynamic>)['url'] as String);
+    startPositions.add(startPosition);
+    currentPosition = startPosition;
+    playing = true;
+    // Holds the first play open so a test can land an error while the manager
+    // is still waiting for media. Later plays run straight through.
+    final gate = playGate;
+    if (gate != null) {
+      playGate = null;
+      await gate.future;
+    }
+  }
+
+  @override
+  Future<void> stop() async {
+    stopCalls++;
+    playing = false;
+  }
+
+  @override
+  Future<void> setSubtitleRendererMode(SubtitleRendererMode mode) async {}
+
+  Future<void> setRepeatMode(RepeatMode mode) async {}
+
+  @override
+  void dispose() => _errors.close();
+}
+
+class _TestResolver extends MediaStreamResolver {
+  int calls = 0;
+  final List<String?> requestedMediaSourceIds = <String?>[];
+  final List<int?> requestedStartTicks = <int?>[];
+  final List<bool> requestedDirectPlay = <bool>[];
+  StreamPlayMethod playMethod = StreamPlayMethod.directStream;
+  bool isLocalMedia = false;
+  List<Map<String, dynamic>> mediaStreams = const [];
+
+  @override
+  Future<StreamResolutionResult> resolve(
+    dynamic mediaItem, {
+    Map<String, dynamic>? deviceProfile,
+    int? maxStreamingBitrate,
+    int? audioStreamIndex,
+    int? subtitleStreamIndex,
+    int? startTimeTicks,
+    String? mediaSourceId,
+    bool enableDirectPlay = true,
+    bool enableDirectStream = true,
+    bool enableTranscoding = true,
+  }) async {
+    calls++;
+    requestedMediaSourceIds.add(mediaSourceId);
+    requestedStartTicks.add(startTimeTicks);
+    requestedDirectPlay.add(enableDirectPlay);
+    final type = (mediaItem as Map<String, dynamic>)['Type'];
+    final isLive = type == 'TvChannel' || type == 'LiveTvChannel';
+    return StreamResolutionResult(
+      streamUrl: 'https://example.test/session-$calls',
+      mediaSourceId: 'source-$calls',
+      liveStreamId: isLive ? 'live-$calls' : null,
+      playSessionId: 'session-$calls',
+      playMethod: playMethod,
+      isLocalMedia: isLocalMedia,
+      mediaStreams: mediaStreams,
+    );
+  }
+}
+
+class _ProgressRequest {
+  _ProgressRequest(this.index, this.sessionId, this.events);
+
+  final int index;
+  final String? sessionId;
+  final List<String> events;
+  final Completer<void> completer = Completer<void>();
+
+  Future<void> get future => completer.future.then((_) {
+    events.add('progress:$sessionId:$index');
+  });
+}
+
+class _TestService implements PlayerService {
+  _TestService({this.stallProgress = false});
+
+  final bool stallProgress;
+  final List<String> events = <String>[];
+  final List<_ProgressRequest> progressRequests = <_ProgressRequest>[];
+  final reportedVolumes = <(int?, bool?)>[];
+  final List<StreamResolutionResult> stoppedResolutions =
+      <StreamResolutionResult>[];
+  final List<StreamResolutionResult> transcodingStops =
+      <StreamResolutionResult>[];
+
+  @override
+  Future<void> onPlaybackStart(
+    dynamic mediaItem,
+    StreamResolutionResult resolution, {
+    int? positionTicks,
+    int? audioStreamIndex,
+    int? subtitleStreamIndex,
+  }) async {
+    events.add('start:${resolution.playSessionId}');
+  }
+
+  @override
+  Future<void> onPlaybackProgress(
+    dynamic mediaItem,
+    StreamResolutionResult resolution,
+    Duration position, {
+    bool isPaused = false,
+    int? audioStreamIndex,
+    int? subtitleStreamIndex,
+    int? volumeLevel,
+    bool? isMuted,
+  }) {
+    reportedVolumes.add((volumeLevel, isMuted));
+    if (!stallProgress) {
+      events.add('progress:${resolution.playSessionId}:immediate');
+      return Future<void>.value();
+    }
+    final request = _ProgressRequest(
+      progressRequests.length,
+      resolution.playSessionId,
+      events,
+    );
+    progressRequests.add(request);
+    return request.future;
+  }
+
+  @override
+  Future<void> onPlaybackStop(
+    dynamic mediaItem,
+    StreamResolutionResult resolution,
+    Duration position, {
+    bool releaseLiveStream = true,
+  }) async {
+    events.add('stop:${resolution.playSessionId}');
+    stoppedResolutions.add(resolution);
+  }
+
+  @override
+  Future<void> closeLiveStream(String liveStreamId) async {}
+
+  @override
+  Future<void> stopTranscoding(StreamResolutionResult resolution) async {
+    transcodingStops.add(resolution);
+  }
+
+  @override
+  void dispose() {}
+}
+
+PlaybackManager _manager(
+  _TestBackend backend,
+  _TestResolver resolver,
+  _TestService service,
+) => PlaybackManager()
+  ..setBackend(backend)
+  ..setResolver(resolver)
+  ..setPlayerService(service);
+
+void main() {
+  for (final type in <String>['Movie', 'Episode']) {
+    test(
+      '$type background stop preserves queue and fresh-resolves position',
+      () async {
+        final backend = _TestBackend();
+        final resolver = _TestResolver();
+        final service = _TestService();
+        final manager = _manager(backend, resolver, service);
+        final item = <String, dynamic>{'Id': type, 'Type': type};
+
+        try {
+          await manager.playItems(<dynamic>[item]);
+          backend.currentPosition = const Duration(seconds: 90);
+
+          expect(await manager.stopForBackground(item), isTrue);
+          expect(manager.queueService.currentItem, same(item));
+          expect(service.stoppedResolutions, hasLength(1));
+          expect(service.stoppedResolutions.single.playSessionId, 'session-1');
+
+          await manager.startQueuedPlayback(
+            startPosition: const Duration(seconds: 90),
+            freshResolution: true,
+          );
+
+          expect(resolver.calls, 2);
+          expect(resolver.requestedMediaSourceIds, <String?>[null, null]);
+          expect(resolver.requestedStartTicks, <int?>[
+            null,
+            const Duration(seconds: 90).inMicroseconds * 10,
+          ]);
+          expect(backend.playedUrls, <String>[
+            'https://example.test/session-1',
+            'https://example.test/session-2',
+          ]);
+          expect(backend.startPositions.last, const Duration(seconds: 90));
+        } finally {
+          manager.dispose();
+        }
+      },
+    );
+  }
+
+  test(
+    'live TV cleanup targets old live/transcode ownership and starts fresh',
+    () async {
+      final backend = _TestBackend();
+      final resolver = _TestResolver();
+      final service = _TestService();
+      final manager = _manager(backend, resolver, service);
+      final item = <String, dynamic>{
+        'Id': 'live-channel',
+        'Type': 'LiveTvChannel',
+      };
+
+      try {
+        await manager.playItems(<dynamic>[item]);
+        backend.currentPosition = const Duration(minutes: 20);
+        expect(await manager.stopForBackground(item), isTrue);
+
+        expect(service.stoppedResolutions.single.liveStreamId, 'live-1');
+        expect(service.transcodingStops.single.playSessionId, 'session-1');
+
+        await manager.startQueuedPlayback(freshResolution: true);
+        expect(backend.startPositions.last, Duration.zero);
+        expect(backend.playedUrls.last, 'https://example.test/session-2');
+        expect(service.events, contains('start:session-2'));
+      } finally {
+        manager.dispose();
+      }
+    },
+  );
+
+  test('background ownership check cannot stop a replacement item', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver();
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+    final oldItem = <String, dynamic>{'Id': 'old', 'Type': 'Movie'};
+    final replacement = <String, dynamic>{
+      'Id': 'replacement',
+      'Type': 'Episode',
+    };
+
+    try {
+      await manager.playItems(<dynamic>[oldItem]);
+      manager.queueService.setQueue(<dynamic>[replacement]);
+
+      expect(await manager.stopForBackground(oldItem), isFalse);
+      expect(manager.queueService.currentItem, same(replacement));
+      expect(service.stoppedResolutions, isEmpty);
+      expect(backend.stopCalls, isZero);
+    } finally {
+      manager.dispose();
+    }
+  });
+
+  testWidgets(
+    'pending progress is discarded on stop and late progress is followed by stop',
+    (tester) async {
+      final backend = _TestBackend();
+      final resolver = _TestResolver();
+      final service = _TestService(stallProgress: true);
+      final manager = _manager(backend, resolver, service);
+      final item = <String, dynamic>{'Id': 'overlap', 'Type': 'Movie'};
+
+      await manager.playItems(<dynamic>[item]);
+      await tester.pump(const Duration(seconds: 10));
+      expect(service.progressRequests, hasLength(1));
+      manager.reportVolumeState(
+        volume: 60,
+        isMuted: false,
+        reportImmediately: true,
+      );
+
+      expect(await manager.stopForBackground(item), isTrue);
+      expect(service.events.last, 'stop:session-1');
+
+      service.progressRequests[0].completer.complete();
+      await tester.pump();
+      expect(service.events.takeLast(2), <String>[
+        'progress:session-1:0',
+        'stop:session-1',
+      ]);
+
+      await tester.pump(const Duration(seconds: 15));
+      expect(service.progressRequests, hasLength(1));
+      manager.dispose();
+    },
+  );
+
+  testWidgets(
+    'stalled progress cannot block teardown or fresh foreground resume',
+    (tester) async {
+      final backend = _TestBackend();
+      final resolver = _TestResolver();
+      final service = _TestService(stallProgress: true);
+      final manager = _manager(backend, resolver, service);
+      final item = <String, dynamic>{'Id': 'stalled', 'Type': 'Movie'};
+
+      await manager.playItems(<dynamic>[item]);
+      await tester.pump(const Duration(seconds: 10));
+      expect(service.progressRequests, hasLength(1));
+
+      await tester.runAsync(() async {
+        expect(
+          await manager
+              .stopForBackground(item)
+              .timeout(const Duration(milliseconds: 100)),
+          isTrue,
+          reason: 'teardown does not await progress',
+        );
+
+        await manager
+            .startQueuedPlayback(
+              startPosition: const Duration(seconds: 30),
+              freshResolution: true,
+            )
+            .timeout(const Duration(milliseconds: 100));
+      });
+      expect(service.events, contains('start:session-2'));
+      manager.reportVolumeState(
+        volume: 60,
+        isMuted: false,
+        reportImmediately: true,
+      );
+      expect(service.progressRequests, hasLength(2));
+      expect(service.progressRequests.last.sessionId, 'session-2');
+
+      service.progressRequests[0].completer.complete();
+      await tester.pump();
+      expect(service.events.last, 'stop:session-1');
+      expect(service.stoppedResolutions.last.playSessionId, isNot('session-2'));
+
+      // The new session's request intentionally never completes. It neither
+      // blocks local work nor produces a report requiring compensation.
+      manager.dispose();
+    },
+  );
+
+  testWidgets('only explicit volume changes request prompt reporting', (
+    tester,
+  ) async {
+    final service = _TestService();
+    final manager = _manager(_TestBackend(), _TestResolver(), service);
+    manager.reportVolumeState(
+      volume: 40,
+      isMuted: false,
+      reportImmediately: true,
+    );
+    expect(service.reportedVolumes, isEmpty);
+    await manager.playItems(<dynamic>[
+      {'Id': 'volume', 'Type': 'Movie'},
+    ]);
+    manager.reportVolumeState(volume: 41, isMuted: false);
+    expect(service.reportedVolumes, isEmpty);
+    manager.reportVolumeState(
+      volume: 42,
+      isMuted: false,
+      reportImmediately: true,
+    );
+    expect(service.reportedVolumes, [(42, false)]);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 5));
+    expect(service.reportedVolumes, [(42, false), (42, false)]);
+    manager.dispose();
+  });
+
+  for (final fail in [false, true]) {
+    testWidgets(
+      'volume reports coalesce behind ${fail ? 'failed' : 'delayed'} progress',
+      (tester) async {
+        final service = _TestService(stallProgress: true);
+        final manager = _manager(_TestBackend(), _TestResolver(), service);
+        await manager.playItems(<dynamic>[
+          {'Id': 'volume', 'Type': 'Movie'},
+        ]);
+        manager.reportVolumeState(volume: 40, isMuted: false);
+        await tester.pump(const Duration(seconds: 5));
+        manager.reportVolumeState(
+          volume: 50,
+          isMuted: false,
+          reportImmediately: true,
+        );
+        manager.reportVolumeState(
+          volume: 60,
+          isMuted: false,
+          reportImmediately: true,
+        );
+        await tester.pump(const Duration(seconds: 5));
+        expect(service.reportedVolumes, [(40, false)]);
+        if (fail) {
+          service.progressRequests.single.completer.completeError(
+            StateError('offline'),
+          );
+        } else {
+          service.progressRequests.single.completer.complete();
+        }
+        await tester.pump();
+        expect(service.reportedVolumes, [(40, false), (60, false)]);
+        manager.reportVolumeState(
+          volume: 0,
+          isMuted: true,
+          reportImmediately: true,
+        );
+        service.progressRequests.last.completer.complete();
+        await tester.pump();
+        expect(service.reportedVolumes, [(40, false), (60, false), (0, true)]);
+        service.progressRequests.last.completer.complete();
+        await tester.pump();
+        expect(service.progressRequests, hasLength(3));
+        expect(tester.takeException(), isNull);
+        manager.dispose();
+      },
+    );
+  }
+
+  testWidgets('disposal discards a queued volume report', (tester) async {
+    final service = _TestService(stallProgress: true);
+    final manager = _manager(_TestBackend(), _TestResolver(), service);
+    await manager.playItems(<dynamic>[
+      {'Id': 'volume', 'Type': 'Movie'},
+    ]);
+    manager.reportVolumeState(
+      volume: 40,
+      isMuted: false,
+      reportImmediately: true,
+    );
+    manager.reportVolumeState(
+      volume: 60,
+      isMuted: false,
+      reportImmediately: true,
+    );
+    manager.dispose();
+    service.progressRequests.single.completer.complete();
+    await tester.pump();
+    expect(service.reportedVolumes, [(40, false)]);
+    expect(tester.takeException(), isNull);
+  });
+
+  test('canonical user stop still clears queue and playback state', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver();
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+    final item = <String, dynamic>{'Id': 'canonical', 'Type': 'Movie'};
+
+    try {
+      await manager.playItems(<dynamic>[item]);
+      manager.state.setPosition(const Duration(seconds: 15));
+      await manager.stop();
+
+      expect(manager.queueService.currentItem, isNull);
+      expect(manager.state.position, Duration.zero);
+      expect(backend.stopCalls, 1);
+      expect(service.stoppedResolutions.single.playSessionId, 'session-1');
+    } finally {
+      manager.dispose();
+    }
+  });
+
+  test(
+    'a second failure with nothing new to veto does not resolve again',
+    () async {
+      final backend = _TestBackend();
+      final resolver = _TestResolver();
+      final service = _TestService();
+      final manager = _manager(backend, resolver, service);
+      final item = <String, dynamic>{'Id': 'audio', 'Type': 'Movie'};
+
+      try {
+        await manager.playItems(<dynamic>[item]);
+        // The recovery asks for a transcode, so that is what comes back.
+        resolver.playMethod = StreamPlayMethod.transcode;
+        backend.emitError(<String, dynamic>{
+          'event': 'playerError',
+          'recoverable': true,
+          'kind': 'unsupported_audio',
+        });
+        await pumpEventQueue(times: 10);
+
+        expect(resolver.calls, 2);
+        expect(resolver.requestedDirectPlay, <bool>[true, false]);
+
+        // No codec on the stream means nothing to veto, so there is no new
+        // information a third resolve could act on.
+        backend.emitError(<String, dynamic>{
+          'event': 'playerError',
+          'recoverable': true,
+          'kind': 'unsupported_audio',
+        });
+        await pumpEventQueue(times: 10);
+
+        expect(resolver.calls, 2);
+      } finally {
+        manager.dispose();
+      }
+    },
+  );
+
+  test('unsupported audio recovers when it lands during startup', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver();
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+
+    final gate = Completer<void>();
+    backend.playGate = gate;
+
+    try {
+      final started = manager.playItems(<dynamic>[
+        <String, dynamic>{'Id': 'startup', 'Type': 'Movie'},
+      ]);
+      await pumpEventQueue(times: 5);
+
+      // An audio failure can land before the first play returns, a format the
+      // decoder turns down on sight for one, so the recovery has to fire in
+      // this window rather than wait on a startup that never finishes.
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_audio',
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 2);
+      expect(resolver.requestedDirectPlay, <bool>[true, false]);
+
+      // Lets the preempted startup unwind so the handoff runs too.
+      gate.complete();
+      await started;
+      await pumpEventQueue(times: 10);
+    } finally {
+      if (!gate.isCompleted) {
+        gate.complete();
+      }
+      manager.dispose();
+    }
+  });
+
+  test('a container error during startup recovers once', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver();
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+
+    final gate = Completer<void>();
+    backend.playGate = gate;
+
+    try {
+      final started = manager.playItems(<dynamic>[
+        <String, dynamic>{'Id': 'padded', 'Type': 'Movie'},
+      ]);
+      await pumpEventQueue(times: 5);
+
+      // A malformed container fails in the extractor, before the first play
+      // has returned, so the recovery has to fire inside that window.
+      resolver.playMethod = StreamPlayMethod.transcode;
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_container',
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 2);
+      expect(resolver.requestedDirectPlay, <bool>[true, false]);
+
+      // Already transcoding, so a repeat has nowhere further to go.
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_container',
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 2);
+
+      gate.complete();
+      await started;
+      await pumpEventQueue(times: 10);
+    } finally {
+      if (!gate.isCompleted) {
+        gate.complete();
+      }
+      manager.dispose();
+    }
+  });
+
+  test('the veto chain runs after a transcode recovery', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver()
+      ..mediaStreams = <Map<String, dynamic>>[
+        <String, dynamic>{'Type': 'Audio', 'Codec': 'eac3', 'IsDefault': true},
+      ];
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+
+    try {
+      await manager.playItems(<dynamic>[
+        <String, dynamic>{'Id': 'chain', 'Type': 'Movie'},
+      ]);
+
+      // The server answers the transcode request with a different codec the
+      // device turns out not to decode either.
+      resolver
+        ..playMethod = StreamPlayMethod.transcode
+        ..mediaStreams = <Map<String, dynamic>>[
+          <String, dynamic>{'Type': 'Audio', 'Codec': 'ac3', 'IsDefault': true},
+        ];
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_audio',
+      });
+      await pumpEventQueue(times: 10);
+      expect(resolver.calls, 2);
+      expect(resolver.requestedDirectPlay, <bool>[true, false]);
+
+      // A second codec vetoed is new information, so it earns one more
+      // resolve rather than a dead stop.
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_audio',
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 3);
+    } finally {
+      manager.dispose();
+    }
+  });
+
+  test('audio offload retry does not trigger server recovery', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver();
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+    final item = <String, dynamic>{'Id': 'offload', 'Type': 'Movie'};
+
+    try {
+      await manager.playItems(<dynamic>[item]);
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_audio',
+        'audioOffloadRetryTriggered': true,
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 1);
+      expect(manager.bringupState.phase, isNot(PlaybackBringupPhase.failed));
+    } finally {
+      manager.dispose();
+    }
+  });
+
+  test('local media audio failure is surfaced without re-resolving', () async {
+    final backend = _TestBackend();
+    final resolver = _TestResolver()..isLocalMedia = true;
+    final service = _TestService();
+    final manager = _manager(backend, resolver, service);
+    final item = <String, dynamic>{'Id': 'local', 'Type': 'Movie'};
+
+    try {
+      await manager.playItems(<dynamic>[item]);
+      backend.emitError(<String, dynamic>{
+        'event': 'playerError',
+        'recoverable': true,
+        'kind': 'unsupported_audio',
+      });
+      await pumpEventQueue(times: 10);
+
+      expect(resolver.calls, 1);
+      expect(manager.bringupState.phase, PlaybackBringupPhase.failed);
+    } finally {
+      manager.dispose();
+    }
+  });
+
+  test(
+    'already-transcoded audio is retried after vetoing its selected codec',
+    () async {
+      final backend = _TestBackend();
+      final resolver = _TestResolver()
+        ..playMethod = StreamPlayMethod.transcode
+        ..mediaStreams = <Map<String, dynamic>>[
+          <String, dynamic>{
+            'Type': 'Audio',
+            'Codec': 'eac3',
+            'IsDefault': true,
+          },
+        ];
+      final service = _TestService();
+      final manager = _manager(backend, resolver, service);
+      final item = <String, dynamic>{'Id': 'transcoded', 'Type': 'Movie'};
+
+      try {
+        await manager.playItems(<dynamic>[item]);
+        backend.emitError(<String, dynamic>{
+          'event': 'playerError',
+          'recoverable': true,
+          'kind': 'unsupported_audio',
+        });
+        await pumpEventQueue(times: 10);
+
+        expect(resolver.calls, 2);
+        expect(resolver.requestedDirectPlay, <bool>[true, false]);
+      } finally {
+        manager.dispose();
+      }
+    },
+  );
+}
+
+extension<T> on Iterable<T> {
+  Iterable<T> takeLast(int count) => skip(length - count);
+}

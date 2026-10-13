@@ -10,6 +10,12 @@ set -euo pipefail
 
 CORES=("$@")
 if [ ${#CORES[@]} -eq 0 ]; then
+  # FBNeo is left out on purpose. Its license asks that frontends not
+  # redistribute the core, and bundling it in the app would do exactly that.
+  # tvOS has no WebView for EmulatorJS to fall back to either, so arcade has
+  # no path here at all. This list, the iOS one, and appleBundledCores in
+  # lib/util/game_cores.dart all have to agree, and game_cores_test.dart
+  # fails if they drift.
   CORES=(fceumm snes9x gambatte mgba genesis_plus_gx pcsx_rearmed)
 fi
 

@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
@@ -10,7 +8,9 @@ import 'package:server_core/server_core.dart';
 
 import '../../../data/models/aggregated_item.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../util/system_ui.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
+import '../../widgets/offline_aware_image.dart';
 
 class PhotoPlayerScreen extends StatefulWidget {
   final String itemId;
@@ -21,7 +21,8 @@ class PhotoPlayerScreen extends StatefulWidget {
   State<PhotoPlayerScreen> createState() => _PhotoPlayerScreenState();
 }
 
-class _PhotoPlayerScreenState extends State<PhotoPlayerScreen> {
+class _PhotoPlayerScreenState extends State<PhotoPlayerScreen>
+    with ImmersiveSystemUi {
   final _client = GetIt.instance<MediaServerClient>();
   final _transformController = TransformationController();
 
@@ -38,7 +39,7 @@ class _PhotoPlayerScreenState extends State<PhotoPlayerScreen> {
   void initState() {
     super.initState();
     _loadPhoto();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    setImmersive(true);
     _scheduleHideControls();
   }
 
@@ -47,7 +48,6 @@ class _PhotoPlayerScreenState extends State<PhotoPlayerScreen> {
     _slideshowTimer?.cancel();
     _hideTimer?.cancel();
     _transformController.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
@@ -197,9 +197,11 @@ class _PhotoPlayerScreenState extends State<PhotoPlayerScreen> {
         minScale: 1.0,
         maxScale: 5.0,
         child: Center(
-          child: CachedNetworkImage(
+          child: OfflineAwareImage(
             imageUrl: url,
             fit: BoxFit.contain,
+            // The viewer zooms to 5x, so the photo keeps its source pixels.
+            decodeBound: DecodeBound.none,
             placeholder: (_, _) => Center(
               child: CircularProgressIndicator(color: AppColorScheme.accent),
             ),

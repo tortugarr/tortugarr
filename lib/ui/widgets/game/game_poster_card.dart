@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../util/game_library.dart';
+import '../../../util/game_artwork_cache.dart';
 import '../../../util/focus/dpad_keys.dart';
+import '../../../util/focus/input_mode_tracker.dart';
 import '../../../util/platform_detection.dart';
 import '../bounded_network_image.dart';
+import '../media_card.dart';
 import 'game_card_focus_frame.dart';
 
 /// A box-art card for one game, with a seeded color + controller-icon fallback
@@ -21,7 +25,7 @@ import 'game_card_focus_frame.dart';
 class GamePosterCard extends StatefulWidget {
   const GamePosterCard({
     super.key,
-    required this.imageUrl,
+    this.imageUrl,
     required this.title,
     required this.fileName,
     required this.seed,
@@ -41,6 +45,9 @@ class GamePosterCard extends StatefulWidget {
     this.loadArtwork = true,
     this.onArtworkLoadFinished,
     this.autoScroll = true,
+    this.cacheManager,
+    this.artwork,
+    this.onArtworkError,
   });
 
   final String? imageUrl;
@@ -63,6 +70,12 @@ class GamePosterCard extends StatefulWidget {
   final bool loadArtwork;
   final VoidCallback? onArtworkLoadFinished;
   final bool autoScroll;
+  final BaseCacheManager? cacheManager;
+
+  /// A protocol-2, bytes-backed artwork widget supplied by the owning screen.
+  /// When present it replaces the legacy cache-manager URL path entirely.
+  final Widget? artwork;
+  final ValueChanged<Object>? onArtworkError;
 
   @override
   State<GamePosterCard> createState() => _GamePosterCardState();
@@ -72,7 +85,14 @@ class _GamePosterCardState extends State<GamePosterCard> {
   bool _hovered = false;
   bool _focused = false;
 
-  bool get _active => _hovered || _focused;
+  /// The highlight belongs to the input actually in use. A pointer resting on a
+  /// card would otherwise keep it highlighted for as long as it sits there,
+  /// leaving a second, stationary border while the d-pad moves focus elsewhere.
+  ///
+  /// Keyed on whether a pointer is *live* rather than on [InputModeTracker.of],
+  /// because that stays pinned to keyboard on TV -- which would mean a mouse
+  /// on a TV box could never highlight anything.
+  bool _activeIn(bool pointerLive) => pointerLive ? _hovered : _focused;
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     // Screen-supplied handling (TV back-to-alpha, right-edge stop) wins first,
@@ -121,9 +141,9 @@ class _GamePosterCardState extends State<GamePosterCard> {
 
   @override
   Widget build(BuildContext context) {
-    final active = _active;
+    final active = _activeIn(InputModeTracker.pointerIsLive(context));
     final scale = widget.cardFocusExpansion && active
-        ? (PlatformDetection.isAppleTV ? 1.12 : 1.05)
+        ? MediaCard.focusScale
         : 1.0;
 
     return MouseRegion(
@@ -145,21 +165,14 @@ class _GamePosterCardState extends State<GamePosterCard> {
           behavior: HitTestBehavior.opaque,
           onTap: widget.onTap,
           child: RepaintBoundary(
-            child: AnimatedScale(
-              scale: scale,
-              duration: const Duration(milliseconds: 150),
-              curve: PlatformDetection.isAppleTV
-                  ? Curves.easeOutCubic
-                  : Curves.linear,
-              child: _buildCard(context, active),
-            ),
+            child: _buildCard(context, active, scale),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCard(BuildContext context, bool active) {
+  Widget _buildCard(BuildContext context, bool active, double scale) {
     final url = widget.imageUrl;
     final borders = ThemeRegistry.active.borders;
     final baseTextStyle =
@@ -174,20 +187,29 @@ class _GamePosterCardState extends State<GamePosterCard> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         // The single focus border + glow lives here and nowhere else.
-        GameCardFocusFrame(
-          active: active,
-          focusColor: widget.focusColor,
-          suppressFocusGlow: widget.suppressFocusGlow,
-          child: SizedBox(
-            width: widget.width,
-            height: widget.width * 1.34,
-            child: ClipRRect(
-              borderRadius: borders.cardRadius,
-              child: url == null || !widget.loadArtwork
-                  ? _Fallback(seed: widget.seed, iconSize: widget.width * 0.3)
-                  : Stack(
+        AnimatedScale(
+          scale: scale,
+          duration: const Duration(milliseconds: 150),
+          curve: PlatformDetection.isAppleTV
+              ? Curves.easeOutCubic
+              : Curves.linear,
+          alignment: Alignment.bottomCenter,
+          child: GameCardFocusFrame(
+            active: active,
+            focusColor: widget.focusColor,
+            suppressFocusGlow: widget.suppressFocusGlow,
+            child: SizedBox(
+              width: widget.width,
+              height: widget.width * 1.34,
+              child: ClipRRect(
+                borderRadius: borders.cardRadius,
+                child:
+                    !widget.loadArtwork || (url == null && widget.artwork == null)
+                    ? _Fallback(seed: widget.seed, iconSize: widget.width * 0.3)
+                    : Stack(
                       fit: StackFit.expand,
                       children: [
                         // Keep the seeded game fallback visible while artwork
@@ -196,16 +218,25 @@ class _GamePosterCardState extends State<GamePosterCard> {
                           seed: widget.seed,
                           iconSize: widget.width * 0.3,
                         ),
-                        BoundedNetworkImage(
-                          imageUrl: url,
-                          fit: BoxFit.cover,
-                          maxWidth: 1024,
-                          onLoadFinished: widget.onArtworkLoadFinished,
-                          // The fallback underneath remains visible on error.
-                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
-                        ),
+                        if (widget.artwork != null)
+                          widget.artwork!
+                        else
+                          BoundedNetworkImage(
+                            imageUrl: url!,
+                            cacheManager:
+                                widget.cacheManager ?? gameArtworkCacheManager,
+                            fit: BoxFit.cover,
+                            maxWidth: 1024,
+                            onLoadFinished: widget.onArtworkLoadFinished,
+                            // The fallback underneath remains visible on error.
+                            errorBuilder: (_, _, error) {
+                              widget.onArtworkError?.call(error);
+                              return const SizedBox.shrink();
+                            },
+                          ),
                       ],
                     ),
+              ),
             ),
           ),
         ),

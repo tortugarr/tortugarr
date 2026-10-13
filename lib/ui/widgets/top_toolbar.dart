@@ -14,27 +14,39 @@ import '../../auth/repositories/user_repository.dart';
 import '../../data/models/aggregated_library.dart';
 import '../../data/repositories/multi_server_repository.dart';
 import '../../data/repositories/user_views_repository.dart';
+import '../../data/services/achievements_service.dart';
+import '../../data/services/library_scope_service.dart';
 import '../../data/services/plugin_sync_service.dart';
 import '../../preference/preference_constants.dart';
 import '../../preference/seerr_preferences.dart';
 import '../../preference/user_preferences.dart';
+import '../../util/audio_artwork_url.dart';
 import '../../util/clock_format.dart';
 import '../../util/game_library.dart';
+import '../../util/live_tv_library.dart';
 import '../../util/overlay_color_palette.dart';
 import '../../util/platform_detection.dart';
 import '../navigation/destinations.dart';
 import '../navigation/home_refresh_bus.dart';
 import '../navigation/route_lifecycle_observer.dart';
+import 'downloads_nav_slot.dart';
+import 'friends_nav_slot.dart';
 import 'expandable_icon_button.dart';
+import 'marquee_text.dart';
+import 'overlay_sheet.dart';
 import 'navigation_layout.dart';
 import 'settings/settings_panel.dart';
+import '../screens/downloads/downloads_panel.dart';
 import '../screens/settings/settings_side_panel.dart';
 import '../screens/syncplay/syncplay_screen.dart';
 import 'seerr_icons.dart';
+import 'server_messages_dialog.dart';
+import 'server_messages_nav_slot.dart';
 import 'shuffle_overlay.dart';
 import 'user_menu_dialog.dart';
 
 import 'offline_aware_image.dart';
+import 'paced_network_image.dart';
 import 'package:playback_core/playback_core.dart';
 import '../../data/models/aggregated_item.dart';
 import '../../data/services/media_server_client_factory.dart';
@@ -54,6 +66,7 @@ const _kPillRadius = 36.0;
 const _kButtonSpacing = 12.0;
 const _kButtonSpacingMobile = 8.0;
 const _kButtonSpacingTV = 2.0;
+const _kMusicBarTitleMaxWidth = 280.0;
 
 class TopToolbar extends StatefulWidget {
   final String? activeRoute;
@@ -62,7 +75,9 @@ class TopToolbar extends StatefulWidget {
 
   /// True while focus is inside the toolbar, so screens can avoid stealing its
   /// d-pad keys. Mirrors [LeftSidebar.isFocusedNotifier].
-  static final ValueNotifier<bool> isFocusedNotifier = ValueNotifier<bool>(false);
+  static final ValueNotifier<bool> isFocusedNotifier = ValueNotifier<bool>(
+    false,
+  );
 
   const TopToolbar({
     super.key,
@@ -108,6 +123,10 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   final _avatarFocus = FocusNode();
   final _homeFocus = FocusNode(debugLabel: 'TopToolbarHome');
   final _settingsFocus = FocusNode(debugLabel: 'TopToolbarSettings');
+  final _serverMessagesFocus = FocusNode(
+    debugLabel: 'TopToolbarServerMessages',
+  );
+  final _friendsFocus = FocusNode(debugLabel: 'TopToolbarFriends');
   final _inlineLibrariesTriggerFocus = FocusNode(
     debugLabel: 'TopToolbarInlineLibrariesTrigger',
   );
@@ -125,6 +144,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   // Tracked per instance so only the toolbar that actually held focus
   // clears the shared isFocusedNotifier on dispose.
   bool _toolbarHadFocus = false;
+  bool _friendsAvailable = FriendsNavSlot.isAvailable();
   List<AggregatedLibrary> _libraries = [];
   Timer? _clockTimer;
   Timer? _librariesReloadDebounce;
@@ -150,9 +170,10 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     };
     _previousFocusNavbarCallback = NavigationLayout.focusNavbarNotifier.value;
     _previousFocusAvatarCallback =
-      NavigationLayout.focusNavbarAvatarNotifier.value;
+        NavigationLayout.focusNavbarAvatarNotifier.value;
     NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
     NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    NavigationLayout.chromeFocusRoots.add(_toolbarScopeNode);
     _avatarFocus.addListener(_onAvatarFocusChanged);
     FocusManager.instance.addListener(_trackPreviousFocus);
     _updateClock();
@@ -165,6 +186,9 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     _prefs.addListener(_onPrefsChanged);
     _viewsRepo.addListener(_onUserViewsChanged);
     GetIt.instance<PluginSyncService>().addListener(_onPrefsChanged);
+    if (GetIt.instance.isRegistered<AchievementsService>()) {
+      GetIt.instance<AchievementsService>().addListener(_onAchievementsChanged);
+    }
     _loadLibraries();
     final manager = GetIt.instance<PlaybackManager>();
     _playSub = manager.state.playingStream.listen((_) {
@@ -224,12 +248,15 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     if (_toolbarHadFocus) {
       TopToolbar.isFocusedNotifier.value = false;
     }
+    NavigationLayout.chromeFocusRoots.remove(_toolbarScopeNode);
     _avatarFocus.removeListener(_onAvatarFocusChanged);
     FocusManager.instance.removeListener(_trackPreviousFocus);
     _toolbarScopeNode.dispose();
     _avatarFocus.dispose();
     _homeFocus.dispose();
     _settingsFocus.dispose();
+    _serverMessagesFocus.dispose();
+    _friendsFocus.dispose();
     _inlineLibrariesTriggerFocus.dispose();
     _musicBarFocusNode.dispose();
     _userSub?.cancel();
@@ -238,6 +265,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     } catch (_) {}
     try {
       GetIt.instance<PluginSyncService>().removeListener(_onPrefsChanged);
+    } catch (_) {}
+    try {
+      GetIt.instance<AchievementsService>().removeListener(
+        _onAchievementsChanged,
+      );
     } catch (_) {}
     _prefs.removeListener(_onPrefsChanged);
     _currentTime.dispose();
@@ -273,6 +305,14 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   void _onUserViewsChanged() {
     if (!mounted) return;
     _scheduleLibrariesReload();
+  }
+
+  /// The service also notifies on every badge refresh, which the slot redraws
+  /// by itself, so the bar only rebuilds when the button comes or goes.
+  void _onAchievementsChanged() {
+    final available = FriendsNavSlot.isAvailable();
+    if (!mounted || available == _friendsAvailable) return;
+    setState(() => _friendsAvailable = available);
   }
 
   // Collapses a burst of change notifications, like the settings sync
@@ -325,16 +365,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
 
       unawaited(GetIt.instance<GameLibraryRegistry>().refresh());
 
-      List<AggregatedLibrary> filtered = libs;
-      if (useMultiServer) {
-        try {
-          final config = await _viewsRepo.getUserConfiguration();
-          final excluded = config.myMediaExcludes.toSet();
-          if (excluded.isNotEmpty) {
-            filtered = libs.where((lib) => !excluded.contains(lib.id)).toList();
-          }
-        } catch (_) {}
-      }
+      final filtered = useMultiServer
+          ? await GetIt.instance<LibraryScopeService>().withoutHiddenLibraries(
+              libs,
+            )
+          : libs;
 
       if (mounted && !_librariesEqual(_libraries, filtered)) {
         setState(() => _libraries = filtered);
@@ -349,6 +384,18 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     }
     return true;
   }
+
+  // Kids Mode sends /live-tv back to home, so the guide button would only be a
+  // dead end.
+  bool get _showLiveTvButton =>
+      !_kidsMode &&
+      _prefs.get(UserPreferences.showLiveTvButton) &&
+      _libraries.any(isLiveTvLibrary);
+
+  List<AggregatedLibrary> get _navLibraries =>
+      librariesForNav(_libraries, _showLiveTvButton, hideLiveTv: _kidsMode);
+
+  bool get _kidsMode => _prefs.get(UserPreferences.kidsModeEnabled);
 
   void _trackPreviousFocus() {
     final primary = FocusManager.instance.primaryFocus;
@@ -384,11 +431,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   }
 
   void _restoreFocusBelowToolbar() {
-    final playBtnNode = NavigationLayout.focusDetailsPlayButtonNotifier.value;
-    if (playBtnNode != null && playBtnNode.context != null && playBtnNode.canRequestFocus) {
-      playBtnNode.requestFocus();
-      return;
-    }
+    if (NavigationLayout.focusDetailsPlayButton()) return;
     final focusContent = NavigationLayout.focusContentFromNavbarNotifier.value;
     if (focusContent != null && widget.activeRoute == Destinations.home) {
       focusContent();
@@ -424,15 +467,28 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     _moveFocusDown();
   }
 
+  /// A node can only take focus once its box exists and has been laid out.
+  /// Asking earlier throws out of the focus machinery.
+  bool _isReadyForFocus(FocusNode node) {
+    final render = node.context?.findRenderObject();
+    return render is RenderBox && render.attached && render.hasSize;
+  }
+
   void _moveFocusDown({int attempt = 0}) {
     if (!mounted) return;
     final scope = FocusScope.of(context);
-    if (scope.focusInDirection(TraversalDirection.down)) {
-      final primary = FocusManager.instance.primaryFocus;
-      if (_isUsableOutsideToolbar(primary)) return;
-    }
+    // Directional traversal measures every candidate it walks, so one node
+    // still waiting on layout takes the whole call down. The manual paths below
+    // cover the same ground, so a failure here isn't worth surfacing.
+    try {
+      if (scope.focusInDirection(TraversalDirection.down)) {
+        final primary = FocusManager.instance.primaryFocus;
+        if (_isUsableOutsideToolbar(primary)) return;
+      }
+    } catch (_) {}
+
     final firstBelow = _findFirstFocusableBelowToolbar(scope);
-    if (firstBelow != null) {
+    if (firstBelow != null && _isReadyForFocus(firstBelow)) {
       firstBelow.requestFocus();
       return;
     }
@@ -440,7 +496,9 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     if (fallback != null && fallback.context != null) {
       final firstContent = _firstFocusableDescendant(fallback);
       if (firstContent != null) {
-        firstContent.requestFocus();
+        if (_isReadyForFocus(firstContent)) {
+          firstContent.requestFocus();
+        }
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           final primary = FocusManager.instance.primaryFocus;
@@ -463,31 +521,69 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     }
   }
 
-  bool _moveWithinToolbar(TraversalDirection direction) {
-    final primary = FocusManager.instance.primaryFocus;
+  /// Where focus goes on leaving the far end of the inline libraries.
+  ///
+  /// The row has collapsed by now, so its buttons are gone and the trigger is
+  /// what sits in their place. Stepping from there lands on whatever is next,
+  /// which is downloads or server messages before it reaches settings.
+  void _focusAfterInlineLibraries() {
+    final moved = _moveWithinToolbar(
+      TraversalDirection.right,
+      from: _inlineLibrariesTriggerFocus,
+    );
+    if (!moved) _settingsFocus.requestFocus();
+  }
+
+  /// Renders nothing while there is nothing saved.
+  Widget _buildDownloadsButton({
+    required Color? navColor,
+    required bool alwaysExpanded,
+    required String label,
+  }) {
+    return DownloadsNavSlot(
+      builder: (context) => ExpandableIconButton(
+        key: const ValueKey('toolbar-downloads'),
+        forceExpanded: alwaysExpanded,
+        icon: Icons.download_for_offline,
+        label: label,
+        baseColor: navColor,
+        onPressed: () => showDownloadsDialog(context),
+      ),
+    );
+  }
+
+  /// Moves focus one button along the toolbar, in painted order.
+  ///
+  /// [from] names where to step from when focus hasn't landed there yet. A
+  /// request applies a microtask later, so a caller that has just moved focus
+  /// can't rely on the primary node having caught up.
+  bool _moveWithinToolbar(TraversalDirection direction, {FocusNode? from}) {
+    final primary = from ?? FocusManager.instance.primaryFocus;
     if (primary == null || !_isInsideToolbar(primary)) return false;
 
     final insideMusicBar = _isDescendantOf(primary, _musicBarFocusNode);
 
-    final nodes = _toolbarScopeNode.descendants
-        .where((n) => !n.skipTraversal && _isLaidOutFocusNode(n))
-        .where((n) {
-          final isMusicNode = _isDescendantOf(n, _musicBarFocusNode);
-          return insideMusicBar == isMusicNode;
-        })
-        .map((n) {
-          final box = n.context!.findRenderObject() as RenderBox?;
-          final pos = box?.localToGlobal(Offset.zero);
-          return (node: n, x: pos?.dx ?? -1.0);
-        })
-        .where((item) => item.x > 0)
-        .toList()
-      ..sort((a, b) => a.x.compareTo(b.x));
+    final nodes =
+        _toolbarScopeNode.descendants
+            .where((n) => !n.skipTraversal && _isLaidOutFocusNode(n))
+            .where((n) {
+              final isMusicNode = _isDescendantOf(n, _musicBarFocusNode);
+              return insideMusicBar == isMusicNode;
+            })
+            .map((n) {
+              final box = n.context!.findRenderObject() as RenderBox?;
+              final pos = box?.localToGlobal(Offset.zero);
+              return (node: n, x: pos?.dx ?? -1.0);
+            })
+            .where((item) => item.x > 0)
+            .toList()
+          ..sort((a, b) => a.x.compareTo(b.x));
 
     final index = nodes.indexWhere((e) => e.node == primary);
     if (index < 0) return false;
-    final nextIndex =
-        direction == TraversalDirection.right ? index + 1 : index - 1;
+    final nextIndex = direction == TraversalDirection.right
+        ? index + 1
+        : index - 1;
     if (nextIndex < 0 || nextIndex >= nodes.length) return false;
     nodes[nextIndex].node.requestFocus();
     return true;
@@ -582,7 +678,8 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
 
     final manager = GetIt.instance<PlaybackManager>();
     final currentItem = manager.queueService.currentItem;
-    final isMusicActive = currentItem is AggregatedItem && currentItem.isAudioLike;
+    final isMusicActive =
+        currentItem is AggregatedItem && currentItem.isAudioLike;
     final totalHeight = toolbarHeight + TopToolbar.musicBarExtraHeight();
 
     return SafeArea(
@@ -602,18 +699,26 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                   event.logicalKey == LogicalKeyboardKey.arrowDown) {
                 final primary = FocusManager.instance.primaryFocus;
                 if (primary != null) {
-                  final insideMusicBar = _isDescendantOf(primary, _musicBarFocusNode);
+                  final insideMusicBar = _isDescendantOf(
+                    primary,
+                    _musicBarFocusNode,
+                  );
                   if (!insideMusicBar && isMusicActive) {
-                    final musicNodes = _musicBarFocusNode.descendants
-                        .where((n) => !n.skipTraversal && _isLaidOutFocusNode(n))
-                        .map((n) {
-                          final box = n.context!.findRenderObject() as RenderBox?;
-                          final pos = box?.localToGlobal(Offset.zero);
-                          return (node: n, x: pos?.dx ?? -1.0);
-                        })
-                        .where((item) => item.x > 0)
-                        .toList()
-                      ..sort((a, b) => a.x.compareTo(b.x));
+                    final musicNodes =
+                        _musicBarFocusNode.descendants
+                            .where(
+                              (n) =>
+                                  !n.skipTraversal && _isLaidOutFocusNode(n),
+                            )
+                            .map((n) {
+                              final box =
+                                  n.context!.findRenderObject() as RenderBox?;
+                              final pos = box?.localToGlobal(Offset.zero);
+                              return (node: n, x: pos?.dx ?? -1.0);
+                            })
+                            .where((item) => item.x > 0)
+                            .toList()
+                          ..sort((a, b) => a.x.compareTo(b.x));
 
                     if (musicNodes.isNotEmpty) {
                       musicNodes.first.node.requestFocus();
@@ -622,9 +727,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                   }
 
                   if (widget.activeRoute != Destinations.home &&
-                      NavigationLayout.focusDetailsPlayButtonNotifier.value == null) {
-                    final success =
-                        primary.focusInDirection(TraversalDirection.down);
+                      NavigationLayout.focusDetailsPlayButtonNotifier.value ==
+                          null) {
+                    final success = primary.focusInDirection(
+                      TraversalDirection.down,
+                    );
                     if (success) {
                       final newFocus = FocusManager.instance.primaryFocus;
                       if (newFocus != null && _isInsideToolbar(newFocus)) {
@@ -640,7 +747,10 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                   event.logicalKey == LogicalKeyboardKey.arrowUp) {
                 final primary = FocusManager.instance.primaryFocus;
                 if (primary != null) {
-                  final insideMusicBar = _isDescendantOf(primary, _musicBarFocusNode);
+                  final insideMusicBar = _isDescendantOf(
+                    primary,
+                    _musicBarFocusNode,
+                  );
                   if (insideMusicBar) {
                     if (_homeFocus.canRequestFocus) {
                       _homeFocus.requestFocus();
@@ -648,8 +758,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                     }
                     FocusNode? targetNode;
                     for (final n in _toolbarScopeNode.descendants) {
-                      if (!n.skipTraversal && _isLaidOutFocusNode(n) && !_isDescendantOf(n, _musicBarFocusNode)) {
-                        final box = n.context!.findRenderObject() as RenderBox?;
+                      if (!n.skipTraversal &&
+                          _isLaidOutFocusNode(n) &&
+                          !_isDescendantOf(n, _musicBarFocusNode)) {
+                        final box =
+                            n.context!.findRenderObject() as RenderBox?;
                         final pos = box?.localToGlobal(Offset.zero);
                         if (pos != null && pos.dx > 0) {
                           targetNode = n;
@@ -670,8 +783,8 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                       event.logicalKey == LogicalKeyboardKey.arrowRight)) {
                 final direction =
                     event.logicalKey == LogicalKeyboardKey.arrowLeft
-                        ? TraversalDirection.left
-                        : TraversalDirection.right;
+                    ? TraversalDirection.left
+                    : TraversalDirection.right;
                 _moveWithinToolbar(direction);
                 // Always consume so the key can't escape sideways into content.
                 return KeyEventResult.handled;
@@ -699,12 +812,12 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                                 ),
                               ),
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: AlignmentDirectional.centerStart,
                                 child: _buildStart(),
                               ),
                               if (!isMobile)
                                 Align(
-                                  alignment: Alignment.centerRight,
+                                  alignment: AlignmentDirectional.centerEnd,
                                   child: _buildEnd(),
                                 ),
                             ],
@@ -727,7 +840,10 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                 ),
                 if (isMusicActive) ...[
                   const SizedBox(height: 8),
-                  TopMusicBar(focusNode: _musicBarFocusNode),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: TopMusicBar(focusNode: _musicBarFocusNode),
+                  ),
                 ],
               ],
             ),
@@ -793,11 +909,6 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
           _restoreFocusBelowToolbar();
           return KeyEventResult.handled;
         }
-        if ((PlatformDetection.isTV || PlatformDetection.isDesktop) &&
-            event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          _homeFocus.requestFocus();
-          return KeyEventResult.handled;
-        }
         return KeyEventResult.ignored;
       },
       child: GestureDetector(
@@ -821,8 +932,18 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
             ),
             child: ClipOval(
               child: _userImageUrl != null
-                  ? Image.network(
-                      _userImageUrl!,
+                  ? Image(
+                      image: ResizeImage.resizeIfNeeded(
+                        ArtworkDecode.widthFor(
+                          avatarSize,
+                          MediaQuery.devicePixelRatioOf(context),
+                        ),
+                        null,
+                        PacedNetworkImage(
+                          _userImageUrl!,
+                          headers: serverImageHeaders,
+                        ),
+                      ),
                       fit: BoxFit.cover,
                       width: avatarSize,
                       height: avatarSize,
@@ -868,14 +989,23 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     final showShuffle = _prefs.get(UserPreferences.showShuffleButton);
     final showGenres = _prefs.get(UserPreferences.showGenresButton);
     final showFavorites = _prefs.get(UserPreferences.showFavoritesButton);
-    final showLibraries = _prefs.get(UserPreferences.showLibrariesInToolbar);
+    // Checked alongside the show* preferences, never written into them, since
+    // those sync and would follow the account to the parent's other devices.
+    final kidsMode = _kidsMode;
+    final showLiveTv = _showLiveTvButton;
+    final navLibraries = _navLibraries;
+    final showLibraries =
+        !kidsMode && _prefs.get(UserPreferences.showLibrariesInToolbar);
     final alwaysExpanded = _prefs.get(UserPreferences.navbarAlwaysExpanded);
     final showFolders = _prefs.get(UserPreferences.enableFolderView);
     final showSyncPlay =
+        !kidsMode &&
         _prefs.get(UserPreferences.syncPlayEnabled) &&
         _prefs.get(UserPreferences.showSyncPlayButton);
     final seerrPrefs = GetIt.instance<SeerrPreferences>();
-    final showSeerr = _prefs.get(UserPreferences.showSeerrButton) &&
+    final showSeerr =
+        !kidsMode &&
+        _prefs.get(UserPreferences.showSeerrButton) &&
         GetIt.instance<PluginSyncService>().seerrAvailable;
     final l10n = AppLocalizations.of(context);
     final seerrNavLabel = seerrPrefs.labelOrDefault(l10n.seerr);
@@ -900,217 +1030,275 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
       child: _wrapPill(
         isNeon: isNeon,
         child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _orderButton(
-                  order: (order++).toDouble(),
-                  child: ExpandableIconButton(
-                    key: const ValueKey('toolbar_home'),
-                    forceExpanded: alwaysExpanded,
-                    icon: Icons.home_rounded,
-                    label: l10n.home,
-                    baseColor: nextNavColor(),
-                    focusNode: _homeFocus,
-                    onKeyEvent: (node, event) {
-                      if (event is KeyDownEvent &&
-                          PlatformDetection.isTV &&
-                          event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-                        _avatarFocus.requestFocus();
-                        return KeyEventResult.handled;
-                      }
-                      return KeyEventResult.ignored;
-                    },
-                    onPressed: () {
-                      if (_isActive(Destinations.home)) {
-                        homeRefreshBus.request();
-                        return;
-                      }
-                      homeRefreshBus.requestAfterNavigation();
-                      context.go(Destinations.home);
-                    },
-                  ),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _orderButton(
+                order: (order++).toDouble(),
+                child: ExpandableIconButton(
+                  key: const ValueKey('toolbar_home'),
+                  forceExpanded: alwaysExpanded,
+                  icon: Icons.home_rounded,
+                  label: l10n.home,
+                  baseColor: nextNavColor(),
+                  focusNode: _homeFocus,
+                  onPressed: () {
+                    if (_isActive(Destinations.home)) {
+                      homeRefreshBus.request();
+                      return;
+                    }
+                    homeRefreshBus.requestAfterNavigation();
+                    context.go(Destinations.home);
+                  },
                 ),
+              ),
+              _gap(),
+              _orderButton(
+                order: (order++).toDouble(),
+                child: ExpandableIconButton(
+                  key: const ValueKey('toolbar_search'),
+                  forceExpanded: alwaysExpanded,
+                  icon: Icons.search_rounded,
+                  label: l10n.search,
+                  baseColor: nextNavColor(),
+                  onPressed: () {
+                    if (_isActive(Destinations.search)) return;
+                    context.navigateTopLevel(Destinations.search);
+                  },
+                ),
+              ),
+              if (showShuffle) ...[
                 _gap(),
                 _orderButton(
                   order: (order++).toDouble(),
                   child: ExpandableIconButton(
-                    key: const ValueKey('toolbar_search'),
+                    key: const ValueKey('toolbar_shuffle'),
                     forceExpanded: alwaysExpanded,
-                    icon: Icons.search_rounded,
-                    label: l10n.search,
+                    icon: Icons.shuffle_rounded,
+                    label: l10n.shuffle,
                     baseColor: nextNavColor(),
-                    onPressed: () {
-                      if (_isActive(Destinations.search)) return;
-                      context.navigateTopLevel(Destinations.search);
-                    },
+                    onPressed: () => showShuffleOverlay(context),
                   ),
                 ),
-                if (showShuffle) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_shuffle'),
-                      forceExpanded: alwaysExpanded,
-                      icon: Icons.shuffle_rounded,
-                      label: l10n.shuffle,
-                      baseColor: nextNavColor(),
-                      onPressed: () => showShuffleOverlay(context),
-                    ),
-                  ),
-                ],
-                if (showGenres) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_genres'),
-                      forceExpanded: alwaysExpanded,
-                      baseColor: nextNavColor(),
-                      iconBuilder: (size, color) => Image.asset(
-                        'assets/icons/genres.png',
-                        width: size,
-                        height: size,
-                        color: color,
-                        fit: BoxFit.contain,
-                      ),
-                      label: l10n.genres,
-                      onPressed: () {
-                        if (_isActive(Destinations.allGenres)) return;
-                        context.navigateTopLevel(Destinations.allGenres);
-                      },
-                    ),
-                  ),
-                ],
-                if (showFavorites) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_favorites'),
-                      forceExpanded: alwaysExpanded,
-                      icon: Icons.favorite_rounded,
-                      label: l10n.favorites,
-                      baseColor: nextNavColor(),
-                      onPressed: () {
-                        if (_isActive(Destinations.allFavorites)) return;
-                        context.navigateTopLevel(Destinations.allFavorites);
-                      },
-                    ),
-                  ),
-                ],
-                if (showFolders) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_folders'),
-                      forceExpanded: alwaysExpanded,
-                      icon: Icons.folder_rounded,
-                      label: l10n.folders,
-                      baseColor: nextNavColor(),
-                      onPressed: () {
-                        if (_isActive(Destinations.folderView)) return;
-                        context.navigateTopLevel(Destinations.folderView);
-                      },
-                    ),
-                  ),
-                ],
-                if (showSyncPlay) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_syncplay'),
-                      forceExpanded: alwaysExpanded,
-                      icon: Icons.groups_rounded,
-                      label: l10n.syncPlay,
-                      baseColor: nextNavColor(),
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const SyncPlayScreen(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-                if (showSeerr) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: ExpandableIconButton(
-                      key: const ValueKey('toolbar_seerr'),
-                      forceExpanded: alwaysExpanded,
-                      baseColor: nextNavColor(),
-                      iconBuilder: (size, color) => seerrPrefs.isSeerrVariant
-                          ? SeerrIcon(size: size, color: color)
-                          : SeerrIcon(size: size, color: color),
-                      label: seerrNavLabel,
-                      onPressed: () {
-                        if (_isActive(Destinations.seerrDiscover)) return;
-                        context.navigateTopLevel(Destinations.seerrDiscover);
-                      },
-                    ),
-                  ),
-                ],
-                if (showLibraries && _libraries.isNotEmpty) ...[
-                  _gap(),
-                  _orderButton(
-                    order: (order++).toDouble(),
-                    child: useInlineLibraries
-                        ? _buildInlineLibrariesButton(
-                            l10n,
-                            iconColor: nextNavColor(),
-                            alwaysExpanded: alwaysExpanded,
-                          )
-                        : _buildLibrariesButton(
-                            iconColor: nextNavColor(),
-                            alwaysExpanded: alwaysExpanded,
-                          ),
-                  ),
-                ],
+              ],
+              if (showGenres) ...[
                 _gap(),
                 _orderButton(
-                  order: 99,
+                  order: (order++).toDouble(),
                   child: ExpandableIconButton(
-                    key: const ValueKey('toolbar_settings'),
+                    key: const ValueKey('toolbar_genres'),
                     forceExpanded: alwaysExpanded,
-                    icon: Icons.settings_rounded,
-                    label: l10n.settings,
                     baseColor: nextNavColor(),
-                    focusNode: _settingsFocus,
-                    onKeyEvent: (_, event) {
-                      if ((event is KeyDownEvent || event is KeyRepeatEvent) &&
-                          PlatformDetection.isTV &&
-                          event.logicalKey == LogicalKeyboardKey.arrowRight) {
-                        return KeyEventResult.handled;
-                      }
-                      if (event is KeyDownEvent &&
-                          event.logicalKey == LogicalKeyboardKey.arrowLeft &&
-                          useInlineLibraries &&
-                          showLibraries &&
-                          _libraries.isNotEmpty) {
-                        _inlineLibrariesTriggerFocus.requestFocus();
-                        return KeyEventResult.handled;
-                      }
-                      return KeyEventResult.ignored;
-                    },
-                    onPressed: () async {
-                      await SettingsPanel.open(
-                        context,
-                        const SettingsSidePanel(),
-                      );
-                      if (mounted) _settingsFocus.requestFocus();
+                    iconBuilder: (size, color) => Image.asset(
+                      'assets/icons/genres.png',
+                      width: size,
+                      height: size,
+                      color: color,
+                      fit: BoxFit.contain,
+                    ),
+                    label: l10n.genres,
+                    onPressed: () {
+                      if (_isActive(Destinations.allGenres)) return;
+                      context.navigateTopLevel(Destinations.allGenres);
                     },
                   ),
                 ),
               ],
-            ),
+              if (showFavorites) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: ExpandableIconButton(
+                    key: const ValueKey('toolbar_favorites'),
+                    forceExpanded: alwaysExpanded,
+                    icon: Icons.favorite_rounded,
+                    label: l10n.favorites,
+                    baseColor: nextNavColor(),
+                    onPressed: () {
+                      if (_isActive(Destinations.allFavorites)) return;
+                      context.navigateTopLevel(Destinations.allFavorites);
+                    },
+                  ),
+                ),
+              ],
+              if (showLiveTv) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: ExpandableIconButton(
+                    key: const ValueKey('toolbar_livetv'),
+                    forceExpanded: alwaysExpanded,
+                    icon: Icons.live_tv_rounded,
+                    label: l10n.liveTv,
+                    baseColor: nextNavColor(),
+                    onPressed: () {
+                      if (_isActive(Destinations.liveTvGuide)) return;
+                      context.navigateTopLevel(Destinations.liveTvGuide);
+                    },
+                  ),
+                ),
+              ],
+              if (showFolders) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: ExpandableIconButton(
+                    key: const ValueKey('toolbar_folders'),
+                    forceExpanded: alwaysExpanded,
+                    icon: Icons.folder_rounded,
+                    label: l10n.folders,
+                    baseColor: nextNavColor(),
+                    onPressed: () {
+                      if (_isActive(Destinations.folderView)) return;
+                      context.navigateTopLevel(Destinations.folderView);
+                    },
+                  ),
+                ),
+              ],
+              if (showSyncPlay) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: ExpandableIconButton(
+                    key: const ValueKey('toolbar_syncplay'),
+                    forceExpanded: alwaysExpanded,
+                    icon: Icons.groups_rounded,
+                    label: l10n.syncPlay,
+                    baseColor: nextNavColor(),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const SyncPlayScreen(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              if (showSeerr) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: ExpandableIconButton(
+                    key: const ValueKey('toolbar_seerr'),
+                    forceExpanded: alwaysExpanded,
+                    baseColor: nextNavColor(),
+                    iconBuilder: (size, color) => seerrPrefs.isSeerrVariant
+                        ? SeerrIcon(size: size, color: color)
+                        : SeerrIcon(size: size, color: color),
+                    label: seerrNavLabel,
+                    onPressed: () {
+                      if (_isActive(Destinations.seerrDiscover)) return;
+                      context.navigateTopLevel(Destinations.seerrDiscover);
+                    },
+                  ),
+                ),
+              ],
+              if (showLibraries && navLibraries.isNotEmpty) ...[
+                _gap(),
+                _orderButton(
+                  order: (order++).toDouble(),
+                  child: useInlineLibraries
+                      ? _buildInlineLibrariesButton(
+                          l10n,
+                          iconColor: nextNavColor(),
+                          alwaysExpanded: alwaysExpanded,
+                        )
+                      : _buildLibrariesButton(
+                          iconColor: nextNavColor(),
+                          alwaysExpanded: alwaysExpanded,
+                        ),
+                ),
+              ],
+              _gap(),
+              if (DownloadsNavSlot.isOffered())
+                _orderButton(
+                  order: 97,
+                  // The slot is taken here rather than inside the builder, so
+                  // the icons after it keep their colour whether or not
+                  // anything is saved to show.
+                  child: _buildDownloadsButton(
+                    navColor: nextNavColor(),
+                    alwaysExpanded: alwaysExpanded,
+                    label: l10n.savedMedia,
+                  ),
+                ),
+              if (FriendsNavSlot.isOffered() && _friendsAvailable)
+                _orderButton(
+                  order: 97.5,
+                  // Only taken where the plugin has friends on, so on every
+                  // other server the icons after it keep their color.
+                  child: _buildFriendsButton(
+                    navColor: nextNavColor(),
+                    alwaysExpanded: alwaysExpanded,
+                    label: l10n.friends,
+                  ),
+                ),
+              if (_prefs.get(UserPreferences.showServerMessagesButton))
+                _orderButton(
+                  order: 98,
+                  // The slot is taken here rather than inside the builder, so the
+                  // settings icon keeps its colour whether or not there are any
+                  // messages to show.
+                  child: _buildServerMessagesButton(
+                    navColor: nextNavColor(),
+                    alwaysExpanded: alwaysExpanded,
+                    label: l10n.serverMessages,
+                  ),
+                ),
+              _orderButton(
+                order: 99,
+                child: ExpandableIconButton(
+                  key: const ValueKey('toolbar_settings'),
+                  forceExpanded: alwaysExpanded,
+                  icon: Icons.settings_rounded,
+                  label: l10n.settings,
+                  baseColor: nextNavColor(),
+                  focusNode: _settingsFocus,
+                  onKeyEvent: (_, event) {
+                    final isRtl =
+                        Directionality.of(context) == TextDirection.rtl;
+                    final outwardKey = isRtl
+                        ? LogicalKeyboardKey.arrowLeft
+                        : LogicalKeyboardKey.arrowRight;
+                    final inwardKey = isRtl
+                        ? LogicalKeyboardKey.arrowRight
+                        : LogicalKeyboardKey.arrowLeft;
+                    if ((event is KeyDownEvent || event is KeyRepeatEvent) &&
+                        PlatformDetection.isTV &&
+                        event.logicalKey == outwardKey) {
+                      return KeyEventResult.handled;
+                    }
+                    if (event is KeyDownEvent &&
+                        event.logicalKey == inwardKey &&
+                        useInlineLibraries &&
+                        showLibraries &&
+                        navLibraries.isNotEmpty) {
+                      // Step onto whatever is actually alongside first, since
+                      // downloads and server messages both sit between the
+                      // libraries and here. Jumping to the trigger is the
+                      // fallback for when nothing does, which is what keeps
+                      // the inline libraries reachable from the end of the row.
+                      if (!_moveWithinToolbar(TraversalDirection.left)) {
+                        _inlineLibrariesTriggerFocus.requestFocus();
+                      }
+                      return KeyEventResult.handled;
+                    }
+                    return KeyEventResult.ignored;
+                  },
+                  onPressed: () async {
+                    await SettingsPanel.open(
+                      context,
+                      const SettingsSidePanel(),
+                    );
+                    if (mounted) _settingsFocus.requestFocus();
+                  },
+                ),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 
@@ -1153,30 +1341,19 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     return _LibrariesDropdown(
       key: const ValueKey('toolbar_libraries'),
       activeRoute: widget.activeRoute,
-      libraries: _libraries,
+      libraries: _navLibraries,
       surfaceColor: _toolbarSurfaceColor(),
       iconColor: iconColor,
       alwaysExpanded: alwaysExpanded,
       onLibraryTap: (lib) {
-        if (lib.collectionType == 'music') {
-          context.navigateTopLevel('/music/${lib.id}');
-        } else if (lib.collectionType == 'books' ||
-            lib.collectionType == 'audiobooks') {
-          context.navigateTopLevel(
-            Destinations.bookLibrary(lib.id, collectionType: lib.collectionType),
-          );
-        } else if (lib.collectionType == 'livetv') {
-          context.navigateTopLevel(Destinations.liveTvGuide);
-        } else {
-          context.navigateTopLevel(
-            gameOrLibraryRoute(
-              lib.id,
-              lib.collectionType,
-              lib.name,
-              serverId: lib.serverId,
-            ),
-          );
-        }
+        context.navigateTopLevel(
+          libraryRoute(
+            lib.id,
+            lib.collectionType,
+            lib.name,
+            serverId: lib.serverId,
+          ),
+        );
       },
     );
   }
@@ -1189,33 +1366,90 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     return _AndroidTvExpandableLibrariesButton(
       key: const ValueKey('toolbar_libraries_inline_tv'),
       activeRoute: widget.activeRoute,
-      libraries: _libraries,
+      libraries: _navLibraries,
       label: l10n.libraries,
       iconColor: iconColor,
       alwaysExpanded: alwaysExpanded,
       triggerFocusNode: _inlineLibrariesTriggerFocus,
-      nextFocusNode: _settingsFocus,
+      onExitForward: _focusAfterInlineLibraries,
       onLibraryTap: (lib) {
-        if (lib.collectionType == 'music') {
-          context.navigateTopLevel('/music/${lib.id}');
-        } else if (lib.collectionType == 'books' ||
-            lib.collectionType == 'audiobooks') {
-          context.navigateTopLevel(
-            Destinations.bookLibrary(lib.id, collectionType: lib.collectionType),
-          );
-        } else if (lib.collectionType == 'livetv') {
-          context.navigateTopLevel(Destinations.liveTvGuide);
-        } else {
-          context.navigateTopLevel(
-            gameOrLibraryRoute(
-              lib.id,
-              lib.collectionType,
-              lib.name,
-              serverId: lib.serverId,
-            ),
-          );
-        }
+        context.navigateTopLevel(
+          libraryRoute(
+            lib.id,
+            lib.collectionType,
+            lib.name,
+            serverId: lib.serverId,
+          ),
+        );
       },
+    );
+  }
+
+  /// The messages button, or nothing when there is nothing to show. The nav
+  /// colour is passed in so the caller decides which palette slot it takes.
+  /// The gap to the next button travels with it, so it only takes up room when
+  /// the button is there.
+  Widget _buildServerMessagesButton({
+    required Color? navColor,
+    required bool alwaysExpanded,
+    required String label,
+  }) {
+    return ServerMessagesNavSlot(
+      builder: (context, unread) => Row(
+        mainAxisSize: MainAxisSize.min,
+        // Stretch like the bare buttons, or the hover pill stops short of the
+        // bar's height.
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ExpandableIconButton(
+            key: const ValueKey('toolbar_server_messages'),
+            forceExpanded: alwaysExpanded,
+            icon: Icons.info_outline_rounded,
+            label: label,
+            baseColor: navColor,
+            badgeCount: unread,
+            focusNode: _serverMessagesFocus,
+            onPressed: () async {
+              await showServerMessagesDialog(context);
+              if (mounted) _serverMessagesFocus.requestFocus();
+            },
+          ),
+          _gap(),
+        ],
+      ),
+    );
+  }
+
+  /// The friends button, or nothing when the server has no friends feature.
+  /// The gap to the next button travels with it, like the messages button.
+  Widget _buildFriendsButton({
+    required Color? navColor,
+    required bool alwaysExpanded,
+    required String label,
+  }) {
+    return FriendsNavSlot(
+      builder: (context, badge) => Row(
+        mainAxisSize: MainAxisSize.min,
+        // Stretch like the bare buttons, or the hover pill stops short of the
+        // bar's height.
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ExpandableIconButton(
+            key: const ValueKey('toolbar_friends'),
+            forceExpanded: alwaysExpanded,
+            icon: Icons.people_alt_rounded,
+            label: label,
+            baseColor: navColor,
+            badgeCount: badge,
+            focusNode: _friendsFocus,
+            onPressed: () async {
+              await FriendsNavSlot.open(context);
+              if (mounted) _friendsFocus.requestFocus();
+            },
+          ),
+          _gap(),
+        ],
+      ),
     );
   }
 
@@ -1233,6 +1467,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
       builder: (context, time, _) {
         return Text(
           time,
+          textDirection: TextDirection.ltr,
           style: TextStyle(
             color: isNeon
                 ? AppColorScheme.onSurface
@@ -1290,7 +1525,9 @@ class _AndroidTvExpandableLibrariesButton extends StatefulWidget {
   final Color? iconColor;
   final bool alwaysExpanded;
   final FocusNode? triggerFocusNode;
-  final FocusNode? nextFocusNode;
+
+  /// Called when focus leaves the far end of the row, once it has collapsed.
+  final VoidCallback? onExitForward;
   final ValueChanged<AggregatedLibrary> onLibraryTap;
 
   const _AndroidTvExpandableLibrariesButton({
@@ -1301,7 +1538,7 @@ class _AndroidTvExpandableLibrariesButton extends StatefulWidget {
     this.iconColor,
     this.alwaysExpanded = false,
     this.triggerFocusNode,
-    this.nextFocusNode,
+    this.onExitForward,
     required this.onLibraryTap,
   });
 
@@ -1392,9 +1629,9 @@ class _AndroidTvExpandableLibrariesButtonState
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final next = widget.nextFocusNode;
-      if (next != null && next.canRequestFocus) {
-        next.requestFocus();
+      final exit = widget.onExitForward;
+      if (exit != null) {
+        exit();
         return;
       }
       FocusScope.of(context).nextFocus();
@@ -1552,7 +1789,9 @@ class _ToolbarLibrariesTriggerButtonState
       final base =
           widget.iconColor ?? AppColorScheme.onSurface.withValues(alpha: 0.6);
       final active = _focused || _hovered || widget.expanded;
-      bgColor = active ? focusColor.withValues(alpha: 0.18) : Colors.transparent;
+      bgColor = active
+          ? focusColor.withValues(alpha: 0.18)
+          : Colors.transparent;
       fgColor = active ? focusColor : base;
     }
 
@@ -1678,7 +1917,9 @@ class _ToolbarLibraryLabelButtonState
       final focusColor = Color(
         _prefs.get(UserPreferences.focusColor).colorValue,
       );
-      bgColor = active ? focusColor.withValues(alpha: 0.18) : Colors.transparent;
+      bgColor = active
+          ? focusColor.withValues(alpha: 0.18)
+          : Colors.transparent;
       fgColor = active
           ? focusColor
           : AppColorScheme.onSurface.withValues(alpha: 0.85);
@@ -1821,8 +2062,46 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
   }
 
   void _removeOverlay() {
+    InlineBackInterceptor.remove(_closeFromBack);
     _overlayEntry?.remove();
     _overlayEntry = null;
+  }
+
+  // The dropdown is an overlay entry rather than a route, so nothing pops it on
+  // back. Registering it lets the key close it instead of leaving the page.
+  bool _closeFromBack() {
+    _hideDropdown(focusButton: true);
+    return true;
+  }
+
+  double _calculateMenuWidth(BuildContext context, double screenWidth) {
+    final baseStyle = (Theme.of(context).textTheme.bodyMedium ??
+            const TextStyle())
+        .copyWith(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+        );
+    final textPainter = TextPainter(
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    );
+    double maxTextWidth = 0.0;
+    for (final lib in widget.libraries) {
+      textPainter.text = TextSpan(
+        text: lib.name,
+        style: baseStyle,
+      );
+      textPainter.layout();
+      if (textPainter.width > maxTextWidth) {
+        maxTextWidth = textPainter.width;
+      }
+    }
+    textPainter.dispose();
+
+    const horizontalPadding = 44.0;
+    final contentWidth = maxTextWidth + horizontalPadding;
+    final maxAllowed = (screenWidth - 24).clamp(140.0, 320.0);
+    return contentWidth.clamp(140.0, maxAllowed);
   }
 
   void _showDropdown({bool focusFirstItem = false}) {
@@ -1830,7 +2109,7 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
     if (_overlayEntry != null) return;
 
     final screenWidth = MediaQuery.of(context).size.width;
-    _menuWidth = (screenWidth - 16).clamp(180.0, 280.0);
+    _menuWidth = _calculateMenuWidth(context, screenWidth);
 
     final targetBox =
         _targetKey.currentContext?.findRenderObject() as RenderBox?;
@@ -1844,6 +2123,7 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
 
     _overlayEntry = OverlayEntry(builder: _buildOverlay);
     Overlay.of(context).insert(_overlayEntry!);
+    InlineBackInterceptor.push(_closeFromBack);
     setState(() {});
 
     if (focusFirstItem && _itemFocusNodes.isNotEmpty) {
@@ -1916,7 +2196,7 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
       link: _layerLink,
       targetAnchor: _openToLeft ? Alignment.bottomRight : Alignment.bottomLeft,
       followerAnchor: _openToLeft ? Alignment.topRight : Alignment.topLeft,
-      offset: Offset.zero,
+      offset: const Offset(0, 4),
       child: content,
     );
 
@@ -1936,16 +2216,30 @@ class _LibrariesDropdownState extends State<_LibrariesDropdown> {
   }
 
   Widget _dropdownContent(double maxMenuHeight) {
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+    final borderColor = isNeon
+        ? AppColorScheme.accent
+        : ThemeRegistry.active.borders.chipBorder.color;
+
     return Container(
+      width: _menuWidth,
       constraints: BoxConstraints(
-        minWidth: 180,
-        maxWidth: _menuWidth,
         maxHeight: maxMenuHeight,
       ),
       decoration: BoxDecoration(
         color: widget.surfaceColor,
         borderRadius: AppRadius.circular(12),
+        border: Border.all(
+          color: borderColor,
+          width: 1.2,
+        ),
         boxShadow: [
+          if (isNeon)
+            BoxShadow(
+              color: AppColorScheme.accent.withValues(alpha: 0.25),
+              blurRadius: 16,
+              spreadRadius: 1,
+            ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.5),
             blurRadius: 24,
@@ -2113,11 +2407,16 @@ class _LibraryDropdownItemState extends State<_LibraryDropdownItem> {
                 : Colors.transparent,
             child: Text(
               widget.name,
-              style: TextStyle(
-                color: (_isHovered || _isFocused) ? focusColor : Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: (Theme.of(context).textTheme.bodyMedium ??
+                      const TextStyle())
+                  .copyWith(
+                    color:
+                        (_isHovered || _isFocused) ? focusColor : Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ),
         ),
@@ -2163,23 +2462,8 @@ class _TopMusicBarState extends State<TopMusicBar> {
     return raw is AggregatedItem ? raw : null;
   }
 
-  String? _artUrl(AggregatedItem item) {
-    try {
-      final client = _clientFactory.getClientIfExists(item.serverId) ??
-          GetIt.instance<MediaServerClient>();
-      final albumTag = item.albumPrimaryImageTag;
-      final albumId = item.albumId;
-      if (item.type == 'Audio' && albumTag != null && albumId != null) {
-        return client.imageApi
-            .getPrimaryImageUrl(albumId, maxHeight: 120, tag: albumTag);
-      }
-      if (item.primaryImageTag != null) {
-        return client.imageApi
-            .getPrimaryImageUrl(item.id, maxHeight: 120, tag: item.primaryImageTag);
-      }
-    } catch (_) {}
-    return null;
-  }
+  String? _artUrl(AggregatedItem item) =>
+      audioArtUrl(item, clientFactory: _clientFactory, maxHeight: 120);
 
   Widget _buildBarButton({
     required IconData icon,
@@ -2207,14 +2491,14 @@ class _TopMusicBarState extends State<TopMusicBar> {
               height: 32,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: focused
-                    ? AppColorScheme.onSurface
-                    : Colors.transparent,
+                color: focused ? AppColorScheme.onSurface : Colors.transparent,
               ),
               child: AdaptiveIcon(
                 icon,
                 size: 20,
-                color: focused ? AppColorScheme.surface : AppColorScheme.onSurface,
+                color: focused
+                    ? AppColorScheme.surface
+                    : AppColorScheme.onSurface,
               ),
             ),
           );
@@ -2249,11 +2533,18 @@ class _TopMusicBarState extends State<TopMusicBar> {
     }
     return Container(
       decoration: BoxDecoration(
-        color: OverlayColorPalette.resolveColor(
-          GetIt.instance<UserPreferences>().get(UserPreferences.navbarColor),
-        ).withValues(
-          alpha: GetIt.instance<UserPreferences>().get(UserPreferences.navbarOpacity) / 100.0,
-        ),
+        color:
+            OverlayColorPalette.resolveColor(
+              GetIt.instance<UserPreferences>().get(
+                UserPreferences.navbarColor,
+              ),
+            ).withValues(
+              alpha:
+                  GetIt.instance<UserPreferences>().get(
+                    UserPreferences.navbarOpacity,
+                  ) /
+                  100.0,
+            ),
         borderRadius: AppRadius.circular(24),
         border: border,
       ),
@@ -2273,7 +2564,20 @@ class _TopMusicBarState extends State<TopMusicBar> {
     final artist = item.artists.isNotEmpty
         ? item.artists.join(', ')
         : item.albumArtist ?? '';
-    final displayText = artist.isNotEmpty ? '${item.name} - $artist' : item.name;
+    final displayText = artist.isNotEmpty
+        ? '${item.name} - $artist'
+        : item.name;
+    final titleStyle = TextStyle(
+      color: AppColorScheme.onSurface,
+      fontSize: 13,
+      fontWeight: FontWeight.w600,
+    );
+    // The text already grows with the UI scale, so the cap on it does too.
+    final titleMaxWidth =
+        _kMusicBarTitleMaxWidth *
+        GetIt.instance<UserPreferences>()
+            .get(UserPreferences.desktopUiScale)
+            .scaleFactor;
     final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
 
     return Center(
@@ -2284,72 +2588,122 @@ class _TopMusicBarState extends State<TopMusicBar> {
           canRequestFocus: false,
           child: FocusTraversalGroup(
             child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ClipRRect(
-                  borderRadius: AppRadius.circular(6),
-                  child: SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: artUrl != null
-                        ? OfflineAwareImage(
-                            imageUrl: artUrl,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            color: AppColorScheme.onSurface.withValues(alpha: 0.1),
-                            child: Icon(
-                              Icons.music_note,
-                              size: 16,
-                              color: AppColorScheme.onSurface.withValues(alpha: 0.6),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: AppRadius.circular(6),
+                    child: SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: artUrl != null
+                          ? OfflineAwareImage(
+                              imageUrl: artUrl,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              color: AppColorScheme.onSurface.withValues(
+                                alpha: 0.1,
+                              ),
+                              child: Icon(
+                                Icons.music_note,
+                                size: 16,
+                                color: AppColorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
+                              ),
                             ),
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () => appRouter.push(Destinations.audioPlayer),
-                    child: Text(
-                      displayText,
-                      style: TextStyle(
-                        color: AppColorScheme.onSurface,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                _buildBarButton(
-                  icon: Icons.skip_previous,
-                  onPressed: _manager.previous,
-                ),
-                const SizedBox(width: 4),
-                _buildBarButton(
-                  icon: isPlaying ? Icons.pause : Icons.play_arrow,
-                  onPressed: isPlaying ? _manager.pause : _manager.resume,
-                ),
-                const SizedBox(width: 4),
-                _buildBarButton(
-                  icon: Icons.skip_next,
-                  onPressed: _manager.next,
-                ),
-                const SizedBox(width: 4),
-                _buildBarButton(
-                  icon: Icons.stop,
-                  onPressed: () => unawaited(_manager.stop(userInitiated: true)),
-                ),
-              ],
+                  const SizedBox(width: 12),
+                  // Focusable, not just tappable: a remote cannot tap, and
+                  // this title is the only way back to the player. Same focus
+                  // treatment as the transport buttons beside it.
+                  Flexible(
+                    child: Focus(
+                      onKeyEvent: (node, event) {
+                        if (isActivateKey(event)) {
+                          appRouter.push(Destinations.audioPlayer);
+                          return KeyEventResult.handled;
+                        }
+                        return KeyEventResult.ignored;
+                      },
+                      child: Builder(
+                        builder: (context) {
+                          final focused = InputModeTracker.showFocusVisuals(
+                            context,
+                            Focus.of(context).hasFocus,
+                          );
+                          return MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  appRouter.push(Destinations.audioPlayer),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 90),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: AppRadius.circular(12),
+                                  color: focused
+                                      ? AppColorScheme.onSurface.withValues(
+                                          alpha: 0.22,
+                                        )
+                                      : Colors.transparent,
+                                ),
+                                child: PlatformDetection.useMobileUi
+                                    ? Text(
+                                        displayText,
+                                        style: titleStyle,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    : ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          maxWidth: titleMaxWidth,
+                                        ),
+                                        child: MarqueeText(
+                                          text: displayText,
+                                          style: titleStyle,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  _buildBarButton(
+                    icon: Icons.skip_previous,
+                    onPressed: _manager.previous,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildBarButton(
+                    icon: isPlaying ? Icons.pause : Icons.play_arrow,
+                    onPressed: isPlaying ? _manager.pause : _manager.resume,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildBarButton(
+                    icon: Icons.skip_next,
+                    onPressed: _manager.next,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildBarButton(
+                    icon: Icons.stop,
+                    onPressed: () =>
+                        unawaited(_manager.stop(userInitiated: true)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 }

@@ -7749,10 +7749,6 @@
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
     },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(tabsfri)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
-    },
     "settingsAudioFallbackCodecMp3": "MP3\n(kun stereo)",
     "@settingsAudioFallbackCodecMp3": {
         "description": "Fallback codec option: MP3"
@@ -9005,5 +9001,21 @@
     "imdbMostPopularMovies": "Mest populære film på IMDb",
     "imdbMostPopularTvShows": "Mest populære serier på IMDb",
     "imdbLowestRatedMovies": "Lavest bedømte film på IMDb",
-    "imdbTopEnglishMovies": "Bedst bedømte engelsksprogede film på IMDb"
+    "imdbTopEnglishMovies": "Bedst bedømte engelsksprogede film på IMDb",
+    "oledMode": "OLED Tilstand",
+    "@oledMode": {
+        "description": "Label for the setting that deepens blacks and enriches artwork on OLED displays"
+    },
+    "oledModeSubtitle": "Dybere sort og forbedre illustrationer. Virker bedst på OLED skærme.",
+    "@oledModeSubtitle": {
+        "description": "Explanation under the OLED Mode setting"
+    },
+    "oledModeSubtle": "Fin",
+    "@oledModeSubtle": {
+        "description": "OLED Mode level that darkens surfaces gently and lightly enriches artwork"
+    },
+    "oledModeVivid": "Levende",
+    "@oledModeVivid": {
+        "description": "OLED Mode level that uses pure black surfaces and the strongest artwork enrichment"
+    }
 }

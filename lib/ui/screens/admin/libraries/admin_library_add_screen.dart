@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../util/error_message.dart';
 import '../providers/admin_user_providers.dart';
 import '../widgets/admin_form_styles.dart';
 import '../widgets/filesystem_browser.dart';
@@ -113,7 +114,7 @@ class _AdminLibraryAddScreenState
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.adminLibraryCreateFailed(e.toString()))),
+          SnackBar(content: Text(l10n.adminLibraryCreateFailed(describeError(e, l10n)))),
         );
       }
     } finally {
@@ -199,11 +200,14 @@ class _AdminLibraryAddScreenState
   }
 
   Widget _buildTypeStep() {
-    return GridView.count(
-      crossAxisCount: 2,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      childAspectRatio: 2.5,
+    return GridView(
+      // A fixed height keeps these at button size however wide the panel gets.
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 280,
+        mainAxisExtent: 64,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+      ),
       children: _collectionTypes.entries.map((entry) {
         final isSelected = _collectionType == entry.key;
         final l10n = AppLocalizations.of(context);

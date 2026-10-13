@@ -8,12 +8,16 @@ import '../../util/platform_detection.dart';
 class FloatingNotification {
   FloatingNotification._();
 
+  /// How long a notification stays up before it dismisses itself.
+  static const Duration displayDuration = Duration(seconds: 7);
+
   static void show(
     BuildContext context,
     String title,
     String body,
-    VoidCallback? onTap,
-  ) {
+    VoidCallback? onTap, {
+    IconData icon = Icons.notifications_active_outlined,
+  }) {
     final overlay = Overlay.maybeOf(context, rootOverlay: true);
     if (overlay == null) return;
 
@@ -22,6 +26,7 @@ class FloatingNotification {
       builder: (entryContext) => _FloatingNotificationCard(
         title: title,
         body: body,
+        icon: icon,
         onTap: onTap,
         onDismissed: () {
           if (entry.mounted) entry.remove();
@@ -35,12 +40,14 @@ class FloatingNotification {
 class _FloatingNotificationCard extends StatefulWidget {
   final String title;
   final String body;
+  final IconData icon;
   final VoidCallback? onTap;
   final VoidCallback onDismissed;
 
   const _FloatingNotificationCard({
     required this.title,
     required this.body,
+    required this.icon,
     required this.onTap,
     required this.onDismissed,
   });
@@ -52,8 +59,6 @@ class _FloatingNotificationCard extends StatefulWidget {
 
 class _FloatingNotificationCardState extends State<_FloatingNotificationCard>
     with SingleTickerProviderStateMixin {
-  static const _autoDismissDuration = Duration(seconds: 7);
-
   late final AnimationController _controller;
   late final Animation<double> _fade;
   late final Animation<Offset> _slide;
@@ -73,7 +78,7 @@ class _FloatingNotificationCardState extends State<_FloatingNotificationCard>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
     _controller.forward();
-    _autoDismissTimer = Timer(_autoDismissDuration, _dismiss);
+    _autoDismissTimer = Timer(FloatingNotification.displayDuration, _dismiss);
   }
 
   @override
@@ -122,11 +127,7 @@ class _FloatingNotificationCardState extends State<_FloatingNotificationCard>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.notifications_active_outlined,
-            color: AppColorScheme.accent,
-            size: 20,
-          ),
+          Icon(widget.icon, color: AppColorScheme.accent, size: 20),
           const SizedBox(width: 12),
           Flexible(
             child: Column(
@@ -173,16 +174,19 @@ class _FloatingNotificationCardState extends State<_FloatingNotificationCard>
             opacity: _fade,
             child: SlideTransition(
               position: _slide,
-              child: tappable
-                  ? Material(
-                      color: Colors.transparent,
-                      child: InkWell(
+              // The Material is there even when the card can't be tapped, as on
+              // TV. Without it the text has no theme and draws in the debug
+              // style, underlined in yellow.
+              child: Material(
+                type: MaterialType.transparency,
+                child: tappable
+                    ? InkWell(
                         borderRadius: AppRadius.circular(14),
                         onTap: _handleTap,
                         child: card,
-                      ),
-                    )
-                  : card,
+                      )
+                    : card,
+              ),
             ),
           ),
         ),

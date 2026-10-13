@@ -1,6 +1,6 @@
 name: custom_tv_text_field
 description: Moonfin fork of custom_tv_text_field — TV-optimized on-screen keyboard. Hidden native input, password masking added.
-version: 1.0.9
+version: 1.1.0
 publish_to: none
 
 environment:

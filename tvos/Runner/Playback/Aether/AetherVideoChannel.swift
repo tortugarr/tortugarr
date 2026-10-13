@@ -4,6 +4,7 @@
 #if os(iOS) || os(macOS)
 
 import AVFoundation
+import AetherEngine
 import VideoToolbox
 #if canImport(Flutter)
 import Flutter
@@ -30,6 +31,9 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
         created.onPlayerError = { [weak self] payload in
             self?.send(payload)
         }
+        created.onNowPlayingCommand = { [weak self] payload in
+            self?.send(payload)
+        }
         return created
     }()
 
@@ -37,6 +41,7 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
     private var lastTextTrackCount = -1
     private var lastClosedCaptionCount = -1
     private var didComplete = false
+    private var didReportTerminalError = false
 
     init(messenger: FlutterBinaryMessenger) {
         control = FlutterMethodChannel(
@@ -94,9 +99,13 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
             player.setAudioTrack((args["index"] as? NSNumber)?.int32Value ?? -1)
         case "setSubtitleTrack":
             let isExternal = (args["isExternalSubtitle"] as? Bool) == true
+            let externalUrl = isExternal ? args["externalSubtitleUrl"] as? String : nil
+            // The player keys its external tracks by the url addExternalSubtitle built,
+            // and a downloaded sidecar comes back here as the bare path it was added
+            // with, so it takes the same conversion or the lookup misses.
             player.selectSubtitleTrack(
                 (args["index"] as? NSNumber)?.int32Value ?? -1,
-                externalUrl: isExternal ? args["externalSubtitleUrl"] as? String : nil
+                externalUrl: externalUrl.flatMap { urlFrom($0)?.absoluteString } ?? externalUrl
             )
         case "addExternalSubtitle":
             if let urlString = args["url"] as? String, let url = urlFrom(urlString) {
@@ -121,11 +130,35 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
                 fontSize: (args["fontSize"] as? NSNumber)?.doubleValue,
                 fontWeight: (args["fontWeight"] as? NSNumber)?.intValue,
                 verticalOffset: (args["verticalOffset"] as? NSNumber)?.doubleValue)
+        case "setAllowUntrustedTls":
+            EngineTLS.serverTrustEvaluator = EngineTrustPolicy.evaluator(from: args)
         case "setSubtitleRendererMode":
             // The host overlay is the only subtitle renderer on this path.
             break
+        case "setEngineLogForwarding":
+            setEngineLogForwarding((args["enabled"] as? Bool) == true)
+        case "setUiMetadata":
+            player.applyNowPlayingMetadata(args)
         default:
             break
+        }
+    }
+
+    /// Engine lines otherwise only reach the device console, which a remote
+    /// user cannot capture, so a report says nothing about what the reader and
+    /// demuxer saw before the failure.
+    ///
+    /// The sink only accepts calls from the platform thread and the engine logs
+    /// from whichever thread did the work, so every line hops before it is sent.
+    private func setEngineLogForwarding(_ enabled: Bool) {
+        guard enabled else {
+            EngineLog.handler = nil
+            return
+        }
+        EngineLog.handler = { [weak self] line in
+            DispatchQueue.main.async {
+                self?.send(["event": "engineLog", "line": line])
+            }
         }
     }
 
@@ -140,6 +173,7 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
     private func setSource(_ args: [String: Any]) {
         guard let url = args["url"] as? String else { return }
         didComplete = false
+        didReportTerminalError = false
         lastTextTrackCount = -1
         lastClosedCaptionCount = -1
 
@@ -154,7 +188,10 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
                 autoPlay: (args["autoPlay"] as? Bool) ?? true,
                 audioStreamIndex: (args["audioStreamIndex"] as? NSNumber).flatMap {
                     $0.intValue >= 0 ? Int32($0.intValue) : nil
-                }))
+                },
+                dolbyVisionBaseLayerOnly: (args["dolbyVisionBaseLayerOnly"] as? Bool) ?? false,
+                externalSubtitles: AetherPlayerWrapper.externalSubtitleTracks(
+                    from: args["externalSubtitles"])))
         player.setForceSubtitlesDisabledOnStart(
             (args["forceSubtitlesDisabledOnStart"] as? Bool) ?? false)
         player.setReplayGainDb((args["normalizationGainDb"] as? NSNumber)?.doubleValue)
@@ -204,6 +241,7 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
             "bufferedMs": Int((p.duration * Double(p.bufferProgress) * 1000).rounded()),
             "isPlaying": isPlaying,
             "isBuffering": isBuffering,
+            "isSubtitleLoading": p.isSubtitleLoading,
         ])
 
         // Captions can turn up part way through a live stream, so a change in
@@ -233,7 +271,8 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
             send(["event": "completed", "completed": true])
         }
 
-        if p.state == .error {
+        if p.state == .error, !didReportTerminalError {
+            didReportTerminalError = true
             send(["event": "error", "error": "Playback error"])
         }
     }

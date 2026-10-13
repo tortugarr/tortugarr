@@ -9,10 +9,20 @@ abstract class LiveTvApi {
     String? userId,
   });
 
+  /// A genre flag ([isMovie], [isSeries], [isSports], [isNews], [isKids]) makes
+  /// the server return only that genre's programs for the given [channelIds],
+  /// so the guide's category chips can walk the lineup in large batches
+  /// without pulling every program. Omitting [channelIds] searches every
+  /// channel; the guide does not use that form.
   Future<Map<String, dynamic>> getGuide({
     DateTime? startDate,
     DateTime? endDate,
     List<String>? channelIds,
+    bool? isMovie,
+    bool? isSeries,
+    bool? isSports,
+    bool? isNews,
+    bool? isKids,
     String? fields,
     bool? enableTotalRecordCount,
     bool? enableImages,
@@ -27,6 +37,12 @@ abstract class LiveTvApi {
     int? limit,
     bool? isAiring,
   });
+
+  /// A single program, images enabled. [getGuide] disables images for its
+  /// whole batch to keep the payload small (issue #666), which also means a
+  /// program's own `ImageTags` never comes back from it even when the server
+  /// has one on file — this is the only call that can see it.
+  Future<Map<String, dynamic>> getProgram(String programId, {String? userId});
 
   Future<Map<String, dynamic>> getRecordings({
     int? limit,
@@ -43,6 +59,9 @@ abstract class LiveTvApi {
   Future<Map<String, dynamic>> getSeriesTimers();
 
   Future<void> createTimer(String programId);
+
+  /// Records every showing of a program's series, not just this one.
+  Future<void> createSeriesTimer(String programId);
 
   Future<void> cancelTimer(String timerId);
 

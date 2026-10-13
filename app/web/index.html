@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Moonfin web client for self-hosted media servers">
+  <meta name="theme-color" content="#101010">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Moonfin">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <title>Moonfin</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #101010;
+      color: #ffffff;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+
+    #moonfin-loader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.45);
+      transition: opacity 180ms ease-out;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .moonfin-loader__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .moonfin-loader__logo-wrap {
+      width: 160px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+    }
+
+    .moonfin-loader__logo {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      backface-visibility: visible;
+      animation: moonfin-logo-spin 8s linear infinite;
+    }
+
+    .moonfin-loader__label {
+      margin-top: 40px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      text-align: center;
+      background: linear-gradient(90deg, #aa5cc3, #00a4dc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: moonfin-label-pulse 2s ease-in-out infinite alternate;
+    }
+
+    #moonfin-loader.ready {
+      opacity: 0;
+    }
+
+    @keyframes moonfin-logo-spin {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(360deg);
+      }
+    }
+
+    @keyframes moonfin-label-pulse {
+      from {
+        opacity: 0.4;
+        transform: scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+  <script>
+    (function () {
+      function isHlsPlaylistUrl(url) {
+        if (typeof url !== 'string' || !url) {
+          return false;
+        }
+        var normalized = url.toLowerCase();
+        if (normalized.indexOf('.m3u8') !== -1) {
+          return true;
+        }
+        return normalized.indexOf('format=hls') !== -1;
+      }
+
+      function shouldTreatAsHls(url, forceHls) {
+        return !!forceHls || isHlsPlaylistUrl(url);
+      }
+
+      window.MoonfinHlsBridge = {
+        // hls.js is preferred whenever MediaSource is available. canPlayType
+        // isn't consulted because Chromium reports native HLS support it
+        // can't actually deliver (black screen on MPEG-TS segments). Browsers
+        // without MSE, like iPhone Safari, fall through to the native
+        // video element, which plays HLS natively there.
+        canUseHlsJs: function (video, url, forceHls) {
+          if (!shouldTreatAsHls(url, forceHls)) {
+            return false;
+          }
+          if (typeof window.Hls === 'undefined') {
+            return false;
+          }
+          if (typeof window.Hls.isSupported !== 'function') {
+            return false;
+          }
+          return !!window.Hls.isSupported();
+        },
+        attach: function (video, url, forceHls) {
+          if (!this.canUseHlsJs(video, url, forceHls)) {
+            return null;
+          }
+          var hls = new window.Hls({
+            enableWorker: true,
+            lowLatencyMode: true,
+            backBufferLength: 90,
+          });
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          return hls;
+        },
+        destroy: function (hls) {
+          if (hls && typeof hls.destroy === 'function') {
+            hls.destroy();
+          }
+        },
+      };
+
+      window.addEventListener('flutter-first-frame', function () {
+        var loader = document.getElementById('moonfin-loader');
+        if (!loader) {
+          return;
+        }
+        loader.classList.add('ready');
+        setTimeout(function () {
+          if (loader.parentNode) {
+            loader.parentNode.removeChild(loader);
+          }
+        }, 220);
+      });
+    })();
+  </script>
+</head>
+<body>
+  <div id="moonfin-loader" aria-hidden="true">
+    <div class="moonfin-loader__content">
+      <div class="moonfin-loader__logo-wrap">
+        <img
+          class="moonfin-loader__logo"
+          src="assets/assets/icons/moonfin_logo.svg"
+          alt="Moonfin"
+          onerror="this.onerror=null;this.src='assets/icons/moonfin_logo.svg';"
+        >
+      </div>
+      <div class="moonfin-loader__label">Loading Moonfin</div>
+    </div>
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

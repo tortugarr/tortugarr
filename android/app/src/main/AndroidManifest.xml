@@ -46,10 +46,25 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
             </intent-filter>
+            <!-- moonfin://item?id=... / moonfin://play?id=... deep links,
+                 delivered to Dart by app_links. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="moonfin"/>
+            </intent-filter>
+            <!-- Keep the engine's built-in deep linking off so raw moonfin://
+                 URIs only reach DeepLinkService. -->
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="false" />
         </activity>
-        <!-- background_downloader: WorkManager foreground service so media
-             downloads (notably long server transcodes) are not killed at the
-             9-minute background work limit. -->
+        <!-- background_downloader: WorkManager foreground service so a media
+             download whose length the server declared is not killed at the
+             9-minute background work limit. A transcode has no declared
+             length, so it runs on an in-process engine under Moonfin's own
+             foreground notification instead. -->
         <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"

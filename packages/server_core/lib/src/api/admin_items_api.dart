@@ -4,11 +4,17 @@ abstract class AdminItemsApi {
   Future<void> updateItem(String itemId, Map<String, dynamic> itemData);
   Future<Map<String, dynamic>> getMetadataEditor(String itemId);
   Future<void> updateContentType(String itemId, String contentType);
+  /// Refreshes [itemId] from the metadata providers. Both refresh modes
+  /// default to `None` on the server, which fetches nothing, so the modes are
+  /// always sent. [MetadataRefreshMode.fullRefresh] re-queries every provider
+  /// while [MetadataRefreshMode.defaultRefresh] only fills in what is missing.
   Future<void> refreshItem(
     String itemId, {
     bool? recursive,
     bool? replaceAllMetadata,
     bool? replaceAllImages,
+    MetadataRefreshMode metadataRefreshMode = MetadataRefreshMode.defaultRefresh,
+    MetadataRefreshMode imageRefreshMode = MetadataRefreshMode.defaultRefresh,
   });
   Future<List<Map<String, dynamic>>> getExternalIdInfos(String itemId);
 

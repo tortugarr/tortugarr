@@ -235,6 +235,8 @@ void main() {
     expect(season['Id'], 'sea1');
     expect(season['Type'], 'Season');
     expect(season['IndexNumber'], 1);
+    // The season card falls back to this, so a stub without it reads as empty.
+    expect(season['ChildCount'], 2);
   });
 
   test('getNextUp returns first unplayed after last played', () async {
@@ -307,6 +309,64 @@ void main() {
     // The >=90% item was marked played instead.
     final done = await api.getItem('m2');
     expect((done['UserData'] as Map)['Played'], true);
+  });
+
+  test('getResumeItems pages past the items already shown', () async {
+    for (var i = 0; i < 3; i++) {
+      await insert(
+        id: 'm$i',
+        type: 'Movie',
+        name: 'Movie $i',
+        positionTicks: 500,
+        metadata: {'RunTimeTicks': 1000},
+      );
+    }
+    await catalog.warm();
+
+    final firstPage = await api.getResumeItems(limit: 2);
+    final secondPage = await api.getResumeItems(startIndex: 2, limit: 2);
+
+    expect(items(firstPage), hasLength(2));
+    expect(items(secondPage), hasLength(1));
+    expect(
+      items(secondPage).map((i) => i['Id']),
+      isNot(anyElement(isIn(items(firstPage).map((i) => i['Id'])))),
+    );
+    expect(secondPage['TotalRecordCount'], 3);
+  });
+
+  test('getResumeItems splits video and audio by media type', () async {
+    for (final type in [
+      'Movie',
+      'Episode',
+      'Video',
+      'MusicVideo',
+      'Audio',
+      'AudioBook',
+    ]) {
+      await insert(
+        id: type,
+        type: type,
+        name: type,
+        positionTicks: 500,
+        metadata: {'RunTimeTicks': 1000},
+      );
+    }
+    await catalog.warm();
+
+    List<String> typesOf(Map<String, dynamic> envelope) =>
+        items(envelope).map((i) => i['Type'] as String).toList()..sort();
+
+    expect(typesOf(await api.getResumeItems(mediaTypes: 'Video')), [
+      'Episode',
+      'Movie',
+      'MusicVideo',
+      'Video',
+    ]);
+    expect(typesOf(await api.getResumeItems(mediaTypes: 'Audio')), [
+      'Audio',
+      'AudioBook',
+    ]);
   });
 
   test('getGenres aggregates distinct genres with counts', () async {

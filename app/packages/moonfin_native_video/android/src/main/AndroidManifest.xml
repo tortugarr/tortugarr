@@ -1,0 +1,22 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+	<application>
+		<service
+			android:name=".MoonfinMediaSessionService"
+			android:exported="true"
+			android:foregroundServiceType="mediaPlayback">
+			<intent-filter>
+				<action android:name="androidx.media3.session.MediaSessionService" />
+			</intent-filter>
+		</service>
+
+		<activity
+			android:name=".Media3PlayerActivity"
+			android:configChanges="keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+			android:exported="false"
+			android:hardwareAccelerated="true"
+			android:launchMode="singleTask"
+			android:resizeableActivity="true"
+			android:supportsPictureInPicture="true"
+			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+	</application>
+</manifest>

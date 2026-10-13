@@ -8,6 +8,43 @@ APP_ICON="$REPO_ROOT/assets/icons/moonfin.png"
 BUILD_DIR="$REPO_ROOT/build/linux/release/bundle"
 TEMP_DIR="$REPO_ROOT/build/linux/temp"
 
+# Artifact names carry the architecture, except on x86_64 which keeps the plain
+# "Linux" name. An installed AppImage updates itself from a zsync file named
+# after the artifact, and the AUR package and the README point at those same
+# names, so renaming the x86_64 files would break all three.
+get_artifact_platform() {
+  case "$(uname -m)" in
+    x86_64) printf '%s\n' "Linux" ;;
+    aarch64|arm64) printf '%s\n' "LinuxARM64" ;;
+    *) printf '%s\n' "Linux_$(uname -m)" ;;
+  esac
+}
+
+PLATFORM_TAG="$(get_artifact_platform)"
+
+# Snap stage-packages land under the host's multiarch directory, so the snap's
+# library path has to name the architecture it is being built for.
+get_multiarch_triplet() {
+  case "$(uname -m)" in
+    aarch64|arm64) printf '%s\n' "aarch64-linux-gnu" ;;
+    *) printf '%s\n' "x86_64-linux-gnu" ;;
+  esac
+}
+
+get_snap_base() {
+  local release=""
+  if [ -r /etc/os-release ]; then
+    release="$(. /etc/os-release && printf '%s' "${VERSION_ID:-}")"
+  fi
+
+  case "$release" in
+    22.04) printf '%s\n' "core22" ;;
+    24.04) printf '%s\n' "core24" ;;
+    26.04) printf '%s\n' "core26" ;;
+    *) return 1 ;;
+  esac
+}
+
 get_deb_architecture() {
   local machine
   machine="$(uname -m)"
@@ -519,12 +556,13 @@ create_desktop_file() {
 [Desktop Entry]
 Type=Application
 Name=Moonfin
-Exec=moonfin
+Exec=moonfin %U
 Icon=${APP_ID}
 Categories=AudioVideo;Video;
 Comment=Jellyfin & Emby media client
 Terminal=false
 StartupWMClass=${APP_ID}
+MimeType=x-scheme-handler/moonfin;
 EOF
   # AppImage launchers read the version from the embedded desktop entry rather
   # than the filename.
@@ -634,7 +672,7 @@ build_appimage() {
 
   local appimage_dir="$TEMP_DIR/appimage"
   local version="$(get_app_version)"
-  local appimage_name="${APP_NAME}_Linux_v${version}.AppImage"
+  local appimage_name="${APP_NAME}_${PLATFORM_TAG}_v${version}.AppImage"
 
   rm -rf "$appimage_dir"
   mkdir -p "$appimage_dir"
@@ -711,7 +749,7 @@ EOF
   # Update information lets AppImage updaters fetch only the changed blocks from
   # the .zsync published with each release. The wildcard matches whichever
   # version the current release carries.
-  local update_info="${APPIMAGE_UPDATE_INFO:-gh-releases-zsync|Moonfin-Client|Moonfin-Core|latest|${APP_NAME}_Linux_v*.AppImage.zsync}"
+  local update_info="${APPIMAGE_UPDATE_INFO:-gh-releases-zsync|Moonfin-Client|Moonfin-Core|latest|${APP_NAME}_${PLATFORM_TAG}_v*.AppImage.zsync}"
   local appimagetool_args=()
   if command -v zsyncmake >/dev/null 2>&1; then
     appimagetool_args+=( -u "$update_info" )
@@ -742,7 +780,7 @@ build_tarball() {
   echo "=== Building Tarball ==="
 
   local version="$(get_app_version)"
-  local tarball_name="${APP_NAME}_Linux_v${version}.tar.gz"
+  local tarball_name="${APP_NAME}_${PLATFORM_TAG}_v${version}.tar.gz"
   local tar_dir="$TEMP_DIR/tarball/moonfin-${version}"
 
   rm -rf "$TEMP_DIR/tarball"
@@ -773,7 +811,14 @@ resolve_exact_lib() {
   return 1
 }
 
-missing_libs="$(ldd "$APPDIR/moonfin-bin" 2>/dev/null | awk '/not found/ {print $1}' | sort -u || true)"
+ldd_output="$(ldd "$APPDIR/moonfin-bin" 2>/dev/null || true)"
+
+# Only "libfoo.so => not found" lines name a missing library. Symbol version
+# lines start with the binary path, so matching bare "not found" reports the
+# binary itself as missing.
+missing_libs="$(printf '%s\n' "$ldd_output" | awk '$2 == "=>" && $3 == "not" && $4 == "found" {print $1}' | sort -u)"
+version_errors="$(printf '%s\n' "$ldd_output" | grep -F 'not found' | grep -v ' => ' || true)"
+
 if ! resolve_exact_lib libsqlite3.so; then
   missing_libs="$(printf '%s\n%s\n' "$missing_libs" "libsqlite3.so" | awk 'NF' | sort -u)"
 fi
@@ -782,6 +827,16 @@ if [ -n "$missing_libs" ]; then
   echo "Moonfin cannot start. Missing shared libraries:" >&2
   printf '  - %s\n' $missing_libs >&2
   echo "Install the missing libraries for your distro and retry." >&2
+  exit 127
+fi
+
+if [ -n "$version_errors" ]; then
+  echo "Moonfin cannot start. A library your system provides is missing symbols" >&2
+  echo "this build needs:" >&2
+  printf '%s\n' "$version_errors" >&2
+  echo "That library has to be bundled with the app for your distro." >&2
+  echo "Please report this output so the next build carries it." >&2
+  echo "A deb, rpm, flatpak or snap build works in the meantime." >&2
   exit 127
 fi
 
@@ -804,6 +859,7 @@ Dependencies:
   - WebKitGTK 4.1 runtime (libwebkit2gtk-4.1-0)
   - libflutter_linux_gtk (bundled)
   - Additional runtime libs are bundled when available (libmpv, libsecret)
+  - xdg-user-dirs
 
 Requirements:
   - X11 or Wayland display server
@@ -823,6 +879,24 @@ EOF
   echo "✓ Created: $REPO_ROOT/$tarball_name"
 }
 
+# The newest glibc anything in the installed tree asks for, which is the oldest
+# glibc that can load it, since symbol versions are forward compatible only.
+# Only undefined symbols count, because a library that defines a version lists
+# every version it ever published rather than the one it needs.
+required_glibc_version() {
+  local tree="$1" file
+
+  command -v readelf >/dev/null 2>&1 || return 0
+
+  for file in "$tree"/* "$tree"/lib/*.so*; do
+    [ -f "$file" ] || continue
+    [ -L "$file" ] && continue
+    readelf --dyn-syms -W "$file" 2>/dev/null |
+      awk '$7 == "UND"' |
+      grep -o 'GLIBC_[0-9][0-9.]*' || true
+  done | sed 's/^GLIBC_//' | sort -uV | tail -n1
+}
+
 build_deb() {
   echo "=== Building Debian Package (.deb) ==="
   if ! command -v dpkg-deb >/dev/null 2>&1; then
@@ -831,7 +905,7 @@ build_deb() {
   fi
 
   local version="$(get_app_version)"
-  local deb_name="${APP_NAME}_Linux_v${version}.deb"
+  local deb_name="${APP_NAME}_${PLATFORM_TAG}_v${version}.deb"
   local pkg_root="$TEMP_DIR/deb/moonfin-${version}"
   local deb_arch
   deb_arch="$(get_deb_architecture)"
@@ -857,13 +931,24 @@ EOF
   mkdir -p "$pkg_root/usr/share/metainfo"
   create_metainfo_file "$pkg_root/usr/share/metainfo" "$version"
 
+  # glibc is deliberately not bundled, so the build host's version is the oldest
+  # one the package can run on. Declaring it turns a wall of loader errors at
+  # launch into a refused install that names the glibc the machine needs.
+  local depends="libgtk-3-0, libglib2.0-0, libsecret-1-0, libwebkit2gtk-4.1-0, xdg-user-dirs"
+  local glibc
+  glibc="$(required_glibc_version "$pkg_root/usr/lib/moonfin")"
+  if [ -n "$glibc" ]; then
+    depends="$depends, libc6 (>= $glibc)"
+  fi
+  echo "Depends: $depends"
+
   cat > "$pkg_root/DEBIAN/control" << EOF
 Package: moonfin
 Version: ${version}
 Architecture: ${deb_arch}
 Maintainer: Moonfin Team <support@moonfin.dev>
 Installed-Size: $(du -sk "$pkg_root/usr" | cut -f1)
-Depends: libgtk-3-0, libglib2.0-0, libsecret-1-0, libwebkit2gtk-4.1-0
+Depends: ${depends}
 Description: Jellyfin & Emby media client
  Moonfin is a media client for Jellyfin and Emby servers,
  available on mobile, TV, and desktop platforms.
@@ -905,7 +990,7 @@ build_rpm() {
   fi
 
   local version="$(get_app_version)"
-  local rpm_name="${APP_NAME}_Linux_v${version}.rpm"
+  local rpm_name="${APP_NAME}_${PLATFORM_TAG}_v${version}.rpm"
   local rpm_dir="$TEMP_DIR/rpm"
   local spec_file="$rpm_dir/moonfin.spec"
 
@@ -920,6 +1005,7 @@ Version:        ${version}
 Release:        1
 Summary:        Jellyfin & Emby media client
 License:        GPL-3.0-only
+Requires:       xdg-user-dirs
 
 %description
 Moonfin is a media client for Jellyfin and Emby servers,
@@ -1003,16 +1089,23 @@ build_snap() {
     return 1
   fi
 
+  local snap_base
+  if ! snap_base="$(get_snap_base)"; then
+    echo "Skipping Snap: no base snap matches this host"
+    echo "  Staged packages don't run on a base built from another release."
+    return 1
+  fi
+
   if command -v snap >/dev/null 2>&1; then
     echo "Waiting for snapd seed to complete..."
     if ! snap wait system seed.loaded >/dev/null 2>&1; then
       echo "Warning: snapd seed wait failed; continuing and letting snapcraft attempt build."
     fi
 
-    if ! snap list core22 >/dev/null 2>&1; then
-      echo "core22 not found. Installing core22 base snap..."
-      if ! retry_with_backoff 3 sudo snap install core22 --channel=latest/stable; then
-        echo "Failed to install core22 after retries."
+    if ! snap list "$snap_base" >/dev/null 2>&1; then
+      echo "$snap_base not found. Installing $snap_base base snap..."
+      if ! retry_with_backoff 3 sudo snap install "$snap_base" --channel=latest/stable; then
+        echo "Failed to install $snap_base after retries."
         return 1
       fi
     fi
@@ -1022,6 +1115,8 @@ build_snap() {
   local version="$(get_app_version)"
   local snap_mpv_package
   snap_mpv_package="$(resolve_mpv_package_name)"
+  local snap_triplet
+  snap_triplet="$(get_multiarch_triplet)"
 
   rm -rf "$snap_dir"
   mkdir -p "$snap_dir"
@@ -1037,7 +1132,7 @@ description: |
 
 grade: stable
 confinement: strict
-base: core22
+base: ${snap_base}
 icon: ${APP_ID}.png
 
 apps:
@@ -1050,7 +1145,10 @@ apps:
       - opengl
       - pulseaudio
     environment:
-      LD_LIBRARY_PATH: \$SNAP/lib:\$SNAP/lib/x86_64-linux-gnu:\$SNAP/usr/lib/x86_64-linux-gnu
+      # libpulse looks for libpulsecommon under an absolute path that
+      # confinement points at the base snap, which carries no audio libraries,
+      # so the copy packed in here has to be named on the search path.
+      LD_LIBRARY_PATH: \$SNAP/lib:\$SNAP/lib/${snap_triplet}:\$SNAP/usr/lib/${snap_triplet}:\$SNAP/usr/lib/${snap_triplet}/pulseaudio
 
 parts:
   moonfin:
@@ -1079,11 +1177,12 @@ EOF
 [Desktop Entry]
 Type=Application
 Name=Moonfin
-Exec=moonfin
+Exec=moonfin %U
 Icon=\${SNAP}/meta/gui/icon.png
 Categories=AudioVideo;Video;
 Comment=Jellyfin & Emby media client
 Terminal=false
+MimeType=x-scheme-handler/moonfin;
 EOF
 
   cd "$snap_dir"
@@ -1095,8 +1194,8 @@ EOF
   local snap_file
   snap_file=$(find "$snap_dir" -maxdepth 1 -name "*.snap" 2>/dev/null | head -1)
   if [ -n "$snap_file" ]; then
-    mv "$snap_file" "$REPO_ROOT/${APP_NAME}_Linux_v${version}.snap"
-    echo "✓ Created: $REPO_ROOT/${APP_NAME}_Linux_v${version}.snap"
+    mv "$snap_file" "$REPO_ROOT/${APP_NAME}_${PLATFORM_TAG}_v${version}.snap"
+    echo "✓ Created: $REPO_ROOT/${APP_NAME}_${PLATFORM_TAG}_v${version}.snap"
   else
     echo "Snap build did not produce a .snap file"
     return 1
@@ -1119,7 +1218,7 @@ build_flatpak() {
 
   local flatpak_build_dir="$TEMP_DIR/flatpak-build"
   local flatpak_repo_dir="$TEMP_DIR/flatpak-repo"
-  local flatpak_name="${APP_NAME}_Linux_v${version}.flatpak"
+  local flatpak_name="${APP_NAME}_${PLATFORM_TAG}_v${version}.flatpak"
   local flatpak_src="$flatpak_dir/src"
 
   rm -rf "$flatpak_build_dir" "$flatpak_repo_dir"
@@ -1140,13 +1239,26 @@ command: moonfin
 
 finish-args:
   - --share=network
+  - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
-  - --device=dri
+  # GPU and gamepads. --device=input is narrower, but the Ubuntu flatpak-builder
+  # in CI is too old to build it.
+  - --device=all
   - --socket=pulseaudio
-  - --socket=session-bus
+  # MPRIS media controls
+  - --own-name=org.mpris.MediaPlayer2.moonfin
+  # Saved logins (flutter_secure_storage via libsecret)
+  - --talk-name=org.freedesktop.secrets
+  # Keep the screen awake during playback (wakelock_plus)
+  - --talk-name=org.freedesktop.ScreenSaver
+  # Desktop notifications (flutter_local_notifications)
+  - --talk-name=org.freedesktop.Notifications
+  # Online/offline detection (connectivity_plus)
   - --system-talk-name=org.freedesktop.NetworkManager
-  - --filesystem=home
+  # Earlier builds kept the offline database here. It's read once to copy it
+  # into the app's own data folder.
+  - --filesystem=xdg-documents/Moonfin:ro
 
 modules:
   - name: appstream-compose-shim
@@ -1213,7 +1325,14 @@ modules:
           return 1
         }
 
-        missing_libs="\$(ldd /app/moonfin/moonfin 2>/dev/null | awk '/not found/ {print \$1}' | sort -u || true)"
+        ldd_output="\$(ldd /app/moonfin/moonfin 2>/dev/null || true)"
+
+        # Only "libfoo.so => not found" lines name a missing library. Symbol
+        # version lines start with the binary path, so matching bare "not found"
+        # reports the binary itself as missing.
+        missing_libs="\$(printf '%s\\n' "\$ldd_output" | awk '\$2 == "=>" && \$3 == "not" && \$4 == "found" {print \$1}' | sort -u)"
+        version_errors="\$(printf '%s\\n' "\$ldd_output" | grep -F 'not found' | grep -v ' => ' || true)"
+
         if ! resolve_exact_lib libsqlite3.so; then
           missing_libs="\$(printf '%s\\n%s\\n' "\$missing_libs" "libsqlite3.so" | awk 'NF' | sort -u)"
         fi
@@ -1222,6 +1341,15 @@ modules:
           echo "Moonfin cannot start. Missing shared libraries:" >&2
           printf '  - %s\\n' \$missing_libs >&2
           echo "Install the missing libraries in the runtime and retry." >&2
+          exit 127
+        fi
+
+        if [ -n "\$version_errors" ]; then
+          echo "Moonfin cannot start. A library the Flatpak runtime provides is missing" >&2
+          echo "symbols this build needs:" >&2
+          printf '%s\\n' "\$version_errors" >&2
+          echo "The bundled libraries were built against a newer system than the runtime." >&2
+          echo "Please report this output." >&2
           exit 127
         fi
 

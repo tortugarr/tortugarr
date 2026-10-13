@@ -39,7 +39,9 @@ class JellyfinMediaServerClient extends MediaServerClient {
   }) : _dio = Dio(BaseOptions(
          baseUrl: baseUrl,
          followRedirects: false,
-         connectTimeout: const Duration(seconds: 30),
+         // Only the connect. Waiting for a free slot happens before this
+         // starts, so it can stay short enough to give up on a hung host.
+         connectTimeout: const Duration(seconds: 8),
          receiveTimeout: const Duration(seconds: 30),
        )) {
     _baseUrl = baseUrl;
@@ -51,6 +53,21 @@ class JellyfinMediaServerClient extends MediaServerClient {
   String? _accessToken;
   String? _userId;
 
+  // Progress goes out every five seconds, and at two entries apiece those
+  // fill the diagnostic report inside an hour, taking the start of the
+  // playback with them. Only one answer a minute is kept, which still shows
+  // the session is reporting, and a ping that fails goes through onError.
+  static const _progressPingLogInterval = 12;
+  int _progressPings = 0;
+
+  bool _isProgressPing(Uri uri) =>
+      uri.path.endsWith('/Sessions/Playing/Progress');
+
+  bool _progressPingIsDue() {
+    _progressPings++;
+    return _progressPings % _progressPingLogInterval == 1;
+  }
+
   void _setupInterceptors() {
     _dio.interceptors.add(redirectInterceptor(_dio));
     _dio.interceptors.add(InterceptorsWrapper(
@@ -60,14 +77,18 @@ class JellyfinMediaServerClient extends MediaServerClient {
           deviceInfo: deviceInfo,
           accessToken: _accessToken,
         );
-        ServerLog.network('→ ${options.method} ${options.uri}');
+        if (!_isProgressPing(options.uri)) {
+          ServerLog.network('→ ${options.method} ${options.uri}');
+        }
         handler.next(options);
       },
       onResponse: (response, handler) {
-        ServerLog.network(
-          '← ${response.statusCode} ${response.requestOptions.method} '
-          '${response.requestOptions.uri}',
-        );
+        final uri = response.requestOptions.uri;
+        if (!_isProgressPing(uri) || _progressPingIsDue()) {
+          ServerLog.network(
+            '← ${response.statusCode} ${response.requestOptions.method} $uri',
+          );
+        }
         handler.next(response);
       },
       onError: (error, handler) {

@@ -19,6 +19,12 @@ class GalleryCoverflow extends StatefulWidget {
   final Widget? activeTrailer;
   final bool trailerActive;
 
+  /// Native mobile only. Plays the trailer as a full-width 16:9 band over the
+  /// coverflow instead of cropped inside the poster card. The band stays
+  /// mounted while it is still invisible because the embedded player has to be
+  /// in the tree before it can start and report playback.
+  final bool fullWidthTrailer;
+
   const GalleryCoverflow({
     super.key,
     required this.items,
@@ -29,6 +35,7 @@ class GalleryCoverflow extends StatefulWidget {
     this.activeRatings,
     this.activeTrailer,
     this.trailerActive = false,
+    this.fullWidthTrailer = false,
   });
 
   @override
@@ -86,51 +93,7 @@ class _GalleryCoverflowState extends State<GalleryCoverflow> {
           padding: EdgeInsets.only(top: topInset + 8),
           child: Column(
             children: [
-              Expanded(
-                child: PageView.builder(
-                controller: _controller,
-                itemCount: widget.items.length,
-                onPageChanged: widget.onSelect,
-                clipBehavior: Clip.none,
-                itemBuilder: (context, i) {
-                  final item = widget.items[i];
-                  final imageUrl = item.posterUrl ?? item.backdropUrl;
-                  final Widget cardImage = imageUrl == null
-                      ? ColoredBox(color: AppColorScheme.surface)
-                      : BoundedNetworkImage(
-                          imageUrl: imageUrl,
-                          minWidth: GalleryCoverflow.kCoverDecodeWidth,
-                          maxWidth: GalleryCoverflow.kCoverDecodeWidth,
-                          errorBuilder: (_, _, _) =>
-                              ColoredBox(color: AppColorScheme.surface),
-                        );
-                  return AnimatedBuilder(
-                    animation: _controller,
-                    child: cardImage,
-                    builder: (context, child) {
-                      final page =
-                          _controller.hasClients &&
-                              _controller.position.haveDimensions
-                          ? (_controller.page ?? widget.activeIndex.toDouble())
-                          : widget.activeIndex.toDouble();
-                      final delta = i - page;
-                      final isCenter = delta.abs() < 0.5;
-                      return _Cover(
-                        image: child!,
-                        delta: delta,
-                        accent: glow,
-                        trailer: isCenter ? widget.activeTrailer : null,
-                        trailerActive: isCenter && widget.trailerActive,
-                        onTap: isCenter
-                            ? widget.onInfo
-                            : () => widget.onSelect(i),
-                        onLongPress: isCenter ? widget.onPlay : null,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+              Expanded(child: _buildCarousel(glow)),
               _Info(item: active, ratings: widget.activeRatings),
               if (!widget.trailerActive) ...[
                 const SizedBox(height: 10),
@@ -140,6 +103,103 @@ class _GalleryCoverflowState extends State<GalleryCoverflow> {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildCarousel(Color glow) {
+    final trailerInCard = !widget.fullWidthTrailer;
+    final pageView = PageView.builder(
+      controller: _controller,
+      itemCount: widget.items.length,
+      onPageChanged: widget.onSelect,
+      clipBehavior: Clip.none,
+      itemBuilder: (context, i) {
+        final item = widget.items[i];
+        final imageUrl = item.posterUrl ?? item.backdropUrl;
+        final Widget cardImage = imageUrl == null
+            ? ColoredBox(color: AppColorScheme.surface)
+            : BoundedNetworkImage(
+                imageUrl: imageUrl,
+                minWidth: GalleryCoverflow.kCoverDecodeWidth,
+                maxWidth: GalleryCoverflow.kCoverDecodeWidth,
+                errorBuilder: (_, _, _) =>
+                    ColoredBox(color: AppColorScheme.surface),
+              );
+        return AnimatedBuilder(
+          animation: _controller,
+          child: cardImage,
+          builder: (context, child) {
+            final page =
+                _controller.hasClients && _controller.position.haveDimensions
+                ? (_controller.page ?? widget.activeIndex.toDouble())
+                : widget.activeIndex.toDouble();
+            final delta = i - page;
+            final isCenter = delta.abs() < 0.5;
+            return _Cover(
+              image: child!,
+              delta: delta,
+              accent: glow,
+              trailer: trailerInCard && isCenter ? widget.activeTrailer : null,
+              trailerActive: trailerInCard && isCenter && widget.trailerActive,
+              onTap: isCenter ? widget.onInfo : () => widget.onSelect(i),
+              onLongPress: isCenter ? widget.onPlay : null,
+            );
+          },
+        );
+      },
+    );
+    if (trailerInCard) return pageView;
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        IgnorePointer(
+          ignoring: widget.trailerActive,
+          child: AnimatedOpacity(
+            opacity: widget.trailerActive ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 400),
+            child: pageView,
+          ),
+        ),
+        if (widget.activeTrailer != null)
+          IgnorePointer(
+            ignoring: !widget.trailerActive,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Full width at native 16:9, capped by the available height so
+                // portrait tablets still show the whole frame.
+                final width = math.min(
+                  constraints.maxWidth,
+                  constraints.maxHeight * 16 / 9,
+                );
+                return Center(
+                  child: SizedBox(
+                    width: width,
+                    height: width * 9 / 16,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: widget.onInfo,
+                      onLongPress: widget.onPlay,
+                      // The band covers the pages underneath, so hand it the
+                      // swipe that would have changed slides.
+                      onHorizontalDragEnd: (details) {
+                        final velocity = details.primaryVelocity ?? 0;
+                        if (velocity.abs() < 200) return;
+                        final next =
+                            (widget.activeIndex + (velocity < 0 ? 1 : -1))
+                                .clamp(0, widget.items.length - 1);
+                        if (next != widget.activeIndex) {
+                          widget.onSelect(next);
+                        }
+                      },
+                      child: widget.activeTrailer!,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
   }

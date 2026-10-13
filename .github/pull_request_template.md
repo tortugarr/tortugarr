@@ -1,60 +1,6 @@
-# Pull Request
+## What and why
 
-## Summary
-Provide a brief description of what this PR changes and why.
+## How I tested it
 
-## Related Issues
-Link related issues or tickets separated by commas.
-
-- Closes #
-- Fixes #
-- Related to #
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Refactor
-- [ ] Performance improvement
-- [ ] UI/UX update
-- [ ] Documentation update
-- [ ] Build/CI change
-- [ ] Other (describe):
-
-## Changes Made
-List the key changes included in this PR.
-
-- 
-- 
-- 
-
-## Platform
-- [ ] Android
-- [ ] iOS
-- [ ] tvOS
-- [ ] Web
-- [ ] macOS
-- [ ] Windows
-- [ ] Linux
-- [ ] All / Shared code
-
-## Testing
-Describe how this change was tested.
-
-- [ ] Tested on emulator / simulator
-- [ ] Tested on physical device
-- [ ] Manual testing completed
-- [ ] Not tested (explain why):
-
-### Test Steps
-1.
-2.
-3.
-
-## Screenshots (if applicable)
-Include screenshots or recordings for UI changes.
-
-## Checklist
-- [ ] Code builds successfully
-- [ ] Code follows project style and conventions
-- [ ] No unnecessary commented-out code
-- [ ] No new warnings introduced
+- [ ] No keys, passwords, addresses or personal paths in the diff (see [CONTRIBUTING.md](https://github.com/tortugarr/tortugarr/blob/main/CONTRIBUTING.md))
+- [ ] Docs updated if behaviour changed

@@ -5,11 +5,14 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
+import '../../util/insecure_certificates.dart';
+
 Future<void> _downloadIsolateMain(Map<String, Object?> args) async {
   final sendPort = args['sendPort'] as SendPort;
   final url = args['url'] as String;
   final savePath = args['savePath'] as String;
   final headers = (args['headers'] as Map).cast<String, String>();
+  final allowSelfSigned = args['allowSelfSigned'] == true;
 
   final cancelPort = ReceivePort();
   sendPort.send(<String, Object?>{'t': 'r', 'cp': cancelPort.sendPort});
@@ -21,7 +24,9 @@ Future<void> _downloadIsolateMain(Map<String, Object?> args) async {
   RandomAccessFile? raf;
   try {
     client = HttpClient();
-    client.badCertificateCallback = (_, _, _) => true;
+    // The isolate gets its own globals, so the preference has to travel with
+    // the arguments rather than being read here.
+    client.badCertificateCallback = (_, _, _) => allowSelfSigned;
     client.idleTimeout = const Duration(seconds: 120);
 
     final request = await client.getUrl(Uri.parse(url));
@@ -103,9 +108,9 @@ Future<void> _downloadIsolateMain(Map<String, Object?> args) async {
 /// driving `dart:io` HttpClient with buffered file writes.
 ///
 /// Media downloads normally run through the native background_downloader
-/// plugin. This engine is kept for platforms the plugin doesn't support,
-/// Tizen and Apple TV, and as a fallback for servers whose TLS certificate
-/// the native engine rejects, since this engine accepts any certificate.
+/// plugin. This engine is the fallback for servers whose TLS certificate the
+/// native engine rejects, which it can accept when the user has allowed self
+/// signed certificates, and for tasks the native queue never starts.
 class LegacyDownloadEngine {
   /// Cancel reason used when the hang guard force-finalizes a download whose
   /// HTTP connection stayed open after all expected bytes arrived.
@@ -130,6 +135,7 @@ class LegacyDownloadEngine {
           (k, v) => MapEntry(k.toString(), v?.toString() ?? ''),
         ),
       ),
+      'allowSelfSigned': gAllowSelfSignedCertificates,
     });
 
     SendPort? toIsolate;

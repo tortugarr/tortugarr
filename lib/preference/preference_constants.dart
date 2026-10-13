@@ -6,49 +6,59 @@ enum SubtitleMode {
   none,
 }
 
-enum AudioOutputMode {
-  auto,
-  forceStereo,
-  avrPassthrough,
-}
-
+/// What the server re-encodes audio to when it has no choice. TrueHD isn't an
+/// option, since Jellyfin can't repackage it into a streaming container and the
+/// track lands silent.
 enum AudioFallbackCodec {
   auto,
   aac,
   ac3,
   eac3,
-  truehd,
   mp3,
   opus,
   flac,
 }
 
-/// High-level audio output choice shown to the user. It is a convenience that
-/// bulk-writes through to [AudioOutputMode] and the individual passthrough
-/// toggles, so the device-profile builder never needs to know about it.
-/// - [auto]: decode locally / let detection drive passthrough (toggles unset).
-/// - [surroundReceiver]: AVR passthrough; advertise everything the receiver
-///   reports it supports (toggles unset, capability-authoritative).
-/// - [stereo]: force a stereo downmix.
-/// - [advanced]: user manages [AudioOutputMode] + per-codec toggles directly.
-enum AudioPassthroughPreset {
+/// How compressed surround audio reaches the output device.
+/// - [disabled]: never bitstream, every codec decodes locally.
+/// - [auto]: bitstream whatever the platform reports the route can take.
+/// - [manual]: bitstream only the codecs the user toggled on.
+enum AudioPassthroughMode {
+  disabled,
   auto,
-  surroundReceiver,
-  stereo,
-  advanced,
+  manual,
 }
 
-/// The per-codec passthrough toggles, used to say which ones the user set by
-/// hand rather than left following detection.
-enum AudioPassthroughToggle {
-  ac3,
-  eac3,
-  eac3Joc,
-  dtsCore,
-  dtsHd,
-  dtsX,
-  trueHd,
-  trueHdAtmos,
+/// How a bitstream reaches the AudioTrack on the Media3 engine, while
+/// [AudioPassthroughMode] decides whether a codec may bitstream at all.
+/// - [platform]: raw codec encodings, the Android HAL packs the IEC frames.
+///   The default.
+/// - [iecPacker]: the app packs IEC 61937 itself and plays through an
+///   ENCODING_IEC61937 track, bypassing buggy vendor packers. Under this mode
+///   an eligible codec either rides the IEC path or decodes locally.
+enum AudioPassthroughOutput {
+  platform('platform'),
+  iecPacker('iec');
+
+  const AudioPassthroughOutput(this.wireName);
+
+  /// The token shared with the native Media3 bridge.
+  final String wireName;
+}
+
+/// Passthrough-controllable base codecs. Variants ride inside the base
+/// bitstream: Atmos (JOC) in eac3, DTS:X in dtsHd, Atmos in trueHd.
+enum PassthroughCodec {
+  ac3('ac3'),
+  eac3('eac3'),
+  dtsCore('dts'),
+  dtsHd('dtshd'),
+  trueHd('truehd');
+
+  const PassthroughCodec(this.wireName);
+
+  /// The codec token shared with the native player and mpv synthesis.
+  final String wireName;
 }
 
 enum PlaybackEnginePreference {
@@ -92,6 +102,14 @@ enum NavbarPosition {
   bottom,
 }
 
+/// How the mobile bottom navbar is drawn. Only read while [NavbarPosition.bottom]
+/// is in effect, which is phones and tablets only.
+enum BottomNavbarStyle {
+  dock,
+  split,
+  strip,
+}
+
 enum NextUpBehavior {
   extended,
   minimal,
@@ -104,11 +122,17 @@ enum PosterSize {
   small(portraitHeight: 120, landscapeHeight: 88),
   medium(portraitHeight: 150, landscapeHeight: 110),
   large(portraitHeight: 180, landscapeHeight: 132),
-  extraLarge(portraitHeight: 210, landscapeHeight: 154);
+  extraLarge(portraitHeight: 210, landscapeHeight: 154),
+  grandparents(portraitHeight: 300, landscapeHeight: 220);
 
   const PosterSize({required this.portraitHeight, required this.landscapeHeight});
   final int portraitHeight;
   final int landscapeHeight;
+
+  /// Every size but Grandparents, which only the Classic home rows draw.
+  static const gridValues = [small, medium, large, extraLarge];
+
+  PosterSize get upToExtraLarge => this == grandparents ? extraLarge : this;
 }
 
 enum FavoritesViewStyle {
@@ -125,10 +149,36 @@ enum DesktopUiScale {
   small(0.9),
   medium(1.0),
   large(1.15),
-  extraLarge(1.3);
+  extraLarge(1.3),
+  grandparents(1.45),
+  greatGrandparents(1.6);
 
   const DesktopUiScale(this.scaleFactor);
   final double scaleFactor;
+}
+
+/// How much finger travel on the Siri Remote touchpad moves focus one item,
+/// in normalized pad units where the pad is 2.0 across. A full slow drag moves
+/// about two items on low, three on medium and five on high.
+enum SiriRemoteSwipeSensitivity {
+  low(0.6, 0.9),
+  medium(0.45, 0.6),
+  high(0.28, 0.36);
+
+  const SiriRemoteSwipeSensitivity(this.firstStepTravel, this.stepTravel);
+
+  final double firstStepTravel;
+  final double stepTravel;
+}
+
+/// What the Apple TV home screen shows above the Moonfin icon.
+enum TopShelfContent {
+  /// A carousel of the newest items from the home's Latest rows.
+  latestMedia,
+
+  /// The static Moonfin banner from the brand assets, with nothing from the
+  /// library on it.
+  appBanner,
 }
 
 enum RefreshRateSwitchingBehavior {
@@ -168,6 +218,39 @@ enum ZoomMode {
   stretch,
 }
 
+/// What a trailing time label next to a progress bar shows.
+enum PlaybackTimeDisplay {
+  /// Total runtime of the item, e.g. `1:58:33`.
+  totalDuration,
+
+  /// Time left until the item ends, e.g. `-1:16:23`.
+  timeRemaining,
+
+  /// Wall-clock time the item will finish at, e.g. `Ends at 21:45`.
+  endsAt,
+}
+
+/// What one of the six configurable slots around the video progress bar shows.
+enum PlaybackTimeSlot {
+  /// Nothing is rendered and the slot collapses.
+  none,
+
+  /// How far into the item playback is, e.g. `42:10`.
+  elapsed,
+
+  /// Total runtime of the item, e.g. `1:58:33`.
+  totalDuration,
+
+  /// Time left until the item ends, e.g. `-1:16:23`.
+  timeRemaining,
+
+  /// Wall-clock time the item will finish at, e.g. `Ends at 21:45`.
+  endsAt,
+
+  /// The current time
+  time,
+}
+
 enum DesktopScrollWheelAction {
   off,
   seek,
@@ -179,12 +262,21 @@ enum DesktopScrollWheelAction {
 /// `reduced` forces the zero-blur sheen everywhere.
 enum GlassQualityMode { auto, full, reduced }
 
+/// How much this device is asked to spend on decoded images and inline video.
+/// [DevicePerformanceMode.auto] measures the device, the other two pin it.
+enum DevicePerformanceMode { auto, standard, reduced }
+
 /// Persisted settled quality of the adaptive glass renderer, mirroring the
 /// package's GlassQuality tiers. `unset` means no benchmark has settled yet,
 /// so the adaptive scope runs its warm-up pass on next launch. Kept as a
 /// Moonfin enum so the preference layer doesn't depend on
 /// liquid_glass_widgets.
 enum GlassSettledQuality { unset, minimal, standard, premium }
+
+/// Layered on top of whichever theme is active. `subtle` and `vivid` crush
+/// chrome toward pure black so OLED pixels switch off, and boost artwork
+/// saturation/contrast. `off` leaves every theme exactly as authored.
+enum OledMode { off, subtle, vivid }
 
 enum AppTheme {
   white(0xFFFFFFFF),
@@ -217,17 +309,26 @@ enum VisualThemeId {
 
 /// Selectable structural style for the media detail screen.
 ///
-/// [moonfin] is the original centered-stack layout (default). [modern] is the
-/// responsive cinematic layout (landscape two-pane / portrait stack). Resolved
-/// globally (not scoped per server/user).
+/// [classic] is the original centered-stack layout. [modern] is the responsive
+/// cinematic layout (landscape two-pane / portrait stack) and is the default.
+/// [spotlight] is the hero-first layout: Play plus at most three action
+/// buttons with the rest behind an ellipsis menu, and summary cards that open
+/// sectioned grid modals. [nouveau] is the full-screen layout, with every
+/// section stacked down the page rather than behind tabs or cards.
+/// [minimalist] strips the screen back to artwork, one play button and the
+/// episodes, and is what Kids Mode always shows. Stored per server and user.
 enum DetailScreenStyle {
   classic,
-  modern;
+  modern,
+  spotlight,
+  nouveau,
+  minimalist;
 }
 
 /// Selectable algorithm source for similarity recommendation system.
 enum RecommendationSystemSource {
   local,
+  server,
   online;
 }
 
@@ -253,6 +354,12 @@ enum RatingType {
   hidden,
 }
 
+enum PersonalRatingStyle {
+  thumbs,
+  stars,
+  numeric,
+}
+
 enum MediaSegmentAction {
   nothing,
   skip,
@@ -266,6 +373,17 @@ enum MediaSegmentCountdown {
   none,
 }
 
+/// How long the skip intro and outro button stays up before it hides itself.
+/// Off is zero, which means no timer runs.
+enum MediaSegmentAutoHide {
+  s5(5),
+  s10(10),
+  off(0);
+
+  const MediaSegmentAutoHide(this.seconds);
+  final int seconds;
+}
+
 /// Banner artwork is authored at 1000x185. Card geometry and image requests
 /// both use this so the artwork that comes back matches what gets drawn.
 const double kBannerAspectRatio = 1000 / 185;
@@ -274,6 +392,16 @@ const double kBannerAspectRatio = 1000 / 185;
 /// it reads this instead of PosterSize.landscapeHeight, which would otherwise
 /// keep resizing banners with no way to change them.
 const double kBannerCardHeight = 110;
+
+/// [strip] shows a Netflix-style filmstrip spanning the scrub position.
+/// [full] temporarily replaces the video with the trickplay image while
+/// scrubbing.
+enum TrickplayMode {
+  disabled,
+  single,
+  strip,
+  full,
+}
 
 enum ImageType {
   poster,
@@ -312,7 +440,9 @@ enum HomeSectionType {
   favoriteSongs('favoritesongs'),
   collections('collections'),
   genres('genres'),
+  studios('studios'),
   liveTv('livetv'),
+  seerrShortcuts('seerr_shortcuts'),
   seerrRecentRequests('seerr_recent_requests'),
   seerrWatchlist('seerr_watchlist'),
   seerrRecentlyAdded('seerr_recently_added'),
@@ -352,10 +482,23 @@ enum HomeSectionType {
   sinceYouWatched4('sinceyouwatched4'),
   sinceYouWatched5('sinceyouwatched5'),
   rewatch('rewatch'),
+  seasonal('seasonal'),
   none('none');
 
   const HomeSectionType(this.serializedName);
   final String serializedName;
+
+  /// Which Since You Watched row this is, counting from one, or zero for
+  /// anything else. Those rows render only up to the configured count, so the
+  /// position is what decides whether a row falls inside it.
+  int get sinceYouWatchedRow => switch (this) {
+    HomeSectionType.sinceYouWatched1 => 1,
+    HomeSectionType.sinceYouWatched2 => 2,
+    HomeSectionType.sinceYouWatched3 => 3,
+    HomeSectionType.sinceYouWatched4 => 4,
+    HomeSectionType.sinceYouWatched5 => 5,
+    _ => 0,
+  };
 
   static HomeSectionType fromSerialized(String name) {
     if (name == 'watchlist') return HomeSectionType.playlists;
@@ -366,22 +509,126 @@ enum HomeSectionType {
   }
 }
 
+/// Every sort ends on SortName so items the server ranks equally keep a stable
+/// order between pages, which a bare key leaves to whatever the database
+/// returns.
 enum LibrarySortBy {
+  playlistOrder('SortName', 'Playlist Order', usesDedicatedEndpoint: true),
   name('SortName', 'Name'),
-  dateAdded('DateCreated', 'Date Added'),
-  premiereDate('PremiereDate', 'Premiere Date'),
-  rating('OfficialRating', 'Rating'),
-  runtime('Runtime', 'Runtime'),
+  dateAdded('DateCreated,SortName', 'Date Added'),
+  dateEpisodeAdded('DateLastContentAdded,SortName', 'Date Episode Added'),
+  premiereDate('PremiereDate,SortName', 'Premiere Date'),
+  rating('OfficialRating,SortName', 'Rating'),
+  runtime('Runtime,SortName', 'Runtime'),
   random('Random', 'Random'),
-  criticRating('CriticRating', 'Critic Rating'),
-  communityRating('CommunityRating', 'Community Rating'),
+  criticRating('CriticRating,SortName', 'Critic Rating'),
+  communityRating('CommunityRating,SortName', 'Community Rating'),
+
+  /// Served by the Moonfin plugin rather than the Items API, since neither
+  /// server sorts on the user's own rating. The api value is the fallback for
+  /// consumers without the dedicated path.
+  myRating('SortName', 'My Rating', usesDedicatedEndpoint: true),
+  datePlayed('DatePlayed,SortName', 'Last Played'),
+  playCount('PlayCount,SortName', 'Play Count'),
   albumArtist('AlbumArtist,Album,SortName', 'Album Artist'),
   album('Album,SortName', 'Album'),
-  genre('Genre,SortName', 'Genre');
+  artist('Artist,Album,SortName', 'Artist'),
+  trackNumber('IndexNumber,SortName', 'Number'),
+  genre('Genre,SortName', 'Genre'),
+  foldersFirst('IsFolder,SortName', 'Folders First');
 
-  const LibrarySortBy(this.apiValue, this.displayName);
+  const LibrarySortBy(
+    this.apiValue,
+    this.displayName, {
+    this.usesDedicatedEndpoint = false,
+  });
+
+  /// Always a value the Items API accepts, so any caller can pass it through.
   final String apiValue;
   final String displayName;
+
+  /// Whether the row this option belongs to reads from its own endpoint rather
+  /// than sorting through the Items API. Rows that know about the endpoint act
+  /// on this, and everything else falls back to [apiValue].
+  final bool usesDedicatedEndpoint;
+
+  /// The options a row can offer when it only ever sorts through the Items API.
+  static List<LibrarySortBy> get itemsApiValues =>
+      values.where((v) => !v.usesDedicatedEndpoint).toList();
+
+  /// What a library offers, since a sort is only worth showing when the items
+  /// carry the field it reads. Album and track ordering belong to music,
+  /// episode dates to series, and folders to the libraries that show them.
+  static List<LibrarySortBy> optionsFor({
+    bool isSongsBrowse = false,
+    bool isMusicBrowse = false,
+    bool isSeriesLibrary = false,
+    bool isBookLibrary = false,
+    bool isFolderyLibrary = false,
+    bool isMovieOrSeriesLibrary = false,
+    bool supportsMyRating = false,
+  }) {
+    if (isFolderyLibrary) {
+      return const [
+        name,
+        dateAdded,
+        premiereDate,
+        rating,
+        datePlayed,
+        playCount,
+        criticRating,
+        communityRating,
+        runtime,
+        random,
+        foldersFirst,
+      ];
+    }
+
+    if (isSongsBrowse) {
+      return const [
+        name,
+        dateAdded,
+        albumArtist,
+        album,
+        artist,
+        trackNumber,
+        premiereDate,
+        datePlayed,
+        playCount,
+        runtime,
+        random,
+      ];
+    }
+
+    return [
+      if (supportsMyRating) myRating,
+      name,
+      dateAdded,
+      if (isSeriesLibrary) dateEpisodeAdded,
+      premiereDate,
+      // Group By covers parental rating better than a sort does, so the
+      // libraries offering it drop the duplicate.
+      if (!isMovieOrSeriesLibrary && !isMusicBrowse) rating,
+      datePlayed,
+      if (!isMusicBrowse) playCount,
+      if (isBookLibrary) trackNumber,
+      if (!isMusicBrowse) criticRating,
+      if (!isMusicBrowse) communityRating,
+      if (isMusicBrowse) albumArtist,
+      if (isMusicBrowse) album,
+      if (isMusicBrowse) genre,
+      runtime,
+      random,
+    ];
+  }
+}
+
+enum LibraryGroupBy {
+  none,
+  genres,
+  parentalRatings,
+  decade,
+  studio,
 }
 
 enum ChannelSortBy {
@@ -404,20 +651,71 @@ enum GenresRowItemFilter {
 }
 
 enum SortDirection {
-  ascending,
-  descending,
+  ascending('Ascending'),
+  descending('Descending');
+
+  const SortDirection(this.apiValue);
+
+  final String apiValue;
 }
 
 enum PlayedStatusFilter {
   all,
   watched,
   unwatched,
+  inProgress,
+}
+
+/// Filters a library on the viewer's own like or dislike, which both server
+/// types expose as the Likes and Dislikes item filters.
+enum LikedStatusFilter {
+  all,
+  liked,
+  disliked,
 }
 
 enum SeriesStatusFilter {
   all,
   continuing,
   ended,
+  unreleased,
+}
+
+/// Extras an item can carry, each its own flag on the items query rather than
+/// a value in the shared Filters list.
+enum LibraryFeatureFilter {
+  subtitles,
+  trailer,
+  extras,
+  themeSong,
+  themeVideo,
+}
+
+/// Picture qualities, which the servers answer with a plain flag each. SD is
+/// the same flag as HD asked the other way round, so the two cancel out and
+/// selecting both is the same as selecting neither.
+enum LibraryVideoQualityFilter {
+  sd,
+  hd,
+  uhd,
+  threeD,
+}
+
+/// What the file was ripped from, passed through as the server's VideoType.
+enum LibraryVideoSourceFilter {
+  dvd('Dvd', 'DVD'),
+  bluray('BluRay', 'Blu-ray'),
+  iso('Iso', 'ISO');
+
+  const LibraryVideoSourceFilter(this.apiValue, this.displayName);
+
+  final String apiValue;
+  final String displayName;
+}
+
+enum LibraryScrollDirection {
+  vertical,
+  horizontal,
 }
 
 enum FavoriteTypeFilter {
@@ -484,6 +782,7 @@ enum SeerrFetchLimit {
 }
 
 enum SeerrRowType {
+  shortcuts('shortcuts'),
   recentRequests('recent_requests'),
   yourWatchlist('watchlist'),
   recentlyAdded('recently_added'),
@@ -509,6 +808,7 @@ enum SeerrRowType {
 
 extension SeerrRowTypeHomeSection on SeerrRowType {
   HomeSectionType get homeSectionType => switch (this) {
+        SeerrRowType.shortcuts => HomeSectionType.seerrShortcuts,
         SeerrRowType.recentRequests => HomeSectionType.seerrRecentRequests,
         SeerrRowType.yourWatchlist => HomeSectionType.seerrWatchlist,
         SeerrRowType.recentlyAdded => HomeSectionType.seerrRecentlyAdded,
@@ -526,6 +826,7 @@ extension SeerrRowTypeHomeSection on SeerrRowType {
 
 extension HomeSectionTypeSeerrRow on HomeSectionType {
   SeerrRowType? get seerrRowType => switch (this) {
+        HomeSectionType.seerrShortcuts => SeerrRowType.shortcuts,
         HomeSectionType.seerrRecentRequests => SeerrRowType.recentRequests,
         HomeSectionType.seerrWatchlist => SeerrRowType.yourWatchlist,
         HomeSectionType.seerrRecentlyAdded => SeerrRowType.recentlyAdded,
@@ -544,6 +845,69 @@ extension HomeSectionTypeSeerrRow on HomeSectionType {
 
 enum ScreensaverMode { library, logo }
 
+enum ScreensaverBackdrop {
+  library,
+  black,
+  moonfin,
+  calm,
+  neonPulse,
+  aurora,
+}
+
+enum ScreensaverPosition {
+  topLeft,
+  topCenter,
+  topRight,
+  middleLeft,
+  middle,
+  middleRight,
+  bottomLeft,
+  bottomCenter,
+  bottomRight,
+}
+
+enum ScreensaverSize {
+  thumbnail,
+  small,
+  medium,
+  large,
+}
+
+enum ScreensaverComponent {
+  none,
+  moonfinLogo,
+  clock,
+  runner,
+}
+
+enum ScreensaverMovement {
+  staticCorner,
+  slow,
+  moderate,
+  fast,
+  ultra,
+}
+
+extension ScreensaverMovementX on ScreensaverMovement {
+  bool get isBouncing => this != ScreensaverMovement.staticCorner;
+
+  double get speedMultiplier => switch (this) {
+        ScreensaverMovement.staticCorner => 0.0,
+        ScreensaverMovement.slow => 0.45,
+        ScreensaverMovement.moderate => 0.70,
+        ScreensaverMovement.fast => 1.0,
+        ScreensaverMovement.ultra => 1.60,
+      };
+
+  LoadingAnimationSpeed get loadingSpeed => switch (this) {
+        ScreensaverMovement.staticCorner => LoadingAnimationSpeed.fast,
+        ScreensaverMovement.slow => LoadingAnimationSpeed.slow,
+        ScreensaverMovement.moderate => LoadingAnimationSpeed.moderate,
+        ScreensaverMovement.fast => LoadingAnimationSpeed.fast,
+        ScreensaverMovement.ultra => LoadingAnimationSpeed.ultra,
+      };
+}
+
 enum ScreensaverClockMode { off, staticCorner, bouncing }
 
 enum ScreensaverTimeout {
@@ -561,9 +925,14 @@ enum ScreensaverTimeout {
 
 enum SinceYouWatchedSource {
   local,
+  server,
   online;
 
-  String get displayName => this == local ? 'Local' : 'Online';
+  String get displayName => switch (this) {
+    SinceYouWatchedSource.local => 'Moonfin Recommends',
+    SinceYouWatchedSource.server => 'Jellyfin Recommends',
+    SinceYouWatchedSource.online => 'TMDb Similarity',
+  };
 }
 
 enum SinceYouWatchedSourceType {
@@ -614,3 +983,79 @@ enum RewatchSortBy {
   String get displayName => this == recentlyWatched ? 'Recently Watched' : 'Random';
 }
 
+/// Which record dates a show in the recently released row of a TV library. A
+/// series carries its first episode's date, so a long running show stops
+/// surfacing. The row shows series cards whichever of these is picked.
+enum RecentlyReleasedSeriesType { series, season, episode }
+
+/// When a home row card shows its MOVIE or SERIES label. Only external rows
+/// carry a media type, so the rest are unaffected either way.
+enum MediaTypeBadgeBehavior { always, mixedRowsOnly, never }
+
+enum LoadingAnimationImage {
+  none,
+  moonfinLogo,
+  spinner,
+  runner,
+  moonPhases,
+  moonfinPhases,
+  neonfinPhases,
+}
+
+enum LoadingAnimationSize {
+  thumbnail,
+  small,
+  medium,
+  large,
+}
+
+enum LoadingAnimationPosition {
+  topLeft,
+  topCenter,
+  topRight,
+  middleLeft,
+  middle,
+  middleRight,
+  bottomLeft,
+  bottomCenter,
+  bottomRight,
+  bouncing,
+}
+
+enum LoadingAnimationSpeed {
+  slow,
+  moderate,
+  fast,
+  ultra,
+}
+
+enum PageTransitionSpeed {
+  slow(Duration(milliseconds: 450)),
+  medium(Duration(milliseconds: 300)),
+  fast(Duration(milliseconds: 150)),
+  off(Duration.zero);
+
+  const PageTransitionSpeed(this.duration);
+  final Duration duration;
+}
+
+enum NavigationAnimationSpeed {
+  extraSlow(Duration(milliseconds: 400)),
+  slow(Duration(milliseconds: 250)),
+  medium(Duration(milliseconds: 150)),
+  fast(Duration(milliseconds: 80));
+
+  const NavigationAnimationSpeed(this.duration);
+  final Duration duration;
+}
+
+enum ModernCardTransitionSpeed {
+  extraSlow(Duration(milliseconds: 450)),
+  slow(Duration(milliseconds: 300)),
+  medium(Duration(milliseconds: 180)),
+  fast(Duration(milliseconds: 90)),
+  off(Duration.zero);
+
+  const ModernCardTransitionSpeed(this.duration);
+  final Duration duration;
+}

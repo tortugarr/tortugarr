@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -12,7 +13,31 @@ class AppLocalizationsCa extends AppLocalizations {
   String get appTitle => 'Moonfin';
 
   @override
-  String get accountPreferences => 'Preferències del compte';
+  String get animeMarkerFiller => 'Filler';
+
+  @override
+  String get animeMarkerMixed => 'Mixt';
+
+  @override
+  String get animeMarkerAnimeCanon => 'Cànon anime';
+
+  @override
+  String get animeMarkerMangaCanon => 'Cànon manga';
+
+  @override
+  String get animeMarkerSubbed => 'Sub';
+
+  @override
+  String get animeMarkerDubbed => 'Dub';
+
+  @override
+  String get animeMarkerSubbedAndDubbed => 'Sub/Dub';
+
+  @override
+  String get animeMarkerPending => 'Pendent';
+
+  @override
+  String get animeMarkerRecap => 'Resum';
 
   @override
   String get interfaceLanguage => 'Idioma de la interfície';
@@ -145,13 +170,226 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Clàssic es el disseny original de moonfin centrat. Modern es el disseny cinemàtic interactiu.';
+      'Clàssic és la disposició original centrada de moonfin. Modern és una disposició cinematogràfica adaptativa. Spotlight és una disposició que posa la il·lustració al davant, amb targetes de contingut emergents. Nouveau és una disposició a pantalla completa amb les seccions apilades al llarg de la pàgina. Minimalista és la il·lustració, un botó de reproducció i els episodis.';
 
   @override
   String get detailScreenStyleMoonfin => 'Clàssic';
 
   @override
   String get detailScreenStyleModern => 'Modern';
+
+  @override
+  String get detailScreenStyleSpotlight => 'Spotlight';
+
+  @override
+  String get spotlightMoreActions => 'Més accions';
+
+  @override
+  String get spotlightCastCrewStudios => 'Repartiment, equip i estudis';
+
+  @override
+  String get spotlightChaptersExtras => 'Capítols i extres';
+
+  @override
+  String get spotlightFileDetails => 'Detalls del fitxer';
+
+  @override
+  String get spotlightSimilarRecommendations => 'Similars i recomanacions';
+
+  @override
+  String get spotlightSeasonsEpisodes => 'Temporades i episodis';
+
+  @override
+  String get spotlightMoreEpisodes => 'Més episodis';
+
+  @override
+  String get spotlightFilmography => 'Filmografia';
+
+  @override
+  String get spotlightCollectionsCard => 'Col·leccions';
+
+  @override
+  String get spotlightPlaylistOrder => 'Ordre de la llista de reproducció';
+
+  @override
+  String get spotlightMoviesAndShows => 'Pel·lícules i Sèries';
+
+  @override
+  String get spotlightSimilarSeerr => 'Similars (Seerr)';
+
+  @override
+  String get spotlightRecommendationsSeerr => 'Recomanacions (Seerr)';
+
+  @override
+  String spotlightPeopleCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count persones',
+      one: '1 persona',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightFactsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dades',
+      one: '1 dada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightTagsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count etiquetes',
+      one: '1 etiqueta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightStudiosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count estudis',
+      one: '1 estudi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightChaptersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count capítols',
+      one: '1 capítol',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightExtrasCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count extres',
+      one: '1 extra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightSeasonsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count temporades',
+      one: '1 temporada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightEpisodesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count episodis',
+      one: '1 episodi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightMoviesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pel·lícules',
+      one: '1 pel·lícula',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightShowsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sèries',
+      one: '1 sèrie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightTracksCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pistes',
+      one: '1 pista',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count elements',
+      one: '1 element',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightAlbumsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count àlbums',
+      one: '1 àlbum',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightCollectionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count col·leccions',
+      one: '1 col·lecció',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String spotlightTitlesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count títols',
+      one: '1 títol',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get detailScreenStyleNouveau => 'Nouveau';
+
+  @override
+  String get detailScreenStyleMinimalist => 'Minimalista';
 
   @override
   String get expandedTabs => 'Pestanyes desplegades';
@@ -161,7 +399,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Mostra automàticament el contingut de les pestanyes mentre hi navegues. Desactiva-ho per obrir i tancar cada pestanya manualment.';
 
   @override
-  String get showTechnicalDetails => 'Mostrar els detalls tècnics?';
+  String get showTechnicalDetails => 'Mostra els detalls tècnics';
 
   @override
   String get showTechnicalDetailsSubtitle =>
@@ -172,21 +410,24 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Utilitza l\'algorisme local de recomanacions de Moonfin (Moonfin Recommends) o les mètriques de similitud en línia de TMDb. Nota: Les recomanacions en línia requereixen la integració amb Seerr.';
+      'Fes servir l\'algorisme de biblioteca local Recomanacions Moonfin, el motor del servidor Recomanacions Jellyfin o les mètriques de similitud en línia de TMDb. Nota: les recomanacions en línia requereixen la integració amb Seerr.';
 
   @override
   String get recommendationSystemMoonfin => 'Recomanacions Moonfin';
+
+  @override
+  String get recommendationSystemJellyfin => 'Recomanacions Jellyfin';
 
   @override
   String get recommendationSystemTmdb => 'Similitud de TMDb';
 
   @override
   String get recommendationsApplyParentalRatingCap =>
-      'Aplicar el límit de classificació parental?';
+      'Aplica el límit de classificació d\'edat a les recomanacions';
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Limita els suggeriments de Recomanacions Moonfin segons la classificació parental del contingut de destinació';
+      'Limita els suggeriments de Recomanacions Moonfin segons la classificació per edats del contingut de destinació';
 
   @override
   String get interfaceStyle => 'Estil de l\'interfaç';
@@ -205,7 +446,39 @@ class AppLocalizationsCa extends AppLocalizations {
   String get interfaceStyleMaterial => 'Material';
 
   @override
+  String get interfaceLayout => 'Disposició de la interfície';
+
+  @override
+  String get interfaceLayoutSubtitle =>
+      'Canvia el tipus de disposicó detectada si el teu dispositiu no es reconeix correctament. Reinicia Moonfin per aplicar els canvis.';
+
+  @override
+  String get interfaceLayoutAutomatic => 'Automàtic';
+
+  @override
+  String get interfaceLayoutTv => 'TV';
+
+  @override
+  String get interfaceLayoutDesktop => 'Escriptori';
+
+  @override
+  String get interfaceLayoutPhone => 'Mòbil';
+
+  @override
   String get glassQuality => 'Qualitat de Glass';
+
+  @override
+  String get oledMode => 'Mode OLED';
+
+  @override
+  String get oledModeSubtitle =>
+      'Profunditza els negres i enriqueix l\'art. Millor en pantalles OLED.';
+
+  @override
+  String get oledModeSubtle => 'Subtil';
+
+  @override
+  String get oledModeVivid => 'Viu';
 
   @override
   String get glassQualitySubtitle =>
@@ -221,8 +494,28 @@ class AppLocalizationsCa extends AppLocalizations {
   String get glassQualityReduced => 'Reduït';
 
   @override
+  String get performanceMode => 'Rendiment';
+
+  @override
+  String get performanceModeSubtitle =>
+      'El mode automàtic avalua aquest dispositiu i es modera en aquells que van justos de memòria, cosa que manté menys imatges a la memòria i deixa els tràilers com a imatges fixes. Té ple efecte a partir del següent inici.';
+
+  @override
+  String get performanceModeAuto => 'Automàtic';
+
+  @override
+  String get performanceModeStandard => 'Estàndard';
+
+  @override
+  String get performanceModeReduced => 'Reduït';
+
+  @override
+  String get trailerPreviewHeldBack =>
+      'Desactivat perquè el Rendiment està configurat com a Reduït per a aquest dispositiu';
+
+  @override
   String get settingsAppearanceThemeSubtitle =>
-      'Canvia entre Moonfin i Neon Pulse sense reiniciar l\'aplicació';
+      'Aplica un tema totalment personalitzat i canvia entre una interfície d\'usuari inspirada en Apple o en Material.';
 
   @override
   String get customThemeTitle => 'Tema personalitzat';
@@ -239,13 +532,23 @@ class AppLocalizationsCa extends AppLocalizations {
       'Utilitzeu el mètode d\'entrada del dispositiu de manera predeterminada per a l\'entrada de text';
 
   @override
+  String get controller => 'Controlador';
+
+  @override
+  String get gamepadNavigation => 'Navegació amb comandament';
+
+  @override
+  String get gamepadNavigationDescription =>
+      'Permet que un comandament de joc connectat mogui el focus i seleccioni elements';
+
+  @override
   String get themeMoonfin => 'Moonfin';
 
   @override
   String get themeMoonfinSubtitle => 'L\'aspecte original de Moonfin.';
 
   @override
-  String get themeNeonPulse => 'pols de neó';
+  String get themeNeonPulse => 'Neon Pulse';
 
   @override
   String get themeNeonPulseSubtitle =>
@@ -481,7 +784,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get imageType => 'Tipus d\'imatge';
 
   @override
-  String get posterSize => 'Mida del cartell';
+  String get posterSize => 'Mida del pòster';
 
   @override
   String get small => 'Petit';
@@ -494,6 +797,21 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get extraLarge => 'Extragran';
+
+  @override
+  String get uiScaleGrandparents => 'Per als avis';
+
+  @override
+  String get uiScaleGreatGrandparents => 'Per als besavis';
+
+  @override
+  String get scrollDirection => 'Direcció de desplaçament';
+
+  @override
+  String get scrollDirectionVertical => 'Vertical';
+
+  @override
+  String get scrollDirectionHorizontal => 'Horitzontal';
 
   @override
   String libraryGenresTitle(String name) {
@@ -589,6 +907,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get scrollRight => 'Desplaceu-vos cap a la dreta';
+
+  @override
+  String get scrollToTop => 'Torna a dalt';
 
   @override
   String get couldNotLoadGenre =>
@@ -758,7 +1079,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get unread => 'Sense llegir';
 
   @override
-  String get unwatched => 'No vist';
+  String get unwatched => 'Sense veure';
 
   @override
   String get seriesStatus => 'Estat de la sèrie';
@@ -776,6 +1097,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get latestAudiobooks => 'Audiollibres afegits recentment';
 
   @override
+  String get latestComics => 'Còmics afegits recentment';
+
+  @override
+  String get comics => 'Còmics';
+
+  @override
   String bookSeriesItemCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -791,6 +1118,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get bookFormatAudiobook => 'Audiollibre';
+
+  @override
+  String get bookFormatComic => 'Còmic';
+
+  @override
+  String get noBooksFound => 'No s\'han trobat llibres per a aquest autor.';
+
+  @override
+  String get noBooksFoundDescription =>
+      'Aquesta biblioteca encara no conté cap llibre, audiollibre ni còmic.';
 
   @override
   String bookPercentRead(int percent) {
@@ -840,7 +1177,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get rssFeed => 'Feed RSS';
 
   @override
-  String get downloadZip => 'Descarrega Zip';
+  String get downloadZip => 'Baixa Zip';
 
   @override
   String sectionCountLabel(int count) {
@@ -970,9 +1307,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'No hi ha biografia disponible per a aquest autor.';
 
   @override
-  String get noBooksFound => 'No s\'han trobat llibres per a aquest autor.';
-
-  @override
   String get unableToLoadAuthorDetails =>
       'No es poden carregar els detalls de l\'autor en aquest moment.';
 
@@ -1079,7 +1413,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get cast => 'Emet';
 
   @override
-  String get castMembers => 'Cast';
+  String get castMembers => 'Repartiment';
 
   @override
   String get trailer => 'Tràiler';
@@ -1097,19 +1431,33 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playlist => 'Llista de reproducció';
 
   @override
-  String get downloaded => 'Descarregat';
+  String get downloaded => 'Baixat';
 
   @override
-  String get finalizingDownload => 'Finalizing…';
+  String get finalizingDownload => 'Finalitzant…';
 
   @override
-  String get downloadAll => 'Descarrega-ho tot';
+  String get queuedDownload => 'En cua';
 
   @override
-  String get download => 'Descarregar';
+  String queuedMoreCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count més a la cua',
+      one: '1 més a la cua',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get deleteDownloaded => 'Suprimeix els descarregats';
+  String get downloadAll => 'Baixa-ho tot';
+
+  @override
+  String get download => 'Baixar';
+
+  @override
+  String get deleteDownloaded => 'Suprimeix els baixats';
 
   @override
   String get goToSeries => 'Ves a la sèrie';
@@ -1145,7 +1493,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String failedToDeleteItemWithError(String error) {
-    return 'Deletion operation failed with the following error: $error';
+    return 'L\'operació d\'eliminació ha fallat amb l\'error següent: $error';
   }
 
   @override
@@ -1208,14 +1556,23 @@ class AppLocalizationsCa extends AppLocalizations {
   String get none => 'Cap';
 
   @override
-  String get downloadSubtitlesLabel => 'Descarrega els subtítols...';
+  String get downloadSubtitlesLabel => 'Baixa els subtítols...';
 
   @override
   String get searchOpenSubtitlesPlugin =>
       'Cerca amb el connector OpenSubtitles';
 
   @override
-  String get downloadSubtitles => 'Descarrega els subtítols';
+  String get downloadSubtitles => 'Baixa els subtítols';
+
+  @override
+  String get searchingSubtitles => 'Cercant subtítols…';
+
+  @override
+  String get fetchingSubtitles => 'S\'estan obtenint els subtítols';
+
+  @override
+  String get downloadingSubtitle => 'Baixant subtítols…';
 
   @override
   String get selectedSubtitleInvalid => 'El subtítol seleccionat no és vàlid.';
@@ -1227,7 +1584,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get subtitleDownloadedPending =>
-      'Subtítols descarregats. Pot trigar un moment a aparèixer mentre Jellyfin actualitza l\'element.';
+      'Subtítols baixats. Pot trigar un moment a aparèixer mentre Jellyfin actualitza l\'element.';
 
   @override
   String noRemoteSubtitlesFound(String language) {
@@ -1246,7 +1603,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get downloadAllQuality => 'Baixeu-ho tot — Qualitat';
 
   @override
-  String get downloadQuality => 'Qualitat de descàrrega';
+  String get downloadQuality => 'Qualitat de baixada';
 
   @override
   String get originalFileNoReencoding => 'Fitxer original, sense recodificació';
@@ -1259,16 +1616,63 @@ class AppLocalizationsCa extends AppLocalizations {
   String get noEpisodesLoaded => 'No s\'ha carregat cap capítol';
 
   @override
+  String get downloadScopeTitle => 'Què baixar';
+
+  @override
+  String get downloadAllEpisodes => 'Tots els episodis';
+
+  @override
+  String get downloadUnwatchedEpisodes => 'Tots els episodis no vistos';
+
+  @override
+  String get downloadAllMovies => 'Totes les pel·lícules';
+
+  @override
+  String get downloadUnwatchedMovies => 'Totes les pel·lícules no vistes';
+
+  @override
+  String get downloadScopeLoading => 'S\'estan carregant els elements...';
+
+  @override
+  String get downloadScopeLoadFailed =>
+      'No s\'han pogut carregar els elements per baixar';
+
+  @override
+  String downloadEstimateTotal(String size) {
+    return '~$size en total';
+  }
+
+  @override
+  String downloadBytesOfTotal(String received, String total) {
+    return '$received de $total';
+  }
+
+  @override
+  String downloadSpeed(String speed) {
+    return '$speed/s';
+  }
+
+  @override
+  String downloadSizeTotal(String size) {
+    return '$size en total';
+  }
+
+  @override
+  String downloadEstimateUnknownCount(int count) {
+    return '$count desconeguts';
+  }
+
+  @override
   String downloadingItem(String name, String quality) {
     return 'S\'està baixant $name ($quality)...';
   }
 
   @override
-  String get deleteDownloadedFiles => 'Suprimeix els fitxers descarregats';
+  String get deleteDownloadedFiles => 'Suprimeix els fitxers baixats';
 
   @override
   String deleteLocalFilesMessage(String typeLabel) {
-    return 'Vols suprimir els fitxers locals per a $typeLabel?\n\nAixò alliberarà espai d\'emmagatzematge. Podeu tornar a descarregar-lo més tard.';
+    return 'Vols suprimir els fitxers locals per a $typeLabel?\n\nAixò alliberarà espai d\'emmagatzematge. Podeu tornar a baixar-lo més tard.';
   }
 
   @override
@@ -1282,6 +1686,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get director => 'DIRECTOR';
+
+  @override
+  String get starring => 'PROTAGONISTES';
 
   @override
   String get directors => 'DIRECTORS';
@@ -1367,7 +1774,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get shuffle => 'Aleatori';
 
   @override
-  String get shuffleAll => 'Shuffle All';
+  String get shuffleAll => 'Barreja-ho tot';
 
   @override
   String get shuffleAllMusic => 'Barreja tota la música';
@@ -1380,15 +1787,35 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String downloadsCount(int count) {
-    return '$count descàrregues';
+    return '$count baixades';
   }
 
   @override
   String get perfectMatch => 'Coincidència perfecte';
 
   @override
+  String get aiTranslated => 'Traduït per IA';
+
+  @override
+  String get machineTranslated => 'Traduït automàticament';
+
+  @override
+  String get hearingImpaired => 'SDH';
+
+  @override
+  String framerateFps(String rate) {
+    return '$rate fps';
+  }
+
+  @override
   String channelsCount(int count) {
-    return '$count can.';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Canals',
+      one: '1 Canal',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -1559,6 +1986,177 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playbackInformation => 'Informació de reproducció';
 
   @override
+  String get showMpvStats => 'Mostra les estadístiques de mpv (Shift+I)';
+
+  @override
+  String get hideMpvStats => 'Amaga les estadístiques de mpv (Shift+I)';
+
+  @override
+  String get keyboardShortcutsTitle => 'Dreceres de teclat';
+
+  @override
+  String get keyboardShortcutsSubtitle =>
+      'Tecles per a l\'aplicació, el reproductor de vídeo i el lector';
+
+  @override
+  String get keyboardShortcutsPlayerHint =>
+      'Prem ? o F1 mentre es reprodueix un vídeo per veure aquesta llista sense sortir del reproductor.';
+
+  @override
+  String get keyboardShortcutsSectionApp => 'A tot arreu';
+
+  @override
+  String get keyboardShortcutsSectionAppScope => 'A qualsevol pantalla';
+
+  @override
+  String get keyboardShortcutsSectionPlayer => 'Reproductor de vídeo';
+
+  @override
+  String get keyboardShortcutsSectionPlayerScope =>
+      'Mentre hi ha un vídeo obert, reproduint-se o en pausa';
+
+  @override
+  String get keyboardShortcutsSectionReader => 'Lector de llibres i còmics';
+
+  @override
+  String get keyboardShortcutsSectionReaderScope =>
+      'Mentre llegeixes un llibre o un còmic';
+
+  @override
+  String get keyNameArrowKeys => 'Tecles de fletxa';
+
+  @override
+  String get keyNameSpace => 'Espai';
+
+  @override
+  String get keyNameEnter => 'Enter';
+
+  @override
+  String get keyNameEsc => 'Esc';
+
+  @override
+  String get keyNameBackspace => 'Backspace';
+
+  @override
+  String get keyNamePageUp => 'Page Up';
+
+  @override
+  String get keyNamePageDown => 'Page Down';
+
+  @override
+  String get keyNameHome => 'Home';
+
+  @override
+  String get keyNameEnd => 'End';
+
+  @override
+  String get keyNameShift => 'Shift';
+
+  @override
+  String get keyNameCtrl => 'Ctrl';
+
+  @override
+  String get keyNameAlt => 'Alt';
+
+  @override
+  String get keyNameScrollWheel => 'Roda del ratolí';
+
+  @override
+  String get shortcutMoveFocus => 'Mou-te entre els elements';
+
+  @override
+  String get shortcutActivate => 'Obre l\'element seleccionat';
+
+  @override
+  String get shortcutGoBack => 'Torna enrere';
+
+  @override
+  String get shortcutToggleFullscreen =>
+      'Activa o desactiva la pantalla completa';
+
+  @override
+  String get shortcutQuit => 'Surt de Moonfin';
+
+  @override
+  String get shortcutPlayPause => 'Reprodueix o posa en pausa';
+
+  @override
+  String get shortcutShowControlsOrPlayPause =>
+      'Mostra els controls, o reprodueix/pausa si ja es veuen';
+
+  @override
+  String get shortcutSeekBack =>
+      'Busca enrere (mantén premut per fer salts més grans)';
+
+  @override
+  String get shortcutSeekForward =>
+      'Busca endavant (mantén premut per fer salts més grans)';
+
+  @override
+  String get shortcutVolumeUp => 'Puja el volum';
+
+  @override
+  String get shortcutVolumeDown => 'Baixa el volum';
+
+  @override
+  String get shortcutMute => 'Silencia o activa el so';
+
+  @override
+  String get shortcutToggleSubtitles => 'Activa o desactiva els subtítols';
+
+  @override
+  String get shortcutSlower => 'Redueix la velocitat';
+
+  @override
+  String get shortcutFaster => 'Augmenta la velocitat';
+
+  @override
+  String get shortcutPlaybackInfo => 'Mostra la informació de reproducció';
+
+  @override
+  String get shortcutMpvStats => 'Activa o desactiva les estadístiques de mpv';
+
+  @override
+  String get shortcutRecropBlackBars => 'Torna a retallar les bandes negres';
+
+  @override
+  String get shortcutLeaveFullscreenOrStop =>
+      'Surt de la pantalla completa; si no hi ets, atura la reproducció';
+
+  @override
+  String get shortcutStopPlayback => 'Atura la reproducció';
+
+  @override
+  String get shortcutNextItem => 'Element següent';
+
+  @override
+  String get shortcutPreviousItem => 'Element anterior';
+
+  @override
+  String get shortcutShowShortcuts => 'Mostra aquesta llista';
+
+  @override
+  String get shortcutNextPage => 'Pàgina següent';
+
+  @override
+  String get shortcutPreviousPage => 'Pàgina anterior';
+
+  @override
+  String get shortcutScrollPage => 'Desplaça la pàgina (llibres electrònics)';
+
+  @override
+  String get shortcutFirstPage => 'Primera pàgina, o inici del capítol';
+
+  @override
+  String get shortcutLastPage => 'Última pàgina, o final del capítol';
+
+  @override
+  String get shortcutZoom => 'Amplia o redueix el zoom (còmics)';
+
+  @override
+  String get shortcutResetZoom => 'Restableix el zoom (còmics)';
+
+  @override
   String get playback => 'Reproducció';
 
   @override
@@ -1593,6 +2191,39 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hdr => 'HDR';
+
+  @override
+  String get hdrOutput => 'Sortida HDR';
+
+  @override
+  String hdrOutputActive(String format) {
+    return 'Actiu — $format';
+  }
+
+  @override
+  String get hdrOutputActiveTonemapped =>
+      'Actiu — amb mapatge de tons a SDR per a aquesta pantalla';
+
+  @override
+  String get hdrOutputDisplayNotHdr =>
+      'Inactiu — la pantalla no està en mode HDR';
+
+  @override
+  String get hdrOutputContentSdr => 'Inactiu — el contingut és SDR';
+
+  @override
+  String get hdrOutputDisabled => 'Inactiu — desactivat a la configuració';
+
+  @override
+  String get hdrOutputFailed =>
+      'Inactiu — no s\'ha pogut iniciar; s\'utilitza la via estàndard';
+
+  @override
+  String get nativeHdrOutput => 'Sortida HDR nativa';
+
+  @override
+  String get nativeHdrOutputDescription =>
+      'Envia el vídeo HDR a la pantalla sense modificar-lo en lloc de convertir-lo a SDR. Només s\'utilitza quan la pantalla ja està en mode HDR i el títol és HDR.';
 
   @override
   String get codec => 'Còdec';
@@ -1804,6 +2435,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get premiere => 'Estrena';
 
   @override
+  String get guideRepeatBadge => 'Repetiu';
+
+  @override
   String get guideTimeline => 'Cronologia de la guia';
 
   @override
@@ -1813,6 +2447,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get noChannelsFound => 'No s\'han trobat canals';
+
+  @override
+  String get noProgramData => 'No hi ha dades del programa';
 
   @override
   String get liveBadge => 'En Viu';
@@ -1861,6 +2498,24 @@ class AppLocalizationsCa extends AppLocalizations {
   String get record => 'Enregistra';
 
   @override
+  String nextSeriesRecording(String dateTime) {
+    return 'Següent enregistrament de la sèrie: $dateTime';
+  }
+
+  @override
+  String get noUpcomingSeriesRecording =>
+      'L\'enregistrament de la sèrie està programat, però la guia no té cap episodi pròxim';
+
+  @override
+  String get recordCurrentEpisode => 'Enregistra aquest episodi';
+
+  @override
+  String get recordCurrentProgram => 'Enregistra aquest programa';
+
+  @override
+  String get cancelCurrentRecording => 'Cancel·la aquest enregistrament';
+
+  @override
   String get cancelRecordingAction => 'Cancel·la la gravació';
 
   @override
@@ -1873,7 +2528,24 @@ class AppLocalizationsCa extends AppLocalizations {
   String get unableToCreateRecording => 'No es pot crear la gravació';
 
   @override
+  String get recordSeries => 'Gravar Sèrie';
+
+  @override
+  String get seriesSetToRecord => 'Sèrie programada per gravar';
+
+  @override
+  String get seriesRecordingCancelled =>
+      'S\'ha cancel·lat l\'enregistrament de la sèrie';
+
+  @override
+  String get unableToCreateSeriesRecording =>
+      'No s\'ha pogut crear l\'enregistrament de sèrie';
+
+  @override
   String get watch => 'Mira';
+
+  @override
+  String get watchChannelLive => 'Mira el canal en directe';
 
   @override
   String get close => 'Tanca';
@@ -1881,6 +2553,15 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String failedToPlayChannel(String name) {
     return 'No s\'ha pogut reproduir $name';
+  }
+
+  @override
+  String get playbackStreamLost =>
+      'La reproducció s\'ha aturat i no s\'ha pogut recuperar.';
+
+  @override
+  String liveReconnecting(int attempt, int total) {
+    return 'S\'està reconnectant… ($attempt de $total)';
   }
 
   @override
@@ -1971,10 +2652,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get localAccount => 'Local';
 
   @override
-  String get savedMedia => 'Mitjans desats';
+  String get savedMedia => 'Baixades';
 
   @override
-  String get tvShows => 'Programes de televisió';
+  String get tvShows => 'Sèries';
 
   @override
   String get music => 'Música';
@@ -1993,7 +2674,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get browseLibrary => 'Explora la biblioteca';
 
   @override
-  String get deleteDownload => 'Suprimeix la descàrrega';
+  String get deleteDownload => 'Suprimeix la baixada';
 
   @override
   String removeItemAndFiles(String name) {
@@ -2062,7 +2743,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'S\'ha produït un error en carregar la sèrie';
 
   @override
-  String get downloadedEpisodes => 'Episodis descarregats';
+  String get downloadedEpisodes => 'Episodis baixats';
 
   @override
   String seasonNumber(int number) {
@@ -2103,7 +2784,88 @@ class AppLocalizationsCa extends AppLocalizations {
   String get storageBreakdown => 'Avaria de l\'emmagatzematge';
 
   @override
-  String get downloadedItems => 'Elements descarregats';
+  String get downloadedItems => 'Elements baixats';
+
+  @override
+  String get activeDownloads => 'Baixades actives';
+
+  @override
+  String savedMediaCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count elements',
+      one: '1 element',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String savedMediaOfLimit(String used, String limit) {
+    return '$used de $limit';
+  }
+
+  @override
+  String get savedMediaSelectItems => 'Selecciona elements';
+
+  @override
+  String get savedMediaNoDownloads => 'Encara no hi ha res desat';
+
+  @override
+  String get savedMediaNoDownloadsDetail =>
+      'Les baixades que iniciïs apareixen aquí i es reprodueixen sense connexió.';
+
+  @override
+  String get savedMediaNoActiveDownloads => 'Ara mateix no s\'està baixant res';
+
+  @override
+  String get savedMediaNoResults => 'Cap baixada coincideix amb aquesta cerca';
+
+  @override
+  String get savedMediaPlayFromStart => 'Reprodueix des del principi';
+
+  @override
+  String get savedMediaGoToDetails => 'Ves als detalls';
+
+  @override
+  String get savedMediaDeleteDownload => 'Suprimeix la baixada';
+
+  @override
+  String savedMediaDeleteSeason(String season) {
+    return 'Suprimeix $season';
+  }
+
+  @override
+  String savedMediaDeleteEpisodes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Suprimeix $count episodis',
+      one: 'Suprimeix 1 episodi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get savedMediaOpenShow => 'Obre la sèrie';
+
+  @override
+  String get savedMediaPlayNextUnwatched => 'Reprodueix el següent no vist';
+
+  @override
+  String get savedMediaRead => 'Llegeix';
+
+  @override
+  String get savedMediaCancelDownload => 'Cancel·la la baixada';
+
+  @override
+  String get sortBySize => 'Mida';
+
+  @override
+  String get sortByName => 'Nom';
+
+  @override
+  String get sortByDateAdded => 'Data d\'afegiment';
 
   @override
   String get storageLimit => 'Límit d\'emmagatzematge';
@@ -2112,11 +2874,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get noLimit => 'Sense límit';
 
   @override
-  String get deleteAllDownloads => 'Suprimeix totes les descàrregues';
+  String get deleteAllDownloads => 'Suprimeix totes les baixades';
 
   @override
   String get deleteAllDownloadsWarning =>
-      'Això eliminarà tots els fitxers multimèdia descarregats i no es pot desfer.';
+      'Això eliminarà tots els fitxers multimèdia baixats i no es pot desfer.';
 
   @override
   String get deleteAll => 'Suprimeix-ho tot';
@@ -2147,7 +2909,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settings => 'Configuració';
 
   @override
-  String get settingsSearchHint => 'Search settings';
+  String get settingsSearchHint => 'Configuració de cerca';
 
   @override
   String get authentication => 'Autenticació';
@@ -2177,10 +2939,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get qualityStorage => 'Qualitat, emmagatzematge';
-
-  @override
-  String get serverSyncAndPluginStatus =>
-      'Sincronització del servidor i estat del connector';
 
   @override
   String get mediaRequestIntegration => 'Integració de sol·licituds de mitjans';
@@ -2217,9 +2975,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get videoAndSubtitles => 'Vídeo i subtítols';
 
   @override
-  String get integrations => 'Integracions';
-
-  @override
   String get pluginAndRequests => 'Connector i peticions';
 
   @override
@@ -2238,10 +2993,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get focusBorderColor => 'Color de la vora del focus';
 
   @override
-  String get watchedIndicators => 'Indicadors observats';
+  String get watchedIndicators => 'Indicadors de contingut vist';
 
   @override
   String get always => 'Sempre';
+
+  @override
+  String get mixedRowsOnly => 'Només files mixtes';
 
   @override
   String get hideUnwatched => 'Amaga sense veure';
@@ -2301,6 +3059,107 @@ class AppLocalizationsCa extends AppLocalizations {
       'Efectes visuals i decoracions de temporada';
 
   @override
+  String get loadingAnimation => 'Animació de càrrega';
+
+  @override
+  String get loadingAnimationDescription =>
+      'Personalitza les animacions de càrrega que utilitza Moonfin';
+
+  @override
+  String get loadingAnimationConfiguration =>
+      'Configuració de l\'animació de càrrega';
+
+  @override
+  String get loadingAnimationImage => 'Imatge';
+
+  @override
+  String get loadingAnimationImageMoonfinLogo => 'Logotip de Moonfin';
+
+  @override
+  String get loadingAnimationImageSpinner => 'Roda de càrrega';
+
+  @override
+  String get loadingAnimationImageRunner => 'Corredor';
+
+  @override
+  String get loadingAnimationImageMoonPhases => 'Fases lunars';
+
+  @override
+  String get loadingAnimationImageMoonfinPhases => 'Fases de Moonfin';
+
+  @override
+  String get loadingAnimationImageNeonfinPhases => 'Fases de Neonfin';
+
+  @override
+  String get loadingAnimationSize => 'Mida de l\'animació';
+
+  @override
+  String get loadingAnimationSizeThumbnail => 'Miniatura';
+
+  @override
+  String get loadingAnimationSizeSmall => 'Petit';
+
+  @override
+  String get loadingAnimationSizeMedium => 'Mitjana';
+
+  @override
+  String get loadingAnimationSizeLarge => 'Gran';
+
+  @override
+  String get loadingAnimationPosition => 'Posició de l\'animació';
+
+  @override
+  String get loadingAnimationPositionTopLeft => 'Superior esquerra';
+
+  @override
+  String get loadingAnimationPositionTopCenter => 'Superior centre';
+
+  @override
+  String get loadingAnimationPositionTopRight => 'Superior dreta';
+
+  @override
+  String get loadingAnimationPositionMiddleLeft => 'Centre esquerra';
+
+  @override
+  String get loadingAnimationPositionMiddle => 'Al mig';
+
+  @override
+  String get loadingAnimationPositionMiddleRight => 'Centre dreta';
+
+  @override
+  String get loadingAnimationPositionBottomLeft => 'Inferior esquerra';
+
+  @override
+  String get loadingAnimationPositionBottomCenter => 'Inferior centre';
+
+  @override
+  String get loadingAnimationPositionBottomRight => 'Inferior dreta';
+
+  @override
+  String get loadingAnimationPositionBouncing => 'Oscil·lant';
+
+  @override
+  String get loadingAnimationSpeed => 'Velocitat de l\'animació';
+
+  @override
+  String get loadingAnimationSpeedSlow => 'Lenta';
+
+  @override
+  String get loadingAnimationSpeedModerate => 'Moderada';
+
+  @override
+  String get loadingAnimationSpeedFast => 'Ràpida';
+
+  @override
+  String get loadingAnimationSpeedUltra => 'Ultra';
+
+  @override
+  String get showLoadingAnimationText => 'Mostra el text';
+
+  @override
+  String get loadingAnimationPreview => 'Vista prèvia';
+
+  @override
   String get snow => 'Neu';
 
   @override
@@ -2313,6 +3172,89 @@ class AppLocalizationsCa extends AppLocalizations {
   String get fallingLeaves => 'Fulles que cauen';
 
   @override
+  String get seasonalChristmas => 'Nadal';
+
+  @override
+  String get seasonalPetals => 'Pètals de primavera';
+
+  @override
+  String get seasonalFireflies => 'Cuques de llum';
+
+  @override
+  String get seasonalHalloween => 'Halloween';
+
+  @override
+  String get seasonalDensity => 'Densitat';
+
+  @override
+  String get seasonalDensityLight => 'Lleuger';
+
+  @override
+  String get seasonalDensityNormal => 'Normal';
+
+  @override
+  String get seasonalDensityHeavy => 'Intens';
+
+  @override
+  String get seasonalRow => 'Fila de temporada';
+
+  @override
+  String get seasonalRowDescription =>
+      'Mostra una fila de pel·lícules de festivitats de la teva biblioteca, amb suggeriments de Seerr quan n\'hi hagi.';
+
+  @override
+  String get seasonalRowSubtitle => 'De temporada';
+
+  @override
+  String get seasonalRowCountry => 'País';
+
+  @override
+  String get seasonalRowCountryAuto => 'Automàtic';
+
+  @override
+  String get countryUnitedStates => 'Estats Units';
+
+  @override
+  String get countryCanada => 'Canada';
+
+  @override
+  String get seasonalRowCountryOther => 'Altres';
+
+  @override
+  String get seasonalRowHolidays => 'Festivitats';
+
+  @override
+  String get seasonalRowHolidaysHint =>
+      'Desmarca una festivitat per amagar-ne la fila.';
+
+  @override
+  String get holidayNewYear => 'Any nou';
+
+  @override
+  String get holidayValentines => 'Sant Valentí';
+
+  @override
+  String get holidayEaster => 'Pasqua';
+
+  @override
+  String get holidayPride => 'Orgull';
+
+  @override
+  String get holidayHalloween => 'Halloween';
+
+  @override
+  String get holidayThanksgiving => 'Acció de Gràcies';
+
+  @override
+  String get holidayChristmas => 'Pel·lícules de Nadal';
+
+  @override
+  String get holidayLunarNewYear => 'Any Nou Lunar';
+
+  @override
+  String get holidayDiwali => 'Diwali';
+
+  @override
   String get themeMusic => 'Tema Música';
 
   @override
@@ -2321,10 +3263,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get themeMusicVolume => 'Tema Música Volum';
-
-  @override
-  String get themeMusicSettingsSubtitle =>
-      'Pàgines de detall, files d\'inici i volum';
 
   @override
   String percentValue(int value) {
@@ -2346,10 +3284,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Repeteix la pista en comptes de reproduir-la un sol cop';
 
   @override
-  String get detailsBackgroundBlur => 'Detalls Desenfocament de fons';
+  String get detailsBackgroundBlur => 'Desenfocament del fons';
 
   @override
-  String get detailsBackgroundOpacity => 'Details Background Opacity';
+  String get detailsBackgroundOpacity => 'Opacitat del fons';
 
   @override
   String pixelValue(int value) {
@@ -2369,7 +3307,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playerZoomMode => 'Mode de zoom del reproductor';
 
   @override
-  String get settingsScrollWheelAction => 'rodeta del ratolí';
+  String get settingsScrollWheelAction => 'Rodeta del ratolí';
 
   @override
   String get settingsScrollWheelActionDescription =>
@@ -2388,10 +3326,34 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playerTooltipVolume => 'Volum';
 
   @override
-  String get fit => 'Fit';
+  String get fit => 'Ajustar';
 
   @override
   String get autoCrop => 'Retall automàtic';
+
+  @override
+  String get cropBlackBars => 'Retalla les bandes negres';
+
+  @override
+  String get settingsCropBlackBarsDescription =>
+      'Detecta les bandes negres codificades quan comença la reproducció, retalla-les i omple la pantalla. Torna-les a retallar des del botó de zoom del reproductor.';
+
+  @override
+  String get cropBlackBarsRecropInterval => 'Interval per tornar a retallar';
+
+  @override
+  String get cropBlackBarsOnce => 'Un cop a l\'inici';
+
+  @override
+  String get cropBlackBarsEverySecond => 'Cada segon';
+
+  @override
+  String get settingsCropBlackBarsIntervalDescription =>
+      'Segueix els canvis de relació d\'aspecte durant la reproducció.';
+
+  @override
+  String get playerRecroppingBlackBars =>
+      'S\'estan tornant a retallar les bandes negres';
 
   @override
   String get stretch => 'Estirar';
@@ -2401,6 +3363,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get disabled => 'Desactivat';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get autoDetect => 'Detecció automàtica';
 
   @override
   String get scaleOnTv => 'Escala a la televisió';
@@ -2416,11 +3384,52 @@ class AppLocalizationsCa extends AppLocalizations {
       'Mostra les miniatures de previsualització quan cerques';
 
   @override
+  String get trickplayDisplayStyleSingle => 'Miniatura única';
+
+  @override
+  String get trickplayDisplayStyleStrip => 'Tira de fotogrames';
+
+  @override
+  String get trickplayModeFull => 'Pantalla completa';
+
+  @override
+  String get trickplaySettingsPreviewHint =>
+      'Arrossega el control lliscant per previsualitzar la cerca';
+
+  @override
+  String get trickplayPreviewScale => 'Mida de les previsualitzacions';
+
+  @override
+  String get trickplayVerticalOffset =>
+      'Distància respecte a la barra de cerca';
+
+  @override
+  String get trickplayFollowScrubPosition => 'Segueix la posició de cerca';
+
+  @override
+  String get trickplayFollowScrubPositionSubtitle =>
+      'La previsualització es desplaça al llarg de la barra de cerca mentre cerques, en lloc de mantenir-se centrada';
+
+  @override
+  String get trickplayPauseWhileScrubbing => 'Pausa mentre es cerca';
+
+  @override
+  String get trickplayPauseWhileScrubbingSubtitle =>
+      'La reproducció es posa en pausa mentre cerques i es reprèn quan prems reproduir. Desactiva-ho per continuar reproduint i saltar directament al punt nou';
+
+  @override
   String get showDescriptionOnPause => 'Mostra la descripció a Pausa';
 
   @override
   String get dimVideoShowOverview =>
       'Atenua el vídeo i mostra el text general mentre estàs en pausa';
+
+  @override
+  String get showChapterMarkers => 'Marques de capítol';
+
+  @override
+  String get showChapterMarkersDescription =>
+      'Marca on comença cada capítol a la barra de progrés';
 
   @override
   String get osdLockButton => 'Botó de bloqueig OSD';
@@ -2430,41 +3439,253 @@ class AppLocalizationsCa extends AppLocalizations {
       'Mostra un botó de bloqueig que bloqueja l\'entrada tàctil fins que estigui premut durant molt de temps';
 
   @override
-  String get osdButtons => 'Player Buttons';
+  String get playerSwipeGestures => 'Desplaçaments de volum i brillantor';
 
   @override
-  String get osdButtonsDescription => 'Choose which buttons the player shows';
+  String get playerSwipeGesturesDescription =>
+      'Desplaça el controlador cap amunt o cap avall per canviar la brillantor a l\'esquerra i el volum a la dreta';
+
+  @override
+  String get osdButtons => 'Botons del reproductor';
+
+  @override
+  String get osdButtonsDescription => 'Tria quins botons mostra el reproductor';
 
   @override
   String get osdButtonsSectionDescription =>
-      'Playback controls are always shown. Everything below is up to you, and each kind of device keeps its own list.';
+      'Els controls de reproducció sempre es mostren. Tot el que hi ha a continuació depèn de tu, i cada tipus de dispositiu manté la seva pròpia llista.';
 
   @override
-  String get detailButtons => 'Action Buttons';
+  String get detailButtons => 'Botons d\'acció';
 
   @override
   String get detailButtonsDescription =>
-      'Choose which buttons the details screen shows';
+      'Tria quins botons mostra la pantalla de detalls';
 
   @override
   String get detailButtonsSectionDescription =>
-      'Play is always first and the locked buttons are always shown. Everything else is up to you, and each kind of device keeps its own list.';
+      'El boto de reproduir sempre és el primer i els botons bloquejats sempre es mostren. La resta depèn de tu, i cada tipus de dispositiu manté la seva pròpia llista.';
 
   @override
-  String get moveUp => 'Move Up';
+  String get actionButtonsOnScreen => 'Botons d\'acció a la pantalla';
 
   @override
-  String get moveDown => 'Move Down';
+  String get actionButtonsOnScreenDescription =>
+      'Personalitza quants botons d\'acció apareixen abans de plegar-se al menú Més accions.';
+
+  @override
+  String get actionButtonsOnScreenAuto => 'Auto (predeterminat del tema)';
+
+  @override
+  String get actionButtonsOnScreenPlayOnly => '1 (només Reprodueix)';
+
+  @override
+  String get actionButtonsOnScreenAll => 'Tots (desplaçament horitzontal)';
+
+  @override
+  String get detailMetadata => 'Fila de metadades';
+
+  @override
+  String get detailMetadataDescription =>
+      'Tria i reordena quines metadades mostra la pantalla de detalls';
+
+  @override
+  String get detailMetadataSectionDescription =>
+      'Activa o desactiva els elements de metadades i organitza l\'ordre en què apareixen a la pantalla de detalls. Cada tipus de dispositiu manté la seva pròpia llista.';
+
+  @override
+  String get detailMetadataYear => 'Any de llançament';
+
+  @override
+  String get detailMetadataParentalRating => 'Classificació per edats';
+
+  @override
+  String get detailMetadataRuntimeAndSeasons => 'Durada i temporades';
+
+  @override
+  String get detailMetadataStatus => 'Estat de la sèrie';
+
+  @override
+  String get detailMetadataStatusSubtitle =>
+      'Mostra si la sèrie continua, ha acabat o torna';
+
+  @override
+  String get detailMetadataGenres => 'Gèneres';
+
+  @override
+  String get detailMetadataSeerrAvailability => 'Disponibilitat a Seerr';
+
+  @override
+  String get detailMetadataSeerrAvailabilitySubtitle =>
+      'Mostra l\'estat de la sol·licitud i la disponibilitat dels mitjans segons Seerr';
+
+  @override
+  String get detailMetadataUpcomingEpisodeDate => 'Pròxims episodis';
+
+  @override
+  String get detailMetadataUpcomingEpisodeDateSubtitle =>
+      'Fa servir Sonarr i TMDB per mostrar les pròximes dates d\'estrena';
+
+  @override
+  String get detailSections => 'Seccions';
+
+  @override
+  String get detailSectionsDescription =>
+      'Tria quines parts de la pantalla de detalls es mostren';
+
+  @override
+  String get detailSectionsScreenDescription =>
+      'Només es mostren les seccions que pot mostrar l\'estil actual de la pantalla de detalls. Si n\'amagues una, s\'amaga en tots els estils que la tenen.';
+
+  @override
+  String get detailSectionGroupHeader => 'Capçalera';
+
+  @override
+  String get detailSectionGroupSections => 'Seccions';
+
+  @override
+  String get detailSectionGroupPerson => 'Pàgines de persones';
+
+  @override
+  String get detailSectionGroupCollection => 'Pàgines de col·leccions';
+
+  @override
+  String get detailSectionGroupOther => 'Altres';
+
+  @override
+  String get detailSectionLogo => 'Logotip';
+
+  @override
+  String get detailSectionLogoSubtitle =>
+      'Mostra el títol com a text quan està desactivat';
+
+  @override
+  String get detailSectionTagline => 'Eslogan';
+
+  @override
+  String get detailSectionPoster => 'Pòster';
+
+  @override
+  String get detailSectionVersionBadge => 'Insígnia de versió';
+
+  @override
+  String get detailSectionUpNext => 'Següent';
+
+  @override
+  String get detailSectionLyrics => 'Lletres';
+
+  @override
+  String get detailSectionCast => 'Repartiment';
+
+  @override
+  String get detailSectionCastSubtitle => 'També a les pàgines de col·leccions';
+
+  @override
+  String get detailSectionCrew => 'Direcció i guió';
+
+  @override
+  String get detailSectionStudios => 'Estudis';
+
+  @override
+  String get detailSectionChapters => 'Capítols';
+
+  @override
+  String get detailSectionExtras => 'Extres';
+
+  @override
+  String get detailSectionCollections => 'Col·leccions';
+
+  @override
+  String get detailSectionMoreLikeThis => 'Més així';
+
+  @override
+  String get detailSectionMoreLikeThisSubtitle =>
+      'També àlbums i artistes similars';
+
+  @override
+  String get detailSectionMoreEpisodes => 'Més episodis';
+
+  @override
+  String get detailSectionMoreEpisodesSubtitle => 'A les pàgines d\'episodis';
+
+  @override
+  String get detailSectionMediaInfo => 'Informació multimèdia';
+
+  @override
+  String get detailSectionMediaInfoSubtitle =>
+      'Fitxer, fluxos i comprovació de reproducció nativa';
+
+  @override
+  String get detailSectionSeerrGenresTags => 'Gèneres i etiquetes';
+
+  @override
+  String get detailSectionSeerrStats => 'Estadístiques';
+
+  @override
+  String get detailSectionSeerrRecommendations => 'Recomanacions';
+
+  @override
+  String get detailSectionSeerrSimilar => 'Títols similars';
+
+  @override
+  String get detailSectionSeerrCollection => 'Bàner de la col·lecció';
+
+  @override
+  String get detailSectionSeerrPersonAppearances => 'Aparicions';
+
+  @override
+  String get detailSectionSeerrPersonCrew => 'Crèdits d\'equip tècnic';
+
+  @override
+  String get detailSectionPersonPagesSubtitle => 'A les pàgines de persones';
+
+  @override
+  String get detailSectionBiography => 'Biografia';
+
+  @override
+  String get detailSectionBirthplace => 'Lloc de naixement';
+
+  @override
+  String get detailSectionGuestAppearances => 'Aparicions de convidats';
+
+  @override
+  String get detailSectionMusicVideos => 'Vídeos musicals';
+
+  @override
+  String get detailSectionPlaylistOrder => 'Ordre de la llista de reproducció';
+
+  @override
+  String get detailSectionBookGenres => 'Gèneres de llibres';
+
+  @override
+  String get detailSectionPhotoExif => 'Detalls de la foto';
+
+  @override
+  String upcomingEpisodeNext(String date, int season, int episode) {
+    return 'Següent: $date (T$season:E$episode)';
+  }
+
+  @override
+  String get upcomingEpisodeToday => 'Avui';
+
+  @override
+  String get upcomingEpisodeTomorrow => 'Demà';
+
+  @override
+  String get moveUp => 'Pujar';
+
+  @override
+  String get moveDown => 'Baixar';
 
   @override
   String get buttonOrderHint =>
-      'Use the arrows to change the order. On a remote, left and right move the highlighted button. Switching one off drops it below the rest.';
+      'Utilitza les fletxes per canviar l\'ordre. Amb el comandament a distància, mou cap a l\'esquerra i cap a la dreta el botó ressaltat. Apagar-ne un el fa caure per sota de la resta.';
 
   @override
-  String get orientationLock => 'Orientation Lock';
+  String get orientationLock => 'Bloqueig d\'orientació';
 
   @override
-  String get fullscreen => 'Fullscreen';
+  String get fullscreen => 'Pantalla completa';
 
   @override
   String get audioBehavior => 'Comportament d\'àudio';
@@ -2581,20 +3802,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'Bitstream DTS d\'àudio només a AVR; requereix suport de receptor i pista font DTS';
 
   @override
-  String get enableTrueHdAudio =>
-      'Activa l\'àudio TrueHD (pot ser que no funcioni a totes les plataformes)';
-
-  @override
-  String get settingsAudioOutputMode => 'Mode de sortida d\'àudio';
-
-  @override
-  String get settingsAudioOutputModeDescription =>
-      'Tria com es descodifica l\'àudio. AVR Passthrough envia els fluxos Dolby/DTS en brut al receptor; Auto o Downmix els descodifica localment.';
-
-  @override
-  String get settingsAudioOutputModeAvrPassthrough => 'Passthrough AVR';
-
-  @override
   String get settingsAudioFallbackCodec => 'Còdec de reserva d\'àudio';
 
   @override
@@ -2613,9 +3820,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsAudioFallbackCodecEac3 => 'EAC3\n(Dolby Digital Plus)';
-
-  @override
-  String get settingsAudioFallbackCodecTrueHd => 'TrueHD\n(Sense perdues)';
 
   @override
   String get settingsAudioFallbackCodecMp3 => 'MP3\n(Només estèreo)';
@@ -2659,7 +3863,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsMaxAudioChannels6_1 => '6.1 Surround';
 
   @override
-  String get settingsMaxAudioChannels7_1 => '7.1 Surround';
+  String get settingsMaxAudioChannels7_1 => '7.1 Envolvent';
 
   @override
   String get settingsAudioPassthroughAdvanced => 'Passthrough (avançat)';
@@ -2675,35 +3879,66 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsAudioEac3Passthrough => 'Passthrough EAC3';
 
   @override
-  String get settingsAudioEac3JocPassthrough => 'Passthrough EAC3 JOC (Atmos)';
-
-  @override
   String get settingsAudioDtsCorePassthrough => 'Passthrough DTS Core';
 
   @override
   String get settingsAudioDtsHdPassthrough => 'Passthrough DTS-HD MA';
 
   @override
+  String get settingsAudioPassthroughMode => 'Passthrough';
+
+  @override
+  String get settingsAudioPassthroughModeDescription =>
+      'Com el so envoltant comprimit arriba al teu televisor o receptor.';
+
+  @override
+  String get settingsAudioPassthroughModeDisabled =>
+      'Deshabilitat (descodifica sempre en aquest dispositiu)';
+
+  @override
+  String get settingsAudioPassthroughModeAuto =>
+      'Automàtic (detecta el suport de dispositius)';
+
+  @override
+  String get settingsAudioPassthroughModeManual =>
+      'Manual (trieu els formats a continuació)';
+
+  @override
+  String get settingsAudioPassthroughOutput => 'Sortida del passthrough';
+
+  @override
+  String get settingsAudioPassthroughOutputDescription =>
+      'Qui empaqueta els fluxos de bits per a l\'enllaç HDMI. Prova l\'empaquetador de l\'aplicació si el passthrough no té so o falla en aquest dispositiu.';
+
+  @override
+  String get settingsAudioPassthroughOutputPlatform =>
+      'Automàtic, empaquetador del sistema (AudioTrack RAW)';
+
+  @override
+  String get settingsAudioPassthroughOutputIec =>
+      'Empaquetador de l\'aplicació (AudioTrack IEC)';
+
+  @override
+  String get settingsAudioPassthroughOutputIecLabel => 'Aplicació (IEC)';
+
+  @override
+  String get settingsDownmixToStereoDescription =>
+      'Mescla tot l\'àudio descodificat en dos canals (Stereo).';
+
+  @override
+  String get settingsAudioEac3IncludesAtmos =>
+      'Bitstream E-AC-3, incloent Dolby Atmos (JOC).';
+
+  @override
+  String get settingsAudioDtsHdIncludesDtsX =>
+      'Bitstream DTS-HD, incloent DTS:X.';
+
+  @override
+  String get settingsAudioTrueHdIncludesAtmos =>
+      'Bitstream TrueHD, incloent Dolby Atmos.';
+
+  @override
   String get settingsAudioTrueHdPassthrough => 'Passthrough TrueHD';
-
-  @override
-  String get settingsAudioTrueHdAtmosPassthrough => 'Passthrough TrueHD Atmos';
-
-  @override
-  String get settingsAudioBitstreamEac3ToExternalDecoder =>
-      'Bitstream Dolby Digital Plus (EAC3) a un descodificador extern.';
-
-  @override
-  String get settingsAudioBitstreamEac3JocToExternalDecoder =>
-      'Bitstream Dolby Atmos sobre EAC3 (JOC) a un descodificador extern.';
-
-  @override
-  String get settingsAudioBitstreamDtsHdToExternalDecoder =>
-      'Bitstream DTS-HD MA (inclou el nucli DTS) al descodificador extern.';
-
-  @override
-  String get settingsAudioBitstreamTrueHdAtmosToExternalDecoder =>
-      'Bitstream Dolby TrueHD amb metadades Atmos al descodificador extern.';
 
   @override
   String get settingsDetectedAudioCapabilities =>
@@ -3007,6 +4242,21 @@ class AppLocalizationsCa extends AppLocalizations {
   String get semiTransparentBlack => 'Negre semitransparent';
 
   @override
+  String get semiTransparentWhite => 'Blanc semitransparent';
+
+  @override
+  String get lightGray => 'Gris clar';
+
+  @override
+  String get darkGray => 'Gris fosc';
+
+  @override
+  String get blue => 'Blau';
+
+  @override
+  String get magenta => 'Magenta';
+
+  @override
   String get global => 'Global';
 
   @override
@@ -3034,56 +4284,41 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get customizationProfile => 'Perfil de personalització';
-
-  @override
-  String get customizationProfileDescription =>
-      'Trieu el perfil per carregar, editar i sincronitzar. Global s\'aplica a tot arreu tret que un perfil de dispositiu el substitueixi. El punt verd marca el perfil actual del dispositiu.';
-
-  @override
-  String get loadProfile => 'Carrega el perfil';
-
-  @override
   String get syncing => 'S\'està sincronitzant...';
 
   @override
-  String get syncToProfile => 'Sincronitza amb el perfil';
-
-  @override
-  String get resetProfile => 'Reset Profile';
-
-  @override
   String resetProfileTitle(String profile) {
-    return 'Reset $profile?';
+    return 'Restaurar $profile?';
   }
 
   @override
   String resetProfileDescription(String profile) {
-    return 'This deletes the $profile profile from the server and puts every synced setting on this device back to its default.';
+    return 'Això elimina el perfil $profile del servidor i restableix a les predeterminades totes les configuracions sincronitzades d\'aquest dispositiu.';
   }
 
   @override
   String get resetGlobalProfileDescription =>
-      'This deletes every saved profile from the server and puts every synced setting on this device back to its default.';
+      'Això elimina tots els perfils desats del servidor i restableix a la configuració per defecte totes les configuracions sincronitzades en aquest dispositiu.';
 
   @override
   String profileReset(String profile) {
-    return 'Reset $profile profile to defaults.';
+    return 'Restabliu el perfil $profile als valors per defecte.';
   }
 
   @override
-  String get resetRatingsTitle => 'Reset ratings?';
+  String get resetRatingsTitle => 'Restablir les valoracions?';
 
   @override
   String get resetRatingsDescription =>
-      'This puts every ratings setting back to its default, including which sources show and the order they appear in.';
+      'Això restableix tots els paràmetres de classificació als valors per defecte, incloent-hi quines fonts es mostren i l\'ordre en què apareixen.';
 
   @override
-  String get ratingsReset => 'Reset ratings to defaults.';
+  String get ratingsReset =>
+      'Restabliu les valoracions als valors per defecte.';
 
   @override
   String failedToResetProfile(String profile) {
-    return 'Failed to reset $profile profile.';
+    return 'Restauració del perfil $profile fallida.';
   }
 
   @override
@@ -3097,20 +4332,27 @@ class AppLocalizationsCa extends AppLocalizations {
   String get quality => 'Qualitat';
 
   @override
-  String get defaultDownloadQuality => 'Qualitat de descàrrega per defecte';
+  String get defaultDownloadQuality => 'Qualitat de baixada per defecte';
 
   @override
   String get network => 'Xarxa';
 
   @override
-  String get wifiOnlyDownloads => 'Descàrregues només per a WiFi';
+  String get wifiOnlyDownloads => 'Baixades només per a WiFi';
 
   @override
-  String get reportDownloadsActivity => 'Mostra les descàrregues al servidor';
+  String get tvOfflineDownloads => 'Habilita les baixades fora de línia';
+
+  @override
+  String get tvOfflineDownloadsSubtitle =>
+      'Mostra accions de baixada a les pàgines d\'ítems';
+
+  @override
+  String get reportDownloadsActivity => 'Mostra les baixades al servidor';
 
   @override
   String get reportDownloadsActivitySubtitle =>
-      'Permet que l\'administrador del servidor vegi les teves descàrregues transcodificades al tauler';
+      'Permet que l\'administrador del servidor vegi les teves baixades transcodificades al tauler';
 
   @override
   String get onlyDownloadOnWifi => 'Baixa només quan està connectat a WiFi';
@@ -3128,17 +4370,24 @@ class AppLocalizationsCa extends AppLocalizations {
   String get calculating => 'Calculant...';
 
   @override
-  String get downloadLocation => 'Descarrega la ubicació';
+  String get downloadLocation => 'Ubicació de les baixades';
 
   @override
   String get defaultLabel => 'Per defecte';
+
+  @override
+  String get sdCard => 'targeta SD';
+
+  @override
+  String get downloadLocationLimitedByAndroid =>
+      'Android només permet que Moonfin escrigui a les carpetes que posseeix, i aquest dispositiu no té emmagatzematge extraïble. Activa la carpeta «Desar a Baixades» anterior per guardar les baixades en un lloc al qual les altres aplicacions puguin accedir.';
 
   @override
   String get saveToDownloadsFolder => 'Desa a la carpeta Baixades';
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Descàrregues/Moonfin: visible per a altres aplicacions';
+      'Baixades/Moonfin: visible per a altres aplicacions';
 
   @override
   String get dangerZone => 'Zona de perill';
@@ -3150,7 +4399,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get original => 'Original';
 
   @override
-  String get changeDownloadLocation => 'Canvia la ubicació de descàrrega';
+  String get changeDownloadLocation => 'Canvia la ubicació de les baixades';
 
   @override
   String get changeDownloadLocationDescription =>
@@ -3169,18 +4418,18 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Els mitjans descarregats es desaran a Descàrregues/Moonfin al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.';
+      'Els mitjans baixats es desaran a Baixades/Moonfin al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
-      'Transcoding: Time Remaining Unavailable';
+      'Transcodificació: temps restant no disponible';
 
   @override
   String get enable => 'Activa';
 
   @override
   String get clearAllDownloadsWarning =>
-      'Això suprimirà tots els mitjans descarregats i no es pot desfer.';
+      'Això suprimirà tots els mitjans baixats i no es pot desfer.';
 
   @override
   String get clearAll => 'Esborra-ho tot';
@@ -3202,6 +4451,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get showFavoritesButton => 'Mostra el botó de Preferits';
+
+  @override
+  String get showLiveTvButton => 'Mostra el botó de TV en directe';
+
+  @override
+  String get showDownloadsButton => 'Mostra el botó de baixades';
 
   @override
   String get showLibrariesInToolbar =>
@@ -3257,7 +4512,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get libraryDisplay => 'Exhibició de la biblioteca';
 
   @override
-  String get posterLabel => 'Cartell';
+  String get posterLabel => 'Pòster';
 
   @override
   String get thumbnailLabel => 'Miniatura';
@@ -3279,6 +4534,16 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get showLibrariesFromAllServers =>
       'Mostra les biblioteques de tots els servidors connectats';
+
+  @override
+  String get mergeRecentRowsByType => 'Fusiona les files recents per tipus';
+
+  @override
+  String get mergeRecentRowsByTypeDescription =>
+      'Combina biblioteques separades del mateix tipus per a les files d\'inici de «Afegit recentment» i «Publicat recentment».';
+
+  @override
+  String get libraryView => 'Vista de la biblioteca';
 
   @override
   String get enableFolderView => 'Activa la vista de carpetes';
@@ -3317,6 +4582,24 @@ class AppLocalizationsCa extends AppLocalizations {
       'Mostra a contingut afegit/estrenat recentment';
 
   @override
+  String get libraryOrder => 'Ordre de les biblioteques';
+
+  @override
+  String get libraryOrderSubtitle => 'Tria l\'ordre de les teves biblioteques';
+
+  @override
+  String get libraryOrderDescription =>
+      'Les teves biblioteques apareixen en aquest ordre a «La meva biblioteca», a les files d\'afegits recentment i a la barra de navegació. L\'ordre es desa al teu compte del servidor, de manera que també el fan servir les altres aplicacions on iniciïs la sessió.';
+
+  @override
+  String get libraryOrderTvHint =>
+      'Prem esquerra o dreta per moure la biblioteca seleccionada.';
+
+  @override
+  String get libraryOrderSaveFailed =>
+      'No s\'ha pogut desar l\'ordre de les biblioteques';
+
+  @override
   String get sourceLibraries => 'Biblioteques font';
 
   @override
@@ -3346,13 +4629,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get seconds => 'segons';
 
   @override
-  String get localPreviews => 'Previsualitzacions locals';
-
-  @override
-  String get localPreviewsDescription =>
-      'Configura les visualitzacions prèvies de tràiler, multimèdia i àudio.';
-
-  @override
   String get mediaBarMode => 'Estil de barra multimèdia';
 
   @override
@@ -3369,6 +4645,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mediaBarModeOff => 'Desactivat';
 
   @override
+  String get mediaBarModeBookshelf => 'Llibreria';
+
+  @override
+  String get mediaBarModeGallery => 'Galeria';
+
+  @override
+  String get mediaBarModeBanner => 'Banner';
+
+  @override
+  String get mediaBarModeAya => 'Aya';
+
+  @override
   String get enableMediaBar => 'Activa la barra multimèdia';
 
   @override
@@ -3379,13 +4667,19 @@ class AppLocalizationsCa extends AppLocalizations {
   String get contentType => 'Tipus de contingut';
 
   @override
-  String get moviesAndTvShows => 'Pel·lícules i programes de televisió';
+  String get mediaBarSourceType => 'Font';
+
+  @override
+  String get mediaBarSourceRandom => 'Aleatori';
+
+  @override
+  String get moviesAndTvShows => 'Pel·lícules i Sèries';
 
   @override
   String get moviesOnly => 'Només pel·lícules';
 
   @override
-  String get tvShowsOnly => 'Només programes de televisió';
+  String get tvShowsOnly => 'Només Sèries';
 
   @override
   String get itemCount => 'Recompte d\'articles';
@@ -3421,11 +4715,11 @@ class AppLocalizationsCa extends AppLocalizations {
       'Activa l\'àudio dels tràilers a la barra multimèdia';
 
   @override
-  String get trailerCaptions => 'Trailer Captions';
+  String get trailerCaptions => 'Subtítols del Tràiler';
 
   @override
   String get trailerCaptionsDescription =>
-      'Show captions on YouTube trailers in the media bar';
+      'Mostra els subtítols dels tràilers de YouTube a la barra de mitjans';
 
   @override
   String get episodePreview => 'Vista prèvia de l\'episodi';
@@ -3446,13 +4740,21 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get enablePreviewAudio =>
-      'Activa l\'àudio per a les previsualitzacions de tràilers i episodis';
+      'Activa l’àudio per a les previsualitzacions multimèdia';
 
   @override
   String get latestMedia => 'Continguts afegits recentment';
 
   @override
   String get recentlyReleased => 'Publicat recentment';
+
+  @override
+  String get recentlyReleasedSeriesType =>
+      'Ordena per sèries recentment publicades';
+
+  @override
+  String get recentlyReleasedSeriesTypeDescription =>
+      'Ordena les files de la pàgina d\'inici de les sèries recentment estrenades per sèrie, temporada o episodi més recent';
 
   @override
   String get myMedia => 'La meva biblioteca';
@@ -3479,17 +4781,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get liveTV => 'TV en directe';
 
   @override
-  String get homeSections => 'Seccions d\'inici';
+  String get favoriteChannels => 'Canals preferits';
 
   @override
   String get resetToDefaults => 'Restableix els valors predeterminats';
 
   @override
   String get homeRowPosterSize => 'Mida del pòster de la fila d\'inici';
-
-  @override
-  String get perRowImageTypeSelection =>
-      'Selecció del tipus d\'imatge per fila';
 
   @override
   String get configureImageTypeForEachRow =>
@@ -3504,32 +4802,29 @@ class AppLocalizationsCa extends AppLocalizations {
       'Combina les dues files en una sola secció d\'inici';
 
   @override
-  String get nextUpMaxDays => 'Max days in Next Up';
+  String get nextUpMaxDays => 'Màxim de dies a \"A continuació\"';
 
   @override
   String get nextUpMaxDaysDescription =>
-      'How long a show stays in Next Up after you last watched it';
+      'Quant de temps una sèrie roman a «Següent» després de l\'última vegada que la vas veure';
 
   @override
   String daysValue(int days) {
-    return '$days days';
+    return '$days dies';
   }
 
   @override
-  String get fullScreenRows => 'Files d\'inici ampliades';
+  String get fullScreenRows => 'Files ampliades';
 
   @override
   String get fullScreenRowsDescription => 'Limita a una sola fila per pantalla';
 
   @override
-  String get homeRowsPadding => 'Home Row Padding';
+  String get homeRowsPadding => 'Separació de les files';
 
   @override
   String get homeRowsPaddingDescription =>
-      'Customize padding between home rows';
-
-  @override
-  String get perRowImageType => 'Tipus d\'imatge per fila';
+      'Personalitza la separació entre les fileres d\'inici';
 
   @override
   String get perRowSettings => 'Configuració per fila';
@@ -3625,7 +4920,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get dimmingLevel => 'Nivell d\'atenuació';
 
   @override
-  String get maxAgeRating => 'Classificació d\'edat màxima';
+  String get maxAgeRating => 'Classificació per edats màxima';
 
   @override
   String get any => 'Qualsevol';
@@ -3636,13 +4931,10 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get requireAgeRating => 'Requereix classificació d\'edat';
+  String get requireAgeRating => 'Requereix classificació per edats';
 
   @override
   String get onlyShowRatedContent => 'Mostra només contingut classificat';
-
-  @override
-  String get showClock => 'Mostra el rellotge';
 
   @override
   String get displayClockDuringScreensaver =>
@@ -3653,6 +4945,54 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get clockModeBouncing => 'Oscil·lant';
+
+  @override
+  String get screensaverGeneralSettings => 'Configuració general';
+
+  @override
+  String get screensaverVisualComponents => 'Components visuals';
+
+  @override
+  String get screensaverLibraryContent => 'Contingut de la biblioteca';
+
+  @override
+  String get screensaverBackdrop => 'Teló de fons';
+
+  @override
+  String get screensaverBackdropBlack => 'Negre';
+
+  @override
+  String get screensaverBackdropMoonfin => 'Moonfin';
+
+  @override
+  String get screensaverBackdropCalm => 'Calma';
+
+  @override
+  String get screensaverBackdropNeonPulse => 'Neon Pulse';
+
+  @override
+  String get screensaverBackdropAurora => 'Aurora';
+
+  @override
+  String get screensaverAdditionalComponent => 'Component addicional';
+
+  @override
+  String get screensaverComponentMoonfinLogo => 'Logotip de Moonfin';
+
+  @override
+  String get screensaverComponentRunner => 'Corredor';
+
+  @override
+  String get screensaverComponentMovement => 'Moviment del component';
+
+  @override
+  String get screensaverComponentPosition => 'Posició del component';
+
+  @override
+  String get screensaverComponentSize => 'Mida del component';
+
+  @override
+  String get screensaverSourceLibrariesDefault => 'Tot (predeterminat)';
 
   @override
   String get rottenTomatoesCritics => 'Rotten Tomatoes (crítics)';
@@ -3676,7 +5016,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get trakt => 'Trakt';
 
   @override
-  String get letterboxd => 'Bústia d';
+  String get letterboxd => 'Letterboxd';
 
   @override
   String get myAnimeList => 'MyAnimeList';
@@ -3726,43 +5066,55 @@ class AppLocalizationsCa extends AppLocalizations {
       'Activa i reordena les fonts de classificació que es mostren a l\'aplicació';
 
   @override
-  String get pluginLabel => 'Connector Moonbase';
-
-  @override
   String get pluginDetected => 'S\'ha detectat connector';
 
   @override
   String get pluginNotDetected => 'Connector no detectat';
 
   @override
-  String get pluginDetectedDescription =>
-      'S\'ha detectat un connector del servidor. La sincronització s\'activa automàticament la primera vegada que es troba el connector.';
-
-  @override
   String get pluginNotDetectedDescription =>
       'Actualment no s\'ha detectat el connector del servidor. La configuració local encara utilitza els seus valors desats o els valors predeterminats integrats.';
 
   @override
-  String pluginStatusVersion(String status, String version) {
-    return '$status\nVersió: $version';
+  String get pluginConnected => 'Connectat';
+
+  @override
+  String pluginConnectedVersion(String version) {
+    return 'Connectat, versió $version';
   }
 
   @override
-  String get availableServices => 'Serveis disponibles';
+  String get pluginSyncOn => 'Sincronització activada';
 
   @override
-  String get serverPluginSync => 'Sincronització del connector del servidor';
+  String get pluginSyncOff => 'Sincronització desactivada';
 
   @override
-  String get syncSettingsWithPlugin =>
-      'Sincronitza la configuració amb el connector del servidor';
+  String get syncProfileDescription =>
+      'Aquest dispositiu se sincronitza amb el perfil que triïs fins que en triïs un altre.';
 
   @override
-  String get whatSyncControls => 'Què controla la sincronització';
+  String get profileAppliesEverywhere => 'S\'aplica a tot arreu';
 
   @override
-  String get syncControlsDescription =>
-      'La sincronització només controla si la configuració amb una còpia de seguretat de connectors s\'envia i s\'extreu del servidor. La selecció de perfils i les accions de sincronització de perfils es troben a la configuració de personalització quan la sincronització dels connectors està activada.';
+  String get profileOverridesGlobal => 'Substitueix Global';
+
+  @override
+  String get profileThisDevice => 'Aquest dispositiu';
+
+  @override
+  String get profileLoad => 'Carrega';
+
+  @override
+  String get profileLoadSubtitle => 'Del servidor a aquest dispositiu';
+
+  @override
+  String get profileSaveSubtitle => 'D\'aquest dispositiu al servidor';
+
+  @override
+  String resetNamedProfile(String profile) {
+    return 'Restableix el perfil $profile';
+  }
 
   @override
   String get recentRequests => 'Sol·licituds recents';
@@ -3771,7 +5123,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get recentlyAdded => 'Afegit recentment';
 
   @override
-  String get trending => 'Tendència';
+  String get trending => 'Tendències';
 
   @override
   String get popularMovies => 'Pel·lícules populars';
@@ -3792,16 +5144,25 @@ class AppLocalizationsCa extends AppLocalizations {
   String get seriesGenres => 'Gèneres de sèries';
 
   @override
-  String get upcomingSeries => 'Pròxima Sèrie';
+  String get upcomingSeries => 'Pròximes Sèries';
 
   @override
   String get networks => 'Xarxes';
 
   @override
+  String get tags => 'Etiquetes';
+
+  @override
+  String get genresAndTags => 'Gèneres i etiquetes';
+
+  @override
   String get seerrDiscoveryRows => 'Fileres de descoberta Seerr';
 
   @override
-  String get yourWatchlist => 'Your Watchlist';
+  String get seerrDiscoverSliders => 'Carrusels de Descobreix de Seerr';
+
+  @override
+  String get yourWatchlist => 'La teva llista de seguiment';
 
   @override
   String get resetRowsToDefaults =>
@@ -3823,6 +5184,22 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hideAdultContent => 'Amaga contingut per a adults als resultats';
+
+  @override
+  String get showMissingCollectionItems =>
+      'Mostra els elements que falten a les col·leccions';
+
+  @override
+  String get showMissingCollectionItemsDesc =>
+      'Inclou els elements que falten a les pàgines de col·leccions';
+
+  @override
+  String get showSeerrAvailabilityBadges =>
+      'Mostra les insígnies de disponibilitat de Seerr';
+
+  @override
+  String get showSeerrAvailabilityBadgesDescription =>
+      'Mostra les insígnies de disponibilitat de temporades a les pàgines de detalls dels mitjans';
 
   @override
   String get seerrNotificationsSection => 'Notificacions';
@@ -3850,11 +5227,11 @@ class AppLocalizationsCa extends AppLocalizations {
       'Incidències noves, respostes i resolucions';
 
   @override
-  String get seerrNotifyNewMediaTitle => 'New media added';
+  String get seerrNotifyNewMediaTitle => 'Nou contingut afegit';
 
   @override
   String get seerrNotifyNewMediaSubtitle =>
-      'Anything new added to the server library';
+      'Qualsevol contingut multimèdia nou afegit a la biblioteca';
 
   @override
   String loggedInAs(String username) {
@@ -3957,7 +5334,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get updateDownloadFailed =>
-      'La descàrrega de l\'actualització ha fallat. Si us plau, torna-ho a provar.';
+      'La baixada de l\'actualització ha fallat. Si us plau, torna-ho a provar.';
 
   @override
   String get openReleasesPage => 'Obriu la pàgina de versions';
@@ -3967,18 +5344,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get watchedIndicatorsBackdrops =>
-      'Indicadors observats, telons de fons';
+      'Indicadors de contingut vist, telons de fons';
 
   @override
   String get focusColorWatchedIndicatorsBackdrops =>
-      'Color del focus, indicadors observats, fons';
+      'Color del focus, indicadors de contingut vist, fons';
 
   @override
   String get navbarStyleToolbarAppearance =>
       'Estil de la barra de navegació, botons de la barra d\'eines, aspecte';
-
-  @override
-  String get reorderToggleHomeRows => 'Reordena i canvia les files d\'inici';
 
   @override
   String get featuredContentAppearance => 'Contingut destacat, aparença';
@@ -3986,10 +5360,6 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get posterSizeImageTypeFolderView =>
       'Mida del pòster, tipus d\'imatge, vista de carpeta';
-
-  @override
-  String get mdbListTmdbRatingSources =>
-      'MDBList, TMDB i fonts de qualificació';
 
   @override
   String gbValue(String value) {
@@ -4026,8 +5396,26 @@ class AppLocalizationsCa extends AppLocalizations {
   String get seerrRequestedStatus => 'Sol·licitat';
 
   @override
+  String get seerrDownloading => 'Baixant';
+
+  @override
+  String seerrDownloadingSize(String done, String total) {
+    return 'Baixant · $done / $total';
+  }
+
+  @override
+  String seerrDownloadedOfTotal(String done, String total) {
+    return '$done / $total';
+  }
+
+  @override
+  String seerrPercentValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
   String seerrDownloadingPercent(int percent) {
-    return 'Descarregant · $percent%';
+    return 'Baixant · $percent%';
   }
 
   @override
@@ -4045,30 +5433,42 @@ class AppLocalizationsCa extends AppLocalizations {
   String get requestMore => 'Demana més';
 
   @override
-  String get requestMore4k => 'Request More in 4K';
+  String get requestMore4k => 'Sol·licita més en 4K';
 
   @override
   String get request => 'Sol·licitud';
 
   @override
-  String get request4k => 'Request 4K';
+  String get request4k => 'Sol·licita en 4K';
 
   @override
-  String get requested4k => '4K Requested';
+  String get requested4k => '4K Sol·licitat';
 
   @override
   String get cancelRequest => 'Cancel·la la sol·licitud';
 
   @override
-  String get cancelRequest4k => 'Cancel 4K Request';
+  String get cancelRequest4k => 'Cancel·la la sol·licitud de 4K';
 
   @override
   String get playInMoonfin => 'Reprodueix a Moonfin';
 
   @override
+  String get requestedByLabel => 'Sol·licitat per';
+
+  @override
   String requestedByName(String name) {
     return 'Sol·licitat per $name';
   }
+
+  @override
+  String get manageRequests => 'Gestiona sol·licituds';
+
+  @override
+  String get watchlist => 'Llista de seguiment';
+
+  @override
+  String get onWatchlist => 'A la llista de seguiment';
 
   @override
   String get approve => 'Aprovar';
@@ -4125,7 +5525,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String requestSeriesOrMovie4k(String type) {
-    return 'Request 4K $type';
+    return 'Sol·licitar $type 4K';
   }
 
   @override
@@ -4133,6 +5533,10 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get allSeasons => 'Totes les temporades';
+
+  @override
+  String get seerrSeriesContinuing =>
+      'La sèrie continua · Es poden sol·licitar temporades futures';
 
   @override
   String get advancedOptions => 'Opcions avançades';
@@ -4177,7 +5581,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get partiallyAvailable => 'Disponible parcialment';
 
   @override
-  String get downloadingStatus => 'Descàrrega';
+  String get downloadingStatus => 'Baixada';
 
   @override
   String get approvedStatus => 'Aprovat';
@@ -5148,11 +6552,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get adminLibSkipIfEmbeddedSubs =>
-      'Omet la descàrrega si hi ha subtítols incrustats';
+      'Omet la baixada si hi ha subtítols incrustats';
 
   @override
   String get adminLibSkipIfAudioMatches =>
-      'Omet la descàrrega si la pista d\'àudio coincideix amb l\'idioma de descàrrega';
+      'Omet la baixada si la pista d\'àudio coincideix amb l\'idioma de baixada';
 
   @override
   String get adminLibRequirePerfectMatch =>
@@ -5303,7 +6707,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String adminFailed(String error) {
-    return 'Error: $error';
+    return 'Fallat: $error';
   }
 
   @override
@@ -5446,7 +6850,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get adminParentalControl => 'Control parental';
 
   @override
-  String get adminMaxParentalRating => 'Classificació parental màxima permesa';
+  String get adminMaxParentalRating => 'Classificació per edats màxima permesa';
 
   @override
   String get adminMaxParentalRatingHint =>
@@ -6856,10 +8260,198 @@ class AppLocalizationsCa extends AppLocalizations {
   String get adminMetadataFieldCriticRating => 'Valoració de la crítica';
 
   @override
+  String get adminMetadataFieldCustomRating => 'Puntuació personalitzada';
+
+  @override
   String get adminMetadataFieldTagline => 'Eslogan';
 
   @override
   String get adminMetadataFieldOverview => 'Visió general';
+
+  @override
+  String get adminMetadataFieldDisplayOrder => 'Ordre de visualització';
+
+  @override
+  String get adminMetadataDisplayOrderAired => 'Emès';
+
+  @override
+  String get adminMetadataDisplayOrderOriginalAirDate =>
+      'Data d\'emissió original';
+
+  @override
+  String get adminMetadataDisplayOrderAbsolute => 'Absolut';
+
+  @override
+  String get adminMetadataDisplayOrderDvd => 'DVD';
+
+  @override
+  String get adminMetadataDisplayOrderDigital => 'Digital';
+
+  @override
+  String get adminMetadataDisplayOrderStoryArc => 'Arc argumental';
+
+  @override
+  String get adminMetadataDisplayOrderProduction => 'Producció';
+
+  @override
+  String get adminMetadataDisplayOrderTv => 'TV';
+
+  @override
+  String get adminMetadataDisplayOrderAlternate => 'Alternatiu';
+
+  @override
+  String get adminMetadataDisplayOrderRegional => 'Regional';
+
+  @override
+  String get adminMetadataDisplayOrderAlternateDvd => 'DVD alternatiu';
+
+  @override
+  String get adminMetadataDisplayOrderDateModified => 'Data de modificació';
+
+  @override
+  String get adminMetadataDisplayOrderSortName => 'Ordenar per nom';
+
+  @override
+  String get adminMetadataDisplayOrderReleaseDate => 'Data de publicació';
+
+  @override
+  String get adminMetadataSettings => 'Configuració de metadades';
+
+  @override
+  String get adminMetadataDownloadLanguage => 'Idioma de baixada preferit';
+
+  @override
+  String get adminMetadataCountryRegion => 'País/Regió';
+
+  @override
+  String get adminMetadataInheritHelp =>
+      'Deixa-ho com a Predeterminat per heretar la configuració d\'un element principal o de la configuració predeterminada del servidor.';
+
+  @override
+  String get adminMetadataField3DFormat => 'Format 3D';
+
+  @override
+  String get adminMetadataPersonKindUnknown => 'Desconegut';
+
+  @override
+  String get adminMetadataPersonKindActor => 'Actor';
+
+  @override
+  String get adminMetadataPersonKindDirector => 'Director';
+
+  @override
+  String get adminMetadataPersonKindComposer => 'Compositor';
+
+  @override
+  String get adminMetadataPersonKindWriter => 'Escriptor';
+
+  @override
+  String get adminMetadataPersonKindGuestStar => 'Estrella convidada';
+
+  @override
+  String get adminMetadataPersonKindProducer => 'Productor';
+
+  @override
+  String get adminMetadataPersonKindConductor => 'Director d\'orquestra';
+
+  @override
+  String get adminMetadataPersonKindLyricist => 'Lletrista';
+
+  @override
+  String get adminMetadataPersonKindArranger => 'Arranjador';
+
+  @override
+  String get adminMetadataPersonKindEngineer => 'Enginyer';
+
+  @override
+  String get adminMetadataPersonKindMixer => 'Mesclador';
+
+  @override
+  String get adminMetadataPersonKindRemixer => 'Remesclador';
+
+  @override
+  String get adminMetadataPersonKindCreator => 'Creador';
+
+  @override
+  String get adminMetadataPersonKindArtist => 'Artista';
+
+  @override
+  String get adminMetadataPersonKindAlbumArtist => 'Artista d\'àlbum';
+
+  @override
+  String get adminMetadataPersonKindAuthor => 'Autor';
+
+  @override
+  String get adminMetadataPersonKindIllustrator => 'Il·lustrador';
+
+  @override
+  String get adminMetadataPersonKindPenciller => 'Dibuixant';
+
+  @override
+  String get adminMetadataPersonKindInker => 'Entintador';
+
+  @override
+  String get adminMetadataPersonKindColorist => 'Colorista';
+
+  @override
+  String get adminMetadataPersonKindLetterer => 'Rotulista';
+
+  @override
+  String get adminMetadataPersonKindCoverArtist => 'Artista de portada';
+
+  @override
+  String get adminMetadataPersonKindEditor => 'Editor';
+
+  @override
+  String get adminMetadataPersonKindTranslator => 'Traductor';
+
+  @override
+  String get adminMetadataPersonKindNarrator => 'Narrador';
+
+  @override
+  String get adminMetadataAirDays => 'Dies d\'emissió';
+
+  @override
+  String get adminMetadataLockItem =>
+      'Bloqueja aquest element per evitar futurs canvis de metadades';
+
+  @override
+  String get adminMetadataEnabledFields => 'Camps habilitats';
+
+  @override
+  String get adminMetadataEnabledFieldsHelp =>
+      'Desselecciona un camp per bloquejar-lo i evitar que les seves dades siguin modificades.';
+
+  @override
+  String get adminMetadataLockFieldName => 'Nom';
+
+  @override
+  String get adminMetadataLockFieldOverview => 'Resum';
+
+  @override
+  String get adminMetadataLockFieldGenres => 'Gèneres';
+
+  @override
+  String get adminMetadataLockFieldOfficialRating => 'Classificació per edats';
+
+  @override
+  String get adminMetadataLockFieldCast => 'Persones';
+
+  @override
+  String get adminMetadataLockFieldProductionLocations =>
+      'Ubicacions de producció';
+
+  @override
+  String get adminMetadataLockFieldBirthLocation => 'Lloc de naixement';
+
+  @override
+  String get adminMetadataLockFieldRuntime => 'Duració';
+
+  @override
+  String get adminMetadataLockFieldStudios => 'Estudis';
+
+  @override
+  String get adminMetadataLockFieldTags => 'Etiquetes';
 
   @override
   String get adminMetadataGenres => 'Gèneres';
@@ -6982,11 +8574,21 @@ class AppLocalizationsCa extends AppLocalizations {
   String get adminPluginsRestart => 'Reinicieu';
 
   @override
+  String get adminPluginsRestartRequired => 'Cal reiniciar';
+
+  @override
   String get adminPluginsNoSearchResults =>
       'Cap connector coincideix amb la vostra cerca';
 
   @override
   String get adminPluginsNoneInstalled => 'No hi ha connectors instal·lats';
+
+  @override
+  String get adminPluginsNoneActive => 'Cap plugin actiu';
+
+  @override
+  String get adminPluginsNoneRequireRestart =>
+      'Cap plugin requereix un reinici del servidor';
 
   @override
   String adminPluginsUpdateAvailable(String version) {
@@ -8052,7 +9654,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get offlineNoInternet =>
-      'Estàs fora de línia. Només el contingut descarregat està disponible.';
+      'Estàs fora de línia. Només el contingut baixat està disponible.';
 
   @override
   String get offlineFileNotAvailable => 'Fitxer no disponible';
@@ -8061,16 +9663,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get offlineSwitchServer => 'Canvia de servidor';
 
   @override
-  String get offlineSavedMedia => 'Mitjans desats';
+  String get offlineSavedMedia => 'Baixades';
 
   @override
   String get offlineBannerTitle => 'No tens connexió';
 
   @override
-  String get offlineBannerSubtitle => 'Es mostren les teves descàrregues';
+  String get offlineBannerSubtitle => 'Es mostren les teves baixades';
 
   @override
-  String get offlineBannerAction => 'Descàrregues';
+  String get offlineBannerAction => 'Baixades';
 
   @override
   String get serverUnreachableBannerTitle =>
@@ -8078,7 +9680,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get serverUnreachableBannerSubtitle =>
-      'Es reprodueix des de les descàrregues fins que torni';
+      'Es reprodueix des de les baixades fins que torni';
 
   @override
   String get castGoogleCast => 'Google Cast';
@@ -8143,7 +9745,26 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get kidsMode => 'Mode infantil';
+
+  @override
+  String get kidsModeSubtitle =>
+      'Simplifica l\'aplicació i bloqueja la sortida amb un PIN';
+
+  @override
+  String get kidsModeExit => 'Surt del mode infantil';
+
+  @override
+  String get kidsModeExitSubtitle =>
+      'Introdueix el PIN per recuperar l\'aplicació completa';
+
+  @override
   String get pinIncorrect => 'PIN incorrecte';
+
+  @override
+  String pinTryAgainIn(String wait) {
+    return 'Massa intents. Torna-ho a provar d\'aquí a $wait.';
+  }
 
   @override
   String get pinMismatch => 'Els PIN no coincideixen';
@@ -8245,13 +9866,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get trackActionPlayNext => 'Reproduir a continuació';
 
   @override
+  String get trackActionViewDetails => 'Veure detalls';
+
+  @override
   String get trackActionAddToQueue => 'Afegeix a la cua';
 
   @override
   String get trackActionAddToPlaylist => 'Afegeix a la llista de reproducció';
 
   @override
-  String get trackActionCancelDownload => 'Cancel·la la descàrrega';
+  String get trackActionCancelDownload => 'Cancel·la la baixada';
 
   @override
   String get trackActionDeleteFromPlaylist =>
@@ -8281,7 +9905,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get trackActionDeletedFile => 'S\'ha suprimit el fitxer descarregat';
+  String get trackActionDeletedFile => 'S\'ha suprimit el fitxer baixat';
 
   @override
   String get trackActionDeleteFileFailed =>
@@ -8317,7 +9941,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get posterImageType => 'Tipus d\'imatge';
 
   @override
-  String get imageTypePoster => 'Cartell';
+  String get imageTypePoster => 'Pòster';
 
   @override
   String get imageTypeThumbnail => 'Miniatura';
@@ -8432,10 +10056,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playerTooltipSeekForward => 'Busca endavant';
 
   @override
+  String get playerTooltipMinimize => 'Minimize player';
+
+  @override
+  String get miniPlayerOpenPlayer => 'Open player';
+
+  @override
   String get contextMenuMarkWatched => 'Marca com a vist';
 
   @override
-  String get contextMenuMarkUnwatched => 'Marca com a no observat';
+  String get contextMenuMarkUnwatched => 'Marca com a no vist';
 
   @override
   String get contextMenuAddToFavorites => 'Afegeix a Preferits';
@@ -8456,22 +10086,20 @@ class AppLocalizationsCa extends AppLocalizations {
   String get contextMenuAddToCollection => 'Afegeix a una col·lecció';
 
   @override
+  String get contextMenuRemoveFromCollection => 'Elimina de la col·lecció';
+
+  @override
+  String removeFromCollectionConfirm(String item, String collection) {
+    return 'Vols eliminar $item de $collection? L\'element es manté a la teva biblioteca.';
+  }
+
+  @override
+  String get removeFromCollectionFailed =>
+      'No s\'ha pogut eliminar de la col·lecció';
+
+  @override
   String get settingsAdministrationSubtitle =>
       'Accediu al panell d\'administració del servidor';
-
-  @override
-  String get settingsAccountSecurity => 'Compte i seguretat';
-
-  @override
-  String get settingsAccountSecuritySubtitle =>
-      'Autenticació, codi PIN i controls parentals';
-
-  @override
-  String get settingsPersonalization => 'Personalització';
-
-  @override
-  String get settingsPersonalizationSubtitle =>
-      'Tema, navegació, files d\'inici i visibilitat de la biblioteca';
 
   @override
   String get settingsDynamicContent => 'Contingut dinàmic';
@@ -8481,22 +10109,8 @@ class AppLocalizationsCa extends AppLocalizations {
       'Barra multimèdia i superposicions visuals';
 
   @override
-  String get settingsPlaybackSyncplay => 'Reproducció i SyncPlay';
-
-  @override
-  String get settingsPlaybackSyncplaySubtitle =>
-      'Configuració d\'àudio/vídeo, subtítols, descàrregues i controls de SyncPlay';
-
-  @override
-  String get settingsIntegrationsSubtitle =>
-      'Sincronització de connectors, Seerr, puntuacions i molt més';
-
-  @override
   String get settingsAboutSubtitle =>
       'Versió de l\'aplicació, informació legal i crèdits';
-
-  @override
-  String get settingsAuthenticationSection => 'Autenticació';
 
   @override
   String get settingsSortServersBy => 'Ordena servidors per';
@@ -8508,9 +10122,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsAlphabetical => 'Alfabètic';
 
   @override
-  String get settingsConnectionSection => 'CONNEXIÓ';
-
-  @override
   String get settingsAllowSelfSignedCerts =>
       'Permet els certificats autosignats';
 
@@ -8519,35 +10130,22 @@ class AppLocalizationsCa extends AppLocalizations {
       'Confia en els servidors que utilitzen certificats TLS autosignats o d\'una CA privada. Activa-ho només per als servidors que controlis. Això desactiva la validació de certificats per a totes les connexions.';
 
   @override
-  String get settingsPrivacyAndSafetySection => 'PRIVACITAT I SEGURETAT';
+  String get untrustedServerCertificate =>
+      'No es confia en el certificat d\'aquest servidor. Si és el teu propi servidor i fa servir un certificat autosignat o privat, pots permetre\'l aquí.';
 
   @override
-  String get settingsBlockedRatings => 'Classificacions bloquejades';
+  String get itemBlockedByParentalControls => 'Això no està disponible';
 
   @override
-  String get settingsGeneralStyle => 'Estil general';
+  String get blockedRatingsCeilingHint =>
+      'Bloquejar una classificació també bloqueja totes les superiors.';
 
   @override
-  String get settingsGeneralStyleSubtitle =>
-      'Accents temàtics, fons, indicadors de visualització i música de tema';
-
-  @override
-  String get settingsDetailsScreen => 'Pantalla de detalls';
-
-  @override
-  String get settingsDetailsScreenSubtitle =>
-      'Estil, desenfocament del fons i comportament de les pestanyes';
+  String get blockedRatingsUnrankedSection =>
+      'Bloqueja només aquesta classificació';
 
   @override
   String get settingsHomePage => 'Pàgina d\'inici';
-
-  @override
-  String get settingsHomePageSubtitle =>
-      'Seccions, tipus d\'imatge, superposicions i previsualitzacions multimèdia';
-
-  @override
-  String get settingsLibrariesSubtitle =>
-      'Visibilitat de la biblioteca, visualització de carpetes i comportament multiservidor';
 
   @override
   String get settingsTwentyFourHourClock => 'Rellotge de 24 hores';
@@ -8567,6 +10165,10 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get settingsShowFavoritesButtonInNavigation =>
       'Mostra el botó de preferits a la barra de navegació';
+
+  @override
+  String get settingsShowLiveTvButtonInNavigation =>
+      'Mostra el botó de TV en directe a la barra de navegació quan el servidor tingui una biblioteca de TV en directe';
 
   @override
   String get settingsShowLibrariesButtonInNavigation =>
@@ -8595,72 +10197,77 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsSeasonalSurprise => 'Sorpresa de temporada';
 
   @override
-  String get settingsMetadataAndRatings => 'Metadades i puntuacions';
-
-  @override
-  String get settingsPluginScreenDescription =>
-      'Moonbase potencia les integracions del servidor, incloses fonts de qualificació addicionals, sol·licituds de Seerr i preferències sincronitzades.';
-
-  @override
-  String get settingsOfflineDownloads => 'Descàrregues fora de línia';
-
-  @override
-  String get useNativeEmulator => 'Native Emulation';
+  String get useNativeEmulator => 'Emulació nativa';
 
   @override
   String get useNativeEmulatorSubtitle =>
-      'Play games with native cores instead of the EmulatorJS web player';
+      'Juga a jocs amb nuclis natius en lloc del reproductor web d\'EmulatorJS';
 
   @override
-  String get emulatorCores => 'Emulator Cores';
+  String get emulatorCores => 'Nuclis de l\'emulador';
 
   @override
-  String get emulatorCoresSubtitle => 'Download systems to play games natively';
+  String get emulatorCoresSubtitle =>
+      'Descargueu sistemes per jugar a jocs de manera nativa';
 
   @override
   String get emulatorCoresDescription =>
-      'Choose which systems to install. Cores are provided by the libretro project and let games run natively instead of in a browser view.';
+      'Tria quins sistemes vols instal·lar. Els nuclis els proporciona el projecte libretro i permeten que els jocs s’executin de manera nativa, en lloc de fer-ho dins d’una vista del navegador.';
 
   @override
-  String get emulatorCoreDownloading => 'Downloading';
+  String get emulatorCoreDownloading => 'Baixant';
 
   @override
-  String get emulatorCoreUnavailable => 'Not available for this device';
+  String get emulatorCoreUnavailable => 'No disponible per aquest dispositiu';
 
   @override
   String get emulatorCoreDownloadFailed =>
-      'Could not download the core. Check your connection and try again.';
+      'No s\'ha pogut baixar el nucli. Verifica la connexió i torna-ho a provar.';
 
   @override
-  String get downloadedGames => 'Downloaded Games';
-
-  @override
-  String get downloadedGamesSubtitle => 'Free up space used by game files';
-
-  @override
-  String get downloadedGamesDescription =>
-      'Games are copied to this device before they play. Remove the ones you have finished to free up space. Saves are kept on the server and are not deleted.';
-
-  @override
-  String get downloadedGamesEmpty =>
-      'No games have been downloaded to this device yet.';
-
-  @override
-  String downloadedGamesTotal(int count, String size) {
-    return '$count games, $size';
+  String emulatorCoreResetSettings(String system) {
+    return 'Restabliu la configuració del $system als valors per defecte';
   }
 
   @override
-  String get removeAllDownloadedGames => 'Remove All';
+  String get emulatorCoreSettingsReset =>
+      'Configuració restablida als valors per defecte.';
+
+  @override
+  String get emulatorCoreResetSettingsFailed =>
+      'No s\'ha pogut restablir la configuració. Verifiqueu la vostra connexió i torneu-ho a provar.';
+
+  @override
+  String get downloadedGames => 'Jocs baixats';
+
+  @override
+  String get downloadedGamesSubtitle =>
+      'Allibera espai ocupat pels fitxers del joc';
+
+  @override
+  String get downloadedGamesDescription =>
+      'Els jocs es copien a aquest dispositiu abans d’executar-se. Elimina els que hagis acabat per alliberar espai. Les partides guardades es conserven al servidor i no s\'eliminen.';
+
+  @override
+  String get downloadedGamesEmpty =>
+      'Encara no s\'ha baixat cap joc en aquest dispositiu.';
+
+  @override
+  String downloadedGamesTotal(int count, String size) {
+    return '$count jocs, $size';
+  }
+
+  @override
+  String get removeAllDownloadedGames => 'Elimina-ho tot';
 
   @override
   String removeDownloadedGameConfirm(String title) {
-    return 'Remove $title from this device? It will download again the next time you play it.';
+    return 'Eliminar $title d\'aquest dispositiu? Es tornarà a baixar la propera vegada que el juguis.';
   }
 
   @override
   String get removeAllDownloadedGamesConfirm =>
-      'Remove all downloaded games from this device? They will download again the next time you play them.';
+      'Eliminar tots els jocs baixats d\'aquest dispositiu? Es tornaran a baixar la propera vegada que els juguis.';
 
   @override
   String get settingsHigh => 'Alt';
@@ -8673,14 +10280,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsEnterDownloadFolderPath =>
-      'Introduïu el camí de la carpeta de descàrrega';
+      'Introduïu el camí de la carpeta de baixades';
 
   @override
-  String get settingsConcurrentDownloads => 'Descàrregues concurrents';
+  String get settingsConcurrentDownloads => 'Baixades concurrents';
 
   @override
   String get settingsConcurrentDownloadsDescription =>
-      'Nombre màxim d\'elements per descarregar alhora.';
+      'Nombre màxim d\'elements per baixar alhora.';
 
   @override
   String get settingsAppInfo => 'INFORMACIÓ DE L\'APP';
@@ -8732,20 +10339,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'Comproveu l\'últim llançament de Moonfin';
 
   @override
-  String get settingsPoweredByFlutter => 'Desenvolupat per Flutter';
-
-  @override
-  String settingsLicenseNoticesCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '# avisos de llicència',
-      one: '# avís de llicència',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get settingsBoth => 'Tots dos';
 
   @override
@@ -8753,41 +10346,24 @@ class AppLocalizationsCa extends AppLocalizations {
       'Barreja el filtre de tipus de contingut';
 
   @override
-  String get settingsVideoPlaybackPreferences =>
-      'Preferències de reproducció de vídeo';
-
-  @override
-  String get settingsVideoPlaybackPreferencesSubtitle =>
-      'Motor de vídeo bàsic i configuració de qualitat de transmissió';
-
-  @override
-  String get settingsAudioPreferences => 'Preferències d\'àudio';
-
-  @override
   String get settingsAudioPreferencesSubtitle =>
       'Pistes d\'àudio, processament i opcions de transmissió';
-
-  @override
-  String get settingsAutomationAndQueue => 'Automatització i cua';
 
   @override
   String get settingsAutomationAndQueueSubtitle =>
       'Reproducció i seqüenciació automàtica';
 
   @override
-  String get settingsOfflineDownloadsSubtitle =>
-      'Qualitat de la baixada, límits d\'emmagatzematge i mida de la cua';
-
-  @override
   String get settingsSyncplaySubtitle =>
       'Lògica de sincronització per a sessions de grup';
 
   @override
-  String get settingsAdvancedOptionsSubtitle =>
-      'Característiques especialitzades del reproductor. Feu servir amb precaució, ja que algunes opcions poden causar problemes de reproducció';
+  String get settingsSkipIntrosAndOutros => 'Ometeu introduccions i altres?';
 
   @override
-  String get settingsSkipIntrosAndOutros => 'Ometeu introduccions i altres?';
+  String settingsMediaSegmentTypeAction(String segment) {
+    return '$segment Segments';
+  }
 
   @override
   String get settingsMediaSegmentCountdown => 'Compte enrere per els segments';
@@ -8800,6 +10376,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsNone => 'Cap';
+
+  @override
+  String get settingsSkipButtonAutoHide =>
+      'Amaga automàticament el botó per saltar';
+
+  @override
+  String get settingsSkipButtonAutoHideDescription =>
+      'Desactiva automàticament el botó per saltar l\'intro i l\'outro després de pocs segons.';
 
   @override
   String get settingsPromptUser => 'Usuari prompte';
@@ -8834,13 +10418,32 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsPlaybackEngineMedia3Recommended => 'Media3 (recomanat)';
 
   @override
-  String get settingsPlaybackEngineMedia3Legacy => 'Media3 (herència)';
-
-  @override
   String get settingsPlaybackEngineMpvLegacy => 'mpv (legat)';
 
   @override
-  String get settingsPlaybackEngineMpvRecommended => 'mpv (recomanat)';
+  String get settingsRedetectDisplay => 'Torna a detectar la pantalla';
+
+  @override
+  String get settingsRedetectDisplayDescription =>
+      'Torna a preguntar al televisor quins formats HDR admet. Utilitza-ho si els títols en Dolby Vision o HDR10 es transcodifiquen després d\'encendre el televisor o el receptor amb retard.';
+
+  @override
+  String get settingsDisplayIsSdr => 'El meu televisor no és HDR';
+
+  @override
+  String get settingsDisplayIsSdrDescription =>
+      'Deixa d\'anunciar la compatibilitat amb HDR per a aquesta pantalla. Utilitza-ho només si la detecció continua informant d\'un HDR que el televisor no pot mostrar realment.';
+
+  @override
+  String settingsDisplayRedetected(String formats) {
+    return 'S\'ha tornat a detectar la pantalla: $formats';
+  }
+
+  @override
+  String get settingsDisplayNoHdrDetected => 'No s\'ha detectat cap format HDR';
+
+  @override
+  String get settingsDisplayMarkedSdr => 'S\'ha desat la pantalla com a SDR';
 
   @override
   String get settingsDolbyVisionFallback => 'Dolby Vision Alternativa';
@@ -8868,14 +10471,13 @@ class AppLocalizationsCa extends AppLocalizations {
       'Controla si els fluxos de capa de millora del perfil Dolby Vision 7 han de dirigir la reproducció.';
 
   @override
-  String get settingsAutoAftkrtEnabled => 'Automàtic (AFTKRT habilitat)';
+  String get settingsAutoAftkrtEnabled => 'Auto';
 
   @override
-  String get settingsEnabledOnThisDevice => 'Habilitat en aquest dispositiu';
+  String get settingsEnabledOnThisDevice => 'Habilitat';
 
   @override
-  String get settingsDisabledPreferTranscode =>
-      'Desactivat (prefereix la transcodificació)';
+  String get settingsDisabledPreferTranscode => 'Desactivat';
 
   @override
   String get settingsResumeRewindDescription =>
@@ -8915,6 +10517,13 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get settingsCinemaModeSubtitle =>
       'Reprodueix tràilers/prerolls abans d\'una funció principal';
+
+  @override
+  String get settingsCinemaModeEpisodes => 'Mode Cinema per a episodis';
+
+  @override
+  String get settingsCinemaModeEpisodesSubtitle =>
+      'També reprodueix prerolls abans dels episodis de televisió';
 
   @override
   String get settingsNextUpDisplayDescription =>
@@ -9071,15 +10680,16 @@ class AppLocalizationsCa extends AppLocalizations {
       'Avançat. Envia àudio i vídeo a través d\'una ruta de maquinari acoblada. Desactivat per defecte perquè causa caigudes d\'àudio / vídeo en alguns dispositius.';
 
   @override
-  String get mapDolbyVisionP7Title => 'Assigna el perfil Dolby Vision 7 a HEVC';
+  String get mapDolbyVisionP7Title =>
+      'Reprodueix sempre el perfil 7 de Dolby Vision com a HDR10';
 
   @override
   String get mapDolbyVisionP7Subtitle =>
-      'Reprodueix els fluxos de Dolby Vision perfil 7 com a HEVC compatible amb HDR10 en dispositius sense DV.';
+      'Omet la conversió al perfil 8 i converteix els fluxos del perfil Dolby Vision 7 a HEVC compatible amb HDR10. Utilitza-ho si els fluxos convertits es mostren incorrectament.';
 
   @override
   String get subtitlesUseEmbeddedStyles =>
-      'Utilitzeu estils de subtítols incrustats';
+      'Utilitza els estils de subtítols incrustats';
 
   @override
   String get subtitlesUseEmbeddedStylesSubtitle =>
@@ -9087,7 +10697,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get subtitlesUseEmbeddedFontSizes =>
-      'Utilitzeu mides de lletra de subtítols incrustades';
+      'Utilitza les mides de lletra dels subtítols incrustats';
 
   @override
   String get subtitlesUseEmbeddedFontSizesSubtitle =>
@@ -9103,7 +10713,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hideBackdropsInLibraries =>
-      'Amagar les imatges de fons mentre navegues?';
+      'Amaga els telons de fons mentre navegues';
 
   @override
   String get useDetailedSubHeadings => 'Utilitzeu subtítols detallats';
@@ -9165,7 +10775,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get savedThemesTitle => 'Temes guardats';
+  String get savedThemesTitle => 'Temes desats';
 
   @override
   String get savedThemesDescription =>
@@ -9210,28 +10820,28 @@ class AppLocalizationsCa extends AppLocalizations {
   String get homeRowsSection => 'Files d\'inici';
 
   @override
-  String get homeRowDisplay => 'Visualització de les fileres d\'inici';
-
-  @override
-  String get homeRowSections => 'Seccions de les fileres d\'inici';
-
-  @override
-  String get homeRowToggles => 'Activació de les fileres d\'inici';
-
-  @override
-  String get homeRowTogglesSubtitle =>
-      'Activa o desactiva les categories de files d\'inici basades en biblioteques';
-
-  @override
-  String get homeRowTogglesDescription =>
-      'Activa els interruptors següents per mostrar les files a les seccions d\'inici.';
-
-  @override
   String get rowsType => 'Tipus de files';
 
   @override
   String get rowsTypeDescription =>
       'El clàssic manté el tipus d\'imatge per fila i la superposició d\'informació. Modern utilitza files de retrat a fons.';
+
+  @override
+  String get modernCardsOnMyMediaRow =>
+      'Targetes modernes a la fila «La meva biblioteca»';
+
+  @override
+  String get modernCardsOnMyMediaRowDescription =>
+      'Mostra pòsters personalitzables que s\'amplien en enfocar-los. Desactiva-ho per mostrar sempre la miniatura apaïsada.';
+
+  @override
+  String get sortOrder => 'Ordre de classificació';
+
+  @override
+  String get ascending => 'Ascendent';
+
+  @override
+  String get descending => 'Descendent';
 
   @override
   String get displayFavoritesRows => 'Mostra les files de preferits';
@@ -9248,6 +10858,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Ordena les files de Preferits per data afegida, data de llançament, alfabèticament i molt més.';
 
   @override
+  String get favoritesRowSortOrderDescription =>
+      'Ordena les files de favorits en ordre ascendent o descendent.';
+
+  @override
   String get displayCollectionsRows => 'Mostra les files de les col·leccions';
 
   @override
@@ -9260,6 +10874,17 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get collectionsRowSortingDescription =>
       'Ordena les files de les col·leccions per data afegida, data de llançament, alfabèticament i molt més.';
+
+  @override
+  String get collectionsRowSortOrderDescription =>
+      'Ordena les files de les col·leccions en ordre ascendent o descendent.';
+
+  @override
+  String get collectionsRowShowEpisodes => 'Mostra els episodis individuals';
+
+  @override
+  String get collectionsRowShowEpisodesSubtitle =>
+      'Expandir les sèries per mostrar cada episodi per separat.';
 
   @override
   String get displayGenresRows => 'Mostra les files de gèneres';
@@ -9276,11 +10901,64 @@ class AppLocalizationsCa extends AppLocalizations {
       'Ordena les files de gèneres per data afegida, data de llançament, alfabèticament i molt més.';
 
   @override
+  String get genresRowSortOrderDescription =>
+      'Ordena les files de gèneres en ordre ascendent o descendent.';
+
+  @override
   String get genresRowItems => 'Gèneres Elements de fila';
 
   @override
   String get genresRowItemsDescription =>
       'Mostra pel·lícules, sèries o totes dues a les files Gèneres.';
+
+  @override
+  String get displayStudiosRows => 'Mostra la fila de l\'estudi';
+
+  @override
+  String get displayStudiosRowsSubtitle =>
+      'Mostra la fila de l\'estudi a les seccions d\'inici.';
+
+  @override
+  String get studiosRowSorting => 'Ordenació de files d\'estudi';
+
+  @override
+  String get studiosRowSortingDescription =>
+      'Fila d\'estudi per nom, afegit recentment, i més.';
+
+  @override
+  String get studiosRowSortOrderDescription =>
+      'Trieu l\'ordre de classificació ascendent o descendent.';
+
+  @override
+  String get selectStudiosToInclude => 'Selecciona estudis per incloure';
+
+  @override
+  String get selectStudiosToIncludeDescription =>
+      'Seleccioneu quins estudis s\'han d\'incloure a la fila d\'inici.';
+
+  @override
+  String get selectAllStudios => 'Selecciona-ho tot';
+
+  @override
+  String get deselectAllStudios => 'Deselecciona-ho tot';
+
+  @override
+  String get tvStudiosFilter => 'Estudis de TV';
+
+  @override
+  String get movieStudiosFilter => 'Estudis de cinema';
+
+  @override
+  String get selectedStudiosFilter => 'Estudis seleccionats';
+
+  @override
+  String get unselectedStudiosFilter => 'Estudis no seleccionats';
+
+  @override
+  String get filtersHeader => 'Filtres';
+
+  @override
+  String get showHeader => 'Mostra';
 
   @override
   String get displayPlaylistsRows =>
@@ -9299,6 +10977,17 @@ class AppLocalizationsCa extends AppLocalizations {
       'Ordena les files de llistes de reproducció per data d\'addició, data d\'estrena, alfabèticament i més.';
 
   @override
+  String get playlistsRowSortOrderDescription =>
+      'Ordena les files de la llista de reproducció en ordre ascendent o descendent.';
+
+  @override
+  String get playlistsRowShowEpisodes => 'Mostrar els episodis individuals';
+
+  @override
+  String get playlistsRowShowEpisodesSubtitle =>
+      'Expandir les sèries per mostrar cada episodi per separat.';
+
+  @override
   String get displayAudioRows => 'Mostra les files d\'àudio';
 
   @override
@@ -9311,6 +11000,10 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get audioRowsSortingDescription =>
       'Ordena les files d\'àudio per data d\'addició, data d\'estrena, alfabèticament i més.';
+
+  @override
+  String get audioRowsSortOrderDescription =>
+      'Ordena les files d\'àudio en ordre ascendent o descendent.';
 
   @override
   String get audioPlaylists => 'Llistes de reproducció d\'àudio';
@@ -9358,7 +11051,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get connection => 'Connexió';
 
   @override
-  String get audioTranscodeTarget => 'Destí de transcodificació d\'àudio';
+  String get locallyDecodedCodecs => 'Còdecs descodificats localment';
+
+  @override
+  String get transcodeTargetCodecs =>
+      'Còdecs de destinació de la transcodificació';
 
   @override
   String get passthrough => 'Passthrough';
@@ -9369,17 +11066,6 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get notSupportedOnThisDevice =>
       'No és compatible amb aquest dispositiu';
-
-  @override
-  String get settingsAudioDtsXPassthrough => 'Transferència DTS:X (DTS UHD)';
-
-  @override
-  String get settingsAudioBitstreamDtsXToExternalDecoder =>
-      'Bitstream DTS:X (DTS UHD) a un descodificador extern.';
-
-  @override
-  String get settingsAudioTrueHdJocPassthrough =>
-      'TrueHD amb Atmos (JOC) Passthrough';
 
   @override
   String get mediaPlayerBehavior => 'Comportament del reproductor multimèdia';
@@ -9403,14 +11089,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get preferSoftwareDecoders =>
-      'Preferiu els descodificadors de programari';
+      'Prefereix els descodificadors de programari';
 
   @override
   String get preferSoftwareDecodersSubtitle =>
       'Utilitzeu FFmpeg (àudio) i libgav1 (AV1) abans dels descodificadors de maquinari. Desactiveu-lo si es trenca el pas d\'àudio HDMI.';
 
   @override
-  String get useExternalPlayer => 'Utilitzeu un reproductor extern';
+  String get useExternalPlayer => 'Utilitza sempre un reproductor extern';
 
   @override
   String get useExternalPlayerSubtitle =>
@@ -9425,6 +11111,20 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get preferSdhSubtitlesSubtitle =>
       'Doneu prioritat a les pistes de subtítols SDH/CC quan feu la selecció automàtica.';
+
+  @override
+  String get preferTextSubtitles => 'Prefereix els subtítols de text';
+
+  @override
+  String get preferTextSubtitlesSubtitle =>
+      'Prioritza els subtítols basats en text (SRT, VTT) per sobre dels formats basats en imatge (PGS, VobSub).';
+
+  @override
+  String get preferExternalSubtitles => 'Prefereix els subtítols externs';
+
+  @override
+  String get preferExternalSubtitlesSubtitle =>
+      'Prioritza els fitxers de subtítols externs per sobre de les pistes incrustades.';
 
   @override
   String get webDiagnostics => 'Diagnòstic web';
@@ -9634,6 +11334,781 @@ class AppLocalizationsCa extends AppLocalizations {
   String get openInBrowser => 'Obre al navegador';
 
   @override
+  String get achievementBadges => 'Insígnies de fites';
+
+  @override
+  String get achievementBadgesSubtitle =>
+      'Insígnies, rangs i missions que guanyes pel que mires';
+
+  @override
+  String get achievementsBadges => 'Insígnies';
+
+  @override
+  String achievementsBadgeCount(int unlocked, int total) {
+    return '$unlocked de $total insígnies';
+  }
+
+  @override
+  String get achievementsUnlockToasts => 'Notificacions de desbloqueig';
+
+  @override
+  String get achievementsUnlockToastsSubtitle =>
+      'Mostra una notificació quan desbloquegis una insígnia';
+
+  @override
+  String get achievementsUnlockedNotification => 'Fita desbloquejada';
+
+  @override
+  String achievementsUnlockedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fites desbloquejades',
+      one: '$count fita desbloquejada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String achievementsUnlockedMore(int count) {
+    return '+$count més';
+  }
+
+  @override
+  String get achievementsQuests => 'Missions';
+
+  @override
+  String achievementsQuestCount(int count) {
+    return '$count completades';
+  }
+
+  @override
+  String get achievementsLeaderboard => 'Classificació';
+
+  @override
+  String get achievementsLeaderboardSubtitle =>
+      'Com et compares amb els altres usuaris d\'aquest servidor';
+
+  @override
+  String get achievementsRecap => 'Resum';
+
+  @override
+  String get achievementsRecapSubtitle => 'Què has vist darrerament';
+
+  @override
+  String get achievementsLibraryCompletion => 'Progrés de les biblioteques';
+
+  @override
+  String achievementsLibraryCount(int count) {
+    return '$count biblioteques';
+  }
+
+  @override
+  String achievementsScore(int score) {
+    return '$score punts';
+  }
+
+  @override
+  String get achievementsScoreLabel => 'Puntuació';
+
+  @override
+  String get achievementsTopRank => 'Has arribat al rang màxim';
+
+  @override
+  String achievementsPointsToNextRank(int points, String tier) {
+    return '$points punts per a $tier';
+  }
+
+  @override
+  String achievementsCurrentStreak(int days) {
+    return 'Ratxa de $days dies';
+  }
+
+  @override
+  String achievementsBestStreak(int days) {
+    return 'Millor: $days dies';
+  }
+
+  @override
+  String get achievementsShowcase => 'Vitrina';
+
+  @override
+  String get achievementsUnlocked => 'Desbloquejades';
+
+  @override
+  String get achievementsLocked => 'Bloquejades';
+
+  @override
+  String get achievementsNothingHere => 'Encara no hi ha res aquí.';
+
+  @override
+  String get achievementsHiddenBadge => 'Fita oculta';
+
+  @override
+  String achievementsUnlockedOn(String date) {
+    return 'Desbloquejada el $date';
+  }
+
+  @override
+  String achievementsPoints(int points) {
+    return '$points pts';
+  }
+
+  @override
+  String get achievementsDailyQuests => 'Diàriament';
+
+  @override
+  String get achievementsWeeklyQuests => 'Setmanalment';
+
+  @override
+  String achievementsQuestReward(int points) {
+    return '+$points';
+  }
+
+  @override
+  String get achievementsRerollDaily => 'Canvia les missions diàries';
+
+  @override
+  String get achievementsRerollWeekly => 'Canvia les missions setmanals';
+
+  @override
+  String get achievementsRerollOffer => 'Canvia aquest conjunt per un altre';
+
+  @override
+  String get achievementsRerollSpentDaily =>
+      'Ja utilitzat avui; torna a mitjanit UTC';
+
+  @override
+  String get achievementsRerollSpentWeekly =>
+      'Ja utilitzat aquesta setmana; torna dilluns UTC';
+
+  @override
+  String get achievementsRerollConfirm => 'Vols canviar aquestes missions?';
+
+  @override
+  String get achievementsRerollConfirmBody =>
+      'Tens un canvi diari i un de setmanal, i això te\'l gasta.';
+
+  @override
+  String get achievementsRerollFailed =>
+      'No s\'han pogut canviar aquestes missions.';
+
+  @override
+  String get achievementsSuggested => 'Elements suggerits per mirar';
+
+  @override
+  String get achievementsNoSuggestions =>
+      'No hi ha res a suggerir per a aquesta insígnia.';
+
+  @override
+  String get achievementsProgressLabel => 'Progrés';
+
+  @override
+  String get achievementsLoadout => 'Equipament';
+
+  @override
+  String get achievementsLoadoutSubtitle =>
+      'Punts per gastar i els potenciadors que tens';
+
+  @override
+  String get achievementsAppearance => 'Aparença';
+
+  @override
+  String get achievementsAppearanceSubtitle =>
+      'L\'avatar i el títol del teu perfil';
+
+  @override
+  String get achievementsAvatars => 'Avatars';
+
+  @override
+  String get achievementsTitles => 'Títols';
+
+  @override
+  String get achievementsEquipped => 'Equipat';
+
+  @override
+  String get achievementsOwned => 'Adquirit';
+
+  @override
+  String achievementsEarnedAt(int score) {
+    return 'S\'aconsegueix amb $score punts acumulats';
+  }
+
+  @override
+  String get achievementsAppearanceEmpty =>
+      'Aquest servidor no té cap avatar ni títol per portar.';
+
+  @override
+  String get achievementsAppearanceFailed =>
+      'No s\'ha pogut canviar l\'aspecte del perfil.';
+
+  @override
+  String get achievementsPowerUps => 'Potenciadors';
+
+  @override
+  String get achievementsStats => 'Estadístiques';
+
+  @override
+  String get achievementsStatsSubtitle =>
+      'Els teus rècords i com va el servidor';
+
+  @override
+  String get achievementsStatsWatched => 'Vist';
+
+  @override
+  String get achievementsStatsBests => 'Rècords';
+
+  @override
+  String get achievementsStatsHabits => 'Hàbits';
+
+  @override
+  String get achievementsStatsVariety => 'Varietat';
+
+  @override
+  String get achievementsStatsServer => 'Aquest servidor';
+
+  @override
+  String get achievementsStatsClock => 'Quan mires';
+
+  @override
+  String get achievementsStatItems => 'Elements vistos';
+
+  @override
+  String get achievementsStatMovies => 'Pel·lícules vistes';
+
+  @override
+  String get achievementsStatSeries => 'Sèries acabades';
+
+  @override
+  String get achievementsStatHours => 'Hores vistes';
+
+  @override
+  String get achievementsStatDays => 'Dies de visionat';
+
+  @override
+  String get achievementsStatRewatches => 'Revisionats';
+
+  @override
+  String get achievementsStatBestWatchStreak => 'Millor ratxa de visionat';
+
+  @override
+  String get achievementsStatBestLoginStreak =>
+      'Millor ratxa d\'inicis de sessió';
+
+  @override
+  String get achievementsStatMostEpisodes => 'Més episodis en un dia';
+
+  @override
+  String get achievementsStatMostMovies => 'Més pel·lícules en un dia';
+
+  @override
+  String get achievementsStatLongestItem => 'Element més llarg';
+
+  @override
+  String get achievementsStatBestCombo => 'Millor combo';
+
+  @override
+  String get achievementsStatLateNight => 'Sessions de nit';
+
+  @override
+  String get achievementsStatEarlyMorning => 'Sessions de bon matí';
+
+  @override
+  String get achievementsStatWeekend => 'Sessions de cap de setmana';
+
+  @override
+  String get achievementsStatDaysSignedIn => 'Dies amb sessió iniciada';
+
+  @override
+  String get achievementsStatLibraries => 'Biblioteques visitades';
+
+  @override
+  String get achievementsStatGenres => 'Gèneres vistos';
+
+  @override
+  String get achievementsStatDecades => 'Dècades vistes';
+
+  @override
+  String get achievementsStatCountries => 'Països vistos';
+
+  @override
+  String get achievementsStatLanguages => 'Idiomes vistos';
+
+  @override
+  String get achievementsStatUsers => 'Usuaris';
+
+  @override
+  String get achievementsStatBadgesUnlocked => 'Insígnies desbloquejades';
+
+  @override
+  String get achievementsStatScoreEarned => 'Punts aconseguits';
+
+  @override
+  String get achievementsStatCommonBadge => 'Insígnia més comuna';
+
+  @override
+  String get achievementsActivity => 'Activitat';
+
+  @override
+  String get achievementsActivitySubtitle =>
+      'Què ha desbloquejat el servidor darrerament';
+
+  @override
+  String achievementsActivityUnlocked(String user, String badge) {
+    return '$user ha desbloquejat $badge';
+  }
+
+  @override
+  String get achievementsShop => 'Botiga';
+
+  @override
+  String get achievementsShopSubtitle => 'Gasta punts en més potenciadors';
+
+  @override
+  String achievementsShopPack(String name, int count) {
+    return '$name ×$count';
+  }
+
+  @override
+  String get achievementsShopEmpty => 'Ara mateix no hi ha res a la venda.';
+
+  @override
+  String get achievementsBuyConfirm => 'Vols comprar-ho?';
+
+  @override
+  String get achievementsBuyConfirmBody =>
+      'Surt directament de la teva reserva de punts.';
+
+  @override
+  String get achievementsBuyFailed => 'No s\'ha pogut comprar.';
+
+  @override
+  String get achievementsScoreBank => 'Reserva de punts';
+
+  @override
+  String get achievementsBoost => 'Impuls d\'XP';
+
+  @override
+  String get achievementsBoostBody =>
+      'Duplica la puntuació durant una hora. Si el tornes a utilitzar, l\'hora torna a començar.';
+
+  @override
+  String get achievementsDoubleCredit => 'Doble recompte';
+
+  @override
+  String get achievementsDoubleCreditBody =>
+      'El següent que acabis compta doble per a les insígnies.';
+
+  @override
+  String get achievementsStreakFreeze => 'Congelació de ratxa';
+
+  @override
+  String get achievementsStreakFreezeBody =>
+      'Cobreix un dia que hagis perdut. Només en pots guardar un.';
+
+  @override
+  String achievementsPowerUpHeld(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count disponibles',
+      one: '1 disponible',
+      zero: 'Cap disponible',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get achievementsPowerUpActive => 'Actiu ara';
+
+  @override
+  String get achievementsUsePowerUp => 'Vols utilitzar aquest potenciador?';
+
+  @override
+  String get achievementsUsePowerUpBody =>
+      'Es gasta tan bon punt ho confirmis.';
+
+  @override
+  String get achievementsPowerUpFailed =>
+      'No s\'ha pogut utilitzar aquest potenciador.';
+
+  @override
+  String get achievementsHours => 'Hores';
+
+  @override
+  String get achievementsStreak => 'Ratxa';
+
+  @override
+  String get achievementsPeriodWeek => 'Setmana';
+
+  @override
+  String get achievementsPeriodMonth => 'Mes';
+
+  @override
+  String get achievementsPeriodYear => 'Any';
+
+  @override
+  String achievementsDaysWatched(int count) {
+    return '$count dies de visionat';
+  }
+
+  @override
+  String achievementsBadgesEarned(int count) {
+    return '$count insígnies aconseguides';
+  }
+
+  @override
+  String get achievementsTopDirectors => 'Directors més vistos';
+
+  @override
+  String get achievementsTopActors => 'Actors més vistos';
+
+  @override
+  String get achievementsLoadFailed =>
+      'No s\'han pogut carregar les teves fites.';
+
+  @override
+  String get friends => 'Amics';
+
+  @override
+  String get friendsSubtitle =>
+      'Mira qui està en línia i xateja amb la gent d\'aquest servidor';
+
+  @override
+  String get friendsShowButton => 'Mostra el botó d\'amics';
+
+  @override
+  String get friendsShowButtonSubtitle =>
+      'Amics i xat del connector Insígnies de fites';
+
+  @override
+  String get friendsMessages => 'Missatges';
+
+  @override
+  String friendsUnreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count missatges sense llegir',
+      one: '1 missatge sense llegir',
+      zero: 'Cap missatge sense llegir',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get friendsRequests => 'Sol·licituds d\'amistat';
+
+  @override
+  String friendsRequestCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count t\'estan esperant',
+      one: '1 t\'està esperant',
+      zero: 'No hi ha res pendent',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get friendsAdd => 'Afegeix amics';
+
+  @override
+  String get friendsAddSubtitle => 'Troba gent d\'aquest servidor';
+
+  @override
+  String get friendsPrivacy => 'Privadesa';
+
+  @override
+  String get friendsPrivacySubtitle => 'Què poden veure els teus amics';
+
+  @override
+  String get friendsOnline => 'En línia';
+
+  @override
+  String get friendsOffline => 'Fora de línia';
+
+  @override
+  String get friendsNone =>
+      'Encara no tens amics. Afegeix gent d\'aquest servidor per veure-la aquí.';
+
+  @override
+  String friendsWatching(String title) {
+    return 'Veient $title';
+  }
+
+  @override
+  String friendsLastWatched(String title) {
+    return 'Últim vist: $title';
+  }
+
+  @override
+  String friendsLastSeen(String time) {
+    return 'Última connexió $time';
+  }
+
+  @override
+  String get friendsLoadFailed =>
+      'No s\'ha pogut carregar. Comprova la connexió i torna-ho a provar.';
+
+  @override
+  String get friendsActionFailed =>
+      'No ha funcionat. Torna-ho a provar d\'aquí a un moment.';
+
+  @override
+  String get friendsIncoming => 'Pendents de la teva resposta';
+
+  @override
+  String get friendsOutgoing => 'Enviades per tu';
+
+  @override
+  String get friendsNoRequests => 'No hi ha sol·licituds d\'amistat.';
+
+  @override
+  String get friendsAccept => 'Accepta';
+
+  @override
+  String get friendsDecline => 'Declinar';
+
+  @override
+  String get friendsCancelRequest => 'Cancel·la la sol·licitud';
+
+  @override
+  String friendsRequestFrom(String name) {
+    return '$name t\'ha enviat una sol·licitud d\'amistat';
+  }
+
+  @override
+  String friendsCancelRequestBody(String name) {
+    return 'Vols retirar la sol·licitud que has enviat a $name?';
+  }
+
+  @override
+  String get friendsSearchHint => 'Cerca persones';
+
+  @override
+  String get friendsNoMatches => 'Ningú no coincideix amb aquest nom.';
+
+  @override
+  String friendsRequestSent(String name) {
+    return 'S\'ha enviat la sol·licitud a $name';
+  }
+
+  @override
+  String get friendsSendRequest => 'Afegeix com a amic';
+
+  @override
+  String get friendsSendMessage => 'Enviar missatge';
+
+  @override
+  String friendsOpenItem(String title) {
+    return 'Obre $title';
+  }
+
+  @override
+  String get friendsRemove => 'Elimina dels amics';
+
+  @override
+  String friendsRemoveBody(String name) {
+    return 'Vols eliminar $name dels teus amics? Més endavant podràs tornar a afegir aquesta persona.';
+  }
+
+  @override
+  String get friendsBlock => 'Bloqueja';
+
+  @override
+  String get friendsUnblock => 'Desbloqueja';
+
+  @override
+  String friendsBlockBody(String name) {
+    return 'Vols bloquejar $name? Cap de vosaltres no podrà enviar missatges directes a l\'altre. Els xats de grup que compartiu continuaran oberts.';
+  }
+
+  @override
+  String friendsUnblockBody(String name) {
+    return 'Vols desbloquejar $name?';
+  }
+
+  @override
+  String get friendsBlocked => 'Usuaris bloquejats';
+
+  @override
+  String friendsProfileHidden(String name) {
+    return '$name té el perfil privat.';
+  }
+
+  @override
+  String get friendsAppearOffline => 'Mostra\'m fora de línia';
+
+  @override
+  String get friendsAppearOfflineSubtitle =>
+      'Els amics sempre et veuran fora de línia';
+
+  @override
+  String get friendsHideNowPlaying => 'Amaga el que estic veient';
+
+  @override
+  String get friendsHideNowPlayingSubtitle =>
+      'Els amics et continuaran veient en línia, però no què s\'està reproduint';
+
+  @override
+  String get friendsHideLastWatched => 'Amaga el meu últim visionat';
+
+  @override
+  String get friendsHideLastWatchedSubtitle =>
+      'Els amics no veuran què vas veure per última vegada mentre estiguis fora de línia';
+
+  @override
+  String get friendsMessageNotifications => 'Notificacions de missatges';
+
+  @override
+  String get friendsMessageNotificationsSubtitle =>
+      'Mostra un bàner quan un amic t\'enviï un missatge';
+
+  @override
+  String get friendsMuteDuringPlayback => 'Silencia durant la reproducció';
+
+  @override
+  String get friendsMuteDuringPlaybackSubtitle =>
+      'Cap bàner de missatges mentre es reprodueix un vídeo o un joc';
+
+  @override
+  String get friendsSaveFailed => 'No s\'ha pogut desar la configuració.';
+
+  @override
+  String get chatNew => 'Missatge nou';
+
+  @override
+  String get chatNewSubtitle => 'Comença un xat amb un amic';
+
+  @override
+  String get chatNewGroup => 'Grup nou';
+
+  @override
+  String get chatNewGroupSubtitle => 'Xateja amb diversos amics alhora';
+
+  @override
+  String get chatNone => 'Encara no hi ha missatges.';
+
+  @override
+  String get chatYou => 'Tu';
+
+  @override
+  String chatYouSaid(String text) {
+    return 'Tu: $text';
+  }
+
+  @override
+  String get chatPhoto => 'Foto';
+
+  @override
+  String get chatEmoji => 'Emoji';
+
+  @override
+  String get chatEmojiSearch => 'Cerca emojis';
+
+  @override
+  String get chatNoRecentEmoji => 'No hi ha emojis recents';
+
+  @override
+  String get chatViewPhoto => 'Mostra la foto';
+
+  @override
+  String get chatHint => 'Escriu un missatge';
+
+  @override
+  String get chatAttach => 'Envia una foto';
+
+  @override
+  String get chatEdited => 'editat';
+
+  @override
+  String get chatSeen => 'Llegit';
+
+  @override
+  String get chatSent => 'Enviat';
+
+  @override
+  String get chatEditing => 'S\'està editant el missatge';
+
+  @override
+  String get chatMessageOptions => 'Opcions del missatge';
+
+  @override
+  String get chatDeleteBody => 'Vols suprimir aquest missatge per a tothom?';
+
+  @override
+  String get chatClear => 'Buida la conversa';
+
+  @override
+  String get chatClearBody =>
+      'Vols suprimir tots els missatges d\'aquest xat per a tots els participants?';
+
+  @override
+  String get chatGroupInfo => 'Informació del grup';
+
+  @override
+  String get chatGroupName => 'Nom del grup';
+
+  @override
+  String chatMemberCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count membres',
+      one: '1 membre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatOwner => 'Propietari';
+
+  @override
+  String get chatAdmin => 'Admin';
+
+  @override
+  String get chatMakeAdmin => 'Fes administrador';
+
+  @override
+  String get chatRemoveAdmin => 'Retira els permisos d\'administrador';
+
+  @override
+  String get chatRemoveMember => 'Elimina del grup';
+
+  @override
+  String get chatAddMember => 'Afegeix persones';
+
+  @override
+  String get chatNobodyToAdd => 'No queda ningú per afegir.';
+
+  @override
+  String get chatLeave => 'Abandonar el grup';
+
+  @override
+  String get chatLeaveBody =>
+      'Vols abandonar aquest grup? Algú t\'hi haurà de tornar a afegir perquè hi puguis tornar.';
+
+  @override
+  String get chatCreate => 'Crear grup';
+
+  @override
+  String get chatPickMembers => 'Tria almenys dos amics';
+
+  @override
+  String chatNewMessageFrom(String name) {
+    return 'Missatge nou de $name';
+  }
+
+  @override
+  String get chatImageTooLarge => 'Aquesta imatge supera els 8 MB.';
+
+  @override
+  String get chatImageUnsupported =>
+      'Només es poden enviar imatges PNG, JPEG, GIF i WebP.';
+
+  @override
   String get embeddedBrowserNotAvailable =>
       'El navegador incrustat no està disponible en aquesta plataforma.';
 
@@ -9792,7 +12267,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get homeVideosAndPhotos => 'Vídeos i fotos d\'inici';
 
   @override
-  String get mixedMoviesAndShows => 'Pel·lícules i programes mixtes';
+  String get mixedMoviesAndShows => 'Pel·lícules i Sèries barrejades';
 
   @override
   String get intelQuickSync => 'Intel Quick Sync';
@@ -9888,14 +12363,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get missing => 'Falta';
 
   @override
-  String get transcodingLimits => 'Límits de transcodificació';
-
-  @override
   String get clearAllArtworkButton => 'Esborrar totes les il·lustracions?';
 
   @override
   String get clearAllArtworkWarning =>
-      'Segur que vols esborrar totes les il·lustracions descarregades?';
+      'Segur que vols esborrar totes les il·lustracions baixades?';
 
   @override
   String get confirmClear => 'Confirma l\'esborrat';
@@ -10047,6 +12519,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get audiobookFocusedTimeline => 'Cronologia enfocada';
 
   @override
+  String get audiobookFullTimeline => 'Cronologia completa';
+
+  @override
   String get audiobookExportBookmarks => 'Exporta els marcadors';
 
   @override
@@ -10102,7 +12577,7 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count min',
+      other: '$count mins',
       one: '1 min',
     );
     return '$_temp0';
@@ -10170,9 +12645,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get audiobookDelete => 'Suprimeix';
 
   @override
-  String get subtitlePreferences => 'Preferències dels subtítols';
-
-  @override
   String get subtitlePreferencesDescription =>
       'Canvia els modes de subtítols, els idiomes predeterminats, l\'aparença i les opcions de renderització.';
 
@@ -10221,9 +12693,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'Sembla que Jellyfin no ha pogut actualitzar la il·lustració. La teva biblioteca està configurada per desar les il·lustracions directament a les carpetes multimèdia (\'Desa les il·lustracions a les carpetes multimèdia\' està activat). Aquest error normalment es produeix quan el procés del servidor Jellyfin no té permís per escriure fitxers als teus directoris multimèdia.';
 
   @override
-  String get externalLists => 'Llistes externes';
-
-  @override
   String get replay => 'Torna a reproduir';
 
   @override
@@ -10232,6 +12701,11 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String fileSizeFormat(Object size, Object format) {
     return 'Mida: $size  •  Format: $format';
+  }
+
+  @override
+  String dateCreatedFormat(Object date) {
+    return 'Data d\'addició: $date';
   }
 
   @override
@@ -10311,13 +12785,125 @@ class AppLocalizationsCa extends AppLocalizations {
       'El nombre de canals d\'àudio no és compatible.';
 
   @override
+  String transcodeAudioCodecWithCodec(String codec) {
+    return 'El còdec d\'àudio ($codec) no s\'admet de manera nativa.';
+  }
+
+  @override
+  String transcodeAudioCodecHintPassthrough(String codec) {
+    return 'Consell: si el teu receptor d\'àudio o barra de so admet $codec, activa Passthrough d\'àudio a la configuració d\'Àudio.';
+  }
+
+  @override
+  String transcodeAudioChannelsExceeded(int channels) {
+    return 'El nombre de canals d\'àudio (${channels}ch) supera el límit del reproductor.';
+  }
+
+  @override
+  String get transcodeAudioChannelsHint =>
+      'Consell: ajusta «Màxim de canals d\'àudio» o la mescla a menys canals a la configuració d\'Àudio.';
+
+  @override
+  String get transcodeSubtitleBurnInAssDisabled =>
+      'Els subtítols ASS/SSA requereixen transcodificació perquè la reproducció nativa està desactivada.';
+
+  @override
+  String get transcodeSubtitleBurnInAssHint =>
+      'Consell: activa «Reproducció nativa d\'ASS/SSA» a la configuració de Reproducció per reproduir-los sense transcodificar.';
+
+  @override
+  String get transcodeSubtitleBurnInPgsDisabled =>
+      'Els subtítols PGS requereixen transcodificació perquè la reproducció nativa està desactivada.';
+
+  @override
+  String get transcodeSubtitleBurnInPgsHint =>
+      'Consell: activa «Reproducció nativa de PGS» a la configuració de Reproducció per reproduir-los sense transcodificar.';
+
+  @override
+  String transcodeSubtitleNotSupportedWithCodec(String codec) {
+    return 'El format de subtítols ($codec) no s\'admet de manera nativa i s\'ha d\'incrustar a la imatge.';
+  }
+
+  @override
+  String transcodeBitrateExceededWithValues(
+    String fileBitrate,
+    String maxBitrate,
+  ) {
+    return 'La taxa de bits del fitxer ($fileBitrate) supera el límit de reproducció en línia configurat ($maxBitrate).';
+  }
+
+  @override
+  String get transcodeBitrateHint =>
+      'Consell: augmenta «Taxa de bits màxima» a la configuració de Reproducció per permetre la reproducció directa en línia.';
+
+  @override
+  String get transcodeResolutionHint =>
+      'Consell: augmenta «Resolució màxima» a la configuració de Reproducció per permetre la reproducció directa en línia.';
+
+  @override
+  String get transcodeVideoRangeNotSupported =>
+      'Aquesta pantalla no admet el rang dinàmic del vídeo (per exemple, Dolby Vision / HDR).';
+
+  @override
+  String get transcodeDolbyVisionProfile7ElDisabled =>
+      'La reproducció nativa de la capa de millora del Dolby Vision Perfil 7 està desactivada.';
+
+  @override
+  String get transcodeDolbyVisionProfile7ElHint =>
+      'Consell: activa «Dolby Vision Perfil 7 Direct Play» a la configuració de Reproducció si la teva pantalla ho admet.';
+
+  @override
+  String get transcodeDolbyVisionFallbackPreferenceTranscode =>
+      'Segons la configuració de l\'usuari, es prefereix la transcodificació com a alternativa per al Dolby Vision.';
+
+  @override
+  String get transcodeDolbyVisionFallbackHint =>
+      'Consell: estableix «Dolby Vision Alternativa» a «Reprodueix com a HDR10» a la configuració de Reproducció per evitar la transcodificació.';
+
+  @override
+  String get transcodeDisplayReportsNoHdr =>
+      'La pantalla connectada no informa que admeti HDR ni Dolby Vision.';
+
+  @override
+  String get transcodeDisplayLacksHdr10ForFallback =>
+      'La pantalla connectada no admet HDR10, que cal per a l\'alternativa del Dolby Vision.';
+
+  @override
+  String get transcodeAudioSampleRateNotSupported =>
+      'La freqüència de mostreig de l\'àudio no s\'admet.';
+
+  @override
+  String get transcodeAudioBitDepthNotSupported =>
+      'La profunditat de bits de l\'àudio no s\'admet.';
+
+  @override
+  String get transcodeRefFramesNotSupported =>
+      'Els fotogrames de referència del vídeo superen els límits del reproductor.';
+
+  @override
+  String get transcodeAnamorphicVideoNotSupported =>
+      'El vídeo anamòrfic no s\'admet.';
+
+  @override
+  String get transcodeInterlacedVideoNotSupported =>
+      'El vídeo entrellaçat no s\'admet.';
+
+  @override
+  String get transcodeSecondaryAudioNotSupported =>
+      'La pista d\'àudio secundària requereix transcodificació.';
+
+  @override
+  String get transcodeDirectPlayError =>
+      'La reproducció nativa no s\'admet per a aquest format multimèdia.';
+
+  @override
   String get sortAlphabetical => 'Alfabètic';
 
   @override
   String get sortReleaseAscending => 'Ordre d\'estrena (ascendent)';
 
   @override
-  String get sortReleaseDescending => 'Ordre d\'estrena (Descendent)';
+  String get sortReleaseDescending => 'Ordre d\'estrena (descendent)';
 
   @override
   String get sortCustomDragDrop => 'Personalitzat (arrossega i deixa anar)';
@@ -10396,107 +12982,1009 @@ class AppLocalizationsCa extends AppLocalizations {
   String get adminLibChapterImageResolutionMatchSource => 'Igual que l\'origen';
 
   @override
-  String get imdbTop250Movies => 'Top 250 pel·lícules d\'IMDb';
+  String get imdbTop250Movies => 'Top 250 pel·lícules a IMDb';
 
   @override
-  String get imdbTop250TvShows => 'Top 250 sèries de TV d\'IMDb';
+  String get imdbTop250TvShows => 'Top 250 sèries a IMDb';
 
   @override
-  String get imdbMostPopularMovies => 'Pel·lícules més populars d\'IMDb';
+  String get imdbMostPopularMovies => 'Pel·lícules més populars a IMDb';
 
   @override
-  String get imdbMostPopularTvShows => 'Sèries de TV més populars d\'IMDb';
+  String get imdbMostPopularTvShows => 'Sèries més populars a IMDb';
 
   @override
-  String get imdbLowestRatedMovies => 'Pel·lícules pitjor valorades d\'IMDb';
+  String get imdbLowestRatedMovies => 'Pel·lícules pitjor valorades a IMDb';
 
   @override
-  String get imdbTopEnglishMovies => 'Millors pel·lícules en anglès d\'IMDb';
+  String get imdbTopEnglishMovies => 'Millors pel·lícules en anglès a IMDb';
 
   @override
-  String get addToWatchlist => 'Add to Watchlist';
+  String get addToWatchlist => 'Afegir a la llista de seguiment';
 
   @override
-  String get removeFromWatchlist => 'Remove from Watchlist';
+  String get removeFromWatchlist => 'Treure de la llista de seguiment';
 
   @override
-  String get watchlistUpdateFailed => 'Couldn\'t update watchlist';
+  String get watchlistUpdateFailed =>
+      'No s\'ha pogut actualitzar la llista de seguiment';
 
   @override
-  String get adminSearchParameters => 'Search Parameters';
+  String get adminSearchParameters => 'Paràmetres de cerca';
 
   @override
-  String get adminCurrentMetadata => 'Current Metadata';
+  String get adminCurrentMetadata => 'Metadades actuals';
 
   @override
-  String get adminLabelYear => 'Year';
+  String get adminLabelYear => 'Any';
 
   @override
-  String get adminLabelImdbId => 'IMDb Id';
+  String get adminLabelImdbId => 'ID d\'IMDb';
 
   @override
-  String get adminLabelTmdbMovieId => 'TheMovieDb Movie Id';
+  String get adminLabelTmdbMovieId => 'Id de pel·lícula de TheMovieDb';
 
   @override
-  String get adminLabelTmdbBoxSetId => 'TheMovieDb Box Set Id';
+  String get adminLabelTmdbBoxSetId => 'Id de la col·lecció de TheMovieDb';
 
   @override
-  String get adminLabelTvdbBoxSetId => 'TheTVDB Box Set Id';
+  String get adminLabelTvdbBoxSetId => 'Id de la col·lecció de TheTVDB';
 
   @override
-  String get adminLabelTvdbId => 'TheTVDB Numerical Id';
+  String get adminLabelTvdbId => 'Id numèric de TheTVDB';
 
   @override
-  String get adminLabelTvdbSlug => 'TheTVDB Slug Movie Id';
+  String get adminLabelTvdbSlug => 'Id Slug de pel·lícula de TheTVDB';
 
   @override
-  String get adminReplaceImages => 'Replace existing images';
+  String get adminReplaceImages => 'Substitueix les imatges existents';
 
   @override
-  String get adminBackToSearch => 'Back to Search Criteria';
+  String get adminBackToSearch => 'Tornar al formulari de cerca';
 
   @override
-  String get grouping => 'Grouping';
+  String get grouping => 'Agrupament';
 
   @override
-  String get groupByType => 'Group by Type';
+  String get groupByType => 'Grup per tipus';
 
   @override
-  String get playlistTypes => 'Playlist Types';
+  String get playlistTypes => 'Tipus de llistes de reproducció';
 
   @override
-  String get playlistTypeVideo => 'Video';
+  String get playlistTypeVideo => 'Vídeo';
 
   @override
-  String get playlistTypeAudio => 'Audio (Music)';
+  String get playlistTypeMusicVideo => 'Vídeo musical';
 
   @override
-  String get playlistTypeAudiobook => 'Audiobook';
+  String get playlistTypeAudio => 'Àudio (Música)';
 
   @override
-  String get playlistTypeBook => 'Book';
+  String get playlistTypeAudiobook => 'Audiollibre';
 
   @override
-  String get playlistTypePhoto => 'Photo';
+  String get playlistTypeBook => 'Llibre';
 
   @override
-  String get playlistTypeMixed => 'Mixed';
+  String get playlistTypePhoto => 'Foto';
 
   @override
-  String get videoPlaylistsSection => 'Video Playlists';
+  String get playlistTypeMixed => 'Mesclat';
 
   @override
-  String get audioPlaylistsSection => 'Audio Playlists';
+  String get videoPlaylistsSection => 'Llistes de reproducció de vídeo';
 
   @override
-  String get audiobookPlaylistsSection => 'Audiobook Playlists';
+  String get musicVideoPlaylistsSection =>
+      'Llistes de reproducció de vídeos musicals';
 
   @override
-  String get bookPlaylistsSection => 'Book Playlists';
+  String get audioPlaylistsSection => 'Llistes de reproducció de música';
 
   @override
-  String get photoPlaylistsSection => 'Photo Playlists';
+  String get audiobookPlaylistsSection =>
+      'Llistes de reproducció d\'audiollibres';
 
   @override
-  String get mixedPlaylistsSection => 'Mixed Playlists';
+  String get bookPlaylistsSection => 'Llistes de reproducció de llibres';
+
+  @override
+  String get photoPlaylistsSection => 'Llistes de reproducció de fotos';
+
+  @override
+  String get mixedPlaylistsSection => 'Llistes de reproducció mixtes';
+
+  @override
+  String get currentTime => 'Hora actual';
+
+  @override
+  String get playbackTimeDisplay => 'Temps a la barra de progrés';
+
+  @override
+  String get settingsPlaybackTimeDisplayDescription =>
+      'Tria quines etiquetes de temps apareixen al voltant de la barra de progrés de reproducció.';
+
+  @override
+  String get playbackTimeTotal => 'Duració total';
+
+  @override
+  String get playbackTimeRemaining => 'Temps restant';
+
+  @override
+  String get playbackTimeEndsAt => 'Acaba a';
+
+  @override
+  String get playbackTimeElapsed => 'Temps transcorregut';
+
+  @override
+  String get playbackTimeVideoSection => 'Reproductor de vídeo';
+
+  @override
+  String get playbackTimeMusicSection => 'Reproductor de música';
+
+  @override
+  String get playbackTimeSlotDescription =>
+      'Tria què es mostra aquí, o amaga-ho.';
+
+  @override
+  String get playbackTimeAboveBarLeft => 'Sobre la barra, a l\'esquerra';
+
+  @override
+  String get playbackTimeAboveBarCenter => 'Sobre la barra, al centre';
+
+  @override
+  String get playbackTimeAboveBarRight => 'Sobre la barra, a la dreta';
+
+  @override
+  String get playbackTimeBelowBarLeft => 'Sota la barra, a l\'esquerra';
+
+  @override
+  String get playbackTimeBelowBarCenter => 'Sota la barra, al centre';
+
+  @override
+  String get playbackTimeBelowBarRight => 'A sota de la barra, a la dreta';
+
+  @override
+  String get settingsMusicPlaybackTimeDescription =>
+      'Tria què es mostra al costat dret de la barra de progrés de la música.';
+
+  @override
+  String get groupByTitle => 'Agrupar per';
+
+  @override
+  String get groupByDecade => 'Dècada (Any)';
+
+  @override
+  String get groupByParentalRating => 'Classificació per edats';
+
+  @override
+  String get groupByStudio => 'Estudi';
+
+  @override
+  String get showAlphabeticalFilters => 'Mostra l\'alfabet';
+
+  @override
+  String get personalRatingStyle => 'Estil de puntuació personal';
+
+  @override
+  String get personalRatingThumbs => 'M\'agrada / no m\'agrada';
+
+  @override
+  String get personalRatingStars => '5 estrelles';
+
+  @override
+  String get personalRatingNumeric => 'Puntuació numèrica d\'1 a 10';
+
+  @override
+  String get rate => 'Puntuar';
+
+  @override
+  String get like => 'M\'agrada';
+
+  @override
+  String get dislike => 'No m\'agrada';
+
+  @override
+  String get personalRatingClear => 'Suprimir la puntuació';
+
+  @override
+  String get personalRatingRated => 'Puntuat';
+
+  @override
+  String get personalRatingMine => 'La meva valoració';
+
+  @override
+  String get personalRatingSaveFailed => 'No s\'ha pogut desar la valoració';
+
+  @override
+  String get increase => 'Incrementar';
+
+  @override
+  String get decrease => 'Disminuir';
+
+  @override
+  String personalRatingOutOfTen(String rating) {
+    return '$rating / 10';
+  }
+
+  @override
+  String personalRatingOutOfFive(String rating) {
+    return '$rating / 5';
+  }
+
+  @override
+  String get filterInProgress => 'En progrés';
+
+  @override
+  String get filterUnreleased => 'No publicat';
+
+  @override
+  String get filterTrailers => 'Tràilers';
+
+  @override
+  String get filterExtras => 'Extres';
+
+  @override
+  String get filterThemeSongs => 'Cançons temàtiques';
+
+  @override
+  String get filterThemeVideos => 'Vídeos temàtics';
+
+  @override
+  String get source => 'Font';
+
+  @override
+  String get years => 'Anys';
+
+  @override
+  String get audioLanguage => 'Idioma de l\'àudio';
+
+  @override
+  String get subtitleLanguage => 'Idioma dels subtítols';
+
+  @override
+  String get clearFilters => 'Netejar filtres';
+
+  @override
+  String get seerrShortcutsRow => 'Navegació de Seerr';
+
+  @override
+  String get seerrReleased => 'Publicat';
+
+  @override
+  String get seerrMinRating => 'Puntuació mínima';
+
+  @override
+  String get seerrMinVotes => 'Vots mínims';
+
+  @override
+  String get seerrOriginalLanguage => 'Idioma Original';
+
+  @override
+  String get seerrRuntime => 'Duració';
+
+  @override
+  String get subtitleHdrSeparate => 'Estil HDR separat';
+
+  @override
+  String get subtitleHdrSeparateSubtitle =>
+      'El blanc és molt més brillant en HDR que en SDR, així que un estil més apagat aquí evita l\'enlluernament';
+
+  @override
+  String get scrollSensitivity => 'Sensibilitat del desplaçament';
+
+  @override
+  String get scrollSensitivitySubtitle =>
+      'Quant es desplaça un clic de la roda del ratolí';
+
+  @override
+  String get mediaDetailsAndSpoilers => 'Detalls dels mitjans i spoilers';
+
+  @override
+  String get openTrailersExternally => 'Obre els tràilers en aplicació externa';
+
+  @override
+  String get openTrailersExternallySubtitle =>
+      'Els tràilers s\'obren a l\'aplicació de YouTube o al navegador en lloc del reproductor integrat';
+
+  @override
+  String get hideDetailsMediaDescription => 'Amaga la descripció dels mitjans';
+
+  @override
+  String get hideDetailsMediaDescriptionSubtitle =>
+      'Amaga el text descriptiu de la pel·lícula o de l\'episodi.';
+
+  @override
+  String get detailUseSeriesThumbnails => 'Utilitza les miniatures de la sèrie';
+
+  @override
+  String get detailUseSeriesThumbnailsSubtitle =>
+      'Substitueix totes les miniatures a la pàgina de detalls clàssica per la miniatura de la sèrie';
+
+  @override
+  String get hideHomeMediaDescription => 'Amaga la descripció dels mitjans';
+
+  @override
+  String get hideHomeMediaDescriptionSubtitle =>
+      'Amaga el text descriptiu de la pel·lícula o de l\'episodi.';
+
+  @override
+  String get continueWatchingAndNextUpHeader =>
+      'Continuar mirant i A continuació';
+
+  @override
+  String get setupSkip => 'Omet la configuració';
+
+  @override
+  String get setupNavbarQuestion => 'On hauria d\'anar la navegació?';
+
+  @override
+  String get setupMediaBarQuestion =>
+      'Quin aspecte hauria de tenir la part superior de la pantalla d\'inici?';
+
+  @override
+  String get setupHomeRowsQuestion =>
+      'Quin aspecte vols per a les teves files?';
+
+  @override
+  String get setupDetailQuestion =>
+      'Com hauria de ser l\'aspecte d\'una pel·lícula o d\'una sèrie quan la obres?';
+
+  @override
+  String get setupTourQuestion =>
+      'Ja està tot a punt. Aquí tens què més hi ha.';
+
+  @override
+  String get setupPlaybackLanguages => 'Idiomes de reproducció';
+
+  @override
+  String get setupOptional => 'Opcional';
+
+  @override
+  String get setupStyleClassic => 'Clàssic';
+
+  @override
+  String get setupStyleModern => 'Modern';
+
+  @override
+  String get setupRowsClassicHint =>
+      'Compacte. Més files a la pantalla alhora.';
+
+  @override
+  String get setupRowsModernHint => 'Targetes més grans amb títols a sota.';
+
+  @override
+  String get setupDetailClassicHint => 'Tot està centrat en una sola columna.';
+
+  @override
+  String get setupDetailModernHint =>
+      'Cinemàtic, amb pestanyes per al repartiment i els extres.';
+
+  @override
+  String get setupStyleSpotlight => 'Spotlight';
+
+  @override
+  String get setupDetailSpotlightHint =>
+      'Centrat en la imatge principal, amb targetes emergents per al repartiment i els extres.';
+
+  @override
+  String get setupStyleNouveau => 'Nouveau';
+
+  @override
+  String get setupDetailNouveauHint =>
+      'A pantalla completa, amb les seccions apilades en lloc de pestanyes.';
+
+  @override
+  String get setupStyleMinimalist => 'Minimalista';
+
+  @override
+  String get setupDetailMinimalistHint =>
+      'La il·lustració, un botó de reproducció i els episodis.';
+
+  @override
+  String get setupNavbarStyleQuestion =>
+      'Quin aspecte ha de tenir la barra inferior?';
+
+  @override
+  String get setupNavbarStyleDockHint =>
+      'Una càpsula flotant amb etiquetes sota cada pestanya.';
+
+  @override
+  String get setupNavbarStyleSplitHint =>
+      'La cerca té el seu propi botó i la barra s\'encongeix mentre et desplaces.';
+
+  @override
+  String get setupNavbarStyleStripHint =>
+      'Una barra d\'amplada completa al llarg de la vora inferior.';
+
+  @override
+  String get setupPickALook => 'Tria un aspecte';
+
+  @override
+  String get setupTourMoreHeader => 'Hi ha més esperant a Configuració';
+
+  @override
+  String get setupTourBulletRequests => 'Sol·licituds de Seerr';
+
+  @override
+  String get setupTourBulletSyncPlay => 'Grups de visualització de SyncPlay';
+
+  @override
+  String get setupTourBulletThemes => 'Temes personalitzats';
+
+  @override
+  String get setupTourBulletDownloads => 'Baixades offline';
+
+  @override
+  String get setupTourBulletMore => 'I molt més';
+
+  @override
+  String get runSetupAgain => 'Iniciar la configuració de nou';
+
+  @override
+  String get serverMessages => 'Missatges';
+
+  @override
+  String get serverMessagesEmpty =>
+      'Encara no hi ha missatges del teu servidor';
+
+  @override
+  String get serverMessagesMarkAllRead => 'Marca-ho tot com a llegit';
+
+  @override
+  String get serverMessagesShowButton => 'Mostra el botó de missatges';
+
+  @override
+  String get serverMessagesShowButtonSubtitle =>
+      'Afegeix un botó al menú per als missatges enviats per l\'administrador del teu servidor';
+
+  @override
+  String get showBookDiscoverTab =>
+      'Mostra la pestanya Descobreix a les biblioteques de llibres';
+
+  @override
+  String get showBookDiscoverTabDescription =>
+      'Explora títols d\'Open Library i LibriVox a les teves biblioteques de llibres i audiollibres';
+
+  @override
+  String get autoDownloadNewEpisodes =>
+      'Baixa automàticament els episodis nous';
+
+  @override
+  String get autoDownloadStop => 'Atura la baixada automàtica';
+
+  @override
+  String autoDownloadKeepUnwatchedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Baixa els episodis nous, amb un màxim de $count de no vistos alhora',
+      one: 'Baixa els episodis nous, amb un màxim d\'1 de no vist alhora',
+      zero: 'Baixa tots els episodis nous',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String autoDownloadStopSubtitle(String quality) {
+    return 'Activat • $quality';
+  }
+
+  @override
+  String get autoDownloadTranscodedForegroundNote =>
+      'Les qualitats transcodificades només es baixen mentre Moonfin està obert. La qualitat original també es baixa en segon pla.';
+
+  @override
+  String get autoDownloadTranscodedRunningNote =>
+      'Les baixades transcodificades no es poden reprendre després d\'una interrupció i tornen a començar des del principi. La qualitat original sí que es pot reprendre.';
+
+  @override
+  String get autoDownloadForegroundOnly =>
+      'Només es baixa mentre Moonfin està obert';
+
+  @override
+  String get autoDownloadQualityTitle => 'Qualitat de la baixada automàtica';
+
+  @override
+  String autoDownloadEnabledFor(String title) {
+    return 'S\'ha activat la baixada automàtica per a $title';
+  }
+
+  @override
+  String autoDownloadStoppedFor(String title) {
+    return 'S\'ha aturat la baixada automàtica per a $title';
+  }
+
+  @override
+  String get smartDownloadsSection => 'Baixades intel·ligents';
+
+  @override
+  String get smartDownloadsEnable => 'Baixa els episodis següents';
+
+  @override
+  String get smartDownloadsEnableSubtitle =>
+      'Quan acabes un episodi en qualsevol dispositiu, Moonfin baixa els següents. Els episodis baixats se suprimeixen un cop vistos.';
+
+  @override
+  String get smartDownloadsKeepReady => 'Episodis que es mantenen baixats';
+
+  @override
+  String smartDownloadsKeepReadySubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Manté baixats els $count episodis següents',
+      one: 'Manté baixat el següent episodi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get smartDownloadsKeepReadyLowered =>
+      'Els episodis que ja s\'han baixat es queden al dispositiu. El nou nombre s\'aplica a les baixades futures.';
+
+  @override
+  String get autoDownloadSection => 'Baixades automàtiques';
+
+  @override
+  String get autoDownloadEnable => 'Activa les baixades automàtiques';
+
+  @override
+  String get autoDownloadEnableSubtitle =>
+      'Baixa els episodis nous de les sèries que segueixes. Els episodis existents encara es poden baixar manualment.';
+
+  @override
+  String get autoDownloadKeepUnwatched => 'Conserva els episodis no vistos';
+
+  @override
+  String get autoDownloadKeepAll => 'Tots';
+
+  @override
+  String get autoDownloadDelete => 'Elimina els episodis baixats';
+
+  @override
+  String get autoDownloadDeleteSubtitle =>
+      'Quan s\'han d\'eliminar els episodis baixats automàticament després de veure\'ls';
+
+  @override
+  String get autoDownloadDeleteNever => 'Mai';
+
+  @override
+  String get autoDownloadDeleteImmediately => 'Just després de veure\'ls';
+
+  @override
+  String get autoDownloadDeleteAfterDay => '1 dia després de veure\'ls';
+
+  @override
+  String get autoDownloadDeleteAfterWeek => '1 setmana després de veure\'ls';
+
+  @override
+  String get autoDownloadBackgroundRefresh => 'Comprova en segon pla';
+
+  @override
+  String get autoDownloadBackgroundRefreshSubtitle =>
+      'Permet que el sistema comprovi periòdicament si hi ha episodis nous mentre Moonfin està tancat';
+
+  @override
+  String get autoDownloadBackgroundRefreshDenied =>
+      'Background App Refresh està desactivat per a Moonfin. Activa\'l a iOS Settings.';
+
+  @override
+  String get autoDownloadBackgroundRestrictedAndroid =>
+      'L\'ús en segon pla està restringit per a Moonfin a Android Settings.';
+
+  @override
+  String get autoDownloadCheckNow => 'Comprova ara';
+
+  @override
+  String get autoDownloadChecking => 'S\'està comprovant...';
+
+  @override
+  String get autoDownloadNeverChecked => 'Encara no s\'ha comprovat';
+
+  @override
+  String autoDownloadLastCheck(String when, int queued) {
+    String _temp0 = intl.Intl.pluralLogic(
+      queued,
+      locale: localeName,
+      other: '$queued episodis a la cua',
+      one: '1 episodi a la cua',
+      zero: 'res de nou',
+    );
+    return 'Última comprovació $when: $_temp0';
+  }
+
+  @override
+  String autoDownloadLastCheckFailed(String when, String error) {
+    return 'L\'última comprovació $when ha fallat: $error';
+  }
+
+  @override
+  String get autoDownloadFollowedSeries => 'Sèries seguides';
+
+  @override
+  String get autoDownloadNoSubscriptions =>
+      'Obre una sèrie i tria «Baixa automàticament els episodis nous» al seu menú de baixada';
+
+  @override
+  String get autoDownloadRemove => 'Deixa de seguir';
+
+  @override
+  String get autoDownloadStorageFull => 'No hi ha prou emmagatzematge';
+
+  @override
+  String get autoDownloadWaitingForWifi => 'S\'està esperant la WiFi';
+
+  @override
+  String get downloadNotificationRunning => 'Baixant';
+
+  @override
+  String downloadNotificationRunningBatch(int done, int total) {
+    return 'Baixant ($done/$total)';
+  }
+
+  @override
+  String downloadNotificationProgress(String name, int percent) {
+    return '$name — $percent%';
+  }
+
+  @override
+  String downloadNotificationTransfer(
+    String name,
+    String progress,
+    String timeRemaining,
+  ) {
+    return '$name — $progress · $timeRemaining';
+  }
+
+  @override
+  String downloadNotificationStarting(String name) {
+    return '$name...';
+  }
+
+  @override
+  String downloadNotificationCompleteTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Baixades completades',
+      one: 'Baixada completada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String downloadNotificationSaved(String name) {
+    return 'S\'ha desat $name per veure\'l fora de línia';
+  }
+
+  @override
+  String downloadNotificationSavedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count elements desats per veure\'ls fora de línia',
+      one: '1 element desat per veure\'l fora de línia',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String downloadNotificationSeriesEpisodes(String series, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count episodis',
+      one: '1 episodi',
+    );
+    return '$series: $_temp0';
+  }
+
+  @override
+  String get downloadNotificationFailedTitle => 'Ha fallat la baixada';
+
+  @override
+  String downloadNotificationFailedBody(String name, String error) {
+    return '$name: $error';
+  }
+
+  @override
+  String get serverMessagesNotificationTitle => 'Missatge remot';
+
+  @override
+  String get serverMessagesNotificationReceived => 'Missatge rebut';
+
+  @override
+  String get downloadStorageLimitReached =>
+      'S\'ha assolit el límit d\'emmagatzematge. Allibera espai o augmenta el límit.';
+
+  @override
+  String downloadNotEnoughStorage(String needed, String free) {
+    return 'No hi ha prou emmagatzematge: calen $needed i només n\'hi ha $free de lliures';
+  }
+
+  @override
+  String get autoDownloadStorageFullTitle =>
+      'No hi ha prou emmagatzematge per als episodis nous';
+
+  @override
+  String autoDownloadStorageFullBody(int count, String name, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hi ha $count episodis esperant espai.',
+      one: '$name necessita $size.',
+    );
+    return '$_temp0 Allibera espai o augmenta el límit de baixada.';
+  }
+
+  @override
+  String get pageTransitions => 'Transicions de pàgina';
+
+  @override
+  String get pageTransitionsSubtitle =>
+      'Ajusta el temps d\'esvaïment en navegar entre pàgines';
+
+  @override
+  String get navigationSpeed => 'Velocitat de navegació';
+
+  @override
+  String get navigationSpeedSubtitle =>
+      'Ajusta la rapidesa amb què l\'indicador d\'enfocament es mou entre elements i files';
+
+  @override
+  String get modernCardsTransitionSpeed =>
+      'Velocitat de transició de les targetes modernes';
+
+  @override
+  String get modernCardsTransitionSpeedSubtitle =>
+      'Ajusta la velocitat de l\'animació en ampliar les targetes modernes enfocades';
+
+  @override
+  String get delayCardExpansionOnRapidScroll =>
+      'Retarda l\'ampliació de les targetes en desplaçament ràpid';
+
+  @override
+  String get delayCardExpansionOnRapidScrollSubtitle =>
+      'Espera que el moviment de l\'enfocament s\'aturi abans d\'ampliar les targetes modernes';
+
+  @override
+  String get animationSpeedExtraSlow => 'Molt lenta';
+
+  @override
+  String get animationSpeedSlow => 'Lenta';
+
+  @override
+  String get animationSpeedMedium => 'Mitjana';
+
+  @override
+  String get animationSpeedFast => 'Ràpida';
+
+  @override
+  String get animationSpeedOff => 'Desactivat';
+
+  @override
+  String get pageTransitionFadeNone => 'Sense esvaïment';
+
+  @override
+  String get pageTransitionFadeShort => 'Esvaïment curt';
+
+  @override
+  String get pageTransitionFadeMedium => 'Esvaïment mitjà';
+
+  @override
+  String get pageTransitionFadeLong => 'Esvaïment llarg';
+
+  @override
+  String get siriRemoteSwipeSensitivity =>
+      'Sensibilitat del lliscament al panell tàctil';
+
+  @override
+  String get siriRemoteSwipeSensitivityDescription =>
+      'Fins on es mou el focus amb cada lliscament al panell tàctil del Siri Remote';
+
+  @override
+  String get appleTvHomeScreen => 'Pantalla d\'inici de l\'Apple TV';
+
+  @override
+  String get topShelf => 'Top Shelf';
+
+  @override
+  String get topShelfDescription =>
+      'El que mostra la pantalla d\'inici de l\'Apple TV a sobre de la icona de Moonfin quan està seleccionada. Aquesta configuració només es desa en aquest dispositiu.';
+
+  @override
+  String get topShelfLatestMedia => 'Contingut més recent';
+
+  @override
+  String get topShelfAppBanner => 'Bàner de Moonfin';
+
+  @override
+  String get keepVideoClearOfDynamicIsland =>
+      'Mantén el vídeo apartat de la Dynamic Island';
+
+  @override
+  String get keepVideoClearOfDynamicIslandDescription =>
+      'En horitzontal, l\'allotjament de la càmera tapa una vora de la pantalla. Això manté la imatge apartada, cosa que només té efecte en vídeos prou amples per arribar-hi.';
+
+  @override
+  String get bottomNavbarStyle => 'Estil de la barra inferior';
+
+  @override
+  String get bottomNavbarStyleDock => 'Dock';
+
+  @override
+  String get bottomNavbarStyleSplit => 'Dividida';
+
+  @override
+  String get bottomNavbarStyleStrip => 'Franja';
+
+  @override
+  String get bottomNavbarTabs => 'Pestanyes de la barra inferior';
+
+  @override
+  String get bottomNavbarTabsDescription =>
+      'Fixa fins a 3 pestanyes entre Inici i Tu. Tota la resta és al centre de la barra inferior.';
+
+  @override
+  String get bottomNavbarTabsAutomatic => 'Automàtic';
+
+  @override
+  String get bottomNavbarTabsPinned => 'Fixades';
+
+  @override
+  String get bottomNavbarTabsAvailable => 'Disponibles';
+
+  @override
+  String get bottomNavbarTabsReset => 'Restableix a automàtic';
+
+  @override
+  String get bottomNavbarTabsLimit =>
+      'Pots fixar fins a 3 pestanyes. Treu-ne una per fixar-ne una altra.';
+
+  @override
+  String get bottomNavbarTabTurnedOff => 'Desactivada a «Botons»';
+
+  @override
+  String get bottomNavbarSplitSearchNote =>
+      'A l\'estil «Dividida», la cerca sempre té el seu propi botó.';
+
+  @override
+  String get bottomNavbarButtonsNote =>
+      'Aquests botons decideixen què es mostra al centre de la barra inferior i quines pestanyes pots fixar a la barra inferior. Les pestanyes que ja són a la barra no s\'hi mostren.';
+
+  @override
+  String get navYou => 'Tu';
+
+  @override
+  String get detailsPage => 'Pàgina de detalls';
+
+  @override
+  String get storageAndDownloads => 'Emmagatzematge i baixades';
+
+  @override
+  String get integrations => 'Integracions';
+
+  @override
+  String get settingsSync => 'Sincronització de la configuració';
+
+  @override
+  String get settingsSyncSubtitle =>
+      'Sincronització amb el connector Moonbase i perfils de personalització';
+
+  @override
+  String get navigationBar => 'Barra de navegació';
+
+  @override
+  String get homeRows => 'Files';
+
+  @override
+  String get homeRowsSubtitle =>
+      'Activa o desactiva les files i canvia\'n l\'ordre';
+
+  @override
+  String get rowOptions => 'Opcions de les files';
+
+  @override
+  String get rowOptionsSubtitle => 'Ordenació i contingut de cada fila';
+
+  @override
+  String get imageTypePerRow => 'Tipus d\'imatge per fila';
+
+  @override
+  String get externalSources => 'Fonts externes';
+
+  @override
+  String get qualityAndDecoding => 'Qualitat i descodificació';
+
+  @override
+  String get qualityAndDecodingSubtitle =>
+      'Taxa de bits, resolució, descodificació, HDR i Dolby Vision';
+
+  @override
+  String get skippingAndAutoplay => 'Salts i reproducció automàtica';
+
+  @override
+  String get advancedPlayback => 'Reproducció avançada';
+
+  @override
+  String get advancedPlaybackSubtitle =>
+      'Encaminament del reproductor, reproductors externs i mpv';
+
+  @override
+  String get settingsAccountSubtitle =>
+      'Inici de sessió, codi PIN, mode infantil, controls parentals i sincronització de la configuració';
+
+  @override
+  String get settingsGeneralSubtitle =>
+      'Llengua, rellotge, entrada i rendiment';
+
+  @override
+  String get settingsAppearanceSubtitle =>
+      'Navegació, pantalla d\'inici, biblioteques, pàgina de detalls i temes';
+
+  @override
+  String get settingsHomeScreenSubtitle =>
+      'Files, barra de mitjans, aspecte i fonts externes';
+
+  @override
+  String get settingsLibrariesEntrySubtitle =>
+      'Visibilitat i ordre de les biblioteques, i pàgines de biblioteca';
+
+  @override
+  String get settingsDetailsPageSubtitle =>
+      'Disposició, botons, seccions, valoracions i música del tema';
+
+  @override
+  String get settingsPlaybackSubtitle =>
+      'Reproductor, qualitat, àudio, subtítols, salts i SyncPlay';
+
+  @override
+  String get settingsStorageSubtitle =>
+      'Baixades, ubicació d\'emmagatzematge i memòria cau d\'imatges';
+
+  @override
+  String get settingsServicesSubtitle => 'Seerr i insígnies de fites';
+
+  @override
+  String get settingsSignInSection => 'Inici de sessió';
+
+  @override
+  String get settingsFamilySection => 'Família';
+
+  @override
+  String get settingsServersSection => 'Servidors';
+
+  @override
+  String get settingsLanguageSection => 'Llengua';
+
+  @override
+  String get settingsInputSection => 'Entrada';
+
+  @override
+  String get settingsMotionSection => 'Moviment';
+
+  @override
+  String get settingsContentsSection => 'Continguts';
+
+  @override
+  String get settingsLooksSection => 'Aspecte';
+
+  @override
+  String get settingsAudioAndSubtitlesSection => 'Àudio i subtítols';
+
+  @override
+  String get settingsSkippingAndQueueSection => 'Salts i cua';
+
+  @override
+  String get settingsWatchTogetherSection => 'Veure junts';
+
+  @override
+  String get settingsAdvancedSection => 'Avançat';
+
+  @override
+  String get playerSettingsSubtitle =>
+      'Controls, avançar i retrocedir, botons del reproductor i previsualització';
 }

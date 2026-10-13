@@ -74,6 +74,21 @@ set_target_properties(${BINARY_NAME}
 # them to the application.
 include(flutter/generated_plugins.cmake)
 
+# sqlite3_flutter_libs compiles its own SQLite into the plugin and hides its C++
+# symbols but not its C ones, so every sqlite3_ entry point lands in the global
+# namespace under the same names as the libsqlite3 webkit2gtk links against.
+# Whichever copy the loader binds first, the other one's callers get a build
+# they weren't compiled against, and sqlite3_initialize dies on a null pointer
+# before the first window appears.
+#
+# Nothing on Linux wants the bundled copy. The plugin's registrar here is empty
+# and the database isolate opens libsqlite3 by name, so hiding these leaves one
+# SQLite answering and changes nothing else.
+if(TARGET sqlite3_flutter_libs_plugin)
+  set_target_properties(sqlite3_flutter_libs_plugin PROPERTIES
+    C_VISIBILITY_PRESET hidden)
+endif()
+
 
 # === Installation ===
 # By default, "installing" just makes a relocatable bundle in the build

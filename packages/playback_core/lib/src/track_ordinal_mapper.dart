@@ -52,6 +52,28 @@ class TrackOrdinalMapper {
         .length;
   }
 
+  /// Converts a Jellyfin `MediaStream.Index` into the index the same stream
+  /// carries inside the container.
+  ///
+  /// The server numbers external subtitles into the same space as the streams
+  /// the file actually holds, so one of those shifts every later stream up by
+  /// one. Returns null when the index is not one of the container's own
+  /// streams.
+  static int? containerStreamIndex({
+    required int streamIndex,
+    required List<Map<String, dynamic>> mediaStreams,
+  }) {
+    final embedded =
+        mediaStreams
+            .where((s) => s['IsExternal'] != true)
+            .map((s) => s['Index'])
+            .whereType<int>()
+            .toList()
+          ..sort();
+    final position = embedded.indexOf(streamIndex);
+    return position < 0 ? null : position;
+  }
+
   /// Converts a Jellyfin `MediaStream.Index` into the backend track ordinal.
   ///
   /// [externalSubtitles] is the resolution's external-delivery list; pass
@@ -106,19 +128,15 @@ class TrackOrdinalMapper {
       }
 
       if (embeddedStripped) return null;
-      final embeddedStreams = typeStreams
-          .where((s) => s['IsExternal'] != true)
-          .toList();
-      final embeddedPos = embeddedStreams.indexWhere(
-        (s) => s['Index'] == streamIndex,
-      );
-      if (embeddedPos < 0) return null;
-      return embeddedPos + 1;
     }
 
-    final positional = typeStreams.indexWhere((s) => s['Index'] == streamIndex);
-    if (positional < 0) return null;
-    return positional + 1;
+    // Only the container's own tracks are numbered here. An external audio
+    // file only has a track once the server muxes it in, so it doesn't push
+    // the embedded ones along.
+    final embedded = typeStreams.where((s) => s['IsExternal'] != true).toList();
+    final position = embedded.indexWhere((s) => s['Index'] == streamIndex);
+    if (position < 0) return null;
+    return position + 1;
   }
 
   /// Inverse of [mpvTrackIdForStream].
@@ -160,20 +178,12 @@ class TrackOrdinalMapper {
         }
         return null;
       }
-
-      final embeddedStreams = typeStreams
-          .where((s) => s['IsExternal'] != true)
-          .toList();
-      final embeddedPos = mpvTrackId - 1;
-      if (embeddedPos >= 0 && embeddedPos < embeddedStreams.length) {
-        return embeddedStreams[embeddedPos]['Index'] as int?;
-      }
-      return null;
     }
 
-    final positional = mpvTrackId - 1;
-    if (positional >= 0 && positional < typeStreams.length) {
-      return typeStreams[positional]['Index'] as int?;
+    final embedded = typeStreams.where((s) => s['IsExternal'] != true).toList();
+    final position = mpvTrackId - 1;
+    if (position >= 0 && position < embedded.length) {
+      return embedded[position]['Index'] as int?;
     }
     return null;
   }

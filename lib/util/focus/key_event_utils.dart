@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -28,6 +29,23 @@ KeyEventResult handleOneShotSelect(KeyEvent event, VoidCallback onSelect) {
     return KeyEventResult.handled;
   }
   return KeyEventResult.ignored;
+}
+
+/// Activates whatever holds focus, for a scope that sees enter and select
+/// before the framework's own shortcut for them.
+///
+/// Finding an enabled action is the only thing that says the press landed. A
+/// material button activates through a callback that returns nothing, so the
+/// invoke result is null even when it fired, and reporting that as ignored
+/// lets the framework activate the same widget a second time.
+KeyEventResult activateFocusedTarget(BuildContext context) {
+  final target = FocusManager.instance.primaryFocus?.context ?? context;
+  final action = Actions.maybeFind<ActivateIntent>(target);
+  if (action == null || !action.isActionEnabled) {
+    return KeyEventResult.ignored;
+  }
+  Actions.maybeInvoke(target, const ActivateIntent());
+  return KeyEventResult.handled;
 }
 
 KeyEventResult handleBackKeyAction(KeyEvent event, VoidCallback onBack) {
@@ -111,13 +129,10 @@ class LongPressSelectKeyHandler {
         _selectDownSeen = true;
         _longPressFired = false;
         _longPressTimer?.cancel();
-        _longPressTimer = Timer(
-          const Duration(milliseconds: 500),
-          () {
-            _longPressFired = true;
-            onLongPress();
-          },
-        );
+        _longPressTimer = Timer(const Duration(milliseconds: 500), () {
+          _longPressFired = true;
+          onLongPress();
+        });
         return KeyEventResult.handled;
       }
       if (event is KeyRepeatEvent) {
@@ -145,4 +160,32 @@ class LongPressSelectKeyHandler {
 
     return KeyEventResult.ignored;
   }
+}
+
+/// A Focus handler that scrolls [controller] by [step] on the up and down
+/// keys, for dialogs and panels whose rows take no focus of their own.
+FocusOnKeyEventCallback arrowScrollHandler(
+  ScrollController controller, {
+  double step = 120,
+}) {
+  void scrollBy(double delta) {
+    if (!controller.hasClients) return;
+    final position = controller.position;
+    final target = (position.pixels + delta).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    unawaited(
+      controller.animateTo(
+        target,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+      ),
+    );
+  }
+
+  return dpadKeyHandler(
+    onUp: () => scrollBy(-step),
+    onDown: () => scrollBy(step),
+  );
 }

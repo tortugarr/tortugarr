@@ -57,8 +57,14 @@ public final class NativeGameChannel: NSObject, FlutterStreamHandler {
     case "load":
       load(args, result: result)
     case "start":
-      session?.start()
-      result(nil)
+      if session?.start() == false {
+        result(FlutterError(
+          code: "start_failed",
+          message: "The emulation thread could not be started.",
+          details: nil))
+      } else {
+        result(nil)
+      }
     case "pause":
       session?.setPaused(true)
       result(nil)

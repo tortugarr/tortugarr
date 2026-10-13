@@ -9,6 +9,7 @@ import 'package:web/web.dart' as web;
 
 import '../preference/user_preferences.dart';
 import 'html_video_backend_profile.dart';
+import 'letterbox_croppers.dart';
 import 'web_subtitle_overlay_web.dart';
 
 extension type _MoonfinHlsBridge._(JSObject _) implements JSObject {
@@ -48,6 +49,23 @@ class HtmlVideoBackend extends PlayerBackend {
   WebSubtitleOverlay get _overlay =>
       _subtitleOverlay ??= WebSubtitleOverlay(_videoElement);
 
+  /// Marks a track whose cues are already being placed, so a track seen twice
+  /// does not collect a second listener.
+  static const _cueHookProperty = 'moonfinCuePlacement';
+
+  /// The size the cue percentage is measured against, so the setting at its
+  /// default leaves the browser drawing cues at its own size.
+  static final double _referenceTextSize =
+      UserPreferences.subtitlesTextSize.defaultValue;
+
+  web.HTMLStyleElement? _subtitleStyleElement;
+  int? _subtitleTextColor;
+  int? _subtitleBackgroundColor;
+  int? _subtitleStrokeColor;
+  double? _subtitleFontSize;
+  int? _subtitleFontWeight;
+  double _subtitleVerticalOffset = 0;
+
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
   Duration _buffer = Duration.zero;
@@ -75,6 +93,9 @@ class HtmlVideoBackend extends PlayerBackend {
 
   web.HTMLVideoElement _createVideoElement() {
     final element = web.HTMLVideoElement()
+      // The id is what the cue stylesheet selects on, so a second player on
+      // the page keeps its own look.
+      ..id = _viewType
       ..autoplay = false
       ..controls = false
       ..preload = 'auto'
@@ -152,6 +173,7 @@ class HtmlVideoBackend extends PlayerBackend {
     final textTrackCount = _videoElement.textTracks.length;
     if (textTrackCount != _knownTextTrackCount) {
       _knownTextTrackCount = textTrackCount;
+      _forEachTextTrack(_watchCuesFor);
       if (!_tracksChangedStream.isClosed) {
         _tracksChangedStream.add(null);
       }
@@ -347,6 +369,7 @@ class HtmlVideoBackend extends PlayerBackend {
     if (_disposed) return;
 
     final payload = mediaItem is Map ? mediaItem : const <String, dynamic>{};
+    final autoPlay = payload['autoPlay'] != false;
     final url = mediaItem is String
         ? mediaItem
         : payload['url']?.toString() ?? '';
@@ -361,17 +384,22 @@ class HtmlVideoBackend extends PlayerBackend {
 
     await _applySource(url, container: container, startPosition: startPosition);
 
-    _setBuffering(true);
-    try {
-      await _videoElement.play().toDart;
-      _setPlaying(true);
-    } catch (error) {
+    if (autoPlay) {
+      _setBuffering(true);
+      try {
+        await _videoElement.play().toDart;
+        _setPlaying(true);
+      } catch (error) {
+        _setPlaying(false);
+        _errorStream.add(<String, dynamic>{
+          'event': 'playerError',
+          'message': error.toString(),
+        });
+      } finally {
+        _setBuffering(false);
+      }
+    } else {
       _setPlaying(false);
-      _errorStream.add(<String, dynamic>{
-        'event': 'playerError',
-        'message': error.toString(),
-      });
-    } finally {
       _setBuffering(false);
     }
 
@@ -507,7 +535,7 @@ class HtmlVideoBackend extends PlayerBackend {
     if (isExternalSubtitle &&
         externalSubtitleUrl != null &&
         externalSubtitleUrl.isNotEmpty) {
-      await addExternalSubtitle(externalSubtitleUrl, codec: subtitleCodec);
+      await _showExternalSubtitle(externalSubtitleUrl, codec: subtitleCodec);
       return;
     }
 
@@ -604,6 +632,8 @@ class HtmlVideoBackend extends PlayerBackend {
   @override
   Future<void> setSubtitleDelay(double seconds) async {}
 
+  /// Adds the subtitle without showing it, so tracks loaded at startup stay
+  /// off until one is picked.
   @override
   Future<void> addExternalSubtitle(
     String url, {
@@ -612,19 +642,26 @@ class HtmlVideoBackend extends PlayerBackend {
     String? codec,
   }) async {
     if (_disposed || url.isEmpty) return;
+    // The overlay fetches its file when the subtitle is picked, so there is
+    // nothing to add ahead of that.
+    if (WebSubtitleOverlay.isOverlayCodec(codec)) return;
+    _addTrack(url, title: title, language: language, codec: codec);
+  }
 
+  Future<void> _showExternalSubtitle(String url, {String? codec}) async {
     if (WebSubtitleOverlay.isOverlayCodec(codec)) {
+      _showTrackAt(-1);
       await _overlay.show(url, codec);
       return;
     }
+    _showTrackAt(_addTrack(url, codec: codec));
+  }
 
-    // Selecting a subtitle asks for it by url, so a track already on the
-    // element is the one being asked for rather than a second copy of it.
+  /// Puts a hidden track for [url] on the element, or finds the one already
+  /// there, and returns its position in add order.
+  int _addTrack(String url, {String? title, String? language, String? codec}) {
     final existing = _externalTracks.indexWhere((track) => track.url == url);
-    if (existing >= 0) {
-      _showTrackAt(existing);
-      return;
-    }
+    if (existing >= 0) return existing;
 
     final element = web.HTMLTrackElement()
       ..kind = 'subtitles'
@@ -638,8 +675,8 @@ class HtmlVideoBackend extends PlayerBackend {
 
     _videoElement.appendChild(element);
     _externalTracks.add((url: url, element: element));
-
-    _showTrackAt(_externalTracks.length - 1);
+    _watchCuesFor(element.track);
+    return _externalTracks.length - 1;
   }
 
   @override
@@ -650,7 +687,112 @@ class HtmlVideoBackend extends PlayerBackend {
     double? fontSize,
     int? fontWeight,
     double? verticalOffset,
-  }) async {}
+  }) async {
+    if (_disposed) return;
+    if (textColor != null) _subtitleTextColor = textColor;
+    if (backgroundColor != null) _subtitleBackgroundColor = backgroundColor;
+    if (strokeColor != null) _subtitleStrokeColor = strokeColor;
+    if (fontSize != null && fontSize > 0) _subtitleFontSize = fontSize;
+    if (fontWeight != null) _subtitleFontWeight = fontWeight;
+    if (verticalOffset != null) {
+      _subtitleVerticalOffset = verticalOffset.clamp(0.0, 1.0);
+    }
+    _applySubtitleAppearance();
+    _forEachTextTrack(_positionCues);
+  }
+
+  /// Appearance goes through a stylesheet, since `::cue` is the only hook the
+  /// browser gives for text it draws itself.
+  void _applySubtitleAppearance() {
+    final rules = <String>[];
+    final text = _cssColor(_subtitleTextColor);
+    if (text != null) rules.add('color: $text');
+    // An unset or fully transparent background has to be written out, or the
+    // browser keeps drawing its own black box behind every line.
+    rules.add(
+      'background-color: ${_cssColor(_subtitleBackgroundColor) ?? 'transparent'}',
+    );
+    final size = _subtitleFontSize;
+    if (size != null) {
+      final percent = size / _referenceTextSize * 100;
+      rules.add('font-size: ${percent.round()}%');
+    }
+    final weight = _subtitleFontWeight;
+    if (weight != null) {
+      rules.add('font-weight: ${weight >= 600 ? 'bold' : 'normal'}');
+    }
+    final stroke = _cssColor(_subtitleStrokeColor);
+    // Offsets in em so the outline keeps its weight as the text is resized.
+    rules.add(
+      stroke == null
+          ? 'text-shadow: none'
+          : 'text-shadow: -0.04em -0.04em 0 $stroke, 0.04em -0.04em 0 $stroke, '
+                '-0.04em 0.04em 0 $stroke, 0.04em 0.04em 0 $stroke',
+    );
+
+    final style = _subtitleStyleElement ??= _createSubtitleStyleElement();
+    style.textContent = '#$_viewType::cue { ${rules.join('; ')} }';
+  }
+
+  web.HTMLStyleElement _createSubtitleStyleElement() {
+    final style = web.HTMLStyleElement();
+    (web.document.head ?? web.document.documentElement)?.appendChild(style);
+    return style;
+  }
+
+  void _forEachTextTrack(void Function(web.TextTrack track) action) {
+    try {
+      final tracks = _videoElement.textTracks;
+      for (var i = 0; i < tracks.length; i++) {
+        action(tracks[i]);
+      }
+    } catch (_) {}
+  }
+
+  /// `::cue` cannot move a cue, so the position comes from the cue's own line,
+  /// read as a percentage of the video box with the cue's bottom edge on it.
+  /// A zero offset therefore puts the line on the bottom edge itself.
+  void _positionCues(web.TextTrack track) {
+    final cues = track.activeCues;
+    if (cues == null) return;
+    final line = (1 - _subtitleVerticalOffset) * 100;
+    for (var i = 0; i < cues.length; i++) {
+      final cue = cues[i];
+      if (!cue.isA<web.VTTCue>()) continue;
+      final vtt = cue as web.VTTCue;
+      // The alignment is what makes the line measure the cue's bottom edge.
+      // An engine that drops it would measure the top instead and push the
+      // lowest positions off the picture, so a cue that will not take it stays
+      // where the browser put it.
+      vtt.lineAlign = 'end';
+      if (vtt.lineAlign != 'end') continue;
+      vtt.snapToLines = false;
+      vtt.line = line.toJS;
+    }
+  }
+
+  /// A cue can only be placed once it exists, and the ones carried inside a
+  /// stream turn up long after playback began, so the track is asked again
+  /// every time its active set changes.
+  void _watchCuesFor(web.TextTrack track) {
+    if (track.has(_cueHookProperty)) return;
+    track.setProperty(_cueHookProperty.toJS, true.toJS);
+    track.addEventListener(
+      'cuechange',
+      ((web.Event _) => _positionCues(track)).toJS,
+    );
+  }
+
+  static String? _cssColor(int? argb) {
+    if (argb == null) return null;
+    final alpha = (argb >> 24) & 0xFF;
+    if (alpha == 0) return null;
+    final red = (argb >> 16) & 0xFF;
+    final green = (argb >> 8) & 0xFF;
+    final blue = argb & 0xFF;
+    if (alpha == 0xFF) return 'rgb($red, $green, $blue)';
+    return 'rgba($red, $green, $blue, ${(alpha / 255).toStringAsFixed(3)})';
+  }
 
   @override
   Future<void> setSubtitleRendererMode(SubtitleRendererMode mode) async {
@@ -658,6 +800,9 @@ class HtmlVideoBackend extends PlayerBackend {
 
   @override
   bool get supportsRuntimeTrackSelection => false;
+
+  @override
+  LetterboxCropper get letterboxCropper => const HtmlLetterboxCropper();
 
   @override
   bool get requiresStartupMediaReadyCheck => false;
@@ -703,6 +848,8 @@ class HtmlVideoBackend extends PlayerBackend {
     _clearExternalTracks();
     _subtitleOverlay?.dispose();
     _subtitleOverlay = null;
+    _subtitleStyleElement?.remove();
+    _subtitleStyleElement = null;
     _detachHlsJsSource();
     _videoElement.pause();
     _videoElement.removeAttribute('src');

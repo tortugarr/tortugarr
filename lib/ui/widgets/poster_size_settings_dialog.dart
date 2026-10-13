@@ -92,7 +92,7 @@ class _PosterSizeSettingsDialogState extends State<PosterSizeSettingsDialog> {
                   ),
                 ),
               ),
-              for (final size in PosterSize.values)
+              for (final size in PosterSize.gridValues)
                 _posterSizeTile(size, currentSize == size),
             ],
           ],
@@ -146,7 +146,7 @@ class _PosterSizeSettingsDialogState extends State<PosterSizeSettingsDialog> {
       PosterSize.small => 'Small',
       PosterSize.medium => 'Medium',
       PosterSize.large => 'Large',
-      PosterSize.extraLarge => 'Extra Large',
+      PosterSize.extraLarge || PosterSize.grandparents => 'Extra Large',
     };
     return InkWell(
       onTap: () {

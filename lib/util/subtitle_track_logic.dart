@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import '../data/models/series_track_preference.dart';
 import '../preference/preference_constants.dart';
 import 'language_matching.dart';
 
@@ -51,6 +52,22 @@ bool shouldRenderSubtitleNatively(String? codec) {
       normalized == 'xsub';
 }
 
+const _textSubtitleCodecs = {
+  'subrip',
+  'srt',
+  'vtt',
+  'webvtt',
+  'ass',
+  'ssa',
+  'ttml',
+};
+
+bool isTextSubtitleStream(Map<String, dynamic> stream) =>
+    stream['IsTextSubtitleStream'] == true ||
+    _textSubtitleCodecs.contains(
+      (stream['Codec'] as String?)?.trim().toLowerCase(),
+    );
+
 /// Internal streams first, external streams last.
 List<Map<String, dynamic>> sortedSubtitleStreams(
   List<Map<String, dynamic>> streams,
@@ -72,6 +89,8 @@ int? computeEffectiveSubtitleIndex({
   required String preferredLanguage,
   required String fallbackLanguage,
   required bool preferSdh,
+  bool preferTextSubtitles = false,
+  bool preferExternalSubtitles = false,
   required bool pgsDirectPlay,
   required bool assDirectPlay,
   required String preferredAudioLanguage,
@@ -196,43 +215,63 @@ int? computeEffectiveSubtitleIndex({
       return aSpecial ? 1 : -1;
     }
 
-    // 2 and 3. SDH match and internal vs external, ordered by preferSdh. With SDH
-    // on we match SDH first, with it off we keep internal tracks first so a bad
-    // external download cannot beat an internal SDH track.
+    // 2. SDH match
     if (preferSdh) {
-      final aSdhMatch = isSdhSubtitleStream(streamA) == preferSdh;
-      final bSdhMatch = isSdhSubtitleStream(streamB) == preferSdh;
-      if (aSdhMatch != bSdhMatch) {
-        return aSdhMatch ? -1 : 1;
-      }
-
-      final aInternal = !isExternalSubtitleStream(streamA);
-      final bInternal = !isExternalSubtitleStream(streamB);
-      if (aInternal != bInternal) {
-        return aInternal ? -1 : 1;
-      }
-    } else {
-      final aInternal = !isExternalSubtitleStream(streamA);
-      final bInternal = !isExternalSubtitleStream(streamB);
-      if (aInternal != bInternal) {
-        return aInternal ? -1 : 1;
-      }
-
-      final aSdhMatch = isSdhSubtitleStream(streamA) == preferSdh;
-      final bSdhMatch = isSdhSubtitleStream(streamB) == preferSdh;
+      final aSdhMatch = isSdhSubtitleStream(streamA);
+      final bSdhMatch = isSdhSubtitleStream(streamB);
       if (aSdhMatch != bSdhMatch) {
         return aSdhMatch ? -1 : 1;
       }
     }
 
-    // 4. Fancy vs Normal
+    // 3. A forced track only carries the foreign dialogue, so neither
+    // preference below may lift one above a full track.
+    if (preferTextSubtitles || preferExternalSubtitles) {
+      final aForced = streamA['IsForced'] == true;
+      final bForced = streamB['IsForced'] == true;
+      if (aForced != bForced) {
+        return aForced ? 1 : -1;
+      }
+    }
+
+    // 4. Text over bitmap
+    if (preferTextSubtitles) {
+      final aText = isTextSubtitleStream(streamA);
+      final bText = isTextSubtitleStream(streamB);
+      if (aText != bText) {
+        return aText ? -1 : 1;
+      }
+    }
+
+    // 5. Internal tracks first, so a bad external download can't beat a good
+    // internal one, unless the viewer prefers external files.
+    final aExt = isExternalSubtitleStream(streamA);
+    final bExt = isExternalSubtitleStream(streamB);
+    if (aExt != bExt) {
+      if (preferExternalSubtitles) {
+        return aExt ? -1 : 1;
+      } else {
+        return aExt ? 1 : -1;
+      }
+    }
+
+    // 6. Non-SDH over SDH
+    if (!preferSdh) {
+      final aSdh = isSdhSubtitleStream(streamA);
+      final bSdh = isSdhSubtitleStream(streamB);
+      if (aSdh != bSdh) {
+        return aSdh ? 1 : -1;
+      }
+    }
+
+    // 7. Fancy vs Normal
     final aFormat = getFormatPriority(streamA);
     final bFormat = getFormatPriority(streamB);
     if (aFormat != bFormat) {
       return aFormat > bFormat ? -1 : 1;
     }
 
-    // 5. Forced flag (prefer non-forced for full subtitles, prefer forced for SubtitleMode.forced)
+    // 8. Forced flag (prefer non-forced for full subtitles, prefer forced for SubtitleMode.forced)
     final aForced = streamA['IsForced'] == true;
     final bForced = streamB['IsForced'] == true;
     if (aForced != bForced) {
@@ -243,14 +282,14 @@ int? computeEffectiveSubtitleIndex({
       }
     }
 
-    // 6. Default flag
+    // 9. Default flag
     final aDefault = streamA['IsDefault'] == true;
     final bDefault = streamB['IsDefault'] == true;
     if (aDefault != bDefault) {
       return aDefault ? -1 : 1;
     }
 
-    // 7. Tie-breaker: earlier stream index in the media container (smaller originalIndex is preferred)
+    // 10. Tie-breaker: earlier stream index in the media container (smaller originalIndex is preferred)
     return a.originalIndex.compareTo(b.originalIndex);
   });
 
@@ -319,4 +358,119 @@ int? mapSubtitleResultToStreamIndex(
     return displayStreams[streamPosition]['Index'] as int?;
   }
   return null;
+}
+
+/// Leading track numbers vary between files, so they are dropped before two
+/// titles are compared.
+final _trackNumberPrefix = RegExp(r'^\d+\s*-\s*');
+
+String _normalizedTitle(String raw) =>
+    raw.replaceAll(_trackNumberPrefix, '').trim().toLowerCase();
+
+String _normalizedStreamTitle(Map<String, dynamic> stream) => _normalizedTitle(
+  (stream['Title'] ?? stream['DisplayTitle'] ?? stream['Name']) as String? ?? '',
+);
+
+/// The stream in [streams] that best answers a remembered choice, or null when
+/// none of them can be it.
+///
+/// The title comes first because it survives files listing their tracks in a
+/// different order, then the position among same-language tracks, then a looser
+/// title match for releases that word the same track slightly differently.
+int? matchSeriesTrackIndex({
+  required List<Map<String, dynamic>> streams,
+  required SeriesTrackPreference pref,
+}) {
+  if (pref.isEmpty) return null;
+  if (pref.isNone) return -1;
+
+  final targetTitle = _normalizedTitle(pref.title);
+
+  // An untagged track leaves only its title to go on. Falling back to position
+  // there would hand back some unrelated track, so it matches or it doesn't.
+  if (pref.language.isEmpty) {
+    final candidates = streams.where((s) => s['Index'] != null);
+    return _titleMatch(candidates, targetTitle, loose: false) ??
+        _titleMatch(candidates, targetTitle);
+  }
+
+  final normPref = normalizeLanguage(pref.language);
+  final iso3Pref = toIso3Language(normPref);
+  final matchingStreams = streams
+      .where((s) => s['Index'] != null)
+      .where(
+        (s) => languageMatchesPreferred(
+          s['Language'] as String? ?? '',
+          normPref,
+          iso3Pref,
+        ),
+      )
+      .toList();
+  if (matchingStreams.isEmpty) return null;
+
+  final exact = _titleMatch(matchingStreams, targetTitle, loose: false);
+  if (exact != null) return exact;
+
+  if (pref.relativeIndex >= 0 && pref.relativeIndex < matchingStreams.length) {
+    return matchingStreams[pref.relativeIndex]['Index'] as int?;
+  }
+
+  return _titleMatch(matchingStreams, targetTitle) ??
+      matchingStreams.first['Index'] as int?;
+}
+
+/// The first stream whose title reads as [targetTitle], or null. A [loose]
+/// match also accepts one title containing the other, for releases that word
+/// the same track slightly differently.
+int? _titleMatch(
+  Iterable<Map<String, dynamic>> streams,
+  String targetTitle, {
+  bool loose = true,
+}) {
+  if (targetTitle.isEmpty) return null;
+  for (final stream in streams) {
+    final streamTitle = _normalizedStreamTitle(stream);
+    if (streamTitle.isEmpty) continue;
+    final hit = loose
+        ? streamTitle.contains(targetTitle) || targetTitle.contains(streamTitle)
+        : streamTitle == targetTitle;
+    if (hit) return stream['Index'] as int?;
+  }
+  return null;
+}
+
+SeriesTrackPreference createSeriesTrackPreferenceFromStream({
+  required List<Map<String, dynamic>> streams,
+  required int? selectedIndex,
+}) {
+  if (selectedIndex == null) return SeriesTrackPreference.empty;
+  if (selectedIndex == -1) return SeriesTrackPreference.none;
+
+  final selectedStream = streams.firstWhere(
+    (s) => s['Index'] == selectedIndex,
+    orElse: () => <String, dynamic>{},
+  );
+
+  if (selectedStream.isEmpty) return SeriesTrackPreference.empty;
+
+  final language = selectedStream['Language'] as String? ?? '';
+  final title = _normalizedStreamTitle(selectedStream);
+
+  int relativeIndex = 0;
+  final normLang = normalizeLanguage(language);
+  final iso3Lang = toIso3Language(normLang);
+
+  for (final stream in streams) {
+    if (stream['Index'] == selectedIndex) break;
+    final l = stream['Language'] as String? ?? '';
+    if (languageMatchesPreferred(l, normLang, iso3Lang)) {
+      relativeIndex++;
+    }
+  }
+
+  return SeriesTrackPreference(
+    language: language,
+    title: title,
+    relativeIndex: relativeIndex,
+  );
 }

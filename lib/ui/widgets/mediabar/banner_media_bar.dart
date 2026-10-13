@@ -9,11 +9,13 @@ import '../../../data/models/media_bar_slide_item.dart';
 import 'media_bar_title.dart';
 import '../../../data/models/media_bar_state.dart';
 import '../../../data/viewmodels/media_bar_view_model.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/platform_detection.dart';
 import '../bounded_network_image.dart';
 import '../rating_display.dart';
+import '../../util/error_message.dart';
 import 'media_bar_status_focus.dart';
 
 class BannerMediaBar extends StatefulWidget {
@@ -143,16 +145,22 @@ class _BannerMediaBarState extends State<BannerMediaBar> {
       widget.onNavigateUp?.call();
       return KeyEventResult.handled;
     }
-    if (key == LogicalKeyboardKey.arrowLeft) {
-      if (_index > 0) {
+    if (key == LogicalKeyboardKey.arrowLeft ||
+        key == LogicalKeyboardKey.arrowRight) {
+      final isRtl = Directionality.of(context) == TextDirection.rtl;
+      final isPhysicalLeftKey = key == LogicalKeyboardKey.arrowLeft;
+      final advances = isPhysicalLeftKey == isRtl;
+      final beforeIndex = _index;
+      if (advances) {
+        if (items.length > 1) _setIndex(_index + 1);
+      } else if (_index > 0) {
         _setIndex(_index - 1);
-      } else if (widget.onNavigateLeft != null) {
+      }
+      if (_index == beforeIndex &&
+          isPhysicalLeftKey &&
+          widget.onNavigateLeft != null) {
         widget.onNavigateLeft!();
       }
-      return KeyEventResult.handled;
-    }
-    if (key == LogicalKeyboardKey.arrowRight) {
-      if (items.length > 1) _setIndex(_index + 1);
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -199,7 +207,10 @@ class _BannerMediaBarState extends State<BannerMediaBar> {
           ),
         );
       }
-      final message = (state as MediaBarError).message;
+      final message = describeError(
+        (state as MediaBarError).error,
+        AppLocalizations.of(context),
+      );
       return Padding(
         padding: EdgeInsets.fromLTRB(16, topInset, 16, 8),
         child: _wrapStatusFocus(

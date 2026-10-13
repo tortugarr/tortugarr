@@ -1,5 +1,39 @@
-import UIKit
 import Flutter
+import GameController
+import UIKit
+
+/// Hosts the Flutter view so a game controller can be kept away from the UI.
+///
+/// The one switch tvOS offers is this view controller's
+/// `controllerUserInteractionEnabled`, honored for whatever sits in its
+/// responder chain, so it has to be an ancestor of the Flutter view rather
+/// than a sibling. Off routes controller input to the GameController profiles
+/// instead of the responder chain, and that covers more devices than a
+/// gamepad: the Siri Remote is a microGamepad, a paired keyboard is a
+/// GCKeyboard, and a third party remote reaches tvOS as one or the other. It
+/// therefore starts on, matching the Apple TV preference default, until Dart
+/// sends the stored value.
+final class GamepadNavigationHostViewController: GCEventViewController {
+    let flutterViewController: FlutterViewController
+
+    init(flutterViewController: FlutterViewController) {
+        self.flutterViewController = flutterViewController
+        super.init(nibName: nil, bundle: nil)
+        controllerUserInteractionEnabled = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addChild(flutterViewController)
+        flutterViewController.view.frame = view.bounds
+        flutterViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(flutterViewController.view)
+        flutterViewController.didMove(toParent: self)
+    }
+}
 
 @main
 class AppDelegate: FlutterAppDelegate {
@@ -17,12 +51,17 @@ class AppDelegate: FlutterAppDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         let flutterViewController = FlutterViewController(project: nil, nibName: nil, bundle: nil)
+        let gamepadHost = GamepadNavigationHostViewController(
+            flutterViewController: flutterViewController)
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = flutterViewController
+        window.rootViewController = gamepadHost
         window.makeKeyAndVisible()
         self.window = window
 
-        GeneratedPluginRegistrant.register(with: self)
+        // FlutterAppDelegate only hands out registrars when the window's root
+        // is a FlutterViewController, and the host sits there now, so plugins
+        // register against the controller directly.
+        GeneratedPluginRegistrant.register(with: flutterViewController)
 
         appleTvVideoChannel = AppleTvVideoChannel(
             messenger: flutterViewController.binaryMessenger,
@@ -33,7 +72,8 @@ class AppDelegate: FlutterAppDelegate {
             messenger: flutterViewController.binaryMessenger,
             textures: flutterViewController)
         systemChannel = AppleTvSystemChannel(
-            messenger: flutterViewController.binaryMessenger)
+            messenger: flutterViewController.binaryMessenger,
+            gamepadHost: gamepadHost)
         audioChannel = AppleTvAudioChannel(
             messenger: flutterViewController.binaryMessenger)
         themeMusicChannel = AppleTvThemeMusicChannel(

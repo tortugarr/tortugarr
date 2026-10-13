@@ -17,7 +17,7 @@
             }
         }
     },
-    "quickConnect": "Quick Connect",
+    "quickConnect": "快速連線",
     "@quickConnect": {
         "description": "Quick Connect toggle button label"
     },
@@ -253,23 +253,23 @@
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
-    "exitAppConfirmation": "您確定要退出嗎？",
+    "exitAppConfirmation": "確定要退出嗎？",
     "@exitAppConfirmation": {
         "description": "Body text of exit confirmation dialog"
     },
-    "exit": "出口",
+    "exit": "退出",
     "@exit": {
         "description": "Exit button label"
     },
-    "noHomeRowsLoaded": "無法載入主行",
+    "noHomeRowsLoaded": "無法載入首頁內容",
     "@noHomeRowsLoaded": {
         "description": "Heading when home screen has no rows to display"
     },
-    "noHomeRowsHint": "嘗試刷新或減少活躍的主頁部分。",
+    "noHomeRowsHint": "請嘗試重新載入，或減少首頁啟用的區段。",
     "@noHomeRowsHint": {
         "description": "Hint text below the no-home-rows heading"
     },
-    "retryHomeRows": "重試主行",
+    "retryHomeRows": "重新載入首頁",
     "@retryHomeRows": {
         "description": "Button to retry loading home rows after failure"
     },
@@ -285,7 +285,7 @@
     "@schedule": {
         "description": "Live TV schedule button label"
     },
-    "series": "影集",
+    "series": "劇集",
     "@series": {
         "description": "Section header for TV series"
     },
@@ -301,11 +301,11 @@
     "@browseAll": {
         "description": "Button to browse all items in a library"
     },
-    "genres": "流派",
+    "genres": "類型",
     "@genres": {
         "description": "Genres navigation label"
     },
-    "collectionPlaceholder": "收藏品會出現在這裡",
+    "collectionPlaceholder": "合輯內容將顯示於此",
     "@collectionPlaceholder": {
         "description": "Placeholder text for empty collection screen"
     },
@@ -341,11 +341,11 @@
     "@displaySettings": {
         "description": "Tooltip for display settings button"
     },
-    "allGenres": "所有流派",
+    "allGenres": "所有類型",
     "@allGenres": {
         "description": "Title for the all genres screen"
     },
-    "noGenresFound": "沒有找到流派",
+    "noGenresFound": "沒有找到類型",
     "@noGenresFound": {
         "description": "Empty state when no genres are available"
     },
@@ -428,19 +428,19 @@
     "@posterSize": {
         "description": "Setting for poster size"
     },
-    "small": "小的",
+    "small": "小",
     "@small": {
         "description": "Poster size option"
     },
-    "medium": "中等的",
+    "medium": "中",
     "@medium": {
         "description": "Poster size option"
     },
-    "large": "大的",
+    "large": "大",
     "@large": {
         "description": "Poster size option"
     },
-    "extraLarge": "特大號",
+    "extraLarge": "特大",
     "@extraLarge": {
         "description": "Size option: extra large"
     },
@@ -544,11 +544,11 @@
     "@scanWithYourPhone": {
         "description": "Instruction shown above a QR code"
     },
-    "audiobookGenres": "有聲書流派",
+    "audiobookGenres": "有聲書類型",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
     },
-    "pickAudiobookGenres": "選擇要在有聲書探索中顯示的流派。",
+    "pickAudiobookGenres": "挑選要在「有聲書探索頁」中顯示的類型。",
     "@pickAudiobookGenres": {
         "description": "Instruction text in audiobook genre picker"
     },
@@ -601,7 +601,7 @@
     "@resume": {
         "description": "Primary action label for resuming reading"
     },
-    "failedToLoadLibrary": "載入庫失敗",
+    "failedToLoadLibrary": "載入媒體庫失敗",
     "@failedToLoadLibrary": {
         "description": "Error when a library cannot be loaded"
     },
@@ -629,7 +629,7 @@
     "@bookHighlightsDescription": {
         "description": "Subtitle for saved highlights section"
     },
-    "handPickedFromLibrary": "從您的圖書館中精心挑選的。",
+    "handPickedFromLibrary": "從媒體庫中精心挑選。",
     "@handPickedFromLibrary": {
         "description": "Subtitle for primary book rail from library"
     },
@@ -657,7 +657,7 @@
     "@searchAudiobooks": {
         "description": "Placeholder text in audiobook search bar"
     },
-    "searchYourLibrary": "搜尋您的圖書館",
+    "searchYourLibrary": "搜尋媒體庫",
     "@searchYourLibrary": {
         "description": "Placeholder text in library search bar"
     },
@@ -700,7 +700,7 @@
     "@readyWhenYouAre": {
         "description": "Label shown when no reading progress exists"
     },
-    "details": "細節",
+    "details": "詳情",
     "@details": {
         "description": "Button and title label for detail views"
     },
@@ -802,11 +802,11 @@
     "@unwatched": {
         "description": "Filter label for unwatched items"
     },
-    "seriesStatus": "系列狀態",
+    "seriesStatus": "劇集狀態",
     "@seriesStatus": {
         "description": "Section header for series status filter"
     },
-    "allLibraries": "所有圖書館",
+    "allLibraries": "所有媒體庫",
     "@allLibraries": {
         "description": "Label when all libraries are selected"
     },
@@ -951,7 +951,7 @@
     "@castAndCrew": {
         "description": "Section header for cast and crew section"
     },
-    "collection": "收藏",
+    "collection": "合輯",
     "@collection": {
         "description": "Section header for collection items"
     },
@@ -959,7 +959,7 @@
     "@episodes": {
         "description": "Section header for episodes"
     },
-    "nextUp": "下一步",
+    "nextUp": "接下來播放",
     "@nextUp": {
         "description": "Home section: next up"
     },
@@ -1019,7 +1019,7 @@
     "@noBooksFound": {
         "description": "Placeholder when no books are found for an author"
     },
-    "unableToLoadAuthorDetails": "目前無法載入作者詳細資料。",
+    "unableToLoadAuthorDetails": "目前無法載入作者詳細資訊。",
     "@unableToLoadAuthorDetails": {
         "description": "Error message when author details fail to load"
     },
@@ -1083,7 +1083,7 @@
     "@startOver": {
         "description": "Action button label to restart reading a book"
     },
-    "restart": "重新啟動",
+    "restart": "從頭播放",
     "@restart": {
         "description": "Action button label to restart playing media"
     },
@@ -1091,11 +1091,11 @@
     "@readOffline": {
         "description": "Action button label to read offline"
     },
-    "playOffline": "離線玩",
+    "playOffline": "離線播放",
     "@playOffline": {
         "description": "Action button label to play offline"
     },
-    "audio": "聲音的",
+    "audio": "音訊",
     "@audio": {
         "description": "Action button label for audio track selection"
     },
@@ -1115,7 +1115,7 @@
     "@trailer": {
         "description": "Action button label for trailer playback"
     },
-    "finished": "完成的",
+    "finished": "已完成",
     "@finished": {
         "description": "Status label for a finished book"
     },
@@ -1123,7 +1123,7 @@
     "@favorited": {
         "description": "Status label for a favorited item"
     },
-    "favorite": "最喜歡的",
+    "favorite": "收藏",
     "@favorite": {
         "description": "Action button label to favorite an item"
     },
@@ -1147,7 +1147,7 @@
     "@deleteDownloaded": {
         "description": "Action button label to delete downloaded album tracks"
     },
-    "goToSeries": "前往系列",
+    "goToSeries": "前往劇集",
     "@goToSeries": {
         "description": "Action button label to navigate to the parent series"
     },
@@ -1395,7 +1395,7 @@
     "@writers": {
         "description": "Metadata label for writers"
     },
-    "studio": "工作室",
+    "studio": "製片商",
     "@studio": {
         "description": "Metadata label for studio"
     },
@@ -1802,7 +1802,7 @@
     "@playback": {
         "description": "Section header in stream info"
     },
-    "playMethod": "玩法",
+    "playMethod": "播放方式",
     "@playMethod": {
         "description": "Stream info label for play method"
     },
@@ -1891,7 +1891,7 @@
             }
         }
     },
-    "failedToLoadBookDetails": "無法載入書籍詳細資料：{error}",
+    "failedToLoadBookDetails": "無法載入書籍詳細資訊：{error}",
     "@failedToLoadBookDetails": {
         "description": "Error when loading book details fails",
         "placeholders": {
@@ -2118,7 +2118,7 @@
     "@readerNotReady": {
         "description": "Error when reader has not finished initializing"
     },
-    "seriesRecordings": "系列錄音",
+    "seriesRecordings": "劇集錄製",
     "@seriesRecordings": {
         "description": "Live TV series recordings label"
     },
@@ -2253,19 +2253,19 @@
     "@failedToCancelRecording": {
         "description": "Error when cancelling a recording fails"
     },
-    "failedToLoadSeriesRecordings": "無法載入系列錄音",
+    "failedToLoadSeriesRecordings": "劇集錄製載入失敗",
     "@failedToLoadSeriesRecordings": {
         "description": "Error when series recordings fail to load"
     },
-    "noSeriesRecordings": "沒有系列錄音",
+    "noSeriesRecordings": "暫無劇集錄製",
     "@noSeriesRecordings": {
         "description": "Empty state when no series recordings exist"
     },
-    "cancelSeriesRecording": "取消系列錄音",
+    "cancelSeriesRecording": "取消劇集錄製",
     "@cancelSeriesRecording": {
         "description": "Button label to cancel a series recording"
     },
-    "cancelSeriesRecordingQuestion": "取消系列錄製？",
+    "cancelSeriesRecordingQuestion": "取消劇集錄製？",
     "@cancelSeriesRecordingQuestion": {
         "description": "Dialog title for cancelling a series recording"
     },
@@ -2278,11 +2278,11 @@
             }
         }
     },
-    "failedToCancelSeriesRecording": "取消連續錄製失敗",
+    "failedToCancelSeriesRecording": "取消劇集錄製失敗",
     "@failedToCancelSeriesRecording": {
         "description": "Error when cancelling a series recording fails"
     },
-    "searchThisLibrary": "搜尋這個圖書館...",
+    "searchThisLibrary": "搜尋這個媒體庫...",
     "@searchThisLibrary": {
         "description": "Search hint when scoped to a specific library"
     },
@@ -2336,7 +2336,7 @@
     "@noDownloadedMediaYet": {
         "description": "Shown when no media has been downloaded"
     },
-    "browseLibrary": "瀏覽圖書館",
+    "browseLibrary": "瀏覽媒體庫",
     "@browseLibrary": {
         "description": "Button to navigate to the library"
     },
@@ -2443,11 +2443,11 @@
             }
         }
     },
-    "seriesNotFound": "未找到系列",
+    "seriesNotFound": "未找到劇集",
     "@seriesNotFound": {
         "description": "Shown when a series cannot be found"
     },
-    "errorLoadingSeries": "載入系列時出錯",
+    "errorLoadingSeries": "載入劇集時出錯",
     "@errorLoadingSeries": {
         "description": "Error when loading a series fails"
     },
@@ -2682,7 +2682,7 @@
     "@focusBorderColor": {
         "description": "Setting for focus border color"
     },
-    "watchedIndicators": "觀察指標",
+    "watchedIndicators": "觀看狀態標記",
     "@watchedIndicators": {
         "description": "Setting for watched indicator display"
     },
@@ -2690,11 +2690,11 @@
     "@always": {
         "description": "Option: always"
     },
-    "hideUnwatched": "隱藏無人監視",
+    "hideUnwatched": "隱藏未觀看數量",
     "@hideUnwatched": {
         "description": "Option: hide unwatched indicators"
     },
-    "episodesOnly": "僅限劇集",
+    "episodesOnly": "僅限單集",
     "@episodesOnly": {
         "description": "Option: episodes only"
     },
@@ -2718,23 +2718,23 @@
     "@showBackdropImages": {
         "description": "Description for background backdrops"
     },
-    "seriesThumbnails": "系列縮圖",
+    "seriesThumbnails": "顯示劇集縮圖",
     "@seriesThumbnails": {
         "description": "Setting for series thumbnails"
     },
-    "seriesThumbnailsDescription": "僅劇集：使用與每行影像類型相符的系列圖稿",
+    "seriesThumbnailsDescription": "電視劇使用劇集主圖，而非單集縮圖。",
     "@seriesThumbnailsDescription": {
         "description": "Description for series thumbnails setting"
     },
-    "homeRowInfoOverlay": "主行資訊疊加",
+    "homeRowInfoOverlay": "首頁列資訊浮層",
     "@homeRowInfoOverlay": {
         "description": "Setting for home row info overlay"
     },
-    "showTitleMetadataOnHomeRows": "瀏覽主行時顯示標題和元數據",
+    "showTitleMetadataOnHomeRows": "瀏覽首頁時顯示標題與媒體資訊",
     "@showTitleMetadataOnHomeRows": {
         "description": "Description for home row info overlay"
     },
-    "clockDisplay": "時鐘顯示",
+    "clockDisplay": "顯示時間",
     "@clockDisplay": {
         "description": "Setting for clock display"
     },
@@ -2787,11 +2787,11 @@
             }
         }
     },
-    "themeMusicOnHomeRows": "主行主題音樂",
+    "themeMusicOnHomeRows": "首頁主題音樂",
     "@themeMusicOnHomeRows": {
         "description": "Setting for theme music on home rows"
     },
-    "playWhenBrowsingHomeScreen": "瀏覽主畫面時播放",
+    "playWhenBrowsingHomeScreen": "瀏覽首頁時播放",
     "@playWhenBrowsingHomeScreen": {
         "description": "Description for theme music on home rows"
     },
@@ -3020,19 +3020,19 @@
     "@hardwareDecodingSubtitle": {
         "description": "Description for hardware decoding toggle"
     },
-    "nextUpAndQueuing": "下次和排隊",
+    "nextUpAndQueuing": "接下來播放與佇列",
     "@nextUpAndQueuing": {
         "description": "Section title for next up and queuing"
     },
-    "extended": "擴充",
+    "extended": "擴展",
     "@extended": {
         "description": "Option: extended"
     },
-    "minimal": "最小",
+    "minimal": "精簡",
     "@minimal": {
         "description": "Option: minimal"
     },
-    "nextUpTimeout": "下一個超時",
+    "nextUpTimeout": "接下來播放倒數時間",
     "@nextUpTimeout": {
         "description": "Setting for next up timeout"
     },
@@ -3404,7 +3404,7 @@
     "@showShuffleButton": {
         "description": "Setting for showing shuffle button"
     },
-    "showGenresButton": "顯示流派按鈕",
+    "showGenresButton": "顯示類型按鈕",
     "@showGenresButton": {
         "description": "Setting for showing genres button"
     },
@@ -3468,7 +3468,7 @@
     "@indigo": {
         "description": "Color: indigo"
     },
-    "libraryDisplay": "圖書館展示",
+    "libraryDisplay": "媒體庫顯示",
     "@libraryDisplay": {
         "description": "Section title for library display settings"
     },
@@ -3484,7 +3484,7 @@
     "@bannerLabel": {
         "description": "Image type: banner"
     },
-    "overridePerLibrarySettings": "覆蓋每個庫的設置",
+    "overridePerLibrarySettings": "覆蓋每個媒體庫的設置",
     "@overridePerLibrarySettings": {
         "description": "Setting for overriding per-library settings"
     },
@@ -3508,11 +3508,11 @@
     "@showFolderBrowsingOption": {
         "description": "Description for folder view"
     },
-    "libraryVisibility": "圖書館可見性",
+    "libraryVisibility": "媒體庫顯示狀態",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。",
+    "libraryVisibilityDescription": "切換各媒體庫在首頁的顯示狀態。重新啟動 Moonfin 後設定才會生效。",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3528,7 +3528,7 @@
     "@sourceLibraries": {
         "description": "Setting for source libraries"
     },
-    "sourceCollections": "來源集",
+    "sourceCollections": "來源合輯",
     "@sourceCollections": {
         "description": "Setting for source collections"
     },
@@ -3641,7 +3641,7 @@
     "@previewAudio": {
         "description": "Setting for preview audio"
     },
-    "enablePreviewAudio": "為預告片和劇集預覽啟用音訊",
+    "enablePreviewAudio": "為媒體預覽啟用音訊",
     "@enablePreviewAudio": {
         "description": "Description for preview audio"
     },
@@ -3649,7 +3649,7 @@
     "@latestMedia": {
         "description": "Home section: latest media"
     },
-    "recentlyReleased": "最近發布",
+    "recentlyReleased": "最近發行",
     "@recentlyReleased": {
         "description": "Home section: recently released"
     },
@@ -3685,7 +3685,7 @@
     "@liveTV": {
         "description": "Home section: live TV"
     },
-    "homeSections": "首頁 欄目",
+    "homeSections": "首頁區段",
     "@homeSections": {
         "description": "Settings title for home sections"
     },
@@ -3693,7 +3693,7 @@
     "@resetToDefaults": {
         "description": "Tooltip for reset to defaults button"
     },
-    "homeRowPosterSize": "主排海報尺寸",
+    "homeRowPosterSize": "首頁列海報尺寸",
     "@homeRowPosterSize": {
         "description": "Setting for home row poster size"
     },
@@ -3701,15 +3701,15 @@
     "@perRowImageTypeSelection": {
         "description": "Setting for per-row image type selection"
     },
-    "configureImageTypeForEachRow": "為每個啟用的主行配置影像類型",
+    "configureImageTypeForEachRow": "設定各啟用首頁列的圖片類型",
     "@configureImageTypeForEachRow": {
         "description": "Description for per-row image type selection"
     },
-    "mergeContinueWatchingAndNextUp": "合併繼續觀看和下一步",
+    "mergeContinueWatchingAndNextUp": "合併繼續觀看和接下來播放",
     "@mergeContinueWatchingAndNextUp": {
         "description": "Setting for merging continue watching and next up"
     },
-    "combineBothRows": "將兩行合併為一個主頁部分",
+    "combineBothRows": "將兩列合併為單一首頁區段",
     "@combineBothRows": {
         "description": "Description for merge continue watching and next up"
     },
@@ -3801,7 +3801,7 @@
     "@mode": {
         "description": "Setting for mode"
     },
-    "libraryArt": "圖書館藝術",
+    "libraryArt": "媒體庫圖片",
     "@libraryArt": {
         "description": "Screensaver mode: library art"
     },
@@ -4027,19 +4027,19 @@
     "@upcomingMovies": {
         "description": "Seerr row: upcoming movies"
     },
-    "studios": "工作室",
+    "studios": "製片商",
     "@studios": {
         "description": "Seerr row: studios"
     },
-    "popularSeries": "熱門系列",
+    "popularSeries": "熱門劇集",
     "@popularSeries": {
         "description": "Seerr row: popular series"
     },
-    "seriesGenres": "系列流派",
+    "seriesGenres": "劇集類型",
     "@seriesGenres": {
         "description": "Seerr row: series genres"
     },
-    "upcomingSeries": "即將推出的系列",
+    "upcomingSeries": "即將推出的劇集",
     "@upcomingSeries": {
         "description": "Seerr row: upcoming series"
     },
@@ -4223,7 +4223,7 @@
     "@navbarStyleToolbarAppearance": {
         "description": "Navigation settings subtitle"
     },
-    "reorderToggleHomeRows": "重新排序和切換主行",
+    "reorderToggleHomeRows": "重新排列並切換媒體庫與外部來源的首頁列",
     "@reorderToggleHomeRows": {
         "description": "Home sections settings subtitle"
     },
@@ -4285,7 +4285,7 @@
     "@requestMore": {
         "description": "Button to request more seasons"
     },
-    "request": "要求",
+    "request": "請求",
     "@request": {
         "description": "Button to submit a media request"
     },
@@ -4293,7 +4293,7 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "玩 Moonfin",
+    "playInMoonfin": "在 Moonfin 中播放",
     "@playInMoonfin": {
         "description": "Button to play available media in Moonfin"
     },
@@ -4314,7 +4314,7 @@
     "@declineAction": {
         "description": "Tooltip/button to decline a request"
     },
-    "similar": "相似的",
+    "similar": "相似",
     "@similar": {
         "description": "Section title for similar media"
     },
@@ -4347,11 +4347,11 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "在您的 Moonfin 庫中找不到項目",
+    "itemNotFoundInLibrary": "在您的 Moonfin 媒體庫中找不到此項目",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
-    "errorSearchingLibrary": "搜尋庫時出錯",
+    "errorSearchingLibrary": "搜尋媒體庫時出錯",
     "@errorSearchingLibrary": {
         "description": "Snackbar when library search fails"
     },
@@ -4385,7 +4385,7 @@
             }
         }
     },
-    "requestSeriesOrMovie": "請求{type}",
+    "requestSeriesOrMovie": "請求 {type}",
     "@requestSeriesOrMovie": {
         "description": "Bottom sheet title for requesting media",
         "placeholders": {
@@ -4430,7 +4430,7 @@
     "@appearances": {
         "description": "Section title for cast appearances"
     },
-    "crewSection": "全體人員",
+    "crewSection": "幕後人員",
     "@crewSection": {
         "description": "Section title for crew credits"
     },
@@ -4443,7 +4443,7 @@
             }
         }
     },
-    "noRequests": "沒有要求",
+    "noRequests": "沒有請求",
     "@noRequests": {
         "description": "Shown when request list is empty"
     },
@@ -4467,7 +4467,7 @@
     "@approvedStatus": {
         "description": "Request status label"
     },
-    "notRequestedStatus": "未要求",
+    "notRequestedStatus": "未請求",
     "@notRequestedStatus": {
         "description": "Request status label when no request exists"
     },
@@ -4483,7 +4483,7 @@
     "@tmdbScore": {
         "description": "Stat label for TMDB user score"
     },
-    "releaseDateLabel": "發布日期",
+    "releaseDateLabel": "發行日期",
     "@releaseDateLabel": {
         "description": "Stat label for release date"
     },
@@ -4628,8 +4628,8 @@
     "analyticsVideoCodecs": "視訊編解碼器",
     "analyticsAudioCodecs": "音訊編解碼器",
     "analyticsContainers": "貨櫃",
-    "analyticsTopGenres": "熱門流派",
-    "analyticsReleaseYears": "發布年份",
+    "analyticsTopGenres": "熱門類型",
+    "analyticsReleaseYears": "發行年份",
     "analyticsContentRatings": "內容評級",
     "analyticsRuntimeBuckets": "運行時桶",
     "analyticsFileFormats": "文件格式",
@@ -4640,8 +4640,8 @@
     "adminServerActions": "伺服器操作",
     "adminRestartServer": "重啟伺服器",
     "adminShutdownServer": "關閉伺服器",
-    "adminScanLibraries": "掃描函式庫",
-    "adminLibraryScanStarted": "圖書館掃描開始",
+    "adminScanLibraries": "掃描媒體庫",
+    "adminLibraryScanStarted": "媒體庫掃描已開始",
     "errorGeneric": "錯誤：{error}",
     "@errorGeneric": {
         "placeholders": {
@@ -4721,8 +4721,8 @@
     "adminEditName": "編輯姓名",
     "adminLibrariesLoadFailed": "載入庫失敗",
     "adminNoLibraries": "沒有配置庫",
-    "adminScanAllLibraries": "掃描所有圖書館",
-    "adminAddLibrary": "新增庫",
+    "adminScanAllLibraries": "掃描所有媒體庫",
+    "adminAddLibrary": "新增媒體庫",
     "adminScanFailed": "無法開始掃描：{error}",
     "@adminScanFailed": {
         "placeholders": {
@@ -4731,7 +4731,7 @@
             }
         }
     },
-    "adminRenameLibrary": "重新命名庫",
+    "adminRenameLibrary": "重新命名媒體庫",
     "adminNewName": "新名稱",
     "adminLibraryRenamed": "媒體庫已重新命名為「{name}」",
     "@adminLibraryRenamed": {
@@ -4749,7 +4749,7 @@
             }
         }
     },
-    "adminDeleteLibrary": "刪除庫",
+    "adminDeleteLibrary": "刪除媒體庫",
     "adminLibraryDeleted": "已刪除媒體庫「{name}」",
     "@adminLibraryDeleted": {
         "placeholders": {
@@ -4775,7 +4775,7 @@
         }
     },
     "adminRemovePath": "刪除路徑",
-    "adminRemovePathConfirm": "要從此媒體庫移除「{path}」嗎？",
+    "adminRemovePathConfirm": "從此媒體庫中移除「{path}」嗎？",
     "@adminRemovePathConfirm": {
         "placeholders": {
             "path": {
@@ -4791,7 +4791,7 @@
             }
         }
     },
-    "adminLibraryOptionsSaved": "已儲存庫選項",
+    "adminLibraryOptionsSaved": "媒體庫選項已儲存",
     "adminLibraryOptionsSaveFailed": "無法儲存選項：{error}",
     "@adminLibraryOptionsSaveFailed": {
         "placeholders": {
@@ -4800,7 +4800,7 @@
             }
         }
     },
-    "adminLibraryLoadFailed": "載入庫失敗",
+    "adminLibraryLoadFailed": "載入媒體庫失敗",
     "adminNoMediaPaths": "未配置媒體路徑",
     "adminAddPath": "新增路徑",
     "adminBrowseFilesystem": "瀏覽伺服器檔案系統：",
@@ -4809,7 +4809,7 @@
     "adminMetadataLanguageHint": "例如英語、德語、法語",
     "adminMetadataCountryCode": "元數據國家代碼",
     "adminMetadataCountryHint": "例如美國、德國、法國",
-    "adminLibraryNameRequired": "庫名稱為必填項",
+    "adminLibraryNameRequired": "媒體庫名稱為必填項",
     "adminLibraryCreateFailed": "無法建立媒體庫：{error}",
     "@adminLibraryCreateFailed": {
         "placeholders": {
@@ -4818,10 +4818,10 @@
             }
         }
     },
-    "adminLibraryName": "圖書館名稱",
+    "adminLibraryName": "媒體庫名稱",
     "adminSelectedPaths": "選定的路徑：",
     "adminNoPathsAdded": "未新增路徑（可以稍後新增）",
-    "adminCreateLibrary": "建立庫",
+    "adminCreateLibrary": "建立媒體庫",
     "paths": "路徑：",
     "adminDisableUser": "停用用戶",
     "adminEnableUser": "啟用用戶",
@@ -4924,11 +4924,11 @@
     "adminMaxActiveSessions": "最大活躍會話數",
     "adminAllowLiveTvAccess": "允許存取直播電視",
     "adminAllowLiveTvManagement": "允許直播電視管理",
-    "adminAllowCollectionManagement": "允許集合管理",
+    "adminAllowCollectionManagement": "允許合輯管理",
     "adminAllowSubtitleManagement": "允許字幕管理",
     "adminAllowLyricManagement": "允許歌詞管理",
     "adminSavePermissions": "保存權限",
-    "adminEnableAllLibraryAccess": "允許存取所有庫",
+    "adminEnableAllLibraryAccess": "允許存取所有媒體庫",
     "adminSaveAccess": "儲存存取權限",
     "adminChangePassword": "更改密碼",
     "adminNewPassword": "新密碼",
@@ -4938,7 +4938,7 @@
     "adminPasswordReset": "密碼重設",
     "adminPasswordUpdated": "密碼已更新",
     "adminUserSettings": "使用者設定",
-    "adminLibraryAccess": "圖書館訪問",
+    "adminLibraryAccess": "媒體庫存取",
     "adminDeviceAndChannelAccess": "設備和通道訪問",
     "adminEnableAllDevices": "啟用對所有裝置的訪問",
     "adminEnableAllChannels": "允許存取所有頻道",
@@ -5336,7 +5336,7 @@
     "adminPreferredMetadataCountry": "首選元數據國家/地區",
     "adminCachePath": "快取路徑",
     "adminMetadataPath": "元資料路徑",
-    "adminLibraryScanConcurrency": "庫掃描並行",
+    "adminLibraryScanConcurrency": "媒體庫並行掃描數",
     "adminParallelImageEncodingLimit": "並行圖像編碼限制",
     "adminSlowResponseThreshold": "慢響應閾值（毫秒）",
     "adminBrandingSaved": "已儲存品牌設定",
@@ -5587,7 +5587,7 @@
     "adminPrePadding": "預填（分鐘）",
     "adminPostPadding": "後填充（分鐘）",
     "adminRecordingPath": "錄音路徑",
-    "adminSeriesRecordingPath": "系列錄音路徑",
+    "adminSeriesRecordingPath": "劇集錄製路徑",
     "adminRecordingSettingsSaved": "已儲存錄音設定",
     "adminSettingsSaveFailed": "無法儲存設定：{error}",
     "@adminSettingsSaveFailed": {
@@ -5623,7 +5623,7 @@
             }
         }
     },
-    "adminSeriesPathDisplay": "影集路徑：{path}",
+    "adminSeriesPathDisplay": "劇集路徑：{path}",
     "@adminSeriesPathDisplay": {
         "placeholders": {
             "path": {
@@ -5653,7 +5653,7 @@
     "adminSettingsSaved": "設定已儲存",
     "adminBackupsNotAvailable": "備份在此伺服器版本上不可用。",
     "adminRestoreWarning1": "恢復將用備份資料替換所有當前伺服器資料。",
-    "adminRestoreWarning2": "目前的伺服器設定、使用者和庫資料將被覆蓋。",
+    "adminRestoreWarning2": "目前的伺服器設定、使用者和媒體庫資料將被覆蓋。",
     "adminRestoreWarning3": "恢復後伺服器將重新啟動。",
     "adminRestoreConfirmMessage": "要立即還原備份 {name} 嗎？",
     "@adminRestoreConfirmMessage": {
@@ -5733,13 +5733,13 @@
     "adminMetadataFieldCriticRating": "評論家評級",
     "adminMetadataFieldTagline": "標語",
     "adminMetadataFieldOverview": "概述",
-    "adminMetadataGenres": "流派",
+    "adminMetadataGenres": "類型",
     "adminMetadataTags": "標籤",
-    "adminMetadataStudios": "工作室",
+    "adminMetadataStudios": "製片商",
     "adminMetadataPeople": "人們",
     "adminMetadataAddGenre": "添加流派",
     "adminMetadataAddTag": "添加標籤",
-    "adminMetadataAddStudio": "新增工作室",
+    "adminMetadataAddStudio": "新增製片商",
     "adminMetadataAddPerson": "新增人員",
     "adminMetadataEditPerson": "編輯人物",
     "adminMetadataRole": "角色",
@@ -5918,7 +5918,7 @@
     "adminGeneralMetadataLanguageHint": "例如英語、德語、法語",
     "adminGeneralMetadataCountry": "首選元數據國家/地區",
     "adminGeneralMetadataCountryHint": "例如美國、德國、法國",
-    "adminGeneralLibraryScanConcurrency": "庫掃描並行",
+    "adminGeneralLibraryScanConcurrency": "媒體庫並行掃描數",
     "adminGeneralImageEncodingLimit": "並行圖像編碼限制",
     "adminUnknownError": "未知錯誤",
     "adminBrowse": "瀏覽",
@@ -6232,7 +6232,7 @@
         }
     },
     "syncPlayAccessDeniedTitle": "SyncPlay 存取被拒絕",
-    "syncPlayAccessDeniedMessage": "您無權存取此 SyncPlay 群組中的一項或多項。請群組擁有者驗證庫權限或選擇其他佇列。",
+    "syncPlayAccessDeniedMessage": "您無權存取此 SyncPlay 群組中的一項或多項。請群組擁有者驗證媒體庫權限或選擇其他佇列。",
     "syncPlaySyncingPlaybackToGroup": "正在將播放同步至 {groupName}",
     "@syncPlaySyncingPlaybackToGroup": {
         "description": "Snackbar message shown when starting playback in a SyncPlay group",
@@ -6393,12 +6393,12 @@
     "trackActionDeletedFile": "已刪除下載的文件",
     "trackActionDeleteFileFailed": "無法刪除下載的文件",
     "shuffleBy": "隨機播放",
-    "shuffleSelectLibrary": "選擇庫",
+    "shuffleSelectLibrary": "選擇媒體庫",
     "shuffleSelectGenre": "選擇類型",
     "shuffleLibrary": "媒體庫",
     "shuffleGenre": "類型",
     "shuffleNoLibraries": "沒有可用的相容庫。",
-    "shuffleNoGenres": "沒有找到適合此隨機播放模式的流派。",
+    "shuffleNoGenres": "未找到適合此隨機播放模式的類型。",
     "posterDisplayTitle": "展示",
     "posterImageType": "圖片類型",
     "imageTypePoster": "海報",
@@ -6412,7 +6412,7 @@
     "playlistNoneFound": "未找到播放列表",
     "addToPlaylist": "新增到播放列表",
     "lyricsNotAvailable": "沒有可用的歌詞",
-    "upNext": "下一個",
+    "upNext": "即將播放",
     "playNext": "播放下一個",
     "stillWatchingContent": "播放已暫停。你還在看嗎？",
     "stillWatchingStop": "停止",
@@ -6426,7 +6426,7 @@
         }
     },
     "liveTv": "電視直播",
-    "continueWatchingAndNextUp": "繼續觀看並繼續觀看",
+    "continueWatchingAndNextUp": "繼續觀看與接下來播放",
     "downloadingBatchProgress": "正在下載 {current}/{total} — {fileName}",
     "@downloadingBatchProgress": {
         "placeholders": {
@@ -6507,7 +6507,7 @@
     "@contextMenuRemoveFromFavorites": {
         "description": "Context menu action to remove an item from favorites"
     },
-    "contextMenuGoToSeries": "前往系列",
+    "contextMenuGoToSeries": "前往劇集",
     "@contextMenuGoToSeries": {
         "description": "Context menu action to navigate to the parent series of an episode"
     },
@@ -6515,7 +6515,7 @@
     "settingsAccountSecurity": "帳戶與安全",
     "settingsAccountSecuritySubtitle": "身份驗證、PIN 碼和家長控制",
     "settingsPersonalization": "個人化",
-    "settingsPersonalizationSubtitle": "主題、導航、主行和庫可見性",
+    "settingsPersonalizationSubtitle": "主題、導覽、首頁和媒體庫顯示設定",
     "settingsDynamicContent": "動態內容",
     "settingsDynamicContentSubtitle": "媒體欄和視覺覆蓋",
     "settingsPlaybackSyncplay": "回放 & SyncPlay",
@@ -6531,15 +6531,15 @@
     "settingsGeneralStyle": "通用風格",
     "settingsGeneralStyleSubtitle": "主題口音、背景、觀看指示器和主題音樂",
     "settingsHomePage": "首頁",
-    "settingsHomePageSubtitle": "部分、圖像類型、疊加和媒體預覽",
-    "settingsLibrariesSubtitle": "庫可見性、資料夾視圖和多伺服器行為",
+    "settingsHomePageSubtitle": "首頁區段、圖片類型、浮層和媒體預覽",
+    "settingsLibrariesSubtitle": "媒體庫顯示、資料夾檢視和多伺服器行為",
     "settingsTwentyFourHourClock": "24 小時制",
     "settingsTwentyFourHourClockSubtitle": "無論何時顯示時鐘，都使用 24 小時時間格式",
     "settingsShowShuffleButtonInNavigation": "在導覽列中顯示隨機播放按鈕",
-    "settingsShowGenresButtonInNavigation": "在導覽列中顯示流派按鈕",
+    "settingsShowGenresButtonInNavigation": "在導覽列中顯示類型按鈕",
     "settingsShowFavoritesButtonInNavigation": "在導覽列中顯示收藏夾按鈕",
     "settingsShowLibrariesButtonInNavigation": "在導覽列中顯示庫按鈕",
-    "settingsLibraryVisibilitySubtitle": "切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。",
+    "settingsLibraryVisibilitySubtitle": "切換各媒體庫在首頁的顯示狀態。重新啟動 Moonfin 後設定才會生效。",
     "settingsMediaBarAndLocalPreviews": "媒體欄和本地預覽",
     "settingsVisualOverlays": "視覺疊加",
     "settingsSeasonalSurprise": "季節性驚喜",
@@ -6654,8 +6654,8 @@
     "settingsSyncplayMinimumSkipDelay": "最小跳躍延遲",
     "settingsSyncplayExtraOffset": "SyncPlay 額外偏移",
     "onNow": "現在播出",
-    "collections": "收藏",
-    "lastPlayed": "上次玩過",
+    "collections": "合輯",
+    "lastPlayed": "上次播放",
     "libraryNameWithServer": "{libraryName}（{serverName}）",
     "@libraryNameWithServer": {
         "description": "Library name display with server suffix for multi-server views",
@@ -6668,7 +6668,7 @@
             }
         }
     },
-    "latestLibraryName": "Latest {libraryName}",
+    "latestLibraryName": "最近新增的 {libraryName}",
     "@latestLibraryName": {
         "description": "Row title for latest media in a specific library",
         "placeholders": {
@@ -6690,16 +6690,16 @@
     "@desktopUiScale": {
         "description": "Setting for desktop UI scale"
     },
-    "nextUpDisplay": "下一個顯示",
+    "nextUpDisplay": "接下來播放提示視窗",
     "@nextUpDisplay": {
         "description": "Setting for next up behavior"
     },
-    "settingsNextUpDisplayDescription": "擴展顯示包含劇集插圖和描述的完整卡片。最小顯示緊湊的倒數疊加。禁用會完全隱藏提示。",
+    "settingsNextUpDisplayDescription": "「擴展」模式顯示單集劇照與倒數視窗。「精簡」模式僅顯示倒數視窗。「停用」模式會完全隱藏提示。",
     "playerTooltipFloatOnTop": "浮在上面",
     "@playerTooltipFloatOnTop": {
         "description": "Tooltip label for enabling always-on-top in desktop player"
     },
-    "playerTooltipExitFloatOnTop": "禁用頂部浮動",
+    "playerTooltipExitFloatOnTop": "取消視窗置頂",
     "@playerTooltipExitFloatOnTop": {
         "description": "Tooltip label for disabling always-on-top in desktop player"
     },
@@ -7050,29 +7050,29 @@
     "savedThemesManageSubtitle": "管理此裝置上已下載的外掛程式主題",
     "themeEditor": "主題編輯器",
     "themeEditorSubtitle": "在您的瀏覽器中開啟 Moonfin 主題編輯器",
-    "homeScreen": "主畫面",
+    "homeScreen": "首頁畫面",
     "bottomBar": "底部列",
     "homeRowsStyleClassic": "經典",
     "homeRowsStyleModern": "現代",
-    "homeRowsSection": "主畫面列",
+    "homeRowsSection": "首頁列",
     "rowsType": "Rows Type",
     "rowsTypeDescription": "「經典」保留各列的圖片類型與資訊覆蓋層。「現代」使用直式轉背景圖的列。",
     "displayFavoritesRows": "顯示我的最愛列",
-    "displayFavoritesRowsSubtitle": "在主畫面區段中顯示最愛電影、影集及其他最愛列。",
+    "displayFavoritesRowsSubtitle": "在首頁中顯示收藏的電影、劇集及其他收藏列。",
     "favoritesRowSorting": "我的最愛列排序",
     "favoritesRowSortingDescription": "依加入日期、上映日期、字母順序等方式排序我的最愛列。",
     "displayCollectionsRows": "顯示合輯列",
-    "displayCollectionsRowsSubtitle": "在主畫面區段中顯示合輯列。",
+    "displayCollectionsRowsSubtitle": "在首頁中顯示合輯列。",
     "collectionsRowSorting": "合輯列排序",
     "collectionsRowSortingDescription": "依加入日期、上映日期、字母順序等方式排序合輯列。",
     "displayGenresRows": "顯示類型列",
-    "displayGenresRowsSubtitle": "在主畫面區段中顯示類型列。",
+    "displayGenresRowsSubtitle": "在首頁中顯示類型列。",
     "genresRowSorting": "類型列排序",
     "genresRowSortingDescription": "依加入日期、上映日期、字母順序等方式排序類型列。",
     "genresRowItems": "類型列項目",
-    "genresRowItemsDescription": "在類型列中顯示電影、影集或兩者。",
+    "genresRowItemsDescription": "在類型列中顯示電影、劇集或兩者。",
     "appearance": "外觀",
-    "cardSize": "Card Size",
+    "cardSize": "首頁列項目尺寸",
     "externalPlayerApp": "外部播放器應用程式",
     "externalPlayerAskEachTimeSubtitle": "開始播放時顯示應用程式選擇器。",
     "loadingInstalledPlayers": "正在載入已安裝的播放器...",
@@ -7087,8 +7087,8 @@
     "mediaPlayerBehavior": "媒體播放器行為",
     "playbackEnhancements": "播放增強功能",
     "alwaysOn": "一律開啟。",
-    "replaceSkipOutroWithNextUpDisplay": "以「下一集」顯示取代「略過片尾」",
-    "replaceSkipOutroWithNextUpDisplaySubtitle": "顯示「下一集」覆蓋層，而非「略過片尾」按鈕。",
+    "replaceSkipOutroWithNextUpDisplay": "用「接下來播放」取代「跳過片尾」",
+    "replaceSkipOutroWithNextUpDisplaySubtitle": "顯示「接下來播放」覆蓋「跳過片尾」按鈕。",
     "playerRouting": "播放器路由",
     "preferSoftwareDecoders": "優先使用軟體解碼器",
     "preferSoftwareDecodersSubtitle": "在硬體解碼器之前優先使用 FFmpeg（音訊）與 libgav1（AV1）。若 HDMI 音訊直通發生問題請停用。",
@@ -7113,7 +7113,7 @@
             }
         }
     },
-    "webDiagnosticsDetail": "詳細資料：{detail}",
+    "webDiagnosticsDetail": "詳細資訊：{detail}",
     "@webDiagnosticsDetail": {
         "description": "Error detail shown in diagnostics summary",
         "placeholders": {
@@ -7164,7 +7164,7 @@
     "photoAlbums": "相簿",
     "photos": "相片",
     "people": "人物",
-    "recentlyReleasedEpisodes": "最近上架的集數",
+    "recentlyReleasedEpisodes": "最近發行的單集",
     "watchAgain": "再看一次",
     "guestAppearances": "客串演出",
     "appearancesSeerr": "演出（Seerr）",
@@ -7201,7 +7201,7 @@
         }
     },
     "analyticsNoIndexedMediaTotals": "此選擇尚無可用的已建立索引媒體總數。",
-    "analyticsLibraryDetails": "媒體庫詳細資料",
+    "analyticsLibraryDetails": "媒體庫詳細資訊",
     "analyticsLibraryBreakdown": "媒體庫細目",
     "analyticsNoLibrariesAvailable": "沒有可用的媒體庫。",
     "adminServerAdministrationTitle": "伺服器管理",
@@ -7304,7 +7304,7 @@
     "loadingShuffle": "正在載入隨機播放...",
     "libraryShuffleLabel": "媒體庫隨機播放",
     "randomShuffleLabel": "隨機播放",
-    "genresShuffleLabel": "類型隨機播放",
+    "genresShuffleLabel": "按類型隨機播放",
     "autoHdrSwitching": "自動切換 HDR",
     "autoHdrSwitchingDescription": "播放 HDR 影片時自動啟用 HDR，並在結束時還原顯示模式。",
     "whenFullscreen": "全螢幕時",
@@ -7326,7 +7326,7 @@
     "@empty": {
         "description": "Label indicating a section or category is empty"
     },
-    "detailScreenStyle": "詳細資料頁樣式",
+    "detailScreenStyle": "詳細資訊頁樣式",
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
@@ -7366,7 +7366,7 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Moonfin 推薦",
     "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Moonfin Recommends"
     },
@@ -7649,7 +7649,7 @@
             }
         }
     },
-    "themeMusicSettingsSubtitle": "詳細資料頁、主畫面列與音量",
+    "themeMusicSettingsSubtitle": "詳細頁、首頁及音量的設定",
     "@themeMusicSettingsSubtitle": {
         "description": "Subtitle for the Theme Music settings sub-category tile"
     },
@@ -7749,10 +7749,6 @@
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
     },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n（無損）",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
-    },
     "settingsAudioFallbackCodecMp3": "MP3\n（僅支援立體聲）",
     "@settingsAudioFallbackCodecMp3": {
         "description": "Fallback codec option: MP3"
@@ -7833,7 +7829,7 @@
     "@subtitleModeForced": {
         "description": "Subtitle mode: only forced"
     },
-    "subtitleModeFlaggedDescription": "播放在媒體檔案中繼資料中標示為「default」或「forced」的字幕軌。",
+    "subtitleModeFlaggedDescription": "播放媒體檔案中繼資料標記為「預設」或「強制」的字幕軌。",
     "@subtitleModeFlaggedDescription": {
         "description": "Description for flagged subtitle mode"
     },
@@ -7845,7 +7841,7 @@
     "@subtitleModeForeignDescription": {
         "description": "Description for foreign subtitle mode"
     },
-    "subtitleModeForcedDescription": "僅載入明確標示 forced 中繼資料旗標的字幕。",
+    "subtitleModeForcedDescription": "僅載入明確標記為「強制」的字幕。",
     "@subtitleModeForcedDescription": {
         "description": "Description for forced subtitle mode"
     },
@@ -7871,7 +7867,7 @@
     "@showSeerrButton": {
         "description": "Setting for showing Seerr button"
     },
-    "groupItemsIntoCollections": "將項目歸入合輯",
+    "groupItemsIntoCollections": "將影片歸類至系列合輯",
     "@groupItemsIntoCollections": {
         "description": "Setting for grouping items into collections"
     },
@@ -7883,7 +7879,7 @@
     "@groupItemsIntoCollectionsDialogTitle": {
         "description": "Title of the alert dialog explaining server settings requirement"
     },
-    "groupItemsIntoCollectionsDialogMessage": "若要使用此設定，請確認您的 Jellyfin 或 Emby 伺服器中，該媒體庫的「顯示」設定已啟用「Group movies into collections」及／或「Group shows into collections」。",
+    "groupItemsIntoCollectionsDialogMessage": "若要使用此設定，請確保您的 Jellyfin 或 Emby 伺服器在「媒體庫」的「顯示」中，啟用「將電影分組到系列合輯」和/或「將劇集分組到系列合輯」的設定。",
     "@groupItemsIntoCollectionsDialogMessage": {
         "description": "Message of the alert dialog explaining server settings requirement"
     },
@@ -7895,11 +7891,11 @@
     "@enableTrailerAudio": {
         "description": "Description for trailer audio"
     },
-    "fullScreenRows": "展開主畫面列",
+    "fullScreenRows": "展開首頁列",
     "@fullScreenRows": {
         "description": "Setting for full screen home rows"
     },
-    "fullScreenRowsDescription": "每個畫面僅顯示一列主畫面列",
+    "fullScreenRowsDescription": "每個畫面僅顯示一列首頁內容",
     "@fullScreenRowsDescription": {
         "description": "Description for full screen home rows"
     },
@@ -8057,7 +8053,7 @@
             }
         }
     },
-    "partOfCollectionName": "屬於 {name}",
+    "partOfCollectionName": "收錄於 {name}",
     "@partOfCollectionName": {
         "description": "Banner on a movie that belongs to a collection",
         "placeholders": {
@@ -8074,7 +8070,7 @@
     "@requestCollection": {
         "description": "Button to request movies from a collection"
     },
-    "collectionMoviesSummary": "{total} 部電影 · {available} 部可觀看",
+    "collectionMoviesSummary": "共 {total} 部電影 · {available} 部可觀看",
     "@collectionMoviesSummary": {
         "description": "Collection header summary line",
         "placeholders": {
@@ -8261,7 +8257,7 @@
     "adminLibrarySectionEmbedded": "內嵌資訊",
     "adminLibrarySectionSubtitles": "字幕",
     "adminLibrarySectionImages": "圖片",
-    "adminLibrarySectionSeries": "影集",
+    "adminLibrarySectionSeries": "劇集",
     "adminLibrarySectionMusic": "音樂",
     "adminLibrarySectionMovies": "電影",
     "adminLibRealtimeMonitor": "啟用即時監控",
@@ -8277,7 +8273,7 @@
     "adminLibFolderView": "顯示資料夾檢視以呈現原始媒體資料夾",
     "adminLibSpecialsInSeasons": "將特別篇顯示於其首播的季別中",
     "adminLibGroupMovies": "將電影歸入合輯",
-    "adminLibGroupShows": "將影集歸入合輯",
+    "adminLibGroupShows": "將劇集歸入合輯",
     "adminLibExternalSuggestions": "在建議中顯示外部內容",
     "adminLibDateAddedSection": "加入日期行為",
     "adminLibDateAddedLabel": "加入日期的依據",
@@ -8321,7 +8317,7 @@
     "adminLibTrickplayExtraction": "啟用 Trickplay 圖片擷取",
     "adminLibTrickplayDuringScan": "在媒體庫掃描期間擷取 Trickplay 圖片",
     "adminLibSaveTrickplayWithMedia": "將 Trickplay 圖片儲存至媒體資料夾",
-    "adminLibAutomaticSeriesGrouping": "自動合併散落於多個資料夾的影集",
+    "adminLibAutomaticSeriesGrouping": "自動合併散落於多個資料夾的劇集",
     "adminLibSeasonZeroName": "第零季顯示名稱",
     "adminLibLufsScan": "啟用 LUFS 掃描以進行音量正規化",
     "adminLibPreferNonstandardArtist": "優先使用非標準的 artists 標籤",
@@ -8337,7 +8333,7 @@
     "adminUnratedMovie": "電影",
     "adminUnratedMusic": "音樂",
     "adminUnratedTrailer": "預告片",
-    "adminUnratedSeries": "影集",
+    "adminUnratedSeries": "劇集",
     "adminAccessSchedules": "存取時間表",
     "adminAccessSchedulesHint": "僅允許在下方排定的時段內存取。未設定時間表時，全天皆可存取。",
     "adminAddSchedule": "新增時間表",
@@ -8516,7 +8512,7 @@
     "@contextMenuHideFromContinueWatching": {
         "description": "Context menu action to hide an item from the Continue Watching section"
     },
-    "contextMenuHideFromNextUp": "從「下一集」中隱藏",
+    "contextMenuHideFromNextUp": "從接下來播放中隱藏",
     "@contextMenuHideFromNextUp": {
         "description": "Context menu action to hide a show from the Next Up section"
     },
@@ -8536,7 +8532,7 @@
     "@settingsAllowSelfSignedCertsSubtitle": {
         "description": "Description for the allow self-signed certificates setting"
     },
-    "settingsDetailsScreen": "詳細資料頁",
+    "settingsDetailsScreen": "詳細資訊頁",
     "settingsDetailsScreenSubtitle": "樣式、背景模糊與分頁行為",
     "settingsShowSeerrButtonInNavigation": "在導覽列中顯示 Seerr 按鈕",
     "settingsAlwaysExpandNavbarLabels": "在頂端導覽列中一律顯示文字標籤",
@@ -8556,7 +8552,7 @@
     "@settingsNone": {
         "description": "Option label to hide all decorations on media segment countdown overlay"
     },
-    "recentlyReleasedLibraryName": "最近上架的{libraryName}",
+    "recentlyReleasedLibraryName": "最近發行的 {libraryName}",
     "@recentlyReleasedLibraryName": {
         "description": "Row title for recently released media in a specific library",
         "placeholders": {
@@ -8573,11 +8569,11 @@
     "@enableTunnelingSubtitle": {
         "description": "Setting subtitle for enable tunneling"
     },
-    "showMediaDetailsOnLibraryPage": "顯示媒體詳細資料",
+    "showMediaDetailsOnLibraryPage": "顯示媒體詳細資訊",
     "@showMediaDetailsOnLibraryPage": {
         "description": "Setting title to show/hide focused media details at the top of the library page"
     },
-    "showMediaDetailsOnLibraryPageDescription": "在媒體庫頁面頂端顯示所選項目的詳細資料。",
+    "showMediaDetailsOnLibraryPageDescription": "在媒體庫頁面頂端顯示所選項目的詳細資訊。",
     "@showMediaDetailsOnLibraryPageDescription": {
         "description": "Setting description to show/hide focused media details at the top of the library page"
     },
@@ -8603,17 +8599,17 @@
             }
         }
     },
-    "homeRowDisplay": "主畫面列顯示",
-    "homeRowSections": "主畫面列區段",
-    "homeRowToggles": "主畫面列開關",
-    "homeRowTogglesSubtitle": "啟用或停用以媒體庫為基礎的主畫面列類別",
-    "homeRowTogglesDescription": "啟用下列開關，即可在主畫面區段中顯示對應的列。",
+    "homeRowDisplay": "首頁列顯示",
+    "homeRowSections": "首頁列區段",
+    "homeRowToggles": "首頁列顯示設定",
+    "homeRowTogglesSubtitle": "啟用或停用首頁列的媒體庫類別",
+    "homeRowTogglesDescription": "啟用下列選項，即可在首頁區段中顯示對應的列。",
     "displayPlaylistsRows": "顯示播放清單列",
-    "displayPlaylistsRowsSubtitle": "在主畫面區段中顯示播放清單列。",
+    "displayPlaylistsRowsSubtitle": "在首頁中顯示播放清單列。",
     "playlistsRowSorting": "播放清單列排序",
     "playlistsRowSortingDescription": "依加入日期、上映日期、字母順序等方式排序播放清單列。",
     "displayAudioRows": "顯示音訊列",
-    "displayAudioRowsSubtitle": "在主畫面區段中顯示音訊列。",
+    "displayAudioRowsSubtitle": "在首頁中顯示音樂列。",
     "audioRowsSorting": "音訊列排序",
     "audioRowsSortingDescription": "依加入日期、上映日期、字母順序等方式排序音訊列。",
     "audioPlaylists": "音訊播放清單",
@@ -9005,5 +9001,57 @@
     "imdbMostPopularMovies": "IMDb 最熱門電影",
     "imdbMostPopularTvShows": "IMDb 最熱門電視劇",
     "imdbLowestRatedMovies": "IMDb 評分最低電影",
-    "imdbTopEnglishMovies": "IMDb 評分最高英語電影"
+    "imdbTopEnglishMovies": "IMDb 評分最高英語電影",
+    "nextUpMaxDays": "接下來播放最長保留天數",
+    "@nextUpMaxDays": {
+        "description": "Setting for how far back the Next Up row reaches"
+    },
+    "nextUpMaxDaysDescription": "電視劇在上次觀看後，於接下來播放中保留的時間",
+    "@nextUpMaxDaysDescription": {
+        "description": "Description for the Next Up window setting"
+    },
+    "castMembers": "卡司",
+    "@castMembers": {
+        "description": "Section title for the list of actors and performers in movie and TV metadata. Not the casting-to-a-device action"
+    },
+    "finalizingDownload": "即將完成…",
+    "@finalizingDownload": {
+        "description": "Status label shown while a finished download is being moved to its final location and validated"
+    },
+    "groupByStudio": "製片商",
+    "@groupByStudio": {
+        "description": "Option to group library items by production studio"
+    },
+    "collectionsRowShowEpisodes": "顯示單集",
+    "collectionsRowShowEpisodesSubtitle": "將電視劇展開，單獨顯示每一集。",
+    "genresAndTags": "類型與標籤",
+    "@genresAndTags": {
+        "description": "Button and dialog title for browsing a title's genres, networks and tags"
+    },
+    "requestSeriesOrMovie4k": "請求 4K {type}",
+    "@requestSeriesOrMovie4k": {
+        "description": "Bottom sheet title for requesting media in 4K",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "mergeRecentRowsByTypeDescription": "合併相同類型的媒體庫，並顯示於首頁的「最近新增」和「最近發行」。",
+    "@mergeRecentRowsByTypeDescription": {
+        "description": "Description for merging recent home rows by media type"
+    },
+    "displayStudiosRowsSubtitle": "在首頁中顯示製片商列。",
+    "homeRowsPadding": "首頁列內邊距",
+    "@homeRowsPadding": {
+        "description": "Title for home rows padding setting"
+    },
+    "homeRowsPaddingDescription": "自訂首頁列之間的內邊距",
+    "@homeRowsPaddingDescription": {
+        "description": "Description for home rows padding setting"
+    },
+    "settingsAudioPassthroughMode": "直通",
+    "@settingsAudioPassthroughMode": {
+        "description": "Title of the audio passthrough mode selector"
+    }
 }

@@ -4,6 +4,23 @@ import 'package:drift/drift.dart';
 
 import '../database/offline_database.dart';
 
+/// A download row without its metadata. Status: 1 in progress, 2 complete,
+/// 3 failed.
+typedef DownloadRef = ({
+  String itemId,
+  int downloadStatus,
+  String downloadSource,
+});
+
+/// A completed episode download, with what smart downloads needs to swap it.
+typedef DownloadedEpisodeRef = ({
+  String itemId,
+  String serverId,
+  String seriesId,
+  String qualityPreset,
+  DateTime? downloadedAt,
+});
+
 class OfflineRepository {
   final OfflineDatabase _db;
 
@@ -99,6 +116,202 @@ class OfflineRepository {
           metadataJson == null ? const Value.absent() : Value(metadataJson),
     ));
   }
+
+  /// Merges [patch] into the stored item's UserData, with a null value
+  /// removing the key, so the offline UI shows a queued rating right away.
+  Future<void> patchUserData(String itemId, Map<String, dynamic> patch) async {
+    final item = await getItem(itemId);
+    if (item == null) return;
+
+    Map<String, dynamic> metadata;
+    try {
+      final decoded = jsonDecode(item.metadataJson);
+      metadata = decoded is Map<String, dynamic>
+          ? decoded
+          : <String, dynamic>{};
+    } catch (_) {
+      metadata = <String, dynamic>{};
+    }
+
+    final userData =
+        (metadata['UserData'] as Map?)?.cast<String, dynamic>() ??
+        <String, dynamic>{};
+    patch.forEach((key, value) {
+      if (value == null) {
+        userData.remove(key);
+      } else {
+        userData[key] = value;
+      }
+    });
+    metadata['UserData'] = userData;
+
+    await (_db.update(_db.downloadedItems)
+          ..where((t) => t.itemId.equals(itemId)))
+        .write(DownloadedItemsCompanion(metadataJson: Value(jsonEncode(metadata))));
+  }
+
+  // ---------------------------------------------------------------------
+  // Auto-download subscriptions
+
+  Expression<bool> _subscriptionKey(
+    $AutoDownloadSubscriptionsTable t, {
+    required String seriesId,
+    required String serverId,
+    required String userId,
+  }) =>
+      t.seriesId.equals(seriesId) &
+      t.serverId.equals(serverId) &
+      t.userId.equals(userId);
+
+  SimpleSelectStatement<
+    $AutoDownloadSubscriptionsTable,
+    AutoDownloadSubscription
+  >
+  _accountSubscriptions({required String serverId, required String userId}) =>
+      _db.select(_db.autoDownloadSubscriptions)
+        ..where((t) => t.serverId.equals(serverId) & t.userId.equals(userId))
+        ..orderBy([(t) => OrderingTerm.asc(t.seriesName)]);
+
+  Future<List<AutoDownloadSubscription>> getSubscriptions({
+    required String serverId,
+    required String userId,
+  }) => _accountSubscriptions(serverId: serverId, userId: userId).get();
+
+  Stream<List<AutoDownloadSubscription>> watchSubscriptions({
+    required String serverId,
+    required String userId,
+  }) => _accountSubscriptions(serverId: serverId, userId: userId).watch();
+
+  SimpleSelectStatement<
+    $AutoDownloadSubscriptionsTable,
+    AutoDownloadSubscription
+  >
+  _subscription({
+    required String seriesId,
+    required String serverId,
+    required String userId,
+  }) => _db.select(_db.autoDownloadSubscriptions)
+    ..where(
+      (t) => _subscriptionKey(
+        t,
+        seriesId: seriesId,
+        serverId: serverId,
+        userId: userId,
+      ),
+    );
+
+  Future<AutoDownloadSubscription?> getSubscription({
+    required String seriesId,
+    required String serverId,
+    required String userId,
+  }) => _subscription(
+    seriesId: seriesId,
+    serverId: serverId,
+    userId: userId,
+  ).getSingleOrNull();
+
+  Stream<AutoDownloadSubscription?> watchSubscription({
+    required String seriesId,
+    required String serverId,
+    required String userId,
+  }) => _subscription(
+    seriesId: seriesId,
+    serverId: serverId,
+    userId: userId,
+  ).watchSingleOrNull();
+
+  Future<void> upsertSubscription(AutoDownloadSubscriptionsCompanion row) {
+    return _db.into(_db.autoDownloadSubscriptions).insertOnConflictUpdate(row);
+  }
+
+  Future<void> updateSubscriptionCheck({
+    required String seriesId,
+    required String serverId,
+    required String userId,
+    required DateTime checkedAt,
+    required int queuedCount,
+    String? error,
+  }) async {
+    await (_db.update(_db.autoDownloadSubscriptions)..where(
+          (t) => _subscriptionKey(
+            t,
+            seriesId: seriesId,
+            serverId: serverId,
+            userId: userId,
+          ),
+        ))
+        .write(
+          AutoDownloadSubscriptionsCompanion(
+            lastCheckedAt: Value(checkedAt),
+            lastQueuedCount: Value(queuedCount),
+            lastError: Value(error),
+          ),
+        );
+  }
+
+  Future<void> deleteSubscription({
+    required String seriesId,
+    required String serverId,
+    required String userId,
+  }) async {
+    await (_db.delete(_db.autoDownloadSubscriptions)..where(
+          (t) => _subscriptionKey(
+            t,
+            seriesId: seriesId,
+            serverId: serverId,
+            userId: userId,
+          ),
+        ))
+        .go();
+  }
+
+  /// Every completed episode download that knows its series, without the
+  /// metadata blobs.
+  Future<List<DownloadedEpisodeRef>> getDownloadedEpisodes() async {
+    final t = _db.downloadedItems;
+    final query = _db.selectOnly(t)
+      ..addColumns([
+        t.itemId,
+        t.serverId,
+        t.seriesId,
+        t.qualityPreset,
+        t.downloadedAt,
+      ])
+      ..where(
+        t.downloadStatus.equals(2) &
+            t.type.equals('Episode') &
+            t.seriesId.isNotNull(),
+      );
+    return [
+      for (final row in await query.get())
+        (
+          itemId: row.read(t.itemId)!,
+          serverId: row.read(t.serverId)!,
+          seriesId: row.read(t.seriesId)!,
+          qualityPreset: row.read(t.qualityPreset)!,
+          downloadedAt: row.read(t.downloadedAt),
+        ),
+    ];
+  }
+
+  /// Id, status and source of every download row, without the metadata
+  /// blobs: what batch queueing and the auto-download check need.
+  Future<List<DownloadRef>> getDownloadRefs() async {
+    final t = _db.downloadedItems;
+    final rows = await (_db.selectOnly(
+      t,
+    )..addColumns([t.itemId, t.downloadStatus, t.downloadSource])).get();
+    return [
+      for (final row in rows)
+        (
+          itemId: row.read(t.itemId)!,
+          downloadStatus: row.read(t.downloadStatus)!,
+          downloadSource: row.read(t.downloadSource)!,
+        ),
+    ];
+  }
+
+  // ---------------------------------------------------------------------
 
   Future<void> deleteItem(String itemId) async {
     await (_db.delete(_db.downloadedItems)

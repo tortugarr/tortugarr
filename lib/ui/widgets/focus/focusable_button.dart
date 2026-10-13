@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../util/focus/input_mode_tracker.dart';
 import 'focus_theme.dart';
 import 'focusable_wrapper.dart';
 
@@ -19,6 +18,7 @@ class FocusableButton extends StatelessWidget {
   final VoidCallback? onNavigateRight;
   final VoidCallback? onBack;
   final String? semanticLabel;
+  final bool autoScroll;
 
   const FocusableButton({
     super.key,
@@ -36,6 +36,7 @@ class FocusableButton extends StatelessWidget {
     this.onNavigateRight,
     this.onBack,
     this.semanticLabel,
+    this.autoScroll = false,
   });
 
   @override
@@ -48,6 +49,7 @@ class FocusableButton extends StatelessWidget {
       focusColor: focusColor,
       disableScale: true,
       useBackgroundFocus: true,
+      autoScroll: autoScroll,
       descendantsAreFocusable: false,
       onFocusChange: onFocusChange,
       onNavigateUp: onNavigateUp,
@@ -58,14 +60,12 @@ class FocusableButton extends StatelessWidget {
       semanticLabel: semanticLabel,
       child: Builder(
         builder: (innerContext) {
+          // Dimming on focus alone rather than on the remote's focus ring, so a
+          // pointer that moves focus onto a button brightens it instead of
+          // leaving every button in a menu equally dim.
           final isFocused = Focus.of(innerContext).hasPrimaryFocus;
-          final showFocusedVisual = InputModeTracker.showFocusVisuals(
-            context,
-            isFocused,
-          );
-          final dim = !showFocusedVisual;
           return AnimatedOpacity(
-            opacity: dim ? 0.6 : 1.0,
+            opacity: isFocused ? 1.0 : 0.6,
             duration: FocusTheme.animationDuration,
             child: Padding(padding: padding, child: child),
           );

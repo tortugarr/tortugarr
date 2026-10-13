@@ -1,0 +1,1696 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../../../../util/platform_detection.dart';
+import '../../../../widgets/marquee_text.dart';
+import '../../../../widgets/overlay_sheet.dart';
+import '../../detail_layout_metrics.dart';
+
+class NouveauAction {
+  final String label;
+  final IconData? icon;
+  final Widget Function(double size, Color color)? iconBuilder;
+  final VoidCallback onPressed;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onFocused;
+  final VoidCallback? onArrowUp;
+  final VoidCallback? onArrowDown;
+  final VoidCallback? onArrowLeft;
+  final VoidCallback? onArrowRight;
+  final FocusNode? focusNode;
+  final bool autofocus;
+  final bool isActive;
+  final Color? activeColor;
+  final double? progress;
+
+  /// Sits beside the label on the primary button, for the time left on a
+  /// part-watched item.
+  final String? trailingLabel;
+
+  const NouveauAction({
+    required this.label,
+    required this.onPressed,
+    this.icon,
+    this.iconBuilder,
+    this.onLongPress,
+    this.onFocused,
+    this.onArrowUp,
+    this.onArrowDown,
+    this.onArrowLeft,
+    this.onArrowRight,
+    this.focusNode,
+    this.autofocus = false,
+    this.isActive = false,
+    this.activeColor,
+    this.progress,
+    this.trailingLabel,
+  });
+}
+
+bool _nouveauActionsUsePhoneLayout(BuildContext context) {
+  final size = MediaQuery.sizeOf(context);
+
+  return size.height > size.width && size.width < 600;
+}
+
+double _nouveauActionScale(BuildContext context) {
+  final width = MediaQuery.sizeOf(context).width;
+
+  if (width < 700) {
+    return (width / 430.0).clamp(0.84, 1.0);
+  }
+
+  return (width / 1920.0).clamp(0.90, 1.08);
+}
+
+/// The buttons also follow the UI scale, apart from a compact layout, which
+/// keeps its fixed sizes like the rest of the screen. Text already gets the
+/// scale from the text scaler, so font sizes stay on [_nouveauActionScale].
+double _nouveauButtonScale(BuildContext context) =>
+    _nouveauActionScale(context) *
+    (detailIsCompact(context) ? 1.0 : detailDesktopScale());
+
+class NouveauActionButtons extends StatefulWidget {
+  final NouveauAction? primaryAction;
+  final List<NouveauAction> secondaryActions;
+  final int maxVisibleButtons;
+
+  const NouveauActionButtons({
+    super.key,
+    required this.primaryAction,
+    required this.secondaryActions,
+    this.maxVisibleButtons = 0,
+  });
+
+  @override
+  State<NouveauActionButtons> createState() => _NouveauActionButtonsState();
+}
+
+class _NouveauActionButtonsState extends State<NouveauActionButtons> {
+  static const int _maxSecondaryActionsWithoutOverflow = 3;
+  static const int _visibleSecondaryActionsWithOverflow = 2;
+
+  final FocusNode _overflowFocusNode = FocusNode(
+    debugLabel: 'nouveau-actions-overflow',
+  );
+
+  final ScrollController _scrollController = ScrollController();
+  bool _canScrollLeft = false;
+  bool _canScrollRight = false;
+  bool _hasOverflow = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_updateScrollMetrics);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateScrollMetrics());
+  }
+
+  @override
+  void didUpdateWidget(covariant NouveauActionButtons oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateScrollMetrics());
+  }
+
+  void _updateScrollMetrics() {
+    if (!mounted || !_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    if (!position.hasContentDimensions) return;
+    final maxScroll = position.maxScrollExtent;
+    final hasOverflow = maxScroll > 0;
+    final canLeft = position.pixels > 0;
+    final canRight = position.pixels < maxScroll;
+    if (hasOverflow != _hasOverflow ||
+        canLeft != _canScrollLeft ||
+        canRight != _canScrollRight) {
+      setState(() {
+        _hasOverflow = hasOverflow;
+        _canScrollLeft = canLeft;
+        _canScrollRight = canRight;
+      });
+    }
+  }
+
+  void _scrollBy(double delta) {
+    if (!_scrollController.hasClients) return;
+    final target = (_scrollController.offset + delta).clamp(
+      0.0,
+      _scrollController.position.maxScrollExtent,
+    );
+    _scrollController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 240),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  bool get _usesOverflow {
+    if (widget.maxVisibleButtons == -1) {
+      return false;
+    }
+    if (widget.maxVisibleButtons == 1) {
+      return widget.secondaryActions.isNotEmpty;
+    }
+    if (widget.maxVisibleButtons > 1) {
+      final maxSecondary = widget.maxVisibleButtons - 1;
+      return widget.secondaryActions.length > maxSecondary;
+    }
+    return widget.secondaryActions.length > _maxSecondaryActionsWithoutOverflow;
+  }
+
+  List<NouveauAction> get _visibleSecondaryActions {
+    if (!_usesOverflow) {
+      return widget.secondaryActions;
+    }
+    if (widget.maxVisibleButtons == 1) {
+      return const <NouveauAction>[];
+    }
+    if (widget.maxVisibleButtons > 1) {
+      final visibleCount = widget.maxVisibleButtons - 1;
+      return widget.secondaryActions.take(visibleCount).toList(growable: false);
+    }
+    return widget.secondaryActions
+        .take(_visibleSecondaryActionsWithOverflow)
+        .toList(growable: false);
+  }
+
+  /// The More button stands in for the actions it hides, so it takes its
+  /// directions from the last of them. The right-edge hand-off lives on that
+  /// action, and it is always one of the ones folded into the overflow.
+  NouveauAction? get _lastSecondaryAction =>
+      widget.secondaryActions.isEmpty ? null : widget.secondaryActions.last;
+
+  List<NouveauAction> get _overflowActions {
+    if (!_usesOverflow) {
+      return const <NouveauAction>[];
+    }
+    if (widget.maxVisibleButtons == 1) {
+      return widget.secondaryActions;
+    }
+    if (widget.maxVisibleButtons > 1) {
+      final visibleCount = widget.maxVisibleButtons - 1;
+      return widget.secondaryActions.skip(visibleCount).toList(growable: false);
+    }
+    return widget.secondaryActions
+        .skip(_visibleSecondaryActionsWithOverflow)
+        .toList(growable: false);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_updateScrollMetrics);
+    _scrollController.dispose();
+    _overflowFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  void _scrollToStart() {
+    if (!mounted || !_scrollController.hasClients) return;
+    if (_scrollController.offset > 0) {
+      _scrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
+
+  void _scrollToItem(BuildContext itemContext) {
+    if (!mounted || !_scrollController.hasClients) return;
+    final itemBox = itemContext.findRenderObject() as RenderBox?;
+    final viewportBox = context.findRenderObject() as RenderBox?;
+    if (itemBox == null || !itemBox.hasSize || viewportBox == null || !viewportBox.hasSize) return;
+
+    final itemGlobalX = itemBox.localToGlobal(Offset.zero).dx;
+    final viewportGlobalX = viewportBox.localToGlobal(Offset.zero).dx;
+    final offsetInViewport = itemGlobalX - viewportGlobalX;
+    final contentX = _scrollController.offset + offsetInViewport;
+    final itemWidth = itemBox.size.width;
+    final viewportWidth = viewportBox.size.width;
+
+    double targetOffset = contentX + (itemWidth / 2.0) - (viewportWidth / 2.0);
+    final maxOffset = _scrollController.position.maxScrollExtent;
+    targetOffset = targetOffset.clamp(0.0, maxOffset);
+
+    if ((targetOffset - _scrollController.offset).abs() > 1.0) {
+      _scrollController.animateTo(
+        targetOffset,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
+
+  void _focusPrimary() {
+    final node = widget.primaryAction?.focusNode;
+
+    if (node != null && node.canRequestFocus) {
+      node.requestFocus();
+    }
+    _scrollToStart();
+  }
+
+  void _focusSecondary(int index) {
+    final actions = _visibleSecondaryActions;
+
+    if (index < 0 || index >= actions.length) {
+      return;
+    }
+
+    final node = actions[index].focusNode;
+
+    if (node != null && node.canRequestFocus) {
+      node.requestFocus();
+    }
+  }
+
+  void _focusOverflow() {
+    if (_overflowFocusNode.canRequestFocus) {
+      _overflowFocusNode.requestFocus();
+    }
+  }
+
+  Future<void> _showOverflowActions(BuildContext context) async {
+    final actions = _overflowActions;
+
+    if (actions.isEmpty) {
+      return;
+    }
+
+    final selectedAction = await showFocusRestoringDialog<NouveauAction>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.56),
+      builder: (context) {
+        return _NouveauOverflowDialog(actions: actions);
+      },
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    selectedAction?.onPressed();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryAction = widget.primaryAction;
+    final visibleSecondaryActions = _visibleSecondaryActions;
+    final overflowActions = _overflowActions;
+
+    if (primaryAction == null &&
+        visibleSecondaryActions.isEmpty &&
+        overflowActions.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    if (_nouveauActionsUsePhoneLayout(context)) {
+      return _buildPhoneLayout(
+        context,
+        primaryAction,
+        visibleSecondaryActions,
+        overflowActions,
+      );
+    }
+
+    return _buildStandardLayout(
+      context,
+      primaryAction,
+      visibleSecondaryActions,
+      overflowActions,
+    );
+  }
+
+  Widget _buildPhoneLayout(
+    BuildContext context,
+    NouveauAction? primaryAction,
+    List<NouveauAction> visibleSecondaryActions,
+    List<NouveauAction> overflowActions,
+  ) {
+    final hasSecondary =
+        visibleSecondaryActions.isNotEmpty || overflowActions.isNotEmpty;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (primaryAction != null)
+            SizedBox(
+              width: double.infinity,
+              child: _NouveauPrimaryButton(
+                action: primaryAction,
+                fullWidth: true,
+                onArrowRight: visibleSecondaryActions.isNotEmpty
+                    ? () => _focusSecondary(0)
+                    : overflowActions.isNotEmpty
+                    ? _focusOverflow
+                    : primaryAction.onArrowRight,
+              ),
+            ),
+
+          if (primaryAction != null && hasSecondary) const SizedBox(height: 14),
+
+          if (hasSecondary)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (
+                    var index = 0;
+                    index < visibleSecondaryActions.length;
+                    index++
+                  ) ...[
+                    if (index > 0) const SizedBox(width: 14),
+
+                    _NouveauCircleActionButton(
+                      action: visibleSecondaryActions[index],
+                      compact: true,
+                      onArrowLeft: index == 0
+                          ? primaryAction != null
+                                ? _focusPrimary
+                                : visibleSecondaryActions[index].onArrowLeft
+                          : () => _focusSecondary(index - 1),
+                      onArrowRight: index < visibleSecondaryActions.length - 1
+                          ? () => _focusSecondary(index + 1)
+                          : overflowActions.isNotEmpty
+                          ? _focusOverflow
+                          : visibleSecondaryActions[index].onArrowRight,
+                    ),
+                  ],
+
+                  if (overflowActions.isNotEmpty) ...[
+                    if (visibleSecondaryActions.isNotEmpty)
+                      const SizedBox(width: 14),
+
+                    _NouveauMoreButton(
+                      focusNode: _overflowFocusNode,
+                      compact: true,
+                      onPressed: () => _showOverflowActions(context),
+                      onArrowUp:
+                          _lastSecondaryAction?.onArrowUp ??
+                          primaryAction?.onArrowUp,
+                      onArrowDown:
+                          _lastSecondaryAction?.onArrowDown ??
+                          primaryAction?.onArrowDown,
+                      onArrowLeft: visibleSecondaryActions.isNotEmpty
+                          ? () => _focusSecondary(
+                              visibleSecondaryActions.length - 1,
+                            )
+                          : primaryAction != null
+                          ? _focusPrimary
+                          : null,
+                      onArrowRight: _lastSecondaryAction?.onArrowRight,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStandardLayout(
+    BuildContext context,
+    NouveauAction? primaryAction,
+    List<NouveauAction> visibleSecondaryActions,
+    List<NouveauAction> overflowActions,
+  ) {
+    final scale = _nouveauButtonScale(context);
+
+    final primaryGap = 18.0 * scale;
+    final secondaryGap = 12.0 * scale;
+    final scrolls = widget.maxVisibleButtons == -1;
+
+    final rowChildren = <Widget>[
+      if (primaryAction != null)
+        _NouveauPrimaryButton(
+          action: primaryAction,
+          onFocused: scrolls ? _scrollToStart : null,
+          onArrowRight: visibleSecondaryActions.isNotEmpty
+              ? () => _focusSecondary(0)
+              : overflowActions.isNotEmpty
+              ? _focusOverflow
+              : primaryAction.onArrowRight,
+        ),
+
+      if (primaryAction != null &&
+          (visibleSecondaryActions.isNotEmpty || overflowActions.isNotEmpty))
+        SizedBox(width: primaryGap),
+
+      for (var index = 0; index < visibleSecondaryActions.length; index++) ...[
+        if (index > 0) SizedBox(width: secondaryGap),
+
+        _NouveauCircleActionButton(
+          action: visibleSecondaryActions[index],
+          onFocused: scrolls ? _scrollToItem : null,
+          onArrowLeft: index == 0
+              ? primaryAction != null
+                    ? _focusPrimary
+                    : visibleSecondaryActions[index].onArrowLeft
+              : () => _focusSecondary(index - 1),
+          onArrowRight: index < visibleSecondaryActions.length - 1
+              ? () => _focusSecondary(index + 1)
+              : overflowActions.isNotEmpty
+              ? _focusOverflow
+              : visibleSecondaryActions[index].onArrowRight,
+        ),
+      ],
+
+      if (overflowActions.isNotEmpty) ...[
+        if (visibleSecondaryActions.isNotEmpty) SizedBox(width: secondaryGap),
+
+        _NouveauMoreButton(
+          focusNode: _overflowFocusNode,
+          onPressed: () => _showOverflowActions(context),
+          onFocused: scrolls ? _scrollToItem : null,
+          onArrowUp: _lastSecondaryAction?.onArrowUp ?? primaryAction?.onArrowUp,
+          onArrowDown:
+              _lastSecondaryAction?.onArrowDown ?? primaryAction?.onArrowDown,
+          onArrowLeft: visibleSecondaryActions.isNotEmpty
+              ? () => _focusSecondary(visibleSecondaryActions.length - 1)
+              : primaryAction != null
+              ? _focusPrimary
+              : null,
+          onArrowRight: _lastSecondaryAction?.onArrowRight,
+        ),
+      ],
+    ];
+
+    // Only the All setting scrolls. Every other value keeps the plain row.
+    if (!scrolls) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: rowChildren,
+        ),
+      );
+    }
+
+    final showDesktopChevrons =
+        _hasOverflow &&
+        PlatformDetection.useDesktopUi &&
+        !PlatformDetection.isTV;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _updateScrollMetrics(),
+        );
+
+        final availableWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+
+        final scrollRow = NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            _updateScrollMetrics();
+            return false;
+          },
+          child: SizedBox(
+            width: availableWidth,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.hardEdge,
+              physics: PlatformDetection.isTV
+                  ? const NeverScrollableScrollPhysics()
+                  : const BouncingScrollPhysics(),
+              // Room for a focused button to grow and cast its shadow
+              // without the scroller clipping it.
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 12.0,
+                  right: 80.0,
+                  top: 10.0,
+                  bottom: 38.0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: rowChildren,
+                ),
+              ),
+            ),
+          ),
+        );
+
+        if (!showDesktopChevrons) {
+          return scrollRow;
+        }
+
+        const double chevronStep = 180.0;
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: availableWidth,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Focus(
+                    canRequestFocus: false,
+                    skipTraversal: true,
+                    descendantsAreFocusable: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.chevron_left),
+                      onPressed: _canScrollLeft
+                          ? () => _scrollBy(-chevronStep)
+                          : null,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
+                  Focus(
+                    canRequestFocus: false,
+                    skipTraversal: true,
+                    descendantsAreFocusable: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.chevron_right),
+                      onPressed: _canScrollRight
+                          ? () => _scrollBy(chevronStep)
+                          : null,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            scrollRow,
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _NouveauPrimaryButton extends StatefulWidget {
+  final NouveauAction action;
+  final VoidCallback? onFocused;
+  final VoidCallback? onArrowRight;
+  final bool fullWidth;
+
+  const _NouveauPrimaryButton({
+    required this.action,
+    this.onFocused,
+    this.onArrowRight,
+    this.fullWidth = false,
+  });
+
+  @override
+  State<_NouveauPrimaryButton> createState() =>
+      _NouveauPrimaryButtonState();
+}
+
+class _NouveauPrimaryButtonState extends State<_NouveauPrimaryButton> {
+  bool _focused = false;
+  bool _hovered = false;
+
+  bool get _highlighted => _focused || _hovered;
+
+  @override
+  Widget build(BuildContext context) {
+    final action = widget.action;
+    final scale = _nouveauButtonScale(context);
+    final textScale = _nouveauActionScale(context);
+
+    final phone = _nouveauActionsUsePhoneLayout(context);
+
+    final progress = action.progress?.clamp(0.0, 1.0).toDouble();
+
+    final showProgress = progress != null && progress > 0 && progress < 1;
+
+    final height = phone ? 54.0 : 62.0 * scale;
+
+    final labelStyle = TextStyle(
+      color: _highlighted ? Colors.black : Colors.white,
+      fontSize: phone ? 15.5 : 16.5 * textScale,
+      fontWeight: FontWeight.w700,
+      height: 1,
+      letterSpacing: -0.1,
+    );
+
+    return Focus(
+      focusNode: action.focusNode,
+      autofocus: action.autofocus,
+      onFocusChange: (focused) {
+        if (_focused == focused) {
+          return;
+        }
+
+        setState(() {
+          _focused = focused;
+        });
+
+        if (focused) {
+          action.onFocused?.call();
+          widget.onFocused?.call();
+        }
+      },
+      onKeyEvent: (_, event) {
+        if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+          return KeyEventResult.ignored;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          final callback = action.onArrowUp;
+
+          if (callback == null) {
+            return KeyEventResult.ignored;
+          }
+
+          callback();
+
+          return KeyEventResult.handled;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          final callback = action.onArrowDown;
+
+          if (callback == null) {
+            return KeyEventResult.ignored;
+          }
+
+          callback();
+
+          return KeyEventResult.handled;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          final callback = action.onArrowLeft;
+
+          if (callback == null) {
+            return KeyEventResult.ignored;
+          }
+
+          callback();
+
+          return KeyEventResult.handled;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          final callback = widget.onArrowRight;
+
+          if (callback == null) {
+            return KeyEventResult.ignored;
+          }
+
+          callback();
+
+          return KeyEventResult.handled;
+        }
+
+        if (event is KeyDownEvent &&
+            (event.logicalKey == LogicalKeyboardKey.select ||
+                event.logicalKey == LogicalKeyboardKey.enter ||
+                event.logicalKey == LogicalKeyboardKey.space)) {
+          action.onPressed();
+
+          return KeyEventResult.handled;
+        }
+
+        return KeyEventResult.ignored;
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) {
+          if (_hovered) {
+            return;
+          }
+
+          setState(() {
+            _hovered = true;
+          });
+        },
+        onExit: (_) {
+          if (!_hovered) {
+            return;
+          }
+
+          setState(() {
+            _hovered = false;
+          });
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: action.onPressed,
+          onLongPress: action.onLongPress,
+          child: AnimatedScale(
+            scale: _focused
+                ? phone
+                      ? 1.015
+                      : 1.06
+                : _hovered
+                ? phone
+                      ? 1.01
+                      : 1.025
+                : 1,
+            duration: const Duration(milliseconds: 170),
+            curve: Curves.easeOutCubic,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 170),
+              curve: Curves.easeOutCubic,
+              width: widget.fullWidth ? double.infinity : null,
+              height: height,
+              constraints: widget.fullWidth
+                  ? const BoxConstraints()
+                  : BoxConstraints(minWidth: 0, maxWidth: 270.0 * scale),
+              padding: EdgeInsets.symmetric(
+                horizontal: phone ? 20 : 23.0 * scale,
+              ),
+              decoration: BoxDecoration(
+                color: _highlighted
+                    ? Colors.white
+                    : Colors.black.withValues(alpha: phone ? 0.40 : 0.34),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: _highlighted
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: phone ? 0.24 : 0.20),
+                  width: 1,
+                ),
+                boxShadow: _focused
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.42),
+                          blurRadius: phone ? 18 : 26.0 * scale,
+                          offset: Offset(0, phone ? 5 : 8.0 * scale),
+                        ),
+                      ]
+                    : null,
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: widget.fullWidth
+                          ? MainAxisSize.max
+                          : MainAxisSize.min,
+                      mainAxisAlignment: widget.fullWidth
+                          ? MainAxisAlignment.center
+                          : MainAxisAlignment.start,
+                      children: [
+                        _ActionIcon(
+                          action: action,
+                          size: phone ? 20 : 21.0 * scale,
+                          color: _highlighted ? Colors.black : Colors.white,
+                        ),
+                        SizedBox(width: phone ? 10 : 12.0 * scale),
+                        // The pill is width capped, so a long label scrolls
+                        // while focused instead of losing its end. The phone
+                        // button is full width and never needs it.
+                        Flexible(
+                          child: _highlighted && !phone
+                              ? MarqueeText(
+                                  text: action.label,
+                                  style: labelStyle,
+                                )
+                              : Text(
+                                  action.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: labelStyle,
+                                ),
+                        ),
+                        // The label yields its width to this, so the time
+                        // left stays readable on a narrow button.
+                        if (action.trailingLabel case final trailing?) ...[
+                          SizedBox(width: phone ? 8 : 9.0 * scale),
+                          Text(
+                            trailing,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: (_highlighted ? Colors.black : Colors.white)
+                                  .withValues(alpha: 0.62),
+                              fontSize: phone ? 13 : 13.5 * textScale,
+                              fontWeight: FontWeight.w600,
+                              height: 1,
+                              letterSpacing: -0.1,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+
+                  if (showProgress)
+                    Positioned(
+                      left: phone ? 18 : 20.0 * scale,
+                      right: phone ? 18 : 20.0 * scale,
+                      bottom: phone ? 7 : 8.0 * scale,
+                      height: phone ? 2 : (2.0 * scale).clamp(2.0, 3.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(999),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final progressWidth =
+                                constraints.maxWidth * progress;
+
+                            final backgroundColor = _highlighted
+                                ? Colors.black.withValues(alpha: 0.10)
+                                : Colors.white.withValues(alpha: 0.18);
+
+                            final progressColor = _highlighted
+                                ? Colors.black.withValues(alpha: 0.68)
+                                : Colors.white.withValues(alpha: 0.72);
+
+                            return Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                ColoredBox(color: backgroundColor),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                    width: progressWidth,
+                                    child: ColoredBox(color: progressColor),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NouveauCircleActionButton extends StatefulWidget {
+  final NouveauAction action;
+  final VoidCallback? onArrowLeft;
+  final VoidCallback? onArrowRight;
+  final void Function(BuildContext context)? onFocused;
+  final bool compact;
+
+  const _NouveauCircleActionButton({
+    required this.action,
+    this.onArrowLeft,
+    this.onArrowRight,
+    this.onFocused,
+    this.compact = false,
+  });
+
+  @override
+  State<_NouveauCircleActionButton> createState() =>
+      _NouveauCircleActionButtonState();
+}
+
+class _NouveauCircleActionButtonState
+    extends State<_NouveauCircleActionButton> {
+  Timer? _tooltipTimer;
+
+  bool _focused = false;
+  bool _hovered = false;
+  bool _tooltipVisible = false;
+
+  bool get _highlighted => _focused || _hovered;
+
+  void _scheduleTooltip({required Duration delay}) {
+    _tooltipTimer?.cancel();
+
+    _tooltipTimer = Timer(delay, () {
+      if (!mounted || (!_focused && !_hovered)) {
+        return;
+      }
+
+      if (_tooltipVisible) {
+        return;
+      }
+
+      setState(() {
+        _tooltipVisible = true;
+      });
+    });
+  }
+
+  void _hideTooltip() {
+    _tooltipTimer?.cancel();
+    _tooltipTimer = null;
+
+    if (!_tooltipVisible || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _tooltipVisible = false;
+    });
+  }
+
+  void _handleFocusChanged(bool focused) {
+    if (_focused == focused) {
+      return;
+    }
+
+    setState(() {
+      _focused = focused;
+    });
+
+    if (focused) {
+      widget.action.onFocused?.call();
+
+      _scheduleTooltip(delay: const Duration(milliseconds: 80));
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_focused) return;
+        widget.onFocused?.call(context);
+      });
+
+      return;
+    }
+
+    if (!_hovered) {
+      _hideTooltip();
+    }
+  }
+
+  void _handlePointerEnter() {
+    if (!_hovered) {
+      setState(() {
+        _hovered = true;
+      });
+    }
+
+    if (!_focused) {
+      _scheduleTooltip(delay: const Duration(milliseconds: 350));
+    }
+  }
+
+  void _handlePointerExit() {
+    if (_hovered) {
+      setState(() {
+        _hovered = false;
+      });
+    }
+
+    if (!_focused) {
+      _hideTooltip();
+    }
+  }
+
+  @override
+  void dispose() {
+    _tooltipTimer?.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final action = widget.action;
+
+    final activeColor = action.activeColor ?? Colors.white;
+
+    final scale = _nouveauButtonScale(context);
+
+    final size = widget.compact ? 52.0 : 64.0 * scale;
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Focus(
+            focusNode: action.focusNode,
+            autofocus: action.autofocus,
+            onFocusChange: _handleFocusChanged,
+            onKeyEvent: (_, event) {
+              if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+                return KeyEventResult.ignored;
+              }
+
+              if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                final callback = action.onArrowUp;
+
+                if (callback == null) {
+                  return KeyEventResult.ignored;
+                }
+
+                callback();
+
+                return KeyEventResult.handled;
+              }
+
+              if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                final callback = action.onArrowDown;
+
+                if (callback == null) {
+                  return KeyEventResult.ignored;
+                }
+
+                callback();
+
+                return KeyEventResult.handled;
+              }
+
+              if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                final callback = widget.onArrowLeft;
+
+                if (callback == null) {
+                  return KeyEventResult.ignored;
+                }
+
+                callback();
+
+                return KeyEventResult.handled;
+              }
+
+              if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+                final callback = widget.onArrowRight;
+
+                if (callback == null) {
+                  return KeyEventResult.ignored;
+                }
+
+                callback();
+
+                return KeyEventResult.handled;
+              }
+
+              if (event is KeyDownEvent &&
+                  (event.logicalKey == LogicalKeyboardKey.select ||
+                      event.logicalKey == LogicalKeyboardKey.enter ||
+                      event.logicalKey == LogicalKeyboardKey.space)) {
+                action.onPressed();
+
+                return KeyEventResult.handled;
+              }
+
+              return KeyEventResult.ignored;
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => _handlePointerEnter(),
+              onExit: (_) => _handlePointerExit(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: action.onPressed,
+                onLongPress: action.onLongPress,
+                child: AnimatedScale(
+                  scale: _highlighted
+                      ? widget.compact
+                            ? 1.035
+                            : 1.075
+                      : 1,
+                  duration: const Duration(milliseconds: 160),
+                  curve: Curves.easeOutCubic,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    curve: Curves.easeOutCubic,
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      color: _highlighted
+                          ? Colors.white
+                          : Colors.black.withValues(
+                              alpha: widget.compact ? 0.34 : 0.28,
+                            ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _highlighted
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.18),
+                        width: 1,
+                      ),
+                      boxShadow: _highlighted
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.34),
+                                blurRadius: widget.compact ? 16 : 22.0 * scale,
+                                offset: Offset(
+                                  0,
+                                  widget.compact ? 5 : 7.0 * scale,
+                                ),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Center(
+                      child: _ActionIcon(
+                        action: action,
+                        size: widget.compact ? 20 : 22.0 * scale,
+                        color: _highlighted
+                            ? Colors.black
+                            : action.isActive
+                            ? activeColor
+                            : Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          if (_tooltipVisible)
+            Positioned(
+              top: size + 8.0 * scale,
+              child: _NouveauActionTooltip(label: action.label),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NouveauMoreButton extends StatefulWidget {
+  final FocusNode focusNode;
+  final VoidCallback onPressed;
+  final void Function(BuildContext context)? onFocused;
+  final VoidCallback? onArrowUp;
+  final VoidCallback? onArrowDown;
+  final VoidCallback? onArrowLeft;
+  final VoidCallback? onArrowRight;
+  final bool compact;
+
+  const _NouveauMoreButton({
+    required this.focusNode,
+    required this.onPressed,
+    this.onFocused,
+    this.onArrowUp,
+    this.onArrowDown,
+    this.onArrowLeft,
+    this.onArrowRight,
+    this.compact = false,
+  });
+
+  @override
+  State<_NouveauMoreButton> createState() => _NouveauMoreButtonState();
+}
+
+class _NouveauMoreButtonState extends State<_NouveauMoreButton> {
+  Timer? _tooltipTimer;
+
+  bool _focused = false;
+  bool _hovered = false;
+  bool _tooltipVisible = false;
+
+  bool get _highlighted => _focused || _hovered;
+
+  void _scheduleTooltip({required Duration delay}) {
+    _tooltipTimer?.cancel();
+
+    _tooltipTimer = Timer(delay, () {
+      if (!mounted || (!_focused && !_hovered)) {
+        return;
+      }
+
+      if (_tooltipVisible) {
+        return;
+      }
+
+      setState(() {
+        _tooltipVisible = true;
+      });
+    });
+  }
+
+  void _hideTooltip() {
+    _tooltipTimer?.cancel();
+    _tooltipTimer = null;
+
+    if (!_tooltipVisible || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _tooltipVisible = false;
+    });
+  }
+
+  void _handleFocusChanged(bool focused) {
+    if (_focused == focused) {
+      return;
+    }
+
+    setState(() {
+      _focused = focused;
+    });
+
+    if (focused) {
+      _scheduleTooltip(delay: const Duration(milliseconds: 80));
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_focused) return;
+        widget.onFocused?.call(context);
+      });
+
+      return;
+    }
+
+    if (!_hovered) {
+      _hideTooltip();
+    }
+  }
+
+  void _handlePointerEnter() {
+    if (!_hovered) {
+      setState(() {
+        _hovered = true;
+      });
+    }
+
+    if (!_focused) {
+      _scheduleTooltip(delay: const Duration(milliseconds: 350));
+    }
+  }
+
+  void _handlePointerExit() {
+    if (_hovered) {
+      setState(() {
+        _hovered = false;
+      });
+    }
+
+    if (!_focused) {
+      _hideTooltip();
+    }
+  }
+
+  @override
+  void dispose() {
+    _tooltipTimer?.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _nouveauButtonScale(context);
+
+    final size = widget.compact ? 52.0 : 64.0 * scale;
+
+    final moreLabel = MaterialLocalizations.of(context).moreButtonTooltip;
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Focus(
+            focusNode: widget.focusNode,
+            onFocusChange: _handleFocusChanged,
+            onKeyEvent: (_, event) {
+              if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+                return KeyEventResult.ignored;
+              }
+
+              // This is the last button in the row once overflow kicks in, so
+              // it carries the same four directions its siblings do.
+              final arrow = switch (event.logicalKey) {
+                LogicalKeyboardKey.arrowUp => widget.onArrowUp,
+                LogicalKeyboardKey.arrowDown => widget.onArrowDown,
+                LogicalKeyboardKey.arrowLeft => widget.onArrowLeft,
+                LogicalKeyboardKey.arrowRight => widget.onArrowRight,
+                _ => null,
+              };
+
+              if (arrow != null) {
+                arrow();
+
+                return KeyEventResult.handled;
+              }
+
+              if (event is KeyDownEvent &&
+                  (event.logicalKey == LogicalKeyboardKey.select ||
+                      event.logicalKey == LogicalKeyboardKey.enter ||
+                      event.logicalKey == LogicalKeyboardKey.space)) {
+                widget.onPressed();
+
+                return KeyEventResult.handled;
+              }
+
+              return KeyEventResult.ignored;
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              onEnter: (_) => _handlePointerEnter(),
+              onExit: (_) => _handlePointerExit(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: widget.onPressed,
+                child: AnimatedScale(
+                  scale: _highlighted
+                      ? widget.compact
+                            ? 1.035
+                            : 1.075
+                      : 1,
+                  duration: const Duration(milliseconds: 160),
+                  curve: Curves.easeOutCubic,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    curve: Curves.easeOutCubic,
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      color: _highlighted
+                          ? Colors.white
+                          : Colors.black.withValues(
+                              alpha: widget.compact ? 0.34 : 0.28,
+                            ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _highlighted
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.18),
+                        width: 1,
+                      ),
+                      boxShadow: _highlighted
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.34),
+                                blurRadius: widget.compact ? 16 : 22.0 * scale,
+                                offset: Offset(
+                                  0,
+                                  widget.compact ? 5 : 7.0 * scale,
+                                ),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Icon(
+                      Icons.more_horiz_rounded,
+                      size: widget.compact ? 22 : 25.0 * scale,
+                      color: _highlighted ? Colors.black : Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          if (_tooltipVisible)
+            Positioned(
+              top: size + 8.0 * scale,
+              child: _NouveauActionTooltip(label: moreLabel),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NouveauActionTooltip extends StatelessWidget {
+  final String label;
+
+  const _NouveauActionTooltip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _nouveauButtonScale(context);
+
+    return IgnorePointer(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, child) {
+          return Opacity(
+            opacity: value,
+            child: Transform.translate(
+              offset: Offset(0, -3 * (1 - value)),
+              child: child,
+            ),
+          );
+        },
+        child: Material(
+          type: MaterialType.transparency,
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 220.0 * scale),
+            padding: EdgeInsets.symmetric(
+              horizontal: 11.0 * scale,
+              vertical: 6.0 * scale,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1C1C1E).withValues(alpha: 0.96),
+              borderRadius: BorderRadius.circular(8.0 * scale),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.30),
+                  blurRadius: 12.0 * scale,
+                  offset: Offset(0, 4.0 * scale),
+                ),
+              ],
+            ),
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13.0 * _nouveauActionScale(context),
+                fontWeight: FontWeight.w600,
+                height: 1.1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NouveauOverflowDialog extends StatelessWidget {
+  final List<NouveauAction> actions;
+
+  const _NouveauOverflowDialog({required this.actions});
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _nouveauActionScale(context);
+
+    final phone = _nouveauActionsUsePhoneLayout(context);
+
+    return Dialog(
+      backgroundColor: const Color(0xFF17181A),
+      surfaceTintColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: phone ? 20 : 48.0 * scale,
+        vertical: phone ? 32 : 48.0 * scale,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(phone ? 20 : 22.0 * scale),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: phone ? 0 : 320.0 * scale,
+          maxWidth: phone ? 420 : 440.0 * scale,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(phone ? 10 : 12.0 * scale),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var index = 0; index < actions.length; index++)
+                _NouveauOverflowActionTile(
+                  action: actions[index],
+                  autofocus: index == 0,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NouveauOverflowActionTile extends StatefulWidget {
+  final NouveauAction action;
+  final bool autofocus;
+
+  const _NouveauOverflowActionTile({
+    required this.action,
+    this.autofocus = false,
+  });
+
+  @override
+  State<_NouveauOverflowActionTile> createState() =>
+      _NouveauOverflowActionTileState();
+}
+
+class _NouveauOverflowActionTileState
+    extends State<_NouveauOverflowActionTile> {
+  bool _focused = false;
+  bool _hovered = false;
+
+  bool get _highlighted => _focused || _hovered;
+
+  @override
+  Widget build(BuildContext context) {
+    final action = widget.action;
+
+    final activeColor = action.activeColor ?? Colors.white;
+
+    final scale = _nouveauActionScale(context);
+
+    final phone = _nouveauActionsUsePhoneLayout(context);
+
+    return Focus(
+      autofocus: widget.autofocus,
+      onFocusChange: (focused) {
+        if (_focused == focused) {
+          return;
+        }
+
+        setState(() {
+          _focused = focused;
+        });
+      },
+      onKeyEvent: (_, event) {
+        if (event is! KeyDownEvent) {
+          return KeyEventResult.ignored;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.select ||
+            event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space) {
+          Navigator.of(context).pop(action);
+
+          return KeyEventResult.handled;
+        }
+
+        // The tiles are a single column, so Up and Down walk it and the
+        // horizontal keys stay inside rather than escaping to the barrier.
+        if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          return FocusScope.of(context).focusInDirection(TraversalDirection.up)
+              ? KeyEventResult.handled
+              : KeyEventResult.ignored;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          return FocusScope.of(context).focusInDirection(TraversalDirection.down)
+              ? KeyEventResult.handled
+              : KeyEventResult.ignored;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+            event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          return KeyEventResult.handled;
+        }
+
+        return KeyEventResult.ignored;
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) {
+          if (_hovered) {
+            return;
+          }
+
+          setState(() {
+            _hovered = true;
+          });
+        },
+        onExit: (_) {
+          if (!_hovered) {
+            return;
+          }
+
+          setState(() {
+            _hovered = false;
+          });
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.of(context).pop(action);
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 120),
+            curve: Curves.easeOutCubic,
+            width: double.infinity,
+            constraints: BoxConstraints(minHeight: phone ? 56 : 58.0 * scale),
+            margin: EdgeInsets.symmetric(vertical: phone ? 2 : 2.0 * scale),
+            padding: EdgeInsets.symmetric(
+              horizontal: phone ? 16 : 18.0 * scale,
+              vertical: phone ? 12 : 13.0 * scale,
+            ),
+            decoration: BoxDecoration(
+              color: _highlighted
+                  ? Colors.white.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(phone ? 12 : 12.0 * scale),
+            ),
+            child: Row(
+              children: [
+                _ActionIcon(
+                  action: action,
+                  size: phone ? 21 : 23.0 * scale,
+                  color: action.isActive ? activeColor : Colors.white,
+                ),
+                SizedBox(width: phone ? 13 : 14.0 * scale),
+                Expanded(
+                  child: Text(
+                    action.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: action.isActive ? activeColor : Colors.white,
+                      fontSize: phone ? 15 : 15.0 * scale,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionIcon extends StatelessWidget {
+  final NouveauAction action;
+  final double size;
+  final Color color;
+
+  const _ActionIcon({
+    required this.action,
+    required this.size,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final builder = action.iconBuilder;
+
+    if (builder != null) {
+      return builder(size, color);
+    }
+
+    final icon = action.icon;
+
+    if (icon == null) {
+      return SizedBox.square(dimension: size);
+    }
+
+    return Icon(icon, size: size, color: color);
+  }
+}

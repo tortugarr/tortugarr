@@ -4,6 +4,8 @@ import 'package:server_core/server_core.dart';
 import '../../util/platform_detection.dart';
 import '../services/connectivity_service.dart';
 import '../services/storage_path_service.dart';
+import '../repositories/offline_repository.dart';
+import '../services/pending_rating_store.dart';
 import 'offline_catalog.dart';
 import 'offline_image_api.dart';
 import 'offline_items_api.dart';
@@ -11,12 +13,9 @@ import 'offline_stub_apis.dart';
 import 'offline_user_views_api.dart';
 
 /// Whether browse and read calls should come from the downloads catalog.
-///
-/// TV can't download, so it keeps the online client and its cached home rows
-/// instead of an empty offline catalog.
 bool shouldUseOfflineCatalog() {
   final getIt = GetIt.instance;
-  return !PlatformDetection.isTV &&
+  return PlatformDetection.supportsOfflineDownloads &&
       getIt.isRegistered<ConnectivityService>() &&
       !getIt<ConnectivityService>().canReachServer;
 }
@@ -46,11 +45,17 @@ class ConnectivityAwareMediaServerClient implements MediaServerClient {
     required bool Function() useOffline,
     required OfflineCatalog catalog,
     required StoragePathService storagePath,
+    required PendingRatingStore pendingRatings,
+    required OfflineRepository offlineRepo,
   }) : _useOffline = useOffline,
        _offlineItems = OfflineItemsApi(catalog, storagePath),
        _offlineImages = OfflineImageApi(catalog, _online.imageApi),
        _offlineViews = OfflineUserViewsApi(catalog),
-       _offlineUserLibrary = OfflineUserLibraryApi(catalog);
+       _offlineUserLibrary = OfflineUserLibraryApi(
+         catalog,
+         pendingRatings: pendingRatings,
+         offlineRepo: offlineRepo,
+       );
 
   /// The wrapped online client, for callers that must never be routed
   /// offline (downloads, sockets, resolvers).
@@ -61,6 +66,10 @@ class ConnectivityAwareMediaServerClient implements MediaServerClient {
 
   @override
   ImageApi get imageApi => _useOffline() ? _offlineImages : _online.imageApi;
+
+  @override
+  TrickplayApi? get trickplayApi =>
+      _useOffline() ? null : _online.trickplayApi;
 
   @override
   UserViewsApi get userViewsApi =>

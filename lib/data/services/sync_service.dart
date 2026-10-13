@@ -5,8 +5,10 @@ import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:server_core/server_core.dart';
 
+import '../../util/server_url.dart';
 import '../database/offline_database.dart';
 import '../repositories/offline_repository.dart';
+import 'pending_rating_store.dart';
 
 enum SyncState { idle, syncing, done, error }
 
@@ -18,22 +20,83 @@ class SyncResult {
 
 class SyncService extends ChangeNotifier {
   final OfflineRepository _offlineRepo;
+  final PendingRatingStore _pendingRatings;
 
   SyncState _state = SyncState.idle;
   SyncState get state => _state;
 
   Timer? _doneResetTimer;
 
-  SyncService(this._offlineRepo);
+  SyncService(this._offlineRepo, this._pendingRatings);
 
-  Future<SyncResult> syncPlaybackProgress(MediaServerClient client) async {
+  /// Pushes ratings queued while offline through [client]. Item ids are only
+  /// unique within one server, so [serverId] scopes the replay to the server
+  /// the client talks to and everything else waits for its own reconnect.
+  ///
+  /// Runs before the metadata refresh on reconnect, so the refreshed items
+  /// come back carrying the rating that was just pushed.
+  Future<SyncResult> syncPendingRatings(
+    MediaServerClient client, {
+    required String? serverId,
+  }) async {
+    if (serverId == null) return const SyncResult(synced: 0, failed: 0);
+
+    var synced = 0, failed = 0;
+    for (final entry in _pendingRatings.all) {
+      if (entry.serverId != serverId) continue;
+      try {
+        if (entry.clear) {
+          await client.userLibraryApi.deleteUserRating(entry.itemId);
+        } else if (entry.rating != null) {
+          await client.userLibraryApi.updateNumericUserRating(
+            entry.itemId,
+            rating: entry.rating!,
+          );
+        } else if (entry.likes != null) {
+          await client.userLibraryApi.updateUserRating(
+            entry.itemId,
+            likes: entry.likes!,
+          );
+        }
+        await _pendingRatings.remove(entry.serverId, entry.itemId);
+        synced++;
+      } catch (e) {
+        debugPrint('[Sync] Failed to push rating for ${entry.itemId}: $e');
+        failed++;
+      }
+    }
+    return SyncResult(synced: synced, failed: failed);
+  }
+
+  /// Whether [row] was downloaded from the server [client] talks to, whose
+  /// app server id is [serverId]. Most writers store that id, a few store the
+  /// server's base URL instead, so a URL-shaped id is matched the way
+  /// MediaServerClientFactory.getClientIfExists resolves one.
+  static bool _isFromServer(
+    DownloadedItem row,
+    MediaServerClient client,
+    String serverId,
+  ) =>
+      isStoredServer(row.serverId, serverId: serverId, baseUrl: client.baseUrl);
+
+  /// Pushes progress recorded offline through [client], furthest progress
+  /// winning. Only rows from [serverId] are touched: a server answers a stop
+  /// report for an item it does not have with success, so another server's
+  /// row would be marked synced without its own server ever hearing of it.
+  Future<SyncResult> syncPlaybackProgress(
+    MediaServerClient client, {
+    required String? serverId,
+  }) async {
+    if (serverId == null) return const SyncResult(synced: 0, failed: 0);
     if (_state == SyncState.syncing) {
       return const SyncResult(synced: 0, failed: 0);
     }
 
     _setState(SyncState.syncing);
 
-    final unsynced = await _offlineRepo.getUnsyncedProgress();
+    final unsynced = (await _offlineRepo.getUnsyncedProgress())
+        .where((row) => _isFromServer(row, client, serverId))
+        .toList();
     if (unsynced.isEmpty) {
       _setState(SyncState.done);
       _scheduleDoneReset();
@@ -148,9 +211,16 @@ class SyncService extends ChangeNotifier {
     return result;
   }
 
-  Future<void> refreshMetadata(MediaServerClient client) async {
-    final items = await _offlineRepo.getItems();
-    for (final item in items.where((i) => i.downloadStatus == 2)) {
+  /// Refreshes the metadata of [serverId]'s completed downloads from
+  /// [client], and pulls newer server progress into rows with nothing left
+  /// to push. Other servers' rows wait for their own server.
+  Future<void> refreshMetadata(
+    MediaServerClient client, {
+    required String? serverId,
+  }) async {
+    if (serverId == null) return;
+    final items = await _offlineRepo.getItems(onlyCompleted: true);
+    for (final item in items.where((i) => _isFromServer(i, client, serverId))) {
       try {
         final serverData = await client.itemsApi.getItem(item.itemId);
         final userData = serverData['UserData'] as Map<String, dynamic>?;
@@ -182,6 +252,7 @@ class SyncService extends ChangeNotifier {
             fileSizeBytes: Value(localItem.fileSizeBytes),
             downloadedAt: Value(localItem.downloadedAt),
             qualityPreset: Value(localItem.qualityPreset),
+            downloadSource: Value(localItem.downloadSource),
             seriesId: Value(localItem.seriesId),
             seasonId: Value(localItem.seasonId),
             seriesName: Value(localItem.seriesName),

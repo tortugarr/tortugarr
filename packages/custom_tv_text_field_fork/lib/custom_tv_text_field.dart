@@ -6,5 +6,8 @@ export 'src/keyboard_controller.dart'
     show
         KeyboardType,
         KeyboardController,
+        CustomKeyboard,
+        KeyboardLayouts,
+        KeyboardLayoutVariant,
         InputPurpose,
         KeyboardSuggestionBuilder;

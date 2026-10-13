@@ -20,21 +20,15 @@ class SeerrNotificationService {
     String? requestId,
     bool isRequest = false,
   }) {
-    if (route.trim().isEmpty) return;
-
+    final target = route.trim();
     final asRequest = isRequest && requestId != null && requestId.isNotEmpty;
 
     // Mobile shows the OS notification alongside the in-app banner; other
     // platforms only get the banner.
     if (PlatformDetection.isMobile) {
-      _showLocal(
-        title,
-        body,
-        route.trim(),
-        requestId: asRequest ? requestId : null,
-      );
+      _showLocal(title, body, target, requestId: asRequest ? requestId : null);
     }
-    _showBanner(title, body, route.trim());
+    _showBanner(title, body, target);
   }
 
   Future<void> _showLocal(
@@ -112,7 +106,7 @@ class SeerrNotificationService {
       context,
       title,
       body,
-      () => appRouter.go(route),
+      route.isEmpty ? null : () => appRouter.go(route),
     );
   }
 

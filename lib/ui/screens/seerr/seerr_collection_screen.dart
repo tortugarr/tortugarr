@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -14,13 +13,19 @@ import '../../../util/platform_detection.dart';
 import '../../navigation/destinations.dart';
 import '../../widgets/library_row.dart';
 import '../../widgets/media_card.dart';
+import '../../widgets/bottom_nav/bottom_navbar.dart';
 import '../../widgets/navigation_layout.dart';
+import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/seerr/seerr_advanced_request_options.dart';
 import '../../widgets/seerr/seerr_quota_row.dart';
 import '../../widgets/seerr/seerr_tv_controls.dart';
 import '../../widgets/track_selector_dialog.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../widgets/skeleton/skeleton_home_row.dart';
+import '../../widgets/skeleton/skeleton_shimmer.dart';
+import '../../widgets/offline_aware_image.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -37,6 +42,7 @@ class SeerrCollectionScreen extends StatefulWidget {
 class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
   SeerrCollectionViewModel? _vm;
   bool _initializing = true;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -67,6 +73,7 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
   void dispose() {
     _vm?.removeListener(_onChanged);
     _vm?.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -83,7 +90,10 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
       backgroundColor: AppColorScheme.background,
       body: NavigationLayout(
         showBackButton: true,
-        child: _buildBody(),
+        child: QuickReturnWrapper(
+          scrollController: _scrollController,
+          child: _buildBody(),
+        ),
       ),
     );
   }
@@ -91,14 +101,11 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
   Widget _buildBody() {
     final l10n = AppLocalizations.of(context);
     final vm = _vm;
-    if (_initializing || vm == null) {
-      return const Center(child: CircularProgressIndicator());
+    if (_initializing || vm == null || (vm.state.isLoading && vm.state.collection == null)) {
+      return _buildSkeleton(context);
     }
 
     final s = vm.state;
-    if (s.isLoading && s.collection == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
 
     if (s.error != null && s.collection == null) {
       return Center(
@@ -106,7 +113,7 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              s.error!,
+              describeError(s.error!, AppLocalizations.of(context)),
               style: TextStyle(
                 color: AppColorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -136,7 +143,7 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
         if (collection.backdropPath != null)
           Opacity(
             opacity: 0.25,
-            child: CachedNetworkImage(
+            child: OfflineAwareImage(
               imageUrl: '$_tmdbBackdropBase${collection.backdropPath}',
               fit: BoxFit.cover,
             ),
@@ -153,21 +160,81 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
             ),
           ),
         ),
-        SingleChildScrollView(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + 56,
-            bottom: 48,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(vm, collection, l10n),
-              const SizedBox(height: 12),
-              _buildPartsRow(vm, l10n),
-            ],
+        BottomNavPadded(
+          fallback: 48,
+          builder: (context, bottom) => SingleChildScrollView(
+            controller: _scrollController,
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + 56,
+              bottom: bottom,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(vm, collection, l10n),
+                const SizedBox(height: 12),
+                _buildPartsRow(vm, l10n),
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSkeleton(BuildContext context) {
+    final topPad = MediaQuery.of(context).padding.top;
+    return SkeletonShimmer(
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.only(top: topPad + 56, bottom: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(_leftInset, 0, 24, 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SkeletonBox(
+                    width: 120,
+                    height: 180,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        SkeletonBox(width: 200, height: 26, borderRadius: BorderRadius.all(Radius.circular(4))),
+                        SizedBox(height: 10),
+                        SkeletonBox(width: 120, height: 16, borderRadius: BorderRadius.all(Radius.circular(4))),
+                        SizedBox(height: 14),
+                        SkeletonBox(width: double.infinity, height: 14, borderRadius: BorderRadius.all(Radius.circular(4))),
+                        SizedBox(height: 8),
+                        SkeletonBox(width: double.infinity, height: 14, borderRadius: BorderRadius.all(Radius.circular(4))),
+                        SizedBox(height: 8),
+                        SkeletonBox(width: 260, height: 14, borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: EdgeInsets.fromLTRB(_leftInset, 0, 24, 12),
+              child: const SkeletonBox(width: 160, height: 20, borderRadius: BorderRadius.all(Radius.circular(4))),
+            ),
+            SkeletonHomeRow(
+              cardWidth: 130,
+              imageHeight: 195,
+              leadingPadding: _leftInset,
+              count: 6,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -192,7 +259,7 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
           if (collection.posterPath != null) ...[
             ClipRRect(
               borderRadius: AppRadius.circular(10),
-              child: CachedNetworkImage(
+              child: OfflineAwareImage(
                 imageUrl: '$_tmdbPosterBase${collection.posterPath}',
                 width: 120,
                 height: 180,
@@ -300,8 +367,10 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
               cardFocusExpansion: cardExpansion,
               suppressFocusGlow: suppressFocusGlow,
               onTap: () => context.push(
-                Destinations.seerrMedia(item.id.toString()),
-                extra: {'mediaType': item.mediaType ?? 'movie'},
+                Destinations.seerrMedia(
+                  item.id.toString(),
+                  mediaType: item.mediaType ?? 'movie',
+                ),
               ),
             ),
           )
@@ -584,7 +653,9 @@ class _CollectionRequestSheetState extends State<_CollectionRequestSheet> {
           ? Text(
               statusLabel,
               style: TextStyle(
-                color: status >= 4 ? Colors.green[300] : Colors.blue[200],
+                color: SeerrMediaStatus.isAvailable(status)
+                    ? Colors.green[300]
+                    : Colors.blue[200],
                 fontSize: 11.5,
               ),
             )

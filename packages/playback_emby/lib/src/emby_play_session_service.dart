@@ -34,6 +34,8 @@ class EmbyPlaySessionService implements PlayerService {
     bool isPaused = false,
     int? audioStreamIndex,
     int? subtitleStreamIndex,
+    int? volumeLevel,
+    bool? isMuted,
   }) async {
     final report = PlaybackProgressReport(
       itemId: MediaStreamResolver.extractItemId(mediaItem),
@@ -43,6 +45,8 @@ class EmbyPlaySessionService implements PlayerService {
       isPaused: isPaused,
       audioStreamIndex: audioStreamIndex,
       subtitleStreamIndex: subtitleStreamIndex,
+      volumeLevel: volumeLevel,
+      isMuted: isMuted ?? false,
     );
     await _client.playbackApi.reportPlaybackProgress(report.toJson());
   }
@@ -51,8 +55,9 @@ class EmbyPlaySessionService implements PlayerService {
   Future<void> onPlaybackStop(
     dynamic mediaItem,
     StreamResolutionResult resolution,
-    Duration position,
-  ) async {
+    Duration position, {
+    bool releaseLiveStream = true,
+  }) async {
     final report = PlaybackStopReport(
       itemId: MediaStreamResolver.extractItemId(mediaItem),
       mediaSourceId: resolution.mediaSourceId,
@@ -71,7 +76,7 @@ class EmbyPlaySessionService implements PlayerService {
     }
 
     final liveStreamId = resolution.liveStreamId;
-    if (liveStreamId != null && liveStreamId.isNotEmpty) {
+    if (releaseLiveStream && liveStreamId != null && liveStreamId.isNotEmpty) {
       try {
         await _client.playbackApi.closeLiveStream(liveStreamId);
       } catch (_) {}

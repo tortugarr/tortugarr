@@ -148,7 +148,7 @@
     "@serverAddressHint": {
         "description": "Hint text for the server URL input field"
     },
-    "connect": "연결하다",
+    "connect": "연결",
     "@connect": {
         "description": "Button to initiate connection to a server"
     },
@@ -160,7 +160,7 @@
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
-    "ok": "좋아요",
+    "ok": "확인",
     "@ok": {
         "description": "Generic OK button label"
     },
@@ -176,7 +176,7 @@
     "@themeMoonfin": {
         "description": "Display name for the Moonfin theme"
     },
-    "themeMoonfinSubtitle": "현재 Moonfin 룩은 여러분 모두가 좋아하게 되었습니다.",
+    "themeMoonfinSubtitle": "모두에게 친숙하고 사랑받는 기존 Moonfin 스타일입니다.",
     "@themeMoonfinSubtitle": {
         "description": "Preview description for the Moonfin theme"
     },
@@ -204,7 +204,7 @@
     "@tryAgain": {
         "description": "Button to retry a failed operation"
     },
-    "noLinkedServers": "이 Emby Connect 계정에 연결된 서버가 없습니다.",
+    "noLinkedServers": "이 Emby Connect 계정에 연결된 서버가 없습니다",
     "@noLinkedServers": {
         "description": "Error when Emby Connect account has no linked servers"
     },
@@ -216,11 +216,11 @@
     "@invalidEmbyConnectLogin": {
         "description": "Error for wrong Emby Connect credentials"
     },
-    "embyConnectExchangeNotSupported": "서버는 Emby Connect 교환을 지원하지 않습니다.",
+    "embyConnectExchangeNotSupported": "서버는 Emby Connect 교환을 지원하지 않습니다",
     "@embyConnectExchangeNotSupported": {
         "description": "Error when server lacks Emby Connect exchange endpoint"
     },
-    "embyConnectNetworkError": "Emby Connect 또는 선택한 서버에 접속하는 중 네트워크 오류가 발생했습니다.",
+    "embyConnectNetworkError": "Emby Connect 또는 선택한 서버에 접속하는 중 네트워크 오류가 발생했습니다",
     "@embyConnectNetworkError": {
         "description": "Generic network error during Emby Connect flow"
     },
@@ -232,7 +232,7 @@
     "@connectingToServerEllipsis": {
         "description": "Status text while connecting to a selected server"
     },
-    "noReachableAddress": "연락 가능한 주소가 제공되지 않았습니다.",
+    "noReachableAddress": "연락 가능한 주소가 제공되지 않았습니다",
     "@noReachableAddress": {
         "description": "Shown when a discovered server has no usable address"
     },
@@ -261,7 +261,7 @@
     "@exit": {
         "description": "Exit button label"
     },
-    "noHomeRowsLoaded": "홈 행을 로드할 수 없습니다.",
+    "noHomeRowsLoaded": "홈 행을 로드할 수 없습니다",
     "@noHomeRowsLoaded": {
         "description": "Heading when home screen has no rows to display"
     },
@@ -305,7 +305,7 @@
     "@genres": {
         "description": "Genres navigation label"
     },
-    "collectionPlaceholder": "컬렉션 항목이 여기에 표시됩니다.",
+    "collectionPlaceholder": "컬렉션 항목이 여기에 표시됩니다",
     "@collectionPlaceholder": {
         "description": "Placeholder text for empty collection screen"
     },
@@ -313,7 +313,7 @@
     "@browseByLetter": {
         "description": "Title for alphabetical browse screen"
     },
-    "alphabeticalBrowsePlaceholder": "여기에 알파벳순 검색이 표시됩니다.",
+    "alphabeticalBrowsePlaceholder": "여기에 알파벳순 검색이 표시됩니다",
     "@alphabeticalBrowsePlaceholder": {
         "description": "Placeholder text for alphabetical browse screen"
     },
@@ -321,15 +321,15 @@
     "@suggestions": {
         "description": "Title for suggestions screen"
     },
-    "suggestionsPlaceholder": "추천 항목이 여기에 표시됩니다.",
+    "suggestionsPlaceholder": "추천 항목이 여기에 표시됩니다",
     "@suggestionsPlaceholder": {
         "description": "Placeholder text for suggestions screen"
     },
-    "failedToLoadLibraries": "라이브러리를 로드하지 못했습니다.",
+    "failedToLoadLibraries": "라이브러리를 로드하지 못했습니다",
     "@failedToLoadLibraries": {
         "description": "Error when library list cannot be loaded"
     },
-    "noLibrariesFound": "라이브러리를 찾을 수 없습니다.",
+    "noLibrariesFound": "라이브러리를 찾을 수 없습니다",
     "@noLibrariesFound": {
         "description": "Empty state when no libraries are available"
     },
@@ -345,7 +345,7 @@
     "@allGenres": {
         "description": "Title for the all genres screen"
     },
-    "noGenresFound": "장르를 찾을 수 없습니다.",
+    "noGenresFound": "장르를 찾을 수 없습니다",
     "@noGenresFound": {
         "description": "Empty state when no genres are available"
     },
@@ -358,7 +358,7 @@
             }
         }
     },
-    "thisFolderIsEmpty": "이 폴더는 비어 있습니다.",
+    "thisFolderIsEmpty": "이 폴더는 비어 있습니다",
     "@thisFolderIsEmpty": {
         "description": "Empty state for folder browse screen"
     },
@@ -371,7 +371,7 @@
             }
         }
     },
-    "failedToLoadFavorites": "즐겨찾기를 로드하지 못했습니다.",
+    "failedToLoadFavorites": "즐겨찾기를 로드하지 못했습니다",
     "@failedToLoadFavorites": {
         "description": "Error when favorites cannot be loaded"
     },
@@ -379,7 +379,7 @@
     "@retry": {
         "description": "Button label to retry a failed operation"
     },
-    "noFavoritesYet": "아직 즐겨찾기가 없습니다.",
+    "noFavoritesYet": "아직 즐겨찾기가 없습니다",
     "@noFavoritesYet": {
         "description": "Empty state when user has no favorites"
     },
@@ -477,7 +477,7 @@
     "@noSavedBookmarks": {
         "description": "Empty state in book bookmarks dialog"
     },
-    "openBook": "오픈북",
+    "openBook": "도서 열기",
     "@openBook": {
         "description": "Button to open a book for reading"
     },
@@ -489,7 +489,7 @@
     "@page": {
         "description": "Bookmark mode label for pdf/comic format"
     },
-    "bookmark": "서표",
+    "bookmark": "북마크",
     "@bookmark": {
         "description": "Generic bookmark mode label"
     },
@@ -601,7 +601,7 @@
     "@resume": {
         "description": "Primary action label for resuming reading"
     },
-    "failedToLoadLibrary": "라이브러리를 로드하지 못했습니다.",
+    "failedToLoadLibrary": "라이브러리를 로드하지 못했습니다",
     "@failedToLoadLibrary": {
         "description": "Error when a library cannot be loaded"
     },
@@ -629,7 +629,7 @@
     "@bookHighlightsDescription": {
         "description": "Subtitle for saved highlights section"
     },
-    "handPickedFromLibrary": "도서관에서 직접 고른 것입니다.",
+    "handPickedFromLibrary": "라이브러리에서 직접 선택했습니다.",
     "@handPickedFromLibrary": {
         "description": "Subtitle for primary book rail from library"
     },
@@ -661,7 +661,7 @@
     "@searchYourLibrary": {
         "description": "Placeholder text in library search bar"
     },
-    "pickUpStory": "중단한 이야기를 다시 시작하세요.",
+    "pickUpStory": "중단한 이야기를 다시 시작하세요",
     "@pickUpStory": {
         "description": "Hero card subtitle for library and audiobook sections"
     },
@@ -741,7 +741,7 @@
     "@browseByGenre": {
         "description": "Collection picker dialog title for genre browse"
     },
-    "discover": "발견하다",
+    "discover": "둘러보기",
     "@discover": {
         "description": "Section title for book discovery"
     },
@@ -749,7 +749,7 @@
     "@trendingTitlesOpenLibrary": {
         "description": "Subtitle for book discovery section"
     },
-    "noBookmarkedItems": "아직 북마크한 항목이 없습니다.",
+    "noBookmarkedItems": "아직 북마크한 항목이 없습니다",
     "@noBookmarkedItems": {
         "description": "Empty state for bookmarks grid"
     },
@@ -818,7 +818,7 @@
     "@author": {
         "description": "Organize mode label for grouping by author"
     },
-    "unknownAuthor": "알 수 없는 작성자",
+    "unknownAuthor": "알 수 없는 저자",
     "@unknownAuthor": {
         "description": "Fallback text when book author is not available"
     },
@@ -854,7 +854,7 @@
     "@rssFeed": {
         "description": "Button label for RSS feed external link"
     },
-    "downloadZip": "우편번호 다운로드",
+    "downloadZip": "ZIP 다운로드",
     "@downloadZip": {
         "description": "Button label for zip download external link"
     },
@@ -927,11 +927,11 @@
     "@trackList": {
         "description": "AppBar title for the item list screen"
     },
-    "itemListPlaceholder": "여기에 항목 목록이 표시됩니다.",
+    "itemListPlaceholder": "여기에 항목 목록이 표시됩니다",
     "@itemListPlaceholder": {
         "description": "Placeholder text for an empty item list screen"
     },
-    "failedToLoad": "로드하지 못했습니다.",
+    "failedToLoad": "로드하지 못했습니다",
     "@failedToLoad": {
         "description": "Error message when item detail fails to load"
     },
@@ -1179,11 +1179,11 @@
     "@deleteItemMessage": {
         "description": "Confirmation message for deleting an item"
     },
-    "failedToDeletePlaylist": "재생목록을 삭제하지 못했습니다.",
+    "failedToDeletePlaylist": "재생목록을 삭제하지 못했습니다",
     "@failedToDeletePlaylist": {
         "description": "Error message when playlist deletion fails"
     },
-    "failedToDeleteItem": "항목을 삭제하지 못했습니다.",
+    "failedToDeleteItem": "항목을 삭제하지 못했습니다",
     "@failedToDeleteItem": {
         "description": "Error message when item deletion fails"
     },
@@ -1208,7 +1208,7 @@
             }
         }
     },
-    "downloadedTracksDeleted": "다운로드한 트랙이 삭제되었습니다.",
+    "downloadedTracksDeleted": "다운로드한 트랙이 삭제되었습니다",
     "@downloadedTracksDeleted": {
         "description": "Success message after deleting downloaded tracks"
     },
@@ -1664,7 +1664,7 @@
     "@deviceVolume": {
         "description": "Label for device volume control in cast dialog"
     },
-    "unavailable": "없는",
+    "unavailable": "사용할 수 없음",
     "@unavailable": {
         "description": "Label when a feature is unavailable"
     },
@@ -1706,11 +1706,11 @@
     "@castingToGoogleCast": {
         "description": "Cast mini bar label for Google Cast"
     },
-    "castingViaAirPlay": "AirPlay를 통해 전송",
+    "castingViaAirPlay": "AirPlay로 전송 중",
     "@castingViaAirPlay": {
         "description": "Cast mini bar label for AirPlay"
     },
-    "castingViaDlna": "DLNA를 통해 캐스팅",
+    "castingViaDlna": "DLNA로 전송 중",
     "@castingViaDlna": {
         "description": "Cast mini bar label for DLNA"
     },
@@ -2686,7 +2686,7 @@
     "@watchedIndicators": {
         "description": "Setting for watched indicator display"
     },
-    "always": "언제나",
+    "always": "항상",
     "@always": {
         "description": "Option: always"
     },
@@ -2698,7 +2698,7 @@
     "@episodesOnly": {
         "description": "Option: episodes only"
     },
-    "never": "절대",
+    "never": "안 함",
     "@never": {
         "description": "Option: never"
     },
@@ -2746,7 +2746,7 @@
     "@inVideo": {
         "description": "Option: show in video"
     },
-    "seasonalEffects": "계절적 영향",
+    "seasonalEffects": "시즌 효과",
     "@seasonalEffects": {
         "description": "Setting for seasonal visual effects"
     },
@@ -3073,7 +3073,7 @@
     "@resumeAndSkip": {
         "description": "Section title for resume and skip settings"
     },
-    "resumeRewind": "이력서 되감기",
+    "resumeRewind": "이어보기 시 되감기",
     "@resumeRewind": {
         "description": "Setting for resume rewind"
     },
@@ -3264,7 +3264,7 @@
     "@customizationProfile": {
         "description": "Setting for customization profile"
     },
-    "customizationProfileDescription": "로드, 편집, 동기화할 프로필을 선택하세요. 장치 프로필이 이를 재정의하지 않는 한 전역은 모든 곳에 적용됩니다. 녹색 점은 현재 장치 프로필을 표시합니다.",
+    "customizationProfileDescription": "로드, 편집, 동기화할 프로필을 선택하세요. 기기 프로필이 재정의하지 않는 한 전역 프로필이 모든 곳에 적용됩니다. 녹색 점은 현재 기기 프로필을 나타냅니다.",
     "@customizationProfileDescription": {
         "description": "Description for customization profile"
     },
@@ -3316,7 +3316,7 @@
     "@storageUsed": {
         "description": "Label for storage used"
     },
-    "manage": "관리하다",
+    "manage": "관리",
     "@manage": {
         "description": "Button to manage storage"
     },
@@ -3360,7 +3360,7 @@
     "@changeDownloadLocationDescription": {
         "description": "Description for changing download location"
     },
-    "confirm": "확인하다",
+    "confirm": "확인",
     "@confirm": {
         "description": "Button to confirm an action"
     },
@@ -3376,7 +3376,7 @@
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
-    "enable": "할 수 있게 하다",
+    "enable": "활성화",
     "@enable": {
         "description": "Button to enable a feature"
     },
@@ -3468,7 +3468,7 @@
     "@indigo": {
         "description": "Color: indigo"
     },
-    "libraryDisplay": "도서관 전시",
+    "libraryDisplay": "라이브러리 표시",
     "@libraryDisplay": {
         "description": "Section title for library display settings"
     },
@@ -3480,7 +3480,7 @@
     "@thumbnailLabel": {
         "description": "Image type: thumbnail"
     },
-    "bannerLabel": "기치",
+    "bannerLabel": "배너",
     "@bannerLabel": {
         "description": "Image type: banner"
     },
@@ -3508,7 +3508,7 @@
     "@showFolderBrowsingOption": {
         "description": "Description for folder view"
     },
-    "libraryVisibility": "도서관 가시성",
+    "libraryVisibility": "라이브러리 가시성",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
@@ -3577,7 +3577,7 @@
     "@enableMediaBar": {
         "description": "Setting for enabling media bar"
     },
-    "showFeaturedContentSlideshow": "집에서 추천 콘텐츠 슬라이드쇼 표시",
+    "showFeaturedContentSlideshow": "홈에서 추천 콘텐츠 슬라이드쇼 표시",
     "@showFeaturedContentSlideshow": {
         "description": "Description for enable media bar"
     },
@@ -3669,7 +3669,7 @@
     "@resumeAudio": {
         "description": "Home section: resume audio"
     },
-    "resumeBooks": "이력서 도서",
+    "resumeBooks": "이어볼 도서",
     "@resumeBooks": {
         "description": "Home section: resume books"
     },
@@ -3753,11 +3753,11 @@
     "@noContentRatingsFound": {
         "description": "Shown when no ratings exist on server"
     },
-    "couldNotLoadServerRatings": "서버 등급을 로드할 수 없습니다. 저장된 평가만 표시됩니다.",
+    "couldNotLoadServerRatings": "서버 평가를 불러오지 못했습니다. 저장된 평가만 표시합니다.",
     "@couldNotLoadServerRatings": {
         "description": "Shown when ratings fail to load"
     },
-    "couldNotRefreshRatings": "서버에서 평가를 새로 고칠 수 없습니다. 저장된 평가를 표시합니다.",
+    "couldNotRefreshRatings": "서버에서 평가를 새로고침하지 못했습니다. 저장된 평가를 표시합니다.",
     "@couldNotRefreshRatings": {
         "description": "Shown when ratings fail to refresh"
     },
@@ -3801,7 +3801,7 @@
     "@mode": {
         "description": "Setting for mode"
     },
-    "libraryArt": "도서관 예술",
+    "libraryArt": "라이브러리 아트워크",
     "@libraryArt": {
         "description": "Screensaver mode: library art"
     },
@@ -4207,7 +4207,7 @@
     "@openReleasesPage": {
         "description": "Option to open the GitHub releases page in a browser (Linux)"
     },
-    "navigation": "항해",
+    "navigation": "탐색",
     "@navigation": {
         "description": "Navigation settings title"
     },
@@ -4223,7 +4223,7 @@
     "@navbarStyleToolbarAppearance": {
         "description": "Navigation settings subtitle"
     },
-    "reorderToggleHomeRows": "홈 행 재정렬 및 ​​전환",
+    "reorderToggleHomeRows": "홈 행 재정렬 및 전환",
     "@reorderToggleHomeRows": {
         "description": "Home sections settings subtitle"
     },
@@ -4252,7 +4252,7 @@
     "@clear": {
         "description": "Button to clear"
     },
-    "browse": "먹다",
+    "browse": "찾아보기",
     "@browse": {
         "description": "Button to browse files"
     },
@@ -4306,11 +4306,11 @@
             }
         }
     },
-    "approve": "승인하다",
+    "approve": "승인",
     "@approve": {
         "description": "Tooltip/button to approve a request"
     },
-    "declineAction": "감소",
+    "declineAction": "거절",
     "@declineAction": {
         "description": "Tooltip/button to decline a request"
     },
@@ -4343,7 +4343,7 @@
             }
         }
     },
-    "keep": "유지하다",
+    "keep": "유지",
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
@@ -4526,12 +4526,12 @@
     "disable": "장애를 입히다",
     "done": "완료",
     "edit": "편집",
-    "encoding": "부호화",
+    "encoding": "인코딩",
     "error": "오류",
     "forward": "앞으로",
     "general": "일반",
     "go": "가다",
-    "install": "설치하다",
+    "install": "설치",
     "installed": "설치됨",
     "interval": "간격",
     "name": "이름",
@@ -4541,17 +4541,17 @@
     "paused": "일시중지됨",
     "permissions": "권한",
     "processing": "처리",
-    "profile": "윤곽",
+    "profile": "프로필",
     "provider": "공급자",
     "refresh": "새로 고치다",
     "remote": "원격",
     "rename": "이름 바꾸기",
     "revoke": "취소",
     "role": "역할",
-    "root": "뿌리",
-    "run": "달리다",
+    "root": "루트",
+    "run": "실행",
     "search": "검색",
-    "select": "선택하다",
+    "select": "선택",
     "send": "보내다",
     "sessions": "세션",
     "set": "세트",
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "서버 재부팅 진행 중",
-    "adminServerRebootMessage": "서버 재부팅이 진행 중입니다. Moonfin을 다시 시작해주세요",
+    "adminServerRebootMessage": "서버 재부팅이 진행 중입니다. Moonfin을 다시 시작해주세요.",
     "adminActiveSessions": "활성 세션",
     "adminSessionsLoadFailed": "세션을 로드하지 못했습니다.",
     "adminNoActiveSessions": "활성 세션 없음",
@@ -4672,12 +4672,12 @@
     "sessionRewind": "되감기",
     "sessionForward": "빨리 감기",
     "sessionNext": "다음",
-    "sessionVolumeDown": "권 –",
-    "sessionVolumeUp": "권 +",
+    "sessionVolumeDown": "음량 -",
+    "sessionVolumeUp": "음량 +",
     "uhd4k": "4K",
     "nowPlaying": "지금 재생 중",
     "volume": "음량",
-    "actions": "행위",
+    "actions": "작업",
     "videoCodec": "비디오 코덱",
     "audioCodec": "오디오 코덱",
     "hwAccel": "하드웨어 가속",
@@ -4818,7 +4818,7 @@
             }
         }
     },
-    "adminLibraryName": "도서관 이름",
+    "adminLibraryName": "라이브러리 이름",
     "adminSelectedPaths": "선택한 경로:",
     "adminNoPathsAdded": "추가된 경로 없음(나중에 추가 가능)",
     "adminCreateLibrary": "라이브러리 생성",
@@ -4938,7 +4938,7 @@
     "adminPasswordReset": "비밀번호 재설정",
     "adminPasswordUpdated": "비밀번호가 업데이트되었습니다.",
     "adminUserSettings": "사용자 설정",
-    "adminLibraryAccess": "도서관 이용",
+    "adminLibraryAccess": "라이브러리 접근 권한",
     "adminDeviceAndChannelAccess": "장치 및 채널 액세스",
     "adminEnableAllDevices": "모든 장치에 대한 액세스 활성화",
     "adminEnableAllChannels": "모든 채널에 대한 액세스 활성화",
@@ -5064,7 +5064,7 @@
     "adminCreateBackup": "백업 생성",
     "adminNoBackups": "백업을 찾을 수 없습니다.",
     "adminViewDetails": "세부정보 보기",
-    "restore": "복원하다",
+    "restore": "복원",
     "adminLogsLoadFailed": "서버 로그를 로드하지 못했습니다.",
     "adminNoLogFiles": "로그 파일을 찾을 수 없습니다.",
     "adminLogCopied": "로그가 클립보드에 복사되었습니다.",
@@ -5234,7 +5234,7 @@
     "adminNoPackagesAvailable": "사용 가능한 패키지가 없습니다.",
     "adminExperimentalIntegration": "실험적 통합",
     "adminExperimentalWarning": "플러그인 설정 통합은 아직 실험적입니다. 일부 설정 페이지가 올바르게 렌더링되지 않을 수 있습니다.",
-    "continueAction": "계속하다",
+    "continueAction": "계속",
     "adminPluginRemoveAfterRestart": "서버를 재시작하면 \"{name}\"이(가) 제거됩니다",
     "@adminPluginRemoveAfterRestart": {
         "placeholders": {
@@ -5381,10 +5381,10 @@
     "adminTileHeight": "타일 ​​높이",
     "adminQualitySubtitle": "낮은 값 = 더 나은 품질, 더 큰 파일",
     "adminProcessThreads": "프로세스 스레드",
-    "adminResumeSaved": "이력서 설정이 저장되었습니다.",
-    "adminResumeLoadFailed": "이력서 설정을 로드하지 못했습니다.",
+    "adminResumeSaved": "이어보기 설정이 저장되었습니다.",
+    "adminResumeLoadFailed": "이어보기 설정을 로드하지 못했습니다.",
     "adminResumeDescription": "콘텐츠가 부분적으로 재생되거나 완전히 재생된 것으로 표시되어야 하는 시점을 구성합니다.",
-    "adminMinResumePercentage": "최소 이력서 비율",
+    "adminMinResumePercentage": "최소 이어보기 비율",
     "adminMinResumeSubtitle": "진행 상황을 저장하려면 콘텐츠를 이 비율 이상으로 재생해야 합니다.",
     "adminMaxResumePercentage": "최대 재개 비율",
     "adminMaxResumeSubtitle": "이 비율 이후에는 콘텐츠가 완전히 재생된 것으로 간주됩니다.",
@@ -5746,7 +5746,7 @@
     "adminMetadataImagePrimary": "주요한",
     "adminMetadataImageBackdrop": "배경",
     "adminMetadataImageLogo": "심벌 마크",
-    "adminMetadataImageBanner": "기치",
+    "adminMetadataImageBanner": "배너",
     "adminMetadataImageThumb": "무지",
     "adminMetadataRecursive": "재귀적",
     "adminMetadataProvider": "공급자",
@@ -5836,7 +5836,7 @@
     "adminPluginsUpdateAvailableGeneric": "업데이트 가능",
     "adminPluginsPendingRemoval": "다시 시작한 후 제거 보류 중",
     "adminPluginsChangesPending": "재시작 보류 중인 변경사항",
-    "adminPluginsEnable": "할 수 있게 하다",
+    "adminPluginsEnable": "활성화",
     "adminPluginsDisable": "장애를 입히다",
     "adminPluginsInstallUpdate": "업데이트 설치",
     "adminPluginsInstallUpdateVersioned": "업데이트 설치(v{version})",
@@ -5921,7 +5921,7 @@
     "adminGeneralLibraryScanConcurrency": "라이브러리 스캔 동시성",
     "adminGeneralImageEncodingLimit": "병렬 이미지 인코딩 제한",
     "adminUnknownError": "알 수 없는 오류",
-    "adminBrowse": "먹다",
+    "adminBrowse": "찾아보기",
     "adminCloseBrowser": "브라우저 닫기",
     "adminNetworkingTitle": "네트워킹",
     "adminNetworkingRestartWarning": "네트워킹 설정을 변경하면 서버를 다시 시작해야 할 수도 있습니다.",
@@ -5948,7 +5948,7 @@
     "adminPlaybackHwAccelLabel": "하드웨어 가속",
     "adminPlaybackEnableHwEncoding": "하드웨어 인코딩 활성화",
     "adminPlaybackEnableHwDecoding": "다음에 대해 하드웨어 디코딩을 활성화합니다.",
-    "adminPlaybackEncoding": "부호화",
+    "adminPlaybackEncoding": "인코딩",
     "adminPlaybackEncodingThreads": "인코딩 스레드",
     "adminPlaybackFallbackFont": "대체 글꼴 활성화",
     "adminPlaybackFallbackFontPath": "대체 글꼴 경로",
@@ -5968,7 +5968,7 @@
     "adminTrickplayPriorityHigh": "높은",
     "adminTrickplayPriorityAboveNormal": "정상 이상",
     "adminTrickplayPriorityNormal": "정상",
-    "adminTrickplayPriorityBelowNormal": "정상 이하",
+    "adminTrickplayPriorityBelowNormal": "보통 미만",
     "adminTrickplayPriorityIdle": "게으른",
     "adminTrickplayImageSettings": "이미지 설정",
     "adminTrickplayInterval": "간격(밀리초)",
@@ -5982,10 +5982,10 @@
     "adminTasksEmpty": "예약된 작업을 찾을 수 없습니다.",
     "adminTasksNoFilterMatch": "현재 필터와 일치하는 작업이 없습니다.",
     "adminTaskCancelling": "취소 중...",
-    "adminTaskRunning": "달리기...",
-    "adminTaskNeverRun": "절대 뛰지 마세요",
+    "adminTaskRunning": "실행 중...",
+    "adminTaskNeverRun": "실행 안 함",
     "adminTaskStop": "정지",
-    "adminTaskRun": "달리다",
+    "adminTaskRun": "실행",
     "adminTaskDetailLastExecution": "마지막 실행",
     "adminTaskDetailStarted": "시작됨",
     "adminTaskDetailEnded": "종료됨",
@@ -6117,7 +6117,7 @@
     "adminPlaybackSegmentDeletion": "세그먼트 삭제 허용",
     "adminPlaybackSegmentKeep": "세그먼트 유지(초)",
     "adminPlaybackThrottleBuffering": "스로틀 버퍼링",
-    "adminResumeMinPct": "최소 이력서 비율",
+    "adminResumeMinPct": "최소 이어보기 비율",
     "adminResumeMinPctSubtitle": "진행 상황을 저장하려면 콘텐츠를 이 비율 이상으로 재생해야 합니다.",
     "adminResumeMaxPct": "최대 재개 비율",
     "adminResumeMaxPctSubtitle": "이 비율 이후에는 콘텐츠가 완전히 재생된 것으로 간주됩니다.",
@@ -6144,7 +6144,7 @@
     "adminGeneralMetadataPath": "메타데이터 경로",
     "adminGeneralServerName": "서버 이름",
     "adminSettingsLoadFailed": "설정을 로드하지 못했습니다.",
-    "adminDiscover": "발견하다",
+    "adminDiscover": "둘러보기",
     "adminChannelMappingsUpdateFailed": "매핑을 업데이트하지 못했습니다: {error}",
     "@adminChannelMappingsUpdateFailed": {
         "placeholders": {
@@ -6182,7 +6182,7 @@
     "syncPlayIgnoreWait": "무시하고 기다리세요",
     "syncPlayIgnoreWaitSubtitle": "이 장치가 버퍼링되는 동안 그룹을 보류하지 마십시오.",
     "syncPlayContinueLocallyNoWait": "느린 회원을 기다리지 않고 로컬에서 계속 진행",
-    "syncPlayRepeat": "반복하다",
+    "syncPlayRepeat": "반복",
     "syncPlayRepeatOne": "하나",
     "syncPlayShuffleModeShuffled": "섞임",
     "syncPlayShuffleModeSorted": "정렬됨",
@@ -6207,8 +6207,8 @@
     "syncPlayAvailableGroups": "사용 가능한 그룹",
     "syncPlayNoGroupsAvailable": "사용 가능한 그룹이 없습니다.",
     "syncPlayJoinGroupQuestion": "SyncPlay 그룹에 가입하시겠습니까?",
-    "syncPlayJoinGroupWarning": "SyncPlay 그룹에 가입하면 현재 재생 대기열이 대체될 수 있습니다. 계속하다?",
-    "syncPlayJoin": "가입하다",
+    "syncPlayJoinGroupWarning": "SyncPlay 그룹에 가입하면 현재 재생 대기열이 대체될 수 있습니다. 계속할까요?",
+    "syncPlayJoin": "참여",
     "syncPlayStateIdle": "게으른",
     "syncPlayStateWaiting": "대기 중",
     "syncPlayStatePaused": "일시중지됨",
@@ -6292,7 +6292,7 @@
         }
     },
     "castDeviceVolume": "장치 볼륨",
-    "castVolumeUnavailable": "없는",
+    "castVolumeUnavailable": "사용할 수 없음",
     "castStopKind": "{kind} 중지",
     "@castStopKind": {
         "placeholders": {
@@ -6327,7 +6327,7 @@
     "pinMismatch": "PIN이 일치하지 않습니다.",
     "pinForgot": "PIN을 잊으셨나요?",
     "pinClear": "지우기",
-    "pinBackspace": "역행 키이",
+    "pinBackspace": "지우기",
     "quickConnectAuthorized": "Quick Connect 요청이 승인되었습니다.",
     "quickConnectInvalidOrExpired": "Quick Connect 코드가 유효하지 않거나 만료되었습니다.",
     "quickConnectNotSupported": "이 서버에서는 Quick Connect가 지원되지 않습니다.",
@@ -6344,7 +6344,7 @@
         }
     },
     "quickConnectEnterCode": "코드 입력",
-    "quickConnectAuthorize": "승인하다",
+    "quickConnectAuthorize": "승인",
     "remoteCommandFailed": "명령을 실행하지 못했습니다: {error}",
     "@remoteCommandFailed": {
         "placeholders": {
@@ -6371,7 +6371,7 @@
     },
     "noRemoteDevices": "사용할 수 있는 원격 재생 장치가 없습니다.",
     "noRemoteDevicesIos": "사용할 수 있는 원격 재생 장치가 없습니다.\n\niOS에서는 시뮬레이터에서 AirPlay 대상을 사용하지 못할 수 있습니다.",
-    "trackActionPlayNext": "다음 플레이",
+    "trackActionPlayNext": "다음 곡 재생",
     "trackActionAddToQueue": "대기열에 추가",
     "trackActionAddToPlaylist": "재생목록에 추가",
     "trackActionCancelDownload": "다운로드 취소",
@@ -6399,11 +6399,11 @@
     "shuffleGenre": "장르",
     "shuffleNoLibraries": "호환되는 라이브러리가 없습니다.",
     "shuffleNoGenres": "이 셔플 모드에 대한 장르를 찾을 수 없습니다.",
-    "posterDisplayTitle": "표시하다",
+    "posterDisplayTitle": "표시",
     "posterImageType": "이미지 유형",
     "imageTypePoster": "포스터",
     "imageTypeThumbnail": "썸네일",
-    "imageTypeBanner": "기치",
+    "imageTypeBanner": "배너",
     "playlistAddFailed": "재생목록에 추가하지 못했습니다.",
     "playlistCreateFailed": "재생목록을 생성하지 못했습니다.",
     "playlistNew": "새 재생목록",
@@ -6416,7 +6416,7 @@
     "playNext": "다음 플레이",
     "stillWatchingContent": "재생이 일시중지되었습니다. 아직도 보고 있나요?",
     "stillWatchingStop": "정지",
-    "stillWatchingContinue": "계속하다",
+    "stillWatchingContinue": "계속",
     "skipSegment": "{segment} 건너뛰기",
     "@skipSegment": {
         "placeholders": {
@@ -6471,11 +6471,11 @@
     "@playerTooltipExitFullscreen": {
         "description": "Tooltip label for exiting fullscreen in player"
     },
-    "playerTooltipLockLandscape": "풍경 잠금",
+    "playerTooltipLockLandscape": "가로 모드 고정",
     "@playerTooltipLockLandscape": {
         "description": "Tooltip label for locking landscape orientation in player"
     },
-    "playerTooltipUnlockOrientation": "순환 허용",
+    "playerTooltipUnlockOrientation": "화면 회전 허용",
     "@playerTooltipUnlockOrientation": {
         "description": "Tooltip label for unlocking orientation lock in player"
     },
@@ -6542,7 +6542,7 @@
     "settingsLibraryVisibilitySubtitle": "라이브러리별로 홈 페이지 가시성을 전환합니다. 변경 사항을 적용하려면 Moonfin을 다시 시작하세요.",
     "settingsMediaBarAndLocalPreviews": "미디어 바 및 로컬 미리보기",
     "settingsVisualOverlays": "시각적 오버레이",
-    "settingsSeasonalSurprise": "계절별 깜짝 선물",
+    "settingsSeasonalSurprise": "시즌 서프라이즈",
     "settingsMetadataAndRatings": "메타데이터 및 평가",
     "settingsPluginScreenDescription": "Moonbase는 추가 평가 소스, Seerr 요청 및 동기화된 기본 설정을 포함한 서버 측 통합을 지원합니다.",
     "settingsOfflineDownloads": "오프라인 다운로드",
@@ -6694,12 +6694,12 @@
     "@nextUpDisplay": {
         "description": "Setting for next up behavior"
     },
-    "settingsNextUpDisplayDescription": "확장에는 에피소드 삽화와 설명이 포함된 전체 카드가 표시됩니다. Minimal은 컴팩트한 카운트다운 오버레이를 표시합니다. 비활성화되면 프롬프트가 완전히 숨겨집니다.",
-    "playerTooltipFloatOnTop": "위에 뜨다",
+    "settingsNextUpDisplayDescription": "확장 모드는 에피소드 아트워크와 설명이 포함된 전체 카드를 표시합니다. 미니멀 모드는 컴팩트한 카운트다운 오버레이를 표시합니다. 끄면 알림이 완전히 숨겨집니다.",
+    "playerTooltipFloatOnTop": "항상 위에 표시",
     "@playerTooltipFloatOnTop": {
         "description": "Tooltip label for enabling always-on-top in desktop player"
     },
-    "playerTooltipExitFloatOnTop": "상단에 플로트 비활성화",
+    "playerTooltipExitFloatOnTop": "항상 위에 표시 끄기",
     "@playerTooltipExitFloatOnTop": {
         "description": "Tooltip label for disabling always-on-top in desktop player"
     },
@@ -6719,7 +6719,7 @@
     "@localAccount": {
         "description": "Auth option label for Seerr sign in using local Seerr credentials"
     },
-    "seasonalEffectsDescription": "시각 효과 및 계절 장식",
+    "seasonalEffectsDescription": "시각 효과 및 시즌 장식",
     "@seasonalEffectsDescription": {
         "description": "Description for seasonal effects settings"
     },
@@ -7055,7 +7055,7 @@
     "homeRowsStyleClassic": "클래식",
     "homeRowsStyleModern": "모던",
     "homeRowsSection": "홈 행",
-    "rowsType": "Rows Type",
+    "rowsType": "행 유형",
     "rowsTypeDescription": "클래식은 행별 이미지 유형과 정보 오버레이를 유지합니다. 모던은 세로형에서 가로형으로 이어지는 행을 사용합니다.",
     "displayFavoritesRows": "즐겨찾기 행 표시",
     "displayFavoritesRowsSubtitle": "홈 섹션에 즐겨찾는 영화, 시리즈 등의 행을 표시합니다.",
@@ -7092,7 +7092,7 @@
     "playerRouting": "플레이어 라우팅",
     "preferSoftwareDecoders": "소프트웨어 디코더 우선",
     "preferSoftwareDecodersSubtitle": "하드웨어 디코더보다 FFmpeg(오디오)와 libgav1(AV1)을 먼저 사용합니다. HDMI 오디오 패스스루에 문제가 생기면 끄세요.",
-    "useExternalPlayer": "Use external player",
+    "useExternalPlayer": "항상 외부 플레이어 사용",
     "useExternalPlayerSubtitle": "Android TV에서 선택한 외부 앱으로 영상을 재생합니다.",
     "automaticQueuing": "자동 대기열 추가",
     "preferSdhSubtitles": "SDH 자막 우선",
@@ -7748,10 +7748,6 @@
     "settingsAudioFallbackCodecEac3": "EAC3\n(Dolby Digital Plus)",
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
-    },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(무손실)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
     },
     "settingsAudioFallbackCodecMp3": "MP3\n(스테레오 전용)",
     "@settingsAudioFallbackCodecMp3": {
@@ -9005,5 +9001,1081 @@
     "adminLibTrickplayExtraction": "Trickplay 이미지 추출 사용",
     "adminLibTrickplayDuringScan": "라이브러리 검색 중 Trickplay 이미지 추출",
     "adminLibSaveTrickplayWithMedia": "Trickplay 이미지를 미디어 폴더에 저장",
-    "adminBackupTrickplay": "Trickplay 이미지"
+    "adminBackupTrickplay": "Trickplay 이미지",
+    "queuedDownload": "대기 중",
+    "@queuedDownload": {
+        "description": "Status label for a download waiting in the queue for a free download slot"
+    },
+    "playerSwipeGesturesDescription": "플레이어에서 위아래로 밀어 왼쪽은 밝기, 오른쪽은 음량을 조절합니다",
+    "@playerSwipeGesturesDescription": {
+        "description": "Description for player swipe gestures"
+    },
+    "osdButtons": "플레이어 버튼",
+    "@osdButtons": {
+        "description": "Settings screen for choosing which buttons the player shows"
+    },
+    "osdButtonsDescription": "플레이어에 표시할 버튼을 선택합니다",
+    "@osdButtonsDescription": {
+        "description": "Subtitle for the player buttons settings tile"
+    },
+    "osdButtonsSectionDescription": "재생 컨트롤은 항상 표시됩니다. 아래 항목은 원하는 대로 설정할 수 있으며, 기기 종류별로 목록이 각각 저장됩니다.",
+    "@osdButtonsSectionDescription": {
+        "description": "Explains that transport controls can't be hidden and that the list is per device kind"
+    },
+    "detailButtons": "작업 버튼",
+    "@detailButtons": {
+        "description": "Settings screen for choosing which buttons the details screen shows"
+    },
+    "detailButtonsDescription": "상세 화면에 표시할 버튼을 선택합니다",
+    "@detailButtonsDescription": {
+        "description": "Subtitle for the details action buttons settings tile"
+    },
+    "detailButtonsSectionDescription": "재생 버튼은 항상 첫 번째로 표시되며 잠긴 버튼은 항상 표시됩니다. 그 외의 항목은 원하는 대로 설정할 수 있으며, 기기 종류별로 목록이 각각 저장됩니다.",
+    "@detailButtonsSectionDescription": {
+        "description": "Explains that the play buttons can't be hidden and that the list is per device kind"
+    },
+    "moveUp": "위로 이동",
+    "@moveUp": {
+        "description": "Moves a button one place earlier in its row"
+    },
+    "moveDown": "아래로 이동",
+    "@moveDown": {
+        "description": "Moves a button one place later in its row"
+    },
+    "buttonOrderHint": "화살표를 사용하여 순서를 변경하세요. 리모컨에서는 좌우 버튼으로 선택한 버튼을 이동합니다. 버튼을 끄면 나머지 버튼 아래로 이동합니다.",
+    "@buttonOrderHint": {
+        "description": "Explains how to reorder the buttons in a row"
+    },
+    "orientationLock": "화면 방향 잠금",
+    "@orientationLock": {
+        "description": "Player button that locks the screen orientation"
+    },
+    "fullscreen": "전체 화면",
+    "@fullscreen": {
+        "description": "Player button that toggles fullscreen"
+    },
+    "settingsAudioPassthroughMode": "패스스루",
+    "@settingsAudioPassthroughMode": {
+        "description": "Title of the audio passthrough mode selector"
+    },
+    "settingsAudioPassthroughModeDescription": "압축된 서라운드 사운드를 TV 또는 리시버로 전송하는 방식입니다.",
+    "settingsAudioPassthroughModeDisabled": "사용 안 함(항상 이 기기에서 디코딩)",
+    "settingsAudioPassthroughModeAuto": "자동(감지된 기기 지원에 맞춤)",
+    "settingsAudioPassthroughModeManual": "수동(아래에서 형식 선택)",
+    "settingsDownmixToStereoDescription": "디코딩된 모든 오디오를 2채널로 다운믹스합니다.",
+    "settingsAudioEac3IncludesAtmos": "Dolby Atmos(JOC)를 포함한 E-AC-3을 비트스트림으로 전송합니다.",
+    "settingsAudioDtsHdIncludesDtsX": "DTS:X를 포함한 DTS-HD를 비트스트림으로 전송합니다.",
+    "settingsAudioTrueHdIncludesAtmos": "Dolby Atmos를 포함한 TrueHD를 비트스트림으로 전송합니다.",
+    "resetProfile": "프로필 초기화",
+    "@resetProfile": {
+        "description": "Button to reset a profile to defaults"
+    },
+    "resetProfileTitle": "{profile}을(를) 초기화할까요?",
+    "@resetProfileTitle": {
+        "description": "Title of the dialog confirming a profile reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetProfileDescription": "서버에서 {profile} 프로필을 삭제하고 이 기기의 동기화된 모든 설정을 기본값으로 되돌립니다.",
+    "@resetProfileDescription": {
+        "description": "Body of the dialog confirming a device profile reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetGlobalProfileDescription": "서버에서 저장된 모든 프로필을 삭제하고 이 기기의 동기화된 모든 설정을 기본값으로 되돌립니다.",
+    "@resetGlobalProfileDescription": {
+        "description": "Body of the dialog confirming a global profile reset"
+    },
+    "profileReset": "{profile} 프로필을 기본값으로 초기화했습니다.",
+    "@profileReset": {
+        "description": "Message after a profile was reset",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "resetRatingsTitle": "평가를 초기화할까요?",
+    "@resetRatingsTitle": {
+        "description": "Title of the dialog confirming a ratings reset"
+    },
+    "resetRatingsDescription": "표시할 소스 및 표시 순서를 포함한 모든 평가 설정을 기본값으로 되돌립니다.",
+    "@resetRatingsDescription": {
+        "description": "Body of the dialog confirming a ratings reset"
+    },
+    "ratingsReset": "평가 설정을 기본값으로 초기화했습니다.",
+    "@ratingsReset": {
+        "description": "Message after the ratings settings were reset"
+    },
+    "failedToResetProfile": "{profile} 프로필을 초기화하지 못했습니다.",
+    "@failedToResetProfile": {
+        "description": "Message when a profile reset failed",
+        "placeholders": {
+            "profile": {
+                "type": "String"
+            }
+        }
+    },
+    "tvOfflineDownloads": "오프라인 다운로드 활성화",
+    "@tvOfflineDownloads": {
+        "description": "TV-only toggle in the Offline Downloads settings: offer download actions on item pages"
+    },
+    "tvOfflineDownloadsSubtitle": "항목 페이지에 다운로드 작업 표시",
+    "@tvOfflineDownloadsSubtitle": {
+        "description": "Subtitle for the TV-only offline downloads toggle"
+    },
+    "sdCard": "SD 카드",
+    "@sdCard": {
+        "description": "Download location option for a removable storage volume"
+    },
+    "downloadLocationLimitedByAndroid": "Android에서는 Moonfin이 소유한 폴더에만 쓸 수 있도록 제한하고 있으며, 이 기기에는 이동식 저장소가 없습니다. 다른 앱이 접근할 수 있는 위치에 다운로드 항목을 보관하려면 위의 '다운로드 폴더에 저장'을 켜세요.",
+    "@downloadLocationLimitedByAndroid": {
+        "description": "Note shown when the only download location Android allows is the default one"
+    },
+    "transcodingTimeRemainingUnavailable": "트랜스코딩 중: 남은 시간 알 수 없음",
+    "@transcodingTimeRemainingUnavailable": {
+        "description": "Notice shown below downloading text when downloading a transcoded stream"
+    },
+    "mergeRecentRowsByType": "유형별 최근 행 병합",
+    "@mergeRecentRowsByType": {
+        "description": "Setting for merging recently added and recently released libraries by media type"
+    },
+    "mergeRecentRowsByTypeDescription": "'최근 추가됨' 및 '최근 출시됨' 홈 행에서 동일한 유형의 개별 라이브러리를 하나로 결합합니다.",
+    "@mergeRecentRowsByTypeDescription": {
+        "description": "Description for merging recent home rows by media type"
+    },
+    "libraryView": "라이브러리 보기",
+    "@libraryView": {
+        "description": "Section title for library view settings"
+    },
+    "mediaBarModeBookshelf": "책장",
+    "@mediaBarModeBookshelf": {
+        "description": "Media bar style option: Bookshelf"
+    },
+    "mediaBarModeGallery": "갤러리",
+    "@mediaBarModeGallery": {
+        "description": "Media bar style option: Gallery"
+    },
+    "mediaBarModeBanner": "배너",
+    "@mediaBarModeBanner": {
+        "description": "Media bar style option: Banner"
+    },
+    "mediaBarModeAya": "Aya",
+    "@mediaBarModeAya": {
+        "description": "Media bar style option: Aya"
+    },
+    "mediaBarSourceType": "소스",
+    "@mediaBarSourceType": {
+        "description": "Setting for which titles the media bar draws from"
+    },
+    "mediaBarSourceRandom": "무작위",
+    "@mediaBarSourceRandom": {
+        "description": "Media bar source: any eligible title"
+    },
+    "trailerCaptions": "예고편 자막",
+    "@trailerCaptions": {
+        "description": "Setting for YouTube trailer captions"
+    },
+    "trailerCaptionsDescription": "미디어 바의 YouTube 예고편에 자막을 표시합니다",
+    "@trailerCaptionsDescription": {
+        "description": "Description for YouTube trailer captions"
+    },
+    "recentlyReleasedSeriesType": "최근 출시된 시리즈 정렬 기준",
+    "@recentlyReleasedSeriesType": {
+        "description": "Setting for sorting series in recently released series row"
+    },
+    "recentlyReleasedSeriesTypeDescription": "'최근 출시된 시리즈' 홈 행을 시리즈, 최신 시즌 또는 최신 에피소드 방영일 기준으로 정렬합니다",
+    "@recentlyReleasedSeriesTypeDescription": {
+        "description": "Description for recently released series type setting"
+    },
+    "favoriteChannels": "즐겨찾는 채널",
+    "@favoriteChannels": {
+        "description": "Home row: favourited live TV channels"
+    },
+    "nextUpMaxDays": "다음 볼 항목 최대 일수",
+    "@nextUpMaxDays": {
+        "description": "Setting for how far back the Next Up row reaches"
+    },
+    "nextUpMaxDaysDescription": "마지막으로 시청한 후 프로그램이 다음 볼 항목에 유지되는 기간입니다",
+    "@nextUpMaxDaysDescription": {
+        "description": "Description for the Next Up window setting"
+    },
+    "daysValue": "{days}일",
+    "@daysValue": {
+        "description": "A number of days",
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "homeRowsPadding": "홈 행 여백",
+    "@homeRowsPadding": {
+        "description": "Title for home rows padding setting"
+    },
+    "homeRowsPaddingDescription": "홈 행 사이의 여백을 사용자 지정합니다",
+    "@homeRowsPaddingDescription": {
+        "description": "Description for home rows padding setting"
+    },
+    "tags": "태그",
+    "@tags": {
+        "description": "Heading for the keyword tags a title is filed under"
+    },
+    "genresAndTags": "장르 및 태그",
+    "@genresAndTags": {
+        "description": "Button and dialog title for browsing a title's genres, networks and tags"
+    },
+    "yourWatchlist": "내 관심 목록",
+    "@yourWatchlist": {
+        "description": "Seerr row: watchlist"
+    },
+    "seerrNotifyNewMediaTitle": "새 미디어 추가됨",
+    "@seerrNotifyNewMediaTitle": {
+        "description": "Title for the toggle that notifies about anything newly added to the server library, not just requested media"
+    },
+    "seerrNotifyNewMediaSubtitle": "서버 라이브러리에 새로 추가된 모든 항목",
+    "@seerrNotifyNewMediaSubtitle": {
+        "description": "Subtitle for the new media notifications toggle"
+    },
+    "requestMore4k": "4K로 추가 요청",
+    "@requestMore4k": {
+        "description": "Button to request more seasons in 4K, shown next to the non-4K Request More button"
+    },
+    "request4k": "4K 요청",
+    "@request4k": {
+        "description": "Button to submit a 4K media request, shown next to the non-4K Request button"
+    },
+    "requested4k": "4K 요청됨",
+    "@requested4k": {
+        "description": "Disabled label shown when a 4K request already exists and the user cannot cancel it"
+    },
+    "cancelRequest4k": "4K 요청 취소",
+    "@cancelRequest4k": {
+        "description": "Button/dialog title to cancel a 4K media request"
+    },
+    "manageRequests": "요청 관리",
+    "@manageRequests": {
+        "description": "Details screen button opening the pending requests to approve or decline"
+    },
+    "watchlist": "관심 목록",
+    "@watchlist": {
+        "description": "Details screen button adding the title to the Seerr watchlist"
+    },
+    "onWatchlist": "관심 목록에 있음",
+    "@onWatchlist": {
+        "description": "Details screen button label when the title is already on the Seerr watchlist"
+    },
+    "requestSeriesOrMovie4k": "4K {type} 요청",
+    "@requestSeriesOrMovie4k": {
+        "description": "Bottom sheet title for requesting media in 4K",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrSeriesContinuing": "시리즈 계속 방영 중 · 후속 시즌을 요청할 수 있습니다",
+    "@seerrSeriesContinuing": {
+        "description": "Banner in the Seerr request dialog for a continuing series whose aired seasons are all in the library"
+    },
+    "adminMetadataFieldCustomRating": "사용자 지정 등급",
+    "adminMetadataFieldDisplayOrder": "표시 순서",
+    "adminMetadataDisplayOrderAired": "방영순",
+    "adminMetadataDisplayOrderOriginalAirDate": "최초 방영일순",
+    "adminMetadataDisplayOrderAbsolute": "절대 순서",
+    "adminMetadataDisplayOrderDvd": "DVD",
+    "adminMetadataDisplayOrderDigital": "디지털",
+    "adminMetadataDisplayOrderStoryArc": "스토리 아크",
+    "adminMetadataDisplayOrderProduction": "제작순",
+    "adminMetadataDisplayOrderTv": "TV",
+    "adminMetadataDisplayOrderAlternate": "대체 순서",
+    "adminMetadataDisplayOrderRegional": "지역순",
+    "adminMetadataDisplayOrderAlternateDvd": "대체 DVD",
+    "adminMetadataDisplayOrderDateModified": "수정일순",
+    "adminMetadataDisplayOrderSortName": "정렬 이름순",
+    "adminMetadataDisplayOrderReleaseDate": "출시일순",
+    "adminMetadataSettings": "메타데이터 설정",
+    "adminMetadataDownloadLanguage": "선호하는 다운로드 언어",
+    "adminMetadataCountryRegion": "국가/지역",
+    "adminMetadataInheritHelp": "상위 항목 또는 서버 기본값의 설정을 상속받으려면 기본값으로 두세요.",
+    "adminMetadataField3DFormat": "3D 형식",
+    "adminMetadataPersonKindUnknown": "알 수 없음",
+    "adminMetadataPersonKindActor": "배우",
+    "adminMetadataPersonKindDirector": "감독",
+    "adminMetadataPersonKindComposer": "작곡가",
+    "adminMetadataPersonKindWriter": "작가",
+    "adminMetadataPersonKindGuestStar": "게스트 출연",
+    "adminMetadataPersonKindProducer": "프로듀서",
+    "adminMetadataPersonKindConductor": "지휘자",
+    "adminMetadataPersonKindLyricist": "작사가",
+    "adminMetadataPersonKindArranger": "편곡가",
+    "adminMetadataPersonKindEngineer": "엔지니어",
+    "adminMetadataPersonKindMixer": "믹서",
+    "adminMetadataPersonKindRemixer": "리믹서",
+    "adminMetadataPersonKindCreator": "제작자",
+    "adminMetadataPersonKindArtist": "아티스트",
+    "adminMetadataPersonKindAlbumArtist": "앨범 아티스트",
+    "adminMetadataPersonKindAuthor": "저자",
+    "adminMetadataPersonKindIllustrator": "일러스트레이터",
+    "adminMetadataPersonKindPenciller": "펜슬러",
+    "adminMetadataPersonKindInker": "잉커",
+    "adminMetadataPersonKindColorist": "컬러리스트",
+    "adminMetadataPersonKindLetterer": "레터러",
+    "adminMetadataPersonKindCoverArtist": "커버 아티스트",
+    "adminMetadataPersonKindEditor": "편집자",
+    "adminMetadataPersonKindTranslator": "번역가",
+    "adminMetadataPersonKindNarrator": "내레이터",
+    "adminMetadataAirDays": "방영 요일",
+    "adminMetadataLockItem": "향후 메타데이터 변경을 방지하기 위해 이 항목을 잠급니다",
+    "adminMetadataEnabledFields": "활성화된 필드",
+    "adminMetadataEnabledFieldsHelp": "필드를 체크 해제하면 잠금 처리되어 데이터 변경을 방지합니다.",
+    "adminMetadataLockFieldName": "이름",
+    "adminMetadataLockFieldOverview": "개요",
+    "adminMetadataLockFieldGenres": "장르",
+    "adminMetadataLockFieldOfficialRating": "시청 등급",
+    "adminMetadataLockFieldCast": "인물",
+    "adminMetadataLockFieldProductionLocations": "제작 위치",
+    "adminMetadataLockFieldBirthLocation": "출생지",
+    "adminMetadataLockFieldRuntime": "재생 시간",
+    "adminMetadataLockFieldStudios": "스튜디오",
+    "adminMetadataLockFieldTags": "태그",
+    "adminPluginsRestartRequired": "재시작 필요",
+    "@adminPluginsRestartRequired": {
+        "description": "Label for the installed-plugin filter showing changes that require a server restart"
+    },
+    "adminPluginsNoneActive": "활성 플러그인 없음",
+    "@adminPluginsNoneActive": {
+        "description": "Empty state for the active installed-plugin filter"
+    },
+    "adminPluginsNoneRequireRestart": "서버 재시작이 필요한 플러그인이 없습니다",
+    "@adminPluginsNoneRequireRestart": {
+        "description": "Empty state for the installed-plugin filter showing changes that require a server restart"
+    },
+    "useNativeEmulator": "네이티브 에뮬레이션",
+    "@useNativeEmulator": {
+        "description": "Settings toggle title. When on, retro games run through native libretro emulator cores instead of the EmulatorJS browser-based emulator."
+    },
+    "useNativeEmulatorSubtitle": "EmulatorJS 웹 플레이어 대신 네이티브 코어로 게임을 플레이합니다",
+    "@useNativeEmulatorSubtitle": {
+        "description": "Subtitle under the Native Emulation settings toggle. EmulatorJS is a product name and should not be translated."
+    },
+    "emulatorCores": "에뮬레이터 코어",
+    "emulatorCoresSubtitle": "게임을 네이티브로 플레이할 시스템 다운로드",
+    "emulatorCoresDescription": "설치할 시스템을 선택하세요. 코어는 libretro 프로젝트에서 제공하며 브라우저 보기 대신 게임을 네이티브로 실행할 수 있게 해줍니다.",
+    "emulatorCoreDownloading": "다운로드 중",
+    "emulatorCoreUnavailable": "이 기기에서는 지원되지 않음",
+    "emulatorCoreDownloadFailed": "코어를 다운로드하지 못했습니다. 연결을 확인하고 다시 시도하세요.",
+    "emulatorCoreResetSettings": "{system} 설정을 기본값으로 초기화",
+    "@emulatorCoreResetSettings": {
+        "description": "Semantic label for the button that resets one core's saved emulator settings",
+        "placeholders": {
+            "system": {
+                "type": "String"
+            }
+        }
+    },
+    "emulatorCoreSettingsReset": "설정을 기본값으로 초기화했습니다.",
+    "@emulatorCoreSettingsReset": {
+        "description": "Snackbar shown after resetting a core's saved emulator settings"
+    },
+    "emulatorCoreResetSettingsFailed": "설정을 초기화하지 못했습니다. 연결을 확인하고 다시 시도하세요.",
+    "@emulatorCoreResetSettingsFailed": {
+        "description": "Snackbar shown when resetting a core's saved emulator settings fails"
+    },
+    "downloadedGames": "다운로드한 게임",
+    "@downloadedGames": {
+        "description": "Settings screen title for managing game files stored on the device"
+    },
+    "downloadedGamesSubtitle": "게임 파일이 사용하는 공간 확보",
+    "@downloadedGamesSubtitle": {
+        "description": "Subtitle for the Downloaded Games settings entry"
+    },
+    "downloadedGamesDescription": "게임은 플레이하기 전에 이 기기로 복사됩니다. 공간을 확보하려면 완료한 게임을 삭제하세요. 저장 데이터는 서버에 보관되며 삭제되지 않습니다.",
+    "@downloadedGamesDescription": {
+        "description": "Explanation at the top of the Downloaded Games settings screen"
+    },
+    "downloadedGamesEmpty": "아직 이 기기에 다운로드된 게임이 없습니다.",
+    "@downloadedGamesEmpty": {
+        "description": "Shown on the Downloaded Games screen when nothing is cached"
+    },
+    "downloadedGamesTotal": "게임 {count}개, {size}",
+    "@downloadedGamesTotal": {
+        "description": "Summary of how many games are stored and how much space they take, where size is a formatted amount such as 1.4 GB",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "removeAllDownloadedGames": "모두 삭제",
+    "@removeAllDownloadedGames": {
+        "description": "Button that deletes every downloaded game from the device"
+    },
+    "removeDownloadedGameConfirm": "이 기기에서 {title}을(를) 삭제할까요? 다음에 플레이할 때 다시 다운로드됩니다.",
+    "@removeDownloadedGameConfirm": {
+        "description": "Confirmation prompt before deleting a single downloaded game, where title is the game name",
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "removeAllDownloadedGamesConfirm": "이 기기에서 다운로드한 모든 게임을 삭제할까요? 다음에 플레이할 때 다시 다운로드됩니다.",
+    "@removeAllDownloadedGamesConfirm": {
+        "description": "Confirmation prompt before deleting every downloaded game"
+    },
+    "settingsMediaSegmentTypeAction": "{segment} 구간",
+    "@settingsMediaSegmentTypeAction": {
+        "description": "Setting label for what to do with one type of media segment",
+        "placeholders": {
+            "segment": {
+                "type": "String"
+            }
+        }
+    },
+    "settingsSkipButtonAutoHide": "건너뛰기 버튼 자동 숨김",
+    "@settingsSkipButtonAutoHide": {
+        "description": "Setting label for automatically dismissing the skip intro and outro button after a delay"
+    },
+    "settingsSkipButtonAutoHideDescription": "몇 초 후에 오프닝 및 엔딩 건너뛰기 버튼을 자동으로 닫습니다.",
+    "settingsCinemaModeEpisodes": "에피소드 시네마 모드",
+    "@settingsCinemaModeEpisodes": {
+        "description": "Settings toggle label. Extends Cinema Mode, which plays pre-roll videos before playback, to TV episodes as well as films. 'Cinema Mode' is the app's feature name."
+    },
+    "settingsCinemaModeEpisodesSubtitle": "TV 에피소드 재생 전에도 프리롤을 재생합니다",
+    "@settingsCinemaModeEpisodesSubtitle": {
+        "description": "Subtitle for the Cinema Mode for episodes toggle. A 'preroll' is a short video (trailer, bumper) played before the main video starts."
+    },
+    "sortOrder": "정렬 순서",
+    "ascending": "오름차순",
+    "descending": "내림차순",
+    "favoritesRowSortOrderDescription": "즐겨찾기 행을 오름차순 또는 내림차순으로 정렬합니다.",
+    "collectionsRowSortOrderDescription": "컬렉션 행을 오름차순 또는 내림차순으로 정렬합니다.",
+    "collectionsRowShowEpisodes": "개별 에피소드 표시",
+    "collectionsRowShowEpisodesSubtitle": "TV 프로그램을 펼쳐 각 에피소드를 별도로 표시합니다.",
+    "genresRowSortOrderDescription": "장르 행을 오름차순 또는 내림차순으로 정렬합니다.",
+    "displayStudiosRows": "스튜디오 행 표시",
+    "displayStudiosRowsSubtitle": "홈 섹션에 스튜디오 행을 표시합니다.",
+    "studiosRowSorting": "스튜디오 행 정렬",
+    "studiosRowSortingDescription": "스튜디오 행을 이름순, 최근 추가순 등으로 정렬합니다.",
+    "studiosRowSortOrderDescription": "오름차순 또는 내림차순 정렬 순서를 선택하세요.",
+    "selectStudiosToInclude": "포함할 스튜디오 선택",
+    "selectStudiosToIncludeDescription": "홈 행에 포함할 스튜디오를 선택하세요.",
+    "selectAllStudios": "모두 선택",
+    "deselectAllStudios": "모두 선택 해제",
+    "tvStudiosFilter": "TV 스튜디오",
+    "movieStudiosFilter": "영화 스튜디오",
+    "selectedStudiosFilter": "선택된 스튜디오",
+    "unselectedStudiosFilter": "선택되지 않은 스튜디오",
+    "filtersHeader": "필터",
+    "showHeader": "표시",
+    "playlistsRowSortOrderDescription": "재생목록 행을 오름차순 또는 내림차순으로 정렬합니다.",
+    "playlistsRowShowEpisodes": "개별 에피소드 표시",
+    "playlistsRowShowEpisodesSubtitle": "TV 프로그램을 펼쳐 각 에피소드를 별도로 표시합니다.",
+    "audioRowsSortOrderDescription": "오디오 행을 오름차순 또는 내림차순으로 정렬합니다.",
+    "addToWatchlist": "관심 목록에 추가",
+    "@addToWatchlist": {
+        "description": "Button label to add media to the user's Seerr watchlist"
+    },
+    "removeFromWatchlist": "관심 목록에서 제거",
+    "@removeFromWatchlist": {
+        "description": "Button label to remove media from the user's Seerr watchlist"
+    },
+    "watchlistUpdateFailed": "관심 목록을 업데이트하지 못했습니다",
+    "@watchlistUpdateFailed": {
+        "description": "Snackbar shown when adding/removing a Seerr watchlist item fails"
+    },
+    "adminSearchParameters": "검색 매개변수",
+    "@adminSearchParameters": {
+        "description": "Column header above the editable fields used to search metadata providers in the Identify dialog"
+    },
+    "adminCurrentMetadata": "현재 메타데이터",
+    "@adminCurrentMetadata": {
+        "description": "Column header above the read-only values currently stored on the item in the Identify dialog"
+    },
+    "adminLabelYear": "연도",
+    "@adminLabelYear": {
+        "description": "Label for the release year field in the Identify dialog"
+    },
+    "adminLabelImdbId": "IMDb ID",
+    "@adminLabelImdbId": {
+        "description": "Label for the IMDb identifier field in the Identify dialog. IMDb is a brand name and is normally left untranslated"
+    },
+    "adminLabelTmdbMovieId": "TheMovieDb 영화 ID",
+    "@adminLabelTmdbMovieId": {
+        "description": "Label for the TheMovieDb movie identifier field in the Identify dialog. TheMovieDb is a brand name and is normally left untranslated"
+    },
+    "adminLabelTmdbBoxSetId": "TheMovieDb 박스 세트 ID",
+    "@adminLabelTmdbBoxSetId": {
+        "description": "Label for the TheMovieDb collection identifier field in the Identify dialog. TheMovieDb is a brand name and is normally left untranslated"
+    },
+    "adminLabelTvdbBoxSetId": "TheTVDB 박스 세트 ID",
+    "@adminLabelTvdbBoxSetId": {
+        "description": "Label for the TheTVDB collection identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
+    },
+    "adminLabelTvdbId": "TheTVDB 숫자 ID",
+    "@adminLabelTvdbId": {
+        "description": "Label for the numeric TheTVDB identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
+    },
+    "adminLabelTvdbSlug": "TheTVDB Slug 영화 ID",
+    "@adminLabelTvdbSlug": {
+        "description": "Label for the TheTVDB slug identifier field in the Identify dialog. TheTVDB is a brand name and is normally left untranslated"
+    },
+    "adminReplaceImages": "기존 이미지 바꾸기",
+    "@adminReplaceImages": {
+        "description": "Checkbox label in the confirmation dialog shown before applying an identified metadata match"
+    },
+    "adminBackToSearch": "검색 조건으로 돌아가기",
+    "@adminBackToSearch": {
+        "description": "Tooltip on the button that returns from the Identify results list to the search form"
+    },
+    "grouping": "그룹화",
+    "@grouping": {
+        "description": "Section header in the library display dialog for grouping options"
+    },
+    "groupByType": "유형별로 그룹화",
+    "@groupByType": {
+        "description": "Checkbox label to group playlists by their media type category"
+    },
+    "playlistTypes": "재생목록 유형",
+    "@playlistTypes": {
+        "description": "Section header in the library display dialog for filtering playlist categories"
+    },
+    "playlistTypeVideo": "비디오",
+    "@playlistTypeVideo": {
+        "description": "Filter checkbox label for video playlists"
+    },
+    "playlistTypeAudio": "오디오(음악)",
+    "@playlistTypeAudio": {
+        "description": "Filter checkbox label for audio/music playlists"
+    },
+    "playlistTypeAudiobook": "오디오북",
+    "@playlistTypeAudiobook": {
+        "description": "Filter checkbox label for audiobook playlists"
+    },
+    "playlistTypeBook": "도서",
+    "@playlistTypeBook": {
+        "description": "Filter checkbox label for book playlists"
+    },
+    "playlistTypePhoto": "사진",
+    "@playlistTypePhoto": {
+        "description": "Filter checkbox label for photo playlists"
+    },
+    "playlistTypeMixed": "혼합",
+    "@playlistTypeMixed": {
+        "description": "Filter checkbox label for mixed media playlists"
+    },
+    "videoPlaylistsSection": "비디오 재생목록",
+    "@videoPlaylistsSection": {
+        "description": "Section header above video playlists when Group by Type is enabled"
+    },
+    "audioPlaylistsSection": "오디오 재생목록",
+    "@audioPlaylistsSection": {
+        "description": "Section header above audio playlists when Group by Type is enabled"
+    },
+    "audiobookPlaylistsSection": "오디오북 재생목록",
+    "@audiobookPlaylistsSection": {
+        "description": "Section header above audiobook playlists when Group by Type is enabled"
+    },
+    "bookPlaylistsSection": "도서 재생목록",
+    "@bookPlaylistsSection": {
+        "description": "Section header above book playlists when Group by Type is enabled"
+    },
+    "photoPlaylistsSection": "사진 재생목록",
+    "@photoPlaylistsSection": {
+        "description": "Section header above photo playlists when Group by Type is enabled"
+    },
+    "mixedPlaylistsSection": "혼합 재생목록",
+    "@mixedPlaylistsSection": {
+        "description": "Section header above mixed playlists when Group by Type is enabled"
+    },
+    "playbackTimeDisplay": "진행 바 시간",
+    "@playbackTimeDisplay": {
+        "description": "Setting title for what is shown next to the playback progress bar"
+    },
+    "settingsPlaybackTimeDisplayDescription": "재생 진행 바 주변에 표시할 시간 레이블을 선택하세요.",
+    "@settingsPlaybackTimeDisplayDescription": {
+        "description": "Setting description for the progress bar time option"
+    },
+    "playbackTimeTotal": "총 재생 시간",
+    "@playbackTimeTotal": {
+        "description": "Progress bar time option showing the full runtime"
+    },
+    "playbackTimeRemaining": "남은 시간",
+    "@playbackTimeRemaining": {
+        "description": "Progress bar time option showing how much is left to play"
+    },
+    "playbackTimeEndsAt": "종료 시각",
+    "@playbackTimeEndsAt": {
+        "description": "Progress bar time option showing the clock time playback finishes"
+    },
+    "playbackTimeElapsed": "경과 시간",
+    "@playbackTimeElapsed": {
+        "description": "Progress bar time option showing how far into the item playback is"
+    },
+    "playbackTimeVideoSection": "비디오 플레이어",
+    "@playbackTimeVideoSection": {
+        "description": "Section header above the video progress bar time slots"
+    },
+    "playbackTimeMusicSection": "음악 플레이어",
+    "@playbackTimeMusicSection": {
+        "description": "Section header above the music progress bar time option"
+    },
+    "playbackTimeSlotDescription": "여기에 표시할 항목을 선택하거나 숨깁니다.",
+    "@playbackTimeSlotDescription": {
+        "description": "Setting description for a single progress bar time slot"
+    },
+    "playbackTimeAboveBarLeft": "바 위, 왼쪽",
+    "@playbackTimeAboveBarLeft": {
+        "description": "Progress bar time slot above the bar on the left"
+    },
+    "playbackTimeAboveBarCenter": "바 위, 가운데",
+    "@playbackTimeAboveBarCenter": {
+        "description": "Progress bar time slot above the bar in the center"
+    },
+    "playbackTimeAboveBarRight": "바 위, 오른쪽",
+    "@playbackTimeAboveBarRight": {
+        "description": "Progress bar time slot above the bar on the right"
+    },
+    "playbackTimeBelowBarLeft": "바 아래, 왼쪽",
+    "@playbackTimeBelowBarLeft": {
+        "description": "Progress bar time slot below the bar on the left"
+    },
+    "playbackTimeBelowBarCenter": "바 아래, 가운데",
+    "@playbackTimeBelowBarCenter": {
+        "description": "Progress bar time slot below the bar in the center"
+    },
+    "playbackTimeBelowBarRight": "바 아래, 오른쪽",
+    "@playbackTimeBelowBarRight": {
+        "description": "Progress bar time slot below the bar on the right"
+    },
+    "settingsMusicPlaybackTimeDescription": "음악 진행 바 오른쪽에 표시할 항목을 선택하세요.",
+    "@settingsMusicPlaybackTimeDescription": {
+        "description": "Setting description for the music progress bar time option"
+    },
+    "groupByTitle": "그룹화 기준",
+    "@groupByTitle": {
+        "description": "Dialog title and button label for library group by options"
+    },
+    "groupByDecade": "연대(연도)",
+    "@groupByDecade": {
+        "description": "Option to group library items by release decade"
+    },
+    "groupByParentalRating": "시청 등급",
+    "@groupByParentalRating": {
+        "description": "Option to group library items by parental rating"
+    },
+    "groupByStudio": "스튜디오",
+    "@groupByStudio": {
+        "description": "Option to group library items by production studio"
+    },
+    "showAlphabeticalFilters": "알파벳 표시",
+    "@showAlphabeticalFilters": {
+        "description": "Checkbox label for toggling alphabetical picker visibility in Sort and Filter options"
+    },
+    "personalRatingStyle": "개인 평가 스타일",
+    "@personalRatingStyle": {
+        "description": "Selects how personal ratings are displayed and entered on media details."
+    },
+    "personalRatingThumbs": "좋아요 / 싫어요",
+    "@personalRatingThumbs": {
+        "description": "Personal rating style using like and dislike actions."
+    },
+    "personalRatingStars": "별점 5개",
+    "@personalRatingStars": {
+        "description": "Personal rating style using a five-star scale."
+    },
+    "personalRatingNumeric": "10점 만점 점수",
+    "@personalRatingNumeric": {
+        "description": "Personal rating style using a numeric score out of ten."
+    },
+    "rate": "평가",
+    "@rate": {
+        "description": "Action that opens the personal rating control."
+    },
+    "like": "좋아요",
+    "@like": {
+        "description": "Personal rating action for a positive rating."
+    },
+    "dislike": "싫어요",
+    "@dislike": {
+        "description": "Personal rating action for a negative rating."
+    },
+    "personalRatingClear": "평가 지우기",
+    "@personalRatingClear": {
+        "description": "Action that removes the personal rating from the media item."
+    },
+    "personalRatingRated": "평가됨",
+    "@personalRatingRated": {
+        "description": "Tooltip for a media item that has a numeric personal rating."
+    },
+    "personalRatingMine": "내 평가",
+    "@personalRatingMine": {
+        "description": "Label under the viewer's own rating in the ratings row."
+    },
+    "personalRatingSaveFailed": "평가를 저장하지 못했습니다",
+    "@personalRatingSaveFailed": {
+        "description": "Error shown when saving a personal rating fails."
+    },
+    "increase": "증가",
+    "@increase": {
+        "description": "Action that increases a numeric personal rating."
+    },
+    "decrease": "감소",
+    "@decrease": {
+        "description": "Action that decreases a numeric personal rating."
+    },
+    "personalRatingOutOfTen": "{rating} / 10",
+    "@personalRatingOutOfTen": {
+        "description": "Numeric personal rating displayed on a scale out of ten.",
+        "placeholders": {
+            "rating": {
+                "type": "String"
+            }
+        }
+    },
+    "personalRatingOutOfFive": "{rating} / 5",
+    "@personalRatingOutOfFive": {
+        "description": "Personal rating displayed on a five-star scale.",
+        "placeholders": {
+            "rating": {
+                "type": "String"
+            }
+        }
+    },
+    "filterInProgress": "진행 중",
+    "@filterInProgress": {
+        "description": "Library filter for items the viewer has started but not finished."
+    },
+    "filterUnreleased": "미출시",
+    "@filterUnreleased": {
+        "description": "Series status filter for shows that have not started airing."
+    },
+    "filterTrailers": "예고편",
+    "@filterTrailers": {
+        "description": "Library filter for items that have a trailer."
+    },
+    "filterExtras": "부가 영상",
+    "@filterExtras": {
+        "description": "Library filter for items that have bonus features."
+    },
+    "filterThemeSongs": "테마곡",
+    "@filterThemeSongs": {
+        "description": "Library filter for items that have a theme song."
+    },
+    "filterThemeVideos": "테마 영상",
+    "@filterThemeVideos": {
+        "description": "Library filter for items that have a theme video."
+    },
+    "source": "소스",
+    "@source": {
+        "description": "Heading for the disc source filters in the library filter picker."
+    },
+    "years": "연도",
+    "@years": {
+        "description": "Heading for the release year filters in the library filter picker."
+    },
+    "audioLanguage": "오디오 언어",
+    "@audioLanguage": {
+        "description": "Heading for the audio language filters in the library filter picker."
+    },
+    "subtitleLanguage": "자막 언어",
+    "@subtitleLanguage": {
+        "description": "Heading for the subtitle language filters in the library filter picker."
+    },
+    "clearFilters": "필터 지우기",
+    "@clearFilters": {
+        "description": "Action that turns every library filter back off."
+    },
+    "seerrShortcutsRow": "Seerr 탐색",
+    "@seerrShortcutsRow": {
+        "description": "Title of the Seerr shortcuts row that jumps to Discover, Movies, Series, Requests and Issues."
+    },
+    "seerrReleased": "출시일",
+    "@seerrReleased": {
+        "description": "Heading for the release window filter in the Seerr browse dialog."
+    },
+    "seerrMinRating": "최소 평점",
+    "@seerrMinRating": {
+        "description": "Heading for the TMDB score floor filter in the Seerr browse dialog."
+    },
+    "seerrMinVotes": "최소 투표수",
+    "@seerrMinVotes": {
+        "description": "Heading for the TMDB vote count floor filter in the Seerr browse dialog."
+    },
+    "seerrOriginalLanguage": "원어",
+    "@seerrOriginalLanguage": {
+        "description": "Heading for the original language filter in the Seerr browse dialog."
+    },
+    "seerrRuntime": "재생 시간",
+    "@seerrRuntime": {
+        "description": "Heading for the runtime window filter in the Seerr browse dialog."
+    },
+    "subtitleHdrSeparate": "별도 HDR 스타일",
+    "@subtitleHdrSeparate": {
+        "description": "Toggle for a second subtitle appearance used only while HDR is playing."
+    },
+    "subtitleHdrSeparateSubtitle": "HDR에서는 SDR보다 흰색이 훨씬 밝으므로, 더 어두운 스타일을 사용해 눈부심을 방지합니다",
+    "@subtitleHdrSeparateSubtitle": {
+        "description": "Explains why a separate HDR subtitle style is worth setting."
+    },
+    "scrollSensitivity": "스크롤 민감도",
+    "@scrollSensitivity": {
+        "description": "Title of the desktop setting that scales mouse wheel scrolling."
+    },
+    "scrollSensitivitySubtitle": "마우스 휠 한 칸당 스크롤되는 거리",
+    "@scrollSensitivitySubtitle": {
+        "description": "Explains the desktop scroll sensitivity slider."
+    },
+    "mediaDetailsAndSpoilers": "미디어 상세 정보 및 스포일러",
+    "@mediaDetailsAndSpoilers": {
+        "description": "Section header for media details and spoiler settings"
+    },
+    "openTrailersExternally": "외부 앱에서 예고편 열기",
+    "@openTrailersExternally": {
+        "description": "Details screen setting that hands trailers to the system"
+    },
+    "openTrailersExternallySubtitle": "내장 플레이어 대신 YouTube 앱 또는 브라우저에서 예고편을 엽니다",
+    "@openTrailersExternallySubtitle": {
+        "description": "Subtitle for the external trailers setting"
+    },
+    "hideDetailsMediaDescription": "상세 페이지에서 미디어 설명 숨기기",
+    "@hideDetailsMediaDescription": {
+        "description": "Setting title to hide media description on details screen"
+    },
+    "hideDetailsMediaDescriptionSubtitle": "영화 또는 에피소드의 설명 텍스트를 숨깁니다.",
+    "@hideDetailsMediaDescriptionSubtitle": {
+        "description": "Description for setting to hide media description on details page"
+    },
+    "detailUseSeriesThumbnails": "상세 페이지에서 시리즈 썸네일 사용",
+    "@detailUseSeriesThumbnails": {
+        "description": "Setting title to replace thumbnails on Classic details page with series thumbnail"
+    },
+    "detailUseSeriesThumbnailsSubtitle": "클래식 상세 페이지의 모든 썸네일을 시리즈 썸네일로 대체합니다",
+    "@detailUseSeriesThumbnailsSubtitle": {
+        "description": "Description for setting to use series thumbnails on Classic details page"
+    },
+    "hideHomeMediaDescription": "홈 화면에서 미디어 설명 숨기기",
+    "@hideHomeMediaDescription": {
+        "description": "Setting title to hide media description on home screen"
+    },
+    "hideHomeMediaDescriptionSubtitle": "영화 또는 에피소드의 설명 텍스트를 숨깁니다.",
+    "@hideHomeMediaDescriptionSubtitle": {
+        "description": "Description for setting to hide media description on home screen"
+    },
+    "continueWatchingAndNextUpHeader": "계속 시청 및 다음 볼 항목",
+    "@continueWatchingAndNextUpHeader": {
+        "description": "Header for settings section containing Continue Watching and Next Up options"
+    },
+    "setupSkip": "설정 건너뛰기",
+    "@setupSkip": {
+        "description": "Leaves the first-run setup wizard without answering anything"
+    },
+    "setupNavbarQuestion": "탐색 바를 어디에 배치할까요?",
+    "@setupNavbarQuestion": {
+        "description": "Setup question asking where the navigation bar should sit"
+    },
+    "setupMediaBarQuestion": "홈 화면 상단을 어떻게 표시할까요?",
+    "@setupMediaBarQuestion": {
+        "description": "Setup wizard question for the media bar style"
+    },
+    "setupHomeRowsQuestion": "홈 행을 어떻게 표시할까요?",
+    "@setupHomeRowsQuestion": {
+        "description": "Setup wizard question for the home row style"
+    },
+    "setupDetailQuestion": "영화나 프로그램을 열었을 때 어떻게 표시할까요?",
+    "@setupDetailQuestion": {
+        "description": "Setup wizard question for the detail screen style"
+    },
+    "setupTourQuestion": "설정이 완료되었습니다. 그 밖의 기능을 살펴보세요.",
+    "@setupTourQuestion": {
+        "description": "Heading of the final setup wizard screen"
+    },
+    "setupStyleClassic": "클래식",
+    "@setupStyleClassic": {
+        "description": "Name of the original layout, offered in the setup wizard"
+    },
+    "setupStyleModern": "모던",
+    "@setupStyleModern": {
+        "description": "Name of the newer layout, offered in the setup wizard"
+    },
+    "setupRowsClassicHint": "간결한 레이아웃. 한 화면에 더 많은 행을 표시합니다.",
+    "@setupRowsClassicHint": {
+        "description": "What the classic home row style gives you"
+    },
+    "setupRowsModernHint": "제목이 아래에 표시되는 더 큰 카드 레이아웃.",
+    "@setupRowsModernHint": {
+        "description": "What the modern home row style gives you"
+    },
+    "setupDetailClassicHint": "모든 정보가 중앙에 한 번에 정렬된 레이아웃.",
+    "@setupDetailClassicHint": {
+        "description": "What the classic detail screen style gives you"
+    },
+    "setupDetailModernHint": "출연진 및 부가 영상 탭이 있는 시네마틱 레이아웃.",
+    "@setupDetailModernHint": {
+        "description": "What the modern detail screen style gives you"
+    },
+    "setupPickALook": "스타일 선택",
+    "@setupPickALook": {
+        "description": "Label above the theme swatches on the final setup screen"
+    },
+    "setupTourMoreHeader": "설정에서 더 많은 기능을 확인할 수 있습니다",
+    "@setupTourMoreHeader": {
+        "description": "Heading of the closing setup screen block that lists features found in settings"
+    },
+    "setupTourBulletRequests": "Seerr 미디어 요청",
+    "@setupTourBulletRequests": {
+        "description": "Bullet on the closing setup screen for the Seerr request feature"
+    },
+    "setupTourBulletSyncPlay": "SyncPlay 함께 시청",
+    "@setupTourBulletSyncPlay": {
+        "description": "Bullet on the closing setup screen for SyncPlay"
+    },
+    "setupTourBulletThemes": "사용자 지정 테마",
+    "@setupTourBulletThemes": {
+        "description": "Bullet on the closing setup screen for custom themes"
+    },
+    "setupTourBulletDownloads": "오프라인 다운로드",
+    "@setupTourBulletDownloads": {
+        "description": "Bullet on the closing setup screen for downloads"
+    },
+    "setupTourBulletMore": "그 외 다양한 기능",
+    "@setupTourBulletMore": {
+        "description": "Closing bullet on the setup screen settings list"
+    },
+    "runSetupAgain": "초기 설정 다시 실행",
+    "@runSetupAgain": {
+        "description": "Starts the first-run setup wizard again from settings"
+    },
+    "oledModeVivid": "선명하게",
+    "@oledModeVivid": {
+        "description": "OLED Mode level that uses pure black surfaces and the strongest artwork enrichment"
+    },
+    "seriesSetToRecord": "시리즈 녹화 예약됨",
+    "@seriesSetToRecord": {
+        "description": "Snackbar confirmation after scheduling a live TV series recording"
+    },
+    "detailsBackgroundOpacity": "상세 정보 배경 불투명도",
+    "@detailsBackgroundOpacity": {
+        "description": "Setting for details background opacity on modern screens"
+    },
+    "manual": "수동",
+    "@manual": {
+        "description": "Option: manual"
+    },
+    "playerSwipeGestures": "음량 및 밝기 스와이프",
+    "@playerSwipeGestures": {
+        "description": "Setting for player swipe gestures"
+    },
+    "failedToDeleteItemWithError": "다음 오류로 인해 삭제 작업에 실패했습니다: {error}",
+    "@failedToDeleteItemWithError": {
+        "description": "Error message when item deletion fails, including the specific error details",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Permission denied"
+            }
+        }
+    },
+    "scrollDirection": "스크롤 방향",
+    "@scrollDirection": {
+        "description": "Section header for scroll direction selection in library display settings"
+    },
+    "castMembers": "출연진",
+    "@castMembers": {
+        "description": "Section title for the list of actors and performers in movie and TV metadata. Not the casting-to-a-device action"
+    },
+    "interfaceLayoutAutomatic": "자동",
+    "@interfaceLayoutAutomatic": {
+        "description": "Interface layout option: detect from the device"
+    },
+    "scrollDirectionVertical": "세로",
+    "@scrollDirectionVertical": {
+        "description": "Library scroll direction option: vertical grid (default)"
+    },
+    "scrollDirectionHorizontal": "가로",
+    "@scrollDirectionHorizontal": {
+        "description": "Library scroll direction option: horizontal grid for ultrawide displays"
+    },
+    "mixedRowsOnly": "혼합 행만",
+    "@mixedRowsOnly": {
+        "description": "Option: only show the label on rows holding both movies and series"
+    },
+    "interfaceLayout": "인터페이스 레이아웃",
+    "@interfaceLayout": {
+        "description": "Setting to override which UI layout the app uses"
+    },
+    "scrollToTop": "맨 위로 스크롤",
+    "@scrollToTop": {
+        "description": "Tooltip for the button that returns a scrolled list to the top"
+    },
+    "shuffleAll": "전체 셔플",
+    "@shuffleAll": {
+        "description": "Action button label for shuffling all tracks of an artist"
+    },
+    "seriesRecordingCancelled": "시리즈 녹화 취소됨",
+    "@seriesRecordingCancelled": {
+        "description": "Snackbar confirmation after cancelling a live TV series recording"
+    },
+    "interfaceLayoutSubtitle": "이 기기에서 잘못 읽히는 경우 감지된 레이아웃을 재정의합니다. 변경 사항을 적용하려면 Moonfin을 다시 시작하세요.",
+    "@interfaceLayoutSubtitle": {
+        "description": "Subtitle for the interface layout setting"
+    },
+    "interfaceLayoutTv": "TV",
+    "@interfaceLayoutTv": {
+        "description": "Interface layout option: 10-foot TV layout"
+    },
+    "interfaceLayoutDesktop": "데스크톱",
+    "@interfaceLayoutDesktop": {
+        "description": "Interface layout option: desktop layout"
+    },
+    "interfaceLayoutPhone": "스마트폰",
+    "@interfaceLayoutPhone": {
+        "description": "Interface layout option: phone layout"
+    },
+    "oledMode": "OLED 모드",
+    "@oledMode": {
+        "description": "Label for the setting that deepens blacks and enriches artwork on OLED displays"
+    },
+    "oledModeSubtitle": "더욱 깊은 블랙과 생생한 아트워크를 제공합니다. OLED 디스플레이에 최적화되어 있습니다.",
+    "@oledModeSubtitle": {
+        "description": "Explanation under the OLED Mode setting"
+    },
+    "oledModeSubtle": "은은하게",
+    "@oledModeSubtle": {
+        "description": "OLED Mode level that darkens surfaces gently and lightly enriches artwork"
+    },
+    "finalizingDownload": "마무리 중…",
+    "@finalizingDownload": {
+        "description": "Status label shown while a finished download is being moved to its final location and validated"
+    },
+    "starring": "주연",
+    "@starring": {
+        "description": "Metadata label for the leading cast"
+    },
+    "recordSeries": "시리즈 녹화",
+    "@recordSeries": {
+        "description": "Button label to record every showing of a live TV series"
+    },
+    "unableToCreateSeriesRecording": "시리즈 녹화를 생성할 수 없습니다",
+    "@unableToCreateSeriesRecording": {
+        "description": "Error when creating a live TV series recording fails"
+    },
+    "autoDetect": "자동 감지",
+    "@autoDetect": {
+        "description": "Option: detect the value automatically"
+    },
+    "settingsSearchHint": "검색 설정",
+    "@settingsSearchHint": {
+        "description": "Hint text in the settings search field"
+    }
 }

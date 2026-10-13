@@ -1,4 +1,3 @@
-import '../preference/preference_constants.dart';
 import '../util/platform_detection.dart';
 
 enum AudioRouteType { hdmi, arc, earc, bluetooth, speaker, headphones, other }
@@ -13,12 +12,12 @@ class AudioCapabilityProfile {
     required this.canDecodeFlac,
     required this.canPassthroughAc3,
     required this.canPassthroughEac3,
-    required this.canPassthroughEac3Joc,
     required this.canPassthroughDts,
     required this.canPassthroughDtsHd,
-    this.canPassthroughDtsX = false,
     required this.canPassthroughTrueHd,
-    this.canPassthroughTrueHdJoc = false,
+    this.canIecLow = false,
+    this.canIecMid = false,
+    this.canIecHbr = false,
     required this.maxPcmChannels,
     required this.activeRouteType,
     required this.routeSupportsHdAudio,
@@ -33,12 +32,12 @@ class AudioCapabilityProfile {
       canDecodeFlac = true,
       canPassthroughAc3 = false,
       canPassthroughEac3 = false,
-      canPassthroughEac3Joc = false,
       canPassthroughDts = false,
       canPassthroughDtsHd = false,
-      canPassthroughDtsX = false,
       canPassthroughTrueHd = false,
-      canPassthroughTrueHdJoc = false,
+      canIecLow = false,
+      canIecMid = false,
+      canIecHbr = false,
       maxPcmChannels = 8,
       activeRouteType = AudioRouteType.other,
       routeSupportsHdAudio = false;
@@ -59,44 +58,72 @@ class AudioCapabilityProfile {
 
   final bool canPassthroughAc3;
   final bool canPassthroughEac3;
-  final bool canPassthroughEac3Joc;
   final bool canPassthroughDts;
   final bool canPassthroughDtsHd;
-  final bool canPassthroughDtsX;
   final bool canPassthroughTrueHd;
-  final bool canPassthroughTrueHdJoc;
+
+  // IEC 61937 carrier support for the Media3 app-side packer ("AudioTrack
+  // (IEC)"): stream-rate stereo, 192 kHz stereo, and 192 kHz 8-channel HBR.
+  final bool canIecLow;
+  final bool canIecMid;
+  final bool canIecHbr;
 
   final int maxPcmChannels;
   final AudioRouteType activeRouteType;
   final bool routeSupportsHdAudio;
 
+  bool get _isHdRoute =>
+      activeRouteType == AudioRouteType.hdmi ||
+      activeRouteType == AudioRouteType.earc;
+
+  // Per-codec IEC eligibility: AC3/DTS core ride the low carrier, EAC3 the
+  // mid one, and the HD formats the HBR carrier, which additionally needs a
+  // direct HDMI or eARC hop just like raw HD passthrough.
+  bool get canIecAc3 => canIecLow;
+  bool get canIecEac3 => canIecMid;
+  bool get canIecDts => canIecLow;
+  bool get canIecDtsHd => canIecHbr && _isHdRoute;
+  bool get canIecTrueHd => canIecHbr && _isHdRoute;
+
   bool get hasCompressedPassthroughRoute =>
       canPassthroughAc3 ||
       canPassthroughEac3 ||
-      canPassthroughEac3Joc ||
       canPassthroughDts ||
       canPassthroughDtsHd ||
-      canPassthroughDtsX ||
-      canPassthroughTrueHd ||
-      canPassthroughTrueHdJoc;
+      canPassthroughTrueHd;
 
   bool get hasMultichannelCapability {
     if (maxPcmChannels > 2) return true;
     if (!hasCompressedPassthroughRoute) return false;
-    return activeRouteType == AudioRouteType.hdmi ||
-        activeRouteType == AudioRouteType.arc ||
-        activeRouteType == AudioRouteType.earc;
+    return isBitstreamRoute;
   }
 
-  bool get isAvReceiverRoute =>
+  /// Whether this route carries a bitstream to an external decoder. Leaving
+  /// the class is what a sink vanishing looks like, while moving within it
+  /// shows up in the per-format flags instead.
+  bool get isBitstreamRoute =>
       activeRouteType == AudioRouteType.hdmi ||
       activeRouteType == AudioRouteType.arc ||
       activeRouteType == AudioRouteType.earc;
 
-  factory AudioCapabilityProfile.fromMap(
-    Map<String, dynamic>? values, {
-    AudioOutputMode audioOutputMode = AudioOutputMode.auto,
-  }) {
+  /// Whether landing this profile would take a capability away from
+  /// [previous]. Any loss counts, because lowering capabilities makes every
+  /// playback transcode until something raises them again. Per-flag rather
+  /// than the aggregate, since [fromMap] already gates the lossless formats
+  /// by route, so a move from HDMI to ARC shows up here as TrueHD lost.
+  bool isDowngradeFrom(AudioCapabilityProfile previous) {
+    if (previous.isBitstreamRoute && !isBitstreamRoute) return true;
+    if (maxPcmChannels < previous.maxPcmChannels) return true;
+    if (previous.canPassthroughAc3 && !canPassthroughAc3) return true;
+    if (previous.canPassthroughEac3 && !canPassthroughEac3) return true;
+    if (previous.canPassthroughDts && !canPassthroughDts) return true;
+    if (previous.canPassthroughDtsHd && !canPassthroughDtsHd) return true;
+    if (previous.canPassthroughTrueHd && !canPassthroughTrueHd) return true;
+    if (previous.routeSupportsHdAudio && !routeSupportsHdAudio) return true;
+    return false;
+  }
+
+  factory AudioCapabilityProfile.fromMap(Map<String, dynamic>? values) {
     if (values == null || values.isEmpty) {
       return const AudioCapabilityProfile.optimistic();
     }
@@ -105,22 +132,13 @@ class AudioCapabilityProfile {
     final legacyDts = _asBool(values['supportsDts']);
     final legacyTrueHd = _asBool(values['supportsTrueHd']);
 
-    final rawRouteType = _parseRouteType(values['activeRouteType']);
-    final activeRouteType = audioOutputMode == AudioOutputMode.avrPassthrough
-        ? (rawRouteType == AudioRouteType.earc ? AudioRouteType.earc : AudioRouteType.hdmi)
-        : rawRouteType;
+    final activeRouteType = _parseRouteType(values['activeRouteType']);
 
-    // ARC (plain Audio Return Channel) only carries compressed audio: AC3, DTS
-    // core, and DD+/EAC3 (incl. EAC3-JOC Atmos). The lossless/HD formats
-    // (TrueHD, TrueHD-Atmos, DTS-HD MA, DTS:X) require eARC or a direct
-    // HDMI-out-to-AVR link, so a probe over-reporting them on ARC must be
-    // gated here, otherwise the capability-authoritative resolvers would
-    // advertise passthrough ARC cannot carry. Gate on `arc` specifically:
-    // plain HDMI can carry HD audio.
-    // Lossless/HD formats (TrueHD, TrueHD-Atmos, DTS-HD MA, DTS:X) require
-    // a direct HDMI connection to an AVR/Soundbar or an eARC link. They are
-    // not supported on plain ARC (due to bandwidth limits) or on stereo
-    // endpoints (built-in speakers, Bluetooth, or other generic outputs).
+    // Lossless/HD formats (TrueHD and DTS-HD MA, along with the Atmos and
+    // DTS:X metadata they carry) need a direct HDMI link to the decoder or an
+    // eARC hop. Plain ARC lacks the bandwidth, so a probe over-reporting them
+    // there must be gated here or the auto resolvers would advertise
+    // passthrough the route can't carry.
     final isHdRoute = activeRouteType == AudioRouteType.hdmi ||
         activeRouteType == AudioRouteType.earc;
 
@@ -149,11 +167,6 @@ class AudioCapabilityProfile {
         'canPassthroughEac3',
         defaultValue: legacyAc3,
       ),
-      canPassthroughEac3Joc: _readBool(
-        values,
-        'canPassthroughEac3Joc',
-        defaultValue: false,
-      ),
       canPassthroughDts: _readBool(
         values,
         'canPassthroughDts',
@@ -162,20 +175,15 @@ class AudioCapabilityProfile {
       canPassthroughDtsHd:
           isHdRoute &&
           _readBool(values, 'canPassthroughDtsHd', defaultValue: legacyDts),
-      canPassthroughDtsX:
-          isHdRoute &&
-          _readBool(values, 'canPassthroughDtsX', defaultValue: false),
       canPassthroughTrueHd:
           isHdRoute &&
           _readBool(values, 'canPassthroughTrueHd', defaultValue: legacyTrueHd),
-      canPassthroughTrueHdJoc:
-          isHdRoute &&
-          _readBool(values, 'canPassthroughTrueHdJoc', defaultValue: false),
-      maxPcmChannels:
-          audioOutputMode == AudioOutputMode.avrPassthrough &&
-              _readInt(values, 'maxPcmChannels', defaultValue: 8) < 8
-          ? 8
-          : _readInt(values, 'maxPcmChannels', defaultValue: 8),
+      // Absent keys stay false so a stale capability cache can never turn IEC
+      // eligibility on by accident.
+      canIecLow: _readBool(values, 'canIecLow', defaultValue: false),
+      canIecMid: _readBool(values, 'canIecMid', defaultValue: false),
+      canIecHbr: _readBool(values, 'canIecHbr', defaultValue: false),
+      maxPcmChannels: _readInt(values, 'maxPcmChannels', defaultValue: 8),
       activeRouteType: activeRouteType,
       routeSupportsHdAudio: _readBool(
         values,
@@ -187,9 +195,7 @@ class AudioCapabilityProfile {
 
   Map<String, dynamic> toMap() {
     final supportsAc3 = canPassthroughAc3 || canPassthroughEac3;
-    final supportsDts =
-        canPassthroughDts || canPassthroughDtsHd || canPassthroughDtsX;
-    final supportsTrueHd = canPassthroughTrueHd || canPassthroughTrueHdJoc;
+    final supportsDts = canPassthroughDts || canPassthroughDtsHd;
 
     return <String, dynamic>{
       'canDecodeAc3': canDecodeAc3,
@@ -200,18 +206,18 @@ class AudioCapabilityProfile {
       'canDecodeFlac': canDecodeFlac,
       'canPassthroughAc3': canPassthroughAc3,
       'canPassthroughEac3': canPassthroughEac3,
-      'canPassthroughEac3Joc': canPassthroughEac3Joc,
       'canPassthroughDts': canPassthroughDts,
       'canPassthroughDtsHd': canPassthroughDtsHd,
-      'canPassthroughDtsX': canPassthroughDtsX,
       'canPassthroughTrueHd': canPassthroughTrueHd,
-      'canPassthroughTrueHdJoc': canPassthroughTrueHdJoc,
+      'canIecLow': canIecLow,
+      'canIecMid': canIecMid,
+      'canIecHbr': canIecHbr,
       'maxPcmChannels': maxPcmChannels,
       'activeRouteType': activeRouteType.name,
       'routeSupportsHdAudio': routeSupportsHdAudio,
       'supportsAc3': supportsAc3,
       'supportsDts': supportsDts,
-      'supportsTrueHd': supportsTrueHd,
+      'supportsTrueHd': canPassthroughTrueHd,
       'supportsPcm': true,
       'supportsAac': true,
     };

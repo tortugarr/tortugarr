@@ -4,8 +4,11 @@ import 'package:server_core/server_core.dart' hide ImageType;
 
 import '../../preference/preference_constants.dart';
 import '../../preference/user_preferences.dart';
+import '../../util/network_errors.dart';
 import '../models/aggregated_item.dart';
 import '../repositories/mdblist_repository.dart';
+import '../services/user_data_sync.dart';
+import '../utils/blocked_ratings.dart';
 
 enum FavoritesState { loading, ready, error }
 
@@ -53,8 +56,10 @@ class FavoritesViewModel extends ChangeNotifier {
   late PosterSize _posterSize;
   PosterSize get posterSize => _posterSize;
 
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
+  Object? _error;
+  Object? get error => _error;
+  bool _isNetworkError = false;
+  bool get isNetworkError => _isNetworkError;
 
   AggregatedItem? _focusedItem;
   AggregatedItem? get focusedItem => _focusedItem;
@@ -76,7 +81,13 @@ class FavoritesViewModel extends ChangeNotifier {
   bool _loadingMoreGrid = false;
   bool get loadingMoreGrid => _loadingMoreGrid;
 
-  bool get hasMoreGrid => _gridItems.length < _gridTotalCount;
+  /// Rows are paged from what the server handed over rather than from what is
+  /// on screen, because a page thinned by the ratings filter would otherwise
+  /// rewind the cursor and ask for rows it already has.
+  int _gridFetchedCount = 0;
+  final Map<FavoriteTypeFilter, int> _rowFetchedCounts = {};
+
+  bool get hasMoreGrid => _gridFetchedCount < _gridTotalCount;
 
   final Map<FavoriteTypeFilter, int> _rowTotalCounts = {};
   final Set<FavoriteTypeFilter> _inFlightPagingRowTypes = {};
@@ -98,6 +109,39 @@ class FavoritesViewModel extends ChangeNotifier {
     _imageType = _prefs.get(UserPreferences.libraryImageType(_prefKey));
     _posterSize = _prefs.resolveLibraryPosterSize();
     _viewStyle = _prefs.get(UserPreferences.favoritesViewStyle);
+    userDataSync.addListener(_onUserDataChanged);
+  }
+
+  /// Repaints the watched ticks in place when something here is played or
+  /// unfavourited, on this device or another one.
+  void _onUserDataChanged() {
+    var changed = false;
+
+    Map<FavoriteTypeFilter, List<AggregatedItem>>? rows;
+    _rowItems.forEach((type, items) {
+      final patched = userDataSync.applyAll(items);
+      if (identical(patched, items)) return;
+      rows ??= Map.of(_rowItems);
+      rows![type] = patched;
+    });
+    if (rows != null) {
+      _rowItems = rows!;
+      changed = true;
+    }
+
+    final grid = userDataSync.applyAll(_gridItems);
+    if (!identical(grid, _gridItems)) {
+      _gridItems = grid;
+      changed = true;
+    }
+
+    if (changed) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    userDataSync.removeListener(_onUserDataChanged);
+    super.dispose();
   }
 
   void setFocusedItem(AggregatedItem? item) {
@@ -130,8 +174,10 @@ class FavoritesViewModel extends ChangeNotifier {
     _state = FavoritesState.loading;
     _rowItems = {};
     _rowTotalCounts.clear();
+    _rowFetchedCounts.clear();
     _gridItems = const [];
     _gridTotalCount = 0;
+    _gridFetchedCount = 0;
     notifyListeners();
 
     try {
@@ -152,7 +198,8 @@ class FavoritesViewModel extends ChangeNotifier {
       }
       _state = FavoritesState.ready;
     } catch (e) {
-      _errorMessage = e.toString();
+      _error = e;
+      _isNetworkError = isNetworkException(e);
       _state = FavoritesState.error;
     }
     notifyListeners();
@@ -208,8 +255,9 @@ class FavoritesViewModel extends ChangeNotifier {
             ),
           )
           .toList();
+      _rowFetchedCounts[type] = startIndex + rawItems.length;
       final totalCount = response['TotalRecordCount'] as int? ?? items.length;
-      return (items, totalCount);
+      return (withoutBlockedItems(items), totalCount);
     } catch (_) {
       return (const <AggregatedItem>[], 0);
     }
@@ -219,12 +267,13 @@ class FavoritesViewModel extends ChangeNotifier {
     final items = _rowItems[type];
     if (items == null || items.isEmpty) return;
     final total = _rowTotalCounts[type] ?? 0;
-    if (items.length >= total) return;
+    final fetched = _rowFetchedCounts[type] ?? items.length;
+    if (fetched >= total) return;
     if (_inFlightPagingRowTypes.contains(type)) return;
 
     _inFlightPagingRowTypes.add(type);
     try {
-      final currentOffset = items.length;
+      final currentOffset = fetched;
       final (newItems, totalCount) = await _fetchRowItems(
         type,
         startIndex: currentOffset,
@@ -288,16 +337,20 @@ class FavoritesViewModel extends ChangeNotifier {
           startIndex + rawItems.length + (rawItems.length == pageSize ? 1 : 0);
     }
 
-    final mapped = rawItems
-        .cast<Map<String, dynamic>>()
-        .map(
-          (raw) => AggregatedItem(
-            id: raw['Id']?.toString() ?? '',
-            serverId: _client.baseUrl,
-            rawData: raw,
-          ),
-        )
-        .toList();
+    final mapped = withoutBlockedItems(
+      rawItems
+          .cast<Map<String, dynamic>>()
+          .map(
+            (raw) => AggregatedItem(
+              id: raw['Id']?.toString() ?? '',
+              serverId: _client.baseUrl,
+              rawData: raw,
+            ),
+          )
+          .toList(),
+    );
+
+    _gridFetchedCount = startIndex + rawItems.length;
 
     if (startIndex == 0) {
       _gridItems = mapped;
@@ -311,11 +364,11 @@ class FavoritesViewModel extends ChangeNotifier {
     _loadingMoreGrid = true;
     notifyListeners();
 
-    final prevLength = _gridItems.length;
+    final prevFetched = _gridFetchedCount;
     try {
-      await _fetchGridPage(_gridItems.length);
-      if (_gridItems.length <= prevLength) {
-        _gridTotalCount = _gridItems.length;
+      await _fetchGridPage(_gridFetchedCount);
+      if (_gridFetchedCount <= prevFetched) {
+        _gridTotalCount = _gridFetchedCount;
       }
     } catch (_) {}
 

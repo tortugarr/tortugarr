@@ -225,7 +225,14 @@ Widget buildSettingsSelectionBubble(
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
   final invert = focused && settingsTileInvertsOnFocus;
+  // ListTile hands its trailing whatever width it asks for and leaves the
+  // title the rest, so an uncapped long label crushes the title to a sliver.
+  final maxBubbleWidth = (MediaQuery.sizeOf(context).width * 0.42).clamp(
+    120.0,
+    280.0,
+  );
   return Container(
+    constraints: BoxConstraints(maxWidth: maxBubbleWidth),
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
     decoration: BoxDecoration(
       color: invert
@@ -242,6 +249,8 @@ Widget buildSettingsSelectionBubble(
     child: Text(
       label,
       textAlign: TextAlign.center,
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
       style: theme.textTheme.labelMedium?.copyWith(
         color: invert
             ? AppColors.black.withValues(alpha: 0.87)
@@ -455,11 +464,15 @@ class EnumPreferenceTile<T extends Enum> extends StatefulWidget {
 class _EnumPreferenceTileState<T extends Enum>
     extends State<EnumPreferenceTile<T>> {
   late PreferenceBinding<T> _binding;
+  late final FocusNode _focusNode;
   bool _pickerOpen = false;
 
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode(
+      debugLabel: 'EnumPreferenceTile_${widget.preference.key}',
+    );
     _binding = PreferenceBinding(
       GetIt.instance<PreferenceStore>(),
       widget.preference,
@@ -478,6 +491,7 @@ class _EnumPreferenceTileState<T extends Enum>
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _binding.dispose();
     super.dispose();
   }
@@ -492,6 +506,7 @@ class _EnumPreferenceTileState<T extends Enum>
           final current = values.contains(value) ? value : values.first;
           final label = widget.labelOf(current);
           return ListTile(
+            focusNode: _focusNode,
             autofocus: widget.autofocus,
             leading: widget.icon != null
                 ? buildSettingsLeadingIconShell(
@@ -524,80 +539,107 @@ class _EnumPreferenceTileState<T extends Enum>
   void _showPicker(BuildContext context, T current) async {
     if (_pickerOpen) return;
     _pickerOpen = true;
-    final values = widget.values ?? widget.preference.values.toList();
-    final selectedIndex = values.indexOf(current);
-    final autofocusIndex = selectedIndex >= 0 ? selectedIndex : 0;
-    var picked = false;
-    final result = await showFocusRestoringDialog<T>(
-      context: context,
-      useRootNavigator: false,
-      builder: (ctx) => withBackClose(
-        ctx,
-        SimpleDialog(
-          title: Text(widget.title, style: _kSettingsTitleTextStyle),
-          children: values.asMap().entries.map((entry) {
-            final i = entry.key;
-            final v = entry.value;
-            final selected = v == current;
-            return TvFocusHighlight(
-              builder: (_, focused) {
-                final invert = focused && settingsTileInvertsOnFocus;
-                return ListTile(
-                  autofocus: i == autofocusIndex,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  title: Text(
-                    (widget.dialogLabelOf ?? widget.labelOf)(v),
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: invert
-                          ? AppColors.black.withValues(alpha: 0.87)
-                          : AppColorScheme.onSurface,
-                    ),
-                  ),
-                  subtitle: widget.dialogSubtitleOf != null
-                      ? Text(
-                          widget.dialogSubtitleOf!(v),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: invert
-                                ? AppColors.black.withValues(alpha: 0.54)
-                                : AppColorScheme.onSurface.withValues(
-                                    alpha: 0.6,
-                                  ),
-                          ),
-                        )
-                      : null,
-                  isThreeLine: widget.dialogSubtitleOf != null,
-                  trailing: selected
-                      ? Icon(
-                          Icons.check,
-                          color: invert
-                              ? AppColors.black.withValues(alpha: 0.54)
-                              : (AppUiIdiomResolver.isApple
-                                  ? AppColorScheme.accent
-                                  : null),
-                        )
-                      : null,
-                  onTap: () {
-                    if (picked) return;
-                    picked = true;
-                    Navigator.pop(ctx, v);
-                  },
-                );
-              },
-            );
-          }).toList(),
-        ),
-      ),
+    final result = await showSettingsPicker<T>(
+      context,
+      title: widget.title,
+      values: widget.values ?? widget.preference.values.toList(),
+      current: current,
+      labelOf: widget.dialogLabelOf ?? widget.labelOf,
+      subtitleOf: widget.dialogSubtitleOf,
     );
     _pickerOpen = false;
     if (!mounted || result == null || result == _binding.value) return;
     _binding.value = result;
     widget.onChanged?.call();
     widget.onChangedValue?.call(result);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted &&
+          !_focusNode.hasFocus &&
+          (ModalRoute.of(context)?.isCurrent ?? true)) {
+        _focusNode.requestFocus();
+      }
+    });
   }
+}
+
+/// The list a settings picker opens: every value, the current one ticked, and
+/// an optional line under each. Resolves to the value pressed, or null when
+/// the dialog is closed without a choice.
+Future<T?> showSettingsPicker<T>(
+  BuildContext context, {
+  required String title,
+  required List<T> values,
+  required T current,
+  required String Function(T value) labelOf,
+  String Function(T value)? subtitleOf,
+}) {
+  final selectedIndex = values.indexOf(current);
+  final autofocusIndex = selectedIndex >= 0 ? selectedIndex : 0;
+  var picked = false;
+  return showFocusRestoringDialog<T>(
+    context: context,
+    useRootNavigator: false,
+    builder: (ctx) => withBackClose(
+      ctx,
+      SimpleDialog(
+        title: Text(title, style: _kSettingsTitleTextStyle),
+        children: values.asMap().entries.map((entry) {
+          final i = entry.key;
+          final v = entry.value;
+          final selected = v == current;
+          return TvFocusHighlight(
+            builder: (_, focused) {
+              final invert = focused && settingsTileInvertsOnFocus;
+              return ListTile(
+                autofocus: i == autofocusIndex,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                title: Text(
+                  labelOf(v),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: invert
+                        ? AppColors.black.withValues(alpha: 0.87)
+                        : AppColorScheme.onSurface,
+                  ),
+                ),
+                subtitle: subtitleOf != null
+                    ? Text(
+                        subtitleOf(v),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: invert
+                              ? AppColors.black.withValues(alpha: 0.54)
+                              : AppColorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
+                        ),
+                      )
+                    : null,
+                isThreeLine: subtitleOf != null,
+                trailing: selected
+                    ? Icon(
+                        Icons.check,
+                        color: invert
+                            ? AppColors.black.withValues(alpha: 0.54)
+                            : (AppUiIdiomResolver.isApple
+                                ? AppColorScheme.accent
+                                : null),
+                      )
+                    : null,
+                onTap: () {
+                  if (picked) return;
+                  picked = true;
+                  Navigator.pop(ctx, v);
+                },
+              );
+            },
+          );
+        }).toList(),
+      ),
+    ),
+  );
 }
 
 class SliderPreferenceTile extends StatefulWidget {
@@ -968,6 +1010,10 @@ class IntPickerPreferenceTile extends StatefulWidget {
   final String? description;
   final IconData? icon;
   final Map<int, String> options;
+
+  /// Longer wording for the picker rows, where there is room to explain what
+  /// an option means. The chip falls back to [options] when absent.
+  final Map<int, String>? dialogOptions;
   final VoidCallback? onChanged;
 
   const IntPickerPreferenceTile({
@@ -975,6 +1021,7 @@ class IntPickerPreferenceTile extends StatefulWidget {
     required this.preference,
     required this.title,
     required this.options,
+    this.dialogOptions,
     this.description,
     this.icon,
     this.onChanged,
@@ -1070,7 +1117,10 @@ class _IntPickerPreferenceTileState extends State<IntPickerPreferenceTile> {
             return TvFocusHighlight(
               builder: (_, _) => ListTile(
                 autofocus: i == autofocusIndex,
-                title: Text(e.value, style: _kSettingsTitleTextStyle),
+                title: Text(
+                  widget.dialogOptions?[e.key] ?? e.value,
+                  style: _kSettingsTitleTextStyle,
+                ),
                 trailing: selected ? const Icon(Icons.check) : null,
                 onTap: () {
                   if (picked) return;
@@ -1097,11 +1147,17 @@ class TvFocusHighlight extends StatefulWidget {
   final bool enabled;
   final FocusNode? focusNode;
 
+  /// Replaces the default tile outer margin (see [_settingsTileOuterPadding]).
+  /// Panels that want edge-to-edge tile highlights pass a tighter EdgeInsets;
+  /// null keeps the shared settings margins.
+  final EdgeInsetsGeometry? outerPadding;
+
   const TvFocusHighlight({
     super.key,
     required this.builder,
     this.enabled = true,
     this.focusNode,
+    this.outerPadding,
   });
 
   @override
@@ -1146,7 +1202,7 @@ class _TvFocusHighlightState extends State<TvFocusHighlight> {
       descendantsAreFocusable: widget.enabled,
       onFocusChange: _onFocusChange,
       child: Padding(
-        padding: _settingsTileOuterPadding(context),
+        padding: widget.outerPadding ?? _settingsTileOuterPadding(context),
         child: Opacity(
           opacity: widget.enabled ? 1.0 : 0.45,
           child: AnimatedContainer(
@@ -1162,10 +1218,33 @@ class _TvFocusHighlightState extends State<TvFocusHighlight> {
                   : AppColorScheme.onSurface.withValues(alpha: 0.7),
               titleTextStyle: _kSettingsTitleTextStyle,
               subtitleTextStyle: _kSettingsSubtitleTextStyle,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Builder(
-                  builder: (ctx) => widget.builder(ctx, focusVisible),
+              child: CheckboxTheme(
+                data: CheckboxThemeData(
+                  side: BorderSide(
+                    color: highlighted
+                        ? AppColors.black.withValues(alpha: 0.8)
+                        : (Theme.of(context).colorScheme.primary),
+                    width: 1.8,
+                  ),
+                  fillColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return highlighted
+                          ? AppColors.black.withValues(alpha: 0.87)
+                          : Theme.of(context).colorScheme.primary;
+                    }
+                    return Colors.transparent;
+                  }),
+                  checkColor: WidgetStateProperty.all(
+                    highlighted
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Builder(
+                    builder: (ctx) => widget.builder(ctx, focusVisible),
+                  ),
                 ),
               ),
             ),

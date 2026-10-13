@@ -59,13 +59,17 @@ fetch() {
 # the SDK's. Add it to that stanza if it is missing.
 patch_mgba() {
   local mk="$1/Makefile.libretro"
-  grep -q "ios-arm64" "$mk" || return 0
+  grep -q "findstring ios" "$mk" || return 0
   awk '
-    /else ifeq \(\$\(platform\), ios-arm64\)/ {inios=1}
+    /^else ifneq \(,\$\(findstring ios,\$\(platform\)\)\)/ {inios=1}
     inios && /HAVE_LOCALE/ {haslocale=1}
     {print}
-    inios && /DEFINES \+= -DHAVE_STRLCPY/ && !haslocale {print "    DEFINES += -DHAVE_LOCALE"; inios=0}
+    inios && /DEFINES \+= -DHAVE_STRLCPY/ && !haslocale {print "   DEFINES += -DHAVE_LOCALE"; inios=0}
   ' "$mk" > "$mk.tmp" && mv "$mk.tmp" "$mk"
+  grep -q "HAVE_LOCALE" "$mk" || {
+    echo "error: mgba locale patch did not apply, the iOS stanza has moved" >&2
+    exit 1
+  }
 }
 
 build_one() {

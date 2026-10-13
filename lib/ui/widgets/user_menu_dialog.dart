@@ -19,12 +19,13 @@ import '../../util/platform_detection.dart';
 import '../../util/pin_code_util.dart';
 import '../navigation/destinations.dart';
 import 'adaptive/adaptive_dialog.dart';
-import '../screens/downloads/downloads_panel.dart';
 import '../screens/settings/settings_side_panel.dart';
+import 'navigation_layout.dart';
 import 'overlay_sheet.dart';
 import 'pin_entry_dialog.dart';
 import 'remote_control_dialog.dart';
 import 'settings/settings_panel.dart';
+import 'image_source.dart';
 
 enum _AccountDialogAction { quickConnect }
 
@@ -35,7 +36,7 @@ void showUserMenu(BuildContext context) {
   ).then((action) {
     if (action != _AccountDialogAction.quickConnect) return;
     if (!context.mounted) return;
-    _showQuickConnectCodeDialog(context);
+    showQuickConnectCodeDialog(context);
   });
 }
 
@@ -363,7 +364,9 @@ class _AccountDialogState extends State<_AccountDialog> {
                   ),
                 ),
               ],
-              if (!PlatformDetection.isTV) ...[
+              // The bottom navbar hub has these already.
+              if (!PlatformDetection.isTV &&
+                  !NavigationLayout.usesBottomNavbar) ...[
                 const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -410,25 +413,6 @@ class _AccountDialogState extends State<_AccountDialog> {
                     ),
                   ),
                 ),
-                if (!PlatformDetection.isWeb && !PlatformDetection.isTV) ...[
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: _ActionButton(
-                        label: l10n.savedMedia,
-                        onPressed: _busy
-                            ? null
-                            : () {
-                                Navigator.of(context).pop();
-                                showDownloadsDialog(context);
-                              },
-                        focusColor: focusColor,
-                      ),
-                    ),
-                  ),
-                ],
               ],
             ],
           ),
@@ -438,7 +422,7 @@ class _AccountDialogState extends State<_AccountDialog> {
   }
 }
 
-Future<void> _showQuickConnectCodeDialog(BuildContext context) async {
+Future<void> showQuickConnectCodeDialog(BuildContext context) async {
   final l10n = AppLocalizations.of(context);
   final code = await _promptQuickConnectCode(context);
   if (code == null || code.isEmpty || !context.mounted) return;
@@ -840,7 +824,12 @@ class _AccountCardState extends State<_AccountCard> {
                           )
                         : Image.network(
                             widget.avatarUrl!,
+                            headers: serverImageHeaders,
                             fit: BoxFit.cover,
+                            cacheWidth: ArtworkDecode.widthFor(
+                              68,
+                              MediaQuery.devicePixelRatioOf(context),
+                            ),
                             errorBuilder: (_, _, _) {
                               if (!_avatarFailed) {
                                 WidgetsBinding.instance

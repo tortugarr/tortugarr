@@ -8,7 +8,11 @@ project(runner LANGUAGES CXX)
 # Any new source files that you add to the application should be added here.
 add_executable(${BINARY_NAME} WIN32
   "flutter_window.cpp"
+  "hdr_overlay_window.cpp"
+  "hdr_video_window.cpp"
+  "hdr_window_support.cpp"
   "main.cpp"
+  "method_call_args.cpp"
   "native_game.cpp"
   "utils.cpp"
   "win32_window.cpp"

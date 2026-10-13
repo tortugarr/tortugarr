@@ -3,6 +3,8 @@ set -euo pipefail
 
 TEAM_ID="${TEAM_ID:-}"
 EXPORT_METHOD="${EXPORT_METHOD:-app-store-connect}"
+# export writes the PKG next to the app, upload sends it to App Store Connect.
+EXPORT_DESTINATION="${EXPORT_DESTINATION:-export}"
 WORKSPACE="${WORKSPACE:-macos/Runner.xcworkspace}"
 SCHEME="${SCHEME:-Runner}"
 CONFIGURATION="${CONFIGURATION:-Release}"
@@ -20,6 +22,11 @@ UPLOAD_WITH_TRANSPORTER="${UPLOAD_WITH_TRANSPORTER:-0}"
 APPLE_ID="${APPLE_ID:-}"
 APP_SPECIFIC_PASSWORD="${APP_SPECIFIC_PASSWORD:-}"
 ASC_PROVIDER="${ASC_PROVIDER:-}"
+# An App Store Connect API key lets xcodebuild fetch profiles on a machine
+# with no Apple ID signed into Xcode, which is every CI runner.
+ASC_KEY_PATH="${ASC_KEY_PATH:-}"
+ASC_KEY_ID="${ASC_KEY_ID:-}"
+ASC_ISSUER_ID="${ASC_ISSUER_ID:-}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_NAME="Moonfin"
@@ -57,6 +64,24 @@ if [ "$BUILD_APPSTORE_PKG" = "1" ] && [ -z "$TEAM_ID" ]; then
   echo "Set TEAM_ID in build-macos.private.env or pass TEAM_ID=... when running." >&2
   exit 1
 fi
+if [ "$EXPORT_DESTINATION" != "export" ] && [ "$EXPORT_DESTINATION" != "upload" ]; then
+  echo "Error: EXPORT_DESTINATION must be export or upload." >&2
+  exit 1
+fi
+# Expanded with the ${arr[@]+...} form below, since an empty array under
+# set -u is an error on the bash macOS ships.
+ASC_AUTH_ARGS=()
+if [ -n "$ASC_KEY_PATH" ]; then
+  if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ]; then
+    echo "Error: ASC_KEY_ID and ASC_ISSUER_ID are required with ASC_KEY_PATH." >&2
+    exit 1
+  fi
+  ASC_AUTH_ARGS=(
+    -authenticationKeyPath "$ASC_KEY_PATH"
+    -authenticationKeyID "$ASC_KEY_ID"
+    -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+  )
+fi
 
 APP_VERSION=$(grep '^version:' "$REPO_ROOT/pubspec.yaml" | sed 's/version:[[:space:]]*//' | cut -d'+' -f1 | tr -d '[:space:]')
 if [ -z "$APP_VERSION" ]; then
@@ -71,6 +96,8 @@ FINAL_PKG_OUTPUT="$REPO_ROOT/${APP_NAME}_macOS_v${APP_VERSION}.pkg"
 APP_FROM_ARCHIVE="$ARCHIVE_PATH/Products/Applications/${APP_NAME}.app"
 DMG_OUTPUT="$REPO_ROOT/${APP_NAME}_macOS_v${APP_VERSION}.dmg"
 STAGING_DIR="$REPO_ROOT/build/macos/dmg-staging"
+DMG_RW_IMAGE="$REPO_ROOT/build/macos/dmg-rw.dmg"
+DMG_MOUNTPOINT="$REPO_ROOT/build/macos/dmg-mount"
 
 if [ -n "$APP_SIGN_ID" ] && ! command -v codesign >/dev/null 2>&1; then
   echo "Error: codesign is required when APP_SIGN_ID/DEVELOPER_ID is set." >&2
@@ -143,7 +170,7 @@ else
   fi
 fi
 if [ "$ALLOW_PROVISIONING_UPDATES" = "1" ]; then
-  ARCHIVE_CMD+=( -allowProvisioningUpdates )
+  ARCHIVE_CMD+=( -allowProvisioningUpdates ${ASC_AUTH_ARGS[@]+"${ASC_AUTH_ARGS[@]}"} )
 fi
 "${ARCHIVE_CMD[@]}"
 
@@ -157,7 +184,7 @@ if [ "$BUILD_APPSTORE_PKG" = "1" ]; then
     echo '  <key>method</key>'
     echo "  <string>${EXPORT_METHOD}</string>"
     echo '  <key>destination</key>'
-    echo '  <string>export</string>'
+    echo "  <string>${EXPORT_DESTINATION}</string>"
     echo '  <key>signingStyle</key>'
     echo '  <string>automatic</string>'
     if [ -n "$TEAM_ID" ]; then
@@ -177,10 +204,18 @@ if [ "$BUILD_APPSTORE_PKG" = "1" ]; then
     -exportOptionsPlist "$EXPORT_OPTIONS_PLIST"
   )
   if [ "$ALLOW_PROVISIONING_UPDATES" = "1" ]; then
-    EXPORT_CMD+=( -allowProvisioningUpdates )
+    EXPORT_CMD+=( -allowProvisioningUpdates ${ASC_AUTH_ARGS[@]+"${ASC_AUTH_ARGS[@]}"} )
   fi
   "${EXPORT_CMD[@]}"
+fi
 
+# An upload leaves nothing on disk, so the PKG handling below is for export only.
+if [ "$BUILD_APPSTORE_PKG" = "1" ] && [ "$EXPORT_DESTINATION" = "upload" ]; then
+  echo "Archive created: $ARCHIVE_PATH"
+  echo "Uploaded to App Store Connect."
+fi
+
+if [ "$BUILD_APPSTORE_PKG" = "1" ] && [ "$EXPORT_DESTINATION" = "export" ]; then
   PKG_OUTPUT="$(find "$EXPORT_DIR" -maxdepth 1 -type f -name '*.pkg' | head -n 1)"
   if [ -z "$PKG_OUTPUT" ]; then
     echo "Error: no exported PKG found in $EXPORT_DIR" >&2
@@ -270,16 +305,32 @@ if [ "$BUILD_DMG_GITHUB" = "1" ]; then
     codesign --force --deep --timestamp --options runtime --sign "$APP_SIGN_ID" "$STAGING_DIR/${APP_NAME}.app"
   fi
 
-  ln -s /Applications "$STAGING_DIR/Applications"
-
+  DMG_SIZE_MB=$(( $(du -sk "$STAGING_DIR" | awk '{print $1}') / 1024 + 100 ))
+  hdiutil detach "$DMG_MOUNTPOINT" -quiet 2>/dev/null || true
+  rm -rf "$DMG_MOUNTPOINT"
+  mkdir -p "$DMG_MOUNTPOINT"
   hdiutil create \
+    -size "${DMG_SIZE_MB}m" \
+    -fs HFS+ \
     -volname "$APP_NAME" \
-    -srcfolder "$STAGING_DIR" \
     -ov \
-    -format UDZO \
-    "$DMG_OUTPUT"
+    "$DMG_RW_IMAGE"
 
-  rm -rf "$STAGING_DIR"
+  (
+    trap 'hdiutil detach "$DMG_MOUNTPOINT" -quiet 2>/dev/null || true' EXIT
+    hdiutil attach "$DMG_RW_IMAGE" \
+      -mountpoint "$DMG_MOUNTPOINT" \
+      -nobrowse \
+      -noautoopen
+    ditto "$STAGING_DIR/${APP_NAME}.app" "$DMG_MOUNTPOINT/${APP_NAME}.app"
+    ln -s /Applications "$DMG_MOUNTPOINT/Applications"
+    hdiutil detach "$DMG_MOUNTPOINT" -quiet
+  )
+
+  hdiutil convert "$DMG_RW_IMAGE" -format UDZO -ov -o "$DMG_OUTPUT"
+
+  rm -f "$DMG_RW_IMAGE"
+  rm -rf "$DMG_MOUNTPOINT" "$STAGING_DIR"
 
   if [ -n "$APP_SIGN_ID" ]; then
     echo "Signing DMG with $APP_SIGN_ID..."

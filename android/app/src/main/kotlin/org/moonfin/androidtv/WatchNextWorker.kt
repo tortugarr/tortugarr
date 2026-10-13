@@ -11,10 +11,13 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import dev.fluttercommunity.plus.device_info.DeviceInfoPlusPlugin
+import dev.fluttercommunity.plus.packageinfo.PackageInfoPlugin
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +36,15 @@ class WatchNextWorker(
     override suspend fun doWork(): Result {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return Result.success()
         if (!isTelevision(applicationContext)) return Result.success()
+        // While the app is foregrounded, WatchNextService.update() already
+        // publishes through MainActivity's channel, so this run would only
+        // duplicate that -- at the cost of building and destroying a second
+        // FlutterEngine on the main thread (see the Dispatchers.Main blocks
+        // below), which on Android is the same thread that drives the UI.
+        // Skipping loses nothing for the same reason, and it keeps the periodic
+        // schedule intact -- retrying here would instead re-poke the process on
+        // the backoff interval for as long as the app stays open.
+        if (isAppInForeground()) return Result.success()
 
         val done = CompletableDeferred<Boolean>()
         // Set when Dart reports a failure that retrying can't fix, so the
@@ -51,10 +63,14 @@ class WatchNextWorker(
                     loader.ensureInitializationComplete(applicationContext, null)
                 }
 
-                // FlutterEngine(context) already registers all generated plugins;
-                // do not call GeneratedPluginRegistrant.registerWith() again.
-                val flutterEngine = FlutterEngine(applicationContext)
+                // Registering every plugin would pull in audio_service, which
+                // binds its media service as soon as it attaches and boots the
+                // whole app headless. Only what the refresh reads is attached.
+                val flutterEngine = FlutterEngine(applicationContext, null, false)
                 engine = flutterEngine
+                flutterEngine.plugins.add(SharedPreferencesPlugin())
+                flutterEngine.plugins.add(PackageInfoPlugin())
+                flutterEngine.plugins.add(DeviceInfoPlusPlugin())
 
                 MethodChannel(
                     flutterEngine.dartExecutor.binaryMessenger,

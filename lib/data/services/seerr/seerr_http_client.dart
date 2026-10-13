@@ -94,9 +94,47 @@ class SeerrHttpClient {
       throw DioException(
         requestOptions: response.requestOptions,
         response: response,
-        message: '$context: HTTP ${response.statusCode}',
+        message: '$context: HTTP ${response.statusCode}${_errorDetail(response)}',
       );
     }
+  }
+
+  /// Seerr and the Moonbase proxy send the reason in a JSON body. Include it
+  /// so the screen shows more than a status code, and take nothing else. The
+  /// message ends up in the diagnostic report, and a raw body from a proxy in
+  /// front of the server is an error page that can carry paths or tokens the
+  /// report's redaction wasn't written for.
+  String _errorDetail(Response response) {
+    final data = response.data;
+    if (data is! Map) return '';
+    final detail = (data['message'] ?? data['error'] ?? data['code'])
+        ?.toString()
+        .trim();
+    if (detail == null || detail.isEmpty) return '';
+    if (detail.length > 200) return ' - ${detail.substring(0, 200)}...';
+    return ' - $detail';
+  }
+
+  /// Treats an empty or non-JSON success body as an empty page, so the list
+  /// shows its empty state instead of an error.
+  Map<String, dynamic> _pageBody(Response response, String context) {
+    final data = response.data;
+    if (data is Map<String, dynamic>) return data;
+    if (data is Map) return Map<String, dynamic>.from(data);
+    if (data == null) return const {};
+    if (data is String) {
+      final trimmed = data.trim();
+      if (trimmed.isEmpty) return const {};
+      try {
+        final decoded = jsonDecode(trimmed);
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+      } on FormatException catch (_) {}
+    }
+    throw DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      message: '$context: unexpected response body',
+    );
   }
 
   Future<Map<String, dynamic>> getCurrentUser() async {
@@ -127,7 +165,7 @@ class SeerrHttpClient {
       options: _authOptions(),
     );
     _requireSuccess(response, 'getRequests');
-    return response.data as Map<String, dynamic>;
+    return _pageBody(response, 'getRequests');
   }
 
   Future<Map<String, dynamic>> getRequestCount() async {
@@ -179,10 +217,13 @@ class SeerrHttpClient {
     return response.data as Map<String, dynamic>;
   }
 
+  /// No creator parameter. Seerr validates against a spec that declares only
+  /// take, skip, sort, filter and requestedBy here, so anything else comes
+  /// back a 400, and it already scopes a user who can't view all issues to
+  /// their own.
   Future<Map<String, dynamic>> getIssues({
     String? filter,
     String? sort,
-    int? createdBy,
     int limit = 20,
     int offset = 0,
   }) async {
@@ -193,12 +234,11 @@ class SeerrHttpClient {
         'take': limit,
         'filter': ?filter,
         'sort': ?sort,
-        'createdBy': ?createdBy,
       },
       options: _authOptions(),
     );
     _requireSuccess(response, 'getIssues');
-    return response.data as Map<String, dynamic>;
+    return _pageBody(response, 'getIssues');
   }
 
   Future<Map<String, dynamic>> getIssueCount() async {
@@ -466,9 +506,16 @@ class SeerrHttpClient {
   Future<Map<String, dynamic>> discoverMovies({
     int page = 1,
     String sortBy = 'popularity.desc',
-    int? genre,
+    String? genre,
     int? studio,
     int? keywords,
+    String? language,
+    double? voteAverageGte,
+    int? voteCountGte,
+    int? withRuntimeGte,
+    int? withRuntimeLte,
+    String? primaryReleaseDateGte,
+    String? primaryReleaseDateLte,
   }) async {
     final response = await _dio.get(
       _apiUrl('discover/movies'),
@@ -478,6 +525,13 @@ class SeerrHttpClient {
         'genre': ?genre,
         'studio': ?studio,
         'keywords': ?keywords,
+        'language': ?language,
+        'voteAverageGte': ?voteAverageGte?.toString(),
+        'voteCountGte': ?voteCountGte?.toString(),
+        'withRuntimeGte': ?withRuntimeGte?.toString(),
+        'withRuntimeLte': ?withRuntimeLte?.toString(),
+        'primaryReleaseDateGte': ?primaryReleaseDateGte,
+        'primaryReleaseDateLte': ?primaryReleaseDateLte,
       },
       options: _authOptions(),
     );
@@ -488,9 +542,17 @@ class SeerrHttpClient {
   Future<Map<String, dynamic>> discoverTv({
     int page = 1,
     String sortBy = 'popularity.desc',
-    int? genre,
+    String? genre,
     int? network,
     int? keywords,
+    String? language,
+    String? status,
+    double? voteAverageGte,
+    int? voteCountGte,
+    int? withRuntimeGte,
+    int? withRuntimeLte,
+    String? firstAirDateGte,
+    String? firstAirDateLte,
   }) async {
     final response = await _dio.get(
       _apiUrl('discover/tv'),
@@ -500,11 +562,30 @@ class SeerrHttpClient {
         'genre': ?genre,
         'network': ?network,
         'keywords': ?keywords,
+        'language': ?language,
+        'status': ?status,
+        'voteAverageGte': ?voteAverageGte?.toString(),
+        'voteCountGte': ?voteCountGte?.toString(),
+        'withRuntimeGte': ?withRuntimeGte?.toString(),
+        'withRuntimeLte': ?withRuntimeLte?.toString(),
+        'firstAirDateGte': ?firstAirDateGte,
+        'firstAirDateLte': ?firstAirDateLte,
       },
       options: _authOptions(),
     );
     _requireSuccess(response, 'discoverTv');
     return response.data as Map<String, dynamic>;
+  }
+
+  /// The languages TMDB knows, served by seerr so the filter list matches
+  /// what the discover queries accept.
+  Future<List<dynamic>> getLanguages() async {
+    final response = await _dio.get(
+      _apiUrl('languages'),
+      options: _authOptions(),
+    );
+    _requireSuccess(response, 'getLanguages');
+    return response.data as List<dynamic>;
   }
 
   Future<Map<String, dynamic>> search(
@@ -514,20 +595,58 @@ class SeerrHttpClient {
     int offset = 0,
   }) async {
     final page = (offset ~/ limit) + 1;
-    // Building the query through Dio rather than by hand, because
-    // Uri.encodeComponent leaves apostrophes as-is and Seerr rejects the
-    // request when a reserved character reaches it unencoded.
+    var url = '${_apiUrl('search')}?query=${_encodeQueryValue(query)}&page=$page';
+    if (mediaType != null) {
+      url += '&type=${Uri.encodeComponent(mediaType)}';
+    }
+
     final response = await _dio.get(
-      _apiUrl('search'),
-      queryParameters: {
-        'query': query,
-        'page': page,
-        'type': ?mediaType,
-      },
+      url,
       options: _authOptions(),
     );
     _requireSuccess(response, 'search');
     return response.data as Map<String, dynamic>;
+  }
+
+  /// Percent-encodes with %20 for spaces and %27 for apostrophes. Dio's
+  /// queryParameters use x-www-form-urlencoded (+ for spaces), which makes
+  /// Seerr/TMDB search for a literal '+' and return 0 results.
+  static String _encodeQueryValue(String value) => Uri.encodeComponent(value)
+      .replaceAll("'", '%27')
+      .replaceAll('!', '%21')
+      .replaceAll('*', '%2A')
+      .replaceAll('(', '%28')
+      .replaceAll(')', '%29');
+
+  /// The sliders on Seerr's discover page, in the order the admin set.
+  Future<List<dynamic>> getDiscoverSliders() async {
+    final response = await _dio.get(
+      _apiUrl('settings/discover'),
+      options: _authOptions(),
+    );
+    _requireSuccess(response, 'getDiscoverSliders');
+    final data = response.data;
+    return data is List ? data : const [];
+  }
+
+  /// One page of a discover slider's results. The query is built by hand for
+  /// the same reason as [search], since a search slider carries free text.
+  Future<Map<String, dynamic>> getSliderPage(
+    String path,
+    Map<String, String> params, {
+    int page = 1,
+  }) async {
+    final query = [
+      for (final entry in params.entries)
+        '${entry.key}=${_encodeQueryValue(entry.value)}',
+      'page=$page',
+    ].join('&');
+    final response = await _dio.get(
+      '${_apiUrl(path)}?$query',
+      options: _authOptions(),
+    );
+    _requireSuccess(response, 'getSliderPage');
+    return _pageBody(response, 'getSliderPage');
   }
 
   Future<Map<String, dynamic>> getMovieDetails(int tmdbId) async {

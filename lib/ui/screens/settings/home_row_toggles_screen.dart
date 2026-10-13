@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
@@ -6,6 +7,7 @@ import 'package:moonfin_design/moonfin_design.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../home/home_view_model.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../../preference/home_section_config.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
@@ -13,8 +15,6 @@ import '../../widgets/adaptive/adaptive_list_section.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/settings/preference_tiles.dart';
-import '../../widgets/settings/settings_panel.dart';
-import 'home_sections_screen.dart';
 import 'settings_app_bar.dart';
 
 class HomeRowTogglesScreen extends StatefulWidget {
@@ -27,20 +27,6 @@ class HomeRowTogglesScreen extends StatefulWidget {
 class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
   final _prefs = GetIt.instance<UserPreferences>();
   late final PluginSyncService _syncService;
-  bool _navigating = false;
-  bool _buttonFocused = false;
-
-  void _pushHomeSectionsScreen(BuildContext context) {
-    if (_navigating) return;
-    _navigating = true;
-    context
-        .pushSettingsScreen(const HomeSectionsScreen(showGeneralOptions: false))
-        .then((_) {
-          if (mounted) {
-            setState(() => _navigating = false);
-          }
-        });
-  }
 
   @override
   void initState() {
@@ -90,12 +76,72 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
     setState(() {});
   }
 
+  void _onStudiosRowsToggleChanged() {
+    final enabled = _prefs.get(UserPreferences.displayStudiosRows);
+    final configs = List<HomeSectionConfig>.from(_prefs.homeSectionsConfig);
+    var changed = false;
+    var found = false;
+    for (var i = 0; i < configs.length; i++) {
+      if (configs[i].type == HomeSectionType.studios) {
+        found = true;
+        if (configs[i].enabled != enabled) {
+          configs[i] = configs[i].copyWith(enabled: enabled);
+          changed = true;
+        }
+      }
+    }
+    if (!found) {
+      configs.add(HomeSectionConfig(
+        type: HomeSectionType.studios,
+        enabled: enabled,
+        order: configs.length,
+      ));
+      changed = true;
+    }
+    if (changed) {
+      _prefs.setHomeSectionsConfig(configs);
+    }
+    _pushPersonalizationSync();
+    _reloadHomeRows();
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void _onStudiosSortChanged() {
+    _pushPersonalizationSync();
+    _reloadHomeRows();
+  }
+
+  Future<void> _openStudioSelectionDialog(BuildContext context) async {
+    final currentIds = _prefs.get(UserPreferences.studiosRowSelectedIds);
+    final previousFocus = FocusManager.instance.primaryFocus;
+    final result = await showDialog<String>(
+      context: context,
+      useRootNavigator: true,
+      builder: (ctx) => StudioSelectionDialog(selectedIdsCsv: currentIds),
+    );
+    previousFocus?.requestFocus();
+    if (result != null && result != currentIds && mounted) {
+      await _prefs.set(UserPreferences.studiosRowSelectedIds, result);
+      final hasSelected = result.split(',').any((s) => s.trim().isNotEmpty);
+      if (hasSelected) {
+        await _prefs.set(UserPreferences.displayStudiosRows, true);
+      }
+      _onStudiosRowsToggleChanged();
+    }
+  }
+
   void _onFavoritesSortChanged() {
     _pushPersonalizationSync();
     _reloadHomeRows();
   }
 
   void _onCollectionsSortChanged() {
+    _pushPersonalizationSync();
+    _reloadHomeRows();
+  }
+
+  void _onCollectionsEpisodesChanged() {
     _pushPersonalizationSync();
     _reloadHomeRows();
   }
@@ -123,6 +169,11 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
   }
 
   void _onPlaylistsSortChanged() {
+    _pushPersonalizationSync();
+    _reloadHomeRows();
+  }
+
+  void _onPlaylistsEpisodesChanged() {
     _pushPersonalizationSync();
     _reloadHomeRows();
   }
@@ -239,8 +290,6 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     final showFavoritesRows = _prefs.get(UserPreferences.displayFavoritesRows);
     final showCollectionsRows = _prefs.get(
@@ -252,95 +301,69 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
     final showSinceYouWatchedRows = _prefs.get(UserPreferences.displaySinceYouWatchedRows);
     final sinceYouWatchedSource = _prefs.get(UserPreferences.sinceYouWatchedSource);
     final showRewatchRow = _prefs.get(UserPreferences.displayRewatchRow);
-
-    final borderTokens = ThemeRegistry.active.borders;
-    final baseBorder = borderTokens.cardBorder.color;
-    final unfocusedBorderColor = baseBorder.a == 0
-        ? AppColorScheme.onSurface.withValues(alpha: 0.16)
-        : baseBorder.withValues(alpha: 0.55);
+    final showStudiosRows = _prefs.get(UserPreferences.displayStudiosRows);
 
     return RequestInitialFocus(
       child: withCleanSettingsTypography(
         context,
         Scaffold(
-          appBar: buildSettingsAppBar(context, Text(l10n.homeRowToggles)),
+          appBar: buildSettingsAppBar(context, Text(l10n.rowOptions)),
           body: ListView(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerLow.withValues(
-                      alpha: 0.82,
-                    ),
-                    borderRadius: AppRadius.circular(16),
-                    border: Border.fromBorderSide(
-                      borderTokens.cardBorder.copyWith(
-                        color: unfocusedBorderColor,
-                        width: 1.0,
-                      ),
-                    ),
+              _SectionHeader(l10n.continueWatchingAndNextUpHeader),
+              adaptiveListSection(
+                children: [
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.mergeContinueWatchingNextUp,
+                    title: l10n.mergeContinueWatchingAndNextUp,
+                    subtitle: l10n.combineBothRows,
+                    icon: Icons.merge_type,
+                    onChanged: _pushPersonalizationSync,
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n.homeRowTogglesDescription,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Focus(
-                        canRequestFocus: false,
-                        skipTraversal: true,
-                        onFocusChange: (f) =>
-                            setState(() => _buttonFocused = f),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: _buttonFocused
-                                ? AppColorScheme.onSurface.withValues(
-                                    alpha: 0.18,
-                                  )
-                                : theme.colorScheme.primary.withValues(
-                                    alpha: 0.15,
-                                  ),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: _buttonFocused
-                                  ? AppColorScheme.onSurface
-                                  : theme.colorScheme.primary.withValues(
-                                      alpha: 0.35,
-                                    ),
-                              width: 1.5,
-                            ),
-                            boxShadow: _buttonFocused
-                                ? [
-                                    BoxShadow(
-                                      color: AppColorScheme.onSurface
-                                          .withValues(alpha: 0.22),
-                                      blurRadius: 14,
-                                      spreadRadius: 0.5,
-                                    ),
-                                  ]
-                                : null,
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.list,
-                              color: theme.colorScheme.primary,
-                            ),
-                            tooltip: l10n.homeSections,
-                            onPressed: () => _pushHomeSectionsScreen(context),
-                          ),
-                        ),
-                      ),
-                    ],
+                  IntPickerPreferenceTile(
+                    preference: UserPreferences.nextUpMaxDays,
+                    title: l10n.nextUpMaxDays,
+                    description: l10n.nextUpMaxDaysDescription,
+                    icon: Icons.event_busy,
+                    options: {
+                      0: l10n.noLimit,
+                      30: l10n.daysValue(30),
+                      90: l10n.daysValue(90),
+                      180: l10n.daysValue(180),
+                      365: l10n.daysValue(365),
+                      730: l10n.daysValue(730),
+                    },
+                    onChanged: () {
+                      _pushPersonalizationSync();
+                      _reloadHomeRows();
+                    },
                   ),
-                ),
+                ],
+              ),
+
+              _SectionHeader(l10n.recentlyAdded),
+              adaptiveListSection(
+                children: [
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.mergeRecentRowsByType,
+                    title: l10n.mergeRecentRowsByType,
+                    subtitle: l10n.mergeRecentRowsByTypeDescription,
+                    icon: Icons.library_books,
+                    onChanged: _pushPersonalizationSync,
+                  ),
+                  EnumPreferenceTile<RecentlyReleasedSeriesType>(
+                    preference: UserPreferences.recentlyReleasedSeriesType,
+                    title: l10n.recentlyReleasedSeriesType,
+                    description: l10n.recentlyReleasedSeriesTypeDescription,
+                    icon: Icons.ondemand_video,
+                    labelOf: (v) => switch (v) {
+                      RecentlyReleasedSeriesType.series => l10n.series,
+                      RecentlyReleasedSeriesType.season => l10n.season,
+                      RecentlyReleasedSeriesType.episode => l10n.episode,
+                    },
+                    onChanged: _pushPersonalizationSync,
+                  ),
+                ],
               ),
 
               _SectionHeader(l10n.audio),
@@ -353,7 +376,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     icon: Icons.music_note,
                     onChanged: _onAudioRowsToggleChanged,
                   ),
-                  if (showAudioRows)
+                  if (showAudioRows) ...[
                     EnumPreferenceTile<LibrarySortBy>(
                       preference: UserPreferences.audioRowsSortBy,
                       title: l10n.audioRowsSorting,
@@ -374,6 +397,17 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                           : v.displayName,
                       onChanged: _onAudioSortChanged,
                     ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.audioRowsSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.audioRowsSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: _onAudioSortChanged,
+                    ),
+                  ],
                 ],
               ),
 
@@ -387,7 +421,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     icon: Icons.collections,
                     onChanged: _onCollectionsRowsToggleChanged,
                   ),
-                  if (showCollectionsRows)
+                  if (showCollectionsRows) ...[
                     EnumPreferenceTile<LibrarySortBy>(
                       preference: UserPreferences.collectionsRowSortBy,
                       title: l10n.collectionsRowSorting,
@@ -396,6 +430,24 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       labelOf: (v) => v.displayName,
                       onChanged: _onCollectionsSortChanged,
                     ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.collectionsRowSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.collectionsRowSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: _onCollectionsSortChanged,
+                    ),
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.collectionsRowShowEpisodes,
+                      title: l10n.collectionsRowShowEpisodes,
+                      subtitle: l10n.collectionsRowShowEpisodesSubtitle,
+                      icon: Icons.video_library_outlined,
+                      onChanged: _onCollectionsEpisodesChanged,
+                    ),
+                  ],
                 ],
               ),
 
@@ -409,15 +461,27 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     icon: Icons.favorite,
                     onChanged: _onFavoritesRowsToggleChanged,
                   ),
-                  if (showFavoritesRows)
+                  if (showFavoritesRows) ...[
                     EnumPreferenceTile<LibrarySortBy>(
                       preference: UserPreferences.favoritesRowSortBy,
                       title: l10n.favoritesRowSorting,
                       description: l10n.favoritesRowSortingDescription,
                       icon: Icons.sort,
+                      values: LibrarySortBy.itemsApiValues,
                       labelOf: (v) => v.displayName,
                       onChanged: _onFavoritesSortChanged,
                     ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.favoritesRowSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.favoritesRowSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: _onFavoritesSortChanged,
+                    ),
+                  ],
                 ],
               ),
 
@@ -437,7 +501,18 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       title: l10n.genresRowSorting,
                       description: l10n.genresRowSortingDescription,
                       icon: Icons.sort,
+                      values: LibrarySortBy.itemsApiValues,
                       labelOf: (v) => v.displayName,
+                      onChanged: _onGenresSortChanged,
+                    ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.genresRowSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.genresRowSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
                       onChanged: _onGenresSortChanged,
                     ),
                     EnumPreferenceTile<GenresRowItemFilter>(
@@ -462,7 +537,7 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     icon: Icons.playlist_play,
                     onChanged: _onPlaylistsRowsToggleChanged,
                   ),
-                  if (showPlaylistsRows)
+                  if (showPlaylistsRows) ...[
                     EnumPreferenceTile<LibrarySortBy>(
                       preference: UserPreferences.playlistsRowSortBy,
                       title: l10n.playlistsRowSorting,
@@ -471,6 +546,24 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                       labelOf: (v) => v.displayName,
                       onChanged: _onPlaylistsSortChanged,
                     ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.playlistsRowSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.playlistsRowSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: _onPlaylistsSortChanged,
+                    ),
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.playlistsRowShowEpisodes,
+                      title: l10n.playlistsRowShowEpisodes,
+                      subtitle: l10n.playlistsRowShowEpisodesSubtitle,
+                      icon: Icons.video_library_outlined,
+                      onChanged: _onPlaylistsEpisodesChanged,
+                    ),
+                  ],
                 ],
               ),
 
@@ -532,8 +625,8 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                   if (showSinceYouWatchedRows) ...[
                     EnumPreferenceTile<SinceYouWatchedSource>(
                       preference: UserPreferences.sinceYouWatchedSource,
-                      title: 'Source',
-                      description: "Choose recommendation source (the local-content-only Moonfin special or TMDB's similarity metric. Note: Online recommendations require Seerr integration).",
+                      title: 'Recommendation Source',
+                      description: "Choose recommendation source (Moonfin Recommends custom local algorithm, Jellyfin Recommends server engine, or TMDb's similarity metrics. Note: Online recommendations require Seerr integration).",
                       icon: Icons.source,
                       values: SinceYouWatchedSource.values,
                       labelOf: (v) => v.displayName,
@@ -577,9 +670,547 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                   ],
                 ],
               ),
+              _SectionHeader('STUDIOS'),
+              adaptiveListSection(
+                children: [
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.displayStudiosRows,
+                    title: l10n.displayStudiosRows,
+                    subtitle: l10n.displayStudiosRowsSubtitle,
+                    icon: Icons.business,
+                    onChanged: _onStudiosRowsToggleChanged,
+                  ),
+                  if (showStudiosRows) ...[
+                    TvFocusHighlight(
+                      builder: (_, focused) => ListTile(
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        leading: buildSettingsLeadingIconShell(
+                          context,
+                          icon: const Icon(Icons.checklist),
+                          focused: focused,
+                          iconColor: focused
+                              ? AppColors.black.withValues(alpha: 0.87)
+                              : AppColorScheme.onSurface.withValues(alpha: 0.7),
+                        ),
+                        title: Text(l10n.selectStudiosToInclude),
+                        subtitle: Text(l10n.selectStudiosToIncludeDescription),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => _openStudioSelectionDialog(context),
+                      ),
+                    ),
+                    EnumPreferenceTile<LibrarySortBy>(
+                      preference: UserPreferences.studiosRowSortBy,
+                      title: l10n.studiosRowSorting,
+                      description: l10n.studiosRowSortingDescription,
+                      icon: Icons.sort_by_alpha,
+                      values: LibrarySortBy.itemsApiValues,
+                      labelOf: (v) => v.displayName,
+                      onChanged: _onStudiosSortChanged,
+                    ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.studiosRowSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.studiosRowSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: _onStudiosSortChanged,
+                    ),
+                  ],
+                ],
+              ),
               const SizedBox(height: 32),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FocusableTile extends StatefulWidget {
+  final Widget child;
+
+  const _FocusableTile({required this.child});
+
+  @override
+  State<_FocusableTile> createState() => _FocusableTileState();
+}
+
+class _FocusableTileState extends State<_FocusableTile> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    return Focus(
+      onFocusChange: (focused) => setState(() => _isFocused = focused),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        margin: const EdgeInsets.symmetric(vertical: 2),
+        decoration: BoxDecoration(
+          color: _isFocused
+              ? primary.withValues(alpha: 0.3)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            color: _isFocused ? Colors.cyanAccent : Colors.transparent,
+            width: 2.0,
+          ),
+        ),
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+class _FocusableActionButton extends StatefulWidget {
+  final bool autofocus;
+  final VoidCallback? onPressed;
+  final Widget child;
+  final bool isFilled;
+
+  const _FocusableActionButton({
+    this.autofocus = false,
+    this.onPressed,
+    required this.child,
+    this.isFilled = false,
+  });
+
+  @override
+  State<_FocusableActionButton> createState() => _FocusableActionButtonState();
+}
+
+class _FocusableActionButtonState extends State<_FocusableActionButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+    final onPrimary = theme.colorScheme.onPrimary;
+
+    return Focus(
+      autofocus: widget.autofocus,
+      onFocusChange: (focused) => setState(() => _isFocused = focused),
+      child: Material(
+        color: _isFocused
+            ? (widget.isFilled ? primary : primary.withValues(alpha: 0.35))
+            : (widget.isFilled ? primary.withValues(alpha: 0.8) : Colors.transparent),
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          onTap: widget.onPressed,
+          borderRadius: BorderRadius.circular(8),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _isFocused ? Colors.cyanAccent : (widget.isFilled ? primary : theme.colorScheme.outline),
+                width: _isFocused ? 2.5 : 1.0,
+              ),
+              boxShadow: _isFocused
+                  ? [
+                      BoxShadow(
+                        color: Colors.cyanAccent.withValues(alpha: 0.5),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : null,
+            ),
+            child: DefaultTextStyle(
+              style: (theme.textTheme.labelLarge ?? const TextStyle()).copyWith(
+                color: _isFocused
+                    ? (widget.isFilled ? onPrimary : Colors.cyanAccent)
+                    : (widget.isFilled ? onPrimary : theme.colorScheme.onSurface),
+                fontWeight: FontWeight.bold,
+              ),
+              child: IconTheme(
+                data: IconThemeData(
+                  color: _isFocused
+                      ? (widget.isFilled ? onPrimary : Colors.cyanAccent)
+                      : (widget.isFilled ? onPrimary : theme.colorScheme.onSurface),
+                  size: 18,
+                ),
+                child: Center(child: widget.child),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StudioSelectionDialog extends StatefulWidget {
+  final String selectedIdsCsv;
+
+  const StudioSelectionDialog({super.key, required this.selectedIdsCsv});
+
+  @override
+  State<StudioSelectionDialog> createState() => _StudioSelectionDialogState();
+}
+
+class _StudioSelectionDialogState extends State<StudioSelectionDialog> {
+  bool _loading = true;
+  String? _error;
+  List<Map<String, dynamic>> _allStudios = [];
+  final Set<String> _selectedIds = {};
+
+  bool _includeTv = true;
+  bool _includeMovies = true;
+
+  bool _showSelected = true;
+  bool _showUnselected = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIds.addAll(
+      widget.selectedIdsCsv
+          .split(',')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty),
+    );
+    _fetchStudios();
+  }
+
+  Future<void> _fetchStudios() async {
+    try {
+      final client = GetIt.instance<MediaServerClient>();
+      final userId = client.userId;
+
+      final results = await Future.wait([
+        client.itemsApi.getStudios(
+          userId: userId,
+          recursive: true,
+          includeItemTypes: const ['Movie'],
+          sortBy: 'SortName',
+          sortOrder: 'Ascending',
+          fields: 'ChildCount,ItemCounts,PrimaryImageTag',
+        ),
+        client.itemsApi.getStudios(
+          userId: userId,
+          recursive: true,
+          includeItemTypes: const ['Series'],
+          sortBy: 'SortName',
+          sortOrder: 'Ascending',
+          fields: 'ChildCount,ItemCounts,PrimaryImageTag',
+        ),
+      ]);
+
+      final movieItems = (results[0]['Items'] as List? ?? []).cast<Map<String, dynamic>>();
+      final tvItems = (results[1]['Items'] as List? ?? []).cast<Map<String, dynamic>>();
+
+      final Map<String, Map<String, dynamic>> studioMap = {};
+
+      for (final m in movieItems) {
+        final id = m['Id'] as String?;
+        final name = m['Name'] as String?;
+        if (id != null && name != null) {
+          studioMap[id] = {
+            'id': id,
+            'name': name,
+            'hasMovie': true,
+            'hasTv': false,
+          };
+        }
+      }
+
+      for (final t in tvItems) {
+        final id = t['Id'] as String?;
+        final name = t['Name'] as String?;
+        if (id != null && name != null) {
+          if (studioMap.containsKey(id)) {
+            studioMap[id]!['hasTv'] = true;
+          } else {
+            studioMap[id] = {
+              'id': id,
+              'name': name,
+              'hasMovie': false,
+              'hasTv': true,
+            };
+          }
+        }
+      }
+
+      final sortedStudios = studioMap.values.toList()
+        ..sort((a, b) {
+          final nameA = (a['name'] as String).toLowerCase();
+          final nameB = (b['name'] as String).toLowerCase();
+          return nameA.compareTo(nameB);
+        });
+
+      if (mounted) {
+        setState(() {
+          _allStudios = sortedStudios;
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = describeError(e, AppLocalizations.of(context));
+          _loading = false;
+        });
+      }
+    }
+  }
+
+  List<Map<String, dynamic>> get _filteredStudios {
+    return _allStudios.where((s) {
+      final id = s['id'] as String;
+      final isSelected = _selectedIds.contains(id);
+      final hasMovie = s['hasMovie'] as bool;
+      final hasTv = s['hasTv'] as bool;
+
+      if (!_showSelected && !_showUnselected) return false;
+      if (!_showSelected && isSelected) return false;
+      if (!_showUnselected && !isSelected) return false;
+
+      if (!_includeTv && !_includeMovies) return false;
+      if (_includeTv && !_includeMovies && !hasTv) return false;
+      if (_includeMovies && !_includeTv && !hasMovie) return false;
+
+      return true;
+    }).toList();
+  }
+
+  /// Whether every studio in the library is picked, which is what the button
+  /// claims to do, so the filters only decide what is listed and never how
+  /// much the button reaches.
+  bool get _allStudiosSelected =>
+      _allStudios.isNotEmpty &&
+      _allStudios.every((s) => _selectedIds.contains(s['id'] as String));
+
+  void _toggleAll() {
+    final selectAll = !_allStudiosSelected;
+    setState(() {
+      for (final s in _allStudios) {
+        final id = s['id'] as String;
+        if (selectAll) {
+          _selectedIds.add(id);
+        } else {
+          _selectedIds.remove(id);
+        }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final filtered = _filteredStudios;
+    final allSelected = _allStudiosSelected;
+
+    return withBackClose(
+      context,
+      AlertDialog(
+        title: Text(l10n.selectStudiosToInclude),
+        content: SizedBox(
+          width: 740,
+          height: 480,
+          child: _loading
+              ? const Center(child: CircularProgressIndicator())
+              : _error != null
+                  ? Center(child: Text('Error loading studios: $_error'))
+                  : _allStudios.isEmpty
+                      ? const Center(child: Text('No studios found in library.'))
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Text(
+                                      '${_selectedIds.length} of ${_allStudios.length} selected (${filtered.length} visible)',
+                                      style: theme.textTheme.titleSmall?.copyWith(
+                                        color: theme.colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(height: 1),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: filtered.length,
+                                      itemBuilder: (context, index) {
+                                        final studio = filtered[index];
+                                        final id = studio['id'] as String;
+                                        final name = studio['name'] as String;
+                                        final isSelected = _selectedIds.contains(id);
+                                        return _FocusableTile(
+                                          child: CheckboxListTile(
+                                            dense: true,
+                                            visualDensity: VisualDensity.compact,
+                                            contentPadding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 0,
+                                            ),
+                                            controlAffinity:
+                                                ListTileControlAffinity.trailing,
+                                            title: Text(name),
+                                            activeColor: theme.colorScheme.primary,
+                                            checkColor: theme.colorScheme.onPrimary,
+                                            side: BorderSide(
+                                              color: theme.colorScheme.primary,
+                                              width: 1.5,
+                                            ),
+                                            value: isSelected,
+                                            onChanged: (checked) {
+                                              setState(() {
+                                                if (checked == true) {
+                                                  _selectedIds.add(id);
+                                                } else {
+                                                  _selectedIds.remove(id);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const VerticalDivider(width: 24, indent: 4, endIndent: 4),
+                            SizedBox(
+                              width: 260,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  _FocusableActionButton(
+                                    autofocus: true,
+                                    onPressed: _toggleAll,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          allSelected
+                                              ? Icons.deselect
+                                              : Icons.select_all,
+                                          size: 18,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          allSelected
+                                              ? l10n.deselectAllStudios
+                                              : l10n.selectAllStudios,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Divider(height: 1),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    l10n.filtersHeader.toUpperCase(),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.1,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  _FocusableTile(
+                                    child: CheckboxListTile(
+                                      dense: true,
+                                      visualDensity: VisualDensity.compact,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                      title: Text(l10n.tvStudiosFilter, style: const TextStyle(fontSize: 13)),
+                                      activeColor: theme.colorScheme.primary,
+                                      checkColor: theme.colorScheme.onPrimary,
+                                      side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                                      value: _includeTv,
+                                      onChanged: (val) => setState(() => _includeTv = val ?? true),
+                                    ),
+                                  ),
+                                  _FocusableTile(
+                                    child: CheckboxListTile(
+                                      dense: true,
+                                      visualDensity: VisualDensity.compact,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                      title: Text(l10n.movieStudiosFilter, style: const TextStyle(fontSize: 13)),
+                                      activeColor: theme.colorScheme.primary,
+                                      checkColor: theme.colorScheme.onPrimary,
+                                      side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                                      value: _includeMovies,
+                                      onChanged: (val) => setState(() => _includeMovies = val ?? true),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    l10n.showHeader.toUpperCase(),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.1,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  _FocusableTile(
+                                    child: CheckboxListTile(
+                                      dense: true,
+                                      visualDensity: VisualDensity.compact,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                      title: Text(l10n.selectedStudiosFilter, style: const TextStyle(fontSize: 13)),
+                                      activeColor: theme.colorScheme.primary,
+                                      checkColor: theme.colorScheme.onPrimary,
+                                      side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                                      value: _showSelected,
+                                      onChanged: (val) => setState(() => _showSelected = val ?? true),
+                                    ),
+                                  ),
+                                  _FocusableTile(
+                                    child: CheckboxListTile(
+                                      dense: true,
+                                      visualDensity: VisualDensity.compact,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                      title: Text(l10n.unselectedStudiosFilter, style: const TextStyle(fontSize: 13)),
+                                      activeColor: theme.colorScheme.primary,
+                                      checkColor: theme.colorScheme.onPrimary,
+                                      side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                                      value: _showUnselected,
+                                      onChanged: (val) => setState(() => _showUnselected = val ?? true),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: _FocusableActionButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: Text(l10n.cancel),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: _FocusableActionButton(
+                                          isFilled: true,
+                                          onPressed: _loading
+                                              ? null
+                                              : () => Navigator.of(context).pop(_selectedIds.join(',')),
+                                          child: Text(l10n.save),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
         ),
       ),
     );

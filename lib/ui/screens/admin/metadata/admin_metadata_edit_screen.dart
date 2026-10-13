@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../util/error_message.dart';
 import '../../../../util/image_mime.dart';
 import '../../../../util/platform_detection.dart';
 import '../../../widgets/adaptive/adaptive_dialog.dart';
@@ -46,7 +47,6 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
   final _premiereDateController = TextEditingController();
   final _endDateController = TextEditingController();
   final _productionYearController = TextEditingController();
-  final _officialRatingController = TextEditingController();
   final _communityRatingController = TextEditingController();
   final _criticRatingController = TextEditingController();
   final _taglineController = TextEditingController();
@@ -56,6 +56,16 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
   List<String> _tags = [];
   List<String> _studios = [];
   List<Map<String, String>> _people = const [];
+  String _displayOrder = '';
+  String _officialRating = '';
+  String _customRating = '';
+  String _metadataLanguage = '';
+  String _metadataCountry = '';
+  String _status = '';
+  String _video3DFormat = '';
+  List<String> _airDays = [];
+  bool _lockData = false;
+  List<String> _lockedFields = [];
 
   final Map<String, TextEditingController> _externalControllers = {};
 
@@ -82,7 +92,6 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     _premiereDateController.dispose();
     _endDateController.dispose();
     _productionYearController.dispose();
-    _officialRatingController.dispose();
     _communityRatingController.dispose();
     _criticRatingController.dispose();
     _taglineController.dispose();
@@ -119,7 +128,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString();
+        _error = describeError(e, AppLocalizations.of(context));
         _loading = false;
       });
     }
@@ -133,12 +142,21 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     _premiereDateController.text = _dateOnly(raw['PremiereDate']);
     _endDateController.text = _dateOnly(raw['EndDate']);
     _productionYearController.text = (raw['ProductionYear'] ?? '').toString();
-    _officialRatingController.text = (raw['OfficialRating'] ?? '').toString();
     _communityRatingController.text = (raw['CommunityRating'] ?? '').toString();
     _criticRatingController.text = (raw['CriticRating'] ?? '').toString();
     _taglineController.text =
         _firstString(raw['Taglines']) ?? (raw['Tagline'] ?? '').toString();
     _overviewController.text = (raw['Overview'] ?? '').toString();
+    _displayOrder = (raw['DisplayOrder'] ?? '').toString();
+    _officialRating = (raw['OfficialRating'] ?? '').toString();
+    _customRating = (raw['CustomRating'] ?? '').toString();
+    _metadataLanguage = (raw['PreferredMetadataLanguage'] ?? '').toString();
+    _metadataCountry = (raw['PreferredMetadataCountryCode'] ?? '').toString();
+    _status = (raw['Status'] ?? '').toString();
+    _video3DFormat = (raw['Video3DFormat'] ?? '').toString();
+    _airDays = _stringList(raw['AirDays']);
+    _lockData = raw['LockData'] == true;
+    _lockedFields = _stringList(raw['LockedFields']);
 
     _genres = _stringList(raw['Genres']);
     _tags = _stringList(raw['Tags']);
@@ -252,6 +270,22 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     return _asMapList(_editorInfo['ContentTypeOptions']);
   }
 
+  /// The metadata editor payload already carries the lists the server expects
+  /// these fields to be picked from, so none of them costs an extra request.
+  /// An older server that omits a list leaves the dropdown empty, and
+  /// [adminCodeDropdown] falls back to a free-text field in that case.
+  List<Map<String, dynamic>> _parentalRatingOptions() {
+    return _asMapList(_editorInfo['ParentalRatingOptions']);
+  }
+
+  List<Map<String, dynamic>> _cultureOptions() {
+    return _asMapList(_editorInfo['Cultures']);
+  }
+
+  List<Map<String, dynamic>> _countryOptions() {
+    return _asMapList(_editorInfo['Countries']);
+  }
+
   List<Map<String, String>> _fallbackContentTypeOptions() {
     final l10n = AppLocalizations.of(context);
     return [
@@ -362,6 +396,252 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     }
   }
 
+  bool get _isSeries => (_raw['Type'] ?? '').toString() == 'Series';
+
+  bool get _isBoxSet => (_raw['Type'] ?? '').toString() == 'BoxSet';
+
+  bool get _isVideo =>
+      (_raw['MediaType'] ?? '').toString() == 'Video' &&
+      (_raw['Type'] ?? '').toString() != 'TvChannel';
+
+  /// Episode ordering schemes the server understands for a series. The empty
+  /// value means "aired order", which is what Jellyfin falls back to when the
+  /// field is unset.
+  List<(String, String)> _displayOrderOptions(AppLocalizations l10n) => [
+    ('originalAirDate', l10n.adminMetadataDisplayOrderOriginalAirDate),
+    ('absolute', l10n.adminMetadataDisplayOrderAbsolute),
+    ('dvd', l10n.adminMetadataDisplayOrderDvd),
+    ('digital', l10n.adminMetadataDisplayOrderDigital),
+    ('storyArc', l10n.adminMetadataDisplayOrderStoryArc),
+    ('production', l10n.adminMetadataDisplayOrderProduction),
+    ('tv', l10n.adminMetadataDisplayOrderTv),
+    ('alternate', l10n.adminMetadataDisplayOrderAlternate),
+    ('regional', l10n.adminMetadataDisplayOrderRegional),
+    ('altdvd', l10n.adminMetadataDisplayOrderAlternateDvd),
+  ];
+
+  /// How a collection sorts its children. Unrelated to the series scheme above
+  /// despite sharing the `DisplayOrder` field name, so it keeps its own list.
+  /// The server treats an unset value as `Default`.
+  List<(String, String)> _boxSetDisplayOrderOptions(AppLocalizations l10n) => [
+    ('Default', l10n.adminMetadataDisplayOrderDateModified),
+    ('SortName', l10n.adminMetadataDisplayOrderSortName),
+    ('PremiereDate', l10n.adminMetadataDisplayOrderReleaseDate),
+  ];
+
+  /// Ratings are stored by their display name, which is what the server sends
+  /// back as each option's `Name`.
+  Widget _ratingField(
+    String label,
+    String current,
+    ValueChanged<String?> onChanged,
+  ) {
+    final l10n = AppLocalizations.of(context);
+    return adminCodeDropdown(
+      label: label,
+      defaultLabel: l10n.none,
+      current: current,
+      rawItems: _parentalRatingOptions().map((r) {
+        final name = r['Name']?.toString();
+        return (name, name);
+      }),
+      onChanged: onChanged,
+    );
+  }
+
+  /// PersonKind as the server defines it. 'Actor' is the sensible starting
+  /// point for a new credit, so it is what an empty or unrecognised type falls
+  /// back to rather than 'Unknown'.
+  List<(String, String)> _personKinds(AppLocalizations l10n) => [
+    ('Unknown', l10n.adminMetadataPersonKindUnknown),
+    ('Actor', l10n.adminMetadataPersonKindActor),
+    ('Director', l10n.adminMetadataPersonKindDirector),
+    ('Composer', l10n.adminMetadataPersonKindComposer),
+    ('Writer', l10n.adminMetadataPersonKindWriter),
+    ('GuestStar', l10n.adminMetadataPersonKindGuestStar),
+    ('Producer', l10n.adminMetadataPersonKindProducer),
+    ('Conductor', l10n.adminMetadataPersonKindConductor),
+    ('Lyricist', l10n.adminMetadataPersonKindLyricist),
+    ('Arranger', l10n.adminMetadataPersonKindArranger),
+    ('Engineer', l10n.adminMetadataPersonKindEngineer),
+    ('Mixer', l10n.adminMetadataPersonKindMixer),
+    ('Remixer', l10n.adminMetadataPersonKindRemixer),
+    ('Creator', l10n.adminMetadataPersonKindCreator),
+    ('Artist', l10n.adminMetadataPersonKindArtist),
+    ('AlbumArtist', l10n.adminMetadataPersonKindAlbumArtist),
+    ('Author', l10n.adminMetadataPersonKindAuthor),
+    ('Illustrator', l10n.adminMetadataPersonKindIllustrator),
+    ('Penciller', l10n.adminMetadataPersonKindPenciller),
+    ('Inker', l10n.adminMetadataPersonKindInker),
+    ('Colorist', l10n.adminMetadataPersonKindColorist),
+    ('Letterer', l10n.adminMetadataPersonKindLetterer),
+    ('CoverArtist', l10n.adminMetadataPersonKindCoverArtist),
+    ('Editor', l10n.adminMetadataPersonKindEditor),
+    ('Translator', l10n.adminMetadataPersonKindTranslator),
+    ('Narrator', l10n.adminMetadataPersonKindNarrator),
+  ];
+
+  List<(String, String)> _weekdays(AppLocalizations l10n) => [
+    ('Sunday', l10n.adminDaySunday),
+    ('Monday', l10n.adminDayMonday),
+    ('Tuesday', l10n.adminDayTuesday),
+    ('Wednesday', l10n.adminDayWednesday),
+    ('Thursday', l10n.adminDayThursday),
+    ('Friday', l10n.adminDayFriday),
+    ('Saturday', l10n.adminDaySaturday),
+  ];
+
+  /// Fields a refresh can be told to leave alone. The server UI swaps the
+  /// production locations label on a person, and only offers runtime on a
+  /// series.
+  List<(String, String)> _lockableFields(AppLocalizations l10n) {
+    final isPerson = (_raw['Type'] ?? '').toString() == 'Person';
+    return [
+      ('Name', l10n.adminMetadataLockFieldName),
+      ('Overview', l10n.adminMetadataLockFieldOverview),
+      ('Genres', l10n.adminMetadataLockFieldGenres),
+      ('OfficialRating', l10n.adminMetadataLockFieldOfficialRating),
+      ('Cast', l10n.adminMetadataLockFieldCast),
+      (
+        'ProductionLocations',
+        isPerson
+            ? l10n.adminMetadataLockFieldBirthLocation
+            : l10n.adminMetadataLockFieldProductionLocations,
+      ),
+      if (_isSeries) ('Runtime', l10n.adminMetadataLockFieldRuntime),
+      ('Studios', l10n.adminMetadataLockFieldStudios),
+      ('Tags', l10n.adminMetadataLockFieldTags),
+    ];
+  }
+
+  List<(String, String)> _seriesStatuses(AppLocalizations l10n) => [
+    ('Continuing', l10n.continuing),
+    ('Ended', l10n.ended),
+    ('Unreleased', l10n.filterUnreleased),
+  ];
+
+  /// The abbreviations read the same in every language, so they carry no
+  /// localized label of their own.
+  static const _video3DFormats = <(String, String)>[
+    ('HalfSideBySide', 'HSBS'),
+    ('HalfTopAndBottom', 'HTAB'),
+    ('FullSideBySide', 'FSBS'),
+    ('FullTopAndBottom', 'FTAB'),
+    ('MVC', 'MVC'),
+  ];
+
+  /// Sits under the two provider dropdowns. [adminCodeDropdown] builds its own
+  /// decoration and has no slot for helper text, so the hint is a plain line
+  /// under the field rather than a reason to widen the shared helper.
+  Widget _inheritHint(AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, left: AppSpacing.spaceXs),
+      child: Text(
+        l10n.adminMetadataInheritHelp,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+
+  Widget _airDaysField(AppLocalizations l10n) {
+    final days = _weekdays(l10n);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        adminSectionLabel(
+          context,
+          l10n.adminMetadataAirDays,
+          icon: Icons.event_repeat_outlined,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: days.map((day) {
+            final selected = _airDays.contains(day.$1);
+            return FilterChip(
+              label: Text(day.$2),
+              selected: selected,
+              // Rebuild the whole list so the days keep calendar order however
+              // they were toggled.
+              onSelected: (on) => setState(() {
+                _airDays = [
+                  for (final d in days)
+                    if (d.$1 == day.$1 ? on : _airDays.contains(d.$1)) d.$1,
+                ];
+              }),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  /// A checked box means the field is left enabled for refreshes to overwrite,
+  /// so the stored list is the inverse of what is ticked. Values the server
+  /// locked that this list does not offer are left untouched.
+  Widget _lockedFieldsEditor(AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        adminSwitchRow(
+          title: l10n.adminMetadataLockItem,
+          value: _lockData,
+          onChanged: (v) => setState(() => _lockData = v),
+        ),
+        if (!_lockData) ...[
+          adminSectionLabel(
+            context,
+            l10n.adminMetadataEnabledFields,
+            icon: Icons.lock_open_outlined,
+          ),
+          Text(
+            l10n.adminMetadataEnabledFieldsHelp,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          ..._lockableFields(l10n).map((field) {
+            final locked = _lockedFields.contains(field.$1);
+            return CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              value: !locked,
+              title: Text(field.$2),
+              onChanged: (enabled) => setState(() {
+                final next = [..._lockedFields]..remove(field.$1);
+                if (enabled != true) next.add(field.$1);
+                _lockedFields = next;
+              }),
+            );
+          }),
+        ],
+      ],
+    );
+  }
+
+  Widget _displayOrderField(AppLocalizations l10n) {
+    if (_isBoxSet) {
+      final options = _boxSetDisplayOrderOptions(l10n);
+      final value = options.any((o) => o.$1 == _displayOrder)
+          ? _displayOrder
+          : options.first.$1;
+      return DropdownButtonFormField<String>(
+        initialValue: value,
+        isExpanded: true,
+        decoration: adminInputDecoration(label: l10n.adminMetadataFieldDisplayOrder),
+        items: options
+            .map((o) => DropdownMenuItem(value: o.$1, child: Text(o.$2)))
+            .toList(),
+        onChanged: (v) => setState(() => _displayOrder = v ?? options.first.$1),
+      );
+    }
+
+    return adminCodeDropdown(
+      label: l10n.adminMetadataFieldDisplayOrder,
+      defaultLabel: l10n.adminMetadataDisplayOrderAired,
+      current: _displayOrder,
+      rawItems: _displayOrderOptions(l10n),
+      onChanged: (v) => setState(() => _displayOrder = v ?? ''),
+    );
+  }
+
   static const _preservedItemFields = <String>[
     'Id',
     'IndexNumber',
@@ -372,18 +652,10 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     'Album',
     'AlbumArtists',
     'ArtistItems',
-    'Status',
-    'AirDays',
     'AirTime',
     'DateCreated',
     'Height',
     'AspectRatio',
-    'Video3DFormat',
-    'CustomRating',
-    'LockData',
-    'LockedFields',
-    'PreferredMetadataLanguage',
-    'PreferredMetadataCountryCode',
     'RunTimeTicks',
     'ProductionLocations',
     'DisplayOrder',
@@ -405,13 +677,22 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
       'ProductionYear':
           int.tryParse(_productionYearController.text.trim()) ??
           _raw['ProductionYear'],
-      'OfficialRating': _officialRatingController.text.trim(),
+      'OfficialRating': _officialRating,
+      'CustomRating': _customRating,
+      'PreferredMetadataLanguage': _metadataLanguage,
+      'PreferredMetadataCountryCode': _metadataCountry,
       'CommunityRating':
           double.tryParse(_communityRatingController.text.trim()) ??
           _raw['CommunityRating'],
       'CriticRating':
           double.tryParse(_criticRatingController.text.trim()) ??
           _raw['CriticRating'],
+      if (_isSeries || _isBoxSet) 'DisplayOrder': _displayOrder,
+      if (_isSeries) 'Status': _nullIfEmpty(_status),
+      if (_isVideo) 'Video3DFormat': _nullIfEmpty(_video3DFormat),
+      if (_isSeries) 'AirDays': _airDays,
+      'LockData': _lockData,
+      'LockedFields': _lockedFields,
       'Taglines': tagline.isEmpty ? <String>[] : [tagline],
       'Overview': _overviewController.text.trim(),
       'Genres': _genres,
@@ -442,7 +723,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
       setState(() => _saving = false);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataSaveFailed(e.toString()))));
+      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataSaveFailed(describeError(e, l10n)))));
     }
   }
 
@@ -506,11 +787,16 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     if (confirmed != true || !mounted) return;
 
     try {
+      final mode = replaceAllMetadata || replaceAllImages
+          ? MetadataRefreshMode.fullRefresh
+          : MetadataRefreshMode.defaultRefresh;
       await _api.refreshItem(
         widget.itemId,
         recursive: recursive,
         replaceAllMetadata: replaceAllMetadata,
         replaceAllImages: replaceAllImages,
+        metadataRefreshMode: mode,
+        imageRefreshMode: mode,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -520,7 +806,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataRefreshFailed(e.toString()))));
+      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataRefreshFailed(describeError(e, l10n)))));
     }
   }
 
@@ -591,9 +877,11 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     final existing = index == null ? null : _people[index];
     final nameController = TextEditingController(text: existing?['Name'] ?? '');
     final roleController = TextEditingController(text: existing?['Role'] ?? '');
-    final typeController = TextEditingController(
-      text: existing?['Type'] ?? 'Actor',
-    );
+    final kinds = _personKinds(l10n);
+    var type = existing?['Type'] ?? '';
+    if (!kinds.any((k) => k.$1 == type)) {
+      type = 'Actor';
+    }
 
     final person = await showDialog<Map<String, String>>(
       context: context,
@@ -615,10 +903,20 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
                         adminInputDecoration(label: l10n.adminMetadataRole),
                   ),
                   const SizedBox(height: 12),
-                  TextField(
-                    controller: typeController,
-                    decoration:
-                        adminInputDecoration(label: l10n.adminMetadataType),
+                  StatefulBuilder(
+                    builder: (ctx, setStateDialog) =>
+                        DropdownButtonFormField<String>(
+                      initialValue: type,
+                      isExpanded: true,
+                      decoration:
+                          adminInputDecoration(label: l10n.adminMetadataType),
+                      items: kinds
+                          .map((k) =>
+                              DropdownMenuItem(value: k.$1, child: Text(k.$2)))
+                          .toList(),
+                      onChanged: (v) =>
+                          setStateDialog(() => type = v ?? 'Actor'),
+                    ),
                   ),
                 ],
               ),
@@ -638,7 +936,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
                   Navigator.pop(ctx, {
                     'Name': name,
                     'Role': roleController.text.trim(),
-                    'Type': typeController.text.trim(),
+                    'Type': type,
                   });
                 },
                 child: Text(index == null ? l10n.add : l10n.save),
@@ -649,7 +947,6 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
 
     nameController.dispose();
     roleController.dispose();
-    typeController.dispose();
 
     if (person == null || !mounted) return;
     setState(() {
@@ -723,7 +1020,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.adminMetadataContentTypeFailed(e.toString()))),
+        SnackBar(content: Text(l10n.adminMetadataContentTypeFailed(describeError(e, l10n)))),
       );
     }
   }
@@ -892,18 +1189,28 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
           ],
         ),
         const SizedBox(height: 12),
+        _field(
+          _productionYearController,
+          l10n.adminMetadataFieldProductionYear,
+          keyboardType: TextInputType.number,
+        ),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(
-              child: _field(
-                _productionYearController,
-                l10n.adminMetadataFieldProductionYear,
-                keyboardType: TextInputType.number,
+              child: _ratingField(
+                l10n.adminMetadataFieldOfficialRating,
+                _officialRating,
+                (v) => setState(() => _officialRating = v ?? ''),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _field(_officialRatingController, l10n.adminMetadataFieldOfficialRating),
+              child: _ratingField(
+                l10n.adminMetadataFieldCustomRating,
+                _customRating,
+                (v) => setState(() => _customRating = v ?? ''),
+              ),
             ),
           ],
         ),
@@ -931,6 +1238,32 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
             ),
           ],
         ),
+        if (_isSeries || _isBoxSet) ...[
+          const SizedBox(height: 12),
+          _displayOrderField(l10n),
+        ],
+        if (_isSeries) ...[
+          const SizedBox(height: 12),
+          adminCodeDropdown(
+            label: l10n.status,
+            defaultLabel: l10n.none,
+            current: _status,
+            rawItems: _seriesStatuses(l10n).map((o) => (o.$1, o.$2)),
+            onChanged: (v) => setState(() => _status = v ?? ''),
+          ),
+          const SizedBox(height: 12),
+          _airDaysField(l10n),
+        ],
+        if (_isVideo) ...[
+          const SizedBox(height: 12),
+          adminCodeDropdown(
+            label: l10n.adminMetadataField3DFormat,
+            defaultLabel: l10n.none,
+            current: _video3DFormat,
+            rawItems: _video3DFormats.map((o) => (o.$1, o.$2)),
+            onChanged: (v) => setState(() => _video3DFormat = v ?? ''),
+          ),
+        ],
         const SizedBox(height: 12),
         _field(_taglineController, l10n.adminMetadataFieldTagline),
         const SizedBox(height: 12),
@@ -1004,6 +1337,38 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
               ),
             );
           }),
+        const SizedBox(height: 8),
+        adminSectionLabel(
+          context,
+          l10n.adminMetadataSettings,
+          icon: Icons.travel_explore_outlined,
+        ),
+        adminCodeDropdown(
+          label: l10n.adminMetadataDownloadLanguage,
+          defaultLabel: l10n.adminLibDefault,
+          current: _metadataLanguage,
+          rawItems: _cultureOptions().map((c) => (
+                (c['TwoLetterISOLanguageName'] ?? c['ThreeLetterISOLanguageName'])
+                    ?.toString(),
+                (c['DisplayName'] ?? c['Name'])?.toString(),
+              )),
+          onChanged: (v) => setState(() => _metadataLanguage = v ?? ''),
+        ),
+        _inheritHint(l10n),
+        const SizedBox(height: 12),
+        adminCodeDropdown(
+          label: l10n.adminMetadataCountryRegion,
+          defaultLabel: l10n.adminLibDefault,
+          current: _metadataCountry,
+          rawItems: _countryOptions().map((c) => (
+                (c['TwoLetterISORegionName'] ?? c['Name'])?.toString(),
+                (c['DisplayName'] ?? c['Name'])?.toString(),
+              )),
+          onChanged: (v) => setState(() => _metadataCountry = v ?? ''),
+        ),
+        _inheritHint(l10n),
+        const SizedBox(height: 8),
+        _lockedFieldsEditor(l10n),
       ],
     );
   }
@@ -1118,6 +1483,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
                 aspectRatio: aspectRatio,
                 child: Image.network(
                   url,
+                  headers: serverImageHeaders,
                   fit: BoxFit.contain,
                   errorBuilder:
                       (_, _, _) => Container(
@@ -1208,7 +1574,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataImageDownloadFailed(e.toString()))));
+      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataImageDownloadFailed(describeError(e, l10n)))));
     }
   }
 
@@ -1264,7 +1630,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
-        SnackBar(content: Text(l10n.adminMetadataImageUploadFailed(e.toString()))),
+        SnackBar(content: Text(l10n.adminMetadataImageUploadFailed(describeError(e, l10n)))),
       );
     }
   }
@@ -1308,7 +1674,7 @@ class _AdminMetadataEditScreenState extends State<AdminMetadataEditScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataImageDeleteFailed(e.toString()))));
+      ).showSnackBar(SnackBar(content: Text(l10n.adminMetadataImageDeleteFailed(describeError(e, l10n)))));
     }
   }
 
@@ -1485,7 +1851,7 @@ class _RemoteImagePickerDialogState extends State<_RemoteImagePickerDialog> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString();
+        _error = describeError(e, AppLocalizations.of(context));
         _loading = false;
       });
     }
@@ -1705,6 +2071,8 @@ class _RemoteImagePickerDialogState extends State<_RemoteImagePickerDialog> {
                                                     )
                                                     : Image.network(
                                                       previewUrl,
+                                                      headers:
+                                                          serverImageHeaders,
                                                       width: double.infinity,
                                                       fit: BoxFit.cover,
                                                     ),

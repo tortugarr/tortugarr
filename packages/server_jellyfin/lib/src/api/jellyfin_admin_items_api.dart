@@ -46,12 +46,16 @@ class JellyfinAdminItemsApi implements AdminItemsApi {
     bool? recursive,
     bool? replaceAllMetadata,
     bool? replaceAllImages,
+    MetadataRefreshMode metadataRefreshMode = MetadataRefreshMode.defaultRefresh,
+    MetadataRefreshMode imageRefreshMode = MetadataRefreshMode.defaultRefresh,
   }) async {
     await _requestWithFallback<void>(
       methods: const ['POST'],
       paths: ['/Items/$itemId/Refresh'],
       queryParameters: {
         'Recursive': ?recursive,
+        'MetadataRefreshMode': metadataRefreshMode.toServerString(),
+        'ImageRefreshMode': imageRefreshMode.toServerString(),
         'ReplaceAllMetadata': ?replaceAllMetadata,
         'ReplaceAllImages': ?replaceAllImages,
       },

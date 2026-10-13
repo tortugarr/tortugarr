@@ -109,7 +109,6 @@ class _ExternalPlayerHostScreenState extends State<ExternalPlayerHostScreen> {
         final profile = DeviceProfileBuilder.build(
           maxBitrateMbps: maxBitrateOption,
           audioCapabilityProfile: const AudioCapabilityProfile.optimistic(),
-          audioOutputMode: AudioOutputMode.auto,
           audioFallbackCodec: AudioFallbackCodec.auto,
           // External players (VLC, mpv, Just Player, …) decode audio in
           // software; never restrict them by the detected output route.
@@ -156,7 +155,7 @@ class _ExternalPlayerHostScreenState extends State<ExternalPlayerHostScreen> {
           profile['MaxStreamingBitrate'] = overrideMbps * 1000000;
         }
 
-        final maxBitrate = profile['MaxStreamingBitrate'] as int?;
+        final maxBitrate = (profile['MaxStreamingBitrate'] as num?)?.toInt();
         final startTicks = startPosition > Duration.zero
             ? startPosition.inMicroseconds * 10
             : null;

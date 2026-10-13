@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../util/error_message.dart';
 import '../../../navigation/destinations.dart';
 import '../../../widgets/adaptive/adaptive_dialog.dart';
 import '../admin_plugin_version_utils.dart';
@@ -116,8 +117,9 @@ class _AdminPluginsScreenState extends ConsumerState<AdminPluginsScreen>
       ref.invalidate(adminInstalledPluginsProvider);
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).adminPluginToggleFailed(e.toString()))));
+            SnackBar(content: Text(l10n.adminPluginToggleFailed(describeError(e, l10n)))));
       }
     }
   }
@@ -152,8 +154,9 @@ class _AdminPluginsScreenState extends ConsumerState<AdminPluginsScreen>
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).adminPluginUninstallFailed(e.toString()))));
+            SnackBar(content: Text(l10n.adminPluginUninstallFailed(describeError(e, l10n)))));
       }
     }
   }
@@ -176,8 +179,9 @@ class _AdminPluginsScreenState extends ConsumerState<AdminPluginsScreen>
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).adminPackageInstallFailed(e.toString()))));
+            SnackBar(content: Text(l10n.adminPackageInstallFailed(describeError(e, l10n)))));
       }
     }
   }
@@ -208,8 +212,9 @@ class _AdminPluginsScreenState extends ConsumerState<AdminPluginsScreen>
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).adminPluginUpdateFailed(e.toString()))),
+          SnackBar(content: Text(l10n.adminPluginUpdateFailed(describeError(e, l10n)))),
         );
       }
     }
@@ -238,6 +243,7 @@ class _InstalledTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final pluginsAsync = ref.watch(adminInstalledPluginsProvider);
     final packagesAsync = ref.watch(adminAvailablePackagesProvider);
 
@@ -247,7 +253,7 @@ class _InstalledTab extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(AppLocalizations.of(context).adminPluginsLoadFailed(error.toString())),
+            Text(l10n.adminPluginsLoadFailed(describeError(error, l10n))),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () => ref.invalidate(adminInstalledPluginsProvider),
@@ -293,14 +299,6 @@ class _InstalledTab extends ConsumerWidget {
               .toList();
         }
 
-        if (filtered.isEmpty) {
-          return Center(
-            child: Text(searchQuery.isNotEmpty
-                ? AppLocalizations.of(context).adminPluginsNoSearchResults
-                : AppLocalizations.of(context).adminPluginsNoneInstalled),
-          );
-        }
-
         return Column(
           children: [
             Padding(
@@ -311,42 +309,63 @@ class _InstalledTab extends ConsumerWidget {
               ),
             ),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(12, 4, 12, 80),
-                children: [
-                  adminGlassGroup(
-                    context,
-                    children: [
-                      for (final plugin in filtered)
-                        Builder(
-                          builder: (context) {
-                            final updateInfo =
-                                updateInfoByPluginId[plugin.id] ??
-                                    const _PluginUpdateInfo();
-                            return _InstalledPluginTile(
-                              plugin: plugin,
-                              hasUpdate: updateInfo.latestVersion != null,
-                              latestVersion: updateInfo.latestVersion,
-                              imageUrl: imageUrlsByPluginId[plugin.id],
-                              onUpdate: updateInfo.package != null &&
-                                      updateInfo.latestVersionInfo != null
-                                  ? () => onInstallUpdate(
-                                        plugin,
-                                        updateInfo.package!,
-                                        updateInfo.latestVersionInfo!,
-                                      )
-                                  : null,
-                              onTap: () => context
-                                  .push(Destinations.adminPlugin(plugin.id)),
-                              onToggle: () => onToggle(plugin),
-                              onUninstall: () => onUninstall(plugin),
-                            );
-                          },
+              child: filtered.isEmpty
+                  ? Center(
+                      child: Text(
+                        searchQuery.isNotEmpty
+                            ? AppLocalizations.of(context)
+                                .adminPluginsNoSearchResults
+                            : switch (statusFilter) {
+                                _InstalledPluginFilter.all =>
+                                  AppLocalizations.of(context)
+                                      .adminPluginsNoneInstalled,
+                                _InstalledPluginFilter.active =>
+                                  AppLocalizations.of(context)
+                                      .adminPluginsNoneActive,
+                                _InstalledPluginFilter.restart =>
+                                  AppLocalizations.of(context)
+                                      .adminPluginsNoneRequireRestart,
+                              },
+                      ),
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(12, 4, 12, 80),
+                      children: [
+                        adminGlassGroup(
+                          context,
+                          children: [
+                            for (final plugin in filtered)
+                              Builder(
+                                builder: (context) {
+                                  final updateInfo =
+                                      updateInfoByPluginId[plugin.id] ??
+                                          const _PluginUpdateInfo();
+                                  return _InstalledPluginTile(
+                                    plugin: plugin,
+                                    hasUpdate:
+                                        updateInfo.latestVersion != null,
+                                    latestVersion: updateInfo.latestVersion,
+                                    imageUrl: imageUrlsByPluginId[plugin.id],
+                                    onUpdate: updateInfo.package != null &&
+                                            updateInfo.latestVersionInfo != null
+                                        ? () => onInstallUpdate(
+                                              plugin,
+                                              updateInfo.package!,
+                                              updateInfo.latestVersionInfo!,
+                                            )
+                                        : null,
+                                    onTap: () => context.push(
+                                      Destinations.adminPlugin(plugin.id),
+                                    ),
+                                    onToggle: () => onToggle(plugin),
+                                    onUninstall: () => onUninstall(plugin),
+                                  );
+                                },
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             ),
           ],
         );
@@ -427,7 +446,7 @@ class _InstalledFilterTabs extends StatelessWidget {
             onTap: () => onStatusChanged(_InstalledPluginFilter.active),
           ),
           _InstalledFilterTab(
-            label: AppLocalizations.of(context).adminPluginsRestart,
+            label: AppLocalizations.of(context).adminPluginsRestartRequired,
             selected: statusFilter == _InstalledPluginFilter.restart,
             onTap: () => onStatusChanged(_InstalledPluginFilter.restart),
           ),
@@ -532,6 +551,7 @@ class _InstalledPluginTile extends StatelessWidget {
                   padding: const EdgeInsets.all(2),
                   child: Image.network(
                     imageUrl!,
+                    headers: serverImageHeaders,
                     fit: BoxFit.contain,
                     errorBuilder: (_, _, _) => Icon(
                       Icons.extension,
@@ -642,6 +662,7 @@ class _CatalogTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final packagesAsync = ref.watch(adminAvailablePackagesProvider);
 
     return packagesAsync.when(
@@ -650,7 +671,7 @@ class _CatalogTab extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(AppLocalizations.of(context).adminPluginsLoadFailed(error.toString())),
+            Text(l10n.adminPluginsLoadFailed(describeError(error, l10n))),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () => ref.invalidate(adminAvailablePackagesProvider),

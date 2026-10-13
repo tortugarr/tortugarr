@@ -12,10 +12,45 @@ struct PromptStrings {
     var stillWatchingBody = "Playback has been paused. Are you still watching?"
     var stillWatchingContinue = "Continue"
     var stillWatchingStop = "Stop"
+    var fetchingSubtitles = "Fetching subtitles"
 
     func endsIn(_ time: String) -> String {
         endsInTemplate.replacingOccurrences(of: "{time}", with: time)
     }
+}
+
+/// Mirrors the Dart PlaybackTimeSlot enum by name.
+enum TimeSlot: String {
+    case none, elapsed, totalDuration, timeRemaining, endsAt, time
+}
+
+/// Defaults match the Dart preferences, so the bar reads the same before the
+/// host has pushed anything.
+struct TimeSlotConfig {
+    var aboveLeft = TimeSlot.none
+    var aboveCenter = TimeSlot.none
+    var aboveRight = TimeSlot.endsAt
+    var belowLeft = TimeSlot.elapsed
+    var belowCenter = TimeSlot.none
+    var belowRight = TimeSlot.totalDuration
+    var use24Hour = false
+    var endsAtTemplate = "Ends at {time}"
+
+    func endsAt(_ time: String) -> String {
+        endsAtTemplate.replacingOccurrences(of: "{time}", with: time)
+    }
+}
+
+/// A fixed locale so the label reads the same as the Dart formatter on the other
+/// platforms instead of following the device region.
+///
+/// It sits outside the view controller because the formatter is built in a stored
+/// property initializer, and those can't reference `Self`.
+private func makeClockFormatter(use24Hour: Bool) -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = use24Hour ? "HH:mm" : "h:mm a"
+    return formatter
 }
 
 final class AppleTvPlayerViewController: UIViewController {
@@ -36,12 +71,20 @@ final class AppleTvPlayerViewController: UIViewController {
     var onNextUpCancel: (() -> Void)?
     var onNextUpDismiss: (() -> Void)?
     var onSkipSegmentSelect: (() -> Void)?
-    var onUserSeek: (() -> Void)?
+    /// Fires with the target after a scrub or a direct jump the user made.
+    /// Carrying the position lets the host hand it to SyncPlay, which is the
+    /// only way a seek made on this player reaches the rest of the group.
+    var onUserSeek: ((Int) -> Void)?
     var onSearchSubtitles: (() -> Void)?
+    var onSubtitleDelayChanged: ((Int) -> Void)?
     var onDownloadSubtitle: ((String) -> Void)?
     var onSyncplayLeave: (() -> Void)?
     var onSyncplayIgnoreWait: ((Bool) -> Void)?
     var onOpenCastPerson: ((String) -> Void)?
+    var onOpenEpisodes: (() -> Void)?
+    var onSelectEpisodesSeason: ((String) -> Void)?
+    var onSelectEpisode: ((String) -> Void)?
+    var onEpisodesClosed: (() -> Void)?
     var baseSubtitlePos = 92
     private var didAttachSurface = false
     private var updateTimer: Timer?
@@ -51,8 +94,6 @@ final class AppleTvPlayerViewController: UIViewController {
 
     private var skipForwardMs = 30000
     private var skipBackMs = 10000
-    private var hasNext = false
-    private var hasPrevious = false
     private var audioTracks: [(index: Int, label: String, subtitle: String, selected: Bool)] = []
     private var subtitleTracks: [(index: Int, label: String, subtitle: String, selected: Bool)] = []
     private var streamInfoSections: [[String: Any]] = []
@@ -62,7 +103,20 @@ final class AppleTvPlayerViewController: UIViewController {
     private var canFavorite = false
     private var isFavorite = false
     private var canDownloadSubtitles = false
-    private weak var subtitleSearchingAlert: UIAlertController?
+    private var canBrowseEpisodes = false
+    private weak var episodeBrowser: EpisodeBrowserViewController?
+    /// The searching / downloading alert. Dart raises and clears it, so both
+    /// halves of the flow report their own ending instead of the search one
+    /// falling through to "No Subtitles Found" whatever went wrong.
+    private weak var subtitleProgressAlert: UIAlertController?
+    // Alert action handlers, kept so the session remote can run them.
+    private var remoteMenuActions: [ObjectIdentifier: (UIAlertAction) -> Void] = [:]
+    private var remoteMenuTransition = false
+    private var pendingRemoteMenuCommands: [String] = []
+    /// The buttons the player button settings left switched on, in the order
+    /// the user put them in. Nil until the Dart side sends one, and the row
+    /// offers everything until then.
+    private var osdButtonOrder: [String]?
     private var syncPlayEnabled = false
     private var syncPlayGroupName = ""
     private var syncPlayParticipants: [String] = []
@@ -76,6 +130,12 @@ final class AppleTvPlayerViewController: UIViewController {
 
     private var trickplay: TrickplayData?
     private var trickplaySheets: [Int: UIImage] = [:]
+    private var trickplaySheetsLoading: Set<Int> = []
+    private var trickplayMode: TrickplayMode = .single
+    private var trickplayScalePercent = 30
+    private var trickplayVerticalPercent = 0
+    private var trickplayFollowScrub = true
+    private var trickplayPauseWhileScrubbing = true
 
     // The Next Up card, skip button, and Still Watching prompt are pure
     // renderers. The Dart side owns every decision (when to show, the
@@ -109,18 +169,32 @@ final class AppleTvPlayerViewController: UIViewController {
     private let loadingOverlay = UIView()
     private let loadingSpinner = UIActivityIndicatorView(style: .large)
     private var loadingDismissed = false
+    private let subtitleLoadingPill = UIView()
+    private let subtitleLoadingSpinner = UIActivityIndicatorView(style: .medium)
+    private let subtitleLoadingLabel = UILabel()
+    private var subtitleLoadingSince: CFTimeInterval?
+    private var subtitleLoadingAboveOsd: NSLayoutConstraint?
+    private var subtitleLoadingInCorner: NSLayoutConstraint?
 
     private var isLive = false
     private var liveProgram:
         (name: String, episodeTitle: String, startMs: Int, endMs: Int, hasTimer: Bool)?
     private var liveChannelNumber = ""
-    private var channelList:
-        [(id: String, number: String, name: String, logoUrl: String, programName: String,
-            selected: Bool)] = []
+    private var channelList: [ChannelCarouselEntry] = []
+    private var selectedChannelIndex = 0
+    private weak var channelCarousel: ChannelCarouselOverlayViewController?
     private var streamStats: [(label: String, value: String)] = []
 
     private var scrubTargetMs: Int?
-    private var scrubCommitTimer: Timer?
+    // Shown on the scrubber from the commit until the player has landed, so
+    // the timeline never jumps back to the old position for a frame.
+    private var scrubFrozenMs: Int?
+    // Bumped whenever a new gesture or an outside seek starts, so an older
+    // commit still waiting to land can't resume playback under the new one.
+    private var scrubCommitId = 0
+    private var scrubConvergeTimer: Timer?
+    private var scrubConvergeDeadline: TimeInterval = 0
+    private var wasPlayingBeforeScrub = false
     private var scrubHoldTimer: Timer?
     private var scrubHoldForward = false
     private var scrubHoldStart: TimeInterval = 0
@@ -138,13 +212,16 @@ final class AppleTvPlayerViewController: UIViewController {
         let cols: Int
         let rows: Int
         let intervalMs: Int
+        let timestampsMs: [Int]
     }
+
+    private enum TrickplayMode: String { case disabled, single, strip, full }
 
     private enum Zone { case scrubber, buttons }
     private enum ControlId {
         case prev, skipBack, playPause, skipForward, next
-        case speed, chapters, subtitles, audio, cast, quality, zoom, info, channels, favorite
-        case syncplay
+        case speed, chapters, episodes, subtitles, audio, cast, quality, zoom, info
+        case channels, favorite, guide, syncplay
     }
     private var focusedZone: Zone = .buttons
     private var focusedControlIndex = 0
@@ -155,9 +232,14 @@ final class AppleTvPlayerViewController: UIViewController {
     private let osdContainer = UIView()
     private let gradientLayer = CAGradientLayer()
     private let scrubber = UIProgressView(progressViewStyle: .default)
-    private let currentTimeLabel = UILabel()
-    private let durationLabel = UILabel()
-    private let endsAtLabel = UILabel()
+    private let aboveRow = UIView()
+    private let belowRow = UIView()
+    private let aboveLeftLabel = UILabel()
+    private let aboveCenterLabel = UILabel()
+    private let aboveRightLabel = UILabel()
+    private let belowLeftLabel = UILabel()
+    private let belowCenterLabel = UILabel()
+    private let belowRightLabel = UILabel()
     private let chapterOverlay = UIView()
     private let controlBar = UIView()
     private let controlStack = UIStackView()
@@ -166,9 +248,9 @@ final class AppleTvPlayerViewController: UIViewController {
 
     private let trickplayContainer = UIView()
     private let trickplayImageView = UIImageView()
-    private let trickplayWidth: CGFloat = 480
-    private var trickplayCenterX: NSLayoutConstraint?
-    private var trickplayHeight: NSLayoutConstraint?
+    private let trickplayStrip = UIView()
+    private var trickplayStripTiles: [UIImageView] = []
+    private let trickplayCover = UIImageView()
 
     private let topContainer = UIView()
     private let topGradientLayer = CAGradientLayer()
@@ -192,6 +274,7 @@ final class AppleTvPlayerViewController: UIViewController {
     private var glassRangeProgress = UIColor(red: 0.04, green: 0.52, blue: 1.0, alpha: 1)
     private var glassRangeTrack = UIColor(white: 1, alpha: 0.2)
     private var glassSurface = UIColor(white: 1, alpha: 0.12)
+    private var glassSurfaceVariant = UIColor(red: 0.145, green: 0.145, blue: 0.145, alpha: 1)
     private var glassOnSurface = UIColor.white
     // Dart pushes the accent for every theme, not only glass ones, so this is
     // the accent every prompt surface renders with. The pink constant only
@@ -219,13 +302,10 @@ final class AppleTvPlayerViewController: UIViewController {
     private let pauseTextLabel = UILabel()
 
     private var chapters: [(title: String, startMs: Int)] = []
+    private var showChapterMarkers = false
 
-    private static let endTimeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
-        return formatter
-    }()
+    private var timeSlots = TimeSlotConfig()
+    private var clockFormatter = makeClockFormatter(use24Hour: false)
 
     init(player: AetherPlayerWrapper) {
         self.player = player
@@ -258,6 +338,9 @@ final class AppleTvPlayerViewController: UIViewController {
         if let v = (args["surface"] as? NSNumber)?.intValue {
             glassSurface = Self.color(fromARGB: v)
         }
+        if let v = (args["surfaceVariant"] as? NSNumber)?.intValue {
+            glassSurfaceVariant = Self.color(fromARGB: v)
+        }
         if let v = (args["onSurface"] as? NSNumber)?.intValue {
             glassOnSurface = Self.color(fromARGB: v)
         }
@@ -280,6 +363,49 @@ final class AppleTvPlayerViewController: UIViewController {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 
+    /// The row keeps the label's line height even when every slot in it is
+    /// empty, so the scrubber does not move when a user hides the times.
+    private func setupTimeRow(
+        _ row: UIView, leading: UILabel, center: UILabel, trailing: UILabel, fontSize: CGFloat
+    ) {
+        let font = UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .medium)
+        row.translatesAutoresizingMaskIntoConstraints = false
+        osdContainer.addSubview(row)
+        row.heightAnchor.constraint(equalToConstant: font.lineHeight).isActive = true
+        for label in [leading, center, trailing] {
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = font
+            label.textColor = UIColor(white: 1, alpha: 0.7)
+            row.addSubview(label)
+            label.centerYAnchor.constraint(equalTo: row.centerYAnchor).isActive = true
+        }
+        NSLayoutConstraint.activate([
+            leading.leadingAnchor.constraint(equalTo: row.leadingAnchor),
+            center.centerXAnchor.constraint(equalTo: row.centerXAnchor),
+            trailing.trailingAnchor.constraint(equalTo: row.trailingAnchor),
+        ])
+    }
+
+    func applyTimeSlots(_ args: [String: Any]) {
+        func slot(_ key: String) -> TimeSlot? {
+            (args[key] as? String).flatMap(TimeSlot.init(rawValue:))
+        }
+        if let v = slot("aboveLeft") { timeSlots.aboveLeft = v }
+        if let v = slot("aboveCenter") { timeSlots.aboveCenter = v }
+        if let v = slot("aboveRight") { timeSlots.aboveRight = v }
+        if let v = slot("belowLeft") { timeSlots.belowLeft = v }
+        if let v = slot("belowCenter") { timeSlots.belowCenter = v }
+        if let v = slot("belowRight") { timeSlots.belowRight = v }
+        if let v = args["use24Hour"] as? Bool, v != timeSlots.use24Hour {
+            timeSlots.use24Hour = v
+            clockFormatter = makeClockFormatter(use24Hour: v)
+        }
+        if let v = args["endsAt"] as? String { timeSlots.endsAtTemplate = v }
+        if isViewLoaded {
+            renderProgress()
+        }
+    }
+
     func applyPromptStrings(_ args: [String: Any]) {
         if let v = args["endsIn"] as? String { promptStrings.endsInTemplate = v }
         if let v = args["upNext"] as? String { promptStrings.upNext = v }
@@ -288,9 +414,11 @@ final class AppleTvPlayerViewController: UIViewController {
         if let v = args["stillWatchingBody"] as? String { promptStrings.stillWatchingBody = v }
         if let v = args["stillWatchingContinue"] as? String { promptStrings.stillWatchingContinue = v }
         if let v = args["stillWatchingStop"] as? String { promptStrings.stillWatchingStop = v }
+        if let v = args["fetchingSubtitles"] as? String { promptStrings.fetchingSubtitles = v }
         if isViewLoaded {
             upNextLabel.text = promptStrings.upNext.uppercased()
             nextUpPlayLabel.text = promptStrings.playNext
+            subtitleLoadingLabel.text = promptStrings.fetchingSubtitles
         }
     }
 
@@ -397,22 +525,12 @@ final class AppleTvPlayerViewController: UIViewController {
         chapterOverlay.isUserInteractionEnabled = false
         osdContainer.addSubview(chapterOverlay)
 
-        currentTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        currentTimeLabel.font = .monospacedDigitSystemFont(ofSize: 26, weight: .medium)
-        currentTimeLabel.textColor = UIColor(white: 1, alpha: 0.7)
-        osdContainer.addSubview(currentTimeLabel)
-
-        durationLabel.translatesAutoresizingMaskIntoConstraints = false
-        durationLabel.font = .monospacedDigitSystemFont(ofSize: 26, weight: .medium)
-        durationLabel.textColor = UIColor(white: 1, alpha: 0.7)
-        durationLabel.textAlignment = .right
-        osdContainer.addSubview(durationLabel)
-
-        endsAtLabel.translatesAutoresizingMaskIntoConstraints = false
-        endsAtLabel.font = .monospacedDigitSystemFont(ofSize: 24, weight: .medium)
-        endsAtLabel.textColor = UIColor(white: 1, alpha: 0.7)
-        endsAtLabel.textAlignment = .right
-        osdContainer.addSubview(endsAtLabel)
+        setupTimeRow(
+            aboveRow, leading: aboveLeftLabel, center: aboveCenterLabel, trailing: aboveRightLabel,
+            fontSize: 24)
+        setupTimeRow(
+            belowRow, leading: belowLeftLabel, center: belowCenterLabel, trailing: belowRightLabel,
+            fontSize: 26)
 
         NSLayoutConstraint.activate([
             controlBar.leadingAnchor.constraint(
@@ -428,18 +546,15 @@ final class AppleTvPlayerViewController: UIViewController {
             controlStack.trailingAnchor.constraint(
                 lessThanOrEqualTo: controlBar.trailingAnchor),
 
-            currentTimeLabel.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
-            currentTimeLabel.bottomAnchor.constraint(
-                equalTo: controlBar.topAnchor, constant: -16),
-
-            durationLabel.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
-            durationLabel.bottomAnchor.constraint(
+            belowRow.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            belowRow.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
+            belowRow.bottomAnchor.constraint(
                 equalTo: controlBar.topAnchor, constant: -16),
 
             scrubber.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
             scrubber.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
             scrubber.bottomAnchor.constraint(
-                equalTo: currentTimeLabel.topAnchor, constant: -10),
+                equalTo: belowRow.topAnchor, constant: -10),
             scrubber.heightAnchor.constraint(equalToConstant: 6),
 
             chapterOverlay.leadingAnchor.constraint(equalTo: scrubber.leadingAnchor),
@@ -447,8 +562,9 @@ final class AppleTvPlayerViewController: UIViewController {
             chapterOverlay.centerYAnchor.constraint(equalTo: scrubber.centerYAnchor),
             chapterOverlay.heightAnchor.constraint(equalToConstant: 16),
 
-            endsAtLabel.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
-            endsAtLabel.bottomAnchor.constraint(
+            aboveRow.leadingAnchor.constraint(equalTo: controlBar.leadingAnchor),
+            aboveRow.trailingAnchor.constraint(equalTo: controlBar.trailingAnchor),
+            aboveRow.bottomAnchor.constraint(
                 equalTo: scrubber.topAnchor, constant: -8),
         ])
 
@@ -457,6 +573,7 @@ final class AppleTvPlayerViewController: UIViewController {
         setupPauseOverlay()
         setupLiveOverlays()
         setupSkipSegment()
+        setupSubtitleLoadingPill()
         setupLoadingOverlay()
     }
 
@@ -477,6 +594,80 @@ final class AppleTvPlayerViewController: UIViewController {
             loadingSpinner.centerYAnchor.constraint(equalTo: loadingOverlay.centerYAnchor),
         ])
         loadingSpinner.startAnimating()
+    }
+
+    // Shown while the chosen external subtitle downloads, which takes a while
+    // when the server has to extract it first. It sits above the controls when
+    // they're up and drops to the corner when they hide, so it stays in view
+    // for the whole wait.
+    private func setupSubtitleLoadingPill() {
+        subtitleLoadingPill.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLoadingPill.backgroundColor = UIColor(white: 0, alpha: 0.55)
+        subtitleLoadingPill.layer.cornerRadius = 16
+        subtitleLoadingPill.isHidden = true
+        view.addSubview(subtitleLoadingPill)
+
+        subtitleLoadingSpinner.color = .white
+        subtitleLoadingSpinner.hidesWhenStopped = true
+        subtitleLoadingLabel.font = .systemFont(ofSize: 26, weight: .semibold)
+        subtitleLoadingLabel.textColor = UIColor(white: 1, alpha: 0.85)
+        subtitleLoadingLabel.text = promptStrings.fetchingSubtitles
+
+        let row = UIStackView(arrangedSubviews: [subtitleLoadingSpinner, subtitleLoadingLabel])
+        row.translatesAutoresizingMaskIntoConstraints = false
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 12
+        subtitleLoadingPill.addSubview(row)
+
+        let aboveOsd = subtitleLoadingPill.bottomAnchor.constraint(
+            equalTo: aboveRow.topAnchor, constant: -16)
+        subtitleLoadingAboveOsd = aboveOsd
+        subtitleLoadingInCorner = subtitleLoadingPill.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor, constant: -56)
+        NSLayoutConstraint.activate([
+            subtitleLoadingPill.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: 90),
+            aboveOsd,
+            row.leadingAnchor.constraint(equalTo: subtitleLoadingPill.leadingAnchor, constant: 18),
+            row.trailingAnchor.constraint(
+                equalTo: subtitleLoadingPill.trailingAnchor, constant: -22),
+            row.topAnchor.constraint(equalTo: subtitleLoadingPill.topAnchor, constant: 10),
+            row.bottomAnchor.constraint(equalTo: subtitleLoadingPill.bottomAnchor, constant: -10),
+        ])
+    }
+
+    private func updateSubtitleLoadingPill(osdShown: Bool) {
+        let now = CACurrentMediaTime()
+        if loadingDismissed && player.isSubtitleLoading {
+            if subtitleLoadingSince == nil { subtitleLoadingSince = now }
+        } else {
+            subtitleLoadingSince = nil
+        }
+        // A cached subtitle answers inside half a second and shouldn't flash it.
+        let show = subtitleLoadingSince.map { now - $0 >= 0.5 } ?? false
+        if subtitleLoadingPill.isHidden == show {
+            subtitleLoadingPill.isHidden = !show
+            if show {
+                subtitleLoadingSpinner.startAnimating()
+            } else {
+                subtitleLoadingSpinner.stopAnimating()
+            }
+        }
+        guard let aboveOsd = subtitleLoadingAboveOsd,
+            let inCorner = subtitleLoadingInCorner,
+            aboveOsd.isActive != osdShown
+        else { return }
+        if osdShown {
+            inCorner.isActive = false
+            aboveOsd.isActive = true
+        } else {
+            aboveOsd.isActive = false
+            inCorner.isActive = true
+        }
+        if show {
+            UIView.animate(withDuration: 0.25) { self.view.layoutIfNeeded() }
+        }
     }
 
     private func updateLoadingOverlay() {
@@ -688,39 +879,22 @@ final class AppleTvPlayerViewController: UIViewController {
     }
 
     private func setupTrickplay() {
-        trickplayContainer.translatesAutoresizingMaskIntoConstraints = false
         trickplayContainer.backgroundColor = .black
-        trickplayContainer.layer.cornerRadius = 6
+        trickplayContainer.layer.cornerRadius = 8
         trickplayContainer.layer.borderWidth = 2
-        trickplayContainer.layer.borderColor = UIColor.white.cgColor
         trickplayContainer.clipsToBounds = true
         trickplayContainer.isHidden = true
         osdContainer.addSubview(trickplayContainer)
 
-        trickplayImageView.translatesAutoresizingMaskIntoConstraints = false
         trickplayImageView.contentMode = .scaleAspectFill
         trickplayContainer.addSubview(trickplayImageView)
 
-        let center = trickplayContainer.centerXAnchor.constraint(
-            equalTo: scrubber.leadingAnchor)
-        let height = trickplayContainer.heightAnchor.constraint(
-            equalToConstant: trickplayWidth * 9 / 16)
-        trickplayCenterX = center
-        trickplayHeight = height
-        NSLayoutConstraint.activate([
-            center,
-            height,
-            trickplayContainer.widthAnchor.constraint(equalToConstant: trickplayWidth),
-            trickplayContainer.bottomAnchor.constraint(
-                equalTo: scrubber.topAnchor, constant: -14),
-            trickplayImageView.leadingAnchor.constraint(
-                equalTo: trickplayContainer.leadingAnchor),
-            trickplayImageView.trailingAnchor.constraint(
-                equalTo: trickplayContainer.trailingAnchor),
-            trickplayImageView.topAnchor.constraint(equalTo: trickplayContainer.topAnchor),
-            trickplayImageView.bottomAnchor.constraint(
-                equalTo: trickplayContainer.bottomAnchor),
-        ])
+        trickplayStrip.isHidden = true
+        osdContainer.addSubview(trickplayStrip)
+
+        trickplayCover.backgroundColor = .black
+        trickplayCover.isHidden = true
+        view.insertSubview(trickplayCover, belowSubview: topContainer)
     }
 
     // Mirrors the Flutter NextUpOverlay layout at TV scale: a thumbnail on
@@ -952,13 +1126,15 @@ final class AppleTvPlayerViewController: UIViewController {
         case .next: return "forward.end.fill"
         case .speed: return "gauge.with.dots.needle.67percent"
         case .chapters: return "list.bullet"
+        case .episodes: return "rectangle.stack"
         case .subtitles: return "captions.bubble"
         case .audio: return "speaker.wave.2"
         case .cast: return "person.2"
         case .quality: return "line.3.horizontal.decrease"
         case .zoom: return player.zoomMode.iconName
         case .info: return "info.circle"
-        case .channels: return "list.bullet.rectangle"
+        case .channels: return "square.grid.3x2"
+        case .guide: return "list.bullet.rectangle"
         case .favorite: return isFavorite ? "heart.fill" : "heart"
         case .syncplay: return "person.2.wave.2"
         }
@@ -989,6 +1165,43 @@ final class AppleTvPlayerViewController: UIViewController {
         return container
     }
 
+    /// What the player button settings call this control. The playback
+    /// controls carry no switch, so they answer to no id.
+    private func osdButtonId(for id: ControlId) -> String? {
+        switch id {
+        case .speed: return "speed"
+        case .chapters: return "chapters"
+        case .episodes: return "episodes"
+        case .subtitles: return "subtitles"
+        case .audio: return "audio"
+        case .cast: return "castAndCrew"
+        case .quality: return "quality"
+        case .zoom: return "zoom"
+        case .info: return "info"
+        case .favorite: return "favorite"
+        case .syncplay: return "syncPlay"
+        case .prev, .skipBack, .playPause, .skipForward, .next, .channels, .guide:
+            return nil
+        }
+    }
+
+    private func osdShows(_ id: ControlId) -> Bool {
+        guard let order = osdButtonOrder, let settings = osdButtonId(for: id) else {
+            return true
+        }
+        return order.contains(settings)
+    }
+
+    /// The ones the user left switched on, in the order they put them in.
+    /// Walking their arrangement rather than the candidates is what drops the
+    /// switched-off ones, since those never appear in it.
+    private func arrangedOsdControls(_ ids: [ControlId]) -> [ControlId] {
+        guard let order = osdButtonOrder else { return ids }
+        return order.compactMap { settings in
+            ids.first { osdButtonId(for: $0) == settings }
+        }
+    }
+
     private func rebuildControls() {
         controlStack.arrangedSubviews.forEach {
             controlStack.removeArrangedSubview($0)
@@ -1001,23 +1214,32 @@ final class AppleTvPlayerViewController: UIViewController {
         if isLive {
             ids.append(.playPause)
             if !channelList.isEmpty { ids.append(.channels) }
-            if !streamInfoSections.isEmpty { ids.append(.info) }
+            ids.append(.guide)
+            if !streamInfoSections.isEmpty, osdShows(.info) { ids.append(.info) }
         } else {
-            if hasPrevious { ids.append(.prev) }
+            // Both always present, because they step chapters before they
+            // step the queue, so they have something to do on a lone movie.
+            ids.append(.prev)
             ids.append(.skipBack)
             ids.append(.playPause)
             ids.append(.skipForward)
-            if hasNext { ids.append(.next) }
-            if canFavorite { ids.append(.favorite) }
-            ids.append(.speed)
-            if chapters.count > 1 { ids.append(.chapters) }
-            if !subtitleTracks.isEmpty || canDownloadSubtitles { ids.append(.subtitles) }
-            if audioTracks.count > 1 { ids.append(.audio) }
-            if hasCast { ids.append(.cast) }
-            if syncPlayEnabled { ids.append(.syncplay) }
-            ids.append(.quality)
-            ids.append(.zoom)
-            if !streamInfoSections.isEmpty { ids.append(.info) }
+            ids.append(.next)
+
+            // Everything past the transport answers to the player button
+            // settings, both for whether it appears and where it sits.
+            var secondary: [ControlId] = []
+            if canFavorite { secondary.append(.favorite) }
+            secondary.append(.speed)
+            if chapters.count > 1 { secondary.append(.chapters) }
+            if canBrowseEpisodes { secondary.append(.episodes) }
+            if !subtitleTracks.isEmpty || canDownloadSubtitles { secondary.append(.subtitles) }
+            if audioTracks.count > 1 { secondary.append(.audio) }
+            if hasCast { secondary.append(.cast) }
+            if syncPlayEnabled { secondary.append(.syncplay) }
+            secondary.append(.quality)
+            secondary.append(.zoom)
+            if !streamInfoSections.isEmpty { secondary.append(.info) }
+            ids += arrangedOsdControls(secondary)
         }
 
         controls = ids
@@ -1046,10 +1268,13 @@ final class AppleTvPlayerViewController: UIViewController {
         headerPrimary = (args["topTitle"] as? String) ?? ""
         headerSecondary = (args["topSubtitle"] as? String) ?? ""
 
-        hasNext = (args["hasNext"] as? Bool) ?? false
-        hasPrevious = (args["hasPrevious"] as? Bool) ?? false
         skipForwardMs = (args["skipForwardMs"] as? NSNumber)?.intValue ?? 30000
         skipBackMs = (args["skipBackMs"] as? NSNumber)?.intValue ?? 10000
+        // A fast forward or rewind key on a remote reaches the transport
+        // commands rather than the clickpad, so they move by the same setting.
+        player.nowPlaying.setSkipIntervals(
+            forward: Double(skipForwardMs) / 1000.0,
+            backward: Double(skipBackMs) / 1000.0)
         audioTracks = parseTracks(args["audioTracks"])
         subtitleTracks = parseTracks(args["subtitleTracks"])
         streamInfoSections = (args["streamInfoSections"] as? [[String: Any]]) ?? []
@@ -1058,6 +1283,12 @@ final class AppleTvPlayerViewController: UIViewController {
         canFavorite = (args["canFavorite"] as? Bool) ?? false
         isFavorite = (args["isFavorite"] as? Bool) ?? false
         canDownloadSubtitles = (args["canDownloadSubtitles"] as? Bool) ?? false
+        canBrowseEpisodes = (args["canBrowseEpisodes"] as? Bool) ?? false
+        // A push that carries no arrangement leaves the one already in hand
+        // alone rather than emptying the row.
+        if let osdButtons = args["osdButtons"] as? [String] {
+            osdButtonOrder = osdButtons
+        }
         if let sync = args["syncPlay"] as? [String: Any] {
             syncPlayEnabled = true
             syncPlayGroupName = (sync["groupName"] as? String) ?? "SyncPlay"
@@ -1082,6 +1313,14 @@ final class AppleTvPlayerViewController: UIViewController {
             }
             let title = (entry["title"] as? String) ?? ""
             return (title: title, startMs: startMs)
+        }
+
+        // Gates the scrubber marks alone. The chapters array still arrives in
+        // full, because the chapters button and its menu read it too.
+        let showMarkers = (args["showChapterMarkers"] as? NSNumber)?.boolValue ?? false
+        if showMarkers != showChapterMarkers {
+            showChapterMarkers = showMarkers
+            layoutChapters()
         }
 
         parseTrickplay(args["trickplay"])
@@ -1116,18 +1355,21 @@ final class AppleTvPlayerViewController: UIViewController {
             liveProgram = nil
         }
 
-        channelList = ((args["channelList"] as? [[String: Any]]) ?? []).compactMap {
-            entry in
+        let accent = themeAccent
+        let rawChannels = (args["channelList"] as? [[String: Any]]) ?? []
+        channelList = rawChannels.compactMap { entry in
             guard let id = entry["id"] as? String, !id.isEmpty else { return nil }
-            return (
-                id: id,
-                number: (entry["number"] as? String) ?? "",
-                name: (entry["name"] as? String) ?? "",
-                logoUrl: (entry["logoUrl"] as? String) ?? "",
-                programName: (entry["programName"] as? String) ?? "",
-                selected: (entry["selected"] as? Bool) ?? false
-            )
+            return ChannelCarouselEntry(dictionary: entry, accent: accent)
         }
+        // Resolved by id rather than by position, because an entry with no id
+        // is dropped and would otherwise shift the index.
+        if let tuned = rawChannels.first(where: { ($0["selected"] as? Bool) == true }),
+            let id = tuned["id"] as? String,
+            let index = channelList.firstIndex(where: { $0.channelId == id })
+        {
+            selectedChannelIndex = index
+        }
+        channelCarousel?.update(entries: channelList, theme: carouselTheme)
 
         streamStats = ((args["streamStats"] as? [[String: Any]]) ?? []).compactMap {
             entry in
@@ -1137,7 +1379,6 @@ final class AppleTvPlayerViewController: UIViewController {
     }
 
     private func parseTrickplay(_ raw: Any?) {
-        trickplaySheets.removeAll()
         guard let dict = raw as? [String: Any],
             let urls = dict["urls"] as? [String],
             let width = (dict["width"] as? NSNumber)?.intValue,
@@ -1148,13 +1389,37 @@ final class AppleTvPlayerViewController: UIViewController {
             width > 0, height > 0, cols > 0, rows > 0, intervalMs > 0
         else {
             trickplay = nil
+            trickplaySheets.removeAll()
+            trickplaySheetsLoading.removeAll()
+            hideTrickplay()
             return
         }
+        // A settings change resends the same sheets, which are worth keeping.
+        if trickplay?.urls != urls {
+            trickplaySheets.removeAll()
+            trickplaySheetsLoading.removeAll()
+        }
         let headers = (dict["headers"] as? [String: String]) ?? [:]
+        let timestampsMs = (dict["timestampsMs"] as? [NSNumber])?.map(\.intValue) ?? []
+        if !timestampsMs.isEmpty && timestampsMs.count != urls.count {
+            trickplay = nil
+            trickplaySheets.removeAll()
+            trickplaySheetsLoading.removeAll()
+            hideTrickplay()
+            return
+        }
         trickplay = TrickplayData(
             urls: urls, headers: headers, width: width, height: height,
-            cols: cols, rows: rows, intervalMs: intervalMs)
-        trickplayHeight?.constant = trickplayWidth * CGFloat(height) / CGFloat(width)
+            cols: cols, rows: rows, intervalMs: intervalMs,
+            timestampsMs: timestampsMs)
+        trickplayMode = TrickplayMode(rawValue: (dict["mode"] as? String) ?? "") ?? .single
+        trickplayScalePercent = (dict["scalePercent"] as? NSNumber)?.intValue ?? 30
+        trickplayVerticalPercent = (dict["verticalPositionPercent"] as? NSNumber)?.intValue ?? 0
+        trickplayFollowScrub = (dict["followScrub"] as? Bool) ?? true
+        trickplayPauseWhileScrubbing = (dict["pauseWhileScrubbing"] as? Bool) ?? true
+        if scrubTargetMs != nil || scrubFrozenMs != nil {
+            updateTrickplay()
+        }
     }
 
     private func parsePauseMeta(_ raw: Any?) {
@@ -1287,6 +1552,7 @@ final class AppleTvPlayerViewController: UIViewController {
 
     private func layoutChapters() {
         chapterOverlay.subviews.forEach { $0.removeFromSuperview() }
+        guard showChapterMarkers else { return }
         let width = chapterOverlay.bounds.width
         let durationMs = player.duration * 1000
         guard width > 0, durationMs > 0, chapters.count > 1 else { return }
@@ -1321,8 +1587,8 @@ final class AppleTvPlayerViewController: UIViewController {
         super.viewDidDisappear(animated)
         updateTimer?.invalidate()
         updateTimer = nil
-        scrubCommitTimer?.invalidate()
-        scrubCommitTimer = nil
+        scrubConvergeTimer?.invalidate()
+        scrubConvergeTimer = nil
         scrubHoldTimer?.invalidate()
         scrubHoldTimer = nil
         player.stop()
@@ -1376,7 +1642,7 @@ final class AppleTvPlayerViewController: UIViewController {
             return
         }
         if scrubTargetMs != nil {
-            cancelScrub()
+            abandonScrubSession()
             showOsd()
             return
         }
@@ -1392,10 +1658,12 @@ final class AppleTvPlayerViewController: UIViewController {
         guard presentedViewController == nil, !nextUpVisible else { return }
         switch recognizer.direction {
         case .up:
-            if !isLive {
-                focusedZone = .scrubber
-                updateFocusHighlight()
+            if isLive {
+                presentChannelCarousel()
+                return
             }
+            focusedZone = .scrubber
+            updateFocusHighlight()
             showOsd()
         case .down:
             focusedZone = .buttons
@@ -1466,7 +1734,7 @@ final class AppleTvPlayerViewController: UIViewController {
             if commit {
                 commitScrub()
             } else {
-                cancelScrub()
+                abandonScrubSession()
             }
             focusedZone = zoneBeforePanScrub ?? .buttons
             updateFocusHighlight()
@@ -1480,106 +1748,197 @@ final class AppleTvPlayerViewController: UIViewController {
             super.pressesBegan(presses, with: event)
             return
         }
-        // While the Next Up card is up it owns the remote. Every press is
-        // consumed here so nothing falls through to scrubbing, OSD handling,
-        // or the default menu behavior underneath the card.
         if nextUpVisible {
             for press in presses {
-                switch press.type {
-                case .select:
-                    hideNextUpCard()
-                    if nextUpFocusOnPlay {
-                        onNextUpPlay?()
-                    } else {
-                        onNextUpCancel?()
-                    }
-                case .leftArrow:
-                    nextUpFocusOnPlay = true
-                    updateNextUpFocusHighlight()
-                case .rightArrow:
-                    nextUpFocusOnPlay = false
-                    updateNextUpFocusHighlight()
-                default:
-                    // Menu is handled by the tap recognizer.
-                    break
-                }
+                _ = handleNavigationPress(press.type)
             }
             return
         }
         for press in presses {
-            // A press while a touch pan is scrubbing resolves the pan first so
-            // the press acts on the restored zone. Select means commit the
-            // seek, anything else commits and proceeds. Menu belongs to the
-            // tap recognizer, which cancels the pan itself.
-            if panScrubEngaged && press.type != .menu {
-                finishPanScrub()
-                if press.type == .select {
-                    showOsd()
-                    return
+            if handleNavigationPress(press.type) { return }
+        }
+        super.pressesBegan(presses, with: event)
+    }
+
+    private func handleNavigationPress(_ type: UIPress.PressType) -> Bool {
+        // While the Next Up card is up it owns the remote. Every press is
+        // consumed here so nothing falls through to scrubbing, OSD handling,
+        // or the default menu behavior underneath the card.
+        if nextUpVisible {
+            switch type {
+            case .select:
+                hideNextUpCard()
+                if nextUpFocusOnPlay {
+                    onNextUpPlay?()
+                } else {
+                    onNextUpCancel?()
                 }
+            case .leftArrow:
+                nextUpFocusOnPlay = true
+                updateNextUpFocusHighlight()
+            case .rightArrow:
+                nextUpFocusOnPlay = false
+                updateNextUpFocusHighlight()
+            default:
+                // Menu is handled by the tap recognizer.
+                break
             }
-            switch press.type {
-            case .menu:
-                // Consumed so the down press can't reach the system while the
-                // recognizer decides on release.
-                return
-            case .upArrow:
-                if isLive {
-                    showOsd()
-                    return
+            return true
+        }
+        // A press while a touch pan is scrubbing resolves the pan first so
+        // the press acts on the restored zone. Select means commit the
+        // seek, anything else commits and proceeds. Menu belongs to the
+        // tap recognizer, which cancels the pan itself.
+        if panScrubEngaged && type != .menu {
+            finishPanScrub()
+            if type == .select {
+                showOsd()
+                return true
+            }
+        }
+        switch type {
+        case .menu:
+            // Consumed so the down press can't reach the system while the
+            // recognizer decides on release.
+            return true
+        case .upArrow:
+            if isLive {
+                presentChannelCarousel()
+                return true
+            }
+            focusedZone = .scrubber
+            updateFocusHighlight()
+            showOsd()
+            return true
+        case .downArrow:
+            focusedZone = .buttons
+            updateFocusHighlight()
+            showOsd()
+            return true
+        case .playPause:
+            togglePlayPause()
+            if !isOsdOnScreen {
+                focusedZone = .scrubber
+            } else {
+                focusedZone = .buttons
+                focusedControlIndex = controls.firstIndex(of: .playPause) ?? 0
+            }
+            updateFocusHighlight()
+            showOsd()
+            return true
+        case .select:
+            if skipSegmentActive {
+                let osdWasOnScreen = isOsdOnScreen
+                hideSkipSegment()
+                onSkipSegmentSelect?()
+                if !osdWasOnScreen {
+                    focusedZone = .scrubber
+                    updateFocusHighlight()
                 }
+                showOsd()
+                return true
+            }
+            if !isOsdOnScreen {
+                togglePlayPause()
                 focusedZone = .scrubber
                 updateFocusHighlight()
                 showOsd()
-                return
-            case .downArrow:
-                focusedZone = .buttons
-                updateFocusHighlight()
-                showOsd()
-                return
-            case .playPause:
-                togglePlayPause()
-                if !isOsdOnScreen {
-                    focusedZone = .scrubber
-                } else {
-                    focusedZone = .buttons
-                    focusedControlIndex = controls.firstIndex(of: .playPause) ?? 0
+                return true
+            }
+            handleSelect()
+            showOsd()
+            return true
+        case .leftArrow:
+            seekOrMoveFocus(forward: false)
+            return true
+        case .rightArrow:
+            seekOrMoveFocus(forward: true)
+            return true
+        default:
+            break
+        }
+        return false
+    }
+
+    /// Handles one complete tap from the session remote. A tap never starts a hold.
+    func handleRemoteNavigation(_ command: String) {
+        guard viewIfLoaded?.window != nil, !isBeingDismissed else { return }
+        if remoteMenuTransition {
+            if pendingRemoteMenuCommands.count < 8 { pendingRemoteMenuCommands.append(command) }
+            return
+        }
+        if let modal = presentedViewController {
+            if let remote = modal as? RemotePlayerNavigable {
+                remote.handleRemoteNavigation(command)
+            } else if let alert = modal as? UIAlertController {
+                // UIKit ignores a dismiss while the alert is still animating and
+                // never finishes the swap, so a tap that lands then is dropped.
+                guard !alert.isBeingPresented, !alert.isBeingDismissed else { return }
+                if command == "back" {
+                    // A progress prompt has no cancellation action.
+                    if !alert.actions.isEmpty { alert.dismiss(animated: true) }
+                } else if !alert.actions.isEmpty {
+                    presentRemoteMenu(for: alert)
                 }
-                updateFocusHighlight()
-                showOsd()
+            } else if command == "back" {
+                modal.dismiss(animated: true)
+            }
+            return
+        }
+        if command == "back" { handleMenuTap(); return }
+        let key: UIPress.PressType
+        switch command {
+        case "moveup": key = .upArrow
+        case "movedown": key = .downArrow
+        case "moveleft": key = .leftArrow
+        case "moveright": key = .rightArrow
+        case "select": key = .select
+        default: return
+        }
+        _ = handleNavigationPress(key)
+        endScrubHold()
+    }
+
+    private func makePlayerMenu(title: String?, message: String?, preferredStyle: UIAlertController.Style) -> UIAlertController {
+        remoteMenuActions.removeAll()
+        return UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
+    }
+
+    private func makePlayerAction(title: String?, style: UIAlertAction.Style, handler: ((UIAlertAction) -> Void)? = nil) -> UIAlertAction {
+        let action = UIAlertAction(title: title, style: style, handler: handler)
+        remoteMenuActions[ObjectIdentifier(action)] = handler ?? { _ in }
+        return action
+    }
+
+    private func presentRemoteMenu(for alert: UIAlertController) {
+        let entries = alert.actions.map { action in
+            RemotePlayerMenu.Entry(action: action, invoke: remoteMenuActions[ObjectIdentifier(action)] ?? { _ in })
+        }
+        let menu = RemotePlayerMenu(title: alert.title, message: alert.message, entries: entries)
+        remoteMenuTransition = true
+        alert.dismiss(animated: false) { [weak self] in
+            guard let self else { return }
+            guard self.viewIfLoaded?.window != nil, !self.isBeingDismissed else {
+                self.remoteMenuTransition = false
+                self.pendingRemoteMenuCommands.removeAll()
                 return
-            case .select:
-                if !isOsdOnScreen {
-                    togglePlayPause()
-                    focusedZone = .scrubber
-                    updateFocusHighlight()
-                    showOsd()
-                    return
-                }
-                if skipSegmentActive {
-                    hideSkipSegment()
-                    onSkipSegmentSelect?()
-                    showOsd()
-                    return
-                }
-                handleSelect()
-                showOsd()
-                return
-            case .leftArrow:
-                handleHorizontal(forward: false)
-                if focusedZone == .scrubber { beginScrubHold(forward: false) }
-                showOsd()
-                return
-            case .rightArrow:
-                handleHorizontal(forward: true)
-                if focusedZone == .scrubber { beginScrubHold(forward: true) }
-                showOsd()
-                return
-            default:
-                break
+            }
+            self.present(menu, animated: false) {
+                self.remoteMenuTransition = false
+                // The tap that opened this menu only shows it, since the action
+                // the alert had focused is private. Taps that came in during the
+                // swap run here.
+                let commands = self.pendingRemoteMenuCommands
+                self.pendingRemoteMenuCommands.removeAll()
+                for queued in commands { menu.handleRemoteNavigation(queued) }
+            }
+            // UIKit refuses the menu if something else got presented first, and
+            // then its completion never runs.
+            if self.presentedViewController !== menu {
+                self.remoteMenuTransition = false
+                self.pendingRemoteMenuCommands.removeAll()
             }
         }
-        super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -1619,21 +1978,36 @@ final class AppleTvPlayerViewController: UIViewController {
         guard scrubHoldTimer != nil else { return }
         scrubHoldTimer?.invalidate()
         scrubHoldTimer = nil
-        if scrubTargetMs != nil { commitScrub() }
+        // While the preview holds a paused frame the session outlives the key
+        // and play is what commits. Otherwise letting go is the commit.
+        if scrubTargetMs != nil && !pauseDuringScrub { commitScrub() }
     }
 
     private func handleSelect() {
         switch focusedZone {
         case .scrubber:
-            if scrubTargetMs != nil {
-                commitScrub()
-            } else {
-                togglePlayPause()
-            }
+            togglePlayPause()
         case .buttons:
             guard controls.indices.contains(focusedControlIndex) else { return }
             activate(controls[focusedControlIndex])
         }
+    }
+
+    /// A sideways press with the OSD down seeks straight away instead of
+    /// moving a button highlight nobody can see, which is what made a skip
+    /// take three presses: one to raise the OSD, one to reach the button and
+    /// one to fire it. The zone follows the seek, so the OSD arrives on the
+    /// scrubber and the press after it keeps seeking.
+    ///
+    /// A live stream has nothing to seek, so it keeps the button behaviour.
+    private func seekOrMoveFocus(forward: Bool) {
+        if !isOsdOnScreen, !isLive {
+            focusedZone = .scrubber
+            updateFocusHighlight()
+        }
+        handleHorizontal(forward: forward)
+        if focusedZone == .scrubber { beginScrubHold(forward: forward) }
+        showOsd()
     }
 
     private func handleHorizontal(forward: Bool) {
@@ -1652,17 +2026,19 @@ final class AppleTvPlayerViewController: UIViewController {
         case .prev:
             onPrevious?()
         case .skipBack:
-            adjustScrub(byMs: -skipBackMs)
+            seekDirect(toMs: Int(player.currentTime * 1000) - skipBackMs)
         case .playPause:
             togglePlayPause()
         case .skipForward:
-            adjustScrub(byMs: skipForwardMs)
+            seekDirect(toMs: Int(player.currentTime * 1000) + skipForwardMs)
         case .next:
             onNext?()
         case .speed:
             presentSpeedMenu()
         case .chapters:
             presentChapterMenu()
+        case .episodes:
+            onOpenEpisodes?()
         case .subtitles:
             presentSubtitleMenu()
         case .audio:
@@ -1679,6 +2055,8 @@ final class AppleTvPlayerViewController: UIViewController {
         case .info:
             presentInfoPanel()
         case .channels:
+            presentChannelCarousel()
+        case .guide:
             onOpenGuide?()
         case .favorite:
             onToggleFavorite?()
@@ -1735,14 +2113,38 @@ final class AppleTvPlayerViewController: UIViewController {
         present(panel, animated: true)
     }
 
-    private func presentChannelList() {
-        guard !channelList.isEmpty else { return }
-        let panel = ChannelListViewController(channels: channelList) {
-            [weak self] channelId in
+    private var carouselTheme: ChannelCarouselTheme {
+        ChannelCarouselTheme(
+            accent: themeAccent,
+            surface: hasThemeConfig ? glassSurface : UIColor(white: 0.1, alpha: 1),
+            surfaceVariant: glassSurfaceVariant,
+            onSurface: hasThemeConfig ? glassOnSurface : .white,
+            rangeTrack: glassRangeTrack,
+            rangeProgress: hasThemeConfig ? glassRangeProgress : themeAccent,
+            isGlass: glassActive)
+    }
+
+    private func presentChannelCarousel() {
+        guard !channelList.isEmpty, presentedViewController == nil else { return }
+        // Opening from the OSD button should put the OSD back on the way out.
+        let restoreOsd = isOsdOnScreen
+        hideOsd()
+        let overlay = ChannelCarouselOverlayViewController(
+            entries: channelList,
+            startIndex: selectedChannelIndex,
+            theme: carouselTheme)
+        overlay.onChannelSelected = { [weak self] channelId in
             self?.onSelectChannel?(channelId)
         }
-        panel.modalPresentationStyle = .overFullScreen
-        present(panel, animated: true)
+        overlay.onShowControls = { [weak self] in
+            self?.showOsd()
+        }
+        overlay.onDismissed = { [weak self] in
+            if restoreOsd { self?.showOsd() }
+        }
+        overlay.modalPresentationStyle = .overFullScreen
+        channelCarousel = overlay
+        present(overlay, animated: false)
     }
 
     private func updateFocusHighlight() {
@@ -1773,13 +2175,15 @@ final class AppleTvPlayerViewController: UIViewController {
         case .next: return "Next"
         case .speed: return "Playback Speed"
         case .chapters: return "Chapters"
+        case .episodes: return "Episodes"
         case .subtitles: return "Subtitles"
         case .audio: return "Audio"
         case .cast: return "Cast & Crew"
         case .quality: return "Playback Quality"
         case .zoom: return "Zoom Mode"
         case .info: return "Playback Information"
-        case .channels: return "Guide"
+        case .channels: return "Channels"
+        case .guide: return "Guide"
         case .favorite: return isFavorite ? "Remove from Favorites" : "Add to Favorites"
         case .syncplay: return "SyncPlay"
         }
@@ -1814,6 +2218,13 @@ final class AppleTvPlayerViewController: UIViewController {
     }
 
     private func togglePlayPause() {
+        // During a paused scrub session play means go to the scrubbed spot
+        // and carry on from there, not resume where the video was paused.
+        if scrubTargetMs != nil {
+            wasPlayingBeforeScrub = true
+            commitScrub()
+            return
+        }
         switch player.state {
         case .playing, .buffering, .opening:
             player.pause()
@@ -1826,90 +2237,335 @@ final class AppleTvPlayerViewController: UIViewController {
         player.state == .paused
     }
 
+    private var hasTrickplayPreview: Bool {
+        trickplayMode != .disabled && trickplay != nil
+    }
+
+    private var pauseDuringScrub: Bool {
+        hasTrickplayPreview && trickplayPauseWhileScrubbing
+    }
+
+    // Pauses once per session so the preview has a still frame to sit on,
+    // unless the setting is off. Without a preview scrubbing leaves playback
+    // alone.
+    private func beginScrub() {
+        scrubCommitId += 1
+        scrubConvergeTimer?.invalidate()
+        scrubConvergeTimer = nil
+        scrubFrozenMs = nil
+        guard pauseDuringScrub else { return }
+        if !wasPlayingBeforeScrub {
+            wasPlayingBeforeScrub = !isPaused()
+            if wasPlayingBeforeScrub { player.pause() }
+        }
+    }
+
+    // Moves the frozen target only. The one real seek happens in commitScrub.
     private func adjustScrub(byMs deltaMs: Int) {
         guard !isLive else { return }
         let durationMs = Int(player.duration * 1000)
         guard durationMs > 0 else { return }
-        let base = scrubTargetMs ?? Int(player.currentTime * 1000)
+        // A quick press after a release lands while the last commit is still
+        // converging, when the player still reads the old position.
+        let base = scrubTargetMs ?? scrubFrozenMs ?? Int(player.currentTime * 1000)
+        if scrubTargetMs == nil { beginScrub() }
         scrubTargetMs = min(durationMs, max(0, base + deltaMs))
+        prefetchTrickplay(aroundMs: base, forward: deltaMs > 0, sheetsAhead: 2)
         renderProgress()
         updateTrickplay()
-        scrubCommitTimer?.invalidate()
-        scrubCommitTimer = Timer.scheduledTimer(
-            withTimeInterval: 0.6, repeats: false
-        ) { [weak self] _ in
-            Task { @MainActor in self?.commitScrub() }
-        }
     }
 
     private func commitScrub() {
-        scrubCommitTimer?.invalidate()
-        scrubCommitTimer = nil
         guard let target = scrubTargetMs else { return }
         scrubTargetMs = nil
-        trickplayContainer.isHidden = true
+        scrubFrozenMs = target
+        scrubCommitId += 1
+        let commitId = scrubCommitId
         player.seek(to: Double(target) / 1000.0)
-        onUserSeek?()
+        onUserSeek?(target)
+        renderProgress()
+        updateTrickplay()
+        scrubConvergeDeadline = ProcessInfo.processInfo.systemUptime + 2.0
+        scrubConvergeTimer?.invalidate()
+        scrubConvergeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {
+            [weak self] _ in
+            Task { @MainActor in self?.checkScrubConverged(commitId: commitId, targetMs: target) }
+        }
     }
 
-    private func cancelScrub() {
+    // The frozen timeline lets go once the player reads close to the target,
+    // or after two seconds so a seek that never lands can't hold it forever.
+    private func checkScrubConverged(commitId: Int, targetMs: Int) {
+        guard commitId == scrubCommitId else {
+            scrubConvergeTimer?.invalidate()
+            scrubConvergeTimer = nil
+            return
+        }
+        let landed = abs(Int(player.currentTime * 1000) - targetMs) <= 800
+        let timedOut = ProcessInfo.processInfo.systemUptime >= scrubConvergeDeadline
+        guard landed || timedOut else { return }
+        scrubConvergeTimer?.invalidate()
+        scrubConvergeTimer = nil
+        scrubFrozenMs = nil
+        if wasPlayingBeforeScrub {
+            wasPlayingBeforeScrub = false
+            player.resume()
+        }
+        renderProgress()
+        updateTrickplay()
+    }
+
+    // A skip, a chapter jump or a seek sent from the app lands somewhere the
+    // session knows nothing about, so the session is dropped rather than left
+    // to commit its stale target the next time play is pressed.
+    private func abandonScrubSession() {
+        guard scrubTargetMs != nil || scrubFrozenMs != nil || wasPlayingBeforeScrub else {
+            return
+        }
+        scrubCommitId += 1
         scrubHoldTimer?.invalidate()
         scrubHoldTimer = nil
-        scrubCommitTimer?.invalidate()
-        scrubCommitTimer = nil
+        scrubConvergeTimer?.invalidate()
+        scrubConvergeTimer = nil
         scrubTargetMs = nil
-        trickplayContainer.isHidden = true
+        scrubFrozenMs = nil
+        hideTrickplay()
+        if wasPlayingBeforeScrub {
+            wasPlayingBeforeScrub = false
+            player.resume()
+        }
         renderProgress()
     }
 
+    private func seekDirect(toMs ms: Int) {
+        abandonScrubSession()
+        let durationMs = Int(player.duration * 1000)
+        let clamped = durationMs > 0 ? min(durationMs, max(0, ms)) : max(0, ms)
+        player.seek(to: Double(clamped) / 1000.0)
+        onUserSeek?(clamped)
+    }
+
+    func seekFromHost(toSeconds seconds: TimeInterval) {
+        abandonScrubSession()
+        player.seek(to: seconds)
+    }
+
+    private func hideTrickplay() {
+        trickplayContainer.isHidden = true
+        trickplayStrip.isHidden = true
+        trickplayCover.isHidden = true
+    }
+
+    // The same sizing rule as the Flutter player: the slider maps 10 to 100
+    // percent onto half to double the space between the overlays, and a tile
+    // never grows past that space or the track width.
+    private func resolveTileSize(trackWidth: CGFloat, aspect: CGFloat, budget: CGFloat) -> CGSize {
+        let percent = CGFloat(min(100, max(10, trickplayScalePercent)))
+        let scale = 0.5 + (percent - 10) / 90 * 1.5
+        let safeBudget = max(budget, 32)
+        let safeTrack = max(trackWidth, 24)
+        let desired = min(max(safeBudget * (scale / 2), 24), safeBudget)
+        let height = min(desired, safeTrack * aspect)
+        return CGSize(width: height / aspect, height: height)
+    }
+
     private func updateTrickplay() {
-        guard let tp = trickplay, let target = scrubTargetMs, player.duration > 0 else {
-            trickplayContainer.isHidden = true
+        guard hasTrickplayPreview, let tp = trickplay,
+            let target = scrubTargetMs ?? scrubFrozenMs, player.duration > 0
+        else {
+            hideTrickplay()
             return
         }
-        let tilesPerImage = tp.cols * tp.rows
-        guard tilesPerImage > 0 else { return }
-        let tileIndex = target / tp.intervalMs
-        let imageIndex = tileIndex / tilesPerImage
-        let tileOffset = tileIndex % tilesPerImage
-        let col = tileOffset % tp.cols
-        let row = tileOffset / tp.cols
-
-        let width = scrubber.bounds.width
-        if width > 0 {
-            let fraction = CGFloat(min(1, max(0, Double(target) / (player.duration * 1000))))
-            let half: CGFloat = 120
-            let x = min(width - half, max(half, fraction * width))
-            trickplayCenterX?.constant = x
+        let durationMs = Int(player.duration * 1000)
+        if trickplayMode == .full {
+            trickplayContainer.isHidden = true
+            trickplayStrip.isHidden = true
+            renderTrickplayCover(tp, targetMs: target)
+            return
         }
+        trickplayCover.isHidden = true
 
-        if let sheet = trickplaySheets[imageIndex] {
-            cropTrickplay(sheet, col: col, row: row, data: tp)
+        let scrubFrame = scrubber.convert(scrubber.bounds, to: osdContainer)
+        let trackWidth = scrubFrame.width
+        guard trackWidth > 0 else {
+            hideTrickplay()
+            return
+        }
+        let aspect = CGFloat(tp.height) / CGFloat(tp.width)
+        let scrubberGap: CGFloat = 14
+        let previewBottom = scrubFrame.minY - scrubberGap
+        let scrubberTopInView = scrubber.convert(scrubber.bounds, to: view).minY
+        let budget = scrubberTopInView - scrubberGap - topContainer.frame.maxY
+        let tile = resolveTileSize(trackWidth: trackWidth, aspect: aspect, budget: budget)
+        let maxTravel = max(min(budget - tile.height, trackWidth), 0)
+        let travel = CGFloat(min(100, max(0, trickplayVerticalPercent))) / 100 * maxTravel
+        let fraction = CGFloat(min(1, max(0, Double(target) / Double(durationMs))))
+        let thumbX = 7 + fraction * max(trackWidth - 14, 0)
+        let mainLeft: CGFloat =
+            trickplayFollowScrub
+            ? min(max(thumbX - tile.width / 2, 0), max(trackWidth - tile.width, 0))
+            : (trackWidth - tile.width) / 2
+        let y = previewBottom - travel - tile.height
+
+        if trickplayMode == .strip {
+            trickplayContainer.isHidden = true
+            renderTrickplayStrip(
+                tp, targetMs: target, durationMs: durationMs, mainLeft: mainLeft,
+                originX: scrubFrame.minX, y: y, tile: tile, trackWidth: trackWidth)
+            return
+        }
+        trickplayStrip.isHidden = true
+        trickplayContainer.layer.borderColor = themeAccent.cgColor
+        trickplayContainer.frame = CGRect(
+            x: scrubFrame.minX + mainLeft, y: y, width: tile.width, height: tile.height)
+        trickplayImageView.frame = trickplayContainer.bounds
+        if let image = trickplayTile(tp, atMs: target) {
+            trickplayImageView.image = image
             trickplayContainer.isHidden = false
         } else {
             trickplayContainer.isHidden = true
-            loadTrickplaySheet(imageIndex)
         }
     }
 
-    private func cropTrickplay(_ sheet: UIImage, col: Int, row: Int, data: TrickplayData) {
-        guard let cg = sheet.cgImage else { return }
-        let rect = CGRect(
-            x: col * data.width, y: row * data.height,
-            width: data.width, height: data.height)
-        if let cropped = cg.cropping(to: rect) {
-            trickplayImageView.image = UIImage(cgImage: cropped)
+    private func renderTrickplayStrip(
+        _ tp: TrickplayData, targetMs: Int, durationMs: Int, mainLeft: CGFloat,
+        originX: CGFloat, y: CGFloat, tile: CGSize, trackWidth: CGFloat
+    ) {
+        let spacing: CGFloat = 4
+        let overflow: CGFloat = 24
+        let step = tile.width + spacing
+        guard step > 0 else {
+            trickplayStrip.isHidden = true
+            return
         }
+        let leftCount = min(500, max(0, Int(((mainLeft + overflow) / step).rounded(.down)) + 1))
+        let rightCount = min(
+            500, max(0, Int(((trackWidth + overflow - mainLeft - tile.width) / step).rounded(.down)) + 1))
+        let count = leftCount + 1 + rightCount
+        while trickplayStripTiles.count < count {
+            let tileView = UIImageView()
+            tileView.contentMode = .scaleAspectFill
+            tileView.clipsToBounds = true
+            tileView.backgroundColor = .black
+            tileView.layer.cornerRadius = 8
+            trickplayStrip.addSubview(tileView)
+            trickplayStripTiles.append(tileView)
+        }
+        for (index, tileView) in trickplayStripTiles.enumerated() {
+            tileView.isHidden = index >= count
+        }
+        let leftOffset = mainLeft - CGFloat(leftCount) * step
+        trickplayStrip.frame = CGRect(
+            x: originX + leftOffset, y: y, width: CGFloat(count) * step - spacing,
+            height: tile.height)
+        let stepMs = max(skipForwardMs, 1)
+        for index in 0..<count {
+            let slot = index - leftCount
+            let tileView = trickplayStripTiles[index]
+            tileView.frame = CGRect(
+                x: CGFloat(index) * step, y: 0, width: tile.width, height: tile.height)
+            tileView.layer.borderWidth = slot == 0 ? 2 : 1
+            tileView.layer.borderColor =
+                slot == 0 ? themeAccent.cgColor : UIColor(white: 1, alpha: 0.25).cgColor
+            let ms = targetMs + slot * stepMs
+            let image = ms < 0 || ms > durationMs ? nil : trickplayTile(tp, atMs: ms)
+            tileView.image = image
+            tileView.alpha = image == nil ? 0 : 1
+        }
+        trickplayStrip.isHidden = false
+    }
+
+    private func renderTrickplayCover(_ tp: TrickplayData, targetMs: Int) {
+        trickplayCover.frame = view.bounds
+        switch player.zoomMode {
+        case .fit: trickplayCover.contentMode = .scaleAspectFit
+        case .autoCrop: trickplayCover.contentMode = .scaleAspectFill
+        case .stretch: trickplayCover.contentMode = .scaleToFill
+        }
+        if let image = trickplayTile(tp, atMs: targetMs) {
+            trickplayCover.image = image
+            trickplayCover.isHidden = false
+        } else {
+            trickplayCover.isHidden = true
+        }
+    }
+
+    // The cropped thumbnail for a position, or nil while its sheet is still
+    // on its way. Asking for it is what starts the download.
+    private func trickplayTile(_ tp: TrickplayData, atMs ms: Int) -> UIImage? {
+        let tilesPerImage = tp.cols * tp.rows
+        guard tilesPerImage > 0 else { return nil }
+        let lastMs = max(0, Int(player.duration * 1000) - 1)
+        let boundedMs = min(max(0, ms), lastMs)
+        let imageIndex: Int
+        let offset: Int
+        if tp.timestampsMs.isEmpty {
+            let tileIndex = boundedMs / tp.intervalMs
+            imageIndex = tileIndex / tilesPerImage
+            offset = tileIndex % tilesPerImage
+        } else {
+            imageIndex = trickplayImageIndex(tp, atMs: boundedMs)
+            offset = 0
+        }
+        guard let sheet = trickplaySheets[imageIndex] else {
+            loadTrickplaySheet(imageIndex)
+            return nil
+        }
+        if !tp.timestampsMs.isEmpty { return sheet }
+        guard let cg = sheet.cgImage else { return nil }
+        let rect = CGRect(
+            x: (offset % tp.cols) * tp.width, y: (offset / tp.cols) * tp.height,
+            width: tp.width, height: tp.height)
+        return cg.cropping(to: rect).map { UIImage(cgImage: $0) }
+    }
+
+    private func prefetchTrickplay(aroundMs ms: Int, forward: Bool, sheetsAhead: Int) {
+        guard hasTrickplayPreview, let tp = trickplay, player.duration > 0, sheetsAhead > 0
+        else { return }
+        let tilesPerImage = tp.cols * tp.rows
+        guard tilesPerImage > 0 else { return }
+        let lastIndex: Int
+        let current: Int
+        if tp.timestampsMs.isEmpty {
+            lastIndex = max(0, (Int(player.duration * 1000) - 1) / tp.intervalMs / tilesPerImage)
+            current = max(0, ms) / tp.intervalMs / tilesPerImage
+        } else {
+            lastIndex = tp.timestampsMs.count - 1
+            current = trickplayImageIndex(tp, atMs: max(0, ms))
+        }
+        for ahead in 1...sheetsAhead {
+            let index = forward ? current + ahead : current - ahead
+            if index < 0 || index > lastIndex { break }
+            loadTrickplaySheet(index)
+        }
+    }
+
+    private func trickplayImageIndex(_ tp: TrickplayData, atMs ms: Int) -> Int {
+        guard !tp.timestampsMs.isEmpty else { return 0 }
+        var low = 0
+        var high = tp.timestampsMs.count - 1
+        while low <= high {
+            let middle = low + (high - low) / 2
+            if tp.timestampsMs[middle] <= ms {
+                low = middle + 1
+            } else {
+                high = middle - 1
+            }
+        }
+        return min(max(high, 0), tp.timestampsMs.count - 1)
     }
 
     private func loadTrickplaySheet(_ index: Int) {
         guard let tp = trickplay, index >= 0, index < tp.urls.count,
-            trickplaySheets[index] == nil
+            trickplaySheets[index] == nil, !trickplaySheetsLoading.contains(index)
         else { return }
+        trickplaySheetsLoading.insert(index)
         loadImage(tp.urls[index], headers: tp.headers) { [weak self] image in
-            guard let self, let image else { return }
+            guard let self else { return }
+            self.trickplaySheetsLoading.remove(index)
+            guard let image else { return }
             self.trickplaySheets[index] = image
-            if self.scrubTargetMs != nil {
+            if self.scrubTargetMs != nil || self.scrubFrozenMs != nil {
                 self.updateTrickplay()
             }
         }
@@ -1950,66 +2606,133 @@ final class AppleTvPlayerViewController: UIViewController {
     }
 
     private func presentAudioMenu() {
-        let sheet = UIAlertController(
+        let sheet = self.makePlayerMenu(
             title: "Audio", message: nil, preferredStyle: .actionSheet)
         for track in audioTracks {
             sheet.addAction(
-                UIAlertAction(title: trackActionTitle(track), style: .default) {
+                self.makePlayerAction(title: trackActionTitle(track), style: .default) {
                     [weak self] _ in
                     self?.onSelectAudio?(track.index)
                 })
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
         present(sheet, animated: true)
     }
 
     private func presentSubtitleMenu() {
-        let sheet = UIAlertController(
+        let sheet = self.makePlayerMenu(
             title: "Subtitles", message: nil, preferredStyle: .actionSheet)
         let anySelected = subtitleTracks.contains { $0.selected }
         let offTitle = (anySelected ? "" : "\u{2713} ") + "Off"
         sheet.addAction(
-            UIAlertAction(title: offTitle, style: .default) { [weak self] _ in
+            self.makePlayerAction(title: offTitle, style: .default) { [weak self] _ in
                 self?.onSelectSubtitle?(-1)
             })
         for track in subtitleTracks {
             sheet.addAction(
-                UIAlertAction(title: trackActionTitle(track), style: .default) {
+                self.makePlayerAction(title: trackActionTitle(track), style: .default) {
                     [weak self] _ in
                     self?.onSelectSubtitle?(track.index)
                 })
         }
+        if anySelected {
+            sheet.addAction(
+                self.makePlayerAction(title: "Subtitle Offset\u{2026}", style: .default) {
+                    [weak self] _ in
+                    self?.presentSubtitleDelayMenu()
+                })
+        }
         if canDownloadSubtitles {
             sheet.addAction(
-                UIAlertAction(title: "Download Subtitles\u{2026}", style: .default) {
+                self.makePlayerAction(title: "Download Subtitles\u{2026}", style: .default) {
                     [weak self] _ in
                     self?.beginSubtitleSearch()
                 })
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
         present(sheet, animated: true)
     }
 
+    /// Alerts have no slider on tvOS, so the offset is stepped through a sheet
+    /// that reopens after each adjustment until the user is done.
+    private func presentSubtitleDelayMenu() {
+        let current = player.subtitleOverlay.delaySeconds
+        let sheet = self.makePlayerMenu(
+            title: "Subtitle Offset",
+            message: String(format: "%+.1f s", current),
+            preferredStyle: .actionSheet)
+        for step in [-0.5, -0.1, 0.1, 0.5] {
+            sheet.addAction(
+                self.makePlayerAction(title: String(format: "%+.1f s", step), style: .default) {
+                    [weak self] _ in
+                    self?.applySubtitleDelay(current + step)
+                })
+        }
+        if current != 0 {
+            sheet.addAction(
+                self.makePlayerAction(title: "Reset", style: .default) { [weak self] _ in
+                    self?.applySubtitleDelay(0)
+                })
+        }
+        sheet.addAction(self.makePlayerAction(title: "Done", style: .cancel))
+        present(sheet, animated: true)
+    }
+
+    private func applySubtitleDelay(_ seconds: TimeInterval) {
+        let rounded = (seconds * 10).rounded() / 10
+        player.setSubtitleDelay(rounded)
+        onSubtitleDelayChanged?(Int((rounded * 1000).rounded()))
+        presentSubtitleDelayMenu()
+    }
+
     private func beginSubtitleSearch() {
-        let alert = UIAlertController(
-            title: "Searching for Subtitles\u{2026}", message: nil,
-            preferredStyle: .alert)
-        subtitleSearchingAlert = alert
-        present(alert, animated: true)
         onSearchSubtitles?()
+    }
+
+    /// Put up a spinner-less "working on it" alert for the stretch between
+    /// picking a subtitle and the server listing it. Without this the sheet just
+    /// closes and nothing happens for as long as the refresh takes, which reads
+    /// as the press having been ignored.
+    func showSubtitleProgress(_ message: String) {
+        let alert = self.makePlayerMenu(title: message, message: nil, preferredStyle: .alert)
+        subtitleProgressAlert = alert
+        present(alert, animated: true)
+    }
+
+    /// Take the progress alert down. A message turns it into an alert the viewer
+    /// has to acknowledge, which is how a failure or a subtitle that never
+    /// turned up gets reported instead of being swallowed.
+    func hideSubtitleProgress(message: String?) {
+        dismissSubtitleProgress { [weak self] in
+            guard let self, let message, !message.isEmpty else { return }
+            let alert = self.makePlayerMenu(title: message, message: nil, preferredStyle: .alert)
+            alert.addAction(self.makePlayerAction(title: "OK", style: .cancel))
+            self.present(alert, animated: true)
+        }
+    }
+
+    /// Dismissal is asynchronous, so whatever comes next has to wait for the
+    /// completion rather than be presented on top of an alert on its way out.
+    private func dismissSubtitleProgress(then next: @escaping () -> Void) {
+        guard let existing = subtitleProgressAlert else {
+            next()
+            return
+        }
+        subtitleProgressAlert = nil
+        existing.dismiss(animated: true) { next() }
     }
 
     func presentRemoteSubtitleResults(_ results: [[String: Any]]) {
         let show = { [weak self] in
             guard let self else { return }
             if results.isEmpty {
-                let alert = UIAlertController(
+                let alert = self.makePlayerMenu(
                     title: "No Subtitles Found", message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                alert.addAction(self.makePlayerAction(title: "OK", style: .cancel))
                 self.present(alert, animated: true)
                 return
             }
-            let sheet = UIAlertController(
+            let sheet = self.makePlayerMenu(
                 title: "Download Subtitles", message: nil, preferredStyle: .actionSheet)
             for result in results {
                 guard let id = result["id"] as? String, !id.isEmpty else { continue }
@@ -2017,40 +2740,34 @@ final class AppleTvPlayerViewController: UIViewController {
                 let subtitle = (result["subtitle"] as? String) ?? ""
                 let title = subtitle.isEmpty ? label : "\(label) \u{00B7} \(subtitle)"
                 sheet.addAction(
-                    UIAlertAction(title: title, style: .default) { [weak self] _ in
+                    self.makePlayerAction(title: title, style: .default) { [weak self] _ in
                         self?.onDownloadSubtitle?(id)
                     })
             }
-            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
             self.present(sheet, animated: true)
         }
-        if let searching = subtitleSearchingAlert {
-            subtitleSearchingAlert = nil
-            searching.dismiss(animated: true) { show() }
-        } else {
-            show()
-        }
+        dismissSubtitleProgress { show() }
     }
 
     private func presentChapterMenu() {
-        let sheet = UIAlertController(
+        let sheet = self.makePlayerMenu(
             title: "Chapters", message: nil, preferredStyle: .actionSheet)
         for chapter in chapters {
             let stamp = formatTime(Double(chapter.startMs) / 1000.0)
             sheet.addAction(
-                UIAlertAction(title: "\(chapter.title) · \(stamp)", style: .default) {
+                self.makePlayerAction(title: "\(chapter.title) · \(stamp)", style: .default) {
                     [weak self] _ in
-                    self?.player.seek(to: Double(chapter.startMs) / 1000.0)
-                    self?.onUserSeek?()
+                    self?.seekDirect(toMs: chapter.startMs)
                     self?.showOsd()
                 })
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
         present(sheet, animated: true)
     }
 
     private func presentSpeedMenu() {
-        let sheet = UIAlertController(
+        let sheet = self.makePlayerMenu(
             title: "Playback Speed", message: nil, preferredStyle: .actionSheet)
         let speeds: [Double] = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
         let current = Double(player.rate)
@@ -2058,29 +2775,29 @@ final class AppleTvPlayerViewController: UIViewController {
             let check = abs(speed - current) < 0.01 ? "\u{2713} " : ""
             let label = speed == 1.0 ? "Normal" : String(format: "%gx", speed)
             sheet.addAction(
-                UIAlertAction(title: "\(check)\(label)", style: .default) {
+                self.makePlayerAction(title: "\(check)\(label)", style: .default) {
                     [weak self] _ in
                     self?.onSetSpeed?(speed)
                 })
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
         present(sheet, animated: true)
     }
 
     private func presentQualityMenu() {
-        let sheet = UIAlertController(
+        let sheet = self.makePlayerMenu(
             title: "Quality", message: nil, preferredStyle: .actionSheet)
         let options = [-1, 40, 20, 12, 8, 4, 2]
         for mbps in options {
             let check = mbps == selectedBitrateMbps ? "\u{2713} " : ""
             let label = mbps < 0 ? "Auto" : "\(mbps) Mbps"
             sheet.addAction(
-                UIAlertAction(title: "\(check)\(label)", style: .default) {
+                self.makePlayerAction(title: "\(check)\(label)", style: .default) {
                     [weak self] _ in
                     self?.onSetBitrate?(mbps)
                 })
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        sheet.addAction(self.makePlayerAction(title: "Cancel", style: .cancel))
         present(sheet, animated: true)
     }
 
@@ -2162,16 +2879,11 @@ final class AppleTvPlayerViewController: UIViewController {
             else { return nil }
             return v
         }
-        func pair(_ a: String, _ b: String) -> String? {
-            guard let first = value(a) else { return nil }
-            return "\(first) / \(value(b) ?? "?")"
-        }
 
         var rows: [(label: String, value: String)] = []
         if let v = value("backend") { rows.append(("Playback Path", v)) }
-        if let v = pair("source_format", "video_format") {
-            rows.append(("Source / Output Format", v))
-        }
+        if let v = value("source_format") { rows.append(("Source Format", v)) }
+        if let v = value("output_format") { rows.append(("Output Format", v)) }
         if let v = value("dv_profile") { rows.append(("Dolby Vision", v)) }
         if let v = value("source_fps") { rows.append(("Source FPS", v)) }
         if let v = value("source_bitrate") { rows.append(("Source Bitrate", v)) }
@@ -2199,6 +2911,42 @@ final class AppleTvPlayerViewController: UIViewController {
         if let v = value("last_error") { rows.append(("Last Error", v)) }
 
         return rows
+    }
+
+    /// Dart's answer to the `openEpisodes` the Episodes button sends.
+    func showEpisodeBrowser(_ args: [String: Any]) {
+        let content = EpisodeBrowserContent(args)
+        if let browser = episodeBrowser {
+            browser.update(content)
+            return
+        }
+        // Something else already holds the screen, so Dart is told the browser
+        // closed rather than left waiting on one that never opened.
+        guard presentedViewController == nil else {
+            onEpisodesClosed?()
+            return
+        }
+        let browser = EpisodeBrowserViewController(content: content, theme: carouselTheme)
+        browser.onSelectSeason = { [weak self] seasonId in
+            self?.onSelectEpisodesSeason?(seasonId)
+        }
+        browser.onSelectEpisode = { [weak self] episodeId in
+            self?.onSelectEpisode?(episodeId)
+        }
+        browser.onClosed = { [weak self] in
+            self?.onEpisodesClosed?()
+        }
+        browser.modalPresentationStyle = .overFullScreen
+        episodeBrowser = browser
+        present(browser, animated: true)
+    }
+
+    func updateEpisodeBrowser(_ args: [String: Any]) {
+        episodeBrowser?.update(EpisodeBrowserContent(args))
+    }
+
+    func hideEpisodeBrowser() {
+        episodeBrowser?.dismiss(animated: true)
     }
 
     private func presentCastPanel() {
@@ -2345,45 +3093,74 @@ final class AppleTvPlayerViewController: UIViewController {
             return
         }
         let duration = player.duration
-        let current = scrubTargetMs.map { Double($0) / 1000.0 } ?? player.currentTime
+        let current =
+            (scrubTargetMs ?? scrubFrozenMs).map { Double($0) / 1000.0 } ?? player.currentTime
         scrubber.progress = duration > 0 ? Float(min(1, max(0, current / duration))) : 0
-        currentTimeLabel.text = formatTime(current)
-        durationLabel.text = formatTime(duration)
-
         let rate = max(0.01, Double(player.rate))
-        if duration > 0 {
+        let text = { (slot: TimeSlot) in
+            self.timeSlotText(slot, current: current, duration: duration, rate: rate)
+        }
+        aboveLeftLabel.text = text(timeSlots.aboveLeft)
+        aboveCenterLabel.text = text(timeSlots.aboveCenter)
+        aboveRightLabel.text = text(timeSlots.aboveRight)
+        belowLeftLabel.text = text(timeSlots.belowLeft)
+        belowCenterLabel.text = text(timeSlots.belowCenter)
+        belowRightLabel.text = text(timeSlots.belowRight)
+    }
+
+    /// Same fallbacks as the Dart formatter: a slot that can't be computed
+    /// shows the total duration rather than going blank.
+    private func timeSlotText(
+        _ slot: TimeSlot, current: TimeInterval, duration: TimeInterval, rate: Double
+    ) -> String {
+        switch slot {
+        case .none:
+            return ""
+        case .elapsed:
+            return formatTime(current)
+        case .totalDuration:
+            return formatTime(duration)
+        case .timeRemaining:
+            return duration > 0 ? "-" + formatTime(max(0, duration - current)) : formatTime(duration)
+        case .endsAt:
             let remaining = max(0, duration - current) / rate
-            let endDate = Date().addingTimeInterval(remaining)
-            endsAtLabel.text = "Ends at \(Self.endTimeFormatter.string(from: endDate))"
-            endsAtLabel.isHidden = false
-        } else {
-            endsAtLabel.isHidden = true
+            guard duration > 0, remaining > 0 else { return formatTime(duration) }
+            return timeSlots.endsAt(clockFormatter.string(from: Date().addingTimeInterval(remaining)))
+        case .time:
+            return clockFormatter.string(from: Date())
         }
     }
 
+    /// Live has no runtime to lay out, so the program bounds take the outer
+    /// slots of the lower row and everything else stays clear.
     private func renderLiveProgress() {
-        endsAtLabel.isHidden = true
+        for label in [aboveLeftLabel, aboveCenterLabel, aboveRightLabel, belowCenterLabel] {
+            label.text = ""
+        }
         if let program = liveProgram, program.endMs > program.startMs {
             let nowMs = Date().timeIntervalSince1970 * 1000
             let span = Double(program.endMs - program.startMs)
             let progress = (nowMs - Double(program.startMs)) / span
             scrubber.progress = Float(min(1, max(0, progress)))
-            currentTimeLabel.text = clockString(epochMs: program.startMs)
-            durationLabel.text = clockString(epochMs: program.endMs)
+            belowLeftLabel.text = clockString(epochMs: program.startMs)
+            belowRightLabel.text = clockString(epochMs: program.endMs)
         } else {
             scrubber.progress = 1
-            currentTimeLabel.text = Self.endTimeFormatter.string(from: Date())
-            durationLabel.text = "LIVE"
+            belowLeftLabel.text = clockFormatter.string(from: Date())
+            belowRightLabel.text = "LIVE"
         }
     }
 
     private func clockString(epochMs: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(epochMs) / 1000.0)
-        return Self.endTimeFormatter.string(from: date)
+        return clockFormatter.string(from: date)
     }
 
     private func updateOsd() {
         renderProgress()
+        if scrubTargetMs == nil && scrubFrozenMs == nil {
+            prefetchTrickplay(aroundMs: Int(player.currentTime * 1000), forward: true, sheetsAhead: 1)
+        }
         controlIcons[.playPause]?.image = UIImage(
             systemName: isPaused() ? "play.fill" : "pause.fill",
             withConfiguration: UIImage.SymbolConfiguration(pointSize: 27, weight: .medium))
@@ -2395,8 +3172,9 @@ final class AppleTvPlayerViewController: UIViewController {
 
         let shouldShow =
             !osdDismissed && !nextUpVisible
-            && (isPaused() || scrubTargetMs != nil
+            && (isPaused() || scrubTargetMs != nil || scrubFrozenMs != nil
                 || (CACurrentMediaTime() - lastShowAt < 4.0))
+        updateSubtitleLoadingPill(osdShown: shouldShow)
         let visible = osdContainer.alpha > 0.5
         if shouldShow && !visible {
             setSubtitlesRaised(true)
@@ -2436,11 +3214,12 @@ extension AppleTvPlayerViewController: UIGestureRecognizerDelegate {
 
 private let kInfoAccentColor = UIColor(red: 0.42, green: 0.49, blue: 0.96, alpha: 1)
 
-private final class InfoPanelViewController: UIViewController, UITableViewDataSource,
+private final class InfoPanelViewController: UIViewController, RemotePlayerNavigable, UITableViewDataSource,
     UITableViewDelegate
 {
     private let sections: [(title: String, rows: [(label: String, value: String)])]
     private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let closeButton = UIButton(type: .system)
 
     init(sections: [(title: String, rows: [(label: String, value: String)])]) {
         self.sections = sections
@@ -2479,7 +3258,6 @@ private final class InfoPanelViewController: UIViewController, UITableViewDataSo
         tableView.register(InfoCell.self, forCellReuseIdentifier: "cell")
         content.addSubview(tableView)
 
-        let closeButton = UIButton(type: .system)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.setTitle("Close", for: .normal)
         closeButton.titleLabel?.font = .systemFont(ofSize: 22, weight: .semibold)
@@ -2555,6 +3333,34 @@ private final class InfoPanelViewController: UIViewController, UITableViewDataSo
             rightLabel: right?.label,
             rightValue: right?.value)
         return cell
+    }
+
+    func handleRemoteNavigation(_ command: String) {
+        if command == "back" { dismiss(animated: true); return }
+        let system = UIFocusSystem.focusSystem(for: view)
+        if command == "select" {
+            if system?.focusedItem === closeButton { closeButton.sendActions(for: .primaryActionTriggered) }
+            return
+        }
+        guard command == "moveup" || command == "movedown" else { return }
+        let onClose = system?.focusedItem === closeButton
+        if onClose && command == "movedown" { return }
+        let paths = sections.indices.flatMap { section in
+            (0..<tableView.numberOfRows(inSection: section)).map { IndexPath(row: $0, section: section) }
+        }
+        let focused = (system?.focusedItem as? UITableViewCell).flatMap { tableView.indexPath(for: $0) }
+        let index = focused.flatMap { paths.firstIndex(of: $0) }
+        let next = index.map { $0 + (command == "moveup" ? -1 : 1) }
+            ?? (onClose ? paths.count - 1 : 0)
+        if next >= paths.count || paths.isEmpty {
+            system?.requestFocusUpdate(to: closeButton)
+        } else {
+            let path = paths[max(0, next)]
+            tableView.scrollToRow(at: path, at: .middle, animated: false)
+            tableView.layoutIfNeeded()
+            if let cell = tableView.cellForRow(at: path) { system?.requestFocusUpdate(to: cell) }
+        }
+        system?.updateFocusIfNeeded()
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -2659,7 +3465,7 @@ private final class InfoCell: UITableViewCell {
     }
 }
 
-private final class CastPanelViewController: UIViewController, UICollectionViewDataSource,
+private final class CastPanelViewController: UIViewController, RemotePlayerNavigable, UICollectionViewDataSource,
     UICollectionViewDelegate
 {
     private let people: [(name: String, subtitle: String, imageUrl: String, personId: String)]
@@ -2737,6 +3543,27 @@ private final class CastPanelViewController: UIViewController, UICollectionViewD
         let person = people[indexPath.item]
         guard !person.personId.isEmpty else { return }
         onSelect(person.personId)
+    }
+
+    func handleRemoteNavigation(_ command: String) {
+        if command == "back" { dismiss(animated: true); return }
+        guard !people.isEmpty else { return }
+        let system = UIFocusSystem.focusSystem(for: view)
+        let cell = system?.focusedItem as? UICollectionViewCell
+        let focused = cell.flatMap { collectionView.indexPath(for: $0) }
+        if command == "select", let focused {
+            collectionView(collectionView, didSelectItemAt: focused)
+            return
+        }
+        let delta = command == "moveleft" ? -1 : command == "moveright" ? 1 : 0
+        let index = focused.map { min(people.count - 1, max(0, $0.item + delta)) } ?? 0
+        let target = IndexPath(item: index, section: 0)
+        collectionView.scrollToItem(at: target, at: .centeredHorizontally, animated: false)
+        collectionView.layoutIfNeeded()
+        if let targetCell = collectionView.cellForItem(at: target) {
+            system?.requestFocusUpdate(to: targetCell)
+            system?.updateFocusIfNeeded()
+        }
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -2841,243 +3668,11 @@ final class PaddedLabel: UILabel {
     }
 }
 
-private final class ChannelListViewController: UIViewController, UITableViewDataSource,
-    UITableViewDelegate
-{
-    private let channels:
-        [(id: String, number: String, name: String, logoUrl: String, programName: String,
-            selected: Bool)]
-    private let onSelect: (String) -> Void
-    private let tableView = UITableView(frame: .zero, style: .plain)
-    private let selectedIndex: Int
-
-    init(
-        channels: [(
-            id: String, number: String, name: String, logoUrl: String, programName: String,
-            selected: Bool
-        )],
-        onSelect: @escaping (String) -> Void
-    ) {
-        self.channels = channels
-        self.onSelect = onSelect
-        self.selectedIndex = channels.firstIndex(where: { $0.selected }) ?? 0
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.55)
-
-        let panel = UIView()
-        panel.translatesAutoresizingMaskIntoConstraints = false
-        panel.backgroundColor = UIColor(white: 0.1, alpha: 0.97)
-        panel.layer.cornerRadius = 22
-        panel.clipsToBounds = true
-        view.addSubview(panel)
-
-        let title = UILabel()
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.text = "Channels"
-        title.font = .systemFont(ofSize: 38, weight: .bold)
-        title.textColor = .white
-        panel.addSubview(title)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .clear
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = 110
-        tableView.remembersLastFocusedIndexPath = true
-        tableView.register(ChannelRowCell.self, forCellReuseIdentifier: "channel")
-        panel.addSubview(tableView)
-
-        NSLayoutConstraint.activate([
-            panel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            panel.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
-            panel.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
-            panel.widthAnchor.constraint(equalToConstant: 980),
-
-            title.topAnchor.constraint(equalTo: panel.topAnchor, constant: 40),
-            title.leadingAnchor.constraint(equalTo: panel.leadingAnchor, constant: 56),
-
-            tableView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 16),
-            tableView.leadingAnchor.constraint(equalTo: panel.leadingAnchor, constant: 24),
-            tableView.trailingAnchor.constraint(equalTo: panel.trailingAnchor, constant: -24),
-            tableView.bottomAnchor.constraint(equalTo: panel.bottomAnchor, constant: -24),
-        ])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        guard channels.indices.contains(selectedIndex) else { return }
-        tableView.scrollToRow(
-            at: IndexPath(row: selectedIndex, section: 0), at: .middle, animated: false)
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        channels.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
-        -> UITableViewCell
-    {
-        let cell =
-            tableView.dequeueReusableCell(withIdentifier: "channel", for: indexPath)
-            as! ChannelRowCell
-        let channel = channels[indexPath.row]
-        cell.configure(
-            number: channel.number, name: channel.name, program: channel.programName,
-            logoUrl: channel.logoUrl, isCurrent: channel.selected)
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let channel = channels[indexPath.row]
-        dismiss(animated: true) { [onSelect] in
-            onSelect(channel.id)
-        }
-    }
-
-    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        for press in presses where press.type == .menu {
-            dismiss(animated: true)
-            return
-        }
-        super.pressesBegan(presses, with: event)
-    }
-}
-
-private final class ChannelRowCell: UITableViewCell {
-    private let logoView = UIImageView()
-    private let numberLabel = UILabel()
-    private let nameLabel = UILabel()
-    private let programLabel = UILabel()
-    private let liveTag = PaddedLabel()
-    private var logoUrl = ""
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .clear
-        selectionStyle = .none
-
-        logoView.translatesAutoresizingMaskIntoConstraints = false
-        logoView.contentMode = .scaleAspectFit
-        logoView.backgroundColor = UIColor(white: 1, alpha: 0.08)
-        logoView.layer.cornerRadius = 8
-        logoView.clipsToBounds = true
-        contentView.addSubview(logoView)
-
-        numberLabel.translatesAutoresizingMaskIntoConstraints = false
-        numberLabel.font = .monospacedDigitSystemFont(ofSize: 28, weight: .bold)
-        numberLabel.textColor = UIColor(white: 1, alpha: 0.7)
-        numberLabel.textAlignment = .center
-        contentView.addSubview(numberLabel)
-
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = .systemFont(ofSize: 28, weight: .semibold)
-        nameLabel.textColor = .white
-        nameLabel.numberOfLines = 1
-        contentView.addSubview(nameLabel)
-
-        programLabel.translatesAutoresizingMaskIntoConstraints = false
-        programLabel.font = .systemFont(ofSize: 22, weight: .regular)
-        programLabel.textColor = UIColor(white: 1, alpha: 0.55)
-        programLabel.numberOfLines = 1
-        contentView.addSubview(programLabel)
-
-        liveTag.translatesAutoresizingMaskIntoConstraints = false
-        liveTag.text = "NOW PLAYING"
-        liveTag.font = .systemFont(ofSize: 18, weight: .bold)
-        liveTag.textColor = .white
-        liveTag.backgroundColor = UIColor(red: 0.9, green: 0.1, blue: 0.55, alpha: 1)
-        liveTag.layer.cornerRadius = 6
-        liveTag.clipsToBounds = true
-        liveTag.isHidden = true
-        contentView.addSubview(liveTag)
-
-        NSLayoutConstraint.activate([
-            numberLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor, constant: 12),
-            numberLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            numberLabel.widthAnchor.constraint(equalToConstant: 84),
-
-            logoView.leadingAnchor.constraint(
-                equalTo: numberLabel.trailingAnchor, constant: 12),
-            logoView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            logoView.widthAnchor.constraint(equalToConstant: 120),
-            logoView.heightAnchor.constraint(equalToConstant: 72),
-
-            nameLabel.leadingAnchor.constraint(
-                equalTo: logoView.trailingAnchor, constant: 24),
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            nameLabel.trailingAnchor.constraint(
-                lessThanOrEqualTo: liveTag.leadingAnchor, constant: -16),
-
-            programLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            programLabel.topAnchor.constraint(
-                equalTo: nameLabel.bottomAnchor, constant: 4),
-            programLabel.trailingAnchor.constraint(
-                lessThanOrEqualTo: liveTag.leadingAnchor, constant: -16),
-
-            liveTag.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor, constant: -16),
-            liveTag.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        ])
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(
-        number: String, name: String, program: String, logoUrl: String, isCurrent: Bool
-    ) {
-        numberLabel.text = number
-        nameLabel.text = name
-        programLabel.text = program
-        programLabel.isHidden = program.isEmpty
-        liveTag.isHidden = !isCurrent
-        self.logoUrl = logoUrl
-        logoView.image = nil
-        guard !logoUrl.isEmpty, let url = URL(string: logoUrl) else { return }
-        let expected = logoUrl
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
-            let image = data.flatMap { UIImage(data: $0) }
-            DispatchQueue.main.async {
-                guard let self, self.logoUrl == expected else { return }
-                self.logoView.image = image
-            }
-        }.resume()
-    }
-
-    override func didUpdateFocus(
-        in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator
-    ) {
-        coordinator.addCoordinatedAnimations {
-            if self.isFocused {
-                self.backgroundColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 0.9)
-                self.numberLabel.textColor = .white
-                self.programLabel.textColor = UIColor(white: 1, alpha: 0.85)
-            } else {
-                self.backgroundColor = .clear
-                self.numberLabel.textColor = UIColor(white: 1, alpha: 0.7)
-                self.programLabel.textColor = UIColor(white: 1, alpha: 0.55)
-            }
-        }
-    }
-}
-
 // Mirrors the Flutter StillWatchingDialog at the same 2x scale the other
 // prompt surfaces use: a glass card with an eye badge, title, body copy, a
 // full width accent Continue over a quiet Stop. Focus is the two stacked
 // buttons with the soft overlay Material renders, no border ring.
-private final class StillWatchingViewController: UIViewController {
+private final class StillWatchingViewController: UIViewController, RemotePlayerNavigable {
     private let strings: PromptStrings
     private let accent: UIColor
     private let surface: UIColor
@@ -3290,6 +3885,16 @@ private final class StillWatchingViewController: UIViewController {
         }
     }
 
+    func handleRemoteNavigation(_ command: String) {
+        switch command {
+        case "moveup": focusOnContinue = true; updateFocusHighlight()
+        case "movedown": focusOnContinue = false; updateFocusHighlight()
+        case "select": resolve(continueWatching: focusOnContinue)
+        case "back": resolve(continueWatching: false)
+        default: break
+        }
+    }
+
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for press in presses {
             switch press.type {
@@ -3314,13 +3919,14 @@ private final class StillWatchingViewController: UIViewController {
     }
 }
 
-private final class SyncPlayPanelViewController: UIViewController {
+private final class SyncPlayPanelViewController: UIViewController, RemotePlayerNavigable {
     private let groupName: String
     private let participants: [String]
     private var ignoreWait: Bool
     private let onIgnoreWait: (Bool) -> Void
     private let onLeave: () -> Void
     private let ignoreWaitButton = UIButton(type: .system)
+    private let leaveButton = UIButton(type: .system)
 
     init(
         groupName: String, participants: [String], ignoreWait: Bool,
@@ -3389,7 +3995,6 @@ private final class SyncPlayPanelViewController: UIViewController {
             }, for: .primaryActionTriggered)
         panel.addSubview(ignoreWaitButton)
 
-        let leaveButton = UIButton(type: .system)
         leaveButton.translatesAutoresizingMaskIntoConstraints = false
         leaveButton.setTitle("Leave Group", for: .normal)
         leaveButton.setTitleColor(
@@ -3432,9 +4037,127 @@ private final class SyncPlayPanelViewController: UIViewController {
             ignoreWait ? "Ignore Wait: On" : "Ignore Wait: Off", for: .normal)
     }
 
+    func handleRemoteNavigation(_ command: String) {
+        if command == "back" { dismiss(animated: true); return }
+        let system = UIFocusSystem.focusSystem(for: view)
+        if command == "select", let button = system?.focusedItem as? UIButton {
+            button.sendActions(for: .primaryActionTriggered)
+            return
+        }
+        guard command == "moveup" || command == "movedown" else { return }
+        let target = command == "movedown" ? leaveButton : ignoreWaitButton
+        system?.requestFocusUpdate(to: target)
+        system?.updateFocusIfNeeded()
+    }
+
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         for press in presses where press.type == .menu {
             dismiss(animated: true)
+            return
+        }
+        super.pressesBegan(presses, with: event)
+    }
+}
+
+/// An overlay on the native player that handles session remote commands itself.
+@MainActor
+protocol RemotePlayerNavigable: AnyObject {
+    func handleRemoteNavigation(_ command: String)
+}
+
+/// UIKit has no public way to trigger a UIAlertAction from code, so when a
+/// session remote command reaches an alert, this table replaces it with the
+/// same actions. Alerts driven by the Siri Remote stay native.
+private final class RemotePlayerMenu: UITableViewController, RemotePlayerNavigable {
+    struct Entry {
+        let action: UIAlertAction
+        let invoke: (UIAlertAction) -> Void
+    }
+    private let entries: [Entry]
+    private let message: String?
+    private var selectedIndex = 0
+    private var answered = false
+
+    init(title: String?, message: String?, entries: [Entry]) {
+        self.entries = entries.filter { $0.action.isEnabled }
+        self.message = message
+        super.init(style: .grouped)
+        self.title = title
+        modalPresentationStyle = .overFullScreen
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.backgroundColor = UIColor(white: 0.08, alpha: 0.98)
+        tableView.contentInset = UIEdgeInsets(top: 60, left: 240, bottom: 60, right: 240)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "action")
+        tableView.remembersLastFocusedIndexPath = true
+    }
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        [title, message].compactMap { $0 }.joined(separator: "\n")
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { entries.count }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "action", for: indexPath)
+        var content = cell.defaultContentConfiguration()
+        content.text = entries[indexPath.row].action.title
+        cell.contentConfiguration = content
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { activate(indexPath.row) }
+
+    override func tableView(_ tableView: UITableView, didUpdateFocusIn context: UITableViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        if let next = context.nextFocusedIndexPath { selectedIndex = next.row }
+    }
+
+    override func indexPathForPreferredFocusedView(in tableView: UITableView) -> IndexPath? {
+        entries.isEmpty ? nil : IndexPath(row: selectedIndex, section: 0)
+    }
+
+    private func activate(_ index: Int) {
+        guard !answered, !isBeingDismissed, entries.indices.contains(index) else { return }
+        answered = true
+        let entry = entries[index]
+        dismiss(animated: true) { entry.invoke(entry.action) }
+    }
+
+    func handleRemoteNavigation(_ command: String) {
+        guard !answered, !isBeingDismissed else { return }
+        if command == "back" {
+            if let cancel = entries.firstIndex(where: { $0.action.style == .cancel }) {
+                activate(cancel)
+            } else {
+                answered = true
+                dismiss(animated: true)
+            }
+            return
+        }
+        guard !entries.isEmpty else { return }
+        if command == "select" { activate(selectedIndex); return }
+        switch command {
+        case "moveup", "moveleft": selectedIndex = max(0, selectedIndex - 1)
+        case "movedown", "moveright": selectedIndex = min(entries.count - 1, selectedIndex + 1)
+        default: return
+        }
+        let path = IndexPath(row: selectedIndex, section: 0)
+        tableView.scrollToRow(at: path, at: .middle, animated: false)
+        tableView.layoutIfNeeded()
+        if let cell = tableView.cellForRow(at: path) {
+            let system = UIFocusSystem.focusSystem(for: view)
+            system?.requestFocusUpdate(to: cell)
+            system?.updateFocusIfNeeded()
+        }
+    }
+
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if presses.contains(where: { $0.type == .menu }) {
+            handleRemoteNavigation("back")
             return
         }
         super.pressesBegan(presses, with: event)

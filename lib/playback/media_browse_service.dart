@@ -50,6 +50,13 @@ class _CachedProbe {
 ///   book|<s>|<id>, shuffle|<s>|all, msg|<code>
 /// ```
 class MediaBrowseService {
+  /// Message ids. A lone message item stands in for a listing that couldn't
+  /// load, and each car adapter shows it its own way.
+  static const signInMessageId = 'msg|signin';
+  static const offlineMessageId = 'msg|offline';
+
+  static bool isMessageId(String mediaId) => mediaId.startsWith('msg|');
+
   static const _pageSize = 100;
   // Ceiling for a single browse response. MediaBrowserServiceCompat sends
   // results in one binder parcel and silently drops oversized ones (the host
@@ -507,7 +514,7 @@ class MediaBrowseService {
     List<AggregatedItem> serverResume = const [];
     try {
       final resumeResponse = await client.itemsApi.getResumeItems(
-        includeItemTypes: const ['AudioBook', 'Audio'],
+        mediaTypes: 'Audio',
         limit: 40,
       );
       serverResume = _toItems(resumeResponse, serverId);
@@ -871,7 +878,7 @@ class MediaBrowseService {
       }
       try {
         final resumeResponse = await client.itemsApi.getResumeItems(
-          includeItemTypes: const ['Audio'],
+          mediaTypes: 'Audio',
           limit: 1,
         );
         final resume = _toItems(resumeResponse, serverId);
@@ -1087,14 +1094,18 @@ class MediaBrowseService {
     return null;
   }
 
+  /// The message item for [mediaId], falling back to the sign-in prompt.
+  MediaItem messageItem(String mediaId) =>
+      mediaId == offlineMessageId ? _offlineItem : _signInItem;
+
   MediaItem get _signInItem => MediaItem(
-        id: 'msg|signin',
+        id: signInMessageId,
         title: _l10n.carSignInPrompt,
         playable: false,
       );
 
   MediaItem get _offlineItem => MediaItem(
-        id: 'msg|offline',
+        id: offlineMessageId,
         title: _l10n.carServerUnreachable,
         playable: false,
       );

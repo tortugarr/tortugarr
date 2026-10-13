@@ -46,58 +46,113 @@ static void my_application_set_window_icon(GtkWindow* window) {
   gtk_window_set_icon(window, icon);
 }
 
-// Gives a Wayland compositor something to find when it looks up this window.
+// How a later run tells its own entry apart. It runs through the quoted Exec
+// because Gear Lever's copy of the bundled entry opens with the same lines.
+#define MOONFIN_ENTRY_SIGNATURE            \
+  "[Desktop Entry]\n"                      \
+  "Type=Application\n"                     \
+  "Name=Moonfin\n"                         \
+  "Comment=Jellyfin & Emby media client\n" \
+  "Exec=\""
+
+static gboolean my_application_is_own_entry(const gchar* contents) {
+  return g_str_has_prefix(contents, MOONFIN_ENTRY_SIGNATURE);
+}
+
+// Asks the desktop to reread the directory. Best effort, desktops without the
+// tool pick the change up on their own.
+static void my_application_refresh_desktop_database(
+    const gchar* applications_dir) {
+  const gchar* argv[] = {"update-desktop-database", applications_dir, nullptr};
+  g_spawn_async(nullptr, const_cast<gchar**>(argv), nullptr,
+                G_SPAWN_SEARCH_PATH, nullptr, nullptr, nullptr, nullptr);
+}
+
+// AppImageLauncher and Gear Lever set this when launching an image.
+static gboolean my_application_launched_by_manager() {
+  const gchar* value = g_getenv("DESKTOPINTEGRATION");
+  return value != nullptr && *value != '\0';
+}
+
+// A desktop environment or an AppImage manager drops one of these to say it
+// handles integration itself and that bundles should keep out of it.
+static gboolean my_application_desktop_integration_opted_out() {
+  g_autofree gchar* user_marker = g_build_filename(
+      g_get_user_data_dir(), "appimagekit", "no_desktopintegration", nullptr);
+  return g_file_test(user_marker, G_FILE_TEST_EXISTS) ||
+         g_file_test("/usr/share/appimagekit/no_desktopintegration",
+                     G_FILE_TEST_EXISTS) ||
+         g_file_test("/etc/appimagekit/no_desktopintegration",
+                     G_FILE_TEST_EXISTS);
+}
+
+// True when an entry other than ours already launches this same image.
 //
-// A Wayland window carries no icon of its own, so the desktop resolves one by
-// matching the window's app id against the installed desktop entries. An
-// AppImage installs nothing, which leaves the taskbar with a placeholder no
-// matter what the image contains. Writing an entry into the user's own data
-// directory, pointing back at the running image, is the only thing that
-// answers that lookup.
-//
-// This runs for AppImage only. Every other package installs its own entry, and
-// a second copy here would shadow it and go stale.
-static void my_application_install_desktop_entry() {
-  const gchar* appimage = g_getenv("APPIMAGE");
-  if (appimage == nullptr || *appimage == '\0') {
-    return;
+// A manager such as Gear Lever or AppImageLauncher writes one under a name of
+// its own once it takes an image on, and an entry of ours beside it is what
+// puts Moonfin in the menu twice.
+static gboolean my_application_appimage_is_integrated(
+    const gchar* applications_dir, const gchar* appimage) {
+  GDir* dir = g_dir_open(applications_dir, 0, nullptr);
+  if (dir == nullptr) {
+    return FALSE;
   }
 
-  g_autofree gchar* applications_dir =
-      g_build_filename(g_get_user_data_dir(), "applications", nullptr);
-  g_autofree gchar* entry_path = g_build_filename(
-      applications_dir, APPLICATION_ID ".desktop", nullptr);
-  g_autofree gchar* entry = g_strdup_printf(
-      "[Desktop Entry]\n"
-      "Type=Application\n"
-      "Name=Moonfin\n"
-      "Comment=Jellyfin & Emby media client\n"
-      "Exec=\"%s\" %%U\n"
-      "Icon=%s\n"
-      "Categories=AudioVideo;Video;\n"
-      "Terminal=false\n"
-      "StartupWMClass=%s\n",
-      appimage, APPLICATION_ID, APPLICATION_ID);
+  gboolean integrated = FALSE;
+  const gchar* name;
+  while ((name = g_dir_read_name(dir)) != nullptr) {
+    if (!g_str_has_suffix(name, ".desktop") ||
+        g_strcmp0(name, APPLICATION_ID ".desktop") == 0) {
+      continue;
+    }
 
-  // Rewrite only when something changed, so moving the image updates the entry
-  // while an ordinary launch touches nothing.
+    g_autofree gchar* path = g_build_filename(applications_dir, name, nullptr);
+    g_autofree gchar* contents = nullptr;
+    if (!g_file_get_contents(path, &contents, nullptr, nullptr)) {
+      continue;
+    }
+
+    // An entry of ours saved under some other name still names the image, so
+    // without this it would read as somebody else's integration.
+    if (my_application_is_own_entry(contents)) {
+      continue;
+    }
+
+    if (g_strstr_len(contents, -1, appimage) != nullptr) {
+      integrated = TRUE;
+      break;
+    }
+  }
+
+  g_dir_close(dir);
+  return integrated;
+}
+
+// Takes away an entry an earlier run wrote. Only ever clears a file this app
+// produced.
+static void my_application_remove_desktop_entry(const gchar* applications_dir,
+                                                const gchar* entry_path) {
   g_autofree gchar* existing = nullptr;
-  if (g_file_get_contents(entry_path, &existing, nullptr, nullptr) &&
-      g_strcmp0(existing, entry) == 0) {
+  if (!g_file_get_contents(entry_path, &existing, nullptr, nullptr)) {
     return;
   }
 
-  if (g_mkdir_with_parents(applications_dir, 0755) != 0) {
+  if (!my_application_is_own_entry(existing)) {
     return;
   }
 
-  g_autoptr(GError) error = nullptr;
-  if (!g_file_set_contents(entry_path, entry, -1, &error)) {
-    g_warning("Could not write the desktop entry to %s: %s", entry_path,
-              error->message);
-    return;
+  g_autoptr(GFile) entry = g_file_new_for_path(entry_path);
+  if (g_file_delete(entry, nullptr, nullptr)) {
+    my_application_refresh_desktop_database(applications_dir);
   }
+}
 
+// Puts the bundle icon where the icon theme looks for it.
+//
+// This happens even when the menu entry belongs to a manager, because the
+// window and the taskbar resolve artwork by name and an AppImage installs
+// nothing for that lookup to find.
+static void my_application_install_icon() {
   g_autofree gchar* icons_dir =
       g_build_filename(g_get_user_data_dir(), "icons", "hicolor", "512x512",
                        "apps", nullptr);
@@ -118,14 +173,105 @@ static void my_application_install_desktop_entry() {
 
   g_autoptr(GFile) source = g_file_new_for_path(source_path);
   g_autoptr(GFile) target = g_file_new_for_path(icon_path);
+
+  // Leave the same artwork alone, so an ordinary launch does no work here.
+  g_autoptr(GFileInfo) source_info =
+      g_file_query_info(source, G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                        G_FILE_QUERY_INFO_NONE, nullptr, nullptr);
+  g_autoptr(GFileInfo) target_info =
+      g_file_query_info(target, G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                        G_FILE_QUERY_INFO_NONE, nullptr, nullptr);
+  if (source_info != nullptr && target_info != nullptr &&
+      g_file_info_get_size(source_info) == g_file_info_get_size(target_info)) {
+    return;
+  }
+
   g_autoptr(GError) copy_error = nullptr;
   g_file_copy(source, target, G_FILE_COPY_OVERWRITE, nullptr, nullptr, nullptr,
               &copy_error);
 }
 
+// Gives a Wayland compositor something to find when it looks up this window.
+//
+// A Wayland window carries no icon of its own, so the desktop resolves one by
+// matching the window's app id against the installed desktop entries. An
+// AppImage installs nothing, which leaves the taskbar with a placeholder no
+// matter what the image contains. Writing an entry into the user's own data
+// directory, pointing back at the running image, is the only thing that
+// answers that lookup.
+//
+// This runs for AppImage only. Every other package installs its own entry, and
+// a second copy here would shadow it and go stale. An AppImage under a manager
+// already has an entry too, so that case steps aside the same way.
+static void my_application_install_desktop_entry() {
+  const gchar* appimage = g_getenv("APPIMAGE");
+  if (appimage == nullptr || *appimage == '\0') {
+    return;
+  }
+
+  my_application_install_icon();
+
+  g_autofree gchar* applications_dir =
+      g_build_filename(g_get_user_data_dir(), "applications", nullptr);
+  g_autofree gchar* entry_path = g_build_filename(
+      applications_dir, APPLICATION_ID ".desktop", nullptr);
+
+  // A manager owns the menu entry or the user opted out, so clear the one an
+  // earlier run left rather than keep a duplicate.
+  if (my_application_launched_by_manager() ||
+      my_application_desktop_integration_opted_out() ||
+      my_application_appimage_is_integrated(applications_dir, appimage)) {
+    my_application_remove_desktop_entry(applications_dir, entry_path);
+    return;
+  }
+
+  g_autofree gchar* entry = g_strdup_printf(
+      MOONFIN_ENTRY_SIGNATURE "%s\" %%U\n"
+      "Icon=%s\n"
+      "Categories=AudioVideo;Video;\n"
+      "Terminal=false\n"
+      "StartupWMClass=%s\n"
+      "MimeType=x-scheme-handler/moonfin;\n",
+      appimage, APPLICATION_ID, APPLICATION_ID);
+
+  // Rewrite only when something changed, so moving the image updates the entry
+  // while an ordinary launch touches nothing. A file there that we didn't write
+  // belongs to a manager like AppManager and stays as is.
+  g_autofree gchar* existing = nullptr;
+  if (g_file_get_contents(entry_path, &existing, nullptr, nullptr) &&
+      (g_strcmp0(existing, entry) == 0 ||
+       !my_application_is_own_entry(existing))) {
+    return;
+  }
+
+  if (g_mkdir_with_parents(applications_dir, 0755) != 0) {
+    return;
+  }
+
+  g_autoptr(GError) error = nullptr;
+  if (!g_file_set_contents(entry_path, entry, -1, &error)) {
+    g_warning("Could not write the desktop entry to %s: %s", entry_path,
+              error->message);
+    return;
+  }
+
+  // Index the scheme handler so moonfin:// links resolve right away.
+  my_application_refresh_desktop_database(applications_dir);
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
+
+  // A moonfin:// launch while the app is already open just raises the
+  // existing window. app_links receives the forwarded command line
+  // separately.
+  GList* windows = gtk_application_get_windows(GTK_APPLICATION(application));
+  if (windows) {
+    gtk_window_present(GTK_WINDOW(windows->data));
+    return;
+  }
+
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
@@ -137,6 +283,7 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
+  fl_dart_project_set_enable_impeller(project, FALSE);
   fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
 
   FlView* view = fl_view_new(project);
@@ -166,7 +313,10 @@ static gboolean my_application_local_command_line(GApplication* application, gch
   g_application_activate(application);
   *exit_status = 0;
 
-  return TRUE;
+  // FALSE lets GApplication forward the command line to the primary instance,
+  // which is how a moonfin:// URI reaches app_links both on a cold start and
+  // when another instance is already running.
+  return FALSE;
 }
 
 static void my_application_startup(GApplication* application) {
@@ -194,15 +344,41 @@ static void my_application_class_init(MyApplicationClass* klass) {
 
 static void my_application_init(MyApplication* self) {}
 
+// A Flatpak can only own its own app ID on the session bus, and Flathub
+// installs Moonfin under an ID that isn't APPLICATION_ID. Registering
+// APPLICATION_ID there is refused and the app exits, so a Flatpak takes the ID
+// it was installed under. The /app check keeps a native build started from
+// another Flatpak's terminal on APPLICATION_ID.
+static const gchar* my_application_resolve_id() {
+  const gchar* flatpak_id = g_getenv("FLATPAK_ID");
+  if (flatpak_id == nullptr || !g_application_id_is_valid(flatpak_id)) {
+    return APPLICATION_ID;
+  }
+
+  g_autofree gchar* executable = g_file_read_link("/proc/self/exe", nullptr);
+  if (executable == nullptr || !g_str_has_prefix(executable, "/app/")) {
+    return APPLICATION_ID;
+  }
+
+  return flatpak_id;
+}
+
 MyApplication* my_application_new() {
+  const gchar* application_id = my_application_resolve_id();
+
   // Set the program name to the application ID, which helps various systems
   // like GTK and desktop environments map this running application to its
   // corresponding .desktop file. This ensures better integration by allowing
   // the application to be recognized beyond its binary name.
-  g_set_prgname(APPLICATION_ID);
+  g_set_prgname(application_id);
 
+  // Single-instance with command-line forwarding, required for app_links to
+  // receive moonfin:// URIs (a second launch hands its arguments to the
+  // primary instance over D-Bus and exits).
   return MY_APPLICATION(g_object_new(my_application_get_type(),
-                                     "application-id", APPLICATION_ID,
-                                     "flags", G_APPLICATION_NON_UNIQUE,
+                                     "application-id", application_id,
+                                     "flags",
+                                     G_APPLICATION_HANDLES_COMMAND_LINE |
+                                         G_APPLICATION_HANDLES_OPEN,
                                      nullptr));
 }

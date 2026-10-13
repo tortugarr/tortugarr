@@ -46,6 +46,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
     }
 
     buildFeatures {
@@ -63,9 +64,18 @@ android {
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+
     def composeBom = platform("androidx.compose:compose-bom:2025.12.00")
 
     implementation(composeBom)
@@ -90,6 +100,7 @@ dependencies {
     implementation("androidx.media3:media3-common:1.10.1")
     implementation("androidx.media3:media3-datasource:1.10.1")
     implementation("androidx.media3:media3-extractor:1.10.1")
+    implementation("androidx.media3:media3-transformer:1.10.1")
     // dav1d (AV1) software decoder, unpacked from its .aar into a plain .jar +
     // src/main/jniLibs. A library module cannot bundle a direct local .aar
     // dependency into its own AAR (AGP "hasLocalAarDeps" error), but a local
@@ -98,4 +109,7 @@ dependencies {
     implementation("org.jellyfin.media3:media3-ffmpeg-decoder:1.9.0+1")
 
     implementation("io.github.peerless2012:ass-media:0.4.0")
+    // ass-media declares this at runtime scope, but its public API hands back
+    // AssRender and AssFrame, so driving libass here needs it at compile time.
+    implementation("io.github.peerless2012:ass-kt:0.4.0")
 }

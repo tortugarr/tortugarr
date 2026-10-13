@@ -207,3 +207,17 @@ enum PlayMethod {
         transcode => 'Transcode',
       };
 }
+
+enum MetadataRefreshMode {
+  none,
+  validationOnly,
+  defaultRefresh,
+  fullRefresh;
+
+  String toServerString() => switch (this) {
+        none => 'None',
+        validationOnly => 'ValidationOnly',
+        defaultRefresh => 'Default',
+        fullRefresh => 'FullRefresh',
+      };
+}

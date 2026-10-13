@@ -6,11 +6,13 @@ import '../../preference/preference_constants.dart';
 import '../../preference/seerr_preferences.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
+import '../services/seerr/seerr_discover_sliders.dart';
 import '../utils/bounded_concurrency.dart';
 
 class SeerrDiscoverRow {
-  final SeerrRowType type;
-  final String title;
+  /// Null for a row showing an admin slider from Seerr's discover page.
+  final SeerrRowType? type;
+  final SeerrDiscoverSlider? slider;
   final List<SeerrDiscoverItem> items;
   final List<SeerrGenre> genres;
   final List<SeerrNetwork> networks;
@@ -20,8 +22,7 @@ class SeerrDiscoverRow {
   final int totalPages;
 
   const SeerrDiscoverRow({
-    required this.type,
-    required this.title,
+    required SeerrRowType this.type,
     this.items = const [],
     this.genres = const [],
     this.networks = const [],
@@ -29,6 +30,29 @@ class SeerrDiscoverRow {
     this.isLoading = false,
     this.page = 1,
     this.totalPages = 1,
+  }) : slider = null;
+
+  const SeerrDiscoverRow.slider(
+    SeerrDiscoverSlider this.slider, {
+    this.items = const [],
+    this.isLoading = false,
+    this.page = 1,
+    this.totalPages = 1,
+  }) : type = null,
+       genres = const [],
+       networks = const [],
+       studios = const [];
+
+  const SeerrDiscoverRow._({
+    required this.type,
+    required this.slider,
+    required this.items,
+    required this.genres,
+    required this.networks,
+    required this.studios,
+    required this.isLoading,
+    required this.page,
+    required this.totalPages,
   });
 
   SeerrDiscoverRow copyWith({
@@ -40,9 +64,9 @@ class SeerrDiscoverRow {
     int? page,
     int? totalPages,
   }) =>
-      SeerrDiscoverRow(
+      SeerrDiscoverRow._(
         type: type,
-        title: title,
+        slider: slider,
         items: items ?? this.items,
         genres: genres ?? this.genres,
         networks: networks ?? this.networks,
@@ -53,10 +77,16 @@ class SeerrDiscoverRow {
       );
 
   bool get hasMore => page < totalPages;
+
+  /// Tells rows apart for focus memory. A slider goes by its id, so sliders
+  /// coming and going don't hand one row another's position.
+  String get key => type?.name ?? 'slider_${slider?.id}';
   bool get isGenreRow => type == SeerrRowType.movieGenres || type == SeerrRowType.seriesGenres;
   bool get isNetworkRow => type == SeerrRowType.networks;
   bool get isStudioRow => type == SeerrRowType.studios;
-  bool get isMediaRow => !isGenreRow && !isNetworkRow && !isStudioRow;
+  bool get isShortcutsRow => type == SeerrRowType.shortcuts;
+  bool get isMediaRow =>
+      !isGenreRow && !isNetworkRow && !isStudioRow && !isShortcutsRow;
 }
 
 class SeerrDiscoverViewModel extends ChangeNotifier {
@@ -71,8 +101,8 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? _error;
-  String? get error => _error;
+  Object? _error;
+  Object? get error => _error;
 
   static const _localRowsFetchLimit = 15;
 
@@ -145,17 +175,22 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
       }
 
       final activeRows = _prefs.activeRows;
+      final slidersFuture = _loadSliders();
       await _refreshRecentlyAddedGate(activeRows);
-      _rows = _visibleRows(activeRows).map((type) => SeerrDiscoverRow(
-        type: type,
-        title: _titleForRowType(type),
-        isLoading: true,
-      )).toList();
+      final sliders = await slidersFuture;
+      _rows = [
+        ..._visibleRows(activeRows).map((type) => SeerrDiscoverRow(
+          type: type,
+          isLoading: true,
+        )),
+        for (final slider in sliders)
+          SeerrDiscoverRow.slider(slider, isLoading: true),
+      ];
       notifyListeners();
 
       await _loadAllRows();
     } catch (e) {
-      _error = e.toString();
+      _error = e;
       debugPrint('[SeerrDiscover] Failed to load: $e');
     } finally {
       _isLoading = false;
@@ -187,6 +222,18 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     }
   }
 
+  /// The admin sliders set up on Seerr's discover page, after Moonfin's own
+  /// rows. Failing to read them leaves just the built-in rows.
+  Future<List<SeerrDiscoverSlider>> _loadSliders() async {
+    try {
+      final sliders = await _repo.getDiscoverSliders(force: true);
+      return sliders.where((s) => s.isSupported).toList();
+    } catch (e) {
+      debugPrint('[SeerrDiscover] Failed to load discover sliders: $e');
+      return const [];
+    }
+  }
+
   List<SeerrRowType> _visibleRows(List<SeerrRowType> rows) =>
       _canViewRecentlyAdded
           ? rows
@@ -195,7 +242,7 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
   Future<void> applyRowConfig() async {
     if (_rows.isEmpty) return;
     final activeTypes = _visibleRows(_prefs.activeRows);
-    final rowMap = {for (final r in _rows) r.type: r};
+    final rowMap = {for (final r in _rows) ?r.type: r};
     final newRows = <SeerrDiscoverRow>[];
     for (final type in activeTypes) {
       final existing = rowMap[type];
@@ -206,7 +253,7 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
         return;
       }
     }
-    _rows = newRows;
+    _rows = [...newRows, ..._rows.where((r) => r.slider != null)];
     notifyListeners();
   }
 
@@ -220,7 +267,7 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final page = await _loadPage(row.type, row.page + 1);
+      final page = await _loadPage(row, row.page + 1);
       if (page != null) {
         List<SeerrDiscoverItem> newItems;
         if (row.type == SeerrRowType.yourWatchlist) {
@@ -256,6 +303,8 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     final row = _rows[index];
     try {
       switch (row.type) {
+        case SeerrRowType.shortcuts:
+          await _loadShortcutArtwork(index);
         case SeerrRowType.recentRequests:
           await _loadRecentRequests(index);
         case SeerrRowType.yourWatchlist:
@@ -277,7 +326,7 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
             isLoading: false,
           ));
         default:
-          final page = await _loadPage(row.type, 1);
+          final page = await _loadPage(row, 1);
           if (page != null) {
             final filtered = _filterItems(page.results);
             _updateRow(index, row.copyWith(
@@ -292,6 +341,21 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('[SeerrDiscover] Failed to load row ${row.type}: $e');
+      _updateRow(index, row.copyWith(isLoading: false));
+    }
+  }
+
+  /// Artwork for the shortcut tiles. One trending read covers every tile, and
+  /// a failure just leaves them on their plain background.
+  Future<void> _loadShortcutArtwork(int index) async {
+    final row = _rows[index];
+    try {
+      final page = await _repo.getTrending(limit: _localRowsFetchLimit);
+      // Shuffled here rather than at render time, so the tiles keep the same
+      // stills until the next load instead of changing on every rebuild.
+      final items = _filterItems(page.results)..shuffle();
+      _updateRow(index, row.copyWith(items: items, isLoading: false));
+    } catch (_) {
       _updateRow(index, row.copyWith(isLoading: false));
     }
   }
@@ -460,10 +524,12 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     }
   }
 
-  Future<SeerrDiscoverPage?> _loadPage(SeerrRowType type, int page) async {
+  Future<SeerrDiscoverPage?> _loadPage(SeerrDiscoverRow row, int page) async {
+    final slider = row.slider;
+    if (slider != null) return _repo.getSliderPage(slider, page: page);
     final limit = _prefs.fetchLimit.limit;
     final offset = (page - 1) * limit;
-    switch (type) {
+    switch (row.type) {
       case SeerrRowType.trending:
         return _repo.getTrending(limit: limit, offset: offset);
       case SeerrRowType.popularMovies:
@@ -490,7 +556,12 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  bool _isNsfw(SeerrDiscoverItem item) {
+  bool _isNsfw(SeerrDiscoverItem item) => isNsfw(item);
+
+  /// Whether [item] is adult content, by TMDB's flag or by a title or
+  /// overview that trips the keyword list. Shared with the other Seerr
+  /// ingestion paths so "hide adult content" means one thing everywhere.
+  static bool isNsfw(SeerrDiscoverItem item) {
     if (item.adult) return true;
     final text = '${item.displayTitle} ${item.overview ?? ''}';
     return nsfwPatterns.any((p) => p.hasMatch(text));
@@ -502,18 +573,4 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  static String _titleForRowType(SeerrRowType type) => switch (type) {
-    SeerrRowType.recentRequests => 'Recent Requests',
-    SeerrRowType.yourWatchlist => 'Your Watchlist',
-    SeerrRowType.recentlyAdded => 'Recently Added',
-    SeerrRowType.trending => 'Trending',
-    SeerrRowType.popularMovies => 'Popular Movies',
-    SeerrRowType.movieGenres => 'Movie Genres',
-    SeerrRowType.upcomingMovies => 'Upcoming Movies',
-    SeerrRowType.studios => 'Studios',
-    SeerrRowType.popularSeries => 'Popular Series',
-    SeerrRowType.seriesGenres => 'Series Genres',
-    SeerrRowType.upcomingSeries => 'Upcoming Series',
-    SeerrRowType.networks => 'Networks',
-  };
 }

@@ -7,6 +7,8 @@ import 'package:moonfin/ui/widgets/bounded_network_image.dart';
 import 'package:moonfin/ui/widgets/focus/focusable_wrapper.dart';
 import 'package:moonfin/ui/widgets/game/game_card_focus_frame.dart';
 import 'package:moonfin/ui/widgets/game/game_poster_card.dart';
+import 'package:moonfin/util/focus/input_mode_tracker.dart';
+import 'package:moonfin/util/platform_detection.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 void main() {
@@ -183,6 +185,123 @@ void main() {
     expect(find.byType(FocusableWrapper), findsNothing);
     expect(find.byType(GameCardFocusFrame), findsOneWidget);
   });
+
+  testWidgets('on TV a mouse still highlights what it hovers', (tester) async {
+    // InputModeTracker.of() is pinned to keyboard on TV so focus visuals can
+    // never vanish for a remote user. Hover state must not be keyed on it, or a
+    // mouse on a TV box highlights nothing at all.
+    PlatformDetection.setTvMode(true);
+    addTearDown(() => PlatformDetection.setTvMode(false));
+
+    final node = FocusNode(debugLabel: 'first');
+    addTearDown(node.dispose);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: InputModeTracker(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GamePosterCard(
+                focusNode: node,
+                title: 'Gauntlet',
+                fileName: 'gauntlet.zip',
+                seed: 'gauntlet',
+                autoScroll: false,
+                onTap: () {},
+              ),
+              GamePosterCard(
+                title: 'Giga Wing',
+                fileName: 'gigawing.zip',
+                seed: 'gigawing',
+                autoScroll: false,
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    List<bool> frames() => tester
+        .widgetList<GameCardFocusFrame>(find.byType(GameCardFocusFrame))
+        .map((frame) => frame.active)
+        .toList(growable: false);
+
+    node.requestFocus();
+    await tester.pumpAndSettle();
+    expect(frames(), [true, false], reason: 'd-pad focus highlights on TV');
+
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    addTearDown(() => mouse.removePointer());
+    await mouse.addPointer(location: Offset.zero);
+    await mouse.moveTo(tester.getCenter(find.byType(GamePosterCard).last));
+    await tester.pumpAndSettle();
+
+    expect(frames(), [
+      false,
+      true,
+    ], reason: 'the hovered card highlights on TV');
+  });
+
+  testWidgets(
+    'a resting pointer stops highlighting once the d-pad moves focus',
+    (tester) async {
+      final restingNode = FocusNode(debugLabel: 'resting');
+      final movedNode = FocusNode(debugLabel: 'moved');
+      addTearDown(restingNode.dispose);
+      addTearDown(movedNode.dispose);
+
+      await tester.pumpWidget(
+        _TestApp(
+          child: InputModeTracker(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GamePosterCard(
+                  focusNode: restingNode,
+                  title: 'Gauntlet',
+                  fileName: 'gauntlet.zip',
+                  seed: 'gauntlet',
+                  autoScroll: false,
+                  onTap: () {},
+                ),
+                GamePosterCard(
+                  focusNode: movedNode,
+                  title: 'Giga Wing',
+                  fileName: 'gigawing.zip',
+                  seed: 'gigawing',
+                  autoScroll: false,
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      List<bool> frames() => tester
+          .widgetList<GameCardFocusFrame>(find.byType(GameCardFocusFrame))
+          .map((frame) => frame.active)
+          .toList(growable: false);
+
+      // A cursor comes to rest on the first card and never moves again.
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      addTearDown(() => mouse.removePointer());
+      await mouse.addPointer(location: Offset.zero);
+      await mouse.moveTo(tester.getCenter(find.byType(GamePosterCard).first));
+      await tester.pumpAndSettle();
+      expect(frames(), [true, false], reason: 'the pointer owns the highlight');
+
+      // The user picks up the remote and moves focus to the second card.
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+      movedNode.requestFocus();
+      await tester.pumpAndSettle();
+
+      // The stationary pointer must not leave a second border behind.
+      expect(frames(), [false, true]);
+    },
+  );
 }
 
 class _TestApp extends StatelessWidget {

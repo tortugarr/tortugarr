@@ -27,6 +27,13 @@ abs_files = Dir.glob(File.join(project_dir, 'Runner/Playback/**/*'))
 shared_dir = File.expand_path(
   File.join(project_dir, '..', 'tvos', 'Runner', 'Playback', 'Aether'))
 abs_files += Dir.glob(File.join(shared_dir, '*.swift')).sort
+# The preview and theme music channels live beside the tvOS runner and serve
+# every Apple platform, so macOS plays trailers and theme music through
+# AVFoundation rather than a second media stack.
+shared_channels = File.expand_path(File.join(project_dir, '..', 'tvos', 'Runner'))
+abs_files += %w[AppleTvPreviewChannel.swift AppleTvThemeMusicChannel.swift]
+  .map { |name| File.join(shared_channels, name) }
+  .select { |path| File.exist?(path) }
 basenames = abs_files.map { |f| File.basename(f) }
 
 # Drop references this script is about to re-add, and any left pointing at a
@@ -52,8 +59,10 @@ abs_files.each do |abs|
 end
 
 # --- AetherEngine ---
+# Pinned exactly, since an engine bump is a deliberate change rather than
+# something a resolve should pick up on its own.
 aether_remote_url = 'https://github.com/superuser404notfound/AetherEngine'
-aether_version = '6.0.2'
+aether_version = '6.89.1'
 aether_local_path = File.expand_path(File.join(project_dir, '..', '..', 'AetherEngine'))
 use_local_aether = ENV['AETHER_LOCAL'] == '1'
 
@@ -62,7 +71,8 @@ if use_local_aether && !File.directory?(aether_local_path)
 end
 
 project.root_object.package_references.dup.each do |p|
-  is_remote_aether = p.respond_to?(:repositoryURL) && p.repositoryURL == aether_remote_url
+  is_remote_aether = p.respond_to?(:repositoryURL) &&
+                     File.basename(p.repositoryURL.to_s.chomp('/'), '.git') == 'AetherEngine'
   is_local_aether = p.is_a?(Xcodeproj::Project::Object::XCLocalSwiftPackageReference) &&
                     File.basename(p.relative_path.to_s) == 'AetherEngine'
   next unless (is_remote_aether && use_local_aether) || (is_local_aether && !use_local_aether)
@@ -77,8 +87,12 @@ project.root_object.package_references.dup.each do |p|
   puts 'removed stale AetherEngine package reference'
 end
 
+# Match on the repository name rather than the whole url. A url that does not
+# match adds a second reference for the same product, and the project then
+# fails to resolve.
 aether_pkg = project.root_object.package_references.find do |p|
-  (p.respond_to?(:repositoryURL) && p.repositoryURL == aether_remote_url) ||
+  (p.respond_to?(:repositoryURL) &&
+   File.basename(p.repositoryURL.to_s.chomp('/'), '.git') == 'AetherEngine') ||
     (p.is_a?(Xcodeproj::Project::Object::XCLocalSwiftPackageReference) &&
      File.basename(p.relative_path.to_s) == 'AetherEngine')
 end
@@ -94,6 +108,18 @@ unless aether_pkg
     puts "added AetherEngine remote package reference (#{aether_version})"
   end
   project.root_object.package_references << aether_pkg
+end
+
+# A reference that is already there keeps whatever it was written with, so an
+# engine bump would land in this script and nowhere else. Reconcile it, which
+# also makes running this twice a no-op.
+if !use_local_aether &&
+   aether_pkg.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) &&
+   (aether_pkg.repositoryURL != aether_remote_url ||
+    aether_pkg.requirement != { 'kind' => 'exactVersion', 'version' => aether_version })
+  aether_pkg.repositoryURL = aether_remote_url
+  aether_pkg.requirement = { 'kind' => 'exactVersion', 'version' => aether_version }
+  puts "repointed AetherEngine at #{aether_remote_url} #{aether_version}"
 end
 
 unless target.package_product_dependencies.any? { |d| d.product_name == 'AetherEngine' }

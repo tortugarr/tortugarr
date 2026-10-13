@@ -1,0 +1,7 @@
+tests/.run*.log
+tests/.work/
+*.tmp
+__pycache__/
+plugin/**/bin/
+plugin/**/obj/
+plugin/dist/

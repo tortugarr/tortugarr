@@ -13,13 +13,19 @@ Widget adaptiveSlider({
   String? label,
 }) {
   if (AppUiIdiomResolver.isApple) {
-    return CupertinoSlider(
-      value: value.clamp(min, max),
-      onChanged: onChanged,
-      onChangeEnd: onChangeEnd,
-      min: min,
-      max: max,
-      divisions: divisions,
+    // A CupertinoSlider keeps its small intrinsic width under loose
+    // constraints, where the Material one fills the row, so it is stretched
+    // here to keep both looking the same in a settings list.
+    return SizedBox(
+      width: double.infinity,
+      child: CupertinoSlider(
+        value: value.clamp(min, max),
+        onChanged: onChanged,
+        onChangeEnd: onChangeEnd,
+        min: min,
+        max: max,
+        divisions: divisions,
+      ),
     );
   }
   return Slider(

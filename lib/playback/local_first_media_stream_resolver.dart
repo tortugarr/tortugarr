@@ -1,5 +1,6 @@
 import 'package:playback_core/playback_core.dart';
 
+import '../data/offline/connectivity_aware_media_server_client.dart';
 import 'offline_stream_resolver.dart';
 
 /// Resolver that serves a completed download's local file instead of a
@@ -39,6 +40,15 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
     if (enableDirectPlay) {
       final local = await _tryResolveLocal(mediaItem, mediaSourceId);
       if (local != null) return local;
+      // With no local copy and no server, the network resolve below just
+      // burns through its timeouts before failing anyway. TV now has both
+      // downloads and the offline catalog, so the offline-failure throw applies
+      // there too.
+      if (shouldUseOfflineCatalog()) {
+        throw StateError(
+          'No playable downloaded copy and the server is unreachable',
+        );
+      }
     }
     return _inner.resolve(
       mediaItem,
@@ -73,10 +83,22 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
 
       // A transcoded download holds one video and one audio track and no
       // embedded subtitles, so the stored original-file metadata would list
-      // phantom tracks in the selectors. Sidecar subtitles still work through
-      // externalSubtitles below, which does not depend on this list.
+      // phantom tracks in the selectors. Its sidecars are real though, and an
+      // empty list puts them out of reach of both the track picker and the
+      // stream index to player track mapping that turns a selection into a
+      // player call, so it describes those and nothing else.
       final mediaStreams = local.isTranscoded
-          ? const <Map<String, dynamic>>[]
+          ? [
+              for (final sub in local.externalSubtitles)
+                <String, dynamic>{
+                  'Type': 'Subtitle',
+                  'Index': sub.index,
+                  'IsExternal': true,
+                  'Codec': sub.codec,
+                  'Title': sub.title,
+                  'Language': sub.language,
+                },
+            ]
           : local.mediaStreams;
 
       return StreamResolutionResult(

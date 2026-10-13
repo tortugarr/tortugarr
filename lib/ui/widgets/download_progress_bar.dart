@@ -4,6 +4,7 @@ import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../data/services/download_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../util/download_utils.dart';
 import '../screens/downloads/downloads_panel.dart';
 
 class DownloadProgressBar extends StatelessWidget {
@@ -21,12 +22,19 @@ class DownloadProgressBar extends StatelessWidget {
       builder: (context, _) {
         final active = downloadService.activeDownloads;
         DownloadProgress? current;
+        DownloadProgress? firstQueued;
         for (final progress in active.values) {
-          if (!progress.isComplete && progress.error == null) {
-            current = progress;
-            break;
+          if (progress.isComplete || progress.error != null) continue;
+          if (progress.isQueued) {
+            // Prefer a transferring entry; a queued one is only a fallback
+            // for the window before any transfer has begun.
+            firstQueued ??= progress;
+            continue;
           }
+          current = progress;
+          break;
         }
+        current ??= firstQueued;
 
         if (current == null) return const SizedBox.shrink();
 
@@ -45,6 +53,8 @@ class DownloadProgressBar extends StatelessWidget {
             : current.progress;
         percentLabel = finalizing
             ? l10n.finalizingDownload
+            : current.isQueued
+            ? l10n.queuedDownload
             : current.progress >= 0
             ? '${(current.progress * 100).toInt()}%'
             : null;
@@ -91,10 +101,14 @@ class DownloadProgressBar extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (current.isTranscoded) ...[
+                        if (current.isTranscoded && !current.isQueued) ...[
                           const SizedBox(height: 2),
                           Text(
-                            l10n.transcodingTimeRemainingUnavailable,
+                            current.etaSeconds != null
+                                ? l10n.timeRemaining(
+                                    formatEta(current.etaSeconds!),
+                                  )
+                                : l10n.transcodingTimeRemainingUnavailable,
                             style: TextStyle(
                               color: AppColorScheme.onAccent.withValues(alpha: 0.8),
                               fontSize: 11,

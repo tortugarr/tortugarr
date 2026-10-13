@@ -1050,7 +1050,7 @@
             }
         }
     },
-    "play": "Jugar",
+    "play": "Reproducir",
     "@play": {
         "description": "Action button label to play media"
     },
@@ -1066,7 +1066,7 @@
     "@readOffline": {
         "description": "Action button label to read offline"
     },
-    "playOffline": "Jugar sin conexión",
+    "playOffline": "Reproducir sin conexión",
     "@playOffline": {
         "description": "Action button label to play offline"
     },
@@ -4248,7 +4248,7 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Jugar en Moonfin",
+    "playInMoonfin": "Reproducir en Moonfin",
     "@playInMoonfin": {
         "description": "Button to play available media in Moonfin"
     },
@@ -7206,5 +7206,86 @@
     "autoHdrSwitchingDescription": "Habilite HDR automáticamente para la reproducción de video HDR y restaure el modo de visualización al salir.",
     "whenFullscreen": "Cuando pantalla completa",
     "transcodingLimits": "Límites de transcodificación",
-    "settingsSupportMoonfinSubtitle": "Dona un café al desarrollador"
+    "settingsSupportMoonfinSubtitle": "Dona un café al desarrollador",
+    "interfaceLanguage": "Idioma de la Intefaz",
+    "@interfaceLanguage": {
+        "description": "Label for the app interface language setting"
+    },
+    "settingsMusicPlaybackTimeDescription": "Elige qué se muestra a la derecha de la barra de progreso de la música.",
+    "@settingsMusicPlaybackTimeDescription": {
+        "description": "Setting description for the music progress bar time option"
+    },
+    "empty": "Vacío",
+    "@empty": {
+        "description": "Label indicating a section or category is empty"
+    },
+    "settingsPlaybackTimeDisplayDescription": "Elige qué etiquetas aparecen alrededor de la barra de progreso de reproducción.",
+    "@settingsPlaybackTimeDisplayDescription": {
+        "description": "Setting description for the progress bar time option"
+    },
+    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de moonfin. Moderno es un diseño cinematográfico adaptable.",
+    "@detailScreenStyleSubtitle": {
+        "description": "Explanation under the detail screen style setting"
+    },
+    "playbackTimeDisplay": "Barra de Progreso de Tiempo",
+    "@playbackTimeDisplay": {
+        "description": "Setting title for what is shown next to the playback progress bar"
+    },
+    "showTechnicalDetails": "¿Mostrar Detalles Técnicos?",
+    "@showTechnicalDetails": {
+        "description": "Label for the detail screen setting to show stream/codec technical details"
+    },
+    "recommendationSystem": "Sistema de Recomendaciones",
+    "@recommendationSystem": {
+        "description": "Label for the Recommendation System setting"
+    },
+    "expandedTabsSubtitle": "Muestra automáticamente el contenido de las pestañas al navegar por ellas. Desactívalo para abrir y cerrar cada pestaña manualmente.",
+    "@expandedTabsSubtitle": {
+        "description": "Explanation under the expanded tabs setting"
+    },
+    "detailScreenStyle": "Estilo de la pantalla de detalles",
+    "@detailScreenStyle": {
+        "description": "Label for the media detail screen layout style setting"
+    },
+    "detailScreenStyleMoonfin": "Clásico",
+    "@detailScreenStyleMoonfin": {
+        "description": "Detail screen style option: the classic centered layout"
+    },
+    "detailScreenStyleModern": "Moderno",
+    "@detailScreenStyleModern": {
+        "description": "Detail screen style option: the responsive cinematic layout"
+    },
+    "showTechnicalDetailsSubtitle": "Mostrar el códec, la resolución y información del stream en el resumen del banner",
+    "@showTechnicalDetailsSubtitle": {
+        "description": "Explanation under the show technical details setting"
+    },
+    "systemLanguageDefault": "Predeterminado del Sistema",
+    "@systemLanguageDefault": {
+        "description": "Label for using the system default language in settings"
+    },
+    "quickConnectUnavailable": "QuickConnect no disponible: {detail}",
+    "@quickConnectUnavailable": {
+        "description": "Quick Connect generic error message",
+        "placeholders": {
+            "detail": {
+                "type": "String"
+            }
+        }
+    },
+    "appTitle": "Moonfin",
+    "@appTitle": {
+        "description": "The application title"
+    },
+    "expandedTabs": "Pestañas Extendidas",
+    "@expandedTabs": {
+        "description": "Label for the detail screen expanded tabs setting"
+    },
+    "quickConnect": "Quick Connect",
+    "@quickConnect": {
+        "description": "Quick Connect toggle button label"
+    },
+    "accountPreferences": "PREFERENCIAS DE LA CUENTA",
+    "@accountPreferences": {
+        "description": "Section header for account preferences settings"
+    }
 }

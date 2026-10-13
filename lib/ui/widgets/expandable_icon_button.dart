@@ -5,14 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
+import 'unread_badge.dart';
+
 import '../../preference/user_preferences.dart';
 import '../../util/focus/dpad_keys.dart';
 import '../../util/focus/input_mode_tracker.dart';
 import '../../util/platform_detection.dart';
 import 'focus/focus_theme.dart';
+import 'focus/glass_press_scale.dart';
 
 const _kExpandDuration = Duration(milliseconds: 150);
-const _kHoverDelay = Duration(milliseconds: 150);
 const _kSpacing = 10.0;
 
 class ExpandableIconButton extends StatefulWidget {
@@ -25,6 +27,9 @@ class ExpandableIconButton extends StatefulWidget {
   final KeyEventResult Function(FocusNode, KeyEvent)? onKeyEvent;
   final ValueChanged<bool>? onFocusChanged;
   final Color? baseColor;
+
+  /// Unread count drawn as a small red circle on the icon. Zero draws nothing.
+  final int badgeCount;
 
   /// When true, the label stays visible even when unfocused/unhovered instead
   /// of collapsing to an icon-only button. Drives the "always expand navbar
@@ -42,6 +47,7 @@ class ExpandableIconButton extends StatefulWidget {
     this.onKeyEvent,
     this.onFocusChanged,
     this.baseColor,
+    this.badgeCount = 0,
     this.forceExpanded = false,
   });
 
@@ -54,7 +60,6 @@ class _ExpandableIconButtonState extends State<ExpandableIconButton> {
   late final FocusNode _focusNode;
   bool _isFocused = false;
   bool _isHovered = false;
-  Timer? _hoverTimer;
   Timer? _longPressTimer;
   bool _longPressTriggered = false;
 
@@ -67,7 +72,6 @@ class _ExpandableIconButtonState extends State<ExpandableIconButton> {
 
   @override
   void dispose() {
-    _hoverTimer?.cancel();
     _longPressTimer?.cancel();
     _focusNode.removeListener(_onFocusChange);
     if (widget.focusNode == null) _focusNode.dispose();
@@ -77,12 +81,8 @@ class _ExpandableIconButtonState extends State<ExpandableIconButton> {
   void _onFocusChange() {
     if (!mounted) return;
     final hasFocus = _focusNode.hasFocus;
-    final hoverChanged = !hasFocus && _isHovered;
-    if (hasFocus == _isFocused && !hoverChanged) return;
-    setState(() {
-      _isFocused = hasFocus;
-      if (hoverChanged) _isHovered = false;
-    });
+    if (hasFocus == _isFocused) return;
+    setState(() => _isFocused = hasFocus);
     if (hasFocus) _ensureVisible();
     widget.onFocusChanged?.call(hasFocus);
   }
@@ -93,6 +93,14 @@ class _ExpandableIconButtonState extends State<ExpandableIconButton> {
   void _ensureVisible() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_focusNode.hasFocus) return;
+      // Scrolling a box into view needs it laid out first, and focus can land
+      // here a frame before that happens.
+      final renderObject = context.findRenderObject();
+      if (renderObject is! RenderBox ||
+          !renderObject.attached ||
+          !renderObject.hasSize) {
+        return;
+      }
       Scrollable.ensureVisible(
         context,
         alignment: 0.5,
@@ -179,65 +187,60 @@ class _ExpandableIconButtonState extends State<ExpandableIconButton> {
 
     final hoverEnabled = !isTV;
     return MouseRegion(
-      onEnter: hoverEnabled
-          ? (_) {
-              _hoverTimer?.cancel();
-              _hoverTimer = Timer(_kHoverDelay, () {
-                if (mounted) setState(() => _isHovered = true);
-              });
-            }
-          : null,
-      onExit: hoverEnabled
-          ? (_) {
-              _hoverTimer?.cancel();
-              if (mounted && _isHovered) setState(() => _isHovered = false);
-            }
-          : null,
+      cursor: hoverEnabled ? SystemMouseCursors.click : MouseCursor.defer,
+      onEnter: hoverEnabled ? (_) => setState(() => _isHovered = true) : null,
+      onExit: hoverEnabled ? (_) => setState(() => _isHovered = false) : null,
       child: Focus(
         focusNode: _focusNode,
         onKeyEvent: _onKeyEvent,
         child: GestureDetector(
           onTap: widget.onPressed,
           onLongPress: widget.onLongPress,
-          child: AnimatedContainer(
-            duration: _kExpandDuration,
-            curve: Curves.easeOut,
-            height: isMobile ? btnSize : null,
-            constraints: BoxConstraints(
-              minWidth: btnSize,
-              maxWidth: isExpanded ? 200 : btnSize,
-            ),
-            decoration: FocusTheme.focusDecoration(
-              isFocused: focusVisible && isMobile,
-              radius: effectiveBorderRadius,
-              color: focusColor,
-              backgroundColor: bgColor,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: isExpanded ? (isMobile ? 18 : 24) : 0,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                widget.iconBuilder?.call(iconSize, fgColor) ??
-                    Icon(widget.icon, size: iconSize, color: fgColor),
-                if (isExpanded) ...[
-                  const SizedBox(width: _kSpacing),
-                  Flexible(
-                    child: Text(
-                      widget.label,
-                      style: TextStyle(
-                        color: fgColor,
-                        fontSize: isMobile ? 14 : (isTV ? 14 : 16),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
+          child: GlassPressScale(
+            child: AnimatedContainer(
+              duration: _kExpandDuration,
+              curve: Curves.easeOut,
+              height: isMobile ? btnSize : null,
+              constraints: BoxConstraints(
+                minWidth: btnSize,
+                maxWidth: isExpanded ? 200 : btnSize,
+              ),
+              decoration: FocusTheme.focusDecoration(
+                isFocused: focusVisible && isMobile,
+                radius: effectiveBorderRadius,
+                color: focusColor,
+                backgroundColor: bgColor,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: isExpanded ? (isMobile ? 18 : 24) : 0,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  UnreadBadge(
+                    count: widget.badgeCount,
+                    child:
+                        widget.iconBuilder?.call(iconSize, fgColor) ??
+                        Icon(widget.icon, size: iconSize, color: fgColor),
                   ),
+                  if (isExpanded) ...[
+                    const SizedBox(width: _kSpacing),
+                    Flexible(
+                      child: Text(
+                        widget.label,
+                        style: TextStyle(
+                          color: fgColor,
+                          fontSize: isMobile ? 14 : (isTV ? 14 : 16),
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

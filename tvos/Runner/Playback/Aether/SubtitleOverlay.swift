@@ -17,18 +17,28 @@ private typealias PlatformImage = NSImage
 final class SubtitleOverlay: PlatformView {
 
     #if canImport(UIKit)
+    private let outlineLabel = UILabel()
     private let textLabel = UILabel()
     private let bitmapView = UIImageView()
     private let assImageView = UIImageView()
     #else
+    private let outlineLabel = NSTextField(labelWithString: "")
     private let textLabel = NSTextField(labelWithString: "")
     private let bitmapView = NSImageView()
     private let assImageView = NSImageView()
     #endif
     private var eventQueue: [SubtitleEvent] = []
-    private var activeEvent: SubtitleEvent?
+    /// Every text cue covering the playhead, not just one: cues sharing a window
+    /// are distinct simultaneous speakers and the engine keeps them all.
+    private var activeTextEvents: [SubtitleEvent] = []
+    private var activeBitmapEvent: SubtitleEvent?
     private var lastUpdateTime: TimeInterval = 0
     var delaySeconds: TimeInterval = 0
+
+    /// What the label is showing: the covering cues joined in start order.
+    var activeText: String {
+        activeTextEvents.compactMap(\.text).joined(separator: "\n")
+    }
 
     /// Where the picture sits inside the overlay. A TV gives the video the
     /// whole surface, but a phone letterboxes anything shaped differently, and
@@ -39,6 +49,14 @@ final class SubtitleOverlay: PlatformView {
     private var videoBox: CGRect {
         guard let rect = videoRectProvider?(), !rect.isEmpty else { return bounds }
         return rect
+    }
+
+    /// ASS positions are authored against the picture, so libass draws into the
+    /// video rect. Clamping it to the view leaves fill mode, where the picture runs
+    /// past the edges, drawing across the whole view.
+    var assCanvas: CGRect {
+        let canvas = videoBox.intersection(bounds)
+        return canvas.isEmpty ? bounds : canvas
     }
 
     /// The user facing size on the 24 based scale, and the 40 to 100 position.
@@ -78,11 +96,19 @@ final class SubtitleOverlay: PlatformView {
         subtitleStrokeEnabled ? max(2 * canvasScale, 1) : 0
     }
 
-    /// The 40pt base margin stays absolute rather than scaling with height,
-    /// because it also positions bitmap cues that arrive without a canvas rect
-    /// and those already sit correctly on a phone.
-    private var subtitleBottomOffset: CGFloat {
-        40 + canvasHeight * 0.5 * CGFloat(100 - subtitlePositionBase) / 60.0
+    /// The lowest position puts the text on the bottom edge itself, which is
+    /// what the setting reads as zero and what a wide film needs to keep its
+    /// lines inside the black bar under the picture.
+    private var textBottomOffset: CGFloat {
+        canvasHeight * 0.5 * CGFloat(100 - subtitlePositionBase) / 60.0
+    }
+
+    /// A bitmap cue that arrives without a canvas rect has nothing tying it to
+    /// the picture, so it keeps a margin off the edge on top of the position.
+    /// The margin stays absolute rather than scaling with height, since those
+    /// cues already sit correctly on a phone.
+    private var bitmapBottomOffset: CGFloat {
+        40 + textBottomOffset
     }
 
     override init(frame: CGRect) {
@@ -100,22 +126,29 @@ final class SubtitleOverlay: PlatformView {
         isUserInteractionEnabled = false
         backgroundColor = .clear
 
-        textLabel.numberOfLines = 0
-        textLabel.textAlignment = .center
+        for label in [outlineLabel, textLabel] {
+            label.numberOfLines = 0
+            label.textAlignment = .center
+        }
         bitmapView.contentMode = .scaleToFill
         assImageView.contentMode = .scaleToFill
         #else
         wantsLayer = true
 
-        textLabel.maximumNumberOfLines = 0
-        textLabel.alignment = .center
-        textLabel.isBezeled = false
-        textLabel.drawsBackground = false
+        for label in [outlineLabel, textLabel] {
+            label.maximumNumberOfLines = 0
+            label.alignment = .center
+            label.isBezeled = false
+            label.drawsBackground = false
+        }
         bitmapView.imageScaling = .scaleAxesIndependently
         assImageView.imageScaling = .scaleAxesIndependently
         #endif
-        textLabel.isHidden = true
-        addSubview(textLabel)
+        // The outline goes under the fill, so it is added first.
+        for label in [outlineLabel, textLabel] {
+            label.isHidden = true
+            addSubview(label)
+        }
         bitmapView.isHidden = true
         addSubview(bitmapView)
         assImageView.isHidden = true
@@ -144,12 +177,12 @@ final class SubtitleOverlay: PlatformView {
     private func layoutOverlay() {
         // The point size follows the height, so it changes on resize and on
         // the first real layout after a style was applied against zero bounds.
-        if subtitleFontSize != appliedFontSize, let text = activeEvent?.text {
-            setLabelText(styledText(text))
+        if subtitleFontSize != appliedFontSize, !activeTextEvents.isEmpty {
+            setLabelText(activeText)
         }
         layoutTextLabel()
         layoutBitmapView()
-        assImageView.frame = bounds
+        assImageView.frame = assCanvas
     }
 
     private func requestLayout() {
@@ -160,11 +193,16 @@ final class SubtitleOverlay: PlatformView {
         #endif
     }
 
-    private func setLabelText(_ text: NSAttributedString?) {
+    private func setLabelText(_ text: String?) {
+        appliedFontSize = subtitleFontSize
+        let fill = text.map(fillText)
+        let outline = text.map(outlineText)
         #if canImport(UIKit)
-        textLabel.attributedText = text
+        textLabel.attributedText = fill
+        outlineLabel.attributedText = outline
         #else
-        textLabel.attributedStringValue = text ?? NSAttributedString()
+        textLabel.attributedStringValue = fill ?? NSAttributedString()
+        outlineLabel.attributedStringValue = outline ?? NSAttributedString()
         #endif
     }
 
@@ -179,6 +217,9 @@ final class SubtitleOverlay: PlatformView {
 
     func showAssImage(_ image: CGImage?) {
         if let image {
+            // A zoom change moves the picture without a layout pass, so the frame
+            // follows each render instead of waiting for one.
+            assImageView.frame = assCanvas
             assImageView.image = Self.platformImage(image)
             assImageView.isHidden = false
         } else {
@@ -189,34 +230,59 @@ final class SubtitleOverlay: PlatformView {
 
     /// The engine republishes the full active-cue set, so replace the queue
     /// wholesale and re-evaluate at the last known clock so a cue swap shows
-    /// without waiting for the next tick.
+    /// without waiting for the next tick. The only writer of `eventQueue`: the
+    /// overlay never drops a cue itself, because for a sidecar track this queue
+    /// is the only copy there is. The engine publishes such a file once and
+    /// clears its drain target, so a cue discarded here never comes back and the
+    /// rest of the session plays with holes in it. Retention belongs to the
+    /// engine, which prunes the tracks it actually drains.
     func setEvents(_ events: [SubtitleEvent]) {
         eventQueue = events.sorted { $0.startTime < $1.startTime }
         if lastUpdateTime > 0 {
-            evaluate(at: lastUpdateTime, evict: false)
-        } else if events.isEmpty, activeEvent != nil {
+            evaluate(at: lastUpdateTime)
+        } else if events.isEmpty {
             hideAll()
         }
     }
 
     func update(currentTime: TimeInterval) {
         lastUpdateTime = currentTime
-        evaluate(at: currentTime, evict: true)
+        evaluate(at: currentTime)
     }
 
-    private func evaluate(at currentTime: TimeInterval, evict: Bool) {
-        let adjusted = currentTime - delaySeconds
-        if evict {
-            eventQueue.removeAll { $0.endTime < adjusted - 0.5 }
-        }
-        let current = eventQueue.first { adjusted >= $0.startTime && adjusted < $0.endTime }
+    /// Every cue whose window covers `adjustedTime`. Static and pure for unit
+    /// tests: a clock that jumps forward and back, and two speakers sharing a
+    /// window, are both decided here.
+    static func activeEvents(
+        in events: [SubtitleEvent], at adjustedTime: TimeInterval
+    ) -> [SubtitleEvent] {
+        events.filter { adjustedTime >= $0.startTime && adjustedTime < $0.endTime }
+    }
 
-        if let current {
-            if activeEvent == nil || activeEvent!.startTime != current.startTime {
-                showEvent(current)
+    /// Whether two cue sets would draw the same block. Keyed on the window as
+    /// well as the text, since the engine rewrites a cue's end time in place to
+    /// close an open-ended line (a teletext page replacement, a PGS trim), and a
+    /// start-only comparison leaves the retired line on screen.
+    private static func drawsTheSame(_ lhs: [SubtitleEvent], _ rhs: [SubtitleEvent]) -> Bool {
+        lhs.count == rhs.count
+            && zip(lhs, rhs).allSatisfy {
+                $0.startTime == $1.startTime && $0.endTime == $1.endTime && $0.text == $1.text
             }
-        } else if activeEvent != nil {
-            hideAll()
+    }
+
+    private func evaluate(at currentTime: TimeInterval) {
+        let adjusted = currentTime - delaySeconds
+        let covering = Self.activeEvents(in: eventQueue, at: adjusted)
+
+        // Text and bitmap are tracked apart so neither hides the other.
+        let texts = covering.filter { $0.text != nil }
+        if !Self.drawsTheSame(texts, activeTextEvents) {
+            showText(texts)
+        }
+
+        let bitmap = covering.first { $0.bitmap != nil }
+        if bitmap?.startTime != activeBitmapEvent?.startTime {
+            showBitmap(bitmap)
         }
     }
 
@@ -255,8 +321,8 @@ final class SubtitleOverlay: PlatformView {
         if let verticalOffset {
             setSubtitlePosition(basePosition: 100 - Int((verticalOffset * 60).rounded()))
         }
-        if let event = activeEvent, event.text != nil {
-            showEvent(event)
+        if !activeTextEvents.isEmpty {
+            showText(activeTextEvents)
         }
     }
 
@@ -270,45 +336,59 @@ final class SubtitleOverlay: PlatformView {
 
     // MARK: - Display
 
-    private func showEvent(_ event: SubtitleEvent) {
-        activeEvent = event
-        if let text = event.text {
+    /// Draws the cues covering the playhead as one block, joined in start order,
+    /// so the label keeps a single centred frame and the styling stays exactly
+    /// as it was for the common one-cue case.
+    private func showText(_ events: [SubtitleEvent]) {
+        activeTextEvents = events
+        guard !events.isEmpty else {
+            setTextHidden(true)
+            setLabelText(nil)
+            return
+        }
+        setLabelText(activeText)
+        setTextHidden(false)
+        layoutTextLabel()
+    }
+
+    private func showBitmap(_ event: SubtitleEvent?) {
+        activeBitmapEvent = event
+        guard let bitmap = event?.bitmap else {
             bitmapView.isHidden = true
             bitmapView.image = nil
-            setLabelText(styledText(text))
-            textLabel.isHidden = false
-            layoutTextLabel()
-        } else if let bitmap = event.bitmap {
-            textLabel.isHidden = true
-            setLabelText(nil)
-            bitmapView.image = Self.platformImage(bitmap)
-            bitmapView.isHidden = false
-            layoutBitmapView()
+            return
         }
+        bitmapView.image = Self.platformImage(bitmap)
+        bitmapView.isHidden = false
+        layoutBitmapView()
     }
 
     private func hideAll() {
-        activeEvent = nil
-        textLabel.isHidden = true
-        setLabelText(nil)
-        bitmapView.isHidden = true
-        bitmapView.image = nil
+        showText([])
+        showBitmap(nil)
+    }
+
+    private func setTextHidden(_ hidden: Bool) {
+        textLabel.isHidden = hidden
+        outlineLabel.isHidden = hidden
     }
 
     private func layoutTextLabel() {
         guard !textLabel.isHidden else { return }
         let maxWidth = bounds.width * 0.9
         let size = textLabel.sizeThatFits(CGSize(width: maxWidth, height: bounds.height * 0.4))
-        textLabel.frame = CGRect(
+        let frame = CGRect(
             x: (bounds.width - size.width) / 2,
-            y: bounds.height - size.height - subtitleBottomOffset,
+            y: bounds.height - size.height - textBottomOffset,
             width: size.width,
             height: size.height
         )
+        textLabel.frame = frame
+        outlineLabel.frame = frame
     }
 
     private func layoutBitmapView() {
-        guard !bitmapView.isHidden, let event = activeEvent else { return }
+        guard !bitmapView.isHidden, let event = activeBitmapEvent else { return }
         let box = videoBox
         if let rect = event.normalizedRect, let canvas = event.canvasSize,
             canvas.width > 0, canvas.height > 0
@@ -333,23 +413,61 @@ final class SubtitleOverlay: PlatformView {
             let h = CGFloat(event.bitmapHeight) * scale
             bitmapView.frame = CGRect(
                 x: (bounds.width - w) / 2,
-                y: bounds.height - h - subtitleBottomOffset,
+                y: bounds.height - h - bitmapBottomOffset,
                 width: w,
                 height: h
             )
         }
     }
 
-    private func styledText(_ text: String) -> NSAttributedString {
-        appliedFontSize = subtitleFontSize
-        let font = PlatformFont.systemFont(ofSize: appliedFontSize, weight: subtitleFontWeight)
+    private func labelFont() -> PlatformFont {
+        PlatformFont.systemFont(ofSize: appliedFontSize, weight: subtitleFontWeight)
+    }
+
+    /// A label's own alignment is ignored once it holds an attributed string,
+    /// so the centring lives here. Line height is pinned to the glyph box
+    /// because the background only fills ascent and descent, leaving the
+    /// font's leading as a gap between stacked lines.
+    private func paragraphStyle(for font: PlatformFont) -> NSParagraphStyle {
+        let style = NSMutableParagraphStyle()
+        style.alignment = .center
+        let glyphBox = font.ascender - font.descender
+        style.minimumLineHeight = glyphBox
+        style.maximumLineHeight = glyphBox
+        return style
+    }
+
+    private func fillText(_ text: String) -> NSAttributedString {
+        let font = labelFont()
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: font,
+                .foregroundColor: subtitleTextColor,
+                .paragraphStyle: paragraphStyle(for: font),
+            ])
+    }
+
+    /// What sits under the text: the background box, and the outline when one
+    /// is wanted. The outline is its own copy of the line rather than a stroke
+    /// on the glyphs, since a stroke traces every contour a glyph is built from
+    /// and letters made of overlapping pieces come out with the seams drawn
+    /// across them. The fill on top covers those, leaving only the half of the
+    /// line that falls outside the letter.
+    private func outlineText(_ text: String) -> NSAttributedString {
+        let font = labelFont()
         var attrs: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: subtitleTextColor,
+            // Nothing to fill here, or this copy shows through as a second set
+            // of glyphs whenever there is no outline to draw.
+            .foregroundColor: PlatformColor.clear,
+            // Must match the fill, or the outline drifts off the letters.
+            .paragraphStyle: paragraphStyle(for: font),
         ]
         if subtitleStrokeWidth > 0 {
             attrs[.strokeColor] = subtitleStrokeColor
-            attrs[.strokeWidth] = -subtitleStrokeWidth
+            // Doubled, since only the outer half survives the fill on top.
+            attrs[.strokeWidth] = subtitleStrokeWidth * 2
         }
         if subtitleBgColor != .clear {
             attrs[.backgroundColor] = subtitleBgColor

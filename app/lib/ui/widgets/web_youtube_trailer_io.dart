@@ -1,0 +1,745 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/widgets.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+
+enum _EmbeddedPlayerMode {
+  manualIframe,
+  unsupported,
+}
+
+class WebYouTubeTrailer extends StatefulWidget {
+  final String videoId;
+  final bool muted;
+  final bool showControls;
+  final bool showCaptions;
+  final bool loop;
+  final bool ignorePointer;
+
+  /// Dormant mode for a kept-alive player: playback stops and the autoplay
+  /// watchdog disarms, but the WebView stays booted for a fast next swap.
+  /// The widget must first mount unsuspended.
+  final bool suspended;
+  final VoidCallback? onPlaybackStarted;
+  final VoidCallback? onCompleted;
+  final VoidCallback? onAutoplayFailed;
+  final VoidCallback? onEmbeddedUnavailable;
+  final Duration autoplayTimeout;
+
+  const WebYouTubeTrailer({
+    super.key,
+    required this.videoId,
+    this.muted = true,
+    this.showControls = false,
+    this.showCaptions = false,
+    this.loop = true,
+    this.ignorePointer = false,
+    this.suspended = false,
+    this.onPlaybackStarted,
+    this.onCompleted,
+    this.onAutoplayFailed,
+    this.onEmbeddedUnavailable,
+    this.autoplayTimeout = const Duration(seconds: 3),
+  });
+
+  @override
+  State<WebYouTubeTrailer> createState() => _WebYouTubeTrailerState();
+}
+
+class _WebYouTubeTrailerState extends State<WebYouTubeTrailer> {
+  static const _jsChannelName = 'MoonfinYt';
+  static const _bridgeName = '__moonfinYtBridge';
+  static const _origin = 'https://www.youtube-nocookie.com';
+  static const _playerElementId = 'moonfin-player';
+  static const _stageElementId = 'moonfin-stage';
+  // Rendered at this fixed size and CSS-scaled to the box; YouTube picks quality
+  // from the player's pixel size, so a 1080p stage yields 1080p trailers.
+  static const _stageWidth = 1920;
+  static const _stageHeight = 1080;
+  static const _startupChromeMaskDuration = Duration(milliseconds: 700);
+
+  WebViewController? _controller;
+  Timer? _autoplayTimer;
+  Timer? _startupChromeMaskTimer;
+
+  bool _playbackStarted = false;
+  bool _autoplayFailureReported = false;
+  bool _embeddedUnavailableReported = false;
+  bool _startupChromeMaskVisible = false;
+
+  _EmbeddedPlayerMode get _playerMode {
+    // Any platform with a system WebView renders through our own HTML; those
+    // without one (e.g. tvOS) report unsupported so the caller falls back.
+    if (WebViewPlatform.instance == null) {
+      return _EmbeddedPlayerMode.unsupported;
+    }
+    return _EmbeddedPlayerMode.manualIframe;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePlayer();
+  }
+
+  @override
+  void didUpdateWidget(covariant WebYouTubeTrailer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (_playerMode == _EmbeddedPlayerMode.unsupported) {
+      _reportEmbeddedUnavailable();
+      return;
+    }
+
+    // Suspension transitions take priority over other prop changes.
+    if (!oldWidget.suspended && widget.suspended) {
+      _resetPlaybackTracking();
+      final controller = _controller;
+      if (controller != null) {
+        unawaited(
+          controller
+              .runJavaScript('window.$_bridgeName?.stop();')
+              .catchError((_) {}),
+        );
+      }
+      return;
+    }
+    if (oldWidget.suspended && !widget.suspended) {
+      _resetPlaybackTracking();
+      final controller = _controller;
+      if (controller == null) {
+        unawaited(_initializeController());
+        return;
+      }
+      // Always reload here; the player was stopped, and consecutive items
+      // can share a video id.
+      unawaited(_loadVideoById(controller, widget.videoId));
+      if (oldWidget.muted != widget.muted) {
+        unawaited(_setMuted(controller, widget.muted));
+      }
+      return;
+    }
+    if (widget.suspended) {
+      return;
+    }
+
+    final videoChanged = oldWidget.videoId != widget.videoId;
+    final mutedChanged = oldWidget.muted != widget.muted;
+    final controlsChanged = oldWidget.showControls != widget.showControls;
+    final captionsChanged = oldWidget.showCaptions != widget.showCaptions;
+    final loopChanged = oldWidget.loop != widget.loop;
+
+    if (!videoChanged &&
+        !mutedChanged &&
+        !controlsChanged &&
+        !captionsChanged &&
+        !loopChanged) {
+      return;
+    }
+
+    _resetPlaybackTracking();
+
+    final controller = _controller;
+    if (controller == null) {
+      unawaited(_initializeController());
+      return;
+    }
+
+    if (controlsChanged || captionsChanged || loopChanged) {
+      unawaited(_loadHtml(controller));
+      return;
+    }
+
+    if (videoChanged) {
+      unawaited(_loadVideoById(controller, widget.videoId));
+    }
+
+    if (mutedChanged) {
+      unawaited(_setMuted(controller, widget.muted));
+    }
+  }
+
+  @override
+  void dispose() {
+    _autoplayTimer?.cancel();
+    _startupChromeMaskTimer?.cancel();
+
+    final controller = _controller;
+    if (controller != null) {
+      _controller = null;
+      // Otherwise the WebView keeps playing after the widget is gone.
+      unawaited(controller.loadRequest(Uri.parse('about:blank')));
+    }
+
+    super.dispose();
+  }
+
+  void _initializePlayer() {
+    switch (_playerMode) {
+      case _EmbeddedPlayerMode.manualIframe:
+        unawaited(_initializeController());
+        return;
+
+      case _EmbeddedPlayerMode.unsupported:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) {
+            return;
+          }
+          _reportEmbeddedUnavailable();
+        });
+        return;
+    }
+  }
+
+  void _resetPlaybackTracking() {
+    _playbackStarted = false;
+    _autoplayFailureReported = false;
+    _embeddedUnavailableReported = false;
+    _startupChromeMaskVisible = false;
+    _autoplayTimer?.cancel();
+    _startupChromeMaskTimer?.cancel();
+  }
+
+  Future<void> _initializeController() async {
+    try {
+      // iOS/macOS need inline playback with no user-gesture gate for muted
+      // autoplay; otherwise the WebView blocks it and the caller falls back.
+      final PlatformWebViewControllerCreationParams params =
+          WebViewPlatform.instance is WebKitWebViewPlatform
+              ? WebKitWebViewControllerCreationParams(
+                  allowsInlineMediaPlayback: true,
+                  mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+                )
+              : const PlatformWebViewControllerCreationParams();
+
+      final controller = WebViewController.fromPlatformCreationParams(params);
+
+      controller
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..addJavaScriptChannel(
+          _jsChannelName,
+          onMessageReceived: _onJavaScriptMessage,
+        );
+
+      // Android blocks autoplay until a user gesture unless disabled here.
+      final platform = controller.platform;
+      if (platform is AndroidWebViewController) {
+        await platform.setMediaPlaybackRequiresUserGesture(false);
+      }
+
+      await controller.setBackgroundColor(const Color(0x00000000));
+      _controller = controller;
+
+      await _loadHtml(controller);
+
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    } catch (_) {
+      _reportEmbeddedUnavailable();
+    }
+  }
+
+  Future<void> _loadHtml(WebViewController controller) async {
+    await controller.loadHtmlString(_playerHtml, baseUrl: _origin);
+    _restartAutoplayTimer();
+  }
+
+  Future<void> _loadVideoById(
+    WebViewController controller,
+    String videoId,
+  ) async {
+    try {
+      final encodedVideoId = jsonEncode(videoId);
+      await controller.runJavaScript(
+        'window.$_bridgeName?.loadVideoById($encodedVideoId);',
+      );
+      _restartAutoplayTimer();
+    } catch (_) {
+      await _loadHtml(controller);
+    }
+  }
+
+  Future<void> _setMuted(WebViewController controller, bool muted) async {
+    final encodedMuted = muted ? 'true' : 'false';
+    try {
+      await controller.runJavaScript(
+        'window.$_bridgeName?.setMuted($encodedMuted);',
+      );
+    } catch (_) {
+      await _loadHtml(controller);
+    }
+  }
+
+  void _onJavaScriptMessage(JavaScriptMessage message) {
+    final payload = _decodeMessage(message.message);
+    if (payload == null) {
+      return;
+    }
+
+    final eventName = payload['event']?.toString();
+    final data = payload['data'];
+
+    // Events posted by the previous video can arrive after a swap; drop
+    // state and error messages that carry a different video id.
+    final eventVideoId = payload['videoId']?.toString();
+    final isStaleEvent = eventVideoId != null &&
+        eventVideoId.isNotEmpty &&
+        eventVideoId != widget.videoId;
+
+    switch (eventName) {
+      case 'Ready':
+        _restartAutoplayTimer();
+        return;
+
+      case 'StateChange' when isStaleEvent:
+      case 'PlayerError' when isStaleEvent:
+        return;
+
+      case 'StateChange':
+        final state = _parseInt(data);
+        // 1 == YT.PlayerState.PLAYING, 0 == YT.PlayerState.ENDED
+        if (state == 1) {
+          _reportPlaybackStarted();
+        } else if (state == 0 && !widget.loop) {
+          // When looping is off the JS does not self-reload, so an ended
+          // trailer means it is time to advance to the next slide.
+          widget.onCompleted?.call();
+        }
+        return;
+
+      case 'PlayerError':
+        _handleYouTubeError(_parseInt(data));
+        return;
+
+      case 'AutoplayBlocked':
+        _reportAutoplayFailed();
+        return;
+
+      default:
+        return;
+    }
+  }
+
+  Map<String, dynamic>? _decodeMessage(String rawMessage) {
+    try {
+      final decoded = jsonDecode(rawMessage);
+      if (decoded is! Map) {
+        return null;
+      }
+
+      return decoded.map<String, dynamic>((key, value) {
+        return MapEntry(key.toString(), value);
+      });
+    } catch (_) {
+      return null;
+    }
+  }
+
+  int _parseInt(Object? value) {
+    if (value is int) {
+      return value;
+    }
+    if (value is num) {
+      return value.toInt();
+    }
+    return int.tryParse(value?.toString() ?? '') ?? -1;
+  }
+
+  void _handleYouTubeError(int errorCode) {
+    switch (errorCode) {
+      case 100:
+      case 101:
+      case 105:
+      case 150:
+      case 152:
+        _reportEmbeddedUnavailable();
+        return;
+
+      case 2:
+      case 5:
+      default:
+        _reportAutoplayFailed();
+        return;
+    }
+  }
+
+  void _restartAutoplayTimer() {
+    _autoplayTimer?.cancel();
+    // A dormant player firing a bogus autoplay failure would globally
+    // disable embedded YouTube.
+    if (widget.suspended) {
+      return;
+    }
+    if (widget.onAutoplayFailed == null ||
+        widget.autoplayTimeout <= Duration.zero) {
+      return;
+    }
+
+    _autoplayTimer = Timer(widget.autoplayTimeout, () {
+      if (_playbackStarted || _autoplayFailureReported) {
+        return;
+      }
+      _reportAutoplayFailed();
+    });
+  }
+
+  void _reportPlaybackStarted() {
+    if (_playbackStarted) {
+      return;
+    }
+
+    _playbackStarted = true;
+    _autoplayTimer?.cancel();
+    _showStartupChromeMask();
+    widget.onPlaybackStarted?.call();
+  }
+
+  void _showStartupChromeMask() {
+    if (_playerMode != _EmbeddedPlayerMode.manualIframe || widget.ignorePointer) {
+      return;
+    }
+
+    _startupChromeMaskTimer?.cancel();
+    if (!_startupChromeMaskVisible && mounted) {
+      setState(() {
+        _startupChromeMaskVisible = true;
+      });
+    } else {
+      _startupChromeMaskVisible = true;
+    }
+
+    _startupChromeMaskTimer = Timer(_startupChromeMaskDuration, () {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _startupChromeMaskVisible = false;
+      });
+    });
+  }
+
+  void _reportAutoplayFailed() {
+    if (_playbackStarted ||
+        _autoplayFailureReported ||
+        _embeddedUnavailableReported) {
+      return;
+    }
+
+    _autoplayFailureReported = true;
+    _autoplayTimer?.cancel();
+    widget.onAutoplayFailed?.call();
+  }
+
+  void _reportEmbeddedUnavailable() {
+    if (_embeddedUnavailableReported) {
+      return;
+    }
+
+    _embeddedUnavailableReported = true;
+    _autoplayTimer?.cancel();
+    widget.onEmbeddedUnavailable?.call();
+  }
+
+  String get _playerHtml {
+    final pointerEvents = widget.ignorePointer ? 'none' : 'auto';
+    final playerVars = <String, dynamic>{
+      'autoplay': 1,
+      'cc_load_policy': widget.showCaptions ? 1 : 0,
+      'controls': widget.showControls ? 1 : 0,
+      'disablekb': 1,
+      'enablejsapi': 1,
+      'fs': 0,
+      'iv_load_policy': 3,
+      'loop': widget.loop ? 1 : 0,
+      'modestbranding': 1,
+      'mute': widget.muted ? 1 : 0,
+      'origin': _origin,
+      'widget_referrer': _origin,
+      'playsinline': 1,
+      'rel': 0,
+      if (widget.loop) 'playlist': widget.videoId,
+    };
+
+    final channelName = jsonEncode(_jsChannelName);
+    final bridgeName = jsonEncode(_bridgeName);
+    final playerElementId = jsonEncode(_playerElementId);
+    final stageElementId = jsonEncode(_stageElementId);
+    final host = jsonEncode(_origin);
+    final initialVideoId = jsonEncode(widget.videoId);
+    final pointerEventsJson = jsonEncode(pointerEvents);
+    final playerVarsJson = jsonEncode(playerVars);
+    final stageWidth = _stageWidth;
+    final stageHeight = _stageHeight;
+
+    return '''
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000000;
+      }
+      #$_stageElementId {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: ${stageWidth}px;
+        height: ${stageHeight}px;
+        transform-origin: top left;
+      }
+      #$_playerElementId {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <title>Moonfin YouTube Player</title>
+  </head>
+  <body>
+    <script>
+(() => {
+  const channelName = $channelName;
+  const bridgeName = $bridgeName;
+  const playerElementId = $playerElementId;
+  const stageElementId = $stageElementId;
+  const host = $host;
+  const pointerEvents = $pointerEventsJson;
+  const playerVars = $playerVarsJson;
+  const stageWidth = $stageWidth;
+  const stageHeight = $stageHeight;
+
+  let player = null;
+  let currentVideoId = $initialVideoId;
+
+  const postMessage = (event, data) => {
+    // videoId is captured at post time so Dart can drop stale events posted
+    // before a loadVideoById swap.
+    const payload = JSON.stringify({
+      event: event,
+      data: data,
+      videoId: currentVideoId
+    });
+
+    const channel = window[channelName];
+    if (channel && typeof channel.postMessage === 'function') {
+      channel.postMessage(payload);
+      return;
+    }
+
+    const handler = window.webkit &&
+        window.webkit.messageHandlers &&
+        window.webkit.messageHandlers[channelName];
+    if (handler && typeof handler.postMessage === 'function') {
+      handler.postMessage(payload);
+    }
+  };
+
+  const captionsOn = playerVars.cc_load_policy === 1;
+
+  const applyMute = () => {
+    if (!player) {
+      return;
+    }
+
+    if (playerVars.mute === 1) {
+      player.mute();
+    } else {
+      player.unMute();
+    }
+  };
+
+  // cc_load_policy only decides whether captions are forced on. It cannot turn
+  // them off when the viewer's YouTube default is on, so unload the caption
+  // module directly when captions are disabled.
+  const applyCaptions = () => {
+    if (!player) {
+      return;
+    }
+    try {
+      if (captionsOn) {
+        player.loadModule('captions');
+        player.loadModule('cc');
+      } else {
+        player.unloadModule('captions');
+        player.unloadModule('cc');
+      }
+    } catch (_) {}
+  };
+
+  const loadCurrentVideo = () => {
+    if (!player || !currentVideoId) {
+      return;
+    }
+
+    player.loadVideoById({ videoId: currentVideoId });
+    applyMute();
+    applyCaptions();
+  };
+
+  // Cover the box with the fixed-size stage (16:9), centered.
+  const applyScale = () => {
+    const stage = document.getElementById(stageElementId);
+    if (!stage) {
+      return;
+    }
+    const scale = Math.max(
+      window.innerWidth / stageWidth,
+      window.innerHeight / stageHeight
+    );
+    const tx = (window.innerWidth - stageWidth * scale) / 2;
+    const ty = (window.innerHeight - stageHeight * scale) / 2;
+    stage.style.transform =
+        'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+  };
+
+  window[bridgeName] = {
+    loadVideoById: function(videoId) {
+      if (!videoId) {
+        return;
+      }
+
+      currentVideoId = videoId;
+      if (player) {
+        loadCurrentVideo();
+      }
+    },
+    setMuted: function(muted) {
+      playerVars.mute = muted ? 1 : 0;
+      applyMute();
+    },
+    stop: function() {
+      if (player) {
+        // Mute first so audio dies immediately even if stopVideo lags.
+        try { player.mute(); } catch (_) {}
+        try { player.stopVideo(); } catch (_) {}
+      }
+    }
+  };
+
+  document.documentElement.style.pointerEvents = pointerEvents;
+  document.body.style.pointerEvents = pointerEvents;
+  document.body.style.margin = '0';
+  document.body.style.width = '100%';
+  document.body.style.height = '100%';
+
+  const stageRoot = document.createElement('div');
+  stageRoot.id = stageElementId;
+  const playerRoot = document.createElement('div');
+  playerRoot.id = playerElementId;
+  stageRoot.appendChild(playerRoot);
+  document.body.appendChild(stageRoot);
+  applyScale();
+
+  const scriptTag = document.createElement('script');
+  scriptTag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(scriptTag);
+
+  const previousOnReady = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => {
+    if (typeof previousOnReady === 'function') {
+      try {
+        previousOnReady();
+      } catch (_) {}
+    }
+
+    player = new YT.Player(playerElementId, {
+      host: host,
+      width: stageWidth,
+      height: stageHeight,
+      videoId: currentVideoId,
+      playerVars: playerVars,
+      events: {
+        onReady: function() {
+          postMessage('Ready', null);
+          if (playerVars.autoplay === 1) {
+            loadCurrentVideo();
+          } else {
+            applyMute();
+          }
+        },
+        onApiChange: function() {
+          // The captions module reports itself here once it loads, which is the
+          // only reliable moment to unload it before captions render.
+          applyCaptions();
+        },
+        onStateChange: function(event) {
+          postMessage('StateChange', event.data);
+
+          if (event.data === 1) {
+            applyCaptions();
+          }
+          if (event.data === 0 && playerVars.loop === 1) {
+            loadCurrentVideo();
+          }
+        },
+        onError: function(event) {
+          postMessage('PlayerError', event.data);
+        },
+        onAutoplayBlocked: function() {
+          postMessage('AutoplayBlocked', null);
+        }
+      }
+    });
+  };
+
+  window.addEventListener('resize', applyScale);
+})();
+    </script>
+  </body>
+</html>
+''';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (_playerMode) {
+      case _EmbeddedPlayerMode.manualIframe:
+        final controller = _controller;
+        if (controller == null) {
+          return const SizedBox.shrink();
+        }
+
+        // The chrome mask only ever shows when the player is interactive, so
+        // skip the wrapping Stack for the muted background preview.
+        final view = WebViewWidget(controller: controller);
+        return IgnorePointer(
+          ignoring: widget.ignorePointer,
+          child:
+              widget.ignorePointer ? view : _buildWithStartupChromeMask(view),
+        );
+
+      case _EmbeddedPlayerMode.unsupported:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildWithStartupChromeMask(Widget child) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        child,
+        IgnorePointer(
+          child: AnimatedOpacity(
+            opacity: _startupChromeMaskVisible ? 1 : 0,
+            duration: const Duration(milliseconds: 200),
+            child: const ColoredBox(color: Color(0xFF000000)),
+          ),
+        ),
+      ],
+    );
+  }
+}

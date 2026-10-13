@@ -9,7 +9,9 @@ import '../../../l10n/app_localizations.dart';
 import '../../../util/game_cores.dart';
 import '../../../util/platform_detection.dart';
 import '../../widgets/adaptive/adaptive_list_section.dart';
+import '../../widgets/focus/focusable_button.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import 'emulator_core_settings_screen.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import 'settings_app_bar.dart';
@@ -92,6 +94,17 @@ class _EmulatorCoresScreenState extends State<EmulatorCoresScreen> {
     }
   }
 
+  void _openSettings(GameCore core) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => EmulatorCoreSettingsScreen(
+          coreId: core.coreId,
+          system: core.system,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => RequestInitialFocus(
         targetNode: PlatformDetection.isTV ? _firstTileFocusNode : null,
@@ -138,43 +151,60 @@ class _EmulatorCoresScreenState extends State<EmulatorCoresScreen> {
       subtitle = '~${core.approxSizeMb.toStringAsFixed(0)} MB';
     }
 
-    return TvFocusHighlight(
-      builder: (_, focused) => SwitchListTile.adaptive(
-        focusNode: isFirst ? _firstTileFocusNode : null,
-        secondary: downloading
-            ? SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  value: progress > 0 ? progress : null,
-                  strokeWidth: 2,
+    return Row(
+      children: [
+        Expanded(
+          child: TvFocusHighlight(
+            builder: (_, focused) => SwitchListTile.adaptive(
+              focusNode: isFirst ? _firstTileFocusNode : null,
+              secondary: downloading
+                  ? SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        value: progress > 0 ? progress : null,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Icon(
+                      Icons.videogame_asset,
+                      color: focused
+                          ? AppColors.black.withValues(alpha: 0.54)
+                          : null,
+                    ),
+              title: Text(
+                core.system,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: focused
+                      ? AppColors.black.withValues(alpha: 0.87)
+                      : AppColorScheme.onSurface,
                 ),
-              )
-            : Icon(
-                Icons.videogame_asset,
-                color: focused ? AppColors.black.withValues(alpha: 0.54) : null,
               ),
-        title: Text(
-          core.system,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: focused
-                ? AppColors.black.withValues(alpha: 0.87)
-                : AppColorScheme.onSurface,
+              subtitle: Text(
+                subtitle,
+                style: TextStyle(
+                  color: focused ? AppColors.black.withValues(alpha: 0.54) : null,
+                ),
+              ),
+              value: installed || downloading,
+              onChanged: (available && !downloading)
+                  ? (v) => _toggle(core, v)
+                  : null,
+            ),
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            color: focused ? AppColors.black.withValues(alpha: 0.54) : null,
+        // Reset now lives inside this screen, alongside editing.
+        Tooltip(
+          message: l10n.emulatorCoreResetSettings(core.system),
+          child: FocusableButton(
+            semanticLabel: l10n.emulatorCoreResetSettings(core.system),
+            onPressed: installed ? () => _openSettings(core) : null,
+            child: const Icon(Icons.tune),
           ),
         ),
-        value: installed || downloading,
-        onChanged: (available && !downloading)
-            ? (v) => _toggle(core, v)
-            : null,
-      ),
+      ],
     );
   }
 }

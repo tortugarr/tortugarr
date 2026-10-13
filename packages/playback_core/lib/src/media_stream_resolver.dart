@@ -7,6 +7,90 @@ abstract class MediaStreamResolver {
     return mediaItem.id as String;
   }
 
+  /// Whether [mediaItem] is a live TV channel, read from the item's `Type`
+  /// or from a wrapped item's `rawData`.
+  static bool isLiveTvItem(dynamic mediaItem) {
+    if (mediaItem == null) return false;
+    try {
+      final Map? map = mediaItem is Map
+          ? mediaItem
+          : (mediaItem as dynamic).rawData as Map?;
+      final type = map?['Type']?.toString();
+      return type == 'TvChannel' || type == 'LiveTvChannel';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Emby's live HLS only works with MPEG-TS segments. With fragmented MP4 the
+  /// playlist lists every segment with a zero duration and no init section,
+  /// and an AAC channel fails outright because ffmpeg copies the ADTS stream
+  /// into fMP4 without a bitstream filter. The Apple profiles lead with fMP4
+  /// and the server takes the first entry it can satisfy, so a channel gets the
+  /// MPEG-TS entries moved ahead of it. Jellyfin handles fMP4 live playlists
+  /// fine, so only Emby needs this.
+  static Map<String, dynamic>? preferMpegTsHlsForLive(
+    Map<String, dynamic>? deviceProfile, {
+    required bool isLiveChannel,
+  }) {
+    if (deviceProfile == null || !isLiveChannel) return deviceProfile;
+    final profiles = deviceProfile['TranscodingProfiles'];
+    if (profiles is! List) return deviceProfile;
+
+    bool isMpegTsVideoHls(dynamic entry) =>
+        _isVideoHls(entry) &&
+        entry['Container']?.toString().toLowerCase() == 'ts';
+
+    final firstVideoHls = profiles.indexWhere(_isVideoHls);
+    if (firstVideoHls == -1 || isMpegTsVideoHls(profiles[firstVideoHls])) {
+      return deviceProfile;
+    }
+    final mpegTsEntries = profiles.where(isMpegTsVideoHls).toList();
+    if (mpegTsEntries.isEmpty) return deviceProfile;
+    final others = profiles.where((e) => !isMpegTsVideoHls(e)).toList();
+    return <String, dynamic>{
+      ...deviceProfile,
+      'TranscodingProfiles': [
+        ...others.take(firstVideoHls),
+        ...mpegTsEntries,
+        ...others.skip(firstVideoHls),
+      ],
+    };
+  }
+
+  /// Jellyfin and Emby cut 6 s segments for a stream copy when the user agent
+  /// looks like AVPlayer, and hold live.m3u8 until three of them exist. Behind
+  /// a tuner that reads at native frame rate that wait runs past AVPlayer's
+  /// 20 s playlist timeout. Asking for two 3 s segments gets the playlist back
+  /// well before that. A value the profile already sets is kept.
+  static Map<String, dynamic>? shortenLiveHlsStartup(
+    Map<String, dynamic>? deviceProfile, {
+    required bool isLiveChannel,
+  }) {
+    if (deviceProfile == null || !isLiveChannel) return deviceProfile;
+    final profiles = deviceProfile['TranscodingProfiles'];
+    if (profiles is! List || !profiles.any(_isVideoHls)) return deviceProfile;
+    return <String, dynamic>{
+      ...deviceProfile,
+      'TranscodingProfiles': [
+        for (final entry in profiles)
+          if (_isVideoHls(entry))
+            <String, dynamic>{
+              'SegmentLength': 3,
+              'MinSegments': 2,
+              ...Map<String, dynamic>.from(entry as Map),
+            }
+          else
+            entry,
+      ],
+    };
+  }
+
+  static bool _isVideoHls(dynamic entry) =>
+      entry is Map &&
+      entry['Type']?.toString() == 'Video' &&
+      entry['Protocol']?.toString().toLowerCase() == 'hls';
+
   static String? resolveStaticMediaSourceId(
     dynamic mediaItem,
     String? mediaSourceId,
@@ -201,6 +285,16 @@ abstract class MediaStreamResolver {
     }
   }
 
+  static const _pgsCodecs = {'pgs', 'pgssub', 'hdmv_pgs_subtitle'};
+
+  static bool isPgsCodec(String? codec) =>
+      _pgsCodecs.contains(codec?.toLowerCase());
+
+  static bool isEmbeddedPgsSubtitle(Map<String, dynamic> stream) =>
+      stream['Type'] == 'Subtitle' &&
+      stream['IsExternal'] != true &&
+      isPgsCodec(stream['Codec'] as String?);
+
   static List<ExternalSubtitle> extractExternalSubtitles(
     List<Map<String, dynamic>> mediaStreams,
     String baseUrl,
@@ -210,6 +304,9 @@ abstract class MediaStreamResolver {
       if (stream['Type'] != 'Subtitle') continue;
       final deliveryUrl = stream['DeliveryUrl'] as String?;
       if (deliveryUrl == null || deliveryUrl.isEmpty) continue;
+      // The server has to extract all of an embedded PGS track before it
+      // sends the file, which can take minutes.
+      if (isEmbeddedPgsSubtitle(stream)) continue;
       final isExternal = stream['IsExternal'] == true;
       final supportsExternal = stream['SupportsExternalStream'] == true;
       if (!isExternal && !supportsExternal) continue;

@@ -1,0 +1,883 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
+import 'package:flutter/foundation.dart' show debugPrint;
+import '../../data/services/log_service.dart';
+import '../../playback/media3_player_backend.dart';
+import '../../util/app_foreground.dart';
+import '../../ui/navigation/app_router.dart';
+import '../../ui/navigation/destinations.dart';
+import '../../ui/navigation/home_refresh_bus.dart';
+
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:playback_core/playback_core.dart';
+import 'package:server_core/server_core.dart';
+
+import '../../data/models/aggregated_item.dart';
+import '../../data/services/carplay_service.dart';
+import '../../data/services/cast/cast_service.dart';
+import '../../data/services/download_notification_service.dart';
+import '../../data/services/tv_channels_service.dart';
+import '../../data/services/watch_next_service.dart';
+import '../../data/services/media_server_client_factory.dart';
+import '../../data/services/plugin_sync_service.dart';
+import '../../data/services/tortugarr/download_features.dart';
+import '../../data/services/adult_library_service.dart';
+import '../../data/services/push_messaging_service.dart';
+import '../../data/services/socket_handler.dart';
+import '../../di/modules/app_module.dart';
+import '../../di/modules/playback_module.dart';
+import '../../di/modules/server_module.dart';
+import '../../playback/audio_handler.dart';
+import '../../playback/headless_session_bootstrap.dart';
+import '../../playback/last_playback_session_store.dart';
+import '../../playback/media_browse_service.dart';
+import '../../preference/preference_constants.dart';
+import '../../preference/user_preferences.dart';
+import '../../syncplay/syncplay_manager.dart';
+import '../../util/platform_detection.dart';
+import '../store/authentication_preferences.dart';
+import '../store/authentication_store.dart';
+import '../store/credential_store.dart';
+import '../models/user.dart';
+import 'server_repository.dart';
+import 'user_repository.dart';
+
+enum SessionState { ready, restoring, switching }
+
+class SessionRepository {
+  static const List<String> _supportedRemoteCommands = [
+    'DisplayMessage',
+    'SetVolume',
+    'Mute',
+    'Unmute',
+    'ToggleMute',
+    'SetAudioStreamIndex',
+    'SetSubtitleStreamIndex',
+    'SetRepeatMode',
+    'SetShuffleQueue',
+  ];
+  static const Duration _initialLoginSyncWait = Duration(seconds: 3);
+
+  final AuthenticationStore _authStore;
+  final AuthenticationPreferences _authPrefs;
+  final CredentialStore _credentialStore;
+  final MediaServerClientFactory _clientFactory;
+  final SocketHandler _socketHandler;
+  final ServerRepository _serverRepository;
+  final UserRepository _userRepository;
+  final PluginSyncService _pluginSyncService;
+  final _logger = Logger();
+
+  String? _activeServerId;
+  String? _activeUserId;
+  SessionState _state = SessionState.ready;
+  StreamSubscription<ServerWebSocketMessage>? _remoteCommandSubscription;
+  StreamSubscription<ServerWebSocketMessage>? _pluginEventSubscription;
+  double _lastUnmutedVolume = 100;
+  bool _remoteMuted = false;
+  bool _hasCheckedWriteAccess = false;
+
+  static const Duration _socketIdleGrace = Duration(seconds: 60);
+  Timer? _socketIdleTimer;
+  bool _socketSuspended = false;
+
+  final _stateController = StreamController<SessionState>.broadcast();
+
+  SessionRepository(
+    this._authStore,
+    this._authPrefs,
+    this._credentialStore,
+    this._clientFactory,
+    this._socketHandler,
+    this._serverRepository,
+    this._userRepository,
+    this._pluginSyncService,
+  );
+
+  String? get activeServerId => _activeServerId;
+  String? get activeUserId => _activeUserId;
+
+  // save or clear the auto login target based on the chosen behavior.
+  Future<void> applyAutoLoginForBehavior(UserSelectBehavior behavior) async {
+    if (behavior == UserSelectBehavior.currentUser) {
+      final serverId = _activeServerId;
+      final userId = _activeUserId;
+      if (serverId != null && userId != null) {
+        await _authPrefs.setAutoLogin(serverId, userId);
+      }
+    } else {
+      await _authPrefs.clearAutoLogin();
+    }
+  }
+
+  // true when the person using the app right now is the saved auto login user.
+  bool get activeUserIsAutoLoginTarget =>
+      _activeUserId != null &&
+      _activeServerId != null &&
+      _authPrefs.savedAutoLoginUserId == _activeUserId &&
+      _authPrefs.savedAutoLoginServerId == _activeServerId;
+
+  // the name of the saved auto-login user or null if none.
+  String? autoLoginTargetDisplayName() {
+    final serverId = _authPrefs.savedAutoLoginServerId;
+    final userId = _authPrefs.savedAutoLoginUserId;
+    if (serverId.isEmpty || userId.isEmpty) return null;
+    return _authStore.getUser(serverId, userId)?.name;
+  }
+
+  SessionState get state => _state;
+  Stream<SessionState> get stateStream => _stateController.stream;
+
+  bool get hasCheckedWriteAccess => _hasCheckedWriteAccess;
+  set hasCheckedWriteAccess(bool value) => _hasCheckedWriteAccess = value;
+
+  Future<bool> restoreSession() async {
+    _setState(SessionState.restoring);
+
+    final behavior = _authPrefs.loginBehavior;
+    String serverId;
+    String userId;
+
+    switch (behavior) {
+      case UserSelectBehavior.disabled:
+        _setState(SessionState.ready);
+        return false;
+      case UserSelectBehavior.lastUser:
+        serverId = _authPrefs.savedLastServerId;
+        userId = _authPrefs.savedLastUserId;
+      case UserSelectBehavior.currentUser:
+        serverId = _authPrefs.savedAutoLoginServerId;
+        userId = _authPrefs.savedAutoLoginUserId;
+    }
+
+    if (serverId.isEmpty || userId.isEmpty) {
+      _setState(SessionState.ready);
+      return false;
+    }
+
+    return switchCurrentSession(serverId: serverId, userId: userId);
+  }
+
+  Future<bool> switchCurrentSession({
+    required String serverId,
+    required String userId,
+    String? username,
+    String? password,
+  }) async {
+    _setState(SessionState.switching);
+    _pluginSyncService.resetState();
+    DownloadFeatures.clear();
+    AdultLibraryService.visible.value = false;
+
+    final server = _serverRepository.getServer(serverId);
+    if (server == null) {
+      _logger.w('Server $serverId not found in stored servers');
+      _setState(SessionState.ready);
+      return false;
+    }
+
+    final users = _authStore.getUsers(serverId);
+    final userIndex = users.indexWhere((u) => u.id == userId);
+    if (userIndex < 0) {
+      _logger.w('User $userId not found for server $serverId');
+      _setState(SessionState.ready);
+      return false;
+    }
+    final user = users[userIndex];
+
+    final token = await _credentialStore.getToken(serverId);
+    final accessToken = user.accessToken.isNotEmpty ? user.accessToken : token;
+
+    if (accessToken == null || accessToken.isEmpty) {
+      _logger.w(
+        'No access token available for user $userId on server $serverId',
+      );
+      _setState(SessionState.ready);
+      return false;
+    }
+
+    final client = _clientFactory.getClient(
+      serverId: serverId,
+      serverType: server.serverType,
+      baseUrl: server.address,
+    );
+
+    client.accessToken = accessToken;
+    client.userId = userId;
+
+    setActiveServerClient(client);
+    resetUserScopedSingletons();
+    setActiveStreamResolver(client);
+    _cancelSocketIdleTimer();
+    // A headless boot has no UI to serve, and car browse, playback, and
+    // progress reporting all go over REST, so skip the socket there and let
+    // onAppResumed connect it if the user opens the app later.
+    _socketSuspended = _isHeadlessAndroidBoot();
+    if (!_socketSuspended) {
+      _socketHandler.connectTo(client);
+    }
+    _bindRemoteCommandHandling();
+    _bindPluginEventHandling(client);
+    _refreshCarBrowseTree(signedIn: true);
+
+    _activeServerId = serverId;
+    _activeUserId = userId;
+
+    _userRepository.setCurrentUser(user);
+    await _authPrefs.setLastServerId(serverId);
+    await _authPrefs.setLastUserId(userId);
+
+    final shouldPrioritizeInitialSync = !_pluginSyncService
+        .isSyncInitializedForServer(client, serverId: serverId);
+    final Future<void> postLoginSyncFuture = _postLoginSync(
+      client,
+      user,
+      serverId,
+      username,
+      password,
+    ).catchError((_) {});
+
+    if (shouldPrioritizeInitialSync) {
+      // Give first-login server sync a short head start so Home can build
+      // from synced preferences, without blocking startup indefinitely.
+      await Future.any<void>([
+        postLoginSyncFuture,
+        Future<void>.delayed(_initialLoginSyncWait),
+      ]);
+    } else {
+      unawaited(postLoginSyncFuture);
+    }
+
+    _setState(SessionState.ready);
+
+    return true;
+  }
+
+  Future<void> _postLoginSync(
+    MediaServerClient client,
+    PrivateUser user,
+    String serverId,
+    String? username,
+    String? password,
+  ) async {
+    await _reportRemoteCapabilities(client);
+
+    try {
+      final serverUser = await client.usersApi.getCurrentUser();
+      final isAdmin = serverUser.policy?.isAdministrator ?? false;
+      final canDownload = serverUser.policy?.enableContentDownloading ?? false;
+      final canManageSubtitles =
+          serverUser.policy?.enableSubtitleManagement ?? false;
+      final canManageCollections =
+          serverUser.policy?.enableCollectionManagement ?? false;
+
+      if (isAdmin != user.isAdministrator ||
+          canDownload != user.canDownload ||
+          canManageSubtitles != user.canManageSubtitles ||
+          canManageCollections != user.canManageCollections) {
+        final updatedUser = user.copyWith(
+          isAdministrator: isAdmin,
+          canDownload: canDownload,
+          canManageSubtitles: canManageSubtitles,
+          canManageCollections: canManageCollections,
+        );
+        await _authStore.putUser(updatedUser);
+        _userRepository.setCurrentUser(updatedUser);
+      }
+
+      // init language prefs if not already set
+      if (serverUser.configuration != null) {
+        GetIt.instance<UserPreferences>().initLanguagePrefs(
+          serverUser.configuration!,
+        );
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        _logger.w('Access token expired or unauthorized. Logging out.');
+        await destroyCurrentSession();
+        appRouter.go(
+          '${Destinations.login}?serverId=$serverId&username=${Uri.encodeComponent(user.name)}',
+        );
+        return;
+      }
+    } catch (_) {}
+
+    await _pluginSyncService.syncOnLogin(client, serverId: serverId);
+    unawaited(DownloadFeatures.refresh(client));
+    // The menu's XXX search button follows the adult library's visibility.
+    unawaited(AdultLibraryService().isVisible().then((_) {}, onError: (Object _) {}));
+
+    // Register the FCM token now that a session exists, and push the current
+    // notification prefs so defaults reach the plugin. Startup registration
+    // bails before login, so this is where closed-app push actually enrolls.
+    if (PlatformDetection.isMobile) {
+      try {
+        if (GetIt.instance.isRegistered<PushMessagingService>()) {
+          await GetIt.instance<PushMessagingService>()
+              .registerWithCurrentToken();
+        }
+        await _pluginSyncService.pushNotificationPrefs(client);
+      } catch (_) {}
+    }
+
+    final seerrAvailable = await _pluginSyncService.configureSeerr(
+      client,
+      username: username ?? user.name,
+      password: password,
+    );
+    if (seerrAvailable) {
+      homeRefreshBus.requestNowOrAfterNavigation();
+    }
+  }
+
+  /// Called when the app moves to the background. After a grace period this
+  /// drops the server websocket, taking the keepalive and reconnect timers
+  /// with it, unless something still needs the socket.
+  void onAppBackgrounded() {
+    _socketIdleTimer?.cancel();
+    _socketIdleTimer = Timer(_socketIdleGrace, _evaluateSocketIdle);
+  }
+
+  /// Called when the app returns to the foreground. Reconnects the websocket
+  /// if it was dropped while backgrounded.
+  void onAppResumed() {
+    _cancelSocketIdleTimer();
+    if (!_socketSuspended) return;
+    _socketSuspended = false;
+    final serverId = _activeServerId;
+    if (serverId == null) return;
+    final client = _clientFactory.getClientIfExists(serverId);
+    if (client != null) {
+      _socketHandler.connectTo(client);
+    }
+  }
+
+  void _evaluateSocketIdle() {
+    if (_shouldKeepSocketAlive()) {
+      // Check again later so the socket still drops once playback or casting
+      // ends while the app stays backgrounded.
+      _socketIdleTimer = Timer(_socketIdleGrace, _evaluateSocketIdle);
+      return;
+    }
+    _socketIdleTimer = null;
+    _socketHandler.disconnect();
+    _socketSuspended = true;
+  }
+
+  void _cancelSocketIdleTimer() {
+    _socketIdleTimer?.cancel();
+    _socketIdleTimer = null;
+  }
+
+  /// True when this engine was booted without a UI, which on Android happens
+  /// when Android Auto or media resumption binds the media browser service.
+  /// Such an engine never receives an activity lifecycle event, so its state
+  /// stays null or detached. Treat inactive as having a UI to avoid false
+  /// positives.
+  bool _isHeadlessAndroidBoot() {
+    if (!PlatformDetection.isAndroid) return false;
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    return lifecycle == null || lifecycle == AppLifecycleState.detached;
+  }
+
+  /// Background audio still needs the socket for remote control and SyncPlay,
+  /// and a joined group or a live cast session needs it too.
+  bool _shouldKeepSocketAlive() {
+    final getIt = GetIt.instance;
+    if (getIt.isRegistered<PlaybackManager>() &&
+        getIt<PlaybackManager>().state.isPlaying) {
+      return true;
+    }
+    if (getIt.isRegistered<SyncPlayManager>() &&
+        getIt<SyncPlayManager>().state.groupId != null) {
+      return true;
+    }
+    if (getIt.isRegistered<CastService>() &&
+        getIt<CastService>().activeKindNotifier.value != null) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> destroyCurrentSession() async {
+    final serverId = _activeServerId;
+    final userId = _activeUserId;
+
+    _cancelSocketIdleTimer();
+    _socketSuspended = false;
+
+    // Drop this device's push registration while the session/token is still
+    // live, otherwise the plugin keeps sending closed-app pushes after logout.
+    if (PlatformDetection.isMobile) {
+      try {
+        if (GetIt.instance.isRegistered<PushMessagingService>()) {
+          await GetIt.instance<PushMessagingService>().unregister();
+        }
+      } catch (_) {}
+    }
+
+    _pluginSyncService.resetState();
+    DownloadFeatures.clear();
+    AdultLibraryService.visible.value = false;
+
+    if (serverId != null) {
+      try {
+        final client = _clientFactory.getClientIfExists(serverId);
+        await client?.authApi.logout();
+      } catch (_) {}
+    }
+
+    _remoteCommandSubscription?.cancel();
+    _remoteCommandSubscription = null;
+    _pluginEventSubscription?.cancel();
+    _pluginEventSubscription = null;
+    _socketHandler.disconnect();
+
+    if (serverId != null) {
+      await _credentialStore.deleteToken(serverId);
+      if (userId != null) {
+        await _authStore.removeUser(serverId, userId);
+      }
+      _clientFactory.removeClient(serverId);
+      resetActiveStreamResolver();
+    }
+
+    await _authPrefs.setLastServerId('');
+    await _authPrefs.setLastUserId('');
+    if (_authPrefs.loginBehavior != UserSelectBehavior.currentUser) {
+      await _authPrefs.clearAutoLogin();
+    }
+
+    _activeServerId = null;
+    _activeUserId = null;
+    _hasCheckedWriteAccess = false;
+    _userRepository.setCurrentUser(null);
+    _refreshCarBrowseTree(signedIn: false);
+    _setState(SessionState.ready);
+  }
+
+  // Keep car clients (Android Auto / CarPlay) in sync with sign-in changes:
+  // drop cached browse data and make the car re-query its root. On sign-out
+  // the persisted resumption queue is cleared too.
+  void _refreshCarBrowseTree({required bool signedIn}) {
+    try {
+      GetIt.instance<HeadlessSessionBootstrap>().invalidate();
+      GetIt.instance<MediaBrowseService>().clearCache();
+      if (signedIn) {
+        WatchNextService().schedulePeriodicRefresh();
+        unawaited(TvChannelsService().publish());
+      } else {
+        unawaited(GetIt.instance<LastPlaybackSessionStore>().clear());
+        WatchNextService().clear();
+        WatchNextService().cancelPeriodicRefresh();
+        TvChannelsService().clear();
+      }
+      if (GetIt.instance.isRegistered<MoonfinAudioHandler>()) {
+        GetIt.instance<MoonfinAudioHandler>().notifyChildrenChanged();
+      }
+      if (GetIt.instance.isRegistered<CarPlayService>()) {
+        GetIt.instance<CarPlayService>().notifySignInChanged(signedIn: signedIn);
+      }
+    } catch (_) {}
+  }
+
+  void _setState(SessionState state) {
+    _state = state;
+    _stateController.add(state);
+  }
+
+  void _bindRemoteCommandHandling() {
+    _remoteCommandSubscription?.cancel();
+    _remoteCommandSubscription = _socketHandler.events.listen(
+      (event) => unawaited(_handleRemoteCommand(event)),
+    );
+  }
+
+  // Plugin events pushed over the session websocket (Emby transport) get
+  // forwarded to the same dispatch the SSE stream uses.
+  void _bindPluginEventHandling(MediaServerClient client) {
+    _pluginEventSubscription?.cancel();
+    _pluginEventSubscription = _socketHandler.events.listen((event) {
+      if (event is! ServerEventMessage || event.type != 'MoonfinEvent') {
+        return;
+      }
+      try {
+        unawaited(
+          _pluginSyncService
+              .handleServerEvent(client, event.data)
+              .catchError((_) {}),
+        );
+      } catch (_) {}
+    });
+  }
+
+  Future<void> _reportRemoteCapabilities(MediaServerClient client) async {
+    try {
+      await client.sessionApi.reportCapabilities({
+        'PlayableMediaTypes': const ['Audio', 'Video'],
+        'SupportsMediaControl': true,
+        'SupportedCommands': _supportedRemoteCommands,
+      });
+    } catch (_) {}
+  }
+
+  Future<void> _handleRemoteCommand(ServerWebSocketMessage event) async {
+    switch (event) {
+      case PlayMessage():
+        await _handlePlayMessage(event);
+      case PlaystateMessage():
+        await _handlePlaystateMessage(event);
+      case GeneralCommandMessage():
+        await _handleGeneralCommandMessage(event);
+      default:
+        break;
+    }
+  }
+
+  int? _parseIntArg(Map<String, String> args, String key) {
+    final value = args[key];
+    if (value == null) {
+      return null;
+    }
+    return int.tryParse(value);
+  }
+
+  Future<void> _setLocalVolume(PlaybackManager manager, double volume) async {
+    final backend = manager.backend;
+    if (backend == null) {
+      return;
+    }
+    await backend.setVolume(volume.clamp(0, 100));
+  }
+
+  double _normalizeVolume(String raw) {
+    final parsed = double.tryParse(raw) ?? 100;
+    if (parsed <= 1) {
+      return (parsed * 100).clamp(0, 100).toDouble();
+    }
+    return parsed.clamp(0, 100).toDouble();
+  }
+
+  Future<void> _setRepeatMode(PlaybackManager manager, String mode) async {
+    final target = switch (mode) {
+      'repeatall' => RepeatMode.repeatAll,
+      'repeatone' => RepeatMode.repeatOne,
+      _ => RepeatMode.none,
+    };
+
+    var attempts = 0;
+    while (manager.state.repeatMode != target && attempts < 3) {
+      manager.toggleRepeat();
+      attempts++;
+    }
+  }
+
+  Future<void> _setShuffleMode(PlaybackManager manager, String mode) async {
+    final wantsShuffle = mode.toLowerCase() == 'shuffle';
+    if (manager.state.isShuffled != wantsShuffle) {
+      manager.toggleShuffle();
+    }
+  }
+
+  Duration? _durationFromTicks(int? ticks) {
+    if (ticks == null || ticks <= 0) {
+      return null;
+    }
+    return Duration(microseconds: ticks ~/ 10);
+  }
+
+  /// Remote-play diagnostics. Goes to logcat as well as the in-app log so a
+  /// release build on the TV can still be followed with `adb logcat`.
+  void _remoteLog(String message, {Object? error}) {
+    debugPrint('[RemotePlay] $message${error == null ? '' : ' ($error)'}');
+    if (GetIt.instance.isRegistered<LogService>()) {
+      GetIt.instance<LogService>().playback(
+        'RemotePlay: $message',
+        level: error == null ? LogLevel.info : LogLevel.error,
+        error: error,
+      );
+    }
+  }
+
+  Future<void> _handlePlayMessage(PlayMessage message) async {
+    final serverId = _activeServerId;
+    _remoteLog(
+      'received ${message.playCommand} for ${message.itemIds.length} item(s) '
+      'startIndex=${message.startIndex} server=$serverId',
+    );
+    if (serverId == null || message.itemIds.isEmpty) {
+      return;
+    }
+
+    final client = _clientFactory.getClientIfExists(serverId);
+    if (client == null) {
+      _remoteLog('no client for server $serverId, ignoring');
+      return;
+    }
+
+    final loaded = await Future.wait(
+      message.itemIds.map((itemId) async {
+        try {
+          final itemData = await client.itemsApi.getItem(itemId);
+          return AggregatedItem(
+            id: itemId,
+            serverId: serverId,
+            rawData: itemData,
+          );
+        } catch (_) {
+          return null;
+        }
+      }),
+    );
+    final items = loaded.whereType<AggregatedItem>().toList(growable: false);
+
+    if (items.isEmpty) {
+      _remoteLog('none of the requested items could be loaded, ignoring');
+      return;
+    }
+
+    final startIndex = message.startIndex.clamp(0, items.length - 1).toInt();
+    final manager = GetIt.instance<PlaybackManager>();
+    final command = message.playCommand.toLowerCase();
+
+    switch (command) {
+      case 'playnow':
+        await _playRemoteItems(manager, items, startIndex, message);
+        break;
+      case 'playnext':
+        for (final item in items.reversed) {
+          manager.queueService.insertNext(item);
+        }
+        break;
+      case 'playlast':
+      case 'enqueue':
+        manager.queueService.addItems(items);
+        break;
+      default:
+        await _playRemoteItems(manager, items, startIndex, message);
+        break;
+    }
+  }
+
+  Future<void> _playRemoteItems(
+    PlaybackManager manager,
+    List<AggregatedItem> items,
+    int startIndex,
+    PlayMessage message,
+  ) async {
+    final item = items[startIndex];
+    final isLiveTv = _isLiveTvItem(item);
+    final allowDirect = isLiveTv
+        ? GetIt.instance<UserPreferences>().get(
+            UserPreferences.liveTvDirectPlayEnabled,
+          )
+        : true;
+
+    final currentPath = currentTopRoutePath();
+    final playerOpen = currentPath == Destinations.videoPlayer ||
+        currentPath == Destinations.audioPlayer;
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _remoteLog(
+      'play "${item.name}" type=${item.type} items=${items.length} '
+      'start=$startIndex pos=${message.startPositionTicks} '
+      'source=${message.mediaSourceId} audio=${message.audioStreamIndex} '
+      'sub=${message.subtitleStreamIndex} route=$currentPath '
+      'playerOpen=$playerOpen lifecycle=$lifecycle',
+    );
+
+    var inBackground = lifecycle != AppLifecycleState.resumed;
+    if (inBackground) {
+      final brought = await AppForeground.bringToFront();
+      // Android answers the request at once but may still refuse it (its
+      // background-activity-start rule); only the lifecycle tells the truth.
+      for (var i = 0; i < 10 && inBackground; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        inBackground =
+            WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed;
+      }
+      _remoteLog(
+        'app not in foreground, bringToFront=$brought '
+        'nowResumed=${!inBackground}',
+      );
+    }
+
+    // With the player closed, the native Media3 slot may be owned by a home
+    // trailer surface or by a view an earlier screen left behind. Reserve it
+    // for the player view first, or the source lands in the wrong surface
+    // and the player opens on nothing.
+    if (!playerOpen && PlatformDetection.isAndroid) {
+      final reserved = await Media3PlayerBackend.prepareMainPlayback();
+      _remoteLog('reserved native player slot=$reserved');
+    }
+
+    // Start playback first and open the player only once it is up, the way
+    // the detail screen's play button does. The old order (route first, then
+    // play) left a black player on screen whenever the start failed, and the
+    // player treated the aborted start as its cue to leave.
+    manager.setStartupRecoveryDecider(
+      (_) async => PlaybackStartupRecoveryDecision.retryWithTranscode,
+    );
+    var started = false;
+    try {
+      await manager.playItems(
+        items,
+        startIndex: startIndex,
+        startPosition:
+            _durationFromTicks(message.startPositionTicks) ?? Duration.zero,
+        audioStreamIndex: message.audioStreamIndex,
+        subtitleStreamIndex: message.subtitleStreamIndex,
+        mediaSourceId: message.mediaSourceId,
+        enableDirectPlay: allowDirect,
+        enableDirectStream: allowDirect,
+        enableTranscoding: !isLiveTv || !allowDirect,
+      );
+      started = manager.bringupState.phase != PlaybackBringupPhase.failed;
+    } on PlaybackStartupRecoveryAbortedException catch (e) {
+      _remoteLog('start aborted', error: e);
+    } catch (e) {
+      _remoteLog('start failed', error: e);
+    } finally {
+      manager.setStartupRecoveryDecider(null);
+    }
+    final bringup = manager.bringupState;
+    _remoteLog(
+      'started=$started phase=${bringup.phase.name} '
+      'backend=${bringup.backend} method=${bringup.playMethod} '
+      'error=${bringup.error}',
+    );
+    if (!started) {
+      return;
+    }
+    if (inBackground) {
+      // Sound with no picture is worse than a paused player waiting in the
+      // app, so hold it here; the viewer presses play once the app is open.
+      await manager.pause();
+      _remoteLog('still in background after start, paused until the app is opened');
+    }
+    if (playerOpen) {
+      return;
+    }
+
+    final mediaType = item.rawData['MediaType'] as String?;
+    final isAudio =
+        item.type == 'Audio' ||
+        item.type == 'MusicAlbum' ||
+        item.type == 'AudioBook' ||
+        mediaType == 'Audio';
+    final destination = manager.playbackDeferredToExternalPlayer
+        ? Destinations.externalPlayer
+        : isAudio
+            ? Destinations.audioPlayer
+            : Destinations.videoPlayer;
+    _remoteLog('opening $destination');
+    appRouter.push(destination);
+  }
+
+  bool _isLiveTvItem(AggregatedItem item) {
+    final type = item.type;
+    return type == 'TvChannel' ||
+        type == 'LiveTvChannel' ||
+        type == 'Program' ||
+        item.rawData['ChannelId'] != null ||
+        item.rawData['TimerId'] != null;
+  }
+
+  Future<void> _handlePlaystateMessage(PlaystateMessage message) async {
+    final manager = GetIt.instance<PlaybackManager>();
+    switch (message.command.toLowerCase()) {
+      case 'pause':
+        await manager.pause();
+      case 'unpause':
+      case 'play':
+        await manager.resume();
+      case 'stop':
+        await manager.stop(userInitiated: false);
+      case 'seek':
+        final seek = _durationFromTicks(message.seekPositionTicks);
+        if (seek != null) {
+          await manager.seekTo(seek);
+        }
+      case 'nexttrack':
+        await manager.next();
+      case 'previoustrack':
+        await manager.previous();
+      default:
+        break;
+    }
+  }
+
+  Future<void> _handleGeneralCommandMessage(
+    GeneralCommandMessage message,
+  ) async {
+    final manager = GetIt.instance<PlaybackManager>();
+    switch (message.name.toLowerCase()) {
+      case 'displaymessage':
+        final text = message.arguments['Text'];
+        if (text != null && text.trim().isNotEmpty) {
+          await GetIt.instance<DownloadNotificationService>().showRemoteMessage(
+            text: text,
+            header: message.arguments['Header'],
+          );
+        }
+      case 'setvolume':
+        final raw = message.arguments['Volume'];
+        if (raw != null) {
+          final volume = _normalizeVolume(raw);
+          await _setLocalVolume(manager, volume);
+          if (volume > 0) {
+            _lastUnmutedVolume = volume;
+            _remoteMuted = false;
+          } else {
+            _remoteMuted = true;
+          }
+        }
+      case 'mute':
+        if (!_remoteMuted) {
+          _remoteMuted = true;
+          await _setLocalVolume(manager, 0);
+        }
+      case 'unmute':
+        _remoteMuted = false;
+        await _setLocalVolume(manager, _lastUnmutedVolume);
+      case 'togglemute':
+        _remoteMuted = !_remoteMuted;
+        await _setLocalVolume(manager, _remoteMuted ? 0 : _lastUnmutedVolume);
+      case 'setaudiostreamindex':
+        final index = _parseIntArg(message.arguments, 'Index');
+        if (index != null) {
+          await manager.changeAudioTrack(index);
+        }
+      case 'setsubtitlestreamindex':
+        final index = _parseIntArg(message.arguments, 'Index');
+        if (index == null) {
+          return;
+        }
+        if (index < 0) {
+          await manager.disableSubtitles();
+          return;
+        }
+        await manager.changeSubtitleTrack(index);
+      case 'setrepeatmode':
+        final mode = message.arguments['RepeatMode'];
+        if (mode != null) {
+          await _setRepeatMode(manager, mode.toLowerCase());
+        }
+      case 'setshufflequeue':
+        final mode = message.arguments['ShuffleMode'];
+        if (mode != null) {
+          await _setShuffleMode(manager, mode);
+        }
+      default:
+        break;
+    }
+  }
+
+  void dispose() {
+    _remoteCommandSubscription?.cancel();
+    _pluginEventSubscription?.cancel();
+    _stateController.close();
+  }
+}

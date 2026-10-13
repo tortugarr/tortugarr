@@ -8,6 +8,9 @@ class EmbyUserLibraryApi implements UserLibraryApi {
   EmbyUserLibraryApi(this._dio, this._getUserId);
 
   @override
+  bool get supportsNumericUserRatings => true;
+
+  @override
   Future<void> markFavorite(String itemId) async {
     final userId = _getUserId();
     await _dio.post('/Users/$userId/FavoriteItems/$itemId');
@@ -31,19 +34,46 @@ class EmbyUserLibraryApi implements UserLibraryApi {
     await _dio.delete('/Users/$userId/PlayedItems/$itemId');
   }
 
+  // Emby's own rating routes answer 200 and store nothing, and it leaves the
+  // rating out of the item it hands back, so a rating written through them is
+  // lost. These go through Moonbase, which writes the user data store the
+  // server keeps underneath those routes. A server without Moonbase has no
+  // such route, and there is nowhere to keep a rating anyway, so a 404 is not
+  // worth failing the gesture over.
+  Future<void> _rate(Future<dynamic> Function() send) async {
+    try {
+      await send();
+    } on DioException catch (e) {
+      if (e.response?.statusCode != 404) rethrow;
+    }
+  }
+
   @override
-  Future<void> updateUserRating(String itemId, {required bool likes}) async {
-    final userId = _getUserId();
-    await _dio.post(
-      '/Users/$userId/Items/$itemId/Rating',
-      queryParameters: {'Likes': likes},
+  Future<void> updateUserRating(String itemId, {required bool likes}) {
+    return _rate(
+      () => _dio.post(
+        '/Moonfin/UserRatings/$itemId',
+        queryParameters: {'Likes': likes},
+      ),
     );
   }
 
   @override
-  Future<void> deleteUserRating(String itemId) async {
-    final userId = _getUserId();
-    await _dio.delete('/Users/$userId/Items/$itemId/Rating');
+  Future<void> updateNumericUserRating(
+    String itemId, {
+    required double rating,
+  }) {
+    return _rate(
+      () => _dio.post(
+        '/Moonfin/UserRatings/$itemId',
+        queryParameters: {'Rating': rating},
+      ),
+    );
+  }
+
+  @override
+  Future<void> deleteUserRating(String itemId) {
+    return _rate(() => _dio.delete('/Moonfin/UserRatings/$itemId'));
   }
 
   @override

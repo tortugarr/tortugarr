@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287635979988",
+    "project_id": "tortugarr-app",
+    "storage_bucket": "tortugarr-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287635979988:android:76c5626561ee1c9d33c541",
+        "android_client_info": {
+          "package_name": "io.github.tortugarr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOF8AKqEpYiKZUzaTeoOQzkzt7RUD9Nls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

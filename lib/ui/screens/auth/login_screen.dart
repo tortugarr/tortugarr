@@ -11,11 +11,13 @@ import 'package:moonfin_design/moonfin_design.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../../auth/models/login_state.dart';
 import '../../../auth/models/server.dart';
 import '../../../auth/repositories/auth_repository.dart';
 import '../../../auth/repositories/server_repository.dart';
 import '../../../auth/repositories/session_repository.dart';
+import '../../../auth/store/authentication_store.dart';
 import '../../../data/services/media_server_client_factory.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/focus/dpad_keys.dart';
@@ -23,6 +25,7 @@ import '../../../util/pin_code_util.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/web_diagnostics_failure.dart';
 import '../../navigation/destinations.dart';
+import '../../widgets/allow_self_signed_dialog.dart';
 import '../../widgets/login_scaffold.dart';
 import '../../widgets/pin_entry_dialog.dart';
 
@@ -61,11 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _backFocus = FocusNode();
   final _qcBtnFocus = FocusNode();
   final _pwBtnFocus = FocusNode();
+  final _allowCertFocus = FocusNode();
 
   Server? _server;
   MediaServerClient? _client;
   bool _isLoading = false;
   String? _errorMessage;
+  bool _untrustedCertificate = false;
+  List<String> _recentUsernames = const [];
 
   bool _supportsQuickConnect = false;
   bool _showQuickConnect = true;
@@ -102,7 +108,17 @@ class _LoginScreenState extends State<LoginScreen> {
       _usernameController.text = widget.prefillUsername!;
     }
     _setupFocusHandlers();
+    _loadRecentUsernames();
     _initServer();
+  }
+
+  /// Names that signed in on this server before, freshest first, offered as
+  /// keyboard chips so a returning user never types theirs again.
+  void _loadRecentUsernames() {
+    final users = GetIt.instance<AuthenticationStore>()
+        .getUsers(widget.serverId)
+      ..sort((a, b) => b.lastUsed.compareTo(a.lastUsed));
+    _recentUsernames = [for (final user in users) user.name];
   }
 
   @override
@@ -115,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _backFocus.dispose();
     _qcBtnFocus.dispose();
     _pwBtnFocus.dispose();
+    _allowCertFocus.dispose();
     _quickConnectTimer?.cancel();
     super.dispose();
   }
@@ -266,6 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _showQuickConnect = true;
       _errorMessage = null;
+      _untrustedCertificate = false;
     });
     if (_quickConnectTimer == null) _startQuickConnect();
   }
@@ -276,6 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _showQuickConnect = false;
       _errorMessage = null;
+      _untrustedCertificate = false;
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -307,6 +326,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on DioException catch (e) {
       if (!mounted) return;
+      if (isUntrustedCertificate(e)) {
+        _showUntrustedCertificate();
+        return;
+      }
       final status = e.response?.statusCode;
       final detail =
           e.response?.data?.toString() ??
@@ -344,7 +367,10 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
       final l10n = AppLocalizations.of(context);
-      setState(() => _errorMessage = l10n.quickConnectUnavailable('$e'));
+      setState(
+        () => _errorMessage =
+            l10n.quickConnectUnavailable(describeError(e, l10n)),
+      );
     }
   }
 
@@ -417,6 +443,30 @@ class _LoginScreenState extends State<LoginScreen> {
     context.go('${Destinations.server}?serverId=${server.id}');
   }
 
+  void _showUntrustedCertificate() {
+    setState(() {
+      _isLoading = false;
+      _untrustedCertificate = true;
+      _errorMessage = AppLocalizations.of(context).untrustedServerCertificate;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _allowCertFocus.requestFocus();
+    });
+  }
+
+  Future<void> _allowSelfSignedAndRetry() async {
+    if (!await confirmAllowSelfSignedCertificates(context) || !mounted) return;
+    setState(() {
+      _errorMessage = null;
+      _untrustedCertificate = false;
+    });
+    if (_showQuickConnect) {
+      await _startQuickConnect();
+    } else {
+      await _login();
+    }
+  }
+
   void _finishLoginWithError(String message) {
     setState(() {
       _isLoading = false;
@@ -463,12 +513,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
+    // The sign in button goes dead once this is running, but the flag only
+    // reaches it on the next build, and the password field submits straight
+    // here, so one remote select can sign in twice.
+    if (_isLoading) return;
     final username = _usernameController.text.trim();
     if (username.isEmpty || _client == null || _server == null) return;
 
     setState(() {
       _isLoading = true;
       _errorMessage = null;
+      _untrustedCertificate = false;
     });
 
     try {
@@ -506,7 +561,11 @@ class _LoginScreenState extends State<LoginScreen> {
               );
 
               if (!verified) {
-                if (mounted) context.go('${Destinations.login}?serverId=${_server!.id}');
+                // Lands back on a screen that has to take another attempt.
+                if (mounted) {
+                  setState(() => _isLoading = false);
+                  context.go('${Destinations.login}?serverId=${_server!.id}');
+                }
                 return;
               }
             }
@@ -522,11 +581,15 @@ class _LoginScreenState extends State<LoginScreen> {
             statusCode: statusCode,
             message: error,
           )) {
+            // Returns without reporting an error, so nothing else clears this.
+            setState(() => _isLoading = false);
             return;
           }
           _finishLoginWithError(error);
         case ServerUnavailable():
           _finishLoginWithError(l10n.serverUnavailable);
+        case UntrustedCertificate():
+          _showUntrustedCertificate();
         default:
           _finishLoginWithError(l10n.loginFailed);
       }
@@ -691,6 +754,10 @@ class _LoginScreenState extends State<LoginScreen> {
           Text(
             _formatCode(_quickConnectCode!),
             textAlign: TextAlign.center,
+            // The space between the digit groups is bidi neutral, so an RTL
+            // paragraph swaps the groups and shows a code the server never
+            // issued. Pinning the text LTR keeps the digits in reading order.
+            textDirection: TextDirection.ltr,
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.bold,
@@ -723,6 +790,14 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 16),
           Text(_errorMessage!, style: TextStyle(color: _loginErrorColor)),
         ],
+        if (_untrustedCertificate) ...[
+          const SizedBox(height: 12),
+          _buildActionButton(
+            label: l10n.settingsAllowSelfSignedCerts,
+            focusNode: _allowCertFocus,
+            onPressed: _allowSelfSignedAndRetry,
+          ),
+        ],
         const SizedBox(height: 24),
         _buildActionButton(
           label: l10n.back,
@@ -744,6 +819,7 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: _usernameController,
             focusNode: _usernameFocus,
             label: l10n.username,
+            recentSuggestions: _recentUsernames,
             textInputAction: _hasPassword
                 ? TextInputAction.next
                 : TextInputAction.done,
@@ -765,6 +841,14 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_errorMessage != null) ...[
           const SizedBox(height: 12),
           Text(_errorMessage!, style: TextStyle(color: _loginErrorColor)),
+        ],
+        if (_untrustedCertificate) ...[
+          const SizedBox(height: 12),
+          _buildActionButton(
+            label: l10n.settingsAllowSelfSignedCerts,
+            focusNode: _allowCertFocus,
+            onPressed: _allowSelfSignedAndRetry,
+          ),
         ],
         const SizedBox(height: 24),
         Wrap(
@@ -794,6 +878,7 @@ class _LoginScreenState extends State<LoginScreen> {
     required FocusNode focusNode,
     required String label,
     bool obscureText = false,
+    List<String> recentSuggestions = const [],
     TextInputAction? textInputAction,
     ValueChanged<String>? onSubmitted,
   }) {
@@ -814,6 +899,7 @@ class _LoginScreenState extends State<LoginScreen> {
               inputPurpose: obscureText
                   ? InputPurpose.password
                   : InputPurpose.username,
+              recentSuggestions: recentSuggestions,
               preferSystemIme: _userPreferences.get(
                 UserPreferences.preferSystemImeKeyboard,
               ),

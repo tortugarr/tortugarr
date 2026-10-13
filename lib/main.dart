@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:moonfin_design/moonfin_design.dart' show LiquidGlassWidgets;
 import 'package:path_provider/path_provider.dart';
 import 'package:playback_core/playback_core.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
@@ -16,32 +18,49 @@ import 'data/models/aggregated_item.dart';
 import 'background/watch_next_background.dart' as watch_next_bg;
 import 'data/services/carplay_service.dart';
 import 'data/services/cast/airplay_command_bridge.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'background/auto_download_background.dart';
+import 'background/auto_download_background_main.dart' as auto_download_bg;
+import 'data/services/auto_download_service.dart';
 import 'data/services/background_download_coordinator.dart';
 import 'data/services/download_notification_service.dart';
 import 'data/services/push_messaging_service.dart';
 import 'data/services/seerr_notification_service.dart';
 import 'data/services/media_server_client_factory.dart';
+import 'data/services/crash_report_service.dart';
+import 'data/services/log_service.dart';
 import 'data/services/storage_path_service.dart';
+import 'util/scroll_sensitivity_binding.dart';
 import 'util/webview_environment.dart';
 import 'data/services/theme_store_service.dart';
 import 'di/injection.dart';
 import 'playback/appletv_audio_now_playing_feeder.dart';
-import 'playback/appletv_mpv_backend.dart';
-import 'playback/audio_capability_profile.dart';
+import 'playback/appletv_backend.dart';
 import 'playback/audio_capability_probe.dart';
 import 'playback/audio_handler.dart';
+import 'playback/codec_caps_repair.dart';
+import 'playback/device_capability_cache.dart';
+import 'playback/display_hdr_probe.dart';
 import 'playback/media_browse_service.dart';
 import 'playback/mpris_service.dart';
 import 'playback/playback_lifecycle_handler.dart';
+import 'platform/background_refresh.dart';
 import 'platform/web_runtime_config.dart';
+import 'preference/preference_constants.dart';
 import 'preference/user_preferences.dart';
 import 'util/fullscreen_helper.dart';
+import 'util/window_geometry.dart';
 import 'util/http_overrides_stub.dart'
     if (dart.library.io) 'util/http_overrides_io.dart';
 import 'util/game_core_licenses.dart';
+import 'util/device_performance.dart';
+import 'ui/navigation/app_router.dart';
+import 'ui/screensaver/screensaver_controller.dart';
 import 'util/platform_detection.dart';
+import 'util/process_exit_reporter.dart';
+import 'util/system_ui.dart';
 import 'util/tv_image_cache_stub.dart'
     if (dart.library.io) 'util/tv_image_cache_io.dart';
 
@@ -50,8 +69,8 @@ DateTime? _lastIosRouteResync;
 /// iOS-only audio route handling: observe output route changes to (a) pause when
 /// the current output device disappears (AirPods removed, cable unplugged) and
 /// (b) re-sync A/V when the output switches mid-playback (a new device connects,
-/// or AirPlay/HomePod is selected), which otherwise leaves libmpv writing to a
-/// stale clock and drifts audio out of sync.
+/// or AirPlay/HomePod is selected), which otherwise leaves the player writing
+/// to a stale clock and drifts audio out of sync.
 void _attachIosAudioRouteHandling() {
   final session = AVAudioSession();
   session.routeChangeStream.listen((change) async {
@@ -70,8 +89,8 @@ void _attachIosAudioRouteHandling() {
           return;
         }
         _lastIosRouteResync = now;
-        // A same-position seek re-primes libmpv's audio/video clock without an
-        // audible pause, realigning A/V after the output switch.
+        // A same-position seek re-primes the player's audio/video clock without
+        // an audible pause, realigning A/V after the output switch.
         await manager.seekTo(manager.state.position);
         break;
       default:
@@ -80,31 +99,123 @@ void _attachIosAudioRouteHandling() {
   });
 }
 
+/// What this device can afford. Its callers size themselves before dependency
+/// injection runs, so it works off [_startupPerformanceMode] rather than off
+/// UserPreferences.
+DevicePerformanceTier _resolvedTier() => resolveDevicePerformanceTierFor(
+  _startupPerformanceMode,
+  PlatformDetection.deviceMemory,
+);
+
 // The entry counts are generous on purpose: a library grid shows dozens of
 // posters at once, so a small count evicts them after about two screenfuls and
 // scrolling back re-decodes everything. maximumSizeBytes is what really bounds
 // memory here.
 void _configureImageCache() {
   final imageCache = PaintingBinding.instance.imageCache;
+  final tier = _resolvedTier();
+  void apply(int entries, int bytes) {
+    imageCache.maximumSize = entries;
+    imageCache.maximumSizeBytes = imageCacheBytesFor(tier, bytes);
+  }
+
   if (PlatformDetection.isWeb) {
-    imageCache.maximumSize = 400;
-    imageCache.maximumSizeBytes = 96 << 20;
+    apply(400, 96 << 20);
     return;
   }
   if (PlatformDetection.isMobile) {
-    imageCache.maximumSize = 400;
-    imageCache.maximumSizeBytes = 120 << 20;
+    apply(400, 120 << 20);
     return;
   }
 
   if (PlatformDetection.isTV) {
-    imageCache.maximumSize = 500;
-    imageCache.maximumSizeBytes = 96 << 20;
+    apply(500, 96 << 20);
     return;
   }
 
-  imageCache.maximumSize = 600;
-  imageCache.maximumSizeBytes = 256 << 20;
+  apply(600, 256 << 20);
+}
+
+/// The TV builds draw with Skia, which sizes its GPU cache from the screen, and
+/// Impeller builds ignore this call. It waits for the first frame so the view
+/// has its real size.
+void _capSkiaCache() {
+  if (!PlatformDetection.isAndroid) return;
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final size = WidgetsBinding.instance.platformDispatcher.implicitView
+        ?.physicalSize;
+    final cap = size == null ? null : skiaCacheCapFor(size.width * size.height);
+    if (cap == null) return;
+    unawaited(
+      SystemChannels.skia
+          .invokeMethod<void>('Skia.setResourceCacheMaxBytes', cap)
+          .catchError((_) {}),
+    );
+  });
+}
+
+Timer? _crashFlushDebounce;
+
+/// Routes uncaught Dart errors into the diagnostic buffer and the pending
+/// crash store. Both handlers keep the console output they replace.
+void _installCrashHandlers() {
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    _captureCrash(details.exception, details.stack);
+  };
+  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
+    // Returning true marks the error handled, which drops the engine's print.
+    debugPrint('Uncaught: $error\n$stack');
+    _captureCrash(error, stack);
+    return true;
+  };
+}
+
+void _captureCrash(Object error, StackTrace? stack) {
+  try {
+    final errorLine = error.toString().split('\n').first;
+    final frameLine = stack?.toString().split('\n').first.trim() ?? '';
+    final signature = '$errorLine @ $frameLine';
+
+    final crashes = GetIt.instance<CrashReportService>();
+    if (!crashes.shouldCapture(signature)) return;
+
+    final logs = GetIt.instance<LogService>();
+    logs.logCrash(
+      'Uncaught: $errorLine',
+      stack == null ? error : '$error\n$stack',
+    );
+    unawaited(crashes.record(signature, logs.exportText(maxEntries: 300)));
+
+    // Debounced so a burst of errors settles before the upload, and so a
+    // crash during startup waits for the session rather than racing it.
+    _crashFlushDebounce?.cancel();
+    _crashFlushDebounce = Timer(const Duration(seconds: 5), () {
+      unawaited(crashes.flushPending());
+    });
+  } catch (_) {
+    // The crash handler must never become a second crash.
+  }
+}
+
+void _startProcessExitReporter() {
+  final reporter = ProcessExitReporter(
+    GetIt.instance<LogService>(),
+    GetIt.instance<CrashReportService>(),
+  );
+  unawaited(reporter.reportPreviousExits());
+  reporter.watch(
+    routeChanges: appRouter.routerDelegate,
+    // A player is pushed over the tab that opened it, so the last match is
+    // what's on screen.
+    currentRoute: () {
+      final matches = appRouter.routerDelegate.currentConfiguration.matches;
+      return matches.isEmpty ? '' : matches.last.matchedLocation;
+    },
+    screensaverVisible: PlatformDetection.isTV
+        ? GetIt.instance<ScreensaverController>().visible
+        : null,
+  );
 }
 
 Future<void> _restoreWindowGeometry() async {
@@ -114,32 +225,85 @@ Future<void> _restoreWindowGeometry() async {
   final x = prefs.get(UserPreferences.windowX);
   final y = prefs.get(UserPreferences.windowY);
   final startFullscreen = prefs.get(UserPreferences.windowFullscreen);
+  final startMaximized =
+      prefs.get(UserPreferences.windowMaximized) && !startFullscreen;
 
   const minW = 800.0;
   const minH = 500.0;
   final hasSavedGeometry = w >= minW && h >= minH;
+  final bounds = hasSavedGeometry
+      ? fitBoundsToWorkAreas(Rect.fromLTWH(x, y, w, h), await _workAreas())
+      : null;
 
   final options = WindowOptions(
-    size: hasSavedGeometry ? Size(w, h) : const Size(1280, 720),
+    size: bounds?.size ?? const Size(1280, 720),
     minimumSize: const Size(minW, minH),
-    center: !hasSavedGeometry,
+    center: !hasSavedGeometry && !startMaximized,
     skipTaskbar: false,
   );
 
   await windowManager.waitUntilReadyToShow(options, () async {
-    if (hasSavedGeometry) {
-      await windowManager.setPosition(Offset(x, y));
+    if (bounds != null) {
+      await windowManager.setPosition(bounds.topLeft);
+    }
+    // Before show, so platforms that apply it right away never draw the
+    // windowed size first.
+    if (startMaximized) {
+      await windowManager.maximize();
     }
     await windowManager.show();
     await windowManager.focus();
-    if (startFullscreen) {
-      // Delay slightly to let the window render its first frame before transitioning to fullscreen.
-      // This avoids graphics context race conditions (black screens) and window layout artifacts.
-      unawaited(Future.delayed(const Duration(milliseconds: 150), () async {
-        await FullscreenHelper.setFullscreen(true);
-      }));
-    }
   });
+
+  // Fullscreen resizes the window, and doing that before the engine has drawn
+  // leaves it laid out at the old size with the rest of the window black. The
+  // timer this replaces was standing in for the first frame, which is a race
+  // on a cold start.
+  if (startFullscreen) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(FullscreenHelper.setFullscreen(true));
+    });
+  }
+}
+
+/// Usable areas of the attached displays, or an empty list when they cannot be
+/// read, which leaves saved bounds alone rather than guessing at a screen.
+Future<List<Rect>> _workAreas() async {
+  try {
+    return [
+      for (final display in await screenRetriever.getAllDisplays())
+        (display.visiblePosition ?? Offset.zero) &
+            (display.visibleSize ?? display.size),
+    ];
+  } catch (_) {
+    return const [];
+  }
+}
+
+/// Applies the stored layout override before anything reads the platform
+/// flags. Reads its own store instance because dependency injection has not
+/// happened yet this early in startup.
+Future<void> _applyInterfaceLayoutOverride() async {
+  try {
+    final store = PreferenceStore();
+    await store.init();
+    PlatformDetection.setInterfaceLayout(
+      store.get(UserPreferences.interfaceLayout),
+    );
+  } catch (_) {}
+}
+
+/// The user's performance choice, read the same way and for the same reason:
+/// the tier is needed long before sign-in makes a per-user key readable, which
+/// is also why this preference is never stored per server and user.
+DevicePerformanceMode _startupPerformanceMode = DevicePerformanceMode.auto;
+
+Future<void> _readPerformanceModeOverride() async {
+  try {
+    final store = PreferenceStore();
+    await store.init();
+    _startupPerformanceMode = store.get(UserPreferences.performanceMode);
+  } catch (_) {}
 }
 
 /// Resolves whether this Android device is a TV, which decides the leanback UI
@@ -169,24 +333,111 @@ Future<void> _detectAndSetTvMode() async {
   );
 }
 
-Future<void> _detectAndSetDisplayCapabilities() async {
-  if (!(PlatformDetection.isAndroid && PlatformDetection.isTV)) return;
+/// Seeds the capability state from the last launch's good probe results.
+///
+/// On a cold boot the app can start before HDMI has finished negotiating, and
+/// every probe then reports a device that can do nothing. Starting from the
+/// persisted last-good answers means even the first playback of such a launch
+/// gets a profile that matches the hardware. A probe that later succeeds
+/// overwrites the seed in either direction.
+Future<void> _seedCapabilitiesFromCache() async {
+  final audio = await DeviceCapabilityCache.readMap(
+    DeviceCapabilityCache.audioKey,
+  );
+  if (audio != null) {
+    PlatformDetection.setAudioCapabilities(audio);
+  }
+  if (PlatformDetection.isAndroid) {
+    // Read without the build key the probe path checks. Only a firmware
+    // update can make this stale and the probe a moment later corrects it,
+    // where a launch whose probe cant answer would otherwise run on the
+    // H264 floor.
+    final codecs = await DeviceCapabilityCache.readMap(
+      DeviceCapabilityCache.codecKey,
+    );
+    if (codecs != null) {
+      PlatformDetection.setMediaCodecCapabilities(codecs);
+    }
+  }
+  if (PlatformDetection.isAndroid) {
+    final memory = await DeviceCapabilityCache.readMap(
+      DeviceCapabilityCache.deviceMemoryKey,
+    );
+    if (memory != null) {
+      PlatformDetection.setDeviceMemory(memory);
+    }
+  }
+  if (DisplayHdrProbe.isSupported) {
+    // Null means the display has never answered. An empty list means it
+    // answered and named nothing, which is a real result worth seeding.
+    final hdrTypes = await DisplayHdrProbe.seedFromCache();
+    if (hdrTypes != null) {
+      PlatformDetection.setDisplayHdrTypes(hdrTypes);
+    }
+  }
+}
+
+/// Runs [attempt] with a doubling delay, first wait two seconds, and stops as
+/// soon as one attempt reports done. An attempt that throws counts the same
+/// as one that came up short, since a failed probe says nothing about the
+/// next one.
+Future<bool> _retryOffLaunchPath(Future<bool> Function() attempt) async {
+  var delay = const Duration(seconds: 2);
+  for (var i = 0; i < 4; i++) {
+    await Future<void>.delayed(delay);
+    delay *= 2;
+    try {
+      if (await attempt()) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
+/// How much RAM this device has. Fixed for the life of the device, so one
+/// attempt with a deadline and no retry, and a cached answer stands in when the
+/// channel cant reach the platform side. Its own try/catch matters: this runs
+/// inside a Future.wait, which gives up on every sibling the moment one throws.
+Future<void> _detectAndSetDeviceMemory() async {
+  if (!PlatformDetection.isAndroid) return;
   try {
     const channel = MethodChannel('org.moonfin.androidtv/platform');
-    final hdrTypes = await channel.invokeMethod<List<dynamic>>('displayHdrTypes');
-    PlatformDetection.setDisplayHdrTypes(
-      hdrTypes?.map((value) => value.toString()),
+    final raw = await channel
+        .invokeMethod<Map<dynamic, dynamic>>('deviceMemory')
+        .timeout(const Duration(seconds: 2));
+    if (raw == null) return;
+    final memory = raw.map((key, value) => MapEntry(key.toString(), value));
+    PlatformDetection.setDeviceMemory(memory);
+    // The facts go in, never the verdict, so moving the threshold later
+    // re-decides an old device instead of reading back a stale answer.
+    unawaited(
+      DeviceCapabilityCache.writeMap(
+        DeviceCapabilityCache.deviceMemoryKey,
+        memory,
+      ),
     );
   } catch (_) {}
 }
 
-/// A cold-start probe can race codec enumeration and return a map with no
-/// usable H264 support. Every Android device that reaches this code plays
-/// H264, so such a result is a transient failure, not a real capability.
-bool _codecCapsLookDegenerate(Map<String, dynamic> caps) {
-  final supportsAvc = caps['supportsAvc'] == true;
-  final avcMainLevel = caps['avcMainLevel'];
-  return !supportsAvc || avcMainLevel is! int || avcMainLevel <= 0;
+/// Runs before the first frame, so only the single attempt is awaited here.
+/// The retries and the listener are deliberately left to run on their own: a
+/// box whose TV is still asleep would otherwise hold the launch for the whole
+/// half-minute retry window.
+Future<void> _detectAndSetDisplayCapabilities() async {
+  if (!DisplayHdrProbe.isSupported) return;
+  // Its own try/catch for the same reason the memory probe has one: this runs
+  // inside a Future.wait, which gives up on every sibling the moment one
+  // throws.
+  try {
+    final snapshot = await DisplayHdrProbe.query(trigger: 'launch');
+    DisplayHdrProbe.apply(snapshot);
+    if (snapshot == null ||
+        snapshot.verdict == DisplayHdrVerdict.cannotAnswer) {
+      unawaited(DisplayHdrProbe.queryWithRetry().then(DisplayHdrProbe.apply));
+    }
+    // A chain that is still asleep when the retries run out heals from here
+    // instead of waiting for the app to be restarted.
+    DisplayHdrProbe.listenForDisplayChanges();
+  } catch (_) {}
 }
 
 Future<Map<String, dynamic>?> _queryCodecCaps(MethodChannel channel) async {
@@ -199,38 +450,104 @@ Future<Map<String, dynamic>?> _queryCodecCaps(MethodChannel channel) async {
   return raw?.map((key, value) => MapEntry(key.toString(), value));
 }
 
-/// Re-probes in the background when the startup result looked degenerate.
-/// The native query enumerates codecs on the platform main thread, so the
-/// retries must never extend the launch path. The device profile is built
-/// per playback, so a corrected result applied here still fixes the next
-/// playback without a restart.
-Future<void> _retryCodecCapsOffLaunchPath(MethodChannel channel) async {
-  for (var i = 0; i < 2; i++) {
-    await Future<void>.delayed(const Duration(seconds: 2));
-    try {
-      final caps = await _queryCodecCaps(channel);
-      if (caps != null && !_codecCapsLookDegenerate(caps)) {
-        PlatformDetection.setMediaCodecCapabilities(caps);
-        return;
-      }
-    } catch (_) {
-      return;
-    }
+/// Re-probes in the background when the startup probe threw or came back
+/// looking wrong. The native query enumerates codecs on the platform main
+/// thread, so the retries must never extend the launch path. The device
+/// profile is built per playback, so a corrected result applied here still
+/// fixes the next playback without a restart.
+///
+/// Backs off between attempts, since enumeration loses the race when the
+/// device is busiest right after boot. Every sound result is applied as it
+/// arrives, and the retries only stop early once one carries HEVC, since a
+/// result without it is either a partial enumeration worth another look or a
+/// device that really lacks the decoder and loses nothing to the re-probes.
+Future<void> _retryCodecCapsOffLaunchPath(MethodChannel channel) =>
+    _retryOffLaunchPath(() => _applyCodecProbe(channel));
+
+/// One probe: applies a sound answer and persists a complete one. Returns
+/// true once the answer carries HEVC and throws when the channel does.
+Future<bool> _applyCodecProbe(MethodChannel channel) async {
+  final caps = await _queryCodecCaps(channel);
+  if (caps == null || codecCapsLookDegenerate(caps)) return false;
+  PlatformDetection.setMediaCodecCapabilities(caps);
+  if (codecCapsLookIncomplete(caps)) return false;
+  await _cacheCodecCaps(channel, caps);
+  return true;
+}
+
+/// The OS build fingerprint, which is the key the codec cache is valid under.
+/// Codec support only changes with a firmware update, and a firmware update
+/// always changes the fingerprint.
+Future<String?> _androidBuildFingerprint(MethodChannel channel) async {
+  try {
+    return await channel.invokeMethod<String>('buildFingerprint');
+  } catch (_) {
+    return null;
   }
+}
+
+Future<void> _cacheCodecCaps(
+  MethodChannel channel,
+  Map<String, dynamic> caps,
+) async {
+  final build = await _androidBuildFingerprint(channel);
+  if (build == null) return;
+  await DeviceCapabilityCache.writeMap(
+    DeviceCapabilityCache.codecKey,
+    caps,
+    build: build,
+  );
+}
+
+/// Some Amlogic and MediaTek audio drivers misbehave once a device has been up
+/// for a long time, so the diagnostic report says how long that's been.
+Future<void> _detectAndSetSystemUptime() async {
+  if (!PlatformDetection.isAndroid) return;
+  try {
+    const channel = MethodChannel('org.moonfin.androidtv/platform');
+    final uptimeMs = await channel
+        .invokeMethod<int>('uptimeMillis')
+        .timeout(const Duration(seconds: 2));
+    if (uptimeMs != null) PlatformDetection.setSystemUptime(uptimeMs);
+  } catch (_) {}
 }
 
 Future<void> _detectAndSetCodecCapabilities() async {
   if (!PlatformDetection.isAndroid) return;
-  try {
-    const channel = MethodChannel('org.moonfin.androidtv/platform');
+  const channel = MethodChannel('org.moonfin.androidtv/platform');
 
+  // What a chip decodes only changes with its firmware, so a sound result
+  // saved under this build is the answer and the enumeration, the slowest
+  // probe of the launch, is skipped entirely.
+  final build = await _androidBuildFingerprint(channel);
+  if (build != null) {
+    final cached = await DeviceCapabilityCache.readMap(
+      DeviceCapabilityCache.codecKey,
+      build: build,
+    );
+    if (cached != null) {
+      PlatformDetection.setMediaCodecCapabilities(cached);
+      return;
+    }
+  }
+
+  try {
     final codecCaps = await _queryCodecCaps(channel);
     if (codecCaps != null) {
-      PlatformDetection.setMediaCodecCapabilities(codecCaps);
       // A degenerate cold-start result would otherwise poison the device
-      // profile until app restart and force needless transcodes.
-      if (_codecCapsLookDegenerate(codecCaps)) {
+      // profile until app restart, leaving playback broken rather than just
+      // inefficient.
+      final degenerate = codecCapsLookDegenerate(codecCaps);
+      PlatformDetection.setMediaCodecCapabilities(
+        degenerate ? withAvcFloor(codecCaps) : codecCaps,
+      );
+      // A result that cleared the AVC check can still be a partial
+      // enumeration, seen in the field as a box whose HEVC decoder vanished
+      // for one launch and every HEVC library transcoding until a restart.
+      if (degenerate || codecCapsLookIncomplete(codecCaps)) {
         unawaited(_retryCodecCapsOffLaunchPath(channel));
+      } else {
+        unawaited(_cacheCodecCaps(channel, codecCaps));
       }
       return;
     }
@@ -243,20 +560,21 @@ Future<void> _detectAndSetCodecCapabilities() async {
         (key, value) => MapEntry(key.toString(), value == true),
       ),
     );
-  } catch (_) {}
+  } catch (_) {
+    // A probe that never answered, like a channel hit before the plugin
+    // registered, leaves every codec flag false and the profile claiming the
+    // device decodes nothing. The floor only lands when the seed left nothing
+    // to keep, and the retries are the same recovery a degenerate answer gets.
+    PlatformDetection.setMediaCodecCapabilities(
+      codecCapsWithoutAProbe(PlatformDetection.mediaCodecCapabilitiesSnapshot),
+    );
+    unawaited(_retryCodecCapsOffLaunchPath(channel));
+  }
 }
 
 Future<void> _detectAndSetAetherCapabilities() async {
   const channel = MethodChannel('moonfin/ios_aether_control');
-  Map<String, dynamic>? caps;
-  try {
-    final raw = await channel.invokeMethod<Map<dynamic, dynamic>>(
-      'getCapabilities',
-    );
-    if (raw != null) {
-      caps = raw.map((key, value) => MapEntry(key.toString(), value));
-    }
-  } catch (_) {}
+  final caps = await _queryAppleVideoCaps(channel);
 
   // Fallback mirrors AetherEngine's guaranteed baseline on the hardware the
   // deployment floors allow (iOS 16, macOS 14).
@@ -276,23 +594,47 @@ Future<void> _detectAndSetAetherCapabilities() async {
           'supportsDvP5': true,
           'supportsDvP7': true,
           'supportsDvP8': true,
+          'supportsAv1': true,
+          'supportsAv1Main10': true,
           'maxResolutionAvc': {'width': 3840, 'height': 2160},
           'maxResolutionHevc': {'width': 3840, 'height': 2160},
+          'maxResolutionAv1': {'width': 1920, 'height': 1080},
         },
   );
 }
 
-Future<void> _detectAndSetAppleTvCapabilities() async {
-  const channel = MethodChannel('moonfin/appletv_video_control');
-  Map<String, dynamic>? caps;
+/// Queries an Apple video capability channel, preferring the last good
+/// answer over the static baseline when the probe fails. Keyed to the OS
+/// version, since that is what changes what these decoders can do.
+Future<Map<String, dynamic>?> _queryAppleVideoCaps(
+  MethodChannel channel,
+) async {
+  final build = PlatformDetection.osVersion;
   try {
     final raw = await channel.invokeMethod<Map<dynamic, dynamic>>(
       'getCapabilities',
     );
     if (raw != null) {
-      caps = raw.map((key, value) => MapEntry(key.toString(), value));
+      final caps = raw.map((key, value) => MapEntry(key.toString(), value));
+      unawaited(
+        DeviceCapabilityCache.writeMap(
+          DeviceCapabilityCache.appleVideoKey,
+          caps,
+          build: build,
+        ),
+      );
+      return caps;
     }
   } catch (_) {}
+  return DeviceCapabilityCache.readMap(
+    DeviceCapabilityCache.appleVideoKey,
+    build: build,
+  );
+}
+
+Future<void> _detectAndSetAppleTvCapabilities() async {
+  const channel = MethodChannel('moonfin/appletv_video_control');
+  final caps = await _queryAppleVideoCaps(channel);
 
   PlatformDetection.setMediaCodecCapabilities(
     caps ??
@@ -318,17 +660,25 @@ Future<void> _detectAndSetAppleTvCapabilities() async {
 Future<void> _detectAndApplyAudioCapabilities(UserPreferences prefs) async {
   if (!AudioCapabilityProbe.isSupported) return;
   try {
-    // Probe with a short retry so a startup enumeration race doesn't strand us
-    // on an empty result, then publish so getDeviceProfile() picks it up.
+    // Probe with a retry window sized against an HDMI handshake, then publish
+    // so getDeviceProfile() picks it up.
     final profile = await AudioCapabilityProbe.queryWithRetry();
     AudioCapabilityProbe.apply(profile);
 
-    // Passthrough is no longer seeded into the toggle prefs: the tri-state
-    // resolvers compute it live from the detected capability, which also
-    // auto-adapts to later route changes. Existing installs whose toggles were
-    // auto-seeded by the old one-shot probe are migrated back to "Auto" once.
-    if (profile != null) {
-      await _migrateSeededPassthroughTogglesToAuto(prefs, profile);
+    // A launch that still has no real answer keeps trying with a longer
+    // backoff, since a box powered on with the app can take a while to bring
+    // its audio outputs up.
+    if (profile == null || AudioCapabilityProbe.looksEmpty(profile)) {
+      unawaited(_retryAudioCapsOffLaunchPath());
+    }
+
+    // Installs migrated into manual mode carry only the toggles they had set
+    // by hand, so fill the rest from the probe and every switch has a real
+    // value.
+    if (profile != null &&
+        prefs.get(UserPreferences.audioPassthroughMode) ==
+            AudioPassthroughMode.manual) {
+      await prefs.seedAbsentPassthroughToggles();
     }
 
     // Re-probe whenever the audio route changes (e.g. the AVR is powered on
@@ -337,54 +687,31 @@ Future<void> _detectAndApplyAudioCapabilities(UserPreferences prefs) async {
   } catch (_) {}
 }
 
-/// One-time migration for installs that ran the old startup seeding, which
-/// copied probe results into the 8 passthrough toggle prefs. A stored value
-/// that still matches what the probe would have seeded was almost certainly
-/// auto-seeded (not a deliberate choice), so it is cleared to return the toggle
-/// to tri-state "Auto". A value that differs is treated as a deliberate user
-/// override and preserved.
-Future<void> _migrateSeededPassthroughTogglesToAuto(
-  UserPreferences prefs,
-  AudioCapabilityProfile profile,
-) async {
-  if (prefs.get(UserPreferences.audioPassthroughMigratedToAuto)) return;
-
-  if (prefs.get(UserPreferences.audioPassthroughProbeSeeded)) {
-    final hasReceiverRoute =
-        profile.activeRouteType == AudioRouteType.arc ||
-        profile.activeRouteType == AudioRouteType.earc;
-    final seededValues = {
-      UserPreferences.ac3PassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughAc3,
-      UserPreferences.eac3PassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughEac3,
-      UserPreferences.eac3JocPassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughEac3Joc,
-      UserPreferences.dtsCorePassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughDts,
-      UserPreferences.dtsHdPassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughDtsHd,
-      UserPreferences.dtsXPassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughDtsX,
-      UserPreferences.trueHdPassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughTrueHd,
-      UserPreferences.trueHdAtmosPassthroughEnabled:
-          hasReceiverRoute && profile.canPassthroughTrueHdJoc,
-    };
-    for (final entry in seededValues.entries) {
-      if (prefs.containsPreference(entry.key) &&
-          prefs.get(entry.key) == entry.value) {
-        await prefs.removePreference(entry.key);
+Future<void> _retryAudioCapsOffLaunchPath() =>
+    _retryOffLaunchPath(() async {
+      final profile = await AudioCapabilityProbe.query();
+      if (profile == null || AudioCapabilityProbe.looksEmpty(profile)) {
+        return false;
       }
-    }
-  }
-
-  await prefs.set(UserPreferences.audioPassthroughMigratedToAuto, true);
-}
+      AudioCapabilityProbe.apply(profile);
+      return true;
+    });
 
 void _sweepImageCache(UserPreferences prefs, {bool throttle = false}) {
   final mb = prefs.get(UserPreferences.imageCacheLimitMb);
   unawaited(enforceImageCacheBudget(mb * 1024 * 1024, throttle: throttle));
+  unawaited(enforceGameArtworkCacheBudget(throttle: throttle));
+}
+
+/// Runs an auto-download check when the app comes back to the foreground;
+/// the service throttles resumes that follow a recent check.
+class _AutoDownloadResumeObserver with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    if (!GetIt.instance.isRegistered<AutoDownloadService>()) return;
+    GetIt.instance<AutoDownloadService>().onAppResumed();
+  }
 }
 
 class _ImageCacheSweepObserver with WidgetsBindingObserver {
@@ -394,9 +721,78 @@ class _ImageCacheSweepObserver with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) return;
-    _sweepImageCache(_prefs, throttle: true);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _sweepImageCache(_prefs, throttle: true);
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        // The index is written on a timer. A process killed in the
+        // background never reaches it, so write on the way out.
+        unawaited(flushImageCacheIndex());
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+        break;
+    }
   }
+}
+
+/// Re-probes display, decoder and audio capabilities when the app comes back
+/// to the foreground, which on a TV covers being woken from standby, the
+/// moment the HDMI chain has just renegotiated, and is also the first moment
+/// an engine that launched without an Activity has a platform channel to ask.
+/// Only answers that carry something are applied here: an empty answer
+/// mid-renegotiation must not clobber a good snapshot.
+class _CapabilityRefreshObserver with WidgetsBindingObserver {
+  static const _throttle = Duration(seconds: 30);
+  DateTime? _lastRefresh;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    final now = DateTime.now();
+    final last = _lastRefresh;
+    if (last != null && now.difference(last) < _throttle) return;
+    _lastRefresh = now;
+    unawaited(_refresh());
+  }
+
+  Future<void> _refresh() async {
+    if (DisplayHdrProbe.isSupported) {
+      DisplayHdrProbe.apply(await DisplayHdrProbe.query(trigger: 'resume'));
+    }
+    // The launch retries all run inside the first half minute, which covers
+    // a slow enumeration but not an engine that had no Activity to answer
+    // the probe until now. A device with no HEVC decoder pays one
+    // enumeration per resume for this and keeps its answer.
+    if (PlatformDetection.isAndroid &&
+        codecCapsLookIncomplete(
+          PlatformDetection.mediaCodecCapabilitiesSnapshot,
+        )) {
+      try {
+        await _applyCodecProbe(
+          const MethodChannel('org.moonfin.androidtv/platform'),
+        );
+      } catch (_) {}
+    }
+    if (AudioCapabilityProbe.isSupported) {
+      // The guard inside apply keeps a null or unenumerated answer from
+      // touching the last detection.
+      AudioCapabilityProbe.apply(await AudioCapabilityProbe.query());
+    }
+  }
+}
+
+/// Desktop is the only place a mouse wheel is the main way to scroll, so the
+/// setting stays inert elsewhere.
+void _bindScrollSensitivity(UserPreferences prefs) {
+  if (!PlatformDetection.useDesktopUi) return;
+  void apply() {
+    (WidgetsBinding.instance as ScrollSensitivityBinding).multiplier =
+        prefs.get(UserPreferences.desktopScrollSensitivity) / 100;
+  }
+
+  apply();
+  prefs.addListener(apply);
 }
 
 class _PreferenceWriteFlushObserver with WidgetsBindingObserver {
@@ -430,9 +826,14 @@ class _PreferenceWriteFlushObserver with WidgetsBindingObserver {
 @pragma('vm:entry-point')
 Future<void> watchNextBackgroundMain() => watch_next_bg.watchNextBackgroundMain();
 
+/// Entry for the Android auto-download worker's headless engine.
+@pragma('vm:entry-point')
+Future<void> autoDownloadBackgroundMain() =>
+    auto_download_bg.autoDownloadBackgroundMain();
+
 void main() async {
   configureHttpOverrides();
-  WidgetsFlutterBinding.ensureInitialized();
+  ScrollSensitivityBinding.ensureInitialized();
 
   // Pre-warms the liquid_glass_widgets shader programs so the first glass
   // pane doesn't white-flash. Cheap no-op on tiers where the package
@@ -479,18 +880,23 @@ void main() async {
     await windowManager.ensureInitialized();
   }
 
-  // iOS runs entirely on AetherEngine, so media_kit isn't initialized there
-  // and its native libs are stubbed out of the build.
-  if (!PlatformDetection.isTizen &&
-      !PlatformDetection.isAppleTV &&
-      !PlatformDetection.isIOS) {
+  // Apple runs entirely on AetherEngine, so media_kit isn't initialized there
+  // and its native libs are out of those builds.
+  if (!PlatformDetection.isAppleTV &&
+      !PlatformDetection.isIOS &&
+      !PlatformDetection.isMacOS) {
     MediaKit.ensureInitialized();
   }
 
+  await _applyInterfaceLayoutOverride();
+  await _readPerformanceModeOverride();
   await _detectAndSetTvMode();
+  await _seedCapabilitiesFromCache();
   await Future.wait([
     _detectAndSetDisplayCapabilities(),
     _detectAndSetCodecCapabilities(),
+    _detectAndSetDeviceMemory(),
+    _detectAndSetSystemUptime(),
   ]);
 
   if (PlatformDetection.isAppleTV) {
@@ -501,7 +907,8 @@ void main() async {
   }
 
   _configureImageCache();
-  await configureImageDiskCache();
+  _capSkiaCache();
+  await configureImageDiskCache(tier: _resolvedTier());
 
   // On Linux the GTK font pipeline loads fonts asynchronously. The first frame
   // can render before MaterialIcons and other fonts are ready, causing icons to
@@ -509,17 +916,12 @@ void main() async {
   // The issue is intermittent and goes away on re-run once the OS font cache
   // is warm, which confirms the timing root cause.
   if (PlatformDetection.isLinux ||
-      PlatformDetection.isTizen ||
       PlatformDetection.isAppleTV) {
     WidgetsBinding.instance.scheduleWarmUpFrame();
   }
 
   if (PlatformDetection.isMobile) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
-    ));
+    SystemUi.install();
 
     // Registered before runApp so a background/terminated push can be handled.
     // The handler itself is a no-op; the OS draws these notifications.
@@ -529,6 +931,13 @@ void main() async {
   }
 
   await configureDependencies();
+  _installCrashHandlers();
+  if (PlatformDetection.isAndroid) _startProcessExitReporter();
+  // When the system runs the auto-download refresh task against this
+  // engine, the native side retries its call until this handler is bound.
+  if (AutoDownloadService.isSupportedPlatform) {
+    BackgroundRefresh.instance.bind(runAutoDownloadBackgroundRefresh);
+  }
 
   // Registered before runApp so a CarPlay-only launch (no window scene, no
   // widgets) can browse and start playback.
@@ -543,8 +952,11 @@ void main() async {
   }
 
   final prefs = GetIt.instance<UserPreferences>();
+  _bindScrollSensitivity(prefs);
   WidgetsBinding.instance.addObserver(_PreferenceWriteFlushObserver(prefs));
   WidgetsBinding.instance.addObserver(_ImageCacheSweepObserver(prefs));
+  WidgetsBinding.instance.addObserver(_CapabilityRefreshObserver());
+  WidgetsBinding.instance.addObserver(_AutoDownloadResumeObserver());
   WidgetsBinding.instance.addPostFrameCallback((_) => _sweepImageCache(prefs));
 
   GetIt.instance<PlaybackManager>().queueService.queueChangedStream.listen((_) {
@@ -582,7 +994,7 @@ void main() async {
       final feeder = AppleTvAudioNowPlayingFeeder(
         manager: GetIt.instance<PlaybackManager>(),
         clientFactory: GetIt.instance<MediaServerClientFactory>(),
-        backend: GetIt.instance<AppleTvMpvBackend>(),
+        backend: GetIt.instance<AppleTvBackend>(),
       )..start();
       GetIt.instance.registerSingleton<AppleTvAudioNowPlayingFeeder>(feeder);
     } catch (_) {}

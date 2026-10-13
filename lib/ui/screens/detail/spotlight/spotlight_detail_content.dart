@@ -1,0 +1,1426 @@
+import 'dart:async' show unawaited;
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moonfin_design/moonfin_design.dart';
+import 'package:playback_core/playback_core.dart';
+
+import '../../../../data/models/aggregated_item.dart';
+import '../../../../data/repositories/seerr_repository.dart';
+import '../../../../data/repositories/tmdb_repository.dart';
+import '../../../../data/services/plugin_sync_service.dart';
+import '../../../../data/services/seerr/seerr_api_models.dart';
+import '../../../../data/viewmodels/item_detail_view_model.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../preference/detail_metadata_layout.dart';
+import '../../../../preference/detail_section_layout.dart';
+import '../../../../preference/preference_constants.dart';
+import '../../../../preference/user_preferences.dart';
+import '../upcoming_episode_badge.dart';
+import '../../../../util/overview_text.dart';
+import '../../../../util/seerr_credits.dart';
+import '../../../../util/platform_detection.dart';
+import '../../../navigation/destinations.dart';
+import '../../../navigation/playback_launcher.dart';
+import '../../../widgets/focus/can_claim_initial_focus.dart';
+import '../../../widgets/logo_view.dart';
+import '../../../widgets/navigation_layout.dart';
+import '../../../widgets/offline_aware_image.dart';
+import '../../../widgets/quick_return_wrapper.dart';
+import '../../../widgets/rating_display.dart';
+import '../../../widgets/seerr/seerr_image_urls.dart';
+import '../../../widgets/seerr/seerr_item_status.dart';
+import '../../../widgets/seerr/seerr_status_pill.dart';
+import '../../../widgets/top_toolbar.dart';
+import '../detail_layout_metrics.dart';
+import '../item_detail_screen.dart'
+    show
+        DetailActionButtons,
+        ExpandableBiography,
+        PersonDates,
+        selectedMediaSourceForItem,
+        technicalDetailsFor;
+import 'spotlight_cards.dart';
+import 'spotlight_images.dart';
+import 'spotlight_landscape_layout.dart';
+import 'spotlight_portrait_layout.dart';
+import 'widgets/spotlight_section_modal.dart';
+import 'widgets/spotlight_summary_card.dart';
+
+/// "Spotlight" detail-screen style: a hero-first layout with Play plus at most
+/// three action buttons (the rest behind an ellipsis menu, ordered by the
+/// shared detail button layout) and summary cards that open sectioned grid
+/// modals.
+///
+/// Takes the same constructor contract as the other detail content widgets so
+/// the style switch swaps it in as a drop-in, and reuses the public action and
+/// content widgets so playback and data logic stay shared.
+class SpotlightDetailContent extends StatefulWidget {
+  final ItemDetailViewModel viewModel;
+  final UserPreferences prefs;
+  final ValueListenable<String?> backdropUrl;
+  final String? selectedMediaSourceId;
+  final ValueChanged<String?> onSelectedMediaSourceChanged;
+  final FocusNode? initialFocusNode;
+  final bool autoPlay;
+  final void Function(Duration position)? onPlayFromChapter;
+  final ValueChanged<bool>? onToggleNavbar;
+  final bool actionsExpanded;
+  final ValueChanged<bool> onActionsExpandedChanged;
+  final ValueChanged<AggregatedItem>? onBackdropItemFocused;
+  final VoidCallback? onCollapseBiography;
+
+  const SpotlightDetailContent({
+    super.key,
+    required this.viewModel,
+    required this.prefs,
+    required this.backdropUrl,
+    this.selectedMediaSourceId,
+    required this.onSelectedMediaSourceChanged,
+    this.onBackdropItemFocused,
+    this.initialFocusNode,
+    this.autoPlay = false,
+    this.onPlayFromChapter,
+    this.onToggleNavbar,
+    required this.actionsExpanded,
+    required this.onActionsExpandedChanged,
+    this.onCollapseBiography,
+  });
+
+  @override
+  State<SpotlightDetailContent> createState() => _SpotlightDetailContentState();
+}
+
+class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
+  bool _landscape = true;
+  bool _modalOpen = false;
+  final _scrollController = ScrollController();
+  final _cardsScrollController = ScrollController();
+  final _overviewFocusNode = FocusNode(debugLabel: 'SpotlightOverview');
+  final _cardFocusNodes = <String, FocusNode>{};
+  final _trackFocusNodes = <String, FocusNode>{};
+
+  // Studios for the people modal. Logos always come from TMDB via the Moonfin
+  // plugin's server-side cache. The Jellyfin studio list is only a name
+  // fallback.
+  List<StudioCompany> _tmdbStudios = const [];
+  String? _tmdbStudiosItemId;
+
+  // A person's Seerr combined credits, for the filmography modal.
+  List<SeerrDiscoverItem> _seerrAppearances = const [];
+  List<SeerrDiscoverItem> _seerrCrewCredits = const [];
+  String? _seerrLoadedForItemId;
+
+  String? _personBackdropUrl;
+  String? _personBackdropKey;
+  String? _personBackdropForItemId;
+  int _personBackdropCreditCount = -1;
+  Map<String, String?> _personCardBackdrops = const {};
+
+  ItemDetailViewModel get _vm => widget.viewModel;
+
+  bool get _seerrAvailable =>
+      GetIt.instance.isRegistered<PluginSyncService>() &&
+      GetIt.instance<PluginSyncService>().seerrAvailable;
+
+  double get _desktopScale =>
+      widget.prefs.get(UserPreferences.desktopUiScale).scaleFactor;
+
+  void _resetPersonBackdrop() {
+    _personBackdropForItemId = null;
+    _personBackdropUrl = null;
+    _personBackdropKey = null;
+    _personBackdropCreditCount = -1;
+    _personCardBackdrops = const {};
+  }
+
+  void _selectPersonBackdrop({bool notify = true}) {
+    final item = _vm.item;
+    if (item == null || item.type != 'Person') return;
+    final isNewPerson = _personBackdropForItemId != item.id;
+    final creditCount = _seerrAppearances.length + _seerrCrewCredits.length;
+    if (!isNewPerson &&
+        _personBackdropUrl != null &&
+        _personBackdropCreditCount == creditCount) {
+      return;
+    }
+
+    final localCandidates = collectPersonLocalBackdrops(_vm);
+    final appearancesCandidates =
+        collectPersonSeerrBackdrops(_seerrAppearances);
+    final crewCandidates = collectPersonSeerrBackdrops(_seerrCrewCredits);
+    final allCandidates = [
+      ...localCandidates,
+      ...appearancesCandidates,
+      ...crewCandidates,
+    ];
+
+    if (allCandidates.isEmpty) return;
+
+    final rng = math.Random();
+    final String? mainUrl;
+    final String? mainKey;
+    if (!isNewPerson && _personBackdropUrl != null && _personBackdropKey != null) {
+      mainUrl = _personBackdropUrl;
+      mainKey = _personBackdropKey;
+    } else {
+      final chosen = allCandidates[rng.nextInt(allCandidates.length)];
+      mainUrl = chosen.fullUrl;
+      mainKey = chosen.key;
+    }
+
+    final picked = personCardBackdropsFor(
+      local: localCandidates,
+      appearances: appearancesCandidates,
+      crew: crewCandidates,
+      mainBackdropKey: mainKey,
+      random: rng,
+    );
+    // A card that already has a picture keeps it, or it would change under
+    // the viewer when the credits land.
+    final cardBackdrops = <String, String?>{
+      for (final entry in picked.entries)
+        entry.key: isNewPerson
+            ? entry.value
+            : (_personCardBackdrops[entry.key] ?? entry.value),
+    };
+
+    void apply() {
+      _personBackdropUrl = mainUrl;
+      _personBackdropKey = mainKey;
+      _personBackdropForItemId = item.id;
+      _personBackdropCreditCount = creditCount;
+      _personCardBackdrops = cardBackdrops;
+    }
+
+    if (notify) {
+      setState(apply);
+    } else {
+      apply();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _vm.addListener(_onViewModelChanged);
+    if (PlatformDetection.isTV) {
+      // The top toolbar's Down press needs a target from the first frame,
+      // not only after a pushed child page pops back.
+      NavigationLayout.focusDetailsPlayButtonNotifier.value =
+          widget.initialFocusNode;
+    }
+    unawaited(_loadStudioLogos());
+    unawaited(
+      _loadSeerrAppearances().then((_) {
+        if (mounted) _selectPersonBackdrop();
+      }),
+    );
+    _selectPersonBackdrop(notify: false);
+  }
+
+  @override
+  void didUpdateWidget(SpotlightDetailContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.viewModel != oldWidget.viewModel) {
+      oldWidget.viewModel.removeListener(_onViewModelChanged);
+      _vm.addListener(_onViewModelChanged);
+      _resetPersonBackdrop();
+      _selectPersonBackdrop();
+    }
+    if (widget.initialFocusNode != oldWidget.initialFocusNode &&
+        PlatformDetection.isTV) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !canClaimInitialFocus(context)) return;
+        widget.initialFocusNode?.requestFocus();
+      });
+      NavigationLayout.focusDetailsPlayButtonNotifier.value =
+          widget.initialFocusNode;
+    }
+  }
+
+  /// The lazy loads key off the item, so they re-run as the view model swaps
+  /// or fills it in. Rebuilds come from the ListenableBuilder in build.
+  void _onViewModelChanged() {
+    if (!mounted) return;
+    final item = _vm.item;
+    if (item != null &&
+        item.type == 'Person' &&
+        item.id != _personBackdropForItemId) {
+      _resetPersonBackdrop();
+    }
+    _selectPersonBackdrop();
+    unawaited(_loadStudioLogos());
+    unawaited(
+      _loadSeerrAppearances().then((_) {
+        if (mounted) _selectPersonBackdrop();
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    if (NavigationLayout.focusDetailsPlayButtonNotifier.value ==
+        widget.initialFocusNode) {
+      NavigationLayout.focusDetailsPlayButtonNotifier.value = null;
+    }
+    _vm.removeListener(_onViewModelChanged);
+    _scrollController.dispose();
+    _cardsScrollController.dispose();
+    _overviewFocusNode.dispose();
+    for (final node in _cardFocusNodes.values) {
+      node.dispose();
+    }
+    for (final node in _trackFocusNodes.values) {
+      node.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _loadStudioLogos() async {
+    final item = _vm.item;
+    if (item == null || _tmdbStudiosItemId == item.id) return;
+    _tmdbStudiosItemId = item.id;
+
+    final tmdbId = item.tmdbId;
+    final pluginAvailable = GetIt.instance<PluginSyncService>().pluginAvailable;
+    if (tmdbId == null || !pluginAvailable) {
+      if (_tmdbStudios.isNotEmpty && mounted) {
+        setState(() => _tmdbStudios = const []);
+      }
+      return;
+    }
+
+    final companies = await GetIt.instance<TmdbRepository>()
+        .getProductionCompanies(
+          tmdbId: tmdbId,
+          type: item.type == 'Series' ? 'tv' : 'movie',
+        );
+    if (!mounted || companies == null) return;
+    // The item can swap while this is in flight, and a slower response for
+    // the previous one would otherwise land on the current page.
+    if (_vm.item?.id != item.id) return;
+    setState(() => _tmdbStudios = companies);
+  }
+
+  Future<void> _loadSeerrAppearances() async {
+    final item = _vm.item;
+    if (item == null || item.type != 'Person') return;
+    final tmdbId = item.tmdbId;
+    if (tmdbId == null || tmdbId.isEmpty) return;
+    if (!GetIt.instance<PluginSyncService>().seerrAvailable) return;
+    // Run once per person. The view model notifies many times as data streams
+    // in and each call would otherwise re-issue the same combined-credits
+    // fetch.
+    if (_seerrLoadedForItemId == item.id) return;
+    _seerrLoadedForItemId = item.id;
+
+    try {
+      final repo = await GetIt.instance.getAsync<SeerrRepository>();
+      await repo.ensureInitialized();
+      final personId = int.tryParse(tmdbId);
+      if (personId == null) return;
+      final credits = await loadSeerrPersonCredits(repo, personId);
+      if (!mounted) return;
+      setState(() {
+        // Seerr lists a title once per credit, so a title has to be folded
+        // into a single entry before it reaches a keyed grid.
+        _seerrAppearances = groupSeerrCredits(credits.cast, isCrew: false);
+        _seerrCrewCredits = groupSeerrCredits(credits.crew, isCrew: true);
+      });
+      _selectPersonBackdrop();
+    } catch (_) {
+      // Seerr credits are an extra. The filmography card falls back to the
+      // library lists when the lookup fails.
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Modal plumbing
+
+  /// Closes the open section modal (if any), then runs [action] on the next
+  /// frame. Modal content never navigates or starts playback over the dialog
+  /// route, so the back stack stays predictable.
+  void _closeModalThen(VoidCallback action) {
+    if (_modalOpen) {
+      Navigator.of(context, rootNavigator: true).pop(action);
+    } else {
+      action();
+    }
+  }
+
+  SpotlightCardActions _cardActions(AggregatedItem item) {
+    return SpotlightCardActions(
+      openItem: (entry) => _closeModalThen(() {
+        if (entry.serverId == 'seerr') {
+          final mediaType = entry.seerrMediaType ??
+              (entry.type == 'Series' || entry.type == 'tv' ? 'tv' : 'movie');
+          final tmdbId = entry.tmdbId;
+          final targetId = (tmdbId != null && tmdbId.isNotEmpty)
+              ? tmdbId
+              : entry.id.replaceAll(RegExp(r'^tmdb:(?:movie:|tv:)?'), '');
+          context.push(
+            Destinations.seerrMedia(
+              targetId,
+              mediaType: mediaType,
+              title: entry.name,
+            ),
+          );
+        } else {
+          context.push(
+            Destinations.itemOrPhoto(
+              entry.id,
+              serverId: entry.serverId,
+              type: entry.type,
+              channelId: entry.channelId,
+            ),
+          );
+        }
+      }),
+      openPerson: (personId) => _closeModalThen(() {
+        context.push(
+          item.serverId == 'seerr'
+              ? Destinations.seerrPerson(personId)
+              : Destinations.item(personId, serverId: item.serverId),
+        );
+      }),
+      openSeerrItem: (entry) => _closeModalThen(() {
+        context.push(
+          Destinations.seerrMedia(
+            entry.id.toString(),
+            mediaType: entry.mediaType ?? 'movie',
+            title: entry.displayTitle,
+          ),
+        );
+      }),
+      openSeerrBrowse: (filterId, filterName, filterType, mediaType) =>
+          _closeModalThen(() {
+            context.push(
+              Destinations.seerrBrowseWith(
+                filterId: filterId,
+                filterName: filterName,
+                mediaType: mediaType,
+                filterType: filterType,
+              ),
+            );
+          }),
+      openSeerrCollection: (collectionId) => _closeModalThen(
+        () => context.push(Destinations.seerrCollection(collectionId)),
+      ),
+      openStudio: (name) =>
+          _closeModalThen(() => context.push(Destinations.studio(name))),
+      playFromChapter: (position) =>
+          _closeModalThen(() => widget.onPlayFromChapter?.call(position)),
+      playExtra: (extra) => _closeModalThen(() => _playItems([extra], 0)),
+      playTrack: (index) => _closeModalThen(() => _playItems(_vm.tracks, index)),
+      playPlaylistTrack: (index) =>
+          _closeModalThen(() => _playItems(_vm.playlistItems, index)),
+      trackFocusNode: (id) =>
+          _trackFocusNodes.putIfAbsent(id, () => FocusNode()),
+    );
+  }
+
+  bool _isAudioItem(AggregatedItem item) {
+    final mediaType = item.rawData['MediaType'] as String?;
+    return item.type == 'Audio' ||
+        item.type == 'AudioBook' ||
+        mediaType == 'Audio';
+  }
+
+  Future<void> _playItems(List<AggregatedItem> items, int index) async {
+    if (items.isEmpty) return;
+    final manager = GetIt.instance<PlaybackManager>();
+    final isAudio = items.every(_isAudioItem);
+    await launchPlayerWhilePreparing(
+      context,
+      manager: manager,
+      destination: isAudio
+          ? Destinations.audioPlayer
+          : Destinations.videoPlayer,
+      startPlayback: (launchSession) async {
+        await runPlaybackStart(
+          launchSession,
+          () => manager.playItems(items, startIndex: index),
+        );
+        return true;
+      },
+    );
+  }
+
+  /// Whether the cards band drives the navbar through focus. That is the TV
+  /// and keyboard model, where a focused card means the navbar steps aside
+  /// and focus leaving brings it back. Touch has no such focus traffic, and
+  /// closing a modal refocuses the card, so letting it hide the navbar there
+  /// would strand the viewer with no back button.
+  bool get _navbarFollowsFocus =>
+      PlatformDetection.isTV ||
+      FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+
+  Future<void> _openCard(SpotlightCardSpec spec) async {
+    if (_modalOpen) return;
+    _modalOpen = true;
+    try {
+      final action = await SpotlightSectionModal.show<VoidCallback>(
+        context,
+        title: spec.effectiveModalTitle,
+        icon: spec.icon,
+        sections: spec.sections,
+        returnFocus: _cardFocusNodes[spec.id],
+        // The view model fires the Seerr lookup without awaiting it, so that a
+        // slow Seerr server never holds up library content. A card opened
+        // before that lands would otherwise keep the sections it was built
+        // with and never gain its Seerr rows, which is most visible on the
+        // similar card. Re-derive the card while the modal is open instead.
+        refreshOn: _vm,
+        refresh: () => _liveCardContent(spec),
+        // The collection grid arrives a page at a time, and this modal is the
+        // only place Spotlight shows it, so it has to ask for the rest.
+        onNearEnd: spec.id == 'boxset_items'
+            ? () => unawaited(_vm.loadMoreCollectionItems())
+            : null,
+      );
+      if (mounted && action != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            action();
+          }
+        });
+      }
+    } finally {
+      _modalOpen = false;
+    }
+  }
+
+  /// The current state of the open card, falling back to what it was opened
+  /// with when the item is gone or the card no longer applies.
+  SpotlightModalContent _liveCardContent(SpotlightCardSpec opened) {
+    final item = _vm.item;
+    // Only the open card is rebuilt. The host notifies on every lazy load and
+    // user-data sync, and rebuilding the whole set to read one of them would
+    // redo the crew merge and the collection aggregation each time.
+    final current = mounted && item != null
+        ? spotlightCardFor(
+            id: opened.id,
+            vm: _vm,
+            item: item,
+            prefs: widget.prefs,
+            l10n: AppLocalizations.of(context),
+            tmdbStudios: _tmdbStudios,
+            actions: _cardActions(item),
+            seerrAppearances: _seerrAppearances,
+            seerrCrewCredits: _seerrCrewCredits,
+            fallbackImageUrl: _cardFallbackImageUrl(item),
+            mainBackdropKey: _personBackdropKey,
+            seerrAvailable: _seerrAvailable,
+            personCardBackdrops: _personCardBackdrops,
+            selectedMediaSourceId: widget.selectedMediaSourceId,
+          )
+        : null;
+    final card = current ?? opened;
+    return (
+      title: card.effectiveModalTitle,
+      icon: card.icon,
+      sections: card.sections,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Backdrop
+
+  /// Full-bleed cinematic backdrop. Layered scrims keep the hero text
+  /// readable, and the background blur preference is consumed as a darkening
+  /// opacity.
+  Widget _buildBackdrop(bool landscape, String? backdropUrl) {
+    final base = AppColorScheme.background;
+    final item = _vm.item;
+    final itemBackdrop = item != null && item.backdropImageTags.isNotEmpty
+        ? _vm.imageApi.getBackdropImageUrl(
+            item.id,
+            maxWidth: 1920,
+            index: 0,
+            tag: item.backdropImageTags.first,
+          )
+        : null;
+    final url = item?.type == 'Person'
+        ? _personBackdropUrl
+        : (backdropUrl ?? itemBackdrop);
+    final blurAmount = widget.prefs
+        .get(UserPreferences.detailsBackgroundBlurAmount)
+        .toDouble();
+    final opacityFactor = blurAmount / 25.0;
+    const maxAlpha = 0.80;
+    final alpha = opacityFactor * maxAlpha;
+    final gradientScale = 0.3 + 0.7 * opacityFactor;
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ColoredBox(color: base),
+        if (url != null && url.isNotEmpty) ...[
+          OfflineAwareImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            alignment: landscape ? Alignment.centerRight : Alignment.topCenter,
+            fadeInDuration: Duration.zero,
+            sourceAspectRatio: 16 / 9,
+            maxDecodeWidth: ArtworkDecode.maxSourceWidth,
+            priority: ImageFetchPriority.high,
+            errorWidget: (context, url, error) => const SizedBox.shrink(),
+          ),
+          ColoredBox(color: Colors.black.withValues(alpha: alpha)),
+        ],
+        if (landscape) ...[
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  base.withValues(alpha: gradientScale),
+                  base.withValues(alpha: 0.90 * gradientScale),
+                  base.withValues(alpha: 0.45 * gradientScale),
+                  base.withValues(alpha: 0.0),
+                ],
+                stops: const [0.0, 0.35, 0.60, 0.85],
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  base.withValues(alpha: gradientScale),
+                  base.withValues(alpha: 0.80 * gradientScale),
+                  base.withValues(alpha: 0.0),
+                ],
+                stops: const [0.0, 0.45, 0.80],
+              ),
+            ),
+          ),
+          // Modern's radial vignette, so the edges fall off the same way.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 1.05,
+                colors: [
+                  base.withValues(alpha: 0.0),
+                  base.withValues(alpha: 0.0),
+                  base.withValues(alpha: 0.32 * gradientScale),
+                ],
+                stops: const [0.0, 0.7, 1.0],
+              ),
+            ),
+          ),
+        ] else
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  base.withValues(alpha: 0.15 * gradientScale),
+                  base.withValues(alpha: 0.45 * gradientScale),
+                  base.withValues(alpha: 0.85 * gradientScale),
+                ],
+                stops: const [0.0, 0.55, 1.0],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  String? _personProfileUrl(AggregatedItem item) => spotlightPersonImageUrl(
+    _vm.imageApi,
+    id: item.id,
+    tag: item.primaryImageTag,
+    profilePath: item.rawData['ProfilePath'] as String?,
+    maxHeight: 720,
+    tmdbProfileBase: seerrProfileLargeBase,
+  );
+
+  // ---------------------------------------------------------------------------
+  // Hero pieces
+
+  Color get _titleColor => ThemeRegistry.active.id == ThemeRegistry.neonPulseId
+      ? AppColorScheme.accent
+      : Colors.white;
+
+  Widget? _buildTagline(BuildContext context, AggregatedItem item) {
+    final tagline = item.tagline?.trim();
+    if (tagline == null || tagline.isEmpty) return null;
+    return Text(
+      tagline.toUpperCase(),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+        color: AppColorScheme.accent,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 3.0,
+      ),
+    );
+  }
+
+  /// With [showLogo] off this draws what an item with no logo gets: the
+  /// title, and on an episode the show's name above it.
+  Widget _buildTitleOrLogo(
+    BuildContext context,
+    AggregatedItem item,
+    Map<String, dynamic>? selectedSource, {
+    required bool showLogo,
+    required bool showVersionBadge,
+  }) {
+    final textTheme = Theme.of(context).textTheme;
+    final logoScaleFactor = _desktopScale > 1.1 ? 0.70 : 1.0;
+    final isEpisode = item.type == 'Episode';
+    final logoTag = showLogo
+        ? item.logoImageTag ?? (isEpisode ? item.seriesLogoImageTag : null)
+        : null;
+    final logoId = logoTag != null
+        ? (item.logoImageTag != null ? item.id : item.seriesId)
+        : null;
+
+    final titleText = Text(
+      item.name,
+      style: (_landscape ? textTheme.displaySmall : textTheme.headlineMedium)
+          ?.copyWith(fontWeight: FontWeight.w700, color: _titleColor),
+    );
+
+    Widget versionBadge() {
+      final versionName =
+          selectedSource?['Name'] as String? ??
+          AppLocalizations.of(context).defaultLabel;
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: AppColorScheme.accent.withValues(alpha: 0.15),
+          borderRadius: AppRadius.circular(4),
+          border: Border.all(
+            color: AppColorScheme.accent.withValues(alpha: 0.4),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          versionName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textTheme.bodySmall?.copyWith(
+            color: AppColorScheme.accent,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    }
+
+    final hasMultipleVersions =
+        showVersionBadge && item.mediaSources.length > 1;
+
+    if (isEpisode) {
+      final seriesLogoHeight = (_landscape ? 90.0 : 64.0) * logoScaleFactor;
+      final seriesLogoWidth = (_landscape ? 360.0 : 260.0) * logoScaleFactor;
+      final hasSeriesLogo = logoTag != null && logoId != null;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: SizedBox(
+              height: seriesLogoHeight,
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: hasSeriesLogo
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          LogoView(
+                            imageUrl: _vm.imageApi.getLogoImageUrl(
+                              logoId,
+                              maxWidth: 350,
+                              tag: logoTag,
+                            ),
+                            maxHeight: seriesLogoHeight,
+                            maxWidth: seriesLogoWidth,
+                          ),
+                          if (hasMultipleVersions) ...[
+                            const SizedBox(width: 16),
+                            Flexible(child: versionBadge()),
+                          ],
+                        ],
+                      )
+                    : (item.seriesName != null
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  item.seriesName!,
+                                  style: textTheme.labelLarge?.copyWith(
+                                    color: AppColorScheme.onSurface
+                                        .withValues(alpha: 0.7),
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ),
+                              if (hasMultipleVersions) ...[
+                                const SizedBox(width: 16),
+                                Flexible(child: versionBadge()),
+                              ],
+                            ],
+                          )
+                        : const SizedBox.shrink()),
+              ),
+            ),
+          ),
+          if (!hasSeriesLogo && item.seriesName == null && hasMultipleVersions)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(child: titleText),
+                const SizedBox(width: 16),
+                Flexible(child: versionBadge()),
+              ],
+            )
+          else
+            titleText,
+        ],
+      );
+    }
+
+    if (logoTag != null && logoId != null) {
+      final itemLogoHeight = (_landscape ? 90.0 : 64.0) * logoScaleFactor;
+      final itemLogoWidth = (_landscape ? 360.0 : 260.0) * logoScaleFactor;
+      return SizedBox(
+        height: itemLogoHeight,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LogoView(
+              imageUrl: _vm.imageApi.getLogoImageUrl(
+                logoId,
+                maxWidth: 350,
+                tag: logoTag,
+              ),
+              maxHeight: itemLogoHeight,
+              maxWidth: itemLogoWidth,
+            ),
+            if (hasMultipleVersions) ...[
+              const SizedBox(width: 16),
+              Flexible(child: versionBadge()),
+            ],
+          ],
+        ),
+      );
+    }
+
+    if (hasMultipleVersions) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(child: titleText),
+          const SizedBox(width: 16),
+          Flexible(child: versionBadge()),
+        ],
+      );
+    }
+
+    return titleText;
+  }
+
+  Widget _metadataRow(
+    BuildContext context,
+    AggregatedItem item,
+    Map<String, dynamic>? selectedMediaSource,
+  ) {
+    final l10n = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final muted = AppColorScheme.onBackground.withValues(alpha: 0.75);
+    final style = textTheme.bodyMedium?.copyWith(color: muted);
+
+    final hidden = detailMetadataLayout.hidden(widget.prefs);
+    final ordered = detailMetadataLayout.ordered(
+      DetailMetadataItem.values,
+      (entry) => entry.id,
+      widget.prefs,
+    );
+
+    final pieces = <Widget>[];
+    void addText(String? value) {
+      if (value == null || value.isEmpty) return;
+      pieces.add(Text(value, style: style));
+    }
+
+    for (final entry in ordered) {
+      if (hidden.contains(entry.id)) continue;
+      switch (entry) {
+        case DetailMetadataItem.year:
+          addText(item.productionYear?.toString());
+        case DetailMetadataItem.parentalRating:
+          addText(item.officialRating);
+        case DetailMetadataItem.runtimeAndSeasons:
+          if (item.type == 'Series' && item.childCount != null) {
+            addText(l10n.seasonCount(item.childCount!));
+          }
+          if (item.type == 'Season') {
+            final epCount = _vm.episodes.isNotEmpty
+                ? _vm.episodes.length
+                : (item.childCount ?? 0);
+            if (epCount > 0) addText(l10n.episodeCount(epCount));
+          }
+          if (item.type == 'Episode') {
+            final s = item.parentIndexNumber;
+            final e = item.indexNumber;
+            if (s != null && e != null) addText('S$s:E$e');
+          }
+          final runtime = item.runtime;
+          if (runtime != null && runtime > Duration.zero && item.type != 'Series') {
+            pieces.add(
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.schedule, size: 14, color: muted),
+                  const SizedBox(width: 4),
+                  Text(spotlightRuntimeLabel(runtime), style: style),
+                ],
+              ),
+            );
+          }
+        case DetailMetadataItem.status:
+          final status = item.status;
+          if (item.type == 'Series' && status != null && status.isNotEmpty) {
+            final isEnded = status.toLowerCase() == 'ended';
+            pieces.add(
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: isEnded ? const Color(0xFFB71C1C) : const Color(0xFF2E7D32),
+                  borderRadius: JellyfinTokens.shapes.smallRadius,
+                ),
+                child: Text(
+                  status,
+                  style: textTheme.labelSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            );
+          }
+        case DetailMetadataItem.upcomingEpisodeDate:
+          if (item.type == 'Series' && _vm.upcomingEpisode != null) {
+            pieces.add(
+              UpcomingEpisodeBadge(
+                text: _vm.upcomingEpisode!.format(context),
+                borderRadius: JellyfinTokens.shapes.smallRadius,
+              ),
+            );
+          }
+        case DetailMetadataItem.genres:
+          if (item.genres.isNotEmpty) {
+            addText(item.genres.take(3).join(' · '));
+          }
+        case DetailMetadataItem.seerrAvailability:
+          final seerrStatus = seerrItemStatus(_vm);
+          if (seerrStatus != null) {
+            pieces.add(SeerrStatusPills(state: seerrStatus, onlyNoteworthy: true));
+          }
+      }
+    }
+
+    if (pieces.isEmpty) return const SizedBox.shrink();
+
+    final separated = <Widget>[];
+    for (var i = 0; i < pieces.length; i++) {
+      if (i > 0) separated.add(Text('·', style: style));
+      separated.add(pieces[i]);
+    }
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 6,
+      children: separated,
+    );
+  }
+
+  Widget _techChip(ThemeData theme, String label) {
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(
+          ThemeRegistry.active.borders.chipBorder.copyWith(
+            color: isNeon
+                ? AppColorScheme.accent.withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.3),
+          ),
+        ),
+        borderRadius: AppRadius.circular(4),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: AppColorScheme.onSurface,
+          shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+        ),
+      ),
+    );
+  }
+
+  Widget? _buildTechnicalDetailsRow(
+    BuildContext context,
+    AggregatedItem item,
+    Map<String, dynamic>? selectedMediaSource,
+  ) {
+    final theme = Theme.of(context);
+    final muted = AppColorScheme.onSurface.withValues(alpha: 0.75);
+    final style = theme.textTheme.bodyMedium?.copyWith(color: muted);
+
+    final tech = technicalDetailsFor(item, selectedMediaSource);
+    final pieces = <Widget>[];
+    if (tech.formattedSize != null) {
+      pieces.add(
+        Text(
+          tech.formattedSize!,
+          style: style?.copyWith(
+            fontWeight: FontWeight.w700,
+            shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+          ),
+        ),
+      );
+    }
+    pieces.addAll(tech.badges.map((b) => _techChip(theme, b)));
+    if (pieces.isEmpty) return null;
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 6,
+      children: pieces,
+    );
+  }
+
+  Widget _buildOverview(BuildContext context, String overview) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: _landscape ? 800 : double.infinity,
+      ),
+      child: ExpandableBiography(
+        text: overview,
+        toggleFocusNode: _overviewFocusNode,
+        onArrowDown: () => widget.initialFocusNode?.requestFocus(),
+        onArrowUp: () => NavigationLayout.focusNavbarNotifier.value?.call(),
+        onArrowLeft: () {
+          final navbarPosition = widget.prefs.get(
+            UserPreferences.navbarPosition,
+          );
+          if (navbarPosition == NavbarPosition.left) {
+            NavigationLayout.focusNavbarNotifier.value?.call();
+          }
+        },
+        onCollapse: widget.onCollapseBiography,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          height: 1.45,
+          color: AppColorScheme.onBackground.withValues(alpha: 0.85),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPersonHeader(BuildContext context, AggregatedItem item) {
+    final textTheme = Theme.of(context).textTheme;
+    final isNeon = ThemeRegistry.active.id == ThemeRegistry.neonPulseId;
+    final focusColor = Color(
+      widget.prefs.get(UserPreferences.focusColor).colorValue,
+    );
+    final profileUrl = _personProfileUrl(item);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: isNeon ? AppColorScheme.accent : focusColor,
+              width: 3.0,
+            ),
+          ),
+          child: CircleAvatar(
+            radius: 60.0,
+            backgroundColor: Colors.white.withValues(alpha: 0.1),
+            backgroundImage: profileUrl != null
+                ? offlineAwareImageProvider(profileUrl)
+                : null,
+            child: profileUrl == null
+                ? const Icon(Icons.person, color: Colors.white54, size: 48)
+                : null,
+          ),
+        ),
+        const SizedBox(width: 24),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                item.name,
+                style: textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: _titleColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+              PersonDates(item: item),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Assembly
+
+  Widget _buildHero(
+    BuildContext context,
+    AggregatedItem item,
+    List<SpotlightCardSpec> cards,
+  ) {
+    final overview = cleanOverview(item.overview?.trim());
+    final isPerson = item.type == 'Person';
+    final visibility = DetailSectionVisibility.of(widget.prefs);
+    final selectedSource = selectedMediaSourceForItem(
+      item,
+      widget.selectedMediaSourceId,
+    );
+    final showTech =
+        !isPerson && widget.prefs.get(UserPreferences.detailShowTechnicalDetails);
+    final techRow = showTech
+        ? _buildTechnicalDetailsRow(context, item, selectedSource)
+        : null;
+    final showRatings =
+        !isPerson &&
+        (_vm.ratings.isNotEmpty ||
+            item.communityRating != null ||
+            item.criticRating != null ||
+            item.personalRating != null);
+    final showOverview =
+        overview.isNotEmpty &&
+        (!isPerson || visibility.shows(DetailSection.biography)) &&
+        !hidesMediaDescription(
+          itemType: item.type,
+          hideMediaDescription: widget.prefs.get(
+            UserPreferences.hideDetailsMediaDescription,
+          ),
+        );
+    final tagline = isPerson || !visibility.shows(DetailSection.tagline)
+        ? null
+        : _buildTagline(context, item);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (tagline != null) ...[tagline, const SizedBox(height: 8)],
+        if (isPerson)
+          _buildPersonHeader(context, item)
+        else
+          _buildTitleOrLogo(
+            context,
+            item,
+            selectedSource,
+            showLogo: visibility.shows(DetailSection.logo),
+            showVersionBadge: visibility.shows(DetailSection.versionBadge),
+          ),
+        const SizedBox(height: 8),
+        if (!isPerson) _metadataRow(context, item, selectedSource),
+        if (techRow != null) ...[const SizedBox(height: 8), techRow],
+        if (showRatings) ...[
+          const SizedBox(height: 8),
+          RatingsRow(
+            ratings: _vm.ratings,
+            communityRating: item.communityRating,
+            criticRating: item.criticRating,
+            personalRating: item.personalRating,
+            enableAdditionalRatings: widget.prefs.get(
+              UserPreferences.enableAdditionalRatings,
+            ),
+            enabledRatings: widget.prefs.get(UserPreferences.enabledRatings),
+            showLabels: widget.prefs.get(UserPreferences.showRatingLabels),
+            showBadges: widget.prefs.get(UserPreferences.showRatingBadges),
+          ),
+        ],
+        if (showOverview) ...[
+          const SizedBox(height: 10),
+          _buildOverview(context, overview),
+        ],
+        const SizedBox(height: 16),
+        _buildActions(context, item, cards),
+      ],
+    );
+  }
+
+  Widget _buildActions(
+    BuildContext context,
+    AggregatedItem item,
+    List<SpotlightCardSpec> cards,
+  ) {
+    final firstCardNode = cards.isNotEmpty
+        ? _cardFocusNodes[cards.first.id]
+        : null;
+    final prefLimit = widget.prefs.get(UserPreferences.detailButtonsMaxVisible);
+    final int? maxVisibleOverride;
+    final bool overflowAsMenu;
+    if (prefLimit == -1) {
+      maxVisibleOverride = null;
+      overflowAsMenu = false;
+    } else if (prefLimit > 0) {
+      maxVisibleOverride = prefLimit + 1;
+      overflowAsMenu = true;
+    } else {
+      maxVisibleOverride = _landscape ? 5 : 4;
+      overflowAsMenu = true;
+    }
+
+    return DetailActionButtons(
+      viewModel: _vm,
+      itemId: item.id,
+      selectedMediaSourceId: widget.selectedMediaSourceId,
+      onSelectedMediaSourceChanged: widget.onSelectedMediaSourceChanged,
+      tvPlayFocusNode: widget.initialFocusNode,
+      upTarget: _overviewFocusNode,
+      downTarget: firstCardNode,
+      autoPlay: widget.autoPlay,
+      modernStyle: true,
+      fullWidthPrimary: !_landscape,
+      overflowAsMenu: overflowAsMenu,
+      maxVisibleButtonsOverride: maxVisibleOverride,
+      rowMaxWidth: _landscape
+          ? SpotlightLandscapeLayout.heroWidthFor(MediaQuery.sizeOf(context))
+          : null,
+      actionsExpanded: widget.actionsExpanded,
+      onActionsExpandedChanged: widget.onActionsExpandedChanged,
+    );
+  }
+
+  List<SpotlightCardSpec> _currentCards(
+    BuildContext context,
+    AggregatedItem item,
+  ) {
+    final cards = spotlightCardsFor(
+      vm: _vm,
+      item: item,
+      prefs: widget.prefs,
+      l10n: AppLocalizations.of(context),
+      tmdbStudios: _tmdbStudios,
+      actions: _cardActions(item),
+      seerrAppearances: _seerrAppearances,
+      seerrCrewCredits: _seerrCrewCredits,
+      fallbackImageUrl: _cardFallbackImageUrl(item),
+      mainBackdropKey: _personBackdropKey,
+      seerrAvailable: _seerrAvailable,
+      personCardBackdrops: _personCardBackdrops,
+      selectedMediaSourceId: widget.selectedMediaSourceId,
+    );
+    for (final card in cards) {
+      _cardFocusNodes.putIfAbsent(
+        card.id,
+        () => FocusNode(debugLabel: 'SpotlightCard:${card.id}'),
+      );
+    }
+    return cards;
+  }
+
+  /// Artwork a card falls back to when it has nothing of its own. The hero
+  /// behind it runs the same backdrops from the start, so a second one is
+  /// preferred and the page doesn't show the same still twice.
+  String? _cardFallbackImageUrl(AggregatedItem item) {
+    final tags = item.backdropImageTags;
+    if (tags.isEmpty) return widget.backdropUrl.value;
+    final index = tags.length > 1 ? 1 : 0;
+    return _vm.imageApi.getBackdropImageUrl(
+      item.id,
+      maxWidth: 960,
+      index: index,
+      tag: tags[index],
+    );
+  }
+
+  Widget _buildCards(BuildContext context, List<SpotlightCardSpec> cards) {
+    if (cards.isEmpty) return const SizedBox.shrink();
+    // Taller cards show more of the artwork through the scrim. The landscape
+    // band is capped against screen height because TV never scrolls this
+    // page, so the row has to fit under the hero whatever the UI scale is.
+    final cardHeight = _landscape
+        ? math.min(
+            200.0 * _desktopScale,
+            math.max(120.0, MediaQuery.sizeOf(context).height * 0.28),
+          )
+        : 150.0;
+    final cardWidth = cardHeight * (16 / 9);
+
+    Widget cardAt(int i) => SpotlightSummaryCard(
+      title: cards[i].title,
+      subtitle: cards[i].subtitle,
+      imageUrl: cards[i].imageUrl,
+      icon: cards[i].icon,
+      compact: !_landscape,
+      focusNode: _cardFocusNodes[cards[i].id],
+      onOpen: () => _openCard(cards[i]),
+      onNavigateUp: () => widget.initialFocusNode?.requestFocus(),
+    );
+
+    final Widget band;
+    if (_landscape) {
+      band = SizedBox(
+        height: cardHeight,
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            scrollbars: false,
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+              PointerDeviceKind.stylus,
+            },
+          ),
+          child: SingleChildScrollView(
+            controller: _cardsScrollController,
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = 0; i < cards.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 16),
+                  SizedBox(
+                    width: cardWidth,
+                    height: cardHeight,
+                    child: cardAt(i),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (cards.length == 1) {
+      band = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: cardAt(0),
+        ),
+      );
+    } else {
+      // A portrait phone would squeeze five cards into ~60px each, so the
+      // band scrolls sideways at a readable width and bleeds to the screen
+      // edges like the home rows.
+      band = SizedBox(
+        height: cardHeight,
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            scrollbars: false,
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+              PointerDeviceKind.stylus,
+            },
+          ),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: cards.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (_, i) =>
+                SizedBox(width: cardWidth, child: cardAt(i)),
+          ),
+        ),
+      );
+    }
+
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      onFocusChange: (focused) {
+        if (mounted && _navbarFollowsFocus) {
+          widget.onToggleNavbar?.call(!focused);
+        }
+      },
+      child: band,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final item = _vm.item;
+    if (item == null) return const SizedBox.shrink();
+
+    _landscape = detailUsesLandscapeLayout(context);
+
+    return ListenableBuilder(
+      listenable: _vm,
+      builder: (context, _) {
+        final currentItem = _vm.item;
+        if (currentItem == null) return const SizedBox.shrink();
+
+        final cardSpecs = _currentCards(context, currentItem);
+
+        // Isolate hero art and backdrop into their own layers so scrolling
+        // content doesn't re-rasterize them. The backdrop repaints only when
+        // its URL swaps.
+        final hero = RepaintBoundary(
+          child: _buildHero(context, currentItem, cardSpecs),
+        );
+        final cards = _buildCards(context, cardSpecs);
+        final backdrop = RepaintBoundary(
+          child: ValueListenableBuilder<String?>(
+            valueListenable: widget.backdropUrl,
+            builder: (context, backdropUrl, _) =>
+                _buildBackdrop(_landscape, backdropUrl),
+          ),
+        );
+        final topInset = TopToolbar.baseHeightFor(context);
+
+        final layout = _landscape
+            ? SpotlightLandscapeLayout(
+                backdrop: backdrop,
+                hero: hero,
+                cards: cards,
+                topInset: topInset,
+                prefs: widget.prefs,
+                scrollController: _scrollController,
+              )
+            : SpotlightPortraitLayout(
+                backdrop: backdrop,
+                hero: hero,
+                cards: cards,
+                topInset: topInset,
+                scrollController: _scrollController,
+              );
+
+        return QuickReturnWrapper(
+          scrollController: _scrollController,
+          topFocusNode: widget.initialFocusNode,
+          child: layout,
+        );
+      },
+    );
+  }
+}

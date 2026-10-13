@@ -2,6 +2,33 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'seerr_api_models.g.dart';
 
+/// Seerr media status codes, as the server reports them on `mediaInfo.status`
+/// and `mediaInfo.status4k`.
+abstract final class SeerrMediaStatus {
+  static const unknown = 1;
+  static const pending = 2;
+  static const processing = 3;
+  static const partiallyAvailable = 4;
+  static const available = 5;
+  static const blocklisted = 6;
+  static const deleted = 7;
+
+  /// The statuses worth a marker. Anything else has nothing useful to say on
+  /// a card corner.
+  static bool hasDot(int? status) =>
+      status == pending ||
+      status == processing ||
+      status == partiallyAvailable ||
+      status == available;
+
+  /// Whether the library actually holds this, in full or in part.
+  ///
+  /// [deleted] and [blocklisted] sort above [available], so a `>=` test quietly
+  /// reads a season that has been removed as one that is still there.
+  static bool isAvailable(int? status) =>
+      status == available || status == partiallyAvailable;
+}
+
 @JsonSerializable()
 class SeerrRequest {
   static const statusPending = 1;
@@ -328,10 +355,10 @@ class SeerrDiscoverItem {
 
   String get displayTitle => title ?? name ?? '';
 
-  bool get isAvailable =>
-      mediaInfo?.status == 5 || mediaInfo?.status == 4;
+  bool get isAvailable => SeerrMediaStatus.isAvailable(mediaInfo?.status);
 
-  bool get isBlacklisted => mediaInfo?.status == 6;
+  bool get isBlacklisted =>
+      mediaInfo?.status == SeerrMediaStatus.blocklisted;
 
   factory SeerrDiscoverItem.fromJson(Map<String, dynamic> json) =>
       _$SeerrDiscoverItemFromJson(json);
@@ -599,6 +626,30 @@ class SeerrCrewMember {
   Map<String, dynamic> toJson() => _$SeerrCrewMemberToJson(this);
 }
 
+/// Per-season availability, as Seerr reports it on a series' media info. The
+/// request list can only approximate this, so it is what the season markers
+/// read.
+///
+/// Season numbers here are TMDB's. A series that TVDB splits differently, which
+/// is common for anime, can disagree with the library's own season numbering.
+@JsonSerializable()
+class SeerrSeasonAvailability {
+  final int seasonNumber;
+  final int? status;
+  final int? status4k;
+
+  const SeerrSeasonAvailability({
+    required this.seasonNumber,
+    this.status,
+    this.status4k,
+  });
+
+  factory SeerrSeasonAvailability.fromJson(Map<String, dynamic> json) =>
+      _$SeerrSeasonAvailabilityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SeerrSeasonAvailabilityToJson(this);
+}
+
 @JsonSerializable()
 class SeerrMediaInfo {
   final int? id;
@@ -609,6 +660,7 @@ class SeerrMediaInfo {
   final List<SeerrDownloadingItem>? downloadStatus;
   final List<SeerrDownloadingItem>? downloadStatus4k;
   final List<SeerrRequest>? requests;
+  final List<SeerrSeasonAvailability>? seasons;
   final String? jellyfinMediaId;
   final String? jellyfinMediaId4k;
 
@@ -621,6 +673,7 @@ class SeerrMediaInfo {
     this.downloadStatus,
     this.downloadStatus4k,
     this.requests,
+    this.seasons,
     this.jellyfinMediaId,
     this.jellyfinMediaId4k,
   });
@@ -1312,4 +1365,23 @@ class SeerrIssueListResponse {
       _$SeerrIssueListResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$SeerrIssueListResponseToJson(this);
+}
+
+/// One language from seerr's languages endpoint. Parsed by hand since the
+/// endpoint's field names come straight from TMDB.
+class SeerrLanguage {
+  final String code;
+  final String name;
+
+  const SeerrLanguage({required this.code, required this.name});
+
+  factory SeerrLanguage.fromJson(Map<String, dynamic> json) {
+    final code = json['iso_639_1']?.toString() ?? '';
+    final english = json['english_name']?.toString() ?? '';
+    final native = json['name']?.toString() ?? '';
+    return SeerrLanguage(
+      code: code,
+      name: english.isNotEmpty ? english : (native.isNotEmpty ? native : code),
+    );
+  }
 }

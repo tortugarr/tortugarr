@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
+import 'package:server_core/server_core.dart';
 
 import '../../../auth/models/login_state.dart';
 import '../../../auth/models/server.dart';
@@ -28,6 +29,8 @@ class ServerScreen extends StatefulWidget {
 }
 
 class _ServerScreenState extends State<ServerScreen> {
+  static const _scrollStep = 150.0;
+
   final _serverRepo = GetIt.instance<ServerRepository>();
   final _userRepo = GetIt.instance<ServerUserRepository>();
   final _authRepo = GetIt.instance<AuthRepository>();
@@ -367,8 +370,6 @@ class _ServerScreenState extends State<ServerScreen> {
       for (var i = 0; i < _users.length; i++) _buildUserCard(_users[i], i),
     ];
 
-    final showArrows = PlatformDetection.useDesktopUi;
-
     final listView = SizedBox(
       width: double.infinity,
       height: 130,
@@ -389,61 +390,34 @@ class _ServerScreenState extends State<ServerScreen> {
       ),
     );
 
-    if (!showArrows) {
+    if (!PlatformDetection.useDesktopUi) {
       return listView;
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
+    // Anything laid out past the edge of its parent still paints but stops
+    // answering the mouse, so the arrows take their own room rather than
+    // hanging off the sides of the list.
+    return Row(
       children: [
-        listView,
-        Positioned(
-          left: -40,
-          top: 0,
-          bottom: 0,
-          child: Center(
-            child: IconButton(
-              onPressed: () => _scrollController.animateTo(
-                (_scrollController.offset - 150).clamp(
-                  0,
-                  _scrollController.position.maxScrollExtent,
-                ),
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              ),
-              icon: const Icon(
-                Icons.chevron_left,
-                color: Colors.white54,
-                size: 28,
-              ),
-              splashRadius: 20,
-            ),
-          ),
-        ),
-        Positioned(
-          right: -40,
-          top: 0,
-          bottom: 0,
-          child: Center(
-            child: IconButton(
-              onPressed: () => _scrollController.animateTo(
-                (_scrollController.offset + 150).clamp(
-                  0,
-                  _scrollController.position.maxScrollExtent,
-                ),
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              ),
-              icon: const Icon(
-                Icons.chevron_right,
-                color: Colors.white54,
-                size: 28,
-              ),
-              splashRadius: 20,
-            ),
-          ),
-        ),
+        _buildScrollArrow(Icons.chevron_left, -_scrollStep),
+        Expanded(child: listView),
+        _buildScrollArrow(Icons.chevron_right, _scrollStep),
       ],
+    );
+  }
+
+  Widget _buildScrollArrow(IconData icon, double delta) {
+    return IconButton(
+      onPressed: () => _scrollController.animateTo(
+        (_scrollController.offset + delta).clamp(
+          0,
+          _scrollController.position.maxScrollExtent,
+        ),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ),
+      icon: Icon(icon, color: Colors.white54, size: 28),
+      splashRadius: 20,
     );
   }
 
@@ -493,7 +467,10 @@ class _ServerScreenState extends State<ServerScreen> {
                           radius: 36,
                           backgroundColor: Colors.white.withValues(alpha: 0.1),
                           backgroundImage: user.imageTag != null
-                              ? NetworkImage(_userImageUrl(user))
+                              ? NetworkImage(
+                                  _userImageUrl(user),
+                                  headers: serverImageHeaders,
+                                )
                               : null,
                           child: user.imageTag == null
                               ? Icon(

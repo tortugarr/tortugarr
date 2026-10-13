@@ -1,0 +1,968 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		039843062E60277649E9EA5D /* pcsx_rearmed_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = 408735DC25E7BC9A0E23AF66 /* pcsx_rearmed_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0891769C67B4C60864B42A13 /* GameVideoOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AF6C4FDC95C4A3E0FE6876 /* GameVideoOutput.swift */; };
+		0BB4A7E017A41C2DC92AA740 /* AppleTvGameChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDED7BFBF49D54BA9795365 /* AppleTvGameChannel.swift */; };
+		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		1DFED451953EAD7F2A8939DF /* GameAudioOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC400404ADA61BB07E400A /* GameAudioOutput.swift */; };
+		224B2914FFCAF939B8A58918 /* SubtitleOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C25965E14CF97BC2A76A5D3 /* SubtitleOverlay.swift */; };
+		2567189A5ED4D6CF76A03672 /* LibretroCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D492B1A866CDE5E7EA46048F /* LibretroCore.swift */; };
+		337D6DF5382996FA5E5A23CC /* MoonfinTopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AFC8523FE7AAB0D9378753BF /* MoonfinTopShelf.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3AC3CEF468D8D4EB37B773D1 /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0CCE08AF23DCECD17895AC /* GameSession.swift */; };
+		3B3967161E833CAB004F5970 /* Flutter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAB004F5970 /* Flutter.framework */; };
+		549B7D32CB5D52C2B425AB01 /* AppleTvPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAFDE906606E0A29F7BE667 /* AppleTvPlayerViewController.swift */; };
+		572ECC94C4EC71C3ED83CAF1 /* GameInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112802CD31173650976CCFDD /* GameInputController.swift */; };
+		5BA7845828F41526E1B65D24 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E49740A9B3056886C7389DA /* Pods_Runner.framework */; };
+		5CE155E72FDE599A002FEC36 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CE155E62FDE599A002FEC36 /* AVKit.framework */; };
+		63160795D06DD3057225A07E /* libass in Frameworks */ = {isa = PBXBuildFile; productRef = 6839BF2ED5903422B72FBF8A /* libass */; };
+		63BF99DC0F79F62C115513B2 /* SubtitleFontLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F7003FAC1CA03DD8462C8 /* SubtitleFontLocator.swift */; };
+		6E8429C73DFB8688BD40C60F /* AppleTvSystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D05FC70CE4F8BD2EC3962C /* AppleTvSystemChannel.swift */; };
+		7A8BDAB827D12F39CAF7401E /* AetherEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 7AFE3931A7703B48EA41DA54 /* AetherEngine */; };
+		81DCCA41EF933CEC711C17AF /* genesis_plus_gx_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = 3D25A3FF43C9B94D5ED8A397 /* genesis_plus_gx_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		86EBDA29EC9F3F8B48EC6A25 /* AppleTvPreviewChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D4A2E4C583DF7B8CAE4BA /* AppleTvPreviewChannel.swift */; };
+		8C3DD6E0F664A13108C13300 /* AppleTvVideoChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7381C8ADAD82442BE7E0BD67 /* AppleTvVideoChannel.swift */; };
+		8DDA1544C590D9C1AAA8093C /* gambatte_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = 5A0944BC3FD88308B7E81F3D /* gambatte_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9705A1C61CF904A100538489 /* Flutter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAB004F5970 /* Flutter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		97C146FB1CF9000082B4168C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000082B4168C /* AppDelegate.swift */; };
+		97C1470A1CF9000082B4168D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000082B4168D /* Main.storyboard */; };
+		97C1470B1CF9000082B4168D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000082B4168E /* LaunchScreen.storyboard */; };
+		97C1470F1CF9000082B4168C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000082B4168C /* Assets.xcassets */; };
+		991C71B70423D0CB846BAF6C /* TopShelfChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0DB225C5FD5F802D648CC0 /* TopShelfChannel.swift */; };
+		A0A9A43E975A45351F5BAC7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA2EEAB62F9513C16D8925F /* Foundation.framework */; };
+		AC7E7382D6595F312410E6CA /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B956F6A882509935D5BDC2DD /* NowPlayingController.swift */; };
+		AD10AD10AD10AD10AD100001 /* AppleTvAudioChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD10AD10AD10AD10AD100002 /* AppleTvAudioChannel.swift */; };
+		AD10AD10AD10AD10AD100003 /* AppleTvThemeMusicChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD10AD10AD10AD10AD100004 /* AppleTvThemeMusicChannel.swift */; };
+		B1D5781F929C2A6B0C63DFFF /* MoonfinTvosStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA777E2D0FE8B6E0FBA471EB /* MoonfinTvosStubs.swift */; };
+		B3B1FA254E548B11BAD5E224 /* PlayerTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B42B27C010FC2423FD572E /* PlayerTypes.swift */; };
+		C1F1E8188A6812EC3C6A9EF1 /* AppleTvGameInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A868E735744FD641776321 /* AppleTvGameInputViewController.swift */; };
+		CC0A0D98880DFE1984B32D3C /* AssRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8C46DBD95F75EBE9D77CD0 /* AssRenderer.swift */; };
+		D806D8D63D0DFDE94D61895A /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C2A2281BE7FC2256E62A2C /* TVServices.framework */; };
+		D8C7A8FA09A6FD717A2D9A10 /* mgba_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = 98DD98A0507A79F82DE9B512 /* mgba_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DC8916296F406B350E0E7238 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEF4B8C13F871646DA3AA02 /* ServiceProvider.swift */; };
+		DFD4D95C3B71D467770180E3 /* fceumm_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = EBDE8DF681CD2620EB749A48 /* fceumm_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E60EDFBE8104012209EAF5DE /* AetherPlayerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D30ADE4CA22FF82A3E77FC3 /* AetherPlayerWrapper.swift */; };
+		F679DA3562E5260D7EB5E8E9 /* snes9x_libretro.framework in Embed Libretro Cores */ = {isa = PBXBuildFile; fileRef = E96043FE795EA6E651493D5F /* snes9x_libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A8C30EECBD693D4B3FE3286 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000082B4168C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2C4B891593CF0BB7114C731B;
+			remoteInfo = MoonfinTopShelf;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3B06AD1E1E4923F5004D2608 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9705A1C61CF904A100538489 /* Flutter.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60EDF8A1CB9173CB8A4CB006 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				337D6DF5382996FA5E5A23CC /* MoonfinTopShelf.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C684840F3AA166FC634CC11A /* Embed Libretro Cores */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DFD4D95C3B71D467770180E3 /* fceumm_libretro.framework in Embed Libretro Cores */,
+				8DDA1544C590D9C1AAA8093C /* gambatte_libretro.framework in Embed Libretro Cores */,
+				81DCCA41EF933CEC711C17AF /* genesis_plus_gx_libretro.framework in Embed Libretro Cores */,
+				D8C7A8FA09A6FD717A2D9A10 /* mgba_libretro.framework in Embed Libretro Cores */,
+				039843062E60277649E9EA5D /* pcsx_rearmed_libretro.framework in Embed Libretro Cores */,
+				F679DA3562E5260D7EB5E8E9 /* snes9x_libretro.framework in Embed Libretro Cores */,
+			);
+			name = "Embed Libretro Cores";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		06981437AF8387C9BD61CC96 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		0D30ADE4CA22FF82A3E77FC3 /* AetherPlayerWrapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AetherPlayerWrapper.swift; path = Aether/AetherPlayerWrapper.swift; sourceTree = "<group>"; };
+		112802CD31173650976CCFDD /* GameInputController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameInputController.swift; sourceTree = "<group>"; };
+		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
+		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		1E49740A9B3056886C7389DA /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EE89F1EA89993C2ABEC53B7 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		211F7003FAC1CA03DD8462C8 /* SubtitleFontLocator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtitleFontLocator.swift; path = Aether/SubtitleFontLocator.swift; sourceTree = "<group>"; };
+		262ACA82479C66EBA778DB00 /* Runner.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		26AF6C4FDC95C4A3E0FE6876 /* GameVideoOutput.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameVideoOutput.swift; sourceTree = "<group>"; };
+		28B42B27C010FC2423FD572E /* PlayerTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlayerTypes.swift; path = Aether/PlayerTypes.swift; sourceTree = "<group>"; };
+		2D0DB225C5FD5F802D648CC0 /* TopShelfChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TopShelfChannel.swift; sourceTree = "<group>"; };
+		3B3967151E833CAB004F5970 /* Flutter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Flutter.framework; path = Flutter/Flutter.framework; sourceTree = "<group>"; };
+		3D25A3FF43C9B94D5ED8A397 /* genesis_plus_gx_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = genesis_plus_gx_libretro.framework; sourceTree = "<group>"; };
+		408735DC25E7BC9A0E23AF66 /* pcsx_rearmed_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pcsx_rearmed_libretro.framework; sourceTree = "<group>"; };
+		4AA2EEAB62F9513C16D8925F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		4DAFDE906606E0A29F7BE667 /* AppleTvPlayerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvPlayerViewController.swift; sourceTree = "<group>"; };
+		4EDED7BFBF49D54BA9795365 /* AppleTvGameChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvGameChannel.swift; sourceTree = "<group>"; };
+		5A0944BC3FD88308B7E81F3D /* gambatte_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = gambatte_libretro.framework; sourceTree = "<group>"; };
+		5B3D4A2E4C583DF7B8CAE4BA /* AppleTvPreviewChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvPreviewChannel.swift; sourceTree = "<group>"; };
+		5CE155E62FDE599A002FEC36 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		69C2A2281BE7FC2256E62A2C /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
+		7159A7791642FD80F3643C71 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		7381C8ADAD82442BE7E0BD67 /* AppleTvVideoChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvVideoChannel.swift; sourceTree = "<group>"; };
+		74858FAE1ED2DC5600515810 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
+		7C25965E14CF97BC2A76A5D3 /* SubtitleOverlay.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtitleOverlay.swift; path = Aether/SubtitleOverlay.swift; sourceTree = "<group>"; };
+		912CE3E99D0758A55751A1AC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
+		97C146EE1CF9000082B41680 /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97C146FA1CF9000082B4168C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		97C146FD1CF9000082B4168C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		97C146FE1CF9000082B4168C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		97C146FF1CF9000082B4168D /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		97C146FF1CF9000082B4168E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		98DD98A0507A79F82DE9B512 /* mgba_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = mgba_libretro.framework; sourceTree = "<group>"; };
+		A0D05FC70CE4F8BD2EC3962C /* AppleTvSystemChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvSystemChannel.swift; sourceTree = "<group>"; };
+		AAA000000000000000000003 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
+		ACEF4B8C13F871646DA3AA02 /* ServiceProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		AD10AD10AD10AD10AD100002 /* AppleTvAudioChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvAudioChannel.swift; sourceTree = "<group>"; };
+		AD10AD10AD10AD10AD100004 /* AppleTvThemeMusicChannel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvThemeMusicChannel.swift; sourceTree = "<group>"; };
+		AFC8523FE7AAB0D9378753BF /* MoonfinTopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MoonfinTopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B956F6A882509935D5BDC2DD /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = Aether/NowPlayingController.swift; sourceTree = "<group>"; };
+		CD0CCE08AF23DCECD17895AC /* GameSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
+		D2A868E735744FD641776321 /* AppleTvGameInputViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleTvGameInputViewController.swift; sourceTree = "<group>"; };
+		D492B1A866CDE5E7EA46048F /* LibretroCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LibretroCore.swift; sourceTree = "<group>"; };
+		D5DC400404ADA61BB07E400A /* GameAudioOutput.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GameAudioOutput.swift; sourceTree = "<group>"; };
+		DB8C46DBD95F75EBE9D77CD0 /* AssRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AssRenderer.swift; path = Aether/AssRenderer.swift; sourceTree = "<group>"; };
+		E96043FE795EA6E651493D5F /* snes9x_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = snes9x_libretro.framework; sourceTree = "<group>"; };
+		EA777E2D0FE8B6E0FBA471EB /* MoonfinTvosStubs.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MoonfinTvosStubs.swift; sourceTree = "<group>"; };
+		EBDE8DF681CD2620EB749A48 /* fceumm_libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = fceumm_libretro.framework; sourceTree = "<group>"; };
+		EC66562038A8BA35AC8B1733 /* MoonfinTopShelf.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = MoonfinTopShelf.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8BCD71546675BEC27EAA8F3B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0A9A43E975A45351F5BAC7A /* Foundation.framework in Frameworks */,
+				D806D8D63D0DFDE94D61895A /* TVServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		97C146EB1CF9000082B4168C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3967161E833CAB004F5970 /* Flutter.framework in Frameworks */,
+				5BA7845828F41526E1B65D24 /* Pods_Runner.framework in Frameworks */,
+				5CE155E72FDE599A002FEC36 /* AVKit.framework in Frameworks */,
+				7A8BDAB827D12F39CAF7401E /* AetherEngine in Frameworks */,
+				63160795D06DD3057225A07E /* libass in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		20EBA61DB96FDD7390F82AD5 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				4AA2EEAB62F9513C16D8925F /* Foundation.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		2508F7D351997BD3CFD96028 /* Native */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Native;
+			sourceTree = "<group>";
+		};
+		433FFBCECA6C7E1A1B6BC27D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7159A7791642FD80F3643C71 /* Pods-Runner.debug.xcconfig */,
+				06981437AF8387C9BD61CC96 /* Pods-Runner.release.xcconfig */,
+				1EE89F1EA89993C2ABEC53B7 /* Pods-Runner.profile.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4790983D8AB5249022D779CA /* Games */ = {
+			isa = PBXGroup;
+			children = (
+				4EDED7BFBF49D54BA9795365 /* AppleTvGameChannel.swift */,
+				D2A868E735744FD641776321 /* AppleTvGameInputViewController.swift */,
+				D5DC400404ADA61BB07E400A /* GameAudioOutput.swift */,
+				112802CD31173650976CCFDD /* GameInputController.swift */,
+				CD0CCE08AF23DCECD17895AC /* GameSession.swift */,
+				26AF6C4FDC95C4A3E0FE6876 /* GameVideoOutput.swift */,
+				D492B1A866CDE5E7EA46048F /* LibretroCore.swift */,
+			);
+			name = Games;
+			path = Runner/Games;
+			sourceTree = SOURCE_ROOT;
+		};
+		5C35408D9CC7A390CB922834 /* Cores */ = {
+			isa = PBXGroup;
+			children = (
+				EBDE8DF681CD2620EB749A48 /* fceumm_libretro.framework */,
+				5A0944BC3FD88308B7E81F3D /* gambatte_libretro.framework */,
+				3D25A3FF43C9B94D5ED8A397 /* genesis_plus_gx_libretro.framework */,
+				98DD98A0507A79F82DE9B512 /* mgba_libretro.framework */,
+				408735DC25E7BC9A0E23AF66 /* pcsx_rearmed_libretro.framework */,
+				E96043FE795EA6E651493D5F /* snes9x_libretro.framework */,
+			);
+			name = Cores;
+			path = Frameworks/Cores;
+			sourceTree = SOURCE_ROOT;
+		};
+		66DD9E560EFC48A917ADF4E1 /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				2508F7D351997BD3CFD96028 /* Native */,
+				0D30ADE4CA22FF82A3E77FC3 /* AetherPlayerWrapper.swift */,
+				DB8C46DBD95F75EBE9D77CD0 /* AssRenderer.swift */,
+				B956F6A882509935D5BDC2DD /* NowPlayingController.swift */,
+				28B42B27C010FC2423FD572E /* PlayerTypes.swift */,
+				211F7003FAC1CA03DD8462C8 /* SubtitleFontLocator.swift */,
+				7C25965E14CF97BC2A76A5D3 /* SubtitleOverlay.swift */,
+				4DAFDE906606E0A29F7BE667 /* AppleTvPlayerViewController.swift */,
+				7381C8ADAD82442BE7E0BD67 /* AppleTvVideoChannel.swift */,
+				EA777E2D0FE8B6E0FBA471EB /* MoonfinTvosStubs.swift */,
+			);
+			name = Playback;
+			path = Runner/Playback;
+			sourceTree = SOURCE_ROOT;
+		};
+		97C146E51CF9000082B4168C = {
+			isa = PBXGroup;
+			children = (
+				97C146F01CF9000082B4168C /* Runner */,
+				97C146F01CF9000082B4168E /* Flutter */,
+				97C146F01CF9000082B4168F /* Frameworks */,
+				97C146EF1CF9000082B41690 /* Products */,
+				433FFBCECA6C7E1A1B6BC27D /* Pods */,
+				F4450AB18D9D87708AF7283B /* MoonfinTopShelf */,
+			);
+			sourceTree = "<group>";
+		};
+		97C146EF1CF9000082B41690 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				97C146EE1CF9000082B41680 /* Runner.app */,
+				AFC8523FE7AAB0D9378753BF /* MoonfinTopShelf.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		97C146F01CF9000082B4168C /* Runner */ = {
+			isa = PBXGroup;
+			children = (
+				97C146FA1CF9000082B4168C /* AppDelegate.swift */,
+				AAA000000000000000000003 /* Runner-Bridging-Header.h */,
+				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
+				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
+				97C146FD1CF9000082B4168C /* Assets.xcassets */,
+				97C146FE1CF9000082B4168C /* Info.plist */,
+				97C146FF1CF9000082B4168D /* Main.storyboard */,
+				97C146FF1CF9000082B4168E /* LaunchScreen.storyboard */,
+				66DD9E560EFC48A917ADF4E1 /* Playback */,
+				262ACA82479C66EBA778DB00 /* Runner.entitlements */,
+				2D0DB225C5FD5F802D648CC0 /* TopShelfChannel.swift */,
+				5B3D4A2E4C583DF7B8CAE4BA /* AppleTvPreviewChannel.swift */,
+				A0D05FC70CE4F8BD2EC3962C /* AppleTvSystemChannel.swift */,
+				AD10AD10AD10AD10AD100002 /* AppleTvAudioChannel.swift */,
+				AD10AD10AD10AD10AD100004 /* AppleTvThemeMusicChannel.swift */,
+				4790983D8AB5249022D779CA /* Games */,
+			);
+			path = Runner;
+			sourceTree = "<group>";
+		};
+		97C146F01CF9000082B4168E /* Flutter */ = {
+			isa = PBXGroup;
+			children = (
+				74858FAE1ED2DC5600515810 /* AppFrameworkInfo.plist */,
+				9740EEB21CF90195004384FC /* Debug.xcconfig */,
+				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
+			);
+			name = Flutter;
+			sourceTree = "<group>";
+		};
+		97C146F01CF9000082B4168F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5CE155E62FDE599A002FEC36 /* AVKit.framework */,
+				3B3967151E833CAB004F5970 /* Flutter.framework */,
+				1E49740A9B3056886C7389DA /* Pods_Runner.framework */,
+				20EBA61DB96FDD7390F82AD5 /* tvOS */,
+				69C2A2281BE7FC2256E62A2C /* TVServices.framework */,
+				5C35408D9CC7A390CB922834 /* Cores */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F4450AB18D9D87708AF7283B /* MoonfinTopShelf */ = {
+			isa = PBXGroup;
+			children = (
+				ACEF4B8C13F871646DA3AA02 /* ServiceProvider.swift */,
+				912CE3E99D0758A55751A1AC /* Info.plist */,
+				EC66562038A8BA35AC8B1733 /* MoonfinTopShelf.entitlements */,
+			);
+			path = MoonfinTopShelf;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2C4B891593CF0BB7114C731B /* MoonfinTopShelf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 157C691DA205990CD7840F52 /* Build configuration list for PBXNativeTarget "MoonfinTopShelf" */;
+			buildPhases = (
+				B37825E9136542989447642A /* Sources */,
+				8BCD71546675BEC27EAA8F3B /* Frameworks */,
+				A9A2D3D741CE2BF74EB50064 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoonfinTopShelf;
+			productName = MoonfinTopShelf;
+			productReference = AFC8523FE7AAB0D9378753BF /* MoonfinTopShelf.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		97C146ED1CF9000082B41690 /* Runner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 97C147051CF9000082B4168C /* Build configuration list for PBXNativeTarget "Runner" */;
+			buildPhases = (
+				CBC64758AED267822414F1CB /* [CP] Check Pods Manifest.lock */,
+				97C146EA1CF9000082B4168C /* Sources */,
+				97C146EB1CF9000082B4168C /* Frameworks */,
+				97C146EC1CF9000082B4168C /* Resources */,
+				3B06AD1E1E4923F5004D2608 /* Embed Frameworks */,
+				AAF10000000000000000F00D /* Embed App.framework */,
+				9740EEB31CF901A200538489 /* Copy flutter_assets */,
+				60EDF8A1CB9173CB8A4CB006 /* Embed App Extensions */,
+				C684840F3AA166FC634CC11A /* Embed Libretro Cores */,
+				9427036CA2B715EC33ABC892 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0422DC254FB5A92797A84C2 /* PBXTargetDependency */,
+			);
+			name = Runner;
+			packageProductDependencies = (
+				7AFE3931A7703B48EA41DA54 /* AetherEngine */,
+				6839BF2ED5903422B72FBF8A /* libass */,
+			);
+			productName = Runner;
+			productReference = 97C146EE1CF9000082B41680 /* Runner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		97C146E61CF9000082B4168C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
+				TargetAttributes = {
+					97C146ED1CF9000082B41690 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+				};
+			};
+			buildConfigurationList = 97C146E91CF9000082B4168C /* Build configuration list for PBXProject "Runner" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 97C146E51CF9000082B4168C;
+			packageReferences = (
+				28D9549FFBD2C43236F78996 /* XCRemoteSwiftPackageReference "AetherEngine" */,
+				2886DC5D0179EDDA99AD5335 /* XCRemoteSwiftPackageReference "libass-build" */,
+			);
+			productRefGroup = 97C146EF1CF9000082B41690 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				97C146ED1CF9000082B41690 /* Runner */,
+				2C4B891593CF0BB7114C731B /* MoonfinTopShelf */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		97C146EC1CF9000082B4168C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97C1470F1CF9000082B4168C /* Assets.xcassets in Resources */,
+				97C1470A1CF9000082B4168D /* Main.storyboard in Resources */,
+				97C1470B1CF9000082B4168D /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9A2D3D741CE2BF74EB50064 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9427036CA2B715EC33ABC892 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9740EEB31CF901A200538489 /* Copy flutter_assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/Flutter/flutter_assets",
+			);
+			name = "Copy flutter_assets";
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(PRODUCT_NAME).app/flutter_assets",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n# Copy flutter_assets into the app bundle\nFLUTTER_ASSETS_SRC=\"${PROJECT_DIR}/Flutter/flutter_assets\"\nDEST=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/flutter_assets\"\nif [ -d \"${FLUTTER_ASSETS_SRC}\" ]; then\n  echo \"Copying flutter_assets to app bundle...\"\n  rsync -av --delete \"${FLUTTER_ASSETS_SRC}/\" \"${DEST}/\"\nelse\n  echo \"warning: flutter_assets not found at ${FLUTTER_ASSETS_SRC}\"\nfi\n";
+		};
+		AAF10000000000000000F00D /* Embed App.framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/Flutter/App.framework",
+			);
+			name = "Embed App.framework";
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(PRODUCT_NAME).app/Frameworks/App.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n# Embed App.framework (AOT Dart snapshots) into the app bundle.\n# Present only for release/profile (AOT) builds; debug/JIT has no App.framework.\n# Runs for build, run, AND archive, so TestFlight/App Store builds get it too.\nAPP_FRAMEWORK_SRC=\"${PROJECT_DIR}/Flutter/App.framework\"\nDEST_FRAMEWORKS=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks\"\nif [ -d \"${APP_FRAMEWORK_SRC}\" ]; then\n  echo \"Embedding App.framework...\"\n  mkdir -p \"${DEST_FRAMEWORKS}\"\n  rsync -av --delete \"${APP_FRAMEWORK_SRC}\" \"${DEST_FRAMEWORKS}/\"\n  # The flutter-tvos tool stamps the iOS deployment floor (e.g. 13.0) into\n  # App.framework/Info.plist, but the binary is linked at the tvOS target.\n  # App Store validation rejects the mismatch (ITMS-90208), so rewrite the\n  # plist to the binary minos so the two always agree.\n  APP_PLIST=\"${DEST_FRAMEWORKS}/App.framework/Info.plist\"\n  APP_BIN=\"${DEST_FRAMEWORKS}/App.framework/App\"\n  MINOS=\"\"\n  if [ -f \"${APP_BIN}\" ]; then\n    MINOS=$(vtool -show-build \"${APP_BIN}\" 2>/dev/null | awk \"/minos/{print \\$2; exit}\")\n  fi\n  if [ -z \"${MINOS}\" ]; then MINOS=\"${TVOS_DEPLOYMENT_TARGET}\"; fi\n  if [ -f \"${APP_PLIST}\" ] && [ -n \"${MINOS}\" ]; then\n    echo \"Setting App.framework MinimumOSVersion to ${MINOS}...\"\n    plutil -replace MinimumOSVersion -string \"${MINOS}\" \"${APP_PLIST}\"\n  fi\n  if [ \"${CODE_SIGNING_REQUIRED}\" != \"NO\" ] && [ -n \"${EXPANDED_CODE_SIGN_IDENTITY}\" ]; then\n    echo \"Codesigning App.framework with ${EXPANDED_CODE_SIGN_IDENTITY}...\"\n    codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --timestamp=none --generate-entitlement-der \"${DEST_FRAMEWORKS}/App.framework\"\n  fi\nelse\n  echo \"No App.framework to embed (debug/JIT build).\"\nfi\n";
+		};
+		CBC64758AED267822414F1CB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		97C146EA1CF9000082B4168C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97C146FB1CF9000082B4168C /* AppDelegate.swift in Sources */,
+				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				991C71B70423D0CB846BAF6C /* TopShelfChannel.swift in Sources */,
+				86EBDA29EC9F3F8B48EC6A25 /* AppleTvPreviewChannel.swift in Sources */,
+				6E8429C73DFB8688BD40C60F /* AppleTvSystemChannel.swift in Sources */,
+				AD10AD10AD10AD10AD100001 /* AppleTvAudioChannel.swift in Sources */,
+				AD10AD10AD10AD10AD100003 /* AppleTvThemeMusicChannel.swift in Sources */,
+				0BB4A7E017A41C2DC92AA740 /* AppleTvGameChannel.swift in Sources */,
+				C1F1E8188A6812EC3C6A9EF1 /* AppleTvGameInputViewController.swift in Sources */,
+				1DFED451953EAD7F2A8939DF /* GameAudioOutput.swift in Sources */,
+				572ECC94C4EC71C3ED83CAF1 /* GameInputController.swift in Sources */,
+				3AC3CEF468D8D4EB37B773D1 /* GameSession.swift in Sources */,
+				0891769C67B4C60864B42A13 /* GameVideoOutput.swift in Sources */,
+				2567189A5ED4D6CF76A03672 /* LibretroCore.swift in Sources */,
+				E60EDFBE8104012209EAF5DE /* AetherPlayerWrapper.swift in Sources */,
+				CC0A0D98880DFE1984B32D3C /* AssRenderer.swift in Sources */,
+				AC7E7382D6595F312410E6CA /* NowPlayingController.swift in Sources */,
+				B3B1FA254E548B11BAD5E224 /* PlayerTypes.swift in Sources */,
+				63BF99DC0F79F62C115513B2 /* SubtitleFontLocator.swift in Sources */,
+				224B2914FFCAF939B8A58918 /* SubtitleOverlay.swift in Sources */,
+				549B7D32CB5D52C2B425AB01 /* AppleTvPlayerViewController.swift in Sources */,
+				8C3DD6E0F664A13108C13300 /* AppleTvVideoChannel.swift in Sources */,
+				B1D5781F929C2A6B0C63DFFF /* MoonfinTvosStubs.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B37825E9136542989447642A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC8916296F406B350E0E7238 /* ServiceProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B0422DC254FB5A92797A84C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoonfinTopShelf;
+			target = 2C4B891593CF0BB7114C731B /* MoonfinTopShelf */;
+			targetProxy = 8A8C30EECBD693D4B3FE3286 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		249021D3217E4FDB00AE95B9 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "Apple Development";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = appletvos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Profile;
+		};
+		249021D4217E4FDB00AE95B9 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flutter",
+				);
+				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Profile;
+		};
+		3B361FCA59A2740DF01F949E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MoonfinTopShelf/MoonfinTopShelf.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MoonfinTopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app.topshelf;
+				PRODUCT_NAME = MoonfinTopShelf;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Debug;
+		};
+		92A6906F767425E17205EE60 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MoonfinTopShelf/MoonfinTopShelf.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MoonfinTopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app.topshelf;
+				PRODUCT_NAME = MoonfinTopShelf;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		97C147031CF9000082B41691 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "Apple Development";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Debug;
+		};
+		97C147031CF9000082B41692 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flutter",
+				);
+				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		97C147041CF9000082B41691 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "Apple Development";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = appletvos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		97C147041CF9000082B41692 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flutter",
+				);
+				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		9A601F4BCC3110F820C4376A /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MoonfinTopShelf/MoonfinTopShelf.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = CCBYLPUSVH;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MoonfinTopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.moonfin.app.topshelf;
+				PRODUCT_NAME = MoonfinTopShelf;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Profile;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		157C691DA205990CD7840F52 /* Build configuration list for PBXNativeTarget "MoonfinTopShelf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92A6906F767425E17205EE60 /* Release */,
+				3B361FCA59A2740DF01F949E /* Debug */,
+				9A601F4BCC3110F820C4376A /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		97C146E91CF9000082B4168C /* Build configuration list for PBXProject "Runner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				97C147031CF9000082B41691 /* Debug */,
+				97C147041CF9000082B41691 /* Release */,
+				249021D3217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		97C147051CF9000082B4168C /* Build configuration list for PBXNativeTarget "Runner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				97C147031CF9000082B41692 /* Debug */,
+				97C147041CF9000082B41692 /* Release */,
+				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2886DC5D0179EDDA99AD5335 /* XCRemoteSwiftPackageReference "libass-build" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mpvkit/libass-build";
+			requirement = {
+				kind = exactVersion;
+				version = 0.17.5;
+			};
+		};
+		28D9549FFBD2C43236F78996 /* XCRemoteSwiftPackageReference "AetherEngine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/superuser404notfound/AetherEngine";
+			requirement = {
+				kind = exactVersion;
+				version = 6.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6839BF2ED5903422B72FBF8A /* libass */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2886DC5D0179EDDA99AD5335 /* XCRemoteSwiftPackageReference "libass-build" */;
+			productName = libass;
+		};
+		7AFE3931A7703B48EA41DA54 /* AetherEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28D9549FFBD2C43236F78996 /* XCRemoteSwiftPackageReference "AetherEngine" */;
+			productName = AetherEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 97C146E61CF9000082B4168C /* Project object */;
+}

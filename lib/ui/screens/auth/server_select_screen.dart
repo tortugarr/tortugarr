@@ -21,12 +21,14 @@ import '../../../auth/services/server_discovery_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../platform/web_runtime_config.dart';
 import '../../../preference/user_preferences.dart';
+import '../../../util/app_beta.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/server_url.dart';
 import '../../../util/web_diagnostics_failure.dart';
 import '../../navigation/destinations.dart';
 import '../../widgets/adaptive/adaptive_dialog.dart';
+import '../../widgets/allow_self_signed_dialog.dart';
 import '../../widgets/login_scaffold.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../widgets/server_type_icon.dart';
@@ -54,6 +56,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
 
   bool _isConnecting = false;
   String? _errorMessage;
+  String? _untrustedAddress;
   bool _attemptedAutoConnect = false;
   bool _suppressAutoNavigationOnServerConnected = false;
 
@@ -244,7 +247,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         imageTag: currentUser.primaryImageTag,
         isAdministrator: currentUser.policy?.isAdministrator ?? false,
         canDownload: currentUser.policy?.enableContentDownloading ?? false,
-        canManageSubtitles: currentUser.policy?.enableSubtitleManagement ??
+        canManageSubtitles: currentUser.policy?.canFetchRemoteSubtitles ??
             false,
         canManageCollections:
           currentUser.policy?.enableCollectionManagement ?? false,
@@ -344,6 +347,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         setState(() {
           _isConnecting = true;
           _errorMessage = null;
+          _untrustedAddress = null;
         });
       case ServerConnected(:final id):
         if (!shouldHandleAdditionState) return;
@@ -359,14 +363,19 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
         :final lastErrorType,
         :final lastStatusCode,
         :final lastErrorMessage,
+        :final untrustedCandidate,
       ):
         if (!shouldHandleAdditionState) return;
         final targetUrl = (lastCandidate != null && lastCandidate.isNotEmpty)
             ? lastCandidate
             : (candidatesTried.isNotEmpty ? candidatesTried.first : null);
+        final l10n = AppLocalizations.of(context);
         setState(() {
           _isConnecting = false;
-          _errorMessage = AppLocalizations.of(context).unableToConnectToServer;
+          _untrustedAddress = untrustedCandidate;
+          _errorMessage = untrustedCandidate != null
+              ? l10n.untrustedServerCertificate
+              : l10n.unableToConnectToServer;
         });
         _maybeOpenWebDiagnosticsForFailure(
           targetUrl: targetUrl,
@@ -375,6 +384,20 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
           message: lastErrorMessage,
         );
     }
+  }
+
+  Future<void> _allowSelfSignedAndRetry() async {
+    final address = _untrustedAddress;
+    if (address == null || !await confirmAllowSelfSignedCertificates(context)) {
+      return;
+    }
+    if (!mounted) return;
+    setState(() {
+      _isConnecting = true;
+      _errorMessage = null;
+      _untrustedAddress = null;
+    });
+    await _serverRepo.addServer(address);
   }
 
   Future<void> _connectToDiscovered(DiscoveredServer discovered) async {
@@ -470,7 +493,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
       footer: Padding(
         padding: const EdgeInsets.only(top: 16),
         child: Text(
-          l10n.appVersionFooter(_deviceInfo.appVersion),
+          l10n.appVersionFooter(AppBeta.label(_deviceInfo.appVersion)),
           style: Theme.of(
             context,
           ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.4)),
@@ -546,6 +569,16 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
             builder: (context, constraints) {
               final isVerySmall = constraints.maxWidth < 360;
               final actions = <Widget>[];
+
+              if (_untrustedAddress != null) {
+                actions.add(
+                  _buildFooterActionButton(
+                    onPressed: _isConnecting ? null : _allowSelfSignedAndRetry,
+                    icon: const Icon(Icons.gpp_maybe_outlined, size: 16),
+                    label: l10n.settingsAllowSelfSignedCerts,
+                  ),
+                );
+              }
 
               if (!_isWebPluginMode) {
                 actions.add(
@@ -635,7 +668,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
                     ),
                   ),
                   Text(
-                    '${server.address} • ${server.version}',
+                    '${server.displayAddress ?? server.address} • ${server.version}',
                     style: TextStyle(
                       fontSize: 13,
                       color: _loginForeground(0.5),
@@ -864,12 +897,24 @@ class _AddServerDialogState extends State<AddServerDialog> {
   final _addressFocus = FocusNode(debugLabel: 'addServerAddress');
   final _connectFocus = FocusNode(debugLabel: 'addServerConnect');
   final _cancelFocus = FocusNode(debugLabel: 'addServerCancel');
+  final _allowFocus = FocusNode(debugLabel: 'addServerAllowSelfSigned');
   final _tvFieldKey = GlobalKey<CustomTVTextFieldState>();
 
   bool _isConnecting = false;
   String? _errorMessage;
+  String? _untrustedAddress;
   bool _dialogDismissed = false;
   bool get _isMoonfin => ThemeRegistry.active.id == ThemeRegistry.moonfinId;
+
+  /// Known server addresses, freshest first, offered as keyboard chips so
+  /// re-adding a server is one press instead of a typed URL.
+  List<String> get _recentServerAddresses {
+    final servers = [...widget.serverRepo.servers]
+      ..sort((a, b) => b.dateLastAccessed.compareTo(a.dateLastAccessed));
+    return [
+      for (final server in servers) server.displayAddress ?? server.address,
+    ];
+  }
 
   Color _dialogForeground(double alpha) {
     return (_isMoonfin ? Colors.white : AppColorScheme.onSurface).withValues(
@@ -895,6 +940,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
     _addressFocus.dispose();
     _connectFocus.dispose();
     _cancelFocus.dispose();
+    _allowFocus.dispose();
     super.dispose();
   }
 
@@ -917,13 +963,15 @@ class _AddServerDialogState extends State<AddServerDialog> {
     }
   }
 
-  Future<void> _submit() async {
-    final address = widget.controller.text.trim();
+  Future<void> _submit() => _connect(widget.controller.text.trim());
+
+  Future<void> _connect(String address) async {
     if (address.isEmpty) return;
 
     setState(() {
       _isConnecting = true;
       _errorMessage = null;
+      _untrustedAddress = null;
     });
 
     try {
@@ -931,22 +979,36 @@ class _AddServerDialogState extends State<AddServerDialog> {
       if (!mounted) return;
       if (server != null) {
         _dismissDialog();
-      } else {
-        _showError(widget.l10n.unableToConnectToServer);
+        return;
       }
+      final untrusted = widget.serverRepo.lastFailure?.untrustedCandidate;
+      if (untrusted == null) {
+        _showError(widget.l10n.unableToConnectToServer);
+        return;
+      }
+      _untrustedAddress = untrusted;
+      _showError(widget.l10n.untrustedServerCertificate, focus: _allowFocus);
     } catch (e) {
       if (!mounted) return;
       _showError(widget.l10n.unableToConnectToServer);
     }
   }
 
-  void _showError(String message) {
+  Future<void> _allowSelfSignedAndRetry() async {
+    final address = _untrustedAddress;
+    if (address == null || !await confirmAllowSelfSignedCertificates(context)) {
+      return;
+    }
+    if (mounted) await _connect(address);
+  }
+
+  void _showError(String message, {FocusNode? focus}) {
     setState(() {
       _isConnecting = false;
       _errorMessage = message;
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _connectFocus.requestFocus();
+      if (mounted) (focus ?? _connectFocus).requestFocus();
     });
   }
 
@@ -1057,6 +1119,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
                   controller: widget.controller,
                   isFocused: focused,
                   inputPurpose: InputPurpose.url,
+                  recentSuggestions: _recentServerAddresses,
                   preferSystemIme: _userPreferences.get(
                     UserPreferences.preferSystemImeKeyboard,
                   ),
@@ -1137,6 +1200,15 @@ class _AddServerDialogState extends State<AddServerDialog> {
               Text(
                 _errorMessage!,
                 style: const TextStyle(color: Color(0xFFef4444), fontSize: 12),
+              ),
+            ],
+            if (_untrustedAddress != null) ...[
+              const SizedBox(height: 12),
+              OutlinedButton(
+                focusNode: _allowFocus,
+                onPressed: _isConnecting ? null : _allowSelfSignedAndRetry,
+                style: _actionStyle(),
+                child: Text(widget.l10n.settingsAllowSelfSignedCerts),
               ),
             ],
           ],

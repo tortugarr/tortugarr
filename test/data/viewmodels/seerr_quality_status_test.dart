@@ -24,6 +24,14 @@ SeerrRequest _request({
             ],
     );
 
+SeerrQualityStatus _track(SeerrMediaInfo info, {bool is4k = false}) =>
+    SeerrQualityStatus.of(
+      is4k: is4k,
+      mediaInfo: info,
+      canManageRequests: false,
+      currentUserId: null,
+    );
+
 void main() {
   group('SeerrQualityStatus', () {
     test('routes status and status4k to their own tracks', () {
@@ -106,8 +114,107 @@ void main() {
       expect(uhd.requestedSeasons, {1});
     });
 
-    test('declined and failed requests are not active and free their seasons',
+    test('unavailableOrRequestedSeasons includes seasons available in library',
         () {
+      final info = SeerrMediaInfo(
+        seasons: const [
+          SeerrSeasonAvailability(seasonNumber: 3, status: 5),
+        ],
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusApproved, seasons: [2]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      expect(hd.requestedSeasons, {2});
+      expect(hd.availableSeasons, {3});
+      expect(hd.unavailableOrRequestedSeasons, {2, 3});
+    });
+
+    // Request a season, watch it, delete it from the library, and Seerr marks
+    // the season deleted while the finished request stays on the record.
+    // Neither of those may stand in the way of asking for it a second time.
+    // https://github.com/Moonfin-Client/Moonfin-Core/issues/1573
+    test('a season Seerr marks deleted can be requested again', () {
+      final info = SeerrMediaInfo(
+        status: SeerrMediaStatus.deleted,
+        seasons: const [
+          SeerrSeasonAvailability(
+            seasonNumber: 1,
+            status: SeerrMediaStatus.deleted,
+          ),
+          SeerrSeasonAvailability(
+            seasonNumber: 2,
+            status: SeerrMediaStatus.available,
+          ),
+        ],
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusCompleted, seasons: [1]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      // The deleted season is neither held by the library nor spoken for, so
+      // the chip carries no check and stays selectable.
+      expect(hd.availableSeasons, {2});
+      expect(hd.requestedSeasons, isEmpty);
+      expect(hd.unavailableOrRequestedSeasons, {2});
+    });
+
+    test('a blocklisted season is not mistaken for one the library holds', () {
+      final info = SeerrMediaInfo(
+        seasons: const [
+          SeerrSeasonAvailability(
+            seasonNumber: 1,
+            status: SeerrMediaStatus.blocklisted,
+          ),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      // Blocklisted sorts above available, so it must never be read as held.
+      expect(hd.availableSeasons, isEmpty);
+    });
+
+    test('an open request still holds its seasons once one is deleted', () {
+      final info = SeerrMediaInfo(
+        seasons: const [
+          SeerrSeasonAvailability(
+            seasonNumber: 1,
+            status: SeerrMediaStatus.deleted,
+          ),
+        ],
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusApproved, seasons: [1]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      // Approved is still on its way, so asking again would duplicate it.
+      expect(hd.unavailableOrRequestedSeasons, {1});
+    });
+
+    test('declined, failed and completed requests free their seasons', () {
       final info = SeerrMediaInfo(
         requests: [
           _request(id: 1, status: SeerrRequest.statusDeclined, seasons: [1]),
@@ -124,8 +231,10 @@ void main() {
 
       expect(hd.activeRequests, isEmpty);
       expect(hd.hasExistingRequest, isFalse);
-      // Completed requests still hold their seasons, declined/failed do not.
-      expect(hd.requestedSeasons, {3});
+      // A finished request is history, not a standing claim on the season.
+      // Whether the season is still there is what per season availability
+      // answers, the same way Seerr decides it.
+      expect(hd.requestedSeasons, isEmpty);
     });
 
     test('a user may cancel their own request only while it is pending', () {
@@ -251,6 +360,135 @@ void main() {
 
       expect(hd.download, isNull);
       expect(uhd.download, isA<SeerrDownloadSummary>());
+    });
+
+    test('seasonStatus prefers what the server reports per season', () {
+      const info = SeerrMediaInfo(
+        status: 4,
+        seasons: [
+          SeerrSeasonAvailability(seasonNumber: 1, status: 5),
+          SeerrSeasonAvailability(seasonNumber: 2, status: 3),
+          // Unknown seasons carry no meaning, so they never reach the UI.
+          SeerrSeasonAvailability(seasonNumber: 3, status: 1),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      expect(hd.seasonStatus, {1: 5, 2: 3});
+    });
+
+    test('seasonStatus falls back to requests when the server reports none', () {
+      final info = SeerrMediaInfo(
+        status: 2,
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusApproved, seasons: [1]),
+          _request(id: 2, status: SeerrRequest.statusPending, seasons: [2]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      // Approved means it is being fetched, pending means nobody has said yes.
+      expect(hd.seasonStatus, {1: 3, 2: 2});
+    });
+
+    test('seasonStatus lets the server override a request-derived season', () {
+      final info = SeerrMediaInfo(
+        status: 4,
+        seasons: const [SeerrSeasonAvailability(seasonNumber: 1, status: 5)],
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusApproved, seasons: [1, 2]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      expect(hd.seasonStatus, {1: 5, 2: 3});
+    });
+
+    test('seasonStatus keeps the two quality tracks apart', () {
+      final info = SeerrMediaInfo(
+        status: 5,
+        status4k: 3,
+        seasons: const [
+          SeerrSeasonAvailability(seasonNumber: 1, status: 5, status4k: 3),
+        ],
+        requests: [
+          _request(
+            id: 1,
+            status: SeerrRequest.statusPending,
+            is4k: true,
+            seasons: [2],
+          ),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+      final uhd = SeerrQualityStatus.of(
+        is4k: true,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      expect(hd.seasonStatus, {1: 5});
+      expect(uhd.seasonStatus, {1: 3, 2: 2});
+    });
+
+    test('seasonStatus ignores declined and failed requests', () {
+      final info = SeerrMediaInfo(
+        status: 1,
+        requests: [
+          _request(id: 1, status: SeerrRequest.statusDeclined, seasons: [1]),
+          _request(id: 2, status: SeerrRequest.statusFailed, seasons: [2]),
+          _request(id: 3, status: SeerrRequest.statusCompleted, seasons: [3]),
+        ],
+      );
+      final hd = SeerrQualityStatus.of(
+        is4k: false,
+        mediaInfo: info,
+        canManageRequests: false,
+        currentUserId: null,
+      );
+
+      expect(hd.seasonStatus, {3: 5});
+    });
+
+    test('a title stays in flight from the request until it lands', () {
+      expect(_track(const SeerrMediaInfo(status: 2)).isInFlight, isTrue);
+      expect(_track(const SeerrMediaInfo(status: 3)).isInFlight, isTrue);
+      expect(_track(const SeerrMediaInfo(status: 5)).isInFlight, isFalse);
+      expect(_track(const SeerrMediaInfo(status: 1)).isInFlight, isFalse);
+    });
+
+    test('a newly requested season keeps a partial series in flight', () {
+      const info = SeerrMediaInfo(
+        status: 4,
+        seasons: [
+          SeerrSeasonAvailability(seasonNumber: 1, status: 5),
+          SeerrSeasonAvailability(seasonNumber: 2, status: 3, status4k: 1),
+        ],
+      );
+
+      expect(_track(info).isInFlight, isTrue);
+      expect(_track(info, is4k: true).isInFlight, isFalse);
     });
   });
 

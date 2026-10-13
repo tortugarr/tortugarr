@@ -7,8 +7,21 @@ library;
 /// VP8/VP9 in WebM, so anything else transcodes to HLS. The empty subtitle
 /// list makes the server burn a selected subtitle in, since the receiver is
 /// never handed a side-loaded track.
-Map<String, dynamic> chromecastDeviceProfile() {
-  const bitrate = 20000000;
+///
+/// [maxBitrateMbps] is the user's own ceiling, the one the local players
+/// already read. A receiver that cant pull the default stalls part way in and
+/// restarts, and until now the cast path gave nobody a way to lower it.
+///
+/// It can only lower the ceiling, never raise it. The preference describes the
+/// user's network rather than the receiver, and it defaults to 120, so taking
+/// it at face value would hand every default install six times what casting
+/// asked for before.
+Map<String, dynamic> chromecastDeviceProfile({int? maxBitrateMbps}) {
+  const castCeiling = 20000000;
+  final requested = (maxBitrateMbps != null && maxBitrateMbps > 0)
+      ? maxBitrateMbps * 1000000
+      : castCeiling;
+  final bitrate = requested < castCeiling ? requested : castCeiling;
   return <String, dynamic>{
     'Name': 'Moonfin Chromecast',
     'MaxStaticBitrate': bitrate,
@@ -65,10 +78,16 @@ Map<String, dynamic> chromecastDeviceProfile() {
             'Value': 'high|main|baseline|constrained baseline',
             'IsRequired': false,
           },
+          // First and second generation Cast devices stop at High profile
+          // level 4.1, and the sender can't ask which model it reached, so
+          // this takes the floor like the width cap below does. Nothing is
+          // lost at 1080p either, since 4.2 only buys frame rates past 60.
+          // A receiver that is handed a level it refuses rejects the whole
+          // manifest before fetching a segment, so no transcode ever starts.
           <String, dynamic>{
             'Condition': 'LessThanEqual',
             'Property': 'VideoLevel',
-            'Value': '42',
+            'Value': '41',
             'IsRequired': false,
           },
           // The oldest Cast devices still in use top out at 1080p, and the

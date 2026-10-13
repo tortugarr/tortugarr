@@ -1,7 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
@@ -22,20 +24,62 @@ import '../../widgets/adaptive/adaptive_glass.dart';
 import '../../widgets/navigation_layout.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../widgets/seerr_download_progress_bar.dart';
+import '../../widgets/seerr/seerr_media_type_badge.dart';
+import '../../widgets/seerr/seerr_request_tile_caption.dart';
 import '../../widgets/seerr/seerr_text_field.dart';
+import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../widgets/seerr/seerr_tv_controls.dart';
 import '../../widgets/track_selector_dialog.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../util/error_message.dart';
 import '../../widgets/focus/focusable_wrapper.dart';
+import '../../widgets/bottom_nav/bottom_navbar.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../widgets/offline_aware_image.dart';
 
-const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w200';
+// w342, like the other Seerr screens. w200 is too soft once the grid
+// enlarges it.
+const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
+
+/// Row height for the request card, the issue card and the skeleton. Shared
+/// so a card does not jump when it loads. Fits the worst case: title, status
+/// or progress bar, requester, date and actions.
+const double _cardHeight = 175;
+
+/// Poster width on the stacked card. Keeps a 1.59 ratio with [_cardHeight].
+const double _cardPosterWidth = 110;
+
+/// Inset a grid card spends inside its cell so the focus scale has room.
+/// Both [_SeerrRequestsScreenState._tileGrid] and [_RequestCardState.build]
+/// need the same number, one to reserve it and one to spend it.
+const double _tileFocusInset = 12;
 
 double _uiScale() => PlatformDetection.useDesktopUi
     ? GetIt.instance<UserPreferences>()
           .get(UserPreferences.desktopUiScale)
           .scaleFactor
     : 1.0;
+
+/// Timestamps arrive as ISO strings. Parse them so intl can format for the
+/// locale.
+String _formatRequestDate(BuildContext context, String? iso) {
+  if (iso == null || iso.isEmpty) return '';
+  final parsed = DateTime.tryParse(iso);
+  if (parsed == null) return '';
+  final locale = Localizations.localeOf(context).toString();
+  return DateFormat.yMMMd(locale).format(parsed.toLocal());
+}
+
+/// Badge text in a light tint of the badge colour, like Seerr does. Keeps the
+/// badge one hue instead of dropping flat white or black into it.
+Color _badgeForeground(Color background) =>
+    Color.lerp(background, Colors.white, 0.82) ?? Colors.white;
+
+/// Poster grid on desktop and TV, stacked card on phone and tablet.
+///
+/// On TV both `useMobileUi` and `useDesktopUi` are false, so "not mobile" is
+/// the check that covers desktop and TV together.
+bool get _usesTileGrid => !PlatformDetection.useMobileUi;
 
 /// Foreground that stays readable on a filled status-colored button.
 Color _onStatusColor(Color background) =>
@@ -183,7 +227,7 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
   Widget _buildBody() {
     final l10n = AppLocalizations.of(context);
     if (_initializing || _requestsVm == null || _issuesVm == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const SkeletonLibraryGrid(aspectRatio: 16 / 9);
     }
 
     final prefs = GetIt.instance<UserPreferences>();
@@ -206,7 +250,14 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(tabsLeft, topInset + 16, 16, 0),
+          // The TV navbar reservation already clears the toolbar, so it
+          // needs less room above the tabs.
+          padding: EdgeInsets.fromLTRB(
+            tabsLeft,
+            topInset + (PlatformDetection.isTV ? 4 : 16),
+            16,
+            0,
+          ),
           child: Row(
             children: [
               _HubTab(
@@ -271,32 +322,64 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
 
     return Padding(
       padding: EdgeInsets.fromLTRB(_leftInset, 4, 16, 8),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (final f in SeerrRequestFilter.values) ...[
-              _HubChip(
-                label: filterLabel(f),
-                count: f == SeerrRequestFilter.pending ? pendingCount : null,
-                selected: s.filter == f,
-                onTap: () => vm.setFilter(f),
-              ),
+      // Its own group, so the chips are one target reached by pressing up
+      // from the grid.
+      child: FocusTraversalGroup(
+        policy: ReadingOrderTraversalPolicy(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final f in SeerrRequestFilter.values) ...[
+                _HubChip(
+                  label: filterLabel(f),
+                  count: f == SeerrRequestFilter.pending ? pendingCount : null,
+                  selected: s.filter == f,
+                  onTap: () => vm.setFilter(f),
+                ),
+                const SizedBox(width: 8),
+              ],
               const SizedBox(width: 8),
+              _HubChip(
+                label: s.sort == 'added'
+                    ? '${l10n.sortBy}: ${l10n.sortNewest}'
+                    : '${l10n.sortBy}: ${l10n.sortLastModified}',
+                selected: false,
+                onTap: () =>
+                    vm.setSort(s.sort == 'added' ? 'modified' : 'added'),
+              ),
             ],
-            const SizedBox(width: 8),
-            _HubChip(
-              label: s.sort == 'added'
-                  ? '${l10n.sortBy}: ${l10n.sortNewest}'
-                  : '${l10n.sortBy}: ${l10n.sortLastModified}',
-              selected: false,
-              onTap: () =>
-                  vm.setSort(s.sort == 'added' ? 'modified' : 'added'),
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  /// Geometry from the last tile-grid layout, so a focus move can snap to a
+  /// whole row instead of stopping wherever ensureVisible left it.
+  ({int perLine, double lineExtent, double lineSpacing, double leadingPad})?
+  _tileGeometry;
+
+  /// Slide the grid so the focused tile's row starts at the top. Runs after
+  /// the frame so it settles after the focus system has scrolled.
+  void _snapToTileRow(int index) {
+    if (!_usesTileGrid) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final g = _tileGeometry;
+      if (g == null || !mounted || !_requestsScroll.hasClients) return;
+      final line = index ~/ g.perLine;
+      final target =
+          (g.leadingPad + line * (g.lineExtent + g.lineSpacing)).clamp(
+            0.0,
+            _requestsScroll.position.maxScrollExtent,
+          );
+      if ((_requestsScroll.position.pixels - target).abs() < 1) return;
+      _requestsScroll.animateTo(
+        target,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   Widget _buildRequestsList(
@@ -324,36 +407,96 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
     }
 
     final disableAnimations = MediaQuery.of(context).disableAnimations;
+    final scale = _uiScale();
+
+    Widget entry(int index) {
+      final req = s.requests[index];
+      final animate =
+          !disableAnimations && !_animatedRequestIds.contains(req.id);
+      if (animate) _animatedRequestIds.add(req.id);
+      return _Entrance(
+        key: ValueKey('req-${req.id}'),
+        animate: animate,
+        slot: index.clamp(0, 8),
+        child: _RequestCard(
+          request: req,
+          summary: s.summaryFor(req),
+          canManage: s.canManageRequests,
+          isActioning: s.actioningRequestId == req.id,
+          onTap: () => _onRequestTap(req),
+          onApprove: () => vm.approveRequest(req.id),
+          onDecline: () => vm.declineRequest(req.id),
+          onRetry: () => vm.retryRequest(req.id),
+          onFocusGained: () => _snapToTileRow(index),
+        ),
+      );
+    }
+
+    if (_usesTileGrid) {
+      return RefreshIndicator(
+        onRefresh: vm.refresh,
+        // Its own traversal group, so an arrow press finds the next poster
+        // before it leaves for the filter chips.
+        child: FocusTraversalGroup(
+          policy: ReadingOrderTraversalPolicy(),
+          child: LayoutBuilder(
+            builder: (context, constraints) => GridView.builder(
+              controller: _requestsScroll,
+              // Top inset leaves room for the focus scale on the first row.
+              padding: EdgeInsets.fromLTRB(
+                _leftInset,
+                12,
+                16,
+                bottomNavContentPadding(context, 80),
+              ),
+              gridDelegate: _tileGrid(
+                scale,
+                constraints.maxWidth - _leftInset - 16,
+                12,
+              ),
+              itemCount: s.requests.length + (s.hasMore ? 1 : 0),
+              itemBuilder: (context, index) => index >= s.requests.length
+                  ? const _LoaderRow()
+                  : entry(index),
+            ),
+          ),
+        ),
+      );
+    }
+
     return RefreshIndicator(
       onRefresh: vm.refresh,
-      child: ListView.builder(
-        controller: _requestsScroll,
-        padding: EdgeInsets.fromLTRB(_leftInset, 8, 16, 80),
-        itemCount: s.requests.length + (s.hasMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index >= s.requests.length) {
-            return const _LoaderRow();
-          }
-          final req = s.requests[index];
-          final animate =
-              !disableAnimations && !_animatedRequestIds.contains(req.id);
-          if (animate) _animatedRequestIds.add(req.id);
-          return _Entrance(
-            key: ValueKey('req-${req.id}'),
-            animate: animate,
-            slot: index.clamp(0, 8),
-            child: _RequestCard(
-              request: req,
-              summary: s.summaryFor(req),
-              canManage: s.canManageRequests,
-              isActioning: s.actioningRequestId == req.id,
-              onTap: () => _onRequestTap(req),
-              onApprove: () => vm.approveRequest(req.id),
-              onDecline: () => vm.declineRequest(req.id),
-              onRetry: () => vm.retryRequest(req.id),
-            ),
-          );
-        },
+      child: BottomNavPadded(
+        fallback: 80,
+        builder: (context, bottom) => ListView.builder(
+          controller: _requestsScroll,
+          padding: EdgeInsets.fromLTRB(_leftInset, 8, 16, bottom),
+          itemCount: s.requests.length + (s.hasMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index >= s.requests.length) {
+              return const _LoaderRow();
+            }
+            final req = s.requests[index];
+            final animate =
+                !disableAnimations && !_animatedRequestIds.contains(req.id);
+            if (animate) _animatedRequestIds.add(req.id);
+            return _Entrance(
+              key: ValueKey('req-${req.id}'),
+              animate: animate,
+              slot: index.clamp(0, 8),
+              child: _RequestCard(
+                request: req,
+                summary: s.summaryFor(req),
+                canManage: s.canManageRequests,
+                isActioning: s.actioningRequestId == req.id,
+                onTap: () => _onRequestTap(req),
+                onApprove: () => vm.approveRequest(req.id),
+                onDecline: () => vm.declineRequest(req.id),
+                onRetry: () => vm.retryRequest(req.id),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -364,8 +507,7 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
     final tmdbId = media.tmdbId;
     if (tmdbId == null) return;
     context.push(
-      Destinations.seerrMedia(tmdbId.toString()),
-      extra: {'mediaType': request.type},
+      Destinations.seerrMedia(tmdbId.toString(), mediaType: request.type),
     );
   }
 
@@ -439,39 +581,93 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
     final disableAnimations = MediaQuery.of(context).disableAnimations;
     return RefreshIndicator(
       onRefresh: vm.refresh,
-      child: ListView.builder(
-        controller: _issuesScroll,
-        padding: EdgeInsets.fromLTRB(_leftInset, 8, 16, 80),
-        itemCount: s.issues.length + (s.hasMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index >= s.issues.length) {
-            return const _LoaderRow();
-          }
-          final issue = s.issues[index];
-          final animate =
-              !disableAnimations && !_animatedIssueIds.contains(issue.id);
-          if (animate) _animatedIssueIds.add(issue.id);
-          return _Entrance(
-            key: ValueKey('issue-${issue.id}'),
-            animate: animate,
-            slot: index.clamp(0, 8),
-            child: _IssueCard(
-              issue: issue,
-              summary: s.summaryFor(issue),
-              canResolve: vm.canResolve(issue),
-              isActioning: s.actioningIssueId == issue.id,
-              onTap: () => _showIssueDialog(issue),
-              onResolve: () => issue.isOpen
-                  ? vm.resolveIssue(issue.id)
-                  : vm.reopenIssue(issue.id),
-            ),
-          );
-        },
+      child: BottomNavPadded(
+        fallback: 80,
+        builder: (context, bottom) => ListView.builder(
+          controller: _issuesScroll,
+          padding: EdgeInsets.fromLTRB(_leftInset, 8, 16, bottom),
+          itemCount: s.issues.length + (s.hasMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index >= s.issues.length) {
+              return const _LoaderRow();
+            }
+            final issue = s.issues[index];
+            final animate =
+                !disableAnimations && !_animatedIssueIds.contains(issue.id);
+            if (animate) _animatedIssueIds.add(issue.id);
+            return _Entrance(
+              key: ValueKey('issue-${issue.id}'),
+              animate: animate,
+              slot: index.clamp(0, 8),
+              child: _IssueCard(
+                issue: issue,
+                summary: s.summaryFor(issue),
+                canResolve: vm.canResolve(issue),
+                isActioning: s.actioningIssueId == issue.id,
+                onTap: () => _showIssueDialog(issue),
+                onResolve: () => issue.isOpen
+                    ? vm.resolveIssue(issue.id)
+                    : vm.reopenIssue(issue.id),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
+  /// Grid sized so a tile holds a whole 2:3 poster plus the caption. Records
+  /// the geometry it works out so the row snap uses the same numbers. Shared
+  /// by the grid and its skeleton, so the loading state has the same shape as
+  /// what replaces it.
+  ///
+  /// The ratio comes from the real tile width: the poster scales with width
+  /// but the caption is a fixed height, so no single ratio works everywhere.
+  SliverGridDelegate _tileGrid(double scale, double available, double topPad) {
+    final extent = (PlatformDetection.isTV ? 150.0 : 220.0) * scale;
+    final spacing = 16 * scale;
+    final rowSpacing = 24 * scale;
+    final columns = math.max(
+      1,
+      ((available + spacing) / (extent + spacing)).ceil(),
+    );
+    final tileWidth = (available - spacing * (columns - 1)) / columns;
+    final tileHeight =
+        tileWidth * 1.5 +
+        SeerrRequestTileCaption.reservedHeight * scale +
+        _tileFocusInset * 2;
+    // Written during build on purpose. It is a plain field the row snap reads
+    // after the frame, not state the widget rebuilds from.
+    _tileGeometry = (
+      perLine: columns,
+      lineExtent: tileHeight,
+      lineSpacing: rowSpacing,
+      leadingPad: topPad,
+    );
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: columns,
+      childAspectRatio: tileWidth / tileHeight,
+      crossAxisSpacing: spacing,
+      mainAxisSpacing: rowSpacing,
+    );
+  }
+
   Widget _buildSkeletonList() {
+    if (_usesTileGrid) {
+      return LayoutBuilder(
+        builder: (context, constraints) => GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(_leftInset, 12, 16, 80),
+          gridDelegate: _tileGrid(
+            _uiScale(),
+            constraints.maxWidth - _leftInset - 16,
+            12,
+          ),
+          itemCount: 12,
+          itemBuilder: (_, _) => const _SkeletonCard(tile: true),
+        ),
+      );
+    }
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.fromLTRB(_leftInset, 8, 16, 80),
@@ -485,14 +681,14 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
     );
   }
 
-  Widget _buildError(String error, Future<void> Function() onRetry) {
+  Widget _buildError(Object error, Future<void> Function() onRetry) {
     final l10n = AppLocalizations.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            error,
+            describeError(error, l10n),
             style: TextStyle(
               color: AppColorScheme.onSurface.withValues(alpha: 0.7),
             ),
@@ -617,7 +813,10 @@ class _LoaderRow extends StatelessWidget {
 
 /// Pulsing placeholder card shown while a tab loads.
 class _SkeletonCard extends StatefulWidget {
-  const _SkeletonCard();
+  /// Poster-shaped, matching the desktop grid, rather than the stacked row.
+  final bool tile;
+
+  const _SkeletonCard({this.tile = false});
 
   @override
   State<_SkeletonCard> createState() => _SkeletonCardState();
@@ -653,8 +852,51 @@ class _SkeletonCardState extends State<_SkeletonCard>
             borderRadius: AppRadius.circular(4),
           ),
         );
+        if (widget.tile) {
+          // Same slack as the real tile, so the poster is the same size.
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AspectRatio(
+                  aspectRatio: 2 / 3,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: fill,
+                      borderRadius: radius,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    10 * scale,
+                    8 * scale,
+                    10 * scale,
+                    10 * scale,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      bar(120, 13),
+                      SizedBox(height: 4 * scale),
+                      bar(70, 18),
+                      SizedBox(height: 4 * scale),
+                      bar(100, 11),
+                      SizedBox(height: 4 * scale),
+                      bar(80, 11),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
         return Container(
-          height: 140 * scale,
+          height: _cardHeight * scale,
           margin: EdgeInsets.only(bottom: 12 * scale),
           decoration: BoxDecoration(
             color: AppColorScheme.onSurface.withValues(alpha: 0.04),
@@ -663,7 +905,7 @@ class _SkeletonCardState extends State<_SkeletonCard>
           child: Row(
             children: [
               Container(
-                width: 93 * scale,
+                width: _cardPosterWidth * scale,
                 decoration: BoxDecoration(
                   color: fill,
                   borderRadius: BorderRadius.only(
@@ -841,9 +1083,12 @@ class _HubChipState extends State<_HubChip> with FocusStateMixin {
             scale: showFocusBorder ? 1.05 : 1.0,
             duration: const Duration(milliseconds: 120),
             child: Container(
+              // The border grows 1 -> 2 on focus and adds to the container
+              // size, so take that pixel back out of the padding to keep the
+              // box steady.
               padding: EdgeInsets.symmetric(
-                horizontal: 12 * scale,
-                vertical: 6 * scale,
+                horizontal: 12 * scale - (showFocusBorder ? 1 : 0),
+                vertical: 6 * scale - (showFocusBorder ? 1 : 0),
               ),
               decoration: BoxDecoration(
                 color: widget.selected
@@ -885,33 +1130,36 @@ class _CardActionButton extends StatelessWidget {
   final FocusNode? focusNode;
   final VoidCallback? onPressed;
 
+  /// Draw the icon alone and put the label in a tooltip. Two labelled buttons
+  /// want about 190px and a TV tile's caption has about 111, so the second
+  /// fell outside the card shell's ClipRRect but stayed focusable.
+  final bool compact;
+
   const _CardActionButton({
     required this.label,
     required this.icon,
     required this.color,
     this.focusNode,
     this.onPressed,
+    this.compact = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final scale = _uiScale();
-    final button = TextButton.icon(
+    final glyph = Icon(icon, size: (compact ? 18 : 16) * scale, color: color);
+    Widget button = TextButton(
       onPressed: onPressed,
       focusNode: focusNode,
-      icon: Icon(icon, size: 16 * scale, color: color),
-      label: Text(
-        label,
-        style: TextStyle(color: color, fontSize: 12.5 * scale),
-      ),
       style:
           TextButton.styleFrom(
             backgroundColor: color.withValues(alpha: 0.12),
             padding: EdgeInsets.symmetric(
-              horizontal: 10 * scale,
+              horizontal: (compact ? 8 : 10) * scale,
               vertical: 6 * scale,
             ),
-            minimumSize: Size(0, 32 * scale),
+            // Same height either way, so the caption's reservation holds.
+            minimumSize: Size(compact ? 36 * scale : 0, 32 * scale),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(borderRadius: AppRadius.circular(8)),
           ).copyWith(
@@ -921,7 +1169,24 @@ class _CardActionButton extends StatelessWidget {
                   : BorderSide.none,
             ),
           ),
+      child: compact
+          ? glyph
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                glyph,
+                SizedBox(width: 8 * scale),
+                Text(
+                  label,
+                  style: TextStyle(color: color, fontSize: 12.5 * scale),
+                ),
+              ],
+            ),
     );
+
+    if (compact) {
+      button = Tooltip(message: label, child: button);
+    }
 
     final node = focusNode;
     if (node == null) return button;
@@ -1004,12 +1269,18 @@ class _HubCardShell extends StatelessWidget {
   final bool highlighted;
   final Color highlightColor;
   final bool expandOnFocus;
+
+  /// Gap under the card, for the stacked list. The grid uses mainAxisSpacing
+  /// instead, where this margin would eat into every cell.
+  final bool spacedBelow;
+
   final Widget child;
 
   const _HubCardShell({
     required this.highlighted,
     required this.highlightColor,
     required this.expandOnFocus,
+    this.spacedBelow = true,
     required this.child,
   });
 
@@ -1023,7 +1294,9 @@ class _HubCardShell extends StatelessWidget {
       duration: const Duration(milliseconds: 120),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 120),
-        margin: EdgeInsets.only(bottom: 12 * scale),
+        margin: spacedBelow
+            ? EdgeInsets.only(bottom: 12 * scale)
+            : EdgeInsets.zero,
         decoration: BoxDecoration(
           borderRadius: radius,
           border: Border.fromBorderSide(
@@ -1050,28 +1323,33 @@ class _HubCardShell extends StatelessWidget {
   }
 }
 
-class _TypeBadge extends StatelessWidget {
+/// One badge shape for the request card, so the type badge and the status
+/// pill match in height.
+class _Badge extends StatelessWidget {
   final String label;
   final Color color;
 
-  const _TypeBadge({required this.label, required this.color});
+  const _Badge({required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
     final scale = _uiScale();
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6 * scale, vertical: 2 * scale),
+      padding: EdgeInsets.symmetric(horizontal: 8 * scale, vertical: 3 * scale),
       decoration: BoxDecoration(
-        color: color,
+        // Seerr's badge treatment: fill at 80%, a full border of the same
+        // hue, light text of that hue. Reads better on dark than solid with
+        // white text.
+        color: color.withValues(alpha: 0.8),
+        border: Border.all(color: color),
         borderRadius: AppRadius.circular(4),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: AppColorScheme.onBadge,
-          fontSize: 9.5 * scale,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
+          color: _badgeForeground(color),
+          fontSize: 11 * scale,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -1088,6 +1366,10 @@ class _RequestCard extends StatefulWidget {
   final VoidCallback? onDecline;
   final VoidCallback? onRetry;
 
+  /// Fired when this card takes focus, so the grid can slide its row to a
+  /// whole-row offset instead of leaving the next one half cut.
+  final VoidCallback? onFocusGained;
+
   const _RequestCard({
     required this.request,
     this.summary,
@@ -1097,6 +1379,7 @@ class _RequestCard extends StatefulWidget {
     this.onApprove,
     this.onDecline,
     this.onRetry,
+    this.onFocusGained,
   });
 
   @override
@@ -1128,7 +1411,7 @@ class _RequestCardState extends State<_RequestCard> with FocusStateMixin {
     final title =
         media?.title ?? media?.name ?? widget.summary?.title ?? l10n.unknown;
     final requester = request.requestedBy?.bestName ?? l10n.unknown;
-    final date = request.createdAt?.split('T').first ?? '';
+    final date = _formatRequestDate(context, request.createdAt);
 
     return _CardActionFocus(
       cardFocus: _cardFocus,
@@ -1136,11 +1419,22 @@ class _RequestCardState extends State<_RequestCard> with FocusStateMixin {
       child: MouseRegion(
         onEnter: (_) => setHovered(true),
         onExit: (_) => setHovered(false),
-        child: _HubCardShell(
-          highlighted: showFocusBorder,
-          highlightColor: focusColor,
-          expandOnFocus: cardFocusExpansion,
-          child: _buildCard(l10n, posterPath, title, requester, date),
+        // Room inside the cell for the focus scale. The scale is a transform
+        // so it never widens the layout box, and ensureVisible parks a focused
+        // cell flush against the viewport edge. A 344px tile at 1.02 needs
+        // 3.4px a side, and the rest covers the border, a theme glow and
+        // rounding.
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: _usesTileGrid ? _tileFocusInset : 0,
+          ),
+          child: _HubCardShell(
+            highlighted: showFocusBorder,
+            highlightColor: focusColor,
+            expandOnFocus: cardFocusExpansion,
+            spacedBelow: !_usesTileGrid,
+            child: _buildCard(l10n, posterPath, title, requester, date),
+          ),
         ),
       ),
     );
@@ -1153,150 +1447,323 @@ class _RequestCardState extends State<_RequestCard> with FocusStateMixin {
     String requester,
     String date,
   ) {
-    final scale = _uiScale();
-    final onSurface = AppColorScheme.onSurface;
-    final isTv = request.type == 'tv';
-    final typeLabel = (isTv ? l10n.series : l10n.movie).toUpperCase();
-    final modifier = request.modifiedBy?.bestName;
-    final downloadSummary = SeerrDownloadSummary.forRequest(request);
-
     return InkWell(
       onTap: widget.onTap,
+      mouseCursor: SystemMouseCursors.click,
       focusNode: _cardFocus,
-      onFocusChange: setFocused,
-      child: SizedBox(
-        height: 140 * scale,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 93 * scale,
-              child: posterPath != null
-                  ? CachedNetworkImage(
-                      imageUrl: '$_tmdbPosterBase$posterPath',
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      placeholder: (_, _) =>
-                          ColoredBox(color: AppColorScheme.surfaceVariant),
-                    )
-                  : Container(
-                      color: AppColorScheme.surfaceVariant,
-                      child: Icon(
-                        Icons.movie,
-                        color: onSurface.withValues(alpha: 0.24),
-                        size: 40 * scale,
-                      ),
+      onFocusChange: (value) {
+        setFocused(value);
+        if (value) widget.onFocusGained?.call();
+      },
+      child: _usesTileGrid
+          ? _posterTile(l10n, posterPath, title, requester, date)
+          : _compactRow(l10n, posterPath, title, requester, date),
+    );
+  }
+
+  /// Poster tile for the desktop and TV grid. The poster is what you scan and
+  /// the stripe under it carries the status. Phone and tablet keep the card.
+  Widget _posterTile(
+    AppLocalizations l10n,
+    String? posterPath,
+    String title,
+    String requester,
+    String date,
+  ) {
+    final scale = _uiScale();
+    final onSurface = AppColorScheme.onSurface;
+    final downloadSummary = SeerrDownloadSummary.forRequest(request);
+    final (statusLabel, statusColor) = _StatusChip.infoFor(request, l10n);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A true 2:3. As Expanded it took whatever the caption left over and
+        // BoxFit.cover cropped it.
+        AspectRatio(
+          aspectRatio: 2 / 3,
+          child: ClipRRect(
+            borderRadius: AppRadius.circular(8),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (posterPath != null)
+                  OfflineAwareImage(
+                    imageUrl: '$_tmdbPosterBase$posterPath',
+                    fit: BoxFit.cover,
+                    placeholder: (_, _) =>
+                        ColoredBox(color: AppColorScheme.surfaceVariant),
+                  )
+                else
+                  Container(
+                    color: AppColorScheme.surfaceVariant,
+                    child: Icon(
+                      Icons.movie,
+                      color: onSurface.withValues(alpha: 0.24),
+                      size: 40 * scale,
                     ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(12 * scale),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: onSurface,
-                        fontSize: 15 * scale,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 6 * scale),
-                    Row(
-                      children: [
-                        _TypeBadge(
-                          label: request.is4k ? '$typeLabel · 4K' : typeLabel,
-                          color: isTv
-                              ? AppColorScheme.mediaTypeBadgeShow
-                              : AppColorScheme.mediaTypeBadgeMovie,
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        _StatusChip(request: request),
-                        const Spacer(),
-                        if (date.isNotEmpty)
-                          Text(
-                            date,
-                            style: TextStyle(
-                              color: onSurface.withValues(alpha: 0.38),
-                              fontSize: 11 * scale,
-                            ),
-                          ),
-                      ],
-                    ),
-                    if (downloadSummary != null) ...[
-                      SizedBox(height: 4 * scale),
-                      SeerrDownloadProgressBar(
-                        summary: downloadSummary,
-                        scale: scale,
-                      ),
-                    ],
-                    SizedBox(height: 4 * scale),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            modifier != null
-                                ? '${l10n.requestedByName(requester)} · ${l10n.modifiedByName(modifier)}'
-                                : l10n.requestedByName(requester),
-                            style: TextStyle(
-                              color: onSurface.withValues(alpha: 0.54),
-                              fontSize: 12 * scale,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (widget.isActioning)
-                          SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: onSurface,
-                            ),
-                          )
-                        else if (widget.canManage &&
-                            request.status == SeerrRequest.statusPending) ...[
-                          _CardActionButton(
-                            label: l10n.approve,
-                            icon: Icons.check_circle_outline,
-                            color: AppColorScheme.statusAvailable,
-                            focusNode: _approveFocus,
-                            onPressed: widget.onApprove,
-                          ),
-                          const SizedBox(width: 6),
-                          _CardActionButton(
-                            label: l10n.declineAction,
-                            icon: Icons.cancel_outlined,
-                            color: AppColorScheme.statusError,
-                            focusNode: _declineFocus,
-                            onPressed: widget.onDecline,
-                          ),
-                        ] else if (widget.canManage &&
-                            request.status == SeerrRequest.statusFailed)
-                          _CardActionButton(
-                            label: l10n.retry,
-                            icon: Icons.refresh,
-                            color: AppColorScheme.statusPending,
-                            focusNode: _retryFocus,
-                            onPressed: widget.onRetry,
-                          ),
-                      ],
-                    ),
-                  ],
+                  ),
+                Positioned(
+                  top: 8 * scale,
+                  left: 8 * scale,
+                  child: SeerrMediaTypeBadge(
+                    mediaType: request.type,
+                    suffix: request.is4k ? '4K' : null,
+                    scale: scale,
+                  ),
                 ),
+                // Status colour only. Progress is the bar under the title.
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _StatusStripe(color: statusColor, scale: scale),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SeerrRequestTileCaption(
+          title: title,
+          requestedByLabel: l10n.requestedByLabel,
+          requester: requester,
+          date: date,
+          scale: scale,
+          marqueeTitle: showFocusBorder,
+          status: downloadSummary != null
+              ? SeerrDownloadProgressBar(
+                  summary: downloadSummary,
+                  // The tile's own scale, so the bar stays in proportion
+                  // with the caption around it.
+                  scale: scale,
+                )
+              : _StatusPill(label: statusLabel, color: statusColor),
+          actions: _actions(l10n, onSurface),
+        ),
+      ],
+    );
+  }
+
+  Widget _compactRow(
+    AppLocalizations l10n,
+    String? posterPath,
+    String title,
+    String requester,
+    String date,
+  ) {
+    final scale = _uiScale();
+    final onSurface = AppColorScheme.onSurface;
+    final downloadSummary = SeerrDownloadSummary.forRequest(request);
+    return SizedBox(
+      // Fixed on purpose. The list gives children an unbounded height, so
+      // sizing to content here (stretch, IntrinsicHeight) throws.
+      height: _cardHeight * scale,
+      child: Row(
+        children: [
+          SizedBox(
+            width: _cardPosterWidth * scale,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (posterPath != null)
+                  OfflineAwareImage(
+                    imageUrl: '$_tmdbPosterBase$posterPath',
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    placeholder: (_, _) =>
+                        ColoredBox(color: AppColorScheme.surfaceVariant),
+                  )
+                else
+                  Container(
+                    color: AppColorScheme.surfaceVariant,
+                    child: Icon(
+                      Icons.movie,
+                      color: onSurface.withValues(alpha: 0.24),
+                      size: 40 * scale,
+                    ),
+                  ),
+                // On the artwork like the poster tiles, so the title keeps
+                // the full line.
+                Positioned(
+                  top: 6 * scale,
+                  left: 6 * scale,
+                  child: SeerrMediaTypeBadge(
+                    mediaType: request.type,
+                    suffix: request.is4k ? '4K' : null,
+                    scale: scale,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(12 * scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // The type badge is on the poster, so the title has the
+                  // full width.
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: onSurface,
+                      fontSize: 15 * scale,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 6 * scale),
+                  // One state line, like the grid. The bar says more than the
+                  // chip, and the two together contradict each other.
+                  if (downloadSummary != null)
+                    SeerrDownloadProgressBar(summary: downloadSummary)
+                  else
+                    _StatusChip(request: request),
+                  // Pins the provenance to the foot so it lines up across the
+                  // list. The card height is fixed, so the slack is real.
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        // Who asked, then when. The editor is usually the
+                        // requester, so it is not shown.
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              l10n.requestedByName(requester),
+                              style: TextStyle(
+                                color: onSurface.withValues(alpha: 0.54),
+                                fontSize: 12 * scale,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            if (date.isNotEmpty)
+                              Text(
+                                date,
+                                style: TextStyle(
+                                  color: onSurface.withValues(alpha: 0.38),
+                                  fontSize: 12 * scale,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                          ],
+                        ),
+                      ),
+                      if (widget.isActioning)
+                        SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: onSurface,
+                          ),
+                        )
+                      else if (widget.canManage &&
+                          request.status == SeerrRequest.statusPending) ...[
+                        _CardActionButton(
+                          label: l10n.approve,
+                          icon: Icons.check_circle_outline,
+                          color: AppColorScheme.statusAvailable,
+                          focusNode: _approveFocus,
+                          onPressed: widget.onApprove,
+                        ),
+                        const SizedBox(width: 6),
+                        _CardActionButton(
+                          label: l10n.declineAction,
+                          icon: Icons.cancel_outlined,
+                          color: AppColorScheme.statusError,
+                          focusNode: _declineFocus,
+                          onPressed: widget.onDecline,
+                        ),
+                      ] else if (widget.canManage &&
+                          request.status == SeerrRequest.statusFailed)
+                        _CardActionButton(
+                          label: l10n.retry,
+                          icon: Icons.refresh,
+                          color: AppColorScheme.statusPending,
+                          focusNode: _retryFocus,
+                          onPressed: widget.onRetry,
+                        ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  /// The tile's action row: approve and decline, retry, or the spinner. Icon
+  /// only, since the caption under a poster is too narrow for two labelled
+  /// buttons. The stacked card builds its own labelled pair inline.
+  List<Widget> _actions(AppLocalizations l10n, Color onSurface) {
+    if (widget.isActioning) {
+      return [
+        SizedBox(
+          width: 18,
+          height: 18,
+          child: CircularProgressIndicator(strokeWidth: 2, color: onSurface),
+        ),
+      ];
+    }
+    if (widget.canManage && request.status == SeerrRequest.statusPending) {
+      return [
+        _CardActionButton(
+          label: l10n.approve,
+          icon: Icons.check_circle_outline,
+          color: AppColorScheme.statusAvailable,
+          focusNode: _approveFocus,
+          onPressed: widget.onApprove,
+          compact: true,
+        ),
+        const SizedBox(width: 8),
+        _CardActionButton(
+          label: l10n.declineAction,
+          icon: Icons.cancel_outlined,
+          color: AppColorScheme.statusError,
+          focusNode: _declineFocus,
+          onPressed: widget.onDecline,
+          compact: true,
+        ),
+      ];
+    }
+    if (widget.canManage && request.status == SeerrRequest.statusFailed) {
+      return [
+        _CardActionButton(
+          label: l10n.retry,
+          icon: Icons.refresh,
+          color: AppColorScheme.statusPending,
+          focusNode: _retryFocus,
+          onPressed: widget.onRetry,
+          compact: true,
+        ),
+      ];
+    }
+    return const [];
+  }
+}
+
+/// The band at the foot of a poster tile. Status colour only, so a wall of
+/// tiles is easy to scan. Not a progress bar: the app already has one.
+class _StatusStripe extends StatelessWidget {
+  final Color color;
+  final double scale;
+
+  const _StatusStripe({required this.color, required this.scale});
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 5 * scale,
+    child: ColoredBox(color: color),
+  );
 }
 
 class _StatusPill extends StatelessWidget {
@@ -1306,29 +1773,7 @@ class _StatusPill extends StatelessWidget {
   const _StatusPill({required this.label, required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    final scale = _uiScale();
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8 * scale, vertical: 3 * scale),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.2),
-        borderRadius: AppRadius.circular(4),
-        border: Border.fromBorderSide(
-          ThemeRegistry.active.borders.chipBorder.copyWith(
-            color: color.withValues(alpha: 0.4),
-          ),
-        ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 11 * scale,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => _Badge(label: label, color: color);
 }
 
 class _StatusChip extends StatelessWidget {
@@ -1343,6 +1788,10 @@ class _StatusChip extends StatelessWidget {
     return _StatusPill(label: label, color: color);
   }
 
+  /// Label and colour for a request, shared by the pill and the tile stripe.
+  static (String, Color) infoFor(SeerrRequest request, AppLocalizations l10n) =>
+      _StatusChip(request: request)._statusInfo(l10n);
+
   /// Mirrors the seerr web UI: the request's own status wins only for
   /// declined and failed, everything else reflects the media status.
   (String, Color) _statusInfo(AppLocalizations l10n) {
@@ -1352,21 +1801,46 @@ class _StatusChip extends StatelessWidget {
     if (request.status == SeerrRequest.statusFailed) {
       return (l10n.failedStatus, AppColorScheme.statusError);
     }
-    if (request.status == SeerrRequest.statusCompleted) {
-      return (l10n.seerrAvailableStatus, AppColorScheme.statusAvailable);
-    }
-    final mediaStatus =
-        request.is4k ? request.media?.status4k : request.media?.status;
+    // Media status wins, not the request status. A completed request whose
+    // media was later deleted is media status 7. Seerr's own RequestCard reads
+    // media.status too.
+    final mediaStatus = request.is4k
+        ? request.media?.status4k
+        : request.media?.status;
+    // Seerr shows one media status as two words. Its StatusBadge reads
+    // "Processing" when downloadStatus is not empty and "Requested" when it is
+    // empty. Waiting on Radarr and downloading are the same code but not the
+    // same state, so mirror that.
+    final queue = request.is4k
+        ? request.media?.downloadStatus4k
+        : request.media?.downloadStatus;
+    final inProgress = queue != null && queue.isNotEmpty;
     return switch (mediaStatus) {
       2 => (l10n.pendingStatus, AppColorScheme.statusPending),
-      3 => (l10n.seerrRequestedStatus, AppColorScheme.statusRequested),
-      4 => (l10n.partiallyAvailable, AppColorScheme.statusAvailable),
+      3 =>
+        inProgress
+            ? (l10n.processingStatus, AppColorScheme.statusRequested)
+            : (l10n.seerrRequestedStatus, AppColorScheme.statusRequested),
+      4 =>
+        inProgress
+            ? (l10n.processingStatus, AppColorScheme.statusRequested)
+            : (l10n.partiallyAvailable, AppColorScheme.statusAvailable),
       5 => (l10n.seerrAvailableStatus, AppColorScheme.statusAvailable),
       6 => (l10n.blocklistedStatus, AppColorScheme.statusError),
       7 => (l10n.deletedStatus, AppColorScheme.statusError),
-      _ => request.status == SeerrRequest.statusPending
-          ? (l10n.pendingStatus, AppColorScheme.statusPending)
-          : (l10n.approvedStatus, AppColorScheme.accent),
+      // Only when the media status is unknown does the request status
+      // decide.
+      _ => switch (request.status) {
+        SeerrRequest.statusPending => (
+          l10n.pendingStatus,
+          AppColorScheme.statusPending,
+        ),
+        SeerrRequest.statusCompleted => (
+          l10n.seerrAvailableStatus,
+          AppColorScheme.statusAvailable,
+        ),
+        _ => (l10n.approvedStatus, AppColorScheme.accent),
+      },
     };
   }
 }
@@ -1413,7 +1887,7 @@ class _IssueCardState extends State<_IssueCard> with FocusStateMixin {
     final title =
         media?.title ?? media?.name ?? widget.summary?.title ?? l10n.unknown;
     final reporter = issue.createdBy?.bestName ?? l10n.unknown;
-    final date = issue.createdAt?.split('T').first ?? '';
+    final date = _formatRequestDate(context, issue.createdAt);
     final scope = _issueScopeLabel(l10n, issue);
     final typeLine = scope.isEmpty
         ? _issueTypeLabel(l10n, issue.issueType).toUpperCase()
@@ -1458,16 +1932,17 @@ class _IssueCardState extends State<_IssueCard> with FocusStateMixin {
 
     return InkWell(
       onTap: widget.onTap,
+      mouseCursor: SystemMouseCursors.click,
       focusNode: _cardFocus,
       onFocusChange: setFocused,
       child: SizedBox(
-        height: 140 * scale,
+        height: _cardHeight * scale,
         child: Row(
           children: [
             SizedBox(
-              width: 93 * scale,
+              width: _cardPosterWidth * scale,
               child: posterPath != null
-                  ? CachedNetworkImage(
+                  ? OfflineAwareImage(
                       imageUrl: '$_tmdbPosterBase$posterPath',
                       fit: BoxFit.cover,
                       height: double.infinity,

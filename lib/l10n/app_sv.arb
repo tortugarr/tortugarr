@@ -21,11 +21,11 @@
     "@quickConnect": {
         "description": "Quick Connect toggle button label"
     },
-    "password": "Losenord",
+    "password": "Lösenord",
     "@password": {
         "description": "Password field label and toggle button"
     },
-    "username": "Anvandarnamn",
+    "username": "Användarnamn",
     "@username": {
         "description": "Username field label"
     },
@@ -33,7 +33,7 @@
     "@quickConnectInstruction": {
         "description": "Instruction text for Quick Connect code entry"
     },
-    "waitingForAuthorization": "Vantar pa auktorisering...",
+    "waitingForAuthorization": "Väntar pa auktorisering…",
     "@waitingForAuthorization": {
         "description": "Quick Connect polling status text"
     },
@@ -257,7 +257,7 @@
     "@exitAppConfirmation": {
         "description": "Body text of exit confirmation dialog"
     },
-    "exit": "Utgång",
+    "exit": "Avsluta",
     "@exit": {
         "description": "Exit button label"
     },
@@ -1744,7 +1744,7 @@
             }
         }
     },
-    "auto": "Bil",
+    "auto": "Auto",
     "@auto": {
         "description": "Label for automatic bitrate selection"
     },
@@ -7749,10 +7749,6 @@
     "@settingsAudioFallbackCodecEac3": {
         "description": "Fallback codec option: EAC3"
     },
-    "settingsAudioFallbackCodecTrueHd": "TrueHD\n(Förlustfritt)",
-    "@settingsAudioFallbackCodecTrueHd": {
-        "description": "Fallback codec option: TrueHD"
-    },
     "settingsAudioFallbackCodecMp3": "MP3\n(Endast stereo)",
     "@settingsAudioFallbackCodecMp3": {
         "description": "Fallback codec option: MP3"
@@ -9005,5 +9001,85 @@
     "imdbMostPopularMovies": "IMDb Populäraste filmerna",
     "imdbMostPopularTvShows": "IMDb Populäraste TV-serierna",
     "imdbLowestRatedMovies": "IMDb Lägst betygsatta filmer",
-    "imdbTopEnglishMovies": "IMDb Högst betygsatta engelskspråkiga filmer"
+    "imdbTopEnglishMovies": "IMDb Högst betygsatta engelskspråkiga filmer",
+    "groupByType": "Gruppera efter typ",
+    "@groupByType": {
+        "description": "Checkbox label to group playlists by their media type category"
+    },
+    "playlistTypes": "Typer av spellistor",
+    "@playlistTypes": {
+        "description": "Section header in the library display dialog for filtering playlist categories"
+    },
+    "playlistTypeVideo": "Video",
+    "@playlistTypeVideo": {
+        "description": "Filter checkbox label for video playlists"
+    },
+    "playlistTypeAudio": "Audio",
+    "@playlistTypeAudio": {
+        "description": "Filter checkbox label for audio/music playlists"
+    },
+    "playlistTypeAudiobook": "Ljudbok",
+    "@playlistTypeAudiobook": {
+        "description": "Filter checkbox label for audiobook playlists"
+    },
+    "playlistTypeBook": "Bok",
+    "@playlistTypeBook": {
+        "description": "Filter checkbox label for book playlists"
+    },
+    "playlistTypePhoto": "Foto",
+    "@playlistTypePhoto": {
+        "description": "Filter checkbox label for photo playlists"
+    },
+    "videoPlaylistsSection": "Spellistor (video)",
+    "@videoPlaylistsSection": {
+        "description": "Section header above video playlists when Group by Type is enabled"
+    },
+    "audiobookPlaylistsSection": "Spellistor (ljudböcker)",
+    "@audiobookPlaylistsSection": {
+        "description": "Section header above audiobook playlists when Group by Type is enabled"
+    },
+    "bookPlaylistsSection": "Spellistor (böcker)",
+    "@bookPlaylistsSection": {
+        "description": "Section header above book playlists when Group by Type is enabled"
+    },
+    "photoPlaylistsSection": "Spellistor (foton)",
+    "@photoPlaylistsSection": {
+        "description": "Section header above photo playlists when Group by Type is enabled"
+    },
+    "dislike": "Ogilla",
+    "@dislike": {
+        "description": "Personal rating action for a negative rating."
+    },
+    "decrease": "Minska",
+    "@decrease": {
+        "description": "Action that decreases a numeric personal rating."
+    },
+    "playlistTypeMixed": "Mixat",
+    "@playlistTypeMixed": {
+        "description": "Filter checkbox label for mixed media playlists"
+    },
+    "mixedPlaylistsSection": "Spellistor (blandat)",
+    "@mixedPlaylistsSection": {
+        "description": "Section header above mixed playlists when Group by Type is enabled"
+    },
+    "grouping": "Gruppering",
+    "@grouping": {
+        "description": "Section header in the library display dialog for grouping options"
+    },
+    "audioPlaylistsSection": "Spellistor (audio)",
+    "@audioPlaylistsSection": {
+        "description": "Section header above audio playlists when Group by Type is enabled"
+    },
+    "groupByStudio": "Studio",
+    "@groupByStudio": {
+        "description": "Option to group library items by production studio"
+    },
+    "like": "Gilla",
+    "@like": {
+        "description": "Personal rating action for a positive rating."
+    },
+    "increase": "Öka",
+    "@increase": {
+        "description": "Action that increases a numeric personal rating."
+    }
 }

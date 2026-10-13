@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../util/language_codes.dart';
-import '../../../util/locale_names.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../l10n/app_localizations.dart';
@@ -28,33 +27,12 @@ class SubtitleSettingsScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final prefs = GetIt.instance<UserPreferences>();
 
-    final iso3ToIso1 = {
-      for (final entry in kIso6391To6392.entries) entry.value: entry.key,
-    };
-
-    final supportedIso3Codes = AppLocalizations.supportedLocales.map((locale) {
-      final lang1 = locale.languageCode;
-      return kIso6391To6392[lang1] ?? lang1;
-    }).toSet();
-
-    final langOptions = {'': l10n.none};
-
-    for (final entry in kIso6392Languages.entries) {
-      final code = entry.key;
-      if (!supportedIso3Codes.contains(code)) {
-        continue;
-      }
-      final englishName = entry.value;
-      final iso1 = iso3ToIso1[code];
-      final displayName =
-          (iso1 != null ? kLocaleDisplayNames[iso1] : null) ?? englishName;
-      langOptions[code] = displayName;
-    }
+    final langOptions = {'': l10n.none, ...supportedLanguageOptions};
 
     return withCleanSettingsTypography(
       context,
       Scaffold(
-        appBar: buildSettingsAppBar(context, Text(l10n.subtitlePreferences)),
+        appBar: buildSettingsAppBar(context, Text(l10n.subtitles)),
         body: ListenableBuilder(
           listenable: prefs,
           builder: (context, _) {
@@ -62,7 +40,9 @@ class SubtitleSettingsScreen extends StatelessWidget {
             final showStreamSettings = mode != SubtitleMode.none;
 
             return ListView(
-              padding: const EdgeInsets.only(bottom: 64.0),
+              padding: EdgeInsets.only(
+                bottom: 64.0 + MediaQuery.paddingOf(context).bottom,
+              ),
               children: [
                 SettingsSectionHeader(l10n.general),
                 adaptiveListSection(
@@ -113,6 +93,18 @@ class SubtitleSettingsScreen extends StatelessWidget {
                         title: l10n.preferSdhSubtitles,
                         subtitle: l10n.preferSdhSubtitlesSubtitle,
                         icon: Icons.hearing,
+                      ),
+                      SwitchPreferenceTile(
+                        preference: UserPreferences.preferTextSubtitles,
+                        title: l10n.preferTextSubtitles,
+                        subtitle: l10n.preferTextSubtitlesSubtitle,
+                        icon: Icons.subtitles,
+                      ),
+                      SwitchPreferenceTile(
+                        preference: UserPreferences.preferExternalSubtitles,
+                        title: l10n.preferExternalSubtitles,
+                        subtitle: l10n.preferExternalSubtitlesSubtitle,
+                        icon: Icons.file_download,
                       ),
                     ],
                   ),

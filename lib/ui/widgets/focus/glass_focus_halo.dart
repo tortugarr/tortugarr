@@ -3,21 +3,27 @@ import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../util/idiom/glass_capability.dart';
 import '../../../util/platform_detection.dart';
+import 'glass_press_scale.dart';
 
 /// tvOS-style focus and hover treatment: a gentle scale pop plus a white
-/// hairline ring and soft glow. It only uses borders and BoxShadows, never
-/// blur filters, so it is safe on every tier including Android TV sheen.
+/// hairline ring and soft glow, and a grow while a pointer is down. It only
+/// uses borders and BoxShadows, never blur filters, so it's safe on every
+/// tier including Android TV sheen.
 ///
 /// Under non-glass looks the ring falls back to the accent color so existing
 /// themes keep their identity.
 class GlassFocusHalo extends StatelessWidget {
+  static const double _borderWidth = 2;
+
   const GlassFocusHalo({
     super.key,
     required this.focused,
     required this.child,
     this.borderRadius,
     this.scale = 1.05,
+    this.pressGrowth = 17.0,
     this.padding,
+    this.ringOverPaints = false,
     this.ringColor,
     this.backgroundColor,
     this.duration = const Duration(milliseconds: 120),
@@ -27,9 +33,21 @@ class GlassFocusHalo extends StatelessWidget {
   final Widget child;
   final BorderRadius? borderRadius;
 
-  /// Scale applied while focused; 1.0 disables the pop (e.g. toolbar icons).
+  /// Scale applied while focused. 1.0 disables the pop, for toolbar icons and
+  /// anything else that shouldn't grow.
   final double scale;
+
+  /// Logical pixels the longest side gains while a pointer is down. 0
+  /// disables it, for surfaces that carry their own press response.
+  final double pressGrowth;
   final EdgeInsetsGeometry? padding;
+
+  /// Paint the ring over the child rather than around it.
+  ///
+  /// The ring is laid out whether or not the halo has focus, so drawn around
+  /// it widens the child on every side for a state it may never reach. A
+  /// surface that hugs its contents wants it painted over instead.
+  final bool ringOverPaints;
   final Color? ringColor;
   final Color? backgroundColor;
   final Duration duration;
@@ -49,16 +67,21 @@ class GlassFocusHalo extends StatelessWidget {
             ? Colors.white.withValues(alpha: 0.10)
             : AppColorScheme.accent.withValues(alpha: 0.18));
 
+    final border = Border.all(
+      color: focused ? ring : Colors.transparent,
+      width: _borderWidth,
+    );
+
     final content = AnimatedContainer(
       duration: duration,
       curve: Curves.easeOut,
       padding: padding ?? EdgeInsets.zero,
+      foregroundDecoration: ringOverPaints
+          ? BoxDecoration(borderRadius: radius, border: border)
+          : null,
       decoration: BoxDecoration(
         borderRadius: radius,
-        border: Border.all(
-          color: focused ? ring : Colors.transparent,
-          width: 2,
-        ),
+        border: ringOverPaints ? null : border,
         color: focused ? bg : Colors.transparent,
         boxShadow: focused && apple
             ? const [
@@ -78,12 +101,13 @@ class GlassFocusHalo extends StatelessWidget {
       child: child,
     );
 
-    if (scale == 1.0) return content;
+    final pressed = GlassPressScale(growth: pressGrowth, child: content);
+    if (scale == 1.0) return pressed;
     return AnimatedScale(
       scale: focused ? scale : 1.0,
       duration: duration,
       curve: Curves.easeOutCubic,
-      child: content,
+      child: pressed,
     );
   }
 }

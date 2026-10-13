@@ -1,0 +1,148 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:moonfin/data/models/download_quality.dart';
+import 'package:moonfin/data/services/download_service.dart';
+
+/// Tests for the per-download engine choice. Android must keep transcoded
+/// downloads on the in-process engines, the only ones that hold a foreground
+/// notification for a chunked response the native engine cannot measure.
+void main() {
+  bool choose({
+    required bool isAndroid,
+    required DownloadQuality quality,
+    bool pluginEngineSupported = true,
+    bool serverNeedsLegacyTls = false,
+    bool destinationOnRemovableStorage = false,
+  }) {
+    return downloadUsesPluginEngine(
+      pluginEngineSupported: pluginEngineSupported,
+      serverNeedsLegacyTls: serverNeedsLegacyTls,
+      isAndroid: isAndroid,
+      qualityTranscoded: quality.isTranscoded,
+      destinationOnRemovableStorage: destinationOnRemovableStorage,
+    );
+  }
+
+  test('Android runs original quality on the native engine', () {
+    expect(choose(isAndroid: true, quality: DownloadQuality.original), isTrue);
+  });
+
+  test('Android keeps every transcoded quality off the native engine', () {
+    for (final quality in DownloadQuality.values.where((q) => q.isTranscoded)) {
+      expect(choose(isAndroid: true, quality: quality), isFalse);
+    }
+  });
+
+  test('other platforms still run transcoded downloads natively', () {
+    expect(
+      choose(isAndroid: false, quality: DownloadQuality.high1080p),
+      isTrue,
+    );
+  });
+
+  test('a server that refused the native TLS handshake stays on legacy', () {
+    expect(
+      choose(
+        isAndroid: true,
+        quality: DownloadQuality.original,
+        serverNeedsLegacyTls: true,
+      ),
+      isFalse,
+    );
+  });
+
+  test('an unsupported platform or missing coordinator stays on legacy', () {
+    expect(
+      choose(
+        isAndroid: true,
+        quality: DownloadQuality.original,
+        pluginEngineSupported: false,
+      ),
+      isFalse,
+    );
+  });
+
+  test(
+    'a removable destination stays on legacy so the finalizing move is not a '
+    'cross-volume copy',
+    () {
+      expect(
+        choose(
+          isAndroid: false,
+          quality: DownloadQuality.original,
+          destinationOnRemovableStorage: true,
+        ),
+        isFalse,
+      );
+      expect(
+        choose(
+          isAndroid: true,
+          quality: DownloadQuality.original,
+          destinationOnRemovableStorage: true,
+        ),
+        isFalse,
+      );
+    },
+  );
+
+  group('transmux engine choice', () {
+    bool chooseTransmux({
+      bool isAndroid = true,
+      required DownloadQuality quality,
+      bool itemSupportsTranscodedDownload = true,
+      bool serverNeedsLegacyTls = false,
+    }) {
+      return downloadUsesTransmuxEngine(
+        isAndroid: isAndroid,
+        qualityTranscoded: quality.isTranscoded,
+        itemSupportsTranscodedDownload: itemSupportsTranscodedDownload,
+        serverNeedsLegacyTls: serverNeedsLegacyTls,
+      );
+    }
+
+    test('every transcoded quality transmuxes on Android', () {
+      for (final quality in DownloadQuality.values.where(
+        (q) => q.isTranscoded,
+      )) {
+        expect(chooseTransmux(quality: quality), isTrue);
+      }
+    });
+
+    test('original quality already carries a seek index and skips it', () {
+      expect(chooseTransmux(quality: DownloadQuality.original), isFalse);
+    });
+
+    test('only Android has the native transmux side', () {
+      expect(
+        chooseTransmux(isAndroid: false, quality: DownloadQuality.high1080p),
+        isFalse,
+      );
+    });
+
+    test('an item type without transcoded downloads skips it', () {
+      expect(
+        chooseTransmux(
+          quality: DownloadQuality.high1080p,
+          itemSupportsTranscodedDownload: false,
+        ),
+        isFalse,
+      );
+    });
+
+    test('a server that refused the native TLS handshake skips it', () {
+      expect(
+        chooseTransmux(
+          quality: DownloadQuality.high1080p,
+          serverNeedsLegacyTls: true,
+        ),
+        isFalse,
+      );
+    });
+
+    test('a transcoded Android download never falls to the native engine', () {
+      expect(
+        choose(isAndroid: true, quality: DownloadQuality.high1080p),
+        isFalse,
+      );
+    });
+  });
+}
