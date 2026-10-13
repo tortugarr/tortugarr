@@ -319,9 +319,23 @@ through a VPN with a kill switch.
 ## When something looks wrong
 
 **Jellyfin says "Plugin updates available" for Moonfin. Should I update?**
-No. Tortugarr is tested with Moonfin plugin 2.0.2, and the installer keeps it there on purpose.
-If it was updated anyway, `sudo tortugarr repair` puts 2.0.2 back. See
-[troubleshooting](../server/docs/troubleshooting.md).
+
+No — this is deliberate. Tortugarr is a fully integrated, tested stack: the installer, the
+Jellyfin / Seerr / Sonarr / Radarr containers, and the Moonfin (Moonbase) server plugin are all
+pinning to specific versions and validated together end-to-end, including the plugin version
+**2.0.2.0**. Updating the plugin to a newer upstream release is not supported: Tortugarr's own
+features — automated download routing, junk-release filtering, missing-episode handling, and
+free-space enforcement — are built against the pinned plugin and can break with upstream changes.
+The installer keeps the pinned version in place, and if it is ever updated anyway,
+`sudo tortugarr repair` restores 2.0.2.0. See [troubleshooting](../server/docs/troubleshooting.md).
+
+**Where to report problems.** Bugs, support questions, and unexpected behaviour are handled
+**only by the Tortugarr maintainers**. Please file **every** issue at the [Tortugarr GitHub
+issues page](https://github.com/tortugarr/tortugarr/issues), and not in the upstream Moonfin
+tracker. The upstream Moonfin project maintains and supports only its own media-player client
+(`Moonfin`, org.moonfin.androidtv). The Moonfin developers bear **no responsibility for**, and
+provide **no support for**, Tortugarr-specific builds, the pinned server plugin version,
+Tortugarr's server stack, or its automation features.
 
 **A series shows up under the wrong name (e.g. "Ted" appears as "Ted Lasso").**
 The folder name was ambiguous. Rename the folder to `Title (Year)`. If that's not enough, add the

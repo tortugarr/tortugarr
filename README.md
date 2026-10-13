@@ -3,6 +3,9 @@
 Tortugarr is a specialized, couch-locked automation extension fork of the [Moonfin-Core](https://github.com/Moonfin-Client/Moonfin-Core) framework (built on commit `567e2a8c`). 
 
 While the core media playback, multi-server unification, and design engine are powered by Moonfin and its contributors, Tortugarr adds a dedicated automated server orchestration installer, localized junk-release filtering, and single-click remote download routing directly from the TV layout.
+
+**Support and responsibility.** Tortugarr is an independent project with its own infrastructure: its own build pipeline, Docker image set, server installer, server plugin integration, and issue tracker. The upstream Moonfin-Core maintainers own and support only their own media-player client (`Moonfin`, org.moonfin.androidtv). They bear **no responsibility for**, and provide **no support for**, Tortugarr-specific builds, the pinned server plugin version (2.0.2.0), Tortugarr's server stack, or Tortugarr's automation features. Please report all bugs and feature requests to the [Tortugarr issue tracker](https://github.com/tortugarr/tortugarr/issues).
+
 <p align="center">
   <img src="docs/images/screensaver-sign.webp" alt="Tortugarr – Every pirate needs a harbor" width="520">
 </p>

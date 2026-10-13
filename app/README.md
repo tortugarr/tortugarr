@@ -34,3 +34,8 @@ and scans the APK for private values before keeping it.
 ## Licence
 
 GPL-2.0, see [LICENSE](LICENSE). Original Moonfin copyright and licence notices are kept.
+
+**Note on support.** Tortugarr is an independent project with its own build pipeline and issue
+tracker. The upstream Moonfin developers maintain and support only their own client, and are not
+responsible for Tortugarr-specific builds or the pinned server plugin version (2.0.2.0). All
+Tortugarr bugs and requests should be filed at the [Tortugarr issue tracker](https://github.com/tortugarr/tortugarr/issues).
