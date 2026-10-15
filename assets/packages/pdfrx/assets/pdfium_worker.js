@@ -1446,15 +1446,38 @@ function _loadDocument(docHandle, useProgressiveLoading, onDispose) {
  */
 function _loadPagesInLimitedTime(docHandle, pagesLoadedCountSoFar, maxPageCountToLoadAdditionally, timeoutMs) {
   const pageCount = Pdfium.wasmExports.FPDF_GetPageCount(docHandle);
+  const end =
+    maxPageCountToLoadAdditionally == null
+      ? pageCount
+      : Math.min(pageCount, pagesLoadedCountSoFar + maxPageCountToLoadAdditionally);
   const t = timeoutMs != null ? Date.now() + timeoutMs : null;
   /** @type {PdfPage[]} */
   const pages = [];
   _resetMissingFonts();
-  for (let i = pagesLoadedCountSoFar; i < pageCount; i++) {
-    pages.push(_loadPageMetadata(docHandle, i));
-    if (maxPageCountToLoadAdditionally != null && pages.length >= maxPageCountToLoadAdditionally) {
-      break;
+  for (let i = pagesLoadedCountSoFar; i < end; i++) {
+    const pageHandle = Pdfium.wasmExports.FPDF_LoadPage(docHandle, i);
+    if (!pageHandle) {
+      const error = Pdfium.wasmExports.FPDF_GetLastError();
+      throw new Error(`FPDF_LoadPage failed (${_getErrorMessage(error)})`);
     }
+
+    const rectBuffer = Pdfium.wasmExports.malloc(4 * 4); // FS_RECTF: float[4]
+    Pdfium.wasmExports.FPDF_GetPageBoundingBox(pageHandle, rectBuffer);
+    const rect = new Float32Array(Pdfium.memory.buffer, rectBuffer, 4);
+    const bbLeft = rect[0];
+    const bbBottom = rect[3];
+    Pdfium.wasmExports.free(rectBuffer);
+
+    pages.push({
+      pageIndex: i,
+      width: Pdfium.wasmExports.FPDF_GetPageWidthF(pageHandle),
+      height: Pdfium.wasmExports.FPDF_GetPageHeightF(pageHandle),
+      rotation: Pdfium.wasmExports.FPDFPage_GetRotation(pageHandle),
+      isLoaded: true,
+      bbLeft: bbLeft,
+      bbBottom: bbBottom,
+    });
+    Pdfium.wasmExports.FPDF_ClosePage(pageHandle);
     if (t != null && Date.now() > t) {
       break;
     }
@@ -1466,33 +1489,45 @@ function _loadPagesInLimitedTime(docHandle, pagesLoadedCountSoFar, maxPageCountT
 /**
  * @param {number} docHandle
  * @param {number} pagesLoadedCountSoFar
- * @param {number[]} loadedPageIndices
  * @param {number|null} maxPageCountToLoadAdditionally
  * @param {number} timeoutMs
  * @returns {Promise<PdfPage[]>}
  */
-async function _loadPagesInLimitedTimeAsync(
-  docHandle,
-  pagesLoadedCountSoFar,
-  loadedPageIndices,
-  maxPageCountToLoadAdditionally,
-  timeoutMs,
-) {
+async function _loadPagesInLimitedTimeAsync(docHandle, pagesLoadedCountSoFar, maxPageCountToLoadAdditionally, timeoutMs) {
   const pageCount = Pdfium.wasmExports.FPDF_GetPageCount(docHandle);
-  const loadedPages = new Set(loadedPageIndices);
+  const end =
+    maxPageCountToLoadAdditionally == null
+      ? pageCount
+      : Math.min(pageCount, pagesLoadedCountSoFar + maxPageCountToLoadAdditionally);
   const t = timeoutMs != null ? Date.now() + timeoutMs : null;
   /** @type {PdfPage[]} */
   const pages = [];
   _resetMissingFonts();
-  for (let i = pagesLoadedCountSoFar; i < pageCount; i++) {
-    if (loadedPages.has(i)) {
-      continue;
-    }
+  for (let i = pagesLoadedCountSoFar; i < end; i++) {
     await _ensurePageAvailable(docHandle, i);
-    pages.push(_loadPageMetadata(docHandle, i));
-    if (maxPageCountToLoadAdditionally != null && pages.length >= maxPageCountToLoadAdditionally) {
-      break;
+    const pageHandle = Pdfium.wasmExports.FPDF_LoadPage(docHandle, i);
+    if (!pageHandle) {
+      const error = Pdfium.wasmExports.FPDF_GetLastError();
+      throw new Error(`FPDF_LoadPage failed (${_getErrorMessage(error)})`);
     }
+
+    const rectBuffer = Pdfium.wasmExports.malloc(4 * 4); // FS_RECTF: float[4]
+    Pdfium.wasmExports.FPDF_GetPageBoundingBox(pageHandle, rectBuffer);
+    const rect = new Float32Array(Pdfium.memory.buffer, rectBuffer, 4);
+    const bbLeft = rect[0];
+    const bbBottom = rect[3];
+    Pdfium.wasmExports.free(rectBuffer);
+
+    pages.push({
+      pageIndex: i,
+      width: Pdfium.wasmExports.FPDF_GetPageWidthF(pageHandle),
+      height: Pdfium.wasmExports.FPDF_GetPageHeightF(pageHandle),
+      rotation: Pdfium.wasmExports.FPDFPage_GetRotation(pageHandle),
+      isLoaded: true,
+      bbLeft: bbLeft,
+      bbBottom: bbBottom,
+    });
+    Pdfium.wasmExports.FPDF_ClosePage(pageHandle);
     if (t != null && Date.now() > t) {
       break;
     }
@@ -1502,45 +1537,12 @@ async function _loadPagesInLimitedTimeAsync(
 }
 
 /**
- * Loads the pages listed in `pageIndices`, in that order, until `timeoutMs` elapses.
- * At least one page is loaded per call. Indices outside the document are ignored.
- * @param {number} docHandle
- * @param {number[]} pageIndices
- * @param {number} timeoutMs
- * @returns {Promise<PdfPage[]>}
- */
-async function _loadPageIndicesInLimitedTimeAsync(docHandle, pageIndices, timeoutMs) {
-  const pageCount = Pdfium.wasmExports.FPDF_GetPageCount(docHandle);
-  const t = Date.now() + timeoutMs;
-  /** @type {PdfPage[]} */
-  const pages = [];
-  _resetMissingFonts();
-  for (const i of pageIndices) {
-    if (i < 0 || i >= pageCount) {
-      continue;
-    }
-    await _ensurePageAvailable(docHandle, i);
-    pages.push(_loadPageMetadata(docHandle, i));
-    if (Date.now() > t) {
-      break;
-    }
-  }
-  _updateMissingFonts(docHandle);
-  return pages;
-}
-
-/**
- * `pageIndices`, when present, lists the unloaded pages in the order they should be measured
- * (e.g. spreading outward from the page being displayed); otherwise pages are measured from
- * `firstPageIndex` onward, skipping `loadedPageIndices`.
- * @param {{docHandle: number, firstPageIndex: number, loadedPageIndices: number[], pageIndices?: number[], loadUnitDuration: number}} params
+ * @param {{docHandle: number, loadUnitDuration: number}} params
  * @returns {{pages: PdfPage[], missingFonts: FontQueries}}
  */
 async function loadPagesProgressively(params) {
-  const { docHandle, firstPageIndex, loadedPageIndices, pageIndices, loadUnitDuration } = params;
-  const pages = pageIndices
-    ? await _loadPageIndicesInLimitedTimeAsync(docHandle, pageIndices, loadUnitDuration)
-    : await _loadPagesInLimitedTimeAsync(docHandle, firstPageIndex, loadedPageIndices, null, loadUnitDuration);
+  const { docHandle, firstPageIndex, loadUnitDuration } = params;
+  const pages = await _loadPagesInLimitedTimeAsync(docHandle, firstPageIndex, null, loadUnitDuration);
   return { pages, missingFonts: missingFonts[docHandle] };
 }
 
@@ -1555,10 +1557,9 @@ async function reloadPages(params) {
   const pages = [];
   const pageCount = Pdfium.wasmExports.FPDF_GetPageCount(docHandle);
   /** @type {number[]} */
-  const indicesToLoad = [];
+  var indicesToLoad = [];
   if (pageIndices) {
-    const requestedPageIndices = [...new Set(pageIndices)].sort((a, b) => a - b);
-    for (const pageIndex of requestedPageIndices) {
+    for (const pageIndex of pageIndices) {
       if (pageIndex < 0 || pageIndex >= pageCount) {
         throw new Error(`Invalid page index ${pageIndex} (page count: ${pageCount})`);
       }
@@ -1578,41 +1579,29 @@ async function reloadPages(params) {
   _resetMissingFonts();
   for (const pageIndex of indicesToLoad) {
     await _ensurePageAvailable(docHandle, pageIndex);
-    pages.push(_loadPageMetadata(docHandle, pageIndex));
-  }
-  return { pages, missingFonts: missingFonts[docHandle] };
-}
-
-/**
- * @param {number} docHandle
- * @param {number} pageIndex
- * @returns {PdfPage}
- */
-function _loadPageMetadata(docHandle, pageIndex) {
-  const pageHandle = Pdfium.wasmExports.FPDF_LoadPage(docHandle, pageIndex);
-  if (!pageHandle) {
-    const error = Pdfium.wasmExports.FPDF_GetLastError();
-    throw new Error(`FPDF_LoadPage failed (${_getErrorMessage(error)})`);
-  }
-  const rectBuffer = Pdfium.wasmExports.malloc(4 * 4);
-  try {
+    const pageHandle = Pdfium.wasmExports.FPDF_LoadPage(docHandle, pageIndex);
+    if (!pageHandle) {
+      const error = Pdfium.wasmExports.FPDF_GetLastError();
+      throw new Error(`FPDF_LoadPage failed (${_getErrorMessage(error)})`);
+    }
+    const rectBuffer = Pdfium.wasmExports.malloc(4 * 4); // FS_RECTF: float[4]
     Pdfium.wasmExports.FPDF_GetPageBoundingBox(pageHandle, rectBuffer);
     const rect = new Float32Array(Pdfium.memory.buffer, rectBuffer, 4);
     const bbLeft = rect[0];
     const bbBottom = rect[3];
-    return {
+    Pdfium.wasmExports.free(rectBuffer);
+    pages.push({
       pageIndex: pageIndex,
       width: Pdfium.wasmExports.FPDF_GetPageWidthF(pageHandle),
       height: Pdfium.wasmExports.FPDF_GetPageHeightF(pageHandle),
       rotation: Pdfium.wasmExports.FPDFPage_GetRotation(pageHandle),
       isLoaded: true,
-      bbLeft,
-      bbBottom,
-    };
-  } finally {
-    Pdfium.wasmExports.free(rectBuffer);
+      bbLeft: bbLeft,
+      bbBottom: bbBottom,
+    });
     Pdfium.wasmExports.FPDF_ClosePage(pageHandle);
   }
+  return { pages, missingFonts: missingFonts[docHandle] };
 }
 
 /**
@@ -1771,17 +1760,7 @@ async function renderPage(params) {
     Pdfium.wasmExports.FPDF_RenderPageBitmap(bitmap, pageHandle, -x, -y, fullWidth, fullHeight, rotation, pdfiumFlags);
 
     if (formHandle && annotationRenderingMode == PdfAnnotationRenderingMode_annotationAndForms) {
-      Pdfium.wasmExports.FPDF_FFLDraw(
-        formHandle,
-        bitmap,
-        pageHandle,
-        -x,
-        -y,
-        fullWidth,
-        fullHeight,
-        rotation,
-        pdfiumFlags,
-      );
+      Pdfium.wasmExports.FPDF_FFLDraw(formHandle, bitmap, pageHandle, -x, -y, fullWidth, fullHeight, rotation, flags);
     }
     const src = new Uint8Array(Pdfium.memory.buffer, bufferPtr, bufferSize);
     let copiedBuffer = new ArrayBuffer(bufferSize);
@@ -2721,9 +2700,8 @@ function encodePdf(params) {
       throw new Error('FPDF_SaveAsCopy failed');
     }
 
-    // Trim to the bytes actually written: subarray would keep the whole
-    // (over-allocated, zero-padded) buffer alive behind combined.buffer.
-    const combined = buffer.slice(0, totalSize);
+    // Trim buffer to actual size
+    const combined = buffer.subarray(0, totalSize);
 
     return {
       result: { data: combined.buffer },
