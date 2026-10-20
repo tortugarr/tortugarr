@@ -102,9 +102,10 @@ bool _shouldRunSetupWizard() {
   }
 }
 
-/// The admin area has no TV layout. The settings tile is hidden there and on
-/// servers it doesn't cover, and this stops deep links too.
-bool _adminAvailable() => !PlatformDetection.isTV && adminServerSupported();
+/// The admin area on the servers it covers. Tortugarr keeps it on TV (the
+/// pages get a TV focus ring in AdminShellScreen); Moonfin 2.7 blocks it
+/// there, which sent Settings > Administration straight home on the TV.
+bool _adminAvailable() => adminServerSupported();
 
 /// Surfaces that genuinely need the server. Everything else works offline
 /// against the downloads catalog.
