@@ -879,11 +879,28 @@ run_doctor() {
     elif [ "${pct:-0}" -ge 90 ]; then warning "$(t d_disk_low "$d" "$pct" "$free")"; warns=$((warns + 1))
     else good "$(t d_disk_ok "$d" "$free")"; fi
   done
-  # Hardlinks between downloads and library let imports be instant and use no extra space.
-  local a="$DATA_DIR/torrents/.tortugarr-link-test" b="$DATA_DIR/media/.tortugarr-link-test"
-  if touch "$a" 2>/dev/null && ln "$a" "$b" 2>/dev/null; then good "$(t d_hardlinks_ok)"
-  else warning "$(t d_hardlinks_no)"; warns=$((warns + 1)); fi
-  rm -f "$a" "$b"
+  if [ "$TORRENT_CLIENT" = qbittorrent-ext ]; then
+    # Downloads land on the user's own qBittorrent's drive: imports are copies, so free space
+    # there is what decides whether the next download fits.
+    local host
+    while read -r host; do
+      [ -n "$host" ] || continue
+      if [ -d "$host" ]; then
+        pct=$(df -P "$host" 2>/dev/null | awk 'NR==2 {gsub("%","",$5); print $5}')
+        free=$(free_gb "$host")
+        if [ "${pct:-0}" -ge 95 ]; then warning "$(t d_ext_space_low "$host" "$free")"; warns=$((warns + 1))
+        else good "$(t d_ext_space_ok "$host" "$free")"; fi
+      else
+        error "$(t ext_host_missing "$host")"; fails=$((fails + 1))
+      fi
+    done < <(jq -r '.mounts[]?.host_path' <<< "${EXT_QBIT_JSON:-{\}}")
+  else
+    # Hardlinks between downloads and library let imports be instant and use no extra space.
+    local a="$DATA_DIR/torrents/.tortugarr-link-test" b="$DATA_DIR/media/.tortugarr-link-test"
+    if touch "$a" 2>/dev/null && ln "$a" "$b" 2>/dev/null; then good "$(t d_hardlinks_ok)"
+    else warning "$(t d_hardlinks_no)"; warns=$((warns + 1)); fi
+    rm -f "$a" "$b"
+  fi
   if [ "$mode" != skip-api ]; then
     engine doctor || fails=$((fails + 1))
   fi

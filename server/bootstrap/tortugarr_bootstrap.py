@@ -1466,6 +1466,16 @@ def configure_jellyfin():
     jellyfin_server_name(h)
     jellyfin_libraries(h)
     jellyfin_scan_interval(h)
+    # An update copies a new Tortugarr plugin in while Jellyfin runs and removes the old folder.
+    # Until Jellyfin restarts it still has the old version loaded, and its package catalog fails
+    # on the missing folder ("Could not find a part of the path .../meta.json"), so installing
+    # the Moonfin plugin fails with 404. Restart first.
+    dist = tortugarr_plugin_dist()
+    loaded = [p.get("Version") for p in h.get("/Plugins") if p.get("Id", "").replace("-", "") == TORTUGARR_PLUGIN_GUID]
+    if dist and loaded and f"Tortugarr_{loaded[0]}" != dist[0]:
+        info(f"jellyfin: restarting to load {dist[0]} (still running Tortugarr {loaded[0]})")
+        jellyfin_restart_and_wait(h)
+        h, _ = jellyfin_login()
     if STATE.get("moonfin_plugin", True):
         if jellyfin_plugin(h):
             jellyfin_restart_and_wait(h)
