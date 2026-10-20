@@ -1357,9 +1357,11 @@ def jellyfin_plugin(h):
         repos.append({"Name": "Moonfin", "Url": repo, "Enabled": True})
         h.post("/Repositories", repos)
         ok("jellyfin: Moonfin plugin repository added")
-    if mine:
+    if any(moonfin_plugin_recent_enough(p.get("Version")) for p in mine):
         info(f"jellyfin: Moonfin plugin present with status {mine[0].get('Status')} - restart pending")
         return True
+    # Nothing recent enough (none at all, or the 2.0.2.0 an earlier release pinned): install the
+    # release's version next to it; jellyfin_plugin_pin removes the old one after the restart.
     q = urllib.parse.urlencode({"assemblyGuid": guid, "version": version, "repositoryUrl": repo})
     h.post(f"/Packages/Installed/Moonbase?{q}")
     ok(f"jellyfin: Moonfin plugin {version} installing")

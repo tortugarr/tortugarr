@@ -53,6 +53,27 @@ def main():
             check("other plugins untouched", json.load(f)["autoUpdate"] is False)
         check("nothing left to change", tb.jellyfin_plugin_pin() is False)
 
+        # Upgrading from the pinned 2.0.2.0: the new version must be installed, not skipped.
+        class FakeJellyfin:
+            def __init__(self, plugins):
+                self.plugins, self.posts = plugins, []
+
+            def get(self, path):
+                return {"/Plugins": self.plugins, "/Repositories": [{"Url": tb.STATE["moonfin_plugin_repo"]}]}[path]
+
+            def post(self, path, body=None):
+                self.posts.append(path)
+
+        tb.STATE["moonfin_plugin_repo"] = "https://example.invalid/manifest.json"
+        jf = FakeJellyfin([{"Id": GUID, "Version": "2.0.2.0", "Status": "Active"}])
+        check("pinned 2.0.2.0 present: restart needed", tb.jellyfin_plugin(jf) is True)
+        check("pinned 2.0.2.0 present: 2.4.0.0 gets installed",
+              any(p.startswith("/Packages/Installed/Moonbase?") and "version=2.4.0.0" in p for p in jf.posts), jf.posts)
+        jf = FakeJellyfin([{"Id": GUID, "Version": "2.5.0.0", "Status": "Active"}])
+        check("newer version active: nothing to do", tb.jellyfin_plugin(jf) is False and not jf.posts)
+        jf = FakeJellyfin([{"Id": GUID, "Version": "2.4.0.0", "Status": "Restart"}])
+        check("installed but not loaded yet: just a restart", tb.jellyfin_plugin(jf) is True and not jf.posts)
+
         # A state.json written by an older release has no minimum: the installed version is it.
         tb.STATE.pop("moonfin_plugin_min_version")
         check("falls back to the release version", tb.moonfin_plugin_min_version() == "2.4.0.0")
