@@ -154,7 +154,10 @@ ask_external_qbit() {
     def=$EXT_QBIT_URL
   done
   ext_qbit_discover || die "$(t ext_no_paths)"
-  is_wsl && ext_offer_more_drives
+  # Say where these came from, so the drive questions below do not leave people wondering.
+  local found; found=$(printf '%s, ' "${EXT_ROOTS[@]}"); found=${found%, }
+  say "$(t ext_found "$found")"
+  is_wsl && say "$(t ext_more_drives_intro)" && ext_offer_more_drives
   local m host
   while read -r m; do
     host=$(jq -r .host_path <<< "$m")
