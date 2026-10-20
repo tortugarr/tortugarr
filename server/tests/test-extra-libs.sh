@@ -36,6 +36,9 @@ check "MUSIC becomes music, keeps /data/library/8" '[ "$(q ".[] | select(.host_p
 check "removed folder is gone" '[ "$(q "[.[] | select(.host_path==\"/mnt/h/-=Serier=-/\")] | length")" = 0 ]'
 check "new folder gets the next free number" '[ "$(q ".[] | select(.host_path==\"$TMP/Konserter\") | \"\(.type) \(.container_path)\"")" = "music /data/library/9" ]'
 
+unset NEW_IN_EXTRA; ask_new_in_extra; check "new titles in own folders by default" '[ "$NEW_IN_EXTRA" = y ]'
+NEW_IN_EXTRA=n; ask_new_in_extra; check "the answer no is kept" '[ "$NEW_IN_EXTRA" = n ]'
+
 # A fresh install starts from an empty list.
 EXTRA_LIBS_JSON=''; mkdir -p "$TMP/Movies"
 EXTRA_PATH_1=$TMP/Movies EXTRA_TYPE_1=movies EXTRA_MANAGE_1=y

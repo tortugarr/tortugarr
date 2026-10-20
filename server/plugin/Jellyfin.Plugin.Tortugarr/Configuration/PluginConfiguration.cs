@@ -102,6 +102,10 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>Where qBittorrent saves adult downloads; the same path is the Jellyfin library.</summary>
     public string AdultSavePath { get; set; } = "/data/media/adult";
 
+    /// <summary>Where qBittorrent saves adult downloads when it sees the folder by another path
+    /// (a qBittorrent on Windows: E:\XxX). Empty: <see cref="AdultSavePath"/>.</summary>
+    public string AdultDownloadPath { get; set; } = string.Empty;
+
     public string AdultLibraryName { get; set; } = "Adult";
 
     public long AdultMinBytes { get; set; } = 20L * 1024 * 1024;

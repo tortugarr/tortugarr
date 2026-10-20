@@ -67,6 +67,7 @@ MSG[extra_type_other]="Andre videoer (klipp, hjemmevideo) - vises under Hjemmevi
 MSG[extra_type_remove]="Fjern fra biblioteket (filene blir liggende)"
 MSG[movies]="Filmer"
 MSG[tv]="Serier"
+MSG[q_new_in_extra]="Legge nye filmer og serier bare i dine egne mapper over, i den med mest ledig plass? Nei = Tortugarr sin egen mappe (%s) kan også velges (på WSL ligger den inni Linux-disken på C:)"
 MSG[q_extra_manage]="Skal Sonarr/Radarr også få styre (gi nytt navn/legge til i) denne mappen? Nei = Jellyfin bare leser den"
 MSG[q_extra_more]="Legge til en mappe til"
 MSG[q_torrent_client]="Hvilket torrentprogram"

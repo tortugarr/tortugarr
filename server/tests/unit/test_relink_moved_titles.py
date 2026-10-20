@@ -83,8 +83,8 @@ def main():
     check("American Dad pointed at E: Serier",
           (s[1]["path"], s[1]["rootFolderPath"]) == ("/data/library/4/American Dad", "/data/library/4"), s[1])
     check("a title in the right place is left alone", s[2]["path"] == "/data/library/9/Futurama")
-    check("wanted title in a movies folder moved to the roomiest tv folder",
-          s[5]["path"] == "/data/media/tv/Crystal Lake" and s[3]["path"] == "/data/media/tv/Gone Show", (s[5], s[3]))
+    check("wanted title in a movies folder moved to the user's roomiest tv folder, never the WSL disk",
+          s[5]["path"] == "/data/library/4/Crystal Lake" and s[3]["path"] == "/data/library/4/Gone Show", (s[5], s[3]))
     check("a title found in two folders is left alone", s[4]["path"] == "/data/library/2/Twice")
     check("files are not moved", all(p.endswith("?moveFiles=false") for p in sonarr.puts) and len(sonarr.puts) == 3)
     check("moved titles refreshed", sonarr.commands == [{"name": "RefreshSeries", "seriesIds": [1, 3, 5]}], sonarr.commands)
@@ -138,12 +138,12 @@ def main():
     radarr.collections = [{"id": 1, "rootFolderPath": "/data/library/1"}, {"id": 2, "rootFolderPath": "/data/library/3"}]
     del warnings[:]
     tb.relink_moved_titles("radarr", radarr)
-    check("wanted movie leaves the clips folder for the roomiest movie folder",
-          radarr.series[1]["path"] == "/data/media/movies/Sacrifice (2026)", radarr.series[1])
+    check("wanted movie leaves the clips folder for the user's own movie folder",
+          radarr.series[1]["path"] == "/data/library/3/Sacrifice (2026)", radarr.series[1])
     check("movie with a file Radarr cannot see is listed, not moved",
           radarr.series[2]["path"] == "/data/library/1/Hans Zimmer Live" and any("Hans Zimmer" in w for w in warnings), warnings)
     check("collection moved off the clips folder, the other kept",
-          [c["rootFolderPath"] for c in radarr.collections] == ["/data/media/movies", "/data/library/3"], radarr.collections)
+          [c["rootFolderPath"] for c in radarr.collections] == ["/data/library/3", "/data/library/3"], radarr.collections)
 
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)

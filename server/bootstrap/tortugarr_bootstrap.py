@@ -496,6 +496,30 @@ def install_tortugarr_plugin():
 TORTUGARR_REPO_URL = "http://127.0.0.1:8096/Tortugarr/v1/Repository/manifest.json"
 
 
+def windows_path(host_path):
+    """/mnt/e/-=XxX=-/ as Windows writes it (E:\\-=XxX=-); None for a path not on a Windows drive."""
+    m = re.match(r"^/mnt/([a-z])(/.*)?$", host_path.rstrip("/"))
+    return m and f"{m.group(1).upper()}:" + (m.group(2) or "\\").replace("/", "\\")
+
+
+def adult_download_path():
+    """Where a qBittorrent outside the stack saves adult downloads: the user's adult folder as it
+    sees it, so nothing lands in the Linux disk. Empty for the stack's own qBittorrent, which
+    saves to /data/media/adult (the plugin's default)."""
+    if torrent_client() != "qbittorrent-ext":
+        return ""
+    for e in STATE.get("extra_libraries", []):
+        if e.get("type") == "adult" and (p := windows_path(e["host_path"])):
+            return p
+    mounts = external_qbit().get("mounts", [])
+    return ext_join(mounts[0]["remote"], "adult") if mounts else ""
+
+
+def ext_join(root, name):
+    sep = "\\" if re.match(r"^[A-Za-z]:", root) else "/"
+    return root.rstrip("\\/") + sep + name
+
+
 def tortugarr_plugin_config(h):
     """The plugin's server-side settings: container addresses and keys. Never sent to the app."""
     client = torrent_client()
@@ -512,11 +536,11 @@ def tortugarr_plugin_config(h):
         # Several download folders (one per drive): the plugin picks the roomiest per grab.
         "DownloadRoots": "\n".join(f"{m['remote']}|{m['container_path']}" for m in external_qbit().get("mounts", [])),
         # New titles only go to root folders of their own type (never a folder not mounted there).
-        "MovieRoots": ",".join(arr_roots("radarr")), "TvRoots": ",".join(arr_roots("sonarr")),
+        "MovieRoots": ",".join(new_title_roots("radarr")), "TvRoots": ",".join(new_title_roots("sonarr")),
         # Radarr/Sonarr send this to the refresh hook (plugin spec 3.12) instead of a Jellyfin key.
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
         # The adult library stays as the administrator set it (off by default); only its place is set.
-        "AdultCategory": "adult", "AdultSavePath": "/data/media/adult",
+        "AdultCategory": "adult", "AdultSavePath": "/data/media/adult", "AdultDownloadPath": adult_download_path(),
     })
     h.post(f"/Plugins/{TORTUGARR_PLUGIN_GUID}/Configuration", conf)
     ok("jellyfin: Tortugarr plugin linked to Sonarr, Radarr, Bazarr and the download client")
@@ -974,7 +998,8 @@ def relink_moved_titles(app, h):
     roots = arr_roots(app)
     folders = h.get("/rootfolder")
     free = {f["path"].rstrip("/"): f.get("freeSpace") or 0 for f in folders}
-    roomiest = max((r for r in roots if r in free), key=lambda r: free[r], default=roots[0])
+    targets = new_title_roots(app)
+    roomiest = max((r for r in targets if r in free), key=lambda r: free[r], default=targets[0])
     names = {}
 
     def has(root, name):
@@ -1044,6 +1069,17 @@ def relink_moved_titles(app, h):
         if path.startswith("/data/library/") and path not in roots and path not in used:
             h.delete(f"/rootfolder/{f['id']}")
             ok(f"{app}: removed root folder {path} (not a {app.capitalize()} folder in Tortugarr's setup, no titles)")
+
+
+def new_title_roots(app):
+    """The root folders new titles go to: the user's own folders of this type when there are any
+    and new_titles_in_extra_only is on (the default), else every root of this type. On WSL
+    Tortugarr's own folder lives inside the distro's virtual disk, which reports its 1 TB limit
+    as free space; on 2026-10-20 it took every new movie away from the drives the user chose."""
+    roots = arr_roots(app)
+    if len(roots) > 1 and STATE.get("new_titles_in_extra_only", True):
+        return roots[1:]
+    return roots
 
 
 def configure_arr(app):
@@ -1767,8 +1803,10 @@ def configure_seerr():
         roots = test.get("rootFolders", [])
         prof = next((p for p in profiles if p["name"] == STATE.get("default_quality_profile", "HD-1080p")), None) \
             or (profiles[0] if profiles else None)
-        want_root = "/data/media/movies" if app == "radarr" else "/data/media/tv"
-        root = next((r for r in roots if r["path"].rstrip("/") == want_root), roots[0] if roots else None)
+        # Seerr adds a request to one fixed folder: the roomiest of those new titles go to now.
+        targets = set(new_title_roots(app))
+        root = max((r for r in roots if r["path"].rstrip("/") in targets), key=lambda r: r.get("freeSpace") or 0,
+                   default=roots[0] if roots else None)
         if not prof or not root:
             raise BootstrapError(f"seerr: {app} returned no quality profile or root folder")
         body = {

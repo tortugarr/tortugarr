@@ -50,6 +50,7 @@ load_state() {
   QUALITY_PROFILE=$(state_get .default_quality_profile)
   SCAN_MINUTES=$(state_get .library_scan_minutes)
   EXTRA_LIBS_JSON=$(jq -c '.extra_libraries // []' "$f")
+  NEW_IN_EXTRA=$(jq -r 'if .new_titles_in_extra_only == false then "n" else "y" end' "$f")
   CREATED_JSON=$(jq -c '.created // {}' "$f")
   INSTALLED_VERSION=$(state_get .tortugarr_version)
   local l; l=$(state_get .language); [ -n "$l" ] && [ -z "${LANG_FORCED:-}" ] && load_language "$l"
@@ -70,7 +71,7 @@ write_state() {
     --argjson hwaccel "$( [ "$HWACCEL" = true ] && echo true || echo false)" \
     --argjson pj "$P_JELLYFIN" --argjson ps "$P_SEERR" --argjson pso "$P_SONARR" --argjson pr "$P_RADARR" \
     --argjson pp "$P_PROWLARR" --argjson ptw "$P_TORRENT_WEB" --argjson ptp "$P_TORRENT_PEER" --argjson psab "$P_SABNZBD" --argjson pbz "${P_BAZARR:-6767}" \
-    --argjson extra "${EXTRA_LIBS_JSON:-[]}" --arg profile "${QUALITY_PROFILE:-HD-1080p}" \
+    --argjson extra "${EXTRA_LIBS_JSON:-[]}" --argjson newextra "$( [ "${NEW_IN_EXTRA:-y}" = y ] && echo true || echo false)" --arg profile "${QUALITY_PROFILE:-HD-1080p}" \
     --argjson scan "${SCAN_MINUTES:-30}" --arg sublangs "${SUB_LANGS:-en}" \
     --arg prepo "$MOONFIN_PLUGIN_REPO" --arg pguid "$MOONFIN_PLUGIN_GUID" --arg pver "$MOONFIN_PLUGIN_VERSION" --arg pmin "${MOONFIN_PLUGIN_MIN_VERSION:-$MOONFIN_PLUGIN_VERSION}" \
     --argjson created "${CREATED_JSON:-{\}}" --argjson extqb "${EXT_QBIT_JSON:-null}" \
@@ -81,7 +82,7 @@ write_state() {
       torrent_client:$client, usenet:$usenet, vpn:$vpn, hwaccel:$hwaccel,
       ports:{jellyfin:$pj, seerr:$ps, sonarr:$pso, radarr:$pr, prowlarr:$pp, bazarr:$pbz,
              torrent_web:$ptw, torrent_peer:$ptp, sabnzbd:$psab},
-      extra_libraries:$extra, default_quality_profile:$profile, library_scan_minutes:$scan,
+      extra_libraries:$extra, new_titles_in_extra_only:$newextra, default_quality_profile:$profile, library_scan_minutes:$scan,
       subtitle_languages:($sublangs | split(",") | map(select(length > 0))),
       moonfin_plugin:true, moonfin_plugin_repo:$prepo, moonfin_plugin_guid:$pguid,
       moonfin_plugin_version:$pver, moonfin_plugin_min_version:$pmin, created:$created}

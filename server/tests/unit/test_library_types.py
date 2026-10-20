@@ -82,6 +82,15 @@ def main():
     check("Radarr roots: own folder + managed movie folders", tb.arr_roots("radarr") == ["/data/media/movies", "/data/library/3"])
     check("Sonarr roots: own folder + managed tv folders", tb.arr_roots("sonarr") == ["/data/media/tv", "/data/library/9"])
 
+    check("new movies only in the user's own movie folders by default", tb.new_title_roots("radarr") == ["/data/library/3"])
+    check("new series only in the user's own tv folders by default", tb.new_title_roots("sonarr") == ["/data/library/9"])
+    tb.STATE["new_titles_in_extra_only"] = False
+    check("switched off: Tortugarr's own folder is a choice too",
+          tb.new_title_roots("radarr") == ["/data/media/movies", "/data/library/3"])
+    tb.STATE["extra_libraries"] = []
+    tb.STATE["new_titles_in_extra_only"] = True
+    check("without own folders Tortugarr's folder is used", tb.new_title_roots("radarr") == ["/data/media/movies"])
+
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 

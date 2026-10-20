@@ -69,6 +69,7 @@ MSG[extra_type_other]="Other videos (clips, home videos) - shown under Home Vide
 MSG[extra_type_remove]="Remove from the library (files stay where they are)"
 MSG[movies]="Movies"
 MSG[tv]="TV shows"
+MSG[q_new_in_extra]="Put new movies and series only in your own folders above, on the one with the most free space? No = Tortugarr's own folder (%s) is a choice too (on WSL that folder is inside the Linux virtual disk on C:)"
 MSG[q_extra_manage]="Let Sonarr/Radarr manage (rename/add to) this folder too? No = Jellyfin only reads it"
 MSG[q_extra_more]="Add another folder"
 MSG[q_torrent_client]="Which torrent client"

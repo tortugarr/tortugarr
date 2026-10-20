@@ -90,6 +90,12 @@ add_extra_libs() {
   done
 }
 
+# With movie or series folders Radarr/Sonarr may add to: do new titles go only there?
+ask_new_in_extra() {
+  jq -e 'any(.[]; .arr_manage and (.type == "movies" or .type == "tv"))' <<< "${EXTRA_LIBS_JSON:-[]}" >/dev/null || return 0
+  confirm NEW_IN_EXTRA "$(t q_new_in_extra "${DATA_DIR:-/srv/tortugarr}/media")" "${NEW_IN_EXTRA:-y}" || NEW_IN_EXTRA=n
+}
+
 # The extra-folder part of the installer's questions.
 ask_extra_libs() {  # reconf(0|1)
   if [ "$1" = 1 ] && [ "$(jq length <<< "${EXTRA_LIBS_JSON:-[]}")" -gt 0 ]; then
@@ -103,4 +109,5 @@ ask_extra_libs() {  # reconf(0|1)
     [ "$1" = 0 ] && EXTRA_LIBS_JSON='[]'
     confirm HAS_EXTRA "$(t q_extra_libs)" n && add_extra_libs
   fi
+  ask_new_in_extra
 }

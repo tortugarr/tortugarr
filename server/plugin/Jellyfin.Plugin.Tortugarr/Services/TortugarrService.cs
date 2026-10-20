@@ -644,7 +644,8 @@ public sealed class TortugarrService
         var url = !string.IsNullOrWhiteSpace(rel.MagnetUrl) ? rel.MagnetUrl : rel.DownloadUrl;
         var qbit = Qbit;
         var before = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false)).Select(t => (string?)t?["hash"]).ToHashSet();
-        await qbit.Add(url, Cfg.AdultCategory, Cfg.AdultSavePath, ct).ConfigureAwait(false);
+        var savePath = string.IsNullOrWhiteSpace(Cfg.AdultDownloadPath) ? Cfg.AdultSavePath : Cfg.AdultDownloadPath;
+        await qbit.Add(url, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
         string? hash = null;
         for (var i = 0; i < 15 && hash is null; i++)
         {
