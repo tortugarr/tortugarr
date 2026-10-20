@@ -115,4 +115,50 @@ void main() {
     await tester.pumpAndSettle();
     expect(menu.hasPrimaryFocus, isFalse);
   });
+
+  testWidgets('Back goes from the page to the menu, not out of the admin area',
+      (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final pages = GlobalKey<NavigatorState>();
+    final rail = FocusNode();
+    final list = FocusNode();
+    final scan = FocusNode();
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          pages: pages,
+          child: Row(
+            children: [
+              SizedBox(width: 100, child: TextButton(focusNode: rail, onPressed: () {}, child: const Text('Exit'))),
+              SizedBox(width: 200, child: TextButton(focusNode: list, onPressed: () {}, child: const Text('Dashboard'))),
+              Expanded(
+                child: Navigator(
+                  key: pages,
+                  onGenerateRoute: (_) => MaterialPageRoute<void>(
+                    builder: (_) => Align(
+                      alignment: Alignment.topLeft,
+                      child: TextButton(focusNode: scan, onPressed: () {}, child: const Text('Scan')),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
+    scan.requestFocus();
+    await tester.pumpAndSettle();
+
+    // The test harness has no physical key for goBack; Escape takes the same path.
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+    expect(list.hasPrimaryFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+    expect(rail.hasPrimaryFocus, isTrue);
+  });
 }

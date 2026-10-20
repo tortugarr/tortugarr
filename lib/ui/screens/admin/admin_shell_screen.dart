@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
@@ -101,7 +100,9 @@ class AdminShellScreen extends StatelessWidget {
     // The admin pages are built for touch; make focus visible on TV.
     return Theme(
       data: TvFocusRing.theme(theme),
-      child: TvFocusRing(child: AdminTvKeys(child: shell)),
+      child: TvFocusRing(
+        child: AdminTvKeys(pages: AdminShellScreen.navigatorKey, child: shell),
+      ),
     );
   }
 
@@ -603,14 +604,11 @@ class _ExitMark extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SvgPicture.asset(
-                    'assets/icons/moonfin_logo.svg',
+                  Image.asset(
+                    'assets/icons/tortugarr_admin_exit.png',
                     width: size,
                     height: size,
-                    colorFilter: ColorFilter.mode(
-                      scheme.onSurface,
-                      BlendMode.srcIn,
-                    ),
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 2),
                   Text(

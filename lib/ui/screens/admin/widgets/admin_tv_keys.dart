@@ -16,12 +16,19 @@ import 'package:flutter/services.dart';
 /// its top, and then the nearest control in that direction anywhere in the
 /// admin area takes focus.
 ///
+/// Back goes one step at a time: a screen opened inside the area closes, the
+/// page hands focus to the page list, the page list to the rail, and only the
+/// rail leaves the area. It went straight to the home screen before.
+///
 /// A HardwareKeyboard handler sees the key before the focused widget does,
 /// which a Focus or Shortcuts above the page would not.
 class AdminTvKeys extends StatefulWidget {
-  const AdminTvKeys({super.key, required this.child});
+  const AdminTvKeys({super.key, required this.child, this.pages});
 
   final Widget child;
+
+  /// The navigator the admin pages live in.
+  final GlobalKey<NavigatorState>? pages;
 
   @override
   State<AdminTvKeys> createState() => _AdminTvKeysState();
@@ -64,15 +71,31 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
       _move(node, ctx, direction);
       return true;
     }
-    if (inText &&
-        (key == LogicalKeyboardKey.goBack || key == LogicalKeyboardKey.escape)) {
+    final back = key == LogicalKeyboardKey.goBack || key == LogicalKeyboardKey.escape;
+    if (back && inText) {
       SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
       if (!node.focusInDirection(TraversalDirection.down)) {
         node.focusInDirection(TraversalDirection.up);
       }
       return true;
     }
+    if (back) return _back(node, ctx);
     return false;
+  }
+
+  bool _back(FocusNode node, BuildContext ctx) {
+    final pages = widget.pages?.currentContext;
+    // A screen opened inside the area closes the usual way.
+    if (widget.pages?.currentState?.canPop() ?? false) return false;
+    // Page -> page list -> rail; from the rail Back leaves the area.
+    final target = _nearestInArea(
+      node,
+      TraversalDirection.left,
+      where: (c) => pages == null || !_isInside(c, pages),
+    );
+    if (target == null) return false;
+    target.requestFocus();
+    return true;
   }
 
   static final _directions = <LogicalKeyboardKey, TraversalDirection>{
@@ -97,7 +120,11 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
 
   /// The closest focusable control in [direction] across the whole admin
   /// area, past the page navigator's focus scope.
-  FocusNode? _nearestInArea(FocusNode from, TraversalDirection direction) {
+  FocusNode? _nearestInArea(
+    FocusNode from,
+    TraversalDirection direction, {
+    bool Function(BuildContext)? where,
+  }) {
     final r = from.rect;
     FocusNode? best;
     var bestScore = double.infinity;
@@ -105,6 +132,7 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
       if (n == from || n is FocusScopeNode || !n.canRequestFocus) continue;
       final c = n.context;
       if (c == null || !_insideArea(c)) continue;
+      if (where != null && !where(c)) continue;
       final o = n.rect;
       if (o.isEmpty) continue;
       final double gap;
@@ -139,10 +167,13 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   /// Only the admin area: the handler is global while this widget lives.
   bool _insideArea(BuildContext ctx) {
     final area = _area.currentContext;
-    if (area == null) return false;
+    return area != null && _isInside(ctx, area);
+  }
+
+  static bool _isInside(BuildContext ctx, BuildContext ancestor) {
     var inside = false;
     ctx.visitAncestorElements((e) {
-      if (e == area) inside = true;
+      if (e == ancestor) inside = true;
       return !inside;
     });
     return inside;
