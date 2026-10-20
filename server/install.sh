@@ -538,6 +538,7 @@ cmd_reconfigure() {
   ask_questions 1
   show_summary
   confirm GO "$(t q_apply)" y || die "$(t aborted)"
+  step "$(t backup_first)"
   local b; b=$(make_backup quiet) && note "$(t backup_created "$b")"
   write_state
   ensure_dirs
@@ -556,6 +557,7 @@ cmd_update() {
   require_install
   header "$(t updating "$INSTALLED_VERSION" "$TORTUGARR_VERSION")"
   install_docker
+  step "$(t backup_first)"
   local b; b=$(make_backup quiet) || die "$(t backup_failed)"
   good "$(t backup_created "$b")"
   # Remember exactly what runs now, so a failed update can go back.

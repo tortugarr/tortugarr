@@ -20,10 +20,11 @@ def check(name, ok, detail=""):
 
 
 class FakeSonarr:
-    def __init__(self, series, folders, roots):
+    def __init__(self, series, folders, roots, free=None):
+        free = free or {}
         self.series = {s["id"]: s for s in series}
         self.folders = folders  # folder -> set of sub-folder names
-        self.roots = [{"id": i + 1, "path": r} for i, r in enumerate(roots)]
+        self.roots = [{"id": i + 1, "path": r, "freeSpace": free.get(r, 0)} for i, r in enumerate(roots)]
         self.puts, self.commands = [], []
 
     def get(self, path):
@@ -39,6 +40,8 @@ class FakeSonarr:
 
     def put(self, path, body):
         assert path.endswith("?moveFiles=false"), path
+        if any(s["path"] == body["path"] and s["id"] != body["id"] for s in self.series.values()):
+            raise tb.BootstrapError("HTTP 400: is already configured for an existing series")
         self.puts.append(path)
         self.series[body["id"]] = body
 
@@ -58,31 +61,50 @@ def main():
         {"host_path": "/mnt/e/-=Dokumentarer=-/", "container_path": "/data/library/2", "type": "movies", "arr_manage": True},
         {"host_path": "/mnt/e/-=Serier=-/", "container_path": "/data/library/4", "type": "tv", "arr_manage": True},
         {"host_path": "/mnt/h/-=Serier=-/", "container_path": "/data/library/9", "type": "tv", "arr_manage": True},
+        {"host_path": "/mnt/e/-=Clips=-/", "container_path": "/data/library/1", "type": "other", "arr_manage": False},
     ]
     sonarr = FakeSonarr(
         series=[{"id": 1, "path": "/data/library/2/American Dad", "rootFolderPath": "/data/library/2"},
                 {"id": 2, "path": "/data/library/9/Futurama", "rootFolderPath": "/data/library/9"},
                 {"id": 3, "path": "/data/library/2/Gone Show", "rootFolderPath": "/data/library/2"},
-                {"id": 4, "path": "/data/library/2/Twice", "rootFolderPath": "/data/library/2"}],
+                {"id": 4, "path": "/data/library/2/Twice", "rootFolderPath": "/data/library/2"},
+                {"id": 5, "path": "/data/library/2/Crystal Lake", "rootFolderPath": "/data/library/2"},
+                {"id": 6, "path": "/data/library/1/clips", "rootFolderPath": "/data/library/1"}],
         folders={"/data/library/2": {"Some Documentary (2020)"},
                  "/data/library/4": {"American Dad", "Twice"},
-                 "/data/library/9": {"Futurama", "Twice"}},
-        roots=["/data/library/2", "/data/media/tv", "/data/library/4", "/data/library/9"])
+                 "/data/library/9": {"Futurama", "Twice"},
+                 "/data/library/1": {"clips"}},
+        roots=["/data/library/2", "/data/media/tv", "/data/library/4", "/data/library/9", "/data/library/1"],
+        free={"/data/media/tv": 800, "/data/library/4": 50, "/data/library/9": 7})
+    warnings = []
+    tb.warn = warnings.append
     tb.relink_moved_titles("sonarr", sonarr)
     s = sonarr.series
     check("American Dad pointed at E: Serier",
           (s[1]["path"], s[1]["rootFolderPath"]) == ("/data/library/4/American Dad", "/data/library/4"), s[1])
     check("a title in the right place is left alone", s[2]["path"] == "/data/library/9/Futurama")
-    check("a title found nowhere is left alone", s[3]["path"] == "/data/library/2/Gone Show")
+    check("wanted title in a movies folder moved to the roomiest tv folder",
+          s[5]["path"] == "/data/media/tv/Crystal Lake" and s[3]["path"] == "/data/media/tv/Gone Show", (s[5], s[3]))
     check("a title found in two folders is left alone", s[4]["path"] == "/data/library/2/Twice")
-    check("files are not moved", all(p.endswith("?moveFiles=false") for p in sonarr.puts) and len(sonarr.puts) == 1)
-    check("moved title refreshed", sonarr.commands == [{"name": "RefreshSeries", "seriesIds": [1]}], sonarr.commands)
+    check("files are not moved", all(p.endswith("?moveFiles=false") for p in sonarr.puts) and len(sonarr.puts) == 3)
+    check("moved titles refreshed", sonarr.commands == [{"name": "RefreshSeries", "seriesIds": [1, 3, 5]}], sonarr.commands)
+    check("a series really in the clips folder is listed, not moved",
+          s[6]["path"] == "/data/library/1/clips" and any("/data/library/1/clips" in w for w in warnings), warnings)
     check("root folder still in use is kept", any(r["path"] == "/data/library/2" for r in sonarr.roots))
+    check("clips root kept while a title is in it", any(r["path"] == "/data/library/1" for r in sonarr.roots))
 
-    s[3]["path"], s[4]["path"] = "/data/library/4/Gone Show", "/data/library/4/Twice"
+    # Two titles for one folder (Radarr, 2026-10-20: The Summit): the PUT is refused, the rest goes on.
+    s[4]["path"] = "/data/library/4/Twice"
+    sonarr.series[7] = {"id": 7, "path": "/data/library/2/American Dad", "rootFolderPath": "/data/library/2"}
+    sonarr.folders["/data/library/9"].discard("Twice")
+    del warnings[:]
+    tb.relink_moved_titles("sonarr", sonarr)
+    check("a second title for the same folder is reported, not fatal",
+          sonarr.series[7]["path"] == "/data/library/2/American Dad" and any("American Dad" in w for w in warnings), warnings)
+    del sonarr.series[7]
     tb.relink_moved_titles("sonarr", sonarr)
     check("movies root folder without titles removed from Sonarr",
-          [r["path"] for r in sonarr.roots] == ["/data/media/tv", "/data/library/4", "/data/library/9"],
+          [r["path"] for r in sonarr.roots] == ["/data/media/tv", "/data/library/4", "/data/library/9", "/data/library/1"],
           [r["path"] for r in sonarr.roots])
 
     puts = len(sonarr.puts)

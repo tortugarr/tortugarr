@@ -937,11 +937,19 @@ def relink_moved_titles(app, h):
     """Points titles back at their folder when it is no longer where Radarr/Sonarr have it. Each
     extra media folder sits at /data/library/N; installers before 4.20.01 numbered them again
     when the list was entered anew, so on 2026-10-20 45 series and 74 movies pointed at a folder
-    that now held other things. A title is moved only when its folder is missing in its own root
-    and found in exactly one root of this type. Files are never touched (moveFiles=false), and
-    root folders under /data/library that are left empty and are not of this type are removed."""
+    that now held other things. Files are never touched (moveFiles=false):
+      - a title whose folder is missing in its own root and found in exactly one root of this
+        type is pointed there;
+      - a title in a /data/library root of another type with nothing on disk (wanted, not yet
+        downloaded) is moved to the root of this type with the most free space, so its download
+        does not land in, say, the clips folder;
+      - a title whose folder really is in a root of another type is listed for the user.
+    Root folders under /data/library that are left empty and are not of this type are removed."""
     kind = "series" if app == "sonarr" else "movie"
     roots = arr_roots(app)
+    folders = h.get("/rootfolder")
+    free = {f["path"].rstrip("/"): f.get("freeSpace") or 0 for f in folders}
+    roomiest = max((r for r in roots if r in free), key=lambda r: free[r], default=roots[0])
     names = {}
 
     def has(root, name):
@@ -950,25 +958,52 @@ def relink_moved_titles(app, h):
         return name in names[root]
 
     titles = h.get(f"/{kind}")
-    moved = []
+    taken = {t["path"].rstrip("/") for t in titles}
+    moved, stray, failed = [], [], []
     for t in titles:
         root, _, name = t["path"].rstrip("/").rpartition("/")
-        if not name or has(root, name):
+        wrong_type = root.startswith("/data/library/") and root not in roots
+        if not name:
+            continue
+        if has(root, name):
+            if wrong_type:
+                stray.append(t["path"])
             continue
         found = [r for r in roots if r != root and has(r, name)]
-        if len(found) != 1:
+        if len(found) == 1:
+            target = found[0]
+        elif wrong_type and not found:
+            target = roomiest
+        else:
             continue
-        t.update({"path": f"{found[0]}/{name}", "rootFolderPath": found[0]})
-        h.put(f"/{kind}/{t['id']}?moveFiles=false", t)
+        new_path = f"{target}/{name}"
+        if new_path in taken:
+            failed.append(f"{t['path']} ({new_path} belongs to another title)")
+            continue
+        body = dict(t, path=new_path, rootFolderPath=target)
+        try:
+            h.put(f"/{kind}/{t['id']}?moveFiles=false", body)
+        except BootstrapError as e:
+            failed.append(f"{t['path']} ({str(e)[-80:]})")
+            continue
+        taken.discard(t["path"].rstrip("/"))
+        taken.add(new_path)
+        t.update(body)
         moved.append(t["id"])
     if moved:
         if app == "sonarr":
             h.post("/command", {"name": "RefreshSeries", "seriesIds": moved})
         else:
             h.post("/command", {"name": "RefreshMovie", "movieIds": moved})
-        ok(f"{app}: {len(moved)} title(s) pointed back at the folder they are in (no files moved)")
+        ok(f"{app}: {len(moved)} title(s) pointed at the right folder (no files moved)")
+    if failed:
+        warn(f"{app}: could not be pointed at their folder: {'; '.join(failed)} - when two titles share "
+             f"a folder, delete the wrong one in {app.capitalize()} (do not delete its files)")
+    if stray:
+        warn(f"{app}: in a folder that is not a {app.capitalize()} folder any more: {'; '.join(stray)} - "
+             f"delete them in {app.capitalize()} if they do not belong there (do not delete the files)")
     used = {t["path"].rstrip("/").rpartition("/")[0] for t in titles}
-    for f in h.get("/rootfolder"):
+    for f in folders:
         path = f["path"].rstrip("/")
         if path.startswith("/data/library/") and path not in roots and path not in used:
             h.delete(f"/rootfolder/{f['id']}")
