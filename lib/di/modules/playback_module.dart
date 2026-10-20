@@ -355,9 +355,7 @@ void registerPlaybackModule() {
   }
 
   final useMedia3ByDefault =
-      PlatformDetection.isAndroid &&
-      prefs.get(UserPreferences.playbackEnginePreference) ==
-          PlaybackEnginePreference.media3;
+      PlatformDetection.isAndroid && prefs.prefersMedia3Now;
   final PlayerBackend initialBackend = PlatformDetection.isAppleTV
       ? appleTvBackend!
       : (PlatformDetection.isIOS || PlatformDetection.isMacOS)
@@ -499,9 +497,7 @@ void registerPlaybackModule() {
     }
 
     if (PlatformDetection.isAndroid) {
-      final preferMedia3 =
-          prefs.get(UserPreferences.playbackEnginePreference) ==
-          PlaybackEnginePreference.media3;
+      final preferMedia3 = prefs.prefersMedia3Now;
       if (preferMedia3) {
         if (currentBackend is Media3PlayerBackend) return currentBackend;
         return _getIt<Media3PlayerBackend>();

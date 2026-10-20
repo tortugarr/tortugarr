@@ -875,6 +875,14 @@ class UserPreferences extends ChangeNotifier {
   /// The hardware audio capabilities last detected by the platform probe, or an
   /// optimistic (decode-everything / passthrough-nothing) profile when none has
   /// been detected. Mirrors how the playback backends build their profile.
+  /// Whether the next playback uses Media3: the engine setting, unless the
+  /// sound goes to Bluetooth on a TV and [mpvOnBluetooth] is on.
+  bool get prefersMedia3Now =>
+      get(playbackEnginePreference) == PlaybackEnginePreference.media3 &&
+      !(PlatformDetection.isTV &&
+          get(mpvOnBluetooth) &&
+          detectedAudioCapabilities.activeRouteType == AudioRouteType.bluetooth);
+
   AudioCapabilityProfile get detectedAudioCapabilities =>
       PlatformDetection.hasAudioCapabilities
       ? AudioCapabilityProfile.fromMap(
@@ -2417,6 +2425,15 @@ class UserPreferences extends ChangeNotifier {
         ? PlaybackEnginePreference.media3
         : PlaybackEnginePreference.mpv,
     values: PlaybackEnginePreference.values,
+  );
+
+  /// Android TV: play with mpv while the sound goes to Bluetooth. On a TCL
+  /// Android 12 TV (2026-10-20) Media3 ran fast-forward bursts and jumps with a
+  /// Bluetooth headset: the A2DP clock stalls and Media3 dropped video to the
+  /// next keyframe about every two seconds. mpv played the same file cleanly.
+  static final mpvOnBluetooth = Preference(
+    key: 'mpv_on_bluetooth',
+    defaultValue: true,
   );
 
   static final dolbyVisionFallbackBehavior = EnumPreference(

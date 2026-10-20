@@ -20518,6 +20518,18 @@ abstract class AppLocalizations {
   /// **'mpv (legacy)'**
   String get settingsPlaybackEngineMpvLegacy;
 
+  /// No description provided for @settingsMpvOnBluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Use mpv with Bluetooth audio'**
+  String get settingsMpvOnBluetooth;
+
+  /// No description provided for @settingsMpvOnBluetoothDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.'**
+  String get settingsMpvOnBluetoothDescription;
+
   /// No description provided for @settingsRedetectDisplay.
   ///
   /// In en, this message translates to:

@@ -78,6 +78,13 @@ class _QualityDecodingScreen extends StatelessWidget {
                       l10n.settingsPlaybackEngineMpvLegacy,
                   },
                 ),
+              if (PlatformDetection.isAndroid && PlatformDetection.isTV)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.mpvOnBluetooth,
+                  title: l10n.settingsMpvOnBluetooth,
+                  subtitle: l10n.settingsMpvOnBluetoothDescription,
+                  icon: Icons.bluetooth_audio,
+                ),
               // Hidden on Apple TV: AetherEngine always uses VideoToolbox for
               // hardware-capable codecs and software decode otherwise, so there
               // is no user-facing toggle to honor.

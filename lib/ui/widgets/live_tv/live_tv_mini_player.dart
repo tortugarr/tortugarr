@@ -12,7 +12,6 @@ import 'package:playback_core/playback_core.dart';
 import '../../../playback/media_kit_player_backend.dart';
 import '../../../playback/media3_player_backend.dart';
 import '../aether_video_view.dart';
-import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/platform_detection.dart';
 import '../offline_aware_image.dart';
@@ -280,9 +279,7 @@ class _LiveTvMiniPlayerState extends State<LiveTvMiniPlayer> {
       return const AetherVideoView();
     }
 
-    final prefersMedia3 =
-        _prefs.get(UserPreferences.playbackEnginePreference) ==
-        PlaybackEnginePreference.media3;
+    final prefersMedia3 = _prefs.prefersMedia3Now;
     final prewarmMedia3 = _manager.backend == null && prefersMedia3;
 
     if (_activeMedia3Backend != null || prewarmMedia3) {

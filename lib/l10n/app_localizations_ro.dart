@@ -11751,6 +11751,13 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsPlaybackEngineMpvLegacy => 'mpv (vechi)';
 
   @override
+  String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
+
+  @override
+  String get settingsMpvOnBluetoothDescription =>
+      'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.';
+
+  @override
   String get settingsRedetectDisplay => 'Redetectează ecranul';
 
   @override

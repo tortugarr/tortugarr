@@ -10984,6 +10984,8 @@
     "settingsPlaybackEngineAndroidTvDescription": "Choose the default playback engine on Android TV devices. Changes apply to the next playback session.",
     "settingsPlaybackEngineMedia3Recommended": "Media3 (recommended)",
     "settingsPlaybackEngineMpvLegacy": "mpv (legacy)",
+    "settingsMpvOnBluetooth": "Use mpv with Bluetooth audio",
+    "settingsMpvOnBluetoothDescription": "Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.",
     "settingsRedetectDisplay": "Re-detect display",
     "settingsRedetectDisplayDescription": "Ask the TV again what HDR formats it supports. Use this if Dolby Vision or HDR10 titles are being transcoded after the TV or receiver was powered on late.",
     "settingsDisplayIsSdr": "My TV is not HDR",

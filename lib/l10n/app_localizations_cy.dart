@@ -11683,6 +11683,13 @@ class AppLocalizationsCy extends AppLocalizations {
   String get settingsPlaybackEngineMpvLegacy => 'mpv (etifeddiaeth)';
 
   @override
+  String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
+
+  @override
+  String get settingsMpvOnBluetoothDescription =>
+      'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.';
+
+  @override
   String get settingsRedetectDisplay => 'Re-detect display';
 
   @override

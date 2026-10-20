@@ -11629,6 +11629,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settingsPlaybackEngineMpvLegacy => 'mpv (eldre)';
 
   @override
+  String get settingsMpvOnBluetooth => 'Bruk mpv med Bluetooth-lyd';
+
+  @override
+  String get settingsMpvOnBluetoothDescription =>
+      'Spiller av med mpv når lyden går til Bluetooth-hodetelefoner eller en høyttaler. Media3 kan hakke og hoppe med Bluetooth på noen TV-er.';
+
+  @override
   String get settingsRedetectDisplay => 'Re-detect display';
 
   @override

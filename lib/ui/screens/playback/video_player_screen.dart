@@ -4325,9 +4325,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       );
     }
 
-    final prefersMedia3 =
-        _prefs.get(UserPreferences.playbackEnginePreference) ==
-        PlaybackEnginePreference.media3;
+    final prefersMedia3 = _prefs.prefersMedia3Now;
     final prewarmMedia3 = _activeBackend == null && prefersMedia3;
     if (_activeMedia3Backend != null || prewarmMedia3) {
       return Positioned.fill(

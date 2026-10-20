@@ -6598,6 +6598,8 @@
     "settingsPlaybackEngineAndroidTvDescription": "Velg standard avspillingsmotor på Android TV-enheter. Endringer gjelder for neste avspillingsøkt.",
     "settingsPlaybackEngineMedia3Recommended": "Media3 (anbefalt)",
     "settingsPlaybackEngineMpvLegacy": "mpv (eldre)",
+    "settingsMpvOnBluetooth": "Bruk mpv med Bluetooth-lyd",
+    "settingsMpvOnBluetoothDescription": "Spiller av med mpv når lyden går til Bluetooth-hodetelefoner eller en høyttaler. Media3 kan hakke og hoppe med Bluetooth på noen TV-er.",
     "settingsDolbyVisionFallback": "Dolby Vision Reserve",
     "settingsDolbyVisionFallbackDescription": "Atferd for Dolby Vision-titler på enheter uten Dolby Vision-dekoding.",
     "settingsAskEachTime": "Spør hver gang",

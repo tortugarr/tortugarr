@@ -11282,6 +11282,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsPlaybackEngineMpvLegacy => 'mpv(레거시)';
 
   @override
+  String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
+
+  @override
+  String get settingsMpvOnBluetoothDescription =>
+      'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.';
+
+  @override
   String get settingsRedetectDisplay => '디스플레이 다시 감지';
 
   @override

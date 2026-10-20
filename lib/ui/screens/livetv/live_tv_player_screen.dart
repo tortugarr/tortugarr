@@ -24,7 +24,6 @@ import '../../../playback/html_video_backend.dart';
 import '../../../playback/media_kit_player_backend.dart';
 import '../../../platform/pip_service.dart';
 import '../../../playback/media3_player_backend.dart';
-import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/clock_format.dart';
 import '../../../util/subtitle_track_logic.dart';
@@ -2204,9 +2203,7 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
       return const AetherVideoView();
     }
 
-    final prefersMedia3 =
-        _prefs.get(UserPreferences.playbackEnginePreference) ==
-        PlaybackEnginePreference.media3;
+    final prefersMedia3 = _prefs.prefersMedia3Now;
     final prewarmMedia3 = _manager.backend == null && prefersMedia3;
     if (_activeMedia3Backend != null || prewarmMedia3) {
       return const Media3VideoView(fill: Colors.black);
