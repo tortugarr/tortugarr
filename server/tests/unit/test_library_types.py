@@ -19,16 +19,22 @@ def check(name, ok, detail=""):
 
 
 class FakeJellyfin:
-    def __init__(self, folders):
+    def __init__(self, folders, users=None):
         self.folders = folders  # name -> {"CollectionType", "Locations"}
+        self.users = users or []
 
     def get(self, path):
+        if path == "/Users":
+            return [dict(u) for u in self.users]
         assert path == "/Library/VirtualFolders", path
-        return [{"Name": n, "CollectionType": f["CollectionType"], "Locations": list(f["Locations"])}
+        return [{"Name": n, "ItemId": "id-" + n, "CollectionType": f["CollectionType"], "Locations": list(f["Locations"])}
                 for n, f in self.folders.items()]
 
     def post(self, path, body=None):
-        if path.startswith("/Library/VirtualFolders?"):
+        if path.startswith("/Users/"):
+            uid = path.split("/")[2]
+            self.users = [dict(u, Policy=body) if u["Id"] == uid else u for u in self.users]
+        elif path.startswith("/Library/VirtualFolders?"):
             q = urllib.parse.parse_qs(path.split("?", 1)[1])
             self.folders[q["name"][0]] = {"CollectionType": q["collectionType"][0],
                                           "Locations": [p["Path"] for p in body["LibraryOptions"]["PathInfos"]]}
@@ -57,7 +63,9 @@ def main():
             "/data/media/movies", "/data/library/3", "/data/library/5", "/data/library/8", "/data/my-own"]},
         "TV Shows": {"CollectionType": "tvshows", "Locations": ["/data/media/tv", "/data/library/1", "/data/library/9"]},
         "Adult": {"CollectionType": "homevideos", "Locations": ["/data/media/adult"]},
-    })
+    }, users=[{"Id": "u1", "Name": "odwar420", "Policy": {"EnableAllFolders": False,
+                                                          "EnabledFolders": ["id-Movies", "id-TV Shows"]}},
+              {"Id": "u2", "Name": "kid", "Policy": {"EnableAllFolders": False, "EnabledFolders": ["id-TV Shows"]}}])
     tb.jellyfin_libraries(jf)
     f = jf.folders
     check("Movies keeps its own folders", set(f["Movies"]["Locations"]) == {"/data/media/movies", "/data/library/3", "/data/my-own"},
@@ -70,6 +78,10 @@ def main():
           f.get("Music Videos", {}).get("CollectionType") == "musicvideos" and f["Music Videos"]["Locations"] == ["/data/library/8"])
     check("XXX moved into the adult library", "/data/library/5" in f["Adult"]["Locations"])
 
+    check("the account that sees Movies gets the new libraries",
+          set(jf.users[0]["Policy"]["EnabledFolders"]) >= {"id-Home Videos", "id-Music Videos"}, jf.users[0])
+    check("an account without Movies is left alone", jf.users[1]["Policy"]["EnabledFolders"] == ["id-TV Shows"])
+
     before = {n: list(x["Locations"]) for n, x in f.items()}
     tb.jellyfin_libraries(jf)
     check("running again changes nothing", before == {n: x["Locations"] for n, x in f.items()})
@@ -78,6 +90,14 @@ def main():
     tb.jellyfin_libraries(jf2)
     check("without an adult library the XXX folder is not shown anywhere",
           all("/data/library/5" not in x["Locations"] for x in jf2.folders.values()))
+
+    # 2026-10-20: the user made "Music & Conserts" for the MUSIC folder; Tortugarr leaves it there.
+    jf3 = FakeJellyfin({"Music & Conserts": {"CollectionType": "movies", "Locations": ["/data/library/8"]},
+                        "Movies": {"CollectionType": "movies", "Locations": ["/data/media/movies", "/data/library/3"]}})
+    tb.jellyfin_libraries(jf3)
+    check("a folder in the user's own library stays there, no second library",
+          jf3.folders["Music & Conserts"]["Locations"] == ["/data/library/8"] and "Music Videos" not in jf3.folders,
+          jf3.folders)
 
     check("Radarr roots: own folder + managed movie folders", tb.arr_roots("radarr") == ["/data/media/movies", "/data/library/3"])
     check("Sonarr roots: own folder + managed tv folders", tb.arr_roots("sonarr") == ["/data/media/tv", "/data/library/9"])

@@ -74,4 +74,15 @@ void main() {
     ])!;
     expect(old.percent, 17);
   });
+
+  test('a download Radarr has finished importing draws no bar', () {
+    LiveDownloadProgress.setForTest({'OTHER': 10});
+    expect(
+      SeerrDownloadSummary.fromItems(const [
+        SeerrDownloadingItem(size: 1000, sizeLeft: 0, downloadId: 'abc'),
+      ]),
+      isNull,
+    );
+    LiveDownloadProgress.setForTest(null);
+  });
 }

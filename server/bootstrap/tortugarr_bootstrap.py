@@ -1460,7 +1460,14 @@ def extra_library_paths():
 def jellyfin_libraries(h):
     existing = {f["Name"]: f for f in h.get("/Library/VirtualFolders")}
     wanted = extra_library_paths()
+    # A folder the user put in a library of their own (renamed, or made by hand, such as
+    # "Music & Conserts" on 2026-10-20) stays there: it is neither added elsewhere nor removed.
+    ours = {n for n, _ in EXTRA_LIBRARY.values()}
+    held = {p.rstrip("/") for n, f in existing.items() if n not in ours and not folder_is_adult(f)
+            for p in f.get("Locations", [])}
+    created = []
     for name, (ctype, paths) in wanted.items():
+        paths = [p for p in paths if p.rstrip("/") not in held]
         if not paths:
             continue
         if name not in existing:
@@ -1480,6 +1487,7 @@ def jellyfin_libraries(h):
             }}
             q = urllib.parse.urlencode({"name": name, "collectionType": ctype, "refreshLibrary": "true"})
             h.post(f"/Library/VirtualFolders?{q}", opts)
+            created.append(name)
             ok(f"jellyfin: library '{name}' -> {', '.join(paths)}")
         else:
             have = set(existing[name].get("Locations", []))
@@ -1491,13 +1499,35 @@ def jellyfin_libraries(h):
     # An extra folder whose type changed (or that was removed) leaves its old library. Only the
     # installer's own /data/library/N paths are touched, never folders added by hand.
     for name, folder in existing.items():
+        if name not in ours and not folder_is_adult(folder):
+            continue
         keep = set(wanted.get(name, ("", []))[1]) | set(jellyfin_adult_paths() if folder_is_adult(folder) else [])
         for p in folder.get("Locations", []):
             if EXTRA_PATH_RE.match(p) and p.rstrip("/") not in {k.rstrip("/") for k in keep}:
                 q = urllib.parse.urlencode({"name": name, "path": p, "refreshLibrary": "true"})
                 h.delete(f"/Library/VirtualFolders/Paths?{q}")
                 ok(f"jellyfin: removed {p} from '{name}' (that folder's type changed)")
+    jellyfin_library_access(h, created)
     jellyfin_adult_folders(h)
+
+
+def jellyfin_library_access(h, names):
+    """A new library is shown to the users who see the Movies library but not every library
+    (EnableAllFolders off): on 2026-10-20 Home Videos and Music Videos existed, but the
+    administrator's account only had its four old libraries."""
+    if not names:
+        return
+    ids = {f["Name"]: f.get("ItemId") for f in h.get("/Library/VirtualFolders")}
+    new = [ids[n] for n in names if ids.get(n)]
+    for u in h.get("/Users"):
+        pol = u.get("Policy") or {}
+        enabled = pol.get("EnabledFolders") or []
+        if pol.get("EnableAllFolders") or ids.get("Movies") not in enabled:
+            continue
+        add = [i for i in new if i not in enabled]
+        if add:
+            h.post(f"/Users/{u['Id']}/Policy", dict(pol, EnabledFolders=enabled + add))
+            ok(f"jellyfin: {u['Name']} sees {', '.join(names)}")
 
 
 ADULT_SAVE_PATH = "/data/media/adult"

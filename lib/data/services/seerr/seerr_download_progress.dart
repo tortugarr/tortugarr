@@ -32,6 +32,14 @@ class LiveDownloadProgress {
     _at = left == null ? null : DateTime.now();
   }
 
+  /// True when Radarr/Sonarr no longer have [downloadId] in their queue, so it
+  /// was imported (or removed); Seerr only notices on its next sync.
+  static bool isGone(String downloadId) {
+    final at = _at;
+    if (at == null || DateTime.now().difference(at) > _maxAge) return false;
+    return !_left.containsKey(downloadId.toUpperCase());
+  }
+
   static int? leftFor(String downloadId) {
     final at = _at;
     if (at == null || DateTime.now().difference(at) > _maxAge) return null;
@@ -113,6 +121,7 @@ class SeerrDownloadSummary {
       // release that gets grabbed, so it is left out.
       final id = item.downloadId;
       if (id == null || id.isEmpty || !seen.add(id)) continue;
+      if (LiveDownloadProgress.isGone(id)) continue;
       total += size;
       left += (LiveDownloadProgress.leftFor(id) ?? item.sizeLeft ?? 0).clamp(0, size);
     }
