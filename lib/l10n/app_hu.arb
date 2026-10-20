@@ -1,6 +1,6 @@
 {
     "@@locale": "hu",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin verzió {version}",
+    "appVersionFooter": "Tortugarr verzió {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "A Moonfin nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.",
+    "secureStorageUnavailableMessage": "A Tortugarr nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Az eredeti, letisztult Moonfin alapértelmezés.",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Az eredeti, letisztult Tortugarr alapértelmezés.",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Kilépsz a Moonfinből?",
+    "exitApp": "Kilépsz a Tortugarrből?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Nincs beállítva. A Moonfin megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.",
+    "notSetMpvConf": "Nincs beállítva. A Tortugarr megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Letöltések/Moonfin – más alkalmazások számára látható",
+    "downloadsVisibleToOtherApps": "Letöltések/Tortugarr – más alkalmazások számára látható",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "A letöltött médiát a rendszer a Letöltések/Moonfin mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.",
+    "saveToDownloadsFolderDescription": "A letöltött médiát a rendszer a Letöltések/Tortugarr mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Moonfin alkalmazást.",
+    "libraryVisibilityDescription": "A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Tortugarr alkalmazást.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Lejátszás a Moonfinben",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Lejátszás a Tortugarrben",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Igényelte: {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Az elem nem található a Moonfin-könyvtáradban",
+    "itemNotFoundInLibrary": "Az elem nem található a Tortugarr-könyvtáradban",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "A szerver újraindítása folyamatban van",
-    "adminServerRebootMessage": "A szerver újraindítása folyamatban van, kérlek, indítsd újra a Moonfint",
+    "adminServerRebootMessage": "A szerver újraindítása folyamatban van, kérlek, indítsd újra a Tortugarrt",
     "adminActiveSessions": "Aktív munkamenetek",
     "adminSessionsLoadFailed": "Nem sikerült betölteni a munkameneteket",
     "adminNoActiveSessions": "Nincsenek aktív munkamenetek",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Műfajok gomb megjelenítése a navigációs sávban",
     "settingsShowFavoritesButtonInNavigation": "Kedvencek gomb megjelenítése a navigációs sávban",
     "settingsShowLibrariesButtonInNavigation": "Könyvtárak gomb megjelenítése a navigációs sávban",
-    "settingsLibraryVisibilitySubtitle": "A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Moonfin alkalmazást, hogy a változtatások életbe lépjenek.",
+    "settingsLibraryVisibilitySubtitle": "A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Tortugarr alkalmazást, hogy a változtatások életbe lépjenek.",
     "settingsMediaBarAndLocalPreviews": "Médiasáv és helyi előnézetek",
     "settingsVisualOverlays": "Vizuális fedvények",
     "settingsSeasonalSurprise": "Szezonális meglepetés",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Csatlakozz a Discordhoz",
     "settingsJoinDiscordSubtitle": "Csevegés a közösséggel",
     "settingsJoinTheDiscord": "Csatlakozz a Discordhoz",
-    "settingsSupportMoonfin": "Moonfin támogatása",
+    "settingsSupportNotflix": "Tortugarr támogatása",
     "settingsLegal": "JOGI",
     "settingsLicenses": "Licencek",
     "settingsOpenSourceLicenseNotices": "Nyílt forráskódú licencnyilatkozatok",
     "settingsPrivacyPolicy": "Adatvédelmi szabályzat",
-    "settingsPrivacyPolicySubtitle": "Hogyan kezeli a Moonfin az adataidat",
+    "settingsPrivacyPolicySubtitle": "Hogyan kezeli a Tortugarr az adataidat",
     "settingsCheckForUpdates": "Frissítések ellenőrzése",
-    "settingsCheckForUpdatesSubtitle": "A legújabb Moonfin kiadás ellenőrzése",
+    "settingsCheckForUpdatesSubtitle": "A legújabb Tortugarr kiadás ellenőrzése",
     "settingsPoweredByFlutter": "Flutterrel készült",
     "settingsLicenseNoticesCount": "{count, plural, one {# licencnyilatkozat} other {# licencnyilatkozat}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Mentett témák",
-    "savedThemesDescription": "Ezek a jelenlegi szerverhez a Moonfin beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.",
+    "savedThemesDescription": "Ezek a jelenlegi szerverhez a Tortugarr beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.",
     "savedThemesEmpty": "Nem találhatók mentett témák ehhez a szerverhez.",
     "savedThemesCurrentThemeId": "{themeId} • Jelenleg aktív",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Mentett téma törlése",
     "savedThemesManageSubtitle": "A letöltött beépülőmodul-témák kezelése ezen az eszközön",
     "themeEditor": "Témaszerkesztő",
-    "themeEditorSubtitle": "Nyisd meg a Moonfin témaszerkesztőt a böngésződben",
+    "themeEditorSubtitle": "Nyisd meg a Tortugarr témaszerkesztőt a böngésződben",
     "homeScreen": "Kezdőképernyő",
     "bottomBar": "Alsó sáv",
     "homeRowsStyleClassic": "Klasszikus",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH feliratok előnyben részesítése",
     "preferSdhSubtitlesSubtitle": "Sorold előre az SDH/CC feliratsávokat az automatikus kiválasztás során.",
     "webDiagnostics": "Webes diagnosztika",
-    "webDiagnosticsTitle": "Moonfin webes diagnosztika",
+    "webDiagnosticsTitle": "Tortugarr webes diagnosztika",
     "webDiagnosticsIntro": "Használd ezt az oldalt a böngésző csatlakozási problémáinak diagnosztizálására (CORS, vegyes tartalom és felderítési beállítások).",
     "webDiagnosticsDetectedMixedContentFailure": "Vegyes tartalom miatti hiba észlelve",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Preflight hiba észlelve",
-    "webDiagnosticsMixedContentFailureBody": "A Moonfin észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.",
-    "webDiagnosticsCorsFailureBody": "A Moonfin böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.",
+    "webDiagnosticsMixedContentFailureBody": "A Tortugarr észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.",
+    "webDiagnosticsCorsFailureBody": "A Tortugarr böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.",
     "webDiagnosticsTargetUrl": "Cél-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "nincs beállítva",
     "webDiagnosticsMixedContent": "Vegyes tartalom",
     "webDiagnosticsMixedContentDetected": "Ez az oldal HTTPS-en keresztül van betöltve, de egy vagy több beállított URL HTTP-s. A böngészők blokkolják a HTTPS-oldalakról indított HTTP API-hívásokat.",
-    "webDiagnosticsMixedContentFix": "Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Moonfint csak megbízható helyi hálózatokon töltsd be HTTP-n.",
+    "webDiagnosticsMixedContentFix": "Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Tortugarrt csak megbízható helyi hálózatokon töltsd be HTTP-n.",
     "webDiagnosticsNoMixedContentDetected": "A jelenlegi futási beállítások alapján nem észlelhető egyértelmű vegyes tartalmú konfiguráció.",
     "webDiagnosticsCorsChecklist": "CORS-ellenőrzőlista",
     "webDiagnosticsCorsChecklistItem1": "• Engedélyezd a böngésző eredetét (origin) az Access-Control-Allow-Origin fejlécben.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Automatikusan engedélyezd a HDR-t HDR-videó lejátszásakor, és állítsd vissza a megjelenítési módot kilépéskor.",
     "whenFullscreen": "Teljes képernyőn",
     "transcodingLimits": "Átkódolási korlátok",
-    "settingsSupportMoonfinSubtitle": "Hívd meg a fejlesztőt egy kávéra",
+    "settingsSupportNotflixSubtitle": "Hívd meg a fejlesztőt egy kávéra",
     "displayAudioRows": "Audiósorok megjelenítése",
     "resolutionLabel": "Felbontás: ",
     "confirmItemScreenshot": "képernyőkép",
@@ -7887,7 +7887,7 @@
         }
     },
     "adminMetadataIdentify": "Azonosítás",
-    "detailScreenStyleSubtitle": "A klasszikus az eredeti, középre igazított Moonfin elrendezés. A modern egy reszponzív, moziszerű elrendezés.",
+    "detailScreenStyleSubtitle": "A klasszikus az eredeti, középre igazított Tortugarr elrendezés. A modern egy reszponzív, moziszerű elrendezés.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7924,7 +7924,7 @@
     "adminBlockedTagsHint": "Az ilyen címkékkel rendelkező tartalmak el lesznek rejtve a felhasználó elől.",
     "adminLoginAttemptsHint": "Állítsd 0-ra az alapértelmezetthez, vagy -1-re a kizárás letiltásához.",
     "adminSyncPlayAccess": "SyncPlay-hozzáférés",
-    "recommendationsApplyParentalRatingCapSubtitle": "Korlátozd a „Moonfin ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján",
+    "recommendationsApplyParentalRatingCapSubtitle": "Korlátozd a „Tortugarr ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -8255,7 +8255,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "A Moonfinnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.",
+    "impellerRestartMessage": "A Tortugarrnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -8288,9 +8288,9 @@
     "@adminLibChapterImageResolutionMatchSource": {
         "description": "Chapter image resolution option that matches the source resolution"
     },
-    "recommendationSystemMoonfin": "Moonfin ajánlásai",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr ajánlásai",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "glassQualityReduced": "Csökkentett",
     "@glassQualityReduced": {
@@ -8322,7 +8322,7 @@
     "@impellerCloseNow": {
         "description": "Button that closes the app so the new rendering engine takes effect on next launch."
     },
-    "recommendationSystemSubtitle": "Használd a Moonfin ajánlásai helyi könyvtári algoritmust vagy az online TMDb hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.",
+    "recommendationSystemSubtitle": "Használd a Tortugarr ajánlásai helyi könyvtári algoritmust vagy az online TMDb hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
@@ -8344,7 +8344,7 @@
     "@glassQualityFull": {
         "description": "Glass quality option: force real blur"
     },
-    "customThemeSubtitle": "Az egyedi témák módosítják a Moonfin vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.",
+    "customThemeSubtitle": "Az egyedi témák módosítják a Tortugarr vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8426,7 +8426,7 @@
         }
     },
     "noSubtitlesFound": "Nem találhatók feliratok.",
-    "impellerRenderingSubtitle": "Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Moonfint a beállítások érvényesítéséhez.",
+    "impellerRenderingSubtitle": "Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Tortugarrt a beállítások érvényesítéséhez.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8483,8 +8483,8 @@
     "resetSort": "Rendezés visszaállítása",
     "audiobookTimeline": "Idővonal",
     "audiobookCancel": "Mégse",
-    "detailScreenStyleMoonfin": "Klasszikus",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Klasszikus",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "recommendationSystem": "Ajánlórendszer",
@@ -8589,7 +8589,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Jelentkezz be a Moonfinbe a telefonodon",
+    "carSignInPrompt": "Jelentkezz be a Tortugarrbe a telefonodon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -9005,5 +9005,247 @@
     "hideBackdropsInLibraries": "Elrejted a háttérképeket böngészés közben?",
     "@hideBackdropsInLibraries": {
         "description": "Setting title to show/hide backdrops when browsing library pages"
-    }
+    },
+    "tgMissing": "Hiányzik",
+    "tgComing": "Hamarosan",
+    "tgComingOn": "Érkezik: {date}",
+    "tgDownloading": "Letöltés folyamatban",
+    "tgReadySoon": "Hamarosan kész",
+    "tgRequested": "Kérve",
+    "tgClose": "Bezárás",
+    "tgCancel": "Mégse",
+    "tgBack": "Vissza",
+    "tgYes": "Igen",
+    "tgNo": "Nem",
+    "tgSearch": "Keresés",
+    "tgHide": "Elrejtés",
+    "tgAll": "Összes",
+    "tgNone": "Nincs",
+    "tgMovies": "Filmek",
+    "tgSeries": "Sorozatok",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Sorozat",
+    "tgCanTakeAMinute": "Akár egy percig is tarthat",
+    "tgToday": "ma",
+    "tgYesterday": "tegnap",
+    "tgDaysAgo": "{days} nappal ezelőtt",
+    "tgMonthsAgo": "{months} hónappal ezelőtt",
+    "tgYearsAgo": "{years} évvel ezelőtt",
+    "tgYearsMonthsAgo": "{years} évvel és {months} hónappal ezelőtt",
+    "tgFindSubtitles": "Feliratok keresése",
+    "tgFreeUpSpace": "Hely felszabadítása",
+    "tgDownloads": "Letöltések",
+    "tgDownloadsCount": "Letöltések ({count})",
+    "tgNoVideoRemoved": "„{title}”: a letöltésben nem volt videófájl ({files}). Eltávolítottuk és letiltottuk – próbálj másik fájlt.",
+    "tgNoVideoNotRemoved": "„{title}”: a letöltésben nem volt videófájl ({files}), de nem sikerült automatikusan eltávolítani.",
+    "tgAiredOn": "Adásba került: {date}",
+    "tgTapToFindFiles": "Koppints a fájlok kereséséhez",
+    "tgWholeSeason": "Teljes évad",
+    "tgEpisodesMissingFindPack": "{count} epizód hiányzik – keress évadcsomagot",
+    "tgAddToSonarrTitle": "Add hozzá a Sonarrhoz a hiányzó epizódok megtekintéséhez",
+    "tgAddToSonarrSubtitle": "A sorozat hozzáadása nem tölt le semmit magától",
+    "tgMissingEpisodesUnavailable": "A hiányzó epizódok most nem jeleníthetők meg",
+    "tgReasonTapRetry": "{reason} · Koppints az újrapróbáláshoz",
+    "tgSeasonPackBadge": "Évadcsomag",
+    "tgMonitorSeasonTitle": "{season}. évad figyelése",
+    "tgMonitorSeasonQuestion": "Letöltse a Sonarr most a {season}. évad hiányzó epizódjait?\n\nNem: csak az új epizódok töltődnek le, amikor megjelennek.",
+    "tgSonarrSearchingSeason": "A Sonarr keresi a {season}. évadot",
+    "tgMonitored": "Figyelve",
+    "tgNotMonitored": "Nincs figyelve",
+    "tgSeasonStateLabel": "{season}. évad: {state}",
+    "tgLabelMissing": "{label} hiányzik",
+    "tgNotAiredYet": "{code} még nem került adásba.",
+    "tgNotAiredYetComing": "{code} még nem került adásba – érkezik: {date}.",
+    "tgAlreadyDownloading": "{code} letöltése már folyamatban van.",
+    "tgDownloadedAppearsSoon": "{code} letöltve, hamarosan megjelenik a könyvtárban.",
+    "tgSearchingFor": "{label} keresése …",
+    "tgSeasonLower": "{season}. évad",
+    "tgWholeLabel": "Teljes {label}",
+    "tgSeasonNoEpisodes": "{season}. évad – nincs epizód a könyvtárban",
+    "tgNoTvdbId": "A sorozatnak nincs TVDB-azonosítója, így a Sonarr nem találja.",
+    "tgAddingToSonarr": "Hozzáadás a Sonarrhoz …",
+    "tgAddToSonarrFailed": "Nem sikerült hozzáadni a sorozatot a Sonarrhoz. Próbáld újra később.",
+    "tgSendingToDownload": "„{label}” küldése letöltésre …",
+    "tgDownloadDidNotStart": "A letöltés nem indult el: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}” letöltése folyamatban ({size}). Amikor elkészül, megjelenik a könyvtárban.",
+    "tgSonarrUnreachableRetry": "Nem sikerült elérni a Sonarrt. Próbáld újra kicsit később.",
+    "tgNoUsableFiles": "Nem találtunk használható fájlt. Próbáld újra később – néhány óra után gyakran megjelennek újak.",
+    "tgFilesCount": "{count} fájl",
+    "tgFilesRecommended": "{count} fájl – {recommended} illik a minőségi profilhoz, a többi alul van",
+    "tgOutsideQualityProfile": "A minőségi profilon kívül",
+    "tgLargerThanProfile": "Nagyobb, mint amit a profil enged",
+    "tgSmallerThanProfile": "Kisebb, mint amit a profil enged",
+    "tgAlreadyExists": "Már létezik",
+    "tgMayNotFitDisk": "Lehet, hogy nem fér el a lemezen",
+    "tgSonarrUnreachable": "Nem sikerült elérni a Sonarrt",
+    "tgSonarrUnreachableAt": "Nem sikerült elérni a Sonarrt itt: {host}",
+    "tgSonarrRejectedChange": "A Sonarr nem fogadta el a módosítást",
+    "tgSeasonMonitoredNoSearch": "Az évad figyelve van, de a Sonarr nem indította el a keresést",
+    "tgSonarrCantSearch": "A Sonarr most nem tudott keresni",
+    "tgSearchExpired": "A keresési eredmény lejárt – keress újra",
+    "tgSonarrRejectedDownload": "A Sonarr nem fogadta el a letöltést (HTTP {status})",
+    "tgSonarrNoSeries": "A Sonarrban nincs meg a sorozat",
+    "tgCouldNotChangeMonitoring": "Nem sikerült módosítani a figyelést: {error}",
+    "tgJellyfinNoIds": "A Jellyfin nem ismerte fel a sorozatot (nincs TVDB- vagy TMDB-azonosító)",
+    "tgSomethingWentWrong": "Valami hiba történt: {error}",
+    "tgDeleteReadOnly": "A fájlt nem a Radarr/Sonarr kezeli, és a Jellyfinnek csak olvasási joga van a mappához. Töröld a fájlkezelőben.",
+    "tgSonarrRequiredPerEpisode": "A Sonarr nem érhető el, vagy a sorozat nincs hozzáadva. Az epizódonkénti letöltéshez Sonarr kell.",
+    "tgEpisodesNotFound": "A kijelölt epizódok nem találhatók a Sonarrban a „{title}” sorozathoz (összesen {count} epizód található). Add hozzá a sorozatot a Sonarrhoz, és próbáld újra.",
+    "tgPartOfCollectionPrefix": "A gyűjtemény része: ",
+    "tgViewingPartOf": "  ·  a {current}. részt nézed {total} közül",
+    "tgPartOf": "{number}. rész {total} közül",
+    "tgUnknownTitle": "Ismeretlen cím",
+    "tgMovieCollection": "Filmgyűjtemény",
+    "tgNotReleasedYet": "„{title}” még nem jelent meg",
+    "tgScreensaverModeVideo": "Videó",
+    "tgScreensaverModeLogo": "Logó",
+    "tgScreensaverSound": "Képernyővédő hangja",
+    "tgScreensaverSoundSubtitle": "Ki: a képernyővédő előzetesei némán játszódnak",
+    "tgScreensaverLogo": "Logó",
+    "tgLogoBadge": "Tortugarr-jelvény",
+    "tgLogoVhs": "Papagáj VHS-kazettákon",
+    "tgLogoSign": "Papagáj egy táblán",
+    "tgHiddenBadge": "REJTETT · {code}",
+    "tgDiskSpace": "Lemezterület",
+    "tgDiskSpaceSubtitle": "Hely felszabadítása új letöltésekhez",
+    "tgAdultTitle": "Felnőttfilmek (XXX)",
+    "tgAdultSubtitle": "Az XXX könyvtár megjelenítése vagy elrejtése (PIN)",
+    "tgHideForeign": "Külföldi tartalom elrejtése",
+    "tgHideForeignOn": "Be: a Felkapott és a Népszerű csak angol, norvég, svéd, dán, német és francia tartalmat mutat",
+    "tgHideForeignOff": "Ki: a Felkapott és a Népszerű minden nyelvet mutat",
+    "tgShowHidden": "Rejtett tartalom megjelenítése",
+    "tgShowHiddenOn": "Be: az egyébként rejtett címek piros REJTETT jelvénnyel jelennek meg",
+    "tgShowHiddenOff": "Hibakeresés: a rejtett címek piros jelvénnyel jelennek meg, nem tűnnek el",
+    "tgShowAllSubLangs": "Minden feliratnyelv megjelenítése",
+    "tgShowAllSubLangsOn": "Be: a feliratmenü minden nyelvet mutat",
+    "tgShowAllSubLangsOff": "Ki: a feliratmenü csak norvégot és angolt mutat",
+    "tgPreviewSound": "Előnézet hangja",
+    "tgPreviewSoundOn": "Be: a címen megállva lejátszott klipnek van hangja",
+    "tgPreviewSoundOff": "Ki: böngészés közben a klipek némán játszódnak",
+    "tgScreensaver": "Képernyővédő",
+    "tgScreensaverSubtitle": "Videó vagy logó, hang és kép",
+    "tgShowMissingEpisodes": "Hiányzó epizódok megjelenítése",
+    "tgShowMissingEpisodesOn": "Be: az évadok mutatják a hiányzó epizódokat, letöltésre készen",
+    "tgShowMissingEpisodesOff": "Ki: az évadok csak a meglévő epizódokat mutatják",
+    "tgShowCollections": "Filmgyűjtemények megjelenítése",
+    "tgShowCollectionsOn": "Be: a filmeknél megjelennek a gyűjtemény többi filmjei, a hiányzók is",
+    "tgShowCollectionsOff": "Ki: a film oldala nem mutatja a gyűjteményt",
+    "tgNoActiveDownloads": "Nincs aktív letöltés.",
+    "tgPickDownloadToOpen": "Válassz egy letöltést a kérések megnyitásához.",
+    "tgRefreshLibrary": "Könyvtár frissítése",
+    "tgAskingJellyfinScan": "A Jellyfin felkérése a könyvtár átvizsgálására …",
+    "tgHideAll": "Összes elrejtése",
+    "tgImporting": "Importálás",
+    "tgSubsNotManaged": "Ezt a címet nem a Radarr/Sonarr kezeli, így a Bazarr nem tud hozzá feliratot keresni.",
+    "tgBazarrUnreachable": "Nem sikerült elérni a Bazarrt. Próbáld újra kicsit később.",
+    "tgSubsFoundNothing": "Még nincs találat. A Bazarr minden nap automatikusan újra próbálja, vagy választhatsz magad.",
+    "tgSubsFound": "Találat: {languages} – kis időbe telhet, míg megjelenik a feliratmenüben.",
+    "tgAnd": "és",
+    "tgSubsDownloaded": "Letöltve – kis időbe telhet, míg megjelenik a feliratmenüben.",
+    "tgAskingBazarr": "Bazarr lekérdezése …",
+    "tgHaveAll": "Mind megvan",
+    "tgSearchAutoNow": "Automatikus keresés most",
+    "tgSearchingUpToMinute": "Keresés … akár egy percig is tarthat",
+    "tgPickYourself": "Válassz magad",
+    "tgAskingProviders": "A feliratforrások lekérdezése … akár egy percig is tarthat",
+    "tgNoProviderSubs": "Egyik forrásnak sincs még felirata ehhez.",
+    "tgLangHas": "{language}: elérhető",
+    "tgLangMissing": "{language}: hiányzik",
+    "tgNoReleaseName": "(nincs kiadásnév)",
+    "tgHearingImpaired": "{provider} · hallássérülteknek",
+    "tgLangNorwegian": "Norvég",
+    "tgLangEnglish": "Angol",
+    "tgBazarrUnknownTitle": "A Bazarr még nem ismeri ezt a címet",
+    "tgBazarrError": "A Bazarr hibával válaszolt (HTTP {code})",
+    "tgLowSpaceSnack": "Kevés a hely a {drive}: meghajtón ({free} szabad). A letöltés leállhat — szólj a szerver üzemeltetőjének.",
+    "tgNoQbitForSpace": "Nem sikerült elérni a qBittorrentet a hely ellenőrzéséhez",
+    "tgNotEnoughSpace": "Nincs elég hely",
+    "tgDriveHasFree": "{drive}: {free} szabad",
+    "tgCopyInDownloads": "Másolat a Downloads mappában · már a könyvtárban van",
+    "tgLastWatched": "Utoljára nézve: {ago}",
+    "tgNeverWatchedAdded": "Soha nem nézted · hozzáadva: {ago}",
+    "tgNeverWatched": "Soha nem nézted",
+    "tgNothingSafeToDelete": "A {drive}: meghajtón nincs semmi, ami biztonságosan törölhető (minden friss, nemrég nézett vagy kedvenc).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Törlöd ezt az 1 címet?} other{Törlöd ezt a {count} címet?}}",
+    "tgDeletedForGood": "{size} véglegesen törlődik. Ez nem vonható vissza.",
+    "tgYesDelete": "Igen, törlés",
+    "tgDeletingProgress": "Törlés: {done}/{total} …",
+    "tgNowHasFree": " · {drive}: most {free} szabad",
+    "tgDeletedTitles": "{count, plural, =1{1 cím törölve} other{{count} cím törölve}}{extra}",
+    "tgDeletedFailed": "{count} törölve, sikertelen: {failed}{extra}",
+    "tgFreeGb": "{gb} GB felszabadítása",
+    "tgDownloadCopies": "Letöltési másolatok",
+    "tgLookingForUnwatched": "Keressük, amit régóta nem néztél …",
+    "tgSuggestionEnough": "Javaslat: {size} · elég hely ✓",
+    "tgSuggestionOf": "Javaslat: {size} a szükséges {target} mennyiségből",
+    "tgPickToSayNo": "Válassz egyet a nemet mondáshoz — a következő javaslat automatikusan jön.",
+    "tgOtherCandidates": "További jelöltek",
+    "tgDownloadAnyway": "Letöltés mindenképp",
+    "tgDeleteCountSize": "{count} törlése ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} szabad.",
+    "tgFileDoubleSpace": "A fájl {size}, és kétszer annyi helyet foglal (letöltés + másolat a könyvtárban), plusz {buffer} tartalék.",
+    "tgFileSize": "A fájl {size}, plusz {buffer} tartalék.",
+    "tgPendingNeeds": "A folyamatban lévő letöltéseknek még {size} kell.",
+    "tgShortBy": "{size} hiányzik.",
+    "tgOnlyEarlyFiles": "Csak a film digitális megjelenése előtt közzétett fájlok találhatók ({count}) — ezek szinte mindig hamisak.",
+    "tgNoDigitalDate": "még nem kapott digitális megjelenési dátumot",
+    "tgDigitalOn": "digitálisan {date} jelenik meg",
+    "tgNotOutDigitally": "Digitálisan még nem jelent meg",
+    "tgTitleWhen": "„{title}” {when}.",
+    "tgNotOutExplain": "Ami most elérhető, az általában mozifelvétel vagy egy másik, azonos című film. Néha létezik egy korai, gyengébb minőségű másolat, gyakran beégetett felirattal. A „Fájlok megjelenítése mindenképp” mutatja, mi létezik. A Radarr magától letölti a rendes verziót, amikor megjelenik.",
+    "tgShowFilesAnyway": "Fájlok megjelenítése mindenképp",
+    "tgPickSeasonsEpisodes": "Évadok és epizódok kiválasztása",
+    "tgNoEpisodeInfo": "{season}: nincs epizódinformáció",
+    "tgAppliesAllDevices": "Minden eszközre érvényes, amely ezt a fiókot használja",
+    "tgNoXxxLibrary": "Nem található XXX nevű könyvtár.",
+    "tgSearchingEachWord": "Minden szó keresése külön … (fél percig is tarthat)",
+    "tgSentToQbit": "„{title}” ({size}) elküldve a qBittorrentnek",
+    "tgDownloadFailed": "A letöltés sikertelen: {error}",
+    "tgXxxNoVideoRemoved": "„{title}” nem tartalmazott videófájlt, ezért eltávolítottuk.",
+    "tgXxxNoVideoNotRemoved": "„{title}” nem tartalmazott videófájlt, és NEM lett eltávolítva.",
+    "tgSearchNewXxx": "Új XXX keresése",
+    "tgXxxSearchHint": "Név, stúdió …",
+    "tgChecking": "Ellenőrzés …",
+    "tgXxxVisible": "Most látható. Az XXX megjelenik a könyvtárakban, a keresésben és a kezdőlapon.",
+    "tgXxxHidden": "Rejtett. Az XXX sehol nem jelenik meg az alkalmazásban.",
+    "tgShowWithPin": "Megjelenítés (PIN)",
+    "tgChangePin": "PIN módosítása",
+    "tgNoLibraryList": "Nem sikerült lekérni a könyvtárlistát (HTTP {code})",
+    "tgNoUserSettings": "Nem sikerült lekérni a felhasználói beállításokat (HTTP {code})",
+    "tgJellyfinRejectedChange": "A Jellyfin elutasította a módosítást (HTTP {code})",
+    "tgDeleteFailed": "A törlés sikertelen (HTTP {code})",
+    "tgXxxAddFailed": "Nem sikerült hozzáadni a „{title}” címet a qBittorrenthez",
+    "tgSeasonEpisodeLower": "{season}. évad, {episode}. epizód",
+    "tgSearchInSeerr": "Keresés a Seerrben",
+    "tgSeerrSearchHint": "Filmek és sorozatok keresése (pl. „Lost S02E05”)",
+    "tgMissingInThisSeason": "Hiányzik ebből az évadból",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Hiányzó évad:} other{Hiányzó évadok:}} {list} - nyisd meg a sorozatot az összes évad megtekintéséhez",
+    "tgProjectOnGitHub": "Tortugarr a GitHubon",
+    "tgProjectOnGitHubSubtitle": "Forráskód, kiadások és hibajegyek",
+    "tgBuiltOnMoonfinCredit": "A Tortugarr a Moonfinre épül (GPL), amelyet a Moonfin fejlesztői készítettek.",
+    "tgCredits": "Köszönet",
+    "tgCreditsThanks": "Alázatos köszönettel: e projektek és az őket létrehozó emberek nélkül a Tortugarr nem létezne.",
+    "tgCreditMoonfin": "Az alkalmazás, amelyre a Tortugarr épül (GPL)",
+    "tgCreditJellyfin": "Médiaszerver",
+    "tgCreditSeerr": "Felfedezés és kérések",
+    "tgCreditRadarr": "Filmek",
+    "tgCreditSonarr": "Sorozatok",
+    "tgCreditProwlarr": "Indexelőkezelő",
+    "tgCreditBazarr": "Feliratok",
+    "tgCreditFlareSolverr": "Cloudflare-segítő az indexelőkhöz",
+    "tgCreditQbittorrent": "Letöltőkliens, a telepítő alapértelmezése",
+    "tgCreditTmdb": "Film- és sorozatadatok, poszterek és képek",
+    "tgCreditOpenSubtitles": "Feliratok, a Bazarr által letöltve",
+    "tgTmdbNotice": "Ez a termék a TMDB API-t használja, de a TMDB nem támogatja és nem hitelesítette.",
+    "tgLoadingLogoSize": "Betöltési logó mérete",
+    "tgLoadingLogoSizeSubtitle": "A videó betöltése közben forgó logó",
+    "tgSubtitleLanguages": "Feliratnyelvek",
+    "tgSubtitleLanguagesSubtitle": "A feliratmenüben látható: {languages}",
+    "tgShowAllSubLangsOffChosen": "Ki: a feliratmenü csak a kiválasztott nyelveket mutatja",
+    "tgDiscoveryLanguages": "Nyelvek a Felkapott és Népszerű sorokban",
+    "tgDiscoveryLanguagesSubtitle": "Látható: {languages}",
+    "tgHideForeignOnChosen": "Be: a Felkapott és Népszerű csak a kiválasztott nyelveket mutatja",
+    "tgShowLanguageBadges": "Nyelvjelölők megjelenítése",
+    "tgShowLanguageBadgesOn": "Be: a címek mutatják a nyelvüket (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Ki: nincs nyelvjelölő a címeken"
 }

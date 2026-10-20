@@ -8,6 +8,7 @@ import 'package:moonfin_design/moonfin_design.dart';
 import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../data/services/seerr/seerr_error.dart';
+import '../../../data/services/tortugarr/download_features.dart';
 import '../../../data/viewmodels/seerr_media_detail_view_model.dart';
 import '../../../data/viewmodels/seerr_discover_view_model.dart';
 import '../../../preference/preference_constants.dart';
@@ -26,10 +27,12 @@ import '../../widgets/media_card.dart';
 import '../../widgets/navigation_layout.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../widgets/seerr_download_progress_bar.dart';
+import '../../widgets/download_now/download_now_button.dart';
 import '../../widgets/focus/focusable_wrapper.dart';
 import '../../widgets/track_selector_dialog.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -760,11 +763,11 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
     // for it.
     final playIsPrimary = tiles.isEmpty;
     addActionTile(uhdAction, is4k: true, primary: false);
-    if (s.isAvailableAnyQuality) {
+    if (s.hasPlayableInLibrary) {
       tiles.add(
         _ActionTile(
           icon: Icons.play_arrow,
-          label: l10n.playInMoonfin,
+          label: l10n.playInNotflix,
           onTap: () => _playInMoonfin(s),
           primary: playIsPrimary,
           focusNode: takeFirst(),
@@ -1401,11 +1404,11 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
             spacing: 12,
             runSpacing: 8,
             children: [
-              if (s.isAvailableAnyQuality)
+              if (s.hasPlayableInLibrary)
                 ElevatedButton.icon(
                   onPressed: () => _playInMoonfin(s),
                   icon: const Icon(Icons.play_arrow),
-                  label: Text(l10n.playInMoonfin),
+                  label: Text(l10n.playInNotflix),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
                     foregroundColor: Colors.white,
@@ -1612,7 +1615,8 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
           },
           onTap: () {
             final mediaType = item.mediaType ?? 'movie';
-            context.push(
+            SinglePush.push(
+              context,
               Destinations.seerrMedia(item.id.toString()),
               extra: {'mediaType': mediaType},
             );
@@ -1622,25 +1626,44 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
     );
   }
 
-  void _showRequestDialog({required bool is4k}) {
+  Future<void> _showRequestDialog({required bool is4k}) async {
     final vm = _vm!;
     final s = vm.state;
-    final l10n = AppLocalizations.of(context);
-    final type = s.isTv ? l10n.series : l10n.movie;
-    showStyledPlayerDialog<void>(
+    if (!DownloadFeatures.downloadNow) {
+      // No Download Now here: a plain Seerr request, as in upstream Moonfin.
+      final l10n = AppLocalizations.of(context);
+      final type = s.isTv ? l10n.series : l10n.movie;
+      await showStyledPlayerDialog<void>(
+        context,
+        title: is4k
+            ? l10n.requestSeriesOrMovie4k(type)
+            : l10n.requestSeriesOrMovie(type),
+        builder: (_) => _RequestDialog(
+          vm: vm,
+          isTv: s.isTv,
+          is4k: is4k,
+          seasons: s.tv?.seasons ?? const [],
+          numberOfSeasons: s.numberOfSeasons ?? 0,
+          requestedSeasons: s.quality(is4k: is4k).requestedSeasons,
+        ),
+      );
+      return;
+    }
+    // The user picks everything themselves: seasons/episodes for TV, then
+    // the exact release (resolution + size) from the Prowlarr picker.
+    await DownloadNowButton.run(
       context,
-      title: is4k
-          ? l10n.requestSeriesOrMovie4k(type)
-          : l10n.requestSeriesOrMovie(type),
-      builder: (_) => _RequestDialog(
-        vm: vm,
-        isTv: s.isTv,
-        is4k: is4k,
-        seasons: s.tv?.seasons ?? const [],
-        numberOfSeasons: s.numberOfSeasons ?? 0,
-        requestedSeasons: s.quality(is4k: is4k).requestedSeasons,
-      ),
+      tmdbId: s.tmdbId,
+      mediaType: s.isTv ? 'tv' : 'movie',
+      title: s.displayTitle,
+      year: int.tryParse(_extractYear(s) ?? ''),
+      tvSeasons: s.isTv ? (s.tv?.seasons ?? const []) : null,
+      numberOfSeasons: s.numberOfSeasons,
+      initialTier: is4k ? '2160p' : null,
+      tvdbId: s.externalIds?.tvdbId,
     );
+    // Refresh so the page reflects the new request/download state.
+    if (mounted) _loadDetails();
   }
 
   void _showCancelDialog(SeerrMediaDetailState s, {required bool is4k}) {

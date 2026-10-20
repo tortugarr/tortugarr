@@ -5,16 +5,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../preference/user_preferences.dart';
+import '../../../../util/platform_detection.dart';
 import '../../../navigation/destinations.dart';
 
 class AdminDrawer extends StatefulWidget {
   final String currentPath;
   final bool isEmbedded;
+  final AdminDrawerFocusController? focusController;
 
   const AdminDrawer({
     super.key,
     required this.currentPath,
     this.isEmbedded = false,
+    this.focusController,
   });
 
   @override
@@ -24,6 +27,48 @@ class AdminDrawer extends StatefulWidget {
 class _AdminDrawerState extends State<AdminDrawer> {
   final _prefs = GetIt.instance<UserPreferences>();
   List<_AdminNavEntry> _entries = [];
+
+  /// One node per entry, so focus survives the rebuild that follows a tap.
+  final Map<String, FocusNode> _nodes = {};
+
+  FocusNode _nodeFor(String id) =>
+      _nodes.putIfAbsent(id, () => FocusNode(debugLabel: 'admin-drawer-$id'));
+
+  /// Focus the entry for the current page (or its parent page).
+  void _focusSelected() {
+    if (_entries.isEmpty) return;
+    final path = widget.currentPath;
+    _AdminNavEntry? best;
+    for (final e in _entries) {
+      final matches =
+          path == e.destination || path.startsWith('${e.destination}/');
+      if (matches &&
+          (best == null || e.destination.length > best.destination.length)) {
+        best = e;
+      }
+    }
+    _nodeFor((best ?? _entries.first).id).requestFocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.focusController?._focusSelected = _focusSelected;
+  }
+
+  @override
+  void didUpdateWidget(AdminDrawer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget.focusController?._focusSelected = _focusSelected;
+  }
+
+  @override
+  void dispose() {
+    for (final node in _nodes.values) {
+      node.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -147,6 +192,8 @@ class _AdminDrawerState extends State<AdminDrawer> {
         borderRadius: AppRadius.circular(9),
         child: InkWell(
           borderRadius: AppRadius.circular(9),
+          focusNode: PlatformDetection.isTV ? _nodeFor(entry.id) : null,
+          focusColor: theme.colorScheme.primary.withValues(alpha: 0.45),
           onTap: () {
             if (!widget.isEmbedded) {
               Navigator.of(context).pop();
@@ -183,14 +230,15 @@ class _AdminDrawerState extends State<AdminDrawer> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                ReorderableDragStartListener(
-                  index: index,
-                  child: Icon(
-                    Icons.drag_indicator,
-                    size: 18,
-                    color: theme.colorScheme.onSurfaceVariant,
+                if (!PlatformDetection.isTV)
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: Icon(
+                      Icons.drag_indicator,
+                      size: 18,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -198,6 +246,13 @@ class _AdminDrawerState extends State<AdminDrawer> {
       ),
     );
   }
+}
+
+/// Lets the admin shell put d-pad focus on the current menu entry.
+class AdminDrawerFocusController {
+  VoidCallback? _focusSelected;
+
+  void focusSelected() => _focusSelected?.call();
 }
 
 class _AdminNavEntry {

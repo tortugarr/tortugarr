@@ -1,6 +1,6 @@
 {
     "@@locale": "et",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versioon {version}",
+    "appVersionFooter": "Tortugarr versioon {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin ei pääsenud teie süsteemi võtmehoidjale juurde. Sisselogimine võib jätkuda, kuid žetoonide turvaline salvestus ei pruugi olla saadaval enne, kui võtmehoidja on lukust avatud.",
+    "secureStorageUnavailableMessage": "Tortugarr ei pääsenud teie süsteemi võtmehoidjale juurde. Sisselogimine võib jätkuda, kuid žetoonide turvaline salvestus ei pruugi olla saadaval enne, kui võtmehoidja on lukust avatud.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Lülitage Moonfini ja Neon Pulse vahel ilma rakendust taaskäivitamata",
+    "settingsAppearanceThemeSubtitle": "Lülitage Tortugarri ja Neon Pulse vahel ilma rakendust taaskäivitamata",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Praegune Moonfin välimus, mida olete kõik armastama hakanud",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Praegune Tortugarr välimus, mida olete kõik armastama hakanud",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neoonpulss",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Kas lahkuda Moonfinist?",
+    "exitApp": "Kas lahkuda Tortugarrist?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Pole määratud. Moonfin proovib rakenduste/andmete kaustades vaikefaili mpv.conf.",
+    "notSetMpvConf": "Pole määratud. Tortugarr proovib rakenduste/andmete kaustades vaikefaili mpv.conf.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Allalaadimised/Moonfin – nähtav teistele rakendustele",
+    "downloadsVisibleToOtherApps": "Allalaadimised/Tortugarr – nähtav teistele rakendustele",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Allalaaditud meedium salvestatakse teie seadme kausta Allalaadimised/Moonfin. Need failid on nähtavad teistele rakendustele, nagu teie galerii või muusikapleier.\n\nOlemasolevad allalaadimised jäävad oma praegusesse asukohta.",
+    "saveToDownloadsFolderDescription": "Allalaaditud meedium salvestatakse teie seadme kausta Allalaadimised/Tortugarr. Need failid on nähtavad teistele rakendustele, nagu teie galerii või muusikapleier.\n\nOlemasolevad allalaadimised jäävad oma praegusesse asukohta.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Avalehe nähtavuse sisse- ja väljalülitamine teegi kaupa. Muudatuste jõustumiseks taaskäivitage Moonfin.",
+    "libraryVisibilityDescription": "Avalehe nähtavuse sisse- ja väljalülitamine teegi kaupa. Muudatuste jõustumiseks taaskäivitage Tortugarr.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Mängi Moonfinis",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Mängi Tortugarris",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Taotleja {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Üksust ei leitud teie Moonfini teegist",
+    "itemNotFoundInLibrary": "Üksust ei leitud teie Tortugarri teegist",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Serveri taaskäivitamine on pooleli",
-    "adminServerRebootMessage": "Serveri taaskäivitamine on pooleli, taaskäivitage Moonfin",
+    "adminServerRebootMessage": "Serveri taaskäivitamine on pooleli, taaskäivitage Tortugarr",
     "adminActiveSessions": "Aktiivsed seansid",
     "adminSessionsLoadFailed": "Seansside laadimine ebaõnnestus",
     "adminNoActiveSessions": "Aktiivseid seansse pole",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Kuvage navigeerimisribal žanrite nupp",
     "settingsShowFavoritesButtonInNavigation": "Kuvage navigeerimisribal lemmikute nupp",
     "settingsShowLibrariesButtonInNavigation": "Kuvage navigeerimisribal teekide nupp",
-    "settingsLibraryVisibilitySubtitle": "Avalehe nähtavuse sisse- ja väljalülitamine teegi kaupa. Muudatuste jõustumiseks taaskäivitage Moonfin.",
+    "settingsLibraryVisibilitySubtitle": "Avalehe nähtavuse sisse- ja väljalülitamine teegi kaupa. Muudatuste jõustumiseks taaskäivitage Tortugarr.",
     "settingsMediaBarAndLocalPreviews": "Meediumiriba ja kohalikud eelvaated",
     "settingsVisualOverlays": "Visuaalsed ülekatted",
     "settingsSeasonalSurprise": "Hooajaline üllatus",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Liituge Discordiga",
     "settingsJoinDiscordSubtitle": "Vestelge kogukonnaga",
     "settingsJoinTheDiscord": "Liituge Discordiga",
-    "settingsSupportMoonfin": "Toetage Moonfinit",
+    "settingsSupportNotflix": "Toetage Tortugarrit",
     "settingsLegal": "ÕIGUSLIK",
     "settingsLicenses": "Litsentsid",
     "settingsOpenSourceLicenseNotices": "Avatud lähtekoodiga litsentsi teatised",
     "settingsPrivacyPolicy": "Privaatsuspoliitika",
-    "settingsPrivacyPolicySubtitle": "Kuidas Moonfin teie andmeid käsitleb",
+    "settingsPrivacyPolicySubtitle": "Kuidas Tortugarr teie andmeid käsitleb",
     "settingsCheckForUpdates": "Kontrollige värskendusi",
-    "settingsCheckForUpdatesSubtitle": "Kontrollige uusimat Moonfini väljaannet",
+    "settingsCheckForUpdatesSubtitle": "Kontrollige uusimat Tortugarri väljaannet",
     "settingsPoweredByFlutter": "Töötab Flutteri baasil",
     "settingsLicenseNoticesCount": "{count, plural, one {# litsentsiteade} other {# litsentsiteadet}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Salvestatud teemad",
-    "savedThemesDescription": "Need on praeguse serveri pluginast Moonfin alla laaditud teemad. Kustutamine eemaldab ainult selle kohaliku koopia.",
+    "savedThemesDescription": "Need on praeguse serveri pluginast Tortugarr alla laaditud teemad. Kustutamine eemaldab ainult selle kohaliku koopia.",
     "savedThemesEmpty": "Selle serveri jaoks ei leitud ühtegi salvestatud teemat.",
     "savedThemesCurrentThemeId": "{themeId} • Hetkel aktiivne",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Kustutage salvestatud teema",
     "savedThemesManageSubtitle": "Hallake selles seadmes allalaaditud pistikprogrammide teemasid",
     "themeEditor": "Teemaredaktor",
-    "themeEditorSubtitle": "Avage brauseris Moonfin teemaredaktor",
+    "themeEditorSubtitle": "Avage brauseris Tortugarr teemaredaktor",
     "homeScreen": "Avakuva",
     "bottomBar": "Alumine riba",
     "homeRowsStyleClassic": "Klassikaline",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Eelista SDH subtiitreid",
     "preferSdhSubtitlesSubtitle": "Seadistage automaatsel valimisel prioriteediks SDH/CC subtiitrirajad.",
     "webDiagnostics": "Veebi diagnostika",
-    "webDiagnosticsTitle": "Moonfin Veebidiagnostika",
+    "webDiagnosticsTitle": "Tortugarr Veebidiagnostika",
     "webDiagnosticsIntro": "Kasutage seda lehte brauseri ühenduvusprobleemide diagnoosimiseks (CORS, segasisu ja avastusseaded).",
     "webDiagnosticsDetectedMixedContentFailure": "Tuvastatud segasisu tõrge",
     "webDiagnosticsDetectedCorsPreflightFailure": "Tuvastatud CORS-i/lennueelse rike",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin tuvastas HTTPS-i lehe, mis üritas helistada HTTP-serveri URL-ile. Brauserid blokeerivad selle päringu enne, kui see teie serverisse jõuab.",
-    "webDiagnosticsCorsFailureBody": "Moonfin tuvastas brauseri tasemel päringu tõrke, mille tavaliselt põhjustab meediumiserveris puuduv CORS või eelkontrolli päised.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr tuvastas HTTPS-i lehe, mis üritas helistada HTTP-serveri URL-ile. Brauserid blokeerivad selle päringu enne, kui see teie serverisse jõuab.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr tuvastas brauseri tasemel päringu tõrke, mille tavaliselt põhjustab meediumiserveris puuduv CORS või eelkontrolli päised.",
     "webDiagnosticsTargetUrl": "Siht-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "pole konfigureeritud",
     "webDiagnosticsMixedContent": "Segatud sisu",
     "webDiagnosticsMixedContentDetected": "See leht laaditakse HTTPS-i kaudu, kuid üks või mitu konfigureeritud URL-i on HTTP. Brauserid blokeerivad HTTPS-i lehtedel HTTP API-de kutsumise.",
-    "webDiagnosticsMixedContentFix": "Parandus: teenindage oma meediumiserverit või puhverserveri lõpp-punkti HTTPS-i kaudu või laadige Moonfin HTTP kaudu ainult usaldusväärsetes kohalikes võrkudes.",
+    "webDiagnosticsMixedContentFix": "Parandus: teenindage oma meediumiserverit või puhverserveri lõpp-punkti HTTPS-i kaudu või laadige Tortugarr HTTP kaudu ainult usaldusväärsetes kohalikes võrkudes.",
     "webDiagnosticsNoMixedContentDetected": "Praeguste käitusaja seadete põhjal ei tuvastatud ilmset segasisu konfiguratsiooni.",
     "webDiagnosticsCorsChecklist": "CORSi kontrollnimekiri",
     "webDiagnosticsCorsChecklistItem1": "• Luba brauseri lähtekoht valikus Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Lubage HDR-i automaatselt HDR-video taasesitamiseks ja taastage väljumisel kuvarežiim.",
     "whenFullscreen": "Täisekraanil",
     "transcodingLimits": "Ümberkodeerimise piirangud",
-    "settingsSupportMoonfinSubtitle": "Annetage arendajale kohv",
+    "settingsSupportNotflixSubtitle": "Annetage arendajale kohv",
     "accountPreferences": "KONTO EELISTUSED",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klassikaline on algne keskjoondatud Moonfini paigutus. Moodne on kohanduv kinolik paigutus.",
+    "detailScreenStyleSubtitle": "Klassikaline on algne keskjoondatud Tortugarri paigutus. Moodne on kohanduv kinolik paigutus.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Klassikaline",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Klassikaline",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moodne",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Kasuta kohalikul meediakogul põhinevat algoritmi „Moonfin soovitab“ või TMDb võrgupõhiseid sarnasusmõõdikuid. Märkus: võrgusoovitused vajavad Seerri integratsiooni.",
+    "recommendationSystemSubtitle": "Kasuta kohalikul meediakogul põhinevat algoritmi „Tortugarr soovitab“ või TMDb võrgupõhiseid sarnasusmõõdikuid. Märkus: võrgusoovitused vajavad Seerri integratsiooni.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin soovitab",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr soovitab",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb sarnasus",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Piira „Moonfin soovitab“ ettepanekuid sihtmeedia vanusepiirangu järgi",
+    "recommendationsApplyParentalRatingCapSubtitle": "Piira „Tortugarr soovitab“ ettepanekuid sihtmeedia vanusepiirangu järgi",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Kohandatud teemad muudavad Moonfini visuaalseid elemente kõikjal. Vali oma stiiliga sobiv variant.",
+    "customThemeSubtitle": "Kohandatud teemad muudavad Tortugarri visuaalseid elemente kõikjal. Vali oma stiiliga sobiv variant.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Logi telefonis Moonfini sisse",
+    "carSignInPrompt": "Logi telefonis Tortugarri sisse",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8940,7 +8940,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller on Flutteri moodne GPU-renderdaja, mis annab sujuvamad animatsioonid ja vähem tõrkeid. Mõnes TV-boksis ja vanemas GPU-s võib see põhjustada häireid või musta pilti; sel juhul lülita see välja. Automaatne valib sinu seadme jaoks parima vaikeväärtuse. Muudatuse rakendamiseks käivita Moonfin uuesti.",
+    "impellerRenderingSubtitle": "Impeller on Flutteri moodne GPU-renderdaja, mis annab sujuvamad animatsioonid ja vähem tõrkeid. Mõnes TV-boksis ja vanemas GPU-s võib see põhjustada häireid või musta pilti; sel juhul lülita see välja. Automaatne valib sinu seadme jaoks parima vaikeväärtuse. Muudatuse rakendamiseks käivita Tortugarr uuesti.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8951,7 +8951,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Renderdusmootori muutmiseks tuleb Moonfin taaskäivitada. Sulge rakendus nüüd ja ava see uuesti, et muudatus rakenduks.",
+    "impellerRestartMessage": "Renderdusmootori muutmiseks tuleb Tortugarr taaskäivitada. Sulge rakendus nüüd ja ava see uuesti, et muudatus rakenduks.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "adminLibTrickplayExtraction": "Luba Trickplay piltide eraldamine",
     "adminLibTrickplayDuringScan": "Eralda Trickplay pildid kogu skannimise ajal",
     "adminLibSaveTrickplayWithMedia": "Salvesta Trickplay pildid meediakaustadesse",
-    "adminBackupTrickplay": "Trickplay pildid"
+    "adminBackupTrickplay": "Trickplay pildid",
+    "tgMissing": "Puudub",
+    "tgComing": "Tulekul",
+    "tgComingOn": "Tulekul {date}",
+    "tgDownloading": "Allalaadimine",
+    "tgReadySoon": "Varsti valmis",
+    "tgRequested": "Soovitud",
+    "tgClose": "Sule",
+    "tgCancel": "Tühista",
+    "tgBack": "Tagasi",
+    "tgYes": "Jah",
+    "tgNo": "Ei",
+    "tgSearch": "Otsi",
+    "tgHide": "Peida",
+    "tgAll": "Kõik",
+    "tgNone": "Puudub",
+    "tgMovies": "Filmid",
+    "tgSeries": "Sarjad",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Sari",
+    "tgCanTakeAMinute": "Võib võtta kuni minuti",
+    "tgToday": "täna",
+    "tgYesterday": "eile",
+    "tgDaysAgo": "{days} päeva tagasi",
+    "tgMonthsAgo": "{months} kuud tagasi",
+    "tgYearsAgo": "{years} aastat tagasi",
+    "tgYearsMonthsAgo": "{years} aastat ja {months} kuud tagasi",
+    "tgFindSubtitles": "Otsi subtiitreid",
+    "tgFreeUpSpace": "Vabasta ruumi",
+    "tgDownloads": "Allalaadimised",
+    "tgDownloadsCount": "Allalaadimised ({count})",
+    "tgNoVideoRemoved": "„{title}“: allalaadimises polnud videofaili ({files}). See eemaldati ja blokeeriti – proovi teist faili.",
+    "tgNoVideoNotRemoved": "„{title}“: allalaadimises polnud videofaili ({files}), kuid seda ei õnnestunud automaatselt eemaldada.",
+    "tgAiredOn": "Eetris {date}",
+    "tgTapToFindFiles": "Puuduta failide otsimiseks",
+    "tgWholeSeason": "Terve hooaeg",
+    "tgEpisodesMissingFindPack": "{count} episoodi puudub – otsi hooajapakett",
+    "tgAddToSonarrTitle": "Lisa Sonarri, et näha puuduvaid episoode",
+    "tgAddToSonarrSubtitle": "Sari lisatakse, ilma et midagi iseenesest alla laaditaks",
+    "tgMissingEpisodesUnavailable": "Puuduvaid episoode ei saa praegu näidata",
+    "tgReasonTapRetry": "{reason} · Puuduta uuesti proovimiseks",
+    "tgSeasonPackBadge": "Hooajapakett",
+    "tgMonitorSeasonTitle": "Jälgi hooaega {season}",
+    "tgMonitorSeasonQuestion": "Kas Sonarr peaks hooaja {season} puuduvad episoodid kohe alla laadima?\n\nEi: alla laaditakse ainult uued episoodid, kui need ilmuvad.",
+    "tgSonarrSearchingSeason": "Sonarr otsib hooaega {season}",
+    "tgMonitored": "Jälgitav",
+    "tgNotMonitored": "Ei jälgita",
+    "tgSeasonStateLabel": "Hooaeg {season}: {state}",
+    "tgLabelMissing": "{label} puudub",
+    "tgNotAiredYet": "{code} pole veel eetris olnud.",
+    "tgNotAiredYetComing": "{code} pole veel eetris olnud – tulekul {date}.",
+    "tgAlreadyDownloading": "{code} juba laaditakse alla.",
+    "tgDownloadedAppearsSoon": "{code} on alla laaditud ja ilmub varsti meediakokku.",
+    "tgSearchingFor": "Otsitakse: {label} …",
+    "tgSeasonLower": "hooaeg {season}",
+    "tgWholeLabel": "Terve {label}",
+    "tgSeasonNoEpisodes": "Hooaeg {season} – meediakogus pole episoode",
+    "tgNoTvdbId": "Sarjal pole TVDB ID-d, nii et Sonarr ei leia seda.",
+    "tgAddingToSonarr": "Lisatakse Sonarri …",
+    "tgAddToSonarrFailed": "Sarja ei õnnestunud Sonarri lisada. Proovi hiljem uuesti.",
+    "tgSendingToDownload": "„{label}“ saadetakse allalaadimisele …",
+    "tgDownloadDidNotStart": "Allalaadimine ei käivitunud: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}“ laaditakse alla ({size}). See ilmub meediakokku, kui allalaadimine on lõppenud.",
+    "tgSonarrUnreachableRetry": "Sonarriga ei saadud ühendust. Proovi veidi hiljem uuesti.",
+    "tgNoUsableFiles": "Kasutuskõlblikke faile ei leitud. Proovi hiljem uuesti – uued ilmuvad sageli mõne tunni pärast.",
+    "tgFilesCount": "{count} faili",
+    "tgFilesRecommended": "{count} faili – {recommended} sobib kvaliteediprofiiliga, ülejäänud on allpool",
+    "tgOutsideQualityProfile": "Väljaspool kvaliteediprofiili",
+    "tgLargerThanProfile": "Suurem, kui profiil lubab",
+    "tgSmallerThanProfile": "Väiksem, kui profiil lubab",
+    "tgAlreadyExists": "On juba olemas",
+    "tgMayNotFitDisk": "Võib kettale mitte mahtuda",
+    "tgSonarrUnreachable": "Sonarriga ei saadud ühendust",
+    "tgSonarrUnreachableAt": "Sonarriga ei saadud ühendust aadressil {host}",
+    "tgSonarrRejectedChange": "Sonarr ei võtnud muudatust vastu",
+    "tgSeasonMonitoredNoSearch": "Hooaeg on jälgitav, kuid Sonarr ei alustanud otsingut",
+    "tgSonarrCantSearch": "Sonarr ei saanud praegu otsida",
+    "tgSearchExpired": "Otsingutulemus on aegunud – otsi uuesti",
+    "tgSonarrRejectedDownload": "Sonarr ei võtnud allalaadimist vastu (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarris pole seda sarja",
+    "tgCouldNotChangeMonitoring": "Jälgimist ei õnnestunud muuta: {error}",
+    "tgJellyfinNoIds": "Jellyfin ei tundnud sarja ära (TVDB või TMDB ID puudub)",
+    "tgSomethingWentWrong": "Midagi läks valesti: {error}",
+    "tgDeleteReadOnly": "Faili ei halda Radarr/Sonarr ja Jellyfinil on kaustale ainult lugemisõigus. Kustuta see failihalduris.",
+    "tgSonarrRequiredPerEpisode": "Sonarr pole kättesaadav või sarja pole sinna lisatud. Episoodide ühekaupa allalaadimine vajab Sonarri.",
+    "tgEpisodesNotFound": "Valitud episoode ei leitud Sonarrist sarja „{title}“ jaoks (leiti kokku {count} episoodi). Lisa sari Sonarri ja proovi uuesti.",
+    "tgPartOfCollectionPrefix": "Osa kollektsioonist ",
+    "tgViewingPartOf": "  ·  vaatad osa {current}/{total}",
+    "tgPartOf": "Osa {number}/{total}",
+    "tgUnknownTitle": "Tundmatu pealkiri",
+    "tgMovieCollection": "Filmikollektsioon",
+    "tgNotReleasedYet": "„{title}“ pole veel välja tulnud",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Ekraanisäästja heli",
+    "tgScreensaverSoundSubtitle": "Väljas: ekraanisäästja treilerid mängivad hääletult",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarri märk",
+    "tgLogoVhs": "Papagoi VHS-kassettidel",
+    "tgLogoSign": "Papagoi sildil",
+    "tgHiddenBadge": "PEIDETUD · {code}",
+    "tgDiskSpace": "Kettaruum",
+    "tgDiskSpaceSubtitle": "Vabasta ruumi uutele allalaadimistele",
+    "tgAdultTitle": "Täiskasvanute filmid (XXX)",
+    "tgAdultSubtitle": "Näita või peida XXX-meediakogu (PIN)",
+    "tgHideForeign": "Peida välismaine sisu",
+    "tgHideForeignOn": "Sees: Trendikas ja Populaarne näitavad ainult inglise, norra, rootsi, taani, saksa ja prantsuse keelt",
+    "tgHideForeignOff": "Väljas: Trendikas ja Populaarne näitavad kõiki keeli",
+    "tgShowHidden": "Näita, mis on peidetud",
+    "tgShowHiddenOn": "Sees: muidu peidetud pealkirju näidatakse punase PEIDETUD-märgiga",
+    "tgShowHiddenOff": "Veaotsing: näita peidetud pealkirju punase märgiga, selle asemel et need eemaldada",
+    "tgShowAllSubLangs": "Näita kõiki subtiitrite keeli",
+    "tgShowAllSubLangsOn": "Sees: subtiitrite menüü näitab kõiki keeli",
+    "tgShowAllSubLangsOff": "Väljas: subtiitrite menüü näitab ainult norra ja inglise keelt",
+    "tgPreviewSound": "Eelvaate heli",
+    "tgPreviewSoundOn": "Sees: klipp, mis mängib pealkirjal peatudes, on heliga",
+    "tgPreviewSoundOff": "Väljas: klipid mängivad sirvimise ajal hääletult",
+    "tgScreensaver": "Ekraanisäästja",
+    "tgScreensaverSubtitle": "Video või logo, heli ja pilt",
+    "tgShowMissingEpisodes": "Näita puuduvaid episoode",
+    "tgShowMissingEpisodesOn": "Sees: hooajad näitavad episoode, mida sul pole, allalaadimiseks valmis",
+    "tgShowMissingEpisodesOff": "Väljas: hooajad näitavad ainult episoode, mis sul on",
+    "tgShowCollections": "Näita filmikollektsioone",
+    "tgShowCollectionsOn": "Sees: filmide juures kuvatakse kollektsiooni teised filmid, ka need, mis sul puuduvad",
+    "tgShowCollectionsOff": "Väljas: filmi lehel kollektsiooni ei näidata",
+    "tgNoActiveDownloads": "Aktiivseid allalaadimisi pole.",
+    "tgPickDownloadToOpen": "Vali allalaadimine, et avada soovid.",
+    "tgRefreshLibrary": "Värskenda meediakogu",
+    "tgAskingJellyfinScan": "Jellyfinil palutakse meediakogu skannida …",
+    "tgHideAll": "Peida kõik",
+    "tgImporting": "Importimine",
+    "tgSubsNotManaged": "Seda pealkirja ei halda Radarr/Sonarr, nii et Bazarr ei saa sellele subtiitreid otsida.",
+    "tgBazarrUnreachable": "Bazarriga ei saadud ühendust. Proovi veidi hiljem uuesti.",
+    "tgSubsFoundNothing": "Veel ei leitud midagi. Bazarr proovib iga päev automaatselt uuesti või võid ise valida.",
+    "tgSubsFound": "Leiti {languages} – võib võtta hetke, enne kui see subtiitrite menüüs ilmub.",
+    "tgAnd": "ja",
+    "tgSubsDownloaded": "Alla laaditud – võib võtta hetke, enne kui see subtiitrite menüüs ilmub.",
+    "tgAskingBazarr": "Küsitakse Bazarrilt …",
+    "tgHaveAll": "Kõik on olemas",
+    "tgSearchAutoNow": "Otsi kohe automaatselt",
+    "tgSearchingUpToMinute": "Otsitakse … võib võtta kuni minuti",
+    "tgPickYourself": "Vali ise",
+    "tgAskingProviders": "Küsitakse subtiitrite allikatelt … võib võtta kuni minuti",
+    "tgNoProviderSubs": "Ühelgi allikal pole sellele veel subtiitreid.",
+    "tgLangHas": "{language}: olemas",
+    "tgLangMissing": "{language}: puudub",
+    "tgNoReleaseName": "(väljalaske nimi puudub)",
+    "tgHearingImpaired": "{provider} · vaegkuuljatele",
+    "tgLangNorwegian": "Norra",
+    "tgLangEnglish": "Inglise",
+    "tgBazarrUnknownTitle": "Bazarr ei tunne seda pealkirja veel",
+    "tgBazarrError": "Bazarr vastas veaga (HTTP {code})",
+    "tgLowSpaceSnack": "Kettal {drive}: on vähe ruumi ({free} vaba). Allalaadimine võib peatuda — anna serveri haldajale teada.",
+    "tgNoQbitForSpace": "qBittorrentiga ei saadud ruumi kontrollimiseks ühendust",
+    "tgNotEnoughSpace": "Ruumi pole piisavalt",
+    "tgDriveHasFree": "{drive}: {free} vaba",
+    "tgCopyInDownloads": "Koopia kaustas Downloads · on juba meediakogus",
+    "tgLastWatched": "Viimati vaadatud {ago}",
+    "tgNeverWatchedAdded": "Pole kunagi vaadatud · lisatud {ago}",
+    "tgNeverWatched": "Pole kunagi vaadatud",
+    "tgNothingSafeToDelete": "Kettalt {drive}: ei leitud midagi, mida saaks ohutult kustutada (kõik on hiljuti lisatud, hiljuti vaadatud või lemmikud).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Kustutada 1 pealkiri?} other{Kustutada {count} pealkirja?}}",
+    "tgDeletedForGood": "{size} kustutatakse jäädavalt. Seda ei saa tagasi võtta.",
+    "tgYesDelete": "Jah, kustuta",
+    "tgDeletingProgress": "Kustutatakse {done}/{total} …",
+    "tgNowHasFree": " · {drive}: nüüd {free} vaba",
+    "tgDeletedTitles": "{count, plural, =1{Kustutati 1 pealkiri} other{Kustutati {count} pealkirja}}{extra}",
+    "tgDeletedFailed": "Kustutati {count}, ebaõnnestus: {failed}{extra}",
+    "tgFreeGb": "Vabasta {gb} GB",
+    "tgDownloadCopies": "Allalaadimiskoopiad",
+    "tgLookingForUnwatched": "Otsitakse seda, mida pole ammu vaadatud …",
+    "tgSuggestionEnough": "Soovitus: {size} · ruumi on piisavalt ✓",
+    "tgSuggestionOf": "Soovitus: {size} vajalikust {target}",
+    "tgPickToSayNo": "Vali üks, et öelda ei — järgmine soovitus tuleb automaatselt.",
+    "tgOtherCandidates": "Teised kandidaadid",
+    "tgDownloadAnyway": "Laadi ikkagi alla",
+    "tgDeleteCountSize": "Kustuta {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} vaba.",
+    "tgFileDoubleSpace": "Fail on {size} ja võtab kaks korda ruumi (allalaadimine + koopia meediakogus), lisaks {buffer} varuks.",
+    "tgFileSize": "Fail on {size}, lisaks {buffer} varuks.",
+    "tgPendingNeeds": "Käimasolevad allalaadimised vajavad veel {size}.",
+    "tgShortBy": "Puudu on {size}.",
+    "tgOnlyEarlyFiles": "Leiti ainult faile, mis on avaldatud enne filmi digitaalset väljalaset ({count}) — need on peaaegu alati võltsingud.",
+    "tgNoDigitalDate": "ei ole veel digitaalse väljalaske kuupäeva saanud",
+    "tgDigitalOn": "tuleb digitaalselt välja {date}",
+    "tgNotOutDigitally": "Pole veel digitaalselt väljas",
+    "tgTitleWhen": "„{title}“ {when}.",
+    "tgNotOutExplain": "See, mis praegu olemas on, on tavaliselt kinosalvestus või teine samanimeline film. Mõnikord leidub varajane koopia madalamas kvaliteedis, sageli sissepõletatud subtiitritega. „Näita faile ikkagi“ näitab, mis olemas on. Radarr laadib õige versiooni ise alla, kui see välja tuleb.",
+    "tgShowFilesAnyway": "Näita faile ikkagi",
+    "tgPickSeasonsEpisodes": "Vali hooajad ja episoodid",
+    "tgNoEpisodeInfo": "{season}: episoodide info puudub",
+    "tgAppliesAllDevices": "Kehtib kõigile seadmetele, mis seda kontot kasutavad",
+    "tgNoXxxLibrary": "Meediakogu nimega XXX ei leitud.",
+    "tgSearchingEachWord": "Otsitakse iga sõna eraldi … (võib võtta pool minutit)",
+    "tgSentToQbit": "„{title}“ ({size}) saadeti qBittorrenti",
+    "tgDownloadFailed": "Allalaadimine ebaõnnestus: {error}",
+    "tgXxxNoVideoRemoved": "„{title}“ ei sisaldanud videofaili ja on eemaldatud.",
+    "tgXxxNoVideoNotRemoved": "„{title}“ ei sisaldanud videofaili ja seda EI eemaldatud.",
+    "tgSearchNewXxx": "Otsi uut XXX-sisu",
+    "tgXxxSearchHint": "Nimi, stuudio …",
+    "tgChecking": "Kontrollitakse …",
+    "tgXxxVisible": "Nüüd nähtav. XXX kuvatakse meediakogudes, otsingus ja avalehel.",
+    "tgXxxHidden": "Peidetud. XXX ei kuvata rakenduses kuskil.",
+    "tgShowWithPin": "Näita (PIN)",
+    "tgChangePin": "Muuda PIN-i",
+    "tgNoLibraryList": "Meediakogude loendit ei saadud (HTTP {code})",
+    "tgNoUserSettings": "Kasutaja seadeid ei saadud (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin lükkas muudatuse tagasi (HTTP {code})",
+    "tgDeleteFailed": "Kustutamine ebaõnnestus (HTTP {code})",
+    "tgXxxAddFailed": "„{title}“ ei õnnestunud qBittorrenti lisada",
+    "tgSeasonEpisodeLower": "hooaeg {season}, episood {episode}",
+    "tgSearchInSeerr": "Otsi Seerrist",
+    "tgSeerrSearchHint": "Otsi filme ja sarju (nt „Lost S02E05“)",
+    "tgMissingInThisSeason": "Puudub sellel hooajal",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Puuduv hooaeg} other{Puuduvad hooajad}} {list} - ava sari, et näha kõiki hooaegu",
+    "tgProjectOnGitHub": "Tortugarr GitHubis",
+    "tgProjectOnGitHubSubtitle": "Lähtekood, väljalasked ja veateated",
+    "tgBuiltOnMoonfinCredit": "Tortugarr põhineb Moonfinil (GPL), mille on loonud Moonfini arendajad.",
+    "tgCredits": "Tänusõnad",
+    "tgCreditsThanks": "Alandliku tänuga: ilma nende projektide ja nende taga olevate inimesteta ei oleks Tortugarri olemas.",
+    "tgCreditMoonfin": "Rakendus, millel Tortugarr põhineb (GPL)",
+    "tgCreditJellyfin": "Meediaserver",
+    "tgCreditSeerr": "Avastamine ja soovid",
+    "tgCreditRadarr": "Filmid",
+    "tgCreditSonarr": "Sarjad",
+    "tgCreditProwlarr": "Indekseerijate haldus",
+    "tgCreditBazarr": "Subtiitrid",
+    "tgCreditFlareSolverr": "Cloudflare'i abiline indekseerijatele",
+    "tgCreditQbittorrent": "Allalaadimisklient, paigaldaja vaikevalik",
+    "tgCreditTmdb": "Filmide ja sarjade andmed, plakatid ja pildid",
+    "tgCreditOpenSubtitles": "Subtiitrid, hangitud Bazarri kaudu",
+    "tgTmdbNotice": "See toode kasutab TMDB API-t, kuid TMDB ei ole seda heaks kiitnud ega sertifitseerinud.",
+    "tgLoadingLogoSize": "Laadimislogo suurus",
+    "tgLoadingLogoSizeSubtitle": "Pöörlev logo video laadimise ajal",
+    "tgSubtitleLanguages": "Subtiitrite keeled",
+    "tgSubtitleLanguagesSubtitle": "Kuvatakse subtiitrite menüüs: {languages}",
+    "tgShowAllSubLangsOffChosen": "Väljas: subtiitrite menüü näitab ainult valitud keeli",
+    "tgDiscoveryLanguages": "Keeled jaotistes Trendid ja Populaarne",
+    "tgDiscoveryLanguagesSubtitle": "Kuvatakse: {languages}",
+    "tgHideForeignOnChosen": "Sees: Trendid ja Populaarne näitavad ainult valitud keeli",
+    "tgShowLanguageBadges": "Näita keelemärke",
+    "tgShowLanguageBadgesOn": "Sees: pealkirjad näitavad oma keelt (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Väljas: pealkirjadel pole keelemärke"
 }

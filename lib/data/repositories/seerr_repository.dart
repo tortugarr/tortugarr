@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:server_core/server_core.dart';
 
@@ -5,6 +7,9 @@ import '../../auth/repositories/session_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_http_client.dart';
 import '../services/seerr/seerr_models.dart';
+import '../services/seerr/seerr_language_filter.dart';
+import '../services/seerr/seerr_release_filter.dart';
+import '../../preference/seerr_preferences.dart';
 
 class SeerrRepository {
   final PreferenceStore _store;
@@ -79,9 +84,13 @@ class SeerrRepository {
     final currentUserId = _session.activeUserId;
 
     if (force) {
+      // Deliberately keeps the current client alive. _initClient reuses it
+      // when the server and token are unchanged, so a forced re-probe from
+      // one screen (the discover page does this on every load) no longer
+      // closes the connection a request from another screen is about to use,
+      // which surfaced as "Can't establish connection after the adapter was
+      // closed" when cancelling a request.
       _initialized = false;
-      _httpClient?.close();
-      _httpClient = null;
       _isAvailable = false;
       _invalidateSessionCache();
     }
@@ -102,8 +111,6 @@ class SeerrRepository {
     if (_initialized && !_isAvailable) {
       if (now - _lastInitAttemptMs > 30000) {
         _initialized = false;
-        _httpClient?.close();
-        _httpClient = null;
       }
     }
 
@@ -157,9 +164,17 @@ class SeerrRepository {
   }
 
   void _initClient(MoonfinProxyConfig proxyConfig) {
-    _httpClient?.close();
-    _httpClient = SeerrHttpClient(proxyConfig: proxyConfig);
     _cachedPublicSettings = null;
+    final current = _httpClient;
+    if (current != null &&
+        current.proxyConfig.jellyfinBaseUrl == proxyConfig.jellyfinBaseUrl &&
+        current.proxyConfig.jellyfinToken == proxyConfig.jellyfinToken) {
+      return;
+    }
+    // Swap first, close second: anything that grabbed the old client keeps
+    // a usable reference while its in-flight requests drain.
+    _httpClient = SeerrHttpClient(proxyConfig: proxyConfig);
+    current?.close();
   }
 
   Future<T> _withClient<T>(
@@ -168,8 +183,26 @@ class SeerrRepository {
     await ensureInitialized();
     final client = _httpClient;
     if (client == null) throw StateError('Seerr HTTP client not initialized');
-    return fn(client);
+    try {
+      return await fn(client);
+    } on DioException catch (e) {
+      if (!isClosedAdapterError(e)) rethrow;
+      // The client was replaced (user switch, new token) between the lookup
+      // above and the request leaving the interceptor chain. Dio refuses to
+      // send on a closed adapter, so run the call once more on the new one.
+      await ensureInitialized();
+      final fresh = _httpClient;
+      if (fresh == null || identical(fresh, client)) rethrow;
+      return fn(fresh);
+    }
   }
+
+  /// Dio wraps the adapter's StateError in a DioException of type unknown;
+  /// the message is the only stable way to tell it apart from other errors.
+  @visibleForTesting
+  static bool isClosedAdapterError(DioException e) =>
+      e.error is StateError &&
+      e.error.toString().contains('adapter was closed');
 
   Future<bool> testConnection() => _withClient((c) => c.testConnection());
 
@@ -376,27 +409,89 @@ class SeerrRepository {
     _invalidateSessionCache();
   }
 
+  /// Settings > "Skjul utenlandsk innhold". On by default.
+  bool get hideForeignContent =>
+      _store.getBool(_userKey(SeerrPreferences.hideForeignKey)) ?? true;
+
+  /// Settings > "Vis hva som skjules". The rows are not filtered; the cards
+  /// mark what the filter would hide (see SeerrLanguageFilter.previewMark).
+  bool get previewForeignContent =>
+      _store.getBool(_userKey(SeerrPreferences.previewForeignKey)) ?? false;
+
+  final SeerrFilledPager _languagePager = SeerrFilledPager();
+
+  /// Loads one page of a discovery row. With [hideForeignContent] on, only
+  /// titles in the allowed languages are kept and further upstream pages are
+  /// pulled so the row stays full (see [SeerrFilledPager]). If that goes
+  /// wrong, the row falls back to the plain page rather than going empty.
+  Future<SeerrDiscoverPage> _discoverRow(
+    String key,
+    int page,
+    Future<Map<String, dynamic>> Function(SeerrHttpClient c, int upstreamPage)
+    fetch, {
+    bool releaseFilter = false,
+  }) => _withClient((c) async {
+    Future<SeerrDiscoverPage> plain() async {
+      final raw = SeerrDiscoverPage.fromJson(await fetch(c, page));
+      return releaseFilter
+          ? SeerrReleaseFilter(c.getMovieDetails).apply(raw)
+          : raw;
+    }
+
+    if (!hideForeignContent || previewForeignContent) return plain();
+    try {
+      // The remembered upstream pages only hold for one language set.
+      final languages = discoveryLanguagesSetting().toList()..sort();
+      return await _languagePager.load(
+        key: '$key|${languages.join(',')}',
+        page: page,
+        fetch: (upstream) async =>
+            SeerrDiscoverPage.fromJson(await fetch(c, upstream)),
+        filter: (items) async {
+          final kept = SeerrLanguageFilter.apply(items);
+          if (!releaseFilter) return kept;
+          final released = await SeerrReleaseFilter(
+            c.getMovieDetails,
+          ).apply(SeerrDiscoverPage(results: kept));
+          return released.results;
+        },
+      );
+    } catch (e) {
+      debugPrint('[LanguageFilter] $key page $page failed, unfiltered: $e');
+      return plain();
+    }
+  });
+
+  static int _pageOf(int limit, int offset) =>
+      limit > 0 ? (offset ~/ limit) + 1 : 1;
+
+  // Trending is TMDB buzz, so it is full of films only out in cinemas
+  // (CAM copies at best). SeerrReleaseFilter keeps what is out on
+  // digital/disc, or has aired for series.
   Future<SeerrDiscoverPage> getTrending({int limit = 20, int offset = 0}) =>
-      _withClient(
-        (c) async => SeerrDiscoverPage.fromJson(
-          await c.getTrending(limit: limit, offset: offset),
-        ),
+      _discoverRow(
+        'trending',
+        _pageOf(limit, offset),
+        (c, p) => c.getTrending(limit: limit, offset: (p - 1) * limit),
+        releaseFilter: true,
       );
 
   Future<SeerrDiscoverPage> getTrendingMovies({
     int limit = 20,
     int offset = 0,
-  }) => _withClient(
-    (c) async => SeerrDiscoverPage.fromJson(
-      await c.getTrendingMovies(limit: limit, offset: offset),
-    ),
+  }) => _discoverRow(
+    'trending_movies',
+    _pageOf(limit, offset),
+    (c, p) => c.getTrendingMovies(limit: limit, offset: (p - 1) * limit),
+    releaseFilter: true,
   );
 
   Future<SeerrDiscoverPage> getTrendingTv({int limit = 20, int offset = 0}) =>
-      _withClient(
-        (c) async => SeerrDiscoverPage.fromJson(
-          await c.getTrendingTv(limit: limit, offset: offset),
-        ),
+      _discoverRow(
+        'trending_tv',
+        _pageOf(limit, offset),
+        (c, p) => c.getTrendingTv(limit: limit, offset: (p - 1) * limit),
+        releaseFilter: true,
       );
 
   Future<SeerrDiscoverPage> getTopMovies({int limit = 20, int offset = 0}) =>
@@ -413,13 +508,16 @@ class SeerrRepository {
         ),
       );
 
-  Future<SeerrDiscoverPage> getUpcomingMovies({int page = 1}) => _withClient(
-    (c) async =>
-        SeerrDiscoverPage.fromJson(await c.getUpcomingMovies(page: page)),
+  Future<SeerrDiscoverPage> getUpcomingMovies({int page = 1}) => _discoverRow(
+    'upcoming_movies',
+    page,
+    (c, p) => c.getUpcomingMovies(page: p),
   );
 
-  Future<SeerrDiscoverPage> getUpcomingTv({int page = 1}) => _withClient(
-    (c) async => SeerrDiscoverPage.fromJson(await c.getUpcomingTv(page: page)),
+  Future<SeerrDiscoverPage> getUpcomingTv({int page = 1}) => _discoverRow(
+    'upcoming_tv',
+    page,
+    (c, p) => c.getUpcomingTv(page: p),
   );
 
   Future<SeerrDiscoverPage> getWatchlist({int page = 1}) => _withClient(
@@ -438,15 +536,15 @@ class SeerrRepository {
     int? genre,
     int? studio,
     int? keywords,
-  }) => _withClient(
-    (c) async => SeerrDiscoverPage.fromJson(
-      await c.discoverMovies(
-        page: page,
-        sortBy: sortBy,
-        genre: genre,
-        studio: studio,
-        keywords: keywords,
-      ),
+  }) => _discoverRow(
+    'discover_movies:$sortBy:$genre:$studio:$keywords',
+    page,
+    (c, p) => c.discoverMovies(
+      page: p,
+      sortBy: sortBy,
+      genre: genre,
+      studio: studio,
+      keywords: keywords,
     ),
   );
 
@@ -456,15 +554,15 @@ class SeerrRepository {
     int? genre,
     int? network,
     int? keywords,
-  }) => _withClient(
-    (c) async => SeerrDiscoverPage.fromJson(
-      await c.discoverTv(
-        page: page,
-        sortBy: sortBy,
-        genre: genre,
-        network: network,
-        keywords: keywords,
-      ),
+  }) => _discoverRow(
+    'discover_tv:$sortBy:$genre:$network:$keywords',
+    page,
+    (c, p) => c.discoverTv(
+      page: p,
+      sortBy: sortBy,
+      genre: genre,
+      network: network,
+      keywords: keywords,
     ),
   );
 

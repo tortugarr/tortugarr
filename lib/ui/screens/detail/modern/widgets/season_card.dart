@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../../widgets/focus/focusable_wrapper.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 /// Glassy season card with a subtle background image, title, episode count and a
 /// chevron. Purely presentational and theme-tokenized; the host resolves the
@@ -29,6 +30,9 @@ class SeasonCard extends StatelessWidget {
   /// d-pad can reach rows below the fold).
   final bool autoScroll;
 
+  /// A season the library has no episodes of: dimmed, with a "Mangler" tag.
+  final bool missing;
+
   const SeasonCard({
     super.key,
     required this.title,
@@ -44,6 +48,7 @@ class SeasonCard extends StatelessWidget {
     this.width,
     this.height,
     this.autoScroll = false,
+    this.missing = false,
   });
 
   @override
@@ -98,6 +103,30 @@ class SeasonCard extends StatelessWidget {
                   ),
                 ),
               ),
+              if (missing) ...[
+                Positioned.fill(
+                  child: ColoredBox(color: Colors.black.withValues(alpha: 0.55)),
+                ),
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD32F2F),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      appL10n().tgMissing,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               Positioned(
                 left: 8,
                 right: 8,

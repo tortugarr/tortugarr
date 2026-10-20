@@ -5,6 +5,7 @@ import 'package:flutter_tvos/flutter_tvos.dart'
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../preference/preference_constants.dart';
+import '../../data/services/seerr/seerr_language_filter.dart';
 import '../../util/platform_detection.dart';
 import '../../util/focus/dpad_keys.dart';
 import '../../util/focus/key_event_utils.dart';
@@ -36,6 +37,10 @@ class MediaCard extends StatefulWidget {
   final String? itemType;
   final String? seerrMediaType;
   final int? seerrStatus;
+
+  /// Set by "Vis hva som skjules": the title's language badge. A title the
+  /// language filter would hide also gets a red frame and dimming.
+  final SeerrLanguageMark? seerrLanguageMark;
   final Color? focusColor;
   final bool cardFocusExpansion;
   final FocusNode? focusNode;
@@ -85,6 +90,7 @@ class MediaCard extends StatefulWidget {
     this.itemType,
     this.seerrMediaType,
     this.seerrStatus,
+    this.seerrLanguageMark,
     this.focusColor,
     this.cardFocusExpansion = true,
     this.focusNode,
@@ -336,6 +342,7 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
                       itemType: widget.itemType,
                       seerrMediaType: widget.seerrMediaType,
                       seerrStatus: widget.seerrStatus,
+                      seerrLanguageMark: widget.seerrLanguageMark,
                       imageOverlays: widget.imageOverlays,
                       overlayOccupiesTopLeft: widget.overlayOccupiesTopLeft,
                       isGenreFallback: widget.isGenreFallback,
@@ -586,6 +593,7 @@ class _CardImage extends StatelessWidget {
   final String? itemType;
   final String? seerrMediaType;
   final int? seerrStatus;
+  final SeerrLanguageMark? seerrLanguageMark;
   final List<Widget> imageOverlays;
   final bool overlayOccupiesTopLeft;
   final bool isGenreFallback;
@@ -608,6 +616,7 @@ class _CardImage extends StatelessWidget {
     this.itemType,
     this.seerrMediaType,
     this.seerrStatus,
+    this.seerrLanguageMark,
     this.imageOverlays = const [],
     this.overlayOccupiesTopLeft = false,
     this.isGenreFallback = false,
@@ -761,6 +770,8 @@ class _CardImage extends StatelessWidget {
                     ),
                   ),
                 ...imageOverlays,
+                if (seerrLanguageMark != null)
+                  ..._buildLanguageMark(seerrLanguageMark!),
               ],
             ),
           ),
@@ -803,6 +814,84 @@ class _CardImage extends StatelessWidget {
       case WatchedIndicatorBehavior.never:
         return false;
     }
+  }
+
+  /// Preview-mode language badge along the bottom, big enough to read on a
+  /// TV from the sofa. Kept titles get a small green code, library titles in
+  /// a foreign language a grey one; titles the filter would hide are dimmed
+  /// with a red frame and a full-width "SKJULES · JA" badge.
+  List<Widget> _buildLanguageMark(SeerrLanguageMark mark) {
+    if (mark.kind != SeerrLanguageMarkKind.hidden) {
+      return [
+        Positioned(
+          left: 6,
+          bottom: 6,
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: mark.kind == SeerrLanguageMarkKind.kept
+                    ? const Color(0xFF2E7D32)
+                    : const Color(0xFF616161),
+                borderRadius: AppRadius.circular(4),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                child: Text(
+                  mark.label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ];
+    }
+    const red = Color(0xFFE53935);
+    return [
+      Positioned.fill(
+        child: IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.35),
+              border: Border.all(color: red, width: 4),
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        left: 4,
+        right: 4,
+        bottom: 6,
+        child: IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: red,
+              borderRadius: AppRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  mark.label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
   }
 
   bool get _showSeerrMediaTypeBadge {

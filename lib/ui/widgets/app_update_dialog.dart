@@ -147,7 +147,7 @@ Future<void> _downloadAndInstallWindowsUpdate(
 
   try {
     final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}${Platform.pathSeparator}moonfin_updater.exe');
+    final file = File('${tempDir.path}${Platform.pathSeparator}tortugarr_updater.exe');
     if (await file.exists()) {
       await file.delete();
     }

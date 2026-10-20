@@ -33,6 +33,7 @@ import '../../widgets/navigation_layout.dart';
 import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/sliding_pill_tabs.dart';
+import '../../navigation/single_push.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
@@ -1434,7 +1435,8 @@ class _SearchScreenState extends State<SearchScreen> with GridFocusNodeMixin {
         'person' => context.push(Destinations.seerrPerson(item.id.toString())),
         'collection' =>
           context.push(Destinations.seerrCollection(item.id.toString())),
-        _ => context.push(
+        _ => SinglePush.push(
+          context,
           Destinations.seerrMedia(item.id.toString()),
           extra: {'mediaType': item.mediaType ?? 'movie'},
         ),

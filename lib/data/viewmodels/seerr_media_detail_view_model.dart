@@ -213,6 +213,21 @@ class SeerrMediaDetailState {
 
   bool get isAvailableAnyQuality => hd.isAvailable || uhd.isAvailable;
 
+  /// True only when Seerr has linked this title to an actual Jellyfin
+  /// library item — i.e. there is something to play RIGHT NOW. "Partially
+  /// available" alone is not enough: a series with three episodes or a
+  /// movie Seerr can't find in the library must not offer a Play button
+  /// that dead-ends in "not found in your library".
+  bool get hasPlayableInLibrary =>
+      (mediaInfo?.jellyfinMediaId ?? mediaInfo?.jellyfinMediaId4k) != null;
+
+  /// True only when the title is FULLY available in at least one quality.
+  /// Unlike [isAvailableAnyQuality] (which counts "partially available"),
+  /// this stays false for a series you only have a few episodes of — so the
+  /// Download Now button stays visible until everything is actually there.
+  bool get isFullyAvailableAnyQuality =>
+      hd.isFullyAvailable || uhd.isFullyAvailable;
+
   SeerrDownloadSummary? get hdDownload => hd.download;
   SeerrDownloadSummary? get download4k => uhd.download;
 
@@ -559,6 +574,20 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
         await _repo.deleteRequest(id);
       }
       await _reloadDetails('Request cancelled');
+      // Verify the requests are actually gone. A silent network failure or a
+      // stale reload must never surface as a green "Request cancelled" while
+      // the request is still open on the server.
+      final stillOpen = _state.allActiveRequests
+          .where((r) => requestIds.contains(r.id))
+          .length;
+      if (stillOpen > 0) {
+        _state = _state.copyWith(
+          isRequesting: false,
+          requestSuccess: null,
+          requestError:
+              'The request could not be cancelled on the server. Try again.',
+        );
+      }
     } catch (e) {
       _setRequestFailure(e);
     }

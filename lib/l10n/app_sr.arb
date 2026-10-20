@@ -1,6 +1,6 @@
 {
     "@@locale": "sr",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin верзија {version}",
+    "appVersionFooter": "Tortugarr верзија {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin није могао да приступи системском привеску за кључеве. Пријава може да се настави, али безбедно чување токена можда неће бити доступно док не откључате привезак.",
+    "secureStorageUnavailableMessage": "Tortugarr није могао да приступи системском привеску за кључеве. Пријава може да се настави, али безбедно чување токена можда неће бити доступно док не откључате привезак.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Оригинални, чист Moonfin изглед.",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Оригинални, чист Tortugarr изглед.",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неон Пулсе",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Изаћи из Moonfin-а?",
+    "exitApp": "Изаћи из Tortugarr-а?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Није постављено. Moonfin ће покушати са подразумеваним mpv.conf у app/data фасциклама.",
+    "notSetMpvConf": "Није постављено. Tortugarr ће покушати са подразумеваним mpv.conf у app/data фасциклама.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — видљиво другим апликацијама",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — видљиво другим апликацијама",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Преузети медији ће бити сачувани у Downloads/Moonfin на вашем уређају. Ове датотеке ће бити видљиве другим апликацијама, као што су галерија или музички плејер.\n\nПостојећа преузимања ће остати на тренутној локацији.",
+    "saveToDownloadsFolderDescription": "Преузети медији ће бити сачувани у Downloads/Tortugarr на вашем уређају. Ове датотеке ће бити видљиве другим апликацијама, као што су галерија или музички плејер.\n\nПостојећа преузимања ће остати на тренутној локацији.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Укључите или искључите видљивост на почетној страници по библиотеци. Поново покрените Moonfin да би промене ступиле на снагу.",
+    "libraryVisibilityDescription": "Укључите или искључите видљивост на почетној страници по библиотеци. Поново покрените Tortugarr да би промене ступиле на снагу.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Пусти у Moonfin-у",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Пусти у Tortugarr-у",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Затражио/ла: {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Ставка није пронађена у вашој Moonfin библиотеци",
+    "itemNotFoundInLibrary": "Ставка није пронађена у вашој Tortugarr библиотеци",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Рестарт сервера је у току",
-    "adminServerRebootMessage": "Поновно покретање сервера је у току, поново покрените Moonfin",
+    "adminServerRebootMessage": "Поновно покретање сервера је у току, поново покрените Tortugarr",
     "adminActiveSessions": "Активне сесије",
     "adminSessionsLoadFailed": "Учитавање сесија није успело",
     "adminNoActiveSessions": "Нема активних сесија",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Прикажи дугме за жанрове на траци за навигацију",
     "settingsShowFavoritesButtonInNavigation": "Прикажите дугме фаворита на траци за навигацију",
     "settingsShowLibrariesButtonInNavigation": "Прикажите дугме библиотеке на траци за навигацију",
-    "settingsLibraryVisibilitySubtitle": "Укључите или искључите видљивост на почетној страници по библиотеци. Поново покрените Moonfin да би промене ступиле на снагу.",
+    "settingsLibraryVisibilitySubtitle": "Укључите или искључите видљивост на почетној страници по библиотеци. Поново покрените Tortugarr да би промене ступиле на снагу.",
     "settingsMediaBarAndLocalPreviews": "Трака медија и локални прегледи",
     "settingsVisualOverlays": "Висуал Оверлаис",
     "settingsSeasonalSurprise": "Сезонско изненађење",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Придружите се Discord-у",
     "settingsJoinDiscordSubtitle": "Разговарајте са заједницом",
     "settingsJoinTheDiscord": "Придружите се Discord серверу",
-    "settingsSupportMoonfin": "Подржите Moonfin",
+    "settingsSupportNotflix": "Подржите Tortugarr",
     "settingsLegal": "ЛЕГАЛ",
     "settingsLicenses": "Лиценце",
     "settingsOpenSourceLicenseNotices": "Обавештења о лиценци отвореног кода",
     "settingsPrivacyPolicy": "Политика приватности",
-    "settingsPrivacyPolicySubtitle": "Како Moonfin рукује вашим подацима",
+    "settingsPrivacyPolicySubtitle": "Како Tortugarr рукује вашим подацима",
     "settingsCheckForUpdates": "Проверите ажурирања",
-    "settingsCheckForUpdatesSubtitle": "Проверите да ли постоји ново Moonfin издање",
+    "settingsCheckForUpdatesSubtitle": "Проверите да ли постоји ново Tortugarr издање",
     "settingsPoweredByFlutter": "Поверед би Флуттер",
     "settingsLicenseNoticesCount": "{count, plural, one {# лиценцно обавештење} few {# лиценцна обавештења} other {# лиценцних обавештења}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Сачуване теме",
-    "savedThemesDescription": "Ово су теме преузете из Moonfin додатка за тренутни сервер. Брисањем се уклања само ова локална копија.",
+    "savedThemesDescription": "Ово су теме преузете из Tortugarr додатка за тренутни сервер. Брисањем се уклања само ова локална копија.",
     "savedThemesEmpty": "За овај сервер нису пронађене сачуване теме.",
     "savedThemesCurrentThemeId": "{themeId} • Тренутно активна",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Обриши сачувану тему",
     "savedThemesManageSubtitle": "Управљајте преузетим темама додатка на овом уређају",
     "themeEditor": "Уређивач тема",
-    "themeEditorSubtitle": "Отворите Moonfin Уређивач тема у прегледачу",
+    "themeEditorSubtitle": "Отворите Tortugarr Уређивач тема у прегледачу",
     "homeScreen": "Почетни екран",
     "bottomBar": "Доња трака",
     "homeRowsStyleClassic": "Класични",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Преферирај SDH титлове",
     "preferSdhSubtitlesSubtitle": "Дај предност SDH/CC записима титлова при аутоматском избору.",
     "webDiagnostics": "Веб дијагностика",
-    "webDiagnosticsTitle": "Moonfin веб дијагностика",
+    "webDiagnosticsTitle": "Tortugarr веб дијагностика",
     "webDiagnosticsIntro": "Користите ову страницу за дијагностику проблема са повезивањем прегледача (CORS, мешовити садржај и подешавања откривања).",
     "webDiagnosticsDetectedMixedContentFailure": "Откривен квар због мешовитог садржаја",
     "webDiagnosticsDetectedCorsPreflightFailure": "Откривен квар CORS-а/preflight захтева",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin је открио да HTTPS страница покушава да позове HTTP URL сервера. Прегледачи блокирају тај захтев пре него што стигне до вашег сервера.",
-    "webDiagnosticsCorsFailureBody": "Moonfin је открио квар захтева на нивоу прегледача који обично изазивају недостајућа CORS или preflight заглавља на медијском серверу.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr је открио да HTTPS страница покушава да позове HTTP URL сервера. Прегледачи блокирају тај захтев пре него што стигне до вашег сервера.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr је открио квар захтева на нивоу прегледача који обично изазивају недостајућа CORS или preflight заглавља на медијском серверу.",
     "webDiagnosticsTargetUrl": "Циљни URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "није конфигурисано",
     "webDiagnosticsMixedContent": "Мешовити садржај",
     "webDiagnosticsMixedContentDetected": "Ова страница се учитава преко HTTPS-а, али је један или више конфигурисаних URL-ова HTTP. Прегледачи блокирају HTTPS страницама позивање HTTP API-ја.",
-    "webDiagnosticsMixedContentFix": "Решење: послужите свој медијски сервер или прокси крајњу тачку преко HTTPS-а или учитајте Moonfin преко HTTP-а само на поузданим локалним мрежама.",
+    "webDiagnosticsMixedContentFix": "Решење: послужите свој медијски сервер или прокси крајњу тачку преко HTTPS-а или учитајте Tortugarr преко HTTP-а само на поузданим локалним мрежама.",
     "webDiagnosticsNoMixedContentDetected": "Из тренутних подешавања извршавања није откривена очигледна конфигурација мешовитог садржаја.",
     "webDiagnosticsCorsChecklist": "CORS контролна листа",
     "webDiagnosticsCorsChecklistItem1": "• Дозволите извор прегледача у Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Аутоматски омогући HDR за репродукцију HDR видеа и врати режим приказа при изласку.",
     "whenFullscreen": "У целом екрану",
     "transcodingLimits": "Ограничења транскодирања",
-    "settingsSupportMoonfinSubtitle": "Частите програмера кафом",
+    "settingsSupportNotflixSubtitle": "Частите програмера кафом",
     "accountPreferences": "ПОДЕШАВАЊА НАЛОГА",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Класични је оригинални центрирани Moonfin распоред. Модерни је прилагодљив биоскопски распоред.",
+    "detailScreenStyleSubtitle": "Класични је оригинални центрирани Tortugarr распоред. Модерни је прилагодљив биоскопски распоред.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Класични",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Класични",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Модерни",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Користите алгоритам локалне библиотеке Moonfin Recommends или онлајн TMDb метрике сличности. Напомена: онлајн препоруке захтевају Seerr интеграцију.",
+    "recommendationSystemSubtitle": "Користите алгоритам локалне библиотеке Tortugarr Recommends или онлајн TMDb метрике сличности. Напомена: онлајн препоруке захтевају Seerr интеграцију.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb сличност",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Ограничи предлоге функције Moonfin Recommends према родитељској оцени изабраног садржаја",
+    "recommendationsApplyParentalRatingCapSubtitle": "Ограничи предлоге функције Tortugarr Recommends према родитељској оцени изабраног садржаја",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Прилагођене теме мењају визуелне елементе у целом Moonfin-у. Изаберите једну од ових опција која одговара вашем стилу.",
+    "customThemeSubtitle": "Прилагођене теме мењају визуелне елементе у целом Tortugarr-у. Изаберите једну од ових опција која одговара вашем стилу.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Пријавите се на Moonfin на телефону",
+    "carSignInPrompt": "Пријавите се на Tortugarr на телефону",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller је Flutter-ов модерни GPU приказивач за глаткије анимације и мање застајкивања. На неким ТВ уређајима и старијим GPU-овима може изазвати сметње или црни видео; искључите га ако то приметите. Аутоматски бира најбоље подешавање за ваш уређај. Поново покрените Moonfin да бисте применили промену.",
+    "impellerRenderingSubtitle": "Impeller је Flutter-ов модерни GPU приказивач за глаткије анимације и мање застајкивања. На неким ТВ уређајима и старијим GPU-овима може изазвати сметње или црни видео; искључите га ако то приметите. Аутоматски бира најбоље подешавање за ваш уређај. Поново покрените Tortugarr да бисте применили промену.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin мора поново да се покрене да би се променио механизам приказа. Затворите апликацију сада, а затим је поново отворите да бисте применили промену.",
+    "impellerRestartMessage": "Tortugarr мора поново да се покрене да би се променио механизам приказа. Затворите апликацију сада, а затим је поново отворите да бисте применили промену.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "IMDb најпопуларнији филмови",
     "imdbMostPopularTvShows": "IMDb најпопуларније ТВ серије",
     "imdbLowestRatedMovies": "IMDb најлошије оцењени филмови",
-    "imdbTopEnglishMovies": "IMDb најбоље оцењени енглески филмови"
+    "imdbTopEnglishMovies": "IMDb најбоље оцењени енглески филмови",
+    "tgMissing": "Недостаје",
+    "tgComing": "Долази",
+    "tgComingOn": "Долази {date}",
+    "tgDownloading": "Преузима се",
+    "tgReadySoon": "Ускоро спремно",
+    "tgRequested": "Затражено",
+    "tgClose": "Затвори",
+    "tgCancel": "Откажи",
+    "tgBack": "Назад",
+    "tgYes": "Да",
+    "tgNo": "Не",
+    "tgSearch": "Претражи",
+    "tgHide": "Сакриј",
+    "tgAll": "Све",
+    "tgNone": "Ништа",
+    "tgMovies": "Филмови",
+    "tgSeries": "Серије",
+    "tgMovieTag": "Филм",
+    "tgSeriesTag": "Серија",
+    "tgCanTakeAMinute": "Може потрајати до једног минута",
+    "tgToday": "данас",
+    "tgYesterday": "јуче",
+    "tgDaysAgo": "пре {days} дана",
+    "tgMonthsAgo": "пре {months} мес.",
+    "tgYearsAgo": "пре {years} год.",
+    "tgYearsMonthsAgo": "пре {years} год. и {months} мес.",
+    "tgFindSubtitles": "Пронађи титлове",
+    "tgFreeUpSpace": "Ослободи простор",
+    "tgDownloads": "Преузимања",
+    "tgDownloadsCount": "Преузимања ({count})",
+    "tgNoVideoRemoved": "„{title}“: преузимање није садржало видео-датотеку ({files}). Уклоњено је и блокирано – пробај другу датотеку.",
+    "tgNoVideoNotRemoved": "„{title}“: преузимање није садржало видео-датотеку ({files}), али није могло да се уклони аутоматски.",
+    "tgAiredOn": "Емитовано {date}",
+    "tgTapToFindFiles": "Додирни да пронађеш датотеке",
+    "tgWholeSeason": "Цела сезона",
+    "tgEpisodesMissingFindPack": "Недостаје {count} епизода – пронађи пакет сезоне",
+    "tgAddToSonarrTitle": "Додај у Sonarr да видиш епизоде које недостају",
+    "tgAddToSonarrSubtitle": "Серија се додаје а да сама ништа не преузима",
+    "tgMissingEpisodesUnavailable": "Епизоде које недостају тренутно не могу да се прикажу",
+    "tgReasonTapRetry": "{reason} · Додирни да покушаш поново",
+    "tgSeasonPackBadge": "Пакет сезоне",
+    "tgMonitorSeasonTitle": "Прати сезону {season}",
+    "tgMonitorSeasonQuestion": "Да ли Sonarr сада да преузме епизоде које недостају у сезони {season}?\n\nНе: преузимају се само нове епизоде када изађу.",
+    "tgSonarrSearchingSeason": "Sonarr тражи сезону {season}",
+    "tgMonitored": "Прати се",
+    "tgNotMonitored": "Не прати се",
+    "tgSeasonStateLabel": "Сезона {season}: {state}",
+    "tgLabelMissing": "{label} недостаје",
+    "tgNotAiredYet": "{code} још није емитована.",
+    "tgNotAiredYetComing": "{code} још није емитована – долази {date}.",
+    "tgAlreadyDownloading": "{code} се већ преузима.",
+    "tgDownloadedAppearsSoon": "{code} је преузета и ускоро ће се појавити у библиотеци.",
+    "tgSearchingFor": "Тражим: {label} …",
+    "tgSeasonLower": "сезона {season}",
+    "tgWholeLabel": "Цела {label}",
+    "tgSeasonNoEpisodes": "Сезона {season} – нема епизода у библиотеци",
+    "tgNoTvdbId": "Серија нема TVDB ид, па Sonarr не може да је пронађе.",
+    "tgAddingToSonarr": "Додавање у Sonarr …",
+    "tgAddToSonarrFailed": "Серија није могла да се дода у Sonarr. Покушај поново касније.",
+    "tgSendingToDownload": "Шаљем „{label}“ на преузимање …",
+    "tgDownloadDidNotStart": "Преузимање није почело: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}“ се преузима ({size}). Појавиће се у библиотеци када се заврши.",
+    "tgSonarrUnreachableRetry": "Sonarr није доступан. Покушај поново мало касније.",
+    "tgNoUsableFiles": "Нису пронађене употребљиве датотеке. Покушај поново касније – нове се често појаве после неколико сати.",
+    "tgFilesCount": "{count} датотека",
+    "tgFilesRecommended": "{count} датотека – {recommended} одговара профилу квалитета, остале су на дну",
+    "tgOutsideQualityProfile": "Ван профила квалитета",
+    "tgLargerThanProfile": "Веће него што профил дозвољава",
+    "tgSmallerThanProfile": "Мање него што профил дозвољава",
+    "tgAlreadyExists": "Већ постоји",
+    "tgMayNotFitDisk": "Можда неће стати на диск",
+    "tgSonarrUnreachable": "Sonarr није доступан",
+    "tgSonarrUnreachableAt": "Sonarr није доступан на {host}",
+    "tgSonarrRejectedChange": "Sonarr није прихватио промену",
+    "tgSeasonMonitoredNoSearch": "Сезона се прати, али Sonarr није покренуо претрагу",
+    "tgSonarrCantSearch": "Sonarr тренутно не може да претражује",
+    "tgSearchExpired": "Резултат претраге је истекао – претражи поново",
+    "tgSonarrRejectedDownload": "Sonarr није прихватио преузимање (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr нема ту серију",
+    "tgCouldNotChangeMonitoring": "Праћење није могло да се промени: {error}",
+    "tgJellyfinNoIds": "Jellyfin није препознао серију (нема TVDB ни TMDB ид)",
+    "tgSomethingWentWrong": "Нешто је пошло наопако: {error}",
+    "tgDeleteReadOnly": "Датотеком не управља Radarr/Sonarr, а Jellyfin има само приступ за читање фасцикле. Обриши је у свом менаџеру датотека.",
+    "tgSonarrRequiredPerEpisode": "Sonarr није доступан или серија тамо није додата. За преузимање појединачних епизода потребан је Sonarr.",
+    "tgEpisodesNotFound": "Изабране епизоде за „{title}“ нису пронађене у Sonarr-у (укупно пронађено {count} епизода). Додај серију у Sonarr и покушај поново.",
+    "tgPartOfCollectionPrefix": "Део колекције ",
+    "tgViewingPartOf": "  ·  гледаш {current}. део од {total}",
+    "tgPartOf": "{number}. део од {total}",
+    "tgUnknownTitle": "Непознат наслов",
+    "tgMovieCollection": "Филмска колекција",
+    "tgNotReleasedYet": "„{title}“ још није изашао",
+    "tgScreensaverModeVideo": "Видео",
+    "tgScreensaverModeLogo": "Логотип",
+    "tgScreensaverSound": "Звук чувара екрана",
+    "tgScreensaverSoundSubtitle": "Искључено: трејлери у чувару екрана се пуштају без звука",
+    "tgScreensaverLogo": "Логотип",
+    "tgLogoBadge": "Tortugarr значка",
+    "tgLogoVhs": "Папагај на VHS касетама",
+    "tgLogoSign": "Папагај на табли",
+    "tgHiddenBadge": "СКРИВЕНО · {code}",
+    "tgDiskSpace": "Простор на диску",
+    "tgDiskSpaceSubtitle": "Ослободи простор за нова преузимања",
+    "tgAdultTitle": "Филмови за одрасле (XXX)",
+    "tgAdultSubtitle": "Прикажи или сакриј XXX библиотеку (PIN)",
+    "tgHideForeign": "Сакриј страни садржај",
+    "tgHideForeignOn": "Укључено: У тренду и Популарно приказују само енглески, норвешки, шведски, дански, немачки и француски",
+    "tgHideForeignOff": "Искључено: У тренду и Популарно приказују све језике",
+    "tgShowHidden": "Прикажи шта је скривено",
+    "tgShowHiddenOn": "Укључено: наслови који би били скривени приказују се са црвеном ознаком СКРИВЕНО",
+    "tgShowHiddenOff": "Решавање проблема: прикажи скривене наслове са црвеном ознаком уместо да се уклоне",
+    "tgShowAllSubLangs": "Прикажи све језике титлова",
+    "tgShowAllSubLangsOn": "Укључено: мени за титлове приказује све језике",
+    "tgShowAllSubLangsOff": "Искључено: мени за титлове приказује само норвешки и енглески",
+    "tgPreviewSound": "Звук у прегледу",
+    "tgPreviewSoundOn": "Укључено: клип који се пушта када се зауставиш на наслову има звук",
+    "tgPreviewSoundOff": "Искључено: клипови се пуштају без звука док прегледаш",
+    "tgScreensaver": "Чувар екрана",
+    "tgScreensaverSubtitle": "Видео или логотип, звук и слика",
+    "tgShowMissingEpisodes": "Прикажи епизоде које недостају",
+    "tgShowMissingEpisodesOn": "Укључено: сезоне приказују епизоде које немаш, спремне за преузимање",
+    "tgShowMissingEpisodesOff": "Искључено: сезоне приказују само епизоде које имаш",
+    "tgShowCollections": "Прикажи филмске колекције",
+    "tgShowCollectionsOn": "Укључено: филмови приказују остале филмове из колекције, укључујући оне који ти недостају",
+    "tgShowCollectionsOff": "Искључено: страница филма не приказује колекцију",
+    "tgNoActiveDownloads": "Нема активних преузимања.",
+    "tgPickDownloadToOpen": "Изабери преузимање да отвориш захтеве.",
+    "tgRefreshLibrary": "Освежи библиотеку",
+    "tgAskingJellyfinScan": "Тражим од Jellyfin-а да скенира библиотеку …",
+    "tgHideAll": "Сакриј све",
+    "tgImporting": "Увоз",
+    "tgSubsNotManaged": "Овим насловом не управља Radarr/Sonarr, па Bazarr не може да пронађе титлове за њега.",
+    "tgBazarrUnreachable": "Bazarr није доступан. Покушај поново мало касније.",
+    "tgSubsFoundNothing": "Још ништа није пронађено. Bazarr аутоматски покушава поново свакога дана, а можеш и сам да изабереш.",
+    "tgSubsFound": "Пронађено: {languages} – може потрајати тренутак док се не појави у менију за титлове.",
+    "tgAnd": "и",
+    "tgSubsDownloaded": "Преузето – може потрајати тренутак док се не појави у менију за титлове.",
+    "tgAskingBazarr": "Питам Bazarr …",
+    "tgHaveAll": "Имамо све",
+    "tgSearchAutoNow": "Претражи аутоматски сада",
+    "tgSearchingUpToMinute": "Претрага … може потрајати до једног минута",
+    "tgPickYourself": "Изабери сам",
+    "tgAskingProviders": "Питам изворе титлова … може потрајати до једног минута",
+    "tgNoProviderSubs": "Ниједан извор још нема титлове за ово.",
+    "tgLangHas": "{language}: доступно",
+    "tgLangMissing": "{language}: недостаје",
+    "tgNoReleaseName": "(без назива издања)",
+    "tgHearingImpaired": "{provider} · за особе оштећеног слуха",
+    "tgLangNorwegian": "Норвешки",
+    "tgLangEnglish": "Енглески",
+    "tgBazarrUnknownTitle": "Bazarr још не познаје овај наслов",
+    "tgBazarrError": "Bazarr је одговорио грешком (HTTP {code})",
+    "tgLowSpaceSnack": "Мало простора на {drive}: ({free} слободно). Преузимање може да стане — јави ономе ко одржава сервер.",
+    "tgNoQbitForSpace": "qBittorrent није доступан да провери простор",
+    "tgNotEnoughSpace": "Нема довољно простора",
+    "tgDriveHasFree": "{drive}: има {free} слободно",
+    "tgCopyInDownloads": "Копија у Downloads · већ је у библиотеци",
+    "tgLastWatched": "Последњи пут гледано {ago}",
+    "tgNeverWatchedAdded": "Никад гледано · додато {ago}",
+    "tgNeverWatched": "Никад гледано",
+    "tgNothingSafeToDelete": "На {drive}: није пронађено ништа што може безбедно да се обрише (све је недавно додато, недавно гледано или омиљено).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{Обрисати {count} наслов?} few{Обрисати {count} наслова?} other{Обрисати {count} наслова?}}",
+    "tgDeletedForGood": "{size} ће бити трајно обрисано. Ово не може да се опозове.",
+    "tgYesDelete": "Да, обриши",
+    "tgDeletingProgress": "Брисање {done}/{total} …",
+    "tgNowHasFree": " · {drive}: сада има {free} слободно",
+    "tgDeletedTitles": "{count, plural, one{Обрисан {count} наслов} few{Обрисана {count} наслова} other{Обрисано {count} наслова}}{extra}",
+    "tgDeletedFailed": "Обрисано {count}, неуспело: {failed}{extra}",
+    "tgFreeGb": "Ослободи {gb} GB",
+    "tgDownloadCopies": "Копије преузимања",
+    "tgLookingForUnwatched": "Тражим шта дуго није гледано …",
+    "tgSuggestionEnough": "Предлог: {size} · довољно простора ✓",
+    "tgSuggestionOf": "Предлог: {size} од потребних {target}",
+    "tgPickToSayNo": "Изабери један да кажеш не — следећи предлог долази аутоматски.",
+    "tgOtherCandidates": "Остали кандидати",
+    "tgDownloadAnyway": "Ипак преузми",
+    "tgDeleteCountSize": "Обриши {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: има {free} слободно.",
+    "tgFileDoubleSpace": "Датотека има {size} и заузима дупло простора (преузимање + копија у библиотеци), плус {buffer} у резерви.",
+    "tgFileSize": "Датотека има {size}, плус {buffer} у резерви.",
+    "tgPendingNeeds": "Преузимања у току требају још {size}.",
+    "tgShortBy": "Недостаје {size}.",
+    "tgOnlyEarlyFiles": "Пронађене су само датотеке објављене пре дигиталног изласка филма ({count}) — оне су скоро увек лажне.",
+    "tgNoDigitalDate": "још нема датум дигиталног изласка",
+    "tgDigitalOn": "дигитално излази {date}",
+    "tgNotOutDigitally": "Још није дигитално доступно",
+    "tgTitleWhen": "„{title}“ {when}.",
+    "tgNotOutExplain": "Оно што сада постоји обично је снимак из биоскопа или други филм истог имена. Понекад постоји рана копија у нижем квалитету, често са угравираним титловима. „Ипак прикажи датотеке“ приказује шта постоји. Radarr сам преузима праву верзију када изађе.",
+    "tgShowFilesAnyway": "Ипак прикажи датотеке",
+    "tgPickSeasonsEpisodes": "Изабери сезоне и епизоде",
+    "tgNoEpisodeInfo": "{season}: нема података о епизодама",
+    "tgAppliesAllDevices": "Важи за све уређаје који користе овај налог",
+    "tgNoXxxLibrary": "Није пронађена библиотека под називом XXX.",
+    "tgSearchingEachWord": "Претражујем сваку реч засебно … (може потрајати пола минута)",
+    "tgSentToQbit": "„{title}“ ({size}) послато у qBittorrent",
+    "tgDownloadFailed": "Преузимање није успело: {error}",
+    "tgXxxNoVideoRemoved": "„{title}“ није садржао видео-датотеку и уклоњен је.",
+    "tgXxxNoVideoNotRemoved": "„{title}“ није садржао видео-датотеку и НИЈЕ уклоњен.",
+    "tgSearchNewXxx": "Тражи нове XXX",
+    "tgXxxSearchHint": "Име, студио …",
+    "tgChecking": "Проверавам …",
+    "tgXxxVisible": "Сада видљиво. XXX се приказује у библиотекама, претрази и на почетном екрану.",
+    "tgXxxHidden": "Скривено. XXX се не приказује нигде у апликацији.",
+    "tgShowWithPin": "Прикажи (PIN)",
+    "tgChangePin": "Промени PIN",
+    "tgNoLibraryList": "Списак библиотека није преузет (HTTP {code})",
+    "tgNoUserSettings": "Корисничка подешавања нису преузета (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin је одбио промену (HTTP {code})",
+    "tgDeleteFailed": "Брисање није успело (HTTP {code})",
+    "tgXxxAddFailed": "„{title}“ није могао да се дода у qBittorrent",
+    "tgSeasonEpisodeLower": "сезона {season}, епизода {episode}",
+    "tgSearchInSeerr": "Претражи у Seerr-у",
+    "tgSeerrSearchHint": "Тражи филмове и серије (нпр. „Lost S02E05“)",
+    "tgMissingInThisSeason": "Недостаје у овој сезони",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Недостаје сезона} few{Недостају сезоне} other{Недостају сезоне}} {list} - отвори серију да видиш све сезоне",
+    "tgProjectOnGitHub": "Tortugarr на GitHub-у",
+    "tgProjectOnGitHubSubtitle": "Изворни код, издања и пријаве грешака",
+    "tgBuiltOnMoonfinCredit": "Tortugarr је изграђен на Moonfin-у (GPL), који су направили Moonfin програмери.",
+    "tgCredits": "Заслуге",
+    "tgCreditsThanks": "Уз скромну захвалност: без ових пројеката и људи који стоје иза њих Tortugarr не би постојао.",
+    "tgCreditMoonfin": "Апликација на којој је Tortugarr изграђен (GPL)",
+    "tgCreditJellyfin": "Медијски сервер",
+    "tgCreditSeerr": "Откривање и захтеви",
+    "tgCreditRadarr": "Филмови",
+    "tgCreditSonarr": "Серије",
+    "tgCreditProwlarr": "Менаџер индексера",
+    "tgCreditBazarr": "Титлови",
+    "tgCreditFlareSolverr": "Cloudflare помоћник за индексере",
+    "tgCreditQbittorrent": "Клијент за преузимање, подразумевани избор инсталације",
+    "tgCreditTmdb": "Подаци о филмовима и серијама, постери и слике",
+    "tgCreditOpenSubtitles": "Титлови, преузети преко Bazarr-а",
+    "tgTmdbNotice": "Овај производ користи TMDB API, али га TMDB не подржава нити сертификује.",
+    "tgLoadingLogoSize": "Величина логотипа при учитавању",
+    "tgLoadingLogoSizeSubtitle": "Логотип који се окреће док се видео учитава",
+    "tgSubtitleLanguages": "Језици титлова",
+    "tgSubtitleLanguagesSubtitle": "Приказано у менију титлова: {languages}",
+    "tgShowAllSubLangsOffChosen": "Искључено: мени титлова приказује само изабране језике",
+    "tgDiscoveryLanguages": "Језици у Трендовима и Популарном",
+    "tgDiscoveryLanguagesSubtitle": "Приказано: {languages}",
+    "tgHideForeignOnChosen": "Укључено: Трендови и Популарно приказују само изабране језике",
+    "tgShowLanguageBadges": "Прикажи ознаке језика",
+    "tgShowLanguageBadgesOn": "Укључено: наслови приказују свој језик (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Искључено: без ознака језика на насловима"
 }

@@ -21,3 +21,9 @@ class MediaBarError extends MediaBarState {
 class MediaBarDisabled extends MediaBarState {
   const MediaBarDisabled();
 }
+
+/// Nothing to show (an empty or emptied library): hidden like
+/// [MediaBarDisabled], not an error, and it loads again with the home screen.
+class MediaBarEmpty extends MediaBarDisabled {
+  const MediaBarEmpty();
+}

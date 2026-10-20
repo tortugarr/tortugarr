@@ -41,13 +41,6 @@ class LocalPreviewsSettingsScreen extends StatelessWidget {
                   onChanged: _pushSync,
                 ),
                 SwitchPreferenceTile(
-                  preference: UserPreferences.mediaBarTrailerAudio,
-                  title: l10n.trailerAudio,
-                  subtitle: l10n.enableTrailerAudio,
-                  icon: Icons.volume_up,
-                  onChanged: _pushSync,
-                ),
-                SwitchPreferenceTile(
                   preference: UserPreferences.mediaBarTrailerCaptions,
                   title: l10n.trailerCaptions,
                   subtitle: l10n.trailerCaptionsDescription,
@@ -61,13 +54,8 @@ class LocalPreviewsSettingsScreen extends StatelessWidget {
                   icon: Icons.ondemand_video,
                   onChanged: _pushSync,
                 ),
-                SwitchPreferenceTile(
-                  preference: UserPreferences.previewAudioEnabled,
-                  title: l10n.previewAudio,
-                  subtitle: l10n.enablePreviewAudio,
-                  icon: Icons.volume_up,
-                  onChanged: _pushSync,
-                ),
+                // Trailer and preview sound: one "Preview sound" switch on the
+                // panel's first page sets both, so they are not here as well.
               ],
             ),
           ],

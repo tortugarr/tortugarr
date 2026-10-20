@@ -6,6 +6,7 @@ class _PanelEntry {
   final String subtitle;
   final VoidCallback onTap;
   final FocusNode? focusNode;
+  final Widget? trailing;
 
   const _PanelEntry({
     required this.icon,
@@ -13,13 +14,23 @@ class _PanelEntry {
     required this.subtitle,
     required this.onTap,
     this.focusNode,
+    this.trailing,
   });
+
+  _PanelEntry withFocusNode(FocusNode? node) => _PanelEntry(
+        icon: icon,
+        title: title,
+        subtitle: subtitle,
+        onTap: onTap,
+        focusNode: node,
+        trailing: trailing,
+      );
 }
 
 class _PanelEntryTile extends StatelessWidget {
   final _PanelEntry entry;
 
-  const _PanelEntryTile({required this.entry});
+  const _PanelEntryTile({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +40,7 @@ class _PanelEntryTile extends StatelessWidget {
       leading: Icon(entry.icon),
       title: Text(entry.title),
       subtitle: Text(entry.subtitle),
-      trailing: const Icon(Icons.chevron_right),
+      trailing: entry.trailing ?? const Icon(Icons.chevron_right),
       onTap: entry.onTap,
     );
   }

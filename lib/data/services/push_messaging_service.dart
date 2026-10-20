@@ -22,6 +22,12 @@ Future<void> pushBackgroundHandler(RemoteMessage message) async {}
 /// token registration and taps. Foreground messages are ignored because the
 /// SSE settings stream already shows the in-app notification.
 class PushMessagingService {
+  /// Push is OFF in Tortugarr. The bundled Firebase config belongs to upstream
+  /// Moonfin's project (Tortugarr reuses its app id), so enabling this would
+  /// register Tortugarr installs in Moonfin's Firebase project. With this off,
+  /// Firebase is never initialized and no token is fetched or sent anywhere.
+  static const bool enabled = false;
+
   Future<void>? _initFuture;
   String? _lastRegisteredToken;
 
@@ -34,7 +40,7 @@ class PushMessagingService {
   Future<void> initialize() => _initFuture ??= _doInitialize();
 
   Future<void> _doInitialize() async {
-    if (!PlatformDetection.isMobile) return;
+    if (!enabled || !PlatformDetection.isMobile) return;
 
     try {
       await Firebase.initializeApp(
@@ -109,7 +115,7 @@ class PushMessagingService {
   /// instead of bailing: on a cold start with session restore this is reached
   /// before the deferred [initialize] call has run.
   Future<void> registerWithCurrentToken() async {
-    if (!PlatformDetection.isMobile) return;
+    if (!enabled || !PlatformDetection.isMobile) return;
     try {
       await initialize();
       // A server switch reuses the same FCM token, so drop the dedupe and let
@@ -179,7 +185,7 @@ class PushMessagingService {
   /// Unregister this device with the plugin, e.g. on logout. No-op off mobile
   /// or when there is no active client.
   Future<void> unregister() async {
-    if (!PlatformDetection.isMobile) return;
+    if (!enabled || !PlatformDetection.isMobile) return;
 
     final client = GetIt.instance.isRegistered<MediaServerClient>()
         ? GetIt.instance<MediaServerClient>()

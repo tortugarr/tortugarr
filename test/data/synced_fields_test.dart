@@ -88,6 +88,7 @@ void main() {
     'homeRowsImageType',
     'homeRowsImageTypeOverride',
     'homeRowsStyle',
+    'mediaBarTrailerCaptions',
     'modernHomeRowsPadding',
     'classicHomeRowsPadding',
     'imdbLowestRatedMoviesEnabled',

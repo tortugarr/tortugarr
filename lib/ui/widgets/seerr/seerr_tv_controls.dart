@@ -179,6 +179,7 @@ class SeerrDialogButton extends StatelessWidget {
   final Color? primaryColor;
   final IconData? icon;
   final Color? foreground;
+  final bool autofocus;
 
   const SeerrDialogButton({
     super.key,
@@ -190,6 +191,7 @@ class SeerrDialogButton extends StatelessWidget {
     this.primaryColor,
     this.icon,
     this.foreground,
+    this.autofocus = false,
   });
 
   @override
@@ -203,6 +205,7 @@ class SeerrDialogButton extends StatelessWidget {
         : foreground ?? Colors.white;
     return FocusableWrapper(
       onSelect: onPressed,
+      autofocus: autofocus,
       borderRadius: 10,
       disableScale: true,
       child: Container(

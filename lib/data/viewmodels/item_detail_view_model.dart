@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
@@ -15,6 +17,15 @@ import '../repositories/seerr_repository.dart';
 import '../utils/playlist_utils.dart';
 import '../../util/episode_playability.dart';
 import '../services/plugin_sync_service.dart';
+import '../services/download/arr_delete_service.dart';
+import '../services/download/download_now_service.dart' show DownloadNowConfig;
+import '../services/tortugarr/download_features.dart';
+import '../services/tortugarr/tortugarr_plugin_client.dart';
+import '../services/download/missing_episodes.dart';
+import '../services/seerr/movie_collection.dart';
+import '../services/seerr/seerr_api_models.dart' show SeerrCollection;
+import '../../preference/seerr_preferences.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 enum CollectionSortOption {
   alphabetical,
@@ -24,6 +35,20 @@ enum CollectionSortOption {
 }
 
 enum ItemDetailState { loading, ready, error }
+
+/// Where the Sonarr episode list for the missing-episodes view stands.
+enum MissingEpisodesLoad {
+  /// Turned off, not a series/season, or Sonarr is not configured.
+  off,
+  loading,
+  ready,
+
+  /// Sonarr does not have the series; it can be added.
+  notInSonarr,
+
+  /// Sonarr could not be reached; the list shows what is on disk.
+  unavailable,
+}
 
 /// Why a delete request failed.
 ///
@@ -104,6 +129,68 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   AggregatedItem? _nextUp;
   AggregatedItem? get nextUp => _nextUp;
+
+  MissingEpisodesLoad _missingLoad = MissingEpisodesLoad.off;
+  MissingEpisodesLoad get missingLoad => _missingLoad;
+
+  SeriesEpisodeStatus? _arrStatus;
+
+  /// Sonarr's episodes for this series; set when [missingLoad] is ready.
+  SeriesEpisodeStatus? get arrStatus =>
+      _missingLoad == MissingEpisodesLoad.ready ? _arrStatus : null;
+
+  /// Whether Sonarr follows [season]; null when Sonarr has no such season
+  /// (or the series is not in Sonarr), so no toggle is shown.
+  bool? seasonMonitored(int season) => arrStatus?.seasonMonitored[season];
+
+  /// Turns Sonarr's monitoring of [season] on or off. Returns null on
+  /// success, or the message to show when it failed.
+  Future<String?> setSeasonMonitoring(
+    int season, {
+    required bool on,
+    bool searchNow = false,
+  }) async {
+    final status = arrStatus;
+    if (status == null) return appL10n().tgSonarrNoSeries;
+    try {
+      final monitored = await MissingEpisodesService().setSeasonMonitoring(
+        status,
+        season,
+        on: on,
+        searchNow: searchNow,
+      );
+      _arrStatus = status.withSeasonMonitored(monitored);
+      notifyListeners();
+      return null;
+    } catch (e) {
+      debugPrint('[ItemDetailViewModel] season monitoring failed: $e');
+      return e is MissingEpisodesException
+          ? e.message
+          : appL10n().tgCouldNotChangeMonitoring('$e'.split('\n').first);
+    }
+  }
+
+  int? _seriesTvdbId;
+  int? get seriesTvdbId => _seriesTvdbId;
+  int? _seriesTmdbId;
+
+  String? _missingError;
+
+  /// Why the missing episodes cannot be shown, when [missingLoad] is
+  /// unavailable.
+  String? get missingError => _missingError;
+
+  MovieCollectionStrip? _movieCollection;
+
+  /// The other movies of this movie's TMDB collection; null when there is
+  /// none, the setting is off or Seerr cannot help.
+  MovieCollectionStrip? get movieCollection => _movieCollection;
+
+  // TMDB id -> Jellyfin item id of the user's movies, shared between detail
+  // pages so stepping through a collection does not refetch it each time.
+  static Map<int, String>? _ownedMovies;
+  static DateTime? _ownedMoviesAt;
+  static String? _ownedMoviesServer;
 
   Map<String, double> _ratings = const {};
   Map<String, double> get ratings => _ratings;
@@ -194,6 +281,10 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  /// The server answered 404: the title was deleted or moved.
+  bool _notFound = false;
+  bool get notFound => _notFound;
 
   ImageApi get imageApi => _client.imageApi;
   String get baseUrl => _client.baseUrl;
@@ -307,7 +398,11 @@ class ItemDetailViewModel extends ChangeNotifier {
 
       _loadSecondary();
     } catch (e) {
-      _errorMessage = e.toString();
+      // The raw exception ("DioException [bad response] ...") is for the log,
+      // not the screen.
+      debugPrint('[ItemDetailViewModel] load failed: $e');
+      _notFound = e is DioException && e.response?.statusCode == 404;
+      _errorMessage = _notFound ? appL10n().tgTitleGone : appL10n().tgCouldNotLoadTitle;
       _state = ItemDetailState.error;
       notifyListeners();
     }
@@ -325,15 +420,23 @@ class ItemDetailViewModel extends ChangeNotifier {
       futures.add(_loadSimilar());
       futures.add(_loadFeatures());
       futures.add(_loadParentCollection());
+      futures.add(loadMissingEpisodes());
     } else if (type == 'Season') {
       futures.add(_loadRatings());
       futures.add(_loadEpisodes());
       futures.add(_loadFeatures());
+      // The season switcher lists every season of the series.
+      futures.add(_loadSeasons());
+      futures.add(loadMissingEpisodes());
     } else if (type == 'Episode') {
       futures.add(_loadRatings());
       futures.add(_loadEpisodes());
       futures.add(_loadSimilar());
       futures.add(_loadFeatures());
+      // Continue Watching / Next Up land here, so the page also needs the
+      // series' seasons and Sonarr's missing episodes.
+      futures.add(_loadSeasons());
+      futures.add(loadMissingEpisodes());
     } else if (type == 'MusicArtist') {
       futures.add(_loadAlbums());
       futures.add(_loadTracks(artistId: itemId));
@@ -357,6 +460,9 @@ class ItemDetailViewModel extends ChangeNotifier {
       if (type != 'MusicVideo') {
         futures.add(_loadParentCollection());
       }
+      if (type == 'Movie') {
+        futures.add(loadMovieCollection());
+      }
     } else {
       futures.add(_loadRatings());
       futures.add(_loadSimilar());
@@ -364,9 +470,143 @@ class ItemDetailViewModel extends ChangeNotifier {
     await Future.wait(futures);
   }
 
-  Future<void> _loadSeasons() async {
+  /// Loads Sonarr's episode list for the series of this Series/Season/Episode page,
+  /// so the episode lists can show what is missing. Never throws; when Sonarr
+  /// cannot help, [missingLoad] says why and the lists stay as they are.
+  Future<void> loadMissingEpisodes() async {
+    final item = _item;
+    final type = item?.type;
+    if (item == null ||
+        !MissingEpisodes.appliesTo(type) ||
+        !MissingEpisodesService.isConfigured ||
+        !showMissingEpisodesSetting()) {
+      _missingLoad = MissingEpisodesLoad.off;
+      return;
+    }
+    if (_arrStatus == null) {
+      _missingLoad = MissingEpisodesLoad.loading;
+      notifyListeners();
+    }
     try {
-      final data = await _client.itemsApi.getSeasons(itemId);
+      var tvdb = _seriesTvdbId;
+      var tmdb = _seriesTmdbId;
+      if (tvdb == null && tmdb == null) {
+        var ids = item.providerIds;
+        final seriesId = item.seriesId;
+        if (type != 'Series' && seriesId != null) {
+          final series = await _client.itemsApi.getItem(seriesId);
+          final raw = series['ProviderIds'];
+          ids = raw is Map
+              ? {for (final e in raw.entries) '${e.key}': '${e.value}'}
+              : const {};
+        }
+        tvdb = int.tryParse(ids['Tvdb'] ?? '');
+        tmdb = int.tryParse(ids['Tmdb'] ?? '');
+        _seriesTvdbId = tvdb;
+        _seriesTmdbId = tmdb;
+      }
+      if (tvdb == null && tmdb == null) {
+        _missingLoad = MissingEpisodesLoad.unavailable;
+        _missingError = appL10n().tgJellyfinNoIds;
+      } else {
+        SeriesEpisodeStatus? status;
+        try {
+          status = await MissingEpisodesService().loadFor(tvdbId: tvdb, tmdbId: tmdb);
+        } on MissingEpisodesException {
+          // A phone that just woke up or switched network often fails the
+          // first request; one more try before telling the user.
+          await Future<void>.delayed(const Duration(seconds: 2));
+          status = await MissingEpisodesService().loadFor(tvdbId: tvdb, tmdbId: tmdb);
+        }
+        _arrStatus = status;
+        _missingError = null;
+        _missingLoad = status == null
+            ? MissingEpisodesLoad.notInSonarr
+            : MissingEpisodesLoad.ready;
+      }
+    } catch (e) {
+      debugPrint('[ItemDetailViewModel] missing episodes failed: $e');
+      _missingError = e is MissingEpisodesException
+          ? e.message
+          : appL10n().tgSomethingWentWrong('$e'.split('\n').first);
+      _missingLoad = _arrStatus != null
+          ? MissingEpisodesLoad.ready
+          : MissingEpisodesLoad.unavailable;
+    }
+    notifyListeners();
+  }
+
+  /// Loads the "Del av filmserien" strip for a Movie page. Never throws; the
+  /// strip simply stays hidden when anything is missing or fails.
+  Future<void> loadMovieCollection({bool refresh = false}) async {
+    final item = _item;
+    if (item == null || item.type != 'Movie' || !showMovieCollectionsSetting()) {
+      return;
+    }
+    final tmdb = int.tryParse(item.tmdbId ?? '');
+    if (tmdb == null) return;
+    try {
+      final getIt = GetIt.instance;
+      if (!getIt.isRegistered<PluginSyncService>() ||
+          !getIt<PluginSyncService>().seerrAvailable) {
+        return;
+      }
+      final repo = await getIt.getAsync<SeerrRepository>();
+      await repo.ensureInitialized();
+      final details = await repo.getMovieDetails(tmdb);
+      final ref = details.collection;
+      if (ref == null) return;
+      final results = await Future.wait([
+        repo.getCollectionDetails(ref.id),
+        _ownedMovieIds(refresh: refresh),
+      ]);
+      _movieCollection = MovieCollections.build(
+        collection: results[0] as SeerrCollection,
+        currentTmdbId: tmdb,
+        owned: results[1] as Map<int, String>,
+      );
+      notifyListeners();
+    } catch (e) {
+      debugPrint('[ItemDetailViewModel] movie collection failed: $e');
+    }
+  }
+
+  Future<Map<int, String>> _ownedMovieIds({bool refresh = false}) async {
+    final cached = _ownedMovies;
+    final at = _ownedMoviesAt;
+    if (!refresh &&
+        cached != null &&
+        at != null &&
+        _ownedMoviesServer == _client.baseUrl &&
+        DateTime.now().difference(at) < const Duration(minutes: 5)) {
+      return cached;
+    }
+    final data = await _client.itemsApi.getItems(
+      includeItemTypes: const ['Movie'],
+      recursive: true,
+      fields: 'ProviderIds',
+      // Otherwise Jellyfin returns the box sets in place of their movies.
+      collapseBoxSetItems: false,
+      enableTotalRecordCount: false,
+    );
+    final owned = MovieCollections.ownedFromItems(
+      ((data['Items'] as List?) ?? const [])
+          .whereType<Map>()
+          .map((m) => Map<String, dynamic>.from(m)),
+    );
+    _ownedMovies = owned;
+    _ownedMoviesAt = DateTime.now();
+    _ownedMoviesServer = _client.baseUrl;
+    return owned;
+  }
+
+  Future<void> _loadSeasons() async {
+    final item = _item;
+    final seriesId = item?.type == 'Episode' || item?.type == 'Season'
+        ? (item?.seriesId ?? itemId)
+        : itemId;
+    try {
+      final data = await _client.itemsApi.getSeasons(seriesId);
       final items = (data['Items'] as List?) ?? [];
       _seasons = _mapItems(items);
       notifyListeners();
@@ -591,6 +831,38 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   /// Returns `null` when the item was deleted, otherwise why it failed.
   Future<DeleteItemFailure?> deleteItem() async {
+    // Jellyfin only has read access to the media folders here, so files that
+    // Radarr/Sonarr manage are deleted through them (which also stops them
+    // from being downloaded again).
+    final current = _item;
+    if (current != null && DownloadNowConfig.isAvailable) {
+      try {
+        final outcome = await ArrDeleteService().delete(current);
+        if (outcome == ArrDeleteOutcome.deleted) return null;
+      } catch (e) {
+        debugPrint('[ItemDetailViewModel] Radarr/Sonarr delete failed: $e');
+        return DeleteItemFailure(detail: '$e');
+      }
+    } else if (current != null && DownloadFeatures.viaPlugin && DownloadFeatures.deleteTitles) {
+      // Public build: the server's Tortugarr plugin deletes through
+      // Radarr/Sonarr and clears Seerr; the app only waits for the removal.
+      try {
+        await TortugarrPluginClient().deleteTitle(current.id);
+        unawaited(ArrDeleteService().awaitRemoval(current.id));
+        return null;
+      } on TortugarrPluginException catch (e) {
+        // Not managed by Radarr/Sonarr: try Jellyfin itself, as below.
+        if (e.code != 'not_managed') {
+          debugPrint('[ItemDetailViewModel] plugin delete failed: $e');
+          return DeleteItemFailure(
+            statusCode: e.status,
+            detail: e.code == 'file_mismatch'
+                ? 'The file in the library is not the one Radarr/Sonarr manage; nothing was deleted.'
+                : e.toString(),
+          );
+        }
+      }
+    }
     try {
       await _client.itemsApi.deleteItem(itemId);
       return null;
@@ -599,6 +871,12 @@ class ItemDetailViewModel extends ChangeNotifier {
         // The body can be an HTML error page or JSON holding server paths, so
         // it gets logged instead of shown.
         debugPrint('[ItemDetailViewModel] Delete failed: ${e.response?.data}');
+        if (e.response?.statusCode == 500) {
+          return DeleteItemFailure(
+            statusCode: 500,
+            detail: appL10n().tgDeleteReadOnly,
+          );
+        }
         return DeleteItemFailure(
           statusCode: e.response?.statusCode,
           detail: e.response?.statusMessage ?? e.message,

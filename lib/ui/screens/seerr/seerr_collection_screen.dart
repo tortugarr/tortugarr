@@ -21,6 +21,7 @@ import '../../widgets/seerr/seerr_tv_controls.dart';
 import '../../widgets/track_selector_dialog.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -299,7 +300,8 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
               focusColor: focusColor,
               cardFocusExpansion: cardExpansion,
               suppressFocusGlow: suppressFocusGlow,
-              onTap: () => context.push(
+              onTap: () => SinglePush.push(
+                context,
                 Destinations.seerrMedia(item.id.toString()),
                 extra: {'mediaType': item.mediaType ?? 'movie'},
               ),

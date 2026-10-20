@@ -1,6 +1,6 @@
 {
     "@@locale": "sw",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin toleo {version}",
+    "appVersionFooter": "Tortugarr toleo {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin haikuweza kufikia ufunguo wa mfumo wako. Kuingia kunaweza kuendelea, lakini hifadhi salama ya tokeni huenda isipatikane hadi ufunguo ufunguliwe.",
+    "secureStorageUnavailableMessage": "Tortugarr haikuweza kufikia ufunguo wa mfumo wako. Kuingia kunaweza kuendelea, lakini hifadhi salama ya tokeni huenda isipatikane hadi ufunguo ufunguliwe.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Badili kati ya Moonfin na Neon Pulse bila kuanzisha upya programu",
+    "settingsAppearanceThemeSubtitle": "Badili kati ya Tortugarr na Neon Pulse bila kuanzisha upya programu",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Mwonekano wa sasa wa Moonfin nyote mmependa",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Mwonekano wa sasa wa Tortugarr nyote mmependa",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Ungependa kufunga Moonfin?",
+    "exitApp": "Ungependa kufunga Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Haijawekwa. Moonfin itajaribu mpv.conf chaguo-msingi katika folda za programu/data.",
+    "notSetMpvConf": "Haijawekwa. Tortugarr itajaribu mpv.conf chaguo-msingi katika folda za programu/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Vipakuliwa/Moonfin — inaonekana kwa programu zingine",
+    "downloadsVisibleToOtherApps": "Vipakuliwa/Tortugarr — inaonekana kwa programu zingine",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Midia iliyopakuliwa itahifadhiwa kwenye Vipakuliwa/Moonfin kwenye kifaa chako. Faili hizi zitaonekana kwa programu zingine kama vile ghala yako au kicheza muziki.\n\nVipakuliwa vilivyopo vitasalia katika eneo vilipo sasa.",
+    "saveToDownloadsFolderDescription": "Midia iliyopakuliwa itahifadhiwa kwenye Vipakuliwa/Tortugarr kwenye kifaa chako. Faili hizi zitaonekana kwa programu zingine kama vile ghala yako au kicheza muziki.\n\nVipakuliwa vilivyopo vitasalia katika eneo vilipo sasa.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Moonfin ili mabadiliko yaanze kutumika.",
+    "libraryVisibilityDescription": "Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Tortugarr ili mabadiliko yaanze kutumika.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Cheza katika Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Cheza katika Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Imeombwa na {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Kipengee hakipatikani kwenye maktaba yako ya Moonfin",
+    "itemNotFoundInLibrary": "Kipengee hakipatikani kwenye maktaba yako ya Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Kuwasha upya seva kunaendelea",
-    "adminServerRebootMessage": "Kuwasha upya seva kunaendelea, tafadhali anzisha upya Moonfin",
+    "adminServerRebootMessage": "Kuwasha upya seva kunaendelea, tafadhali anzisha upya Tortugarr",
     "adminActiveSessions": "Vipindi Amilifu",
     "adminSessionsLoadFailed": "Imeshindwa kupakia vipindi",
     "adminNoActiveSessions": "Hakuna vipindi vinavyotumika",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Onyesha kitufe cha aina kwenye upau wa kusogeza",
     "settingsShowFavoritesButtonInNavigation": "Onyesha kitufe cha vipendwa kwenye upau wa kusogeza",
     "settingsShowLibrariesButtonInNavigation": "Onyesha kitufe cha maktaba kwenye upau wa kusogeza",
-    "settingsLibraryVisibilitySubtitle": "Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Moonfin ili mabadiliko yaanze kutumika.",
+    "settingsLibraryVisibilitySubtitle": "Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Tortugarr ili mabadiliko yaanze kutumika.",
     "settingsMediaBarAndLocalPreviews": "Upau wa Midia na Uhakiki wa Karibu Nawe",
     "settingsVisualOverlays": "Viwekeleo vya Kuonekana",
     "settingsSeasonalSurprise": "Mshangao wa Msimu",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Jiunge na Discord",
     "settingsJoinDiscordSubtitle": "Piga gumzo na jumuiya",
     "settingsJoinTheDiscord": "Jiunge na Discord",
-    "settingsSupportMoonfin": "Msaada Moonfin",
+    "settingsSupportNotflix": "Msaada Tortugarr",
     "settingsLegal": "KISHERIA",
     "settingsLicenses": "Leseni",
     "settingsOpenSourceLicenseNotices": "Notisi za leseni ya chanzo huria",
     "settingsPrivacyPolicy": "Sera ya Faragha",
-    "settingsPrivacyPolicySubtitle": "Jinsi Moonfin hushughulikia data yako",
+    "settingsPrivacyPolicySubtitle": "Jinsi Tortugarr hushughulikia data yako",
     "settingsCheckForUpdates": "Angalia Usasisho",
-    "settingsCheckForUpdatesSubtitle": "Angalia toleo jipya zaidi la Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Angalia toleo jipya zaidi la Tortugarr",
     "settingsPoweredByFlutter": "Inaendeshwa na Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {ilani # ya leseni} other {ilani # za leseni}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Mandhari zilizohifadhiwa",
-    "savedThemesDescription": "Hizi ni mandhari zilizopakuliwa kutoka kwa programu-jalizi ya Moonfin kwa seva ya sasa. Kufuta huondoa nakala hii ya ndani pekee.",
+    "savedThemesDescription": "Hizi ni mandhari zilizopakuliwa kutoka kwa programu-jalizi ya Tortugarr kwa seva ya sasa. Kufuta huondoa nakala hii ya ndani pekee.",
     "savedThemesEmpty": "Hakuna mandhari zilizohifadhiwa zilizopatikana kwa seva hii.",
     "savedThemesCurrentThemeId": "{themeId} • Inatumika sasa",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Futa mandhari iliyohifadhiwa",
     "savedThemesManageSubtitle": "Dhibiti mandhari za programu-jalizi zilizopakuliwa kwenye kifaa hiki",
     "themeEditor": "Kihariri cha Mandhari",
-    "themeEditorSubtitle": "Fungua Kihariri cha Mandhari cha Moonfin kwenye kivinjari chako",
+    "themeEditorSubtitle": "Fungua Kihariri cha Mandhari cha Tortugarr kwenye kivinjari chako",
     "homeScreen": "Skrini ya Nyumbani",
     "bottomBar": "Upau wa Chini",
     "homeRowsStyleClassic": "Klasiki",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Pendelea manukuu ya SDH",
     "preferSdhSubtitlesSubtitle": "Tanguliza mikondo ya manukuu ya SDH/CC wakati wa kuchagua kiotomatiki.",
     "webDiagnostics": "Uchunguzi wa wavuti",
-    "webDiagnosticsTitle": "Uchunguzi wa Wavuti wa Moonfin",
+    "webDiagnosticsTitle": "Uchunguzi wa Wavuti wa Tortugarr",
     "webDiagnosticsIntro": "Tumia ukurasa huu kuchunguza matatizo ya muunganisho wa kivinjari (CORS, maudhui mchanganyiko, na mipangilio ya ugunduzi).",
     "webDiagnosticsDetectedMixedContentFailure": "Hitilafu ya Maudhui Mchanganyiko Imetambuliwa",
     "webDiagnosticsDetectedCorsPreflightFailure": "Hitilafu ya CORS/Preflight Imetambuliwa",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin imetambua ukurasa wa HTTPS unaojaribu kupiga simu kwa URL ya seva ya HTTP. Vivinjari huzuia ombi hili kabla halijafika kwenye seva yako.",
-    "webDiagnosticsCorsFailureBody": "Moonfin imetambua hitilafu ya ombi katika kiwango cha kivinjari ambayo mara nyingi husababishwa na vichwa vya CORS au preflight vinavyokosekana kwenye seva ya maudhui.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr imetambua ukurasa wa HTTPS unaojaribu kupiga simu kwa URL ya seva ya HTTP. Vivinjari huzuia ombi hili kabla halijafika kwenye seva yako.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr imetambua hitilafu ya ombi katika kiwango cha kivinjari ambayo mara nyingi husababishwa na vichwa vya CORS au preflight vinavyokosekana kwenye seva ya maudhui.",
     "webDiagnosticsTargetUrl": "URL lengwa: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "haijasanidiwa",
     "webDiagnosticsMixedContent": "Maudhui Mchanganyiko",
     "webDiagnosticsMixedContentDetected": "Ukurasa huu umepakiwa kupitia HTTPS, lakini URL moja au zaidi zilizosanidiwa ni za HTTP. Vivinjari huzuia kurasa za HTTPS kupiga simu kwa API za HTTP.",
-    "webDiagnosticsMixedContentFix": "Suluhisho: toa seva yako ya maudhui au ncha ya proksi kupitia HTTPS, au pakia Moonfin kupitia HTTP kwenye mitandao ya ndani inayoaminika pekee.",
+    "webDiagnosticsMixedContentFix": "Suluhisho: toa seva yako ya maudhui au ncha ya proksi kupitia HTTPS, au pakia Tortugarr kupitia HTTP kwenye mitandao ya ndani inayoaminika pekee.",
     "webDiagnosticsNoMixedContentDetected": "Hakuna usanidi dhahiri wa maudhui mchanganyiko uliotambuliwa kutoka kwa mipangilio ya sasa ya utekelezaji.",
     "webDiagnosticsCorsChecklist": "Orodha ya Kukagua ya CORS",
     "webDiagnosticsCorsChecklistItem1": "• Ruhusu asili ya kivinjari katika Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Washa HDR kiotomatiki kwa uchezaji wa video ya HDR na urejeshe modi ya onyesho unapotoka.",
     "whenFullscreen": "Wakati wa skrini nzima",
     "transcodingLimits": "Vikomo vya Kubadilisha Msimbo",
-    "settingsSupportMoonfinSubtitle": "Mchangie msanidi kahawa",
+    "settingsSupportNotflixSubtitle": "Mchangie msanidi kahawa",
     "accountPreferences": "MAPENDELEO YA AKAUNTI",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klasiki ni mpangilio asili wa Moonfin ulio katikati. Kisasa ni mpangilio wa kisinema unaojirekebisha.",
+    "detailScreenStyleSubtitle": "Klasiki ni mpangilio asili wa Tortugarr ulio katikati. Kisasa ni mpangilio wa kisinema unaojirekebisha.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Klasiki",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Klasiki",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Kisasa",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Tumia algoriti ya maktaba ya ndani ya Moonfin Recommends au Vipimo vya Ufanano vya TMDb mtandaoni. Kumbuka: Mapendekezo ya mtandaoni yanahitaji muunganisho wa Seerr.",
+    "recommendationSystemSubtitle": "Tumia algoriti ya maktaba ya ndani ya Tortugarr Recommends au Vipimo vya Ufanano vya TMDb mtandaoni. Kumbuka: Mapendekezo ya mtandaoni yanahitaji muunganisho wa Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Ufanano wa TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Punguza mapendekezo ya Moonfin Recommends kulingana na ukadiriaji wa wazazi wa maudhui lengwa",
+    "recommendationsApplyParentalRatingCapSubtitle": "Punguza mapendekezo ya Tortugarr Recommends kulingana na ukadiriaji wa wazazi wa maudhui lengwa",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Mandhari maalum hubadilisha vipengele vya kuonekana katika Moonfin nzima. Chagua mojawapo ya chaguo hizi ili kuendana na mtindo wako.",
+    "customThemeSubtitle": "Mandhari maalum hubadilisha vipengele vya kuonekana katika Tortugarr nzima. Chagua mojawapo ya chaguo hizi ili kuendana na mtindo wako.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Ingia kwenye Moonfin kwenye simu yako",
+    "carSignInPrompt": "Ingia kwenye Tortugarr kwenye simu yako",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller ni kionyeshi cha kisasa cha GPU cha Flutter kwa uhuishaji laini na mkwaruzo mdogo. Kwenye baadhi ya visanduku vya TV na GPU za zamani inaweza kusababisha hitilafu au video nyeusi; izime ikiwa unaona hayo. Kiotomatiki huchagua chaguo-msingi bora kwa kifaa chako. Anzisha upya Moonfin ili kutumia.",
+    "impellerRenderingSubtitle": "Impeller ni kionyeshi cha kisasa cha GPU cha Flutter kwa uhuishaji laini na mkwaruzo mdogo. Kwenye baadhi ya visanduku vya TV na GPU za zamani inaweza kusababisha hitilafu au video nyeusi; izime ikiwa unaona hayo. Kiotomatiki huchagua chaguo-msingi bora kwa kifaa chako. Anzisha upya Tortugarr ili kutumia.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin inahitaji kuanzishwa upya ili kubadilisha injini ya uonyeshaji. Funga programu sasa, kisha uifungue tena ili kutumia.",
+    "impellerRestartMessage": "Tortugarr inahitaji kuanzishwa upya ili kubadilisha injini ya uonyeshaji. Funga programu sasa, kisha uifungue tena ili kutumia.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Filamu Maarufu Zaidi za IMDb",
     "imdbMostPopularTvShows": "Vipindi Maarufu Zaidi vya TV vya IMDb",
     "imdbLowestRatedMovies": "Filamu Zenye Ukadiriaji wa Chini Zaidi za IMDb",
-    "imdbTopEnglishMovies": "Filamu Bora za Kiingereza za IMDb"
+    "imdbTopEnglishMovies": "Filamu Bora za Kiingereza za IMDb",
+    "tgMissing": "Haipo",
+    "tgComing": "Inakuja",
+    "tgComingOn": "Inakuja {date}",
+    "tgDownloading": "Inapakuliwa",
+    "tgReadySoon": "Itakuwa tayari hivi karibuni",
+    "tgRequested": "Imeombwa",
+    "tgClose": "Funga",
+    "tgCancel": "Ghairi",
+    "tgBack": "Nyuma",
+    "tgYes": "Ndiyo",
+    "tgNo": "Hapana",
+    "tgSearch": "Tafuta",
+    "tgHide": "Ficha",
+    "tgAll": "Zote",
+    "tgNone": "Hakuna",
+    "tgMovies": "Filamu",
+    "tgSeries": "Mifululizo",
+    "tgMovieTag": "Filamu",
+    "tgSeriesTag": "Mfululizo",
+    "tgCanTakeAMinute": "Inaweza kuchukua hadi dakika moja",
+    "tgToday": "leo",
+    "tgYesterday": "jana",
+    "tgDaysAgo": "siku {days} zilizopita",
+    "tgMonthsAgo": "miezi {months} iliyopita",
+    "tgYearsAgo": "miaka {years} iliyopita",
+    "tgYearsMonthsAgo": "miaka {years} na miezi {months} iliyopita",
+    "tgFindSubtitles": "Tafuta manukuu",
+    "tgFreeUpSpace": "Ondoa vitu kupata nafasi",
+    "tgDownloads": "Vipakuliwa",
+    "tgDownloadsCount": "Vipakuliwa ({count})",
+    "tgNoVideoRemoved": "\"{title}\": kipakuliwa hakikuwa na faili ya video ({files}). Kimeondolewa na kuzuiwa — jaribu faili nyingine.",
+    "tgNoVideoNotRemoved": "\"{title}\": kipakuliwa hakikuwa na faili ya video ({files}), lakini hakikuweza kuondolewa kiotomatiki.",
+    "tgAiredOn": "Ilirushwa {date}",
+    "tgTapToFindFiles": "Gusa kutafuta faili",
+    "tgWholeSeason": "Msimu mzima",
+    "tgEpisodesMissingFindPack": "Vipindi {count} havipo – tafuta kifurushi cha msimu",
+    "tgAddToSonarrTitle": "Ongeza kwenye Sonarr kuona vipindi visivyopo",
+    "tgAddToSonarrSubtitle": "Mfululizo huongezwa bila kupakua chochote wenyewe",
+    "tgMissingEpisodesUnavailable": "Vipindi visivyopo haviwezi kuonyeshwa kwa sasa",
+    "tgReasonTapRetry": "{reason} · Gusa kujaribu tena",
+    "tgSeasonPackBadge": "Kifurushi cha msimu",
+    "tgMonitorSeasonTitle": "Fuatilia msimu wa {season}",
+    "tgMonitorSeasonQuestion": "Je, Sonarr ipakue vipindi visivyopo vya msimu wa {season} sasa?\n\nHapana: vipindi vipya tu vitapakuliwa vitakapotoka.",
+    "tgSonarrSearchingSeason": "Sonarr inatafuta msimu wa {season}",
+    "tgMonitored": "Inafuatiliwa",
+    "tgNotMonitored": "Haifuatiliwi",
+    "tgSeasonStateLabel": "Msimu wa {season}: {state}",
+    "tgLabelMissing": "{label} haipo",
+    "tgNotAiredYet": "{code} bado haijarushwa.",
+    "tgNotAiredYetComing": "{code} bado haijarushwa – inakuja {date}.",
+    "tgAlreadyDownloading": "{code} tayari inapakuliwa.",
+    "tgDownloadedAppearsSoon": "{code} imepakuliwa na itaonekana kwenye maktaba hivi punde.",
+    "tgSearchingFor": "Inatafuta {label} …",
+    "tgSeasonLower": "msimu wa {season}",
+    "tgWholeLabel": "{label} mzima",
+    "tgSeasonNoEpisodes": "Msimu wa {season} – hakuna vipindi kwenye maktaba",
+    "tgNoTvdbId": "Mfululizo hauna kitambulisho cha TVDB, kwa hivyo Sonarr haiwezi kuupata.",
+    "tgAddingToSonarr": "Inaongeza kwenye Sonarr …",
+    "tgAddToSonarrFailed": "Imeshindwa kuongeza mfululizo kwenye Sonarr. Jaribu tena baadaye.",
+    "tgSendingToDownload": "Inatuma \"{label}\" ipakuliwe …",
+    "tgDownloadDidNotStart": "Upakuaji haukuanza: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" inapakuliwa ({size}). Itaonekana kwenye maktaba ikikamilika.",
+    "tgSonarrUnreachableRetry": "Imeshindwa kufikia Sonarr. Jaribu tena baada ya muda mfupi.",
+    "tgNoUsableFiles": "Hakuna faili zinazofaa zilizopatikana. Jaribu tena baadaye – mpya huonekana mara nyingi baada ya saa chache.",
+    "tgFilesCount": "Faili {count}",
+    "tgFilesRecommended": "Faili {count} – {recommended} zinalingana na wasifu wa ubora, zilizobaki ziko chini",
+    "tgOutsideQualityProfile": "Nje ya wasifu wa ubora",
+    "tgLargerThanProfile": "Kubwa kuliko wasifu unavyoruhusu",
+    "tgSmallerThanProfile": "Ndogo kuliko wasifu unavyoruhusu",
+    "tgAlreadyExists": "Ipo tayari",
+    "tgMayNotFitDisk": "Huenda isitoshe kwenye diski",
+    "tgSonarrUnreachable": "Imeshindwa kufikia Sonarr",
+    "tgSonarrUnreachableAt": "Imeshindwa kufikia Sonarr kwenye {host}",
+    "tgSonarrRejectedChange": "Sonarr haikukubali mabadiliko",
+    "tgSeasonMonitoredNoSearch": "Msimu unafuatiliwa, lakini Sonarr haikuanza kutafuta",
+    "tgSonarrCantSearch": "Sonarr haikuweza kutafuta kwa sasa",
+    "tgSearchExpired": "Matokeo ya utafutaji yameisha muda – tafuta tena",
+    "tgSonarrRejectedDownload": "Sonarr haikukubali kipakuliwa (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr haina mfululizo huu",
+    "tgCouldNotChangeMonitoring": "Imeshindwa kubadilisha ufuatiliaji: {error}",
+    "tgJellyfinNoIds": "Jellyfin haikutambua mfululizo (hakuna kitambulisho cha TVDB au TMDB)",
+    "tgSomethingWentWrong": "Hitilafu imetokea: {error}",
+    "tgDeleteReadOnly": "Faili hii haisimamiwi na Radarr/Sonarr, na Jellyfin ina ruhusa ya kusoma tu kwenye folda. Ifute kwenye kidhibiti faili chako.",
+    "tgSonarrRequiredPerEpisode": "Sonarr haifikiki, au mfululizo haujaongezwa humo. Kupakua kipindi kimoja kimoja kunahitaji Sonarr.",
+    "tgEpisodesNotFound": "Vipindi vilivyochaguliwa vya \"{title}\" havikupatikana kwenye Sonarr (vipindi {count} vimepatikana kwa jumla). Ongeza mfululizo kwenye Sonarr na ujaribu tena.",
+    "tgPartOfCollectionPrefix": "Sehemu ya mkusanyiko ",
+    "tgViewingPartOf": "  ·  unatazama sehemu ya {current} kati ya {total}",
+    "tgPartOf": "Sehemu ya {number} kati ya {total}",
+    "tgUnknownTitle": "Jina lisilojulikana",
+    "tgMovieCollection": "Mkusanyiko wa filamu",
+    "tgNotReleasedYet": "\"{title}\" bado haijatoka",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Nembo",
+    "tgScreensaverSound": "Sauti ya kiokoa skrini",
+    "tgScreensaverSoundSubtitle": "Imezimwa: trela za kiokoa skrini huchezwa bila sauti",
+    "tgScreensaverLogo": "Nembo",
+    "tgLogoBadge": "Beji ya Tortugarr",
+    "tgLogoVhs": "Kasuku juu ya kanda za VHS",
+    "tgLogoSign": "Kasuku juu ya kibao",
+    "tgHiddenBadge": "IMEFICHWA · {code}",
+    "tgDiskSpace": "Nafasi ya diski",
+    "tgDiskSpaceSubtitle": "Pata nafasi kwa vipakuliwa vipya",
+    "tgAdultTitle": "Filamu za watu wazima (XXX)",
+    "tgAdultSubtitle": "Onyesha au ficha maktaba ya XXX (PIN)",
+    "tgHideForeign": "Ficha maudhui ya kigeni",
+    "tgHideForeignOn": "Imewashwa: Zinazovuma na Maarufu zinaonyesha Kiingereza, Kinorwe, Kiswidi, Kidenmaki, Kijerumani na Kifaransa tu",
+    "tgHideForeignOff": "Imezimwa: Zinazovuma na Maarufu zinaonyesha lugha zote",
+    "tgShowHidden": "Onyesha kilichofichwa",
+    "tgShowHiddenOn": "Imewashwa: vichwa ambavyo vingefichwa vinaonyeshwa na beji nyekundu ya IMEFICHWA",
+    "tgShowHiddenOff": "Utatuzi: onyesha vichwa vilivyofichwa na beji nyekundu badala ya kuviondoa",
+    "tgShowAllSubLangs": "Onyesha lugha zote za manukuu",
+    "tgShowAllSubLangsOn": "Imewashwa: menyu ya manukuu inaonyesha lugha zote",
+    "tgShowAllSubLangsOff": "Imezimwa: menyu ya manukuu inaonyesha Kinorwe na Kiingereza tu",
+    "tgPreviewSound": "Sauti ya onyesho la awali",
+    "tgPreviewSoundOn": "Imewashwa: klipu inayochezwa unaposimama kwenye kichwa ina sauti",
+    "tgPreviewSoundOff": "Imezimwa: klipu huchezwa bila sauti unapovinjari",
+    "tgScreensaver": "Kiokoa skrini",
+    "tgScreensaverSubtitle": "Video au nembo, sauti na picha",
+    "tgShowMissingEpisodes": "Onyesha vipindi visivyopo",
+    "tgShowMissingEpisodesOn": "Imewashwa: misimu inaonyesha vipindi usivyo navyo, tayari kupakuliwa",
+    "tgShowMissingEpisodesOff": "Imezimwa: misimu inaonyesha vipindi ulivyo navyo tu",
+    "tgShowCollections": "Onyesha mikusanyiko ya filamu",
+    "tgShowCollectionsOn": "Imewashwa: filamu zinaonyesha filamu nyingine za mkusanyiko, pamoja na zile usizo nazo",
+    "tgShowCollectionsOff": "Imezimwa: ukurasa wa filamu hauonyeshi mkusanyiko",
+    "tgNoActiveDownloads": "Hakuna vipakuliwa vinavyoendelea.",
+    "tgPickDownloadToOpen": "Chagua kipakuliwa kufungua maombi.",
+    "tgRefreshLibrary": "Onyesha upya maktaba",
+    "tgAskingJellyfinScan": "Inaomba Jellyfin ichanganue maktaba …",
+    "tgHideAll": "Ficha zote",
+    "tgImporting": "Inaleta",
+    "tgSubsNotManaged": "Kichwa hiki hakisimamiwi na Radarr/Sonarr, kwa hivyo Bazarr haiwezi kukitafutia manukuu.",
+    "tgBazarrUnreachable": "Imeshindwa kufikia Bazarr. Jaribu tena baada ya muda mfupi.",
+    "tgSubsFoundNothing": "Hakuna kilichopatikana bado. Bazarr hujaribu tena kiotomatiki kila siku, au unaweza kuchagua mwenyewe.",
+    "tgSubsFound": "Imepata {languages} – inaweza kuchukua muda kidogo kabla ya kuonekana kwenye menyu ya manukuu.",
+    "tgAnd": "na",
+    "tgSubsDownloaded": "Imepakuliwa – inaweza kuchukua muda kidogo kabla ya kuonekana kwenye menyu ya manukuu.",
+    "tgAskingBazarr": "Inauliza Bazarr …",
+    "tgHaveAll": "Zote zipo",
+    "tgSearchAutoNow": "Tafuta kiotomatiki sasa",
+    "tgSearchingUpToMinute": "Inatafuta … inaweza kuchukua hadi dakika moja",
+    "tgPickYourself": "Chagua mwenyewe",
+    "tgAskingProviders": "Inauliza watoa manukuu … inaweza kuchukua hadi dakika moja",
+    "tgNoProviderSubs": "Hakuna mtoa huduma aliye na manukuu ya hii bado.",
+    "tgLangHas": "{language}: inapatikana",
+    "tgLangMissing": "{language}: haipo",
+    "tgNoReleaseName": "(hakuna jina la toleo)",
+    "tgHearingImpaired": "{provider} · kwa wasiosikia vizuri",
+    "tgLangNorwegian": "Kinorwe",
+    "tgLangEnglish": "Kiingereza",
+    "tgBazarrUnknownTitle": "Bazarr bado haikijui kichwa hiki",
+    "tgBazarrError": "Bazarr ilijibu na hitilafu (HTTP {code})",
+    "tgLowSpaceSnack": "Nafasi ndogo kwenye {drive}: ({free} imesalia). Upakuaji unaweza kusimama — mjulishe anayesimamia seva.",
+    "tgNoQbitForSpace": "Imeshindwa kufikia qBittorrent kukagua nafasi",
+    "tgNotEnoughSpace": "Nafasi haitoshi",
+    "tgDriveHasFree": "{drive}: ina {free} wazi",
+    "tgCopyInDownloads": "Nakala kwenye Downloads · ipo tayari kwenye maktaba",
+    "tgLastWatched": "Ilitazamwa mwisho {ago}",
+    "tgNeverWatchedAdded": "Haijatazamwa kamwe · iliongezwa {ago}",
+    "tgNeverWatched": "Haijatazamwa kamwe",
+    "tgNothingSafeToDelete": "Hakuna kilichopatikana kwenye {drive}: kinachoweza kufutwa kwa usalama (vyote vimeongezwa karibuni, vimetazamwa karibuni au ni vipendwa).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Futa kichwa 1?} other{Futa vichwa {count}?}}",
+    "tgDeletedForGood": "{size} itafutwa kabisa. Hili haliwezi kutenduliwa.",
+    "tgYesDelete": "Ndiyo, futa",
+    "tgDeletingProgress": "Inafuta {done}/{total} …",
+    "tgNowHasFree": " · {drive}: sasa ina {free} wazi",
+    "tgDeletedTitles": "{count, plural, =1{Kichwa 1 kimefutwa} other{Vichwa {count} vimefutwa}}{extra}",
+    "tgDeletedFailed": "{count} vimefutwa, vimeshindikana: {failed}{extra}",
+    "tgFreeGb": "Pata GB {gb}",
+    "tgDownloadCopies": "Nakala za vipakuliwa",
+    "tgLookingForUnwatched": "Inatafuta kisichotazamwa kwa muda mrefu …",
+    "tgSuggestionEnough": "Pendekezo: {size} · nafasi inatosha ✓",
+    "tgSuggestionOf": "Pendekezo: {size} kati ya {target} inayohitajika",
+    "tgPickToSayNo": "Chagua kimoja kukataa — pendekezo linalofuata huingia kiotomatiki.",
+    "tgOtherCandidates": "Vingine vinavyowezekana",
+    "tgDownloadAnyway": "Pakua hata hivyo",
+    "tgDeleteCountSize": "Futa {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: ina {free} wazi.",
+    "tgFileDoubleSpace": "Faili ni {size} na inachukua nafasi mara mbili (kipakuliwa + nakala kwenye maktaba), pamoja na {buffer} ya akiba.",
+    "tgFileSize": "Faili ni {size}, pamoja na {buffer} ya akiba.",
+    "tgPendingNeeds": "Vipakuliwa vinavyoendelea vinahitaji {size} zaidi.",
+    "tgShortBy": "Inapungua {size}.",
+    "tgOnlyEarlyFiles": "Zimepatikana faili zilizochapishwa kabla filamu haijatoka kidijitali tu ({count}) — karibu zote ni za kughushi.",
+    "tgNoDigitalDate": "bado haina tarehe ya kutoka kidijitali",
+    "tgDigitalOn": "inatoka kidijitali {date}",
+    "tgNotOutDigitally": "Bado haijatoka kidijitali",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "Kilichopo sasa kwa kawaida ni rekodi ya sinema au filamu nyingine yenye jina hilo hilo. Wakati mwingine kuna nakala ya awali ya ubora wa chini, mara nyingi yenye manukuu yaliyobandikwa. \"Onyesha faili hata hivyo\" huonyesha kilichopo. Radarr itapakua toleo sahihi yenyewe litakapotoka.",
+    "tgShowFilesAnyway": "Onyesha faili hata hivyo",
+    "tgPickSeasonsEpisodes": "Chagua misimu na vipindi",
+    "tgNoEpisodeInfo": "{season}: hakuna maelezo ya vipindi",
+    "tgAppliesAllDevices": "Inatumika kwa kila kifaa kinachotumia akaunti hii",
+    "tgNoXxxLibrary": "Hakuna maktaba inayoitwa XXX iliyopatikana.",
+    "tgSearchingEachWord": "Inatafuta kila neno peke yake … (inaweza kuchukua nusu dakika)",
+    "tgSentToQbit": "\"{title}\" ({size}) imetumwa kwa qBittorrent",
+    "tgDownloadFailed": "Upakuaji umeshindikana: {error}",
+    "tgXxxNoVideoRemoved": "\"{title}\" haikuwa na faili ya video na imeondolewa.",
+    "tgXxxNoVideoNotRemoved": "\"{title}\" haikuwa na faili ya video na HAIKUONDOLEWA.",
+    "tgSearchNewXxx": "Tafuta XXX mpya",
+    "tgXxxSearchHint": "Jina, studio …",
+    "tgChecking": "Inakagua …",
+    "tgXxxVisible": "Inaonekana sasa. XXX inaonekana kwenye maktaba, utafutaji na skrini ya mwanzo.",
+    "tgXxxHidden": "Imefichwa. XXX haionekani popote kwenye programu.",
+    "tgShowWithPin": "Onyesha (PIN)",
+    "tgChangePin": "Badilisha PIN",
+    "tgNoLibraryList": "Imeshindwa kupata orodha ya maktaba (HTTP {code})",
+    "tgNoUserSettings": "Imeshindwa kupata mipangilio ya mtumiaji (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin ilikataa mabadiliko (HTTP {code})",
+    "tgDeleteFailed": "Kufuta kumeshindikana (HTTP {code})",
+    "tgXxxAddFailed": "Imeshindwa kuongeza \"{title}\" kwenye qBittorrent",
+    "tgSeasonEpisodeLower": "msimu wa {season}, kipindi cha {episode}",
+    "tgSearchInSeerr": "Tafuta kwenye Seerr",
+    "tgSeerrSearchHint": "Tafuta filamu na mifululizo (mf. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Havipo katika msimu huu",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Msimu usiopo} other{Misimu isiyopo}} {list} - fungua mfululizo kuona misimu yote",
+    "tgProjectOnGitHub": "Tortugarr kwenye GitHub",
+    "tgProjectOnGitHubSubtitle": "Msimbo wa chanzo, matoleo na ripoti za matatizo",
+    "tgBuiltOnMoonfinCredit": "Tortugarr imejengwa juu ya Moonfin (GPL), iliyotengenezwa na wasanidi wa Moonfin.",
+    "tgCredits": "Shukrani",
+    "tgCreditsThanks": "Kwa shukrani za dhati: bila miradi hii na watu walio nyuma yake, Tortugarr isingekuwepo.",
+    "tgCreditMoonfin": "Programu ambayo Tortugarr imejengwa juu yake (GPL)",
+    "tgCreditJellyfin": "Seva ya media",
+    "tgCreditSeerr": "Ugunduzi na maombi",
+    "tgCreditRadarr": "Filamu",
+    "tgCreditSonarr": "Mifululizo",
+    "tgCreditProwlarr": "Kidhibiti cha viorodheshaji",
+    "tgCreditBazarr": "Manukuu",
+    "tgCreditFlareSolverr": "Msaidizi wa Cloudflare kwa viorodheshaji",
+    "tgCreditQbittorrent": "Programu ya kupakua, chaguo-msingi la kisakinishi",
+    "tgCreditTmdb": "Data ya filamu na mifululizo, mabango na picha",
+    "tgCreditOpenSubtitles": "Manukuu, yanayopatikana kupitia Bazarr",
+    "tgTmdbNotice": "Bidhaa hii inatumia API ya TMDB lakini haiidhinishwi au kuthibitishwa na TMDB.",
+    "tgLoadingLogoSize": "Ukubwa wa nembo ya kupakia",
+    "tgLoadingLogoSizeSubtitle": "Nembo inayozunguka wakati video inapakia",
+    "tgSubtitleLanguages": "Lugha za manukuu",
+    "tgSubtitleLanguagesSubtitle": "Zinaonyeshwa kwenye menyu ya manukuu: {languages}",
+    "tgShowAllSubLangsOffChosen": "Imezimwa: menyu ya manukuu inaonyesha lugha ulizochagua tu",
+    "tgDiscoveryLanguages": "Lugha katika Zinazovuma na Maarufu",
+    "tgDiscoveryLanguagesSubtitle": "Zinaonyeshwa: {languages}",
+    "tgHideForeignOnChosen": "Imewashwa: Zinazovuma na Maarufu zinaonyesha lugha ulizochagua tu",
+    "tgShowLanguageBadges": "Onyesha beji za lugha",
+    "tgShowLanguageBadgesOn": "Imewashwa: mada zinaonyesha lugha yao (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Imezimwa: hakuna beji za lugha kwenye mada"
 }

@@ -42,6 +42,7 @@ import '../../../data/services/media_server_client_factory.dart';
 import '../../../data/services/theme_music_service.dart';
 import '../../../platform/pip_service.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/audio_labels.dart';
 import '../../../util/subtitle_track_logic.dart';
@@ -172,6 +173,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   Duration? _positionBeforeScreenLock;
   StreamSubscription<bool>? _screenLockSub;
   StreamSubscription<bool>? _screensaverPlayingSub;
+  StreamSubscription<bool>? _subtitleAutoOffSub;
+  String? _subtitleAutoOffCheckedFor;
   StreamSubscription<void>? _completedSub;
   bool _isRestoringPosition = false;
   DateTime? _suppressSeekPromptsUntil;
@@ -235,7 +238,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   bool? _wasDesktopFullscreenOnEntry;
 
   LogicalKeyboardKey? _seekDirection;
-  int _seekRepeatCount = 0;
+  DateTime? _seekHoldStart;
+  DateTime? _seekLastRepeat;
 
   double _brightnessValue = 0.5;
   double _systemVolume = 1.0;
@@ -767,6 +771,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _screensaverPlayingSub = _state.playingStream.listen(
       _screensaverController.setPlaybackActive,
     );
+    _subtitleAutoOffSub = _state.playingStream.listen((playing) {
+      if (playing) unawaited(_autoDisableForeignSubtitle());
+    });
     if (PlatformDetection.useNativeVideoSurface) {
       _subtitleActive = (_manager.subtitleStreamIndex ?? -1) >= 0;
     }
@@ -947,6 +954,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       GetIt.instance<PlaybackArbiter>().pipActive = false;
     }
     _screensaverPlayingSub?.cancel();
+    _subtitleAutoOffSub?.cancel();
     _screensaverController.setPlaybackActive(false);
     _prefs.removeListener(_syncMediaQueuingPreference);
     _syncPlayManager?.removeListener(_onSyncPlayChanged);
@@ -2895,31 +2903,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     }
   }
 
+  /// One press moves by the user's skip length. Held, the seek marker
+  /// speeds up with how long the key has been held (not with how fast the
+  /// remote repeats, which differs between TVs): see [holdSeekSpeed].
   int _accelerateSeekStep(int baseMs, KeyEvent event) {
     final key = event.logicalKey;
-    if (event is KeyDownEvent) {
+    final now = DateTime.now();
+    if (event is KeyDownEvent || _seekDirection != key || _seekHoldStart == null) {
       _seekDirection = key;
-      _seekRepeatCount = 0;
+      _seekHoldStart = now;
+      _seekLastRepeat = now;
       return baseMs;
     }
     if (event is KeyRepeatEvent) {
-      if (_seekDirection != key) {
-        _seekDirection = key;
-        _seekRepeatCount = 0;
-        return baseMs;
-      }
-      _seekRepeatCount++;
-      if (_seekRepeatCount > 18) return baseMs * 12;
-      if (_seekRepeatCount > 10) return baseMs * 6;
-      if (_seekRepeatCount > 4) return baseMs * 2;
-      return baseMs;
+      final sinceLast = now.difference(_seekLastRepeat ?? now).inMilliseconds.clamp(20, 250);
+      _seekLastRepeat = now;
+      final held = now.difference(_seekHoldStart!);
+      return math.max(1000, (holdSeekSpeed(held) * sinceLast).round());
     }
     return baseMs;
   }
 
   void _resetSeekAcceleration() {
     _seekDirection = null;
-    _seekRepeatCount = 0;
+    _seekHoldStart = null;
+    _seekLastRepeat = null;
   }
 
   String _formatDuration(Duration d) {
@@ -3575,6 +3583,44 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     ZoomMode.autoCrop => BoxFit.cover,
     ZoomMode.stretch => BoxFit.fill,
   };
+
+  /// A subtitle track the file switches on by itself (forced or default) is
+  /// turned off when its language is not one the user picked for the subtitle
+  /// menu. Runs once per item, so a track chosen in the menu is never touched.
+  Future<void> _autoDisableForeignSubtitle() async {
+    String? itemId;
+    try {
+      itemId = (_queue.currentItem as dynamic)?.id?.toString();
+    } catch (_) {
+      itemId = null;
+    }
+    if (itemId == null || itemId == _subtitleAutoOffCheckedFor) return;
+    _subtitleAutoOffCheckedFor = itemId;
+    try {
+      final streams = (_manager.currentResolution?.mediaStreams ??
+              const <Map<String, dynamic>>[])
+          .where((s) => s['Type'] == 'Subtitle')
+          .toList();
+      if (streams.isEmpty) return;
+      final active = await _manager.getSubtitleStreamIndexAsync();
+      if (!mounted) return;
+      if (!shouldAutoDisableSubtitle(
+        streams,
+        active,
+        showAll: showAllSubtitleLanguagesSetting(),
+        languages: subtitleMenuLanguagesSetting(),
+      )) {
+        return;
+      }
+      await _runSinglePlayerMutation(
+        'subtitles_auto_off',
+        _manager.disableSubtitles,
+      );
+      _syncSubtitleActive();
+    } catch (e) {
+      debugPrint('[Subtitles] auto-off check failed: $e');
+    }
+  }
 
   void _syncSubtitleActive() {
     if (!PlatformDetection.useNativeVideoSurface || !mounted) return;
@@ -4342,14 +4388,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                           return KeyEventResult.ignored;
                         }
                         switch (event.logicalKey) {
+                          // Held, the marker speeds up; the video jumps there
+                          // once the key is released (debounced seek).
                           case LogicalKeyboardKey.arrowLeft:
                             _seekRelativeDebounced(
-                              -_prefs.get(UserPreferences.skipBackLength),
+                              -_accelerateSeekStep(
+                                _prefs.get(UserPreferences.skipBackLength),
+                                event,
+                              ),
                             );
                             return KeyEventResult.handled;
                           case LogicalKeyboardKey.arrowRight:
                             _seekRelativeDebounced(
-                              _prefs.get(UserPreferences.skipForwardLength),
+                              _accelerateSeekStep(
+                                _prefs.get(UserPreferences.skipForwardLength),
+                                event,
+                              ),
                             );
                             return KeyEventResult.handled;
                           case LogicalKeyboardKey.arrowUp:
@@ -6095,7 +6149,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     final displaySubtitleStreams = audio
         ? const <Map<String, dynamic>>[]
         : sortedSubtitleStreams(streams);
-    final optionStreams = audio ? streams : displaySubtitleStreams;
+    final sortedOptionStreams = audio ? streams : displaySubtitleStreams;
     final audioStreams = allStreams.where((s) => s['Type'] == 'Audio').toList();
     final canDownloadRemote =
         !audio && item is AggregatedItem && _canDownloadRemoteSubtitles(item);
@@ -6115,6 +6169,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                 as int?;
       }
       final isSubsOff = !audio && currentStreamIndex == -1;
+      final optionStreams = audio
+          ? sortedOptionStreams
+          : filterSubtitleMenuStreams(
+              sortedOptionStreams,
+              showAll: showAllSubtitleLanguagesSetting(),
+              languages: subtitleMenuLanguagesSetting(),
+            );
 
       final options = <TrackOption>[
         if (!audio) TrackOption(label: l10n.off),
@@ -6214,7 +6275,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
           return;
         }
         final streamIdx = result - 1;
-        if (canDownloadRemote && streamIdx == streams.length) {
+        if (canDownloadRemote && streamIdx == optionStreams.length) {
           await _downloadRemoteSubtitles(item, streams, audioStreams);
           return;
         }
@@ -7213,4 +7274,18 @@ class _DelayFooterState extends State<_DelayFooter> {
       ),
     );
   }
+}
+
+/// How fast a held seek key moves the marker, in video milliseconds per real
+/// millisecond: slow at first, then faster, like other streaming apps.
+/// 0-1 s: 30x, 1-2 s: 60x, 2-3.5 s: 120x, 3.5-5 s: 300x, then 600x
+/// (half a minute to ten minutes of video per second held).
+@visibleForTesting
+double holdSeekSpeed(Duration held) {
+  final s = held.inMilliseconds / 1000;
+  if (s < 1) return 30;
+  if (s < 2) return 60;
+  if (s < 3.5) return 120;
+  if (s < 5) return 300;
+  return 600;
 }

@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import '../log_service.dart';
 import 'seerr_error.dart';
 import 'seerr_models.dart';
+import 'seerr_query_encoding.dart';
 
 class SeerrHttpClient {
   final MoonfinProxyConfig proxyConfig;
@@ -293,6 +294,9 @@ class SeerrHttpClient {
   }
 
   Future<void> deleteRequest(int requestId) async {
+    // No silent swallowing here: a cancel that never reached the server must
+    // surface as an error, not a fake success. The view model verifies the
+    // request is actually gone afterwards.
     final response = await _dio.delete(
       _apiUrl('request/$requestId'),
       options: _authOptions(),
@@ -514,16 +518,17 @@ class SeerrHttpClient {
     int offset = 0,
   }) async {
     final page = (offset ~/ limit) + 1;
-    // Building the query through Dio rather than by hand, because
-    // Uri.encodeComponent leaves apostrophes as-is and Seerr rejects the
-    // request when a reserved character reaches it unencoded.
+    // NOTE: Seerr's /search endpoint 400s on unknown query parameters, and
+    // it does not know 'limit' — only query/page/language. Do not add it
+    // back; the server returns its default page size either way.
+    //
+    // The query string is built by hand with [strictQueryEncode]. Dio's own
+    // queryParameters encoding writes a space as '+', and Uri.encodeComponent
+    // leaves "!'()*" alone; Seerr's validator answers both with
+    // 400 "Parameter 'query' must be url encoded", which is why a two-word
+    // title like "The Terminator" used to fail here.
     final response = await _dio.get(
-      _apiUrl('search'),
-      queryParameters: {
-        'query': query,
-        'page': page,
-        'type': ?mediaType,
-      },
+      '${_apiUrl('search')}?query=${strictQueryEncode(query)}&page=$page',
       options: _authOptions(),
     );
     _requireSuccess(response, 'search');

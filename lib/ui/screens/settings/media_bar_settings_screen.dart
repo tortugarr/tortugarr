@@ -355,7 +355,7 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                   icon: Icons.featured_play_list,
                   options: {
                     UserPreferences.mediaBarModeMoonfin:
-                        l10n.mediaBarModeMoonfin,
+                        l10n.mediaBarModeNotflix,
                     UserPreferences.mediaBarModeMakd: l10n.mediaBarModeMakd,
                     UserPreferences.mediaBarModeBookshelf: 'Bookshelf',
                     UserPreferences.mediaBarModeGallery: 'Gallery',

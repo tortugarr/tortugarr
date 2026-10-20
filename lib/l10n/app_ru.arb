@@ -1,6 +1,6 @@
 {
     "@@locale": "ru",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin версии {version}",
+    "appVersionFooter": "Tortugarr версии {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin не удалось получить доступ к вашему системному набору ключей. Вход в систему может быть продолжен, но безопасное хранилище токенов может быть недоступно, пока брелок не будет разблокирован.",
+    "secureStorageUnavailableMessage": "Tortugarr не удалось получить доступ к вашему системному набору ключей. Вход в систему может быть продолжен, но безопасное хранилище токенов может быть недоступно, пока брелок не будет разблокирован.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Переключайтесь между Moonfin и Neon Pulse, не перезапуская приложение.",
+    "settingsAppearanceThemeSubtitle": "Переключайтесь между Tortugarr и Neon Pulse, не перезапуская приложение.",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Текущий образ Moonfin, который вам всем полюбился",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Текущий образ Tortugarr, который вам всем полюбился",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неоновый Пульс",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Выход из Moonfin?",
+    "exitApp": "Выход из Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Не установлено. Moonfin попробует использовать mpv.conf по умолчанию в папках app/data.",
+    "notSetMpvConf": "Не установлено. Tortugarr попробует использовать mpv.conf по умолчанию в папках app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Загрузки/Moonfin — видны другим приложениям",
+    "downloadsVisibleToOtherApps": "Загрузки/Tortugarr — видны другим приложениям",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Загруженные медиафайлы будут сохранены в папке «Загрузки/Moonfin» на вашем устройстве. Эти файлы будут видны другим приложениям, таким как ваша галерея или музыкальный проигрыватель.\n\nСуществующие загрузки останутся в своем текущем местоположении.",
+    "saveToDownloadsFolderDescription": "Загруженные медиафайлы будут сохранены в папке «Загрузки/Tortugarr» на вашем устройстве. Эти файлы будут видны другим приложениям, таким как ваша галерея или музыкальный проигрыватель.\n\nСуществующие загрузки останутся в своем текущем местоположении.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Переключить видимость домашней страницы для каждой библиотеки. Перезапустите Moonfin, чтобы изменения вступили в силу.",
+    "libraryVisibilityDescription": "Переключить видимость домашней страницы для каждой библиотеки. Перезапустите Tortugarr, чтобы изменения вступили в силу.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Играйте в Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Играйте в Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Запрос от {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Предмет не найден в вашей библиотеке Moonfin.",
+    "itemNotFoundInLibrary": "Предмет не найден в вашей библиотеке Tortugarr.",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Идет перезагрузка сервера",
-    "adminServerRebootMessage": "Выполняется перезагрузка сервера, перезапустите Moonfin",
+    "adminServerRebootMessage": "Выполняется перезагрузка сервера, перезапустите Tortugarr",
     "adminActiveSessions": "Активные сессии",
     "adminSessionsLoadFailed": "Не удалось загрузить сеансы",
     "adminNoActiveSessions": "Нет активных сессий",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Показывать кнопку жанров на панели навигации",
     "settingsShowFavoritesButtonInNavigation": "Показывать кнопку избранного на панели навигации",
     "settingsShowLibrariesButtonInNavigation": "Показать кнопку «Библиотеки» на панели навигации.",
-    "settingsLibraryVisibilitySubtitle": "Переключить видимость домашней страницы для каждой библиотеки. Перезапустите Moonfin, чтобы изменения вступили в силу.",
+    "settingsLibraryVisibilitySubtitle": "Переключить видимость домашней страницы для каждой библиотеки. Перезапустите Tortugarr, чтобы изменения вступили в силу.",
     "settingsMediaBarAndLocalPreviews": "Медиа-бар и локальные превью",
     "settingsVisualOverlays": "Визуальные наложения",
     "settingsSeasonalSurprise": "Сезонный сюрприз",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Присоединяйтесь к Discord",
     "settingsJoinDiscordSubtitle": "Общайтесь с сообществом",
     "settingsJoinTheDiscord": "Присоединяйтесь к Discord",
-    "settingsSupportMoonfin": "Поддержка Moonfin",
+    "settingsSupportNotflix": "Поддержка Tortugarr",
     "settingsLegal": "ЮРИДИЧЕСКИЙ",
     "settingsLicenses": "Лицензии",
     "settingsOpenSourceLicenseNotices": "Уведомления о лицензии с открытым исходным кодом",
     "settingsPrivacyPolicy": "политика конфиденциальности",
-    "settingsPrivacyPolicySubtitle": "Как Moonfin обрабатывает ваши данные",
+    "settingsPrivacyPolicySubtitle": "Как Tortugarr обрабатывает ваши данные",
     "settingsCheckForUpdates": "Проверьте наличие обновлений",
-    "settingsCheckForUpdatesSubtitle": "Проверьте наличие последней версии Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Проверьте наличие последней версии Tortugarr",
     "settingsPoweredByFlutter": "При поддержке Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# лицензионное уведомление} few {# лицензионных уведомления} many {# лицензионных уведомлений} other {# лицензионных уведомления}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Сохранённые темы",
-    "savedThemesDescription": "Это темы, скачанные из плагина Moonfin для текущего сервера. Удаление затрагивает только локальную копию.",
+    "savedThemesDescription": "Это темы, скачанные из плагина Tortugarr для текущего сервера. Удаление затрагивает только локальную копию.",
     "savedThemesEmpty": "Для этого сервера сохранённых тем не найдено.",
     "savedThemesCurrentThemeId": "{themeId} • сейчас активна",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Удалить сохранённую тему",
     "savedThemesManageSubtitle": "Управление скачанными темами плагина на этом устройстве",
     "themeEditor": "Редактор тем",
-    "themeEditorSubtitle": "Открыть редактор тем Moonfin в браузере",
+    "themeEditorSubtitle": "Открыть редактор тем Tortugarr в браузере",
     "homeScreen": "Главный экран",
     "bottomBar": "Нижняя панель",
     "homeRowsStyleClassic": "Классический",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Предпочитать субтитры SDH",
     "preferSdhSubtitlesSubtitle": "Отдавать приоритет дорожкам SDH/CC при автовыборе.",
     "webDiagnostics": "Веб-диагностика",
-    "webDiagnosticsTitle": "Веб-диагностика Moonfin",
+    "webDiagnosticsTitle": "Веб-диагностика Tortugarr",
     "webDiagnosticsIntro": "Эта страница помогает диагностировать проблемы подключения в браузере (CORS, смешанное содержимое и настройки обнаружения).",
     "webDiagnosticsDetectedMixedContentFailure": "Обнаружен сбой из-за смешанного содержимого",
     "webDiagnosticsDetectedCorsPreflightFailure": "Обнаружен сбой CORS/preflight",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin обнаружил, что HTTPS-страница обращается к серверу по HTTP. Браузеры блокируют такой запрос ещё до того, как он дойдёт до сервера.",
-    "webDiagnosticsCorsFailureBody": "Moonfin обнаружил сбой запроса на уровне браузера. Обычно он вызван отсутствием заголовков CORS или preflight на медиасервере.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr обнаружил, что HTTPS-страница обращается к серверу по HTTP. Браузеры блокируют такой запрос ещё до того, как он дойдёт до сервера.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr обнаружил сбой запроса на уровне браузера. Обычно он вызван отсутствием заголовков CORS или preflight на медиасервере.",
     "webDiagnosticsTargetUrl": "Целевой URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "не настроено",
     "webDiagnosticsMixedContent": "Смешанное содержимое",
     "webDiagnosticsMixedContentDetected": "Эта страница загружена по HTTPS, но один или несколько заданных URL используют HTTP. Браузеры блокируют обращения HTTPS-страниц к HTTP-API.",
-    "webDiagnosticsMixedContentFix": "Решение: используйте HTTPS для медиасервера или прокси либо открывайте Moonfin по HTTP только в доверенных локальных сетях.",
+    "webDiagnosticsMixedContentFix": "Решение: используйте HTTPS для медиасервера или прокси либо открывайте Tortugarr по HTTP только в доверенных локальных сетях.",
     "webDiagnosticsNoMixedContentDetected": "В текущих настройках явных признаков смешанного содержимого не обнаружено.",
     "webDiagnosticsCorsChecklist": "Чек-лист CORS",
     "webDiagnosticsCorsChecklistItem1": "• Разрешите источник браузера в Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Автоматически включать HDR при воспроизведении HDR-видео и восстанавливать режим экрана при выходе.",
     "whenFullscreen": "В полноэкранном режиме",
     "transcodingLimits": "Ограничения транскодирования",
-    "settingsSupportMoonfinSubtitle": "Угостите разработчика чашкой кофе",
+    "settingsSupportNotflixSubtitle": "Угостите разработчика чашкой кофе",
     "accountPreferences": "НАСТРОЙКИ АККАУНТА",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "«Классический» — исходная центрированная компоновка Moonfin. «Современный» — адаптивная кинематографичная компоновка.",
+    "detailScreenStyleSubtitle": "«Классический» — исходная центрированная компоновка Tortugarr. «Современный» — адаптивная кинематографичная компоновка.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Классический",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Классический",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Современный",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Использовать алгоритм локальной библиотеки «Moonfin рекомендует» или онлайн-метрики схожести TMDb. Примечание: для онлайн-рекомендаций нужна интеграция с Seerr.",
+    "recommendationSystemSubtitle": "Использовать алгоритм локальной библиотеки «Tortugarr рекомендует» или онлайн-метрики схожести TMDb. Примечание: для онлайн-рекомендаций нужна интеграция с Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin рекомендует",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr рекомендует",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Схожесть TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Ограничивать подборку «Moonfin рекомендует» возрастным рейтингом выбранного медиа",
+    "recommendationsApplyParentalRatingCapSubtitle": "Ограничивать подборку «Tortugarr рекомендует» возрастным рейтингом выбранного медиа",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Пользовательские темы меняют оформление во всём Moonfin. Выберите вариант на свой вкус.",
+    "customThemeSubtitle": "Пользовательские темы меняют оформление во всём Tortugarr. Выберите вариант на свой вкус.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Войдите в Moonfin на телефоне",
+    "carSignInPrompt": "Войдите в Tortugarr на телефоне",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller — современный GPU-рендерер Flutter: анимации плавнее, подтормаживаний меньше. На некоторых ТВ-приставках и старых GPU он может вызывать артефакты или чёрное видео — тогда выберите «Выкл». «Автоматически» подбирает лучший вариант для вашего устройства. Перезапустите Moonfin, чтобы применить.",
+    "impellerRenderingSubtitle": "Impeller — современный GPU-рендерер Flutter: анимации плавнее, подтормаживаний меньше. На некоторых ТВ-приставках и старых GPU он может вызывать артефакты или чёрное видео — тогда выберите «Выкл». «Автоматически» подбирает лучший вариант для вашего устройства. Перезапустите Tortugarr, чтобы применить.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Чтобы сменить движок отрисовки, Moonfin нужно перезапустить. Закройте приложение и откройте его снова.",
+    "impellerRestartMessage": "Чтобы сменить движок отрисовки, Tortugarr нужно перезапустить. Закройте приложение и откройте его снова.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "IMDb: самые популярные фильмы",
     "imdbMostPopularTvShows": "IMDb: самые популярные сериалы",
     "imdbLowestRatedMovies": "IMDb: фильмы с худшим рейтингом",
-    "imdbTopEnglishMovies": "IMDb: лучшие англоязычные фильмы"
+    "imdbTopEnglishMovies": "IMDb: лучшие англоязычные фильмы",
+    "tgMissing": "Отсутствует",
+    "tgComing": "Скоро",
+    "tgComingOn": "Выйдет {date}",
+    "tgDownloading": "Загружается",
+    "tgReadySoon": "Скоро будет готово",
+    "tgRequested": "Запрошено",
+    "tgClose": "Закрыть",
+    "tgCancel": "Отмена",
+    "tgBack": "Назад",
+    "tgYes": "Да",
+    "tgNo": "Нет",
+    "tgSearch": "Поиск",
+    "tgHide": "Скрыть",
+    "tgAll": "Все",
+    "tgNone": "Ничего",
+    "tgMovies": "Фильмы",
+    "tgSeries": "Сериалы",
+    "tgMovieTag": "Фильм",
+    "tgSeriesTag": "Сериал",
+    "tgCanTakeAMinute": "Может занять до минуты",
+    "tgToday": "сегодня",
+    "tgYesterday": "вчера",
+    "tgDaysAgo": "{days} дн. назад",
+    "tgMonthsAgo": "{months} мес. назад",
+    "tgYearsAgo": "{years} г. назад",
+    "tgYearsMonthsAgo": "{years} г. {months} мес. назад",
+    "tgFindSubtitles": "Найти субтитры",
+    "tgFreeUpSpace": "Освободить место",
+    "tgDownloads": "Загрузки",
+    "tgDownloadsCount": "Загрузки ({count})",
+    "tgNoVideoRemoved": "«{title}»: в загрузке не было видеофайла ({files}). Она удалена и заблокирована — попробуйте другой файл.",
+    "tgNoVideoNotRemoved": "«{title}»: в загрузке не было видеофайла ({files}), но удалить её автоматически не удалось.",
+    "tgAiredOn": "Эфир: {date}",
+    "tgTapToFindFiles": "Нажмите, чтобы найти файлы",
+    "tgWholeSeason": "Весь сезон",
+    "tgEpisodesMissingFindPack": "Не хватает {count} эпизодов — найти сезон целиком",
+    "tgAddToSonarrTitle": "Добавьте в Sonarr, чтобы видеть недостающие эпизоды",
+    "tgAddToSonarrSubtitle": "Сериал добавляется без автоматической загрузки",
+    "tgMissingEpisodesUnavailable": "Недостающие эпизоды сейчас нельзя показать",
+    "tgReasonTapRetry": "{reason} · Нажмите, чтобы повторить",
+    "tgSeasonPackBadge": "Весь сезон",
+    "tgMonitorSeasonTitle": "Отслеживать сезон {season}",
+    "tgMonitorSeasonQuestion": "Загрузить недостающие эпизоды сезона {season} через Sonarr сейчас?\n\nНет: будут загружаться только новые эпизоды по мере выхода.",
+    "tgSonarrSearchingSeason": "Sonarr ищет сезон {season}",
+    "tgMonitored": "Отслеживается",
+    "tgNotMonitored": "Не отслеживается",
+    "tgSeasonStateLabel": "Сезон {season}: {state}",
+    "tgLabelMissing": "{label} отсутствует",
+    "tgNotAiredYet": "{code} ещё не вышел.",
+    "tgNotAiredYetComing": "{code} ещё не вышел — выйдет {date}.",
+    "tgAlreadyDownloading": "{code} уже загружается.",
+    "tgDownloadedAppearsSoon": "{code} загружен и скоро появится в библиотеке.",
+    "tgSearchingFor": "Поиск: {label} …",
+    "tgSeasonLower": "сезон {season}",
+    "tgWholeLabel": "Весь {label}",
+    "tgSeasonNoEpisodes": "Сезон {season} — нет эпизодов в библиотеке",
+    "tgNoTvdbId": "У сериала нет TVDB id, поэтому Sonarr не может его найти.",
+    "tgAddingToSonarr": "Добавляем в Sonarr …",
+    "tgAddToSonarrFailed": "Не удалось добавить сериал в Sonarr. Попробуйте позже.",
+    "tgSendingToDownload": "Отправляем «{label}» на загрузку …",
+    "tgDownloadDidNotStart": "Загрузка не началась: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» загружается ({size}). Появится в библиотеке, когда загрузка завершится.",
+    "tgSonarrUnreachableRetry": "Не удалось связаться с Sonarr. Попробуйте чуть позже.",
+    "tgNoUsableFiles": "Подходящих файлов не найдено. Попробуйте позже — новые часто появляются через несколько часов.",
+    "tgFilesCount": "{count} файлов",
+    "tgFilesRecommended": "{count} файлов — {recommended} подходят под профиль качества, остальные внизу",
+    "tgOutsideQualityProfile": "Вне профиля качества",
+    "tgLargerThanProfile": "Больше, чем разрешает профиль",
+    "tgSmallerThanProfile": "Меньше, чем разрешает профиль",
+    "tgAlreadyExists": "Уже есть",
+    "tgMayNotFitDisk": "Может не поместиться на диск",
+    "tgSonarrUnreachable": "Нет связи с Sonarr",
+    "tgSonarrUnreachableAt": "Нет связи с Sonarr по адресу {host}",
+    "tgSonarrRejectedChange": "Sonarr не принял изменение",
+    "tgSeasonMonitoredNoSearch": "Сезон отслеживается, но Sonarr не начал поиск",
+    "tgSonarrCantSearch": "Sonarr сейчас не может выполнить поиск",
+    "tgSearchExpired": "Результаты поиска устарели — повторите поиск",
+    "tgSonarrRejectedDownload": "Sonarr не принял загрузку (HTTP {status})",
+    "tgSonarrNoSeries": "Этого сериала нет в Sonarr",
+    "tgCouldNotChangeMonitoring": "Не удалось изменить отслеживание: {error}",
+    "tgJellyfinNoIds": "Jellyfin не распознал сериал (нет TVDB или TMDB id)",
+    "tgSomethingWentWrong": "Что-то пошло не так: {error}",
+    "tgDeleteReadOnly": "Файл не управляется Radarr/Sonarr, а у Jellyfin есть только доступ на чтение к папке. Удалите его в файловом менеджере.",
+    "tgSonarrRequiredPerEpisode": "Sonarr недоступен или сериал там не добавлен. Для загрузки отдельных эпизодов нужен Sonarr.",
+    "tgEpisodesNotFound": "Не удалось найти выбранные эпизоды «{title}» в Sonarr (всего найдено {count} эпизодов). Добавьте сериал в Sonarr и попробуйте снова.",
+    "tgPartOfCollectionPrefix": "Часть коллекции ",
+    "tgViewingPartOf": "  ·  вы смотрите часть {current} из {total}",
+    "tgPartOf": "Часть {number} из {total}",
+    "tgUnknownTitle": "Без названия",
+    "tgMovieCollection": "Коллекция фильмов",
+    "tgNotReleasedYet": "«{title}» ещё не вышел",
+    "tgScreensaverModeVideo": "Видео",
+    "tgScreensaverModeLogo": "Логотип",
+    "tgScreensaverSound": "Звук заставки",
+    "tgScreensaverSoundSubtitle": "Выкл.: трейлеры в заставке воспроизводятся без звука",
+    "tgScreensaverLogo": "Логотип",
+    "tgLogoBadge": "Значок Tortugarr",
+    "tgLogoVhs": "Попугай на кассетах VHS",
+    "tgLogoSign": "Попугай на вывеске",
+    "tgHiddenBadge": "СКРЫТО · {code}",
+    "tgDiskSpace": "Место на диске",
+    "tgDiskSpaceSubtitle": "Освободите место для новых загрузок",
+    "tgAdultTitle": "Фильмы для взрослых (XXX)",
+    "tgAdultSubtitle": "Показать или скрыть библиотеку XXX (PIN)",
+    "tgHideForeign": "Скрывать иностранный контент",
+    "tgHideForeignOn": "Вкл.: в «В тренде» и «Популярное» только английский, норвежский, шведский, датский, немецкий и французский",
+    "tgHideForeignOff": "Выкл.: «В тренде» и «Популярное» показывают все языки",
+    "tgShowHidden": "Показывать скрытое",
+    "tgShowHiddenOn": "Вкл.: элементы, которые должны быть скрыты, показываются с красной пометкой СКРЫТО",
+    "tgShowHiddenOff": "Для отладки: показывать скрытые элементы с красной пометкой, а не убирать их",
+    "tgShowAllSubLangs": "Показывать все языки субтитров",
+    "tgShowAllSubLangsOn": "Вкл.: в меню субтитров показываются все языки",
+    "tgShowAllSubLangsOff": "Выкл.: в меню субтитров только норвежский и английский",
+    "tgPreviewSound": "Звук в превью",
+    "tgPreviewSoundOn": "Вкл.: ролик, который запускается, когда вы останавливаетесь на фильме, идёт со звуком",
+    "tgPreviewSoundOff": "Выкл.: ролики при просмотре каталога идут без звука",
+    "tgScreensaver": "Заставка",
+    "tgScreensaverSubtitle": "Видео или логотип, звук и изображение",
+    "tgShowMissingEpisodes": "Показывать недостающие эпизоды",
+    "tgShowMissingEpisodesOn": "Вкл.: в сезонах видны эпизоды, которых у вас нет, — их можно загрузить",
+    "tgShowMissingEpisodesOff": "Выкл.: в сезонах видны только имеющиеся эпизоды",
+    "tgShowCollections": "Показывать коллекции фильмов",
+    "tgShowCollectionsOn": "Вкл.: на странице фильма видны остальные фильмы коллекции, включая те, которых у вас нет",
+    "tgShowCollectionsOff": "Выкл.: страница фильма не показывает коллекцию",
+    "tgNoActiveDownloads": "Нет активных загрузок.",
+    "tgPickDownloadToOpen": "Выберите загрузку, чтобы открыть запросы.",
+    "tgRefreshLibrary": "Обновить библиотеку",
+    "tgAskingJellyfinScan": "Просим Jellyfin просканировать библиотеку …",
+    "tgHideAll": "Скрыть все",
+    "tgImporting": "Импорт",
+    "tgSubsNotManaged": "Этот фильм или сериал не управляется Radarr/Sonarr, поэтому Bazarr не может найти для него субтитры.",
+    "tgBazarrUnreachable": "Не удалось связаться с Bazarr. Попробуйте чуть позже.",
+    "tgSubsFoundNothing": "Пока ничего не найдено. Bazarr автоматически повторяет поиск каждый день, или выберите сами.",
+    "tgSubsFound": "Найдено: {languages} — в меню субтитров появится через некоторое время.",
+    "tgAnd": "и",
+    "tgSubsDownloaded": "Загружено — в меню субтитров появится через некоторое время.",
+    "tgAskingBazarr": "Запрашиваем Bazarr …",
+    "tgHaveAll": "Всё уже есть",
+    "tgSearchAutoNow": "Найти автоматически сейчас",
+    "tgSearchingUpToMinute": "Ищем … может занять до минуты",
+    "tgPickYourself": "Выбрать вручную",
+    "tgAskingProviders": "Запрашиваем источники субтитров … может занять до минуты",
+    "tgNoProviderSubs": "Ни у одного источника пока нет субтитров.",
+    "tgLangHas": "{language}: есть",
+    "tgLangMissing": "{language}: нет",
+    "tgNoReleaseName": "(без названия релиза)",
+    "tgHearingImpaired": "{provider} · для слабослышащих",
+    "tgLangNorwegian": "Норвежский",
+    "tgLangEnglish": "Английский",
+    "tgBazarrUnknownTitle": "Bazarr пока не знает об этом фильме или сериале",
+    "tgBazarrError": "Bazarr ответил ошибкой (HTTP {code})",
+    "tgLowSpaceSnack": "Мало места на {drive}: (свободно {free}). Загрузка может остановиться — сообщите тому, кто управляет сервером.",
+    "tgNoQbitForSpace": "Не удалось связаться с qBittorrent, чтобы проверить место",
+    "tgNotEnoughSpace": "Недостаточно места",
+    "tgDriveHasFree": "{drive}: свободно {free}",
+    "tgCopyInDownloads": "Копия в Downloads · уже есть в библиотеке",
+    "tgLastWatched": "Последний просмотр: {ago}",
+    "tgNeverWatchedAdded": "Не просмотрено · добавлено {ago}",
+    "tgNeverWatched": "Не просмотрено",
+    "tgNothingSafeToDelete": "На {drive}: нет ничего, что можно безопасно удалить (всё недавно добавлено, недавно просмотрено или в избранном).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{Удалить {count} элемент?} few{Удалить {count} элемента?} many{Удалить {count} элементов?} other{Удалить {count} элемента?}}",
+    "tgDeletedForGood": "{size} будет удалено безвозвратно. Это действие нельзя отменить.",
+    "tgYesDelete": "Да, удалить",
+    "tgDeletingProgress": "Удаляем {done}/{total} …",
+    "tgNowHasFree": " · {drive}: теперь свободно {free}",
+    "tgDeletedTitles": "{count, plural, one{Удалён {count} элемент} few{Удалено {count} элемента} many{Удалено {count} элементов} other{Удалено {count} элемента}}{extra}",
+    "tgDeletedFailed": "Удалено: {count}, не удалось: {failed}{extra}",
+    "tgFreeGb": "Освободить {gb} ГБ",
+    "tgDownloadCopies": "Копии загрузок",
+    "tgLookingForUnwatched": "Ищем то, что давно не смотрели …",
+    "tgSuggestionEnough": "Предложение: {size} · места достаточно ✓",
+    "tgSuggestionOf": "Предложение: {size} из {target} необходимых",
+    "tgPickToSayNo": "Выберите элемент, чтобы отказаться, — следующее предложение подставится автоматически.",
+    "tgOtherCandidates": "Другие варианты",
+    "tgDownloadAnyway": "Всё равно загрузить",
+    "tgDeleteCountSize": "Удалить {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: свободно {free}.",
+    "tgFileDoubleSpace": "Файл весит {size} и занимает место дважды (загрузка + копия в библиотеке), плюс {buffer} в запасе.",
+    "tgFileSize": "Файл весит {size}, плюс {buffer} в запасе.",
+    "tgPendingNeeds": "Текущим загрузкам нужно ещё {size}.",
+    "tgShortBy": "Не хватает {size}.",
+    "tgOnlyEarlyFiles": "Найдены только файлы, опубликованные до цифрового релиза фильма ({count}) — они почти всегда поддельные.",
+    "tgNoDigitalDate": "пока не имеет даты цифрового релиза",
+    "tgDigitalOn": "выходит в цифре {date}",
+    "tgNotOutDigitally": "Ещё не вышел в цифре",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "То, что есть сейчас, — как правило, запись из кинотеатра или другой фильм с таким же названием. Иногда встречается ранняя копия в низком качестве, часто с вшитыми субтитрами. «Всё равно показать файлы» покажет, что есть. Radarr сам загрузит нормальную версию, когда она выйдет.",
+    "tgShowFilesAnyway": "Всё равно показать файлы",
+    "tgPickSeasonsEpisodes": "Выберите сезоны и эпизоды",
+    "tgNoEpisodeInfo": "{season}: нет данных об эпизодах",
+    "tgAppliesAllDevices": "Действует на всех устройствах с этим аккаунтом",
+    "tgNoXxxLibrary": "Библиотека с названием XXX не найдена.",
+    "tgSearchingEachWord": "Ищем каждое слово отдельно … (может занять полминуты)",
+    "tgSentToQbit": "«{title}» ({size}) отправлен в qBittorrent",
+    "tgDownloadFailed": "Ошибка загрузки: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» не содержал видеофайла и был удалён.",
+    "tgXxxNoVideoNotRemoved": "«{title}» не содержал видеофайла и НЕ был удалён.",
+    "tgSearchNewXxx": "Искать новое XXX",
+    "tgXxxSearchHint": "Название, студия …",
+    "tgChecking": "Проверяем …",
+    "tgXxxVisible": "Теперь видно. XXX показывается в библиотеках, поиске и на главной.",
+    "tgXxxHidden": "Скрыто. XXX не показывается нигде в приложении.",
+    "tgShowWithPin": "Показать (PIN)",
+    "tgChangePin": "Изменить PIN",
+    "tgNoLibraryList": "Не удалось получить список библиотек (HTTP {code})",
+    "tgNoUserSettings": "Не удалось получить настройки пользователя (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin отклонил изменение (HTTP {code})",
+    "tgDeleteFailed": "Удаление не удалось (HTTP {code})",
+    "tgXxxAddFailed": "Не удалось добавить «{title}» в qBittorrent",
+    "tgSeasonEpisodeLower": "сезон {season}, эпизод {episode}",
+    "tgSearchInSeerr": "Поиск в Seerr",
+    "tgSeerrSearchHint": "Искать фильмы и сериалы (например, «Lost S02E05»)",
+    "tgMissingInThisSeason": "Отсутствует в этом сезоне",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Отсутствует сезон} few{Отсутствуют сезоны} many{Отсутствуют сезоны} other{Отсутствуют сезоны}} {list} - откройте сериал, чтобы увидеть все сезоны",
+    "tgProjectOnGitHub": "Tortugarr на GitHub",
+    "tgProjectOnGitHubSubtitle": "Исходный код, релизы и обращения",
+    "tgBuiltOnMoonfinCredit": "Tortugarr создан на основе Moonfin (GPL) от разработчиков Moonfin.",
+    "tgCredits": "Благодарности",
+    "tgCreditsThanks": "С искренней благодарностью: без этих проектов и людей, стоящих за ними, Tortugarr бы не существовал.",
+    "tgCreditMoonfin": "Приложение, на котором основан Tortugarr (GPL)",
+    "tgCreditJellyfin": "Медиасервер",
+    "tgCreditSeerr": "Поиск новинок и запросы",
+    "tgCreditRadarr": "Фильмы",
+    "tgCreditSonarr": "Сериалы",
+    "tgCreditProwlarr": "Менеджер индексаторов",
+    "tgCreditBazarr": "Субтитры",
+    "tgCreditFlareSolverr": "Обход Cloudflare для индексаторов",
+    "tgCreditQbittorrent": "Клиент загрузок, стандартный выбор установщика",
+    "tgCreditTmdb": "Данные о фильмах и сериалах, постеры и изображения",
+    "tgCreditOpenSubtitles": "Субтитры, получаемые через Bazarr",
+    "tgTmdbNotice": "Этот продукт использует API TMDB, но не одобрен и не сертифицирован TMDB.",
+    "tgLoadingLogoSize": "Размер логотипа загрузки",
+    "tgLoadingLogoSizeSubtitle": "Вращающийся логотип во время загрузки видео",
+    "tgSubtitleLanguages": "Языки субтитров",
+    "tgSubtitleLanguagesSubtitle": "Показываются в меню субтитров: {languages}",
+    "tgShowAllSubLangsOffChosen": "Выкл.: меню субтитров показывает только выбранные языки",
+    "tgDiscoveryLanguages": "Языки в разделах «В тренде» и «Популярное»",
+    "tgDiscoveryLanguagesSubtitle": "Показываются: {languages}",
+    "tgHideForeignOnChosen": "Вкл.: «В тренде» и «Популярное» показывают только выбранные языки",
+    "tgShowLanguageBadges": "Показывать метки языка",
+    "tgShowLanguageBadgesOn": "Вкл.: у названий отображается их язык (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Выкл.: без меток языка у названий"
 }

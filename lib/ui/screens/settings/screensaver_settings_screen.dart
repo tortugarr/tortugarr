@@ -12,6 +12,7 @@ import '../../widgets/settings/preference_binding.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import 'settings_app_bar.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 class ScreensaverSettingsScreen extends StatefulWidget {
   const ScreensaverSettingsScreen({super.key});
@@ -67,10 +68,28 @@ class _ScreensaverSettingsScreenState extends State<ScreensaverSettingsScreen> {
                     title: l10n.mode,
                     icon: Icons.auto_awesome,
                     labelOf: (value) => switch (value) {
-                      ScreensaverMode.library => l10n.libraryArt,
-                      ScreensaverMode.logo => l10n.logo,
+                      ScreensaverMode.library => appL10n().tgScreensaverModeVideo,
+                      ScreensaverMode.logo => appL10n().tgScreensaverModeLogo,
                     },
                   ),
+                  if (mode == ScreensaverMode.library)
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.screensaverAudio,
+                      title: appL10n().tgScreensaverSound,
+                      subtitle: appL10n().tgScreensaverSoundSubtitle,
+                      icon: Icons.volume_up,
+                    ),
+                  if (mode == ScreensaverMode.logo)
+                    EnumPreferenceTile<ScreensaverLogoImage>(
+                      preference: UserPreferences.screensaverLogoImage,
+                      title: appL10n().tgScreensaverLogo,
+                      icon: Icons.image,
+                      labelOf: (value) => switch (value) {
+                        ScreensaverLogoImage.badge => appL10n().tgLogoBadge,
+                        ScreensaverLogoImage.vhs => appL10n().tgLogoVhs,
+                        ScreensaverLogoImage.sign => appL10n().tgLogoSign,
+                      },
+                    ),
                   EnumPreferenceTile<ScreensaverTimeout>(
                     preference: UserPreferences.screensaverTimeout,
                     title: l10n.timeout,

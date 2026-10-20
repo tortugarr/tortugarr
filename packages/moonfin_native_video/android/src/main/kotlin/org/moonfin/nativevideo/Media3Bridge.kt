@@ -68,6 +68,17 @@ object Media3Bridge {
     @Volatile
     private var activeView: Media3VideoView? = null
 
+    // While set (and not expired), the slot is reserved for the next main
+    // view: preview surfaces may neither attach nor re-activate, and a
+    // preview source is dropped instead of queued. Cleared when a main view
+    // attaches. The expiry keeps trailers from staying dead if the main
+    // player never opens.
+    @Volatile
+    private var mainPlaybackReservedUntilMs = 0L
+
+    private fun mainPlaybackReserved(): Boolean =
+        System.currentTimeMillis() < mainPlaybackReservedUntilMs
+
     @Volatile
     private var eventSink: EventChannel.EventSink? = null
 
@@ -104,8 +115,18 @@ object Media3Bridge {
             ) {
                 return@post
             }
+            // Nor may it grab the slot while a main player is on its way and
+            // its source sits in the queue; that is how a remote "play now"
+            // from the home screen ended up loading the movie into the
+            // trailer surface, which the player screen then tore down.
+            if (view.role == "preview" && mainPlaybackReserved()) {
+                return@post
+            }
             if (oldView != null && oldView !== view) {
                 oldView.forceReleasePlayer()
+            }
+            if (view.role != "preview") {
+                mainPlaybackReservedUntilMs = 0L
             }
             activeView = view
             emitEvent(
@@ -171,10 +192,40 @@ object Media3Bridge {
     }
 
     fun handleMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        if (call.method == "prepareMainPlayback") {
+            // Called right before a main playback starts from a screen that
+            // is not the player (remote play from the home screen). Whatever
+            // view owns the player now, a trailer surface or a view left
+            // behind by an earlier screen, is released so the coming source
+            // queues up for the fullscreen player's own view.
+            mainHandler.post {
+                val current = activeView
+                if (current != null) {
+                    current.forceReleasePlayer()
+                    activeView = null
+                }
+                synchronized(pendingCalls) {
+                    pendingCalls.clear()
+                }
+                mainPlaybackReservedUntilMs = System.currentTimeMillis() + 20_000L
+                result.success(true)
+            }
+            return
+        }
+
         if (call.method == "activateView") {
             val id = ((call.arguments as? Map<*, *>)?.get("viewId") as? Number)?.toInt()
             val view = id?.let { viewRegistry[it] }
-            if (view != null && view.isReattachable()) {
+            val current = activeView
+            // Tell the preview caller "no" up front when attachView would
+            // refuse it anyway, so it backs off instead of sending volume
+            // and source calls that would land in the main player's queue.
+            val previewBlocked = view != null &&
+                view.role == "preview" &&
+                (mainPlaybackReserved() ||
+                    (current != null && current !== view &&
+                        current.role == "main" && current.isPlayerLive()))
+            if (view != null && view.isReattachable() && !previewBlocked) {
                 view.ensurePlayerAlive()
                 // The posted attachView runs before the next channel message;
                 // attaching the already-active view just flushes the queue.
@@ -222,6 +273,12 @@ object Media3Bridge {
             val isPreviewSource =
                 (call.arguments as? Map<*, *>)?.get("preview") as? Boolean ?: false
             val current = activeView
+            if (isPreviewSource && current == null && mainPlaybackReserved()) {
+                // Slot reserved for the main player; a queued trailer would
+                // otherwise replace the movie once the player view attaches.
+                result.success(null)
+                return
+            }
             if (!isPreviewSource && current != null && current.role == "preview") {
                 // Real playback starting while a trailer owns the slot (the
                 // idle-home start window). Load the source into the next main

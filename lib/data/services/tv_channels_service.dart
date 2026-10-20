@@ -8,6 +8,7 @@ import 'package:server_core/server_core.dart';
 import '../../l10n/app_localizations.dart';
 import '../../playback/car_artwork.dart';
 import '../../preference/user_preferences.dart';
+import '../../util/app_l10n.dart' show kForceEnglish;
 import '../../util/platform_detection.dart';
 import '../models/aggregated_item.dart';
 import 'media_server_client_factory.dart';
@@ -112,11 +113,11 @@ class TvChannelsService {
   /// Resolves localized channel titles without a [BuildContext], matching how
   /// the app picks its locale from the language override preference.
   static AppLocalizations _localizations() {
-    ui.Locale? resolved;
+    ui.Locale? resolved = kForceEnglish ? const ui.Locale('en') : null;
     try {
       final override =
           GetIt.instance<UserPreferences>().get(UserPreferences.languageOverride);
-      if (override != 'system') {
+      if (!kForceEnglish && override != 'system') {
         for (final locale in AppLocalizations.supportedLocales) {
           if (locale.toLanguageTag() == override ||
               locale.toString() == override) {

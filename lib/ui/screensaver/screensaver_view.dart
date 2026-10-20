@@ -1,14 +1,32 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
+import '../../data/services/youtube_stream_resolver.dart';
 import '../../preference/preference_constants.dart';
 import '../../preference/user_preferences.dart';
 import '../../util/clock_format.dart';
+import '../../util/platform_detection.dart';
 import 'bouncing_box.dart';
 import 'screensaver_content_service.dart';
+
+/// Asset and box size (keeps the artwork's aspect) for each logo choice.
+({String asset, double width, double height}) screensaverLogoAsset(
+  ScreensaverLogoImage image,
+) =>
+    switch (image) {
+      ScreensaverLogoImage.badge =>
+        (asset: 'assets/images/screensaver_badge.png', width: 320, height: 326),
+      ScreensaverLogoImage.vhs =>
+        (asset: 'assets/images/screensaver_vhs.png', width: 420, height: 305),
+      ScreensaverLogoImage.sign =>
+        (asset: 'assets/images/screensaver_sign.png', width: 400, height: 361),
+    };
 
 class ScreensaverView extends StatefulWidget {
   const ScreensaverView({super.key});
@@ -18,8 +36,11 @@ class ScreensaverView extends StatefulWidget {
 }
 
 class _ScreensaverViewState extends State<ScreensaverView> {
-  static const _splashDelay = Duration(seconds: 2);
+  /// How long a slide without a trailer stays up.
   static const _slideDuration = Duration(seconds: 30);
+
+  /// A trailer that never reports completion still moves on after this.
+  static const _maxTrailerDuration = Duration(minutes: 3);
 
   final _prefs = GetIt.instance<UserPreferences>();
   late final ScreensaverContentService _service;
@@ -45,9 +66,8 @@ class _ScreensaverViewState extends State<ScreensaverView> {
   }
 
   Future<void> _startSlideshow() async {
-    final splash = Future<void>.delayed(_splashDelay);
+    // No logo splash first: the video mode shows only library content.
     final items = await _service.loadBatch();
-    await splash;
     if (!mounted) return;
     if (items.isEmpty) {
       setState(() => _libraryEmpty = true);
@@ -58,7 +78,22 @@ class _ScreensaverViewState extends State<ScreensaverView> {
       _index = 0;
     });
     _precacheNext();
-    _slideTimer = Timer.periodic(_slideDuration, (_) => _advance());
+    _scheduleAdvance(_slideDuration);
+  }
+
+  void _scheduleAdvance(Duration after) {
+    _slideTimer?.cancel();
+    _slideTimer = Timer(after, _advance);
+  }
+
+  void _onTrailerStarted(int index) {
+    if (!mounted || index != _index) return;
+    _scheduleAdvance(_maxTrailerDuration);
+  }
+
+  void _onTrailerEnded(int index) {
+    if (!mounted || index != _index) return;
+    _advance();
   }
 
   Future<void> _advance() async {
@@ -72,13 +107,16 @@ class _ScreensaverViewState extends State<ScreensaverView> {
           _index = 0;
         });
         _precacheNext();
+        _scheduleAdvance(_slideDuration);
         return;
       }
       setState(() => _index = 0);
+      _scheduleAdvance(_slideDuration);
       return;
     }
     setState(() => _index++);
     _precacheNext();
+    _scheduleAdvance(_slideDuration);
   }
 
   void _precacheNext() {
@@ -95,8 +133,8 @@ class _ScreensaverViewState extends State<ScreensaverView> {
     final mode = _prefs.get(UserPreferences.screensaverMode);
     final dim = _prefs.get(UserPreferences.screensaverDimming).clamp(0, 90);
     final clockMode = _prefs.get(UserPreferences.screensaverClockMode);
-    final showSlides =
-        mode == ScreensaverMode.library && !_libraryEmpty && _index >= 0;
+    final videoMode = mode == ScreensaverMode.library && !_libraryEmpty;
+    final showSlides = videoMode && _index >= 0;
 
     return ColoredBox(
       color: Colors.black,
@@ -109,10 +147,13 @@ class _ScreensaverViewState extends State<ScreensaverView> {
               child: _SlideView(
                 key: ValueKey(_index),
                 item: _items[_index],
+                audio: _prefs.get(UserPreferences.screensaverAudio),
+                onTrailerStarted: () => _onTrailerStarted(_index),
+                onTrailerEnded: () => _onTrailerEnded(_index),
               ),
             )
-          else
-            const _BouncingLogo(),
+          else if (!videoMode)
+            _BouncingLogo(_prefs.get(UserPreferences.screensaverLogoImage)),
           if (dim > 0)
             ColoredBox(color: Colors.black.withValues(alpha: dim / 100)),
           if (clockMode != ScreensaverClockMode.off)
@@ -128,25 +169,36 @@ class _ScreensaverViewState extends State<ScreensaverView> {
 }
 
 class _BouncingLogo extends StatelessWidget {
-  const _BouncingLogo();
+  const _BouncingLogo(this.image);
+
+  final ScreensaverLogoImage image;
 
   @override
   Widget build(BuildContext context) {
+    final logo = screensaverLogoAsset(image);
     return BouncingBox(
-      childWidth: 400,
-      childHeight: 200,
-      child: Image.asset(
-        'assets/images/logo_and_text.png',
-        fit: BoxFit.contain,
-      ),
+      childWidth: logo.width,
+      childHeight: logo.height,
+      child: Image.asset(logo.asset, fit: BoxFit.contain),
     );
   }
 }
 
+/// One library title: its backdrop with a slow zoom, and its trailer on top
+/// once it plays. Muted unless the user turned on screensaver sound.
 class _SlideView extends StatefulWidget {
-  const _SlideView({super.key, required this.item});
+  const _SlideView({
+    super.key,
+    required this.item,
+    required this.audio,
+    required this.onTrailerStarted,
+    required this.onTrailerEnded,
+  });
 
   final ScreensaverItem item;
+  final bool audio;
+  final VoidCallback onTrailerStarted;
+  final VoidCallback onTrailerEnded;
 
   @override
   State<_SlideView> createState() => _SlideViewState();
@@ -154,7 +206,14 @@ class _SlideView extends StatefulWidget {
 
 class _SlideViewState extends State<_SlideView>
     with SingleTickerProviderStateMixin {
+  static const _resolveTimeout = Duration(seconds: 10);
+  static const _openTimeout = Duration(seconds: 15);
+
   late final AnimationController _kenBurns;
+  Player? _player;
+  VideoController? _video;
+  StreamSubscription<bool>? _completedSub;
+  bool _videoVisible = false;
 
   @override
   void initState() {
@@ -163,16 +222,55 @@ class _SlideViewState extends State<_SlideView>
       vsync: this,
       duration: const Duration(seconds: 30),
     )..forward();
+    final trailer = widget.item.trailerUrl;
+    if (trailer != null &&
+        !kIsWeb &&
+        !PlatformDetection.useApplePreviewPlayer) {
+      unawaited(_playTrailer(trailer));
+    }
+  }
+
+  Future<void> _playTrailer(String trailerUrl) async {
+    try {
+      final videoId = YouTubeStreamResolver.extractVideoId(trailerUrl);
+      final stream = await YouTubeStreamResolver.resolveFromUrl(trailerUrl)
+          .timeout(_resolveTimeout, onTimeout: () => null);
+      if (!mounted || stream == null || stream.isEmpty) return;
+      final player = Player(
+        configuration: const PlayerConfiguration(libass: false),
+      );
+      _player = player;
+      _video = VideoController(player);
+      await player.setVolume(widget.audio ? 100 : 0);
+      await player
+          .open(videoId != null
+              ? Media(stream, httpHeaders: YouTubeStreamResolver.youtubeHeaders)
+              : Media(stream))
+          .timeout(_openTimeout);
+      if (!mounted) return;
+      _completedSub = player.stream.completed.listen((done) {
+        if (done && mounted) widget.onTrailerEnded();
+      });
+      setState(() => _videoVisible = true);
+      widget.onTrailerStarted();
+    } catch (_) {
+      // No trailer: the backdrop stays, and the slide moves on after its time.
+    }
   }
 
   @override
   void dispose() {
+    _completedSub?.cancel();
+    final player = _player;
+    _player = null;
+    if (player != null) unawaited(player.dispose());
     _kenBurns.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final video = _video;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -186,6 +284,16 @@ class _SlideViewState extends State<_SlideView>
             errorWidget: (_, _, _) => const ColoredBox(color: Colors.black),
           ),
         ),
+        if (video != null)
+          AnimatedOpacity(
+            opacity: _videoVisible ? 1 : 0,
+            duration: const Duration(milliseconds: 800),
+            child: Video(
+              controller: video,
+              controls: NoVideoControls,
+              fit: BoxFit.cover,
+            ),
+          ),
         const DecoratedBox(
           decoration: BoxDecoration(
             gradient: RadialGradient(

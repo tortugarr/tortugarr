@@ -42,15 +42,7 @@ class _CustomizationCategoryScreen extends StatelessWidget {
                     const _NavigationCategoryScreen(),
                   ),
                 ),
-                if (PlatformDetection.isTV)
-                  _TvSettingsListTile(
-                    leading: const Icon(Icons.wallpaper),
-                    title: Text(l10n.screensaver),
-                    subtitle: Text(l10n.enableBuiltInScreensaver),
-                    onTap: () => context.pushSettingsScreen(
-                      const ScreensaverSettingsScreen(),
-                    ),
-                  ),
+                // Screensaver: on the panel's first page (Tortugarr), not twice.
               ],
             ),
             _SectionHeader(l10n.layout),

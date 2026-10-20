@@ -544,6 +544,9 @@ extension HomeSectionTypeSeerrRow on HomeSectionType {
 
 enum ScreensaverMode { library, logo }
 
+/// Tortugarr artwork the logo screensaver bounces around.
+enum ScreensaverLogoImage { badge, vhs, sign }
+
 enum ScreensaverClockMode { off, staticCorner, bouncing }
 
 enum ScreensaverTimeout {

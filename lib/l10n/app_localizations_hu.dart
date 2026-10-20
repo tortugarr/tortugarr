@@ -9,7 +9,7 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get accountPreferences => 'Fiókbeállítások';
@@ -80,7 +80,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin verzió $version';
+    return 'Tortugarr verzió $version';
   }
 
   @override
@@ -132,7 +132,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'A Moonfin nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.';
+      'A Tortugarr nem tudott hozzáférni a rendszer kulcstartójához. A bejelentkezés folytatódhat, de előfordulhat, hogy a biztonságos tokentároló nem érhető el, amíg a kulcstartót fel nem oldják.';
 
   @override
   String get ok => 'OK';
@@ -145,10 +145,10 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'A klasszikus az eredeti, középre igazított Moonfin elrendezés. A modern egy reszponzív, moziszerű elrendezés.';
+      'A klasszikus az eredeti, középre igazított Tortugarr elrendezés. A modern egy reszponzív, moziszerű elrendezés.';
 
   @override
-  String get detailScreenStyleMoonfin => 'Klasszikus';
+  String get detailScreenStyleNotflix => 'Klasszikus';
 
   @override
   String get detailScreenStyleModern => 'Modern';
@@ -172,10 +172,10 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Használd a Moonfin ajánlásai helyi könyvtári algoritmust vagy az online TMDb hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.';
+      'Használd a Tortugarr ajánlásai helyi könyvtári algoritmust vagy az online TMDb hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin ajánlásai';
+  String get recommendationSystemNotflix => 'Tortugarr ajánlásai';
 
   @override
   String get recommendationSystemTmdb => 'TMDb hasonlóság';
@@ -186,7 +186,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Korlátozd a „Moonfin ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján';
+      'Korlátozd a „Tortugarr ajánlásai” javaslatait a célmédia szülői korhatár-besorolása alapján';
 
   @override
   String get interfaceStyle => 'Felület stílusa';
@@ -229,7 +229,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Az egyedi témák módosítják a Moonfin vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.';
+      'Az egyedi témák módosítják a Tortugarr vizuális elemeit. Válassz egyet a stílusodhoz illő lehetőségek közül.';
 
   @override
   String get keyboardPreferSystemIme =>
@@ -240,11 +240,11 @@ class AppLocalizationsHu extends AppLocalizations {
       'Használd alapértelmezetten az eszközöd beviteli módját a szövegbevitelhez';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeNotflix => 'Tortugarr';
 
   @override
-  String get themeMoonfinSubtitle =>
-      'Az eredeti, letisztult Moonfin alapértelmezés.';
+  String get themeNotflixSubtitle =>
+      'Az eredeti, letisztult Tortugarr alapértelmezés.';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -319,7 +319,7 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Kilépsz a Moonfinből?';
+  String get exitApp => 'Kilépsz a Tortugarrből?';
 
   @override
   String get exitAppConfirmation => 'Biztosan ki szeretnél lépni?';
@@ -1369,7 +1369,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shuffleAllMusic => 'Összes zene keverése';
 
   @override
-  String get carSignInPrompt => 'Jelentkezz be a Moonfinbe a telefonodon';
+  String get carSignInPrompt => 'Jelentkezz be a Tortugarrbe a telefonodon';
 
   @override
   String get carServerUnreachable => 'A szervered nem érhető el';
@@ -2869,7 +2869,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Nincs beállítva. A Moonfin megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.';
+      'Nincs beállítva. A Tortugarr megpróbálja az alapértelmezett mpv.conf fájlt az alkalmazás/adat mappákban.';
 
   @override
   String get selectMpvConf => 'mpv.conf kiválasztása';
@@ -3126,7 +3126,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Letöltések/Moonfin – más alkalmazások számára látható';
+      'Letöltések/Tortugarr – más alkalmazások számára látható';
 
   @override
   String get dangerZone => 'Veszélyzóna';
@@ -3156,7 +3156,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'A letöltött médiát a rendszer a Letöltések/Moonfin mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.';
+      'A letöltött médiát a rendszer a Letöltések/Tortugarr mappába menti az eszközödön. Ezeket a fájlokat más alkalmazások is láthatják, például a galéria vagy a zenelejátszó.\n\nA meglévő letöltések a jelenlegi helyükön maradnak.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -3294,7 +3294,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Moonfin alkalmazást.';
+      'A kezdőlap láthatóságának váltása könyvtáronként. A módosítások életbe lépéséhez indítsd újra a Tortugarr alkalmazást.';
 
   @override
   String get showInNavigation => 'Megjelenítés a navigációban';
@@ -3347,7 +3347,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Válassz a különböző médiasáv-stílusok közül, vagy kapcsold ki a médiasávot';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeNotflix => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -3879,7 +3879,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get sourceCode => 'Forráskód';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Frissítések keresése most';
@@ -4047,7 +4047,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Lejátszás a Moonfinben';
+  String get playInNotflix => 'Lejátszás a Tortugarrben';
 
   @override
   String requestedByName(String name) {
@@ -4081,7 +4081,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Az elem nem található a Moonfin-könyvtáradban';
+      'Az elem nem található a Tortugarr-könyvtáradban';
 
   @override
   String get errorSearchingLibrary => 'Hiba a könyvtár keresése közben';
@@ -4673,7 +4673,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'A szerver újraindítása folyamatban van, kérlek, indítsd újra a Moonfint';
+      'A szerver újraindítása folyamatban van, kérlek, indítsd újra a Tortugarrt';
 
   @override
   String get adminActiveSessions => 'Aktív munkamenetek';
@@ -8530,7 +8530,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Moonfin alkalmazást, hogy a változtatások életbe lépjenek.';
+      'A kezdőlap láthatóságának váltása könyvtáronként. Indítsd újra a Tortugarr alkalmazást, hogy a változtatások életbe lépjenek.';
 
   @override
   String get settingsMediaBarAndLocalPreviews => 'Médiasáv és helyi előnézetek';
@@ -8649,10 +8649,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Csatlakozz a Discordhoz';
 
   @override
-  String get settingsSupportMoonfin => 'Moonfin támogatása';
+  String get settingsSupportNotflix => 'Tortugarr támogatása';
 
   @override
-  String get settingsSupportMoonfinSubtitle =>
+  String get settingsSupportNotflixSubtitle =>
       'Hívd meg a fejlesztőt egy kávéra';
 
   @override
@@ -8670,14 +8670,14 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Hogyan kezeli a Moonfin az adataidat';
+      'Hogyan kezeli a Tortugarr az adataidat';
 
   @override
   String get settingsCheckForUpdates => 'Frissítések ellenőrzése';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'A legújabb Moonfin kiadás ellenőrzése';
+      'A legújabb Tortugarr kiadás ellenőrzése';
 
   @override
   String get settingsPoweredByFlutter => 'Flutterrel készült';
@@ -9118,7 +9118,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Ezek a jelenlegi szerverhez a Moonfin beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.';
+      'Ezek a jelenlegi szerverhez a Tortugarr beépülő modulból letöltött témák. A törlés csak ezt a helyi másolatot távolítja el.';
 
   @override
   String get savedThemesEmpty =>
@@ -9141,7 +9141,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Nyisd meg a Moonfin témaszerkesztőt a böngésződben';
+      'Nyisd meg a Tortugarr témaszerkesztőt a böngésződben';
 
   @override
   String get homeScreen => 'Kezdőképernyő';
@@ -9375,7 +9375,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get webDiagnostics => 'Webes diagnosztika';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin webes diagnosztika';
+  String get webDiagnosticsTitle => 'Tortugarr webes diagnosztika';
 
   @override
   String get webDiagnosticsIntro =>
@@ -9391,11 +9391,11 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'A Moonfin észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.';
+      'A Tortugarr észlelte, hogy egy HTTPS-oldal próbál hívni egy HTTP-szerver URL-t. A böngészők blokkolják ezt a kérést, mielőtt az elérné a szerveredet.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'A Moonfin böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.';
+      'A Tortugarr böngészőszintű kéréshibát észlelt, amelyet általában a CORS- vagy preflight-fejlécek hiánya okoz a médiaszerveren.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -9444,7 +9444,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Moonfint csak megbízható helyi hálózatokon töltsd be HTTP-n.';
+      'Megoldás: szolgáld ki a médiaszerveredet vagy a proxyvégpontodat HTTPS-en keresztül, vagy a Tortugarrt csak megbízható helyi hálózatokon töltsd be HTTP-n.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -10288,7 +10288,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Moonfint a beállítások érvényesítéséhez.';
+      'Az Impeller a Flutter modern GPU-megjelenítője a simább animációkért és a kevesebb akadozásért. Néhány TV-boxon és régebbi GPU-n képhibákat vagy fekete videót okozhat; ha ezeket tapasztalod, kapcsold ki. Az Automatikus a legmegfelelőbb alapértelmezést választja ki az eszközödhöz. Indítsd újra a Tortugarrt a beállítások érvényesítéséhez.';
 
   @override
   String get impellerAuto => 'Automatikus';
@@ -10304,7 +10304,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'A Moonfinnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.';
+      'A Tortugarrnek újra kell indulnia a megjelenítő motor megváltoztatásához. Zárd be most az alkalmazást, majd nyisd meg újra a beállítások érvényesítéséhez.';
 
   @override
   String get impellerCloseNow => 'Alkalmazás bezárása most';
@@ -10440,4 +10440,1046 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mixedPlaylistsSection => 'Mixed Playlists';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Hiányzik';
+
+  @override
+  String get tgComing => 'Hamarosan';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Érkezik: $date';
+  }
+
+  @override
+  String get tgDownloading => 'Letöltés folyamatban';
+
+  @override
+  String get tgReadySoon => 'Hamarosan kész';
+
+  @override
+  String get tgRequested => 'Kérve';
+
+  @override
+  String get tgClose => 'Bezárás';
+
+  @override
+  String get tgCancel => 'Mégse';
+
+  @override
+  String get tgBack => 'Vissza';
+
+  @override
+  String get tgYes => 'Igen';
+
+  @override
+  String get tgNo => 'Nem';
+
+  @override
+  String get tgSearch => 'Keresés';
+
+  @override
+  String get tgHide => 'Elrejtés';
+
+  @override
+  String get tgAll => 'Összes';
+
+  @override
+  String get tgNone => 'Nincs';
+
+  @override
+  String get tgMovies => 'Filmek';
+
+  @override
+  String get tgSeries => 'Sorozatok';
+
+  @override
+  String get tgMovieTag => 'Film';
+
+  @override
+  String get tgSeriesTag => 'Sorozat';
+
+  @override
+  String get tgCanTakeAMinute => 'Akár egy percig is tarthat';
+
+  @override
+  String get tgToday => 'ma';
+
+  @override
+  String get tgYesterday => 'tegnap';
+
+  @override
+  String tgDaysAgo(int days) {
+    return '$days nappal ezelőtt';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return '$months hónappal ezelőtt';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return '$years évvel ezelőtt';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return '$years évvel és $months hónappal ezelőtt';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Feliratok keresése';
+
+  @override
+  String get tgFreeUpSpace => 'Hely felszabadítása';
+
+  @override
+  String get tgDownloads => 'Letöltések';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Letöltések ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '„$title”: a letöltésben nem volt videófájl ($files). Eltávolítottuk és letiltottuk – próbálj másik fájlt.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '„$title”: a letöltésben nem volt videófájl ($files), de nem sikerült automatikusan eltávolítani.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Adásba került: $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Koppints a fájlok kereséséhez';
+
+  @override
+  String get tgWholeSeason => 'Teljes évad';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return '$count epizód hiányzik – keress évadcsomagot';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Add hozzá a Sonarrhoz a hiányzó epizódok megtekintéséhez';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'A sorozat hozzáadása nem tölt le semmit magától';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'A hiányzó epizódok most nem jeleníthetők meg';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Koppints az újrapróbáláshoz';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Évadcsomag';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return '$season. évad figyelése';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Letöltse a Sonarr most a $season. évad hiányzó epizódjait?\n\nNem: csak az új epizódok töltődnek le, amikor megjelennek.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'A Sonarr keresi a $season. évadot';
+  }
+
+  @override
+  String get tgMonitored => 'Figyelve';
+
+  @override
+  String get tgNotMonitored => 'Nincs figyelve';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '$season. évad: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label hiányzik';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code még nem került adásba.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code még nem került adásba – érkezik: $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code letöltése már folyamatban van.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code letöltve, hamarosan megjelenik a könyvtárban.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return '$label keresése …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '$season. évad';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Teljes $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '$season. évad – nincs epizód a könyvtárban';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'A sorozatnak nincs TVDB-azonosítója, így a Sonarr nem találja.';
+
+  @override
+  String get tgAddingToSonarr => 'Hozzáadás a Sonarrhoz …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Nem sikerült hozzáadni a sorozatot a Sonarrhoz. Próbáld újra később.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return '„$label” küldése letöltésre …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'A letöltés nem indult el: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '„$label” letöltése folyamatban ($size). Amikor elkészül, megjelenik a könyvtárban.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Nem sikerült elérni a Sonarrt. Próbáld újra kicsit később.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Nem találtunk használható fájlt. Próbáld újra később – néhány óra után gyakran megjelennek újak.';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count fájl';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count fájl – $recommended illik a minőségi profilhoz, a többi alul van';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'A minőségi profilon kívül';
+
+  @override
+  String get tgLargerThanProfile => 'Nagyobb, mint amit a profil enged';
+
+  @override
+  String get tgSmallerThanProfile => 'Kisebb, mint amit a profil enged';
+
+  @override
+  String get tgAlreadyExists => 'Már létezik';
+
+  @override
+  String get tgMayNotFitDisk => 'Lehet, hogy nem fér el a lemezen';
+
+  @override
+  String get tgSonarrUnreachable => 'Nem sikerült elérni a Sonarrt';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Nem sikerült elérni a Sonarrt itt: $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'A Sonarr nem fogadta el a módosítást';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Az évad figyelve van, de a Sonarr nem indította el a keresést';
+
+  @override
+  String get tgSonarrCantSearch => 'A Sonarr most nem tudott keresni';
+
+  @override
+  String get tgSearchExpired => 'A keresési eredmény lejárt – keress újra';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'A Sonarr nem fogadta el a letöltést (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'A Sonarrban nincs meg a sorozat';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Nem sikerült módosítani a figyelést: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'A Jellyfin nem ismerte fel a sorozatot (nincs TVDB- vagy TMDB-azonosító)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Valami hiba történt: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'A fájlt nem a Radarr/Sonarr kezeli, és a Jellyfinnek csak olvasási joga van a mappához. Töröld a fájlkezelőben.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'A Sonarr nem érhető el, vagy a sorozat nincs hozzáadva. Az epizódonkénti letöltéshez Sonarr kell.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'A kijelölt epizódok nem találhatók a Sonarrban a „$title” sorozathoz (összesen $count epizód található). Add hozzá a sorozatot a Sonarrhoz, és próbáld újra.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'A gyűjtemény része: ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  a $current. részt nézed $total közül';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '$number. rész $total közül';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Ismeretlen cím';
+
+  @override
+  String get tgMovieCollection => 'Filmgyűjtemény';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '„$title” még nem jelent meg';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Videó';
+
+  @override
+  String get tgScreensaverModeLogo => 'Logó';
+
+  @override
+  String get tgScreensaverSound => 'Képernyővédő hangja';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Ki: a képernyővédő előzetesei némán játszódnak';
+
+  @override
+  String get tgScreensaverLogo => 'Logó';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr-jelvény';
+
+  @override
+  String get tgLogoVhs => 'Papagáj VHS-kazettákon';
+
+  @override
+  String get tgLogoSign => 'Papagáj egy táblán';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'REJTETT · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Lemezterület';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Hely felszabadítása új letöltésekhez';
+
+  @override
+  String get tgAdultTitle => 'Felnőttfilmek (XXX)';
+
+  @override
+  String get tgAdultSubtitle =>
+      'Az XXX könyvtár megjelenítése vagy elrejtése (PIN)';
+
+  @override
+  String get tgHideForeign => 'Külföldi tartalom elrejtése';
+
+  @override
+  String get tgHideForeignOn =>
+      'Be: a Felkapott és a Népszerű csak angol, norvég, svéd, dán, német és francia tartalmat mutat';
+
+  @override
+  String get tgHideForeignOff =>
+      'Ki: a Felkapott és a Népszerű minden nyelvet mutat';
+
+  @override
+  String get tgShowHidden => 'Rejtett tartalom megjelenítése';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Be: az egyébként rejtett címek piros REJTETT jelvénnyel jelennek meg';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Hibakeresés: a rejtett címek piros jelvénnyel jelennek meg, nem tűnnek el';
+
+  @override
+  String get tgShowAllSubLangs => 'Minden feliratnyelv megjelenítése';
+
+  @override
+  String get tgShowAllSubLangsOn => 'Be: a feliratmenü minden nyelvet mutat';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Ki: a feliratmenü csak norvégot és angolt mutat';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Ki: a feliratmenü csak a kiválasztott nyelveket mutatja';
+
+  @override
+  String get tgSubtitleLanguages => 'Feliratnyelvek';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'A feliratmenüben látható: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Előnézet hangja';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Be: a címen megállva lejátszott klipnek van hangja';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Ki: böngészés közben a klipek némán játszódnak';
+
+  @override
+  String get tgScreensaver => 'Képernyővédő';
+
+  @override
+  String get tgScreensaverSubtitle => 'Videó vagy logó, hang és kép';
+
+  @override
+  String get tgShowMissingEpisodes => 'Hiányzó epizódok megjelenítése';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Be: az évadok mutatják a hiányzó epizódokat, letöltésre készen';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Ki: az évadok csak a meglévő epizódokat mutatják';
+
+  @override
+  String get tgShowCollections => 'Filmgyűjtemények megjelenítése';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Be: a filmeknél megjelennek a gyűjtemény többi filmjei, a hiányzók is';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Ki: a film oldala nem mutatja a gyűjteményt';
+
+  @override
+  String get tgNoActiveDownloads => 'Nincs aktív letöltés.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Válassz egy letöltést a kérések megnyitásához.';
+
+  @override
+  String get tgRefreshLibrary => 'Könyvtár frissítése';
+
+  @override
+  String get tgAskingJellyfinScan =>
+      'A Jellyfin felkérése a könyvtár átvizsgálására …';
+
+  @override
+  String get tgHideAll => 'Összes elrejtése';
+
+  @override
+  String get tgImporting => 'Importálás';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Ezt a címet nem a Radarr/Sonarr kezeli, így a Bazarr nem tud hozzá feliratot keresni.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Nem sikerült elérni a Bazarrt. Próbáld újra kicsit később.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Még nincs találat. A Bazarr minden nap automatikusan újra próbálja, vagy választhatsz magad.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Találat: $languages – kis időbe telhet, míg megjelenik a feliratmenüben.';
+  }
+
+  @override
+  String get tgAnd => 'és';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Letöltve – kis időbe telhet, míg megjelenik a feliratmenüben.';
+
+  @override
+  String get tgAskingBazarr => 'Bazarr lekérdezése …';
+
+  @override
+  String get tgHaveAll => 'Mind megvan';
+
+  @override
+  String get tgSearchAutoNow => 'Automatikus keresés most';
+
+  @override
+  String get tgSearchingUpToMinute => 'Keresés … akár egy percig is tarthat';
+
+  @override
+  String get tgPickYourself => 'Válassz magad';
+
+  @override
+  String get tgAskingProviders =>
+      'A feliratforrások lekérdezése … akár egy percig is tarthat';
+
+  @override
+  String get tgNoProviderSubs => 'Egyik forrásnak sincs még felirata ehhez.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: elérhető';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: hiányzik';
+  }
+
+  @override
+  String get tgNoReleaseName => '(nincs kiadásnév)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · hallássérülteknek';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Norvég';
+
+  @override
+  String get tgLangEnglish => 'Angol';
+
+  @override
+  String get tgBazarrUnknownTitle => 'A Bazarr még nem ismeri ezt a címet';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'A Bazarr hibával válaszolt (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Kevés a hely a $drive: meghajtón ($free szabad). A letöltés leállhat — szólj a szerver üzemeltetőjének.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Nem sikerült elérni a qBittorrentet a hely ellenőrzéséhez';
+
+  @override
+  String get tgNotEnoughSpace => 'Nincs elég hely';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: $free szabad';
+  }
+
+  @override
+  String get tgCopyInDownloads =>
+      'Másolat a Downloads mappában · már a könyvtárban van';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Utoljára nézve: $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Soha nem nézted · hozzáadva: $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Soha nem nézted';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'A $drive: meghajtón nincs semmi, ami biztonságosan törölhető (minden friss, nemrég nézett vagy kedvenc).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Törlöd ezt a $count címet?',
+      one: 'Törlöd ezt az 1 címet?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size véglegesen törlődik. Ez nem vonható vissza.';
+  }
+
+  @override
+  String get tgYesDelete => 'Igen, törlés';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Törlés: $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: most $free szabad';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cím törölve',
+      one: '1 cím törölve',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return '$count törölve, sikertelen: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return '$gb GB felszabadítása';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Letöltési másolatok';
+
+  @override
+  String get tgLookingForUnwatched => 'Keressük, amit régóta nem néztél …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Javaslat: $size · elég hely ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Javaslat: $size a szükséges $target mennyiségből';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Válassz egyet a nemet mondáshoz — a következő javaslat automatikusan jön.';
+
+  @override
+  String get tgOtherCandidates => 'További jelöltek';
+
+  @override
+  String get tgDownloadAnyway => 'Letöltés mindenképp';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return '$count törlése ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: $free szabad.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'A fájl $size, és kétszer annyi helyet foglal (letöltés + másolat a könyvtárban), plusz $buffer tartalék.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'A fájl $size, plusz $buffer tartalék.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'A folyamatban lévő letöltéseknek még $size kell.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return '$size hiányzik.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Csak a film digitális megjelenése előtt közzétett fájlok találhatók ($count) — ezek szinte mindig hamisak.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'még nem kapott digitális megjelenési dátumot';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'digitálisan $date jelenik meg';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Digitálisan még nem jelent meg';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '„$title” $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Ami most elérhető, az általában mozifelvétel vagy egy másik, azonos című film. Néha létezik egy korai, gyengébb minőségű másolat, gyakran beégetett felirattal. A „Fájlok megjelenítése mindenképp” mutatja, mi létezik. A Radarr magától letölti a rendes verziót, amikor megjelenik.';
+
+  @override
+  String get tgShowFilesAnyway => 'Fájlok megjelenítése mindenképp';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Évadok és epizódok kiválasztása';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: nincs epizódinformáció';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Minden eszközre érvényes, amely ezt a fiókot használja';
+
+  @override
+  String get tgNoXxxLibrary => 'Nem található XXX nevű könyvtár.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Minden szó keresése külön … (fél percig is tarthat)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '„$title” ($size) elküldve a qBittorrentnek';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'A letöltés sikertelen: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '„$title” nem tartalmazott videófájlt, ezért eltávolítottuk.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '„$title” nem tartalmazott videófájlt, és NEM lett eltávolítva.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Új XXX keresése';
+
+  @override
+  String get tgXxxSearchHint => 'Név, stúdió …';
+
+  @override
+  String get tgChecking => 'Ellenőrzés …';
+
+  @override
+  String get tgXxxVisible =>
+      'Most látható. Az XXX megjelenik a könyvtárakban, a keresésben és a kezdőlapon.';
+
+  @override
+  String get tgXxxHidden =>
+      'Rejtett. Az XXX sehol nem jelenik meg az alkalmazásban.';
+
+  @override
+  String get tgShowWithPin => 'Megjelenítés (PIN)';
+
+  @override
+  String get tgChangePin => 'PIN módosítása';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Nem sikerült lekérni a könyvtárlistát (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Nem sikerült lekérni a felhasználói beállításokat (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'A Jellyfin elutasította a módosítást (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'A törlés sikertelen (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Nem sikerült hozzáadni a „$title” címet a qBittorrenthez';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '$season. évad, $episode. epizód';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Keresés a Seerrben';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Filmek és sorozatok keresése (pl. „Lost S02E05”)';
+
+  @override
+  String get tgMissingInThisSeason => 'Hiányzik ebből az évadból';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hiányzó évadok:',
+      one: 'Hiányzó évad:',
+    );
+    return '$_temp0 $list - nyisd meg a sorozatot az összes évad megtekintéséhez';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr a GitHubon';
+
+  @override
+  String get tgProjectOnGitHubSubtitle => 'Forráskód, kiadások és hibajegyek';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'A Tortugarr a Moonfinre épül (GPL), amelyet a Moonfin fejlesztői készítettek.';
+
+  @override
+  String get tgCredits => 'Köszönet';
+
+  @override
+  String get tgCreditsThanks =>
+      'Alázatos köszönettel: e projektek és az őket létrehozó emberek nélkül a Tortugarr nem létezne.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin => 'Az alkalmazás, amelyre a Tortugarr épül (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Médiaszerver';
+
+  @override
+  String get tgCreditSeerr => 'Felfedezés és kérések';
+
+  @override
+  String get tgCreditRadarr => 'Filmek';
+
+  @override
+  String get tgCreditSonarr => 'Sorozatok';
+
+  @override
+  String get tgCreditProwlarr => 'Indexelőkezelő';
+
+  @override
+  String get tgCreditBazarr => 'Feliratok';
+
+  @override
+  String get tgCreditFlareSolverr => 'Cloudflare-segítő az indexelőkhöz';
+
+  @override
+  String get tgCreditQbittorrent => 'Letöltőkliens, a telepítő alapértelmezése';
+
+  @override
+  String get tgCreditTmdb => 'Film- és sorozatadatok, poszterek és képek';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Feliratok, a Bazarr által letöltve';
+
+  @override
+  String get tgTmdbNotice =>
+      'Ez a termék a TMDB API-t használja, de a TMDB nem támogatja és nem hitelesítette.';
+
+  @override
+  String get tgLoadingLogoSize => 'Betöltési logó mérete';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle => 'A videó betöltése közben forgó logó';
+
+  @override
+  String get tgDiscoveryLanguages => 'Nyelvek a Felkapott és Népszerű sorokban';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Látható: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Be: a Felkapott és Népszerű csak a kiválasztott nyelveket mutatja';
+
+  @override
+  String get tgShowLanguageBadges => 'Nyelvjelölők megjelenítése';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Be: a címek mutatják a nyelvüket (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff => 'Ki: nincs nyelvjelölő a címeken';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }

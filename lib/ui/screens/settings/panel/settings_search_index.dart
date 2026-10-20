@@ -945,12 +945,6 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       subtitle: l10n.autoPlayTrailers,
     ),
     previews.leaf(
-      'mediaBarTrailerAudio',
-      l10n.trailerAudio,
-      subtitle: l10n.enableTrailerAudio,
-      keywords: ['mute'],
-    ),
-    previews.leaf(
       'mediaBarTrailerCaptions',
       l10n.trailerCaptions,
       subtitle: l10n.trailerCaptionsDescription,
@@ -960,12 +954,6 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       'episodePreviewEnabled',
       l10n.mediaPreview,
       subtitle: l10n.mediaPreviewDescription,
-    ),
-    previews.leaf(
-      'previewAudioEnabled',
-      l10n.previewAudio,
-      subtitle: l10n.enablePreviewAudio,
-      keywords: ['mute'],
     ),
 
     seasonal.screen(keywords: ['snow', 'fireworks', 'confetti', 'holiday']),

@@ -6,6 +6,7 @@ import '../../preference/user_preferences.dart';
 import '../../util/platform_detection.dart';
 import '../../util/overlay_color_palette.dart';
 import 'download_progress_bar.dart';
+import 'seerr_active_downloads_bar.dart';
 import 'left_sidebar.dart';
 import 'mobile_bottom_nav_bar.dart';
 import 'top_toolbar.dart';
@@ -171,6 +172,7 @@ class _NavigationLayoutState extends State<NavigationLayout> with WidgetsBinding
         Column(
           children: [
             Expanded(child: content),
+            const SeerrActiveDownloadsBar(),
             const DownloadProgressBar(),
             const BottomMusicBar(),
             AnimatedOpacity(
@@ -294,6 +296,7 @@ class _NavigationLayoutState extends State<NavigationLayout> with WidgetsBinding
             ],
           ),
         ),
+        const SeerrActiveDownloadsBar(),
         const DownloadProgressBar(),
       ],
     );
@@ -349,6 +352,7 @@ class _NavigationLayoutState extends State<NavigationLayout> with WidgetsBinding
               ],
             ),
           ),
+          const SeerrActiveDownloadsBar(),
           const DownloadProgressBar(),
         ],
       );
@@ -366,6 +370,7 @@ class _NavigationLayoutState extends State<NavigationLayout> with WidgetsBinding
             ],
           ),
         ),
+        const SeerrActiveDownloadsBar(),
         const DownloadProgressBar(),
       ],
     );

@@ -28,6 +28,8 @@ import '../../widgets/track_selector_dialog.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/focus/focusable_wrapper.dart';
 import '../../widgets/focus/request_initial_focus.dart';
+import '../../widgets/focus/nav_chrome_focus.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w200';
 
@@ -359,11 +361,13 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
   }
 
   void _onRequestTap(SeerrRequest request) {
+    if (!NavChromeFocus.isOnCurrentRoute(context)) return;
     final media = request.media;
     if (media == null) return;
     final tmdbId = media.tmdbId;
     if (tmdbId == null) return;
-    context.push(
+    SinglePush.push(
+      context,
       Destinations.seerrMedia(tmdbId.toString()),
       extra: {'mediaType': request.type},
     );

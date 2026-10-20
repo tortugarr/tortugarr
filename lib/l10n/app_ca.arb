@@ -1,6 +1,6 @@
 {
     "@@locale": "ca",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versió {version}",
+    "appVersionFooter": "Tortugarr versió {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin no ha pogut accedir al teu gestor de claus del sistema. L'inici de sessió pot continuar, però és possible que l'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.",
+    "secureStorageUnavailableMessage": "Tortugarr no ha pogut accedir al teu gestor de claus del sistema. L'inici de sessió pot continuar, però és possible que l'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Canvia entre Moonfin i Neon Pulse sense reiniciar l'aplicació",
+    "settingsAppearanceThemeSubtitle": "Canvia entre Tortugarr i Neon Pulse sense reiniciar l'aplicació",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "L'aspecte original de Moonfin.",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "L'aspecte original de Tortugarr.",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "pols de neó",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Sortir de Moonfin?",
+    "exitApp": "Sortir de Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "No configurat. Moonfin provarà un mpv.conf predeterminat a les carpetes d'aplicacions/dades.",
+    "notSetMpvConf": "No configurat. Tortugarr provarà un mpv.conf predeterminat a les carpetes d'aplicacions/dades.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Descàrregues/Moonfin: visible per a altres aplicacions",
+    "downloadsVisibleToOtherApps": "Descàrregues/Tortugarr: visible per a altres aplicacions",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Els mitjans descarregats es desaran a Descàrregues/Moonfin al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.",
+    "saveToDownloadsFolderDescription": "Els mitjans descarregats es desaran a Descàrregues/Tortugarr al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.",
+    "libraryVisibilityDescription": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3557,13 +3557,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "Trieu entre Moonfin, MakD o desactiva la barra multimèdia",
+    "mediaBarModeDescription": "Trieu entre Tortugarr, MakD o desactiva la barra multimèdia",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Reprodueix a Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Reprodueix a Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Sol·licitat per {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "No s'ha trobat l'element a la vostra biblioteca de Moonfin",
+    "itemNotFoundInLibrary": "No s'ha trobat l'element a la vostra biblioteca de Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Reinici del servidor en curs",
-    "adminServerRebootMessage": "S'està reiniciant el servidor, reinicieu Moonfin",
+    "adminServerRebootMessage": "S'està reiniciant el servidor, reinicieu Tortugarr",
     "adminActiveSessions": "Sessions actives",
     "adminSessionsLoadFailed": "No s'han pogut carregar les sessions",
     "adminNoActiveSessions": "No hi ha sessions actives",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Mostra el botó de gèneres a la barra de navegació",
     "settingsShowFavoritesButtonInNavigation": "Mostra el botó de preferits a la barra de navegació",
     "settingsShowLibrariesButtonInNavigation": "Mostra el botó de biblioteques a la barra de navegació",
-    "settingsLibraryVisibilitySubtitle": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.",
+    "settingsLibraryVisibilitySubtitle": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.",
     "settingsMediaBarAndLocalPreviews": "Barra multimèdia i visualitzacions prèvies locals",
     "settingsVisualOverlays": "Superposicions visuals",
     "settingsSeasonalSurprise": "Sorpresa de temporada",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Uneix-te a Discord",
     "settingsJoinDiscordSubtitle": "Xateja amb la comunitat",
     "settingsJoinTheDiscord": "Uneix-te al Discord",
-    "settingsSupportMoonfin": "Suport Moonfin",
+    "settingsSupportNotflix": "Suport Tortugarr",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Llicències",
     "settingsOpenSourceLicenseNotices": "Avisos de llicència de codi obert",
     "settingsPrivacyPolicy": "Política de privadesa",
-    "settingsPrivacyPolicySubtitle": "Com Moonfin gestiona les vostres dades",
+    "settingsPrivacyPolicySubtitle": "Com Tortugarr gestiona les vostres dades",
     "settingsCheckForUpdates": "Comproveu si hi ha actualitzacions",
-    "settingsCheckForUpdatesSubtitle": "Comproveu l'últim llançament de Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Comproveu l'últim llançament de Tortugarr",
     "settingsPoweredByFlutter": "Desenvolupat per Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# avís de llicència} other {# avisos de llicència}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Temes guardats",
-    "savedThemesDescription": "Aquests són temes baixats del connector Moonfin per al servidor actual. En suprimir, només s'elimina aquesta còpia local.",
+    "savedThemesDescription": "Aquests són temes baixats del connector Tortugarr per al servidor actual. En suprimir, només s'elimina aquesta còpia local.",
     "savedThemesEmpty": "No s'ha trobat cap tema desat per a aquest servidor.",
     "savedThemesCurrentThemeId": "{themeId} • Actualment actiu",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Suprimeix el tema desat",
     "savedThemesManageSubtitle": "Gestiona els temes de connectors baixats en aquest dispositiu",
     "themeEditor": "Editor de temes",
-    "themeEditorSubtitle": "Obriu l'editor de temes Moonfin al vostre navegador",
+    "themeEditorSubtitle": "Obriu l'editor de temes Tortugarr al vostre navegador",
     "homeScreen": "Pantalla d'inici",
     "bottomBar": "Barra inferior",
     "homeRowsStyleClassic": "Clàssic",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Preferiu els subtítols SDH",
     "preferSdhSubtitlesSubtitle": "Doneu prioritat a les pistes de subtítols SDH/CC quan feu la selecció automàtica.",
     "webDiagnostics": "Diagnòstic web",
-    "webDiagnosticsTitle": "Moonfin Diagnòstic web",
+    "webDiagnosticsTitle": "Tortugarr Diagnòstic web",
     "webDiagnosticsIntro": "Utilitzeu aquesta pàgina per diagnosticar problemes de connectivitat del navegador (CORS, contingut mixt i configuració de descobriment).",
     "webDiagnosticsDetectedMixedContentFailure": "S'ha detectat un error de contingut mixt",
     "webDiagnosticsDetectedCorsPreflightFailure": "S'ha detectat una fallada CORS/preflight",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin ha detectat una pàgina HTTPS que intentava trucar a un URL de servidor HTTP. Els navegadors bloquegen aquesta sol·licitud abans que arribi al vostre servidor.",
-    "webDiagnosticsCorsFailureBody": "Moonfin ha detectat un error de sol·licitud a nivell de navegador que sol ser causat per la falta de capçaleres CORS o de comprovació prèvia al servidor multimèdia.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr ha detectat una pàgina HTTPS que intentava trucar a un URL de servidor HTTP. Els navegadors bloquegen aquesta sol·licitud abans que arribi al vostre servidor.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr ha detectat un error de sol·licitud a nivell de navegador que sol ser causat per la falta de capçaleres CORS o de comprovació prèvia al servidor multimèdia.",
     "webDiagnosticsTargetUrl": "URL de destinació: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "no configurat",
     "webDiagnosticsMixedContent": "Contingut mixt",
     "webDiagnosticsMixedContentDetected": "Aquesta pàgina es carrega mitjançant HTTPS, però un o més URL configurats són HTTP. Els navegadors impedeixen que les pàgines HTTPS cridin a les API HTTP.",
-    "webDiagnosticsMixedContentFix": "Solució: doneu servei al vostre servidor multimèdia o punt final del servidor intermediari mitjançant HTTPS o carregueu Moonfin mitjançant HTTP només a xarxes locals de confiança.",
+    "webDiagnosticsMixedContentFix": "Solució: doneu servei al vostre servidor multimèdia o punt final del servidor intermediari mitjançant HTTPS o carregueu Tortugarr mitjançant HTTP només a xarxes locals de confiança.",
     "webDiagnosticsNoMixedContentDetected": "No s'ha detectat cap configuració òbvia de contingut mixt des de la configuració actual del temps d'execució.",
     "webDiagnosticsCorsChecklist": "Llista de verificació CORS",
     "webDiagnosticsCorsChecklistItem1": "• Permet l'origen del navegador a Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Activa automàticament HDR per a la reproducció de vídeo HDR i restaura el mode de visualització en sortir.",
     "whenFullscreen": "Quan a pantalla completa",
     "transcodingLimits": "Límits de transcodificació",
-    "settingsSupportMoonfinSubtitle": "Dona un cafè al desenvolupador",
+    "settingsSupportNotflixSubtitle": "Dona un cafè al desenvolupador",
     "enableTunnelingSubtitle": "Avançat. Envia àudio i vídeo a través d'una ruta de maquinari acoblada. Desactivat per defecte perquè causa caigudes d'àudio / vídeo en alguns dispositius.",
     "@enableTunnelingSubtitle": {
         "description": "Setting subtitle for enable tunneling"
@@ -7576,13 +7576,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Utilitza l'algorisme local de recomanacions de Moonfin (Moonfin Recommends) o les mètriques de similitud en línia de TMDb. Nota: Les recomanacions en línia requereixen la integració amb Seerr.",
+    "recommendationSystemSubtitle": "Utilitza l'algorisme local de recomanacions de Tortugarr (Tortugarr Recommends) o les mètriques de similitud en línia de TMDb. Nota: Les recomanacions en línia requereixen la integració amb Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Recomanacions Moonfin",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Recomanacions Tortugarr",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "gameMenu": "Menú",
     "@gameMenu": {
@@ -7635,8 +7635,8 @@
         "description": "In-game menu action opening the emulator settings"
     },
     "forced": "Forçat",
-    "detailScreenStyleMoonfin": "Clàssic",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Clàssic",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "expandedTabs": "Pestanyes desplegades",
@@ -7663,7 +7663,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limita els suggeriments de Recomanacions Moonfin segons la classificació parental del contingut de destinació",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limita els suggeriments de Recomanacions Tortugarr segons la classificació parental del contingut de destinació",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7687,7 +7687,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Els temes personalitzats modifiquen els elements visuals de tot Moonfin. Tria una d'aquestes opcions segons el teu estil.",
+    "customThemeSubtitle": "Els temes personalitzats modifiquen els elements visuals de tot Tortugarr. Tria una d'aquestes opcions segons el teu estil.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7799,7 +7799,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Inicia la sessió a Moonfin al teu telèfon",
+    "carSignInPrompt": "Inicia la sessió a Tortugarr al teu telèfon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Moonfin per aplicar-ho.",
+    "impellerRenderingSubtitle": "Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Tortugarr per aplicar-ho.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin s'ha de reiniciar per canviar el motor de renderització. Tanca l'aplicació ara i torna a obrir-la per aplicar-ho.",
+    "impellerRestartMessage": "Tortugarr s'ha de reiniciar per canviar el motor de renderització. Tanca l'aplicació ara i torna a obrir-la per aplicar-ho.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Pel·lícules més populars d'IMDb",
     "imdbMostPopularTvShows": "Sèries de TV més populars d'IMDb",
     "imdbLowestRatedMovies": "Pel·lícules pitjor valorades d'IMDb",
-    "imdbTopEnglishMovies": "Millors pel·lícules en anglès d'IMDb"
+    "imdbTopEnglishMovies": "Millors pel·lícules en anglès d'IMDb",
+    "tgMissing": "Falta",
+    "tgComing": "Properament",
+    "tgComingOn": "Arriba el {date}",
+    "tgDownloading": "Descarregant",
+    "tgReadySoon": "Llest aviat",
+    "tgRequested": "Sol·licitat",
+    "tgClose": "Tanca",
+    "tgCancel": "Cancel·la",
+    "tgBack": "Enrere",
+    "tgYes": "Sí",
+    "tgNo": "No",
+    "tgSearch": "Cerca",
+    "tgHide": "Amaga",
+    "tgAll": "Tots",
+    "tgNone": "Cap",
+    "tgMovies": "Pel·lícules",
+    "tgSeries": "Sèries",
+    "tgMovieTag": "Pel·lícula",
+    "tgSeriesTag": "Sèrie",
+    "tgCanTakeAMinute": "Pot trigar fins a un minut",
+    "tgToday": "avui",
+    "tgYesterday": "ahir",
+    "tgDaysAgo": "fa {days} dies",
+    "tgMonthsAgo": "fa {months} mesos",
+    "tgYearsAgo": "fa {years} anys",
+    "tgYearsMonthsAgo": "fa {years} anys i {months} mesos",
+    "tgFindSubtitles": "Troba subtítols",
+    "tgFreeUpSpace": "Allibera espai",
+    "tgDownloads": "Baixades",
+    "tgDownloadsCount": "Baixades ({count})",
+    "tgNoVideoRemoved": "«{title}»: la baixada no contenia cap fitxer de vídeo ({files}). S'ha eliminat i bloquejat — prova un altre fitxer.",
+    "tgNoVideoNotRemoved": "«{title}»: la baixada no contenia cap fitxer de vídeo ({files}), però no s'ha pogut eliminar automàticament.",
+    "tgAiredOn": "Emès el {date}",
+    "tgTapToFindFiles": "Toca per cercar fitxers",
+    "tgWholeSeason": "Temporada completa",
+    "tgEpisodesMissingFindPack": "Falten {count} episodis – cerca un paquet de temporada",
+    "tgAddToSonarrTitle": "Afegeix a Sonarr per veure els episodis que falten",
+    "tgAddToSonarrSubtitle": "La sèrie s'afegeix sense descarregar res per si mateixa",
+    "tgMissingEpisodesUnavailable": "Ara mateix no es poden mostrar els episodis que falten",
+    "tgReasonTapRetry": "{reason} · Toca per tornar-ho a provar",
+    "tgSeasonPackBadge": "Paquet de temporada",
+    "tgMonitorSeasonTitle": "Monitora la temporada {season}",
+    "tgMonitorSeasonQuestion": "Vols que Sonarr obtingui ara els episodis que falten de la temporada {season}?\n\nNo: només s'obtindran els episodis nous quan s'estrenin.",
+    "tgSonarrSearchingSeason": "Sonarr està cercant la temporada {season}",
+    "tgMonitored": "Monitorada",
+    "tgNotMonitored": "No monitorada",
+    "tgSeasonStateLabel": "Temporada {season}: {state}",
+    "tgLabelMissing": "Falta {label}",
+    "tgNotAiredYet": "{code} encara no s'ha emès.",
+    "tgNotAiredYetComing": "{code} encara no s'ha emès – arriba el {date}.",
+    "tgAlreadyDownloading": "{code} ja s'està descarregant.",
+    "tgDownloadedAppearsSoon": "{code} s'ha descarregat i apareixerà a la biblioteca d'aquí a poc.",
+    "tgSearchingFor": "Cercant {label} …",
+    "tgSeasonLower": "temporada {season}",
+    "tgWholeLabel": "{label} completa",
+    "tgSeasonNoEpisodes": "Temporada {season} – cap episodi a la biblioteca",
+    "tgNoTvdbId": "La sèrie no té identificador de TVDB, per això Sonarr no la pot trobar.",
+    "tgAddingToSonarr": "S'està afegint a Sonarr …",
+    "tgAddToSonarrFailed": "No s'ha pogut afegir la sèrie a Sonarr. Torna-ho a provar més tard.",
+    "tgSendingToDownload": "S'està enviant «{label}» a descarregar …",
+    "tgDownloadDidNotStart": "La baixada no ha començat: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» s'està descarregant ({size}). Apareixerà a la biblioteca quan acabi.",
+    "tgSonarrUnreachableRetry": "No s'ha pogut connectar amb Sonarr. Torna-ho a provar d'aquí a una estona.",
+    "tgNoUsableFiles": "No s'ha trobat cap fitxer útil. Torna-ho a provar més tard – sovint n'apareixen de nous al cap d'unes hores.",
+    "tgFilesCount": "{count} fitxers",
+    "tgFilesRecommended": "{count} fitxers – {recommended} encaixen amb el perfil de qualitat, la resta són al final",
+    "tgOutsideQualityProfile": "Fora del perfil de qualitat",
+    "tgLargerThanProfile": "Més gran del que permet el perfil",
+    "tgSmallerThanProfile": "Més petit del que permet el perfil",
+    "tgAlreadyExists": "Ja existeix",
+    "tgMayNotFitDisk": "Pot ser que no càpiga al disc",
+    "tgSonarrUnreachable": "No s'ha pogut connectar amb Sonarr",
+    "tgSonarrUnreachableAt": "No s'ha pogut connectar amb Sonarr a {host}",
+    "tgSonarrRejectedChange": "Sonarr no ha acceptat el canvi",
+    "tgSeasonMonitoredNoSearch": "La temporada està monitorada, però Sonarr no ha iniciat la cerca",
+    "tgSonarrCantSearch": "Sonarr no pot cercar ara mateix",
+    "tgSearchExpired": "El resultat de la cerca ha caducat – torna a cercar",
+    "tgSonarrRejectedDownload": "Sonarr no ha acceptat la baixada (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr no té aquesta sèrie",
+    "tgCouldNotChangeMonitoring": "No s'ha pogut canviar el monitoratge: {error}",
+    "tgJellyfinNoIds": "Jellyfin no ha reconegut la sèrie (sense identificador de TVDB ni de TMDB)",
+    "tgSomethingWentWrong": "Alguna cosa ha fallat: {error}",
+    "tgDeleteReadOnly": "El fitxer no el gestionen Radarr/Sonarr, i Jellyfin només té accés de lectura a la carpeta. Elimina'l des del gestor de fitxers.",
+    "tgSonarrRequiredPerEpisode": "Sonarr no està disponible o la sèrie no s'hi ha afegit. Les baixades per episodi necessiten Sonarr.",
+    "tgEpisodesNotFound": "No s'han trobat a Sonarr els episodis seleccionats de «{title}» (s'han trobat {count} episodis en total). Afegeix la sèrie a Sonarr i torna-ho a provar.",
+    "tgPartOfCollectionPrefix": "Forma part de la col·lecció ",
+    "tgViewingPartOf": "  ·  estàs veient la part {current} de {total}",
+    "tgPartOf": "Part {number} de {total}",
+    "tgUnknownTitle": "Títol desconegut",
+    "tgMovieCollection": "Col·lecció de pel·lícules",
+    "tgNotReleasedYet": "«{title}» encara no s'ha estrenat",
+    "tgScreensaverModeVideo": "Vídeo",
+    "tgScreensaverModeLogo": "Logotip",
+    "tgScreensaverSound": "So de l'estalvi de pantalla",
+    "tgScreensaverSoundSubtitle": "Desactivat: els tràilers de l'estalvi de pantalla es reprodueixen sense so",
+    "tgScreensaverLogo": "Logotip",
+    "tgLogoBadge": "Emblema de Tortugarr",
+    "tgLogoVhs": "Lloro sobre cintes VHS",
+    "tgLogoSign": "Lloro sobre un rètol",
+    "tgHiddenBadge": "AMAGAT · {code}",
+    "tgDiskSpace": "Espai de disc",
+    "tgDiskSpaceSubtitle": "Allibera espai per a noves baixades",
+    "tgAdultTitle": "Pel·lícules per a adults (XXX)",
+    "tgAdultSubtitle": "Mostra o amaga la biblioteca XXX (PIN)",
+    "tgHideForeign": "Amaga el contingut estranger",
+    "tgHideForeignOn": "Activat: Tendències i Populars només mostren anglès, noruec, suec, danès, alemany i francès",
+    "tgHideForeignOff": "Desactivat: Tendències i Populars mostren tots els idiomes",
+    "tgShowHidden": "Mostra el que s'amaga",
+    "tgShowHiddenOn": "Activat: els títols que s'amagarien es mostren amb una etiqueta vermella AMAGAT",
+    "tgShowHiddenOff": "Resolució de problemes: mostra els títols amagats amb una etiqueta vermella en lloc de treure'ls",
+    "tgShowAllSubLangs": "Mostra tots els idiomes de subtítols",
+    "tgShowAllSubLangsOn": "Activat: el menú de subtítols mostra tots els idiomes",
+    "tgShowAllSubLangsOff": "Desactivat: el menú de subtítols només mostra noruec i anglès",
+    "tgPreviewSound": "So de les previsualitzacions",
+    "tgPreviewSoundOn": "Activat: el clip que es reprodueix quan t'atures en un títol té so",
+    "tgPreviewSoundOff": "Desactivat: els clips es reprodueixen sense so mentre navegues",
+    "tgScreensaver": "Estalvi de pantalla",
+    "tgScreensaverSubtitle": "Vídeo o logotip, so i imatge",
+    "tgShowMissingEpisodes": "Mostra els episodis que falten",
+    "tgShowMissingEpisodesOn": "Activat: les temporades mostren els episodis que no tens, a punt per descarregar",
+    "tgShowMissingEpisodesOff": "Desactivat: les temporades només mostren els episodis que tens",
+    "tgShowCollections": "Mostra les col·leccions de pel·lícules",
+    "tgShowCollectionsOn": "Activat: les pel·lícules mostren les altres pel·lícules de la col·lecció, incloses les que et falten",
+    "tgShowCollectionsOff": "Desactivat: la pàgina de la pel·lícula no mostra la col·lecció",
+    "tgNoActiveDownloads": "No hi ha cap baixada activa.",
+    "tgPickDownloadToOpen": "Selecciona una baixada per obrir les sol·licituds.",
+    "tgRefreshLibrary": "Actualitza la biblioteca",
+    "tgAskingJellyfinScan": "S'està demanant a Jellyfin que escanegi la biblioteca …",
+    "tgHideAll": "Amaga-ho tot",
+    "tgImporting": "Important",
+    "tgSubsNotManaged": "Aquest títol no el gestionen Radarr/Sonarr, per això Bazarr no li pot trobar subtítols.",
+    "tgBazarrUnreachable": "No s'ha pogut connectar amb Bazarr. Torna-ho a provar d'aquí a una estona.",
+    "tgSubsFoundNothing": "Encara no s'ha trobat res. Bazarr ho torna a provar automàticament cada dia, o pots triar-ne un tu mateix.",
+    "tgSubsFound": "S'ha trobat {languages} – pot trigar un moment a aparèixer al menú de subtítols.",
+    "tgAnd": "i",
+    "tgSubsDownloaded": "Descarregat – pot trigar un moment a aparèixer al menú de subtítols.",
+    "tgAskingBazarr": "S'està consultant Bazarr …",
+    "tgHaveAll": "Ja els tens tots",
+    "tgSearchAutoNow": "Cerca automàticament ara",
+    "tgSearchingUpToMinute": "Cercant … pot trigar fins a un minut",
+    "tgPickYourself": "Tria tu mateix",
+    "tgAskingProviders": "S'estan consultant els proveïdors de subtítols … pot trigar fins a un minut",
+    "tgNoProviderSubs": "Cap proveïdor té encara subtítols per a aquest títol.",
+    "tgLangHas": "{language}: disponible",
+    "tgLangMissing": "{language}: falta",
+    "tgNoReleaseName": "(sense nom de versió)",
+    "tgHearingImpaired": "{provider} · per a persones amb discapacitat auditiva",
+    "tgLangNorwegian": "Noruec",
+    "tgLangEnglish": "Anglès",
+    "tgBazarrUnknownTitle": "Bazarr encara no coneix aquest títol",
+    "tgBazarrError": "Bazarr ha respost amb un error (HTTP {code})",
+    "tgLowSpaceSnack": "Poc espai a {drive}: ({free} lliures). La baixada es pot aturar — avisa qui gestiona el servidor.",
+    "tgNoQbitForSpace": "No s'ha pogut connectar amb qBittorrent per comprovar l'espai",
+    "tgNotEnoughSpace": "No hi ha prou espai",
+    "tgDriveHasFree": "{drive}: té {free} lliures",
+    "tgCopyInDownloads": "Còpia a Downloads · ja és a la biblioteca",
+    "tgLastWatched": "Vist per última vegada {ago}",
+    "tgNeverWatchedAdded": "Mai vist · afegit {ago}",
+    "tgNeverWatched": "Mai vist",
+    "tgNothingSafeToDelete": "No s'ha trobat res a {drive}: que es pugui eliminar amb seguretat (tot s'ha afegit o vist fa poc, o és un favorit).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Vols eliminar 1 títol?} other{Vols eliminar {count} títols?}}",
+    "tgDeletedForGood": "S'eliminaran {size} definitivament. Això no es pot desfer.",
+    "tgYesDelete": "Sí, elimina",
+    "tgDeletingProgress": "S'està eliminant {done}/{total} …",
+    "tgNowHasFree": " · {drive}: ara té {free} lliures",
+    "tgDeletedTitles": "{count, plural, =1{S'ha eliminat 1 títol} other{S'han eliminat {count} títols}}{extra}",
+    "tgDeletedFailed": "Eliminats: {count}, han fallat: {failed}{extra}",
+    "tgFreeGb": "Allibera {gb} GB",
+    "tgDownloadCopies": "Còpies de baixada",
+    "tgLookingForUnwatched": "S'està cercant el que fa molt que no es veu …",
+    "tgSuggestionEnough": "Suggeriment: {size} · espai suficient ✓",
+    "tgSuggestionOf": "Suggeriment: {size} dels {target} necessaris",
+    "tgPickToSayNo": "Selecciona'n un per dir que no — el suggeriment següent entra automàticament.",
+    "tgOtherCandidates": "Altres candidats",
+    "tgDownloadAnyway": "Descarrega igualment",
+    "tgDeleteCountSize": "Elimina {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: té {free} lliures.",
+    "tgFileDoubleSpace": "El fitxer ocupa {size} i necessita el doble d'espai (baixada + còpia a la biblioteca), més {buffer} de reserva.",
+    "tgFileSize": "El fitxer ocupa {size}, més {buffer} de reserva.",
+    "tgPendingNeeds": "Les baixades en curs necessiten {size} més.",
+    "tgShortBy": "Falten {size}.",
+    "tgOnlyEarlyFiles": "Només s'han trobat fitxers publicats abans de l'estrena digital de la pel·lícula ({count}) — quasi sempre són falsos.",
+    "tgNoDigitalDate": "encara no té data d'estrena digital",
+    "tgDigitalOn": "s'estrena en digital el {date}",
+    "tgNotOutDigitally": "Encara no s'ha estrenat en digital",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "El que hi ha ara sol ser una gravació de cinema o una altra pel·lícula amb el mateix nom. De vegades existeix una còpia primerenca de qualitat inferior, sovint amb subtítols incrustats. «Mostra els fitxers igualment» ensenya el que hi ha. Radarr obtindrà la versió bona tot sol quan s'estreni.",
+    "tgShowFilesAnyway": "Mostra els fitxers igualment",
+    "tgPickSeasonsEpisodes": "Tria temporades i episodis",
+    "tgNoEpisodeInfo": "{season}: sense informació dels episodis",
+    "tgAppliesAllDevices": "S'aplica a tots els dispositius que fan servir aquest compte",
+    "tgNoXxxLibrary": "No s'ha trobat cap biblioteca anomenada XXX.",
+    "tgSearchingEachWord": "S'està cercant cada paraula per separat … (pot trigar mig minut)",
+    "tgSentToQbit": "«{title}» ({size}) enviat a qBittorrent",
+    "tgDownloadFailed": "La baixada ha fallat: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» no contenia cap fitxer de vídeo i s'ha eliminat.",
+    "tgXxxNoVideoNotRemoved": "«{title}» no contenia cap fitxer de vídeo i NO s'ha eliminat.",
+    "tgSearchNewXxx": "Cerca XXX nous",
+    "tgXxxSearchHint": "Nom, estudi …",
+    "tgChecking": "S'està comprovant …",
+    "tgXxxVisible": "Ara és visible. XXX apareix a les biblioteques, a la cerca i a la pantalla d'inici.",
+    "tgXxxHidden": "Amagat. XXX no apareix en cap lloc de l'app.",
+    "tgShowWithPin": "Mostra (PIN)",
+    "tgChangePin": "Canvia el PIN",
+    "tgNoLibraryList": "No s'ha pogut obtenir la llista de biblioteques (HTTP {code})",
+    "tgNoUserSettings": "No s'ha pogut obtenir la configuració de l'usuari (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin ha rebutjat el canvi (HTTP {code})",
+    "tgDeleteFailed": "L'eliminació ha fallat (HTTP {code})",
+    "tgXxxAddFailed": "No s'ha pogut afegir «{title}» a qBittorrent",
+    "tgSeasonEpisodeLower": "temporada {season}, episodi {episode}",
+    "tgSearchInSeerr": "Cerca a Seerr",
+    "tgSeerrSearchHint": "Cerca pel·lícules i sèries (p. ex. «Lost S02E05»)",
+    "tgMissingInThisSeason": "Falten en aquesta temporada",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Falta la temporada} other{Falten les temporades}} {list} - obre la sèrie per veure totes les temporades",
+    "tgProjectOnGitHub": "Tortugarr a GitHub",
+    "tgProjectOnGitHubSubtitle": "Codi font, versions i incidències",
+    "tgBuiltOnMoonfinCredit": "Tortugarr està construït sobre Moonfin (GPL), creat pels desenvolupadors de Moonfin.",
+    "tgCredits": "Agraïments",
+    "tgCreditsThanks": "Amb humil agraïment: sense aquests projectes i les persones que hi ha al darrere, Tortugarr no existiria.",
+    "tgCreditMoonfin": "L'app sobre la qual està construït Tortugarr (GPL)",
+    "tgCreditJellyfin": "Servidor multimèdia",
+    "tgCreditSeerr": "Descobriment i sol·licituds",
+    "tgCreditRadarr": "Pel·lícules",
+    "tgCreditSonarr": "Sèries",
+    "tgCreditProwlarr": "Gestor d'indexadors",
+    "tgCreditBazarr": "Subtítols",
+    "tgCreditFlareSolverr": "Ajudant de Cloudflare per als indexadors",
+    "tgCreditQbittorrent": "Client de baixades, opció per defecte de l'instal·lador",
+    "tgCreditTmdb": "Dades de pel·lícules i sèries, cartells i imatges",
+    "tgCreditOpenSubtitles": "Subtítols, obtinguts a través de Bazarr",
+    "tgTmdbNotice": "Aquest producte fa servir l'API de TMDB, però TMDB no l'avala ni el certifica.",
+    "tgLoadingLogoSize": "Mida del logotip de càrrega",
+    "tgLoadingLogoSizeSubtitle": "El logotip que gira mentre es carrega un vídeo",
+    "tgSubtitleLanguages": "Idiomes dels subtítols",
+    "tgSubtitleLanguagesSubtitle": "Es mostren al menú de subtítols: {languages}",
+    "tgShowAllSubLangsOffChosen": "Desactivat: el menú de subtítols només mostra els idiomes triats",
+    "tgDiscoveryLanguages": "Idiomes a Tendències i Populars",
+    "tgDiscoveryLanguagesSubtitle": "Es mostren: {languages}",
+    "tgHideForeignOnChosen": "Activat: Tendències i Populars només mostren els idiomes triats",
+    "tgShowLanguageBadges": "Mostra etiquetes d'idioma",
+    "tgShowLanguageBadgesOn": "Activat: els títols mostren el seu idioma (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Desactivat: cap etiqueta d'idioma als títols"
 }

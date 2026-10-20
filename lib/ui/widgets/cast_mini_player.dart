@@ -9,7 +9,17 @@ import '../../data/services/cast/cast_target.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../l10n/app_localizations.dart';
 import '../../util/audio_labels.dart';
+import '../navigation/app_router.dart';
 import 'overlay_sheet.dart';
+
+/// Ticks (100 ns) as h:mm:ss, the way a player shows elapsed time.
+String _formatTicks(num ticks) {
+  final d = Duration(microseconds: (ticks ~/ 10).toInt());
+  final h = d.inHours.toString().padLeft(2, '0');
+  final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
+  final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return '$h:$m:$s';
+}
 
 class CastMiniPlayer extends StatelessWidget {
   const CastMiniPlayer({super.key});
@@ -57,6 +67,11 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
 
   CastService get _castService => widget.castService;
   CastTargetKind get _kind => widget.kind;
+
+  /// This widget lives above the router (see app.dart), so its own context
+  /// has no Navigator. Sheets must open in the router's navigator instead.
+  BuildContext get _sheetContext =>
+      appRouter.routerDelegate.navigatorKey.currentContext ?? context;
 
   @override
   void initState() {
@@ -126,7 +141,8 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
     final volume = _castService.remoteVolumeNotifier.value;
 
     showFocusRestoringModalBottomSheet<void>(
-      context: context,
+      context: _sheetContext,
+      useRootNavigator: true,
       backgroundColor: AppColorScheme.surface,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSheetState) => SafeArea(
@@ -233,7 +249,8 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
             GetIt.instance<MediaServerClient>();
 
     showFocusRestoringModalBottomSheet<void>(
-      context: context,
+      context: _sheetContext,
+      useRootNavigator: true,
       backgroundColor: AppColorScheme.surface,
       isScrollControlled: true,
       builder: (sheetCtx) => DraggableScrollableSheet(
@@ -260,6 +277,36 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
                 child: ListView(
                   controller: scrollController,
                   children: [
+                    if (!audio)
+                      ListTile(
+                        title: Text(
+                          l10n.off,
+                          style: TextStyle(color: AppColorScheme.onSurface),
+                        ),
+                        leading: Icon(
+                          Icons.subtitles_off_outlined,
+                          color: AppColorScheme.onSurface.withValues(alpha: 0.38),
+                        ),
+                        onTap: () {
+                          Navigator.pop(sheetCtx);
+                          final positionTicks =
+                              _castService.remotePositionNotifier.value;
+                          _doAction(() async {
+                            final switched = await _castService.selectTrack(
+                              _kind,
+                              subtitleStreamIndex: -1,
+                            );
+                            if (switched) return;
+                            await client.sessionApi.sendPlayCommand(
+                              target.id,
+                              playCommand: 'PlayNow',
+                              itemIds: [item.id],
+                              startPositionTicks: positionTicks,
+                              subtitleStreamIndex: -1,
+                            );
+                          });
+                        },
+                      ),
                     ...streams.asMap().entries.map((e) {
                       final stream = e.value;
                       final streamIndex = stream['Index'] as int? ?? e.key;
@@ -294,6 +341,14 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
                           final positionTicks =
                               _castService.remotePositionNotifier.value;
                           _doAction(() async {
+                            // A Notflix session switches in place; only
+                            // receivers that cannot get the item reloaded.
+                            final switched = await _castService.selectTrack(
+                              _kind,
+                              audioStreamIndex: audio ? streamIndex : null,
+                              subtitleStreamIndex: !audio ? streamIndex : null,
+                            );
+                            if (switched) return;
                             await client.sessionApi.sendPlayCommand(
                               target.id,
                               playCommand: 'PlayNow',
@@ -449,9 +504,27 @@ class _SeekSliver extends StatelessWidget {
             isSeeking ? seekValue : positionTicks.toDouble();
         final double maxValue = durationTicks;
 
+        final timeStyle = TextStyle(
+          color: AppColorScheme.onSurface.withValues(alpha: 0.7),
+          fontSize: AppTypography.fontSizeXs,
+          fontFeatures: const [FontFeature.tabularFigures()],
+        );
         return Material(
           type: MaterialType.transparency,
-          child: SliderTheme(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_formatTicks(posValue), style: timeStyle),
+                    Text(_formatTicks(maxValue), style: timeStyle),
+                  ],
+                ),
+              ),
+              SliderTheme(
             data: SliderThemeData(
               trackHeight: 2,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
@@ -468,6 +541,8 @@ class _SeekSliver extends StatelessWidget {
               onChanged: onSeekChanged,
               onChangeEnd: onSeekEnd,
             ),
+          ),
+            ],
           ),
         );
       },

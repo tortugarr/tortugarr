@@ -141,3 +141,8 @@ web/drift_worker.js.map
 /scripts/.cache/
 /.arb-work/
 /.arb-work-brand/
+
+# Download Now: LAN-local *arr credentials. The real file is gitignored so
+# the feature source can be committed without leaking secrets. A tracked
+# template lives at download_now_secrets.example.dart.
+/lib/data/services/download/download_now_secrets.dart

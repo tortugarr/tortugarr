@@ -1,6 +1,6 @@
 {
     "@@locale": "ta",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin பதிப்பு {version}",
+    "appVersionFooter": "Tortugarr பதிப்பு {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin உங்கள் கணினி கீரிங்கை அணுக முடியவில்லை. உள்நுழைவு தொடரலாம், ஆனால் கீரிங் திறக்கப்படும் வரை பாதுகாப்பான டோக்கன் சேமிப்பிடம் கிடைக்காமல் போகலாம்.",
+    "secureStorageUnavailableMessage": "Tortugarr உங்கள் கணினி கீரிங்கை அணுக முடியவில்லை. உள்நுழைவு தொடரலாம், ஆனால் கீரிங் திறக்கப்படும் வரை பாதுகாப்பான டோக்கன் சேமிப்பிடம் கிடைக்காமல் போகலாம்.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "பயன்பாட்டை மறுதொடக்கம் செய்யாமல் Moonfin மற்றும் Neon Pulse இடையே மாறவும்",
+    "settingsAppearanceThemeSubtitle": "பயன்பாட்டை மறுதொடக்கம் செய்யாமல் Tortugarr மற்றும் Neon Pulse இடையே மாறவும்",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "தற்போதைய Moonfin நீங்கள் அனைவரும் விரும்பி இருக்கிறீர்கள்",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "தற்போதைய Tortugarr நீங்கள் அனைவரும் விரும்பி இருக்கிறீர்கள்",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "நியான் பல்ஸ்",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin இலிருந்து வெளியேறவா?",
+    "exitApp": "Tortugarr இலிருந்து வெளியேறவா?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "அமைக்கப்படவில்லை. Moonfin பயன்பாடு/தரவு கோப்புறைகளில் இயல்புநிலை mpv.conf ஐ முயற்சிக்கும்.",
+    "notSetMpvConf": "அமைக்கப்படவில்லை. Tortugarr பயன்பாடு/தரவு கோப்புறைகளில் இயல்புநிலை mpv.conf ஐ முயற்சிக்கும்.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "பதிவிறக்கங்கள்/Moonfin — பிற பயன்பாடுகளுக்குத் தெரியும்",
+    "downloadsVisibleToOtherApps": "பதிவிறக்கங்கள்/Tortugarr — பிற பயன்பாடுகளுக்குத் தெரியும்",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "பதிவிறக்கம் செய்யப்பட்ட மீடியா உங்கள் சாதனத்தில் பதிவிறக்கங்கள்/Moonfin இல் சேமிக்கப்படும். இந்தக் கோப்புகள் உங்கள் கேலரி அல்லது மியூசிக் பிளேயர் போன்ற பிற பயன்பாடுகளுக்குத் தெரியும்.\n\nஏற்கனவே உள்ள பதிவிறக்கங்கள் அவற்றின் தற்போதைய இருப்பிடத்திலேயே இருக்கும்.",
+    "saveToDownloadsFolderDescription": "பதிவிறக்கம் செய்யப்பட்ட மீடியா உங்கள் சாதனத்தில் பதிவிறக்கங்கள்/Tortugarr இல் சேமிக்கப்படும். இந்தக் கோப்புகள் உங்கள் கேலரி அல்லது மியூசிக் பிளேயர் போன்ற பிற பயன்பாடுகளுக்குத் தெரியும்.\n\nஏற்கனவே உள்ள பதிவிறக்கங்கள் அவற்றின் தற்போதைய இருப்பிடத்திலேயே இருக்கும்.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "ஒரு நூலகத்திற்கு முகப்புப் பக்கத் தெரிவுநிலையை நிலைமாற்று. மாற்றங்கள் நடைமுறைக்கு வர Moonfin ஐ மீண்டும் தொடங்கவும்.",
+    "libraryVisibilityDescription": "ஒரு நூலகத்திற்கு முகப்புப் பக்கத் தெரிவுநிலையை நிலைமாற்று. மாற்றங்கள் நடைமுறைக்கு வர Tortugarr ஐ மீண்டும் தொடங்கவும்.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3557,13 +3557,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "Moonfin, MakD ஆகியவற்றிற்கு இடையே தேர்வு செய்யவும் அல்லது மீடியா பட்டியை அணைக்கவும்",
+    "mediaBarModeDescription": "Tortugarr, MakD ஆகியவற்றிற்கு இடையே தேர்வு செய்யவும் அல்லது மீடியா பட்டியை அணைக்கவும்",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin இல் விளையாடு",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Tortugarr இல் விளையாடு",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} கோரியுள்ளார்",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "உங்கள் Moonfin நூலகத்தில் உருப்படி இல்லை",
+    "itemNotFoundInLibrary": "உங்கள் Tortugarr நூலகத்தில் உருப்படி இல்லை",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "சேவையக மறுதொடக்கம் செயலில் உள்ளது",
-    "adminServerRebootMessage": "சேவையக மறுதொடக்கம் செயலில் உள்ளது, Moonfin ஐ மீண்டும் தொடங்கவும்",
+    "adminServerRebootMessage": "சேவையக மறுதொடக்கம் செயலில் உள்ளது, Tortugarr ஐ மீண்டும் தொடங்கவும்",
     "adminActiveSessions": "செயலில் உள்ள அமர்வுகள்",
     "adminSessionsLoadFailed": "அமர்வுகளை ஏற்றுவதில் தோல்வி",
     "adminNoActiveSessions": "செயலில் அமர்வுகள் இல்லை",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "வழிசெலுத்தல் பட்டியில் வகைகள் பொத்தானைக் காட்டு",
     "settingsShowFavoritesButtonInNavigation": "வழிசெலுத்தல் பட்டியில் பிடித்தவை பொத்தானைக் காட்டு",
     "settingsShowLibrariesButtonInNavigation": "வழிசெலுத்தல் பட்டியில் நூலகங்கள் பொத்தானைக் காட்டு",
-    "settingsLibraryVisibilitySubtitle": "ஒரு நூலகத்திற்கு முகப்புப் பக்கத் தெரிவுநிலையை நிலைமாற்று. மாற்றங்கள் நடைமுறைக்கு வர Moonfin ஐ மீண்டும் தொடங்கவும்.",
+    "settingsLibraryVisibilitySubtitle": "ஒரு நூலகத்திற்கு முகப்புப் பக்கத் தெரிவுநிலையை நிலைமாற்று. மாற்றங்கள் நடைமுறைக்கு வர Tortugarr ஐ மீண்டும் தொடங்கவும்.",
     "settingsMediaBarAndLocalPreviews": "மீடியா பார் & உள்ளூர் மாதிரிக்காட்சிகள்",
     "settingsVisualOverlays": "காட்சி மேலடுக்குகள்",
     "settingsSeasonalSurprise": "பருவகால ஆச்சரியம்",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Discord இல் சேரவும்",
     "settingsJoinDiscordSubtitle": "சமூகத்துடன் அரட்டையடிக்கவும்",
     "settingsJoinTheDiscord": "Discord இல் சேரவும்",
-    "settingsSupportMoonfin": "ஆதரவு Moonfin",
+    "settingsSupportNotflix": "ஆதரவு Tortugarr",
     "settingsLegal": "சட்டபூர்வமானது",
     "settingsLicenses": "உரிமங்கள்",
     "settingsOpenSourceLicenseNotices": "திறந்த மூல உரிம அறிவிப்புகள்",
     "settingsPrivacyPolicy": "தனியுரிமைக் கொள்கை",
-    "settingsPrivacyPolicySubtitle": "Moonfin உங்கள் தரவை எவ்வாறு கையாள்கிறது",
+    "settingsPrivacyPolicySubtitle": "Tortugarr உங்கள் தரவை எவ்வாறு கையாள்கிறது",
     "settingsCheckForUpdates": "புதுப்பிப்புகளைச் சரிபார்க்கவும்",
-    "settingsCheckForUpdatesSubtitle": "சமீபத்திய Moonfin வெளியீட்டைப் பார்க்கவும்",
+    "settingsCheckForUpdatesSubtitle": "சமீபத்திய Tortugarr வெளியீட்டைப் பார்க்கவும்",
     "settingsPoweredByFlutter": "Flutter மூலம் இயக்கப்படுகிறது",
     "settingsLicenseNoticesCount": "{count, plural, one {# உரிம அறிவிப்பு} other {# உரிம அறிவிப்புகள்}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "சேமித்த தீம்கள்",
-    "savedThemesDescription": "இவை தற்போதைய சர்வருக்காக Moonfin செருகுநிரலிலிருந்து பதிவிறக்கப்பட்ட தீம்கள். நீக்குவது இந்த உள்ளூர் நகலை மட்டுமே அகற்றும்.",
+    "savedThemesDescription": "இவை தற்போதைய சர்வருக்காக Tortugarr செருகுநிரலிலிருந்து பதிவிறக்கப்பட்ட தீம்கள். நீக்குவது இந்த உள்ளூர் நகலை மட்டுமே அகற்றும்.",
     "savedThemesEmpty": "இந்த சர்வருக்கான சேமித்த தீம்கள் எதுவும் கிடைக்கவில்லை.",
     "savedThemesCurrentThemeId": "{themeId} • தற்போது செயலில்",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "சேமித்த தீமை நீக்கு",
     "savedThemesManageSubtitle": "இந்தச் சாதனத்தில் பதிவிறக்கிய செருகுநிரல் தீம்களை நிர்வகிக்கவும்",
     "themeEditor": "தீம் எடிட்டர்",
-    "themeEditorSubtitle": "உங்கள் உலாவியில் Moonfin தீம் எடிட்டரைத் திறக்கும்",
+    "themeEditorSubtitle": "உங்கள் உலாவியில் Tortugarr தீம் எடிட்டரைத் திறக்கும்",
     "homeScreen": "முகப்புத் திரை",
     "bottomBar": "கீழ்ப் பட்டி",
     "homeRowsStyleClassic": "கிளாசிக்",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH வசன வரிகளை விரும்பு",
     "preferSdhSubtitlesSubtitle": "தானாகத் தேர்ந்தெடுக்கும்போது SDH/CC வசன வரி தடங்களுக்கு முன்னுரிமை அளிக்கும்.",
     "webDiagnostics": "வலை கண்டறிதல்கள்",
-    "webDiagnosticsTitle": "Moonfin வலை கண்டறிதல்கள்",
+    "webDiagnosticsTitle": "Tortugarr வலை கண்டறிதல்கள்",
     "webDiagnosticsIntro": "உலாவி இணைப்புச் சிக்கல்களை (CORS, கலப்பு உள்ளடக்கம் மற்றும் கண்டுபிடிப்பு அமைப்புகள்) கண்டறிய இந்தப் பக்கத்தைப் பயன்படுத்தவும்.",
     "webDiagnosticsDetectedMixedContentFailure": "கலப்பு-உள்ளடக்கத் தோல்வி கண்டறியப்பட்டது",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Preflight தோல்வி கண்டறியப்பட்டது",
-    "webDiagnosticsMixedContentFailureBody": "ஒரு HTTPS பக்கம் HTTP சர்வர் URL ஐ அழைக்க முயல்வதை Moonfin கண்டறிந்தது. உங்கள் சர்வரை அடையும் முன்பே உலாவிகள் இந்தக் கோரிக்கையைத் தடுக்கின்றன.",
-    "webDiagnosticsCorsFailureBody": "மீடியா சர்வரில் CORS அல்லது preflight தலைப்புகள் இல்லாததால் பொதுவாக ஏற்படும் உலாவி-நிலைக் கோரிக்கைத் தோல்வியை Moonfin கண்டறிந்தது.",
+    "webDiagnosticsMixedContentFailureBody": "ஒரு HTTPS பக்கம் HTTP சர்வர் URL ஐ அழைக்க முயல்வதை Tortugarr கண்டறிந்தது. உங்கள் சர்வரை அடையும் முன்பே உலாவிகள் இந்தக் கோரிக்கையைத் தடுக்கின்றன.",
+    "webDiagnosticsCorsFailureBody": "மீடியா சர்வரில் CORS அல்லது preflight தலைப்புகள் இல்லாததால் பொதுவாக ஏற்படும் உலாவி-நிலைக் கோரிக்கைத் தோல்வியை Tortugarr கண்டறிந்தது.",
     "webDiagnosticsTargetUrl": "இலக்கு URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "உள்ளமைக்கப்படவில்லை",
     "webDiagnosticsMixedContent": "கலப்பு உள்ளடக்கம்",
     "webDiagnosticsMixedContentDetected": "இந்தப் பக்கம் HTTPS வழியாக ஏற்றப்படுகிறது, ஆனால் உள்ளமைக்கப்பட்ட ஒன்று அல்லது அதற்கு மேற்பட்ட URL கள் HTTP ஆக உள்ளன. HTTPS பக்கங்கள் HTTP API களை அழைப்பதை உலாவிகள் தடுக்கின்றன.",
-    "webDiagnosticsMixedContentFix": "தீர்வு: உங்கள் மீடியா சர்வர் அல்லது ப்ராக்ஸி எண்ட்பாயின்ட்டை HTTPS வழியாக வழங்கவும், அல்லது நம்பகமான உள்ளூர் நெட்வொர்க்குகளில் மட்டும் Moonfin ஐ HTTP வழியாக ஏற்றவும்.",
+    "webDiagnosticsMixedContentFix": "தீர்வு: உங்கள் மீடியா சர்வர் அல்லது ப்ராக்ஸி எண்ட்பாயின்ட்டை HTTPS வழியாக வழங்கவும், அல்லது நம்பகமான உள்ளூர் நெட்வொர்க்குகளில் மட்டும் Tortugarr ஐ HTTP வழியாக ஏற்றவும்.",
     "webDiagnosticsNoMixedContentDetected": "தற்போதைய இயக்க நேர அமைப்புகளிலிருந்து வெளிப்படையான கலப்பு-உள்ளடக்க உள்ளமைவு எதுவும் கண்டறியப்படவில்லை.",
     "webDiagnosticsCorsChecklist": "CORS சரிபார்ப்புப் பட்டியல்",
     "webDiagnosticsCorsChecklistItem1": "• Access-Control-Allow-Origin இல் உலாவி மூலத்தை அனுமதிக்கவும்.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR வீடியோ இயக்கத்திற்கு HDR ஐத் தானாக இயக்கி, வெளியேறும்போது காட்சி முறையை மீட்டமைக்கும்.",
     "whenFullscreen": "முழுத்திரையில் இருக்கும்போது",
     "transcodingLimits": "டிரான்ஸ்கோடிங் வரம்புகள்",
-    "settingsSupportMoonfinSubtitle": "டெவலப்பருக்கு ஒரு காபி வழங்குங்கள்",
+    "settingsSupportNotflixSubtitle": "டெவலப்பருக்கு ஒரு காபி வழங்குங்கள்",
     "accountPreferences": "கணக்கு விருப்பங்கள்",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "கிளாசிக் என்பது Moonfin இன் அசல் மையப்படுத்தப்பட்ட அமைப்பு. மாடர்ன் என்பது திரைக்கேற்ப மாறும் சினிமா பாணி அமைப்பு.",
+    "detailScreenStyleSubtitle": "கிளாசிக் என்பது Tortugarr இன் அசல் மையப்படுத்தப்பட்ட அமைப்பு. மாடர்ன் என்பது திரைக்கேற்ப மாறும் சினிமா பாணி அமைப்பு.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "கிளாசிக்",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "கிளாசிக்",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "மாடர்ன்",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Moonfin பரிந்துரைகள் என்ற உள்ளூர் நூலக அல்காரிதத்தையோ அல்லது ஆன்லைன் TMDb இன் ஒற்றுமை அளவீடுகளையோ பயன்படுத்தும். குறிப்பு: ஆன்லைன் பரிந்துரைகளுக்கு Seerr ஒருங்கிணைப்பு தேவை.",
+    "recommendationSystemSubtitle": "Tortugarr பரிந்துரைகள் என்ற உள்ளூர் நூலக அல்காரிதத்தையோ அல்லது ஆன்லைன் TMDb இன் ஒற்றுமை அளவீடுகளையோ பயன்படுத்தும். குறிப்பு: ஆன்லைன் பரிந்துரைகளுக்கு Seerr ஒருங்கிணைப்பு தேவை.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin பரிந்துரைகள்",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr பரிந்துரைகள்",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ஒற்றுமை",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "இலக்கு மீடியாவின் பெற்றோர் மதிப்பீட்டின்படி Moonfin பரிந்துரைகளை வரம்பிடும்",
+    "recommendationsApplyParentalRatingCapSubtitle": "இலக்கு மீடியாவின் பெற்றோர் மதிப்பீட்டின்படி Tortugarr பரிந்துரைகளை வரம்பிடும்",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "தனிப்பயன் தீம்கள் Moonfin முழுவதும் காட்சிக் கூறுகளை மாற்றும். உங்கள் பாணிக்கு ஏற்ற ஒன்றைத் தேர்வுசெய்யவும்.",
+    "customThemeSubtitle": "தனிப்பயன் தீம்கள் Tortugarr முழுவதும் காட்சிக் கூறுகளை மாற்றும். உங்கள் பாணிக்கு ஏற்ற ஒன்றைத் தேர்வுசெய்யவும்.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "உங்கள் ஃபோனில் Moonfin இல் உள்நுழையவும்",
+    "carSignInPrompt": "உங்கள் ஃபோனில் Tortugarr இல் உள்நுழையவும்",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller என்பது மென்மையான அனிமேஷன்கள் மற்றும் குறைவான தடங்கலுக்கான Flutter இன் நவீன GPU ரெண்டரர். சில TV பாக்ஸ்கள் மற்றும் பழைய GPU களில் இது கோளாறுகள் அல்லது கருப்பு வீடியோவை ஏற்படுத்தலாம்; அவற்றைக் கண்டால் இதை அணைக்கவும். தானியங்கி உங்கள் சாதனத்திற்கு ஏற்ற சிறந்த இயல்பைத் தேர்வுசெய்யும். பயன்படுத்த Moonfin ஐ மறுதொடக்கம் செய்யவும்.",
+    "impellerRenderingSubtitle": "Impeller என்பது மென்மையான அனிமேஷன்கள் மற்றும் குறைவான தடங்கலுக்கான Flutter இன் நவீன GPU ரெண்டரர். சில TV பாக்ஸ்கள் மற்றும் பழைய GPU களில் இது கோளாறுகள் அல்லது கருப்பு வீடியோவை ஏற்படுத்தலாம்; அவற்றைக் கண்டால் இதை அணைக்கவும். தானியங்கி உங்கள் சாதனத்திற்கு ஏற்ற சிறந்த இயல்பைத் தேர்வுசெய்யும். பயன்படுத்த Tortugarr ஐ மறுதொடக்கம் செய்யவும்.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "ரெண்டரிங் எஞ்சினை மாற்ற Moonfin மறுதொடக்கம் செய்ய வேண்டும். இப்போது ஆப்பை மூடி, பயன்படுத்த மீண்டும் திறக்கவும்.",
+    "impellerRestartMessage": "ரெண்டரிங் எஞ்சினை மாற்ற Tortugarr மறுதொடக்கம் செய்ய வேண்டும். இப்போது ஆப்பை மூடி, பயன்படுத்த மீண்டும் திறக்கவும்.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "IMDb மிகவும் பிரபலமான திரைப்படங்கள்",
     "imdbMostPopularTvShows": "IMDb மிகவும் பிரபலமான டிவி நிகழ்ச்சிகள்",
     "imdbLowestRatedMovies": "IMDb குறைந்த மதிப்பிடப்பட்ட திரைப்படங்கள்",
-    "imdbTopEnglishMovies": "IMDb சிறந்த மதிப்பிடப்பட்ட ஆங்கிலத் திரைப்படங்கள்"
+    "imdbTopEnglishMovies": "IMDb சிறந்த மதிப்பிடப்பட்ட ஆங்கிலத் திரைப்படங்கள்",
+    "tgMissing": "காணவில்லை",
+    "tgComing": "வரவிருக்கிறது",
+    "tgComingOn": "{date} வருகிறது",
+    "tgDownloading": "பதிவிறக்கப்படுகிறது",
+    "tgReadySoon": "விரைவில் தயார்",
+    "tgRequested": "கோரப்பட்டது",
+    "tgClose": "மூடு",
+    "tgCancel": "ரத்து செய்",
+    "tgBack": "பின்செல்",
+    "tgYes": "ஆம்",
+    "tgNo": "இல்லை",
+    "tgSearch": "தேடு",
+    "tgHide": "மறை",
+    "tgAll": "அனைத்தும்",
+    "tgNone": "எதுவுமில்லை",
+    "tgMovies": "திரைப்படங்கள்",
+    "tgSeries": "தொடர்கள்",
+    "tgMovieTag": "திரைப்படம்",
+    "tgSeriesTag": "தொடர்",
+    "tgCanTakeAMinute": "ஒரு நிமிடம் வரை ஆகலாம்",
+    "tgToday": "இன்று",
+    "tgYesterday": "நேற்று",
+    "tgDaysAgo": "{days} நாட்களுக்கு முன்",
+    "tgMonthsAgo": "{months} மாதங்களுக்கு முன்",
+    "tgYearsAgo": "{years} ஆண்டுகளுக்கு முன்",
+    "tgYearsMonthsAgo": "{years} ஆண்டுகள் {months} மாதங்களுக்கு முன்",
+    "tgFindSubtitles": "வசன வரிகளைத் தேடு",
+    "tgFreeUpSpace": "இடத்தைக் காலி செய்",
+    "tgDownloads": "பதிவிறக்கங்கள்",
+    "tgDownloadsCount": "பதிவிறக்கங்கள் ({count})",
+    "tgNoVideoRemoved": "\"{title}\": பதிவிறக்கத்தில் வீடியோ கோப்பு இல்லை ({files}). அது அகற்றப்பட்டு தடுக்கப்பட்டது — வேறு கோப்பை முயற்சிக்கவும்.",
+    "tgNoVideoNotRemoved": "\"{title}\": பதிவிறக்கத்தில் வீடியோ கோப்பு இல்லை ({files}), ஆனால் அதைத் தானாக அகற்ற முடியவில்லை.",
+    "tgAiredOn": "{date} ஒளிபரப்பானது",
+    "tgTapToFindFiles": "கோப்புகளைத் தேட தட்டவும்",
+    "tgWholeSeason": "முழு சீசன்",
+    "tgEpisodesMissingFindPack": "{count} அத்தியாயங்கள் இல்லை – சீசன் தொகுப்பைத் தேடு",
+    "tgAddToSonarrTitle": "காணாத அத்தியாயங்களைப் பார்க்க Sonarr-இல் சேர்க்கவும்",
+    "tgAddToSonarrSubtitle": "தொடர் தானாக எதையும் பதிவிறக்காமல் சேர்க்கப்படும்",
+    "tgMissingEpisodesUnavailable": "காணாத அத்தியாயங்களை இப்போது காட்ட முடியாது",
+    "tgReasonTapRetry": "{reason} · மீண்டும் முயல தட்டவும்",
+    "tgSeasonPackBadge": "சீசன் தொகுப்பு",
+    "tgMonitorSeasonTitle": "சீசன் {season}-ஐக் கண்காணி",
+    "tgMonitorSeasonQuestion": "சீசன் {season}-இல் காணாத அத்தியாயங்களை Sonarr இப்போது பெறவா?\n\nஇல்லை: புதிய அத்தியாயங்கள் வெளியாகும்போது மட்டும் பெறப்படும்.",
+    "tgSonarrSearchingSeason": "Sonarr சீசன் {season}-ஐத் தேடுகிறது",
+    "tgMonitored": "கண்காணிக்கப்படுகிறது",
+    "tgNotMonitored": "கண்காணிக்கப்படவில்லை",
+    "tgSeasonStateLabel": "சீசன் {season}: {state}",
+    "tgLabelMissing": "{label} இல்லை",
+    "tgNotAiredYet": "{code} இன்னும் ஒளிபரப்பாகவில்லை.",
+    "tgNotAiredYetComing": "{code} இன்னும் ஒளிபரப்பாகவில்லை – {date} வருகிறது.",
+    "tgAlreadyDownloading": "{code} ஏற்கனவே பதிவிறக்கப்படுகிறது.",
+    "tgDownloadedAppearsSoon": "{code} பதிவிறக்கப்பட்டது, விரைவில் நூலகத்தில் தோன்றும்.",
+    "tgSearchingFor": "{label} தேடப்படுகிறது …",
+    "tgSeasonLower": "சீசன் {season}",
+    "tgWholeLabel": "முழு {label}",
+    "tgSeasonNoEpisodes": "சீசன் {season} – நூலகத்தில் அத்தியாயங்கள் இல்லை",
+    "tgNoTvdbId": "தொடருக்கு TVDB ஐடி இல்லை, அதனால் Sonarr அதைக் கண்டுபிடிக்க முடியாது.",
+    "tgAddingToSonarr": "Sonarr-இல் சேர்க்கப்படுகிறது …",
+    "tgAddToSonarrFailed": "தொடரை Sonarr-இல் சேர்க்க முடியவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும்.",
+    "tgSendingToDownload": "\"{label}\" பதிவிறக்கத்திற்கு அனுப்பப்படுகிறது …",
+    "tgDownloadDidNotStart": "பதிவிறக்கம் தொடங்கவில்லை: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" பதிவிறக்கப்படுகிறது ({size}). முடிந்தவுடன் நூலகத்தில் தோன்றும்.",
+    "tgSonarrUnreachableRetry": "Sonarr-ஐ அணுக முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.",
+    "tgNoUsableFiles": "பயன்படுத்தக்கூடிய கோப்புகள் எதுவும் கிடைக்கவில்லை. பின்னர் மீண்டும் முயற்சிக்கவும் – சில மணி நேரத்தில் புதியவை வரும்.",
+    "tgFilesCount": "{count} கோப்புகள்",
+    "tgFilesRecommended": "{count} கோப்புகள் – {recommended} தர சுயவிவரத்திற்குப் பொருந்துகின்றன, மீதி கீழே உள்ளன",
+    "tgOutsideQualityProfile": "தர சுயவிவரத்திற்கு வெளியே",
+    "tgLargerThanProfile": "சுயவிவரம் அனுமதிப்பதை விடப் பெரியது",
+    "tgSmallerThanProfile": "சுயவிவரம் அனுமதிப்பதை விடச் சிறியது",
+    "tgAlreadyExists": "ஏற்கனவே உள்ளது",
+    "tgMayNotFitDisk": "வட்டில் இடம் போதாமல் போகலாம்",
+    "tgSonarrUnreachable": "Sonarr-ஐ அணுக முடியவில்லை",
+    "tgSonarrUnreachableAt": "{host} இல் Sonarr-ஐ அணுக முடியவில்லை",
+    "tgSonarrRejectedChange": "Sonarr மாற்றத்தை ஏற்கவில்லை",
+    "tgSeasonMonitoredNoSearch": "சீசன் கண்காணிக்கப்படுகிறது, ஆனால் Sonarr தேடலைத் தொடங்கவில்லை",
+    "tgSonarrCantSearch": "Sonarr இப்போது தேட முடியவில்லை",
+    "tgSearchExpired": "தேடல் முடிவு காலாவதியானது – மீண்டும் தேடவும்",
+    "tgSonarrRejectedDownload": "Sonarr பதிவிறக்கத்தை ஏற்கவில்லை (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr-இல் இந்தத் தொடர் இல்லை",
+    "tgCouldNotChangeMonitoring": "கண்காணிப்பை மாற்ற முடியவில்லை: {error}",
+    "tgJellyfinNoIds": "Jellyfin தொடரை அடையாளம் காணவில்லை (TVDB அல்லது TMDB ஐடி இல்லை)",
+    "tgSomethingWentWrong": "ஏதோ தவறு நடந்தது: {error}",
+    "tgDeleteReadOnly": "இந்தக் கோப்பு Radarr/Sonarr ஆல் நிர்வகிக்கப்படுவதில்லை, Jellyfin-க்கு இந்தக் கோப்புறையில் படிக்கும் அனுமதி மட்டுமே உள்ளது. கோப்பு மேலாளரில் அதை நீக்கவும்.",
+    "tgSonarrRequiredPerEpisode": "Sonarr-ஐ அணுக முடியவில்லை, அல்லது தொடர் அங்கு சேர்க்கப்படவில்லை. அத்தியாயம் வாரியான பதிவிறக்கத்திற்கு Sonarr தேவை.",
+    "tgEpisodesNotFound": "\"{title}\" -க்கான தேர்ந்தெடுத்த அத்தியாயங்களை Sonarr-இல் காண முடியவில்லை (மொத்தம் {count} அத்தியாயங்கள் கிடைத்தன). தொடரை Sonarr-இல் சேர்த்து மீண்டும் முயற்சிக்கவும்.",
+    "tgPartOfCollectionPrefix": "தொகுப்பின் ஒரு பகுதி: ",
+    "tgViewingPartOf": "  ·  நீங்கள் {total}-இல் {current}-ஆம் பகுதியைப் பார்க்கிறீர்கள்",
+    "tgPartOf": "பகுதி {number} / {total}",
+    "tgUnknownTitle": "அறியப்படாத தலைப்பு",
+    "tgMovieCollection": "திரைப்படத் தொகுப்பு",
+    "tgNotReleasedYet": "\"{title}\" இன்னும் வெளியாகவில்லை",
+    "tgScreensaverModeVideo": "வீடியோ",
+    "tgScreensaverModeLogo": "லோகோ",
+    "tgScreensaverSound": "ஸ்கிரீன்சேவர் ஒலி",
+    "tgScreensaverSoundSubtitle": "அணைத்தால்: ஸ்கிரீன்சேவர் டிரெய்லர்கள் ஒலியின்றி ஓடும்",
+    "tgScreensaverLogo": "லோகோ",
+    "tgLogoBadge": "Tortugarr சின்னம்",
+    "tgLogoVhs": "VHS கேசட்டுகளின் மேல் கிளி",
+    "tgLogoSign": "பலகையின் மேல் கிளி",
+    "tgHiddenBadge": "மறைக்கப்பட்டது · {code}",
+    "tgDiskSpace": "வட்டு இடம்",
+    "tgDiskSpaceSubtitle": "புதிய பதிவிறக்கங்களுக்கு இடத்தைக் காலி செய்",
+    "tgAdultTitle": "வயதுவந்தோர் படங்கள் (XXX)",
+    "tgAdultSubtitle": "XXX நூலகத்தைக் காட்டு அல்லது மறை (PIN)",
+    "tgHideForeign": "வெளிநாட்டு உள்ளடக்கத்தை மறை",
+    "tgHideForeignOn": "இயக்கினால்: டிரெண்டிங் மற்றும் பிரபலமானவை ஆங்கிலம், நார்வேஜியன், ஸ்வீடிஷ், டேனிஷ், ஜெர்மன், பிரெஞ்சு மட்டும் காட்டும்",
+    "tgHideForeignOff": "அணைத்தால்: டிரெண்டிங் மற்றும் பிரபலமானவை எல்லா மொழிகளையும் காட்டும்",
+    "tgShowHidden": "மறைக்கப்பட்டதைக் காட்டு",
+    "tgShowHiddenOn": "இயக்கினால்: மறைக்கப்பட வேண்டிய தலைப்புகள் சிவப்பு 'மறைக்கப்பட்டது' குறியுடன் காட்டப்படும்",
+    "tgShowHiddenOff": "சிக்கல் தீர்வு: மறைக்கப்பட்ட தலைப்புகளை நீக்காமல் சிவப்புக் குறியுடன் காட்டு",
+    "tgShowAllSubLangs": "அனைத்து வசன மொழிகளையும் காட்டு",
+    "tgShowAllSubLangsOn": "இயக்கினால்: வசன மெனு எல்லா மொழிகளையும் காட்டும்",
+    "tgShowAllSubLangsOff": "அணைத்தால்: வசன மெனு நார்வேஜியன் மற்றும் ஆங்கிலம் மட்டும் காட்டும்",
+    "tgPreviewSound": "முன்னோட்ட ஒலி",
+    "tgPreviewSoundOn": "இயக்கினால்: ஒரு தலைப்பில் நிற்கும்போது ஓடும் கிளிப்பில் ஒலி இருக்கும்",
+    "tgPreviewSoundOff": "அணைத்தால்: உலாவும்போது கிளிப்புகள் ஒலியின்றி ஓடும்",
+    "tgScreensaver": "ஸ்கிரீன்சேவர்",
+    "tgScreensaverSubtitle": "வீடியோ அல்லது லோகோ, ஒலி மற்றும் படம்",
+    "tgShowMissingEpisodes": "காணாத அத்தியாயங்களைக் காட்டு",
+    "tgShowMissingEpisodesOn": "இயக்கினால்: சீசன்கள் உங்களிடம் இல்லாத அத்தியாயங்களையும் காட்டும், பதிவிறக்கத் தயாராக",
+    "tgShowMissingEpisodesOff": "அணைத்தால்: சீசன்கள் உங்களிடம் உள்ள அத்தியாயங்களை மட்டும் காட்டும்",
+    "tgShowCollections": "திரைப்படத் தொகுப்புகளைக் காட்டு",
+    "tgShowCollectionsOn": "இயக்கினால்: திரைப்படங்கள் தொகுப்பின் மற்ற படங்களையும் காட்டும், உங்களிடம் இல்லாதவை உட்பட",
+    "tgShowCollectionsOff": "அணைத்தால்: திரைப்படப் பக்கம் தொகுப்பைக் காட்டாது",
+    "tgNoActiveDownloads": "செயலில் பதிவிறக்கங்கள் இல்லை.",
+    "tgPickDownloadToOpen": "கோரிக்கைகளைத் திறக்க ஒரு பதிவிறக்கத்தைத் தேர்ந்தெடுக்கவும்.",
+    "tgRefreshLibrary": "நூலகத்தைப் புதுப்பி",
+    "tgAskingJellyfinScan": "நூலகத்தை ஸ்கேன் செய்ய Jellyfin-ஐக் கேட்கிறது …",
+    "tgHideAll": "அனைத்தையும் மறை",
+    "tgImporting": "இறக்குமதி செய்கிறது",
+    "tgSubsNotManaged": "இந்தத் தலைப்பு Radarr/Sonarr ஆல் நிர்வகிக்கப்படுவதில்லை, அதனால் Bazarr இதற்கு வசன வரிகளைத் தேட முடியாது.",
+    "tgBazarrUnreachable": "Bazarr-ஐ அணுக முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.",
+    "tgSubsFoundNothing": "இன்னும் எதுவும் கிடைக்கவில்லை. Bazarr தினமும் தானாக மீண்டும் முயற்சிக்கும், அல்லது நீங்களே தேர்ந்தெடுக்கலாம்.",
+    "tgSubsFound": "{languages} கிடைத்தது – வசன மெனுவில் தோன்ற சிறிது நேரம் ஆகலாம்.",
+    "tgAnd": "மற்றும்",
+    "tgSubsDownloaded": "பதிவிறக்கப்பட்டது – வசன மெனுவில் தோன்ற சிறிது நேரம் ஆகலாம்.",
+    "tgAskingBazarr": "Bazarr-ஐக் கேட்கிறது …",
+    "tgHaveAll": "அனைத்தும் உள்ளன",
+    "tgSearchAutoNow": "இப்போது தானாகத் தேடு",
+    "tgSearchingUpToMinute": "தேடுகிறது … ஒரு நிமிடம் வரை ஆகலாம்",
+    "tgPickYourself": "நீங்களே தேர்ந்தெடுங்கள்",
+    "tgAskingProviders": "வசன வழங்குநர்களைக் கேட்கிறது … ஒரு நிமிடம் வரை ஆகலாம்",
+    "tgNoProviderSubs": "எந்த வழங்குநரிடமும் இதற்கு இன்னும் வசன வரிகள் இல்லை.",
+    "tgLangHas": "{language}: உள்ளது",
+    "tgLangMissing": "{language}: இல்லை",
+    "tgNoReleaseName": "(வெளியீட்டுப் பெயர் இல்லை)",
+    "tgHearingImpaired": "{provider} · செவித்திறன் குறைபாடுள்ளோருக்கு",
+    "tgLangNorwegian": "நார்வேஜியன்",
+    "tgLangEnglish": "ஆங்கிலம்",
+    "tgBazarrUnknownTitle": "Bazarr-க்கு இந்தத் தலைப்பு இன்னும் தெரியவில்லை",
+    "tgBazarrError": "Bazarr பிழையுடன் பதிலளித்தது (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: இல் இடம் குறைவு ({free} மீதம்). பதிவிறக்கம் நின்றுபோகலாம் — சேவையகத்தை நிர்வகிப்பவருக்குத் தெரிவிக்கவும்.",
+    "tgNoQbitForSpace": "இடத்தைச் சரிபார்க்க qBittorrent-ஐ அணுக முடியவில்லை",
+    "tgNotEnoughSpace": "போதிய இடம் இல்லை",
+    "tgDriveHasFree": "{drive}: இல் {free} மீதம் உள்ளது",
+    "tgCopyInDownloads": "Downloads-இல் நகல் · ஏற்கனவே நூலகத்தில் உள்ளது",
+    "tgLastWatched": "கடைசியாகப் பார்த்தது {ago}",
+    "tgNeverWatchedAdded": "பார்க்கவே இல்லை · {ago} சேர்க்கப்பட்டது",
+    "tgNeverWatched": "பார்க்கவே இல்லை",
+    "tgNothingSafeToDelete": "{drive}: இல் பாதுகாப்பாக நீக்கக்கூடியது எதுவும் இல்லை (எல்லாமே சமீபத்தில் சேர்க்கப்பட்டவை, சமீபத்தில் பார்த்தவை அல்லது பிடித்தவை).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{1 தலைப்பை நீக்கவா?} other{{count} தலைப்புகளை நீக்கவா?}}",
+    "tgDeletedForGood": "{size} நிரந்தரமாக நீக்கப்படும். இதைச் செயல்தவிர்க்க முடியாது.",
+    "tgYesDelete": "ஆம், நீக்கு",
+    "tgDeletingProgress": "நீக்குகிறது {done}/{total} …",
+    "tgNowHasFree": " · {drive}: இல் இப்போது {free} மீதம்",
+    "tgDeletedTitles": "{count, plural, one{1 தலைப்பு நீக்கப்பட்டது} other{{count} தலைப்புகள் நீக்கப்பட்டன}}{extra}",
+    "tgDeletedFailed": "{count} நீக்கப்பட்டது, தோல்வி: {failed}{extra}",
+    "tgFreeGb": "{gb} GB காலி செய்",
+    "tgDownloadCopies": "பதிவிறக்க நகல்கள்",
+    "tgLookingForUnwatched": "நீண்ட நாட்களாகப் பார்க்கப்படாததைத் தேடுகிறது …",
+    "tgSuggestionEnough": "பரிந்துரை: {size} · போதிய இடம் ✓",
+    "tgSuggestionOf": "பரிந்துரை: தேவையான {target}-இல் {size}",
+    "tgPickToSayNo": "வேண்டாம் எனச் சொல்ல ஒன்றைத் தேர்ந்தெடுக்கவும் — அடுத்த பரிந்துரை தானாக வரும்.",
+    "tgOtherCandidates": "மற்ற தேர்வுகள்",
+    "tgDownloadAnyway": "எப்படியும் பதிவிறக்கு",
+    "tgDeleteCountSize": "{count} நீக்கு ({size})",
+    "tgDriveHasFreeDot": "{drive}: இல் {free} மீதம் உள்ளது.",
+    "tgFileDoubleSpace": "கோப்பு {size}, இருமடங்கு இடம் எடுக்கும் (பதிவிறக்கம் + நூலகத்தில் நகல்), கூடுதலாக {buffer} இருப்பு.",
+    "tgFileSize": "கோப்பு {size}, கூடுதலாக {buffer} இருப்பு.",
+    "tgPendingNeeds": "நடைபெறும் பதிவிறக்கங்களுக்கு மேலும் {size} தேவை.",
+    "tgShortBy": "{size} குறைவு.",
+    "tgOnlyEarlyFiles": "திரைப்படம் டிஜிட்டலாக வெளியாகும் முன் வெளியிடப்பட்ட கோப்புகள் மட்டுமே கிடைத்தன ({count}) — அவை பெரும்பாலும் போலியானவை.",
+    "tgNoDigitalDate": "என்பதற்கு இன்னும் டிஜிட்டல் வெளியீட்டுத் தேதி இல்லை",
+    "tgDigitalOn": "{date} அன்று டிஜிட்டலாக வெளியாகும்",
+    "tgNotOutDigitally": "இன்னும் டிஜிட்டலாக வெளியாகவில்லை",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "இப்போது இருப்பது பெரும்பாலும் திரையரங்கப் பதிவு அல்லது அதே பெயரில் வேறு படம். சில சமயம் குறைந்த தரத்தில், பெரும்பாலும் பதிந்த வசனங்களுடன், ஒரு ஆரம்பகால நகல் இருக்கும். \"எப்படியும் கோப்புகளைக் காட்டு\" இருப்பதைக் காட்டும். வெளியானவுடன் Radarr சரியான பதிப்பைத் தானாகப் பெறும்.",
+    "tgShowFilesAnyway": "எப்படியும் கோப்புகளைக் காட்டு",
+    "tgPickSeasonsEpisodes": "சீசன்கள் மற்றும் அத்தியாயங்களைத் தேர்ந்தெடு",
+    "tgNoEpisodeInfo": "{season}: அத்தியாயத் தகவல் இல்லை",
+    "tgAppliesAllDevices": "இந்தக் கணக்கைப் பயன்படுத்தும் எல்லா சாதனங்களுக்கும் பொருந்தும்",
+    "tgNoXxxLibrary": "XXX என்ற பெயரில் நூலகம் எதுவும் இல்லை.",
+    "tgSearchingEachWord": "ஒவ்வொரு சொல்லையும் தனித்தனியே தேடுகிறது … (அரை நிமிடம் ஆகலாம்)",
+    "tgSentToQbit": "\"{title}\" ({size}) qBittorrent-க்கு அனுப்பப்பட்டது",
+    "tgDownloadFailed": "பதிவிறக்கம் தோல்வியடைந்தது: {error}",
+    "tgXxxNoVideoRemoved": "\"{title}\" இல் வீடியோ கோப்பு இல்லை, அகற்றப்பட்டது.",
+    "tgXxxNoVideoNotRemoved": "\"{title}\" இல் வீடியோ கோப்பு இல்லை, ஆனால் அகற்றப்படவில்லை.",
+    "tgSearchNewXxx": "புதிய XXX தேடு",
+    "tgXxxSearchHint": "பெயர், ஸ்டுடியோ …",
+    "tgChecking": "சரிபார்க்கிறது …",
+    "tgXxxVisible": "இப்போது தெரியும். XXX நூலகங்களில், தேடலில் மற்றும் முகப்புத் திரையில் காட்டப்படும்.",
+    "tgXxxHidden": "மறைக்கப்பட்டது. XXX ஆப்பில் எங்கும் காட்டப்படாது.",
+    "tgShowWithPin": "காட்டு (PIN)",
+    "tgChangePin": "PIN-ஐ மாற்று",
+    "tgNoLibraryList": "நூலகப் பட்டியலைப் பெற முடியவில்லை (HTTP {code})",
+    "tgNoUserSettings": "பயனர் அமைப்புகளைப் பெற முடியவில்லை (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin மாற்றத்தை நிராகரித்தது (HTTP {code})",
+    "tgDeleteFailed": "நீக்குதல் தோல்வியடைந்தது (HTTP {code})",
+    "tgXxxAddFailed": "\"{title}\" ஐ qBittorrent-இல் சேர்க்க முடியவில்லை",
+    "tgSeasonEpisodeLower": "சீசன் {season}, அத்தியாயம் {episode}",
+    "tgSearchInSeerr": "Seerr-இல் தேடு",
+    "tgSeerrSearchHint": "திரைப்படங்கள் மற்றும் தொடர்களைத் தேடு (எ.கா. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "இந்தச் சீசனில் இல்லாதவை",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{காணாத சீசன்} other{காணாத சீசன்கள்}} {list} - எல்லா சீசன்களையும் பார்க்க தொடரைத் திறக்கவும்",
+    "tgProjectOnGitHub": "GitHub-இல் Tortugarr",
+    "tgProjectOnGitHubSubtitle": "மூலக் குறியீடு, வெளியீடுகள் மற்றும் சிக்கல்கள்",
+    "tgBuiltOnMoonfinCredit": "Tortugarr, Moonfin உருவாக்குநர்களின் Moonfin (GPL) அடிப்படையில் உருவாக்கப்பட்டது.",
+    "tgCredits": "நன்றிகள்",
+    "tgCreditsThanks": "பணிவான நன்றியுடன்: இந்தத் திட்டங்களும் அவற்றின் பின்னால் உள்ள மனிதர்களும் இல்லாவிட்டால் Tortugarr இருந்திருக்காது.",
+    "tgCreditMoonfin": "Tortugarr உருவாக்கப்பட்ட அடிப்படை ஆப் (GPL)",
+    "tgCreditJellyfin": "மீடியா சேவையகம்",
+    "tgCreditSeerr": "கண்டறிதல் மற்றும் கோரிக்கைகள்",
+    "tgCreditRadarr": "திரைப்படங்கள்",
+    "tgCreditSonarr": "தொடர்கள்",
+    "tgCreditProwlarr": "இன்டெக்ஸர் மேலாளர்",
+    "tgCreditBazarr": "வசன வரிகள்",
+    "tgCreditFlareSolverr": "இன்டெக்ஸர்களுக்கான Cloudflare உதவி",
+    "tgCreditQbittorrent": "பதிவிறக்கக் கிளையன்ட், நிறுவியின் இயல்புநிலை",
+    "tgCreditTmdb": "திரைப்பட மற்றும் தொடர் தரவு, போஸ்டர்கள் மற்றும் படங்கள்",
+    "tgCreditOpenSubtitles": "வசன வரிகள், Bazarr வழியாகப் பெறப்பட்டவை",
+    "tgTmdbNotice": "இந்தத் தயாரிப்பு TMDB API-ஐப் பயன்படுத்துகிறது, ஆனால் TMDB ஆல் அங்கீகரிக்கப்பட்டதோ சான்றளிக்கப்பட்டதோ இல்லை.",
+    "tgLoadingLogoSize": "லோடிங் லோகோ அளவு",
+    "tgLoadingLogoSizeSubtitle": "வீடியோ லோடாகும்போது சுழலும் லோகோ",
+    "tgSubtitleLanguages": "வசன மொழிகள்",
+    "tgSubtitleLanguagesSubtitle": "வசன மெனுவில் காட்டப்படும்: {languages}",
+    "tgShowAllSubLangsOffChosen": "ஆஃப்: வசன மெனு நீங்கள் தேர்ந்தெடுத்த மொழிகளை மட்டும் காட்டும்",
+    "tgDiscoveryLanguages": "டிரெண்டிங் மற்றும் பிரபலத்தில் மொழிகள்",
+    "tgDiscoveryLanguagesSubtitle": "காட்டப்படும்: {languages}",
+    "tgHideForeignOnChosen": "ஆன்: டிரெண்டிங் மற்றும் பிரபலம் நீங்கள் தேர்ந்தெடுத்த மொழிகளை மட்டும் காட்டும்",
+    "tgShowLanguageBadges": "மொழி பேட்ஜ்களைக் காட்டு",
+    "tgShowLanguageBadgesOn": "ஆன்: தலைப்புகள் தங்கள் மொழியைக் காட்டும் (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "ஆஃப்: தலைப்புகளில் மொழி பேட்ஜ் இல்லை"
 }

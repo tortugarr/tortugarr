@@ -11,6 +11,7 @@ import '../../data/repositories/multi_server_repository.dart';
 import '../../data/repositories/media_bar_repository.dart';
 import '../../data/repositories/offline_repository.dart';
 import '../../data/services/media_server_client_factory.dart';
+import '../../data/services/download/download_now_service.dart';
 import '../../data/repositories/seerr_repository.dart';
 import '../../data/repositories/tmdb_repository.dart';
 import '../../data/repositories/user_views_repository.dart';
@@ -66,6 +67,7 @@ void resetUserScopedSingletons() {
   unregister<SearchRepository>();
   unregister<UserViewsRepository>();
   unregister<GameLibraryRegistry>();
+  unregister<DownloadNowService>();
 
   _registerUserScopedSingletons();
 }
@@ -207,4 +209,5 @@ void _registerUserScopedSingletons() {
       _getIt<SeerrPreferences>(),
     ),
   );
+  _getIt.registerLazySingleton(() => DownloadNowService());
 }

@@ -9,7 +9,7 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get accountPreferences => 'PREDVOĽBY ÚČTU';
@@ -80,7 +80,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin verzia $version';
+    return 'Tortugarr verzia $version';
   }
 
   @override
@@ -133,7 +133,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin nemá prístup k vášmu systémovému zväzku kľúčov. Prihlasovanie môže pokračovať, ale bezpečné úložisko tokenov môže byť nedostupné, kým sa kľúčenka neodomkne.';
+      'Tortugarr nemá prístup k vášmu systémovému zväzku kľúčov. Prihlasovanie môže pokračovať, ale bezpečné úložisko tokenov môže byť nedostupné, kým sa kľúčenka neodomkne.';
 
   @override
   String get ok => 'OK';
@@ -146,10 +146,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Klasický je pôvodné vycentrované rozloženie Moonfin. Moderný je responzívne filmové rozloženie.';
+      'Klasický je pôvodné vycentrované rozloženie Tortugarr. Moderný je responzívne filmové rozloženie.';
 
   @override
-  String get detailScreenStyleMoonfin => 'Klasický';
+  String get detailScreenStyleNotflix => 'Klasický';
 
   @override
   String get detailScreenStyleModern => 'Moderný';
@@ -173,10 +173,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Použite algoritmus Moonfin odporúča pre lokálnu knižnicu alebo online metriky podobnosti TMDb. Poznámka: Online odporúčania vyžadujú integráciu Seerr.';
+      'Použite algoritmus Tortugarr odporúča pre lokálnu knižnicu alebo online metriky podobnosti TMDb. Poznámka: Online odporúčania vyžadujú integráciu Seerr.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin odporúča';
+  String get recommendationSystemNotflix => 'Tortugarr odporúča';
 
   @override
   String get recommendationSystemTmdb => 'Podobnosť TMDb';
@@ -187,7 +187,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Obmedziť návrhy funkcie Moonfin odporúča podľa rodičovského hodnotenia cieľového média';
+      'Obmedziť návrhy funkcie Tortugarr odporúča podľa rodičovského hodnotenia cieľového média';
 
   @override
   String get interfaceStyle => 'Štýl rozhrania';
@@ -223,14 +223,14 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      'Prepínajte medzi Moonfin a Neon Pulse bez reštartovania aplikácie';
+      'Prepínajte medzi Tortugarr a Neon Pulse bez reštartovania aplikácie';
 
   @override
   String get customThemeTitle => 'Vlastná téma';
 
   @override
   String get customThemeSubtitle =>
-      'Vlastné témy menia vizuálne prvky v celej aplikácii Moonfin. Vyberte si možnosť, ktorá vyhovuje vášmu štýlu.';
+      'Vlastné témy menia vizuálne prvky v celej aplikácii Tortugarr. Vyberte si možnosť, ktorá vyhovuje vášmu štýlu.';
 
   @override
   String get keyboardPreferSystemIme => 'Uprednostniť systémovú klávesnicu';
@@ -240,11 +240,11 @@ class AppLocalizationsSk extends AppLocalizations {
       'Na zadávanie textu predvolene používať metódu vstupu vášho zariadenia';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeNotflix => 'Tortugarr';
 
   @override
-  String get themeMoonfinSubtitle =>
-      'Aktuálny vzhľad Moonfin, ktorý ste si všetci obľúbili';
+  String get themeNotflixSubtitle =>
+      'Aktuálny vzhľad Tortugarr, ktorý ste si všetci obľúbili';
 
   @override
   String get themeNeonPulse => 'Neónový pulz';
@@ -318,7 +318,7 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Odísť z Moonfin?';
+  String get exitApp => 'Odísť z Tortugarr?';
 
   @override
   String get exitAppConfirmation => 'Naozaj chcete skončiť?';
@@ -1379,7 +1379,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get shuffleAllMusic => 'Prehrať všetku hudbu náhodne';
 
   @override
-  String get carSignInPrompt => 'Prihláste sa do Moonfin v telefóne';
+  String get carSignInPrompt => 'Prihláste sa do Tortugarr v telefóne';
 
   @override
   String get carServerUnreachable => 'Server je nedostupný';
@@ -2874,7 +2874,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Nie je nastavené. Moonfin vyskúša predvolený súbor mpv.conf v priečinkoch aplikácií/údajov.';
+      'Nie je nastavené. Tortugarr vyskúša predvolený súbor mpv.conf v priečinkoch aplikácií/údajov.';
 
   @override
   String get selectMpvConf => 'Vyberte mpv.conf';
@@ -3128,7 +3128,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Downloads/Moonfin — viditeľné pre ostatné aplikácie';
+      'Downloads/Tortugarr — viditeľné pre ostatné aplikácie';
 
   @override
   String get dangerZone => 'Nebezpečná zóna';
@@ -3159,7 +3159,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Stiahnuté médiá sa uložia do priečinka Downloads/Moonfin na vašom zariadení. Tieto súbory budú viditeľné pre iné aplikácie, ako je vaša galéria alebo hudobný prehrávač.\n\nExistujúce stiahnuté súbory zostanú na svojom aktuálnom mieste.';
+      'Stiahnuté médiá sa uložia do priečinka Downloads/Tortugarr na vašom zariadení. Tieto súbory budú viditeľné pre iné aplikácie, ako je vaša galéria alebo hudobný prehrávač.\n\nExistujúce stiahnuté súbory zostanú na svojom aktuálnom mieste.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -3296,7 +3296,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Prepnúť viditeľnosť domovskej stránky podľa knižnice. Reštartujte Moonfin, aby sa zmeny prejavili.';
+      'Prepnúť viditeľnosť domovskej stránky podľa knižnice. Reštartujte Tortugarr, aby sa zmeny prejavili.';
 
   @override
   String get showInNavigation => 'Zobraziť v navigácii';
@@ -3348,7 +3348,7 @@ class AppLocalizationsSk extends AppLocalizations {
       'Vyberte si medzi rôznymi štýlmi mediálneho panela alebo mediálny panel vypnite';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeNotflix => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -3871,7 +3871,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get sourceCode => 'Zdrojový kód';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Skontrolujte aktualizácie';
@@ -4039,7 +4039,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Hrajte v Moonfin';
+  String get playInNotflix => 'Hrajte v Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -4073,7 +4073,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Položka sa nenašla vo vašej knižnici Moonfin';
+      'Položka sa nenašla vo vašej knižnici Tortugarr';
 
   @override
   String get errorSearchingLibrary => 'Chyba pri vyhľadávaní knižnice';
@@ -4665,7 +4665,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Prebieha reštart servera, reštartujte prosím Moonfin';
+      'Prebieha reštart servera, reštartujte prosím Tortugarr';
 
   @override
   String get adminActiveSessions => 'Aktívne relácie';
@@ -8505,7 +8505,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Prepnúť viditeľnosť domovskej stránky podľa knižnice. Reštartujte Moonfin, aby sa zmeny prejavili.';
+      'Prepnúť viditeľnosť domovskej stránky podľa knižnice. Reštartujte Tortugarr, aby sa zmeny prejavili.';
 
   @override
   String get settingsMediaBarAndLocalPreviews => 'Panel médií a miestne ukážky';
@@ -8624,10 +8624,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Pripojte sa k Discordu';
 
   @override
-  String get settingsSupportMoonfin => 'Podporte Moonfina';
+  String get settingsSupportNotflix => 'Podporte Tortugarra';
 
   @override
-  String get settingsSupportMoonfinSubtitle => 'Kúpte vývojárovi kávu';
+  String get settingsSupportNotflixSubtitle => 'Kúpte vývojárovi kávu';
 
   @override
   String get settingsLegal => 'PRÁVNE';
@@ -8644,14 +8644,14 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Ako Moonfin narába s vašimi údajmi';
+      'Ako Tortugarr narába s vašimi údajmi';
 
   @override
   String get settingsCheckForUpdates => 'Skontrolujte aktualizácie';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Pozrite si najnovšie vydanie Moonfin';
+      'Pozrite si najnovšie vydanie Tortugarr';
 
   @override
   String get settingsPoweredByFlutter => 'Beží na Flutter';
@@ -9090,7 +9090,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Toto sú témy stiahnuté z pluginu Moonfin pre aktuálny server. Odstránením sa zmaže len táto lokálna kópia.';
+      'Toto sú témy stiahnuté z pluginu Tortugarr pre aktuálny server. Odstránením sa zmaže len táto lokálna kópia.';
 
   @override
   String get savedThemesEmpty =>
@@ -9112,7 +9112,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get themeEditor => 'Editor tém';
 
   @override
-  String get themeEditorSubtitle => 'Otvoriť editor tém Moonfin v prehliadači';
+  String get themeEditorSubtitle =>
+      'Otvoriť editor tém Tortugarr v prehliadači';
 
   @override
   String get homeScreen => 'Domovská obrazovka';
@@ -9346,7 +9347,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get webDiagnostics => 'Webová diagnostika';
 
   @override
-  String get webDiagnosticsTitle => 'Webová diagnostika Moonfin';
+  String get webDiagnosticsTitle => 'Webová diagnostika Tortugarr';
 
   @override
   String get webDiagnosticsIntro =>
@@ -9362,11 +9363,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin zistil, že stránka HTTPS sa pokúša volať URL servera cez HTTP. Prehliadače túto požiadavku zablokujú skôr, než sa dostane na váš server.';
+      'Tortugarr zistil, že stránka HTTPS sa pokúša volať URL servera cez HTTP. Prehliadače túto požiadavku zablokujú skôr, než sa dostane na váš server.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin zistil zlyhanie požiadavky na úrovni prehliadača, ktoré býva spôsobené chýbajúcimi hlavičkami CORS alebo preflight na mediálnom serveri.';
+      'Tortugarr zistil zlyhanie požiadavky na úrovni prehliadača, ktoré býva spôsobené chýbajúcimi hlavičkami CORS alebo preflight na mediálnom serveri.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -9414,7 +9415,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Riešenie: sprístupnite mediálny server alebo proxy koncový bod cez HTTPS, alebo načítavajte Moonfin cez HTTP len v dôveryhodných lokálnych sieťach.';
+      'Riešenie: sprístupnite mediálny server alebo proxy koncový bod cez HTTPS, alebo načítavajte Tortugarr cez HTTP len v dôveryhodných lokálnych sieťach.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -10263,7 +10264,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller je moderný GPU renderer Flutteru pre plynulejšie animácie a menej trhania. Na niektorých TV boxoch a starších GPU môže spôsobovať chyby zobrazenia alebo čierne video; v takom prípade ho vypnite. Automatický vyberie najlepšiu predvoľbu pre vaše zariadenie. Zmena sa prejaví po reštarte Moonfin.';
+      'Impeller je moderný GPU renderer Flutteru pre plynulejšie animácie a menej trhania. Na niektorých TV boxoch a starších GPU môže spôsobovať chyby zobrazenia alebo čierne video; v takom prípade ho vypnite. Automatický vyberie najlepšiu predvoľbu pre vaše zariadenie. Zmena sa prejaví po reštarte Tortugarr.';
 
   @override
   String get impellerAuto => 'Automatický';
@@ -10279,7 +10280,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin sa musí reštartovať, aby sa zmenil vykresľovací engine. Zatvorte teraz aplikáciu a znova ju otvorte.';
+      'Tortugarr sa musí reštartovať, aby sa zmenil vykresľovací engine. Zatvorte teraz aplikáciu a znova ju otvorte.';
 
   @override
   String get impellerCloseNow => 'Zatvoriť aplikáciu';
@@ -10415,4 +10416,1049 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mixedPlaylistsSection => 'Mixed Playlists';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Chýba';
+
+  @override
+  String get tgComing => 'Už čoskoro';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Vychádza $date';
+  }
+
+  @override
+  String get tgDownloading => 'Sťahuje sa';
+
+  @override
+  String get tgReadySoon => 'Čoskoro pripravené';
+
+  @override
+  String get tgRequested => 'Vyžiadané';
+
+  @override
+  String get tgClose => 'Zavrieť';
+
+  @override
+  String get tgCancel => 'Zrušiť';
+
+  @override
+  String get tgBack => 'Späť';
+
+  @override
+  String get tgYes => 'Áno';
+
+  @override
+  String get tgNo => 'Nie';
+
+  @override
+  String get tgSearch => 'Hľadať';
+
+  @override
+  String get tgHide => 'Skryť';
+
+  @override
+  String get tgAll => 'Všetko';
+
+  @override
+  String get tgNone => 'Nič';
+
+  @override
+  String get tgMovies => 'Filmy';
+
+  @override
+  String get tgSeries => 'Seriály';
+
+  @override
+  String get tgMovieTag => 'Film';
+
+  @override
+  String get tgSeriesTag => 'Seriál';
+
+  @override
+  String get tgCanTakeAMinute => 'Môže trvať až minútu';
+
+  @override
+  String get tgToday => 'dnes';
+
+  @override
+  String get tgYesterday => 'včera';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'pred $days dňami';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'pred $months mes.';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'pred $years rokmi';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'pred $years rokmi a $months mes.';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Nájsť titulky';
+
+  @override
+  String get tgFreeUpSpace => 'Uvoľniť miesto';
+
+  @override
+  String get tgDownloads => 'Sťahovania';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Sťahovania ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '„$title“: stiahnutý obsah neobsahoval žiadny videosúbor ($files). Bol odstránený a zablokovaný – skúste iný súbor.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '„$title“: stiahnutý obsah neobsahoval žiadny videosúbor ($files), ale nepodarilo sa ho automaticky odstrániť.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Odvysielané $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Ťuknutím vyhľadáte súbory';
+
+  @override
+  String get tgWholeSeason => 'Celá séria';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Chýba $count epizód – nájsť balík celej série';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Pridajte do Sonarr a uvidíte chýbajúce epizódy';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Seriál sa pridá, ale sám od seba nič nestiahne';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Chýbajúce epizódy sa teraz nedajú zobraziť';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Ťuknutím skúsite znova';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Celá séria';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Sledovať sériu $season';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Má Sonarr hneď stiahnuť chýbajúce epizódy série $season?\n\nNie: stiahnu sa len nové epizódy, keď vyjdú.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr hľadá sériu $season';
+  }
+
+  @override
+  String get tgMonitored => 'Sledované';
+
+  @override
+  String get tgNotMonitored => 'Nesledované';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return 'Séria $season: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return 'Chýba: $label';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code ešte nebola odvysielaná.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code ešte nebola odvysielaná – vychádza $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code sa už sťahuje.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code je stiahnutá a o chvíľu sa objaví v knižnici.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Hľadám $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return 'séria $season';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Celá $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return 'Séria $season – v knižnici nie sú žiadne epizódy';
+  }
+
+  @override
+  String get tgNoTvdbId => 'Seriál nemá TVDB id, takže ho Sonarr nemôže nájsť.';
+
+  @override
+  String get tgAddingToSonarr => 'Pridávam do Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Seriál sa nepodarilo pridať do Sonarr. Skúste to neskôr.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Odosielam „$label“ na stiahnutie …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Sťahovanie sa nespustilo: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '„$label“ sa sťahuje ($size). V knižnici sa objaví, keď bude hotové.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Nedá sa spojiť so Sonarr. Skúste to o chvíľu znova.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Nenašli sa žiadne použiteľné súbory. Skúste to neskôr – nové sa často objavia po niekoľkých hodinách.';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count súborov';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count súborov – $recommended zodpovedá profilu kvality, ostatné sú dole';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Mimo profilu kvality';
+
+  @override
+  String get tgLargerThanProfile => 'Väčší, než profil povoľuje';
+
+  @override
+  String get tgSmallerThanProfile => 'Menší, než profil povoľuje';
+
+  @override
+  String get tgAlreadyExists => 'Už existuje';
+
+  @override
+  String get tgMayNotFitDisk => 'Možno sa nezmestí na disk';
+
+  @override
+  String get tgSonarrUnreachable => 'Nedá sa spojiť so Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Nedá sa spojiť so Sonarr na $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr zmenu neprijal';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Séria je sledovaná, ale Sonarr nespustil hľadanie';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr teraz nemohol hľadať';
+
+  @override
+  String get tgSearchExpired => 'Výsledok hľadania vypršal – hľadajte znova';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr sťahovanie neprijal (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr tento seriál nemá';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Sledovanie sa nepodarilo zmeniť: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin seriál nerozpoznal (chýba TVDB aj TMDB id)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Niečo sa pokazilo: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Súbor nespravuje Radarr/Sonarr a Jellyfin má k priečinku len prístup na čítanie. Vymažte ho v správcovi súborov.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr nie je dostupný, alebo tam seriál nie je pridaný. Sťahovanie po epizódach vyžaduje Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Vybrané epizódy seriálu „$title“ sa v Sonarr nenašli (celkom nájdených $count epizód). Pridajte seriál do Sonarr a skúste to znova.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Súčasť kolekcie ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  pozeráte časť $current z $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return 'Časť $number z $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Neznámy názov';
+
+  @override
+  String get tgMovieCollection => 'Filmová kolekcia';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '„$title“ ešte nevyšiel';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Video';
+
+  @override
+  String get tgScreensaverModeLogo => 'Logo';
+
+  @override
+  String get tgScreensaverSound => 'Zvuk šetriča obrazovky';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Vypnuté: upútavky v šetriči sa prehrávajú bez zvuku';
+
+  @override
+  String get tgScreensaverLogo => 'Logo';
+
+  @override
+  String get tgLogoBadge => 'Odznak Tortugarr';
+
+  @override
+  String get tgLogoVhs => 'Papagáj na kazetách VHS';
+
+  @override
+  String get tgLogoSign => 'Papagáj na tabuli';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'SKRYTÉ · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Miesto na disku';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Uvoľnite miesto pre nové sťahovania';
+
+  @override
+  String get tgAdultTitle => 'Filmy pre dospelých (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Zobraziť alebo skryť knižnicu XXX (PIN)';
+
+  @override
+  String get tgHideForeign => 'Skryť zahraničný obsah';
+
+  @override
+  String get tgHideForeignOn =>
+      'Zapnuté: Trendy a Populárne zobrazujú len angličtinu, nórčinu, švédčinu, dánčinu, nemčinu a francúzštinu';
+
+  @override
+  String get tgHideForeignOff =>
+      'Vypnuté: Trendy a Populárne zobrazujú všetky jazyky';
+
+  @override
+  String get tgShowHidden => 'Zobraziť, čo sa skrýva';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Zapnuté: tituly, ktoré by boli skryté, sa zobrazia s červeným štítkom SKRYTÉ';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Riešenie problémov: skryté tituly zobraziť s červeným štítkom namiesto ich odstránenia';
+
+  @override
+  String get tgShowAllSubLangs => 'Zobraziť všetky jazyky titulkov';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Zapnuté: ponuka titulkov zobrazuje všetky jazyky';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Vypnuté: ponuka titulkov zobrazuje len nórčinu a angličtinu';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Vyp.: ponuka titulkov ukazuje len vybrané jazyky';
+
+  @override
+  String get tgSubtitleLanguages => 'Jazyky titulkov';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Zobrazené v ponuke titulkov: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Zvuk náhľadu';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Zapnuté: klip, ktorý sa prehrá, keď sa zastavíte na titule, má zvuk';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Vypnuté: klipy sa pri prezeraní prehrávajú bez zvuku';
+
+  @override
+  String get tgScreensaver => 'Šetrič obrazovky';
+
+  @override
+  String get tgScreensaverSubtitle => 'Video alebo logo, zvuk a obraz';
+
+  @override
+  String get tgShowMissingEpisodes => 'Zobraziť chýbajúce epizódy';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Zapnuté: série zobrazujú aj epizódy, ktoré nemáte, pripravené na stiahnutie';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Vypnuté: série zobrazujú len epizódy, ktoré máte';
+
+  @override
+  String get tgShowCollections => 'Zobraziť filmové kolekcie';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Zapnuté: pri filmoch sa zobrazia ostatné filmy z kolekcie, vrátane tých, ktoré vám chýbajú';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Vypnuté: stránka filmu kolekciu nezobrazuje';
+
+  @override
+  String get tgNoActiveDownloads => 'Žiadne aktívne sťahovania.';
+
+  @override
+  String get tgPickDownloadToOpen => 'Vyberte sťahovanie a otvorte požiadavky.';
+
+  @override
+  String get tgRefreshLibrary => 'Obnoviť knižnicu';
+
+  @override
+  String get tgAskingJellyfinScan => 'Žiadam Jellyfin o prehľadanie knižnice …';
+
+  @override
+  String get tgHideAll => 'Skryť všetko';
+
+  @override
+  String get tgImporting => 'Importuje sa';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Tento titul nespravuje Radarr/Sonarr, takže Bazarr k nemu nemôže nájsť titulky.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Nedá sa spojiť s Bazarr. Skúste to o chvíľu znova.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Zatiaľ sa nič nenašlo. Bazarr to automaticky skúša každý deň, alebo si môžete vybrať sami.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Nájdené: $languages – môže chvíľu trvať, kým sa objavia v ponuke titulkov.';
+  }
+
+  @override
+  String get tgAnd => 'a';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Stiahnuté – môže chvíľu trvať, kým sa objavia v ponuke titulkov.';
+
+  @override
+  String get tgAskingBazarr => 'Pýtam sa Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Všetko je k dispozícii';
+
+  @override
+  String get tgSearchAutoNow => 'Hľadať automaticky teraz';
+
+  @override
+  String get tgSearchingUpToMinute => 'Hľadám … môže trvať až minútu';
+
+  @override
+  String get tgPickYourself => 'Vybrať sám';
+
+  @override
+  String get tgAskingProviders =>
+      'Pýtam sa zdrojov titulkov … môže trvať až minútu';
+
+  @override
+  String get tgNoProviderSubs => 'Žiadny zdroj k tomu zatiaľ titulky nemá.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: k dispozícii';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: chýba';
+  }
+
+  @override
+  String get tgNoReleaseName => '(bez názvu release)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · pre nepočujúcich';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Nórčina';
+
+  @override
+  String get tgLangEnglish => 'Angličtina';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr tento titul ešte nepozná';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr odpovedal chybou (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Málo miesta na $drive: ($free voľných). Sťahovanie sa môže zastaviť — povedzte to tomu, kto spravuje server.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Nedá sa spojiť s qBittorrent a skontrolovať miesto';
+
+  @override
+  String get tgNotEnoughSpace => 'Nedostatok miesta';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: má $free voľných';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Kópia v Downloads · už je v knižnici';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Naposledy pozerané $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Nikdy nepozerané · pridané $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Nikdy nepozerané';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Na $drive: sa nenašlo nič, čo by sa dalo bezpečne vymazať (všetko je nedávno pridané, nedávno pozerané alebo obľúbené).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vymazať $count titulov?',
+      few: 'Vymazať $count tituly?',
+      one: 'Vymazať $count titul?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size sa nenávratne vymaže. Túto akciu nie je možné vrátiť späť.';
+  }
+
+  @override
+  String get tgYesDelete => 'Áno, vymazať';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Mažem $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: má teraz $free voľných';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vymazaných $count titulov',
+      few: 'Vymazané $count tituly',
+      one: 'Vymazaný $count titul',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Vymazané $count, nepodarilo sa: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Uvoľniť $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Kópie sťahovaní';
+
+  @override
+  String get tgLookingForUnwatched => 'Hľadám, čo dlho nikto nepozeral …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Návrh: $size · dosť miesta ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Návrh: $size z potrebných $target';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Vyberte položku a povedzte nie — ďalší návrh sa doplní automaticky.';
+
+  @override
+  String get tgOtherCandidates => 'Ďalší kandidáti';
+
+  @override
+  String get tgDownloadAnyway => 'Napriek tomu stiahnuť';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Vymazať $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: má $free voľných.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Súbor má $size a zaberie dvojnásobok miesta (sťahovanie + kópia v knižnici), plus $buffer v rezerve.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Súbor má $size, plus $buffer v rezerve.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Prebiehajúce sťahovania potrebujú ešte $size.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Chýba $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Našli sa len súbory zverejnené pred digitálnym vydaním filmu ($count) — tie sú takmer vždy falošné.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'ešte nemá dátum digitálneho vydania';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'vychádza digitálne $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Digitálne ešte nevyšiel';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '„$title“ $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'To, čo teraz existuje, je zvyčajne záznam z kina alebo iný film s rovnakým názvom. Niekedy existuje skorá kópia v nižšej kvalite, často s napálenými titulkami. „Napriek tomu zobraziť súbory“ ukáže, čo existuje. Radarr stiahne správnu verziu sám, keď vyjde.';
+
+  @override
+  String get tgShowFilesAnyway => 'Napriek tomu zobraziť súbory';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Vyberte série a epizódy';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: žiadne informácie o epizódach';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Platí pre všetky zariadenia, ktoré používajú tento účet';
+
+  @override
+  String get tgNoXxxLibrary => 'Nenašla sa žiadna knižnica s názvom XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Hľadám každé slovo zvlášť … (môže trvať pol minúty)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '„$title“ ($size) odoslané do qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Sťahovanie zlyhalo: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '„$title“ neobsahoval žiadny videosúbor a bol odstránený.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '„$title“ neobsahoval žiadny videosúbor a NEBOL odstránený.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Hľadať nové XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Názov, štúdio …';
+
+  @override
+  String get tgChecking => 'Kontrolujem …';
+
+  @override
+  String get tgXxxVisible =>
+      'Viditeľné. XXX sa zobrazuje v knižniciach, vo vyhľadávaní aj na domovskej obrazovke.';
+
+  @override
+  String get tgXxxHidden => 'Skryté. XXX sa v aplikácii nikde nezobrazuje.';
+
+  @override
+  String get tgShowWithPin => 'Zobraziť (PIN)';
+
+  @override
+  String get tgChangePin => 'Zmeniť PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Nepodarilo sa načítať zoznam knižníc (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Nepodarilo sa načítať používateľské nastavenia (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin zmenu odmietol (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Mazanie zlyhalo (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return '„$title“ sa nepodarilo pridať do qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return 'séria $season, epizóda $episode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Hľadať v Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Hľadať filmy a seriály (napr. „Lost S02E05“)';
+
+  @override
+  String get tgMissingInThisSeason => 'Chýba v tejto sérii';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Chýbajú série',
+      few: 'Chýbajú série',
+      one: 'Chýba séria',
+    );
+    return '$_temp0 $list - otvorte seriál a zobrazte všetky série';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr na GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Zdrojový kód, vydania a hlásenia chýb';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr je postavený na Moonfin (GPL) od vývojárov Moonfin.';
+
+  @override
+  String get tgCredits => 'Poďakovanie';
+
+  @override
+  String get tgCreditsThanks =>
+      'S pokornou vďakou: bez týchto projektov a ľudí, ktorí za nimi stoja, by Tortugarr neexistoval.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Aplikácia, na ktorej je Tortugarr postavený (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Mediálny server';
+
+  @override
+  String get tgCreditSeerr => 'Objavovanie a požiadavky';
+
+  @override
+  String get tgCreditRadarr => 'Filmy';
+
+  @override
+  String get tgCreditSonarr => 'Seriály';
+
+  @override
+  String get tgCreditProwlarr => 'Správa indexerov';
+
+  @override
+  String get tgCreditBazarr => 'Titulky';
+
+  @override
+  String get tgCreditFlareSolverr => 'Pomocník Cloudflare pre indexery';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Klient na sťahovanie, predvolená voľba inštalátora';
+
+  @override
+  String get tgCreditTmdb => 'Údaje o filmoch a seriáloch, plagáty a obrázky';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Titulky, získavané cez Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Tento produkt používa API TMDB, ale nie je spoločnosťou TMDB schválený ani certifikovaný.';
+
+  @override
+  String get tgLoadingLogoSize => 'Veľkosť loga pri načítavaní';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Otáčajúce sa logo, kým sa video načítava';
+
+  @override
+  String get tgDiscoveryLanguages => 'Jazyky v Trendoch a Obľúbených';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Zobrazené: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Zap.: Trendy a Obľúbené ukazujú len vybrané jazyky';
+
+  @override
+  String get tgShowLanguageBadges => 'Zobraziť štítky jazyka';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Zap.: tituly ukazujú svoj jazyk (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Vyp.: žiadne štítky jazyka pri tituloch';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }

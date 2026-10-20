@@ -1,6 +1,6 @@
 {
     "@@locale": "nl",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versie {version}",
+    "appVersionFooter": "Tortugarr versie {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin heeft geen toegang tot uw systeemsleutelhanger. Inloggen kan doorgaan, maar veilige tokenopslag is mogelijk niet beschikbaar totdat de sleutelhanger wordt ontgrendeld.",
+    "secureStorageUnavailableMessage": "Tortugarr heeft geen toegang tot uw systeemsleutelhanger. Inloggen kan doorgaan, maar veilige tokenopslag is mogelijk niet beschikbaar totdat de sleutelhanger wordt ontgrendeld.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "De originele, schone Moonfin-standaard.",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "De originele, schone Tortugarr-standaard.",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonpuls",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin verlaten?",
+    "exitApp": "Tortugarr verlaten?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Niet ingesteld. Moonfin zal een standaard mpv.conf proberen in app/data-mappen.",
+    "notSetMpvConf": "Niet ingesteld. Tortugarr zal een standaard mpv.conf proberen in app/data-mappen.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — zichtbaar voor andere apps",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — zichtbaar voor andere apps",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Gedownloade media worden opgeslagen in Downloads/Moonfin op uw apparaat. Deze bestanden zijn zichtbaar voor andere apps, zoals uw galerij of muziekspeler.\n\nBestaande downloads blijven op hun huidige locatie.",
+    "saveToDownloadsFolderDescription": "Gedownloade media worden opgeslagen in Downloads/Tortugarr op uw apparaat. Deze bestanden zijn zichtbaar voor andere apps, zoals uw galerij of muziekspeler.\n\nBestaande downloads blijven op hun huidige locatie.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Schakel de zichtbaarheid van de startpagina per bibliotheek in. Start Moonfin opnieuw op zodat de wijzigingen van kracht worden.",
+    "libraryVisibilityDescription": "Schakel de zichtbaarheid van de startpagina per bibliotheek in. Start Tortugarr opnieuw op zodat de wijzigingen van kracht worden.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Speel in Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Speel in Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Aangevraagd door {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Item niet gevonden in uw Moonfin-bibliotheek",
+    "itemNotFoundInLibrary": "Item niet gevonden in uw Tortugarr-bibliotheek",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Het opnieuw opstarten van de server wordt uitgevoerd",
-    "adminServerRebootMessage": "Het opnieuw opstarten van de server wordt uitgevoerd. Start Moonfin opnieuw op",
+    "adminServerRebootMessage": "Het opnieuw opstarten van de server wordt uitgevoerd. Start Tortugarr opnieuw op",
     "adminActiveSessions": "Actieve sessies",
     "adminSessionsLoadFailed": "Kan sessies niet laden",
     "adminNoActiveSessions": "Geen actieve sessies",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Toon de genreknop in de navigatiebalk",
     "settingsShowFavoritesButtonInNavigation": "Toon de favorietenknop in de navigatiebalk",
     "settingsShowLibrariesButtonInNavigation": "Toon de bibliothekenknop in de navigatiebalk",
-    "settingsLibraryVisibilitySubtitle": "Schakel de zichtbaarheid van de startpagina per bibliotheek in. Start Moonfin opnieuw op zodat de wijzigingen van kracht worden.",
+    "settingsLibraryVisibilitySubtitle": "Schakel de zichtbaarheid van de startpagina per bibliotheek in. Start Tortugarr opnieuw op zodat de wijzigingen van kracht worden.",
     "settingsMediaBarAndLocalPreviews": "Mediabalk en lokale voorbeelden",
     "settingsVisualOverlays": "Visuele overlays",
     "settingsSeasonalSurprise": "Seizoensgebonden verrassing",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Sluit je aan bij Discord",
     "settingsJoinDiscordSubtitle": "Chat met de gemeenschap",
     "settingsJoinTheDiscord": "Sluit je aan bij de Discord",
-    "settingsSupportMoonfin": "Steun Moonfin",
+    "settingsSupportNotflix": "Steun Tortugarr",
     "settingsLegal": "JURIDISCH",
     "settingsLicenses": "Licenties",
     "settingsOpenSourceLicenseNotices": "Kennisgevingen over open-sourcelicenties",
     "settingsPrivacyPolicy": "Privacybeleid",
-    "settingsPrivacyPolicySubtitle": "Hoe Moonfin met uw gegevens omgaat",
+    "settingsPrivacyPolicySubtitle": "Hoe Tortugarr met uw gegevens omgaat",
     "settingsCheckForUpdates": "Controleer op updates",
-    "settingsCheckForUpdatesSubtitle": "Kijk voor de nieuwste Moonfin-release",
+    "settingsCheckForUpdatesSubtitle": "Kijk voor de nieuwste Tortugarr-release",
     "settingsPoweredByFlutter": "Mogelijk gemaakt door Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# licentiemelding} other {# licentiemeldingen}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Opgeslagen thema's",
-    "savedThemesDescription": "Dit zijn thema's die voor de huidige server zijn gedownload van de Moonfin-plug-in. Verwijderen wist alleen deze lokale kopie.",
+    "savedThemesDescription": "Dit zijn thema's die voor de huidige server zijn gedownload van de Tortugarr-plug-in. Verwijderen wist alleen deze lokale kopie.",
     "savedThemesEmpty": "Er zijn geen opgeslagen thema's gevonden voor deze server.",
     "savedThemesCurrentThemeId": "{themeId} • Momenteel actief",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Opgeslagen thema verwijderen",
     "savedThemesManageSubtitle": "Beheer gedownloade plug-in-thema's op dit apparaat",
     "themeEditor": "Thema-editor",
-    "themeEditorSubtitle": "Open de Moonfin Thema-editor in uw browser",
+    "themeEditorSubtitle": "Open de Tortugarr Thema-editor in uw browser",
     "homeScreen": "Startscherm",
     "bottomBar": "Onderste balk",
     "homeRowsStyleClassic": "Klassiek",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Voorkeur voor SDH-ondertitels",
     "preferSdhSubtitlesSubtitle": "Geef bij automatische selectie voorrang aan SDH-/CC-ondertiteltracks.",
     "webDiagnostics": "Webdiagnostiek",
-    "webDiagnosticsTitle": "Moonfin-webdiagnostiek",
+    "webDiagnosticsTitle": "Tortugarr-webdiagnostiek",
     "webDiagnosticsIntro": "Gebruik deze pagina om verbindingsproblemen in de browser te onderzoeken (CORS, gemengde inhoud en detectie-instellingen).",
     "webDiagnosticsDetectedMixedContentFailure": "Fout door gemengde inhoud gedetecteerd",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS-/preflight-fout gedetecteerd",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin heeft gedetecteerd dat een HTTPS-pagina een HTTP-server-URL probeert aan te roepen. Browsers blokkeren dit verzoek voordat het uw server bereikt.",
-    "webDiagnosticsCorsFailureBody": "Moonfin heeft een verzoekfout op browserniveau gedetecteerd die meestal wordt veroorzaakt door ontbrekende CORS- of preflight-headers op de mediaserver.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr heeft gedetecteerd dat een HTTPS-pagina een HTTP-server-URL probeert aan te roepen. Browsers blokkeren dit verzoek voordat het uw server bereikt.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr heeft een verzoekfout op browserniveau gedetecteerd die meestal wordt veroorzaakt door ontbrekende CORS- of preflight-headers op de mediaserver.",
     "webDiagnosticsTargetUrl": "Doel-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "niet geconfigureerd",
     "webDiagnosticsMixedContent": "Gemengde inhoud",
     "webDiagnosticsMixedContentDetected": "Deze pagina wordt via HTTPS geladen, maar een of meer geconfigureerde URL's zijn HTTP. Browsers blokkeren HTTPS-pagina's die HTTP-API's aanroepen.",
-    "webDiagnosticsMixedContentFix": "Oplossing: bied uw mediaserver of proxy-eindpunt via HTTPS aan, of laad Moonfin alleen via HTTP op vertrouwde lokale netwerken.",
+    "webDiagnosticsMixedContentFix": "Oplossing: bied uw mediaserver of proxy-eindpunt via HTTPS aan, of laad Tortugarr alleen via HTTP op vertrouwde lokale netwerken.",
     "webDiagnosticsNoMixedContentDetected": "Geen duidelijke configuratie met gemengde inhoud gevonden in de huidige runtime-instellingen.",
     "webDiagnosticsCorsChecklist": "CORS-checklist",
     "webDiagnosticsCorsChecklistItem1": "• Sta de browser-origin toe in Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Schakel HDR automatisch in bij het afspelen van HDR-video en herstel de weergavemodus bij het afsluiten.",
     "whenFullscreen": "In volledig scherm",
     "transcodingLimits": "Transcodeerlimieten",
-    "settingsSupportMoonfinSubtitle": "Doneer een kop koffie aan de ontwikkelaar",
+    "settingsSupportNotflixSubtitle": "Doneer een kop koffie aan de ontwikkelaar",
     "accountPreferences": "ACCOUNTVOORKEUREN",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Klassiek",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Klassiek",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Gebruik het lokale bibliotheekalgoritme van Moonfin Recommends of de online gelijkeniswaarden van TMDb. Let op: online aanbevelingen vereisen Seerr-integratie.",
+    "recommendationSystemSubtitle": "Gebruik het lokale bibliotheekalgoritme van Tortugarr Recommends of de online gelijkeniswaarden van TMDb. Let op: online aanbevelingen vereisen Seerr-integratie.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-gelijkenis",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Beperk suggesties van Moonfin Recommends op basis van de leeftijdsclassificatie van de betreffende media",
+    "recommendationsApplyParentalRatingCapSubtitle": "Beperk suggesties van Tortugarr Recommends op basis van de leeftijdsclassificatie van de betreffende media",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Aangepaste thema's veranderen visuele elementen in heel Moonfin. Kies een van deze opties die bij uw stijl past.",
+    "customThemeSubtitle": "Aangepaste thema's veranderen visuele elementen in heel Tortugarr. Kies een van deze opties die bij uw stijl past.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Meld u aan bij Moonfin op uw telefoon",
+    "carSignInPrompt": "Meld u aan bij Tortugarr op uw telefoon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller is de moderne GPU-renderer van Flutter voor vloeiendere animaties en minder haperingen. Op sommige tv-boxen en oudere GPU's kan dit glitches of zwarte video veroorzaken; zet het dan Uit. Automatisch kiest de beste standaardinstelling voor uw apparaat. Start Moonfin opnieuw op om de wijziging toe te passen.",
+    "impellerRenderingSubtitle": "Impeller is de moderne GPU-renderer van Flutter voor vloeiendere animaties en minder haperingen. Op sommige tv-boxen en oudere GPU's kan dit glitches of zwarte video veroorzaken; zet het dan Uit. Automatisch kiest de beste standaardinstelling voor uw apparaat. Start Tortugarr opnieuw op om de wijziging toe te passen.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin moet opnieuw worden opgestart om de rendering-engine te wijzigen. Sluit de app nu en open hem daarna opnieuw om de wijziging toe te passen.",
+    "impellerRestartMessage": "Tortugarr moet opnieuw worden opgestart om de rendering-engine te wijzigen. Sluit de app nu en open hem daarna opnieuw om de wijziging toe te passen.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9102,5 +9102,247 @@
     "trailerCaptionsDescription": "Laat ondertitels zien in de YouTube-trailers in de mediabalk",
     "@trailerCaptionsDescription": {
         "description": "Description for YouTube trailer captions"
-    }
+    },
+    "tgMissing": "Ontbreekt",
+    "tgComing": "Komt eraan",
+    "tgComingOn": "Komt {date}",
+    "tgDownloading": "Wordt gedownload",
+    "tgReadySoon": "Bijna klaar",
+    "tgRequested": "Aangevraagd",
+    "tgClose": "Sluiten",
+    "tgCancel": "Annuleren",
+    "tgBack": "Terug",
+    "tgYes": "Ja",
+    "tgNo": "Nee",
+    "tgSearch": "Zoeken",
+    "tgHide": "Verbergen",
+    "tgAll": "Alles",
+    "tgNone": "Geen",
+    "tgMovies": "Films",
+    "tgSeries": "Series",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Serie",
+    "tgCanTakeAMinute": "Kan tot een minuut duren",
+    "tgToday": "vandaag",
+    "tgYesterday": "gisteren",
+    "tgDaysAgo": "{days} dagen geleden",
+    "tgMonthsAgo": "{months} maanden geleden",
+    "tgYearsAgo": "{years} jaar geleden",
+    "tgYearsMonthsAgo": "{years} jaar en {months} maanden geleden",
+    "tgFindSubtitles": "Ondertitels zoeken",
+    "tgFreeUpSpace": "Ruimte vrijmaken",
+    "tgDownloads": "Downloads",
+    "tgDownloadsCount": "Downloads ({count})",
+    "tgNoVideoRemoved": "\"{title}\": de download bevatte geen videobestand ({files}). Hij is verwijderd en geblokkeerd — probeer een ander bestand.",
+    "tgNoVideoNotRemoved": "\"{title}\": de download bevatte geen videobestand ({files}), maar kon niet automatisch worden verwijderd.",
+    "tgAiredOn": "Uitgezonden {date}",
+    "tgTapToFindFiles": "Tik om bestanden te zoeken",
+    "tgWholeSeason": "Heel seizoen",
+    "tgEpisodesMissingFindPack": "{count} afleveringen ontbreken – zoek een seizoenspakket",
+    "tgAddToSonarrTitle": "Voeg toe aan Sonarr om ontbrekende afleveringen te zien",
+    "tgAddToSonarrSubtitle": "De serie wordt toegevoegd zonder dat er vanzelf iets wordt gedownload",
+    "tgMissingEpisodesUnavailable": "Ontbrekende afleveringen kunnen nu niet worden getoond",
+    "tgReasonTapRetry": "{reason} · Tik om opnieuw te proberen",
+    "tgSeasonPackBadge": "Seizoenspakket",
+    "tgMonitorSeasonTitle": "Seizoen {season} volgen",
+    "tgMonitorSeasonQuestion": "Moet Sonarr de ontbrekende afleveringen van seizoen {season} nu ophalen?\n\nNee: alleen nieuwe afleveringen worden opgehaald zodra ze verschijnen.",
+    "tgSonarrSearchingSeason": "Sonarr zoekt naar seizoen {season}",
+    "tgMonitored": "Gevolgd",
+    "tgNotMonitored": "Niet gevolgd",
+    "tgSeasonStateLabel": "Seizoen {season}: {state}",
+    "tgLabelMissing": "{label} ontbreekt",
+    "tgNotAiredYet": "{code} is nog niet uitgezonden.",
+    "tgNotAiredYetComing": "{code} is nog niet uitgezonden – komt {date}.",
+    "tgAlreadyDownloading": "{code} wordt al gedownload.",
+    "tgDownloadedAppearsSoon": "{code} is gedownload en verschijnt binnenkort in de bibliotheek.",
+    "tgSearchingFor": "Zoeken naar {label} …",
+    "tgSeasonLower": "seizoen {season}",
+    "tgWholeLabel": "Heel {label}",
+    "tgSeasonNoEpisodes": "Seizoen {season} – geen afleveringen in de bibliotheek",
+    "tgNoTvdbId": "De serie heeft geen TVDB-id, dus Sonarr kan hem niet vinden.",
+    "tgAddingToSonarr": "Toevoegen aan Sonarr …",
+    "tgAddToSonarrFailed": "De serie kon niet aan Sonarr worden toegevoegd. Probeer het later opnieuw.",
+    "tgSendingToDownload": "\"{label}\" wordt naar de download gestuurd …",
+    "tgDownloadDidNotStart": "De download is niet gestart: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" wordt gedownload ({size}). Hij verschijnt in de bibliotheek zodra hij klaar is.",
+    "tgSonarrUnreachableRetry": "Kon Sonarr niet bereiken. Probeer het iets later opnieuw.",
+    "tgNoUsableFiles": "Geen bruikbare bestanden gevonden. Probeer het later opnieuw – nieuwe verschijnen vaak na een paar uur.",
+    "tgFilesCount": "{count} bestanden",
+    "tgFilesRecommended": "{count} bestanden – {recommended} passen bij het kwaliteitsprofiel, de rest staat onderaan",
+    "tgOutsideQualityProfile": "Buiten het kwaliteitsprofiel",
+    "tgLargerThanProfile": "Groter dan het profiel toestaat",
+    "tgSmallerThanProfile": "Kleiner dan het profiel toestaat",
+    "tgAlreadyExists": "Bestaat al",
+    "tgMayNotFitDisk": "Past misschien niet op de schijf",
+    "tgSonarrUnreachable": "Kon Sonarr niet bereiken",
+    "tgSonarrUnreachableAt": "Kon Sonarr niet bereiken op {host}",
+    "tgSonarrRejectedChange": "Sonarr heeft de wijziging niet geaccepteerd",
+    "tgSeasonMonitoredNoSearch": "Het seizoen wordt gevolgd, maar Sonarr is de zoekopdracht niet gestart",
+    "tgSonarrCantSearch": "Sonarr kon nu niet zoeken",
+    "tgSearchExpired": "Het zoekresultaat is verlopen – zoek opnieuw",
+    "tgSonarrRejectedDownload": "Sonarr heeft de download niet geaccepteerd (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr heeft de serie niet",
+    "tgCouldNotChangeMonitoring": "Kon het volgen niet wijzigen: {error}",
+    "tgJellyfinNoIds": "Jellyfin heeft de serie niet herkend (geen TVDB- of TMDB-id)",
+    "tgSomethingWentWrong": "Er is iets misgegaan: {error}",
+    "tgDeleteReadOnly": "Het bestand wordt niet beheerd door Radarr/Sonarr en Jellyfin heeft alleen leestoegang tot de map. Verwijder het in je bestandsbeheer.",
+    "tgSonarrRequiredPerEpisode": "Sonarr is niet bereikbaar of de serie is daar niet toegevoegd. Downloaden per aflevering vereist Sonarr.",
+    "tgEpisodesNotFound": "Kon de gekozen afleveringen voor \"{title}\" niet vinden in Sonarr ({count} afleveringen in totaal gevonden). Voeg de serie toe aan Sonarr en probeer het opnieuw.",
+    "tgPartOfCollectionPrefix": "Onderdeel van de collectie ",
+    "tgViewingPartOf": "  ·  je bekijkt deel {current} van {total}",
+    "tgPartOf": "Deel {number} van {total}",
+    "tgUnknownTitle": "Onbekende titel",
+    "tgMovieCollection": "Filmcollectie",
+    "tgNotReleasedYet": "\"{title}\" is nog niet uit",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Geluid in schermbeveiliging",
+    "tgScreensaverSoundSubtitle": "Uit: trailers in de schermbeveiliging spelen zonder geluid",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarr-badge",
+    "tgLogoVhs": "Papegaai op VHS-banden",
+    "tgLogoSign": "Papegaai op een bord",
+    "tgHiddenBadge": "VERBORGEN · {code}",
+    "tgDiskSpace": "Schijfruimte",
+    "tgDiskSpaceSubtitle": "Maak ruimte vrij voor nieuwe downloads",
+    "tgAdultTitle": "Films voor volwassenen (XXX)",
+    "tgAdultSubtitle": "De XXX-bibliotheek tonen of verbergen (PIN)",
+    "tgHideForeign": "Buitenlandse inhoud verbergen",
+    "tgHideForeignOn": "Aan: Trending en Populair tonen alleen Engels, Noors, Zweeds, Deens, Duits en Frans",
+    "tgHideForeignOff": "Uit: Trending en Populair tonen alle talen",
+    "tgShowHidden": "Tonen wat verborgen is",
+    "tgShowHiddenOn": "Aan: titels die verborgen zouden worden, krijgen een rode VERBORGEN-badge",
+    "tgShowHiddenOff": "Probleemoplossing: toon verborgen titels met een rode badge in plaats van ze weg te laten",
+    "tgShowAllSubLangs": "Alle ondertiteltalen tonen",
+    "tgShowAllSubLangsOn": "Aan: het ondertitelmenu toont alle talen",
+    "tgShowAllSubLangsOff": "Uit: het ondertitelmenu toont alleen Noors en Engels",
+    "tgPreviewSound": "Geluid in voorvertoningen",
+    "tgPreviewSoundOn": "Aan: de clip die speelt als je op een titel blijft staan heeft geluid",
+    "tgPreviewSoundOff": "Uit: clips spelen zonder geluid terwijl je bladert",
+    "tgScreensaver": "Schermbeveiliging",
+    "tgScreensaverSubtitle": "Video of logo, geluid en beeld",
+    "tgShowMissingEpisodes": "Ontbrekende afleveringen tonen",
+    "tgShowMissingEpisodesOn": "Aan: seizoenen tonen afleveringen die je niet hebt, klaar om te downloaden",
+    "tgShowMissingEpisodesOff": "Uit: seizoenen tonen alleen de afleveringen die je hebt",
+    "tgShowCollections": "Filmcollecties tonen",
+    "tgShowCollectionsOn": "Aan: films tonen de andere films in de collectie, ook die je mist",
+    "tgShowCollectionsOff": "Uit: de filmpagina toont de collectie niet",
+    "tgNoActiveDownloads": "Geen actieve downloads.",
+    "tgPickDownloadToOpen": "Kies een download om de aanvragen te openen.",
+    "tgRefreshLibrary": "Bibliotheek vernieuwen",
+    "tgAskingJellyfinScan": "Jellyfin wordt gevraagd de bibliotheek te scannen …",
+    "tgHideAll": "Alles verbergen",
+    "tgImporting": "Importeren",
+    "tgSubsNotManaged": "Deze titel wordt niet beheerd door Radarr/Sonarr, dus Bazarr kan er geen ondertitels voor vinden.",
+    "tgBazarrUnreachable": "Kon Bazarr niet bereiken. Probeer het iets later opnieuw.",
+    "tgSubsFoundNothing": "Nog niets gevonden. Bazarr probeert het elke dag automatisch opnieuw, of je kiest er zelf een.",
+    "tgSubsFound": "{languages} gevonden – het kan even duren voordat het in het ondertitelmenu verschijnt.",
+    "tgAnd": "en",
+    "tgSubsDownloaded": "Gedownload – het kan even duren voordat het in het ondertitelmenu verschijnt.",
+    "tgAskingBazarr": "Bazarr wordt gevraagd …",
+    "tgHaveAll": "Alles aanwezig",
+    "tgSearchAutoNow": "Nu automatisch zoeken",
+    "tgSearchingUpToMinute": "Zoeken … kan tot een minuut duren",
+    "tgPickYourself": "Zelf kiezen",
+    "tgAskingProviders": "De ondertitelbronnen worden gevraagd … kan tot een minuut duren",
+    "tgNoProviderSubs": "Geen enkele bron heeft hier al ondertitels voor.",
+    "tgLangHas": "{language}: beschikbaar",
+    "tgLangMissing": "{language}: ontbreekt",
+    "tgNoReleaseName": "(geen releasenaam)",
+    "tgHearingImpaired": "{provider} · voor slechthorenden",
+    "tgLangNorwegian": "Noors",
+    "tgLangEnglish": "Engels",
+    "tgBazarrUnknownTitle": "Bazarr kent deze titel nog niet",
+    "tgBazarrError": "Bazarr antwoordde met een fout (HTTP {code})",
+    "tgLowSpaceSnack": "Weinig ruimte op {drive}: ({free} vrij). De download kan stoppen — laat het weten aan wie de server beheert.",
+    "tgNoQbitForSpace": "Kon qBittorrent niet bereiken om de ruimte te controleren",
+    "tgNotEnoughSpace": "Niet genoeg ruimte",
+    "tgDriveHasFree": "{drive}: heeft {free} vrij",
+    "tgCopyInDownloads": "Kopie in Downloads · staat al in de bibliotheek",
+    "tgLastWatched": "Laatst bekeken {ago}",
+    "tgNeverWatchedAdded": "Nooit bekeken · toegevoegd {ago}",
+    "tgNeverWatched": "Nooit bekeken",
+    "tgNothingSafeToDelete": "Niets gevonden op {drive}: dat veilig kan worden verwijderd (alles is recent toegevoegd, recent bekeken of een favoriet).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{1 titel verwijderen?} other{{count} titels verwijderen?}}",
+    "tgDeletedForGood": "{size} wordt definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+    "tgYesDelete": "Ja, verwijderen",
+    "tgDeletingProgress": "Verwijderen {done}/{total} …",
+    "tgNowHasFree": " · {drive}: heeft nu {free} vrij",
+    "tgDeletedTitles": "{count, plural, =1{1 titel verwijderd} other{{count} titels verwijderd}}{extra}",
+    "tgDeletedFailed": "{count} verwijderd, mislukt: {failed}{extra}",
+    "tgFreeGb": "{gb} GB vrijmaken",
+    "tgDownloadCopies": "Downloadkopieën",
+    "tgLookingForUnwatched": "Zoeken naar wat al lang niet is bekeken …",
+    "tgSuggestionEnough": "Voorstel: {size} · genoeg ruimte ✓",
+    "tgSuggestionOf": "Voorstel: {size} van de benodigde {target}",
+    "tgPickToSayNo": "Kies er een om nee te zeggen — het volgende voorstel komt automatisch.",
+    "tgOtherCandidates": "Andere kandidaten",
+    "tgDownloadAnyway": "Toch downloaden",
+    "tgDeleteCountSize": "{count} verwijderen ({size})",
+    "tgDriveHasFreeDot": "{drive}: heeft {free} vrij.",
+    "tgFileDoubleSpace": "Het bestand is {size} en neemt twee keer de ruimte in (download + kopie in de bibliotheek), plus {buffer} in reserve.",
+    "tgFileSize": "Het bestand is {size}, plus {buffer} in reserve.",
+    "tgPendingNeeds": "Lopende downloads hebben nog {size} nodig.",
+    "tgShortBy": "{size} tekort.",
+    "tgOnlyEarlyFiles": "Alleen bestanden gevonden die vóór de digitale release van de film zijn gepubliceerd ({count}) — die zijn bijna altijd nep.",
+    "tgNoDigitalDate": "heeft nog geen digitale releasedatum",
+    "tgDigitalOn": "komt digitaal uit op {date}",
+    "tgNotOutDigitally": "Nog niet digitaal uit",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "Wat er nu bestaat, is meestal een bioscoopopname of een andere film met dezelfde naam. Soms is er een vroege kopie in lagere kwaliteit, vaak met ingebrande ondertitels. \"Toch bestanden tonen\" laat zien wat er is. Radarr haalt de echte versie zelf op zodra die uitkomt.",
+    "tgShowFilesAnyway": "Toch bestanden tonen",
+    "tgPickSeasonsEpisodes": "Kies seizoenen en afleveringen",
+    "tgNoEpisodeInfo": "{season}: geen afleveringsinfo",
+    "tgAppliesAllDevices": "Geldt voor elk apparaat dat dit account gebruikt",
+    "tgNoXxxLibrary": "Geen bibliotheek met de naam XXX gevonden.",
+    "tgSearchingEachWord": "Elk woord apart zoeken … (kan een halve minuut duren)",
+    "tgSentToQbit": "\"{title}\" ({size}) naar qBittorrent gestuurd",
+    "tgDownloadFailed": "Download mislukt: {error}",
+    "tgXxxNoVideoRemoved": "\"{title}\" bevatte geen videobestand en is verwijderd.",
+    "tgXxxNoVideoNotRemoved": "\"{title}\" bevatte geen videobestand en is NIET verwijderd.",
+    "tgSearchNewXxx": "Zoeken naar nieuwe XXX",
+    "tgXxxSearchHint": "Naam, studio …",
+    "tgChecking": "Controleren …",
+    "tgXxxVisible": "Nu zichtbaar. XXX verschijnt in de bibliotheken, de zoekfunctie en op het startscherm.",
+    "tgXxxHidden": "Verborgen. XXX verschijnt nergens in de app.",
+    "tgShowWithPin": "Tonen (PIN)",
+    "tgChangePin": "PIN wijzigen",
+    "tgNoLibraryList": "Kon de bibliotheeklijst niet ophalen (HTTP {code})",
+    "tgNoUserSettings": "Kon de gebruikersinstellingen niet ophalen (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin heeft de wijziging afgewezen (HTTP {code})",
+    "tgDeleteFailed": "Verwijderen mislukt (HTTP {code})",
+    "tgXxxAddFailed": "Kon \"{title}\" niet toevoegen aan qBittorrent",
+    "tgSeasonEpisodeLower": "seizoen {season}, aflevering {episode}",
+    "tgSearchInSeerr": "Zoeken in Seerr",
+    "tgSeerrSearchHint": "Zoek films en series (bijv. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Ontbreekt in dit seizoen",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Ontbrekend seizoen} other{Ontbrekende seizoenen}} {list} - open de serie om alle seizoenen te zien",
+    "tgProjectOnGitHub": "Tortugarr op GitHub",
+    "tgProjectOnGitHubSubtitle": "Broncode, releases en issues",
+    "tgBuiltOnMoonfinCredit": "Tortugarr is gebouwd op Moonfin (GPL), door de Moonfin-ontwikkelaars.",
+    "tgCredits": "Met dank aan",
+    "tgCreditsThanks": "Met nederige dank: zonder deze projecten en de mensen erachter zou Tortugarr niet bestaan.",
+    "tgCreditMoonfin": "De app waarop Tortugarr is gebouwd (GPL)",
+    "tgCreditJellyfin": "Mediaserver",
+    "tgCreditSeerr": "Ontdekken en aanvragen",
+    "tgCreditRadarr": "Films",
+    "tgCreditSonarr": "Series",
+    "tgCreditProwlarr": "Indexerbeheer",
+    "tgCreditBazarr": "Ondertitels",
+    "tgCreditFlareSolverr": "Cloudflare-hulp voor indexers",
+    "tgCreditQbittorrent": "Downloadclient, de standaardkeuze van het installatieprogramma",
+    "tgCreditTmdb": "Film- en seriegegevens, posters en afbeeldingen",
+    "tgCreditOpenSubtitles": "Ondertitels, opgehaald via Bazarr",
+    "tgTmdbNotice": "Dit product gebruikt de TMDB-API, maar is niet goedgekeurd of gecertificeerd door TMDB.",
+    "tgLoadingLogoSize": "Grootte van het laadlogo",
+    "tgLoadingLogoSizeSubtitle": "Het draaiende logo terwijl een video laadt",
+    "tgSubtitleLanguages": "Ondertitelingstalen",
+    "tgSubtitleLanguagesSubtitle": "Getoond in het ondertitelmenu: {languages}",
+    "tgShowAllSubLangsOffChosen": "Uit: het ondertitelmenu toont alleen de gekozen talen",
+    "tgDiscoveryLanguages": "Talen in Trending en Populair",
+    "tgDiscoveryLanguagesSubtitle": "Getoond: {languages}",
+    "tgHideForeignOnChosen": "Aan: Trending en Populair tonen alleen de gekozen talen",
+    "tgShowLanguageBadges": "Taallabels tonen",
+    "tgShowLanguageBadgesOn": "Aan: titels tonen hun taal (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Uit: geen taallabels op de titels"
 }

@@ -1,6 +1,6 @@
 {
     "@@locale": "da",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin version {version}",
+    "appVersionFooter": "Tortugarr version {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin kunne ikke få adgang til din systemnøglering. Login kan fortsætte, men sikker token-opbevaring er muligvis ikke tilgængelig, før nøgleringen er låst op.",
+    "secureStorageUnavailableMessage": "Tortugarr kunne ikke få adgang til din systemnøglering. Login kan fortsætte, men sikker token-opbevaring er muligvis ikke tilgængelig, før nøgleringen er låst op.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Skift mellem Moonfin og Neon Pulse uden at genstarte appen",
+    "settingsAppearanceThemeSubtitle": "Skift mellem Tortugarr og Neon Pulse uden at genstarte appen",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Det nuværende Moonfin-udseende, som alle vil komme til at elske",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Det nuværende Tortugarr-udseende, som alle vil komme til at elske",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonpuls",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Afslut Moonfin?",
+    "exitApp": "Afslut Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Ikke indstillet. Moonfin vil prøve en standard mpv.conf i app/data-mapper.",
+    "notSetMpvConf": "Ikke indstillet. Tortugarr vil prøve en standard mpv.conf i app/data-mapper.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — synlig for andre apps",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — synlig for andre apps",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Downloadede medier vil blive gemt i Downloads/Moonfin på din enhed. Disse filer vil være synlige for andre apps, såsom dit galleri eller din musikafspiller.\n\nEksisterende downloads forbliver på deres nuværende placering.",
+    "saveToDownloadsFolderDescription": "Downloadede medier vil blive gemt i Downloads/Tortugarr på din enhed. Disse filer vil være synlige for andre apps, såsom dit galleri eller din musikafspiller.\n\nEksisterende downloads forbliver på deres nuværende placering.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Skift startsidesynlighed pr. bibliotek. Genstart Moonfin for at ændringerne træder i kraft.",
+    "libraryVisibilityDescription": "Skift startsidesynlighed pr. bibliotek. Genstart Tortugarr for at ændringerne træder i kraft.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Spil i Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Spil i Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Anmodet af {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Element blev ikke fundet i dit Moonfin-bibliotek",
+    "itemNotFoundInLibrary": "Element blev ikke fundet i dit Tortugarr-bibliotek",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Servergenstart er i gang",
-    "adminServerRebootMessage": "Servergenstart er i gang. Genstart venligst Moonfin",
+    "adminServerRebootMessage": "Servergenstart er i gang. Genstart venligst Tortugarr",
     "adminActiveSessions": "Aktive sessioner",
     "adminSessionsLoadFailed": "Kunne ikke indlæse sessioner",
     "adminNoActiveSessions": "Ingen aktive sessioner",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Vis genreknappen i navigationslinjen",
     "settingsShowFavoritesButtonInNavigation": "Vis knappen Favoritter i navigationslinjen",
     "settingsShowLibrariesButtonInNavigation": "Vis biblioteksknappen i navigationslinjen",
-    "settingsLibraryVisibilitySubtitle": "Skift startsidesynlighed pr. bibliotek. Genstart Moonfin for at ændringerne træder i kraft.",
+    "settingsLibraryVisibilitySubtitle": "Skift startsidesynlighed pr. bibliotek. Genstart Tortugarr for at ændringerne træder i kraft.",
     "settingsMediaBarAndLocalPreviews": "Mediebar og lokale forhåndsvisninger",
     "settingsVisualOverlays": "Visuelle overlejringer",
     "settingsSeasonalSurprise": "Sæsonbestemt overraskelse",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Tilmeld dig Discord",
     "settingsJoinDiscordSubtitle": "Chat med fællesskabet",
     "settingsJoinTheDiscord": "Deltag i Discord",
-    "settingsSupportMoonfin": "Støt Moonfin",
+    "settingsSupportNotflix": "Støt Tortugarr",
     "settingsLegal": "JURIDISK",
     "settingsLicenses": "Licenser",
     "settingsOpenSourceLicenseNotices": "Open source-licensmeddelelser",
     "settingsPrivacyPolicy": "Privatlivspolitik",
-    "settingsPrivacyPolicySubtitle": "Hvordan Moonfin håndterer dine data",
+    "settingsPrivacyPolicySubtitle": "Hvordan Tortugarr håndterer dine data",
     "settingsCheckForUpdates": "Se efter opdateringer",
-    "settingsCheckForUpdatesSubtitle": "Se efter den seneste Moonfin-udgivelse",
+    "settingsCheckForUpdatesSubtitle": "Se efter den seneste Tortugarr-udgivelse",
     "settingsPoweredByFlutter": "Drevet af Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# licensmeddelelse} other {# licensmeddelelser}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Gemte temaer",
-    "savedThemesDescription": "Disse er temaer, der er downloadet fra Moonfin plugin til den aktuelle server. Sletning fjerner kun denne lokale kopi.",
+    "savedThemesDescription": "Disse er temaer, der er downloadet fra Tortugarr plugin til den aktuelle server. Sletning fjerner kun denne lokale kopi.",
     "savedThemesEmpty": "Der blev ikke fundet nogen gemte temaer for denne server.",
     "savedThemesCurrentThemeId": "{themeId} • Aktiv i øjeblikket",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Slet gemt tema",
     "savedThemesManageSubtitle": "Administrer downloadede plugin-temaer på denne enhed",
     "themeEditor": "Tema redaktør",
-    "themeEditorSubtitle": "Åbn Moonfin Theme Editor i din browser",
+    "themeEditorSubtitle": "Åbn Tortugarr Theme Editor i din browser",
     "homeScreen": "Startskærm",
     "bottomBar": "Nederste bjælke",
     "homeRowsStyleClassic": "Klassisk",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Foretrækker SDH undertekster",
     "preferSdhSubtitlesSubtitle": "Prioriter SDH/CC-undertekstspor ved automatisk valg.",
     "webDiagnostics": "Webdiagnostik",
-    "webDiagnosticsTitle": "Moonfin Webdiagnostik",
+    "webDiagnosticsTitle": "Tortugarr Webdiagnostik",
     "webDiagnosticsIntro": "Brug denne side til at diagnosticere problemer med browserforbindelse (CORS, blandet indhold og indstillinger for opdagelse).",
     "webDiagnosticsDetectedMixedContentFailure": "Detekteret blandet indholdsfejl",
     "webDiagnosticsDetectedCorsPreflightFailure": "Detekteret CORS/Preflight-fejl",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin registrerede en HTTPS-side, der forsøgte at kalde en HTTP-server-URL. Browsere blokerer denne anmodning, før den når din server.",
-    "webDiagnosticsCorsFailureBody": "Moonfin har registreret en anmodningsfejl på browserniveau, der almindeligvis er forårsaget af manglende CORS eller preflight-headers på medieserveren.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr registrerede en HTTPS-side, der forsøgte at kalde en HTTP-server-URL. Browsere blokerer denne anmodning, før den når din server.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr har registreret en anmodningsfejl på browserniveau, der almindeligvis er forårsaget af manglende CORS eller preflight-headers på medieserveren.",
     "webDiagnosticsTargetUrl": "Mål-URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "ikke konfigureret",
     "webDiagnosticsMixedContent": "Blandet indhold",
     "webDiagnosticsMixedContentDetected": "Denne side indlæses via HTTPS, men en eller flere konfigurerede URL'er er HTTP. Browsere blokerer HTTPS-sider fra at kalde HTTP API'er.",
-    "webDiagnosticsMixedContentFix": "Fix: server din medieserver eller proxy-slutpunkt via HTTPS, eller indlæs kun Moonfin over HTTP på betroede lokale netværk.",
+    "webDiagnosticsMixedContentFix": "Fix: server din medieserver eller proxy-slutpunkt via HTTPS, eller indlæs kun Tortugarr over HTTP på betroede lokale netværk.",
     "webDiagnosticsNoMixedContentDetected": "Ingen åbenlys konfiguration af blandet indhold fundet fra aktuelle runtime-indstillinger.",
     "webDiagnosticsCorsChecklist": "CORS tjekliste",
     "webDiagnosticsCorsChecklistItem1": "• Tillad browserens oprindelse i Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Aktiver automatisk HDR for HDR-videoafspilning og gendan visningstilstand ved afslutning.",
     "whenFullscreen": "Når fuldskærm",
     "transcodingLimits": "Omkodningsgrænser",
-    "settingsSupportMoonfinSubtitle": "Doner en kop kaffe til udvikleren",
+    "settingsSupportNotflixSubtitle": "Doner en kop kaffe til udvikleren",
     "interfaceLanguage": "Sprog i brugerflade",
     "@interfaceLanguage": {
         "description": "Label for the app interface language setting"
@@ -7379,12 +7379,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klassisk er det oprindelige centrerede Moonfin-layout. Moderne er et responsivt, filmisk layout.",
+    "detailScreenStyleSubtitle": "Klassisk er det oprindelige centrerede Tortugarr-layout. Moderne er et responsivt, filmisk layout.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Klassisk",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Klassisk",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moderne",
@@ -7411,13 +7411,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Brug Moonfin Anbefaler-algoritmen til dit lokale bibliotek eller TMDb's lighedsmålinger online. Bemærk: Onlineanbefalinger kræver Seerr-integration.",
+    "recommendationSystemSubtitle": "Brug Tortugarr Anbefaler-algoritmen til dit lokale bibliotek eller TMDb's lighedsmålinger online. Bemærk: Onlineanbefalinger kræver Seerr-integration.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Anbefaler",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Anbefaler",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-lighed",
     "@recommendationSystemTmdb": {
@@ -7427,7 +7427,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Begræns forslag fra Moonfin Anbefaler efter målmediets aldersgrænse",
+    "recommendationsApplyParentalRatingCapSubtitle": "Begræns forslag fra Tortugarr Anbefaler efter målmediets aldersgrænse",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7475,7 +7475,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Brugerdefinerede temaer ændrer visuelle elementer i hele Moonfin. Vælg en af disse muligheder, der passer til din stil.",
+    "customThemeSubtitle": "Brugerdefinerede temaer ændrer visuelle elementer i hele Tortugarr. Vælg en af disse muligheder, der passer til din stil.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7627,7 +7627,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Log ind på Moonfin på din telefon",
+    "carSignInPrompt": "Log ind på Tortugarr på din telefon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller er Flutters moderne GPU-renderer, der giver jævnere animationer og mindre hakken. På nogle TV-bokse og ældre GPU'er kan den give grafikfejl eller sort video; slå den fra, hvis du oplever det. Automatisk vælger den bedste standardindstilling til din enhed. Genstart Moonfin for at anvende ændringen.",
+    "impellerRenderingSubtitle": "Impeller er Flutters moderne GPU-renderer, der giver jævnere animationer og mindre hakken. På nogle TV-bokse og ældre GPU'er kan den give grafikfejl eller sort video; slå den fra, hvis du oplever det. Automatisk vælger den bedste standardindstilling til din enhed. Genstart Tortugarr for at anvende ændringen.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin skal genstartes for at skifte gengivelsesmotor. Luk appen nu, og åbn den igen for at anvende ændringen.",
+    "impellerRestartMessage": "Tortugarr skal genstartes for at skifte gengivelsesmotor. Luk appen nu, og åbn den igen for at anvende ændringen.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Mest populære film på IMDb",
     "imdbMostPopularTvShows": "Mest populære serier på IMDb",
     "imdbLowestRatedMovies": "Lavest bedømte film på IMDb",
-    "imdbTopEnglishMovies": "Bedst bedømte engelsksprogede film på IMDb"
+    "imdbTopEnglishMovies": "Bedst bedømte engelsksprogede film på IMDb",
+    "tgMissing": "Mangler",
+    "tgComing": "Kommer",
+    "tgComingOn": "Kommer {date}",
+    "tgDownloading": "Downloader",
+    "tgReadySoon": "Klar snart",
+    "tgRequested": "Anmodet",
+    "tgClose": "Luk",
+    "tgCancel": "Annullér",
+    "tgBack": "Tilbage",
+    "tgYes": "Ja",
+    "tgNo": "Nej",
+    "tgSearch": "Søg",
+    "tgHide": "Skjul",
+    "tgAll": "Alle",
+    "tgNone": "Ingen",
+    "tgMovies": "Film",
+    "tgSeries": "Serier",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Serie",
+    "tgCanTakeAMinute": "Kan tage op til et minut",
+    "tgToday": "i dag",
+    "tgYesterday": "i går",
+    "tgDaysAgo": "{days} dage siden",
+    "tgMonthsAgo": "{months} mdr. siden",
+    "tgYearsAgo": "{years} år siden",
+    "tgYearsMonthsAgo": "{years} år og {months} mdr. siden",
+    "tgFindSubtitles": "Find undertekster",
+    "tgFreeUpSpace": "Frigør plads",
+    "tgDownloads": "Downloads",
+    "tgDownloadsCount": "Downloads ({count})",
+    "tgNoVideoRemoved": "»{title}«: downloaden indeholdt ingen videofil ({files}). Den er fjernet og blokeret – prøv en anden fil.",
+    "tgNoVideoNotRemoved": "»{title}«: downloaden indeholdt ingen videofil ({files}), men kunne ikke fjernes automatisk.",
+    "tgAiredOn": "Sendt {date}",
+    "tgTapToFindFiles": "Tryk for at finde filer",
+    "tgWholeSeason": "Hele sæsonen",
+    "tgEpisodesMissingFindPack": "{count} episoder mangler – find en sæsonpakke",
+    "tgAddToSonarrTitle": "Tilføj i Sonarr for at se manglende episoder",
+    "tgAddToSonarrSubtitle": "Serien tilføjes uden selv at downloade noget",
+    "tgMissingEpisodesUnavailable": "Manglende episoder kan ikke vises lige nu",
+    "tgReasonTapRetry": "{reason} · Tryk for at prøve igen",
+    "tgSeasonPackBadge": "Hel sæson",
+    "tgMonitorSeasonTitle": "Overvåg sæson {season}",
+    "tgMonitorSeasonQuestion": "Skal Sonarr hente de manglende episoder i sæson {season} nu?\n\nNej: kun nye episoder hentes, når de kommer.",
+    "tgSonarrSearchingSeason": "Sonarr søger efter sæson {season}",
+    "tgMonitored": "Overvåges",
+    "tgNotMonitored": "Overvåges ikke",
+    "tgSeasonStateLabel": "Sæson {season}: {state}",
+    "tgLabelMissing": "{label} mangler",
+    "tgNotAiredYet": "{code} er ikke sendt endnu.",
+    "tgNotAiredYetComing": "{code} er ikke sendt endnu – kommer {date}.",
+    "tgAlreadyDownloading": "{code} downloades allerede.",
+    "tgDownloadedAppearsSoon": "{code} er downloadet og dukker snart op i biblioteket.",
+    "tgSearchingFor": "Søger efter {label} …",
+    "tgSeasonLower": "sæson {season}",
+    "tgWholeLabel": "Hele {label}",
+    "tgSeasonNoEpisodes": "Sæson {season} – ingen episoder i biblioteket",
+    "tgNoTvdbId": "Serien har intet TVDB-id, så Sonarr kan ikke finde den.",
+    "tgAddingToSonarr": "Tilføjer i Sonarr …",
+    "tgAddToSonarrFailed": "Serien kunne ikke tilføjes i Sonarr. Prøv igen senere.",
+    "tgSendingToDownload": "Sender »{label}« til download …",
+    "tgDownloadDidNotStart": "Downloaden startede ikke: {error}",
+    "tgDownloadingAppearsWhenDone": "»{label}« downloades ({size}). Den dukker op i biblioteket, når den er færdig.",
+    "tgSonarrUnreachableRetry": "Kunne ikke få kontakt til Sonarr. Prøv igen lidt senere.",
+    "tgNoUsableFiles": "Fandt ingen brugbare filer. Prøv igen senere – nye dukker ofte op efter nogle timer.",
+    "tgFilesCount": "{count} filer",
+    "tgFilesRecommended": "{count} filer – {recommended} passer til kvalitetsprofilen, resten ligger nederst",
+    "tgOutsideQualityProfile": "Uden for kvalitetsprofilen",
+    "tgLargerThanProfile": "Større end profilen tillader",
+    "tgSmallerThanProfile": "Mindre end profilen tillader",
+    "tgAlreadyExists": "Findes allerede",
+    "tgMayNotFitDisk": "Er der måske ikke plads til på disken",
+    "tgSonarrUnreachable": "Kunne ikke få kontakt til Sonarr",
+    "tgSonarrUnreachableAt": "Kunne ikke få kontakt til Sonarr på {host}",
+    "tgSonarrRejectedChange": "Sonarr accepterede ikke ændringen",
+    "tgSeasonMonitoredNoSearch": "Sæsonen overvåges, men Sonarr startede ikke søgningen",
+    "tgSonarrCantSearch": "Sonarr kunne ikke søge lige nu",
+    "tgSearchExpired": "Søgeresultatet er udløbet – søg igen",
+    "tgSonarrRejectedDownload": "Sonarr accepterede ikke downloaden (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr har ikke serien",
+    "tgCouldNotChangeMonitoring": "Overvågningen kunne ikke ændres: {error}",
+    "tgJellyfinNoIds": "Jellyfin genkendte ikke serien (intet TVDB- eller TMDB-id)",
+    "tgSomethingWentWrong": "Noget gik galt: {error}",
+    "tgDeleteReadOnly": "Filen styres ikke af Radarr/Sonarr, og Jellyfin har kun læseadgang til mappen. Slet den i din filhåndtering.",
+    "tgSonarrRequiredPerEpisode": "Sonarr kan ikke nås, eller serien er ikke tilføjet der. Download af enkelte episoder kræver Sonarr.",
+    "tgEpisodesNotFound": "Kunne ikke finde de valgte episoder i Sonarr for »{title}« (fandt {count} episoder i alt). Tilføj serien i Sonarr og prøv igen.",
+    "tgPartOfCollectionPrefix": "Del af filmserien ",
+    "tgViewingPartOf": "  ·  du ser del {current} af {total}",
+    "tgPartOf": "Del {number} af {total}",
+    "tgUnknownTitle": "Ukendt titel",
+    "tgMovieCollection": "Filmserie",
+    "tgNotReleasedYet": "»{title}« er ikke udkommet endnu",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Lyd i pauseskærm",
+    "tgScreensaverSoundSubtitle": "Fra: trailere i pauseskærmen afspilles uden lyd",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarr-mærket",
+    "tgLogoVhs": "Papegøje på VHS-bånd",
+    "tgLogoSign": "Papegøje på et skilt",
+    "tgHiddenBadge": "SKJULT · {code}",
+    "tgDiskSpace": "Diskplads",
+    "tgDiskSpaceSubtitle": "Frigør plads til nye downloads",
+    "tgAdultTitle": "Voksenfilm (XXX)",
+    "tgAdultSubtitle": "Vis eller skjul XXX-biblioteket (PIN)",
+    "tgHideForeign": "Skjul udenlandsk indhold",
+    "tgHideForeignOn": "Til: Trending og Populært viser kun engelsk, norsk, svensk, dansk, tysk og fransk",
+    "tgHideForeignOff": "Fra: Trending og Populært viser alle sprog",
+    "tgShowHidden": "Vis, hvad der skjules",
+    "tgShowHiddenOn": "Til: titler, der ellers ville være skjult, vises med et rødt SKJULT-mærke",
+    "tgShowHiddenOff": "Fejlfinding: vis skjulte titler med et rødt mærke i stedet for at fjerne dem",
+    "tgShowAllSubLangs": "Vis alle undertekstsprog",
+    "tgShowAllSubLangsOn": "Til: undertekstmenuen viser alle sprog",
+    "tgShowAllSubLangsOff": "Fra: undertekstmenuen viser kun norsk og engelsk",
+    "tgPreviewSound": "Lyd i forhåndsvisninger",
+    "tgPreviewSoundOn": "Til: klippet, der afspilles, når du stopper på en titel, har lyd",
+    "tgPreviewSoundOff": "Fra: klip afspilles uden lyd, mens du browser",
+    "tgScreensaver": "Pauseskærm",
+    "tgScreensaverSubtitle": "Video eller logo, lyd og billede",
+    "tgShowMissingEpisodes": "Vis manglende episoder",
+    "tgShowMissingEpisodesOn": "Til: sæsoner viser episoder, du ikke har, klar til download",
+    "tgShowMissingEpisodesOff": "Fra: sæsoner viser kun de episoder, du har",
+    "tgShowCollections": "Vis filmserier",
+    "tgShowCollectionsOn": "Til: film viser de andre film i serien, også dem du mangler",
+    "tgShowCollectionsOff": "Fra: filmsiden viser ikke filmserien",
+    "tgNoActiveDownloads": "Ingen aktive downloads.",
+    "tgPickDownloadToOpen": "Vælg en download for at åbne anmodningerne.",
+    "tgRefreshLibrary": "Opdater bibliotek",
+    "tgAskingJellyfinScan": "Beder Jellyfin om at scanne biblioteket …",
+    "tgHideAll": "Skjul alle",
+    "tgImporting": "Importerer",
+    "tgSubsNotManaged": "Denne titel styres ikke af Radarr/Sonarr, så Bazarr kan ikke finde undertekster til den.",
+    "tgBazarrUnreachable": "Kunne ikke få kontakt til Bazarr. Prøv igen lidt senere.",
+    "tgSubsFoundNothing": "Fandt intet endnu. Bazarr prøver automatisk igen hver dag, eller du kan vælge selv.",
+    "tgSubsFound": "Fandt {languages} – det kan tage et øjeblik, før den dukker op i undertekstmenuen.",
+    "tgAnd": "og",
+    "tgSubsDownloaded": "Downloadet – det kan tage et øjeblik, før den dukker op i undertekstmenuen.",
+    "tgAskingBazarr": "Spørger Bazarr …",
+    "tgHaveAll": "Har dem alle",
+    "tgSearchAutoNow": "Søg automatisk nu",
+    "tgSearchingUpToMinute": "Søger … kan tage op til et minut",
+    "tgPickYourself": "Vælg selv",
+    "tgAskingProviders": "Spørger undertekstkilderne … kan tage op til et minut",
+    "tgNoProviderSubs": "Ingen kilder har undertekster til denne endnu.",
+    "tgLangHas": "{language}: findes",
+    "tgLangMissing": "{language}: mangler",
+    "tgNoReleaseName": "(uden udgivelsesnavn)",
+    "tgHearingImpaired": "{provider} · for hørehæmmede",
+    "tgLangNorwegian": "Norsk",
+    "tgLangEnglish": "Engelsk",
+    "tgBazarrUnknownTitle": "Bazarr kender ikke denne titel endnu",
+    "tgBazarrError": "Bazarr svarede med en fejl (HTTP {code})",
+    "tgLowSpaceSnack": "Lidt plads på {drive}: ({free} ledig). Downloaden kan stoppe — sig det til den, der kører serveren.",
+    "tgNoQbitForSpace": "Kunne ikke få kontakt til qBittorrent for at tjekke pladsen",
+    "tgNotEnoughSpace": "Ikke nok plads",
+    "tgDriveHasFree": "{drive}: har {free} ledig",
+    "tgCopyInDownloads": "Kopi i Downloads · ligger allerede i biblioteket",
+    "tgLastWatched": "Sidst set {ago}",
+    "tgNeverWatchedAdded": "Aldrig set · tilføjet {ago}",
+    "tgNeverWatched": "Aldrig set",
+    "tgNothingSafeToDelete": "Fandt intet på {drive}: der kan slettes sikkert (alt er nyligt tilføjet, nyligt set eller en favorit).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Slet 1 titel?} other{Slet {count} titler?}}",
+    "tgDeletedForGood": "{size} slettes for altid. Dette kan ikke fortrydes.",
+    "tgYesDelete": "Ja, slet",
+    "tgDeletingProgress": "Sletter {done}/{total} …",
+    "tgNowHasFree": " · {drive}: har nu {free} ledig",
+    "tgDeletedTitles": "{count, plural, =1{Slettede 1 titel} other{Slettede {count} titler}}{extra}",
+    "tgDeletedFailed": "Slettede {count}, mislykkedes: {failed}{extra}",
+    "tgFreeGb": "Frigør {gb} GB",
+    "tgDownloadCopies": "Downloadkopier",
+    "tgLookingForUnwatched": "Leder efter det, der ikke er set i lang tid …",
+    "tgSuggestionEnough": "Forslag: {size} · nok plads ✓",
+    "tgSuggestionOf": "Forslag: {size} af {target} nødvendige",
+    "tgPickToSayNo": "Vælg en for at sige nej — det næste forslag kommer automatisk.",
+    "tgOtherCandidates": "Andre kandidater",
+    "tgDownloadAnyway": "Download alligevel",
+    "tgDeleteCountSize": "Slet {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: har {free} ledig.",
+    "tgFileDoubleSpace": "Filen er {size} og fylder dobbelt (download + kopi i biblioteket), plus {buffer} i reserve.",
+    "tgFileSize": "Filen er {size}, plus {buffer} i reserve.",
+    "tgPendingNeeds": "Igangværende downloads har brug for {size} mere.",
+    "tgShortBy": "Mangler {size}.",
+    "tgOnlyEarlyFiles": "Fandt kun filer udgivet, før filmen udkom digitalt ({count}) — de er næsten altid falske.",
+    "tgNoDigitalDate": "har endnu ingen digital udgivelsesdato",
+    "tgDigitalOn": "udkommer digitalt {date}",
+    "tgNotOutDigitally": "Ikke ude digitalt endnu",
+    "tgTitleWhen": "»{title}« {when}.",
+    "tgNotOutExplain": "Det, der findes nu, er som regel en biografoptagelse eller en anden film med samme navn. Nogle gange findes en tidlig kopi i lavere kvalitet, ofte med indbrændte undertekster. »Vis filer alligevel« viser, hvad der findes. Radarr henter selv den rigtige version, når den udkommer.",
+    "tgShowFilesAnyway": "Vis filer alligevel",
+    "tgPickSeasonsEpisodes": "Vælg sæsoner og episoder",
+    "tgNoEpisodeInfo": "{season}: ingen episodeinfo",
+    "tgAppliesAllDevices": "Gælder alle enheder, der bruger denne konto",
+    "tgNoXxxLibrary": "Fandt intet bibliotek, der hedder XXX.",
+    "tgSearchingEachWord": "Søger efter hvert ord for sig … (kan tage et halvt minut)",
+    "tgSentToQbit": "Sendte »{title}« ({size}) til qBittorrent",
+    "tgDownloadFailed": "Download mislykkedes: {error}",
+    "tgXxxNoVideoRemoved": "»{title}« indeholdt ingen videofil og er blevet fjernet.",
+    "tgXxxNoVideoNotRemoved": "»{title}« indeholdt ingen videofil og blev IKKE fjernet.",
+    "tgSearchNewXxx": "Søg efter nyt XXX",
+    "tgXxxSearchHint": "Navn, studie …",
+    "tgChecking": "Tjekker …",
+    "tgXxxVisible": "Synlig nu. XXX vises i bibliotekerne, i søgning og på startskærmen.",
+    "tgXxxHidden": "Skjult. XXX vises ingen steder i appen.",
+    "tgShowWithPin": "Vis (PIN)",
+    "tgChangePin": "Skift PIN",
+    "tgNoLibraryList": "Kunne ikke hente bibliotekslisten (HTTP {code})",
+    "tgNoUserSettings": "Kunne ikke hente brugerindstillingerne (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin afviste ændringen (HTTP {code})",
+    "tgDeleteFailed": "Sletning mislykkedes (HTTP {code})",
+    "tgXxxAddFailed": "Kunne ikke tilføje »{title}« i qBittorrent",
+    "tgSeasonEpisodeLower": "sæson {season}, episode {episode}",
+    "tgSearchInSeerr": "Søg i Seerr",
+    "tgSeerrSearchHint": "Søg efter film og serier (f.eks. »Lost S02E05«)",
+    "tgMissingInThisSeason": "Mangler i denne sæson",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Mangler sæson} other{Mangler sæsonerne}} {list} - åbn serien for at se alle sæsoner",
+    "tgProjectOnGitHub": "Tortugarr på GitHub",
+    "tgProjectOnGitHubSubtitle": "Kildekode, udgivelser og fejlrapporter",
+    "tgBuiltOnMoonfinCredit": "Tortugarr er bygget på Moonfin (GPL), lavet af Moonfin-udviklerne.",
+    "tgCredits": "Tak til",
+    "tgCreditsThanks": "Med ydmyg tak: uden disse projekter og menneskene bag dem ville Tortugarr ikke eksistere.",
+    "tgCreditMoonfin": "Appen, Tortugarr er bygget på (GPL)",
+    "tgCreditJellyfin": "Medieserver",
+    "tgCreditSeerr": "Opdagelse og anmodninger",
+    "tgCreditRadarr": "Film",
+    "tgCreditSonarr": "Serier",
+    "tgCreditProwlarr": "Indexer-styring",
+    "tgCreditBazarr": "Undertekster",
+    "tgCreditFlareSolverr": "Cloudflare-hjælper til indexere",
+    "tgCreditQbittorrent": "Downloadklient, installationens standardvalg",
+    "tgCreditTmdb": "Film- og seriedata, plakater og billeder",
+    "tgCreditOpenSubtitles": "Undertekster, hentet via Bazarr",
+    "tgTmdbNotice": "Dette produkt bruger TMDB-API'et, men er ikke godkendt eller certificeret af TMDB.",
+    "tgLoadingLogoSize": "Størrelse på indlæsningslogo",
+    "tgLoadingLogoSizeSubtitle": "Logoet, der snurrer, mens en video indlæses",
+    "tgSubtitleLanguages": "Undertekstsprog",
+    "tgSubtitleLanguagesSubtitle": "Vises i undertekstmenuen: {languages}",
+    "tgShowAllSubLangsOffChosen": "Fra: undertekstmenuen viser kun de sprog, du har valgt",
+    "tgDiscoveryLanguages": "Sprog i Trending og Populært",
+    "tgDiscoveryLanguagesSubtitle": "Vises: {languages}",
+    "tgHideForeignOnChosen": "Til: Trending og Populært viser kun de sprog, du har valgt",
+    "tgShowLanguageBadges": "Vis sprogmærker",
+    "tgShowLanguageBadgesOn": "Til: titlerne viser deres sprog (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Fra: ingen sprogmærker på titlerne"
 }

@@ -1,6 +1,6 @@
 {
     "@@locale": "ja",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin バージョン {version}",
+    "appVersionFooter": "Tortugarr バージョン {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin はシステム キーリングにアクセスできませんでした。ログインは続行できますが、キーリングのロックが解除されるまで安全なトークン ストレージを利用できなくなる可能性があります。",
+    "secureStorageUnavailableMessage": "Tortugarr はシステム キーリングにアクセスできませんでした。ログインは続行できますが、キーリングのロックが解除されるまで安全なトークン ストレージを利用できなくなる可能性があります。",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "アプリを再起動せずに Moonfin と Neon Pulse を切り替える",
+    "settingsAppearanceThemeSubtitle": "アプリを再起動せずに Tortugarr と Neon Pulse を切り替える",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "皆さんが気に入った現在の Moonfin の外観",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "皆さんが気に入った現在の Tortugarr の外観",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin を終了しますか?",
+    "exitApp": "Tortugarr を終了しますか?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "設定されていません。 Moonfin は、app/data フォルダー内のデフォルトの mpv.conf を試行します。",
+    "notSetMpvConf": "設定されていません。 Tortugarr は、app/data フォルダー内のデフォルトの mpv.conf を試行します。",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "ダウンロード/Moonfin — 他のアプリに表示されます",
+    "downloadsVisibleToOtherApps": "ダウンロード/Tortugarr — 他のアプリに表示されます",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "ダウンロードしたメディアは、デバイスの Downloads/Moonfin に保存されます。これらのファイルは、ギャラリーや音楽プレーヤーなどの他のアプリに表示されます。\n\n既存のダウンロードは現在の場所に残ります。",
+    "saveToDownloadsFolderDescription": "ダウンロードしたメディアは、デバイスの Downloads/Tortugarr に保存されます。これらのファイルは、ギャラリーや音楽プレーヤーなどの他のアプリに表示されます。\n\n既存のダウンロードは現在の場所に残ります。",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "ライブラリごとにホームページの表示を切り替えます。変更を有効にするには、Moonfin を再起動します。",
+    "libraryVisibilityDescription": "ライブラリごとにホームページの表示を切り替えます。変更を有効にするには、Tortugarr を再起動します。",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "マクド",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin でプレイする",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Tortugarr でプレイする",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} がリクエスト",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Moonfin ライブラリにアイテムが見つかりません",
+    "itemNotFoundInLibrary": "Tortugarr ライブラリにアイテムが見つかりません",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "サーバーの再起動が進行中です",
-    "adminServerRebootMessage": "サーバーの再起動が進行中です。Moonfin を再起動してください。",
+    "adminServerRebootMessage": "サーバーの再起動が進行中です。Tortugarr を再起動してください。",
     "adminActiveSessions": "アクティブなセッション",
     "adminSessionsLoadFailed": "セッションのロードに失敗しました",
     "adminNoActiveSessions": "アクティブなセッションはありません",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "ナビゲーションバーにジャンルボタンを表示する",
     "settingsShowFavoritesButtonInNavigation": "ナビゲーションバーにお気に入りボタンを表示する",
     "settingsShowLibrariesButtonInNavigation": "ナビゲーション バーにライブラリ ボタンを表示する",
-    "settingsLibraryVisibilitySubtitle": "ライブラリごとにホームページの表示を切り替えます。変更を有効にするには、Moonfin を再起動します。",
+    "settingsLibraryVisibilitySubtitle": "ライブラリごとにホームページの表示を切り替えます。変更を有効にするには、Tortugarr を再起動します。",
     "settingsMediaBarAndLocalPreviews": "メディアバーとローカルプレビュー",
     "settingsVisualOverlays": "ビジュアルオーバーレイ",
     "settingsSeasonalSurprise": "季節のサプライズ",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Discord に参加する",
     "settingsJoinDiscordSubtitle": "コミュニティとチャットする",
     "settingsJoinTheDiscord": "Discord に参加する",
-    "settingsSupportMoonfin": "Moonfin をサポート",
+    "settingsSupportNotflix": "Tortugarr をサポート",
     "settingsLegal": "法律上の",
     "settingsLicenses": "ライセンス",
     "settingsOpenSourceLicenseNotices": "オープンソースライセンスに関する通知",
     "settingsPrivacyPolicy": "プライバシーポリシー",
-    "settingsPrivacyPolicySubtitle": "Moonfin によるデータの処理方法",
+    "settingsPrivacyPolicySubtitle": "Tortugarr によるデータの処理方法",
     "settingsCheckForUpdates": "アップデートをチェックする",
-    "settingsCheckForUpdatesSubtitle": "最新の Moonfin リリースを確認してください",
+    "settingsCheckForUpdatesSubtitle": "最新の Tortugarr リリースを確認してください",
     "settingsPoweredByFlutter": "フラッター搭載",
     "settingsLicenseNoticesCount": "{count, plural, one {# 件のライセンス表記} other {# 件のライセンス表記}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "保存したテーマ",
-    "savedThemesDescription": "現在のサーバーの Moonfin プラグインからダウンロードしたテーマです。削除してもこのデバイス上のコピーが消えるだけです。",
+    "savedThemesDescription": "現在のサーバーの Tortugarr プラグインからダウンロードしたテーマです。削除してもこのデバイス上のコピーが消えるだけです。",
     "savedThemesEmpty": "このサーバーの保存済みテーマは見つかりませんでした。",
     "savedThemesCurrentThemeId": "{themeId} • 現在使用中",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "保存したテーマを削除",
     "savedThemesManageSubtitle": "このデバイスにダウンロードしたプラグインのテーマを管理します",
     "themeEditor": "テーマエディター",
-    "themeEditorSubtitle": "ブラウザーで Moonfin テーマエディターを開きます",
+    "themeEditorSubtitle": "ブラウザーで Tortugarr テーマエディターを開きます",
     "homeScreen": "ホーム画面",
     "bottomBar": "下部バー",
     "homeRowsStyleClassic": "クラシック",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH 字幕を優先",
     "preferSdhSubtitlesSubtitle": "自動選択時に SDH / CC の字幕トラックを優先します。",
     "webDiagnostics": "Web 診断",
-    "webDiagnosticsTitle": "Moonfin Web 診断",
+    "webDiagnosticsTitle": "Tortugarr Web 診断",
     "webDiagnosticsIntro": "このページでは、ブラウザーの接続に関する問題 (CORS、混在コンテンツ、検出設定) を診断できます。",
     "webDiagnosticsDetectedMixedContentFailure": "混在コンテンツによるエラーを検出しました",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS / プリフライトのエラーを検出しました",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin は、HTTPS のページから HTTP のサーバー URL を呼び出そうとしているのを検出しました。ブラウザーはこのリクエストをサーバーに届く前にブロックします。",
-    "webDiagnosticsCorsFailureBody": "Moonfin はブラウザーレベルのリクエスト失敗を検出しました。多くの場合、メディアサーバー側で CORS やプリフライトのヘッダーが不足していることが原因です。",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr は、HTTPS のページから HTTP のサーバー URL を呼び出そうとしているのを検出しました。ブラウザーはこのリクエストをサーバーに届く前にブロックします。",
+    "webDiagnosticsCorsFailureBody": "Tortugarr はブラウザーレベルのリクエスト失敗を検出しました。多くの場合、メディアサーバー側で CORS やプリフライトのヘッダーが不足していることが原因です。",
     "webDiagnosticsTargetUrl": "対象 URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "未設定",
     "webDiagnosticsMixedContent": "混在コンテンツ",
     "webDiagnosticsMixedContentDetected": "このページは HTTPS で読み込まれていますが、設定された URL に HTTP のものが含まれています。ブラウザーは HTTPS のページから HTTP の API を呼び出すことをブロックします。",
-    "webDiagnosticsMixedContentFix": "対処法: メディアサーバーまたはプロキシのエンドポイントを HTTPS で公開するか、信頼できるローカルネットワークでのみ Moonfin を HTTP で読み込んでください。",
+    "webDiagnosticsMixedContentFix": "対処法: メディアサーバーまたはプロキシのエンドポイントを HTTPS で公開するか、信頼できるローカルネットワークでのみ Tortugarr を HTTP で読み込んでください。",
     "webDiagnosticsNoMixedContentDetected": "現在の実行時設定からは、明らかな混在コンテンツの構成は検出されませんでした。",
     "webDiagnosticsCorsChecklist": "CORS チェックリスト",
     "webDiagnosticsCorsChecklistItem1": "• Access-Control-Allow-Origin でブラウザーのオリジンを許可する。",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR 動画の再生時に自動的に HDR を有効にし、終了時に表示モードを元に戻します。",
     "whenFullscreen": "全画面表示のとき",
     "transcodingLimits": "トランスコードの制限",
-    "settingsSupportMoonfinSubtitle": "開発者にコーヒーを 1 杯おごる",
+    "settingsSupportNotflixSubtitle": "開発者にコーヒーを 1 杯おごる",
     "accountPreferences": "アカウント設定",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "クラシックは従来の Moonfin の中央寄せレイアウトです。モダンはレスポンシブなシネマティックレイアウトです。",
+    "detailScreenStyleSubtitle": "クラシックは従来の Tortugarr の中央寄せレイアウトです。モダンはレスポンシブなシネマティックレイアウトです。",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "クラシック",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "クラシック",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "モダン",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Moonfin Recommends のローカルライブラリ用アルゴリズム、またはオンラインの TMDb 類似度指標を使用します。注: オンラインのおすすめには Seerr 連携が必要です。",
+    "recommendationSystemSubtitle": "Tortugarr Recommends のローカルライブラリ用アルゴリズム、またはオンラインの TMDb 類似度指標を使用します。注: オンラインのおすすめには Seerr 連携が必要です。",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb 類似度",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Moonfin Recommends のおすすめを対象作品の視聴年齢制限で絞り込みます",
+    "recommendationsApplyParentalRatingCapSubtitle": "Tortugarr Recommends のおすすめを対象作品の視聴年齢制限で絞り込みます",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "カスタムテーマは Moonfin 全体の見た目を変更します。好みに合わせて選択してください。",
+    "customThemeSubtitle": "カスタムテーマは Tortugarr 全体の見た目を変更します。好みに合わせて選択してください。",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "スマートフォンで Moonfin にサインインしてください",
+    "carSignInPrompt": "スマートフォンで Tortugarr にサインインしてください",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8940,7 +8940,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller は Flutter の新しい GPU レンダラーで、アニメーションが滑らかになり、カクつきが減ります。一部の TV ボックスや古い GPU では表示の乱れや映像が黒くなることがあり、その場合はオフにしてください。自動はお使いのデバイスに最適な設定を選びます。適用するには Moonfin を再起動してください。",
+    "impellerRenderingSubtitle": "Impeller は Flutter の新しい GPU レンダラーで、アニメーションが滑らかになり、カクつきが減ります。一部の TV ボックスや古い GPU では表示の乱れや映像が黒くなることがあり、その場合はオフにしてください。自動はお使いのデバイスに最適な設定を選びます。適用するには Tortugarr を再起動してください。",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8951,7 +8951,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "レンダリングエンジンを変更するには Moonfin の再起動が必要です。アプリをいったん終了し、開き直すと適用されます。",
+    "impellerRestartMessage": "レンダリングエンジンを変更するには Tortugarr の再起動が必要です。アプリをいったん終了し、開き直すと適用されます。",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9015,5 +9015,247 @@
                 "example": "Permission denied"
             }
         }
-    }
+    },
+    "tgMissing": "未所持",
+    "tgComing": "近日公開",
+    "tgComingOn": "{date} 公開",
+    "tgDownloading": "ダウンロード中",
+    "tgReadySoon": "まもなく視聴可能",
+    "tgRequested": "リクエスト済み",
+    "tgClose": "閉じる",
+    "tgCancel": "キャンセル",
+    "tgBack": "戻る",
+    "tgYes": "はい",
+    "tgNo": "いいえ",
+    "tgSearch": "検索",
+    "tgHide": "非表示",
+    "tgAll": "すべて",
+    "tgNone": "なし",
+    "tgMovies": "映画",
+    "tgSeries": "シリーズ",
+    "tgMovieTag": "映画",
+    "tgSeriesTag": "シリーズ",
+    "tgCanTakeAMinute": "最大1分ほどかかることがあります",
+    "tgToday": "今日",
+    "tgYesterday": "昨日",
+    "tgDaysAgo": "{days} 日前",
+    "tgMonthsAgo": "{months} か月前",
+    "tgYearsAgo": "{years} 年前",
+    "tgYearsMonthsAgo": "{years} 年 {months} か月前",
+    "tgFindSubtitles": "字幕を探す",
+    "tgFreeUpSpace": "空き容量を増やす",
+    "tgDownloads": "ダウンロード",
+    "tgDownloadsCount": "ダウンロード ({count})",
+    "tgNoVideoRemoved": "「{title}」: ダウンロードに動画ファイルが含まれていませんでした ({files})。削除してブロックしました — 別のファイルをお試しください。",
+    "tgNoVideoNotRemoved": "「{title}」: ダウンロードに動画ファイルが含まれていませんでしたが ({files})、自動では削除できませんでした。",
+    "tgAiredOn": "{date} 放送",
+    "tgTapToFindFiles": "タップしてファイルを探す",
+    "tgWholeSeason": "シーズン全体",
+    "tgEpisodesMissingFindPack": "{count} エピソードが未所持 – シーズンパックを探す",
+    "tgAddToSonarrTitle": "Sonarr に追加して未所持のエピソードを表示",
+    "tgAddToSonarrSubtitle": "シリーズを追加するだけで、自動的にダウンロードされることはありません",
+    "tgMissingEpisodesUnavailable": "未所持のエピソードを今は表示できません",
+    "tgReasonTapRetry": "{reason} · タップして再試行",
+    "tgSeasonPackBadge": "シーズンパック",
+    "tgMonitorSeasonTitle": "シーズン {season} を監視",
+    "tgMonitorSeasonQuestion": "シーズン {season} の未所持エピソードを Sonarr で今取得しますか？\n\nいいえ: 新しいエピソードが公開されたときだけ取得します。",
+    "tgSonarrSearchingSeason": "Sonarr がシーズン {season} を検索中",
+    "tgMonitored": "監視中",
+    "tgNotMonitored": "監視していません",
+    "tgSeasonStateLabel": "シーズン {season}: {state}",
+    "tgLabelMissing": "{label} が未所持",
+    "tgNotAiredYet": "{code} はまだ放送されていません。",
+    "tgNotAiredYetComing": "{code} はまだ放送されていません – {date} 公開予定。",
+    "tgAlreadyDownloading": "{code} はすでにダウンロード中です。",
+    "tgDownloadedAppearsSoon": "{code} はダウンロード済みです。まもなくライブラリに表示されます。",
+    "tgSearchingFor": "{label} を検索中 …",
+    "tgSeasonLower": "シーズン {season}",
+    "tgWholeLabel": "{label} 全体",
+    "tgSeasonNoEpisodes": "シーズン {season} – ライブラリにエピソードがありません",
+    "tgNoTvdbId": "このシリーズには TVDB の ID がないため、Sonarr で見つけられません。",
+    "tgAddingToSonarr": "Sonarr に追加中 …",
+    "tgAddToSonarrFailed": "シリーズを Sonarr に追加できませんでした。あとでもう一度お試しください。",
+    "tgSendingToDownload": "「{label}」をダウンロードに送信中 …",
+    "tgDownloadDidNotStart": "ダウンロードを開始できませんでした: {error}",
+    "tgDownloadingAppearsWhenDone": "「{label}」をダウンロード中です ({size})。完了するとライブラリに表示されます。",
+    "tgSonarrUnreachableRetry": "Sonarr に接続できませんでした。少し待ってからもう一度お試しください。",
+    "tgNoUsableFiles": "使えるファイルが見つかりませんでした。あとでもう一度お試しください – 数時間後に新しいファイルが出てくることがよくあります。",
+    "tgFilesCount": "{count} 件のファイル",
+    "tgFilesRecommended": "{count} 件のファイル – {recommended} 件が品質プロファイルに合致、残りは下に表示",
+    "tgOutsideQualityProfile": "品質プロファイル外",
+    "tgLargerThanProfile": "プロファイルの上限より大きい",
+    "tgSmallerThanProfile": "プロファイルの下限より小さい",
+    "tgAlreadyExists": "すでに存在します",
+    "tgMayNotFitDisk": "ディスクに収まらない可能性があります",
+    "tgSonarrUnreachable": "Sonarr に接続できませんでした",
+    "tgSonarrUnreachableAt": "{host} の Sonarr に接続できませんでした",
+    "tgSonarrRejectedChange": "Sonarr が変更を受け付けませんでした",
+    "tgSeasonMonitoredNoSearch": "シーズンは監視中ですが、Sonarr が検索を開始しませんでした",
+    "tgSonarrCantSearch": "Sonarr は今検索できませんでした",
+    "tgSearchExpired": "検索結果の有効期限が切れました – もう一度検索してください",
+    "tgSonarrRejectedDownload": "Sonarr がダウンロードを受け付けませんでした (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr にこのシリーズがありません",
+    "tgCouldNotChangeMonitoring": "監視設定を変更できませんでした: {error}",
+    "tgJellyfinNoIds": "Jellyfin がシリーズを認識できませんでした (TVDB / TMDB の ID がありません)",
+    "tgSomethingWentWrong": "問題が発生しました: {error}",
+    "tgDeleteReadOnly": "このファイルは Radarr / Sonarr の管理外で、Jellyfin はフォルダーに読み取り権限しかありません。ファイルマネージャーで削除してください。",
+    "tgSonarrRequiredPerEpisode": "Sonarr に接続できないか、シリーズがそこに追加されていません。エピソード単位のダウンロードには Sonarr が必要です。",
+    "tgEpisodesNotFound": "「{title}」の選択したエピソードが Sonarr で見つかりませんでした (全 {count} エピソードを確認)。シリーズを Sonarr に追加してからもう一度お試しください。",
+    "tgPartOfCollectionPrefix": "コレクションの一部: ",
+    "tgViewingPartOf": "  ·  {total} 作中の第 {current} 作を表示中",
+    "tgPartOf": "{total} 作中の第 {number} 作",
+    "tgUnknownTitle": "不明なタイトル",
+    "tgMovieCollection": "映画コレクション",
+    "tgNotReleasedYet": "「{title}」はまだ公開されていません",
+    "tgScreensaverModeVideo": "動画",
+    "tgScreensaverModeLogo": "ロゴ",
+    "tgScreensaverSound": "スクリーンセーバーの音声",
+    "tgScreensaverSoundSubtitle": "オフ: スクリーンセーバーの予告編をミュートで再生",
+    "tgScreensaverLogo": "ロゴ",
+    "tgLogoBadge": "Tortugarr バッジ",
+    "tgLogoVhs": "VHS テープの上のオウム",
+    "tgLogoSign": "看板の上のオウム",
+    "tgHiddenBadge": "非表示 · {code}",
+    "tgDiskSpace": "ディスク容量",
+    "tgDiskSpaceSubtitle": "新しいダウンロードのために空き容量を増やす",
+    "tgAdultTitle": "アダルト映画 (XXX)",
+    "tgAdultSubtitle": "XXX ライブラリの表示 / 非表示 (PIN)",
+    "tgHideForeign": "外国語コンテンツを非表示",
+    "tgHideForeignOn": "オン: 「急上昇」と「人気」に英語、ノルウェー語、スウェーデン語、デンマーク語、ドイツ語、フランス語のみ表示",
+    "tgHideForeignOff": "オフ: 「急上昇」と「人気」にすべての言語を表示",
+    "tgShowHidden": "非表示の内容を表示",
+    "tgShowHiddenOn": "オン: 非表示になるタイトルを赤い「非表示」バッジ付きで表示",
+    "tgShowHiddenOff": "トラブルシューティング: 非表示のタイトルを消さずに赤いバッジ付きで表示",
+    "tgShowAllSubLangs": "すべての字幕言語を表示",
+    "tgShowAllSubLangsOn": "オン: 字幕メニューにすべての言語を表示",
+    "tgShowAllSubLangsOff": "オフ: 字幕メニューにノルウェー語と英語のみ表示",
+    "tgPreviewSound": "プレビューの音声",
+    "tgPreviewSoundOn": "オン: タイトルで止まったときに再生されるクリップに音声あり",
+    "tgPreviewSoundOff": "オフ: 閲覧中のクリップはミュートで再生",
+    "tgScreensaver": "スクリーンセーバー",
+    "tgScreensaverSubtitle": "動画またはロゴ、音声と画像",
+    "tgShowMissingEpisodes": "未所持のエピソードを表示",
+    "tgShowMissingEpisodesOn": "オン: 持っていないエピソードもシーズンに表示し、すぐにダウンロード可能",
+    "tgShowMissingEpisodesOff": "オフ: 持っているエピソードのみシーズンに表示",
+    "tgShowCollections": "映画コレクションを表示",
+    "tgShowCollectionsOn": "オン: 映画ページにコレクションの他の作品を表示 (未所持のものを含む)",
+    "tgShowCollectionsOff": "オフ: 映画ページにコレクションを表示しない",
+    "tgNoActiveDownloads": "進行中のダウンロードはありません。",
+    "tgPickDownloadToOpen": "ダウンロードを選択してリクエストを開きます。",
+    "tgRefreshLibrary": "ライブラリを更新",
+    "tgAskingJellyfinScan": "Jellyfin にライブラリのスキャンを依頼中 …",
+    "tgHideAll": "すべて非表示",
+    "tgImporting": "インポート中",
+    "tgSubsNotManaged": "このタイトルは Radarr / Sonarr の管理外のため、Bazarr で字幕を探せません。",
+    "tgBazarrUnreachable": "Bazarr に接続できませんでした。少し待ってからもう一度お試しください。",
+    "tgSubsFoundNothing": "まだ見つかりませんでした。Bazarr は毎日自動で再試行します。自分で選ぶこともできます。",
+    "tgSubsFound": "{languages} が見つかりました – 字幕メニューに表示されるまで少し時間がかかることがあります。",
+    "tgAnd": "と",
+    "tgSubsDownloaded": "ダウンロード完了 – 字幕メニューに表示されるまで少し時間がかかることがあります。",
+    "tgAskingBazarr": "Bazarr に問い合わせ中 …",
+    "tgHaveAll": "すべて所持済み",
+    "tgSearchAutoNow": "今すぐ自動検索",
+    "tgSearchingUpToMinute": "検索中 … 最大1分ほどかかることがあります",
+    "tgPickYourself": "自分で選ぶ",
+    "tgAskingProviders": "字幕プロバイダーに問い合わせ中 … 最大1分ほどかかることがあります",
+    "tgNoProviderSubs": "この作品の字幕はまだどのプロバイダーにもありません。",
+    "tgLangHas": "{language}: あり",
+    "tgLangMissing": "{language}: なし",
+    "tgNoReleaseName": "(リリース名なし)",
+    "tgHearingImpaired": "{provider} · 聴覚障がい者向け",
+    "tgLangNorwegian": "ノルウェー語",
+    "tgLangEnglish": "英語",
+    "tgBazarrUnknownTitle": "Bazarr はこのタイトルをまだ認識していません",
+    "tgBazarrError": "Bazarr がエラーを返しました (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: の空き容量が少なくなっています ({free} 空き)。ダウンロードが止まる可能性があります — サーバーの管理者に知らせてください。",
+    "tgNoQbitForSpace": "qBittorrent に接続できず、空き容量を確認できませんでした",
+    "tgNotEnoughSpace": "空き容量が不足しています",
+    "tgDriveHasFree": "{drive}: 空き {free}",
+    "tgCopyInDownloads": "Downloads フォルダー内のコピー · ライブラリにすでにあります",
+    "tgLastWatched": "最終視聴: {ago}",
+    "tgNeverWatchedAdded": "未視聴 · 追加: {ago}",
+    "tgNeverWatched": "未視聴",
+    "tgNothingSafeToDelete": "{drive}: に安全に削除できるものは見つかりませんでした (すべて最近追加、最近視聴、またはお気に入りです)。",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{1 件のタイトルを削除しますか？} other{{count} 件のタイトルを削除しますか？}}",
+    "tgDeletedForGood": "{size} が完全に削除されます。この操作は取り消せません。",
+    "tgYesDelete": "はい、削除する",
+    "tgDeletingProgress": "削除中 {done}/{total} …",
+    "tgNowHasFree": " · {drive}: 現在の空き {free}",
+    "tgDeletedTitles": "{count, plural, =1{1 件のタイトルを削除しました} other{{count} 件のタイトルを削除しました}}{extra}",
+    "tgDeletedFailed": "{count} 件を削除、失敗: {failed}{extra}",
+    "tgFreeGb": "{gb} GB を空ける",
+    "tgDownloadCopies": "ダウンロードのコピー",
+    "tgLookingForUnwatched": "長い間視聴されていないものを探しています …",
+    "tgSuggestionEnough": "提案: {size} · 容量は十分です ✓",
+    "tgSuggestionOf": "提案: 必要な {target} のうち {size}",
+    "tgPickToSayNo": "外したいものを選ぶと、次の候補が自動で入ります。",
+    "tgOtherCandidates": "その他の候補",
+    "tgDownloadAnyway": "それでもダウンロード",
+    "tgDeleteCountSize": "{count} 件を削除 ({size})",
+    "tgDriveHasFreeDot": "{drive}: 空き {free}。",
+    "tgFileDoubleSpace": "ファイルは {size} で、2 倍の容量を使います (ダウンロード + ライブラリ内のコピー)。さらに予備として {buffer} が必要です。",
+    "tgFileSize": "ファイルは {size} で、さらに予備として {buffer} が必要です。",
+    "tgPendingNeeds": "進行中のダウンロードにはさらに {size} 必要です。",
+    "tgShortBy": "{size} 不足しています。",
+    "tgOnlyEarlyFiles": "映画のデジタル配信前に公開されたファイルしか見つかりませんでした ({count}) — ほぼ確実に偽物です。",
+    "tgNoDigitalDate": "のデジタル配信日はまだ決まっていません",
+    "tgDigitalOn": "は {date} にデジタル配信されます",
+    "tgNotOutDigitally": "まだデジタル配信されていません",
+    "tgTitleWhen": "「{title}」{when}。",
+    "tgNotOutExplain": "今あるファイルはたいてい映画館での録画か、同名の別の映画です。ときには低画質の早期コピーがあり、字幕が焼き込まれていることも多いです。「それでもファイルを表示」で現在あるものを確認できます。正式版が出れば Radarr が自動で取得します。",
+    "tgShowFilesAnyway": "それでもファイルを表示",
+    "tgPickSeasonsEpisodes": "シーズンとエピソードを選択",
+    "tgNoEpisodeInfo": "{season}: エピソード情報なし",
+    "tgAppliesAllDevices": "このアカウントを使うすべてのデバイスに適用されます",
+    "tgNoXxxLibrary": "XXX という名前のライブラリが見つかりませんでした。",
+    "tgSearchingEachWord": "単語ごとに検索中 … (30 秒ほどかかることがあります)",
+    "tgSentToQbit": "「{title}」({size}) を qBittorrent に送信しました",
+    "tgDownloadFailed": "ダウンロードに失敗しました: {error}",
+    "tgXxxNoVideoRemoved": "「{title}」に動画ファイルがなかったため、削除しました。",
+    "tgXxxNoVideoNotRemoved": "「{title}」に動画ファイルがありませんでしたが、削除は「されていません」。",
+    "tgSearchNewXxx": "新しい XXX を検索",
+    "tgXxxSearchHint": "名前、スタジオ …",
+    "tgChecking": "確認中 …",
+    "tgXxxVisible": "表示中です。XXX はライブラリ、検索、ホーム画面に表示されます。",
+    "tgXxxHidden": "非表示です。XXX はアプリ内のどこにも表示されません。",
+    "tgShowWithPin": "表示 (PIN)",
+    "tgChangePin": "PIN を変更",
+    "tgNoLibraryList": "ライブラリ一覧を取得できませんでした (HTTP {code})",
+    "tgNoUserSettings": "ユーザー設定を取得できませんでした (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin が変更を拒否しました (HTTP {code})",
+    "tgDeleteFailed": "削除に失敗しました (HTTP {code})",
+    "tgXxxAddFailed": "「{title}」を qBittorrent に追加できませんでした",
+    "tgSeasonEpisodeLower": "シーズン {season} エピソード {episode}",
+    "tgSearchInSeerr": "Seerr で検索",
+    "tgSeerrSearchHint": "映画やシリーズを検索 (例:「Lost S02E05」)",
+    "tgMissingInThisSeason": "このシーズンの未所持",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{未所持のシーズン} other{未所持のシーズン}} {list} - シリーズを開くとすべてのシーズンを表示",
+    "tgProjectOnGitHub": "GitHub の Tortugarr",
+    "tgProjectOnGitHubSubtitle": "ソースコード、リリース、問題報告",
+    "tgBuiltOnMoonfinCredit": "Tortugarr は Moonfin 開発者による Moonfin (GPL) をベースにしています。",
+    "tgCredits": "クレジット",
+    "tgCreditsThanks": "心からの感謝を込めて: これらのプロジェクトと、その背後にいる人々がいなければ、Tortugarr は存在しませんでした。",
+    "tgCreditMoonfin": "Tortugarr のベースとなったアプリ (GPL)",
+    "tgCreditJellyfin": "メディアサーバー",
+    "tgCreditSeerr": "作品の発見とリクエスト",
+    "tgCreditRadarr": "映画",
+    "tgCreditSonarr": "シリーズ",
+    "tgCreditProwlarr": "インデクサー管理",
+    "tgCreditBazarr": "字幕",
+    "tgCreditFlareSolverr": "インデクサー向け Cloudflare ヘルパー",
+    "tgCreditQbittorrent": "ダウンロードクライアント、インストーラーの標準",
+    "tgCreditTmdb": "映画・シリーズのデータ、ポスター、アートワーク",
+    "tgCreditOpenSubtitles": "字幕 (Bazarr 経由で取得)",
+    "tgTmdbNotice": "この製品は TMDB API を使用していますが、TMDB による承認や認証を受けたものではありません。",
+    "tgLoadingLogoSize": "読み込みロゴのサイズ",
+    "tgLoadingLogoSizeSubtitle": "動画の読み込み中に回転するロゴ",
+    "tgSubtitleLanguages": "字幕の言語",
+    "tgSubtitleLanguagesSubtitle": "字幕メニューに表示: {languages}",
+    "tgShowAllSubLangsOffChosen": "オフ: 字幕メニューには選んだ言語のみ表示",
+    "tgDiscoveryLanguages": "トレンドと人気の言語",
+    "tgDiscoveryLanguagesSubtitle": "表示: {languages}",
+    "tgHideForeignOnChosen": "オン: トレンドと人気には選んだ言語のみ表示",
+    "tgShowLanguageBadges": "言語バッジを表示",
+    "tgShowLanguageBadgesOn": "オン: 作品に言語を表示 (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "オフ: 作品に言語バッジを表示しない"
 }

@@ -5,6 +5,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import '../../data/services/adult_library_service.dart';
+import '../../data/services/tortugarr/download_features.dart';
+import 'adult_library_dialog.dart' show searchNewAdult;
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:server_core/server_core.dart';
@@ -27,6 +30,8 @@ import '../navigation/destinations.dart';
 import '../navigation/home_refresh_bus.dart';
 import '../navigation/route_lifecycle_observer.dart';
 import 'navigation_layout.dart';
+import 'active_downloads_dialog.dart';
+import '../../data/services/seerr_active_downloads_service.dart';
 import 'settings/settings_panel.dart';
 import '../screens/syncplay/syncplay_screen.dart';
 import '../screens/settings/settings_side_panel.dart';
@@ -40,6 +45,8 @@ import '../../data/models/aggregated_item.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../navigation/app_router.dart';
 import 'adaptive/sf_symbol.dart';
+import 'focus/nav_chrome_focus.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 const _kExpandedWidthDesktop = 240.0;
 const _kExpandedWidthMobile = 260.0;
@@ -111,6 +118,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   @override
   void initState() {
     super.initState();
+    NavChromeFocus.register(_sidebarFocus);
     _currentTime = ValueNotifier<String>('');
     _focusNavbarCallback = () {
       if (!mounted || _homeFocusNode.context == null) return;
@@ -220,6 +228,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     _settingsFocusNode.dispose();
     _profileFocusNode.dispose();
     _musicCardFocusNode.dispose();
+    NavChromeFocus.unregister(_sidebarFocus);
     _sidebarFocus.dispose();
     _scrollController.dispose();
     _userSub?.cancel();
@@ -1082,6 +1091,53 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                         : const SizedBox.shrink(),
                   ),
                 ],
+                // TV: the download bar at the bottom is out of d-pad reach,
+                // so active downloads get their own entry here.
+                if (PlatformDetection.isTV &&
+                    GetIt.instance.isRegistered<SeerrActiveDownloadsService>())
+                  ListenableBuilder(
+                    listenable: Listenable.merge([
+                      GetIt.instance<SeerrActiveDownloadsService>(),
+                      GetIt.instance<UserPreferences>(),
+                    ]),
+                    builder: (context, _) {
+                      final downloads =
+                          GetIt.instance<SeerrActiveDownloadsService>();
+                      final always = GetIt.instance<UserPreferences>()
+                          .get(UserPreferences.alwaysShowDownloadsButton);
+                      if (!downloads.hasActive && !always) return const SizedBox.shrink();
+                      return _SidebarItem(
+                        key: const ValueKey('sidebar-downloads'),
+                        icon: Icons.downloading_rounded,
+                        label: downloads.hasActive
+                                  ? appL10n().tgDownloadsCount(downloads.downloads.length)
+                                  : appL10n().tgDownloadsButton,
+                        showLabel: _showLabels,
+                        onPressed: () => showActiveDownloadsDialog(context),
+                      );
+                    },
+                  ),
+                // XXX search, only while the adult library is shown.
+                ListenableBuilder(
+                  listenable: Listenable.merge([
+                    GetIt.instance<UserPreferences>(),
+                    AdultLibraryService.visible,
+                    DownloadFeatures.capabilities,
+                  ]),
+                  builder: (context, _) {
+                    final show = GetIt.instance<UserPreferences>().get(UserPreferences.adultSearchInMenu) &&
+                          AdultLibraryService.visible.value &&
+                          DownloadFeatures.adultDownloads;
+                    if (!show) return const SizedBox.shrink();
+                    return _SidebarItem(
+                      key: const ValueKey('sidebar-adult-search'),
+                      icon: Icons.travel_explore,
+                      label: appL10n().tgAdultSearchButton,
+                      showLabel: _showLabels,
+                      onPressed: () => unawaited(searchNewAdult(context)),
+                    );
+                  },
+                ),
                 _SidebarItem(
                   key: const ValueKey('sidebar-settings'),
                   icon: Icons.settings_rounded,

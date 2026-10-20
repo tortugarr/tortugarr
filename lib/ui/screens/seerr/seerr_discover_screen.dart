@@ -7,11 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
+import 'package:server_core/server_core.dart';
 
 import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
+import '../../../data/services/seerr/seerr_language_filter.dart';
 import '../../../data/viewmodels/seerr_discover_view_model.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../ui/mixins/focus_state_mixin.dart';
 import '../../../util/focus/dpad_keys.dart';
@@ -25,6 +28,9 @@ import '../../../l10n/app_localizations.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/focus/locked_focus_row.dart';
 import '../../widgets/horizontal_scroll_section.dart';
+import '../../navigation/single_push.dart';
+import '../../../util/episode_query.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w300';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -50,6 +56,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
   final _loadingHoldFocusNode =
       FocusNode(debugLabel: 'seerrDiscoverLoadingHold', skipTraversal: true);
   final _requestsEntryFocusNode = FocusNode(debugLabel: 'seerrRequestsEntry');
+  final _searchEntryFocusNode = FocusNode(debugLabel: 'seerrSearchEntry');
   int _badgeCount = 0;
   bool _initialFocusResolved = false;
   bool _isFirstRowFocused = false;
@@ -145,6 +152,13 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
   Future<void> _openRequests() async {
     await context.push(Destinations.seerrRequests);
     _loadBadgeCount(force: true);
+  }
+
+  Future<void> _openSearch() async {
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => const _SeerrSearchDialog(),
+    );
   }
 
   // Focusing the navbar can miss on the first try, so retry a few times.
@@ -288,7 +302,8 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
 
   void _onItemTap(SeerrDiscoverItem item) {
     final mediaType = item.mediaType ?? 'movie';
-    context.push(
+    SinglePush.push(
+      context,
       Destinations.seerrMedia(item.id.toString()),
       extra: {'mediaType': mediaType},
     );
@@ -356,12 +371,24 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
                   ? infoTopInset + 40.0
                   : infoTopInset,
               right: 24,
-              child: _RequestsEntryButton(
-                focusNode: _requestsEntryFocusNode,
-                badgeCount: _badgeCount,
-                onTap: _openRequests,
-                onDown: () => _initialFocusNode.requestFocus(),
-                onUp: _focusNavbarFromEntry,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _SearchEntryButton(
+                    focusNode: _searchEntryFocusNode,
+                    onTap: _openSearch,
+                    onDown: () => _initialFocusNode.requestFocus(),
+                    onUp: _focusNavbarFromEntry,
+                  ),
+                  const SizedBox(width: 12),
+                  _RequestsEntryButton(
+                    focusNode: _requestsEntryFocusNode,
+                    badgeCount: _badgeCount,
+                    onTap: _openRequests,
+                    onDown: () => _initialFocusNode.requestFocus(),
+                    onUp: _focusNavbarFromEntry,
+                  ),
+                ],
               ),
             ),
           ],
@@ -620,6 +647,19 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
             aspectRatio: 2 / 3,
             seerrMediaType: item.mediaType,
             seerrStatus: item.mediaInfo?.status,
+            seerrLanguageMark: SeerrLanguageFilter.previewMark(
+              item,
+              active:
+                  row.type != SeerrRowType.yourWatchlist &&
+                  row.type != SeerrRowType.recentRequests &&
+                  row.type != SeerrRowType.recentlyAdded &&
+                  GetIt.instance<SeerrPreferences>().languagePreviewActive,
+              badges:
+                  row.type != SeerrRowType.yourWatchlist &&
+                  row.type != SeerrRowType.recentRequests &&
+                  row.type != SeerrRowType.recentlyAdded &&
+                  GetIt.instance<SeerrPreferences>().showLanguageBadges,
+            ),
             focusColor: focusColor,
             cardFocusExpansion: cardExpansion,
             suppressFocusGlow: suppressFocusGlow,
@@ -1060,6 +1100,413 @@ class _InfoPanel extends StatelessWidget {
   }
 }
 
+class _SearchEntryButton extends StatefulWidget {
+  final FocusNode focusNode;
+  final VoidCallback onTap;
+  final VoidCallback onDown;
+  final VoidCallback onUp;
+
+  const _SearchEntryButton({
+    required this.focusNode,
+    required this.onTap,
+    required this.onDown,
+    required this.onUp,
+  });
+
+  @override
+  State<_SearchEntryButton> createState() => _SearchEntryButtonState();
+}
+
+class _SearchEntryButtonState extends State<_SearchEntryButton>
+    with FocusStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      focusNode: widget.focusNode,
+      onFocusChange: setFocused,
+      onKeyEvent: (node, event) {
+        if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+          return KeyEventResult.ignored;
+        }
+        final key = event.logicalKey;
+        if (key.isSelectKey) {
+          widget.onTap();
+          return KeyEventResult.handled;
+        }
+        if (key.isDownKey) {
+          widget.onDown();
+          return KeyEventResult.handled;
+        }
+        if (key.isUpKey) {
+          widget.onUp();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setHovered(true),
+        onExit: (_) => setHovered(false),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 140),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: hovered
+                  ? AppColorScheme.accent
+                  : AppColorScheme.surface.withValues(alpha: 0.85),
+              borderRadius: AppRadius.circular(20),
+              border: Border.all(
+                color: focused
+                    ? AppColorScheme.accent
+                    : Colors.white.withValues(alpha: 0.15),
+                width: focused ? 2 : 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.search,
+                  color: hovered
+                      ? AppColorScheme.onAccent
+                      : AppColorScheme.onSurface,
+                  size: 18,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SeerrSearchDialog extends StatefulWidget {
+  const _SeerrSearchDialog();
+
+  @override
+  State<_SeerrSearchDialog> createState() => _SeerrSearchDialogState();
+}
+
+class _SeerrSearchDialogState extends State<_SeerrSearchDialog> {
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode(debugLabel: 'seerrSearchField');
+  /// 'all', 'movie' or 'tv'. All by default: the old Movies default hid every series.
+  String _mediaType = 'all';
+  EpisodeQuery _parsed = const EpisodeQuery('');
+  List<SeerrDiscoverItem> _results = [];
+  bool _loading = false;
+  String? _error;
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onChanged(String value) {
+    _debounce?.cancel();
+    if (value.trim().length < 3) {
+      setState(() {
+        _results = [];
+        _error = null;
+        _loading = false;
+      });
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 400), () => _search(value));
+  }
+
+  Future<void> _search(String query) async {
+    final trimmed = query.trim();
+    if (trimmed.length < 3) {
+      setState(() {
+        _results = const [];
+        _loading = false;
+        _error = null;
+      });
+      return;
+    }
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final repo = GetIt.instance<SeerrRepository>();
+      final parsed = parseEpisodeQuery(trimmed);
+      final page = await repo.search(parsed.title);
+      if (!mounted) return;
+      setState(() {
+        _parsed = parsed;
+        _results = page.results.where((item) {
+          final type = item.mediaType;
+          if (type != 'movie' && type != 'tv') return false;
+          return _mediaType == 'all' || type == _mediaType;
+        }).toList();
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  String _kindLabel(SeerrDiscoverItem item) {
+    final kind = item.mediaType == 'tv' ? appL10n().tgSeriesTag : appL10n().tgMovieTag;
+    final date = item.mediaType == 'tv' ? item.firstAirDate : item.releaseDate;
+    final year = (date != null && date.length >= 4) ? date.substring(0, 4) : null;
+    final season = item.mediaType == 'tv' && _parsed.hasSeason
+        ? (_parsed.episode != null
+            ? appL10n().tgSeasonEpisodeLower(_parsed.season!, _parsed.episode!)
+            : appL10n().tgSeasonLower(_parsed.season!))
+        : null;
+    return [kind, ?year, if (season != null) '→ $season'].join(' ');
+  }
+
+  /// A series the library has, searched with a season (and maybe episode),
+  /// opens that season or episode in the library, where missing episodes can be
+  /// fetched. Everything else opens the Seerr page as before.
+  Future<void> _openResult(SeerrDiscoverItem item) async {
+    final navigator = Navigator.of(context);
+    final router = GoRouter.of(context);
+    final seriesId = item.mediaInfo?.jellyfinMediaId;
+    if (item.mediaType == 'tv' && _parsed.hasSeason && seriesId != null) {
+      final target = await resolveSeasonTarget(
+        seriesId,
+        season: _parsed.season!,
+        episode: _parsed.episode,
+      );
+      if (!mounted) return;
+      navigator.pop();
+      router.push(Destinations.item(target));
+      return;
+    }
+    navigator.pop();
+    if (!mounted) return;
+    SinglePush.push(
+      context,
+      Destinations.seerrMedia(item.id.toString()),
+      extra: {'mediaType': item.mediaType},
+    );
+  }
+
+  String? _posterUrl(SeerrDiscoverItem item) {
+    final path = item.posterPath;
+    if (path == null || path.isEmpty) return null;
+    if (path.startsWith('http')) return path;
+    return '$_tmdbPosterBase$path';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.circular(16)),
+      child: Container(
+        width: 700,
+        height: 600,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              appL10n().tgSearchInSeerr,
+              style: TextStyle(
+                color: AppColorScheme.onSurface,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    onChanged: _onChanged,
+                    onSubmitted: _search,
+                    style: TextStyle(color: AppColorScheme.onSurface),
+                    decoration: InputDecoration(
+                      hintText: appL10n().tgSeerrSearchHint,
+                      hintStyle: TextStyle(
+                        color: AppColorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                      filled: true,
+                      fillColor: AppColorScheme.background,
+                      border: OutlineInputBorder(
+                        borderRadius: AppRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                _MediaTypeToggle(
+                  value: _mediaType,
+                  onChanged: (v) {
+                    setState(() => _mediaType = v);
+                    if (_controller.text.trim().length >= 2) {
+                      _search(_controller.text);
+                    }
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Expanded(child: _buildResults()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResults() {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null) {
+      return Center(
+        child: Text(
+          _error!,
+          style: TextStyle(color: AppColorScheme.onSurface),
+        ),
+      );
+    }
+    if (_results.isEmpty) {
+      return Center(
+        child: Text(
+          _controller.text.trim().length < 3
+              ? 'Type at least 3 characters to search'
+              : 'No results',
+          style: TextStyle(
+            color: AppColorScheme.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+      );
+    }
+    return ListView.separated(
+      itemCount: _results.length,
+      separatorBuilder: (_, __) => Divider(
+        color: AppColorScheme.onSurface.withValues(alpha: 0.1),
+        height: 1,
+      ),
+      itemBuilder: (ctx, i) {
+        final item = _results[i];
+        final poster = _posterUrl(item);
+        return ListTile(
+          leading: poster != null
+              ? ClipRRect(
+                  borderRadius: AppRadius.circular(6),
+                  child: Image.network(
+                    poster,
+                    width: 40,
+                    height: 60,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 40,
+                      height: 60,
+                      color: AppColorScheme.background,
+                      child: const Icon(Icons.movie),
+                    ),
+                  ),
+                )
+              : Container(
+                  width: 40,
+                  height: 60,
+                  color: AppColorScheme.background,
+                  child: const Icon(Icons.movie),
+                ),
+          title: Text(
+            item.title ?? item.name ?? 'Unknown',
+            style: TextStyle(color: AppColorScheme.onSurface),
+          ),
+          subtitle: Text(
+            [
+              _kindLabel(item),
+              if (item.overview != null && item.overview!.isNotEmpty)
+                item.overview!,
+            ].join(' · '),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppColorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          onTap: () => _openResult(item),
+        );
+      },
+    );
+  }
+}
+
+class _MediaTypeToggle extends StatelessWidget {
+  final String value;
+  final ValueChanged<String> onChanged;
+
+  const _MediaTypeToggle({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColorScheme.background,
+        borderRadius: AppRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _toggleBtn(context, 'all', appL10n().tgAll),
+          _toggleBtn(context, 'movie', appL10n().tgMovies),
+          _toggleBtn(context, 'tv', appL10n().tgSeries),
+        ],
+      ),
+    );
+  }
+
+  Widget _toggleBtn(BuildContext context, String type, String label) {
+    final selected = value == type;
+    return GestureDetector(
+      onTap: () => onChanged(type),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? AppColorScheme.accent : Colors.transparent,
+          borderRadius: AppRadius.circular(8),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected
+                ? AppColorScheme.onAccent
+                : AppColorScheme.onSurface,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class _GenreCard extends StatefulWidget {
   final String name;
   final String? imageUrl;
@@ -1414,5 +1861,39 @@ class _RequestsEntryButtonState extends State<_RequestsEntryButton>
         ),
       ),
     );
+  }
+}
+
+
+/// Picks the library item to open for "series, season N, episode M": the
+/// episode when the library has it, else the season, else the series itself
+/// (whose Seasons tab shows missing seasons). Lookups that fail fall back the
+/// same way.
+Future<String> resolveSeasonTarget(
+  String seriesId, {
+  required int season,
+  int? episode,
+  Future<Map<String, dynamic>> Function(String seriesId)? getSeasons,
+  Future<Map<String, dynamic>> Function(String seriesId, String seasonId)? getEpisodes,
+}) async {
+  try {
+    final client = (getSeasons == null || getEpisodes == null)
+        ? GetIt.instance<MediaServerClient>()
+        : null;
+    final seasons = await (getSeasons ?? client!.itemsApi.getSeasons)(seriesId);
+    final seasonItem = ((seasons['Items'] as List?) ?? const [])
+        .whereType<Map>()
+        .firstWhere((s) => s['IndexNumber'] == season, orElse: () => const {});
+    final seasonId = seasonItem['Id'] as String?;
+    if (seasonId == null) return seriesId;
+    if (episode == null) return seasonId;
+    final episodes = await (getEpisodes ??
+        (sid, seid) => client!.itemsApi.getEpisodes(sid, seasonId: seid))(seriesId, seasonId);
+    final ep = ((episodes['Items'] as List?) ?? const [])
+        .whereType<Map>()
+        .firstWhere((e) => e['IndexNumber'] == episode, orElse: () => const {});
+    return (ep['Id'] as String?) ?? seasonId;
+  } catch (_) {
+    return seriesId;
   }
 }

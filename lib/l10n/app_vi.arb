@@ -1,6 +1,6 @@
 {
     "@@locale": "vi",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin phiên bản {version}",
+    "appVersionFooter": "Tortugarr phiên bản {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin không thể truy cập vào khóa hệ thống của bạn. Việc đăng nhập có thể tiếp tục nhưng việc lưu trữ mã thông báo an toàn có thể không khả dụng cho đến khi khóa được mở khóa.",
+    "secureStorageUnavailableMessage": "Tortugarr không thể truy cập vào khóa hệ thống của bạn. Việc đăng nhập có thể tiếp tục nhưng việc lưu trữ mã thông báo an toàn có thể không khả dụng cho đến khi khóa được mở khóa.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Chuyển đổi giữa Moonfin và Neon Pulse mà không cần khởi động lại ứng dụng",
+    "settingsAppearanceThemeSubtitle": "Chuyển đổi giữa Tortugarr và Neon Pulse mà không cần khởi động lại ứng dụng",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Diện mạo Moonfin hiện tại được tất cả các bạn yêu thích",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Diện mạo Tortugarr hiện tại được tất cả các bạn yêu thích",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Xung neon",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Thoát khỏi Moonfin?",
+    "exitApp": "Thoát khỏi Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Chưa được thiết lập. Moonfin sẽ thử mpv.conf mặc định trong thư mục ứng dụng/dữ liệu.",
+    "notSetMpvConf": "Chưa được thiết lập. Tortugarr sẽ thử mpv.conf mặc định trong thư mục ứng dụng/dữ liệu.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Tải xuống/Moonfin - hiển thị với các ứng dụng khác",
+    "downloadsVisibleToOtherApps": "Tải xuống/Tortugarr - hiển thị với các ứng dụng khác",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Phương tiện đã tải xuống sẽ được lưu vào Tải xuống/Moonfin trên thiết bị của bạn. Các tệp này sẽ hiển thị với các ứng dụng khác như thư viện hoặc trình phát nhạc của bạn.\n\nCác bản tải xuống hiện tại sẽ vẫn ở vị trí hiện tại của chúng.",
+    "saveToDownloadsFolderDescription": "Phương tiện đã tải xuống sẽ được lưu vào Tải xuống/Tortugarr trên thiết bị của bạn. Các tệp này sẽ hiển thị với các ứng dụng khác như thư viện hoặc trình phát nhạc của bạn.\n\nCác bản tải xuống hiện tại sẽ vẫn ở vị trí hiện tại của chúng.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Chuyển đổi khả năng hiển thị trang chủ cho mỗi thư viện. Khởi động lại Moonfin để các thay đổi có hiệu lực.",
+    "libraryVisibilityDescription": "Chuyển đổi khả năng hiển thị trang chủ cho mỗi thư viện. Khởi động lại Tortugarr để các thay đổi có hiệu lực.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3557,13 +3557,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "Chọn giữa Moonfin, MakD hoặc tắt thanh phương tiện",
+    "mediaBarModeDescription": "Chọn giữa Tortugarr, MakD hoặc tắt thanh phương tiện",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Chơi ở Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Chơi ở Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Được yêu cầu bởi {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Không tìm thấy mục trong thư viện Moonfin của bạn",
+    "itemNotFoundInLibrary": "Không tìm thấy mục trong thư viện Tortugarr của bạn",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Đang khởi động lại máy chủ",
-    "adminServerRebootMessage": "Máy chủ đang khởi động lại, vui lòng khởi động lại Moonfin",
+    "adminServerRebootMessage": "Máy chủ đang khởi động lại, vui lòng khởi động lại Tortugarr",
     "adminActiveSessions": "Phiên hoạt động",
     "adminSessionsLoadFailed": "Không tải được phiên",
     "adminNoActiveSessions": "Không có phiên hoạt động nào",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Hiển thị nút thể loại trong thanh điều hướng",
     "settingsShowFavoritesButtonInNavigation": "Hiển thị nút yêu thích trên thanh điều hướng",
     "settingsShowLibrariesButtonInNavigation": "Hiển thị nút thư viện trong thanh điều hướng",
-    "settingsLibraryVisibilitySubtitle": "Chuyển đổi khả năng hiển thị trang chủ cho mỗi thư viện. Khởi động lại Moonfin để các thay đổi có hiệu lực.",
+    "settingsLibraryVisibilitySubtitle": "Chuyển đổi khả năng hiển thị trang chủ cho mỗi thư viện. Khởi động lại Tortugarr để các thay đổi có hiệu lực.",
     "settingsMediaBarAndLocalPreviews": "Thanh phương tiện & bản xem trước cục bộ",
     "settingsVisualOverlays": "Lớp phủ trực quan",
     "settingsSeasonalSurprise": "Bất ngờ theo mùa",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Tham gia Discord",
     "settingsJoinDiscordSubtitle": "Trò chuyện với cộng đồng",
     "settingsJoinTheDiscord": "Tham gia Discord",
-    "settingsSupportMoonfin": "Hỗ trợ Moonfin",
+    "settingsSupportNotflix": "Hỗ trợ Tortugarr",
     "settingsLegal": "HỢP PHÁP",
     "settingsLicenses": "Giấy phép",
     "settingsOpenSourceLicenseNotices": "Thông báo giấy phép nguồn mở",
     "settingsPrivacyPolicy": "Chính sách bảo mật",
-    "settingsPrivacyPolicySubtitle": "Cách Moonfin xử lý dữ liệu của bạn",
+    "settingsPrivacyPolicySubtitle": "Cách Tortugarr xử lý dữ liệu của bạn",
     "settingsCheckForUpdates": "Kiểm tra cập nhật",
-    "settingsCheckForUpdatesSubtitle": "Kiểm tra bản phát hành Moonfin mới nhất",
+    "settingsCheckForUpdatesSubtitle": "Kiểm tra bản phát hành Tortugarr mới nhất",
     "settingsPoweredByFlutter": "Được cung cấp bởi Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# thông báo giấy phép} other {# thông báo giấy phép}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Chủ đề đã lưu",
-    "savedThemesDescription": "Đây là các chủ đề được tải xuống từ plugin Moonfin cho máy chủ hiện tại. Việc xóa chỉ xóa bản sao cục bộ này.",
+    "savedThemesDescription": "Đây là các chủ đề được tải xuống từ plugin Tortugarr cho máy chủ hiện tại. Việc xóa chỉ xóa bản sao cục bộ này.",
     "savedThemesEmpty": "Không tìm thấy chủ đề đã lưu nào cho máy chủ này.",
     "savedThemesCurrentThemeId": "{themeId} • Hiện đang hoạt động",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Xóa chủ đề đã lưu",
     "savedThemesManageSubtitle": "Quản lý các chủ đề plugin đã tải xuống trên thiết bị này",
     "themeEditor": "Trình chỉnh sửa chủ đề",
-    "themeEditorSubtitle": "Mở Trình chỉnh sửa chủ đề Moonfin trong trình duyệt của bạn",
+    "themeEditorSubtitle": "Mở Trình chỉnh sửa chủ đề Tortugarr trong trình duyệt của bạn",
     "homeScreen": "Màn hình chính",
     "bottomBar": "Thanh dưới cùng",
     "homeRowsStyleClassic": "Cổ điển",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Ưu tiên phụ đề SDH",
     "preferSdhSubtitlesSubtitle": "Ưu tiên các bản phụ đề SDH/CC khi tự động chọn.",
     "webDiagnostics": "Chẩn đoán web",
-    "webDiagnosticsTitle": "Moonfin Chẩn đoán web",
+    "webDiagnosticsTitle": "Tortugarr Chẩn đoán web",
     "webDiagnosticsIntro": "Sử dụng trang này để chẩn đoán các sự cố kết nối trình duyệt (CORS, nội dung hỗn hợp và cài đặt khám phá).",
     "webDiagnosticsDetectedMixedContentFailure": "Đã phát hiện lỗi nội dung hỗn hợp",
     "webDiagnosticsDetectedCorsPreflightFailure": "Đã phát hiện CORS/Lỗi trước ánh sáng",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin đã phát hiện thấy một trang HTTPS đang cố gọi URL máy chủ HTTP. Trình duyệt chặn yêu cầu này trước khi nó đến máy chủ của bạn.",
-    "webDiagnosticsCorsFailureBody": "Moonfin đã phát hiện ra lỗi yêu cầu ở cấp trình duyệt thường xảy ra do thiếu tiêu đề CORS hoặc preflight trên máy chủ phương tiện.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr đã phát hiện thấy một trang HTTPS đang cố gọi URL máy chủ HTTP. Trình duyệt chặn yêu cầu này trước khi nó đến máy chủ của bạn.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr đã phát hiện ra lỗi yêu cầu ở cấp trình duyệt thường xảy ra do thiếu tiêu đề CORS hoặc preflight trên máy chủ phương tiện.",
     "webDiagnosticsTargetUrl": "URL mục tiêu: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "không được cấu hình",
     "webDiagnosticsMixedContent": "Nội dung hỗn hợp",
     "webDiagnosticsMixedContentDetected": "Trang này được tải qua HTTPS nhưng một hoặc nhiều URL được định cấu hình là HTTP. Trình duyệt chặn các trang HTTPS gọi API HTTP.",
-    "webDiagnosticsMixedContentFix": "Khắc phục: phân phối máy chủ phương tiện hoặc điểm cuối proxy của bạn qua HTTPS hoặc chỉ tải Moonfin qua HTTP trên các mạng cục bộ đáng tin cậy.",
+    "webDiagnosticsMixedContentFix": "Khắc phục: phân phối máy chủ phương tiện hoặc điểm cuối proxy của bạn qua HTTPS hoặc chỉ tải Tortugarr qua HTTP trên các mạng cục bộ đáng tin cậy.",
     "webDiagnosticsNoMixedContentDetected": "Không phát hiện thấy cấu hình nội dung hỗn hợp rõ ràng nào từ cài đặt thời gian chạy hiện tại.",
     "webDiagnosticsCorsChecklist": "Danh sách kiểm tra CORS",
     "webDiagnosticsCorsChecklistItem1": "• Cho phép nguồn gốc trình duyệt trong Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Tự động bật HDR để phát lại video HDR và ​​khôi phục chế độ hiển thị khi thoát.",
     "whenFullscreen": "Khi toàn màn hình",
     "transcodingLimits": "Giới hạn chuyển mã",
-    "settingsSupportMoonfinSubtitle": "Mời nhà phát triển một ly cà phê",
+    "settingsSupportNotflixSubtitle": "Mời nhà phát triển một ly cà phê",
     "accountPreferences": "TÙY CHỌN TÀI KHOẢN",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Cổ điển là bố cục Moonfin gốc căn giữa. Hiện đại là bố cục điện ảnh tự điều chỉnh.",
+    "detailScreenStyleSubtitle": "Cổ điển là bố cục Tortugarr gốc căn giữa. Hiện đại là bố cục điện ảnh tự điều chỉnh.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Cổ điển",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Cổ điển",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Hiện đại",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Dùng thuật toán Moonfin Gợi ý dựa trên thư viện cục bộ hoặc Chỉ số tương đồng trực tuyến của TMDb. Lưu ý: Gợi ý trực tuyến cần tích hợp Seerr.",
+    "recommendationSystemSubtitle": "Dùng thuật toán Tortugarr Gợi ý dựa trên thư viện cục bộ hoặc Chỉ số tương đồng trực tuyến của TMDb. Lưu ý: Gợi ý trực tuyến cần tích hợp Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Gợi ý",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Gợi ý",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Độ tương đồng TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Giới hạn gợi ý của Moonfin Gợi ý theo xếp hạng độ tuổi của nội dung đích",
+    "recommendationsApplyParentalRatingCapSubtitle": "Giới hạn gợi ý của Tortugarr Gợi ý theo xếp hạng độ tuổi của nội dung đích",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Chủ đề tùy chỉnh thay đổi các thành phần giao diện trên toàn Moonfin. Hãy chọn một tùy chọn hợp với phong cách của bạn.",
+    "customThemeSubtitle": "Chủ đề tùy chỉnh thay đổi các thành phần giao diện trên toàn Tortugarr. Hãy chọn một tùy chọn hợp với phong cách của bạn.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Đăng nhập Moonfin trên điện thoại của bạn",
+    "carSignInPrompt": "Đăng nhập Tortugarr trên điện thoại của bạn",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller là bộ kết xuất GPU hiện đại của Flutter, cho hoạt ảnh mượt hơn và ít giật hơn. Trên một số hộp TV và GPU đời cũ, nó có thể gây lỗi hiển thị hoặc video đen; hãy Tắt nếu bạn gặp tình trạng đó. Tự động sẽ chọn mặc định phù hợp nhất cho thiết bị của bạn. Khởi động lại Moonfin để áp dụng.",
+    "impellerRenderingSubtitle": "Impeller là bộ kết xuất GPU hiện đại của Flutter, cho hoạt ảnh mượt hơn và ít giật hơn. Trên một số hộp TV và GPU đời cũ, nó có thể gây lỗi hiển thị hoặc video đen; hãy Tắt nếu bạn gặp tình trạng đó. Tự động sẽ chọn mặc định phù hợp nhất cho thiết bị của bạn. Khởi động lại Tortugarr để áp dụng.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin cần khởi động lại để đổi công cụ kết xuất. Hãy đóng ứng dụng ngay bây giờ, sau đó mở lại để áp dụng.",
+    "impellerRestartMessage": "Tortugarr cần khởi động lại để đổi công cụ kết xuất. Hãy đóng ứng dụng ngay bây giờ, sau đó mở lại để áp dụng.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Phim phổ biến nhất trên IMDb",
     "imdbMostPopularTvShows": "Chương trình TV phổ biến nhất trên IMDb",
     "imdbLowestRatedMovies": "Phim bị đánh giá thấp nhất trên IMDb",
-    "imdbTopEnglishMovies": "Phim tiếng Anh được đánh giá cao nhất trên IMDb"
+    "imdbTopEnglishMovies": "Phim tiếng Anh được đánh giá cao nhất trên IMDb",
+    "tgMissing": "Chưa có",
+    "tgComing": "Sắp ra mắt",
+    "tgComingOn": "Ra mắt {date}",
+    "tgDownloading": "Đang tải xuống",
+    "tgReadySoon": "Sắp sẵn sàng",
+    "tgRequested": "Đã yêu cầu",
+    "tgClose": "Đóng",
+    "tgCancel": "Hủy",
+    "tgBack": "Quay lại",
+    "tgYes": "Có",
+    "tgNo": "Không",
+    "tgSearch": "Tìm kiếm",
+    "tgHide": "Ẩn",
+    "tgAll": "Tất cả",
+    "tgNone": "Không có",
+    "tgMovies": "Phim",
+    "tgSeries": "Phim bộ",
+    "tgMovieTag": "Phim",
+    "tgSeriesTag": "Phim bộ",
+    "tgCanTakeAMinute": "Có thể mất đến một phút",
+    "tgToday": "hôm nay",
+    "tgYesterday": "hôm qua",
+    "tgDaysAgo": "{days} ngày trước",
+    "tgMonthsAgo": "{months} tháng trước",
+    "tgYearsAgo": "{years} năm trước",
+    "tgYearsMonthsAgo": "{years} năm {months} tháng trước",
+    "tgFindSubtitles": "Tìm phụ đề",
+    "tgFreeUpSpace": "Giải phóng dung lượng",
+    "tgDownloads": "Tải xuống",
+    "tgDownloadsCount": "Tải xuống ({count})",
+    "tgNoVideoRemoved": "\"{title}\": bản tải xuống không có tệp video ({files}). Đã xóa và chặn — hãy thử tệp khác.",
+    "tgNoVideoNotRemoved": "\"{title}\": bản tải xuống không có tệp video ({files}), nhưng không thể tự động xóa.",
+    "tgAiredOn": "Phát sóng {date}",
+    "tgTapToFindFiles": "Nhấn để tìm tệp",
+    "tgWholeSeason": "Cả mùa",
+    "tgEpisodesMissingFindPack": "Thiếu {count} tập – tìm trọn bộ cả mùa",
+    "tgAddToSonarrTitle": "Thêm vào Sonarr để xem các tập còn thiếu",
+    "tgAddToSonarrSubtitle": "Phim bộ chỉ được thêm vào, không tự tải xuống gì cả",
+    "tgMissingEpisodesUnavailable": "Hiện không thể hiển thị các tập còn thiếu",
+    "tgReasonTapRetry": "{reason} · Nhấn để thử lại",
+    "tgSeasonPackBadge": "Trọn bộ cả mùa",
+    "tgMonitorSeasonTitle": "Theo dõi mùa {season}",
+    "tgMonitorSeasonQuestion": "Để Sonarr tải các tập còn thiếu của mùa {season} ngay bây giờ?\n\nKhông: chỉ tải các tập mới khi chúng ra mắt.",
+    "tgSonarrSearchingSeason": "Sonarr đang tìm mùa {season}",
+    "tgMonitored": "Đang theo dõi",
+    "tgNotMonitored": "Không theo dõi",
+    "tgSeasonStateLabel": "Mùa {season}: {state}",
+    "tgLabelMissing": "Thiếu {label}",
+    "tgNotAiredYet": "{code} chưa phát sóng.",
+    "tgNotAiredYetComing": "{code} chưa phát sóng – ra mắt {date}.",
+    "tgAlreadyDownloading": "{code} đang được tải xuống.",
+    "tgDownloadedAppearsSoon": "{code} đã tải xong và sẽ sớm xuất hiện trong thư viện.",
+    "tgSearchingFor": "Đang tìm {label} …",
+    "tgSeasonLower": "mùa {season}",
+    "tgWholeLabel": "Cả {label}",
+    "tgSeasonNoEpisodes": "Mùa {season} – chưa có tập nào trong thư viện",
+    "tgNoTvdbId": "Phim bộ này không có ID TVDB nên Sonarr không tìm được.",
+    "tgAddingToSonarr": "Đang thêm vào Sonarr …",
+    "tgAddToSonarrFailed": "Không thể thêm phim bộ vào Sonarr. Hãy thử lại sau.",
+    "tgSendingToDownload": "Đang gửi \"{label}\" để tải xuống …",
+    "tgDownloadDidNotStart": "Không bắt đầu được tải xuống: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" đang được tải xuống ({size}). Sẽ xuất hiện trong thư viện khi hoàn tất.",
+    "tgSonarrUnreachableRetry": "Không kết nối được với Sonarr. Hãy thử lại sau ít phút.",
+    "tgNoUsableFiles": "Không tìm thấy tệp nào dùng được. Hãy thử lại sau – tệp mới thường xuất hiện sau vài giờ.",
+    "tgFilesCount": "{count} tệp",
+    "tgFilesRecommended": "{count} tệp – {recommended} tệp phù hợp cấu hình chất lượng, số còn lại ở dưới cùng",
+    "tgOutsideQualityProfile": "Ngoài cấu hình chất lượng",
+    "tgLargerThanProfile": "Lớn hơn mức cấu hình cho phép",
+    "tgSmallerThanProfile": "Nhỏ hơn mức cấu hình cho phép",
+    "tgAlreadyExists": "Đã có sẵn",
+    "tgMayNotFitDisk": "Có thể không đủ chỗ trên ổ đĩa",
+    "tgSonarrUnreachable": "Không kết nối được với Sonarr",
+    "tgSonarrUnreachableAt": "Không kết nối được với Sonarr tại {host}",
+    "tgSonarrRejectedChange": "Sonarr không chấp nhận thay đổi",
+    "tgSeasonMonitoredNoSearch": "Mùa này đang được theo dõi, nhưng Sonarr không bắt đầu tìm kiếm",
+    "tgSonarrCantSearch": "Sonarr hiện không thể tìm kiếm",
+    "tgSearchExpired": "Kết quả tìm kiếm đã hết hạn – hãy tìm lại",
+    "tgSonarrRejectedDownload": "Sonarr không chấp nhận bản tải xuống (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr không có phim bộ này",
+    "tgCouldNotChangeMonitoring": "Không thể thay đổi theo dõi: {error}",
+    "tgJellyfinNoIds": "Jellyfin không nhận ra phim bộ này (không có ID TVDB hoặc TMDB)",
+    "tgSomethingWentWrong": "Đã xảy ra lỗi: {error}",
+    "tgDeleteReadOnly": "Tệp này không do Radarr/Sonarr quản lý, và Jellyfin chỉ có quyền đọc thư mục. Hãy xóa bằng trình quản lý tệp.",
+    "tgSonarrRequiredPerEpisode": "Không kết nối được với Sonarr, hoặc phim bộ chưa được thêm vào đó. Tải từng tập cần có Sonarr.",
+    "tgEpisodesNotFound": "Không tìm thấy các tập đã chọn của \"{title}\" trong Sonarr (tìm được tổng cộng {count} tập). Hãy thêm phim bộ vào Sonarr và thử lại.",
+    "tgPartOfCollectionPrefix": "Thuộc bộ sưu tập ",
+    "tgViewingPartOf": "  ·  bạn đang xem phần {current} trong {total}",
+    "tgPartOf": "Phần {number} trong {total}",
+    "tgUnknownTitle": "Tiêu đề không xác định",
+    "tgMovieCollection": "Bộ sưu tập phim",
+    "tgNotReleasedYet": "\"{title}\" chưa ra mắt",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Âm thanh trình bảo vệ màn hình",
+    "tgScreensaverSoundSubtitle": "Tắt: trailer trong trình bảo vệ màn hình phát không tiếng",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Huy hiệu Tortugarr",
+    "tgLogoVhs": "Vẹt trên băng VHS",
+    "tgLogoSign": "Vẹt trên bảng hiệu",
+    "tgHiddenBadge": "BỊ ẨN · {code}",
+    "tgDiskSpace": "Dung lượng ổ đĩa",
+    "tgDiskSpaceSubtitle": "Giải phóng dung lượng cho các bản tải xuống mới",
+    "tgAdultTitle": "Phim người lớn (XXX)",
+    "tgAdultSubtitle": "Hiện hoặc ẩn thư viện XXX (PIN)",
+    "tgHideForeign": "Ẩn nội dung nước ngoài",
+    "tgHideForeignOn": "Bật: Thịnh hành và Phổ biến chỉ hiện tiếng Anh, Na Uy, Thụy Điển, Đan Mạch, Đức và Pháp",
+    "tgHideForeignOff": "Tắt: Thịnh hành và Phổ biến hiện mọi ngôn ngữ",
+    "tgShowHidden": "Hiện những gì bị ẩn",
+    "tgShowHiddenOn": "Bật: các tiêu đề vốn bị ẩn sẽ hiện kèm nhãn BỊ ẨN màu đỏ",
+    "tgShowHiddenOff": "Khắc phục sự cố: hiện các tiêu đề bị ẩn kèm nhãn đỏ thay vì loại bỏ",
+    "tgShowAllSubLangs": "Hiện tất cả ngôn ngữ phụ đề",
+    "tgShowAllSubLangsOn": "Bật: menu phụ đề hiện mọi ngôn ngữ",
+    "tgShowAllSubLangsOff": "Tắt: menu phụ đề chỉ hiện tiếng Na Uy và tiếng Anh",
+    "tgPreviewSound": "Âm thanh xem trước",
+    "tgPreviewSoundOn": "Bật: đoạn clip phát khi bạn dừng ở một tiêu đề sẽ có tiếng",
+    "tgPreviewSoundOff": "Tắt: clip phát không tiếng khi bạn duyệt",
+    "tgScreensaver": "Trình bảo vệ màn hình",
+    "tgScreensaverSubtitle": "Video hoặc logo, âm thanh và hình ảnh",
+    "tgShowMissingEpisodes": "Hiện các tập còn thiếu",
+    "tgShowMissingEpisodesOn": "Bật: các mùa hiện cả những tập bạn chưa có, sẵn sàng để tải xuống",
+    "tgShowMissingEpisodesOff": "Tắt: các mùa chỉ hiện những tập bạn đã có",
+    "tgShowCollections": "Hiện bộ sưu tập phim",
+    "tgShowCollectionsOn": "Bật: trang phim hiện các phim khác trong bộ sưu tập, kể cả những phim bạn còn thiếu",
+    "tgShowCollectionsOff": "Tắt: trang phim không hiện bộ sưu tập",
+    "tgNoActiveDownloads": "Không có bản tải xuống nào đang chạy.",
+    "tgPickDownloadToOpen": "Chọn một bản tải xuống để mở các yêu cầu.",
+    "tgRefreshLibrary": "Làm mới thư viện",
+    "tgAskingJellyfinScan": "Đang yêu cầu Jellyfin quét thư viện …",
+    "tgHideAll": "Ẩn tất cả",
+    "tgImporting": "Đang nhập",
+    "tgSubsNotManaged": "Tiêu đề này không do Radarr/Sonarr quản lý nên Bazarr không tìm được phụ đề cho nó.",
+    "tgBazarrUnreachable": "Không kết nối được với Bazarr. Hãy thử lại sau ít phút.",
+    "tgSubsFoundNothing": "Chưa tìm thấy gì. Bazarr sẽ tự động thử lại mỗi ngày, hoặc bạn có thể tự chọn.",
+    "tgSubsFound": "Đã tìm thấy {languages} – có thể mất một lúc trước khi xuất hiện trong menu phụ đề.",
+    "tgAnd": "và",
+    "tgSubsDownloaded": "Đã tải xuống – có thể mất một lúc trước khi xuất hiện trong menu phụ đề.",
+    "tgAskingBazarr": "Đang hỏi Bazarr …",
+    "tgHaveAll": "Đã có đủ",
+    "tgSearchAutoNow": "Tìm tự động ngay",
+    "tgSearchingUpToMinute": "Đang tìm … có thể mất đến một phút",
+    "tgPickYourself": "Tự chọn",
+    "tgAskingProviders": "Đang hỏi các nguồn phụ đề … có thể mất đến một phút",
+    "tgNoProviderSubs": "Chưa có nguồn nào có phụ đề cho phim này.",
+    "tgLangHas": "{language}: có",
+    "tgLangMissing": "{language}: chưa có",
+    "tgNoReleaseName": "(không có tên bản phát hành)",
+    "tgHearingImpaired": "{provider} · cho người khiếm thính",
+    "tgLangNorwegian": "Tiếng Na Uy",
+    "tgLangEnglish": "Tiếng Anh",
+    "tgBazarrUnknownTitle": "Bazarr chưa biết tiêu đề này",
+    "tgBazarrError": "Bazarr trả về lỗi (HTTP {code})",
+    "tgLowSpaceSnack": "Sắp hết dung lượng trên {drive}: (còn trống {free}). Bản tải xuống có thể bị dừng — hãy báo cho người quản lý máy chủ.",
+    "tgNoQbitForSpace": "Không kết nối được với qBittorrent để kiểm tra dung lượng",
+    "tgNotEnoughSpace": "Không đủ dung lượng",
+    "tgDriveHasFree": "{drive}: còn trống {free}",
+    "tgCopyInDownloads": "Bản sao trong Downloads · đã có trong thư viện",
+    "tgLastWatched": "Xem lần cuối {ago}",
+    "tgNeverWatchedAdded": "Chưa xem · đã thêm {ago}",
+    "tgNeverWatched": "Chưa xem",
+    "tgNothingSafeToDelete": "Không tìm thấy gì trên {drive}: có thể xóa an toàn (mọi thứ đều mới thêm, mới xem hoặc là mục yêu thích).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Xóa 1 tiêu đề?} other{Xóa {count} tiêu đề?}}",
+    "tgDeletedForGood": "{size} sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+    "tgYesDelete": "Có, xóa",
+    "tgDeletingProgress": "Đang xóa {done}/{total} …",
+    "tgNowHasFree": " · {drive}: giờ còn trống {free}",
+    "tgDeletedTitles": "{count, plural, =1{Đã xóa 1 tiêu đề} other{Đã xóa {count} tiêu đề}}{extra}",
+    "tgDeletedFailed": "Đã xóa {count}, thất bại: {failed}{extra}",
+    "tgFreeGb": "Giải phóng {gb} GB",
+    "tgDownloadCopies": "Bản sao tải xuống",
+    "tgLookingForUnwatched": "Đang tìm những gì đã lâu không xem …",
+    "tgSuggestionEnough": "Đề xuất: {size} · đủ dung lượng ✓",
+    "tgSuggestionOf": "Đề xuất: {size} trong {target} cần có",
+    "tgPickToSayNo": "Chọn một mục để bỏ qua — đề xuất tiếp theo sẽ tự động được thêm vào.",
+    "tgOtherCandidates": "Ứng viên khác",
+    "tgDownloadAnyway": "Vẫn tải xuống",
+    "tgDeleteCountSize": "Xóa {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: còn trống {free}.",
+    "tgFileDoubleSpace": "Tệp có kích cỡ {size} và chiếm gấp đôi dung lượng (bản tải xuống + bản sao trong thư viện), cộng thêm {buffer} dự phòng.",
+    "tgFileSize": "Tệp có kích cỡ {size}, cộng thêm {buffer} dự phòng.",
+    "tgPendingNeeds": "Các bản tải xuống đang chạy cần thêm {size}.",
+    "tgShortBy": "Còn thiếu {size}.",
+    "tgOnlyEarlyFiles": "Chỉ tìm thấy các tệp đăng trước khi phim phát hành kỹ thuật số ({count}) — hầu như luôn là giả.",
+    "tgNoDigitalDate": "chưa có ngày phát hành kỹ thuật số",
+    "tgDigitalOn": "sẽ phát hành kỹ thuật số vào {date}",
+    "tgNotOutDigitally": "Chưa phát hành kỹ thuật số",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "Những gì hiện có thường là bản quay trong rạp hoặc một bộ phim khác cùng tên. Đôi khi có bản sớm với chất lượng thấp, thường kèm phụ đề in cứng. \"Vẫn hiện tệp\" sẽ cho thấy những gì hiện có. Radarr sẽ tự tải bản chính thức khi phim ra mắt.",
+    "tgShowFilesAnyway": "Vẫn hiện tệp",
+    "tgPickSeasonsEpisodes": "Chọn mùa và tập",
+    "tgNoEpisodeInfo": "{season}: không có thông tin tập",
+    "tgAppliesAllDevices": "Áp dụng cho mọi thiết bị dùng tài khoản này",
+    "tgNoXxxLibrary": "Không tìm thấy thư viện nào tên XXX.",
+    "tgSearchingEachWord": "Đang tìm từng từ riêng lẻ … (có thể mất nửa phút)",
+    "tgSentToQbit": "Đã gửi \"{title}\" ({size}) tới qBittorrent",
+    "tgDownloadFailed": "Tải xuống thất bại: {error}",
+    "tgXxxNoVideoRemoved": "\"{title}\" không có tệp video và đã bị xóa.",
+    "tgXxxNoVideoNotRemoved": "\"{title}\" không có tệp video và KHÔNG bị xóa.",
+    "tgSearchNewXxx": "Tìm XXX mới",
+    "tgXxxSearchHint": "Tên, hãng phim …",
+    "tgChecking": "Đang kiểm tra …",
+    "tgXxxVisible": "Đang hiện. XXX xuất hiện trong thư viện, tìm kiếm và màn hình chính.",
+    "tgXxxHidden": "Đã ẩn. XXX không xuất hiện ở bất kỳ đâu trong ứng dụng.",
+    "tgShowWithPin": "Hiện (PIN)",
+    "tgChangePin": "Đổi PIN",
+    "tgNoLibraryList": "Không lấy được danh sách thư viện (HTTP {code})",
+    "tgNoUserSettings": "Không lấy được cài đặt người dùng (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin từ chối thay đổi (HTTP {code})",
+    "tgDeleteFailed": "Xóa thất bại (HTTP {code})",
+    "tgXxxAddFailed": "Không thể thêm \"{title}\" vào qBittorrent",
+    "tgSeasonEpisodeLower": "mùa {season}, tập {episode}",
+    "tgSearchInSeerr": "Tìm trong Seerr",
+    "tgSeerrSearchHint": "Tìm phim và phim bộ (ví dụ \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Còn thiếu trong mùa này",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Thiếu mùa} other{Thiếu các mùa}} {list} - mở phim bộ để xem tất cả các mùa",
+    "tgProjectOnGitHub": "Tortugarr trên GitHub",
+    "tgProjectOnGitHubSubtitle": "Mã nguồn, bản phát hành và báo lỗi",
+    "tgBuiltOnMoonfinCredit": "Tortugarr được xây dựng trên Moonfin (GPL), do các nhà phát triển Moonfin tạo ra.",
+    "tgCredits": "Ghi công",
+    "tgCreditsThanks": "Xin chân thành cảm ơn: không có những dự án này và những con người đứng sau chúng, Tortugarr đã không thể tồn tại.",
+    "tgCreditMoonfin": "Ứng dụng mà Tortugarr được xây dựng trên (GPL)",
+    "tgCreditJellyfin": "Máy chủ đa phương tiện",
+    "tgCreditSeerr": "Khám phá và yêu cầu",
+    "tgCreditRadarr": "Phim",
+    "tgCreditSonarr": "Phim bộ",
+    "tgCreditProwlarr": "Quản lý trình lập chỉ mục",
+    "tgCreditBazarr": "Phụ đề",
+    "tgCreditFlareSolverr": "Trợ giúp Cloudflare cho các trình lập chỉ mục",
+    "tgCreditQbittorrent": "Trình tải xuống, mặc định của bộ cài đặt",
+    "tgCreditTmdb": "Dữ liệu phim và phim bộ, poster và hình ảnh",
+    "tgCreditOpenSubtitles": "Phụ đề, lấy qua Bazarr",
+    "tgTmdbNotice": "Sản phẩm này sử dụng TMDB API nhưng không được TMDB xác nhận hay chứng nhận.",
+    "tgLoadingLogoSize": "Kích cỡ logo khi tải",
+    "tgLoadingLogoSizeSubtitle": "Logo xoay trong khi video đang tải",
+    "tgSubtitleLanguages": "Ngôn ngữ phụ đề",
+    "tgSubtitleLanguagesSubtitle": "Hiển thị trong menu phụ đề: {languages}",
+    "tgShowAllSubLangsOffChosen": "Tắt: menu phụ đề chỉ hiển thị các ngôn ngữ bạn đã chọn",
+    "tgDiscoveryLanguages": "Ngôn ngữ trong Thịnh hành và Phổ biến",
+    "tgDiscoveryLanguagesSubtitle": "Hiển thị: {languages}",
+    "tgHideForeignOnChosen": "Bật: Thịnh hành và Phổ biến chỉ hiển thị các ngôn ngữ bạn đã chọn",
+    "tgShowLanguageBadges": "Hiển thị nhãn ngôn ngữ",
+    "tgShowLanguageBadgesOn": "Bật: các tựa hiển thị ngôn ngữ của chúng (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Tắt: không có nhãn ngôn ngữ trên các tựa"
 }

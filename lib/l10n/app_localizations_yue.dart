@@ -9,7 +9,7 @@ class AppLocalizationsYue extends AppLocalizations {
   AppLocalizationsYue([String locale = 'yue']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get accountPreferences => '帳戶偏好設定';
@@ -79,7 +79,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin 版本 $version';
+    return 'Tortugarr 版本 $version';
   }
 
   @override
@@ -131,7 +131,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
+      'Tortugarr 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
 
   @override
   String get ok => '好的';
@@ -144,10 +144,10 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      '「經典」係 Moonfin 原本嘅置中版面。「現代」係自適應嘅電影感版面。';
+      '「經典」係 Tortugarr 原本嘅置中版面。「現代」係自適應嘅電影感版面。';
 
   @override
-  String get detailScreenStyleMoonfin => '經典';
+  String get detailScreenStyleNotflix => '經典';
 
   @override
   String get detailScreenStyleModern => '現代';
@@ -169,10 +169,10 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      '用 Moonfin Recommends 嘅本機媒體庫演算法，或者網上 TMDb 嘅相似度指標。注意：網上推薦需要整合 Seerr。';
+      '用 Tortugarr Recommends 嘅本機媒體庫演算法，或者網上 TMDb 嘅相似度指標。注意：網上推薦需要整合 Seerr。';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemNotflix => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 相似度';
@@ -182,7 +182,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      '根據目標媒體嘅家長分級嚟限制 Moonfin Recommends 嘅建議';
+      '根據目標媒體嘅家長分級嚟限制 Tortugarr Recommends 嘅建議';
 
   @override
   String get interfaceStyle => '介面風格';
@@ -218,13 +218,13 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      '在 Moonfin 和 Neon Pulse 之間切換，無需重新啟動應用程式';
+      '在 Tortugarr 和 Neon Pulse 之間切換，無需重新啟動應用程式';
 
   @override
   String get customThemeTitle => '自訂主題';
 
   @override
-  String get customThemeSubtitle => '自訂主題會改變成個 Moonfin 嘅視覺元素。揀一個啱你風格嘅選項啦。';
+  String get customThemeSubtitle => '自訂主題會改變成個 Tortugarr 嘅視覺元素。揀一個啱你風格嘅選項啦。';
 
   @override
   String get keyboardPreferSystemIme => '優先用系統鍵盤';
@@ -233,10 +233,10 @@ class AppLocalizationsYue extends AppLocalizations {
   String get keyboardPreferSystemImeDescription => '預設用你部裝置嘅輸入法嚟打字';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeNotflix => 'Tortugarr';
 
   @override
-  String get themeMoonfinSubtitle => '目前的 Moonfin 外觀你們都喜歡';
+  String get themeNotflixSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => '霓虹脈動';
@@ -301,7 +301,7 @@ class AppLocalizationsYue extends AppLocalizations {
   }
 
   @override
-  String get exitApp => '退出Moonfin？';
+  String get exitApp => '退出Tortugarr？';
 
   @override
   String get exitAppConfirmation => '您確定要退出嗎？';
@@ -1324,7 +1324,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get shuffleAllMusic => '隨機播放所有音樂';
 
   @override
-  String get carSignInPrompt => '用你部電話登入 Moonfin';
+  String get carSignInPrompt => '用你部電話登入 Tortugarr';
 
   @override
   String get carServerUnreachable => '連唔到你個伺服器';
@@ -2771,7 +2771,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get customMpvConfPath => '自訂 mpv.conf 路徑';
 
   @override
-  String get notSetMpvConf => '未設定。 Moonfin 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
+  String get notSetMpvConf => '未設定。 Tortugarr 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
 
   @override
   String get selectMpvConf => '選擇mpv.conf';
@@ -3018,7 +3018,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get saveToDownloadsFolder => '儲存到下載資料夾';
 
   @override
-  String get downloadsVisibleToOtherApps => 'Downloads/Moonfin — 對其他應用程式可見';
+  String get downloadsVisibleToOtherApps => 'Downloads/Tortugarr — 對其他應用程式可見';
 
   @override
   String get dangerZone => '危險區';
@@ -3047,7 +3047,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      '下載的媒體將會儲存到您裝置上的 Downloads/Moonfin 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
+      '下載的媒體將會儲存到您裝置上的 Downloads/Tortugarr 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -3175,7 +3175,8 @@ class AppLocalizationsYue extends AppLocalizations {
   String get libraryVisibility => '圖書館可見性';
 
   @override
-  String get libraryVisibilityDescription => '切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。';
+  String get libraryVisibilityDescription =>
+      '切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。';
 
   @override
   String get showInNavigation => '在導航中顯示';
@@ -3222,10 +3223,10 @@ class AppLocalizationsYue extends AppLocalizations {
   String get mediaBarMode => '媒體欄風格';
 
   @override
-  String get mediaBarModeDescription => '在 Moonfin、MakD 之間進行選擇，或關閉媒體列';
+  String get mediaBarModeDescription => '在 Tortugarr、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeNotflix => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -3724,7 +3725,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get sourceCode => '原始碼';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => '立即檢查更新';
@@ -3880,7 +3881,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => '玩 Moonfin';
+  String get playInNotflix => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -3913,7 +3914,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get keep => '保持';
 
   @override
-  String get itemNotFoundInLibrary => '在您的 Moonfin 庫中找不到項目';
+  String get itemNotFoundInLibrary => '在您的 Tortugarr 庫中找不到項目';
 
   @override
   String get errorSearchingLibrary => '搜尋庫時出錯';
@@ -4497,7 +4498,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get adminServerRebootInProgress => '伺服器正在重啟';
 
   @override
-  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Moonfin';
+  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Tortugarr';
 
   @override
   String get adminActiveSessions => '活躍會話';
@@ -8148,7 +8149,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      '切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。';
+      '切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。';
 
   @override
   String get settingsMediaBarAndLocalPreviews => '媒體欄和本地預覽';
@@ -8264,10 +8265,10 @@ class AppLocalizationsYue extends AppLocalizations {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportMoonfin => '支援Moonfin';
+  String get settingsSupportNotflix => '支援Tortugarr';
 
   @override
-  String get settingsSupportMoonfinSubtitle => '請開發者飲杯咖啡';
+  String get settingsSupportNotflixSubtitle => '請開發者飲杯咖啡';
 
   @override
   String get settingsLegal => '合法的';
@@ -8282,13 +8283,13 @@ class AppLocalizationsYue extends AppLocalizations {
   String get settingsPrivacyPolicy => '隱私權政策';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Moonfin 如何處理您的數據';
+  String get settingsPrivacyPolicySubtitle => 'Tortugarr 如何處理您的數據';
 
   @override
   String get settingsCheckForUpdates => '檢查更新';
 
   @override
-  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Moonfin 版本';
+  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Tortugarr 版本';
 
   @override
   String get settingsPoweredByFlutter => '由顫動提供支持';
@@ -8687,7 +8688,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      '呢啲係為目前伺服器由 Moonfin 外掛程式下載返嚟嘅主題。刪除淨係會移除呢個本機副本。';
+      '呢啲係為目前伺服器由 Tortugarr 外掛程式下載返嚟嘅主題。刪除淨係會移除呢個本機副本。';
 
   @override
   String get savedThemesEmpty => '搵唔到呢部伺服器嘅已儲存主題。';
@@ -8707,7 +8708,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get themeEditor => '主題編輯器';
 
   @override
-  String get themeEditorSubtitle => '喺你嘅瀏覽器度開 Moonfin 主題編輯器';
+  String get themeEditorSubtitle => '喺你嘅瀏覽器度開 Tortugarr 主題編輯器';
 
   @override
   String get homeScreen => '主畫面';
@@ -8920,7 +8921,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get webDiagnostics => '網頁診斷';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin 網頁診斷';
+  String get webDiagnosticsTitle => 'Tortugarr 網頁診斷';
 
   @override
   String get webDiagnosticsIntro => '用呢版嚟診斷瀏覽器嘅連線問題（CORS、混合內容同探索設定）。';
@@ -8933,11 +8934,11 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin 偵測到有 HTTPS 網頁想呼叫 HTTP 嘅伺服器 URL。瀏覽器會喺要求去到你部伺服器之前就封鎖咗佢。';
+      'Tortugarr 偵測到有 HTTPS 網頁想呼叫 HTTP 嘅伺服器 URL。瀏覽器會喺要求去到你部伺服器之前就封鎖咗佢。';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin 偵測到瀏覽器層面嘅要求失敗，通常係因為媒體伺服器度缺少咗 CORS 或者預檢標頭。';
+      'Tortugarr 偵測到瀏覽器層面嘅要求失敗，通常係因為媒體伺服器度缺少咗 CORS 或者預檢標頭。';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -8985,7 +8986,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      '解決方法：用 HTTPS 提供你嘅媒體伺服器或者代理端點，又或者淨係喺可信嘅本地網路度用 HTTP 載入 Moonfin。';
+      '解決方法：用 HTTPS 提供你嘅媒體伺服器或者代理端點，又或者淨係喺可信嘅本地網路度用 HTTP 載入 Tortugarr。';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -9789,7 +9790,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller 係 Flutter 新一代嘅 GPU 算圖器，動畫會順啲、少啲窒。喺部分電視盒同舊 GPU 上面可能會有花屏或者黑畫面；如果你見到咁就閂咗佢。「自動」會為你部裝置揀最啱嘅預設值。要重新啟動 Moonfin 先生效。';
+      'Impeller 係 Flutter 新一代嘅 GPU 算圖器，動畫會順啲、少啲窒。喺部分電視盒同舊 GPU 上面可能會有花屏或者黑畫面；如果你見到咁就閂咗佢。「自動」會為你部裝置揀最啱嘅預設值。要重新啟動 Tortugarr 先生效。';
 
   @override
   String get impellerAuto => '自動';
@@ -9805,7 +9806,7 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin 要重新啟動先可以更改算圖引擎。而家閂咗個應用程式，再開返就會生效。';
+      'Tortugarr 要重新啟動先可以更改算圖引擎。而家閂咗個應用程式，再開返就會生效。';
 
   @override
   String get impellerCloseNow => '而家閂咗應用程式';
@@ -9940,6 +9941,1003 @@ class AppLocalizationsYue extends AppLocalizations {
 
   @override
   String get mixedPlaylistsSection => 'Mixed Playlists';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => '缺少';
+
+  @override
+  String get tgComing => '即將推出';
+
+  @override
+  String tgComingOn(String date) {
+    return '$date推出';
+  }
+
+  @override
+  String get tgDownloading => '下載中';
+
+  @override
+  String get tgReadySoon => '好快就得';
+
+  @override
+  String get tgRequested => '已請求';
+
+  @override
+  String get tgClose => '關閉';
+
+  @override
+  String get tgCancel => '取消';
+
+  @override
+  String get tgBack => '返回';
+
+  @override
+  String get tgYes => '係';
+
+  @override
+  String get tgNo => '唔係';
+
+  @override
+  String get tgSearch => '搜尋';
+
+  @override
+  String get tgHide => '隱藏';
+
+  @override
+  String get tgAll => '全部';
+
+  @override
+  String get tgNone => '冇';
+
+  @override
+  String get tgMovies => '電影';
+
+  @override
+  String get tgSeries => '劇集';
+
+  @override
+  String get tgMovieTag => '電影';
+
+  @override
+  String get tgSeriesTag => '劇集';
+
+  @override
+  String get tgCanTakeAMinute => '最多可能要一分鐘';
+
+  @override
+  String get tgToday => '今日';
+
+  @override
+  String get tgYesterday => '昨日';
+
+  @override
+  String tgDaysAgo(int days) {
+    return '$days 日前';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return '$months 個月前';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return '$years 年前';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return '$years 年 $months 個月前';
+  }
+
+  @override
+  String get tgFindSubtitles => '搵字幕';
+
+  @override
+  String get tgFreeUpSpace => '騰出空間';
+
+  @override
+  String get tgDownloads => '下載';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return '下載（$count）';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '「$title」：呢個下載冇影片檔（$files）。已經移除並封鎖 — 試試另一個檔案。';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '「$title」：呢個下載冇影片檔（$files），但係無法自動移除。';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return '$date播出';
+  }
+
+  @override
+  String get tgTapToFindFiles => '㩒一下搵檔案';
+
+  @override
+  String get tgWholeSeason => '整季';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return '缺少 $count 集 – 搵整季合集';
+  }
+
+  @override
+  String get tgAddToSonarrTitle => '加入 Sonarr 以查看缺少嘅集數';
+
+  @override
+  String get tgAddToSonarrSubtitle => '加入之後唔會自動下載任何內容';
+
+  @override
+  String get tgMissingEpisodesUnavailable => '暫時無法顯示缺少嘅集數';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · 㩒一下重試';
+  }
+
+  @override
+  String get tgSeasonPackBadge => '整季合集';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return '監控第 $season 季';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return '要 Sonarr 而家就抓取第 $season 季缺少嘅集數？\n\n唔係：只會喺新一集播出時先抓取。';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr 正在搜尋第 $season 季';
+  }
+
+  @override
+  String get tgMonitored => '已監控';
+
+  @override
+  String get tgNotMonitored => '未監控';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '第 $season 季：$state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label缺少';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code 仲未播出。';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code 仲未播出 – $date推出。';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code 已經喺下載中。';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code 已經下載完成，好快就會出現喺媒體庫。';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return '正在搜尋$label…';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '第 $season 季';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return '完整嘅$label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '第 $season 季 – 媒體庫冇任何集數';
+  }
+
+  @override
+  String get tgNoTvdbId => '呢套劇集冇 TVDB ID，Sonarr 搵唔到。';
+
+  @override
+  String get tgAddingToSonarr => '正在加入 Sonarr…';
+
+  @override
+  String get tgAddToSonarrFailed => '無法將呢套劇集加入 Sonarr。請遲啲再試。';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return '正在將「$label」送去下載…';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return '下載未能開始：$error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '「$label」正在下載（$size）。完成之後會出現喺媒體庫。';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry => '無法連接 Sonarr。請遲啲再試。';
+
+  @override
+  String get tgNoUsableFiles => '搵唔到可用嘅檔案。請遲啲再試 – 新檔案通常幾個鐘之後會出現。';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count 個檔案';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count 個檔案 – 其中 $recommended 個符合品質設定檔，其餘排喺最底';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => '唔符合品質設定檔';
+
+  @override
+  String get tgLargerThanProfile => '大過設定檔容許嘅大小';
+
+  @override
+  String get tgSmallerThanProfile => '細過設定檔容許嘅大小';
+
+  @override
+  String get tgAlreadyExists => '已經存在';
+
+  @override
+  String get tgMayNotFitDisk => '硬碟空間可能唔夠';
+
+  @override
+  String get tgSonarrUnreachable => '無法連接 Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return '無法連接 $host 上嘅 Sonarr';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr 唔接受呢項變更';
+
+  @override
+  String get tgSeasonMonitoredNoSearch => '呢季已經受監控，但係 Sonarr 冇開始搜尋';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr 暫時無法搜尋';
+
+  @override
+  String get tgSearchExpired => '搜尋結果已經過期 – 請重新搜尋';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr 唔接受呢個下載（HTTP $status）';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr 冇呢套劇集';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return '無法變更監控狀態：$error';
+  }
+
+  @override
+  String get tgJellyfinNoIds => 'Jellyfin 認唔到呢套劇集（冇 TVDB 或 TMDB ID）';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return '出錯了：$error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      '呢個檔案唔係由 Radarr/Sonarr 管理，而且 Jellyfin 對該資料夾只有讀取權限。請喺檔案管理器刪除。';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      '無法連接 Sonarr，或者呢套劇集仲未加入 Sonarr。逐集下載需要 Sonarr。';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return '喺 Sonarr 搵唔到「$title」所選嘅集數（總共搵到 $count 集）。請將呢套劇集加入 Sonarr 之後再試。';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => '屬於電影系列 ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  你正在睇第 $current 部，共 $total 部';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '第 $number 部，共 $total 部';
+  }
+
+  @override
+  String get tgUnknownTitle => '未知標題';
+
+  @override
+  String get tgMovieCollection => '電影系列';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '「$title」仲未上映';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => '影片';
+
+  @override
+  String get tgScreensaverModeLogo => '標誌';
+
+  @override
+  String get tgScreensaverSound => '螢幕保護聲音';
+
+  @override
+  String get tgScreensaverSoundSubtitle => '關閉：螢幕保護嘅預告片會靜音播放';
+
+  @override
+  String get tgScreensaverLogo => '標誌';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr 徽章';
+
+  @override
+  String get tgLogoVhs => 'VHS 錄影帶上嘅鸚鵡';
+
+  @override
+  String get tgLogoSign => '招牌上嘅鸚鵡';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return '已隱藏 · $code';
+  }
+
+  @override
+  String get tgDiskSpace => '硬碟空間';
+
+  @override
+  String get tgDiskSpaceSubtitle => '為新下載騰出空間';
+
+  @override
+  String get tgAdultTitle => '成人電影（XXX）';
+
+  @override
+  String get tgAdultSubtitle => '顯示或隱藏 XXX 媒體庫（PIN）';
+
+  @override
+  String get tgHideForeign => '隱藏外語內容';
+
+  @override
+  String get tgHideForeignOn => '開啟：「熱門趨勢」同「人氣推介」只顯示英文、挪威文、瑞典文、丹麥文、德文同法文嘅內容';
+
+  @override
+  String get tgHideForeignOff => '關閉：「熱門趨勢」同「人氣推介」顯示所有語言嘅內容';
+
+  @override
+  String get tgShowHidden => '顯示被隱藏嘅內容';
+
+  @override
+  String get tgShowHiddenOn => '開啟：原本會被隱藏嘅作品會帶住紅色「已隱藏」標記顯示';
+
+  @override
+  String get tgShowHiddenOff => '疑難排解：用紅色標記顯示被隱藏嘅作品，而唔係將佢移除';
+
+  @override
+  String get tgShowAllSubLangs => '顯示所有字幕語言';
+
+  @override
+  String get tgShowAllSubLangsOn => '開啟：字幕選單顯示所有語言';
+
+  @override
+  String get tgShowAllSubLangsOff => '關閉：字幕選單只顯示挪威文同英文';
+
+  @override
+  String get tgShowAllSubLangsOffChosen => '關閉：字幕選單只顯示你揀咗嘅語言';
+
+  @override
+  String get tgSubtitleLanguages => '字幕語言';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return '喺字幕選單顯示：$languages';
+  }
+
+  @override
+  String get tgPreviewSound => '預覽聲音';
+
+  @override
+  String get tgPreviewSoundOn => '開啟：停留喺作品上時播放嘅片段有聲';
+
+  @override
+  String get tgPreviewSoundOff => '關閉：瀏覽時片段會靜音播放';
+
+  @override
+  String get tgScreensaver => '螢幕保護';
+
+  @override
+  String get tgScreensaverSubtitle => '影片或標誌、聲音同圖像';
+
+  @override
+  String get tgShowMissingEpisodes => '顯示缺少嘅集數';
+
+  @override
+  String get tgShowMissingEpisodesOn => '開啟：每季會顯示你未有、可以下載嘅集數';
+
+  @override
+  String get tgShowMissingEpisodesOff => '關閉：每季只顯示你已有嘅集數';
+
+  @override
+  String get tgShowCollections => '顯示電影系列';
+
+  @override
+  String get tgShowCollectionsOn => '開啟：電影頁面會顯示同系列嘅其他電影，包括你未有嘅';
+
+  @override
+  String get tgShowCollectionsOff => '關閉：電影頁面唔顯示所屬系列';
+
+  @override
+  String get tgNoActiveDownloads => '冇進行中嘅下載。';
+
+  @override
+  String get tgPickDownloadToOpen => '選擇一個下載以開啟請求。';
+
+  @override
+  String get tgRefreshLibrary => '重新整理媒體庫';
+
+  @override
+  String get tgAskingJellyfinScan => '正在請 Jellyfin 掃描媒體庫…';
+
+  @override
+  String get tgHideAll => '全部隱藏';
+
+  @override
+  String get tgImporting => '匯入中';
+
+  @override
+  String get tgSubsNotManaged => '呢部作品唔係由 Radarr/Sonarr 管理，所以 Bazarr 無法為佢搵字幕。';
+
+  @override
+  String get tgBazarrUnreachable => '無法連接 Bazarr。請遲啲再試。';
+
+  @override
+  String get tgSubsFoundNothing => '暫時仲未搵到。Bazarr 每日會自動再試，你亦可以自己揀。';
+
+  @override
+  String tgSubsFound(String languages) {
+    return '搵到$languages – 可能要等一陣先會出現喺字幕選單。';
+  }
+
+  @override
+  String get tgAnd => '同';
+
+  @override
+  String get tgSubsDownloaded => '已下載 – 可能要等一陣先會出現喺字幕選單。';
+
+  @override
+  String get tgAskingBazarr => '正在詢問 Bazarr…';
+
+  @override
+  String get tgHaveAll => '全部都有';
+
+  @override
+  String get tgSearchAutoNow => '立即自動搜尋';
+
+  @override
+  String get tgSearchingUpToMinute => '正在搜尋…最多可能要一分鐘';
+
+  @override
+  String get tgPickYourself => '自己揀';
+
+  @override
+  String get tgAskingProviders => '正在詢問字幕來源…最多可能要一分鐘';
+
+  @override
+  String get tgNoProviderSubs => '暫時仲冇任何來源有呢部作品嘅字幕。';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language：已有';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language：缺少';
+  }
+
+  @override
+  String get tgNoReleaseName => '（冇發行名稱）';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · 聽障字幕';
+  }
+
+  @override
+  String get tgLangNorwegian => '挪威文';
+
+  @override
+  String get tgLangEnglish => '英文';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr 仲未認識呢部作品';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr 回應錯誤（HTTP $code）';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return '$drive: 空間不足（剩餘 $free）。下載可能會中斷 — 請通知管理伺服器嘅人。';
+  }
+
+  @override
+  String get tgNoQbitForSpace => '無法連接 qBittorrent 檢查空間';
+
+  @override
+  String get tgNotEnoughSpace => '空間不足';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: 剩餘 $free';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Downloads 資料夾中嘅副本 · 媒體庫已經有';
+
+  @override
+  String tgLastWatched(String ago) {
+    return '上次觀看：$ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return '從未觀看 · $ago加入';
+  }
+
+  @override
+  String get tgNeverWatched => '從未觀看';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return '喺 $drive: 搵唔到可以安全刪除嘅內容（全部都係最近加入、最近睇過或者已加入最愛）。';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '要刪除 $count 部作品？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size 會被永久刪除。呢個動作無法復原。';
+  }
+
+  @override
+  String get tgYesDelete => '係，刪除';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return '正在刪除 $done/$total…';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: 而家剩餘 $free';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已刪除 $count 部作品',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return '已刪除 $count 部，失敗：$failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return '騰出 $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => '下載副本';
+
+  @override
+  String get tgLookingForUnwatched => '正在搵好久冇睇過嘅內容…';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return '建議：$size · 空間足夠 ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return '建議：$size，共需 $target';
+  }
+
+  @override
+  String get tgPickToSayNo => '揀一項以排除 — 下一個建議會自動補上。';
+
+  @override
+  String get tgOtherCandidates => '其他候選';
+
+  @override
+  String get tgDownloadAnyway => '照樣下載';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return '刪除 $count 項（$size）';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: 剩餘 $free。';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return '呢個檔案係 $size，會佔用雙倍空間（下載 + 媒體庫中嘅副本），另加 $buffer 預留空間。';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return '呢個檔案係 $size，另加 $buffer 預留空間。';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return '進行中嘅下載仲需要 $size。';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return '仲差 $size。';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return '只搵到喺電影數碼發行之前發布嘅檔案（$count）— 呢類檔案幾乎都係假嘅。';
+  }
+
+  @override
+  String get tgNoDigitalDate => '仲未有數碼發行日期';
+
+  @override
+  String tgDigitalOn(String date) {
+    return '將於 $date 數碼發行';
+  }
+
+  @override
+  String get tgNotOutDigitally => '仲未數碼發行';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '「$title」$when。';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      '而家搵到嘅通常係戲院偷錄或者同名嘅另一部電影。有時會有畫質較低嘅早期版本，多數帶有內嵌字幕。「照樣顯示檔案」會列出現有嘅檔案。正式版本推出之後，Radarr 會自動抓取。';
+
+  @override
+  String get tgShowFilesAnyway => '照樣顯示檔案';
+
+  @override
+  String get tgPickSeasonsEpisodes => '選擇季數同集數';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season：冇集數資料';
+  }
+
+  @override
+  String get tgAppliesAllDevices => '適用於使用呢個帳戶嘅所有裝置';
+
+  @override
+  String get tgNoXxxLibrary => '搵唔到名為 XXX 嘅媒體庫。';
+
+  @override
+  String get tgSearchingEachWord => '正在逐個字搜尋…（可能要半分鐘）';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '已將「$title」（$size）送去 qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return '下載失敗：$error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '「$title」冇影片檔，已經移除。';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '「$title」冇影片檔，但係未有移除。';
+  }
+
+  @override
+  String get tgSearchNewXxx => '搜尋新嘅 XXX';
+
+  @override
+  String get tgXxxSearchHint => '名稱、片商…';
+
+  @override
+  String get tgChecking => '正在檢查…';
+
+  @override
+  String get tgXxxVisible => '而家已顯示。XXX 會出現喺媒體庫、搜尋同主頁。';
+
+  @override
+  String get tgXxxHidden => '已隱藏。XXX 唔會出現喺應用程式任何地方。';
+
+  @override
+  String get tgShowWithPin => '顯示（PIN）';
+
+  @override
+  String get tgChangePin => '更改 PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return '無法取得媒體庫清單（HTTP $code）';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return '無法取得使用者設定（HTTP $code）';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin 拒絕咗呢項變更（HTTP $code）';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return '刪除失敗（HTTP $code）';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return '無法將「$title」加入 qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '第 $season 季第 $episode 集';
+  }
+
+  @override
+  String get tgSearchInSeerr => '喺 Seerr 搜尋';
+
+  @override
+  String get tgSeerrSearchHint => '搜尋電影同劇集（例如「Lost S02E05」）';
+
+  @override
+  String get tgMissingInThisSeason => '呢季缺少';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '缺少第',
+    );
+    return '$_temp0 $list 季 - 開啟劇集可以查看所有季';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'GitHub 上嘅 Tortugarr';
+
+  @override
+  String get tgProjectOnGitHubSubtitle => '原始碼、發行版本同問題回報';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr 以 Moonfin（GPL）為基礎打造，Moonfin 由其開發者製作。';
+
+  @override
+  String get tgCredits => '鳴謝';
+
+  @override
+  String get tgCreditsThanks => '謹此致謝：冇呢些項目同背後嘅每一位，就唔會有 Tortugarr。';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin => 'Tortugarr 所依據嘅應用程式（GPL）';
+
+  @override
+  String get tgCreditJellyfin => '媒體伺服器';
+
+  @override
+  String get tgCreditSeerr => '探索同請求';
+
+  @override
+  String get tgCreditRadarr => '電影';
+
+  @override
+  String get tgCreditSonarr => '劇集';
+
+  @override
+  String get tgCreditProwlarr => '索引器管理';
+
+  @override
+  String get tgCreditBazarr => '字幕';
+
+  @override
+  String get tgCreditFlareSolverr => '為索引器處理 Cloudflare 嘅小幫手';
+
+  @override
+  String get tgCreditQbittorrent => '下載客戶端，安裝程式嘅預設選項';
+
+  @override
+  String get tgCreditTmdb => '電影同劇集資料、海報同圖像';
+
+  @override
+  String get tgCreditOpenSubtitles => '字幕，透過 Bazarr 取得';
+
+  @override
+  String get tgTmdbNotice => '本產品使用 TMDB API，但未經 TMDB 認可或認證。';
+
+  @override
+  String get tgLoadingLogoSize => '載入標誌大小';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle => '影片載入時旋轉嘅標誌';
+
+  @override
+  String get tgDiscoveryLanguages => '熱門趨勢同熱門嘅語言';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return '顯示：$languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen => '開啟：熱門趨勢同熱門只顯示你揀咗嘅語言';
+
+  @override
+  String get tgShowLanguageBadges => '顯示語言標籤';
+
+  @override
+  String get tgShowLanguageBadgesOn => '開啟：作品會顯示佢嘅語言 (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff => '關閉：作品上面唔顯示語言標籤';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }
 
 /// The translations for Yue Chinese Cantonese, as used in China (`yue_CN`).
@@ -9947,7 +10945,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   AppLocalizationsYueCn() : super('yue_CN');
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get signIn => '登入';
@@ -10002,7 +11000,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin 版本$version';
+    return 'Tortugarr 版本$version';
   }
 
   @override
@@ -10054,7 +11052,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin 无法访问您的系统密钥环。登录可以继续，但在密钥环解锁之前，安全令牌存储可能不可用。';
+      'Tortugarr 无法访问您的系统密钥环。登录可以继续，但在密钥环解锁之前，安全令牌存储可能不可用。';
 
   @override
   String get ok => '好的';
@@ -10064,7 +11062,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      '在 Moonfin 和 Neon Pulse 之间切换，无需重新启动应用程序';
+      '在 Tortugarr 和 Neon Pulse 之间切换，无需重新启动应用程序';
 
   @override
   String get keyboardPreferSystemIme => '更喜欢系统键盘';
@@ -10073,10 +11071,10 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get keyboardPreferSystemImeDescription => '默认情况下使用您的设备输入法进行文本输入';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeNotflix => 'Tortugarr';
 
   @override
-  String get themeMoonfinSubtitle => '目前的 Moonfin 外观你们都喜欢';
+  String get themeNotflixSubtitle => '目前的 Tortugarr 外观你们都喜欢';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -10129,7 +11127,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   }
 
   @override
-  String get exitApp => '退出Moonfin？';
+  String get exitApp => '退出Tortugarr？';
 
   @override
   String get exitAppConfirmation => '您确定要退出吗？';
@@ -12277,7 +13275,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get customMpvConfPath => '自定义 mpv.conf 路径';
 
   @override
-  String get notSetMpvConf => '未设置。 Moonfin 将尝试应用程序/数据文件夹中的默认 mpv.conf。';
+  String get notSetMpvConf => '未设置。 Tortugarr 将尝试应用程序/数据文件夹中的默认 mpv.conf。';
 
   @override
   String get selectMpvConf => '选择mpv.conf';
@@ -12444,7 +13442,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get saveToDownloadsFolder => '保存到下载文件夹';
 
   @override
-  String get downloadsVisibleToOtherApps => 'Downloads/Moonfin — 对其他应用程序可见';
+  String get downloadsVisibleToOtherApps => 'Downloads/Tortugarr — 对其他应用程序可见';
 
   @override
   String get dangerZone => '危险区';
@@ -12473,7 +13471,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      '下载的媒体将保存到您设备上的 Downloads/Moonfin 中。这些文件将对其他应用程序可见，例如您的图库或音乐播放器。\n\n现有下载将保留在当前位置。';
+      '下载的媒体将保存到您设备上的 Downloads/Tortugarr 中。这些文件将对其他应用程序可见，例如您的图库或音乐播放器。\n\n现有下载将保留在当前位置。';
 
   @override
   String get enable => '使能够';
@@ -12578,7 +13576,8 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get libraryVisibility => '图书馆可见性';
 
   @override
-  String get libraryVisibilityDescription => '切换每个库的主页可见性。重新启动 Moonfin 以使更改生效。';
+  String get libraryVisibilityDescription =>
+      '切换每个库的主页可见性。重新启动 Tortugarr 以使更改生效。';
 
   @override
   String get showInNavigation => '在导航中显示';
@@ -12625,10 +13624,10 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get mediaBarMode => '媒体栏风格';
 
   @override
-  String get mediaBarModeDescription => '在 Moonfin、MakD 之间进行选择，或关闭媒体栏';
+  String get mediaBarModeDescription => '在 Tortugarr、MakD 之间进行选择，或关闭媒体栏';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeNotflix => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '马克D';
@@ -13002,7 +14001,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get sourceCode => '源代码';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => '立即检查更新';
@@ -13121,7 +14120,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get cancelRequest => '取消请求';
 
   @override
-  String get playInMoonfin => '玩 Moonfin';
+  String get playInNotflix => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -13154,7 +14153,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get keep => '保持';
 
   @override
-  String get itemNotFoundInLibrary => '在您的 Moonfin 库中找不到项目';
+  String get itemNotFoundInLibrary => '在您的 Tortugarr 库中找不到项目';
 
   @override
   String get errorSearchingLibrary => '搜索库时出错';
@@ -13576,7 +14575,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get adminServerRebootInProgress => '服务器正在重启';
 
   @override
-  String get adminServerRebootMessage => '服务器正在重新启动，请重新启动 Moonfin';
+  String get adminServerRebootMessage => '服务器正在重新启动，请重新启动 Tortugarr';
 
   @override
   String get adminActiveSessions => '活跃会话';
@@ -16387,7 +17386,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      '切换每个库的主页可见性。重新启动 Moonfin 以使更改生效。';
+      '切换每个库的主页可见性。重新启动 Tortugarr 以使更改生效。';
 
   @override
   String get settingsMediaBarAndLocalPreviews => '媒体栏和本地预览';
@@ -16445,10 +17444,10 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportMoonfin => '支持Moonfin';
+  String get settingsSupportNotflix => '支持Tortugarr';
 
   @override
-  String get settingsSupportMoonfinSubtitle =>
+  String get settingsSupportNotflixSubtitle =>
       'Donate a coffee to the developer';
 
   @override
@@ -16464,13 +17463,13 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get settingsPrivacyPolicy => '隐私政策';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Moonfin 如何处理您的数据';
+  String get settingsPrivacyPolicySubtitle => 'Tortugarr 如何处理您的数据';
 
   @override
   String get settingsCheckForUpdates => '检查更新';
 
   @override
-  String get settingsCheckForUpdatesSubtitle => '检查最新的 Moonfin 版本';
+  String get settingsCheckForUpdatesSubtitle => '检查最新的 Tortugarr 版本';
 
   @override
   String get settingsPoweredByFlutter => '由颤动提供支持';
@@ -16810,7 +17809,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get savedThemesDescription =>
-      'These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.';
+      'These are themes downloaded from the Tortugarr plugin for the current server. Deleting removes only this local copy.';
 
   @override
   String get savedThemesEmpty => 'No saved themes were found for this server.';
@@ -16832,7 +17831,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get themeEditorSubtitle =>
-      'Open the Moonfin Theme Editor in your browser';
+      'Open the Tortugarr Theme Editor in your browser';
 
   @override
   String get homeScreen => 'Home Screen';
@@ -16994,7 +17993,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get webDiagnostics => 'Web diagnostics';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Web Diagnostics';
+  String get webDiagnosticsTitle => 'Tortugarr Web Diagnostics';
 
   @override
   String get webDiagnosticsIntro =>
@@ -17010,11 +18009,11 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.';
+      'Tortugarr detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.';
+      'Tortugarr detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -17062,7 +18061,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Fix: serve your media server or proxy endpoint via HTTPS, or load Moonfin over HTTP on trusted local networks only.';
+      'Fix: serve your media server or proxy endpoint via HTTPS, or load Tortugarr over HTTP on trusted local networks only.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -17436,6 +18435,911 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
 
   @override
   String get transcodingLimits => 'Transcoding Limits';
+
+  @override
+  String get tgMissing => '缺失';
+
+  @override
+  String get tgComing => '即将上线';
+
+  @override
+  String tgComingOn(String date) {
+    return '$date上线';
+  }
+
+  @override
+  String get tgDownloading => '下载中';
+
+  @override
+  String get tgReadySoon => '即将就绪';
+
+  @override
+  String get tgRequested => '已请求';
+
+  @override
+  String get tgClose => '关闭';
+
+  @override
+  String get tgCancel => '取消';
+
+  @override
+  String get tgBack => '返回';
+
+  @override
+  String get tgYes => '是';
+
+  @override
+  String get tgNo => '否';
+
+  @override
+  String get tgSearch => '搜索';
+
+  @override
+  String get tgHide => '隐藏';
+
+  @override
+  String get tgAll => '全部';
+
+  @override
+  String get tgNone => '无';
+
+  @override
+  String get tgMovies => '电影';
+
+  @override
+  String get tgSeries => '剧集';
+
+  @override
+  String get tgMovieTag => '电影';
+
+  @override
+  String get tgSeriesTag => '剧集';
+
+  @override
+  String get tgCanTakeAMinute => '最多可能需要一分钟';
+
+  @override
+  String get tgToday => '今天';
+
+  @override
+  String get tgYesterday => '昨天';
+
+  @override
+  String tgDaysAgo(int days) {
+    return '$days 天前';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return '$months 个月前';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return '$years 年前';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return '$years 年 $months 个月前';
+  }
+
+  @override
+  String get tgFindSubtitles => '查找字幕';
+
+  @override
+  String get tgFreeUpSpace => '释放空间';
+
+  @override
+  String get tgDownloads => '下载';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return '下载（$count）';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '“$title”：该下载不含视频文件（$files）。已将其移除并屏蔽 — 请试试其他文件。';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '“$title”：该下载不含视频文件（$files），但无法自动移除。';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return '$date播出';
+  }
+
+  @override
+  String get tgTapToFindFiles => '点按以查找文件';
+
+  @override
+  String get tgWholeSeason => '整季';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return '缺少 $count 集 – 查找整季合集';
+  }
+
+  @override
+  String get tgAddToSonarrTitle => '添加到 Sonarr 以查看缺失的剧集';
+
+  @override
+  String get tgAddToSonarrSubtitle => '添加后不会自动下载任何内容';
+
+  @override
+  String get tgMissingEpisodesUnavailable => '目前无法显示缺失的剧集';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · 点按重试';
+  }
+
+  @override
+  String get tgSeasonPackBadge => '整季合集';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return '监控第 $season 季';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return '要让 Sonarr 现在就获取第 $season 季缺失的剧集吗？\n\n否：只在新剧集播出时获取。';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr 正在搜索第 $season 季';
+  }
+
+  @override
+  String get tgMonitored => '已监控';
+
+  @override
+  String get tgNotMonitored => '未监控';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '第 $season 季：$state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label缺失';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code 尚未播出。';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code 尚未播出 – $date上线。';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code 已在下载中。';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code 已下载完成，稍后会出现在媒体库中。';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return '正在搜索$label…';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '第 $season 季';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return '完整的$label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '第 $season 季 – 媒体库中没有剧集';
+  }
+
+  @override
+  String get tgNoTvdbId => '该剧集没有 TVDB ID，Sonarr 无法找到它。';
+
+  @override
+  String get tgAddingToSonarr => '正在添加到 Sonarr…';
+
+  @override
+  String get tgAddToSonarrFailed => '无法将该剧集添加到 Sonarr。请稍后重试。';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return '正在将“$label”发送至下载…';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return '下载未能开始：$error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '“$label”正在下载（$size）。完成后会出现在媒体库中。';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry => '无法连接到 Sonarr。请稍后再试。';
+
+  @override
+  String get tgNoUsableFiles => '未找到可用文件。请稍后再试 – 新文件通常在几小时后出现。';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count 个文件';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count 个文件 – 其中 $recommended 个符合质量配置，其余排在底部';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => '不符合质量配置';
+
+  @override
+  String get tgLargerThanProfile => '超出配置允许的大小';
+
+  @override
+  String get tgSmallerThanProfile => '小于配置允许的大小';
+
+  @override
+  String get tgAlreadyExists => '已存在';
+
+  @override
+  String get tgMayNotFitDisk => '磁盘空间可能不足';
+
+  @override
+  String get tgSonarrUnreachable => '无法连接到 Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return '无法连接到 $host 上的 Sonarr';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr 未接受此更改';
+
+  @override
+  String get tgSeasonMonitoredNoSearch => '该季已被监控，但 Sonarr 没有开始搜索';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr 目前无法搜索';
+
+  @override
+  String get tgSearchExpired => '搜索结果已过期 – 请重新搜索';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr 未接受该下载（HTTP $status）';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr 中没有该剧集';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return '无法更改监控状态：$error';
+  }
+
+  @override
+  String get tgJellyfinNoIds => 'Jellyfin 无法识别该剧集（没有 TVDB 或 TMDB ID）';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return '出错了：$error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      '该文件不由 Radarr/Sonarr 管理，且 Jellyfin 对该文件夹只有读取权限。请在文件管理器中删除。';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      '无法连接到 Sonarr，或该剧集尚未添加到 Sonarr。按单集下载需要 Sonarr。';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return '在 Sonarr 中找不到“$title”所选的剧集（共找到 $count 集）。请将该剧集添加到 Sonarr 后重试。';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => '属于电影系列 ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  您正在观看第 $current 部，共 $total 部';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '第 $number 部，共 $total 部';
+  }
+
+  @override
+  String get tgUnknownTitle => '未知标题';
+
+  @override
+  String get tgMovieCollection => '电影系列';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '“$title”尚未上映';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => '视频';
+
+  @override
+  String get tgScreensaverModeLogo => '徽标';
+
+  @override
+  String get tgScreensaverSound => '屏保声音';
+
+  @override
+  String get tgScreensaverSoundSubtitle => '关闭：屏保预告片静音播放';
+
+  @override
+  String get tgScreensaverLogo => '徽标';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr 徽章';
+
+  @override
+  String get tgLogoVhs => 'VHS 录像带上的鹦鹉';
+
+  @override
+  String get tgLogoSign => '招牌上的鹦鹉';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return '已隐藏 · $code';
+  }
+
+  @override
+  String get tgDiskSpace => '磁盘空间';
+
+  @override
+  String get tgDiskSpaceSubtitle => '为新下载释放空间';
+
+  @override
+  String get tgAdultTitle => '成人电影（XXX）';
+
+  @override
+  String get tgAdultSubtitle => '显示或隐藏 XXX 媒体库（PIN）';
+
+  @override
+  String get tgHideForeign => '隐藏外语内容';
+
+  @override
+  String get tgHideForeignOn => '开启：“热播”和“热门”只显示英语、挪威语、瑞典语、丹麦语、德语和法语内容';
+
+  @override
+  String get tgHideForeignOff => '关闭：“热播”和“热门”显示所有语言的内容';
+
+  @override
+  String get tgShowHidden => '显示被隐藏的内容';
+
+  @override
+  String get tgShowHiddenOn => '开启：原本会被隐藏的标题会带红色“已隐藏”标记显示';
+
+  @override
+  String get tgShowHiddenOff => '排查问题：用红色标记显示被隐藏的标题，而不是将其移除';
+
+  @override
+  String get tgShowAllSubLangs => '显示所有字幕语言';
+
+  @override
+  String get tgShowAllSubLangsOn => '开启：字幕菜单显示所有语言';
+
+  @override
+  String get tgShowAllSubLangsOff => '关闭：字幕菜单只显示挪威语和英语';
+
+  @override
+  String get tgShowAllSubLangsOffChosen => '关闭：字幕菜单只显示你拣咗嘅语言';
+
+  @override
+  String get tgSubtitleLanguages => '字幕语言';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return '喺字幕菜单显示：$languages';
+  }
+
+  @override
+  String get tgPreviewSound => '预览声音';
+
+  @override
+  String get tgPreviewSoundOn => '开启：停留在某个标题时播放的片段带有声音';
+
+  @override
+  String get tgPreviewSoundOff => '关闭：浏览时片段静音播放';
+
+  @override
+  String get tgScreensaver => '屏保';
+
+  @override
+  String get tgScreensaverSubtitle => '视频或徽标、声音和图像';
+
+  @override
+  String get tgShowMissingEpisodes => '显示缺失的剧集';
+
+  @override
+  String get tgShowMissingEpisodesOn => '开启：每季会显示您尚未拥有、可供下载的剧集';
+
+  @override
+  String get tgShowMissingEpisodesOff => '关闭：每季只显示您已拥有的剧集';
+
+  @override
+  String get tgShowCollections => '显示电影系列';
+
+  @override
+  String get tgShowCollectionsOn => '开启：电影页面会显示同系列的其他影片，包括您尚未拥有的';
+
+  @override
+  String get tgShowCollectionsOff => '关闭：电影页面不显示所属系列';
+
+  @override
+  String get tgNoActiveDownloads => '没有进行中的下载。';
+
+  @override
+  String get tgPickDownloadToOpen => '选择一个下载以打开请求。';
+
+  @override
+  String get tgRefreshLibrary => '刷新媒体库';
+
+  @override
+  String get tgAskingJellyfinScan => '正在请求 Jellyfin 扫描媒体库…';
+
+  @override
+  String get tgHideAll => '全部隐藏';
+
+  @override
+  String get tgImporting => '导入中';
+
+  @override
+  String get tgSubsNotManaged => '该标题不由 Radarr/Sonarr 管理，因此 Bazarr 无法为其查找字幕。';
+
+  @override
+  String get tgBazarrUnreachable => '无法连接到 Bazarr。请稍后再试。';
+
+  @override
+  String get tgSubsFoundNothing => '暂时没有找到。Bazarr 每天会自动重试，您也可以自行选择。';
+
+  @override
+  String tgSubsFound(String languages) {
+    return '已找到$languages – 可能需要片刻才会出现在字幕菜单中。';
+  }
+
+  @override
+  String get tgAnd => '和';
+
+  @override
+  String get tgSubsDownloaded => '已下载 – 可能需要片刻才会出现在字幕菜单中。';
+
+  @override
+  String get tgAskingBazarr => '正在询问 Bazarr…';
+
+  @override
+  String get tgHaveAll => '全部已有';
+
+  @override
+  String get tgSearchAutoNow => '立即自动搜索';
+
+  @override
+  String get tgSearchingUpToMinute => '正在搜索…最多可能需要一分钟';
+
+  @override
+  String get tgPickYourself => '自行选择';
+
+  @override
+  String get tgAskingProviders => '正在询问字幕来源…最多可能需要一分钟';
+
+  @override
+  String get tgNoProviderSubs => '目前还没有任何来源提供此内容的字幕。';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language：已有';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language：缺失';
+  }
+
+  @override
+  String get tgNoReleaseName => '（无发布名称）';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · 听障字幕';
+  }
+
+  @override
+  String get tgLangNorwegian => '挪威语';
+
+  @override
+  String get tgLangEnglish => '英语';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr 尚不认识此标题';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr 返回了错误（HTTP $code）';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return '$drive: 空间不足（剩余 $free）。下载可能会中断 — 请告知服务器管理员。';
+  }
+
+  @override
+  String get tgNoQbitForSpace => '无法连接到 qBittorrent 以检查空间';
+
+  @override
+  String get tgNotEnoughSpace => '空间不足';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: 剩余 $free';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Downloads 文件夹中的副本 · 媒体库中已有';
+
+  @override
+  String tgLastWatched(String ago) {
+    return '上次观看：$ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return '从未观看 · $ago添加';
+  }
+
+  @override
+  String get tgNeverWatched => '从未观看';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return '在 $drive: 上没有找到可以安全删除的内容（全部是最近添加、最近观看或收藏的）。';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '要删除 $count 个标题吗？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size 将被永久删除。此操作无法撤销。';
+  }
+
+  @override
+  String get tgYesDelete => '是，删除';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return '正在删除 $done/$total…';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: 现在剩余 $free';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已删除 $count 个标题',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return '已删除 $count 个，失败：$failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return '释放 $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => '下载副本';
+
+  @override
+  String get tgLookingForUnwatched => '正在查找很久没看过的内容…';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return '建议：$size · 空间足够 ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return '建议：$size，共需 $target';
+  }
+
+  @override
+  String get tgPickToSayNo => '选择一项以排除 — 下一个建议会自动补上。';
+
+  @override
+  String get tgOtherCandidates => '其他候选';
+
+  @override
+  String get tgDownloadAnyway => '仍要下载';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return '删除 $count 项（$size）';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: 剩余 $free。';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return '该文件为 $size，需要占用双倍空间（下载 + 媒体库中的副本），另加 $buffer 预留空间。';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return '该文件为 $size，另加 $buffer 预留空间。';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return '进行中的下载还需要 $size。';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return '还差 $size。';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return '只找到在电影数字发行前发布的文件（$count）— 这类文件几乎都是假的。';
+  }
+
+  @override
+  String get tgNoDigitalDate => '尚无数字发行日期';
+
+  @override
+  String tgDigitalOn(String date) {
+    return '将于 $date 数字发行';
+  }
+
+  @override
+  String get tgNotOutDigitally => '尚未数字发行';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '“$title”$when。';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      '目前能找到的通常是影院盗录或同名的另一部电影。有时会有画质较低的早期版本，往往带有内嵌字幕。“仍要显示文件”会列出现有的文件。正式版本发布后，Radarr 会自动获取。';
+
+  @override
+  String get tgShowFilesAnyway => '仍要显示文件';
+
+  @override
+  String get tgPickSeasonsEpisodes => '选择季和剧集';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season：没有剧集信息';
+  }
+
+  @override
+  String get tgAppliesAllDevices => '适用于使用此账户的所有设备';
+
+  @override
+  String get tgNoXxxLibrary => '没有找到名为 XXX 的媒体库。';
+
+  @override
+  String get tgSearchingEachWord => '正在逐词搜索…（可能需要半分钟）';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '已将“$title”（$size）发送到 qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return '下载失败：$error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '“$title”不含视频文件，已被移除。';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '“$title”不含视频文件，但未被移除。';
+  }
+
+  @override
+  String get tgSearchNewXxx => '搜索新的 XXX';
+
+  @override
+  String get tgXxxSearchHint => '名称、片商…';
+
+  @override
+  String get tgChecking => '正在检查…';
+
+  @override
+  String get tgXxxVisible => '现已显示。XXX 会出现在媒体库、搜索和首页中。';
+
+  @override
+  String get tgXxxHidden => '已隐藏。XXX 不会出现在应用的任何位置。';
+
+  @override
+  String get tgShowWithPin => '显示（PIN）';
+
+  @override
+  String get tgChangePin => '更改 PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return '无法获取媒体库列表（HTTP $code）';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return '无法获取用户设置（HTTP $code）';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin 拒绝了此更改（HTTP $code）';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return '删除失败（HTTP $code）';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return '无法将“$title”添加到 qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '第 $season 季第 $episode 集';
+  }
+
+  @override
+  String get tgSearchInSeerr => '在 Seerr 中搜索';
+
+  @override
+  String get tgSeerrSearchHint => '搜索电影和剧集（例如“Lost S02E05”）';
+
+  @override
+  String get tgMissingInThisSeason => '本季缺失';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '缺少第',
+    );
+    return '$_temp0 $list 季 - 打开剧集可查看全部季';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'GitHub 上的 Tortugarr';
+
+  @override
+  String get tgProjectOnGitHubSubtitle => '源代码、版本发布和问题反馈';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr 基于 Moonfin（GPL）构建，Moonfin 由其开发者打造。';
+
+  @override
+  String get tgCredits => '致谢';
+
+  @override
+  String get tgCreditsThanks => '谨致谢意：没有这些项目以及它们背后的人，就不会有 Tortugarr。';
+
+  @override
+  String get tgCreditMoonfin => 'Tortugarr 所基于的应用（GPL）';
+
+  @override
+  String get tgCreditJellyfin => '媒体服务器';
+
+  @override
+  String get tgCreditSeerr => '发现与请求';
+
+  @override
+  String get tgCreditRadarr => '电影';
+
+  @override
+  String get tgCreditSonarr => '剧集';
+
+  @override
+  String get tgCreditProwlarr => '索引器管理';
+
+  @override
+  String get tgCreditBazarr => '字幕';
+
+  @override
+  String get tgCreditFlareSolverr => '为索引器处理 Cloudflare 的助手';
+
+  @override
+  String get tgCreditQbittorrent => '下载客户端，安装程序的默认选择';
+
+  @override
+  String get tgCreditTmdb => '电影和剧集数据、海报和图片';
+
+  @override
+  String get tgCreditOpenSubtitles => '字幕，通过 Bazarr 获取';
+
+  @override
+  String get tgTmdbNotice => '本产品使用 TMDB API，但未经 TMDB 认可或认证。';
+
+  @override
+  String get tgLoadingLogoSize => '加载徽标大小';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle => '视频加载时旋转的徽标';
+
+  @override
+  String get tgDiscoveryLanguages => '热门趋势同热门嘅语言';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return '显示：$languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen => '开启：热门趋势同热门只显示你拣咗嘅语言';
+
+  @override
+  String get tgShowLanguageBadges => '显示语言标签';
+
+  @override
+  String get tgShowLanguageBadgesOn => '开启：作品会显示佢嘅语言 (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff => '关闭：作品上面唔显示语言标签';
 }
 
 /// The translations for Yue Chinese Cantonese, as used in Hong Kong (`yue_HK`).
@@ -17443,7 +19347,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   AppLocalizationsYueHk() : super('yue_HK');
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get signIn => '登入';
@@ -17498,7 +19402,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin version $version';
+    return 'Tortugarr version $version';
   }
 
   @override
@@ -17550,7 +19454,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
+      'Tortugarr 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。';
 
   @override
   String get ok => '好的';
@@ -17560,7 +19464,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      '在 Moonfin 和 Neon Pulse 之間切換，無需重新啟動應用程式';
+      '在 Tortugarr 和 Neon Pulse 之間切換，無需重新啟動應用程式';
 
   @override
   String get keyboardPreferSystemIme => 'Prefer system keyboard';
@@ -17570,10 +19474,10 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
       'Use your device input method by default for text entry';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeNotflix => 'Tortugarr';
 
   @override
-  String get themeMoonfinSubtitle => '目前的 Moonfin 外觀你們都喜歡';
+  String get themeNotflixSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -17626,7 +19530,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   }
 
   @override
-  String get exitApp => '退出Moonfin？';
+  String get exitApp => '退出Tortugarr？';
 
   @override
   String get exitAppConfirmation => '您確定要退出嗎？';
@@ -19774,7 +21678,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get customMpvConfPath => '自訂 mpv.conf 路徑';
 
   @override
-  String get notSetMpvConf => '未設定。 Moonfin 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
+  String get notSetMpvConf => '未設定。 Tortugarr 將嘗試應用程式/資料資料夾中的預設 mpv.conf。';
 
   @override
   String get selectMpvConf => '選擇mpv.conf';
@@ -19941,7 +21845,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get saveToDownloadsFolder => '儲存到下載資料夾';
 
   @override
-  String get downloadsVisibleToOtherApps => 'Downloads/Moonfin — 對其他應用程式可見';
+  String get downloadsVisibleToOtherApps => 'Downloads/Tortugarr — 對其他應用程式可見';
 
   @override
   String get dangerZone => '危險區';
@@ -19970,7 +21874,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      '下載的媒體將會儲存到您裝置上的 Downloads/Moonfin 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
+      '下載的媒體將會儲存到您裝置上的 Downloads/Tortugarr 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。';
 
   @override
   String get enable => '使能夠';
@@ -20075,7 +21979,8 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get libraryVisibility => '圖書館可見性';
 
   @override
-  String get libraryVisibilityDescription => '切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。';
+  String get libraryVisibilityDescription =>
+      '切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。';
 
   @override
   String get showInNavigation => '在導航中顯示';
@@ -20122,10 +22027,10 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get mediaBarMode => '媒體欄風格';
 
   @override
-  String get mediaBarModeDescription => '在 Moonfin、MakD 之間進行選擇，或關閉媒體列';
+  String get mediaBarModeDescription => '在 Tortugarr、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeNotflix => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -20499,7 +22404,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get sourceCode => '原始碼';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => '立即檢查更新';
@@ -20618,7 +22523,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get cancelRequest => '取消請求';
 
   @override
-  String get playInMoonfin => '玩 Moonfin';
+  String get playInNotflix => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -20651,7 +22556,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get keep => '保持';
 
   @override
-  String get itemNotFoundInLibrary => '在您的 Moonfin 庫中找不到項目';
+  String get itemNotFoundInLibrary => '在您的 Tortugarr 庫中找不到項目';
 
   @override
   String get errorSearchingLibrary => '搜尋庫時出錯';
@@ -21073,7 +22978,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get adminServerRebootInProgress => '伺服器正在重啟';
 
   @override
-  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Moonfin';
+  String get adminServerRebootMessage => '伺服器正在重新啟動，請重新啟動 Tortugarr';
 
   @override
   String get adminActiveSessions => '活躍會話';
@@ -23884,7 +25789,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      '切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。';
+      '切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。';
 
   @override
   String get settingsMediaBarAndLocalPreviews => '媒體欄和本地預覽';
@@ -23942,10 +25847,10 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportMoonfin => '支援Moonfin';
+  String get settingsSupportNotflix => '支援Tortugarr';
 
   @override
-  String get settingsSupportMoonfinSubtitle =>
+  String get settingsSupportNotflixSubtitle =>
       'Donate a coffee to the developer';
 
   @override
@@ -23961,13 +25866,13 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get settingsPrivacyPolicy => '隱私權政策';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Moonfin 如何處理您的數據';
+  String get settingsPrivacyPolicySubtitle => 'Tortugarr 如何處理您的數據';
 
   @override
   String get settingsCheckForUpdates => '檢查更新';
 
   @override
-  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Moonfin 版本';
+  String get settingsCheckForUpdatesSubtitle => '檢查最新的 Tortugarr 版本';
 
   @override
   String get settingsPoweredByFlutter => '由顫動提供支持';
@@ -24306,7 +26211,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get savedThemesDescription =>
-      'These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.';
+      'These are themes downloaded from the Tortugarr plugin for the current server. Deleting removes only this local copy.';
 
   @override
   String get savedThemesEmpty => 'No saved themes were found for this server.';
@@ -24328,7 +26233,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get themeEditorSubtitle =>
-      'Open the Moonfin Theme Editor in your browser';
+      'Open the Tortugarr Theme Editor in your browser';
 
   @override
   String get homeScreen => 'Home Screen';
@@ -24490,7 +26395,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get webDiagnostics => 'Web diagnostics';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Web Diagnostics';
+  String get webDiagnosticsTitle => 'Tortugarr Web Diagnostics';
 
   @override
   String get webDiagnosticsIntro =>
@@ -24506,11 +26411,11 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.';
+      'Tortugarr detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.';
+      'Tortugarr detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -24558,7 +26463,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Fix: serve your media server or proxy endpoint via HTTPS, or load Moonfin over HTTP on trusted local networks only.';
+      'Fix: serve your media server or proxy endpoint via HTTPS, or load Tortugarr over HTTP on trusted local networks only.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -24932,4 +26837,909 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
 
   @override
   String get transcodingLimits => 'Transcoding Limits';
+
+  @override
+  String get tgMissing => '缺少';
+
+  @override
+  String get tgComing => '即將推出';
+
+  @override
+  String tgComingOn(String date) {
+    return '$date推出';
+  }
+
+  @override
+  String get tgDownloading => '下載中';
+
+  @override
+  String get tgReadySoon => '好快就得';
+
+  @override
+  String get tgRequested => '已請求';
+
+  @override
+  String get tgClose => '關閉';
+
+  @override
+  String get tgCancel => '取消';
+
+  @override
+  String get tgBack => '返回';
+
+  @override
+  String get tgYes => '係';
+
+  @override
+  String get tgNo => '唔係';
+
+  @override
+  String get tgSearch => '搜尋';
+
+  @override
+  String get tgHide => '隱藏';
+
+  @override
+  String get tgAll => '全部';
+
+  @override
+  String get tgNone => '冇';
+
+  @override
+  String get tgMovies => '電影';
+
+  @override
+  String get tgSeries => '劇集';
+
+  @override
+  String get tgMovieTag => '電影';
+
+  @override
+  String get tgSeriesTag => '劇集';
+
+  @override
+  String get tgCanTakeAMinute => '最多可能要一分鐘';
+
+  @override
+  String get tgToday => '今日';
+
+  @override
+  String get tgYesterday => '昨日';
+
+  @override
+  String tgDaysAgo(int days) {
+    return '$days 日前';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return '$months 個月前';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return '$years 年前';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return '$years 年 $months 個月前';
+  }
+
+  @override
+  String get tgFindSubtitles => '搵字幕';
+
+  @override
+  String get tgFreeUpSpace => '騰出空間';
+
+  @override
+  String get tgDownloads => '下載';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return '下載（$count）';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '「$title」：呢個下載冇影片檔（$files）。已經移除並封鎖 — 試試另一個檔案。';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '「$title」：呢個下載冇影片檔（$files），但係無法自動移除。';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return '$date播出';
+  }
+
+  @override
+  String get tgTapToFindFiles => '㩒一下搵檔案';
+
+  @override
+  String get tgWholeSeason => '整季';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return '缺少 $count 集 – 搵整季合集';
+  }
+
+  @override
+  String get tgAddToSonarrTitle => '加入 Sonarr 以查看缺少嘅集數';
+
+  @override
+  String get tgAddToSonarrSubtitle => '加入之後唔會自動下載任何內容';
+
+  @override
+  String get tgMissingEpisodesUnavailable => '暫時無法顯示缺少嘅集數';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · 㩒一下重試';
+  }
+
+  @override
+  String get tgSeasonPackBadge => '整季合集';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return '監控第 $season 季';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return '要 Sonarr 而家就抓取第 $season 季缺少嘅集數？\n\n唔係：只會喺新一集播出時先抓取。';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr 正在搜尋第 $season 季';
+  }
+
+  @override
+  String get tgMonitored => '已監控';
+
+  @override
+  String get tgNotMonitored => '未監控';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '第 $season 季：$state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label缺少';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code 仲未播出。';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code 仲未播出 – $date推出。';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code 已經喺下載中。';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code 已經下載完成，好快就會出現喺媒體庫。';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return '正在搜尋$label…';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '第 $season 季';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return '完整嘅$label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '第 $season 季 – 媒體庫冇任何集數';
+  }
+
+  @override
+  String get tgNoTvdbId => '呢套劇集冇 TVDB ID，Sonarr 搵唔到。';
+
+  @override
+  String get tgAddingToSonarr => '正在加入 Sonarr…';
+
+  @override
+  String get tgAddToSonarrFailed => '無法將呢套劇集加入 Sonarr。請遲啲再試。';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return '正在將「$label」送去下載…';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return '下載未能開始：$error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '「$label」正在下載（$size）。完成之後會出現喺媒體庫。';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry => '無法連接 Sonarr。請遲啲再試。';
+
+  @override
+  String get tgNoUsableFiles => '搵唔到可用嘅檔案。請遲啲再試 – 新檔案通常幾個鐘之後會出現。';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count 個檔案';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count 個檔案 – 其中 $recommended 個符合品質設定檔，其餘排喺最底';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => '唔符合品質設定檔';
+
+  @override
+  String get tgLargerThanProfile => '大過設定檔容許嘅大小';
+
+  @override
+  String get tgSmallerThanProfile => '細過設定檔容許嘅大小';
+
+  @override
+  String get tgAlreadyExists => '已經存在';
+
+  @override
+  String get tgMayNotFitDisk => '硬碟空間可能唔夠';
+
+  @override
+  String get tgSonarrUnreachable => '無法連接 Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return '無法連接 $host 上嘅 Sonarr';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr 唔接受呢項變更';
+
+  @override
+  String get tgSeasonMonitoredNoSearch => '呢季已經受監控，但係 Sonarr 冇開始搜尋';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr 暫時無法搜尋';
+
+  @override
+  String get tgSearchExpired => '搜尋結果已經過期 – 請重新搜尋';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr 唔接受呢個下載（HTTP $status）';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr 冇呢套劇集';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return '無法變更監控狀態：$error';
+  }
+
+  @override
+  String get tgJellyfinNoIds => 'Jellyfin 認唔到呢套劇集（冇 TVDB 或 TMDB ID）';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return '出錯了：$error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      '呢個檔案唔係由 Radarr/Sonarr 管理，而且 Jellyfin 對該資料夾只有讀取權限。請喺檔案管理器刪除。';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      '無法連接 Sonarr，或者呢套劇集仲未加入 Sonarr。逐集下載需要 Sonarr。';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return '喺 Sonarr 搵唔到「$title」所選嘅集數（總共搵到 $count 集）。請將呢套劇集加入 Sonarr 之後再試。';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => '屬於電影系列 ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  你正在睇第 $current 部，共 $total 部';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '第 $number 部，共 $total 部';
+  }
+
+  @override
+  String get tgUnknownTitle => '未知標題';
+
+  @override
+  String get tgMovieCollection => '電影系列';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '「$title」仲未上映';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => '影片';
+
+  @override
+  String get tgScreensaverModeLogo => '標誌';
+
+  @override
+  String get tgScreensaverSound => '螢幕保護聲音';
+
+  @override
+  String get tgScreensaverSoundSubtitle => '關閉：螢幕保護嘅預告片會靜音播放';
+
+  @override
+  String get tgScreensaverLogo => '標誌';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr 徽章';
+
+  @override
+  String get tgLogoVhs => 'VHS 錄影帶上嘅鸚鵡';
+
+  @override
+  String get tgLogoSign => '招牌上嘅鸚鵡';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return '已隱藏 · $code';
+  }
+
+  @override
+  String get tgDiskSpace => '硬碟空間';
+
+  @override
+  String get tgDiskSpaceSubtitle => '為新下載騰出空間';
+
+  @override
+  String get tgAdultTitle => '成人電影（XXX）';
+
+  @override
+  String get tgAdultSubtitle => '顯示或隱藏 XXX 媒體庫（PIN）';
+
+  @override
+  String get tgHideForeign => '隱藏外語內容';
+
+  @override
+  String get tgHideForeignOn => '開啟：「熱門趨勢」同「人氣推介」只顯示英文、挪威文、瑞典文、丹麥文、德文同法文嘅內容';
+
+  @override
+  String get tgHideForeignOff => '關閉：「熱門趨勢」同「人氣推介」顯示所有語言嘅內容';
+
+  @override
+  String get tgShowHidden => '顯示被隱藏嘅內容';
+
+  @override
+  String get tgShowHiddenOn => '開啟：原本會被隱藏嘅作品會帶住紅色「已隱藏」標記顯示';
+
+  @override
+  String get tgShowHiddenOff => '疑難排解：用紅色標記顯示被隱藏嘅作品，而唔係將佢移除';
+
+  @override
+  String get tgShowAllSubLangs => '顯示所有字幕語言';
+
+  @override
+  String get tgShowAllSubLangsOn => '開啟：字幕選單顯示所有語言';
+
+  @override
+  String get tgShowAllSubLangsOff => '關閉：字幕選單只顯示挪威文同英文';
+
+  @override
+  String get tgShowAllSubLangsOffChosen => '關閉：字幕選單只顯示你揀咗嘅語言';
+
+  @override
+  String get tgSubtitleLanguages => '字幕語言';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return '喺字幕選單顯示：$languages';
+  }
+
+  @override
+  String get tgPreviewSound => '預覽聲音';
+
+  @override
+  String get tgPreviewSoundOn => '開啟：停留喺作品上時播放嘅片段有聲';
+
+  @override
+  String get tgPreviewSoundOff => '關閉：瀏覽時片段會靜音播放';
+
+  @override
+  String get tgScreensaver => '螢幕保護';
+
+  @override
+  String get tgScreensaverSubtitle => '影片或標誌、聲音同圖像';
+
+  @override
+  String get tgShowMissingEpisodes => '顯示缺少嘅集數';
+
+  @override
+  String get tgShowMissingEpisodesOn => '開啟：每季會顯示你未有、可以下載嘅集數';
+
+  @override
+  String get tgShowMissingEpisodesOff => '關閉：每季只顯示你已有嘅集數';
+
+  @override
+  String get tgShowCollections => '顯示電影系列';
+
+  @override
+  String get tgShowCollectionsOn => '開啟：電影頁面會顯示同系列嘅其他電影，包括你未有嘅';
+
+  @override
+  String get tgShowCollectionsOff => '關閉：電影頁面唔顯示所屬系列';
+
+  @override
+  String get tgNoActiveDownloads => '冇進行中嘅下載。';
+
+  @override
+  String get tgPickDownloadToOpen => '選擇一個下載以開啟請求。';
+
+  @override
+  String get tgRefreshLibrary => '重新整理媒體庫';
+
+  @override
+  String get tgAskingJellyfinScan => '正在請 Jellyfin 掃描媒體庫…';
+
+  @override
+  String get tgHideAll => '全部隱藏';
+
+  @override
+  String get tgImporting => '匯入中';
+
+  @override
+  String get tgSubsNotManaged => '呢部作品唔係由 Radarr/Sonarr 管理，所以 Bazarr 無法為佢搵字幕。';
+
+  @override
+  String get tgBazarrUnreachable => '無法連接 Bazarr。請遲啲再試。';
+
+  @override
+  String get tgSubsFoundNothing => '暫時仲未搵到。Bazarr 每日會自動再試，你亦可以自己揀。';
+
+  @override
+  String tgSubsFound(String languages) {
+    return '搵到$languages – 可能要等一陣先會出現喺字幕選單。';
+  }
+
+  @override
+  String get tgAnd => '同';
+
+  @override
+  String get tgSubsDownloaded => '已下載 – 可能要等一陣先會出現喺字幕選單。';
+
+  @override
+  String get tgAskingBazarr => '正在詢問 Bazarr…';
+
+  @override
+  String get tgHaveAll => '全部都有';
+
+  @override
+  String get tgSearchAutoNow => '立即自動搜尋';
+
+  @override
+  String get tgSearchingUpToMinute => '正在搜尋…最多可能要一分鐘';
+
+  @override
+  String get tgPickYourself => '自己揀';
+
+  @override
+  String get tgAskingProviders => '正在詢問字幕來源…最多可能要一分鐘';
+
+  @override
+  String get tgNoProviderSubs => '暫時仲冇任何來源有呢部作品嘅字幕。';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language：已有';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language：缺少';
+  }
+
+  @override
+  String get tgNoReleaseName => '（冇發行名稱）';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · 聽障字幕';
+  }
+
+  @override
+  String get tgLangNorwegian => '挪威文';
+
+  @override
+  String get tgLangEnglish => '英文';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr 仲未認識呢部作品';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr 回應錯誤（HTTP $code）';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return '$drive: 空間不足（剩餘 $free）。下載可能會中斷 — 請通知管理伺服器嘅人。';
+  }
+
+  @override
+  String get tgNoQbitForSpace => '無法連接 qBittorrent 檢查空間';
+
+  @override
+  String get tgNotEnoughSpace => '空間不足';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: 剩餘 $free';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Downloads 資料夾中嘅副本 · 媒體庫已經有';
+
+  @override
+  String tgLastWatched(String ago) {
+    return '上次觀看：$ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return '從未觀看 · $ago加入';
+  }
+
+  @override
+  String get tgNeverWatched => '從未觀看';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return '喺 $drive: 搵唔到可以安全刪除嘅內容（全部都係最近加入、最近睇過或者已加入最愛）。';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '要刪除 $count 部作品？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size 會被永久刪除。呢個動作無法復原。';
+  }
+
+  @override
+  String get tgYesDelete => '係，刪除';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return '正在刪除 $done/$total…';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: 而家剩餘 $free';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已刪除 $count 部作品',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return '已刪除 $count 部，失敗：$failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return '騰出 $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => '下載副本';
+
+  @override
+  String get tgLookingForUnwatched => '正在搵好久冇睇過嘅內容…';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return '建議：$size · 空間足夠 ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return '建議：$size，共需 $target';
+  }
+
+  @override
+  String get tgPickToSayNo => '揀一項以排除 — 下一個建議會自動補上。';
+
+  @override
+  String get tgOtherCandidates => '其他候選';
+
+  @override
+  String get tgDownloadAnyway => '照樣下載';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return '刪除 $count 項（$size）';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: 剩餘 $free。';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return '呢個檔案係 $size，會佔用雙倍空間（下載 + 媒體庫中嘅副本），另加 $buffer 預留空間。';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return '呢個檔案係 $size，另加 $buffer 預留空間。';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return '進行中嘅下載仲需要 $size。';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return '仲差 $size。';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return '只搵到喺電影數碼發行之前發布嘅檔案（$count）— 呢類檔案幾乎都係假嘅。';
+  }
+
+  @override
+  String get tgNoDigitalDate => '仲未有數碼發行日期';
+
+  @override
+  String tgDigitalOn(String date) {
+    return '將於 $date 數碼發行';
+  }
+
+  @override
+  String get tgNotOutDigitally => '仲未數碼發行';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '「$title」$when。';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      '而家搵到嘅通常係戲院偷錄或者同名嘅另一部電影。有時會有畫質較低嘅早期版本，多數帶有內嵌字幕。「照樣顯示檔案」會列出現有嘅檔案。正式版本推出之後，Radarr 會自動抓取。';
+
+  @override
+  String get tgShowFilesAnyway => '照樣顯示檔案';
+
+  @override
+  String get tgPickSeasonsEpisodes => '選擇季數同集數';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season：冇集數資料';
+  }
+
+  @override
+  String get tgAppliesAllDevices => '適用於使用呢個帳戶嘅所有裝置';
+
+  @override
+  String get tgNoXxxLibrary => '搵唔到名為 XXX 嘅媒體庫。';
+
+  @override
+  String get tgSearchingEachWord => '正在逐個字搜尋…（可能要半分鐘）';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '已將「$title」（$size）送去 qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return '下載失敗：$error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '「$title」冇影片檔，已經移除。';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '「$title」冇影片檔，但係未有移除。';
+  }
+
+  @override
+  String get tgSearchNewXxx => '搜尋新嘅 XXX';
+
+  @override
+  String get tgXxxSearchHint => '名稱、片商…';
+
+  @override
+  String get tgChecking => '正在檢查…';
+
+  @override
+  String get tgXxxVisible => '而家已顯示。XXX 會出現喺媒體庫、搜尋同主頁。';
+
+  @override
+  String get tgXxxHidden => '已隱藏。XXX 唔會出現喺應用程式任何地方。';
+
+  @override
+  String get tgShowWithPin => '顯示（PIN）';
+
+  @override
+  String get tgChangePin => '更改 PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return '無法取得媒體庫清單（HTTP $code）';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return '無法取得使用者設定（HTTP $code）';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin 拒絕咗呢項變更（HTTP $code）';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return '刪除失敗（HTTP $code）';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return '無法將「$title」加入 qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '第 $season 季第 $episode 集';
+  }
+
+  @override
+  String get tgSearchInSeerr => '喺 Seerr 搜尋';
+
+  @override
+  String get tgSeerrSearchHint => '搜尋電影同劇集（例如「Lost S02E05」）';
+
+  @override
+  String get tgMissingInThisSeason => '呢季缺少';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '缺少第',
+    );
+    return '$_temp0 $list 季 - 開啟劇集可以查看所有季';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'GitHub 上嘅 Tortugarr';
+
+  @override
+  String get tgProjectOnGitHubSubtitle => '原始碼、發行版本同問題回報';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr 以 Moonfin（GPL）為基礎打造，Moonfin 由其開發者製作。';
+
+  @override
+  String get tgCredits => '鳴謝';
+
+  @override
+  String get tgCreditsThanks => '謹此致謝：冇呢些項目同背後嘅每一位，就唔會有 Tortugarr。';
+
+  @override
+  String get tgCreditMoonfin => 'Tortugarr 所依據嘅應用程式（GPL）';
+
+  @override
+  String get tgCreditJellyfin => '媒體伺服器';
+
+  @override
+  String get tgCreditSeerr => '探索同請求';
+
+  @override
+  String get tgCreditRadarr => '電影';
+
+  @override
+  String get tgCreditSonarr => '劇集';
+
+  @override
+  String get tgCreditProwlarr => '索引器管理';
+
+  @override
+  String get tgCreditBazarr => '字幕';
+
+  @override
+  String get tgCreditFlareSolverr => '為索引器處理 Cloudflare 嘅小幫手';
+
+  @override
+  String get tgCreditQbittorrent => '下載客戶端，安裝程式嘅預設選項';
+
+  @override
+  String get tgCreditTmdb => '電影同劇集資料、海報同圖像';
+
+  @override
+  String get tgCreditOpenSubtitles => '字幕，透過 Bazarr 取得';
+
+  @override
+  String get tgTmdbNotice => '本產品使用 TMDB API，但未經 TMDB 認可或認證。';
+
+  @override
+  String get tgLoadingLogoSize => '載入標誌大小';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle => '影片載入時旋轉嘅標誌';
+
+  @override
+  String get tgDiscoveryLanguages => '熱門趨勢同熱門嘅語言';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return '顯示：$languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen => '開啟：熱門趨勢同熱門只顯示你揀咗嘅語言';
+
+  @override
+  String get tgShowLanguageBadges => '顯示語言標籤';
+
+  @override
+  String get tgShowLanguageBadgesOn => '開啟：作品會顯示佢嘅語言 (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff => '關閉：作品上面唔顯示語言標籤';
 }

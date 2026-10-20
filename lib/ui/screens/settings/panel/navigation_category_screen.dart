@@ -121,6 +121,13 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                   icon: Icons.favorite,
                   onChanged: _pushPersonalizationSync,
                 ),
+                if (PlatformDetection.isTV)
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.alwaysShowDownloadsButton,
+                    title: appL10n().tgAlwaysShowDownloads,
+                    subtitle: appL10n().tgAlwaysShowDownloadsSubtitle,
+                    icon: Icons.downloading_rounded,
+                  ),
                 SwitchPreferenceTile(
                   preference: UserPreferences.showLibrariesInToolbar,
                   title: l10n.showLibrariesInToolbar,

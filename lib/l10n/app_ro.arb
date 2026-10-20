@@ -1,6 +1,6 @@
 {
     "@@locale": "ro",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versiunea {version}",
+    "appVersionFooter": "Tortugarr versiunea {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin nu a putut accesa breloul de chei de sistem. Conectarea poate continua, dar stocarea securizată a token-ului poate fi indisponibilă până când inelul de chei este deblocat.",
+    "secureStorageUnavailableMessage": "Tortugarr nu a putut accesa breloul de chei de sistem. Conectarea poate continua, dar stocarea securizată a token-ului poate fi indisponibilă până când inelul de chei este deblocat.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Comutați între Moonfin și Neon Pulse fără a reporni aplicația",
+    "settingsAppearanceThemeSubtitle": "Comutați între Tortugarr și Neon Pulse fără a reporni aplicația",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Aspectul actual de Moonfin pe care ați ajuns să-l iubești cu toții",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Aspectul actual de Tortugarr pe care ați ajuns să-l iubești cu toții",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Ieși din Moonfin?",
+    "exitApp": "Ieși din Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Nu setat. Moonfin va încerca un mpv.conf implicit în folderele aplicații/date.",
+    "notSetMpvConf": "Nu setat. Tortugarr va încerca un mpv.conf implicit în folderele aplicații/date.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Descărcări/Moonfin — vizibil pentru alte aplicații",
+    "downloadsVisibleToOtherApps": "Descărcări/Tortugarr — vizibil pentru alte aplicații",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Media descărcate va fi salvat în Descărcări/Moonfin pe dispozitivul dvs. Aceste fișiere vor fi vizibile pentru alte aplicații, cum ar fi galeria sau playerul muzical.\n\nDescărcările existente vor rămâne în locația lor actuală.",
+    "saveToDownloadsFolderDescription": "Media descărcate va fi salvat în Descărcări/Tortugarr pe dispozitivul dvs. Aceste fișiere vor fi vizibile pentru alte aplicații, cum ar fi galeria sau playerul muzical.\n\nDescărcările existente vor rămâne în locația lor actuală.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Comutați vizibilitatea paginii de pornire pentru fiecare bibliotecă. Reporniți Moonfin pentru ca modificările să intre în vigoare.",
+    "libraryVisibilityDescription": "Comutați vizibilitatea paginii de pornire pentru fiecare bibliotecă. Reporniți Tortugarr pentru ca modificările să intre în vigoare.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Joacă în Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Joacă în Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Solicitat de {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Articol nu a fost găsit în biblioteca dvs. Moonfin",
+    "itemNotFoundInLibrary": "Articol nu a fost găsit în biblioteca dvs. Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Repornirea serverului este în curs",
-    "adminServerRebootMessage": "Repornirea serverului este în curs, vă rugăm să reporniți Moonfin",
+    "adminServerRebootMessage": "Repornirea serverului este în curs, vă rugăm să reporniți Tortugarr",
     "adminActiveSessions": "Sesiuni active",
     "adminSessionsLoadFailed": "Nu s-au încărcat sesiunile",
     "adminNoActiveSessions": "Fără sesiuni active",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Afișați butonul genuri în bara de navigare",
     "settingsShowFavoritesButtonInNavigation": "Afișați butonul de favorite în bara de navigare",
     "settingsShowLibrariesButtonInNavigation": "Afișați butonul biblioteci în bara de navigare",
-    "settingsLibraryVisibilitySubtitle": "Comutați vizibilitatea paginii de pornire pentru fiecare bibliotecă. Reporniți Moonfin pentru ca modificările să intre în vigoare.",
+    "settingsLibraryVisibilitySubtitle": "Comutați vizibilitatea paginii de pornire pentru fiecare bibliotecă. Reporniți Tortugarr pentru ca modificările să intre în vigoare.",
     "settingsMediaBarAndLocalPreviews": "Bara media și previzualizările locale",
     "settingsVisualOverlays": "Suprapuneri vizuale",
     "settingsSeasonalSurprise": "Surpriză de sezon",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Alăturați-vă Discordului",
     "settingsJoinDiscordSubtitle": "Chat cu comunitatea",
     "settingsJoinTheDiscord": "Alăturați-vă Discordului",
-    "settingsSupportMoonfin": "Susține Moonfin",
+    "settingsSupportNotflix": "Susține Tortugarr",
     "settingsLegal": "LEGALE",
     "settingsLicenses": "Licențe",
     "settingsOpenSourceLicenseNotices": "Notificări de licență open-source",
     "settingsPrivacyPolicy": "Politica de confidențialitate",
-    "settingsPrivacyPolicySubtitle": "Cum vă gestionează Moonfin datele",
+    "settingsPrivacyPolicySubtitle": "Cum vă gestionează Tortugarr datele",
     "settingsCheckForUpdates": "Verificați actualizările",
-    "settingsCheckForUpdatesSubtitle": "Verificați cea mai recentă versiune Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Verificați cea mai recentă versiune Tortugarr",
     "settingsPoweredByFlutter": "Alimentat de Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# notificare de licență} few {# notificări de licență} other {# de notificări de licență}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Teme salvate",
-    "savedThemesDescription": "Acestea sunt teme descărcate din pluginul Moonfin pentru serverul curent. Ștergerea elimină numai această copie locală.",
+    "savedThemesDescription": "Acestea sunt teme descărcate din pluginul Tortugarr pentru serverul curent. Ștergerea elimină numai această copie locală.",
     "savedThemesEmpty": "Nu au fost găsite teme salvate pentru acest server.",
     "savedThemesCurrentThemeId": "{themeId} • Activ în prezent",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Ștergeți tema salvată",
     "savedThemesManageSubtitle": "Gestionați temele de plugin descărcate pe acest dispozitiv",
     "themeEditor": "Editor de teme",
-    "themeEditorSubtitle": "Deschideți editorul de teme Moonfin în browser",
+    "themeEditorSubtitle": "Deschideți editorul de teme Tortugarr în browser",
     "homeScreen": "Ecran principal",
     "bottomBar": "Bară inferioară",
     "homeRowsStyleClassic": "Clasic",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Preferă subtitrările SDH",
     "preferSdhSubtitlesSubtitle": "Prioritizează pistele de subtitrare SDH/CC la selectarea automată.",
     "webDiagnostics": "Diagnosticare web",
-    "webDiagnosticsTitle": "Diagnosticare web Moonfin",
+    "webDiagnosticsTitle": "Diagnosticare web Tortugarr",
     "webDiagnosticsIntro": "Folosiți această pagină pentru a diagnostica problemele de conectivitate ale browserului (CORS, conținut mixt și setări de descoperire).",
     "webDiagnosticsDetectedMixedContentFailure": "A fost detectată o eroare de conținut mixt",
     "webDiagnosticsDetectedCorsPreflightFailure": "A fost detectată o eroare CORS/preflight",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin a detectat o pagină HTTPS care încearcă să apeleze un URL de server HTTP. Browserele blochează această cerere înainte să ajungă la server.",
-    "webDiagnosticsCorsFailureBody": "Moonfin a detectat o eroare de cerere la nivel de browser, cauzată de obicei de lipsa antetelor CORS sau preflight de pe serverul media.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr a detectat o pagină HTTPS care încearcă să apeleze un URL de server HTTP. Browserele blochează această cerere înainte să ajungă la server.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr a detectat o eroare de cerere la nivel de browser, cauzată de obicei de lipsa antetelor CORS sau preflight de pe serverul media.",
     "webDiagnosticsTargetUrl": "URL țintă: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "neconfigurat",
     "webDiagnosticsMixedContent": "Conținut mixt",
     "webDiagnosticsMixedContentDetected": "Această pagină este încărcată prin HTTPS, dar unul sau mai multe URL-uri configurate folosesc HTTP. Browserele blochează apelurile către API-uri HTTP din pagini HTTPS.",
-    "webDiagnosticsMixedContentFix": "Soluție: serviți serverul media sau punctul final proxy prin HTTPS ori încărcați Moonfin prin HTTP doar în rețele locale de încredere.",
+    "webDiagnosticsMixedContentFix": "Soluție: serviți serverul media sau punctul final proxy prin HTTPS ori încărcați Tortugarr prin HTTP doar în rețele locale de încredere.",
     "webDiagnosticsNoMixedContentDetected": "Nu a fost detectată nicio configurație evidentă de conținut mixt în setările curente de execuție.",
     "webDiagnosticsCorsChecklist": "Listă de verificare CORS",
     "webDiagnosticsCorsChecklistItem1": "• Permiteți originea browserului în Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Activează automat HDR la redarea videoclipurilor HDR și restabilește modul de afișare la ieșire.",
     "whenFullscreen": "Pe ecran complet",
     "transcodingLimits": "Limite de transcodare",
-    "settingsSupportMoonfinSubtitle": "Donează o cafea dezvoltatorului",
+    "settingsSupportNotflixSubtitle": "Donează o cafea dezvoltatorului",
     "accountPreferences": "PREFERINȚE CONT",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Clasic este aspectul centrat original Moonfin. Modern este un aspect cinematografic adaptiv.",
+    "detailScreenStyleSubtitle": "Clasic este aspectul centrat original Tortugarr. Modern este un aspect cinematografic adaptiv.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Clasic",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Clasic",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Folosiți algoritmul local Moonfin Recommends sau metricile de similaritate TMDb online. Notă: recomandările online necesită integrarea Seerr.",
+    "recommendationSystemSubtitle": "Folosiți algoritmul local Tortugarr Recommends sau metricile de similaritate TMDb online. Notă: recomandările online necesită integrarea Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Similaritate TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limitează sugestiile Moonfin Recommends în funcție de clasificarea parentală a conținutului vizat",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limitează sugestiile Tortugarr Recommends în funcție de clasificarea parentală a conținutului vizat",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Temele personalizate modifică elementele vizuale din întreaga aplicație Moonfin. Alegeți una dintre aceste opțiuni, potrivită stilului dvs.",
+    "customThemeSubtitle": "Temele personalizate modifică elementele vizuale din întreaga aplicație Tortugarr. Alegeți una dintre aceste opțiuni, potrivită stilului dvs.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Conectați-vă la Moonfin pe telefon",
+    "carSignInPrompt": "Conectați-vă la Tortugarr pe telefon",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller este motorul GPU modern al Flutter, pentru animații mai fluide și mai puține sacadări. Pe unele TV box-uri și plăci grafice mai vechi poate provoca artefacte sau imagine neagră; dezactivați-l dacă observați astfel de probleme. Opțiunea Automat alege cea mai bună valoare implicită pentru dispozitivul dvs. Reporniți Moonfin pentru a aplica modificarea.",
+    "impellerRenderingSubtitle": "Impeller este motorul GPU modern al Flutter, pentru animații mai fluide și mai puține sacadări. Pe unele TV box-uri și plăci grafice mai vechi poate provoca artefacte sau imagine neagră; dezactivați-l dacă observați astfel de probleme. Opțiunea Automat alege cea mai bună valoare implicită pentru dispozitivul dvs. Reporniți Tortugarr pentru a aplica modificarea.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin trebuie repornit pentru a schimba motorul de randare. Închideți aplicația acum, apoi redeschideți-o pentru a aplica modificarea.",
+    "impellerRestartMessage": "Tortugarr trebuie repornit pentru a schimba motorul de randare. Închideți aplicația acum, apoi redeschideți-o pentru a aplica modificarea.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Cele mai populare filme IMDb",
     "imdbMostPopularTvShows": "Cele mai populare seriale TV IMDb",
     "imdbLowestRatedMovies": "Filme cu cel mai mic scor IMDb",
-    "imdbTopEnglishMovies": "Cele mai bine cotate filme în engleză pe IMDb"
+    "imdbTopEnglishMovies": "Cele mai bine cotate filme în engleză pe IMDb",
+    "tgMissing": "Lipsește",
+    "tgComing": "În curând",
+    "tgComingOn": "Apare {date}",
+    "tgDownloading": "Se descarcă",
+    "tgReadySoon": "Gata în curând",
+    "tgRequested": "Solicitat",
+    "tgClose": "Închide",
+    "tgCancel": "Anulează",
+    "tgBack": "Înapoi",
+    "tgYes": "Da",
+    "tgNo": "Nu",
+    "tgSearch": "Caută",
+    "tgHide": "Ascunde",
+    "tgAll": "Toate",
+    "tgNone": "Niciunul",
+    "tgMovies": "Filme",
+    "tgSeries": "Seriale",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Serial",
+    "tgCanTakeAMinute": "Poate dura până la un minut",
+    "tgToday": "azi",
+    "tgYesterday": "ieri",
+    "tgDaysAgo": "cu {days} zile în urmă",
+    "tgMonthsAgo": "cu {months} luni în urmă",
+    "tgYearsAgo": "cu {years} ani în urmă",
+    "tgYearsMonthsAgo": "cu {years} ani și {months} luni în urmă",
+    "tgFindSubtitles": "Caută subtitrări",
+    "tgFreeUpSpace": "Eliberează spațiu",
+    "tgDownloads": "Descărcări",
+    "tgDownloadsCount": "Descărcări ({count})",
+    "tgNoVideoRemoved": "„{title}”: descărcarea nu conținea niciun fișier video ({files}). A fost eliminată și blocată — încearcă alt fișier.",
+    "tgNoVideoNotRemoved": "„{title}”: descărcarea nu conținea niciun fișier video ({files}), dar nu a putut fi eliminată automat.",
+    "tgAiredOn": "Difuzat {date}",
+    "tgTapToFindFiles": "Apasă pentru a căuta fișiere",
+    "tgWholeSeason": "Tot sezonul",
+    "tgEpisodesMissingFindPack": "{count} episoade lipsă – caută un pachet de sezon",
+    "tgAddToSonarrTitle": "Adaugă în Sonarr pentru a vedea episoadele lipsă",
+    "tgAddToSonarrSubtitle": "Serialul este adăugat fără să descarce nimic de la sine",
+    "tgMissingEpisodesUnavailable": "Episoadele lipsă nu pot fi afișate acum",
+    "tgReasonTapRetry": "{reason} · Apasă pentru a reîncerca",
+    "tgSeasonPackBadge": "Pachet de sezon",
+    "tgMonitorSeasonTitle": "Monitorizează sezonul {season}",
+    "tgMonitorSeasonQuestion": "Să caute Sonarr acum episoadele lipsă din sezonul {season}?\n\nNu: doar episoadele noi vor fi descărcate când apar.",
+    "tgSonarrSearchingSeason": "Sonarr caută sezonul {season}",
+    "tgMonitored": "Monitorizat",
+    "tgNotMonitored": "Nemonitorizat",
+    "tgSeasonStateLabel": "Sezonul {season}: {state}",
+    "tgLabelMissing": "{label} lipsește",
+    "tgNotAiredYet": "{code} nu a fost difuzat încă.",
+    "tgNotAiredYetComing": "{code} nu a fost difuzat încă – apare {date}.",
+    "tgAlreadyDownloading": "{code} se descarcă deja.",
+    "tgDownloadedAppearsSoon": "{code} este descărcat și va apărea în bibliotecă în curând.",
+    "tgSearchingFor": "Se caută {label} …",
+    "tgSeasonLower": "sezonul {season}",
+    "tgWholeLabel": "Tot {label}",
+    "tgSeasonNoEpisodes": "Sezonul {season} – niciun episod în bibliotecă",
+    "tgNoTvdbId": "Serialul nu are id TVDB, așa că Sonarr nu îl poate găsi.",
+    "tgAddingToSonarr": "Se adaugă în Sonarr …",
+    "tgAddToSonarrFailed": "Serialul nu a putut fi adăugat în Sonarr. Încearcă mai târziu.",
+    "tgSendingToDownload": "Se trimite „{label}” la descărcare …",
+    "tgDownloadDidNotStart": "Descărcarea nu a pornit: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}” se descarcă ({size}). Va apărea în bibliotecă când este gata.",
+    "tgSonarrUnreachableRetry": "Nu s-a putut contacta Sonarr. Încearcă din nou puțin mai târziu.",
+    "tgNoUsableFiles": "Nu s-au găsit fișiere utilizabile. Încearcă mai târziu – adesea apar unele noi după câteva ore.",
+    "tgFilesCount": "{count} fișiere",
+    "tgFilesRecommended": "{count} fișiere – {recommended} se potrivesc profilului de calitate, restul sunt la final",
+    "tgOutsideQualityProfile": "În afara profilului de calitate",
+    "tgLargerThanProfile": "Mai mare decât permite profilul",
+    "tgSmallerThanProfile": "Mai mic decât permite profilul",
+    "tgAlreadyExists": "Există deja",
+    "tgMayNotFitDisk": "S-ar putea să nu încapă pe disc",
+    "tgSonarrUnreachable": "Nu s-a putut contacta Sonarr",
+    "tgSonarrUnreachableAt": "Nu s-a putut contacta Sonarr la {host}",
+    "tgSonarrRejectedChange": "Sonarr nu a acceptat modificarea",
+    "tgSeasonMonitoredNoSearch": "Sezonul este monitorizat, dar Sonarr nu a pornit căutarea",
+    "tgSonarrCantSearch": "Sonarr nu a putut căuta acum",
+    "tgSearchExpired": "Rezultatul căutării a expirat – caută din nou",
+    "tgSonarrRejectedDownload": "Sonarr nu a acceptat descărcarea (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr nu are serialul",
+    "tgCouldNotChangeMonitoring": "Monitorizarea nu a putut fi modificată: {error}",
+    "tgJellyfinNoIds": "Jellyfin nu a recunoscut serialul (fără id TVDB sau TMDB)",
+    "tgSomethingWentWrong": "Ceva nu a mers bine: {error}",
+    "tgDeleteReadOnly": "Fișierul nu este gestionat de Radarr/Sonarr, iar Jellyfin are doar acces de citire la dosar. Șterge-l din managerul de fișiere.",
+    "tgSonarrRequiredPerEpisode": "Sonarr nu este accesibil sau serialul nu a fost adăugat acolo. Descărcarea pe episod necesită Sonarr.",
+    "tgEpisodesNotFound": "Episoadele selectate nu au fost găsite în Sonarr pentru „{title}” (găsite {count} episoade în total). Adaugă serialul în Sonarr și încearcă din nou.",
+    "tgPartOfCollectionPrefix": "Parte din colecția ",
+    "tgViewingPartOf": "  ·  vizionezi partea {current} din {total}",
+    "tgPartOf": "Partea {number} din {total}",
+    "tgUnknownTitle": "Titlu necunoscut",
+    "tgMovieCollection": "Colecție de filme",
+    "tgNotReleasedYet": "„{title}” nu a apărut încă",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Sunet în screensaver",
+    "tgScreensaverSoundSubtitle": "Oprit: trailerele din screensaver rulează fără sunet",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Insigna Tortugarr",
+    "tgLogoVhs": "Papagal pe casete VHS",
+    "tgLogoSign": "Papagal pe o firmă",
+    "tgHiddenBadge": "ASCUNS · {code}",
+    "tgDiskSpace": "Spațiu pe disc",
+    "tgDiskSpaceSubtitle": "Eliberează spațiu pentru descărcări noi",
+    "tgAdultTitle": "Filme pentru adulți (XXX)",
+    "tgAdultSubtitle": "Arată sau ascunde biblioteca XXX (PIN)",
+    "tgHideForeign": "Ascunde conținutul străin",
+    "tgHideForeignOn": "Pornit: Trending și Populare arată doar engleză, norvegiană, suedeză, daneză, germană și franceză",
+    "tgHideForeignOff": "Oprit: Trending și Populare arată toate limbile",
+    "tgShowHidden": "Arată ce este ascuns",
+    "tgShowHiddenOn": "Pornit: titlurile care ar fi ascunse apar cu o insignă roșie ASCUNS",
+    "tgShowHiddenOff": "Depanare: arată titlurile ascunse cu o insignă roșie în loc să le elimine",
+    "tgShowAllSubLangs": "Arată toate limbile de subtitrare",
+    "tgShowAllSubLangsOn": "Pornit: meniul de subtitrări arată toate limbile",
+    "tgShowAllSubLangsOff": "Oprit: meniul de subtitrări arată doar norvegiană și engleză",
+    "tgPreviewSound": "Sunet în previzualizări",
+    "tgPreviewSoundOn": "Pornit: clipul redat când te oprești pe un titlu are sunet",
+    "tgPreviewSoundOff": "Oprit: clipurile rulează fără sunet în timp ce navighezi",
+    "tgScreensaver": "Screensaver",
+    "tgScreensaverSubtitle": "Video sau logo, sunet și imagine",
+    "tgShowMissingEpisodes": "Arată episoadele lipsă",
+    "tgShowMissingEpisodesOn": "Pornit: sezoanele arată episoadele pe care nu le ai, gata de descărcat",
+    "tgShowMissingEpisodesOff": "Oprit: sezoanele arată doar episoadele pe care le ai",
+    "tgShowCollections": "Arată colecțiile de filme",
+    "tgShowCollectionsOn": "Pornit: filmele arată celelalte filme din colecție, inclusiv cele care îți lipsesc",
+    "tgShowCollectionsOff": "Oprit: pagina filmului nu arată colecția",
+    "tgNoActiveDownloads": "Nicio descărcare activă.",
+    "tgPickDownloadToOpen": "Selectează o descărcare pentru a deschide solicitările.",
+    "tgRefreshLibrary": "Reîmprospătează biblioteca",
+    "tgAskingJellyfinScan": "Se cere Jellyfin să scaneze biblioteca …",
+    "tgHideAll": "Ascunde toate",
+    "tgImporting": "Se importă",
+    "tgSubsNotManaged": "Acest titlu nu este gestionat de Radarr/Sonarr, așa că Bazarr nu poate găsi subtitrări pentru el.",
+    "tgBazarrUnreachable": "Nu s-a putut contacta Bazarr. Încearcă din nou puțin mai târziu.",
+    "tgSubsFoundNothing": "Nu s-a găsit nimic încă. Bazarr reîncearcă automat zilnic, sau poți alege tu una.",
+    "tgSubsFound": "S-a găsit {languages} – poate dura puțin până apare în meniul de subtitrări.",
+    "tgAnd": "și",
+    "tgSubsDownloaded": "Descărcat – poate dura puțin până apare în meniul de subtitrări.",
+    "tgAskingBazarr": "Se întreabă Bazarr …",
+    "tgHaveAll": "Le ai pe toate",
+    "tgSearchAutoNow": "Caută automat acum",
+    "tgSearchingUpToMinute": "Se caută … poate dura până la un minut",
+    "tgPickYourself": "Alege tu",
+    "tgAskingProviders": "Se întreabă furnizorii de subtitrări … poate dura până la un minut",
+    "tgNoProviderSubs": "Niciun furnizor nu are încă subtitrări pentru acesta.",
+    "tgLangHas": "{language}: disponibil",
+    "tgLangMissing": "{language}: lipsește",
+    "tgNoReleaseName": "(fără nume de release)",
+    "tgHearingImpaired": "{provider} · pentru persoane cu deficiențe de auz",
+    "tgLangNorwegian": "Norvegiană",
+    "tgLangEnglish": "Engleză",
+    "tgBazarrUnknownTitle": "Bazarr nu cunoaște încă acest titlu",
+    "tgBazarrError": "Bazarr a răspuns cu o eroare (HTTP {code})",
+    "tgLowSpaceSnack": "Spațiu redus pe {drive}: ({free} liber). Descărcarea se poate opri — anunță persoana care administrează serverul.",
+    "tgNoQbitForSpace": "Nu s-a putut contacta qBittorrent pentru a verifica spațiul",
+    "tgNotEnoughSpace": "Spațiu insuficient",
+    "tgDriveHasFree": "{drive}: are {free} liber",
+    "tgCopyInDownloads": "Copie în Downloads · deja în bibliotecă",
+    "tgLastWatched": "Vizionat ultima dată {ago}",
+    "tgNeverWatchedAdded": "Nevizionat · adăugat {ago}",
+    "tgNeverWatched": "Nevizionat",
+    "tgNothingSafeToDelete": "Nu s-a găsit nimic pe {drive}: care să poată fi șters în siguranță (totul este adăugat recent, vizionat recent sau favorit).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{Ștergi 1 titlu?} few{Ștergi {count} titluri?} other{Ștergi {count} de titluri?}}",
+    "tgDeletedForGood": "{size} vor fi șterși definitiv. Acțiunea nu poate fi anulată.",
+    "tgYesDelete": "Da, șterge",
+    "tgDeletingProgress": "Se șterge {done}/{total} …",
+    "tgNowHasFree": " · {drive}: are acum {free} liber",
+    "tgDeletedTitles": "{count, plural, one{S-a șters 1 titlu} few{S-au șters {count} titluri} other{S-au șters {count} de titluri}}{extra}",
+    "tgDeletedFailed": "Șterse: {count}, eșuate: {failed}{extra}",
+    "tgFreeGb": "Eliberează {gb} GB",
+    "tgDownloadCopies": "Copii de descărcare",
+    "tgLookingForUnwatched": "Se caută ce nu a mai fost vizionat de mult …",
+    "tgSuggestionEnough": "Sugerat: {size} · spațiu suficient ✓",
+    "tgSuggestionOf": "Sugerat: {size} din {target} necesari",
+    "tgPickToSayNo": "Selectează unul pentru a-l refuza — următoarea sugestie apare automat.",
+    "tgOtherCandidates": "Alți candidați",
+    "tgDownloadAnyway": "Descarcă oricum",
+    "tgDeleteCountSize": "Șterge {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: are {free} liber.",
+    "tgFileDoubleSpace": "Fișierul are {size} și ocupă dublu spațiu (descărcare + copie în bibliotecă), plus {buffer} în rezervă.",
+    "tgFileSize": "Fișierul are {size}, plus {buffer} în rezervă.",
+    "tgPendingNeeds": "Descărcările în curs mai au nevoie de {size}.",
+    "tgShortBy": "Lipsesc {size}.",
+    "tgOnlyEarlyFiles": "S-au găsit doar fișiere publicate înainte ca filmul să apară digital ({count}) — acestea sunt aproape întotdeauna false.",
+    "tgNoDigitalDate": "nu are încă o dată de lansare digitală",
+    "tgDigitalOn": "apare digital pe {date}",
+    "tgNotOutDigitally": "Nu a apărut digital încă",
+    "tgTitleWhen": "„{title}” {when}.",
+    "tgNotOutExplain": "Ce există acum este de obicei o înregistrare din cinema sau un alt film cu același nume. Uneori există o copie timpurie de calitate mai slabă, adesea cu subtitrări incluse în imagine. „Arată fișierele oricum” afișează ce există. Radarr descarcă singur versiunea corectă când apare.",
+    "tgShowFilesAnyway": "Arată fișierele oricum",
+    "tgPickSeasonsEpisodes": "Alege sezoane și episoade",
+    "tgNoEpisodeInfo": "{season}: fără informații despre episoade",
+    "tgAppliesAllDevices": "Se aplică pe toate dispozitivele care folosesc acest cont",
+    "tgNoXxxLibrary": "Nu s-a găsit nicio bibliotecă numită XXX.",
+    "tgSearchingEachWord": "Se caută fiecare cuvânt separat … (poate dura o jumătate de minut)",
+    "tgSentToQbit": "„{title}” ({size}) a fost trimis la qBittorrent",
+    "tgDownloadFailed": "Descărcarea a eșuat: {error}",
+    "tgXxxNoVideoRemoved": "„{title}” nu conținea niciun fișier video și a fost eliminat.",
+    "tgXxxNoVideoNotRemoved": "„{title}” nu conținea niciun fișier video și NU a fost eliminat.",
+    "tgSearchNewXxx": "Caută XXX noi",
+    "tgXxxSearchHint": "Nume, studio …",
+    "tgChecking": "Se verifică …",
+    "tgXxxVisible": "Vizibil acum. XXX apare în biblioteci, în căutare și pe ecranul principal.",
+    "tgXxxHidden": "Ascuns. XXX nu apare nicăieri în aplicație.",
+    "tgShowWithPin": "Arată (PIN)",
+    "tgChangePin": "Schimbă PIN-ul",
+    "tgNoLibraryList": "Lista bibliotecilor nu a putut fi obținută (HTTP {code})",
+    "tgNoUserSettings": "Setările utilizatorului nu au putut fi obținute (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin a respins modificarea (HTTP {code})",
+    "tgDeleteFailed": "Ștergerea a eșuat (HTTP {code})",
+    "tgXxxAddFailed": "„{title}” nu a putut fi adăugat în qBittorrent",
+    "tgSeasonEpisodeLower": "sezonul {season}, episodul {episode}",
+    "tgSearchInSeerr": "Caută în Seerr",
+    "tgSeerrSearchHint": "Caută filme și seriale (de ex. „Lost S02E05”)",
+    "tgMissingInThisSeason": "Lipsă în acest sezon",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Lipsește sezonul} few{Lipsesc sezoanele} other{Lipsesc sezoanele}} {list} - deschide serialul pentru a vedea toate sezoanele",
+    "tgProjectOnGitHub": "Tortugarr pe GitHub",
+    "tgProjectOnGitHubSubtitle": "Cod sursă, versiuni și probleme raportate",
+    "tgBuiltOnMoonfinCredit": "Tortugarr este construit pe Moonfin (GPL), realizat de dezvoltatorii Moonfin.",
+    "tgCredits": "Mulțumiri",
+    "tgCreditsThanks": "Cu umile mulțumiri: fără aceste proiecte și oamenii din spatele lor, Tortugarr nu ar exista.",
+    "tgCreditMoonfin": "Aplicația pe care este construit Tortugarr (GPL)",
+    "tgCreditJellyfin": "Server media",
+    "tgCreditSeerr": "Descoperire și solicitări",
+    "tgCreditRadarr": "Filme",
+    "tgCreditSonarr": "Seriale",
+    "tgCreditProwlarr": "Manager de indexere",
+    "tgCreditBazarr": "Subtitrări",
+    "tgCreditFlareSolverr": "Ajutor Cloudflare pentru indexere",
+    "tgCreditQbittorrent": "Client de descărcare, opțiunea implicită a instalatorului",
+    "tgCreditTmdb": "Date despre filme și seriale, afișe și imagini",
+    "tgCreditOpenSubtitles": "Subtitrări, obținute prin Bazarr",
+    "tgTmdbNotice": "Acest produs folosește API-ul TMDB, dar nu este aprobat sau certificat de TMDB.",
+    "tgLoadingLogoSize": "Dimensiunea logoului de încărcare",
+    "tgLoadingLogoSizeSubtitle": "Logoul care se rotește în timp ce se încarcă un videoclip",
+    "tgSubtitleLanguages": "Limbile subtitrărilor",
+    "tgSubtitleLanguagesSubtitle": "Afișate în meniul de subtitrări: {languages}",
+    "tgShowAllSubLangsOffChosen": "Oprit: meniul de subtitrări arată doar limbile alese",
+    "tgDiscoveryLanguages": "Limbi în Tendințe și Populare",
+    "tgDiscoveryLanguagesSubtitle": "Afișate: {languages}",
+    "tgHideForeignOnChosen": "Pornit: Tendințe și Populare arată doar limbile alese",
+    "tgShowLanguageBadges": "Afișează etichetele de limbă",
+    "tgShowLanguageBadgesOn": "Pornit: titlurile își arată limba (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Oprit: fără etichete de limbă pe titluri"
 }

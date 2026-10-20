@@ -9,7 +9,7 @@ class _AuthenticationCategoryScreen extends StatelessWidget {
     final hideWebOnlyAuthControls = PlatformDetection.isWeb;
 
     final Map<String, String> langOptions = {
-      'system': l10n.systemLanguageDefault,
+      'system': bilingualSystemDefaultLabel(l10n.systemLanguageDefault),
     };
     final sortedLocales = List<Locale>.from(AppLocalizations.supportedLocales);
     sortedLocales.sort((a, b) {
@@ -19,7 +19,8 @@ class _AuthenticationCategoryScreen extends StatelessWidget {
     });
     for (final locale in sortedLocales) {
       final tag = locale.toLanguageTag();
-      langOptions[tag] = kLocaleDisplayNames[tag] ?? locale.toString();
+      langOptions[tag] = bilingualLocaleLabel(
+          tag, kLocaleDisplayNames[tag] ?? locale.toString());
     }
 
     return Scaffold(
@@ -83,6 +84,7 @@ class _AuthenticationCategoryScreen extends StatelessWidget {
           _SectionHeader(l10n.accountPreferences),
           adaptiveListSection(
             children: [
+              if (!kForceEnglish)
               StringPickerPreferenceTile(
                 preference: UserPreferences.languageOverride,
                 title: l10n.interfaceLanguage,

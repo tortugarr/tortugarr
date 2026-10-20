@@ -8,6 +8,11 @@ import '../../auth/repositories/user_repository.dart';
 import '../../data/services/connectivity_service.dart';
 import '../../di/injection.dart';
 import '../../playback/external_player_policy.dart';
+import '../../presentation/features/discover/discover_routes.dart';
+import '../../presentation/features/discover/screens/discover_screen.dart';
+import '../../presentation/features/discover/screens/file_picker_screen.dart';
+import '../../presentation/features/discover/screens/search_results_screen.dart';
+import '../../presentation/features/downloads/screens/download_status_screen.dart';
 import '../../preference/user_preferences.dart';
 import '../../preference/preference_constants.dart';
 import '../../syncplay/syncplay_manager.dart';
@@ -114,6 +119,7 @@ const _authRoutes = {
 bool _isOfflineBlocked(String path) {
   return path.startsWith('/live-tv') ||
       path.startsWith('/seerr') ||
+      path.startsWith('/discover') ||
       path.startsWith('/admin') ||
       path.startsWith('/games');
 }
@@ -786,6 +792,29 @@ final appRouter = GoRouter(
         return SeerrCollectionScreen(collectionId: collectionId);
       },
     ),
+    // Discovery (Jellyseerr search -> release picker -> qBittorrent download).
+    // Paths come from DiscoverRoutes rather than Destinations so that nothing
+    // under lib/presentation/ has to import lib/ui/; the router is the one
+    // place that reaches across.
+    GoRoute(
+      path: DiscoverRoutes.discover,
+      builder: (context, state) => const DiscoverScreen(),
+      routes: [
+        GoRoute(
+          path: DiscoverRoutes.resultsSegment,
+          builder: (context, state) => const SearchResultsScreen(),
+        ),
+        GoRoute(
+          path: DiscoverRoutes.filesSegment,
+          builder: (context, state) => const FilePickerScreen(),
+        ),
+        GoRoute(
+          path: DiscoverRoutes.downloadingSegment,
+          builder: (context, state) => const DownloadStatusScreen(),
+        ),
+      ],
+    ),
+
     GoRoute(
       path: Destinations.seerrPersonDetail,
       builder: (context, state) {
@@ -854,3 +883,15 @@ class PlayerRouteObserver extends NavigatorObserver {
     isPlayerActive.value = _playerRoutes.isNotEmpty;
   }
 }
+
+/// Path of the route on top of the navigator, including routes that were
+/// pushed imperatively. [RouteMatchList.uri] leaves those out, so a check
+/// against it reports "/home" while the video player sits open on top.
+String currentTopRoutePath() =>
+    topRoutePathOf(appRouter.routerDelegate.currentConfiguration);
+
+/// The location of the route actually on top. go_router's `uri` stays on the
+/// last `go` target when pages are pushed imperatively (left-menu navigation
+/// pushes on Android), so it cannot tell that Home is covered.
+String topRoutePathOf(RouteMatchList config) =>
+    config.lastOrNull?.matchedLocation ?? config.uri.path;

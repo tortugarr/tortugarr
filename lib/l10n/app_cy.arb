@@ -1,6 +1,6 @@
 {
     "@@locale": "cy",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "fersiwn Moonfin {version}",
+    "appVersionFooter": "fersiwn Tortugarr {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Ni allai Moonfin gyrchu cylch allweddi eich system. Gall mewngofnodi barhau, ond mae'n bosibl na fydd storfa docynnau ddiogel ar gael nes bod y cylch allweddi wedi'i ddatgloi.",
+    "secureStorageUnavailableMessage": "Ni allai Tortugarr gyrchu cylch allweddi eich system. Gall mewngofnodi barhau, ond mae'n bosibl na fydd storfa docynnau ddiogel ar gael nes bod y cylch allweddi wedi'i ddatgloi.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Newid rhwng Moonfin a Neon Pulse heb ailgychwyn yr app",
+    "settingsAppearanceThemeSubtitle": "Newid rhwng Tortugarr a Neon Pulse heb ailgychwyn yr app",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
-    "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+    "themeNotflix": "Tortugarr",
+    "@themeNotflix": {
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Golwg gyfredol Moonfin rydych chi i gyd wedi dod i garu",
-    "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+    "themeNotflixSubtitle": "Golwg gyfredol Tortugarr rydych chi i gyd wedi dod i garu",
+    "@themeNotflixSubtitle": {
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Pwls Neon",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Gadael Moonfin?",
+    "exitApp": "Gadael Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Heb ei osod. Bydd Moonfin yn ceisio mpv.conf rhagosodedig mewn ffolderi app/data.",
+    "notSetMpvConf": "Heb ei osod. Bydd Tortugarr yn ceisio mpv.conf rhagosodedig mewn ffolderi app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Lawrlwythiadau / Moonfin - yn weladwy i apiau eraill",
+    "downloadsVisibleToOtherApps": "Lawrlwythiadau / Tortugarr - yn weladwy i apiau eraill",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Bydd cyfryngau wedi'u lawrlwytho yn cael eu cadw i Lawrlwythiadau / Moonfin ar eich dyfais. Bydd y ffeiliau hyn yn weladwy i apiau eraill fel eich oriel neu chwaraewr cerddoriaeth.\n\nBydd lawrlwythiadau presennol yn aros yn eu lleoliad presennol.",
+    "saveToDownloadsFolderDescription": "Bydd cyfryngau wedi'u lawrlwytho yn cael eu cadw i Lawrlwythiadau / Tortugarr ar eich dyfais. Bydd y ffeiliau hyn yn weladwy i apiau eraill fel eich oriel neu chwaraewr cerddoriaeth.\n\nBydd lawrlwythiadau presennol yn aros yn eu lleoliad presennol.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Toglo gwelededd tudalen gartref fesul llyfrgell. Ailgychwyn Moonfin i newidiadau ddod i rym.",
+    "libraryVisibilityDescription": "Toglo gwelededd tudalen gartref fesul llyfrgell. Ailgychwyn Tortugarr i newidiadau ddod i rym.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
-    "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+    "mediaBarModeNotflix": "Tortugarr",
+    "@mediaBarModeNotflix": {
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Chwarae yn Moonfin",
-    "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+    "playInNotflix": "Chwarae yn Tortugarr",
+    "@playInNotflix": {
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Cais gan {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Ni chanfuwyd yr eitem yn eich llyfrgell Moonfin",
+    "itemNotFoundInLibrary": "Ni chanfuwyd yr eitem yn eich llyfrgell Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Mae ailgychwyn gweinydd ar y gweill",
-    "adminServerRebootMessage": "Ailgychwyn gweinydd ar y gweill, ailgychwynwch Moonfin",
+    "adminServerRebootMessage": "Ailgychwyn gweinydd ar y gweill, ailgychwynwch Tortugarr",
     "adminActiveSessions": "Sesiynau Gweithredol",
     "adminSessionsLoadFailed": "Wedi methu llwytho sesiynau",
     "adminNoActiveSessions": "Dim sesiynau gweithredol",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Dangoswch y botwm genres yn y bar llywio",
     "settingsShowFavoritesButtonInNavigation": "Dangoswch y botwm ffefrynnau yn y bar llywio",
     "settingsShowLibrariesButtonInNavigation": "Dangoswch y botwm llyfrgelloedd yn y bar llywio",
-    "settingsLibraryVisibilitySubtitle": "Toglo gwelededd tudalen gartref fesul llyfrgell. Ailgychwyn Moonfin i newidiadau ddod i rym.",
+    "settingsLibraryVisibilitySubtitle": "Toglo gwelededd tudalen gartref fesul llyfrgell. Ailgychwyn Tortugarr i newidiadau ddod i rym.",
     "settingsMediaBarAndLocalPreviews": "Bar Cyfryngau a Rhagolygon Lleol",
     "settingsVisualOverlays": "Troshaenau Gweledol",
     "settingsSeasonalSurprise": "Syndod Tymhorol",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Ymunwch â Discord",
     "settingsJoinDiscordSubtitle": "Sgwrsio gyda'r gymuned",
     "settingsJoinTheDiscord": "Ymunwch â'r Discord",
-    "settingsSupportMoonfin": "Cefnogwch Moonfin",
+    "settingsSupportNotflix": "Cefnogwch Tortugarr",
     "settingsLegal": "CYFREITHIOL",
     "settingsLicenses": "Trwyddedau",
     "settingsOpenSourceLicenseNotices": "Hysbysiadau trwydded ffynhonnell agored",
     "settingsPrivacyPolicy": "Polisi Preifatrwydd",
-    "settingsPrivacyPolicySubtitle": "Sut mae Moonfin yn trin eich data",
+    "settingsPrivacyPolicySubtitle": "Sut mae Tortugarr yn trin eich data",
     "settingsCheckForUpdates": "Gwiriwch am Ddiweddariadau",
-    "settingsCheckForUpdatesSubtitle": "Gwiriwch am y datganiad Moonfin diweddaraf",
+    "settingsCheckForUpdatesSubtitle": "Gwiriwch am y datganiad Tortugarr diweddaraf",
     "settingsPoweredByFlutter": "Wedi'i bweru gan Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# hysbysiad trwydded} zero {# o hysbysiadau trwydded} other {# hysbysiad trwydded}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Themâu wedi'u cadw",
-    "savedThemesDescription": "Mae'r rhain yn themâu wedi'u llwytho i lawr o'r ategyn Moonfin ar gyfer y gweinydd presennol. Mae dileu yn dileu'r copi lleol hwn yn unig.",
+    "savedThemesDescription": "Mae'r rhain yn themâu wedi'u llwytho i lawr o'r ategyn Tortugarr ar gyfer y gweinydd presennol. Mae dileu yn dileu'r copi lleol hwn yn unig.",
     "savedThemesEmpty": "Ni chanfuwyd unrhyw themâu sydd wedi'u cadw ar gyfer y gweinydd hwn.",
     "savedThemesCurrentThemeId": "{themeId} • Yn weithredol ar hyn o bryd",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Dileu thema sydd wedi'i chadw",
     "savedThemesManageSubtitle": "Rheoli themâu ategyn wedi'u lawrlwytho ar y ddyfais hon",
     "themeEditor": "Golygydd Thema",
-    "themeEditorSubtitle": "Agorwch y Golygydd Thema Moonfin yn eich porwr",
+    "themeEditorSubtitle": "Agorwch y Golygydd Thema Tortugarr yn eich porwr",
     "homeScreen": "Sgrin Cartref",
     "bottomBar": "Bar Gwaelod",
     "homeRowsStyleClassic": "Clasurol",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Gwell isdeitlau SDH",
     "preferSdhSubtitlesSubtitle": "Blaenoriaethu traciau is-deitl SDH/CC wrth ddewis yn awtomatig.",
     "webDiagnostics": "Diagnosteg gwe",
-    "webDiagnosticsTitle": "Moonfin Diagnosteg Gwe",
+    "webDiagnosticsTitle": "Tortugarr Diagnosteg Gwe",
     "webDiagnosticsIntro": "Defnyddiwch y dudalen hon i wneud diagnosis o broblemau cysylltedd porwr (CORS, cynnwys cymysg, a gosodiadau darganfod).",
     "webDiagnosticsDetectedMixedContentFailure": "Canfod Methiant Cynnwys Cymysg",
     "webDiagnosticsDetectedCorsPreflightFailure": "Wedi canfod CORS/Methiant Rhag Hedfan",
-    "webDiagnosticsMixedContentFailureBody": "Canfu Moonfin dudalen HTTPS yn ceisio galw URL gweinydd HTTP. Mae porwyr yn rhwystro'r cais hwn cyn iddo gyrraedd eich gweinydd.",
-    "webDiagnosticsCorsFailureBody": "Canfu Moonfin fethiant cais ar lefel porwr a achosir yn aml gan fod penawdau CORS neu rag-hedfan ar goll ar y gweinydd cyfryngau.",
+    "webDiagnosticsMixedContentFailureBody": "Canfu Tortugarr dudalen HTTPS yn ceisio galw URL gweinydd HTTP. Mae porwyr yn rhwystro'r cais hwn cyn iddo gyrraedd eich gweinydd.",
+    "webDiagnosticsCorsFailureBody": "Canfu Tortugarr fethiant cais ar lefel porwr a achosir yn aml gan fod penawdau CORS neu rag-hedfan ar goll ar y gweinydd cyfryngau.",
     "webDiagnosticsTargetUrl": "URL targed: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "heb ei ffurfweddu",
     "webDiagnosticsMixedContent": "Cynnwys Cymysg",
     "webDiagnosticsMixedContentDetected": "Mae'r dudalen hon wedi'i llwytho dros HTTPS, ond mae un neu fwy o URLau wedi'u ffurfweddu yn HTTP. Mae porwyr yn rhwystro tudalennau HTTPS rhag galw APIs HTTP.",
-    "webDiagnosticsMixedContentFix": "Trwsio: gwasanaethwch eich gweinydd cyfryngau neu bwynt terfyn dirprwy trwy HTTPS, neu llwythwch Moonfin dros HTTP ar rwydweithiau lleol dibynadwy yn unig.",
+    "webDiagnosticsMixedContentFix": "Trwsio: gwasanaethwch eich gweinydd cyfryngau neu bwynt terfyn dirprwy trwy HTTPS, neu llwythwch Tortugarr dros HTTP ar rwydweithiau lleol dibynadwy yn unig.",
     "webDiagnosticsNoMixedContentDetected": "Dim ffurfweddiad cynnwys cymysg amlwg wedi'i ganfod o'r gosodiadau amser rhedeg cyfredol.",
     "webDiagnosticsCorsChecklist": "Rhestr Wirio CORS",
     "webDiagnosticsCorsChecklistItem1": "• Caniatáu tarddiad y porwr yn Access-Control-Allow-Origin.",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Galluogi HDR yn awtomatig ar gyfer chwarae fideo HDR ac adfer modd arddangos wrth ymadael.",
     "whenFullscreen": "Pan fydd sgrin lawn",
     "transcodingLimits": "Terfynau Trawsgodio",
-    "settingsSupportMoonfinSubtitle": "Rhowch goffi i'r datblygwr",
+    "settingsSupportNotflixSubtitle": "Rhowch goffi i'r datblygwr",
     "accountPreferences": "DEWISIADAU CYFRIF",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7330,12 +7330,12 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Clasurol yw cynllun canolog gwreiddiol Moonfin. Modern yw cynllun sinematig ymatebol.",
+    "detailScreenStyleSubtitle": "Clasurol yw cynllun canolog gwreiddiol Tortugarr. Modern yw cynllun sinematig ymatebol.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleMoonfin": "Clasurol",
-    "@detailScreenStyleMoonfin": {
+    "detailScreenStyleNotflix": "Clasurol",
+    "@detailScreenStyleNotflix": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Defnyddiwch algorithm llyfrgell leol Moonfin Recommends neu Fetrigau Tebygrwydd ar-lein TMDb. Sylwer: mae angen integreiddio Seerr ar gyfer argymhellion ar-lein.",
+    "recommendationSystemSubtitle": "Defnyddiwch algorithm llyfrgell leol Tortugarr Recommends neu Fetrigau Tebygrwydd ar-lein TMDb. Sylwer: mae angen integreiddio Seerr ar gyfer argymhellion ar-lein.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
-    "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+    "recommendationSystemNotflix": "Tortugarr Recommends",
+    "@recommendationSystemNotflix": {
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Tebygrwydd TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Cyfyngu awgrymiadau Moonfin Recommends yn ôl dosbarthiad oedran y cyfrwng targed",
+    "recommendationsApplyParentalRatingCapSubtitle": "Cyfyngu awgrymiadau Tortugarr Recommends yn ôl dosbarthiad oedran y cyfrwng targed",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Mae themâu personol yn newid elfennau gweledol ar draws Moonfin. Dewiswch un o'r opsiynau hyn i weddu i'ch arddull.",
+    "customThemeSubtitle": "Mae themâu personol yn newid elfennau gweledol ar draws Tortugarr. Dewiswch un o'r opsiynau hyn i weddu i'ch arddull.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Mewngofnodwch i Moonfin ar eich ffôn",
+    "carSignInPrompt": "Mewngofnodwch i Tortugarr ar eich ffôn",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8944,7 +8944,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller yw rendrwr GPU modern Flutter, ar gyfer animeiddiadau llyfnach a llai o hercian. Ar rai bocsys teledu a GPUau hŷn gall achosi namau neu fideo du; diffoddwch ef os gwelwch chi'r rheini. Mae Awtomatig yn dewis y rhagosodiad gorau ar gyfer eich dyfais. Ailgychwynnwch Moonfin i'w osod.",
+    "impellerRenderingSubtitle": "Impeller yw rendrwr GPU modern Flutter, ar gyfer animeiddiadau llyfnach a llai o hercian. Ar rai bocsys teledu a GPUau hŷn gall achosi namau neu fideo du; diffoddwch ef os gwelwch chi'r rheini. Mae Awtomatig yn dewis y rhagosodiad gorau ar gyfer eich dyfais. Ailgychwynnwch Tortugarr i'w osod.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8955,7 +8955,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Mae angen i Moonfin ailgychwyn i newid yr injan rendro. Caewch yr ap nawr, yna ei ailagor i osod y newid.",
+    "impellerRestartMessage": "Mae angen i Tortugarr ailgychwyn i newid yr injan rendro. Caewch yr ap nawr, yna ei ailagor i osod y newid.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9005,5 +9005,247 @@
     "imdbMostPopularMovies": "Ffilmiau Mwyaf Poblogaidd IMDb",
     "imdbMostPopularTvShows": "Cyfresi Teledu Mwyaf Poblogaidd IMDb",
     "imdbLowestRatedMovies": "Ffilmiau â'r Sgôr Isaf ar IMDb",
-    "imdbTopEnglishMovies": "Ffilmiau Saesneg â'r Sgôr Uchaf ar IMDb"
+    "imdbTopEnglishMovies": "Ffilmiau Saesneg â'r Sgôr Uchaf ar IMDb",
+    "tgMissing": "Ar goll",
+    "tgComing": "Ar y ffordd",
+    "tgComingOn": "Yn dod {date}",
+    "tgDownloading": "Yn lawrlwytho",
+    "tgReadySoon": "Yn barod cyn bo hir",
+    "tgRequested": "Wedi gofyn amdano",
+    "tgClose": "Cau",
+    "tgCancel": "Canslo",
+    "tgBack": "Yn ôl",
+    "tgYes": "Ie",
+    "tgNo": "Na",
+    "tgSearch": "Chwilio",
+    "tgHide": "Cuddio",
+    "tgAll": "Pob un",
+    "tgNone": "Dim",
+    "tgMovies": "Ffilmiau",
+    "tgSeries": "Cyfresi",
+    "tgMovieTag": "Ffilm",
+    "tgSeriesTag": "Cyfres",
+    "tgCanTakeAMinute": "Gall gymryd hyd at funud",
+    "tgToday": "heddiw",
+    "tgYesterday": "ddoe",
+    "tgDaysAgo": "{days} diwrnod yn ôl",
+    "tgMonthsAgo": "{months} mis yn ôl",
+    "tgYearsAgo": "{years} blynedd yn ôl",
+    "tgYearsMonthsAgo": "{years} blynedd a {months} mis yn ôl",
+    "tgFindSubtitles": "Chwilio am isdeitlau",
+    "tgFreeUpSpace": "Rhyddhau lle",
+    "tgDownloads": "Lawrlwythiadau",
+    "tgDownloadsCount": "Lawrlwythiadau ({count})",
+    "tgNoVideoRemoved": "\"{title}\": nid oedd ffeil fideo yn y lawrlwythiad ({files}). Cafodd ei dynnu a'i rwystro — rhowch gynnig ar ffeil arall.",
+    "tgNoVideoNotRemoved": "\"{title}\": nid oedd ffeil fideo yn y lawrlwythiad ({files}), ond nid oedd modd ei dynnu'n awtomatig.",
+    "tgAiredOn": "Darlledwyd {date}",
+    "tgTapToFindFiles": "Tapiwch i chwilio am ffeiliau",
+    "tgWholeSeason": "Y tymor cyfan",
+    "tgEpisodesMissingFindPack": "{count} pennod ar goll – chwilio am becyn tymor",
+    "tgAddToSonarrTitle": "Ychwanegu at Sonarr i weld penodau sydd ar goll",
+    "tgAddToSonarrSubtitle": "Caiff y gyfres ei hychwanegu heb lawrlwytho dim ohoni ei hun",
+    "tgMissingEpisodesUnavailable": "Does dim modd dangos penodau sydd ar goll ar hyn o bryd",
+    "tgReasonTapRetry": "{reason} · Tapiwch i geisio eto",
+    "tgSeasonPackBadge": "Pecyn tymor",
+    "tgMonitorSeasonTitle": "Monitro tymor {season}",
+    "tgMonitorSeasonQuestion": "A ddylai Sonarr gael y penodau sydd ar goll yn nhymor {season} nawr?\n\nNa: dim ond penodau newydd a gaiff eu casglu pan fyddan nhw'n dod allan.",
+    "tgSonarrSearchingSeason": "Mae Sonarr yn chwilio am dymor {season}",
+    "tgMonitored": "Yn cael ei fonitro",
+    "tgNotMonitored": "Ddim yn cael ei fonitro",
+    "tgSeasonStateLabel": "Tymor {season}: {state}",
+    "tgLabelMissing": "{label} ar goll",
+    "tgNotAiredYet": "Nid yw {code} wedi'i ddarlledu eto.",
+    "tgNotAiredYetComing": "Nid yw {code} wedi'i ddarlledu eto – yn dod {date}.",
+    "tgAlreadyDownloading": "Mae {code} yn cael ei lawrlwytho'n barod.",
+    "tgDownloadedAppearsSoon": "Mae {code} wedi'i lawrlwytho a bydd yn ymddangos yn y llyfrgell cyn bo hir.",
+    "tgSearchingFor": "Yn chwilio am {label} …",
+    "tgSeasonLower": "tymor {season}",
+    "tgWholeLabel": "{label} cyfan",
+    "tgSeasonNoEpisodes": "Tymor {season} – dim penodau yn y llyfrgell",
+    "tgNoTvdbId": "Nid oes gan y gyfres id TVDB, felly ni all Sonarr ddod o hyd iddi.",
+    "tgAddingToSonarr": "Yn ychwanegu at Sonarr …",
+    "tgAddToSonarrFailed": "Doedd dim modd ychwanegu'r gyfres at Sonarr. Ceisiwch eto nes ymlaen.",
+    "tgSendingToDownload": "Yn anfon \"{label}\" i'w lawrlwytho …",
+    "tgDownloadDidNotStart": "Ni ddechreuodd y lawrlwythiad: {error}",
+    "tgDownloadingAppearsWhenDone": "Mae \"{label}\" yn cael ei lawrlwytho ({size}). Bydd yn ymddangos yn y llyfrgell pan fydd wedi gorffen.",
+    "tgSonarrUnreachableRetry": "Doedd dim modd cysylltu â Sonarr. Ceisiwch eto ymhen ychydig.",
+    "tgNoUsableFiles": "Ni ddaethpwyd o hyd i ffeiliau defnyddiol. Ceisiwch eto nes ymlaen – mae rhai newydd yn ymddangos yn aml ar ôl ychydig oriau.",
+    "tgFilesCount": "{count} ffeil",
+    "tgFilesRecommended": "{count} ffeil – {recommended} yn cyd-fynd â'r proffil ansawdd, y gweddill ar y gwaelod",
+    "tgOutsideQualityProfile": "Y tu allan i'r proffil ansawdd",
+    "tgLargerThanProfile": "Yn fwy nag y mae'r proffil yn ei ganiatáu",
+    "tgSmallerThanProfile": "Yn llai nag y mae'r proffil yn ei ganiatáu",
+    "tgAlreadyExists": "Yn bodoli'n barod",
+    "tgMayNotFitDisk": "Efallai na fydd yn ffitio ar y ddisg",
+    "tgSonarrUnreachable": "Doedd dim modd cysylltu â Sonarr",
+    "tgSonarrUnreachableAt": "Doedd dim modd cysylltu â Sonarr ar {host}",
+    "tgSonarrRejectedChange": "Ni dderbyniodd Sonarr y newid",
+    "tgSeasonMonitoredNoSearch": "Mae'r tymor yn cael ei fonitro, ond ni ddechreuodd Sonarr y chwilio",
+    "tgSonarrCantSearch": "Doedd Sonarr ddim yn gallu chwilio ar hyn o bryd",
+    "tgSearchExpired": "Mae canlyniad y chwilio wedi dod i ben – chwiliwch eto",
+    "tgSonarrRejectedDownload": "Ni dderbyniodd Sonarr y lawrlwythiad (HTTP {status})",
+    "tgSonarrNoSeries": "Nid yw'r gyfres gan Sonarr",
+    "tgCouldNotChangeMonitoring": "Doedd dim modd newid y monitro: {error}",
+    "tgJellyfinNoIds": "Ni wnaeth Jellyfin adnabod y gyfres (dim id TVDB na TMDB)",
+    "tgSomethingWentWrong": "Aeth rhywbeth o chwith: {error}",
+    "tgDeleteReadOnly": "Nid yw'r ffeil yn cael ei rheoli gan Radarr/Sonarr, a dim ond mynediad darllen sydd gan Jellyfin i'r ffolder. Dilëwch hi yn eich rheolwr ffeiliau.",
+    "tgSonarrRequiredPerEpisode": "Nid oes modd cysylltu â Sonarr, neu nid yw'r gyfres wedi'i hychwanegu yno. Mae angen Sonarr i lawrlwytho fesul pennod.",
+    "tgEpisodesNotFound": "Doedd dim modd dod o hyd i'r penodau a ddewiswyd yn Sonarr ar gyfer \"{title}\" (daethpwyd o hyd i {count} pennod i gyd). Ychwanegwch y gyfres at Sonarr a cheisiwch eto.",
+    "tgPartOfCollectionPrefix": "Rhan o'r casgliad ",
+    "tgViewingPartOf": "  ·  rydych chi'n gwylio rhan {current} o {total}",
+    "tgPartOf": "Rhan {number} o {total}",
+    "tgUnknownTitle": "Teitl anhysbys",
+    "tgMovieCollection": "Casgliad ffilmiau",
+    "tgNotReleasedYet": "Nid yw \"{title}\" allan eto",
+    "tgScreensaverModeVideo": "Fideo",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Sain yr arbedwr sgrin",
+    "tgScreensaverSoundSubtitle": "I ffwrdd: mae trelars yr arbedwr sgrin yn chwarae'n fud",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Bathodyn Tortugarr",
+    "tgLogoVhs": "Parot ar dapiau VHS",
+    "tgLogoSign": "Parot ar arwydd",
+    "tgHiddenBadge": "WEDI'I GUDDIO · {code}",
+    "tgDiskSpace": "Lle ar y ddisg",
+    "tgDiskSpaceSubtitle": "Rhyddhau lle ar gyfer lawrlwythiadau newydd",
+    "tgAdultTitle": "Ffilmiau i oedolion (XXX)",
+    "tgAdultSubtitle": "Dangos neu guddio'r llyfrgell XXX (PIN)",
+    "tgHideForeign": "Cuddio cynnwys tramor",
+    "tgHideForeignOn": "Ymlaen: dim ond Saesneg, Norwyeg, Swedeg, Daneg, Almaeneg a Ffrangeg a ddangosir yn Ar Frig y Don a Poblogaidd",
+    "tgHideForeignOff": "I ffwrdd: mae Ar Frig y Don a Poblogaidd yn dangos pob iaith",
+    "tgShowHidden": "Dangos beth sydd wedi'i guddio",
+    "tgShowHiddenOn": "Ymlaen: dangosir teitlau a fyddai'n cael eu cuddio â bathodyn coch WEDI'I GUDDIO",
+    "tgShowHiddenOff": "Datrys problemau: dangos teitlau cudd â bathodyn coch yn lle eu tynnu",
+    "tgShowAllSubLangs": "Dangos pob iaith isdeitlau",
+    "tgShowAllSubLangsOn": "Ymlaen: mae'r ddewislen isdeitlau yn dangos pob iaith",
+    "tgShowAllSubLangsOff": "I ffwrdd: dim ond Norwyeg a Saesneg a ddangosir yn y ddewislen isdeitlau",
+    "tgPreviewSound": "Sain y rhagolwg",
+    "tgPreviewSoundOn": "Ymlaen: mae sain ar y clip sy'n chwarae pan fyddwch chi'n stopio ar deitl",
+    "tgPreviewSoundOff": "I ffwrdd: mae clipiau'n chwarae'n fud wrth i chi bori",
+    "tgScreensaver": "Arbedwr sgrin",
+    "tgScreensaverSubtitle": "Fideo neu logo, sain a llun",
+    "tgShowMissingEpisodes": "Dangos penodau sydd ar goll",
+    "tgShowMissingEpisodesOn": "Ymlaen: mae tymhorau'n dangos penodau sydd gennych chi ddim, yn barod i'w lawrlwytho",
+    "tgShowMissingEpisodesOff": "I ffwrdd: dim ond y penodau sydd gennych chi a ddangosir yn y tymhorau",
+    "tgShowCollections": "Dangos casgliadau ffilmiau",
+    "tgShowCollectionsOn": "Ymlaen: mae ffilmiau'n dangos y ffilmiau eraill yn y casgliad, gan gynnwys y rhai sydd gennych chi ddim",
+    "tgShowCollectionsOff": "I ffwrdd: nid yw tudalen y ffilm yn dangos y casgliad",
+    "tgNoActiveDownloads": "Dim lawrlwythiadau ar y gweill.",
+    "tgPickDownloadToOpen": "Dewiswch lawrlwythiad i agor y ceisiadau.",
+    "tgRefreshLibrary": "Adnewyddu'r llyfrgell",
+    "tgAskingJellyfinScan": "Yn gofyn i Jellyfin sganio'r llyfrgell …",
+    "tgHideAll": "Cuddio pob un",
+    "tgImporting": "Yn mewnforio",
+    "tgSubsNotManaged": "Nid yw'r teitl hwn yn cael ei reoli gan Radarr/Sonarr, felly ni all Bazarr ddod o hyd i isdeitlau ar ei gyfer.",
+    "tgBazarrUnreachable": "Doedd dim modd cysylltu â Bazarr. Ceisiwch eto ymhen ychydig.",
+    "tgSubsFoundNothing": "Dim byd eto. Mae Bazarr yn ceisio eto'n awtomatig bob dydd, neu gallwch chi ddewis un eich hun.",
+    "tgSubsFound": "Wedi dod o hyd i {languages} – gall gymryd eiliad cyn iddo ymddangos yn y ddewislen isdeitlau.",
+    "tgAnd": "a",
+    "tgSubsDownloaded": "Wedi'i lawrlwytho – gall gymryd eiliad cyn iddo ymddangos yn y ddewislen isdeitlau.",
+    "tgAskingBazarr": "Yn gofyn i Bazarr …",
+    "tgHaveAll": "Pob un gennych chi",
+    "tgSearchAutoNow": "Chwilio'n awtomatig nawr",
+    "tgSearchingUpToMinute": "Yn chwilio … gall gymryd hyd at funud",
+    "tgPickYourself": "Dewis eich hun",
+    "tgAskingProviders": "Yn gofyn i'r darparwyr isdeitlau … gall gymryd hyd at funud",
+    "tgNoProviderSubs": "Nid oes gan unrhyw ddarparwr isdeitlau ar gyfer hwn eto.",
+    "tgLangHas": "{language}: ar gael",
+    "tgLangMissing": "{language}: ar goll",
+    "tgNoReleaseName": "(dim enw rhyddhad)",
+    "tgHearingImpaired": "{provider} · i'r rhai â nam ar eu clyw",
+    "tgLangNorwegian": "Norwyeg",
+    "tgLangEnglish": "Saesneg",
+    "tgBazarrUnknownTitle": "Nid yw Bazarr yn gwybod am y teitl hwn eto",
+    "tgBazarrError": "Atebodd Bazarr â gwall (HTTP {code})",
+    "tgLowSpaceSnack": "Lle isel ar {drive}: ({free} yn rhydd). Gall y lawrlwythiad stopio — rhowch wybod i'r sawl sy'n rhedeg y gweinydd.",
+    "tgNoQbitForSpace": "Doedd dim modd cysylltu â qBittorrent i wirio'r lle",
+    "tgNotEnoughSpace": "Dim digon o le",
+    "tgDriveHasFree": "{drive}: {free} yn rhydd",
+    "tgCopyInDownloads": "Copi yn Downloads · yn y llyfrgell yn barod",
+    "tgLastWatched": "Gwyliwyd ddiwethaf {ago}",
+    "tgNeverWatchedAdded": "Heb ei wylio erioed · ychwanegwyd {ago}",
+    "tgNeverWatched": "Heb ei wylio erioed",
+    "tgNothingSafeToDelete": "Dim byd ar {drive}: y mae modd ei ddileu'n ddiogel (ychwanegwyd neu gwyliwyd pob peth yn ddiweddar, neu mae'n ffefryn).",
+    "tgDeleteTitlesQuestion": "{count, plural, zero{Dileu {count} teitl?} one{Dileu 1 teitl?} two{Dileu {count} deitl?} few{Dileu {count} theitl?} many{Dileu {count} theitl?} other{Dileu {count} teitl?}}",
+    "tgDeletedForGood": "Caiff {size} ei ddileu am byth. Does dim modd dad-wneud hyn.",
+    "tgYesDelete": "Ie, dileu",
+    "tgDeletingProgress": "Yn dileu {done}/{total} …",
+    "tgNowHasFree": " · {drive}: {free} yn rhydd nawr",
+    "tgDeletedTitles": "{count, plural, zero{Dilëwyd {count} teitl} one{Dilëwyd 1 teitl} two{Dilëwyd {count} deitl} few{Dilëwyd {count} theitl} many{Dilëwyd {count} theitl} other{Dilëwyd {count} teitl}}{extra}",
+    "tgDeletedFailed": "Dilëwyd {count}, methodd: {failed}{extra}",
+    "tgFreeGb": "Rhyddhau {gb} GB",
+    "tgDownloadCopies": "Copïau lawrlwytho",
+    "tgLookingForUnwatched": "Yn chwilio am beth sydd heb ei wylio ers tro …",
+    "tgSuggestionEnough": "Awgrym: {size} · digon o le ✓",
+    "tgSuggestionOf": "Awgrym: {size} o'r {target} sydd ei angen",
+    "tgPickToSayNo": "Dewiswch un i ddweud na — daw'r awgrym nesaf i mewn yn awtomatig.",
+    "tgOtherCandidates": "Ymgeiswyr eraill",
+    "tgDownloadAnyway": "Lawrlwytho beth bynnag",
+    "tgDeleteCountSize": "Dileu {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} yn rhydd.",
+    "tgFileDoubleSpace": "Mae'r ffeil yn {size} ac yn cymryd dwywaith y lle (lawrlwythiad + copi yn y llyfrgell), ynghyd â {buffer} mewn cronfa.",
+    "tgFileSize": "Mae'r ffeil yn {size}, ynghyd â {buffer} mewn cronfa.",
+    "tgPendingNeeds": "Mae angen {size} yn rhagor ar lawrlwythiadau sydd ar y gweill.",
+    "tgShortBy": "{size} yn brin.",
+    "tgOnlyEarlyFiles": "Dim ond ffeiliau a gyhoeddwyd cyn i'r ffilm ddod allan yn ddigidol a gafwyd ({count}) — maen nhw bron bob amser yn ffug.",
+    "tgNoDigitalDate": "heb ddyddiad rhyddhau digidol eto",
+    "tgDigitalOn": "yn dod allan yn ddigidol ar {date}",
+    "tgNotOutDigitally": "Ddim allan yn ddigidol eto",
+    "tgTitleWhen": "Mae \"{title}\" {when}.",
+    "tgNotOutExplain": "Fel arfer, recordiad sinema neu ffilm arall â'r un enw sydd ar gael nawr. Weithiau mae copi cynnar ar gael mewn ansawdd isel, yn aml ag isdeitlau wedi'u llosgi i mewn. Mae \"Dangos ffeiliau beth bynnag\" yn dangos beth sydd ar gael. Bydd Radarr yn casglu'r fersiwn iawn ei hun pan fydd yn dod allan.",
+    "tgShowFilesAnyway": "Dangos ffeiliau beth bynnag",
+    "tgPickSeasonsEpisodes": "Dewis tymhorau a phenodau",
+    "tgNoEpisodeInfo": "{season}: dim gwybodaeth am benodau",
+    "tgAppliesAllDevices": "Yn berthnasol i bob dyfais sy'n defnyddio'r cyfrif hwn",
+    "tgNoXxxLibrary": "Dim llyfrgell o'r enw XXX.",
+    "tgSearchingEachWord": "Yn chwilio am bob gair ar wahân … (gall gymryd hanner munud)",
+    "tgSentToQbit": "Anfonwyd \"{title}\" ({size}) at qBittorrent",
+    "tgDownloadFailed": "Methodd y lawrlwythiad: {error}",
+    "tgXxxNoVideoRemoved": "Nid oedd ffeil fideo yn \"{title}\" ac mae wedi'i dynnu.",
+    "tgXxxNoVideoNotRemoved": "Nid oedd ffeil fideo yn \"{title}\" a NI chafodd ei dynnu.",
+    "tgSearchNewXxx": "Chwilio am XXX newydd",
+    "tgXxxSearchHint": "Enw, stiwdio …",
+    "tgChecking": "Yn gwirio …",
+    "tgXxxVisible": "Yn weladwy nawr. Mae XXX yn ymddangos yn y llyfrgelloedd, wrth chwilio ac ar y sgrin gartref.",
+    "tgXxxHidden": "Wedi'i guddio. Nid yw XXX yn ymddangos yn unman yn yr ap.",
+    "tgShowWithPin": "Dangos (PIN)",
+    "tgChangePin": "Newid PIN",
+    "tgNoLibraryList": "Doedd dim modd cael rhestr y llyfrgelloedd (HTTP {code})",
+    "tgNoUserSettings": "Doedd dim modd cael gosodiadau'r defnyddiwr (HTTP {code})",
+    "tgJellyfinRejectedChange": "Gwrthododd Jellyfin y newid (HTTP {code})",
+    "tgDeleteFailed": "Methodd y dileu (HTTP {code})",
+    "tgXxxAddFailed": "Doedd dim modd ychwanegu \"{title}\" at qBittorrent",
+    "tgSeasonEpisodeLower": "tymor {season}, pennod {episode}",
+    "tgSearchInSeerr": "Chwilio yn Seerr",
+    "tgSeerrSearchHint": "Chwilio am ffilmiau a chyfresi (e.e. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Ar goll yn y tymor hwn",
+    "tgMissingSeasonsOpenSeries": "{count, plural, zero{Tymhorau ar goll:} one{Tymor ar goll:} two{Tymhorau ar goll:} few{Tymhorau ar goll:} many{Tymhorau ar goll:} other{Tymhorau ar goll:}} {list} - agorwch y gyfres i weld pob tymor",
+    "tgProjectOnGitHub": "Tortugarr ar GitHub",
+    "tgProjectOnGitHubSubtitle": "Cod ffynhonnell, rhyddhadau a materion",
+    "tgBuiltOnMoonfinCredit": "Mae Tortugarr wedi'i adeiladu ar Moonfin (GPL), gan ddatblygwyr Moonfin.",
+    "tgCredits": "Diolchiadau",
+    "tgCreditsThanks": "Gyda diolch gostyngedig: heb y prosiectau hyn a'r bobl y tu ôl iddyn nhw, ni fyddai Tortugarr yn bod.",
+    "tgCreditMoonfin": "Yr ap y mae Tortugarr wedi'i adeiladu arno (GPL)",
+    "tgCreditJellyfin": "Gweinydd cyfryngau",
+    "tgCreditSeerr": "Darganfod a cheisiadau",
+    "tgCreditRadarr": "Ffilmiau",
+    "tgCreditSonarr": "Cyfresi",
+    "tgCreditProwlarr": "Rheolwr mynegeion",
+    "tgCreditBazarr": "Isdeitlau",
+    "tgCreditFlareSolverr": "Cynorthwyydd Cloudflare ar gyfer mynegeion",
+    "tgCreditQbittorrent": "Rhaglen lawrlwytho, dewis rhagosodedig y gosodwr",
+    "tgCreditTmdb": "Data ffilmiau a chyfresi, posteri a gwaith celf",
+    "tgCreditOpenSubtitles": "Isdeitlau, a gesglir trwy Bazarr",
+    "tgTmdbNotice": "Mae'r cynnyrch hwn yn defnyddio API TMDB ond nid yw wedi'i gymeradwyo na'i ardystio gan TMDB.",
+    "tgLoadingLogoSize": "Maint y logo llwytho",
+    "tgLoadingLogoSizeSubtitle": "Y logo sy'n troi tra bo fideo yn llwytho",
+    "tgSubtitleLanguages": "Ieithoedd isdeitlau",
+    "tgSubtitleLanguagesSubtitle": "Yn cael eu dangos yn y ddewislen isdeitlau: {languages}",
+    "tgShowAllSubLangsOffChosen": "I ffwrdd: mae'r ddewislen isdeitlau ond yn dangos yr ieithoedd a ddewiswyd",
+    "tgDiscoveryLanguages": "Ieithoedd yn Trendio a Poblogaidd",
+    "tgDiscoveryLanguagesSubtitle": "Yn cael eu dangos: {languages}",
+    "tgHideForeignOnChosen": "Ymlaen: mae Trendio a Poblogaidd ond yn dangos yr ieithoedd a ddewiswyd",
+    "tgShowLanguageBadges": "Dangos bathodynnau iaith",
+    "tgShowLanguageBadgesOn": "Ymlaen: mae teitlau'n dangos eu hiaith (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "I ffwrdd: dim bathodynnau iaith ar y teitlau"
 }

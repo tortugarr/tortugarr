@@ -1,7 +1,23 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../../preference/user_preferences.dart';
+
+/// The loading logo's size factor for a stored percentage: 25–110 %, and
+/// 100 % (today's size) when nothing is stored.
+double loadingLogoScale(int? percent) => (percent ?? 100).clamp(25, 110) / 100;
+
+double _storedLoadingLogoScale() {
+  try {
+    return loadingLogoScale(
+      GetIt.instance<UserPreferences>().get(UserPreferences.loadingLogoScale),
+    );
+  } catch (_) {
+    return 1.0;
+  }
+}
 
 class PlayerLoadingOverlay extends StatefulWidget {
   const PlayerLoadingOverlay({
@@ -24,7 +40,7 @@ class _PlayerLoadingOverlayState extends State<PlayerLoadingOverlay>
   static const _labelGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [Color(0xFFAA5CC3), Color(0xFF00A4DC)],
+    colors: [Color(0xFFE50914), Color(0xFFFFC21A)], // Notflix red to the yellow "not"
   );
 
   late final AnimationController _logoController;
@@ -79,10 +95,12 @@ class _PlayerLoadingOverlayState extends State<PlayerLoadingOverlay>
               child: child,
             );
           },
-          child: SvgPicture.asset(
-            'assets/icons/moonfin_logo.svg',
-            width: widget.logoSize,
-            height: widget.logoSize,
+          child: Image.asset(
+            'assets/icons/tortugarr_logo.png',
+            // Round Tortugarr badge (about 1:1); a little larger than the old mark so the banner text reads.
+            width: widget.logoSize * 1.15 * _storedLoadingLogoScale(),
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.medium,
           ),
         ),
         if (hasLabel) ...[

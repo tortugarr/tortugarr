@@ -18,6 +18,7 @@ import '../../widgets/navigation_layout.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/focus/step_scroll.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbProfileLarge = 'https://image.tmdb.org/t/p/w500';
@@ -397,7 +398,8 @@ class _SeerrPersonScreenState extends State<SeerrPersonScreen> {
               suppressFocusGlow: suppressFocusGlow,
               onTap: () {
                 final mediaType = item.mediaType ?? 'movie';
-                context.push(
+                SinglePush.push(
+                  context,
                   Destinations.seerrMedia(item.id.toString()),
                   extra: {'mediaType': mediaType},
                 );

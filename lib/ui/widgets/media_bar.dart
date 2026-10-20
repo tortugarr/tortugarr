@@ -30,6 +30,7 @@ import '../../preference/user_preferences.dart';
 import '../navigation/app_router.dart';
 import '../navigation/destinations.dart';
 import '../screensaver/screensaver_controller.dart';
+import '../../util/device_memory.dart';
 import '../../util/language_matching.dart';
 import '../../util/overlay_color_palette.dart';
 import '../../util/overview_text.dart';
@@ -148,6 +149,14 @@ class _MediaBarState extends State<MediaBar>
   /// defer to post-frame mid-build (cancel runs from deactivate) so the
   /// ancestor NavigationLayout is not marked dirty during build.
   void _publishTrailerImmersive(bool value) {
+    if (value && _screensaverController.visible.value) {
+      // Prepared before the screensaver came up: stop it instead of letting
+      // it play (with sound) behind or over the screensaver.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _cancelTrailerPreview();
+      });
+      return;
+    }
     // Keep the screensaver from arming while a trailer plays on any backend.
     _screensaverController.setMediaBarTrailerActive(value);
     if (NavigationLayout.trailerImmersiveNotifier.value == value) return;
@@ -217,7 +226,7 @@ class _MediaBarState extends State<MediaBar>
       onError: (_) {},
     );
     _isHomeRouteActive = _isHomePath(
-      appRouter.routerDelegate.currentConfiguration.uri.path,
+      currentTopRoutePath(),
     );
     appRouter.routerDelegate.addListener(_onRouteChanged);
     PlayerRouteObserver.instance.isPlayerActive
@@ -296,7 +305,9 @@ class _MediaBarState extends State<MediaBar>
   }
 
   bool _isHomeRouteCurrent() {
-    return _isHomePath(appRouter.routerDelegate.currentConfiguration.uri.path);
+    // The top route, not the uri: Seerr and other left-menu pages are pushed
+    // over Home, which leaves the uri on /home while Home is covered.
+    return _isHomePath(currentTopRoutePath());
   }
 
   /// Whether a trailer may play right now. Re-checked after every await in the
@@ -489,6 +500,9 @@ class _MediaBarState extends State<MediaBar>
     int centerIndex,
   ) {
     if (!mounted || items.isEmpty) return;
+    // Warming a dozen slides holds ~50 MB of decoded backdrops. A low-RAM
+    // device keeps only the adjacent slides warm and loads the rest from disk.
+    if (DeviceMemory.isConstrained) return;
     final dpr = MediaQuery.devicePixelRatioOf(context);
     final screenWidth = MediaQuery.sizeOf(context).width;
 
@@ -856,8 +870,11 @@ class _MediaBarState extends State<MediaBar>
     _pendingYouTubeVideoId = null;
     _pendingWebTrailerUrl = null;
     _clearSponsorBlockTracking();
+    // Keeping the YouTube WebView alive between slides skips its slow start,
+    // but its renderer process holds 60-170 MB, too much on a low-RAM TV.
     final releaseRetainedYouTube =
-        !retainYouTubePlayer && _retainedYouTubeVideoId != null;
+        (!retainYouTubePlayer || DeviceMemory.isConstrained) &&
+        _retainedYouTubeVideoId != null;
     if (_activeYouTubeVideoId != null ||
         _activeWebTrailerUrl != null ||
         releaseRetainedYouTube ||
@@ -1011,8 +1028,13 @@ class _MediaBarState extends State<MediaBar>
         // since the last trailer, so reclaim control routing first.
         final persistentViewId = _media3PlatformViewId;
         if (persistentViewId != null) {
-          await _media3TrailerBackend!.activateView(persistentViewId);
+          final reclaimed =
+              await _media3TrailerBackend!.activateView(persistentViewId);
           if (!mounted || resolveId != _trailerResolveId) return;
+          // The native side refuses while a main player owns, or is about to
+          // own, the slot. Backing off here keeps the trailer's mute and
+          // source calls out of the main player's queue.
+          if (!reclaimed) return;
         }
         await _media3TrailerBackend!.setVolume(0);
         await _media3TrailerBackend.configureSubtitleStyle(verticalOffset: 0.15);

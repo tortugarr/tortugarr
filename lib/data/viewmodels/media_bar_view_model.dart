@@ -146,7 +146,7 @@ class MediaBarViewModel extends ChangeNotifier {
     bool preserveCurrent = true,
     bool force = false,
   }) async {
-    if (_state is! MediaBarLoading && !force) return;
+    if (_state is! MediaBarLoading && _state is! MediaBarEmpty && !force) return;
     if (_isLoading) return;
     _isLoading = true;
     final loadGeneration = ++_loadGeneration;

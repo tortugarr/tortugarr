@@ -1,11 +1,11 @@
 name: moonfin
-description: "Moonfin - Jellyfin & Emby media client for mobile, tablet, and desktop"
+description: "Tortugarr - your own streaming service: an app for Android TV, phones and tablets"
 publish_to: 'none'
-version: 2.3.2+30000144
+version: 4.20.0+2000034
 
 moonfin:
-  android_tv_version: 2.3.2
-  android_tv_build_number: 2000012
+  android_tv_version: 4.20.0
+  android_tv_build_number: 2000034
 
 environment:
   sdk: ^3.11.0
@@ -232,6 +232,7 @@ flutter:
     - assets/fonts/
     - assets/subtitle_fonts/
     - assets/licenses/cores/
+    - assets/intro/tortugarr_intro.mp4
 
   fonts:
     - family: NeonPulseDisplay

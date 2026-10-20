@@ -223,7 +223,7 @@ abstract class AppLocalizations {
   /// The application title
   ///
   /// In en, this message translates to:
-  /// **'Moonfin'**
+  /// **'Tortugarr'**
   String get appTitle;
 
   /// Section header for account preferences settings
@@ -349,7 +349,7 @@ abstract class AppLocalizations {
   /// App version shown in footer
   ///
   /// In en, this message translates to:
-  /// **'Moonfin version {version}'**
+  /// **'Tortugarr version {version}'**
   String appVersionFooter(String version);
 
   /// Section heading for previously saved servers
@@ -445,7 +445,7 @@ abstract class AppLocalizations {
   /// Explanation when secure storage is not available
   ///
   /// In en, this message translates to:
-  /// **'Moonfin could not access your system keyring. Login can continue, but secure token storage may be unavailable until the keyring is unlocked.'**
+  /// **'Tortugarr could not access your system keyring. Login can continue, but secure token storage may be unavailable until the keyring is unlocked.'**
   String get secureStorageUnavailableMessage;
 
   /// Generic OK button label
@@ -476,7 +476,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Classic'**
-  String get detailScreenStyleMoonfin;
+  String get detailScreenStyleNotflix;
 
   /// Detail screen style option: the responsive cinematic layout
   ///
@@ -517,14 +517,14 @@ abstract class AppLocalizations {
   /// Explanation under the recommendation system setting
   ///
   /// In en, this message translates to:
-  /// **'Use the Moonfin Recommends local-library algorithm or the online TMDb\'s Similarity Metrics. Note: Online recommendations require Seerr integration.'**
+  /// **'Use the Tortugarr Recommends local-library algorithm or the online TMDb\'s Similarity Metrics. Note: Online recommendations require Seerr integration.'**
   String get recommendationSystemSubtitle;
 
-  /// Recommendation system option: Moonfin Recommends
+  /// Recommendation system option: Tortugarr Recommends
   ///
   /// In en, this message translates to:
-  /// **'Moonfin Recommends'**
-  String get recommendationSystemMoonfin;
+  /// **'Tortugarr Recommends'**
+  String get recommendationSystemNotflix;
 
   /// Recommendation system option: TMDb Similarity
   ///
@@ -541,7 +541,7 @@ abstract class AppLocalizations {
   /// Explanation under the parental rating cap setting toggle
   ///
   /// In en, this message translates to:
-  /// **'Limit Moonfin Recommends suggestions by parental rating of target media'**
+  /// **'Limit Tortugarr Recommends suggestions by parental rating of target media'**
   String get recommendationsApplyParentalRatingCapSubtitle;
 
   /// Label for the Automatic/Apple/Material interface style setting
@@ -619,7 +619,7 @@ abstract class AppLocalizations {
   /// Description under custom themes section
   ///
   /// In en, this message translates to:
-  /// **'Custom themes alter visual elements across Moonfin. Choose one of these options to suit your style.'**
+  /// **'Custom themes alter visual elements across Tortugarr. Choose one of these options to suit your style.'**
   String get customThemeSubtitle;
 
   /// Settings label for preferring the native system keyboard instead of the custom TV keyboard
@@ -634,17 +634,17 @@ abstract class AppLocalizations {
   /// **'Use your device input method by default for text entry'**
   String get keyboardPreferSystemImeDescription;
 
-  /// Display name for the Moonfin theme
+  /// Display name for the Tortugarr theme
   ///
   /// In en, this message translates to:
-  /// **'Moonfin'**
-  String get themeMoonfin;
+  /// **'Tortugarr'**
+  String get themeNotflix;
 
-  /// Preview description for the Moonfin theme
+  /// Preview description for the Tortugarr theme
   ///
   /// In en, this message translates to:
-  /// **'The original clean Moonfin default.'**
-  String get themeMoonfinSubtitle;
+  /// **'The original clean Tortugarr default.'**
+  String get themeNotflixSubtitle;
 
   /// Display name for the Neon Pulse theme
   ///
@@ -769,7 +769,7 @@ abstract class AppLocalizations {
   /// Title of exit confirmation dialog
   ///
   /// In en, this message translates to:
-  /// **'Exit Moonfin?'**
+  /// **'Exit Tortugarr?'**
   String get exitApp;
 
   /// Body text of exit confirmation dialog
@@ -2557,7 +2557,7 @@ abstract class AppLocalizations {
   /// Shown in the car when no account is signed in
   ///
   /// In en, this message translates to:
-  /// **'Sign in to Moonfin on your phone'**
+  /// **'Sign in to Tortugarr on your phone'**
   String get carSignInPrompt;
 
   /// Shown in the car when the media server can't be reached
@@ -5167,7 +5167,7 @@ abstract class AppLocalizations {
   /// Description when no custom mpv.conf is set
   ///
   /// In en, this message translates to:
-  /// **'Not set. Moonfin will try a default mpv.conf in app/data folders.'**
+  /// **'Not set. Tortugarr will try a default mpv.conf in app/data folders.'**
   String get notSetMpvConf;
 
   /// Dialog title for selecting mpv.conf
@@ -5623,7 +5623,7 @@ abstract class AppLocalizations {
   /// Description for downloads folder visibility
   ///
   /// In en, this message translates to:
-  /// **'Downloads/Moonfin — visible to other apps'**
+  /// **'Downloads/Tortugarr — visible to other apps'**
   String get downloadsVisibleToOtherApps;
 
   /// Section title for dangerous actions
@@ -5677,7 +5677,7 @@ abstract class AppLocalizations {
   /// Description for saving to downloads folder
   ///
   /// In en, this message translates to:
-  /// **'Downloaded media will be saved to Downloads/Moonfin on your device. These files will be visible to other apps such as your gallery or music player.\n\nExisting downloads will remain in their current location.'**
+  /// **'Downloaded media will be saved to Downloads/Tortugarr on your device. These files will be visible to other apps such as your gallery or music player.\n\nExisting downloads will remain in their current location.'**
   String get saveToDownloadsFolderDescription;
 
   /// Notice shown below downloading text when downloading a transcoded stream
@@ -5929,7 +5929,7 @@ abstract class AppLocalizations {
   /// Explanation shown on the library visibility settings screen
   ///
   /// In en, this message translates to:
-  /// **'Toggle home page visibility per library. Restart Moonfin for changes to take effect.'**
+  /// **'Toggle home page visibility per library. Restart Tortugarr for changes to take effect.'**
   String get libraryVisibilityDescription;
 
   /// Toggle for showing library in navigation
@@ -6022,11 +6022,11 @@ abstract class AppLocalizations {
   /// **'Choose between various media bar styles, or turn the media bar off'**
   String get mediaBarModeDescription;
 
-  /// Media bar style option: Moonfin
+  /// Media bar style option: Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Moonfin'**
-  String get mediaBarModeMoonfin;
+  /// **'Tortugarr'**
+  String get mediaBarModeNotflix;
 
   /// Media bar style option: MakD
   ///
@@ -6985,7 +6985,7 @@ abstract class AppLocalizations {
   /// Displayed source code repository URL
   ///
   /// In en, this message translates to:
-  /// **'https://github.com/Moonfin-Client/Moonfin-Core'**
+  /// **'https://github.com/tortugarr/tortugarr'**
   String get sourceCodeUrl;
 
   /// Button to check for updates
@@ -7270,11 +7270,11 @@ abstract class AppLocalizations {
   /// **'Cancel 4K Request'**
   String get cancelRequest4k;
 
-  /// Button to play available media in Moonfin
+  /// Button to play available media in Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Play in Moonfin'**
-  String get playInMoonfin;
+  /// **'Play in Tortugarr'**
+  String get playInNotflix;
 
   /// Label showing who requested media
   ///
@@ -7327,7 +7327,7 @@ abstract class AppLocalizations {
   /// Snackbar when Seerr item cannot be found in Jellyfin
   ///
   /// In en, this message translates to:
-  /// **'Item not found in your Moonfin library'**
+  /// **'Item not found in your Tortugarr library'**
   String get itemNotFoundInLibrary;
 
   /// Snackbar when library search fails
@@ -8407,7 +8407,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminServerRebootMessage.
   ///
   /// In en, this message translates to:
-  /// **'Server reboot in progress, please restart Moonfin'**
+  /// **'Server reboot in progress, please restart Tortugarr'**
   String get adminServerRebootMessage;
 
   /// No description provided for @adminActiveSessions.
@@ -15061,7 +15061,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLibraryVisibilitySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Toggle home page visibility per library. Restart Moonfin for changes to take effect.'**
+  /// **'Toggle home page visibility per library. Restart Tortugarr for changes to take effect.'**
   String get settingsLibraryVisibilitySubtitle;
 
   /// No description provided for @settingsMediaBarAndLocalPreviews.
@@ -15268,17 +15268,17 @@ abstract class AppLocalizations {
   /// **'Join the Discord'**
   String get settingsJoinTheDiscord;
 
-  /// No description provided for @settingsSupportMoonfin.
+  /// No description provided for @settingsSupportNotflix.
   ///
   /// In en, this message translates to:
-  /// **'Support Moonfin'**
-  String get settingsSupportMoonfin;
+  /// **'Support Tortugarr'**
+  String get settingsSupportNotflix;
 
-  /// No description provided for @settingsSupportMoonfinSubtitle.
+  /// No description provided for @settingsSupportNotflixSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Donate a coffee to the developer'**
-  String get settingsSupportMoonfinSubtitle;
+  String get settingsSupportNotflixSubtitle;
 
   /// No description provided for @settingsLegal.
   ///
@@ -15307,7 +15307,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPrivacyPolicySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'How Moonfin handles your data'**
+  /// **'How Tortugarr handles your data'**
   String get settingsPrivacyPolicySubtitle;
 
   /// No description provided for @settingsCheckForUpdates.
@@ -15319,7 +15319,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsCheckForUpdatesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Check for the latest Moonfin release'**
+  /// **'Check for the latest Tortugarr release'**
   String get settingsCheckForUpdatesSubtitle;
 
   /// No description provided for @settingsPoweredByFlutter.
@@ -16045,7 +16045,7 @@ abstract class AppLocalizations {
   /// No description provided for @savedThemesDescription.
   ///
   /// In en, this message translates to:
-  /// **'These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.'**
+  /// **'These are themes downloaded from the Tortugarr plugin for the current server. Deleting removes only this local copy.'**
   String get savedThemesDescription;
 
   /// No description provided for @savedThemesEmpty.
@@ -16081,7 +16081,7 @@ abstract class AppLocalizations {
   /// No description provided for @themeEditorSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Open the Moonfin Theme Editor in your browser'**
+  /// **'Open the Tortugarr Theme Editor in your browser'**
   String get themeEditorSubtitle;
 
   /// No description provided for @homeScreen.
@@ -16501,7 +16501,7 @@ abstract class AppLocalizations {
   /// No description provided for @webDiagnosticsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Moonfin Web Diagnostics'**
+  /// **'Tortugarr Web Diagnostics'**
   String get webDiagnosticsTitle;
 
   /// No description provided for @webDiagnosticsIntro.
@@ -16525,13 +16525,13 @@ abstract class AppLocalizations {
   /// No description provided for @webDiagnosticsMixedContentFailureBody.
   ///
   /// In en, this message translates to:
-  /// **'Moonfin detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.'**
+  /// **'Tortugarr detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.'**
   String get webDiagnosticsMixedContentFailureBody;
 
   /// No description provided for @webDiagnosticsCorsFailureBody.
   ///
   /// In en, this message translates to:
-  /// **'Moonfin detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.'**
+  /// **'Tortugarr detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.'**
   String get webDiagnosticsCorsFailureBody;
 
   /// Target URL shown in diagnostics summary
@@ -16615,7 +16615,7 @@ abstract class AppLocalizations {
   /// No description provided for @webDiagnosticsMixedContentFix.
   ///
   /// In en, this message translates to:
-  /// **'Fix: serve your media server or proxy endpoint via HTTPS, or load Moonfin over HTTP on trusted local networks only.'**
+  /// **'Fix: serve your media server or proxy endpoint via HTTPS, or load Tortugarr over HTTP on trusted local networks only.'**
   String get webDiagnosticsMixedContentFix;
 
   /// No description provided for @webDiagnosticsNoMixedContentDetected.
@@ -18067,7 +18067,7 @@ abstract class AppLocalizations {
   /// Explanatory description under the rendering engine setting.
   ///
   /// In en, this message translates to:
-  /// **'Impeller is Flutter\'s modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Moonfin to apply.'**
+  /// **'Impeller is Flutter\'s modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Tortugarr to apply.'**
   String get impellerRenderingSubtitle;
 
   /// No description provided for @impellerAuto.
@@ -18097,7 +18097,7 @@ abstract class AppLocalizations {
   /// Body of the dialog shown after changing the rendering engine.
   ///
   /// In en, this message translates to:
-  /// **'Moonfin needs to restart to change the rendering engine. Close the app now, then reopen it to apply.'**
+  /// **'Tortugarr needs to restart to change the rendering engine. Close the app now, then reopen it to apply.'**
   String get impellerRestartMessage;
 
   /// Button that closes the app so the new rendering engine takes effect on next launch.
@@ -18363,6 +18363,1602 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mixed Playlists'**
   String get mixedPlaylistsSection;
+
+  /// Title shown when a Seerr browse filter (network/studio) is not supported by the backend
+  ///
+  /// In en, this message translates to:
+  /// **'Filter not supported'**
+  String get seerrFilterNotSupported;
+
+  /// Detail message explaining why the filter failed and suggesting the filter dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.'**
+  String get seerrFilterNotSupportedDetail;
+
+  /// Button label to clear filters and show all items
+  ///
+  /// In en, this message translates to:
+  /// **'Show All'**
+  String get showAll;
+
+  /// Settings entry showing that this app was built on the Moonfin project
+  ///
+  /// In en, this message translates to:
+  /// **'Built on Moonfin'**
+  String get settingsBuiltOnOriginal;
+
+  /// No description provided for @tgMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get tgMissing;
+
+  /// No description provided for @tgComing.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming'**
+  String get tgComing;
+
+  /// No description provided for @tgComingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming {date}'**
+  String tgComingOn(String date);
+
+  /// No description provided for @tgDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading'**
+  String get tgDownloading;
+
+  /// No description provided for @tgReadySoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready soon'**
+  String get tgReadySoon;
+
+  /// No description provided for @tgRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get tgRequested;
+
+  /// No description provided for @tgClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get tgClose;
+
+  /// No description provided for @tgCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get tgCancel;
+
+  /// No description provided for @tgBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get tgBack;
+
+  /// No description provided for @tgYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get tgYes;
+
+  /// No description provided for @tgNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get tgNo;
+
+  /// No description provided for @tgSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get tgSearch;
+
+  /// No description provided for @tgHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get tgHide;
+
+  /// No description provided for @tgAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get tgAll;
+
+  /// No description provided for @tgNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get tgNone;
+
+  /// No description provided for @tgMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get tgMovies;
+
+  /// No description provided for @tgSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Series'**
+  String get tgSeries;
+
+  /// No description provided for @tgMovieTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie'**
+  String get tgMovieTag;
+
+  /// No description provided for @tgSeriesTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Series'**
+  String get tgSeriesTag;
+
+  /// No description provided for @tgCanTakeAMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Can take up to a minute'**
+  String get tgCanTakeAMinute;
+
+  /// No description provided for @tgToday.
+  ///
+  /// In en, this message translates to:
+  /// **'today'**
+  String get tgToday;
+
+  /// No description provided for @tgYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'yesterday'**
+  String get tgYesterday;
+
+  /// No description provided for @tgDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String tgDaysAgo(int days);
+
+  /// No description provided for @tgMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months ago'**
+  String tgMonthsAgo(int months);
+
+  /// No description provided for @tgYearsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{years} years ago'**
+  String tgYearsAgo(int years);
+
+  /// No description provided for @tgYearsMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{years} years and {months} months ago'**
+  String tgYearsMonthsAgo(int years, int months);
+
+  /// No description provided for @tgFindSubtitles.
+  ///
+  /// In en, this message translates to:
+  /// **'Find subtitles'**
+  String get tgFindSubtitles;
+
+  /// No description provided for @tgFreeUpSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Free up space'**
+  String get tgFreeUpSpace;
+
+  /// No description provided for @tgDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads'**
+  String get tgDownloads;
+
+  /// No description provided for @tgDownloadsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads ({count})'**
+  String tgDownloadsCount(int count);
+
+  /// No description provided for @tgNoVideoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\": the download had no video file ({files}). It was removed and blocked — try another file.'**
+  String tgNoVideoRemoved(String title, String files);
+
+  /// No description provided for @tgNoVideoNotRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\": the download had no video file ({files}), but it could not be removed automatically.'**
+  String tgNoVideoNotRemoved(String title, String files);
+
+  /// No description provided for @tgAiredOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Aired {date}'**
+  String tgAiredOn(String date);
+
+  /// No description provided for @tgTapToFindFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to find files'**
+  String get tgTapToFindFiles;
+
+  /// No description provided for @tgWholeSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole season'**
+  String get tgWholeSeason;
+
+  /// No description provided for @tgEpisodesMissingFindPack.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} episodes missing – find a season pack'**
+  String tgEpisodesMissingFindPack(int count);
+
+  /// No description provided for @tgAddToSonarrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Sonarr to see missing episodes'**
+  String get tgAddToSonarrTitle;
+
+  /// No description provided for @tgAddToSonarrSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The series is added without downloading anything by itself'**
+  String get tgAddToSonarrSubtitle;
+
+  /// No description provided for @tgMissingEpisodesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing episodes can\'t be shown right now'**
+  String get tgMissingEpisodesUnavailable;
+
+  /// No description provided for @tgReasonTapRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason} · Tap to try again'**
+  String tgReasonTapRetry(String reason);
+
+  /// No description provided for @tgSeasonPackBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Season pack'**
+  String get tgSeasonPackBadge;
+
+  /// No description provided for @tgMonitorSeasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor season {season}'**
+  String tgMonitorSeasonTitle(int season);
+
+  /// No description provided for @tgMonitorSeasonQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Should Sonarr fetch the missing episodes in season {season} now?\n\nNo: only new episodes are fetched when they come out.'**
+  String tgMonitorSeasonQuestion(int season);
+
+  /// No description provided for @tgSonarrSearchingSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr is searching for season {season}'**
+  String tgSonarrSearchingSeason(int season);
+
+  /// No description provided for @tgMonitored.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitored'**
+  String get tgMonitored;
+
+  /// No description provided for @tgNotMonitored.
+  ///
+  /// In en, this message translates to:
+  /// **'Not monitored'**
+  String get tgNotMonitored;
+
+  /// No description provided for @tgSeasonStateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Season {season}: {state}'**
+  String tgSeasonStateLabel(int season, String state);
+
+  /// No description provided for @tgLabelMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} missing'**
+  String tgLabelMissing(String label);
+
+  /// No description provided for @tgNotAiredYet.
+  ///
+  /// In en, this message translates to:
+  /// **'{code} hasn\'t aired yet.'**
+  String tgNotAiredYet(String code);
+
+  /// No description provided for @tgNotAiredYetComing.
+  ///
+  /// In en, this message translates to:
+  /// **'{code} hasn\'t aired yet – coming {date}.'**
+  String tgNotAiredYetComing(String code, String date);
+
+  /// No description provided for @tgAlreadyDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'{code} is already downloading.'**
+  String tgAlreadyDownloading(String code);
+
+  /// No description provided for @tgDownloadedAppearsSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'{code} is downloaded and will show up in the library shortly.'**
+  String tgDownloadedAppearsSoon(String code);
+
+  /// No description provided for @tgSearchingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for {label} …'**
+  String tgSearchingFor(String label);
+
+  /// No description provided for @tgSeasonLower.
+  ///
+  /// In en, this message translates to:
+  /// **'season {season}'**
+  String tgSeasonLower(int season);
+
+  /// No description provided for @tgWholeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole {label}'**
+  String tgWholeLabel(String label);
+
+  /// No description provided for @tgSeasonNoEpisodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Season {season} – no episodes in the library'**
+  String tgSeasonNoEpisodes(int season);
+
+  /// No description provided for @tgNoTvdbId.
+  ///
+  /// In en, this message translates to:
+  /// **'The series has no TVDB id, so Sonarr can\'t find it.'**
+  String get tgNoTvdbId;
+
+  /// No description provided for @tgAddingToSonarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding to Sonarr …'**
+  String get tgAddingToSonarr;
+
+  /// No description provided for @tgAddToSonarrFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t add the series to Sonarr. Try again later.'**
+  String get tgAddToSonarrFailed;
+
+  /// No description provided for @tgSendingToDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending \"{label}\" to download …'**
+  String tgSendingToDownload(String label);
+
+  /// No description provided for @tgDownloadDidNotStart.
+  ///
+  /// In en, this message translates to:
+  /// **'The download didn\'t start: {error}'**
+  String tgDownloadDidNotStart(String error);
+
+  /// No description provided for @tgDownloadingAppearsWhenDone.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{label}\" is downloading ({size}). It shows up in the library when it is done.'**
+  String tgDownloadingAppearsWhenDone(String label, String size);
+
+  /// No description provided for @tgSonarrUnreachableRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach Sonarr. Try again a little later.'**
+  String get tgSonarrUnreachableRetry;
+
+  /// No description provided for @tgNoUsableFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Found no usable files. Try again later – new ones often show up after a few hours.'**
+  String get tgNoUsableFiles;
+
+  /// No description provided for @tgFilesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files'**
+  String tgFilesCount(int count);
+
+  /// No description provided for @tgFilesRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files – {recommended} fit the quality profile, the rest are at the bottom'**
+  String tgFilesRecommended(int count, int recommended);
+
+  /// No description provided for @tgOutsideQualityProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside the quality profile'**
+  String get tgOutsideQualityProfile;
+
+  /// No description provided for @tgLargerThanProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger than the profile allows'**
+  String get tgLargerThanProfile;
+
+  /// No description provided for @tgSmallerThanProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Smaller than the profile allows'**
+  String get tgSmallerThanProfile;
+
+  /// No description provided for @tgAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Already exists'**
+  String get tgAlreadyExists;
+
+  /// No description provided for @tgMayNotFitDisk.
+  ///
+  /// In en, this message translates to:
+  /// **'May not fit on the disk'**
+  String get tgMayNotFitDisk;
+
+  /// No description provided for @tgSonarrUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach Sonarr'**
+  String get tgSonarrUnreachable;
+
+  /// No description provided for @tgSonarrUnreachableAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach Sonarr at {host}'**
+  String tgSonarrUnreachableAt(String host);
+
+  /// No description provided for @tgSonarrRejectedChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr didn\'t accept the change'**
+  String get tgSonarrRejectedChange;
+
+  /// No description provided for @tgSeasonMonitoredNoSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'The season is monitored, but Sonarr didn\'t start the search'**
+  String get tgSeasonMonitoredNoSearch;
+
+  /// No description provided for @tgSonarrCantSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr couldn\'t search right now'**
+  String get tgSonarrCantSearch;
+
+  /// No description provided for @tgSearchExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'The search result has expired – search again'**
+  String get tgSearchExpired;
+
+  /// No description provided for @tgSonarrRejectedDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr didn\'t accept the download (HTTP {status})'**
+  String tgSonarrRejectedDownload(String status);
+
+  /// No description provided for @tgSonarrNoSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr doesn\'t have the series'**
+  String get tgSonarrNoSeries;
+
+  /// No description provided for @tgCouldNotChangeMonitoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the monitoring: {error}'**
+  String tgCouldNotChangeMonitoring(String error);
+
+  /// No description provided for @tgJellyfinNoIds.
+  ///
+  /// In en, this message translates to:
+  /// **'Jellyfin didn\'t recognise the series (no TVDB or TMDB id)'**
+  String get tgJellyfinNoIds;
+
+  /// No description provided for @tgSomethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong: {error}'**
+  String tgSomethingWentWrong(String error);
+
+  /// No description provided for @tgDeleteReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'The file isn\'t managed by Radarr/Sonarr, and Jellyfin only has read access to the folder. Delete it in your file manager.'**
+  String get tgDeleteReadOnly;
+
+  /// No description provided for @tgSonarrRequiredPerEpisode.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonarr isn\'t reachable, or the series hasn\'t been added there. Per-episode downloads need Sonarr.'**
+  String get tgSonarrRequiredPerEpisode;
+
+  /// No description provided for @tgEpisodesNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t find the selected episodes in Sonarr for \"{title}\" (found {count} episodes in total). Add the series to Sonarr and try again.'**
+  String tgEpisodesNotFound(String title, int count);
+
+  /// No description provided for @tgPartOfCollectionPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the collection '**
+  String get tgPartOfCollectionPrefix;
+
+  /// No description provided for @tgViewingPartOf.
+  ///
+  /// In en, this message translates to:
+  /// **'  ·  you are viewing part {current} of {total}'**
+  String tgViewingPartOf(int current, int total);
+
+  /// No description provided for @tgPartOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Part {number} of {total}'**
+  String tgPartOf(int number, int total);
+
+  /// No description provided for @tgUnknownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown title'**
+  String get tgUnknownTitle;
+
+  /// No description provided for @tgMovieCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie collection'**
+  String get tgMovieCollection;
+
+  /// No description provided for @tgNotReleasedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" is not out yet'**
+  String tgNotReleasedYet(String title);
+
+  /// No description provided for @tgScreensaverModeVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get tgScreensaverModeVideo;
+
+  /// No description provided for @tgScreensaverModeLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get tgScreensaverModeLogo;
+
+  /// No description provided for @tgScreensaverSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Screensaver sound'**
+  String get tgScreensaverSound;
+
+  /// No description provided for @tgScreensaverSoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: screensaver trailers play muted'**
+  String get tgScreensaverSoundSubtitle;
+
+  /// No description provided for @tgScreensaverLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get tgScreensaverLogo;
+
+  /// No description provided for @tgLogoBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Tortugarr badge'**
+  String get tgLogoBadge;
+
+  /// No description provided for @tgLogoVhs.
+  ///
+  /// In en, this message translates to:
+  /// **'Parrot on VHS tapes'**
+  String get tgLogoVhs;
+
+  /// No description provided for @tgLogoSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Parrot on a sign'**
+  String get tgLogoSign;
+
+  /// No description provided for @tgHiddenBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'HIDDEN · {code}'**
+  String tgHiddenBadge(String code);
+
+  /// No description provided for @tgDiskSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Disk space'**
+  String get tgDiskSpace;
+
+  /// No description provided for @tgDiskSpaceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free up space for new downloads'**
+  String get tgDiskSpaceSubtitle;
+
+  /// No description provided for @tgAdultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adult movies (XXX)'**
+  String get tgAdultTitle;
+
+  /// No description provided for @tgAdultSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show or hide the XXX library (PIN)'**
+  String get tgAdultSubtitle;
+
+  /// No description provided for @tgHideForeign.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide foreign content'**
+  String get tgHideForeign;
+
+  /// No description provided for @tgHideForeignOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: Trending and Popular only show English, Norwegian, Swedish, Danish, German and French'**
+  String get tgHideForeignOn;
+
+  /// No description provided for @tgHideForeignOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: Trending and Popular show every language'**
+  String get tgHideForeignOff;
+
+  /// No description provided for @tgShowHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Show what is hidden'**
+  String get tgShowHidden;
+
+  /// No description provided for @tgShowHiddenOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: titles that would be hidden are shown with a red HIDDEN badge'**
+  String get tgShowHiddenOn;
+
+  /// No description provided for @tgShowHiddenOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Troubleshooting: show hidden titles with a red badge instead of removing them'**
+  String get tgShowHiddenOff;
+
+  /// No description provided for @tgShowAllSubLangs.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all subtitle languages'**
+  String get tgShowAllSubLangs;
+
+  /// No description provided for @tgShowAllSubLangsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: the subtitle menu shows every language'**
+  String get tgShowAllSubLangsOn;
+
+  /// No description provided for @tgShowAllSubLangsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: the subtitle menu only shows Norwegian and English'**
+  String get tgShowAllSubLangsOff;
+
+  /// Subtitle of the "Show all subtitle languages" switch when off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: the subtitle menu only shows the languages you picked'**
+  String get tgShowAllSubLangsOffChosen;
+
+  /// Settings entry and dialog title: pick which languages the subtitle menu lists.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitle languages'**
+  String get tgSubtitleLanguages;
+
+  /// Summary under the Subtitle languages entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown in the subtitle menu: {languages}'**
+  String tgSubtitleLanguagesSubtitle(String languages);
+
+  /// No description provided for @tgPreviewSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview sound'**
+  String get tgPreviewSound;
+
+  /// No description provided for @tgPreviewSoundOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: the clip that plays when you stop on a title has sound'**
+  String get tgPreviewSoundOn;
+
+  /// No description provided for @tgPreviewSoundOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: clips play muted while you browse'**
+  String get tgPreviewSoundOff;
+
+  /// No description provided for @tgScreensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Screensaver'**
+  String get tgScreensaver;
+
+  /// No description provided for @tgScreensaverSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video or logo, sound and image'**
+  String get tgScreensaverSubtitle;
+
+  /// No description provided for @tgShowMissingEpisodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Show missing episodes'**
+  String get tgShowMissingEpisodes;
+
+  /// No description provided for @tgShowMissingEpisodesOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: seasons show episodes you don\'t have, ready to download'**
+  String get tgShowMissingEpisodesOn;
+
+  /// No description provided for @tgShowMissingEpisodesOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: seasons only show the episodes you have'**
+  String get tgShowMissingEpisodesOff;
+
+  /// No description provided for @tgShowCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Show movie collections'**
+  String get tgShowCollections;
+
+  /// No description provided for @tgShowCollectionsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: movies show the other films in the collection, including the ones you\'re missing'**
+  String get tgShowCollectionsOn;
+
+  /// No description provided for @tgShowCollectionsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: the movie page doesn\'t show the collection'**
+  String get tgShowCollectionsOff;
+
+  /// No description provided for @tgNoActiveDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'No active downloads.'**
+  String get tgNoActiveDownloads;
+
+  /// No description provided for @tgPickDownloadToOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a download to open the requests.'**
+  String get tgPickDownloadToOpen;
+
+  /// No description provided for @tgRefreshLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh library'**
+  String get tgRefreshLibrary;
+
+  /// No description provided for @tgAskingJellyfinScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking Jellyfin to scan the library …'**
+  String get tgAskingJellyfinScan;
+
+  /// No description provided for @tgHideAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide all'**
+  String get tgHideAll;
+
+  /// No description provided for @tgImporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing'**
+  String get tgImporting;
+
+  /// No description provided for @tgSubsNotManaged.
+  ///
+  /// In en, this message translates to:
+  /// **'This title isn\'t managed by Radarr/Sonarr, so Bazarr can\'t find subtitles for it.'**
+  String get tgSubsNotManaged;
+
+  /// No description provided for @tgBazarrUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach Bazarr. Try again a little later.'**
+  String get tgBazarrUnreachable;
+
+  /// No description provided for @tgSubsFoundNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Found nothing yet. Bazarr tries again automatically every day, or you can pick one yourself.'**
+  String get tgSubsFoundNothing;
+
+  /// No description provided for @tgSubsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found {languages} – it can take a moment before it shows up in the subtitle menu.'**
+  String tgSubsFound(String languages);
+
+  /// No description provided for @tgAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get tgAnd;
+
+  /// No description provided for @tgSubsDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded – it can take a moment before it shows up in the subtitle menu.'**
+  String get tgSubsDownloaded;
+
+  /// No description provided for @tgAskingBazarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking Bazarr …'**
+  String get tgAskingBazarr;
+
+  /// No description provided for @tgHaveAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Have them all'**
+  String get tgHaveAll;
+
+  /// No description provided for @tgSearchAutoNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Search automatically now'**
+  String get tgSearchAutoNow;
+
+  /// No description provided for @tgSearchingUpToMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching … can take up to a minute'**
+  String get tgSearchingUpToMinute;
+
+  /// No description provided for @tgPickYourself.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick yourself'**
+  String get tgPickYourself;
+
+  /// No description provided for @tgAskingProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking the subtitle providers … can take up to a minute'**
+  String get tgAskingProviders;
+
+  /// No description provided for @tgNoProviderSubs.
+  ///
+  /// In en, this message translates to:
+  /// **'No provider has subtitles for this yet.'**
+  String get tgNoProviderSubs;
+
+  /// No description provided for @tgLangHas.
+  ///
+  /// In en, this message translates to:
+  /// **'{language}: available'**
+  String tgLangHas(String language);
+
+  /// No description provided for @tgLangMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'{language}: missing'**
+  String tgLangMissing(String language);
+
+  /// No description provided for @tgNoReleaseName.
+  ///
+  /// In en, this message translates to:
+  /// **'(no release name)'**
+  String get tgNoReleaseName;
+
+  /// No description provided for @tgHearingImpaired.
+  ///
+  /// In en, this message translates to:
+  /// **'{provider} · hearing impaired'**
+  String tgHearingImpaired(String provider);
+
+  /// No description provided for @tgLangNorwegian.
+  ///
+  /// In en, this message translates to:
+  /// **'Norwegian'**
+  String get tgLangNorwegian;
+
+  /// No description provided for @tgLangEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get tgLangEnglish;
+
+  /// No description provided for @tgBazarrUnknownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bazarr doesn\'t know this title yet'**
+  String get tgBazarrUnknownTitle;
+
+  /// No description provided for @tgBazarrError.
+  ///
+  /// In en, this message translates to:
+  /// **'Bazarr answered with an error (HTTP {code})'**
+  String tgBazarrError(int code);
+
+  /// No description provided for @tgLowSpaceSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Low space on {drive}: ({free} free). The download may stop — tell whoever runs the server.'**
+  String tgLowSpaceSnack(String drive, String free);
+
+  /// No description provided for @tgNoQbitForSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach qBittorrent to check the space'**
+  String get tgNoQbitForSpace;
+
+  /// No description provided for @tgNotEnoughSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough space'**
+  String get tgNotEnoughSpace;
+
+  /// No description provided for @tgDriveHasFree.
+  ///
+  /// In en, this message translates to:
+  /// **'{drive}: has {free} free'**
+  String tgDriveHasFree(String drive, String free);
+
+  /// No description provided for @tgCopyInDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy in Downloads · already in the library'**
+  String get tgCopyInDownloads;
+
+  /// No description provided for @tgLastWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Last watched {ago}'**
+  String tgLastWatched(String ago);
+
+  /// No description provided for @tgNeverWatchedAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Never watched · added {ago}'**
+  String tgNeverWatchedAdded(String ago);
+
+  /// No description provided for @tgNeverWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Never watched'**
+  String get tgNeverWatched;
+
+  /// No description provided for @tgNothingSafeToDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Found nothing on {drive}: that can be deleted safely (everything is recently added, recently watched or a favourite).'**
+  String tgNothingSafeToDelete(String drive);
+
+  /// No description provided for @tgDeleteTitlesQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Delete 1 title?} other{Delete {count} titles?}}'**
+  String tgDeleteTitlesQuestion(int count);
+
+  /// No description provided for @tgDeletedForGood.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} will be deleted for good. This can\'t be undone.'**
+  String tgDeletedForGood(String size);
+
+  /// No description provided for @tgYesDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, delete'**
+  String get tgYesDelete;
+
+  /// No description provided for @tgDeletingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting {done}/{total} …'**
+  String tgDeletingProgress(int done, int total);
+
+  /// No description provided for @tgNowHasFree.
+  ///
+  /// In en, this message translates to:
+  /// **' · {drive}: now has {free} free'**
+  String tgNowHasFree(String drive, String free);
+
+  /// No description provided for @tgDeletedTitles.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Deleted 1 title} other{Deleted {count} titles}}{extra}'**
+  String tgDeletedTitles(int count, String extra);
+
+  /// No description provided for @tgDeletedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {count}, failed: {failed}{extra}'**
+  String tgDeletedFailed(int count, String failed, String extra);
+
+  /// No description provided for @tgFreeGb.
+  ///
+  /// In en, this message translates to:
+  /// **'Free {gb} GB'**
+  String tgFreeGb(int gb);
+
+  /// No description provided for @tgDownloadCopies.
+  ///
+  /// In en, this message translates to:
+  /// **'Download copies'**
+  String get tgDownloadCopies;
+
+  /// No description provided for @tgLookingForUnwatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for what hasn\'t been watched in a long time …'**
+  String get tgLookingForUnwatched;
+
+  /// No description provided for @tgSuggestionEnough.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {size} · enough space ✓'**
+  String tgSuggestionEnough(String size);
+
+  /// No description provided for @tgSuggestionOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {size} of {target} needed'**
+  String tgSuggestionOf(String size, String target);
+
+  /// No description provided for @tgPickToSayNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Select one to say no — the next suggestion comes in automatically.'**
+  String get tgPickToSayNo;
+
+  /// No description provided for @tgOtherCandidates.
+  ///
+  /// In en, this message translates to:
+  /// **'Other candidates'**
+  String get tgOtherCandidates;
+
+  /// No description provided for @tgDownloadAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Download anyway'**
+  String get tgDownloadAnyway;
+
+  /// No description provided for @tgDeleteCountSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} ({size})'**
+  String tgDeleteCountSize(int count, String size);
+
+  /// No description provided for @tgDriveHasFreeDot.
+  ///
+  /// In en, this message translates to:
+  /// **'{drive}: has {free} free.'**
+  String tgDriveHasFreeDot(String drive, String free);
+
+  /// No description provided for @tgFileDoubleSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'The file is {size} and takes twice the space (download + copy in the library), plus {buffer} in reserve.'**
+  String tgFileDoubleSpace(String size, String buffer);
+
+  /// No description provided for @tgFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'The file is {size}, plus {buffer} in reserve.'**
+  String tgFileSize(String size, String buffer);
+
+  /// No description provided for @tgPendingNeeds.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads in progress need {size} more.'**
+  String tgPendingNeeds(String size);
+
+  /// No description provided for @tgShortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Short by {size}.'**
+  String tgShortBy(String size);
+
+  /// No description provided for @tgOnlyEarlyFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Only found files published before the movie came out digitally ({count}) — they are almost always fake.'**
+  String tgOnlyEarlyFiles(int count);
+
+  /// No description provided for @tgNoDigitalDate.
+  ///
+  /// In en, this message translates to:
+  /// **'has no digital release date yet'**
+  String get tgNoDigitalDate;
+
+  /// No description provided for @tgDigitalOn.
+  ///
+  /// In en, this message translates to:
+  /// **'comes out digitally on {date}'**
+  String tgDigitalOn(String date);
+
+  /// No description provided for @tgNotOutDigitally.
+  ///
+  /// In en, this message translates to:
+  /// **'Not out digitally yet'**
+  String get tgNotOutDigitally;
+
+  /// No description provided for @tgTitleWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" {when}.'**
+  String tgTitleWhen(String title, String when);
+
+  /// No description provided for @tgNotOutExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'What exists now is usually a cinema recording or another film with the same name. Sometimes an early copy exists in lower quality, often with burned-in subtitles. \"Show files anyway\" shows what exists. Radarr fetches the proper version by itself when it comes out.'**
+  String get tgNotOutExplain;
+
+  /// No description provided for @tgShowFilesAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Show files anyway'**
+  String get tgShowFilesAnyway;
+
+  /// No description provided for @tgPickSeasonsEpisodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose seasons and episodes'**
+  String get tgPickSeasonsEpisodes;
+
+  /// No description provided for @tgNoEpisodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{season}: no episode info'**
+  String tgNoEpisodeInfo(String season);
+
+  /// No description provided for @tgAppliesAllDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to every device that uses this account'**
+  String get tgAppliesAllDevices;
+
+  /// No description provided for @tgNoXxxLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Found no library called XXX.'**
+  String get tgNoXxxLibrary;
+
+  /// No description provided for @tgSearchingEachWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching each word on its own … (can take half a minute)'**
+  String get tgSearchingEachWord;
+
+  /// No description provided for @tgSentToQbit.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent \"{title}\" ({size}) to qBittorrent'**
+  String tgSentToQbit(String title, String size);
+
+  /// No description provided for @tgDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Download failed: {error}'**
+  String tgDownloadFailed(String error);
+
+  /// No description provided for @tgXxxNoVideoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" had no video file and has been removed.'**
+  String tgXxxNoVideoRemoved(String title);
+
+  /// No description provided for @tgXxxNoVideoNotRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" had no video file and was NOT removed.'**
+  String tgXxxNoVideoNotRemoved(String title);
+
+  /// No description provided for @tgSearchNewXxx.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for new XXX'**
+  String get tgSearchNewXxx;
+
+  /// No description provided for @tgXxxSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, studio …'**
+  String get tgXxxSearchHint;
+
+  /// No description provided for @tgChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking …'**
+  String get tgChecking;
+
+  /// No description provided for @tgXxxVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible now. XXX shows in the libraries, search and on the home screen.'**
+  String get tgXxxVisible;
+
+  /// No description provided for @tgXxxHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden. XXX shows nowhere in the app.'**
+  String get tgXxxHidden;
+
+  /// No description provided for @tgShowWithPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Show (PIN)'**
+  String get tgShowWithPin;
+
+  /// No description provided for @tgChangePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get tgChangePin;
+
+  /// No description provided for @tgNoLibraryList.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t get the library list (HTTP {code})'**
+  String tgNoLibraryList(String code);
+
+  /// No description provided for @tgNoUserSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t get the user settings (HTTP {code})'**
+  String tgNoUserSettings(String code);
+
+  /// No description provided for @tgJellyfinRejectedChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Jellyfin rejected the change (HTTP {code})'**
+  String tgJellyfinRejectedChange(String code);
+
+  /// No description provided for @tgDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting failed (HTTP {code})'**
+  String tgDeleteFailed(String code);
+
+  /// No description provided for @tgXxxAddFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t add \"{title}\" to qBittorrent'**
+  String tgXxxAddFailed(String title);
+
+  /// No description provided for @tgSeasonEpisodeLower.
+  ///
+  /// In en, this message translates to:
+  /// **'season {season}, episode {episode}'**
+  String tgSeasonEpisodeLower(int season, int episode);
+
+  /// No description provided for @tgSearchInSeerr.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in Seerr'**
+  String get tgSearchInSeerr;
+
+  /// No description provided for @tgSeerrSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for movies and series (e.g. \"Lost S02E05\")'**
+  String get tgSeerrSearchHint;
+
+  /// No description provided for @tgMissingInThisSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing in this season'**
+  String get tgMissingInThisSeason;
+
+  /// No description provided for @tgMissingSeasonsOpenSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Missing season} other{Missing seasons}} {list} - open the series to see all seasons'**
+  String tgMissingSeasonsOpenSeries(int count, String list);
+
+  /// No description provided for @tgProjectOnGitHub.
+  ///
+  /// In en, this message translates to:
+  /// **'Tortugarr on GitHub'**
+  String get tgProjectOnGitHub;
+
+  /// No description provided for @tgProjectOnGitHubSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code, releases and issues'**
+  String get tgProjectOnGitHubSubtitle;
+
+  /// No description provided for @tgBuiltOnMoonfinCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Tortugarr is built on Moonfin (GPL), by the Moonfin developers.'**
+  String get tgBuiltOnMoonfinCredit;
+
+  /// No description provided for @tgCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get tgCredits;
+
+  /// No description provided for @tgCreditsThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'With humble thanks: without these projects and the people behind them, Tortugarr would not exist.'**
+  String get tgCreditsThanks;
+
+  /// No description provided for @tgAboutProjectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Behind the Sails'**
+  String get tgAboutProjectTitle;
+
+  /// No description provided for @tgAboutProjectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.'**
+  String get tgAboutProjectBody;
+
+  /// No description provided for @tgCreditMoonfin.
+  ///
+  /// In en, this message translates to:
+  /// **'The app Tortugarr is built on (GPL)'**
+  String get tgCreditMoonfin;
+
+  /// No description provided for @tgCreditJellyfin.
+  ///
+  /// In en, this message translates to:
+  /// **'Media server'**
+  String get tgCreditJellyfin;
+
+  /// No description provided for @tgCreditSeerr.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovery and requests'**
+  String get tgCreditSeerr;
+
+  /// No description provided for @tgCreditRadarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get tgCreditRadarr;
+
+  /// No description provided for @tgCreditSonarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Series'**
+  String get tgCreditSonarr;
+
+  /// No description provided for @tgCreditProwlarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Indexer manager'**
+  String get tgCreditProwlarr;
+
+  /// No description provided for @tgCreditBazarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitles'**
+  String get tgCreditBazarr;
+
+  /// No description provided for @tgCreditFlareSolverr.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloudflare helper for indexers'**
+  String get tgCreditFlareSolverr;
+
+  /// No description provided for @tgCreditQbittorrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Download client, the installer\'s default'**
+  String get tgCreditQbittorrent;
+
+  /// No description provided for @tgCreditTmdb.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie and series data, posters and artwork'**
+  String get tgCreditTmdb;
+
+  /// No description provided for @tgCreditOpenSubtitles.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitles, fetched through Bazarr'**
+  String get tgCreditOpenSubtitles;
+
+  /// No description provided for @tgTmdbNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This product uses the TMDB API but is not endorsed or certified by TMDB.'**
+  String get tgTmdbNotice;
+
+  /// No description provided for @tgLoadingLogoSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading logo size'**
+  String get tgLoadingLogoSize;
+
+  /// No description provided for @tgLoadingLogoSizeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The spinning logo while a video loads'**
+  String get tgLoadingLogoSizeSubtitle;
+
+  /// Settings entry: which original languages the Trending/Popular rows keep
+  ///
+  /// In en, this message translates to:
+  /// **'Languages in Trending and Popular'**
+  String get tgDiscoveryLanguages;
+
+  /// Subtitle listing the picked languages
+  ///
+  /// In en, this message translates to:
+  /// **'Shown: {languages}'**
+  String tgDiscoveryLanguagesSubtitle(String languages);
+
+  /// Subtitle of the foreign-content filter when on
+  ///
+  /// In en, this message translates to:
+  /// **'On: Trending and Popular only show the languages you picked'**
+  String get tgHideForeignOnChosen;
+
+  /// Settings toggle: language badges on discovery titles
+  ///
+  /// In en, this message translates to:
+  /// **'Show language badges'**
+  String get tgShowLanguageBadges;
+
+  /// Subtitle when language badges are on
+  ///
+  /// In en, this message translates to:
+  /// **'On: titles show their language (EN, NO, SE …)'**
+  String get tgShowLanguageBadgesOn;
+
+  /// Subtitle when language badges are off
+  ///
+  /// In en, this message translates to:
+  /// **'Off: no language badges on the titles'**
+  String get tgShowLanguageBadgesOff;
+
+  /// No description provided for @tgDeleteMovieMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the movie \"{title}\" and its file?'**
+  String tgDeleteMovieMessage(Object title);
+
+  /// No description provided for @tgDeleteSeriesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the WHOLE series \"{title}\": every season and episode?'**
+  String tgDeleteSeriesMessage(Object title);
+
+  /// No description provided for @tgDeleteSeasonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete season {season} of \"{title}\" and all its episodes?'**
+  String tgDeleteSeasonMessage(int season, Object title);
+
+  /// No description provided for @tgDeleteEpisodeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete episode {episode} of \"{title}\"?'**
+  String tgDeleteEpisodeMessage(Object episode, Object title);
+
+  /// No description provided for @tgTitleGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This title is no longer in the library.'**
+  String get tgTitleGone;
+
+  /// No description provided for @tgTitleGoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It was deleted or moved on the server.'**
+  String get tgTitleGoneBody;
+
+  /// No description provided for @tgCouldNotLoadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load this title. Check that the server is reachable.'**
+  String get tgCouldNotLoadTitle;
+
+  /// No description provided for @tgShowSdReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Show SD releases'**
+  String get tgShowSdReleases;
+
+  /// No description provided for @tgShowSdReleasesOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: low-quality (SD) files are listed too, marked as such'**
+  String get tgShowSdReleasesOn;
+
+  /// No description provided for @tgShowSdReleasesOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: only 720p and better, or a good source'**
+  String get tgShowSdReleasesOff;
+
+  /// No description provided for @tgOnlySdFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.'**
+  String tgOnlySdFound(int count);
+
+  /// No description provided for @tgNothingKeptReasons.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} found, none usable: {reasons}'**
+  String tgNothingKeptReasons(int count, Object reasons);
+
+  /// No description provided for @tgDownloadsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads'**
+  String get tgDownloadsButton;
+
+  /// No description provided for @tgAlwaysShowDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Always show Downloads'**
+  String get tgAlwaysShowDownloads;
+
+  /// No description provided for @tgAlwaysShowDownloadsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: the Downloads button is only in the menu while something downloads'**
+  String get tgAlwaysShowDownloadsSubtitle;
+
+  /// No description provided for @tgIndexersUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'{names} unavailable right now: results from the other indexers only.'**
+  String tgIndexersUnavailable(Object names);
+
+  /// No description provided for @tgAdultSearchInMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'XXX search in the menu'**
+  String get tgAdultSearchInMenu;
+
+  /// No description provided for @tgAdultSearchButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Search XXX'**
+  String get tgAdultSearchButton;
 }
 
 class _AppLocalizationsDelegate

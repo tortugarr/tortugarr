@@ -47,11 +47,9 @@ class SeerrRowConfig {
         SeerrRowConfig(type: SeerrRowType.popularMovies, order: 4),
         SeerrRowConfig(type: SeerrRowType.movieGenres, order: 5),
         SeerrRowConfig(type: SeerrRowType.upcomingMovies, order: 6),
-        SeerrRowConfig(type: SeerrRowType.studios, order: 7),
-        SeerrRowConfig(type: SeerrRowType.popularSeries, order: 8),
-        SeerrRowConfig(type: SeerrRowType.seriesGenres, order: 9),
-        SeerrRowConfig(type: SeerrRowType.upcomingSeries, order: 10),
-        SeerrRowConfig(type: SeerrRowType.networks, order: 11),
+        SeerrRowConfig(type: SeerrRowType.popularSeries, order: 7),
+        SeerrRowConfig(type: SeerrRowType.seriesGenres, order: 8),
+        SeerrRowConfig(type: SeerrRowType.upcomingSeries, order: 9),
       ];
 
   static List<SeerrRowConfig> fromJsonString(String jsonString) {

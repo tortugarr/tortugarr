@@ -38,13 +38,13 @@ function Get-AppVersion {
 
 $flutterExe = Get-FlutterCommand
 $appVersion = Get-AppVersion
-$apkSource = Join-Path $repoRoot "build\app\outputs\flutter-apk\app-release.apk"
-$apkOutput = Join-Path $repoRoot "Moonfin_Android_v$appVersion.apk"
+$apkSource = Join-Path $repoRoot "build\app\outputs\flutter-apk\app-androidTv-release.apk"
+$apkOutput = Join-Path $repoRoot "Tortugarr_Android_v$appVersion.apk"
 $checkerScript = Join-Path $repoRoot "scripts\check-android-16kb-pages.sh"
 
 Push-Location $repoRoot
 try {
-  Write-Host "Moonfin version: $appVersion"
+  Write-Host "Tortugarr version: $appVersion"
 
   Write-Host "Cleaning previous Flutter outputs..."
   & $flutterExe clean
@@ -58,10 +58,34 @@ try {
     throw "flutter pub get failed with exit code $LASTEXITCODE"
   }
 
-  Write-Host "Building Android release APK (arm64-v8a only)..."
-  & $flutterExe build apk --release --target-platform android-arm64
-  if ($LASTEXITCODE -ne 0) {
-    throw "flutter build apk failed with exit code $LASTEXITCODE"
+  Write-Host "Building Tortugarr Android TV release APK (armeabi-v7a)..."
+  $maxAttempts = 3
+  $attempt = 1
+  $buildSuccess = $false
+
+  while (-not $buildSuccess -and $attempt -le $maxAttempts) {
+    & $flutterExe build apk --release --flavor androidTv --target-platform android-arm
+    if ($LASTEXITCODE -eq 0) {
+      $buildSuccess = $true
+    } else {
+      if ($attempt -lt $maxAttempts) {
+        Write-Host "Build failed (attempt $attempt/$maxAttempts); clearing pdfium cache and retrying..."
+        # Clear pdfium cache which sometimes has corrupted downloads
+        $pdfiumCachePaths = @(
+          (Join-Path $repoRoot "build\android\*\release\pdfium"),
+          (Join-Path $repoRoot "build\android\*\release\.lib\*")
+        )
+        foreach ($path in $pdfiumCachePaths) {
+          Get-ChildItem -Path $path -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        }
+        Start-Sleep -Seconds ($attempt * 10)
+      }
+      $attempt++
+    }
+  }
+
+  if (-not $buildSuccess) {
+    throw "flutter build apk failed after $maxAttempts attempts"
   }
 
   if (-not (Test-Path $apkSource)) {

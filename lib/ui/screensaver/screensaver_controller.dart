@@ -124,10 +124,18 @@ class ScreensaverController {
     _onStateChanged();
   }
 
+  /// Blocked for a reason other than a home-screen trailer.
+  bool get _blockedBesidesTrailer =>
+      !_enabledCache || _activityPaused || _playbackActive || _streamPlaying;
+
   void _onStateChanged() {
     if (!PlatformDetection.isTV) return;
     if (!_armed) {
       _idleTimer?.cancel();
+      // A media bar trailer that starts underneath must not close the
+      // screensaver: that is how a random trailer used to take over the
+      // screen, with sound, a second after the screensaver came up.
+      if (visible.value && !_blockedBesidesTrailer) return;
       if (visible.value) {
         visible.value = false;
       }
