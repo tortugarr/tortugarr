@@ -1,7 +1,7 @@
 name: moonfin
 description: "Tortugarr - your own streaming service: an app for Android TV, phones and tablets"
 publish_to: 'none'
-version: 4.20.0+2000031
+version: 4.20.0+2000032
 
 moonfin:
   android_tv_version: 4.20.0
