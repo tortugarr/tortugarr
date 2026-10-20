@@ -8,6 +8,7 @@ import '../../navigation/destinations.dart';
 import 'admin_nav.dart';
 import 'providers/admin_websocket_handler.dart';
 import 'widgets/admin_settings_search.dart';
+import 'widgets/admin_tv_keys.dart';
 import 'widgets/admin_unsaved_bar.dart';
 import '../../../util/platform_detection.dart';
 import '../../widgets/focus/tv_focus_ring.dart';
@@ -100,7 +101,7 @@ class AdminShellScreen extends StatelessWidget {
     // The admin pages are built for touch; make focus visible on TV.
     return Theme(
       data: TvFocusRing.theme(theme),
-      child: TvFocusRing(child: shell),
+      child: TvFocusRing(child: AdminTvKeys(child: shell)),
     );
   }
 
