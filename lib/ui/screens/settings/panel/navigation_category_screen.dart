@@ -202,6 +202,13 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       icon: Icons.favorite,
                       onChanged: _pushPersonalizationSync,
                     ),
+                  if (PlatformDetection.isTV)
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.alwaysShowDownloadsButton,
+                      title: appL10n().tgAlwaysShowDownloads,
+                      subtitle: appL10n().tgAlwaysShowDownloadsSubtitle,
+                      icon: Icons.downloading_rounded,
+                    ),
                   if (!onBar.contains(BottomNavTab.liveTv))
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.liveTv),
@@ -219,8 +226,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       subtitle: l10n.settingsShowLibrariesButtonInNavigation,
                       icon: Icons.video_library,
                       onChanged: _pushPersonalizationSync,
-                    ),
-                  SwitchPreferenceTile(
+                    ),                  SwitchPreferenceTile(
                     preference: UserPreferences.showSyncPlayButton,
                     title: l10n.settingsSyncplayButton,
                     subtitle: l10n.settingsSyncplayButtonSubtitle,

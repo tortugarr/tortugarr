@@ -10,6 +10,7 @@ import '../data/models/aggregated_item.dart';
 import '../data/models/series_track_preference.dart';
 import '../playback/audio_capability_profile.dart';
 import '../util/device_performance.dart';
+import '../util/device_memory.dart';
 import '../util/idiom/app_ui_idiom.dart';
 import '../util/language_matching.dart';
 import '../util/platform_detection.dart';
@@ -2080,6 +2081,19 @@ class UserPreferences extends ChangeNotifier {
     values: ScreensaverMode.values,
   );
 
+  /// Sound for the screensaver's trailer videos. Off by default: an idle TV
+  /// should not suddenly start making noise.
+  static final screensaverAudio = Preference(
+    key: 'pref_screensaver_audio',
+    defaultValue: false,
+  );
+
+  static final screensaverLogoImage = EnumPreference(
+    key: 'pref_screensaver_logo_image',
+    defaultValue: ScreensaverLogoImage.badge,
+    values: ScreensaverLogoImage.values,
+  );
+
   static final screensaverTimeout = EnumPreference(
     key: 'pref_screensaver_timeout',
     defaultValue: ScreensaverTimeout.m5,
@@ -2089,6 +2103,27 @@ class UserPreferences extends ChangeNotifier {
   static final screensaverDimming = Preference(
     key: 'pref_screensaver_dimming',
     defaultValue: 30,
+  );
+
+
+  /// TV: show the Downloads button in the menu all the time, not only while
+  /// something downloads.
+  static final alwaysShowDownloadsButton = Preference(
+    key: 'pref_always_show_downloads_button',
+    defaultValue: false,
+  );
+
+  /// A "Search XXX" button in the menu while the adult library is shown.
+  static final adultSearchInMenu = Preference(
+    key: 'pref_adult_search_in_menu',
+    defaultValue: false,
+  );
+
+  /// Keep releases below the quality minimum (SD) in the release lists. Only
+  /// that rule is relaxed; cam copies, executables and the rest stay out.
+  static final showSdReleases = Preference(
+    key: 'pref_show_sd_releases',
+    defaultValue: false,
   );
 
   static final screensaverClockMode = EnumPreference(
@@ -2783,9 +2818,11 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: 10000,
   );
 
+  // Off by default on low-RAM devices: each trailer starts a WebView or a
+  // second player next to the home screen.
   static final mediaBarTrailerPreview = Preference(
     key: 'mediaBarTrailerPreview',
-    defaultValue: true,
+    defaultValue: !DeviceMemory.isConstrained,
   );
 
   static final mediaBarTrailerAudio = Preference(

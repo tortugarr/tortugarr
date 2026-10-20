@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../preference/seerr_preferences.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1580,10 +1581,14 @@ class _LiveTvPlayerScreenState extends State<LiveTvPlayerScreen>
 
   void _showSubtitleSelector() {
     final l10n = AppLocalizations.of(context);
-    final streams = _streamsOfType('Subtitle');
+    final current = _manager.subtitleStreamIndex;
+    final streams = filterSubtitleMenuStreams(
+      _streamsOfType('Subtitle'),
+      showAll: showAllSubtitleLanguagesSetting(),
+      languages: subtitleMenuLanguagesSetting(),
+    );
     final captions = _captionTracks;
 
-    final current = _manager.subtitleStreamIndex;
     final selectedStream = current == null || current < 0
         ? -1
         : streams.indexWhere((s) => s['Index'] == current);

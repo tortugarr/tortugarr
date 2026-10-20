@@ -10,7 +10,7 @@ class AppLocalizationsSw extends AppLocalizations {
   AppLocalizationsSw([String locale = 'sw']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -138,7 +138,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin toleo $version';
+    return 'Tortugarr toleo $version';
   }
 
   @override
@@ -190,7 +190,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin haikuweza kufikia ufunguo wa mfumo wako. Kuingia kunaweza kuendelea, lakini hifadhi salama ya tokeni huenda isipatikane hadi ufunguo ufunguliwe.';
+      'Tortugarr haikuweza kufikia ufunguo wa mfumo wako. Kuingia kunaweza kuendelea, lakini hifadhi salama ya tokeni huenda isipatikane hadi ufunguo ufunguliwe.';
 
   @override
   String get ok => 'Sawa';
@@ -203,7 +203,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Klasiki ni mpangilio asili wa Moonfin ulio katikati. Kisasa ni mpangilio wa kisinema unaojirekebisha.';
+      'Klasiki ni mpangilio asili wa Tortugarr ulio katikati. Kisasa ni mpangilio wa kisinema unaojirekebisha.';
 
   @override
   String get detailScreenStyleMoonfin => 'Klasiki';
@@ -443,10 +443,10 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Tumia algoriti ya maktaba ya ndani ya Moonfin Recommends au Vipimo vya Ufanano vya TMDb mtandaoni. Kumbuka: Mapendekezo ya mtandaoni yanahitaji muunganisho wa Seerr.';
+      'Tumia algoriti ya maktaba ya ndani ya Tortugarr Recommends au Vipimo vya Ufanano vya TMDb mtandaoni. Kumbuka: Mapendekezo ya mtandaoni yanahitaji muunganisho wa Seerr.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -460,7 +460,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Punguza mapendekezo ya Moonfin Recommends kulingana na ukadiriaji wa wazazi wa maudhui lengwa';
+      'Punguza mapendekezo ya Tortugarr Recommends kulingana na ukadiriaji wa wazazi wa maudhui lengwa';
 
   @override
   String get interfaceStyle => 'Mtindo wa Kiolesura';
@@ -561,14 +561,14 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      'Badili kati ya Moonfin na Neon Pulse bila kuanzisha upya programu';
+      'Badili kati ya Tortugarr na Neon Pulse bila kuanzisha upya programu';
 
   @override
   String get customThemeTitle => 'Mandhari Maalum';
 
   @override
   String get customThemeSubtitle =>
-      'Mandhari maalum hubadilisha vipengele vya kuonekana katika Moonfin nzima. Chagua mojawapo ya chaguo hizi ili kuendana na mtindo wako.';
+      'Mandhari maalum hubadilisha vipengele vya kuonekana katika Tortugarr nzima. Chagua mojawapo ya chaguo hizi ili kuendana na mtindo wako.';
 
   @override
   String get keyboardPreferSystemIme => 'Pendelea kibodi ya mfumo';
@@ -588,11 +588,11 @@ class AppLocalizationsSw extends AppLocalizations {
       'Let a connected game controller move focus and select items';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Mwonekano wa sasa wa Moonfin nyote mmependa';
+      'Mwonekano wa sasa wa Tortugarr nyote mmependa';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -668,7 +668,7 @@ class AppLocalizationsSw extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Ungependa kufunga Moonfin?';
+  String get exitApp => 'Ungependa kufunga Tortugarr?';
 
   @override
   String get exitAppConfirmation => 'Je, una uhakika unataka kuondoka?';
@@ -1857,7 +1857,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shuffleAllMusic => 'Changanya muziki wote';
 
   @override
-  String get carSignInPrompt => 'Ingia kwenye Moonfin kwenye simu yako';
+  String get carSignInPrompt => 'Ingia kwenye Tortugarr kwenye simu yako';
 
   @override
   String get carServerUnreachable => 'Haiwezi kufikia seva yako';
@@ -4191,7 +4191,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Haijawekwa. Moonfin itajaribu mpv.conf chaguo-msingi katika folda za programu/data.';
+      'Haijawekwa. Tortugarr itajaribu mpv.conf chaguo-msingi katika folda za programu/data.';
 
   @override
   String get selectMpvConf => 'Chagua mpv.conf';
@@ -4491,7 +4491,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Vipakuliwa/Moonfin — inaonekana kwa programu zingine';
+      'Vipakuliwa/Tortugarr — inaonekana kwa programu zingine';
 
   @override
   String get dangerZone => 'Eneo la Hatari';
@@ -4522,7 +4522,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Midia iliyopakuliwa itahifadhiwa kwenye Vipakuliwa/Moonfin kwenye kifaa chako. Faili hizi zitaonekana kwa programu zingine kama vile ghala yako au kicheza muziki.\n\nVipakuliwa vilivyopo vitasalia katika eneo vilipo sasa.';
+      'Midia iliyopakuliwa itahifadhiwa kwenye Vipakuliwa/Tortugarr kwenye kifaa chako. Faili hizi zitaonekana kwa programu zingine kama vile ghala yako au kicheza muziki.\n\nVipakuliwa vilivyopo vitasalia katika eneo vilipo sasa.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4777,7 +4777,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Moonfin ili mabadiliko yaanze kutumika.';
+      'Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Tortugarr ili mabadiliko yaanze kutumika.';
 
   @override
   String get showInNavigation => 'Onyesha katika urambazaji';
@@ -4839,7 +4839,7 @@ class AppLocalizationsSw extends AppLocalizations {
       'Chagua kati ya mitindo mbalimbali ya upau wa midia, au zima upau wa midia';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -5473,7 +5473,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get sourceCode => 'Msimbo wa Chanzo';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Angalia Sasisho Sasa';
@@ -5652,7 +5652,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Cheza katika Moonfin';
+  String get playInMoonfin => 'Cheza katika Tortugarr';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5698,7 +5698,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Kipengee hakipatikani kwenye maktaba yako ya Moonfin';
+      'Kipengee hakipatikani kwenye maktaba yako ya Tortugarr';
 
   @override
   String get errorSearchingLibrary => 'Hitilafu katika kutafuta maktaba';
@@ -7693,7 +7693,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Kuwasha upya seva kunaendelea, tafadhali anzisha upya Moonfin';
+      'Kuwasha upya seva kunaendelea, tafadhali anzisha upya Tortugarr';
 
   @override
   String get adminActiveSessions => 'Vipindi Amilifu';
@@ -11462,7 +11462,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Moonfin ili mabadiliko yaanze kutumika.';
+      'Geuza mwonekano wa ukurasa wa nyumbani kwa kila maktaba. Anzisha tena Tortugarr ili mabadiliko yaanze kutumika.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11584,7 +11584,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Jiunge na Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Msaada Moonfin';
+  String get settingsSupportMoonfin => 'Msaada Tortugarr';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Mchangie msanidi kahawa';
@@ -11604,14 +11604,14 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Jinsi Moonfin hushughulikia data yako';
+      'Jinsi Tortugarr hushughulikia data yako';
 
   @override
   String get settingsCheckForUpdates => 'Angalia Usasisho';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Angalia toleo jipya zaidi la Moonfin';
+      'Angalia toleo jipya zaidi la Tortugarr';
 
   @override
   String get settingsBoth => 'Zote mbili';
@@ -12053,7 +12053,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Hizi ni mandhari zilizopakuliwa kutoka kwa programu-jalizi ya Moonfin kwa seva ya sasa. Kufuta huondoa nakala hii ya ndani pekee.';
+      'Hizi ni mandhari zilizopakuliwa kutoka kwa programu-jalizi ya Tortugarr kwa seva ya sasa. Kufuta huondoa nakala hii ya ndani pekee.';
 
   @override
   String get savedThemesEmpty =>
@@ -12076,7 +12076,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Fungua Kihariri cha Mandhari cha Moonfin kwenye kivinjari chako';
+      'Fungua Kihariri cha Mandhari cha Tortugarr kwenye kivinjari chako';
 
   @override
   String get homeScreen => 'Skrini ya Nyumbani';
@@ -12396,7 +12396,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get webDiagnostics => 'Uchunguzi wa wavuti';
 
   @override
-  String get webDiagnosticsTitle => 'Uchunguzi wa Wavuti wa Moonfin';
+  String get webDiagnosticsTitle => 'Uchunguzi wa Wavuti wa Tortugarr';
 
   @override
   String get webDiagnosticsIntro =>
@@ -12412,11 +12412,11 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin imetambua ukurasa wa HTTPS unaojaribu kupiga simu kwa URL ya seva ya HTTP. Vivinjari huzuia ombi hili kabla halijafika kwenye seva yako.';
+      'Tortugarr imetambua ukurasa wa HTTPS unaojaribu kupiga simu kwa URL ya seva ya HTTP. Vivinjari huzuia ombi hili kabla halijafika kwenye seva yako.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin imetambua hitilafu ya ombi katika kiwango cha kivinjari ambayo mara nyingi husababishwa na vichwa vya CORS au preflight vinavyokosekana kwenye seva ya maudhui.';
+      'Tortugarr imetambua hitilafu ya ombi katika kiwango cha kivinjari ambayo mara nyingi husababishwa na vichwa vya CORS au preflight vinavyokosekana kwenye seva ya maudhui.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -12465,7 +12465,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Suluhisho: toa seva yako ya maudhui au ncha ya proksi kupitia HTTPS, au pakia Moonfin kupitia HTTP kwenye mitandao ya ndani inayoaminika pekee.';
+      'Suluhisho: toa seva yako ya maudhui au ncha ya proksi kupitia HTTPS, au pakia Tortugarr kupitia HTTP kwenye mitandao ya ndani inayoaminika pekee.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -14168,7 +14168,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller ni kionyeshi cha kisasa cha GPU cha Flutter kwa uhuishaji laini na mkwaruzo mdogo. Kwenye baadhi ya visanduku vya TV na GPU za zamani inaweza kusababisha hitilafu au video nyeusi; izime ikiwa unaona hayo. Kiotomatiki huchagua chaguo-msingi bora kwa kifaa chako. Anzisha upya Moonfin ili kutumia.';
+      'Impeller ni kionyeshi cha kisasa cha GPU cha Flutter kwa uhuishaji laini na mkwaruzo mdogo. Kwenye baadhi ya visanduku vya TV na GPU za zamani inaweza kusababisha hitilafu au video nyeusi; izime ikiwa unaona hayo. Kiotomatiki huchagua chaguo-msingi bora kwa kifaa chako. Anzisha upya Tortugarr ili kutumia.';
 
   @override
   String get impellerAuto => 'Kiotomatiki';
@@ -14184,7 +14184,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin inahitaji kuanzishwa upya ili kubadilisha injini ya uonyeshaji. Funga programu sasa, kisha uifungue tena ili kutumia.';
+      'Tortugarr inahitaji kuanzishwa upya ili kubadilisha injini ya uonyeshaji. Funga programu sasa, kisha uifungue tena ili kutumia.';
 
   @override
   String get impellerCloseNow => 'Funga programu sasa';
@@ -15273,4 +15273,1052 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Length';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Haipo';
+
+  @override
+  String get tgComing => 'Inakuja';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Inakuja $date';
+  }
+
+  @override
+  String get tgDownloading => 'Inapakuliwa';
+
+  @override
+  String get tgReadySoon => 'Itakuwa tayari hivi karibuni';
+
+  @override
+  String get tgRequested => 'Imeombwa';
+
+  @override
+  String get tgClose => 'Funga';
+
+  @override
+  String get tgCancel => 'Ghairi';
+
+  @override
+  String get tgBack => 'Nyuma';
+
+  @override
+  String get tgYes => 'Ndiyo';
+
+  @override
+  String get tgNo => 'Hapana';
+
+  @override
+  String get tgSearch => 'Tafuta';
+
+  @override
+  String get tgHide => 'Ficha';
+
+  @override
+  String get tgAll => 'Zote';
+
+  @override
+  String get tgNone => 'Hakuna';
+
+  @override
+  String get tgMovies => 'Filamu';
+
+  @override
+  String get tgSeries => 'Mifululizo';
+
+  @override
+  String get tgMovieTag => 'Filamu';
+
+  @override
+  String get tgSeriesTag => 'Mfululizo';
+
+  @override
+  String get tgCanTakeAMinute => 'Inaweza kuchukua hadi dakika moja';
+
+  @override
+  String get tgToday => 'leo';
+
+  @override
+  String get tgYesterday => 'jana';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'siku $days zilizopita';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'miezi $months iliyopita';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'miaka $years iliyopita';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'miaka $years na miezi $months iliyopita';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Tafuta manukuu';
+
+  @override
+  String get tgFreeUpSpace => 'Ondoa vitu kupata nafasi';
+
+  @override
+  String get tgDownloads => 'Vipakuliwa';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Vipakuliwa ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '\"$title\": kipakuliwa hakikuwa na faili ya video ($files). Kimeondolewa na kuzuiwa — jaribu faili nyingine.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '\"$title\": kipakuliwa hakikuwa na faili ya video ($files), lakini hakikuweza kuondolewa kiotomatiki.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Ilirushwa $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Gusa kutafuta faili';
+
+  @override
+  String get tgWholeSeason => 'Msimu mzima';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Vipindi $count havipo – tafuta kifurushi cha msimu';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Ongeza kwenye Sonarr kuona vipindi visivyopo';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Mfululizo huongezwa bila kupakua chochote wenyewe';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Vipindi visivyopo haviwezi kuonyeshwa kwa sasa';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Gusa kujaribu tena';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Kifurushi cha msimu';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Fuatilia msimu wa $season';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Je, Sonarr ipakue vipindi visivyopo vya msimu wa $season sasa?\n\nHapana: vipindi vipya tu vitapakuliwa vitakapotoka.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr inatafuta msimu wa $season';
+  }
+
+  @override
+  String get tgMonitored => 'Inafuatiliwa';
+
+  @override
+  String get tgNotMonitored => 'Haifuatiliwi';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return 'Msimu wa $season: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label haipo';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code bado haijarushwa.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code bado haijarushwa – inakuja $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code tayari inapakuliwa.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code imepakuliwa na itaonekana kwenye maktaba hivi punde.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Inatafuta $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return 'msimu wa $season';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return '$label mzima';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return 'Msimu wa $season – hakuna vipindi kwenye maktaba';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'Mfululizo hauna kitambulisho cha TVDB, kwa hivyo Sonarr haiwezi kuupata.';
+
+  @override
+  String get tgAddingToSonarr => 'Inaongeza kwenye Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Imeshindwa kuongeza mfululizo kwenye Sonarr. Jaribu tena baadaye.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Inatuma \"$label\" ipakuliwe …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Upakuaji haukuanza: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '\"$label\" inapakuliwa ($size). Itaonekana kwenye maktaba ikikamilika.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Imeshindwa kufikia Sonarr. Jaribu tena baada ya muda mfupi.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Hakuna faili zinazofaa zilizopatikana. Jaribu tena baadaye – mpya huonekana mara nyingi baada ya saa chache.';
+
+  @override
+  String tgFilesCount(int count) {
+    return 'Faili $count';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return 'Faili $count – $recommended zinalingana na wasifu wa ubora, zilizobaki ziko chini';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Nje ya wasifu wa ubora';
+
+  @override
+  String get tgLargerThanProfile => 'Kubwa kuliko wasifu unavyoruhusu';
+
+  @override
+  String get tgSmallerThanProfile => 'Ndogo kuliko wasifu unavyoruhusu';
+
+  @override
+  String get tgAlreadyExists => 'Ipo tayari';
+
+  @override
+  String get tgMayNotFitDisk => 'Huenda isitoshe kwenye diski';
+
+  @override
+  String get tgSonarrUnreachable => 'Imeshindwa kufikia Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Imeshindwa kufikia Sonarr kwenye $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr haikukubali mabadiliko';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Msimu unafuatiliwa, lakini Sonarr haikuanza kutafuta';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr haikuweza kutafuta kwa sasa';
+
+  @override
+  String get tgSearchExpired =>
+      'Matokeo ya utafutaji yameisha muda – tafuta tena';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr haikukubali kipakuliwa (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr haina mfululizo huu';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Imeshindwa kubadilisha ufuatiliaji: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin haikutambua mfululizo (hakuna kitambulisho cha TVDB au TMDB)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Hitilafu imetokea: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Faili hii haisimamiwi na Radarr/Sonarr, na Jellyfin ina ruhusa ya kusoma tu kwenye folda. Ifute kwenye kidhibiti faili chako.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr haifikiki, au mfululizo haujaongezwa humo. Kupakua kipindi kimoja kimoja kunahitaji Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Vipindi vilivyochaguliwa vya \"$title\" havikupatikana kwenye Sonarr (vipindi $count vimepatikana kwa jumla). Ongeza mfululizo kwenye Sonarr na ujaribu tena.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Sehemu ya mkusanyiko ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  unatazama sehemu ya $current kati ya $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return 'Sehemu ya $number kati ya $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Jina lisilojulikana';
+
+  @override
+  String get tgMovieCollection => 'Mkusanyiko wa filamu';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '\"$title\" bado haijatoka';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Video';
+
+  @override
+  String get tgScreensaverModeLogo => 'Nembo';
+
+  @override
+  String get tgScreensaverSound => 'Sauti ya kiokoa skrini';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Imezimwa: trela za kiokoa skrini huchezwa bila sauti';
+
+  @override
+  String get tgScreensaverLogo => 'Nembo';
+
+  @override
+  String get tgLogoBadge => 'Beji ya Tortugarr';
+
+  @override
+  String get tgLogoVhs => 'Kasuku juu ya kanda za VHS';
+
+  @override
+  String get tgLogoSign => 'Kasuku juu ya kibao';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'IMEFICHWA · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Nafasi ya diski';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Pata nafasi kwa vipakuliwa vipya';
+
+  @override
+  String get tgAdultTitle => 'Filamu za watu wazima (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Onyesha au ficha maktaba ya XXX (PIN)';
+
+  @override
+  String get tgHideForeign => 'Ficha maudhui ya kigeni';
+
+  @override
+  String get tgHideForeignOn =>
+      'Imewashwa: Zinazovuma na Maarufu zinaonyesha Kiingereza, Kinorwe, Kiswidi, Kidenmaki, Kijerumani na Kifaransa tu';
+
+  @override
+  String get tgHideForeignOff =>
+      'Imezimwa: Zinazovuma na Maarufu zinaonyesha lugha zote';
+
+  @override
+  String get tgShowHidden => 'Onyesha kilichofichwa';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Imewashwa: vichwa ambavyo vingefichwa vinaonyeshwa na beji nyekundu ya IMEFICHWA';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Utatuzi: onyesha vichwa vilivyofichwa na beji nyekundu badala ya kuviondoa';
+
+  @override
+  String get tgShowAllSubLangs => 'Onyesha lugha zote za manukuu';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Imewashwa: menyu ya manukuu inaonyesha lugha zote';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Imezimwa: menyu ya manukuu inaonyesha Kinorwe na Kiingereza tu';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Imezimwa: menyu ya manukuu inaonyesha lugha ulizochagua tu';
+
+  @override
+  String get tgSubtitleLanguages => 'Lugha za manukuu';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Zinaonyeshwa kwenye menyu ya manukuu: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Sauti ya onyesho la awali';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Imewashwa: klipu inayochezwa unaposimama kwenye kichwa ina sauti';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Imezimwa: klipu huchezwa bila sauti unapovinjari';
+
+  @override
+  String get tgScreensaver => 'Kiokoa skrini';
+
+  @override
+  String get tgScreensaverSubtitle => 'Video au nembo, sauti na picha';
+
+  @override
+  String get tgShowMissingEpisodes => 'Onyesha vipindi visivyopo';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Imewashwa: misimu inaonyesha vipindi usivyo navyo, tayari kupakuliwa';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Imezimwa: misimu inaonyesha vipindi ulivyo navyo tu';
+
+  @override
+  String get tgShowCollections => 'Onyesha mikusanyiko ya filamu';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Imewashwa: filamu zinaonyesha filamu nyingine za mkusanyiko, pamoja na zile usizo nazo';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Imezimwa: ukurasa wa filamu hauonyeshi mkusanyiko';
+
+  @override
+  String get tgNoActiveDownloads => 'Hakuna vipakuliwa vinavyoendelea.';
+
+  @override
+  String get tgPickDownloadToOpen => 'Chagua kipakuliwa kufungua maombi.';
+
+  @override
+  String get tgRefreshLibrary => 'Onyesha upya maktaba';
+
+  @override
+  String get tgAskingJellyfinScan => 'Inaomba Jellyfin ichanganue maktaba …';
+
+  @override
+  String get tgHideAll => 'Ficha zote';
+
+  @override
+  String get tgImporting => 'Inaleta';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Kichwa hiki hakisimamiwi na Radarr/Sonarr, kwa hivyo Bazarr haiwezi kukitafutia manukuu.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Imeshindwa kufikia Bazarr. Jaribu tena baada ya muda mfupi.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Hakuna kilichopatikana bado. Bazarr hujaribu tena kiotomatiki kila siku, au unaweza kuchagua mwenyewe.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Imepata $languages – inaweza kuchukua muda kidogo kabla ya kuonekana kwenye menyu ya manukuu.';
+  }
+
+  @override
+  String get tgAnd => 'na';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Imepakuliwa – inaweza kuchukua muda kidogo kabla ya kuonekana kwenye menyu ya manukuu.';
+
+  @override
+  String get tgAskingBazarr => 'Inauliza Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Zote zipo';
+
+  @override
+  String get tgSearchAutoNow => 'Tafuta kiotomatiki sasa';
+
+  @override
+  String get tgSearchingUpToMinute =>
+      'Inatafuta … inaweza kuchukua hadi dakika moja';
+
+  @override
+  String get tgPickYourself => 'Chagua mwenyewe';
+
+  @override
+  String get tgAskingProviders =>
+      'Inauliza watoa manukuu … inaweza kuchukua hadi dakika moja';
+
+  @override
+  String get tgNoProviderSubs =>
+      'Hakuna mtoa huduma aliye na manukuu ya hii bado.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: inapatikana';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: haipo';
+  }
+
+  @override
+  String get tgNoReleaseName => '(hakuna jina la toleo)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · kwa wasiosikia vizuri';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Kinorwe';
+
+  @override
+  String get tgLangEnglish => 'Kiingereza';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr bado haikijui kichwa hiki';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr ilijibu na hitilafu (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Nafasi ndogo kwenye $drive: ($free imesalia). Upakuaji unaweza kusimama — mjulishe anayesimamia seva.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Imeshindwa kufikia qBittorrent kukagua nafasi';
+
+  @override
+  String get tgNotEnoughSpace => 'Nafasi haitoshi';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: ina $free wazi';
+  }
+
+  @override
+  String get tgCopyInDownloads =>
+      'Nakala kwenye Downloads · ipo tayari kwenye maktaba';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Ilitazamwa mwisho $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Haijatazamwa kamwe · iliongezwa $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Haijatazamwa kamwe';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Hakuna kilichopatikana kwenye $drive: kinachoweza kufutwa kwa usalama (vyote vimeongezwa karibuni, vimetazamwa karibuni au ni vipendwa).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Futa vichwa $count?',
+      one: 'Futa kichwa 1?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size itafutwa kabisa. Hili haliwezi kutenduliwa.';
+  }
+
+  @override
+  String get tgYesDelete => 'Ndiyo, futa';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Inafuta $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: sasa ina $free wazi';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vichwa $count vimefutwa',
+      one: 'Kichwa 1 kimefutwa',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return '$count vimefutwa, vimeshindikana: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Pata GB $gb';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Nakala za vipakuliwa';
+
+  @override
+  String get tgLookingForUnwatched =>
+      'Inatafuta kisichotazamwa kwa muda mrefu …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Pendekezo: $size · nafasi inatosha ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Pendekezo: $size kati ya $target inayohitajika';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Chagua kimoja kukataa — pendekezo linalofuata huingia kiotomatiki.';
+
+  @override
+  String get tgOtherCandidates => 'Vingine vinavyowezekana';
+
+  @override
+  String get tgDownloadAnyway => 'Pakua hata hivyo';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Futa $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: ina $free wazi.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Faili ni $size na inachukua nafasi mara mbili (kipakuliwa + nakala kwenye maktaba), pamoja na $buffer ya akiba.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Faili ni $size, pamoja na $buffer ya akiba.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Vipakuliwa vinavyoendelea vinahitaji $size zaidi.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Inapungua $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Zimepatikana faili zilizochapishwa kabla filamu haijatoka kidijitali tu ($count) — karibu zote ni za kughushi.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'bado haina tarehe ya kutoka kidijitali';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'inatoka kidijitali $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Bado haijatoka kidijitali';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '\"$title\" $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Kilichopo sasa kwa kawaida ni rekodi ya sinema au filamu nyingine yenye jina hilo hilo. Wakati mwingine kuna nakala ya awali ya ubora wa chini, mara nyingi yenye manukuu yaliyobandikwa. \"Onyesha faili hata hivyo\" huonyesha kilichopo. Radarr itapakua toleo sahihi yenyewe litakapotoka.';
+
+  @override
+  String get tgShowFilesAnyway => 'Onyesha faili hata hivyo';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Chagua misimu na vipindi';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: hakuna maelezo ya vipindi';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Inatumika kwa kila kifaa kinachotumia akaunti hii';
+
+  @override
+  String get tgNoXxxLibrary => 'Hakuna maktaba inayoitwa XXX iliyopatikana.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Inatafuta kila neno peke yake … (inaweza kuchukua nusu dakika)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '\"$title\" ($size) imetumwa kwa qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Upakuaji umeshindikana: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '\"$title\" haikuwa na faili ya video na imeondolewa.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '\"$title\" haikuwa na faili ya video na HAIKUONDOLEWA.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Tafuta XXX mpya';
+
+  @override
+  String get tgXxxSearchHint => 'Jina, studio …';
+
+  @override
+  String get tgChecking => 'Inakagua …';
+
+  @override
+  String get tgXxxVisible =>
+      'Inaonekana sasa. XXX inaonekana kwenye maktaba, utafutaji na skrini ya mwanzo.';
+
+  @override
+  String get tgXxxHidden => 'Imefichwa. XXX haionekani popote kwenye programu.';
+
+  @override
+  String get tgShowWithPin => 'Onyesha (PIN)';
+
+  @override
+  String get tgChangePin => 'Badilisha PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Imeshindwa kupata orodha ya maktaba (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Imeshindwa kupata mipangilio ya mtumiaji (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin ilikataa mabadiliko (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Kufuta kumeshindikana (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Imeshindwa kuongeza \"$title\" kwenye qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return 'msimu wa $season, kipindi cha $episode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Tafuta kwenye Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Tafuta filamu na mifululizo (mf. \"Lost S02E05\")';
+
+  @override
+  String get tgMissingInThisSeason => 'Havipo katika msimu huu';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Misimu isiyopo',
+      one: 'Msimu usiopo',
+    );
+    return '$_temp0 $list - fungua mfululizo kuona misimu yote';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr kwenye GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Msimbo wa chanzo, matoleo na ripoti za matatizo';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr imejengwa juu ya Moonfin (GPL), iliyotengenezwa na wasanidi wa Moonfin.';
+
+  @override
+  String get tgCredits => 'Shukrani';
+
+  @override
+  String get tgCreditsThanks =>
+      'Kwa shukrani za dhati: bila miradi hii na watu walio nyuma yake, Tortugarr isingekuwepo.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Programu ambayo Tortugarr imejengwa juu yake (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Seva ya media';
+
+  @override
+  String get tgCreditSeerr => 'Ugunduzi na maombi';
+
+  @override
+  String get tgCreditRadarr => 'Filamu';
+
+  @override
+  String get tgCreditSonarr => 'Mifululizo';
+
+  @override
+  String get tgCreditProwlarr => 'Kidhibiti cha viorodheshaji';
+
+  @override
+  String get tgCreditBazarr => 'Manukuu';
+
+  @override
+  String get tgCreditFlareSolverr => 'Msaidizi wa Cloudflare kwa viorodheshaji';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Programu ya kupakua, chaguo-msingi la kisakinishi';
+
+  @override
+  String get tgCreditTmdb => 'Data ya filamu na mifululizo, mabango na picha';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Manukuu, yanayopatikana kupitia Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Bidhaa hii inatumia API ya TMDB lakini haiidhinishwi au kuthibitishwa na TMDB.';
+
+  @override
+  String get tgLoadingLogoSize => 'Ukubwa wa nembo ya kupakia';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Nembo inayozunguka wakati video inapakia';
+
+  @override
+  String get tgDiscoveryLanguages => 'Lugha katika Zinazovuma na Maarufu';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Zinaonyeshwa: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Imewashwa: Zinazovuma na Maarufu zinaonyesha lugha ulizochagua tu';
+
+  @override
+  String get tgShowLanguageBadges => 'Onyesha beji za lugha';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Imewashwa: mada zinaonyesha lugha yao (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Imezimwa: hakuna beji za lugha kwenye mada';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }

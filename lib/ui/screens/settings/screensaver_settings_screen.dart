@@ -18,6 +18,7 @@ import '../../screensaver/screensaver_gradient_backdrops.dart';
 import '../../screensaver/screensaver_view.dart';
 import '../../widgets/playback/loading_animation_widget.dart';
 import 'settings_app_bar.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 class ScreensaverSettingsScreen extends StatefulWidget {
   const ScreensaverSettingsScreen({super.key});
@@ -271,6 +272,14 @@ class _ScreensaverSettingsScreenState extends State<ScreensaverSettingsScreen> {
                         l10n.screensaverBackdropAurora,
                     },
                   ),
+                  // Library art plays each title's trailer over its backdrop.
+                  if (backdrop == ScreensaverBackdrop.library)
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.screensaverAudio,
+                      title: appL10n().tgScreensaverSound,
+                      subtitle: appL10n().tgScreensaverSoundSubtitle,
+                      icon: Icons.volume_up,
+                    ),
                   EnumPreferenceTile<ScreensaverComponent>(
                     preference: UserPreferences.screensaverComponent,
                     title: l10n.screensaverAdditionalComponent,
@@ -285,6 +294,18 @@ class _ScreensaverSettingsScreenState extends State<ScreensaverSettingsScreen> {
                         l10n.screensaverComponentRunner,
                     },
                   ),
+                  if (component == ScreensaverComponent.moonfinLogo)
+                    EnumPreferenceTile<ScreensaverLogoImage>(
+                      preference: UserPreferences.screensaverLogoImage,
+                      title: appL10n().tgScreensaverLogo,
+                      icon: Icons.image,
+                      onChanged: () => setState(() {}),
+                      labelOf: (value) => switch (value) {
+                        ScreensaverLogoImage.badge => appL10n().tgLogoBadge,
+                        ScreensaverLogoImage.vhs => appL10n().tgLogoVhs,
+                        ScreensaverLogoImage.sign => appL10n().tgLogoSign,
+                      },
+                    ),
                   if (component != ScreensaverComponent.none)
                     EnumPreferenceTile<ScreensaverMovement>(
                       preference: UserPreferences.screensaverMovement,
@@ -495,10 +516,13 @@ class _ScreensaverSettingsScreenState extends State<ScreensaverSettingsScreen> {
       case ScreensaverComponent.none:
         componentWidget = null;
       case ScreensaverComponent.moonfinLogo:
-        compWidth = 100 * scale;
-        compHeight = 44 * scale;
+        final logo =
+            screensaverLogoAsset(_prefs.get(UserPreferences.screensaverLogoImage));
+        // The preview is drawn at 100/320 of the screensaver's size.
+        compWidth = logo.width * 100 / 320 * scale;
+        compHeight = logo.height * 100 / 320 * scale;
         componentWidget = Image.asset(
-          'assets/images/logo_and_text.png',
+          logo.asset,
           width: compWidth,
           height: compHeight,
           fit: BoxFit.contain,

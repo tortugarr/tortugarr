@@ -223,7 +223,7 @@ class _EmbyConnectScreenState extends State<EmbyConnectScreen> {
       maxWidth: 700,
       header: Padding(
         padding: const EdgeInsets.only(bottom: 24),
-        child: Image.asset('assets/images/logo_and_text.png', height: 80),
+        child: Image.asset('assets/images/logo_and_text.png', height: 140),
       ),
       footer: AnimatedContainer(
         duration: const Duration(milliseconds: 180),

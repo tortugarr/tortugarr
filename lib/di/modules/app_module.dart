@@ -19,6 +19,7 @@ import '../../data/repositories/offline_repository.dart';
 import '../../data/services/blocked_content_gate.dart';
 import '../../data/services/library_scope_service.dart';
 import '../../data/services/media_server_client_factory.dart';
+import '../../data/services/download/download_now_service.dart';
 import '../../data/repositories/seerr_repository.dart';
 import '../../data/repositories/tmdb_repository.dart';
 import '../../data/repositories/user_views_repository.dart';
@@ -96,6 +97,7 @@ void resetUserScopedSingletons() {
   unregister<UpcomingEpisodeService>();
   // Watched state is per user, so the next account must not inherit it.
   userDataSync.reset();
+  unregister<DownloadNowService>();
 
   _registerUserScopedSingletons();
 }
@@ -358,4 +360,5 @@ void _registerUserScopedSingletons() {
       _getIt<SeerrPreferences>(),
     ),
   );
+  _getIt.registerLazySingleton(() => DownloadNowService());
 }

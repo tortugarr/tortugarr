@@ -11,6 +11,7 @@ import '../repositories/multi_server_repository.dart';
 import '../repositories/search_repository.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
+import '../../util/episode_query.dart';
 
 class SearchResultGroup {
   final String title;
@@ -371,7 +372,9 @@ class SearchViewModel extends ChangeNotifier {
     try {
       await repo.ensureInitialized();
       if (!repo.isAvailable) return const [];
-      final page = await repo.search(query, limit: _resultLimit);
+      // Seerr/TMDB search titles only; drop episode codes like S13E04.
+      final page = await repo.search(parseEpisodeQuery(query).title,
+          limit: _resultLimit);
       return page.results.where((item) => !item.isBlacklisted).toList();
     } catch (_) {
       return const [];

@@ -1,6 +1,6 @@
 {
     "@@locale": "fa",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin نسخه {version}",
+    "appVersionFooter": "Tortugarr نسخه {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin نمی‌تواند به کلید سیستم شما دسترسی پیدا کند. ورود به سیستم می‌تواند ادامه یابد، اما ذخیره رمز ایمن ممکن است تا زمانی که قفل کلید باز نشود، در دسترس نباشد.",
+    "secureStorageUnavailableMessage": "Tortugarr نمی‌تواند به کلید سیستم شما دسترسی پیدا کند. ورود به سیستم می‌تواند ادامه یابد، اما ذخیره رمز ایمن ممکن است تا زمانی که قفل کلید باز نشود، در دسترس نباشد.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "جابه‌جایی بین Moonfin و Neon Pulse بدون راه‌اندازی مجدد برنامه",
+    "settingsAppearanceThemeSubtitle": "جابه‌جایی بین Tortugarr و Neon Pulse بدون راه‌اندازی مجدد برنامه",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "ظاهر Moonfin کنونی که همه شما عاشق آن شده اید",
+    "themeMoonfinSubtitle": "ظاهر Tortugarr کنونی که همه شما عاشق آن شده اید",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "نئون پالس",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "از Moonfin خارج شوید؟",
+    "exitApp": "از Tortugarr خارج شوید؟",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "تنظیم نشده است. Moonfin یک mpv.conf پیش‌فرض را در پوشه‌های برنامه/داده امتحان می‌کند.",
+    "notSetMpvConf": "تنظیم نشده است. Tortugarr یک mpv.conf پیش‌فرض را در پوشه‌های برنامه/داده امتحان می‌کند.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "دانلودها/Moonfin — قابل مشاهده برای سایر برنامه ها",
+    "downloadsVisibleToOtherApps": "دانلودها/Tortugarr — قابل مشاهده برای سایر برنامه ها",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "رسانه دانلود شده در Downloads/Moonfin در دستگاه شما ذخیره خواهد شد. این فایل ها برای سایر برنامه ها مانند گالری یا پخش کننده موسیقی شما قابل مشاهده خواهند بود.\n\nدانلودهای موجود در مکان فعلی خود باقی خواهند ماند.",
+    "saveToDownloadsFolderDescription": "رسانه دانلود شده در Downloads/Tortugarr در دستگاه شما ذخیره خواهد شد. این فایل ها برای سایر برنامه ها مانند گالری یا پخش کننده موسیقی شما قابل مشاهده خواهند بود.\n\nدانلودهای موجود در مکان فعلی خود باقی خواهند ماند.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "قابلیت مشاهده صفحه اصلی در هر کتابخانه را تغییر دهید. برای اعمال تغییرات Moonfin را مجددا راه اندازی کنید.",
+    "libraryVisibilityDescription": "قابلیت مشاهده صفحه اصلی در هر کتابخانه را تغییر دهید. برای اعمال تغییرات Tortugarr را مجددا راه اندازی کنید.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "بازی در Moonfin",
+    "playInMoonfin": "بازی در Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "درخواست شده توسط {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "موردی در کتابخانه Moonfin شما یافت نشد",
+    "itemNotFoundInLibrary": "موردی در کتابخانه Tortugarr شما یافت نشد",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "راه اندازی مجدد سرور در حال انجام است",
-    "adminServerRebootMessage": "راه اندازی مجدد سرور در حال انجام است، لطفاً Moonfin را مجددا راه اندازی کنید",
+    "adminServerRebootMessage": "راه اندازی مجدد سرور در حال انجام است، لطفاً Tortugarr را مجددا راه اندازی کنید",
     "adminActiveSessions": "جلسات فعال",
     "adminSessionsLoadFailed": "جلسات بارگیری نشد",
     "adminNoActiveSessions": "بدون جلسه فعال",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "دکمه ژانرها را در نوار پیمایش نشان دهید",
     "settingsShowFavoritesButtonInNavigation": "نمایش دکمه علاقه مندی ها در نوار ناوبری",
     "settingsShowLibrariesButtonInNavigation": "نمایش دکمه کتابخانه ها در نوار پیمایش",
-    "settingsLibraryVisibilitySubtitle": "قابلیت مشاهده صفحه اصلی در هر کتابخانه را تغییر دهید. برای اعمال تغییرات Moonfin را مجددا راه اندازی کنید.",
+    "settingsLibraryVisibilitySubtitle": "قابلیت مشاهده صفحه اصلی در هر کتابخانه را تغییر دهید. برای اعمال تغییرات Tortugarr را مجددا راه اندازی کنید.",
     "settingsMediaBarAndLocalPreviews": "نوار رسانه و پیش‌نمایش‌های محلی",
     "settingsVisualOverlays": "پوشش های بصری",
     "settingsSeasonalSurprise": "سورپرایز فصلی",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "به Discord بپیوندید",
     "settingsJoinDiscordSubtitle": "با جامعه چت کنید",
     "settingsJoinTheDiscord": "به Discord بپیوندید",
-    "settingsSupportMoonfin": "پشتیبانی Moonfin",
+    "settingsSupportMoonfin": "پشتیبانی Tortugarr",
     "settingsLegal": "قانونی",
     "settingsLicenses": "مجوزها",
     "settingsOpenSourceLicenseNotices": "اعلامیه های مجوز منبع باز",
     "settingsPrivacyPolicy": "سیاست حفظ حریم خصوصی",
-    "settingsPrivacyPolicySubtitle": "چگونه Moonfin داده‌های شما را مدیریت می‌کند",
+    "settingsPrivacyPolicySubtitle": "چگونه Tortugarr داده‌های شما را مدیریت می‌کند",
     "settingsCheckForUpdates": "به روز رسانی ها را بررسی کنید",
-    "settingsCheckForUpdatesSubtitle": "آخرین نسخه Moonfin را بررسی کنید",
+    "settingsCheckForUpdatesSubtitle": "آخرین نسخه Tortugarr را بررسی کنید",
     "settingsPoweredByFlutter": "پشتیبانی شده توسط فلاتر",
     "settingsLicenseNoticesCount": "{count, plural, one {# اعلان مجوز} other {# اعلان مجوز}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "تم های ذخیره شده",
-    "savedThemesDescription": "اینها مضامینی هستند که از پلاگین Moonfin برای سرور فعلی دانلود شده‌اند. حذف فقط این کپی محلی را حذف می کند.",
+    "savedThemesDescription": "اینها مضامینی هستند که از پلاگین Tortugarr برای سرور فعلی دانلود شده‌اند. حذف فقط این کپی محلی را حذف می کند.",
     "savedThemesEmpty": "هیچ تم ذخیره شده ای برای این سرور پیدا نشد.",
     "savedThemesCurrentThemeId": "{themeId} • در حال حاضر فعال است",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "حذف تم ذخیره شده",
     "savedThemesManageSubtitle": "مضامین بارگیری شده افزونه را در این دستگاه مدیریت کنید",
     "themeEditor": "ویرایشگر تم",
-    "themeEditorSubtitle": "ویرایشگر تم Moonfin را در مرورگر خود باز کنید",
+    "themeEditorSubtitle": "ویرایشگر تم Tortugarr را در مرورگر خود باز کنید",
     "homeScreen": "صفحه اصلی",
     "bottomBar": "نوار پایین",
     "homeRowsStyleClassic": "کلاسیک",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "زیرنویس SDH را ترجیح دهید",
     "preferSdhSubtitlesSubtitle": "هنگام انتخاب خودکار، آهنگ‌های زیرنویس SDH/CC را اولویت‌بندی کنید.",
     "webDiagnostics": "تشخیص وب",
-    "webDiagnosticsTitle": "Moonfin عیب‌یابی وب",
+    "webDiagnosticsTitle": "Tortugarr عیب‌یابی وب",
     "webDiagnosticsIntro": "از این صفحه برای تشخیص مشکلات اتصال مرورگر (CORS، محتوای مختلط و تنظیمات کشف) استفاده کنید.",
     "webDiagnosticsDetectedMixedContentFailure": "خطای محتوای مختلط شناسایی شد",
     "webDiagnosticsDetectedCorsPreflightFailure": "تشخیص CORS/شکست قبل از پرواز",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin یک صفحه HTTPS را شناسایی کرد که سعی در فراخوانی URL سرور HTTP داشت. مرورگرها این درخواست را قبل از رسیدن به سرور شما مسدود می کنند.",
-    "webDiagnosticsCorsFailureBody": "Moonfin یک شکست درخواست در سطح مرورگر را شناسایی کرد که معمولاً به دلیل فقدان CORS یا سرصفحه‌های پیش از پرواز در سرور رسانه ایجاد می‌شود.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr یک صفحه HTTPS را شناسایی کرد که سعی در فراخوانی URL سرور HTTP داشت. مرورگرها این درخواست را قبل از رسیدن به سرور شما مسدود می کنند.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr یک شکست درخواست در سطح مرورگر را شناسایی کرد که معمولاً به دلیل فقدان CORS یا سرصفحه‌های پیش از پرواز در سرور رسانه ایجاد می‌شود.",
     "webDiagnosticsTargetUrl": "URL هدف: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "پیکربندی نشده است",
     "webDiagnosticsMixedContent": "محتوای ترکیبی",
     "webDiagnosticsMixedContentDetected": "این صفحه از طریق HTTPS بارگیری می شود، اما یک یا چند URL پیکربندی شده HTTP هستند. مرورگرها صفحات HTTPS را از تماس با APIهای HTTP مسدود می کنند.",
-    "webDiagnosticsMixedContentFix": "رفع: سرور رسانه یا نقطه پایانی پراکسی خود را از طریق HTTPS ارائه دهید، یا Moonfin را از طریق HTTP فقط در شبکه‌های محلی مورد اعتماد بارگیری کنید.",
+    "webDiagnosticsMixedContentFix": "رفع: سرور رسانه یا نقطه پایانی پراکسی خود را از طریق HTTPS ارائه دهید، یا Tortugarr را از طریق HTTP فقط در شبکه‌های محلی مورد اعتماد بارگیری کنید.",
     "webDiagnosticsNoMixedContentDetected": "هیچ پیکربندی محتوای مختلط آشکاری از تنظیمات زمان اجرا فعلی شناسایی نشده است.",
     "webDiagnosticsCorsChecklist": "چک لیست CORS",
     "webDiagnosticsCorsChecklistItem1": "• اجازه دادن به مبدأ مرورگر در Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "کلاسیک همان چیدمان وسط‌چین اصلی Moonfin است. مدرن یک چیدمان سینمایی واکنش‌گراست.",
+    "detailScreenStyleSubtitle": "کلاسیک همان چیدمان وسط‌چین اصلی Tortugarr است. مدرن یک چیدمان سینمایی واکنش‌گراست.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "از الگوریتم کتابخانه محلی Moonfin Recommends یا سنجه‌های شباهت آنلاین TMDb استفاده کنید. توجه: پیشنهادهای آنلاین به یکپارچه‌سازی Seerr نیاز دارند.",
+    "recommendationSystemSubtitle": "از الگوریتم کتابخانه محلی Tortugarr Recommends یا سنجه‌های شباهت آنلاین TMDb استفاده کنید. توجه: پیشنهادهای آنلاین به یکپارچه‌سازی Seerr نیاز دارند.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "شباهت TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "محدود کردن پیشنهادهای Moonfin Recommends بر اساس رده‌بندی سنی رسانه هدف",
+    "recommendationsApplyParentalRatingCapSubtitle": "محدود کردن پیشنهادهای Tortugarr Recommends بر اساس رده‌بندی سنی رسانه هدف",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "تم‌های سفارشی عناصر بصری را در سراسر Moonfin تغییر می‌دهند. یکی از این گزینه‌ها را متناسب با سلیقه خود انتخاب کنید.",
+    "customThemeSubtitle": "تم‌های سفارشی عناصر بصری را در سراسر Tortugarr تغییر می‌دهند. یکی از این گزینه‌ها را متناسب با سلیقه خود انتخاب کنید.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "در گوشی خود وارد Moonfin شوید",
+    "carSignInPrompt": "در گوشی خود وارد Tortugarr شوید",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller موتور رندر مدرن GPU در Flutter است که انیمیشن‌های روان‌تر و پرش کمتری ارائه می‌دهد. در برخی تی‌وی‌باکس‌ها و GPUهای قدیمی ممکن است باعث اشکال تصویری یا ویدیوی سیاه شود؛ در این صورت آن را خاموش کنید. خودکار بهترین حالت پیش‌فرض را برای دستگاه شما انتخاب می‌کند. برای اعمال، Moonfin را دوباره راه‌اندازی کنید.",
+    "impellerRenderingSubtitle": "Impeller موتور رندر مدرن GPU در Flutter است که انیمیشن‌های روان‌تر و پرش کمتری ارائه می‌دهد. در برخی تی‌وی‌باکس‌ها و GPUهای قدیمی ممکن است باعث اشکال تصویری یا ویدیوی سیاه شود؛ در این صورت آن را خاموش کنید. خودکار بهترین حالت پیش‌فرض را برای دستگاه شما انتخاب می‌کند. برای اعمال، Tortugarr را دوباره راه‌اندازی کنید.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "برای تغییر موتور رندر، Moonfin باید دوباره راه‌اندازی شود. اکنون برنامه را ببندید و سپس دوباره باز کنید تا اعمال شود.",
+    "impellerRestartMessage": "برای تغییر موتور رندر، Tortugarr باید دوباره راه‌اندازی شود. اکنون برنامه را ببندید و سپس دوباره باز کنید تا اعمال شود.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "محبوب‌ترین فیلم‌های IMDb",
     "imdbMostPopularTvShows": "محبوب‌ترین سریال‌های IMDb",
     "imdbLowestRatedMovies": "کم‌امتیازترین فیلم‌های IMDb",
-    "imdbTopEnglishMovies": "برترین فیلم‌های انگلیسی‌زبان IMDb"
+    "imdbTopEnglishMovies": "برترین فیلم‌های انگلیسی‌زبان IMDb",
+    "tgMissing": "موجود نیست",
+    "tgComing": "به‌زودی",
+    "tgComingOn": "{date} منتشر می‌شود",
+    "tgDownloading": "در حال دانلود",
+    "tgReadySoon": "به‌زودی آماده",
+    "tgRequested": "درخواست شده",
+    "tgClose": "بستن",
+    "tgCancel": "لغو",
+    "tgBack": "بازگشت",
+    "tgYes": "بله",
+    "tgNo": "خیر",
+    "tgSearch": "جستجو",
+    "tgHide": "پنهان کردن",
+    "tgAll": "همه",
+    "tgNone": "هیچ‌کدام",
+    "tgMovies": "فیلم‌ها",
+    "tgSeries": "سریال‌ها",
+    "tgMovieTag": "فیلم",
+    "tgSeriesTag": "سریال",
+    "tgCanTakeAMinute": "ممکن است تا یک دقیقه طول بکشد",
+    "tgToday": "امروز",
+    "tgYesterday": "دیروز",
+    "tgDaysAgo": "{days} روز پیش",
+    "tgMonthsAgo": "{months} ماه پیش",
+    "tgYearsAgo": "{years} سال پیش",
+    "tgYearsMonthsAgo": "{years} سال و {months} ماه پیش",
+    "tgFindSubtitles": "یافتن زیرنویس",
+    "tgFreeUpSpace": "آزاد کردن فضا",
+    "tgDownloads": "دانلودها",
+    "tgDownloadsCount": "دانلودها ({count})",
+    "tgNoVideoRemoved": "«{title}»: دانلود هیچ فایل ویدیویی نداشت ({files}). حذف و مسدود شد — فایل دیگری را امتحان کنید.",
+    "tgNoVideoNotRemoved": "«{title}»: دانلود هیچ فایل ویدیویی نداشت ({files})، اما حذف خودکار آن ممکن نبود.",
+    "tgAiredOn": "پخش‌شده در {date}",
+    "tgTapToFindFiles": "برای یافتن فایل‌ها ضربه بزنید",
+    "tgWholeSeason": "فصل کامل",
+    "tgEpisodesMissingFindPack": "{count} قسمت موجود نیست – یک پک فصل پیدا کنید",
+    "tgAddToSonarrTitle": "برای دیدن قسمت‌های ناموجود به Sonarr اضافه کنید",
+    "tgAddToSonarrSubtitle": "سریال بدون دانلود خودکار چیزی اضافه می‌شود",
+    "tgMissingEpisodesUnavailable": "قسمت‌های ناموجود فعلاً نمایش داده نمی‌شوند",
+    "tgReasonTapRetry": "{reason} · برای تلاش دوباره ضربه بزنید",
+    "tgSeasonPackBadge": "پک فصل",
+    "tgMonitorSeasonTitle": "نظارت بر فصل {season}",
+    "tgMonitorSeasonQuestion": "آیا Sonarr قسمت‌های ناموجود فصل {season} را همین حالا دریافت کند؟\n\nخیر: فقط قسمت‌های جدید پس از انتشار دریافت می‌شوند.",
+    "tgSonarrSearchingSeason": "Sonarr در حال جستجوی فصل {season} است",
+    "tgMonitored": "تحت نظارت",
+    "tgNotMonitored": "بدون نظارت",
+    "tgSeasonStateLabel": "فصل {season}: {state}",
+    "tgLabelMissing": "{label} موجود نیست",
+    "tgNotAiredYet": "{code} هنوز پخش نشده است.",
+    "tgNotAiredYetComing": "{code} هنوز پخش نشده است – {date} منتشر می‌شود.",
+    "tgAlreadyDownloading": "{code} از قبل در حال دانلود است.",
+    "tgDownloadedAppearsSoon": "{code} دانلود شد و به‌زودی در کتابخانه نمایش داده می‌شود.",
+    "tgSearchingFor": "در حال جستجوی {label} …",
+    "tgSeasonLower": "فصل {season}",
+    "tgWholeLabel": "{label} کامل",
+    "tgSeasonNoEpisodes": "فصل {season} – هیچ قسمتی در کتابخانه نیست",
+    "tgNoTvdbId": "این سریال شناسه TVDB ندارد، بنابراین Sonarr نمی‌تواند آن را پیدا کند.",
+    "tgAddingToSonarr": "در حال افزودن به Sonarr …",
+    "tgAddToSonarrFailed": "افزودن سریال به Sonarr ممکن نبود. بعداً دوباره امتحان کنید.",
+    "tgSendingToDownload": "در حال ارسال «{label}» برای دانلود …",
+    "tgDownloadDidNotStart": "دانلود شروع نشد: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» در حال دانلود است ({size}). پس از پایان در کتابخانه نمایش داده می‌شود.",
+    "tgSonarrUnreachableRetry": "دسترسی به Sonarr ممکن نبود. کمی بعد دوباره امتحان کنید.",
+    "tgNoUsableFiles": "فایل قابل استفاده‌ای پیدا نشد. بعداً دوباره امتحان کنید – فایل‌های جدید معمولاً پس از چند ساعت پیدا می‌شوند.",
+    "tgFilesCount": "{count} فایل",
+    "tgFilesRecommended": "{count} فایل – {recommended} با پروفایل کیفیت سازگارند، بقیه در پایین هستند",
+    "tgOutsideQualityProfile": "خارج از پروفایل کیفیت",
+    "tgLargerThanProfile": "بزرگ‌تر از حد مجاز پروفایل",
+    "tgSmallerThanProfile": "کوچک‌تر از حد مجاز پروفایل",
+    "tgAlreadyExists": "از قبل موجود است",
+    "tgMayNotFitDisk": "ممکن است در دیسک جا نشود",
+    "tgSonarrUnreachable": "دسترسی به Sonarr ممکن نبود",
+    "tgSonarrUnreachableAt": "دسترسی به Sonarr در {host} ممکن نبود",
+    "tgSonarrRejectedChange": "Sonarr تغییر را نپذیرفت",
+    "tgSeasonMonitoredNoSearch": "فصل تحت نظارت است، اما Sonarr جستجو را شروع نکرد",
+    "tgSonarrCantSearch": "Sonarr فعلاً نمی‌تواند جستجو کند",
+    "tgSearchExpired": "نتیجه جستجو منقضی شده است – دوباره جستجو کنید",
+    "tgSonarrRejectedDownload": "Sonarr دانلود را نپذیرفت (HTTP {status})",
+    "tgSonarrNoSeries": "این سریال در Sonarr وجود ندارد",
+    "tgCouldNotChangeMonitoring": "تغییر نظارت ممکن نبود: {error}",
+    "tgJellyfinNoIds": "Jellyfin سریال را نشناخت (بدون شناسه TVDB یا TMDB)",
+    "tgSomethingWentWrong": "مشکلی پیش آمد: {error}",
+    "tgDeleteReadOnly": "این فایل توسط Radarr/Sonarr مدیریت نمی‌شود و Jellyfin فقط دسترسی خواندن به پوشه دارد. آن را در مدیر فایل حذف کنید.",
+    "tgSonarrRequiredPerEpisode": "Sonarr در دسترس نیست یا سریال در آن اضافه نشده است. دانلود تک‌قسمتی به Sonarr نیاز دارد.",
+    "tgEpisodesNotFound": "قسمت‌های انتخاب‌شده برای «{title}» در Sonarr پیدا نشدند (در مجموع {count} قسمت پیدا شد). سریال را به Sonarr اضافه کنید و دوباره امتحان کنید.",
+    "tgPartOfCollectionPrefix": "بخشی از مجموعه ",
+    "tgViewingPartOf": "  ·  شما قسمت {current} از {total} را می‌بینید",
+    "tgPartOf": "قسمت {number} از {total}",
+    "tgUnknownTitle": "عنوان ناشناخته",
+    "tgMovieCollection": "مجموعه فیلم",
+    "tgNotReleasedYet": "«{title}» هنوز منتشر نشده است",
+    "tgScreensaverModeVideo": "ویدیو",
+    "tgScreensaverModeLogo": "لوگو",
+    "tgScreensaverSound": "صدای محافظ صفحه",
+    "tgScreensaverSoundSubtitle": "خاموش: تریلرهای محافظ صفحه بی‌صدا پخش می‌شوند",
+    "tgScreensaverLogo": "لوگو",
+    "tgLogoBadge": "نشان Tortugarr",
+    "tgLogoVhs": "طوطی روی نوارهای VHS",
+    "tgLogoSign": "طوطی روی تابلو",
+    "tgHiddenBadge": "پنهان · {code}",
+    "tgDiskSpace": "فضای دیسک",
+    "tgDiskSpaceSubtitle": "آزاد کردن فضا برای دانلودهای جدید",
+    "tgAdultTitle": "فیلم‌های بزرگسالان (XXX)",
+    "tgAdultSubtitle": "نمایش یا پنهان کردن کتابخانه XXX (PIN)",
+    "tgHideForeign": "پنهان کردن محتوای خارجی",
+    "tgHideForeignOn": "روشن: «پرطرفدار» و «محبوب» فقط انگلیسی، نروژی، سوئدی، دانمارکی، آلمانی و فرانسوی را نشان می‌دهند",
+    "tgHideForeignOff": "خاموش: «پرطرفدار» و «محبوب» همه زبان‌ها را نشان می‌دهند",
+    "tgShowHidden": "نمایش موارد پنهان",
+    "tgShowHiddenOn": "روشن: عناوینی که پنهان می‌شدند با نشان قرمز «پنهان» نمایش داده می‌شوند",
+    "tgShowHiddenOff": "عیب‌یابی: عناوین پنهان به‌جای حذف، با نشان قرمز نمایش داده می‌شوند",
+    "tgShowAllSubLangs": "نمایش همه زبان‌های زیرنویس",
+    "tgShowAllSubLangsOn": "روشن: منوی زیرنویس همه زبان‌ها را نشان می‌دهد",
+    "tgShowAllSubLangsOff": "خاموش: منوی زیرنویس فقط نروژی و انگلیسی را نشان می‌دهد",
+    "tgPreviewSound": "صدای پیش‌نمایش",
+    "tgPreviewSoundOn": "روشن: کلیپی که با توقف روی یک عنوان پخش می‌شود صدا دارد",
+    "tgPreviewSoundOff": "خاموش: کلیپ‌ها هنگام مرور بی‌صدا پخش می‌شوند",
+    "tgScreensaver": "محافظ صفحه",
+    "tgScreensaverSubtitle": "ویدیو یا لوگو، صدا و تصویر",
+    "tgShowMissingEpisodes": "نمایش قسمت‌های ناموجود",
+    "tgShowMissingEpisodesOn": "روشن: فصل‌ها قسمت‌هایی را که ندارید، آماده برای دانلود نشان می‌دهند",
+    "tgShowMissingEpisodesOff": "خاموش: فصل‌ها فقط قسمت‌هایی را که دارید نشان می‌دهند",
+    "tgShowCollections": "نمایش مجموعه‌های فیلم",
+    "tgShowCollectionsOn": "روشن: فیلم‌ها فیلم‌های دیگر مجموعه، از جمله آن‌هایی که ندارید، را نشان می‌دهند",
+    "tgShowCollectionsOff": "خاموش: صفحه فیلم مجموعه را نشان نمی‌دهد",
+    "tgNoActiveDownloads": "دانلود فعالی وجود ندارد.",
+    "tgPickDownloadToOpen": "برای باز کردن درخواست‌ها یک دانلود را انتخاب کنید.",
+    "tgRefreshLibrary": "به‌روزرسانی کتابخانه",
+    "tgAskingJellyfinScan": "درخواست اسکن کتابخانه از Jellyfin …",
+    "tgHideAll": "پنهان کردن همه",
+    "tgImporting": "در حال وارد کردن",
+    "tgSubsNotManaged": "این عنوان توسط Radarr/Sonarr مدیریت نمی‌شود، بنابراین Bazarr نمی‌تواند برای آن زیرنویس پیدا کند.",
+    "tgBazarrUnreachable": "دسترسی به Bazarr ممکن نبود. کمی بعد دوباره امتحان کنید.",
+    "tgSubsFoundNothing": "هنوز چیزی پیدا نشد. Bazarr هر روز خودکار دوباره تلاش می‌کند، یا می‌توانید خودتان انتخاب کنید.",
+    "tgSubsFound": "{languages} پیدا شد – ممکن است کمی طول بکشد تا در منوی زیرنویس نمایش داده شود.",
+    "tgAnd": "و",
+    "tgSubsDownloaded": "دانلود شد – ممکن است کمی طول بکشد تا در منوی زیرنویس نمایش داده شود.",
+    "tgAskingBazarr": "در حال پرسش از Bazarr …",
+    "tgHaveAll": "همه را دارید",
+    "tgSearchAutoNow": "جستجوی خودکار همین حالا",
+    "tgSearchingUpToMinute": "در حال جستجو … ممکن است تا یک دقیقه طول بکشد",
+    "tgPickYourself": "خودتان انتخاب کنید",
+    "tgAskingProviders": "در حال پرسش از منابع زیرنویس … ممکن است تا یک دقیقه طول بکشد",
+    "tgNoProviderSubs": "هنوز هیچ منبعی برای این مورد زیرنویس ندارد.",
+    "tgLangHas": "{language}: موجود",
+    "tgLangMissing": "{language}: موجود نیست",
+    "tgNoReleaseName": "(بدون نام نسخه)",
+    "tgHearingImpaired": "{provider} · ویژه کم‌شنوایان",
+    "tgLangNorwegian": "نروژی",
+    "tgLangEnglish": "انگلیسی",
+    "tgBazarrUnknownTitle": "Bazarr هنوز این عنوان را نمی‌شناسد",
+    "tgBazarrError": "Bazarr با خطا پاسخ داد (HTTP {code})",
+    "tgLowSpaceSnack": "فضای کم در {drive}: ({free} آزاد). دانلود ممکن است متوقف شود — به مسئول سرور اطلاع دهید.",
+    "tgNoQbitForSpace": "برای بررسی فضا دسترسی به qBittorrent ممکن نبود",
+    "tgNotEnoughSpace": "فضای کافی نیست",
+    "tgDriveHasFree": "{drive}: {free} آزاد دارد",
+    "tgCopyInDownloads": "نسخه‌ای در Downloads · از قبل در کتابخانه است",
+    "tgLastWatched": "آخرین تماشا {ago}",
+    "tgNeverWatchedAdded": "هرگز تماشا نشده · اضافه‌شده {ago}",
+    "tgNeverWatched": "هرگز تماشا نشده",
+    "tgNothingSafeToDelete": "در {drive}: چیزی که بتوان با اطمینان حذف کرد پیدا نشد (همه موارد به‌تازگی اضافه یا تماشا شده‌اند یا در علاقه‌مندی‌ها هستند).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{یک عنوان حذف شود؟} other{{count} عنوان حذف شود؟}}",
+    "tgDeletedForGood": "{size} برای همیشه حذف می‌شود. این کار قابل بازگشت نیست.",
+    "tgYesDelete": "بله، حذف شود",
+    "tgDeletingProgress": "در حال حذف {done}/{total} …",
+    "tgNowHasFree": " · {drive}: اکنون {free} آزاد دارد",
+    "tgDeletedTitles": "{count, plural, one{یک عنوان حذف شد} other{{count} عنوان حذف شد}}{extra}",
+    "tgDeletedFailed": "{count} حذف شد، ناموفق: {failed}{extra}",
+    "tgFreeGb": "آزاد کردن {gb} GB",
+    "tgDownloadCopies": "نسخه‌های دانلود",
+    "tgLookingForUnwatched": "در جستجوی مواردی که مدت زیادی تماشا نشده‌اند …",
+    "tgSuggestionEnough": "پیشنهاد: {size} · فضای کافی ✓",
+    "tgSuggestionOf": "پیشنهاد: {size} از {target} مورد نیاز",
+    "tgPickToSayNo": "برای رد کردن یک مورد را انتخاب کنید — پیشنهاد بعدی خودکار می‌آید.",
+    "tgOtherCandidates": "گزینه‌های دیگر",
+    "tgDownloadAnyway": "به‌هرحال دانلود کن",
+    "tgDeleteCountSize": "حذف {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} آزاد دارد.",
+    "tgFileDoubleSpace": "فایل {size} است و دو برابر فضا می‌گیرد (دانلود + نسخه در کتابخانه)، به‌علاوه {buffer} ذخیره.",
+    "tgFileSize": "فایل {size} است، به‌علاوه {buffer} ذخیره.",
+    "tgPendingNeeds": "دانلودهای در حال انجام {size} بیشتر نیاز دارند.",
+    "tgShortBy": "{size} کم است.",
+    "tgOnlyEarlyFiles": "فقط فایل‌هایی پیدا شد که پیش از انتشار دیجیتال فیلم منتشر شده‌اند ({count}) — این‌ها تقریباً همیشه جعلی‌اند.",
+    "tgNoDigitalDate": "هنوز تاریخ انتشار دیجیتال ندارد",
+    "tgDigitalOn": "در {date} به‌صورت دیجیتال منتشر می‌شود",
+    "tgNotOutDigitally": "هنوز به‌صورت دیجیتال منتشر نشده",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "آنچه اکنون موجود است معمولاً فیلم‌برداری از سینما یا فیلمی دیگر با همین نام است. گاهی نسخه‌ای اولیه با کیفیت پایین‌تر وجود دارد، اغلب با زیرنویس چسبیده. «به‌هرحال فایل‌ها را نشان بده» موجودها را نشان می‌دهد. Radarr نسخه اصلی را پس از انتشار خودش دریافت می‌کند.",
+    "tgShowFilesAnyway": "به‌هرحال فایل‌ها را نشان بده",
+    "tgPickSeasonsEpisodes": "فصل‌ها و قسمت‌ها را انتخاب کنید",
+    "tgNoEpisodeInfo": "{season}: اطلاعات قسمت موجود نیست",
+    "tgAppliesAllDevices": "برای همه دستگاه‌هایی که از این حساب استفاده می‌کنند اعمال می‌شود",
+    "tgNoXxxLibrary": "کتابخانه‌ای با نام XXX پیدا نشد.",
+    "tgSearchingEachWord": "جستجوی هر کلمه به‌صورت جدا … (ممکن است نیم دقیقه طول بکشد)",
+    "tgSentToQbit": "«{title}» ({size}) به qBittorrent ارسال شد",
+    "tgDownloadFailed": "دانلود ناموفق بود: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» فایل ویدیویی نداشت و حذف شد.",
+    "tgXxxNoVideoNotRemoved": "«{title}» فایل ویدیویی نداشت و حذف نشد.",
+    "tgSearchNewXxx": "جستجوی XXX جدید",
+    "tgXxxSearchHint": "نام، استودیو …",
+    "tgChecking": "در حال بررسی …",
+    "tgXxxVisible": "اکنون نمایان است. XXX در کتابخانه‌ها، جستجو و صفحه اصلی نشان داده می‌شود.",
+    "tgXxxHidden": "پنهان است. XXX هیچ‌جای برنامه نشان داده نمی‌شود.",
+    "tgShowWithPin": "نمایش (PIN)",
+    "tgChangePin": "تغییر PIN",
+    "tgNoLibraryList": "دریافت فهرست کتابخانه‌ها ممکن نبود (HTTP {code})",
+    "tgNoUserSettings": "دریافت تنظیمات کاربر ممکن نبود (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin تغییر را رد کرد (HTTP {code})",
+    "tgDeleteFailed": "حذف ناموفق بود (HTTP {code})",
+    "tgXxxAddFailed": "افزودن «{title}» به qBittorrent ممکن نبود",
+    "tgSeasonEpisodeLower": "فصل {season}، قسمت {episode}",
+    "tgSearchInSeerr": "جستجو در Seerr",
+    "tgSeerrSearchHint": "جستجوی فیلم و سریال (مثلاً «Lost S02E05»)",
+    "tgMissingInThisSeason": "ناموجود در این فصل",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{فصل ناموجود} other{فصل‌های ناموجود}} {list} - برای دیدن همه فصل‌ها سریال را باز کنید",
+    "tgProjectOnGitHub": "Tortugarr در GitHub",
+    "tgProjectOnGitHubSubtitle": "کد منبع، نسخه‌ها و مشکلات",
+    "tgBuiltOnMoonfinCredit": "Tortugarr بر پایه Moonfin (GPL) ساخته شده است، ساخته توسعه‌دهندگان Moonfin.",
+    "tgCredits": "سپاسگزاری",
+    "tgCreditsThanks": "با سپاس فروتنانه: بدون این پروژه‌ها و افرادی که پشت آن‌ها هستند، Tortugarr وجود نداشت.",
+    "tgCreditMoonfin": "برنامه‌ای که Tortugarr بر پایه آن ساخته شده (GPL)",
+    "tgCreditJellyfin": "سرور رسانه",
+    "tgCreditSeerr": "کشف و درخواست‌ها",
+    "tgCreditRadarr": "فیلم‌ها",
+    "tgCreditSonarr": "سریال‌ها",
+    "tgCreditProwlarr": "مدیر ایندکسرها",
+    "tgCreditBazarr": "زیرنویس‌ها",
+    "tgCreditFlareSolverr": "کمک‌رسان Cloudflare برای ایندکسرها",
+    "tgCreditQbittorrent": "کلاینت دانلود، پیش‌فرض نصب‌کننده",
+    "tgCreditTmdb": "داده‌های فیلم و سریال، پوسترها و تصاویر",
+    "tgCreditOpenSubtitles": "زیرنویس‌ها، دریافت‌شده از طریق Bazarr",
+    "tgTmdbNotice": "این محصول از TMDB API استفاده می‌کند اما توسط TMDB تأیید یا گواهی نشده است.",
+    "tgLoadingLogoSize": "اندازه لوگوی بارگذاری",
+    "tgLoadingLogoSizeSubtitle": "لوگویی که هنگام بارگذاری ویدیو می‌چرخد",
+    "tgSubtitleLanguages": "زبان‌های زیرنویس",
+    "tgSubtitleLanguagesSubtitle": "در منوی زیرنویس نمایش داده می‌شود: {languages}",
+    "tgShowAllSubLangsOffChosen": "خاموش: منوی زیرنویس فقط زبان‌های انتخاب‌شده را نشان می‌دهد",
+    "tgDiscoveryLanguages": "زبان‌ها در پرطرفدار و محبوب",
+    "tgDiscoveryLanguagesSubtitle": "نمایش داده می‌شود: {languages}",
+    "tgHideForeignOnChosen": "روشن: پرطرفدار و محبوب فقط زبان‌های انتخاب‌شده را نشان می‌دهند",
+    "tgShowLanguageBadges": "نمایش نشان زبان",
+    "tgShowLanguageBadgesOn": "روشن: عنوان‌ها زبان خود را نشان می‌دهند (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "خاموش: بدون نشان زبان روی عنوان‌ها"
 }

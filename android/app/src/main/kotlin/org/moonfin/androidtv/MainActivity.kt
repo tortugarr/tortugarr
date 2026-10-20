@@ -71,6 +71,13 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     private var keyHandler: ((KeyEvent) -> Boolean)? = null
     private var motionHandler: ((MotionEvent) -> Boolean)? = null
 
+    // Key codes whose ACTION_DOWN (repeatCount 0) reached this activity. Android keeps
+    // auto-repeating a key it believes is still held, e.g. when an accessibility key
+    // remapper (Button Mapper) swallowed the UP of the remote key that launched us. Those
+    // repeats and the late UP land here; dropping them keeps them from skipping the intro
+    // or moving focus.
+    private val keysDownHere = HashSet<Int>()
+
     override fun registerInputDeviceListener(listener: InputManager.InputDeviceListener, handler: Handler?) {
         val inputManager = getSystemService(Context.INPUT_SERVICE) as InputManager
         inputManager.registerInputDeviceListener(listener, handler)
@@ -203,6 +210,9 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
 
     companion object {
         private var engineHandedToActivity: FlutterEngine? = null
+        // TCL remote app keys (Netflix, YouTube, Prime, TCL Channel, TCL Dashboard, web).
+        // The app has no use for them; remappers launch other apps on them.
+        private val TCL_APP_KEYS = setOf(4020, 4062, 4065, 4099, 4137, 4159)
         private const val CHANNEL = "org.moonfin.androidtv/pip"
         private const val CAST_CHANNEL = "com.moonfin/native_cast"
         private const val CAST_EVENTS_CHANNEL = "com.moonfin/native_cast_events"
@@ -446,6 +456,9 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                     } else {
                         finishAffinity()
                     }
+                }
+                "bringToFront" -> {
+                    result.success(bringTaskToFront())
                 }
                 else -> result.notImplemented()
             }
@@ -912,6 +925,7 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         // A native session decides for itself what a pad button does, so the
         // gate waits for it to finish.
         if (pad?.active != true && gameInputRouter.blocksNavigation(event)) return true
+        if (isStrayKey(event)) return true
         // keyHandler is the gamepads_android plugin's registration
         // (GamepadsCompatibleActivity.registerKeyEventHandler), which forwards
         // to the xyz.luan/gamepads channel's Gamepads.normalizedEvents stream.
@@ -926,6 +940,31 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         // casts this Activity to GamepadsCompatibleActivity and calls it
         // unconditionally, so the interface member must remain implemented.
         return super.dispatchKeyEvent(event)
+    }
+
+    /**
+     * True for key events that must not reach Flutter (see [keysDownHere]). Only
+     * auto-repeats of keys this activity never saw pressed are dropped; UP events always
+     * pass, because Flutter's keyboard state breaks (e.g. Back stops working) if it misses
+     * the UP of a key it saw go down before an external activity took focus.
+     */
+    private fun isStrayKey(event: KeyEvent): Boolean {
+        val code = event.keyCode
+        if (code in TCL_APP_KEYS) return true
+        return when (event.action) {
+            KeyEvent.ACTION_DOWN ->
+                if (event.repeatCount == 0) {
+                    keysDownHere.add(code)
+                    false
+                } else {
+                    code !in keysDownHere
+                }
+            KeyEvent.ACTION_UP -> {
+                keysDownHere.remove(code)
+                false
+            }
+            else -> false
+        }
     }
 
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
@@ -1268,6 +1307,19 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         )
     }
 
+    /// Moves this task to the front when a remote "play now" arrives while
+    /// the app is in the background. Best effort; the platform may refuse.
+    private fun bringTaskToFront(): Boolean {
+        return try {
+            val am = getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+            am.moveTaskToFront(taskId, android.app.ActivityManager.MOVE_TASK_WITH_HOME)
+            true
+        } catch (t: Throwable) {
+            android.util.Log.w("Moonfin", "bringToFront failed", t)
+            false
+        }
+    }
+
     private fun startGoogleCastSession(args: Map<*, *>, result: MethodChannel.Result) {
         val targetId = args["targetId"] as? String
         val streamUrl = args["streamUrl"] as? String
@@ -1302,18 +1354,24 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         val sessionManager = castContext.sessionManager
         val currentSession = sessionManager.currentCastSession
         if (currentSession != null) {
-            loadOnCastSession(
-                session = currentSession,
-                streamUrl = streamUrl,
-                contentType = contentType,
-                title = title,
-                subtitle = subtitle,
-                posterUrl = posterUrl,
-                queueItems = queueItems,
-                startTicks = startTicks,
-                result = result,
-            )
-            return
+            if (currentSession.isConnected && currentSession.remoteMediaClient != null) {
+                loadOnCastSession(
+                    session = currentSession,
+                    streamUrl = streamUrl,
+                    contentType = contentType,
+                    title = title,
+                    subtitle = subtitle,
+                    posterUrl = posterUrl,
+                    queueItems = queueItems,
+                    startTicks = startTicks,
+                    result = result,
+                )
+                return
+            }
+            // A session that is still connecting, or one left behind by an
+            // earlier attempt, has no media client, and loading on it fails
+            // with NO_REMOTE_CLIENT every time. Drop it and start afresh.
+            sessionManager.endCurrentSession(true)
         }
 
         pendingCastTimeout?.let { handler.removeCallbacks(it) }

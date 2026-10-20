@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/services/seerr/seerr_api_models.dart';
+import '../../../data/services/tortugarr/download_features.dart';
 import '../../../data/viewmodels/seerr_media_detail_view_model.dart';
 import '../../../l10n/app_localizations.dart';
+import '../download_now/download_now_button.dart';
 import 'seerr_advanced_request_options.dart';
 import 'seerr_quota_row.dart';
 import 'seerr_request_action.dart';
@@ -32,6 +36,29 @@ void showSeerrRequestDialog({
   bool isContinuing = false,
 }) {
   final s = vm.state;
+  if (DownloadFeatures.downloadNow) {
+    // Tortugarr: the user picks everything themselves, seasons/episodes for a
+    // series and then the exact release (resolution and size) from the
+    // Prowlarr picker, instead of a plain Seerr request.
+    final date = s.releaseDate ?? s.firstAirDate;
+    unawaited(
+      DownloadNowButton.run(
+        context,
+        tmdbId: s.tmdbId,
+        mediaType: s.isTv ? 'tv' : 'movie',
+        title: s.displayTitle,
+        year: date != null && date.length >= 4
+            ? int.tryParse(date.substring(0, 4))
+            : null,
+        seasons: season != null ? [season] : null,
+        tvSeasons: s.isTv ? (s.tv?.seasons ?? const []) : null,
+        numberOfSeasons: s.numberOfSeasons,
+        initialTier: is4k ? '2160p' : null,
+        tvdbId: s.externalIds?.tvdbId,
+      ).then((_) => vm.refreshDetails()),
+    );
+    return;
+  }
   final l10n = AppLocalizations.of(context);
   final type = s.isTv ? l10n.series : l10n.movie;
   showStyledPlayerDialog<void>(

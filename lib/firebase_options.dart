@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,19 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDmnzsFwVWmD-jQfAhvqNpaSyynX3zfXCQ',
-    appId: '1:441057924978:android:44e1a665e44f2bdee06feb',
-    messagingSenderId: '441057924978',
-    projectId: 'moonfin-500020',
-    storageBucket: 'moonfin-500020.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBrG1Soo9T9h16Di3s0zAMozE3xm3OjLRU',
-    appId: '1:441057924978:ios:88c6e38098495466e06feb',
-    messagingSenderId: '441057924978',
-    projectId: 'moonfin-500020',
-    storageBucket: 'moonfin-500020.firebasestorage.app',
-    iosBundleId: 'org.moonfin.app',
+    apiKey: 'AIzaSyAOF8AKqEpYiKZUzaTeoOQzkzt7RUD9Nls',
+    appId: '1:287635979988:android:76c5626561ee1c9d33c541',
+    messagingSenderId: '287635979988',
+    projectId: 'tortugarr-app',
+    storageBucket: 'tortugarr-app.firebasestorage.app',
   );
 }

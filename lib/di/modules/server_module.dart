@@ -16,6 +16,7 @@ import '../../data/services/download_service.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../data/services/push_messaging_service.dart';
 import '../../data/services/saved_media_presence.dart';
+import '../../data/services/seerr_active_downloads_service.dart';
 import '../../data/services/seerr_notification_service.dart';
 import '../../data/services/socket_handler.dart';
 import '../../data/services/storage_path_service.dart';
@@ -58,6 +59,12 @@ void registerServerModule() {
   if (!_getIt.isRegistered<SeerrNotificationService>()) {
     _getIt.registerLazySingleton<SeerrNotificationService>(
       () => SeerrNotificationService(),
+    );
+  }
+
+  if (!_getIt.isRegistered<SeerrActiveDownloadsService>()) {
+    _getIt.registerLazySingleton<SeerrActiveDownloadsService>(
+      SeerrActiveDownloadsService.new,
     );
   }
 

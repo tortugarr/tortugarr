@@ -155,6 +155,9 @@ class Destinations {
   // Settings
   static const settings = '/settings';
 
+  // Discovery
+  static const discover = '/discover';
+
   // Seerr
   static const seerrDiscover = '/seerr/discover';
   static const seerrRequests = '/seerr/requests';

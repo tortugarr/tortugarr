@@ -7,6 +7,7 @@ import '../../../preference/button_layout.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../syncplay/syncplay_manager.dart';
 import '../../../util/platform_detection.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 /// The details screen action buttons a user can arrange. Play is absent on
 /// purpose, it always leads the row because it renders as the primary button
@@ -23,6 +24,7 @@ enum DetailButton {
   restart('restart', canHide: false),
   audio('audio'),
   subtitles('subtitles'),
+  findSubtitles('findSubtitles'),
   version('version'),
   cast('cast'),
   trailer('trailer'),
@@ -127,6 +129,7 @@ enum DetailButton {
     DetailButton.restart => Icons.restart_alt,
     DetailButton.audio => Icons.audiotrack,
     DetailButton.subtitles => Icons.subtitles,
+    DetailButton.findSubtitles => Icons.closed_caption_outlined,
     DetailButton.version => Icons.video_file,
     DetailButton.cast => Icons.cast,
     DetailButton.trailer => Icons.movie_outlined,
@@ -150,6 +153,7 @@ enum DetailButton {
     DetailButton.restart => l10n.restart,
     DetailButton.audio => l10n.audio,
     DetailButton.subtitles => l10n.subtitles,
+    DetailButton.findSubtitles => appL10n().tgFindSubtitles,
     DetailButton.version => l10n.version,
     DetailButton.cast => l10n.cast,
     DetailButton.trailer => l10n.trailer,

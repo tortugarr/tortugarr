@@ -89,6 +89,19 @@ object Media3Bridge {
     private var headlessHost: Media3VideoView? = null
     private var hostOwner: Any? = null
 
+    // While set (and not expired), the slot is reserved for the next main
+    // view: preview surfaces may not attach, and a preview source is dropped
+    // instead of queued. Media3SlotPolicy cannot see a main source that is
+    // still queued for a view that has not mounted yet, so without this a
+    // home-screen trailer could take the slot and the queued movie with it.
+    // Cleared when a main view attaches; the expiry keeps trailers from
+    // staying dead if the main player never opens.
+    @Volatile
+    private var mainPlaybackReservedUntilMs = 0L
+
+    private fun mainPlaybackReserved(): Boolean =
+        System.currentTimeMillis() < mainPlaybackReservedUntilMs
+
     @Volatile
     private var eventSink: EventChannel.EventSink? = null
 
@@ -140,6 +153,8 @@ object Media3Bridge {
     }
 
     private fun attachViewNow(view: Media3VideoView) {
+        // A trailer may not grab the slot while a main player is on its way.
+        if (view.role == "preview" && mainPlaybackReserved()) return
         val oldView = activeView
         // A source that already landed on the outgoing main view moves with
         // the slot. Flutter can mount the replacement after setSource was
@@ -164,6 +179,9 @@ object Media3Bridge {
                     carriedSource = oldView.handoverSourceArguments()
                 }
             }
+        }
+        if (view.role != "preview") {
+            mainPlaybackReservedUntilMs = 0L
         }
         activeView = view
         emitViewReady()
@@ -280,6 +298,27 @@ object Media3Bridge {
     }
 
     fun handleMethodCall(call: MethodCall, result: MethodChannel.Result, caller: Any) {
+        if (call.method == "prepareMainPlayback") {
+            // Called right before a main playback starts from a screen that
+            // is not the player (remote play from the home screen). A trailer
+            // or a view left behind by an earlier screen is released so the
+            // coming source queues up for the fullscreen player's own view.
+            // Music on the headless host is left to Media3SlotPolicy.
+            mainHandler.post {
+                val current = activeView
+                if (current != null && current !== headlessHost) {
+                    current.forceReleasePlayer()
+                    activeView = null
+                }
+                synchronized(pendingCalls) {
+                    pendingCalls.clear()
+                }
+                mainPlaybackReservedUntilMs = System.currentTimeMillis() + 20_000L
+                result.success(true)
+            }
+            return
+        }
+
         if (call.method == "activateView") {
             val id = ((call.arguments as? Map<*, *>)?.get("viewId") as? Number)?.toInt()
             val view = id?.let { viewRegistry[it] }
@@ -374,6 +413,12 @@ object Media3Bridge {
         if (call.method == "setSource") {
             val sourceArgs = call.arguments as? Map<*, *>
             val current = activeView
+            if (sourceArgs?.get("preview") as? Boolean == true && mainPlaybackReserved()) {
+                // Slot reserved for the main player; a queued trailer would
+                // otherwise replace the movie once the player view attaches.
+                result.success(null)
+                return
+            }
             val mounted = newestMountedMainView()
             val route = Media3SlotPolicy.routeSource(
                 isPreview = sourceArgs?.get("preview") as? Boolean ?: false,

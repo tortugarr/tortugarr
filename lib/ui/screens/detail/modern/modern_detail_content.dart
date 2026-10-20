@@ -81,6 +81,15 @@ import 'widgets/season_card.dart';
 import 'widgets/up_next_card.dart';
 import '../../../../data/viewmodels/seerr_media_detail_view_model.dart';
 import '../../../../preference/seerr_preferences.dart';
+import '../../../../data/services/download/missing_episodes.dart';
+import '../../../../data/services/tortugarr/download_features.dart';
+import '../../../widgets/missing_episodes/missing_episode_card.dart';
+import '../../../widgets/missing_episodes/missing_episodes_flow.dart';
+import '../../../widgets/missing_episodes/season_monitor_toggle.dart';
+import '../../../widgets/missing_episodes/season_switcher.dart';
+import '../../../widgets/movie_collection/movie_collection_strip.dart';
+import '../../../widgets/download_now/download_now_button.dart';
+import '../../../../data/services/seerr/movie_collection.dart';
 import '../../../widgets/overlay_sheet.dart';
 import '../../../widgets/seerr/seerr_collection_banner.dart';
 import '../../../widgets/seerr/seerr_item_chips.dart';
@@ -89,6 +98,8 @@ import '../../../widgets/seerr/seerr_item_status.dart';
 import '../../../widgets/seerr/seerr_status_pill.dart';
 import '../../../widgets/seerr/seerr_stats_card.dart';
 import '../../../widgets/seerr_icons.dart';
+import '../../../navigation/single_push.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 double _desktopUiScale({UserPreferences? prefs}) {
   final effectivePrefs = prefs ?? GetIt.instance<UserPreferences>();
@@ -264,7 +275,15 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
   final FocusNode _otherFirstFocusNode = FocusNode(debugLabel: 'otherFirst');
   final FocusNode _collectionFirstFocusNode = FocusNode(debugLabel: 'collectionFirst');
   final FocusNode _seasonsFirstFocusNode = FocusNode(debugLabel: 'seasonsFirst');
+  final FocusNode _collectionStripFirstFocusNode =
+      FocusNode(debugLabel: 'movieCollectionFirst');
   final FocusNode _episodesFirstFocusNode = FocusNode(debugLabel: 'episodesFirst');
+  final FocusNode _seasonSwitcherFocusNode = FocusNode(debugLabel: 'seasonSwitcher');
+  final FocusNode _seasonMonitorFocusNode = FocusNode(debugLabel: 'seasonMonitor');
+  bool _seasonMonitorShown = false;
+  /// Whether the Season page shows the season switcher above its episodes,
+  /// so Up from the first episode goes there instead of to the tab bar.
+  bool _seasonSwitcherShown = false;
   final FocusNode _overviewFocusNode = FocusNode(debugLabel: 'overview');
   final FocusNode _personMoviesFirstFocusNode = FocusNode(debugLabel: 'personMoviesFirst');
   final FocusNode _personSeriesFirstFocusNode = FocusNode(debugLabel: 'personSeriesFirst');
@@ -719,7 +738,10 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     _otherFirstFocusNode.dispose();
     _collectionFirstFocusNode.dispose();
     _seasonsFirstFocusNode.dispose();
+    _collectionStripFirstFocusNode.dispose();
     _episodesFirstFocusNode.dispose();
+    _seasonSwitcherFocusNode.dispose();
+    _seasonMonitorFocusNode.dispose();
     _overviewFocusNode.dispose();
     _personMoviesFirstFocusNode.dispose();
     _personSeriesFirstFocusNode.dispose();
@@ -1058,6 +1080,10 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       case 'Season':
         return [
           _ModernTab('episodes', l10n.episodes, _episodeListTab),
+          // All seasons of the series (library + missing), so a Season page is
+          // never a dead end. Only when there is another season to go to.
+          if (_seriesSeasonCount() > 1)
+            _ModernTab('seasons', l10n.seasons, _seasonsTab),
           if (hasCast) cast,
           if (hasCrew) crew,
           if (hasStudios) studios,
@@ -1070,6 +1096,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
           // More episodes section. A season's own list is the page itself.
           if (sections.shows(DetailSection.moreEpisodes))
             _ModernTab('episodes', l10n.episodes, _episodeListTab),
+          if (_vm.seasons.isNotEmpty)
+            _ModernTab('seasons', l10n.seasons, _seasonsTab),
           if (hasCast) cast,
           if (hasCrew) crew,
           if (hasStudios) studios,
@@ -1327,13 +1355,14 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     }
     final textTheme = Theme.of(context).textTheme;
     final counts = _episodeCountsBySeason();
-    final showPosterUrl = _imageUrl(item);
+    final showPosterUrl = _seriesPosterUrl(item);
     final watchedBehavior =
         widget.prefs.get(UserPreferences.watchedIndicatorBehavior);
     // Determine which season contains the "next up" episode, mirroring the
     // episode-card logic: prefer _vm.nextUp.seasonId, fall back to the first
     // unplayed episode's seasonId so the cyan border always renders correctly.
     final nextUpSeasonId = _vm.nextUp?.seasonId ??
+        (item.type == 'Episode' ? item.seasonId : null) ??
         _vm.seriesEpisodes.firstWhereOrNull((e) => !e.isPlayed)?.seasonId;
     final showAvailabilityBadges =
         widget.prefs.get(UserPreferences.showSeerrAvailabilityBadges);
@@ -1403,13 +1432,37 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                 qualityToggle: true,
                 season: season.indexNumber,
               )
-            : context.push(
-                Destinations.item(
-                  season.id,
-                  serverId: season.serverId,
-                ),
-              ),
+            : _openSeason(item, season),
       );
+    }
+    // Seasons Sonarr knows that the library has no episodes of.
+    final arr = _vm.arrStatus;
+    final missingSeasons = arr == null
+        ? const <int>[]
+        : MissingEpisodes.missingSeasons(
+            presentSeasons: [
+              for (final s in _vm.seasons)
+                if (s.indexNumber != null) s.indexNumber!,
+            ],
+            status: arr,
+          );
+    int sonarrEpisodeCount(int season) =>
+        arr?.episodes.where((e) => e.seasonNumber == season).length ?? 0;
+    // Sonarr monitoring per season, off by default; only for seasons Sonarr has.
+    List<Widget> monitorToggle(int? season) {
+      if (season == null) return const [];
+      final monitored = _vm.seasonMonitored(season);
+      if (monitored == null) return const [];
+      return [
+        const SizedBox(height: 4),
+        SeasonMonitorToggle(
+          season: season,
+          monitored: monitored,
+          compact: true,
+          onChanged: (on, searchNow) =>
+              _vm.setSeasonMonitoring(season, on: on, searchNow: searchNow),
+        ),
+      ];
     }
     final seasonLabelStyle = textTheme.labelMedium?.copyWith(
       color: Colors.white70,
@@ -1419,12 +1472,12 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     );
     // Centered when it fits, horizontally scrollable when the name is longer
     // than the card, so a long season name never wraps to a second line.
-    Widget seasonLabel(int i, double viewportWidth) => SingleChildScrollView(
+    Widget nameLabel(String name, double viewportWidth) => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(
             constraints: BoxConstraints(minWidth: viewportWidth),
             child: Text(
-              _vm.seasons[i].name.toUpperCase(),
+              name.toUpperCase(),
               maxLines: 1,
               softWrap: false,
               style: seasonLabelStyle,
@@ -1432,6 +1485,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             ),
           ),
         );
+    Widget seasonLabel(int i, double viewportWidth) =>
+        nameLabel(_vm.seasons[i].name, viewportWidth);
     final child = LayoutBuilder(
       builder: (context, constraints) {
         const spacing = 12.0;
@@ -1460,6 +1515,36 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                       height: cardHeight,
                       topRow: i < columns,
                     ),
+                    ...monitorToggle(_vm.seasons[i].indexNumber),
+                  ],
+                ),
+              ),
+            for (var j = 0; j < missingSeasons.length; j++)
+              SizedBox(
+                width: cardWidth,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    nameLabel(l10n.seasonNumber(missingSeasons[j]), cardWidth),
+                    const SizedBox(height: 6),
+                    SeasonCard(
+                      title: l10n.seasonNumber(missingSeasons[j]),
+                      subtitle: l10n.episodeCount(
+                        sonarrEpisodeCount(missingSeasons[j]),
+                      ),
+                      imageUrl: showPosterUrl,
+                      isFallbackImage: true,
+                      landscape: _landscape,
+                      missing: true,
+                      width: cardWidth,
+                      height: cardHeight,
+                      autoScroll: true,
+                      onNavigateUp: _vm.seasons.length + j < columns
+                          ? _focusSelectedTab
+                          : null,
+                      onTap: () => _openMissingSeason(item, missingSeasons[j]),
+                    ),
+                    ...monitorToggle(missingSeasons[j]),
                   ],
                 ),
               ),
@@ -1479,9 +1564,216 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 32),
-        child: child,
+        child: _vm.missingLoad == MissingEpisodesLoad.unavailable
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  child,
+                  const SizedBox(height: 16),
+                  _missingStatusNote(first: false),
+                ],
+              )
+            : child,
       ),
     );
+  }
+
+  /// The poster of the series a Series/Season/Episode page belongs to, for
+  /// season cards that have no image of their own.
+  String? _seriesPosterUrl(AggregatedItem item) {
+    final seriesId = item.seriesId;
+    final tag = item.seriesPrimaryImageTag;
+    if (item.type == 'Episode' && seriesId != null && tag != null) {
+      return _vm.imageApi.getPrimaryImageUrl(seriesId, maxHeight: 360, tag: tag);
+    }
+    return _imageUrl(item);
+  }
+
+  /// The shown season's episodes with Sonarr's missing ones in between, or
+  /// null when Sonarr's list is not loaded (then only what is on disk shows).
+  /// [item] is the Season page, or the Episode page whose season is listed.
+  List<SeasonEntry>? _seasonEntries(AggregatedItem item) {
+    final status = _vm.arrStatus;
+    final number = MissingEpisodes.seasonShownBy(
+      itemType: item.type,
+      indexNumber: item.indexNumber,
+      parentIndexNumber: item.parentIndexNumber,
+    );
+    if (status == null || number == null) return null;
+    return MissingEpisodes.mergeSeason(
+      present: _vm.episodes,
+      status: status,
+      season: number,
+    );
+  }
+
+  void _openMissingSeason(AggregatedItem series, int season) {
+    final status = _vm.arrStatus;
+    if (status == null) return;
+    unawaited(showMissingSeasonDialog(
+      context,
+      vm: _vm,
+      seriesTitle: series.seriesName ?? series.name,
+      season: season,
+      entries: MissingEpisodes.mergeSeason(
+        present: const [],
+        status: status,
+        season: season,
+      ),
+    ));
+  }
+
+  /// Season-pack button, missing-episode placeholders and the add-to-Sonarr
+  /// tile for one season's list. [first] marks the row that takes the tab's
+  /// first focus node.
+  List<Widget Function(bool first)> _missingAwareRows(
+    BuildContext context, {
+    required String seriesTitle,
+    required int? season,
+    required List<SeasonEntry> entries,
+    required Widget Function(AggregatedItem episode, bool first) presentRow,
+  }) {
+    final rows = <Widget Function(bool first)>[];
+    if (season != null &&
+        _vm.arrStatus != null &&
+        MissingEpisodes.offerSeasonPack(entries)) {
+      rows.add((first) => SeasonPackButton(
+            missingCount: MissingEpisodes.downloadableCount(entries),
+            focusNode: first ? _episodesFirstFocusNode : null,
+            onNavigateUp: first ? _episodesUp : null,
+            onSelect: () => unawaited(openSeasonPack(
+              context,
+              vm: _vm,
+              seriesTitle: seriesTitle,
+              season: season,
+            )),
+          ));
+    }
+    for (final entry in entries) {
+      final present = entry.present;
+      final missing = entry.missing;
+      if (present != null) {
+        rows.add((first) => presentRow(present, first));
+      } else if (missing != null) {
+        rows.add((first) => MissingEpisodeCard(
+              missing: missing,
+              focusNode: first ? _episodesFirstFocusNode : null,
+              onNavigateUp: first ? _episodesUp : null,
+              onSelect: () => unawaited(openMissingEpisode(
+                context,
+                vm: _vm,
+                seriesTitle: seriesTitle,
+                missing: missing,
+              )),
+            ));
+      }
+    }
+    return rows;
+  }
+
+  Widget _missingStatusNote({required bool first}) => MissingEpisodesStatusNote(
+        reason: _vm.missingError ?? 'Ukjent feil',
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onNavigateUp: first ? _episodesUp : null,
+        onRetry: () => unawaited(_vm.loadMissingEpisodes()),
+      );
+
+  Widget _addToSonarrTile(BuildContext context, {required bool first}) =>
+      AddToSonarrTile(
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onNavigateUp: first ? _episodesUp : null,
+        onSelect: () => unawaited(addSeriesToSonarr(context, _vm)),
+      );
+
+  /// Library seasons plus the seasons only Sonarr knows about.
+  /// Opens a season from the seasons row. Switching from one season to
+  /// another replaces the page, so Back still returns to where the user
+  /// came from.
+  void _openSeason(AggregatedItem item, AggregatedItem season) {
+    final destination =
+        Destinations.item(season.id, serverId: season.serverId);
+    if (item.type == 'Season') {
+      if (season.id != item.id) context.pushReplacement(destination);
+    } else {
+      context.push(destination);
+    }
+  }
+
+  int _seriesSeasonCount() {
+    final arr = _vm.arrStatus;
+    final missing = arr == null
+        ? 0
+        : MissingEpisodes.missingSeasons(
+            presentSeasons: [
+              for (final s in _vm.seasons)
+                if (s.indexNumber != null) s.indexNumber!,
+            ],
+            status: arr,
+          ).length;
+    return _vm.seasons.length + missing;
+  }
+
+  /// Up from the first row of the episode list: the season switcher when the
+  /// Season page shows one, otherwise the tab bar.
+  void _episodesUp() {
+    if (_seasonMonitorShown && _seasonMonitorFocusNode.context != null) {
+      _seasonMonitorFocusNode.requestFocus();
+    } else if (_seasonSwitcherShown && _seasonSwitcherFocusNode.context != null) {
+      _seasonSwitcherFocusNode.requestFocus();
+    } else {
+      _focusSelectedTab();
+    }
+  }
+
+  /// Chips for every season of the series (library seasons plus the ones only
+  /// Sonarr knows) on a Season page, or null when there is nothing to switch to.
+  Widget? _seasonSwitcher(BuildContext context, AggregatedItem item) {
+    if (item.type != 'Season' || item.seriesId == null) return null;
+    try {
+      final l10n = AppLocalizations.of(context);
+      final arr = _vm.arrStatus;
+      final missing = arr == null
+          ? const <int>[]
+          : MissingEpisodes.missingSeasons(
+              presentSeasons: [
+                for (final s in _vm.seasons)
+                  if (s.indexNumber != null) s.indexNumber!,
+              ],
+              status: arr,
+            );
+      final entries = SeasonSwitcherEntry.combine(
+        library: [
+          for (final s in _vm.seasons)
+            (id: s.id, serverId: s.serverId, number: s.indexNumber, name: s.name),
+        ],
+        missingSeasons: missing,
+        missingLabel: l10n.seasonNumber,
+      );
+      if (entries.length < 2) return null;
+      return SeasonSwitcher(
+        entries: entries,
+        currentItemId: item.id,
+        currentFocusNode: _seasonSwitcherFocusNode,
+        onNavigateUp: _focusSelectedTab,
+        onNavigateDown: () => _seasonMonitorShown &&
+                _seasonMonitorFocusNode.context != null
+            ? _seasonMonitorFocusNode.requestFocus()
+            : _episodesFirstFocusNode.requestFocus(),
+        onSelect: (e) {
+          if (e.missing) {
+            final number = e.number;
+            if (number != null) _openMissingSeason(item, number);
+          } else {
+            // Replace, so Back still returns to where the user came from.
+            context.pushReplacement(
+              Destinations.item(e.itemId!, serverId: e.serverId),
+            );
+          }
+        },
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Widget _episodeListTab(BuildContext context, AggregatedItem item) {
@@ -1500,6 +1792,64 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     // episode so the cyan "next up" border still renders correctly.
     final nextUpId = _vm.nextUp?.id ??
         _vm.episodes.firstWhereOrNull((e) => !e.isPlayed)?.id;
+    // Season pages and Episode pages (Continue Watching / Next Up) both list
+    // one season, so both get Sonarr's missing episodes merged in.
+    final season = MissingEpisodes.seasonShownBy(
+      itemType: item.type,
+      indexNumber: item.indexNumber,
+      parentIndexNumber: item.parentIndexNumber,
+    );
+    final listsSeason = season != null;
+    final entries = (listsSeason ? _seasonEntries(item) : null) ??
+        [for (final e in _vm.episodes) SeasonEntry.present(e)];
+
+    final switcher = _seasonSwitcher(context, item);
+    _seasonSwitcherShown = switcher != null;
+    final monitored = season == null ? null : _vm.seasonMonitored(season);
+    final monitorToggle = monitored == null
+        ? null
+        : SeasonMonitorToggle(
+            season: season!,
+            monitored: monitored,
+            focusNode: _seasonMonitorFocusNode,
+            onNavigateUp: () => _seasonSwitcherShown &&
+                    _seasonSwitcherFocusNode.context != null
+                ? _seasonSwitcherFocusNode.requestFocus()
+                : _focusSelectedTab(),
+            onNavigateDown: () => _episodesFirstFocusNode.requestFocus(),
+            onChanged: (on, searchNow) =>
+                _vm.setSeasonMonitoring(season, on: on, searchNow: searchNow),
+          );
+    _seasonMonitorShown = monitorToggle != null;
+    final rows = _missingAwareRows(
+      context,
+      seriesTitle: item.seriesName ?? item.name,
+      season: season,
+      entries: entries,
+      presentRow: (episode, first) => DetailEpisodeCard(
+        episode: episode,
+        imageApi: _vm.imageApi,
+        onChanged: () => _vm.load(),
+        isActive: episode.id == nextUpId,
+        contextSeasonId: _vm.effectiveSeasonId,
+        focusNode: first ? _episodesFirstFocusNode : null,
+        onKeyEvent: first
+            ? (node, event) {
+                if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                  _episodesUp();
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              }
+            : null,
+      ),
+    );
+    if (listsSeason && _vm.missingLoad == MissingEpisodesLoad.notInSonarr) {
+      rows.add((first) => _addToSonarrTile(context, first: first));
+    }
+    if (listsSeason && _vm.missingLoad == MissingEpisodesLoad.unavailable) {
+      rows.add((first) => _missingStatusNote(first: first));
+    }
 
     return Focus(
       canRequestFocus: false,
@@ -1513,26 +1863,20 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var i = 0; i < _vm.episodes.length; i++)
+          if (switcher != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: switcher,
+            ),
+          if (monitorToggle != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Align(alignment: Alignment.centerLeft, child: monitorToggle),
+            ),
+          for (var i = 0; i < rows.length; i++)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: DetailEpisodeCard(
-                episode: _vm.episodes[i],
-                imageApi: _vm.imageApi,
-                onChanged: () => _vm.load(),
-                isActive: _vm.episodes[i].id == nextUpId,
-                contextSeasonId: _vm.effectiveSeasonId,
-                focusNode: i == 0 ? _episodesFirstFocusNode : null,
-                onKeyEvent: i == 0
-                    ? (node, event) {
-                        if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                          _focusSelectedTab();
-                          return KeyEventResult.handled;
-                        }
-                        return KeyEventResult.ignored;
-                      }
-                    : null,
-              ),
+              child: rows[i](i == 0),
             ),
         ],
       ),
@@ -1589,10 +1933,25 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       }
     }
 
+    // With Sonarr's list loaded, every season gets its missing episodes and
+    // seasons the library has none of get a group of their own.
+    final arr = _vm.arrStatus;
+    final seasonNumbers = <int>{
+      ...seasonGroups.keys,
+      if (arr != null)
+        ...MissingEpisodes.missingSeasons(
+          presentSeasons: seasonGroups.keys,
+          status: arr,
+        ),
+    }.toList()
+      ..sort();
+
     final children = <Widget>[];
-    for (final entry in seasonGroups.entries) {
-      final season = entry.key;
-      final eps = entry.value;
+    for (final season in seasonNumbers) {
+      final eps = seasonGroups[season] ?? const <AggregatedItem>[];
+      final entries = arr == null
+          ? [for (final e in eps) SeasonEntry.present(e)]
+          : MissingEpisodes.mergeSeason(present: eps, status: arr, season: season);
       final isExpanded = _expandedSeasons.contains(season);
       final isFirst = children.isEmpty;
 
@@ -1632,7 +1991,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    '(${eps.length})',
+                    entries.length > eps.length
+                        ? '(${eps.length} av ${entries.length})'
+                        : '(${eps.length})',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.white38,
                         ),
@@ -1650,21 +2011,41 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             padding: const EdgeInsets.only(left: 12, bottom: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: eps.map((episode) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: DetailEpisodeCard(
+              children: [
+                for (final row in _missingAwareRows(
+                  context,
+                  seriesTitle: item.name,
+                  season: season,
+                  entries: entries,
+                  presentRow: (episode, _) => DetailEpisodeCard(
                     episode: episode,
                     imageApi: _vm.imageApi,
                     onChanged: () => _vm.load(),
                     isActive: episode.id == _vm.nextUp?.id,
                   ),
-                );
-              }).toList(),
+                ))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: row(false),
+                  ),
+              ],
             ),
           ),
         );
       }
+    }
+
+    if (_vm.missingLoad == MissingEpisodesLoad.notInSonarr) {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: _addToSonarrTile(context, first: children.isEmpty),
+      ));
+    }
+    if (_vm.missingLoad == MissingEpisodesLoad.unavailable) {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: _missingStatusNote(first: children.isEmpty),
+      ));
     }
 
     return Focus(
@@ -3504,7 +3885,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                   if (entry.serverId == 'seerr') {
                     final mediaType = entry.seerrMediaType ??
                         (entry.type == 'Series' ? 'tv' : 'movie');
-                    context.push(
+                    SinglePush.push(
+                      context,
                       Destinations.seerrMedia(entry.id, mediaType: mediaType),
                     );
                   } else {
@@ -3651,7 +4033,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                                   RegExp(r'^tmdb:(?:movie:|tv:)?'),
                                   '',
                                 );
-                          context.push(
+                          SinglePush.push(
+                            context,
                             Destinations.seerrMedia(
                               targetId,
                               mediaType: mediaType,
@@ -4731,7 +5114,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             selectedMediaSourceId: widget.selectedMediaSourceId,
             onSelectedMediaSourceChanged: widget.onSelectedMediaSourceChanged,
             tvPlayFocusNode: widget.initialFocusNode,
-            downTarget: _tabBarDownTarget(tabs),
+            downTarget: _showCollectionStrip(item)
+                ? _collectionStripFirstFocusNode
+                : _tabBarDownTarget(tabs),
             upTarget: _overviewFocusNode,
             autoPlay: widget.autoPlay,
             modernStyle: true,
@@ -4752,10 +5137,73 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             onActionsExpandedChanged: widget.onActionsExpandedChanged,
           ),
         ),
+        if (_showCollectionStrip(item)) ...[
+          const SizedBox(height: 20),
+          MovieCollectionStripView(
+            strip: _vm.movieCollection!,
+            firstFocusNode: _collectionStripFirstFocusNode,
+            onNavigateUp: () => widget.initialFocusNode?.requestFocus(),
+            onNavigateDown: () =>
+                _tabNode(_selectedTab >= 0 ? _selectedTab : 0).requestFocus(),
+            maxWidth: _landscape
+                ? ModernLandscapeLayout.heroWidthFor(
+                    MediaQuery.sizeOf(context),
+                    hasUpNext: hasUpNext,
+                    isBoxSet: false,
+                  )
+                : null,
+            onSelect: (part) => unawaited(_openCollectionPart(context, part)),
+          ),
+        ],
       ],
     );
 
     return childrenCol;
+  }
+
+  bool _showCollectionStrip(AggregatedItem item) =>
+      item.type == 'Movie' && (_vm.movieCollection?.others.isNotEmpty ?? false);
+
+  /// Owned parts open their own detail page (which shows the strip again
+  /// without itself); missing ones run Download Now for that movie (the
+  /// public build opens the movie's Seerr page instead).
+  Future<void> _openCollectionPart(
+    BuildContext context,
+    CollectionPart part,
+  ) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    switch (part.state) {
+      case CollectionPartState.owned:
+        final id = part.jellyfinItemId;
+        if (id == null) return;
+        await context.push(Destinations.item(id, serverId: _vm.item?.serverId));
+      case CollectionPartState.missing:
+      case CollectionPartState.requested:
+        if (!DownloadFeatures.downloadNow) {
+          // No Download Now: the Seerr page, where the movie can be requested.
+          await context.push(
+            Destinations.seerrMedia(part.tmdbId.toString(), mediaType: 'movie'),
+          );
+          if (mounted) unawaited(_vm.loadMovieCollection(refresh: true));
+          return;
+        }
+        await DownloadNowButton.run(
+          context,
+          tmdbId: part.tmdbId,
+          mediaType: 'movie',
+          title: part.title,
+          year: part.year,
+        );
+        if (mounted) unawaited(_vm.loadMovieCollection(refresh: true));
+      case CollectionPartState.downloading:
+        messenger?.showSnackBar(SnackBar(
+          content: Text('"${part.title}" lastes allerede ned'),
+        ));
+      case CollectionPartState.unreleased:
+        messenger?.showSnackBar(SnackBar(
+          content: Text(appL10n().tgNotReleasedYet(part.title)),
+        ));
+    }
   }
 
   Widget _metadataRow(BuildContext context, AggregatedItem item, Map<String, dynamic>? selectedMediaSource) {

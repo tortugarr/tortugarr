@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show debugPrint, visibleForTesting;
 import 'package:flutter/widgets.dart'
     show
         Actions,
@@ -13,6 +13,9 @@ import 'package:flutter/widgets.dart'
         WidgetsBinding;
 
 import '../../l10n/current_app_localizations.dart';
+import '../../data/services/log_service.dart';
+import '../../playback/media3_player_backend.dart';
+import '../../util/app_foreground.dart';
 import '../../ui/navigation/app_router.dart';
 import '../../ui/navigation/destinations.dart';
 import '../../ui/navigation/home_refresh_bus.dart';
@@ -38,6 +41,8 @@ import '../../data/services/watch_next_service.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../data/services/achievements_service.dart';
 import '../../data/services/plugin_sync_service.dart';
+import '../../data/services/tortugarr/download_features.dart';
+import '../../data/services/adult_library_service.dart';
 import '../../data/services/push_messaging_service.dart';
 import '../../data/services/remote_search_session.dart';
 import '../../data/services/server_messages_service.dart';
@@ -246,6 +251,8 @@ class SessionRepository {
     if (GetIt.instance.isRegistered<ServerMessagesService>()) {
       GetIt.instance<ServerMessagesService>().clear();
     }
+    DownloadFeatures.clear();
+    AdultLibraryService.visible.value = false;
 
     final server = _serverRepository.getServer(serverId);
     if (server == null) {
@@ -428,6 +435,9 @@ class SessionRepository {
     }
 
     await _pluginSyncService.syncOnLogin(client, serverId: serverId);
+    unawaited(DownloadFeatures.refresh(client));
+    // The menu's XXX search button follows the adult library's visibility.
+    unawaited(AdultLibraryService().isVisible().then((_) {}, onError: (Object _) {}));
 
     // Register the FCM token now that a session exists, and push the current
     // notification prefs so defaults reach the plugin. Startup registration
@@ -563,6 +573,8 @@ class SessionRepository {
     if (GetIt.instance.isRegistered<ServerMessagesService>()) {
       GetIt.instance<ServerMessagesService>().clear();
     }
+    DownloadFeatures.clear();
+    AdultLibraryService.visible.value = false;
 
     if (serverId != null && !tokenKnownInvalid) {
       try {
@@ -837,14 +849,32 @@ class SessionRepository {
     return Duration(microseconds: ticks ~/ 10);
   }
 
+  /// Remote-play diagnostics. Goes to logcat as well as the in-app log so a
+  /// release build on the TV can still be followed with `adb logcat`.
+  void _remoteLog(String message, {Object? error}) {
+    debugPrint('[RemotePlay] $message${error == null ? '' : ' ($error)'}');
+    if (GetIt.instance.isRegistered<LogService>()) {
+      GetIt.instance<LogService>().playback(
+        'RemotePlay: $message',
+        level: error == null ? LogLevel.info : LogLevel.error,
+        error: error,
+      );
+    }
+  }
+
   Future<void> _handlePlayMessage(PlayMessage message) async {
     final serverId = _activeServerId;
+    _remoteLog(
+      'received ${message.playCommand} for ${message.itemIds.length} item(s) '
+      'startIndex=${message.startIndex} server=$serverId',
+    );
     if (serverId == null || message.itemIds.isEmpty) {
       return;
     }
 
     final client = _clientFactory.getClientIfExists(serverId);
     if (client == null) {
+      _remoteLog('no client for server $serverId, ignoring');
       return;
     }
 
@@ -865,6 +895,7 @@ class SessionRepository {
     final items = loaded.whereType<AggregatedItem>().toList(growable: false);
 
     if (items.isEmpty) {
+      _remoteLog('none of the requested items could be loaded, ignoring');
       return;
     }
 
@@ -907,34 +938,88 @@ class SessionRepository {
           )
         : true;
 
-    _ensurePlayerRouteForItem(item);
-    await manager.playItems(
-      items,
-      startIndex: startIndex,
-      startPosition:
-          _durationFromTicks(message.startPositionTicks) ?? Duration.zero,
-      audioStreamIndex: message.audioStreamIndex,
-      subtitleStreamIndex: message.subtitleStreamIndex,
-      mediaSourceId: message.mediaSourceId,
-      enableDirectPlay: allowDirect,
-      enableDirectStream: allowDirect,
-      enableTranscoding: !isLiveTv || !allowDirect,
+    final currentPath = currentTopRoutePath();
+    final playerOpen = currentPath == Destinations.videoPlayer ||
+        currentPath == Destinations.audioPlayer;
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _remoteLog(
+      'play "${item.name}" type=${item.type} items=${items.length} '
+      'start=$startIndex pos=${message.startPositionTicks} '
+      'source=${message.mediaSourceId} audio=${message.audioStreamIndex} '
+      'sub=${message.subtitleStreamIndex} route=$currentPath '
+      'playerOpen=$playerOpen lifecycle=$lifecycle',
     );
-  }
 
-  bool _isLiveTvItem(AggregatedItem item) {
-    final type = item.type;
-    return type == 'TvChannel' ||
-        type == 'LiveTvChannel' ||
-        type == 'Program' ||
-        item.rawData['ChannelId'] != null ||
-        item.rawData['TimerId'] != null;
-  }
+    var inBackground = lifecycle != AppLifecycleState.resumed;
+    if (inBackground) {
+      final brought = await AppForeground.bringToFront();
+      // Android answers the request at once but may still refuse it (its
+      // background-activity-start rule); only the lifecycle tells the truth.
+      for (var i = 0; i < 10 && inBackground; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        inBackground =
+            WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed;
+      }
+      _remoteLog(
+        'app not in foreground, bringToFront=$brought '
+        'nowResumed=${!inBackground}',
+      );
+    }
 
-  void _ensurePlayerRouteForItem(AggregatedItem item) {
-    final currentPath = appRouter.routerDelegate.currentConfiguration.uri.path;
-    if (currentPath == Destinations.videoPlayer ||
-        currentPath == Destinations.audioPlayer) {
+    // With the player closed, the native Media3 slot may be owned by a home
+    // trailer surface or by a view an earlier screen left behind. Reserve it
+    // for the player view first, or the source lands in the wrong surface
+    // and the player opens on nothing.
+    if (!playerOpen && PlatformDetection.isAndroid) {
+      final reserved = await Media3PlayerBackend.prepareMainPlayback();
+      _remoteLog('reserved native player slot=$reserved');
+    }
+
+    // Start playback first and open the player only once it is up, the way
+    // the detail screen's play button does. The old order (route first, then
+    // play) left a black player on screen whenever the start failed, and the
+    // player treated the aborted start as its cue to leave.
+    manager.setStartupRecoveryDecider(
+      (_) async => PlaybackStartupRecoveryDecision.retryWithTranscode,
+    );
+    var started = false;
+    try {
+      await manager.playItems(
+        items,
+        startIndex: startIndex,
+        startPosition:
+            _durationFromTicks(message.startPositionTicks) ?? Duration.zero,
+        audioStreamIndex: message.audioStreamIndex,
+        subtitleStreamIndex: message.subtitleStreamIndex,
+        mediaSourceId: message.mediaSourceId,
+        enableDirectPlay: allowDirect,
+        enableDirectStream: allowDirect,
+        enableTranscoding: !isLiveTv || !allowDirect,
+      );
+      started = manager.bringupState.phase != PlaybackBringupPhase.failed;
+    } on PlaybackStartupRecoveryAbortedException catch (e) {
+      _remoteLog('start aborted', error: e);
+    } catch (e) {
+      _remoteLog('start failed', error: e);
+    } finally {
+      manager.setStartupRecoveryDecider(null);
+    }
+    final bringup = manager.bringupState;
+    _remoteLog(
+      'started=$started phase=${bringup.phase.name} '
+      'backend=${bringup.backend} method=${bringup.playMethod} '
+      'error=${bringup.error}',
+    );
+    if (!started) {
+      return;
+    }
+    if (inBackground) {
+      // Sound with no picture is worse than a paused player waiting in the
+      // app, so hold it here; the viewer presses play once the app is open.
+      await manager.pause();
+      _remoteLog('still in background after start, paused until the app is opened');
+    }
+    if (playerOpen) {
       return;
     }
 
@@ -944,10 +1029,22 @@ class SessionRepository {
         item.type == 'MusicAlbum' ||
         item.type == 'AudioBook' ||
         mediaType == 'Audio';
+    final destination = manager.playbackDeferredToExternalPlayer
+        ? Destinations.externalPlayer
+        : isAudio
+            ? Destinations.audioPlayer
+            : Destinations.videoPlayer;
+    _remoteLog('opening $destination');
+    appRouter.push(destination);
+  }
 
-    appRouter.push(
-      isAudio ? Destinations.audioPlayer : Destinations.videoPlayer,
-    );
+  bool _isLiveTvItem(AggregatedItem item) {
+    final type = item.type;
+    return type == 'TvChannel' ||
+        type == 'LiveTvChannel' ||
+        type == 'Program' ||
+        item.rawData['ChannelId'] != null ||
+        item.rawData['TimerId'] != null;
   }
 
   Future<void> _handlePlaystateMessage(PlaystateMessage message) async {

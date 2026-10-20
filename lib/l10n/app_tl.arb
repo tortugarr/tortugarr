@@ -1,6 +1,6 @@
 {
     "@@locale": "tl",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin bersyon {version}",
+    "appVersionFooter": "Tortugarr bersyon {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Hindi ma-access ng Moonfin ang keyring ng iyong system. Maaaring magpatuloy ang pag-log in, ngunit maaaring hindi available ang secure na imbakan ng token hanggang sa ma-unlock ang keyring.",
+    "secureStorageUnavailableMessage": "Hindi ma-access ng Tortugarr ang keyring ng iyong system. Maaaring magpatuloy ang pag-log in, ngunit maaaring hindi available ang secure na imbakan ng token hanggang sa ma-unlock ang keyring.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Lumipat sa pagitan ng Moonfin at Neon Pulse nang hindi nire-restart ang app",
+    "settingsAppearanceThemeSubtitle": "Lumipat sa pagitan ng Tortugarr at Neon Pulse nang hindi nire-restart ang app",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Kasalukuyang hitsura ng Moonfin na nagustuhan mo",
+    "themeMoonfinSubtitle": "Kasalukuyang hitsura ng Tortugarr na nagustuhan mo",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Lumabas sa Moonfin?",
+    "exitApp": "Lumabas sa Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Hindi nakatakda. Susubukan ng Moonfin ang isang default na mpv.conf sa mga folder ng app/data.",
+    "notSetMpvConf": "Hindi nakatakda. Susubukan ng Tortugarr ang isang default na mpv.conf sa mga folder ng app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Mga Download/Moonfin — nakikita ng ibang mga app",
+    "downloadsVisibleToOtherApps": "Mga Download/Tortugarr — nakikita ng ibang mga app",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Ise-save ang na-download na media sa Downloads/Moonfin sa iyong device. Ang mga file na ito ay makikita ng ibang mga app gaya ng iyong gallery o music player.\n\nAng mga kasalukuyang pag-download ay mananatili sa kanilang kasalukuyang lokasyon.",
+    "saveToDownloadsFolderDescription": "Ise-save ang na-download na media sa Downloads/Tortugarr sa iyong device. Ang mga file na ito ay makikita ng ibang mga app gaya ng iyong gallery o music player.\n\nAng mga kasalukuyang pag-download ay mananatili sa kanilang kasalukuyang lokasyon.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "I-toggle ang visibility ng home page sa bawat library. I-restart ang Moonfin para magkabisa ang mga pagbabago.",
+    "libraryVisibilityDescription": "I-toggle ang visibility ng home page sa bawat library. I-restart ang Tortugarr para magkabisa ang mga pagbabago.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3557,13 +3557,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "Pumili sa pagitan ng Moonfin, MakD, o i-off ang media bar",
+    "mediaBarModeDescription": "Pumili sa pagitan ng Tortugarr, MakD, o i-off ang media bar",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Maglaro sa Moonfin",
+    "playInMoonfin": "Maglaro sa Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Hiniling ni {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Hindi nakita ang item sa iyong Moonfin library",
+    "itemNotFoundInLibrary": "Hindi nakita ang item sa iyong Tortugarr library",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Kasalukuyang nag-reboot ang server",
-    "adminServerRebootMessage": "Kasalukuyang nag-reboot ang server, mangyaring i-restart ang Moonfin",
+    "adminServerRebootMessage": "Kasalukuyang nag-reboot ang server, mangyaring i-restart ang Tortugarr",
     "adminActiveSessions": "Mga Aktibong Sesyon",
     "adminSessionsLoadFailed": "Nabigong i-load ang mga session",
     "adminNoActiveSessions": "Walang aktibong session",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Ipakita ang pindutan ng genre sa navigation bar",
     "settingsShowFavoritesButtonInNavigation": "Ipakita ang pindutan ng mga paborito sa navigation bar",
     "settingsShowLibrariesButtonInNavigation": "Ipakita ang pindutan ng mga aklatan sa navigation bar",
-    "settingsLibraryVisibilitySubtitle": "I-toggle ang visibility ng home page sa bawat library. I-restart ang Moonfin para magkabisa ang mga pagbabago.",
+    "settingsLibraryVisibilitySubtitle": "I-toggle ang visibility ng home page sa bawat library. I-restart ang Tortugarr para magkabisa ang mga pagbabago.",
     "settingsMediaBarAndLocalPreviews": "Media Bar at Local Previews",
     "settingsVisualOverlays": "Mga Visual na Overlay",
     "settingsSeasonalSurprise": "Pana-panahong Sorpresa",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Sumali sa Discord",
     "settingsJoinDiscordSubtitle": "Makipag-chat sa komunidad",
     "settingsJoinTheDiscord": "Sumali sa Discord",
-    "settingsSupportMoonfin": "Suportahan ang Moonfin",
+    "settingsSupportMoonfin": "Suportahan ang Tortugarr",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Mga lisensya",
     "settingsOpenSourceLicenseNotices": "Open-source na mga paunawa sa lisensya",
     "settingsPrivacyPolicy": "Patakaran sa Privacy",
-    "settingsPrivacyPolicySubtitle": "Paano pinangangasiwaan ng Moonfin ang iyong data",
+    "settingsPrivacyPolicySubtitle": "Paano pinangangasiwaan ng Tortugarr ang iyong data",
     "settingsCheckForUpdates": "Tingnan ang Mga Update",
-    "settingsCheckForUpdatesSubtitle": "Tingnan ang pinakabagong release ng Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Tingnan ang pinakabagong release ng Tortugarr",
     "settingsPoweredByFlutter": "Pinapatakbo ng Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# license notice} other {# na license notice}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Mga naka-save na theme",
-    "savedThemesDescription": "Ito ang mga theme na na-download mula sa Moonfin plugin para sa kasalukuyang server. Ang pagtanggal ay nag-aalis lamang ng lokal na kopyang ito.",
+    "savedThemesDescription": "Ito ang mga theme na na-download mula sa Tortugarr plugin para sa kasalukuyang server. Ang pagtanggal ay nag-aalis lamang ng lokal na kopyang ito.",
     "savedThemesEmpty": "Walang nakitang naka-save na theme para sa server na ito.",
     "savedThemesCurrentThemeId": "{themeId} • Kasalukuyang aktibo",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Tanggalin ang naka-save na theme",
     "savedThemesManageSubtitle": "Pamahalaan ang mga na-download na plugin theme sa device na ito",
     "themeEditor": "Theme Editor",
-    "themeEditorSubtitle": "Buksan ang Moonfin Theme Editor sa iyong browser",
+    "themeEditorSubtitle": "Buksan ang Tortugarr Theme Editor sa iyong browser",
     "homeScreen": "Home Screen",
     "bottomBar": "Bottom Bar",
     "homeRowsStyleClassic": "Classic",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Piliin ang mga SDH subtitle",
     "preferSdhSubtitlesSubtitle": "Unahin ang mga SDH/CC subtitle track kapag awtomatikong pumipili.",
     "webDiagnostics": "Web diagnostics",
-    "webDiagnosticsTitle": "Moonfin Web Diagnostics",
+    "webDiagnosticsTitle": "Tortugarr Web Diagnostics",
     "webDiagnosticsIntro": "Gamitin ang page na ito para i-diagnose ang mga isyu sa connectivity ng browser (CORS, mixed content, at mga discovery setting).",
     "webDiagnosticsDetectedMixedContentFailure": "Natukoy na Mixed-Content Failure",
     "webDiagnosticsDetectedCorsPreflightFailure": "Natukoy na CORS/Preflight Failure",
-    "webDiagnosticsMixedContentFailureBody": "Nakakita ang Moonfin ng HTTPS page na sumusubok tumawag sa isang HTTP server URL. Bina-block ng mga browser ang request na ito bago ito umabot sa iyong server.",
-    "webDiagnosticsCorsFailureBody": "Nakakita ang Moonfin ng browser-level na request failure na karaniwang sanhi ng kulang na CORS o preflight header sa media server.",
+    "webDiagnosticsMixedContentFailureBody": "Nakakita ang Tortugarr ng HTTPS page na sumusubok tumawag sa isang HTTP server URL. Bina-block ng mga browser ang request na ito bago ito umabot sa iyong server.",
+    "webDiagnosticsCorsFailureBody": "Nakakita ang Tortugarr ng browser-level na request failure na karaniwang sanhi ng kulang na CORS o preflight header sa media server.",
     "webDiagnosticsTargetUrl": "Target na URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "hindi naka-configure",
     "webDiagnosticsMixedContent": "Mixed Content",
     "webDiagnosticsMixedContentDetected": "Nilo-load ang page na ito sa HTTPS, ngunit isa o higit pang naka-configure na URL ang HTTP. Bina-block ng mga browser ang mga HTTPS page sa pagtawag sa mga HTTP API.",
-    "webDiagnosticsMixedContentFix": "Ayos: ihatid ang iyong media server o proxy endpoint sa pamamagitan ng HTTPS, o i-load ang Moonfin sa HTTP sa mga pinagkakatiwalaang lokal na network lamang.",
+    "webDiagnosticsMixedContentFix": "Ayos: ihatid ang iyong media server o proxy endpoint sa pamamagitan ng HTTPS, o i-load ang Tortugarr sa HTTP sa mga pinagkakatiwalaang lokal na network lamang.",
     "webDiagnosticsNoMixedContentDetected": "Walang malinaw na mixed-content na configuration na natukoy mula sa kasalukuyang mga runtime setting.",
     "webDiagnosticsCorsChecklist": "CORS Checklist",
     "webDiagnosticsCorsChecklistItem1": "• Payagan ang browser origin sa Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Ang Classic ay ang orihinal na nakasentrong layout ng Moonfin. Ang Modern ay isang responsive na cinematic na layout.",
+    "detailScreenStyleSubtitle": "Ang Classic ay ang orihinal na nakasentrong layout ng Tortugarr. Ang Modern ay isang responsive na cinematic na layout.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Gamitin ang local-library na algorithm ng Moonfin Recommends o ang online na Similarity Metrics ng TMDb. Tandaan: Kailangan ng Seerr integration para sa mga online na rekomendasyon.",
+    "recommendationSystemSubtitle": "Gamitin ang local-library na algorithm ng Tortugarr Recommends o ang online na Similarity Metrics ng TMDb. Tandaan: Kailangan ng Seerr integration para sa mga online na rekomendasyon.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb Similarity",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limitahan ang mga suhestiyon ng Moonfin Recommends ayon sa parental rating ng target na media",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limitahan ang mga suhestiyon ng Tortugarr Recommends ayon sa parental rating ng target na media",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Binabago ng mga custom na theme ang mga visual na elemento sa buong Moonfin. Pumili ng isa sa mga opsyong ito para tumugma sa iyong istilo.",
+    "customThemeSubtitle": "Binabago ng mga custom na theme ang mga visual na elemento sa buong Tortugarr. Pumili ng isa sa mga opsyong ito para tumugma sa iyong istilo.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Mag-sign in sa Moonfin sa iyong telepono",
+    "carSignInPrompt": "Mag-sign in sa Tortugarr sa iyong telepono",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Ang Impeller ay ang modernong GPU renderer ng Flutter para sa mas maayos na animation at mas kaunting stutter. Sa ilang TV box at mas lumang GPU, maaari itong magdulot ng glitch o itim na video; i-off ito kung nakikita mo ang mga iyon. Pinipili ng Automatic ang pinakamahusay na default para sa iyong device. I-restart ang Moonfin para ilapat.",
+    "impellerRenderingSubtitle": "Ang Impeller ay ang modernong GPU renderer ng Flutter para sa mas maayos na animation at mas kaunting stutter. Sa ilang TV box at mas lumang GPU, maaari itong magdulot ng glitch o itim na video; i-off ito kung nakikita mo ang mga iyon. Pinipili ng Automatic ang pinakamahusay na default para sa iyong device. I-restart ang Tortugarr para ilapat.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Kailangang mag-restart ang Moonfin para baguhin ang rendering engine. Isara ang app ngayon, pagkatapos ay buksang muli ito para ilapat.",
+    "impellerRestartMessage": "Kailangang mag-restart ang Tortugarr para baguhin ang rendering engine. Isara ang app ngayon, pagkatapos ay buksang muli ito para ilapat.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "IMDb Pinakasikat na Mga Pelikula",
     "imdbMostPopularTvShows": "IMDb Pinakasikat na Mga TV Show",
     "imdbLowestRatedMovies": "IMDb Pinakamababang Rating na Mga Pelikula",
-    "imdbTopEnglishMovies": "IMDb Pinakamataas na Rating na Mga Pelikulang Ingles"
+    "imdbTopEnglishMovies": "IMDb Pinakamataas na Rating na Mga Pelikulang Ingles",
+    "tgMissing": "Nawawala",
+    "tgComing": "Paparating",
+    "tgComingOn": "Paparating {date}",
+    "tgDownloading": "Dina-download",
+    "tgReadySoon": "Malapit nang maging handa",
+    "tgRequested": "Na-request",
+    "tgClose": "Isara",
+    "tgCancel": "Kanselahin",
+    "tgBack": "Bumalik",
+    "tgYes": "Oo",
+    "tgNo": "Hindi",
+    "tgSearch": "Maghanap",
+    "tgHide": "Itago",
+    "tgAll": "Lahat",
+    "tgNone": "Wala",
+    "tgMovies": "Mga pelikula",
+    "tgSeries": "Mga serye",
+    "tgMovieTag": "Pelikula",
+    "tgSeriesTag": "Serye",
+    "tgCanTakeAMinute": "Maaaring umabot ng isang minuto",
+    "tgToday": "ngayon",
+    "tgYesterday": "kahapon",
+    "tgDaysAgo": "{days} araw na ang nakalipas",
+    "tgMonthsAgo": "{months} buwan na ang nakalipas",
+    "tgYearsAgo": "{years} taon na ang nakalipas",
+    "tgYearsMonthsAgo": "{years} taon at {months} buwan na ang nakalipas",
+    "tgFindSubtitles": "Maghanap ng subtitle",
+    "tgFreeUpSpace": "Magbakante ng space",
+    "tgDownloads": "Mga download",
+    "tgDownloadsCount": "Mga download ({count})",
+    "tgNoVideoRemoved": "\"{title}\": walang video file ang download ({files}). Inalis at na-block ito — sumubok ng ibang file.",
+    "tgNoVideoNotRemoved": "\"{title}\": walang video file ang download ({files}), pero hindi ito maalis nang awtomatiko.",
+    "tgAiredOn": "Ipinalabas {date}",
+    "tgTapToFindFiles": "I-tap para maghanap ng mga file",
+    "tgWholeSeason": "Buong season",
+    "tgEpisodesMissingFindPack": "{count} episode ang nawawala – maghanap ng season pack",
+    "tgAddToSonarrTitle": "Idagdag sa Sonarr para makita ang mga nawawalang episode",
+    "tgAddToSonarrSubtitle": "Idadagdag ang serye nang walang ida-download nang kusa",
+    "tgMissingEpisodesUnavailable": "Hindi maipakita ang mga nawawalang episode sa ngayon",
+    "tgReasonTapRetry": "{reason} · I-tap para subukan muli",
+    "tgSeasonPackBadge": "Season pack",
+    "tgMonitorSeasonTitle": "I-monitor ang season {season}",
+    "tgMonitorSeasonQuestion": "Kukunin na ba ng Sonarr ang mga nawawalang episode ng season {season} ngayon?\n\nHindi: mga bagong episode lang ang kukunin kapag lumabas na ang mga ito.",
+    "tgSonarrSearchingSeason": "Hinahanap ng Sonarr ang season {season}",
+    "tgMonitored": "Naka-monitor",
+    "tgNotMonitored": "Hindi naka-monitor",
+    "tgSeasonStateLabel": "Season {season}: {state}",
+    "tgLabelMissing": "Nawawala ang {label}",
+    "tgNotAiredYet": "Hindi pa naipapalabas ang {code}.",
+    "tgNotAiredYetComing": "Hindi pa naipapalabas ang {code} – paparating {date}.",
+    "tgAlreadyDownloading": "Dina-download na ang {code}.",
+    "tgDownloadedAppearsSoon": "Na-download na ang {code} at lalabas sa library sa ilang sandali.",
+    "tgSearchingFor": "Hinahanap ang {label} …",
+    "tgSeasonLower": "season {season}",
+    "tgWholeLabel": "Buong {label}",
+    "tgSeasonNoEpisodes": "Season {season} – walang episode sa library",
+    "tgNoTvdbId": "Walang TVDB id ang serye, kaya hindi ito mahanap ng Sonarr.",
+    "tgAddingToSonarr": "Idinadagdag sa Sonarr …",
+    "tgAddToSonarrFailed": "Hindi maidagdag ang serye sa Sonarr. Subukan muli mamaya.",
+    "tgSendingToDownload": "Ipinapadala ang \"{label}\" para i-download …",
+    "tgDownloadDidNotStart": "Hindi nagsimula ang download: {error}",
+    "tgDownloadingAppearsWhenDone": "Dina-download ang \"{label}\" ({size}). Lalabas ito sa library kapag tapos na.",
+    "tgSonarrUnreachableRetry": "Hindi ma-reach ang Sonarr. Subukan muli sa ilang sandali.",
+    "tgNoUsableFiles": "Walang nahanap na magagamit na file. Subukan muli mamaya – madalas lumalabas ang mga bago pagkalipas ng ilang oras.",
+    "tgFilesCount": "{count} file",
+    "tgFilesRecommended": "{count} file – {recommended} ang tugma sa quality profile, nasa ibaba ang iba",
+    "tgOutsideQualityProfile": "Labas sa quality profile",
+    "tgLargerThanProfile": "Mas malaki kaysa sa pinapayagan ng profile",
+    "tgSmallerThanProfile": "Mas maliit kaysa sa pinapayagan ng profile",
+    "tgAlreadyExists": "Mayroon na",
+    "tgMayNotFitDisk": "Maaaring hindi magkasya sa disk",
+    "tgSonarrUnreachable": "Hindi ma-reach ang Sonarr",
+    "tgSonarrUnreachableAt": "Hindi ma-reach ang Sonarr sa {host}",
+    "tgSonarrRejectedChange": "Hindi tinanggap ng Sonarr ang pagbabago",
+    "tgSeasonMonitoredNoSearch": "Naka-monitor ang season, pero hindi sinimulan ng Sonarr ang paghahanap",
+    "tgSonarrCantSearch": "Hindi makapaghanap ang Sonarr sa ngayon",
+    "tgSearchExpired": "Nag-expire na ang resulta ng paghahanap – maghanap muli",
+    "tgSonarrRejectedDownload": "Hindi tinanggap ng Sonarr ang download (HTTP {status})",
+    "tgSonarrNoSeries": "Wala sa Sonarr ang serye",
+    "tgCouldNotChangeMonitoring": "Hindi mabago ang monitoring: {error}",
+    "tgJellyfinNoIds": "Hindi nakilala ng Jellyfin ang serye (walang TVDB o TMDB id)",
+    "tgSomethingWentWrong": "May nangyaring mali: {error}",
+    "tgDeleteReadOnly": "Hindi pinamamahalaan ng Radarr/Sonarr ang file, at read access lang ang Jellyfin sa folder. I-delete ito sa iyong file manager.",
+    "tgSonarrRequiredPerEpisode": "Hindi ma-reach ang Sonarr, o hindi pa naidagdag doon ang serye. Kailangan ng Sonarr para mag-download kada episode.",
+    "tgEpisodesNotFound": "Hindi mahanap sa Sonarr ang mga piniling episode ng \"{title}\" ({count} episode lahat ang nahanap). Idagdag ang serye sa Sonarr at subukan muli.",
+    "tgPartOfCollectionPrefix": "Bahagi ng koleksyong ",
+    "tgViewingPartOf": "  ·  pinapanood mo ang bahagi {current} ng {total}",
+    "tgPartOf": "Bahagi {number} ng {total}",
+    "tgUnknownTitle": "Hindi kilalang pamagat",
+    "tgMovieCollection": "Koleksyon ng pelikula",
+    "tgNotReleasedYet": "Hindi pa lumalabas ang \"{title}\"",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Tunog ng screensaver",
+    "tgScreensaverSoundSubtitle": "Off: naka-mute ang mga trailer sa screensaver",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarr badge",
+    "tgLogoVhs": "Loro sa mga VHS tape",
+    "tgLogoSign": "Loro sa karatula",
+    "tgHiddenBadge": "NAKATAGO · {code}",
+    "tgDiskSpace": "Disk space",
+    "tgDiskSpaceSubtitle": "Magbakante ng space para sa mga bagong download",
+    "tgAdultTitle": "Mga pelikulang pang-adult (XXX)",
+    "tgAdultSubtitle": "Ipakita o itago ang XXX library (PIN)",
+    "tgHideForeign": "Itago ang banyagang content",
+    "tgHideForeignOn": "On: Ingles, Norwegian, Swedish, Danish, German at French lang ang ipinapakita sa Trending at Sikat",
+    "tgHideForeignOff": "Off: lahat ng wika ang ipinapakita sa Trending at Sikat",
+    "tgShowHidden": "Ipakita ang nakatago",
+    "tgShowHiddenOn": "On: ang mga pamagat na dapat itago ay ipinapakita nang may pulang NAKATAGO badge",
+    "tgShowHiddenOff": "Troubleshooting: ipakita ang mga nakatagong pamagat nang may pulang badge sa halip na alisin",
+    "tgShowAllSubLangs": "Ipakita ang lahat ng wika ng subtitle",
+    "tgShowAllSubLangsOn": "On: lahat ng wika ang ipinapakita sa subtitle menu",
+    "tgShowAllSubLangsOff": "Off: Norwegian at Ingles lang ang ipinapakita sa subtitle menu",
+    "tgPreviewSound": "Tunog ng preview",
+    "tgPreviewSoundOn": "On: may tunog ang clip na pinapatugtog kapag huminto ka sa isang pamagat",
+    "tgPreviewSoundOff": "Off: naka-mute ang mga clip habang nagba-browse ka",
+    "tgScreensaver": "Screensaver",
+    "tgScreensaverSubtitle": "Video o logo, tunog at larawan",
+    "tgShowMissingEpisodes": "Ipakita ang mga nawawalang episode",
+    "tgShowMissingEpisodesOn": "On: ipinapakita ng mga season ang mga episode na wala ka pa, handang i-download",
+    "tgShowMissingEpisodesOff": "Off: ipinapakita lang ng mga season ang mga episode na mayroon ka",
+    "tgShowCollections": "Ipakita ang mga koleksyon ng pelikula",
+    "tgShowCollectionsOn": "On: ipinapakita ng mga pelikula ang ibang pelikula sa koleksyon, kasama ang mga wala ka pa",
+    "tgShowCollectionsOff": "Off: hindi ipinapakita ng page ng pelikula ang koleksyon",
+    "tgNoActiveDownloads": "Walang aktibong download.",
+    "tgPickDownloadToOpen": "Pumili ng download para buksan ang mga request.",
+    "tgRefreshLibrary": "I-refresh ang library",
+    "tgAskingJellyfinScan": "Hinihiling sa Jellyfin na i-scan ang library …",
+    "tgHideAll": "Itago lahat",
+    "tgImporting": "Ini-import",
+    "tgSubsNotManaged": "Hindi pinamamahalaan ng Radarr/Sonarr ang pamagat na ito, kaya hindi makahanap ng subtitle ang Bazarr para dito.",
+    "tgBazarrUnreachable": "Hindi ma-reach ang Bazarr. Subukan muli sa ilang sandali.",
+    "tgSubsFoundNothing": "Wala pang nahanap. Awtomatikong sumusubok muli ang Bazarr araw-araw, o maaari kang pumili mismo.",
+    "tgSubsFound": "Nahanap ang {languages} – maaaring tumagal ng ilang sandali bago ito lumabas sa subtitle menu.",
+    "tgAnd": "at",
+    "tgSubsDownloaded": "Na-download – maaaring tumagal ng ilang sandali bago ito lumabas sa subtitle menu.",
+    "tgAskingBazarr": "Tinatanong ang Bazarr …",
+    "tgHaveAll": "Kumpleto na",
+    "tgSearchAutoNow": "Maghanap nang awtomatiko ngayon",
+    "tgSearchingUpToMinute": "Hinahanap … maaaring umabot ng isang minuto",
+    "tgPickYourself": "Pumili mismo",
+    "tgAskingProviders": "Tinatanong ang mga subtitle provider … maaaring umabot ng isang minuto",
+    "tgNoProviderSubs": "Wala pang provider na may subtitle para dito.",
+    "tgLangHas": "{language}: available",
+    "tgLangMissing": "{language}: nawawala",
+    "tgNoReleaseName": "(walang release name)",
+    "tgHearingImpaired": "{provider} · para sa may kapansanan sa pandinig",
+    "tgLangNorwegian": "Norwegian",
+    "tgLangEnglish": "Ingles",
+    "tgBazarrUnknownTitle": "Hindi pa kilala ng Bazarr ang pamagat na ito",
+    "tgBazarrError": "Sumagot ang Bazarr ng error (HTTP {code})",
+    "tgLowSpaceSnack": "Kaunti na lang ang space sa {drive}: ({free} ang natitira). Maaaring huminto ang download — sabihan ang nagpapatakbo ng server.",
+    "tgNoQbitForSpace": "Hindi ma-reach ang qBittorrent para tingnan ang space",
+    "tgNotEnoughSpace": "Hindi sapat ang space",
+    "tgDriveHasFree": "{drive}: may {free} na libre",
+    "tgCopyInDownloads": "Kopya sa Downloads · nasa library na",
+    "tgLastWatched": "Huling pinanood {ago}",
+    "tgNeverWatchedAdded": "Hindi pa napanood · idinagdag {ago}",
+    "tgNeverWatched": "Hindi pa napanood",
+    "tgNothingSafeToDelete": "Walang nahanap sa {drive}: na ligtas i-delete (lahat ay bagong dagdag, bagong napanood o paborito).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{I-delete ang 1 pamagat?} other{I-delete ang {count} pamagat?}}",
+    "tgDeletedForGood": "Permanenteng made-delete ang {size}. Hindi na ito maibabalik.",
+    "tgYesDelete": "Oo, i-delete",
+    "tgDeletingProgress": "Dini-delete {done}/{total} …",
+    "tgNowHasFree": " · {drive}: may {free} na libre ngayon",
+    "tgDeletedTitles": "{count, plural, =1{Na-delete ang 1 pamagat} other{Na-delete ang {count} pamagat}}{extra}",
+    "tgDeletedFailed": "Na-delete ang {count}, bigo: {failed}{extra}",
+    "tgFreeGb": "Magbakante ng {gb} GB",
+    "tgDownloadCopies": "Mga kopya ng download",
+    "tgLookingForUnwatched": "Hinahanap ang matagal nang hindi napapanood …",
+    "tgSuggestionEnough": "Mungkahi: {size} · sapat ang space ✓",
+    "tgSuggestionOf": "Mungkahi: {size} sa {target} na kailangan",
+    "tgPickToSayNo": "Pumili ng isa para tumanggi — kusang papasok ang susunod na mungkahi.",
+    "tgOtherCandidates": "Iba pang kandidato",
+    "tgDownloadAnyway": "I-download pa rin",
+    "tgDeleteCountSize": "I-delete ang {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: may {free} na libre.",
+    "tgFileDoubleSpace": "{size} ang file at dobleng space ang kinukuha nito (download + kopya sa library), dagdag pa ang {buffer} na reserba.",
+    "tgFileSize": "{size} ang file, dagdag pa ang {buffer} na reserba.",
+    "tgPendingNeeds": "Kailangan pa ng {size} ng mga kasalukuyang download.",
+    "tgShortBy": "Kulang ng {size}.",
+    "tgOnlyEarlyFiles": "Mga file lang na inilabas bago lumabas nang digital ang pelikula ang nahanap ({count}) — halos lagi itong peke.",
+    "tgNoDigitalDate": "ay wala pang digital release date",
+    "tgDigitalOn": "ay lalabas nang digital sa {date}",
+    "tgNotOutDigitally": "Hindi pa lumalabas nang digital",
+    "tgTitleWhen": "Ang \"{title}\" {when}.",
+    "tgNotOutExplain": "Ang kasalukuyang available ay kadalasang recording mula sa sinehan o ibang pelikula na may parehong pamagat. Minsan may maagang kopya na mababa ang kalidad, madalas may naka-burn-in na subtitle. Ipinapakita ng \"Ipakita pa rin ang mga file\" kung ano ang mayroon. Kusang kukunin ng Radarr ang tamang bersyon kapag lumabas na ito.",
+    "tgShowFilesAnyway": "Ipakita pa rin ang mga file",
+    "tgPickSeasonsEpisodes": "Pumili ng mga season at episode",
+    "tgNoEpisodeInfo": "{season}: walang impormasyon ng episode",
+    "tgAppliesAllDevices": "Para sa lahat ng device na gumagamit ng account na ito",
+    "tgNoXxxLibrary": "Walang nahanap na library na XXX ang pangalan.",
+    "tgSearchingEachWord": "Hinahanap ang bawat salita nang hiwalay … (maaaring umabot ng kalahating minuto)",
+    "tgSentToQbit": "Ipinadala ang \"{title}\" ({size}) sa qBittorrent",
+    "tgDownloadFailed": "Bigo ang download: {error}",
+    "tgXxxNoVideoRemoved": "Walang video file ang \"{title}\" at inalis na ito.",
+    "tgXxxNoVideoNotRemoved": "Walang video file ang \"{title}\" at HINDI ito inalis.",
+    "tgSearchNewXxx": "Maghanap ng bagong XXX",
+    "tgXxxSearchHint": "Pangalan, studio …",
+    "tgChecking": "Tinitingnan …",
+    "tgXxxVisible": "Nakikita na. Lumalabas ang XXX sa mga library, paghahanap at sa home screen.",
+    "tgXxxHidden": "Nakatago. Hindi lumalabas ang XXX kahit saan sa app.",
+    "tgShowWithPin": "Ipakita (PIN)",
+    "tgChangePin": "Palitan ang PIN",
+    "tgNoLibraryList": "Hindi makuha ang listahan ng library (HTTP {code})",
+    "tgNoUserSettings": "Hindi makuha ang mga setting ng user (HTTP {code})",
+    "tgJellyfinRejectedChange": "Tinanggihan ng Jellyfin ang pagbabago (HTTP {code})",
+    "tgDeleteFailed": "Bigo ang pag-delete (HTTP {code})",
+    "tgXxxAddFailed": "Hindi maidagdag ang \"{title}\" sa qBittorrent",
+    "tgSeasonEpisodeLower": "season {season}, episode {episode}",
+    "tgSearchInSeerr": "Maghanap sa Seerr",
+    "tgSeerrSearchHint": "Maghanap ng pelikula at serye (hal. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Nawawala sa season na ito",
+    "tgMissingSeasonsOpenSeries": "{count, plural, other{Nawawalang season}} {list} - buksan ang serye para makita ang lahat ng season",
+    "tgProjectOnGitHub": "Tortugarr sa GitHub",
+    "tgProjectOnGitHubSubtitle": "Source code, mga release at mga issue",
+    "tgBuiltOnMoonfinCredit": "Ang Tortugarr ay binuo sa Moonfin (GPL), gawa ng mga developer ng Moonfin.",
+    "tgCredits": "Pasasalamat",
+    "tgCreditsThanks": "Taos-pusong pasasalamat: kung wala ang mga proyektong ito at ang mga taong nasa likod nila, hindi iiral ang Tortugarr.",
+    "tgCreditMoonfin": "Ang app na pinagbatayan ng Tortugarr (GPL)",
+    "tgCreditJellyfin": "Media server",
+    "tgCreditSeerr": "Pagtuklas at mga request",
+    "tgCreditRadarr": "Mga pelikula",
+    "tgCreditSonarr": "Mga serye",
+    "tgCreditProwlarr": "Tagapamahala ng indexer",
+    "tgCreditBazarr": "Mga subtitle",
+    "tgCreditFlareSolverr": "Cloudflare helper para sa mga indexer",
+    "tgCreditQbittorrent": "Download client, default ng installer",
+    "tgCreditTmdb": "Data ng pelikula at serye, mga poster at artwork",
+    "tgCreditOpenSubtitles": "Mga subtitle, kinukuha sa pamamagitan ng Bazarr",
+    "tgTmdbNotice": "Gumagamit ang produktong ito ng TMDB API pero hindi ito ini-endorso o sertipikado ng TMDB.",
+    "tgLoadingLogoSize": "Laki ng loading logo",
+    "tgLoadingLogoSizeSubtitle": "Ang umiikot na logo habang naglo-load ang video",
+    "tgSubtitleLanguages": "Mga wika ng subtitle",
+    "tgSubtitleLanguagesSubtitle": "Ipinapakita sa menu ng subtitle: {languages}",
+    "tgShowAllSubLangsOffChosen": "Off: ang menu ng subtitle ay nagpapakita lang ng mga wikang pinili mo",
+    "tgDiscoveryLanguages": "Mga wika sa Trending at Sikat",
+    "tgDiscoveryLanguagesSubtitle": "Ipinapakita: {languages}",
+    "tgHideForeignOnChosen": "On: ang Trending at Sikat ay nagpapakita lang ng mga wikang pinili mo",
+    "tgShowLanguageBadges": "Ipakita ang mga badge ng wika",
+    "tgShowLanguageBadgesOn": "On: ipinapakita ng mga pamagat ang kanilang wika (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Off: walang badge ng wika sa mga pamagat"
 }

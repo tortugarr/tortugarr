@@ -9,6 +9,8 @@ import 'admin_nav.dart';
 import 'providers/admin_websocket_handler.dart';
 import 'widgets/admin_settings_search.dart';
 import 'widgets/admin_unsaved_bar.dart';
+import '../../../util/platform_detection.dart';
+import '../../widgets/focus/tv_focus_ring.dart';
 
 /// The admin area's frame. Wide windows get the group rail, the page list
 /// and breadcrumbs. Narrow ones get a bottom bar of groups that open each
@@ -75,7 +77,7 @@ class AdminShellScreen extends StatelessWidget {
 
     // With nothing under the area, Android only hands Back to the app while a
     // route claims it. Otherwise it closes the app.
-    return PopScope(
+    final shell = PopScope(
       canPop: Navigator.of(context).canPop(),
       child: AdminWebSocketHandler(
         child: isWide
@@ -93,6 +95,12 @@ class AdminShellScreen extends StatelessWidget {
                 child: pages,
               ),
       ),
+    );
+    if (!PlatformDetection.isTV) return shell;
+    // The admin pages are built for touch; make focus visible on TV.
+    return Theme(
+      data: TvFocusRing.theme(theme),
+      child: TvFocusRing(child: shell),
     );
   }
 

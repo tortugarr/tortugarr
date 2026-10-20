@@ -1,10 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moonfin_design/moonfin_design.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:server_core/server_core.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../../auth/repositories/server_repository.dart';
 import '../../../auth/repositories/session_repository.dart';
@@ -34,12 +37,27 @@ class StartupScreen extends StatefulWidget {
 
 class _StartupScreenState extends State<StartupScreen>
     with SingleTickerProviderStateMixin {
+  static const Duration _minSplashDuration = Duration(seconds: 5);
+  static const String _introAssetPath = 'assets/intro/tortugarr_intro.mp4';
+
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
+  late final DateTime _mountedAt;
+  // media_kit, like the rest of the app's playback (Moonfin dropped the
+  // video_player package).
+  Player? _player;
+  VideoController? _videoController;
+  StreamSubscription<bool>? _completedSub;
+  bool _videoReady = false;
+  bool _videoFinished = false;
+  bool _destinationReady = false;
+  String? _destination;
+  bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
+    _mountedAt = DateTime.now();
     _fadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
@@ -49,11 +67,90 @@ class _StartupScreenState extends State<StartupScreen>
       curve: Curves.easeIn,
     );
     _fadeController.forward();
+    _initVideo();
     _initialize();
+  }
+
+  Future<void> _initVideo() async {
+    try {
+      final player = Player();
+      _player = player;
+      _videoController = VideoController(player);
+      _completedSub = player.stream.completed.listen((done) {
+        if (done) _onVideoFinished();
+      });
+      await player.setPlaylistMode(PlaylistMode.none);
+      await player.setVolume(100);
+      await player.open(Media('asset:///$_introAssetPath'));
+      if (!mounted) return;
+      setState(() => _videoReady = true);
+    } catch (_) {
+      // Asset missing or unsupported on this platform — fall through to the
+      // normal splash hold so the app still boots.
+      if (!mounted) return;
+      _videoFinished = true;
+      _maybeNavigate();
+    }
+  }
+
+  void _onVideoFinished() {
+    if (_videoFinished || !mounted) return;
+    _videoFinished = true;
+    _maybeNavigate();
+  }
+
+  void _skipVideo() {
+    if (_videoFinished) return;
+    _videoFinished = true;
+    unawaited(_player?.pause());
+    _maybeNavigate();
+  }
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    // Only a fresh press skips the intro. Auto-repeats can arrive without the user
+    // touching the remote (a key Android still thinks is held after a remapper
+    // launched the app), and they used to cut the intro short.
+    if (event is! KeyDownEvent) {
+      return KeyEventResult.ignored;
+    }
+    _skipVideo();
+    return KeyEventResult.handled;
+  }
+
+  void _enqueueDestination(String destination) {
+    _destination = destination;
+    _destinationReady = true;
+    _maybeNavigate();
+  }
+
+  void _maybeNavigate() {
+    if (_navigated) return;
+    if (!_videoFinished || !_destinationReady) return;
+    _navigated = true;
+    final dest = _destination;
+    if (dest != null && mounted) {
+      context.go(dest);
+    }
+  }
+
+  /// Wait so the splash stays on screen for at least [_minSplashDuration]
+  /// after mount, regardless of how fast init completes. The video is ~10s,
+  /// so the 5s floor is the video that ends up driving the timing in practice.
+  Future<void> _holdSplash() async {
+    final elapsed = DateTime.now().difference(_mountedAt);
+    final remaining = _minSplashDuration - elapsed;
+    if (remaining > Duration.zero) {
+      await Future<void>.delayed(remaining);
+    }
   }
 
   @override
   void dispose() {
+    _completedSub?.cancel();
+    final player = _player;
+    _player = null;
+    _videoController = null;
+    if (player != null) unawaited(player.dispose());
     _fadeController.dispose();
     super.dispose();
   }
@@ -97,7 +194,9 @@ class _StartupScreenState extends State<StartupScreen>
 
     if (widget.bootstrapActiveSession && session.activeUserId != null) {
       await _waitForNetworkSettle();
-      if (mounted) context.go(Destinations.home);
+      await _holdSplash();
+      if (!mounted) return;
+      _enqueueDestination(Destinations.home);
       return;
     }
 
@@ -156,22 +255,24 @@ class _StartupScreenState extends State<StartupScreen>
         );
 
         if (!verified) {
-          if (mounted) context.go(Destinations.serverSelect);
+          _enqueueDestination(Destinations.serverSelect);
           return;
         }
       }
 
       await _waitForNetworkSettle();
-      if (mounted) context.go(Destinations.home);
+      await _holdSplash();
+      if (!mounted) return;
+      _enqueueDestination(Destinations.home);
     } else {
-      if (mounted) {
-        if (targetServerId != null && targetServerId.isNotEmpty) {
-          // A previously-used server is known — go straight to user selection
-          // for that server rather than the Add Server page.
-          context.go('${Destinations.server}?serverId=$targetServerId');
-        } else {
-          context.go(Destinations.serverSelect);
-        }
+      await _holdSplash();
+      if (!mounted) return;
+      if (targetServerId != null && targetServerId.isNotEmpty) {
+        // A previously-used server is known — go straight to user selection
+        // for that server rather than the Add Server page.
+        _enqueueDestination('${Destinations.server}?serverId=$targetServerId');
+      } else {
+        _enqueueDestination(Destinations.serverSelect);
       }
     }
   }
@@ -196,55 +297,36 @@ class _StartupScreenState extends State<StartupScreen>
     );
   }
 
-  bool get _isLargeScreen {
-    final platform = defaultTargetPlatform;
-    return platform == TargetPlatform.linux ||
-        platform == TargetPlatform.macOS ||
-        platform == TargetPlatform.windows;
+  @override
+  Widget build(BuildContext context) {
+    return RequestInitialFocus(
+      child: Focus(
+        autofocus: true,
+        onKeyEvent: _onKey,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _skipVideo,
+          child: _buildContent(),
+        ),
+      ),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) =>
-      RequestInitialFocus(child: _buildContent(context));
-
-  Widget _buildContent(BuildContext context) {
-    final gradientColors = [
-      AppColorScheme.background,
-      AppColorScheme.surfaceVariant,
-      AppColorScheme.surface,
-    ];
+  Widget _buildContent() {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: gradientColors,
-          ),
-        ),
-        child: Center(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/logo_and_text.png',
-                  height: _isLargeScreen ? 80 : 56,
+      backgroundColor: Colors.black,
+      body: SizedBox.expand(
+        child: _videoReady && _videoController != null
+            ? FadeTransition(
+                opacity: _fadeAnimation,
+                child: Video(
+                  controller: _videoController!,
+                  controls: NoVideoControls,
+                  fit: BoxFit.contain,
+                  fill: Colors.black,
                 ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColorScheme.accent.withValues(alpha: 0.7),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+              )
+            : const ColoredBox(color: Colors.black),
       ),
     );
   }

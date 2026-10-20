@@ -1,6 +1,6 @@
 {
     "@@locale": "el",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin έκδοση {version}",
+    "appVersionFooter": "Tortugarr έκδοση {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Ο Moonfin δεν μπόρεσε να αποκτήσει πρόσβαση στο μπρελόκ του συστήματός σας. Η σύνδεση μπορεί να συνεχιστεί, αλλά η ασφαλής αποθήκευση διακριτικών ενδέχεται να μην είναι διαθέσιμη μέχρι να ξεκλειδωθεί το μπρελόκ.",
+    "secureStorageUnavailableMessage": "Ο Tortugarr δεν μπόρεσε να αποκτήσει πρόσβαση στο μπρελόκ του συστήματός σας. Η σύνδεση μπορεί να συνεχιστεί, αλλά η ασφαλής αποθήκευση διακριτικών ενδέχεται να μην είναι διαθέσιμη μέχρι να ξεκλειδωθεί το μπρελόκ.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Η τρέχουσα εμφάνιση Moonfin που όλοι έχετε αγαπήσει.",
+    "themeMoonfinSubtitle": "Η τρέχουσα εμφάνιση Tortugarr που όλοι έχετε αγαπήσει.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Έξοδος από Moonfin;",
+    "exitApp": "Έξοδος από Tortugarr;",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Δεν έχει οριστεί. Το Moonfin θα δοκιμάσει ένα προεπιλεγμένο mpv.conf στους φακέλους εφαρμογής/δεδομένων.",
+    "notSetMpvConf": "Δεν έχει οριστεί. Το Tortugarr θα δοκιμάσει ένα προεπιλεγμένο mpv.conf στους φακέλους εφαρμογής/δεδομένων.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Λήψεις/Moonfin — ορατές σε άλλες εφαρμογές",
+    "downloadsVisibleToOtherApps": "Λήψεις/Tortugarr — ορατές σε άλλες εφαρμογές",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Τα ληφθέντα πολυμέσα θα αποθηκευτούν στο Downloads/Moonfin στη συσκευή σας. Αυτά τα αρχεία θα είναι ορατά σε άλλες εφαρμογές, όπως η γκαλερί ή το πρόγραμμα αναπαραγωγής μουσικής.\n\nΟι υπάρχουσες λήψεις θα παραμείνουν στην τρέχουσα θέση τους.",
+    "saveToDownloadsFolderDescription": "Τα ληφθέντα πολυμέσα θα αποθηκευτούν στο Downloads/Tortugarr στη συσκευή σας. Αυτά τα αρχεία θα είναι ορατά σε άλλες εφαρμογές, όπως η γκαλερί ή το πρόγραμμα αναπαραγωγής μουσικής.\n\nΟι υπάρχουσες λήψεις θα παραμείνουν στην τρέχουσα θέση τους.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Moonfin για να τεθούν σε ισχύ οι αλλαγές.",
+    "libraryVisibilityDescription": "Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Tortugarr για να τεθούν σε ισχύ οι αλλαγές.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Αναπαραγωγή στο Moonfin",
+    "playInMoonfin": "Αναπαραγωγή στο Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Ζητήθηκε από {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Το αντικείμενο δεν βρέθηκε στη βιβλιοθήκη σας Moonfin",
+    "itemNotFoundInLibrary": "Το αντικείμενο δεν βρέθηκε στη βιβλιοθήκη σας Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Επανεκκίνηση διακομιστή σε εξέλιξη",
-    "adminServerRebootMessage": "Επανεκκίνηση διακομιστή σε εξέλιξη, κάντε επανεκκίνηση Moonfin",
+    "adminServerRebootMessage": "Επανεκκίνηση διακομιστή σε εξέλιξη, κάντε επανεκκίνηση Tortugarr",
     "adminActiveSessions": "Ενεργές συνεδρίες",
     "adminSessionsLoadFailed": "Αποτυχία φόρτωσης συνεδριών",
     "adminNoActiveSessions": "Δεν υπάρχουν ενεργές συνεδρίες",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Εμφάνιση του κουμπιού ειδών στη γραμμή πλοήγησης",
     "settingsShowFavoritesButtonInNavigation": "Εμφάνιση του κουμπιού αγαπημένων στη γραμμή πλοήγησης",
     "settingsShowLibrariesButtonInNavigation": "Εμφάνιση του κουμπιού βιβλιοθήκες στη γραμμή πλοήγησης",
-    "settingsLibraryVisibilitySubtitle": "Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Moonfin για να τεθούν σε ισχύ οι αλλαγές.",
+    "settingsLibraryVisibilitySubtitle": "Εναλλαγή ορατότητας αρχικής σελίδας ανά βιβλιοθήκη. Επανεκκινήστε το Tortugarr για να τεθούν σε ισχύ οι αλλαγές.",
     "settingsMediaBarAndLocalPreviews": "Γραμμή πολυμέσων και τοπικές προεπισκοπήσεις",
     "settingsVisualOverlays": "Οπτικές επικαλύψεις",
     "settingsSeasonalSurprise": "Εποχιακή Έκπληξη",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Εγγραφείτε Discord",
     "settingsJoinDiscordSubtitle": "Συζήτηση με την κοινότητα",
     "settingsJoinTheDiscord": "Εγγραφείτε στο Discord",
-    "settingsSupportMoonfin": "Υποστήριξη Moonfin",
+    "settingsSupportMoonfin": "Υποστήριξη Tortugarr",
     "settingsLegal": "ΝΟΜΙΚΟΣ",
     "settingsLicenses": "Άδειες",
     "settingsOpenSourceLicenseNotices": "Ειδοποιήσεις άδειας ανοιχτού κώδικα",
     "settingsPrivacyPolicy": "Πολιτική Απορρήτου",
-    "settingsPrivacyPolicySubtitle": "Πώς χειρίζεται ο Moonfin τα δεδομένα σας",
+    "settingsPrivacyPolicySubtitle": "Πώς χειρίζεται ο Tortugarr τα δεδομένα σας",
     "settingsCheckForUpdates": "Ελέγξτε για Ενημερώσεις",
-    "settingsCheckForUpdatesSubtitle": "Ελέγξτε για την πιο πρόσφατη έκδοση Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Ελέγξτε για την πιο πρόσφατη έκδοση Tortugarr",
     "settingsPoweredByFlutter": "Με την υποστήριξη του Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# ειδοποίηση άδειας} other {# ειδοποιήσεις άδειας}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Αποθηκευμένα θέματα",
-    "savedThemesDescription": "Αυτά είναι θέματα που έχουν ληφθεί από την προσθήκη Moonfin για τον τρέχοντα διακομιστή. Η διαγραφή καταργεί μόνο αυτό το τοπικό αντίγραφο.",
+    "savedThemesDescription": "Αυτά είναι θέματα που έχουν ληφθεί από την προσθήκη Tortugarr για τον τρέχοντα διακομιστή. Η διαγραφή καταργεί μόνο αυτό το τοπικό αντίγραφο.",
     "savedThemesEmpty": "Δεν βρέθηκαν αποθηκευμένα θέματα για αυτόν τον διακομιστή.",
     "savedThemesCurrentThemeId": "{themeId} • Αυτήν τη στιγμή ενεργό",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Διαγραφή αποθηκευμένου θέματος",
     "savedThemesManageSubtitle": "Διαχειριστείτε τα ληφθέντα θέματα προσθηκών σε αυτήν τη συσκευή",
     "themeEditor": "Επεξεργαστής θεμάτων",
-    "themeEditorSubtitle": "Ανοίξτε το πρόγραμμα επεξεργασίας θεμάτων Moonfin στο πρόγραμμα περιήγησής σας",
+    "themeEditorSubtitle": "Ανοίξτε το πρόγραμμα επεξεργασίας θεμάτων Tortugarr στο πρόγραμμα περιήγησής σας",
     "homeScreen": "Αρχική οθόνη",
     "bottomBar": "Μπάρα κάτω",
     "homeRowsStyleClassic": "Κλασσικός",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Προτιμήστε υπότιτλους SDH",
     "preferSdhSubtitlesSubtitle": "Δώστε προτεραιότητα στα κομμάτια υποτίτλων SDH/CC κατά την αυτόματη επιλογή.",
     "webDiagnostics": "Διαγνωστικά Web",
-    "webDiagnosticsTitle": "Moonfin Διαγνωστικά Ιστού",
+    "webDiagnosticsTitle": "Tortugarr Διαγνωστικά Ιστού",
     "webDiagnosticsIntro": "Χρησιμοποιήστε αυτήν τη σελίδα για να διαγνώσετε προβλήματα συνδεσιμότητας του προγράμματος περιήγησης (CORS, μικτό περιεχόμενο και ρυθμίσεις εντοπισμού).",
     "webDiagnosticsDetectedMixedContentFailure": "Εντοπίστηκε αποτυχία μικτού περιεχομένου",
     "webDiagnosticsDetectedCorsPreflightFailure": "Εντοπίστηκε αποτυχία CORS/Προκαταρκτικής πτήσης",
-    "webDiagnosticsMixedContentFailureBody": "Ο Moonfin εντόπισε μια σελίδα HTTPS που προσπαθεί να καλέσει μια διεύθυνση URL διακομιστή HTTP. Τα προγράμματα περιήγησης αποκλείουν αυτό το αίτημα πριν φτάσει στον διακομιστή σας.",
-    "webDiagnosticsCorsFailureBody": "Ο Moonfin εντόπισε μια αποτυχία αιτήματος σε επίπεδο προγράμματος περιήγησης που συνήθως προκαλείται από έλλειψη κεφαλίδων CORS ή προκαταρκτικής πτήσης στον διακομιστή πολυμέσων.",
+    "webDiagnosticsMixedContentFailureBody": "Ο Tortugarr εντόπισε μια σελίδα HTTPS που προσπαθεί να καλέσει μια διεύθυνση URL διακομιστή HTTP. Τα προγράμματα περιήγησης αποκλείουν αυτό το αίτημα πριν φτάσει στον διακομιστή σας.",
+    "webDiagnosticsCorsFailureBody": "Ο Tortugarr εντόπισε μια αποτυχία αιτήματος σε επίπεδο προγράμματος περιήγησης που συνήθως προκαλείται από έλλειψη κεφαλίδων CORS ή προκαταρκτικής πτήσης στον διακομιστή πολυμέσων.",
     "webDiagnosticsTargetUrl": "Διεύθυνση URL στόχου: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "δεν έχει ρυθμιστεί",
     "webDiagnosticsMixedContent": "Μικτό Περιεχόμενο",
     "webDiagnosticsMixedContentDetected": "Αυτή η σελίδα φορτώνεται μέσω HTTPS, αλλά μία ή περισσότερες διαμορφωμένες διευθύνσεις URL είναι HTTP. Τα προγράμματα περιήγησης εμποδίζουν τις σελίδες HTTPS να καλούν HTTP API.",
-    "webDiagnosticsMixedContentFix": "Διόρθωση: εξυπηρετήστε τον διακομιστή πολυμέσων ή το τελικό σημείο του διακομιστή μεσολάβησης μέσω HTTPS ή φορτώστε το Moonfin μέσω HTTP μόνο σε αξιόπιστα τοπικά δίκτυα.",
+    "webDiagnosticsMixedContentFix": "Διόρθωση: εξυπηρετήστε τον διακομιστή πολυμέσων ή το τελικό σημείο του διακομιστή μεσολάβησης μέσω HTTPS ή φορτώστε το Tortugarr μέσω HTTP μόνο σε αξιόπιστα τοπικά δίκτυα.",
     "webDiagnosticsNoMixedContentDetected": "Δεν εντοπίστηκε προφανής διαμόρφωση μικτού περιεχομένου από τις τρέχουσες ρυθμίσεις χρόνου εκτέλεσης.",
     "webDiagnosticsCorsChecklist": "Λίστα ελέγχου CORS",
     "webDiagnosticsCorsChecklistItem1": "• Να επιτρέπεται η προέλευση του προγράμματος περιήγησης στο Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Το Κλασικό είναι η αρχική, κεντραρισμένη διάταξη του Moonfin. Το Μοντέρνο είναι μια προσαρμοστική, κινηματογραφική διάταξη.",
+    "detailScreenStyleSubtitle": "Το Κλασικό είναι η αρχική, κεντραρισμένη διάταξη του Tortugarr. Το Μοντέρνο είναι μια προσαρμοστική, κινηματογραφική διάταξη.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Χρησιμοποιήστε τον αλγόριθμο τοπικής βιβλιοθήκης «Προτάσεις Moonfin» ή τις διαδικτυακές μετρήσεις ομοιότητας του TMDb. Σημείωση: οι διαδικτυακές προτάσεις απαιτούν ενσωμάτωση με το Seerr.",
+    "recommendationSystemSubtitle": "Χρησιμοποιήστε τον αλγόριθμο τοπικής βιβλιοθήκης «Προτάσεις Tortugarr» ή τις διαδικτυακές μετρήσεις ομοιότητας του TMDb. Σημείωση: οι διαδικτυακές προτάσεις απαιτούν ενσωμάτωση με το Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Προτάσεις Moonfin",
+    "recommendationSystemMoonfin": "Προτάσεις Tortugarr",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Ομοιότητα TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Περιορισμός των προτάσεων του Moonfin με βάση τη γονική διαβάθμιση του επιλεγμένου περιεχομένου",
+    "recommendationsApplyParentalRatingCapSubtitle": "Περιορισμός των προτάσεων του Tortugarr με βάση τη γονική διαβάθμιση του επιλεγμένου περιεχομένου",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Τα προσαρμοσμένα θέματα αλλάζουν τα οπτικά στοιχεία σε όλο το Moonfin. Επιλέξτε μία από αυτές τις επιλογές που ταιριάζει στο στυλ σας.",
+    "customThemeSubtitle": "Τα προσαρμοσμένα θέματα αλλάζουν τα οπτικά στοιχεία σε όλο το Tortugarr. Επιλέξτε μία από αυτές τις επιλογές που ταιριάζει στο στυλ σας.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Συνδεθείτε στο Moonfin από το τηλέφωνό σας",
+    "carSignInPrompt": "Συνδεθείτε στο Tortugarr από το τηλέφωνό σας",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Το Impeller είναι ο σύγχρονος επεξεργαστής απόδοσης GPU του Flutter, για πιο ομαλά κινούμενα γραφικά και λιγότερα κολλήματα. Σε ορισμένα TV box και παλαιότερες GPU μπορεί να προκαλέσει προβλήματα εμφάνισης ή μαύρο βίντεο· απενεργοποιήστε το αν παρατηρήσετε κάτι τέτοιο. Το Αυτόματο επιλέγει την καλύτερη προεπιλογή για τη συσκευή σας. Επανεκκινήστε το Moonfin για να εφαρμοστεί.",
+    "impellerRenderingSubtitle": "Το Impeller είναι ο σύγχρονος επεξεργαστής απόδοσης GPU του Flutter, για πιο ομαλά κινούμενα γραφικά και λιγότερα κολλήματα. Σε ορισμένα TV box και παλαιότερες GPU μπορεί να προκαλέσει προβλήματα εμφάνισης ή μαύρο βίντεο· απενεργοποιήστε το αν παρατηρήσετε κάτι τέτοιο. Το Αυτόματο επιλέγει την καλύτερη προεπιλογή για τη συσκευή σας. Επανεκκινήστε το Tortugarr για να εφαρμοστεί.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Το Moonfin πρέπει να επανεκκινήσει για να αλλάξει η μηχανή απόδοσης. Κλείστε την εφαρμογή τώρα και ανοίξτε την ξανά για να εφαρμοστεί.",
+    "impellerRestartMessage": "Το Tortugarr πρέπει να επανεκκινήσει για να αλλάξει η μηχανή απόδοσης. Κλείστε την εφαρμογή τώρα και ανοίξτε την ξανά για να εφαρμοστεί.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9226,5 +9226,247 @@
     "adminBackToSearch": "Επιστροφή στα Κριτήρια Αναζήτησης",
     "@adminBackToSearch": {
         "description": "Tooltip on the button that returns from the Identify results list to the search form"
-    }
+    },
+    "tgMissing": "Λείπει",
+    "tgComing": "Έρχεται",
+    "tgComingOn": "Έρχεται {date}",
+    "tgDownloading": "Λήψη σε εξέλιξη",
+    "tgReadySoon": "Έτοιμο σύντομα",
+    "tgRequested": "Ζητήθηκε",
+    "tgClose": "Κλείσιμο",
+    "tgCancel": "Ακύρωση",
+    "tgBack": "Πίσω",
+    "tgYes": "Ναι",
+    "tgNo": "Όχι",
+    "tgSearch": "Αναζήτηση",
+    "tgHide": "Απόκρυψη",
+    "tgAll": "Όλα",
+    "tgNone": "Κανένα",
+    "tgMovies": "Ταινίες",
+    "tgSeries": "Σειρές",
+    "tgMovieTag": "Ταινία",
+    "tgSeriesTag": "Σειρά",
+    "tgCanTakeAMinute": "Μπορεί να πάρει έως ένα λεπτό",
+    "tgToday": "σήμερα",
+    "tgYesterday": "χθες",
+    "tgDaysAgo": "πριν από {days} ημέρες",
+    "tgMonthsAgo": "πριν από {months} μήνες",
+    "tgYearsAgo": "πριν από {years} χρόνια",
+    "tgYearsMonthsAgo": "πριν από {years} χρόνια και {months} μήνες",
+    "tgFindSubtitles": "Εύρεση υπότιτλων",
+    "tgFreeUpSpace": "Απελευθέρωση χώρου",
+    "tgDownloads": "Λήψεις",
+    "tgDownloadsCount": "Λήψεις ({count})",
+    "tgNoVideoRemoved": "«{title}»: η λήψη δεν περιείχε αρχείο βίντεο ({files}). Αφαιρέθηκε και μπλοκαρίστηκε – δοκιμάστε άλλο αρχείο.",
+    "tgNoVideoNotRemoved": "«{title}»: η λήψη δεν περιείχε αρχείο βίντεο ({files}), αλλά δεν ήταν δυνατή η αυτόματη αφαίρεσή της.",
+    "tgAiredOn": "Προβλήθηκε {date}",
+    "tgTapToFindFiles": "Πατήστε για εύρεση αρχείων",
+    "tgWholeSeason": "Ολόκληρος κύκλος",
+    "tgEpisodesMissingFindPack": "Λείπουν {count} επεισόδια – βρείτε πακέτο κύκλου",
+    "tgAddToSonarrTitle": "Προσθέστε στο Sonarr για να δείτε τα επεισόδια που λείπουν",
+    "tgAddToSonarrSubtitle": "Η σειρά προστίθεται χωρίς να κατεβάσει τίποτα από μόνη της",
+    "tgMissingEpisodesUnavailable": "Τα επεισόδια που λείπουν δεν μπορούν να εμφανιστούν τώρα",
+    "tgReasonTapRetry": "{reason} · Πατήστε για νέα προσπάθεια",
+    "tgSeasonPackBadge": "Πακέτο κύκλου",
+    "tgMonitorSeasonTitle": "Παρακολούθηση κύκλου {season}",
+    "tgMonitorSeasonQuestion": "Να κατεβάσει το Sonarr τα επεισόδια που λείπουν από τον κύκλο {season} τώρα;\n\nΌχι: μόνο τα νέα επεισόδια θα λαμβάνονται όταν κυκλοφορούν.",
+    "tgSonarrSearchingSeason": "Το Sonarr αναζητά τον κύκλο {season}",
+    "tgMonitored": "Παρακολουθείται",
+    "tgNotMonitored": "Δεν παρακολουθείται",
+    "tgSeasonStateLabel": "Κύκλος {season}: {state}",
+    "tgLabelMissing": "Λείπει: {label}",
+    "tgNotAiredYet": "Το {code} δεν έχει προβληθεί ακόμα.",
+    "tgNotAiredYetComing": "Το {code} δεν έχει προβληθεί ακόμα – έρχεται {date}.",
+    "tgAlreadyDownloading": "Το {code} κατεβαίνει ήδη.",
+    "tgDownloadedAppearsSoon": "Το {code} κατέβηκε και θα εμφανιστεί σύντομα στη βιβλιοθήκη.",
+    "tgSearchingFor": "Αναζήτηση για {label} …",
+    "tgSeasonLower": "κύκλος {season}",
+    "tgWholeLabel": "Ολόκληρος {label}",
+    "tgSeasonNoEpisodes": "Κύκλος {season} – κανένα επεισόδιο στη βιβλιοθήκη",
+    "tgNoTvdbId": "Η σειρά δεν έχει TVDB id, οπότε το Sonarr δεν μπορεί να τη βρει.",
+    "tgAddingToSonarr": "Προσθήκη στο Sonarr …",
+    "tgAddToSonarrFailed": "Δεν ήταν δυνατή η προσθήκη της σειράς στο Sonarr. Δοκιμάστε ξανά αργότερα.",
+    "tgSendingToDownload": "Αποστολή «{label}» για λήψη …",
+    "tgDownloadDidNotStart": "Η λήψη δεν ξεκίνησε: {error}",
+    "tgDownloadingAppearsWhenDone": "Το «{label}» κατεβαίνει ({size}). Θα εμφανιστεί στη βιβλιοθήκη όταν ολοκληρωθεί.",
+    "tgSonarrUnreachableRetry": "Δεν ήταν δυνατή η επικοινωνία με το Sonarr. Δοκιμάστε ξανά σε λίγο.",
+    "tgNoUsableFiles": "Δεν βρέθηκαν χρησιμοποιήσιμα αρχεία. Δοκιμάστε ξανά αργότερα – συχνά εμφανίζονται νέα μετά από λίγες ώρες.",
+    "tgFilesCount": "{count} αρχεία",
+    "tgFilesRecommended": "{count} αρχεία – {recommended} ταιριάζουν στο προφίλ ποιότητας, τα υπόλοιπα είναι στο τέλος",
+    "tgOutsideQualityProfile": "Εκτός προφίλ ποιότητας",
+    "tgLargerThanProfile": "Μεγαλύτερο από όσο επιτρέπει το προφίλ",
+    "tgSmallerThanProfile": "Μικρότερο από όσο επιτρέπει το προφίλ",
+    "tgAlreadyExists": "Υπάρχει ήδη",
+    "tgMayNotFitDisk": "Μπορεί να μη χωρέσει στον δίσκο",
+    "tgSonarrUnreachable": "Δεν ήταν δυνατή η επικοινωνία με το Sonarr",
+    "tgSonarrUnreachableAt": "Δεν ήταν δυνατή η επικοινωνία με το Sonarr στο {host}",
+    "tgSonarrRejectedChange": "Το Sonarr δεν δέχτηκε την αλλαγή",
+    "tgSeasonMonitoredNoSearch": "Ο κύκλος παρακολουθείται, αλλά το Sonarr δεν ξεκίνησε την αναζήτηση",
+    "tgSonarrCantSearch": "Το Sonarr δεν μπόρεσε να κάνει αναζήτηση τώρα",
+    "tgSearchExpired": "Το αποτέλεσμα αναζήτησης έληξε – αναζητήστε ξανά",
+    "tgSonarrRejectedDownload": "Το Sonarr δεν δέχτηκε τη λήψη (HTTP {status})",
+    "tgSonarrNoSeries": "Το Sonarr δεν έχει τη σειρά",
+    "tgCouldNotChangeMonitoring": "Δεν ήταν δυνατή η αλλαγή της παρακολούθησης: {error}",
+    "tgJellyfinNoIds": "Το Jellyfin δεν αναγνώρισε τη σειρά (χωρίς TVDB ή TMDB id)",
+    "tgSomethingWentWrong": "Κάτι πήγε στραβά: {error}",
+    "tgDeleteReadOnly": "Το αρχείο δεν διαχειρίζεται από Radarr/Sonarr και το Jellyfin έχει μόνο πρόσβαση ανάγνωσης στον φάκελο. Διαγράψτε το από τη διαχείριση αρχείων.",
+    "tgSonarrRequiredPerEpisode": "Το Sonarr δεν είναι διαθέσιμο ή η σειρά δεν έχει προστεθεί εκεί. Η λήψη ανά επεισόδιο απαιτεί Sonarr.",
+    "tgEpisodesNotFound": "Τα επιλεγμένα επεισόδια δεν βρέθηκαν στο Sonarr για το «{title}» (βρέθηκαν {count} επεισόδια συνολικά). Προσθέστε τη σειρά στο Sonarr και δοκιμάστε ξανά.",
+    "tgPartOfCollectionPrefix": "Μέρος της συλλογής ",
+    "tgViewingPartOf": "  ·  βλέπετε το μέρος {current} από {total}",
+    "tgPartOf": "Μέρος {number} από {total}",
+    "tgUnknownTitle": "Άγνωστος τίτλος",
+    "tgMovieCollection": "Συλλογή ταινιών",
+    "tgNotReleasedYet": "Το «{title}» δεν έχει κυκλοφορήσει ακόμα",
+    "tgScreensaverModeVideo": "Βίντεο",
+    "tgScreensaverModeLogo": "Λογότυπο",
+    "tgScreensaverSound": "Ήχος προφύλαξης οθόνης",
+    "tgScreensaverSoundSubtitle": "Ανενεργό: τα τρέιλερ της προφύλαξης οθόνης παίζουν χωρίς ήχο",
+    "tgScreensaverLogo": "Λογότυπο",
+    "tgLogoBadge": "Σήμα Tortugarr",
+    "tgLogoVhs": "Παπαγάλος σε κασέτες VHS",
+    "tgLogoSign": "Παπαγάλος σε ταμπέλα",
+    "tgHiddenBadge": "ΚΡΥΦΟ · {code}",
+    "tgDiskSpace": "Χώρος δίσκου",
+    "tgDiskSpaceSubtitle": "Απελευθερώστε χώρο για νέες λήψεις",
+    "tgAdultTitle": "Ταινίες για ενήλικες (XXX)",
+    "tgAdultSubtitle": "Εμφάνιση ή απόκρυψη της βιβλιοθήκης XXX (PIN)",
+    "tgHideForeign": "Απόκρυψη ξένου περιεχομένου",
+    "tgHideForeignOn": "Ενεργό: τα Τάσεις και Δημοφιλή δείχνουν μόνο αγγλικά, νορβηγικά, σουηδικά, δανικά, γερμανικά και γαλλικά",
+    "tgHideForeignOff": "Ανενεργό: τα Τάσεις και Δημοφιλή δείχνουν όλες τις γλώσσες",
+    "tgShowHidden": "Εμφάνιση των κρυφών",
+    "tgShowHiddenOn": "Ενεργό: οι τίτλοι που θα κρύβονταν εμφανίζονται με κόκκινο σήμα ΚΡΥΦΟ",
+    "tgShowHiddenOff": "Αντιμετώπιση προβλημάτων: εμφάνιση κρυφών τίτλων με κόκκινο σήμα αντί για αφαίρεση",
+    "tgShowAllSubLangs": "Εμφάνιση όλων των γλωσσών υπότιτλων",
+    "tgShowAllSubLangsOn": "Ενεργό: το μενού υπότιτλων δείχνει όλες τις γλώσσες",
+    "tgShowAllSubLangsOff": "Ανενεργό: το μενού υπότιτλων δείχνει μόνο νορβηγικά και αγγλικά",
+    "tgPreviewSound": "Ήχος προεπισκόπησης",
+    "tgPreviewSoundOn": "Ενεργό: το κλιπ που παίζει όταν σταματάτε σε έναν τίτλο έχει ήχο",
+    "tgPreviewSoundOff": "Ανενεργό: τα κλιπ παίζουν χωρίς ήχο όσο περιηγείστε",
+    "tgScreensaver": "Προφύλαξη οθόνης",
+    "tgScreensaverSubtitle": "Βίντεο ή λογότυπο, ήχος και εικόνα",
+    "tgShowMissingEpisodes": "Εμφάνιση επεισοδίων που λείπουν",
+    "tgShowMissingEpisodesOn": "Ενεργό: οι κύκλοι δείχνουν τα επεισόδια που δεν έχετε, έτοιμα για λήψη",
+    "tgShowMissingEpisodesOff": "Ανενεργό: οι κύκλοι δείχνουν μόνο τα επεισόδια που έχετε",
+    "tgShowCollections": "Εμφάνιση συλλογών ταινιών",
+    "tgShowCollectionsOn": "Ενεργό: οι ταινίες δείχνουν τις υπόλοιπες ταινίες της συλλογής, μαζί με αυτές που σας λείπουν",
+    "tgShowCollectionsOff": "Ανενεργό: η σελίδα της ταινίας δεν δείχνει τη συλλογή",
+    "tgNoActiveDownloads": "Καμία ενεργή λήψη.",
+    "tgPickDownloadToOpen": "Επιλέξτε μια λήψη για να ανοίξετε τα αιτήματα.",
+    "tgRefreshLibrary": "Ανανέωση βιβλιοθήκης",
+    "tgAskingJellyfinScan": "Ζητείται από το Jellyfin να σαρώσει τη βιβλιοθήκη …",
+    "tgHideAll": "Απόκρυψη όλων",
+    "tgImporting": "Εισαγωγή",
+    "tgSubsNotManaged": "Αυτός ο τίτλος δεν διαχειρίζεται από Radarr/Sonarr, οπότε το Bazarr δεν μπορεί να βρει υπότιτλους για αυτόν.",
+    "tgBazarrUnreachable": "Δεν ήταν δυνατή η επικοινωνία με το Bazarr. Δοκιμάστε ξανά σε λίγο.",
+    "tgSubsFoundNothing": "Δεν βρέθηκε τίποτα ακόμα. Το Bazarr ξαναπροσπαθεί αυτόματα κάθε μέρα, ή μπορείτε να επιλέξετε εσείς.",
+    "tgSubsFound": "Βρέθηκαν {languages} – μπορεί να πάρει λίγο μέχρι να εμφανιστούν στο μενού υπότιτλων.",
+    "tgAnd": "και",
+    "tgSubsDownloaded": "Λήφθηκαν – μπορεί να πάρει λίγο μέχρι να εμφανιστούν στο μενού υπότιτλων.",
+    "tgAskingBazarr": "Ερώτηση στο Bazarr …",
+    "tgHaveAll": "Τα έχετε όλα",
+    "tgSearchAutoNow": "Αυτόματη αναζήτηση τώρα",
+    "tgSearchingUpToMinute": "Αναζήτηση … μπορεί να πάρει έως ένα λεπτό",
+    "tgPickYourself": "Επιλέξτε εσείς",
+    "tgAskingProviders": "Ερώτηση στους παρόχους υπότιτλων … μπορεί να πάρει έως ένα λεπτό",
+    "tgNoProviderSubs": "Κανένας πάροχος δεν έχει υπότιτλους για αυτό ακόμα.",
+    "tgLangHas": "{language}: διαθέσιμοι",
+    "tgLangMissing": "{language}: λείπουν",
+    "tgNoReleaseName": "(χωρίς όνομα release)",
+    "tgHearingImpaired": "{provider} · για άτομα με προβλήματα ακοής",
+    "tgLangNorwegian": "Νορβηγικά",
+    "tgLangEnglish": "Αγγλικά",
+    "tgBazarrUnknownTitle": "Το Bazarr δεν γνωρίζει ακόμα αυτόν τον τίτλο",
+    "tgBazarrError": "Το Bazarr απάντησε με σφάλμα (HTTP {code})",
+    "tgLowSpaceSnack": "Λίγος χώρος στο {drive}: ({free} ελεύθερα). Η λήψη μπορεί να σταματήσει — ενημερώστε όποιον διαχειρίζεται τον διακομιστή.",
+    "tgNoQbitForSpace": "Δεν ήταν δυνατή η επικοινωνία με το qBittorrent για έλεγχο του χώρου",
+    "tgNotEnoughSpace": "Ανεπαρκής χώρος",
+    "tgDriveHasFree": "{drive}: έχει {free} ελεύθερα",
+    "tgCopyInDownloads": "Αντίγραφο στο Downloads · υπάρχει ήδη στη βιβλιοθήκη",
+    "tgLastWatched": "Τελευταία προβολή {ago}",
+    "tgNeverWatchedAdded": "Δεν έχει προβληθεί · προστέθηκε {ago}",
+    "tgNeverWatched": "Δεν έχει προβληθεί",
+    "tgNothingSafeToDelete": "Δεν βρέθηκε τίποτα στο {drive}: που να μπορεί να διαγραφεί με ασφάλεια (όλα είναι πρόσφατα προστεθειμένα, πρόσφατα προβεβλημένα ή αγαπημένα).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{Διαγραφή 1 τίτλου;} other{Διαγραφή {count} τίτλων;}}",
+    "tgDeletedForGood": "{size} θα διαγραφούν οριστικά. Δεν μπορεί να αναιρεθεί.",
+    "tgYesDelete": "Ναι, διαγραφή",
+    "tgDeletingProgress": "Διαγραφή {done}/{total} …",
+    "tgNowHasFree": " · {drive}: έχει τώρα {free} ελεύθερα",
+    "tgDeletedTitles": "{count, plural, one{Διαγράφηκε 1 τίτλος} other{Διαγράφηκαν {count} τίτλοι}}{extra}",
+    "tgDeletedFailed": "Διαγράφηκαν {count}, απέτυχαν: {failed}{extra}",
+    "tgFreeGb": "Απελευθέρωση {gb} GB",
+    "tgDownloadCopies": "Αντίγραφα λήψεων",
+    "tgLookingForUnwatched": "Αναζήτηση για όσα δεν έχουν προβληθεί εδώ και πολύ καιρό …",
+    "tgSuggestionEnough": "Πρόταση: {size} · αρκετός χώρος ✓",
+    "tgSuggestionOf": "Πρόταση: {size} από {target} που χρειάζονται",
+    "tgPickToSayNo": "Επιλέξτε ένα για να πείτε όχι — η επόμενη πρόταση έρχεται αυτόματα.",
+    "tgOtherCandidates": "Άλλες επιλογές",
+    "tgDownloadAnyway": "Λήψη ούτως ή άλλως",
+    "tgDeleteCountSize": "Διαγραφή {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: έχει {free} ελεύθερα.",
+    "tgFileDoubleSpace": "Το αρχείο είναι {size} και πιάνει διπλό χώρο (λήψη + αντίγραφο στη βιβλιοθήκη), πλέον {buffer} ως απόθεμα.",
+    "tgFileSize": "Το αρχείο είναι {size}, πλέον {buffer} ως απόθεμα.",
+    "tgPendingNeeds": "Οι λήψεις σε εξέλιξη χρειάζονται ακόμα {size}.",
+    "tgShortBy": "Λείπουν {size}.",
+    "tgOnlyEarlyFiles": "Βρέθηκαν μόνο αρχεία που δημοσιεύτηκαν πριν την ψηφιακή κυκλοφορία της ταινίας ({count}) — είναι σχεδόν πάντα ψεύτικα.",
+    "tgNoDigitalDate": "δεν έχει ακόμα ημερομηνία ψηφιακής κυκλοφορίας",
+    "tgDigitalOn": "κυκλοφορεί ψηφιακά στις {date}",
+    "tgNotOutDigitally": "Δεν έχει κυκλοφορήσει ψηφιακά ακόμα",
+    "tgTitleWhen": "Το «{title}» {when}.",
+    "tgNotOutExplain": "Ό,τι υπάρχει τώρα είναι συνήθως εγγραφή από κινηματογράφο ή άλλη ταινία με το ίδιο όνομα. Μερικές φορές υπάρχει μια πρώιμη κόπια σε χαμηλότερη ποιότητα, συχνά με ενσωματωμένους υπότιτλους. Η «Εμφάνιση αρχείων ούτως ή άλλως» δείχνει τι υπάρχει. Το Radarr κατεβάζει μόνο του τη σωστή έκδοση όταν κυκλοφορήσει.",
+    "tgShowFilesAnyway": "Εμφάνιση αρχείων ούτως ή άλλως",
+    "tgPickSeasonsEpisodes": "Επιλέξτε κύκλους και επεισόδια",
+    "tgNoEpisodeInfo": "{season}: χωρίς πληροφορίες επεισοδίων",
+    "tgAppliesAllDevices": "Ισχύει για κάθε συσκευή που χρησιμοποιεί αυτόν τον λογαριασμό",
+    "tgNoXxxLibrary": "Δεν βρέθηκε βιβλιοθήκη με όνομα XXX.",
+    "tgSearchingEachWord": "Αναζήτηση κάθε λέξης ξεχωριστά … (μπορεί να πάρει μισό λεπτό)",
+    "tgSentToQbit": "Το «{title}» ({size}) στάλθηκε στο qBittorrent",
+    "tgDownloadFailed": "Η λήψη απέτυχε: {error}",
+    "tgXxxNoVideoRemoved": "Το «{title}» δεν περιείχε αρχείο βίντεο και αφαιρέθηκε.",
+    "tgXxxNoVideoNotRemoved": "Το «{title}» δεν περιείχε αρχείο βίντεο και ΔΕΝ αφαιρέθηκε.",
+    "tgSearchNewXxx": "Αναζήτηση νέων XXX",
+    "tgXxxSearchHint": "Όνομα, στούντιο …",
+    "tgChecking": "Έλεγχος …",
+    "tgXxxVisible": "Ορατό τώρα. Το XXX εμφανίζεται στις βιβλιοθήκες, στην αναζήτηση και στην αρχική οθόνη.",
+    "tgXxxHidden": "Κρυφό. Το XXX δεν εμφανίζεται πουθενά στην εφαρμογή.",
+    "tgShowWithPin": "Εμφάνιση (PIN)",
+    "tgChangePin": "Αλλαγή PIN",
+    "tgNoLibraryList": "Δεν ήταν δυνατή η λήψη της λίστας βιβλιοθηκών (HTTP {code})",
+    "tgNoUserSettings": "Δεν ήταν δυνατή η λήψη των ρυθμίσεων χρήστη (HTTP {code})",
+    "tgJellyfinRejectedChange": "Το Jellyfin απέρριψε την αλλαγή (HTTP {code})",
+    "tgDeleteFailed": "Η διαγραφή απέτυχε (HTTP {code})",
+    "tgXxxAddFailed": "Δεν ήταν δυνατή η προσθήκη του «{title}» στο qBittorrent",
+    "tgSeasonEpisodeLower": "κύκλος {season}, επεισόδιο {episode}",
+    "tgSearchInSeerr": "Αναζήτηση στο Seerr",
+    "tgSeerrSearchHint": "Αναζητήστε ταινίες και σειρές (π.χ. «Lost S02E05»)",
+    "tgMissingInThisSeason": "Λείπουν σε αυτόν τον κύκλο",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Λείπει ο κύκλος} other{Λείπουν οι κύκλοι}} {list} - ανοίξτε τη σειρά για να δείτε όλους τους κύκλους",
+    "tgProjectOnGitHub": "Το Tortugarr στο GitHub",
+    "tgProjectOnGitHubSubtitle": "Πηγαίος κώδικας, εκδόσεις και αναφορές προβλημάτων",
+    "tgBuiltOnMoonfinCredit": "Το Tortugarr βασίζεται στο Moonfin (GPL), από τους προγραμματιστές του Moonfin.",
+    "tgCredits": "Ευχαριστίες",
+    "tgCreditsThanks": "Με ταπεινή ευγνωμοσύνη: χωρίς αυτά τα έργα και τους ανθρώπους πίσω τους, το Tortugarr δεν θα υπήρχε.",
+    "tgCreditMoonfin": "Η εφαρμογή στην οποία βασίζεται το Tortugarr (GPL)",
+    "tgCreditJellyfin": "Διακομιστής πολυμέσων",
+    "tgCreditSeerr": "Ανακάλυψη και αιτήματα",
+    "tgCreditRadarr": "Ταινίες",
+    "tgCreditSonarr": "Σειρές",
+    "tgCreditProwlarr": "Διαχείριση indexers",
+    "tgCreditBazarr": "Υπότιτλοι",
+    "tgCreditFlareSolverr": "Βοηθός Cloudflare για indexers",
+    "tgCreditQbittorrent": "Πρόγραμμα λήψεων, προεπιλογή του εγκαταστάτη",
+    "tgCreditTmdb": "Δεδομένα ταινιών και σειρών, αφίσες και εικόνες",
+    "tgCreditOpenSubtitles": "Υπότιτλοι, μέσω Bazarr",
+    "tgTmdbNotice": "Αυτό το προϊόν χρησιμοποιεί το TMDB API, αλλά δεν είναι εγκεκριμένο ή πιστοποιημένο από το TMDB.",
+    "tgLoadingLogoSize": "Μέγεθος λογότυπου φόρτωσης",
+    "tgLoadingLogoSizeSubtitle": "Το λογότυπο που περιστρέφεται όσο φορτώνει ένα βίντεο",
+    "tgSubtitleLanguages": "Γλώσσες υποτίτλων",
+    "tgSubtitleLanguagesSubtitle": "Εμφανίζονται στο μενού υποτίτλων: {languages}",
+    "tgShowAllSubLangsOffChosen": "Ανενεργό: το μενού υποτίτλων δείχνει μόνο τις γλώσσες που επιλέξατε",
+    "tgDiscoveryLanguages": "Γλώσσες στα Τάσεις και Δημοφιλή",
+    "tgDiscoveryLanguagesSubtitle": "Εμφανίζονται: {languages}",
+    "tgHideForeignOnChosen": "Ενεργό: τα Τάσεις και Δημοφιλή δείχνουν μόνο τις γλώσσες που επιλέξατε",
+    "tgShowLanguageBadges": "Εμφάνιση σημάτων γλώσσας",
+    "tgShowLanguageBadgesOn": "Ενεργό: οι τίτλοι δείχνουν τη γλώσσα τους (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Ανενεργό: χωρίς σήματα γλώσσας στους τίτλους"
 }

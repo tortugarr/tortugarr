@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../models/aggregated_item.dart';
 import '../media_server_client_factory.dart';
 import 'cast_provider.dart';
+import 'cast_service.dart';
 import 'cast_target.dart';
 import 'cast_transport_controls.dart';
 
@@ -19,6 +22,42 @@ class RemoteSessionCastProvider
   /// number rather than marking a working control unavailable.
   double? _lastSentVolume;
 
+  // A Tortugarr session reports no events back to us; the cast service polls
+  // fetchRemoteSnapshot. A few empty polls in a row mean the receiver stopped,
+  // so the mini player closes instead of waiting forever.
+  static const _missingPollsBeforeEnd = 3;
+  int _missingPolls = 0;
+
+  CastService? get _castService =>
+      GetIt.instance.isRegistered<CastService>()
+          ? GetIt.instance<CastService>()
+          : null;
+
+  /// Switches tracks on the receiver in place. The TV app handles
+  /// SetAudioStreamIndex / SetSubtitleStreamIndex itself, so playback keeps
+  /// its position instead of restarting from a stale one.
+  Future<void> selectTrack({
+    int? audioStreamIndex,
+    int? subtitleStreamIndex,
+  }) async {
+    final sessionId = _activeSessionId;
+    if (sessionId == null) return;
+    final api = _activeClient.sessionApi;
+    if (audioStreamIndex != null) {
+      await api.sendGeneralCommand(
+        sessionId,
+        'SetAudioStreamIndex',
+        arguments: {'Index': '$audioStreamIndex'},
+      );
+    }
+    if (subtitleStreamIndex != null) {
+      await api.sendGeneralCommand(
+        sessionId,
+        'SetSubtitleStreamIndex',
+        arguments: {'Index': '$subtitleStreamIndex'},
+      );
+    }
+  }
   RemoteSessionCastProvider(this._clientFactory);
 
   @override
@@ -113,6 +152,31 @@ class RemoteSessionCastProvider
       audioStreamIndex: audioStreamIndex,
       subtitleStreamIndex: subtitleStreamIndex,
     );
+    _missingPolls = 0;
+  }
+
+  // The TV reports its state to Jellyfin on its own schedule, so a poll can
+  // lag a tap by several seconds. Show the expected state at once and poll
+  // soon after to confirm; a refused command is corrected by that poll.
+  void _assume({String? state, int? positionTicks}) {
+    _castService?.updateRemoteState(
+      kind: CastTargetKind.jellyfinSession,
+      state: state,
+      positionTicks: positionTicks,
+    );
+    Future<void>.delayed(const Duration(milliseconds: 900), _confirmState);
+  }
+
+  Future<void> _confirmState() async {
+    final snapshot =
+        await fetchRemoteSnapshot(CastTargetKind.jellyfinSession);
+    if (snapshot == null) return;
+    _castService?.updateRemoteState(
+      kind: CastTargetKind.jellyfinSession,
+      state: snapshot.state,
+      positionTicks: snapshot.positionTicks,
+      volume: snapshot.volume,
+    );
   }
 
   @override
@@ -120,6 +184,7 @@ class RemoteSessionCastProvider
     final sessionId = _activeSessionId;
     if (sessionId == null) return;
     await _activeClient.sessionApi.sendPlayStateCommand(sessionId, 'Unpause');
+    _assume(state: 'playing');
   }
 
   @override
@@ -127,6 +192,7 @@ class RemoteSessionCastProvider
     final sessionId = _activeSessionId;
     if (sessionId == null) return;
     await _activeClient.sessionApi.sendPlayStateCommand(sessionId, 'Pause');
+    _assume(state: 'paused');
   }
 
   @override
@@ -138,12 +204,14 @@ class RemoteSessionCastProvider
       'Seek',
       seekPositionTicks: positionTicks,
     );
+    _assume(positionTicks: positionTicks);
   }
 
   @override
   Future<void> stop(CastTargetKind kind) async {
     final sessionId = _activeSessionId;
     if (sessionId == null) return;
+    _missingPolls = 0;
     await _activeClient.sessionApi.sendPlayStateCommand(sessionId, 'Stop');
     _activeSessionId = null;
     _activeServerId = null;
@@ -178,10 +246,22 @@ class RemoteSessionCastProvider
     CastTargetKind kind,
   ) async {
     final session = await _fetchActiveSession();
+    final nowPlaying = session?['NowPlayingItem'] as Map<String, dynamic>?;
+    if (_activeSessionId != null && nowPlaying == null) {
+      _missingPolls++;
+      if (_missingPolls >= _missingPollsBeforeEnd) {
+        _missingPolls = 0;
+        _activeSessionId = null;
+        _activeServerId = null;
+        _castService?.remoteSessionEnded(kind);
+        return null;
+      }
+    } else {
+      _missingPolls = 0;
+    }
     if (session == null) return null;
 
     final playState = session['PlayState'] as Map<String, dynamic>?;
-    final nowPlaying = session['NowPlayingItem'] as Map<String, dynamic>?;
     return RemotePlaybackSnapshot(
       // Nothing playing reads as no state at all rather than as paused, which
       // is what the mini player shows an idle receiver.

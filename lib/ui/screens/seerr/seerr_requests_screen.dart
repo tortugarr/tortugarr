@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/repositories/seerr_repository.dart';
@@ -36,6 +35,8 @@ import '../../widgets/focus/focusable_wrapper.dart';
 import '../../widgets/bottom_nav/bottom_navbar.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/offline_aware_image.dart';
+import '../../widgets/focus/nav_chrome_focus.dart';
+import '../../navigation/single_push.dart';
 
 // w342, like the other Seerr screens. w200 is too soft once the grid
 // enlarges it.
@@ -526,11 +527,13 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
   }
 
   void _onRequestTap(SeerrRequest request) {
+    if (!NavChromeFocus.isOnCurrentRoute(context)) return;
     final media = request.media;
     if (media == null) return;
     final tmdbId = media.tmdbId;
     if (tmdbId == null) return;
-    context.push(
+    SinglePush.push(
+      context,
       Destinations.seerrMedia(tmdbId.toString(), mediaType: request.type),
     );
   }

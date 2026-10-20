@@ -199,6 +199,13 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
+    // Wait for any in-flight load before clearing the rows. Clearing _rows
+    // while _loadRow/_updateRow from a previous load are still running made
+    // them index into an empty list ("RangeError (length): ... empty: 1"),
+    // which aborted the refresh and left stale rows on screen.
+    while (_isLoading) {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
     _rows = [];
     notifyListeners();
     await load();
@@ -300,6 +307,8 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadRow(int index) async {
+    // Defensive: a concurrent refresh may have trimmed _rows.
+    if (index < 0 || index >= _rows.length) return;
     final row = _rows[index];
     try {
       switch (row.type) {
@@ -310,21 +319,18 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
         case SeerrRowType.yourWatchlist:
           await _loadWatchlist(index);
         case SeerrRowType.recentlyAdded:
-          await _loadRecentlyAdded(index);
+          await _loadRecentlyAddedFiltered(index);
         case SeerrRowType.movieGenres:
           await _loadGenres(index, isMovie: true);
         case SeerrRowType.seriesGenres:
           await _loadGenres(index, isMovie: false);
         case SeerrRowType.networks:
-          _updateRow(index, row.copyWith(
-            networks: popularNetworks,
-            isLoading: false,
-          ));
         case SeerrRowType.studios:
-          _updateRow(index, row.copyWith(
-            studios: popularStudios,
-            isLoading: false,
-          ));
+          // Removed: TMDB network/studio IDs don't map to Sonarr/Radarr internal IDs.
+          // When clicked, the browse screen fails with "Network Id Not Found".
+          // These rows showed stale hardcoded data anyway. Users can still access
+          // network/studio filters via the browse screen's filter dropdowns.
+          _updateRow(index, row.copyWith(isLoading: false, items: const []));
         default:
           final page = await _loadPage(row, 1);
           if (page != null) {
@@ -376,12 +382,14 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _loadRecentlyAdded(int index) async {
+  Future<void> _loadRecentlyAddedFiltered(int index) async {
     final row = _rows[index];
     try {
       final media = await _repo.getRecentlyAdded(limit: _localRowsFetchLimit);
       final items = await Future.wait(media.map(_mediaToDiscoverItem));
-      _updateRow(index, row.copyWith(items: items, isLoading: false));
+      // Apply the same filter as other discover rows: hide already-available items
+      final filtered = _filterItems(items);
+      _updateRow(index, row.copyWith(items: filtered, isLoading: false));
     } catch (_) {
       _updateRow(index, row.copyWith(isLoading: false));
     }
@@ -568,6 +576,8 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
   }
 
   void _updateRow(int index, SeerrDiscoverRow row) {
+    // Defensive: a concurrent refresh may have trimmed _rows.
+    if (index < 0 || index >= _rows.length) return;
     _rows = List.of(_rows);
     _rows[index] = row;
     notifyListeners();

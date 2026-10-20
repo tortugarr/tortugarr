@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/repositories/seerr_repository.dart';
@@ -23,6 +22,7 @@ import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../widgets/offline_aware_image.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbProfileLarge = 'https://image.tmdb.org/t/p/w500';
@@ -466,7 +466,8 @@ class _SeerrPersonScreenState extends State<SeerrPersonScreen> {
               suppressFocusGlow: suppressFocusGlow,
               onTap: () {
                 final mediaType = item.mediaType ?? 'movie';
-                context.push(
+                SinglePush.push(
+                  context,
                   Destinations.seerrMedia(
                     item.id.toString(),
                     mediaType: mediaType,

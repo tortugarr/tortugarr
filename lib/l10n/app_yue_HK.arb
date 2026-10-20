@@ -1,6 +1,6 @@
 {
     "@@locale": "yue_HK",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -78,7 +78,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin version {version}",
+    "appVersionFooter": "Tortugarr version {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -152,7 +152,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。",
+    "secureStorageUnavailableMessage": "Tortugarr 無法存取您的系統金鑰環。登入可以繼續，但在密鑰環解鎖之前，安全令牌儲存可能不可用。",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -164,17 +164,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "在 Moonfin 和 Neon Pulse 之間切換，無需重新啟動應用程式",
+    "settingsAppearanceThemeSubtitle": "在 Tortugarr 和 Neon Pulse 之間切換，無需重新啟動應用程式",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "目前的 Moonfin 外觀你們都喜歡",
+    "themeMoonfinSubtitle": "目前的 Tortugarr 外觀你們都喜歡",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -245,7 +245,7 @@
             }
         }
     },
-    "exitApp": "退出Moonfin？",
+    "exitApp": "退出Tortugarr？",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3101,7 +3101,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "未設定。 Moonfin 將嘗試應用程式/資料資料夾中的預設 mpv.conf。",
+    "notSetMpvConf": "未設定。 Tortugarr 將嘗試應用程式/資料資料夾中的預設 mpv.conf。",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3328,7 +3328,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — 對其他應用程式可見",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — 對其他應用程式可見",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3364,7 +3364,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "下載的媒體將會儲存到您裝置上的 Downloads/Moonfin 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。",
+    "saveToDownloadsFolderDescription": "下載的媒體將會儲存到您裝置上的 Downloads/Tortugarr 中。這些檔案將對其他應用程式可見，例如您的圖庫或音樂播放器。\n\n現有下載將保留在目前位置。",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3504,7 +3504,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。",
+    "libraryVisibilityDescription": "切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3549,13 +3549,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "在 Moonfin、MakD 之間進行選擇，或關閉媒體列",
+    "mediaBarModeDescription": "在 Tortugarr、MakD 之間進行選擇，或關閉媒體列",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "馬克D",
     "@mediaBarModeMakd": {
@@ -4057,7 +4057,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4225,9 +4225,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "玩 Moonfin",
+    "playInMoonfin": "玩 Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Requested by {name}",
     "@requestedByName": {
@@ -4279,7 +4279,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "在您的 Moonfin 庫中找不到項目",
+    "itemNotFoundInLibrary": "在您的 Tortugarr 庫中找不到項目",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4581,7 +4581,7 @@
         }
     },
     "adminServerRebootInProgress": "伺服器正在重啟",
-    "adminServerRebootMessage": "伺服器正在重新啟動，請重新啟動 Moonfin",
+    "adminServerRebootMessage": "伺服器正在重新啟動，請重新啟動 Tortugarr",
     "adminActiveSessions": "活躍會話",
     "adminSessionsLoadFailed": "無法載入會話",
     "adminNoActiveSessions": "沒有活動會話",
@@ -6457,7 +6457,7 @@
     "settingsShowGenresButtonInNavigation": "在導覽列中顯示流派按鈕",
     "settingsShowFavoritesButtonInNavigation": "在導覽列中顯示收藏夾按鈕",
     "settingsShowLibrariesButtonInNavigation": "在導覽列中顯示庫按鈕",
-    "settingsLibraryVisibilitySubtitle": "切換每個庫的主頁可見性。重新啟動 Moonfin 以使變更生效。",
+    "settingsLibraryVisibilitySubtitle": "切換每個庫的主頁可見性。重新啟動 Tortugarr 以使變更生效。",
     "settingsMediaBarAndLocalPreviews": "媒體欄和本地預覽",
     "settingsVisualOverlays": "視覺疊加",
     "settingsSeasonalSurprise": "季節性驚喜",
@@ -6476,14 +6476,14 @@
     "settingsJoinDiscord": "加入 Discord",
     "settingsJoinDiscordSubtitle": "與社群聊天",
     "settingsJoinTheDiscord": "加入 Discord",
-    "settingsSupportMoonfin": "支援Moonfin",
+    "settingsSupportMoonfin": "支援Tortugarr",
     "settingsLegal": "合法的",
     "settingsLicenses": "許可證",
     "settingsOpenSourceLicenseNotices": "開源授權聲明",
     "settingsPrivacyPolicy": "隱私權政策",
-    "settingsPrivacyPolicySubtitle": "Moonfin 如何處理您的數據",
+    "settingsPrivacyPolicySubtitle": "Tortugarr 如何處理您的數據",
     "settingsCheckForUpdates": "檢查更新",
-    "settingsCheckForUpdatesSubtitle": "檢查最新的 Moonfin 版本",
+    "settingsCheckForUpdatesSubtitle": "檢查最新的 Tortugarr 版本",
     "settingsPoweredByFlutter": "由顫動提供支持",
     "settingsLicenseNoticesCount": "{count, plural, one {# license notice} other {# license notices}}",
     "@settingsLicenseNoticesCount": {
@@ -6949,7 +6949,7 @@
         }
     },
     "savedThemesTitle": "Saved themes",
-    "savedThemesDescription": "These are themes downloaded from the Moonfin plugin for the current server. Deleting removes only this local copy.",
+    "savedThemesDescription": "These are themes downloaded from the Tortugarr plugin for the current server. Deleting removes only this local copy.",
     "savedThemesEmpty": "No saved themes were found for this server.",
     "savedThemesCurrentThemeId": "{themeId} • Currently active",
     "@savedThemesCurrentThemeId": {
@@ -6963,7 +6963,7 @@
     "savedThemesDeleteTooltip": "Delete saved theme",
     "savedThemesManageSubtitle": "Manage downloaded plugin themes on this device",
     "themeEditor": "Theme Editor",
-    "themeEditorSubtitle": "Open the Moonfin Theme Editor in your browser",
+    "themeEditorSubtitle": "Open the Tortugarr Theme Editor in your browser",
     "homeScreen": "Home Screen",
     "bottomBar": "Bottom Bar",
     "homeRowsStyleClassic": "Classic",
@@ -7012,12 +7012,12 @@
     "preferSdhSubtitles": "Prefer SDH subtitles",
     "preferSdhSubtitlesSubtitle": "Prioritize SDH/CC subtitle tracks when auto-selecting.",
     "webDiagnostics": "Web diagnostics",
-    "webDiagnosticsTitle": "Moonfin Web Diagnostics",
+    "webDiagnosticsTitle": "Tortugarr Web Diagnostics",
     "webDiagnosticsIntro": "Use this page to diagnose browser connectivity issues (CORS, mixed content, and discovery settings).",
     "webDiagnosticsDetectedMixedContentFailure": "Detected Mixed-Content Failure",
     "webDiagnosticsDetectedCorsPreflightFailure": "Detected CORS/Preflight Failure",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.",
-    "webDiagnosticsCorsFailureBody": "Moonfin detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr detected an HTTPS page trying to call an HTTP server URL. Browsers block this request before it reaches your server.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr detected a browser-level request failure that is commonly caused by missing CORS or preflight headers on the media server.",
     "webDiagnosticsTargetUrl": "Target URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7047,7 +7047,7 @@
     "notConfigured": "not configured",
     "webDiagnosticsMixedContent": "Mixed Content",
     "webDiagnosticsMixedContentDetected": "This page is loaded over HTTPS, but one or more configured URLs are HTTP. Browsers block HTTPS pages from calling HTTP APIs.",
-    "webDiagnosticsMixedContentFix": "Fix: serve your media server or proxy endpoint via HTTPS, or load Moonfin over HTTP on trusted local networks only.",
+    "webDiagnosticsMixedContentFix": "Fix: serve your media server or proxy endpoint via HTTPS, or load Tortugarr over HTTP on trusted local networks only.",
     "webDiagnosticsNoMixedContentDetected": "No obvious mixed-content configuration detected from current runtime settings.",
     "webDiagnosticsCorsChecklist": "CORS Checklist",
     "webDiagnosticsCorsChecklistItem1": "• Allow the browser origin in Access-Control-Allow-Origin.",
@@ -7223,5 +7223,247 @@
     "autoHdrSwitchingDescription": "Automatically enable HDR for HDR video playback and restore display mode on exit.",
     "whenFullscreen": "When fullscreen",
     "transcodingLimits": "Transcoding Limits",
-    "settingsSupportMoonfinSubtitle": "Donate a coffee to the developer"
+    "settingsSupportMoonfinSubtitle": "Donate a coffee to the developer",
+    "tgMissing": "缺少",
+    "tgComing": "即將推出",
+    "tgComingOn": "{date}推出",
+    "tgDownloading": "下載中",
+    "tgReadySoon": "好快就得",
+    "tgRequested": "已請求",
+    "tgClose": "關閉",
+    "tgCancel": "取消",
+    "tgBack": "返回",
+    "tgYes": "係",
+    "tgNo": "唔係",
+    "tgSearch": "搜尋",
+    "tgHide": "隱藏",
+    "tgAll": "全部",
+    "tgNone": "冇",
+    "tgMovies": "電影",
+    "tgSeries": "劇集",
+    "tgMovieTag": "電影",
+    "tgSeriesTag": "劇集",
+    "tgCanTakeAMinute": "最多可能要一分鐘",
+    "tgToday": "今日",
+    "tgYesterday": "昨日",
+    "tgDaysAgo": "{days} 日前",
+    "tgMonthsAgo": "{months} 個月前",
+    "tgYearsAgo": "{years} 年前",
+    "tgYearsMonthsAgo": "{years} 年 {months} 個月前",
+    "tgFindSubtitles": "搵字幕",
+    "tgFreeUpSpace": "騰出空間",
+    "tgDownloads": "下載",
+    "tgDownloadsCount": "下載（{count}）",
+    "tgNoVideoRemoved": "「{title}」：呢個下載冇影片檔（{files}）。已經移除並封鎖 — 試試另一個檔案。",
+    "tgNoVideoNotRemoved": "「{title}」：呢個下載冇影片檔（{files}），但係無法自動移除。",
+    "tgAiredOn": "{date}播出",
+    "tgTapToFindFiles": "㩒一下搵檔案",
+    "tgWholeSeason": "整季",
+    "tgEpisodesMissingFindPack": "缺少 {count} 集 – 搵整季合集",
+    "tgAddToSonarrTitle": "加入 Sonarr 以查看缺少嘅集數",
+    "tgAddToSonarrSubtitle": "加入之後唔會自動下載任何內容",
+    "tgMissingEpisodesUnavailable": "暫時無法顯示缺少嘅集數",
+    "tgReasonTapRetry": "{reason} · 㩒一下重試",
+    "tgSeasonPackBadge": "整季合集",
+    "tgMonitorSeasonTitle": "監控第 {season} 季",
+    "tgMonitorSeasonQuestion": "要 Sonarr 而家就抓取第 {season} 季缺少嘅集數？\n\n唔係：只會喺新一集播出時先抓取。",
+    "tgSonarrSearchingSeason": "Sonarr 正在搜尋第 {season} 季",
+    "tgMonitored": "已監控",
+    "tgNotMonitored": "未監控",
+    "tgSeasonStateLabel": "第 {season} 季：{state}",
+    "tgLabelMissing": "{label}缺少",
+    "tgNotAiredYet": "{code} 仲未播出。",
+    "tgNotAiredYetComing": "{code} 仲未播出 – {date}推出。",
+    "tgAlreadyDownloading": "{code} 已經喺下載中。",
+    "tgDownloadedAppearsSoon": "{code} 已經下載完成，好快就會出現喺媒體庫。",
+    "tgSearchingFor": "正在搜尋{label}…",
+    "tgSeasonLower": "第 {season} 季",
+    "tgWholeLabel": "完整嘅{label}",
+    "tgSeasonNoEpisodes": "第 {season} 季 – 媒體庫冇任何集數",
+    "tgNoTvdbId": "呢套劇集冇 TVDB ID，Sonarr 搵唔到。",
+    "tgAddingToSonarr": "正在加入 Sonarr…",
+    "tgAddToSonarrFailed": "無法將呢套劇集加入 Sonarr。請遲啲再試。",
+    "tgSendingToDownload": "正在將「{label}」送去下載…",
+    "tgDownloadDidNotStart": "下載未能開始：{error}",
+    "tgDownloadingAppearsWhenDone": "「{label}」正在下載（{size}）。完成之後會出現喺媒體庫。",
+    "tgSonarrUnreachableRetry": "無法連接 Sonarr。請遲啲再試。",
+    "tgNoUsableFiles": "搵唔到可用嘅檔案。請遲啲再試 – 新檔案通常幾個鐘之後會出現。",
+    "tgFilesCount": "{count} 個檔案",
+    "tgFilesRecommended": "{count} 個檔案 – 其中 {recommended} 個符合品質設定檔，其餘排喺最底",
+    "tgOutsideQualityProfile": "唔符合品質設定檔",
+    "tgLargerThanProfile": "大過設定檔容許嘅大小",
+    "tgSmallerThanProfile": "細過設定檔容許嘅大小",
+    "tgAlreadyExists": "已經存在",
+    "tgMayNotFitDisk": "硬碟空間可能唔夠",
+    "tgSonarrUnreachable": "無法連接 Sonarr",
+    "tgSonarrUnreachableAt": "無法連接 {host} 上嘅 Sonarr",
+    "tgSonarrRejectedChange": "Sonarr 唔接受呢項變更",
+    "tgSeasonMonitoredNoSearch": "呢季已經受監控，但係 Sonarr 冇開始搜尋",
+    "tgSonarrCantSearch": "Sonarr 暫時無法搜尋",
+    "tgSearchExpired": "搜尋結果已經過期 – 請重新搜尋",
+    "tgSonarrRejectedDownload": "Sonarr 唔接受呢個下載（HTTP {status}）",
+    "tgSonarrNoSeries": "Sonarr 冇呢套劇集",
+    "tgCouldNotChangeMonitoring": "無法變更監控狀態：{error}",
+    "tgJellyfinNoIds": "Jellyfin 認唔到呢套劇集（冇 TVDB 或 TMDB ID）",
+    "tgSomethingWentWrong": "出錯了：{error}",
+    "tgDeleteReadOnly": "呢個檔案唔係由 Radarr/Sonarr 管理，而且 Jellyfin 對該資料夾只有讀取權限。請喺檔案管理器刪除。",
+    "tgSonarrRequiredPerEpisode": "無法連接 Sonarr，或者呢套劇集仲未加入 Sonarr。逐集下載需要 Sonarr。",
+    "tgEpisodesNotFound": "喺 Sonarr 搵唔到「{title}」所選嘅集數（總共搵到 {count} 集）。請將呢套劇集加入 Sonarr 之後再試。",
+    "tgPartOfCollectionPrefix": "屬於電影系列 ",
+    "tgViewingPartOf": "  ·  你正在睇第 {current} 部，共 {total} 部",
+    "tgPartOf": "第 {number} 部，共 {total} 部",
+    "tgUnknownTitle": "未知標題",
+    "tgMovieCollection": "電影系列",
+    "tgNotReleasedYet": "「{title}」仲未上映",
+    "tgScreensaverModeVideo": "影片",
+    "tgScreensaverModeLogo": "標誌",
+    "tgScreensaverSound": "螢幕保護聲音",
+    "tgScreensaverSoundSubtitle": "關閉：螢幕保護嘅預告片會靜音播放",
+    "tgScreensaverLogo": "標誌",
+    "tgLogoBadge": "Tortugarr 徽章",
+    "tgLogoVhs": "VHS 錄影帶上嘅鸚鵡",
+    "tgLogoSign": "招牌上嘅鸚鵡",
+    "tgHiddenBadge": "已隱藏 · {code}",
+    "tgDiskSpace": "硬碟空間",
+    "tgDiskSpaceSubtitle": "為新下載騰出空間",
+    "tgAdultTitle": "成人電影（XXX）",
+    "tgAdultSubtitle": "顯示或隱藏 XXX 媒體庫（PIN）",
+    "tgHideForeign": "隱藏外語內容",
+    "tgHideForeignOn": "開啟：「熱門趨勢」同「人氣推介」只顯示英文、挪威文、瑞典文、丹麥文、德文同法文嘅內容",
+    "tgHideForeignOff": "關閉：「熱門趨勢」同「人氣推介」顯示所有語言嘅內容",
+    "tgShowHidden": "顯示被隱藏嘅內容",
+    "tgShowHiddenOn": "開啟：原本會被隱藏嘅作品會帶住紅色「已隱藏」標記顯示",
+    "tgShowHiddenOff": "疑難排解：用紅色標記顯示被隱藏嘅作品，而唔係將佢移除",
+    "tgShowAllSubLangs": "顯示所有字幕語言",
+    "tgShowAllSubLangsOn": "開啟：字幕選單顯示所有語言",
+    "tgShowAllSubLangsOff": "關閉：字幕選單只顯示挪威文同英文",
+    "tgPreviewSound": "預覽聲音",
+    "tgPreviewSoundOn": "開啟：停留喺作品上時播放嘅片段有聲",
+    "tgPreviewSoundOff": "關閉：瀏覽時片段會靜音播放",
+    "tgScreensaver": "螢幕保護",
+    "tgScreensaverSubtitle": "影片或標誌、聲音同圖像",
+    "tgShowMissingEpisodes": "顯示缺少嘅集數",
+    "tgShowMissingEpisodesOn": "開啟：每季會顯示你未有、可以下載嘅集數",
+    "tgShowMissingEpisodesOff": "關閉：每季只顯示你已有嘅集數",
+    "tgShowCollections": "顯示電影系列",
+    "tgShowCollectionsOn": "開啟：電影頁面會顯示同系列嘅其他電影，包括你未有嘅",
+    "tgShowCollectionsOff": "關閉：電影頁面唔顯示所屬系列",
+    "tgNoActiveDownloads": "冇進行中嘅下載。",
+    "tgPickDownloadToOpen": "選擇一個下載以開啟請求。",
+    "tgRefreshLibrary": "重新整理媒體庫",
+    "tgAskingJellyfinScan": "正在請 Jellyfin 掃描媒體庫…",
+    "tgHideAll": "全部隱藏",
+    "tgImporting": "匯入中",
+    "tgSubsNotManaged": "呢部作品唔係由 Radarr/Sonarr 管理，所以 Bazarr 無法為佢搵字幕。",
+    "tgBazarrUnreachable": "無法連接 Bazarr。請遲啲再試。",
+    "tgSubsFoundNothing": "暫時仲未搵到。Bazarr 每日會自動再試，你亦可以自己揀。",
+    "tgSubsFound": "搵到{languages} – 可能要等一陣先會出現喺字幕選單。",
+    "tgAnd": "同",
+    "tgSubsDownloaded": "已下載 – 可能要等一陣先會出現喺字幕選單。",
+    "tgAskingBazarr": "正在詢問 Bazarr…",
+    "tgHaveAll": "全部都有",
+    "tgSearchAutoNow": "立即自動搜尋",
+    "tgSearchingUpToMinute": "正在搜尋…最多可能要一分鐘",
+    "tgPickYourself": "自己揀",
+    "tgAskingProviders": "正在詢問字幕來源…最多可能要一分鐘",
+    "tgNoProviderSubs": "暫時仲冇任何來源有呢部作品嘅字幕。",
+    "tgLangHas": "{language}：已有",
+    "tgLangMissing": "{language}：缺少",
+    "tgNoReleaseName": "（冇發行名稱）",
+    "tgHearingImpaired": "{provider} · 聽障字幕",
+    "tgLangNorwegian": "挪威文",
+    "tgLangEnglish": "英文",
+    "tgBazarrUnknownTitle": "Bazarr 仲未認識呢部作品",
+    "tgBazarrError": "Bazarr 回應錯誤（HTTP {code}）",
+    "tgLowSpaceSnack": "{drive}: 空間不足（剩餘 {free}）。下載可能會中斷 — 請通知管理伺服器嘅人。",
+    "tgNoQbitForSpace": "無法連接 qBittorrent 檢查空間",
+    "tgNotEnoughSpace": "空間不足",
+    "tgDriveHasFree": "{drive}: 剩餘 {free}",
+    "tgCopyInDownloads": "Downloads 資料夾中嘅副本 · 媒體庫已經有",
+    "tgLastWatched": "上次觀看：{ago}",
+    "tgNeverWatchedAdded": "從未觀看 · {ago}加入",
+    "tgNeverWatched": "從未觀看",
+    "tgNothingSafeToDelete": "喺 {drive}: 搵唔到可以安全刪除嘅內容（全部都係最近加入、最近睇過或者已加入最愛）。",
+    "tgDeleteTitlesQuestion": "{count, plural, other{要刪除 {count} 部作品？}}",
+    "tgDeletedForGood": "{size} 會被永久刪除。呢個動作無法復原。",
+    "tgYesDelete": "係，刪除",
+    "tgDeletingProgress": "正在刪除 {done}/{total}…",
+    "tgNowHasFree": " · {drive}: 而家剩餘 {free}",
+    "tgDeletedTitles": "{count, plural, other{已刪除 {count} 部作品}}{extra}",
+    "tgDeletedFailed": "已刪除 {count} 部，失敗：{failed}{extra}",
+    "tgFreeGb": "騰出 {gb} GB",
+    "tgDownloadCopies": "下載副本",
+    "tgLookingForUnwatched": "正在搵好久冇睇過嘅內容…",
+    "tgSuggestionEnough": "建議：{size} · 空間足夠 ✓",
+    "tgSuggestionOf": "建議：{size}，共需 {target}",
+    "tgPickToSayNo": "揀一項以排除 — 下一個建議會自動補上。",
+    "tgOtherCandidates": "其他候選",
+    "tgDownloadAnyway": "照樣下載",
+    "tgDeleteCountSize": "刪除 {count} 項（{size}）",
+    "tgDriveHasFreeDot": "{drive}: 剩餘 {free}。",
+    "tgFileDoubleSpace": "呢個檔案係 {size}，會佔用雙倍空間（下載 + 媒體庫中嘅副本），另加 {buffer} 預留空間。",
+    "tgFileSize": "呢個檔案係 {size}，另加 {buffer} 預留空間。",
+    "tgPendingNeeds": "進行中嘅下載仲需要 {size}。",
+    "tgShortBy": "仲差 {size}。",
+    "tgOnlyEarlyFiles": "只搵到喺電影數碼發行之前發布嘅檔案（{count}）— 呢類檔案幾乎都係假嘅。",
+    "tgNoDigitalDate": "仲未有數碼發行日期",
+    "tgDigitalOn": "將於 {date} 數碼發行",
+    "tgNotOutDigitally": "仲未數碼發行",
+    "tgTitleWhen": "「{title}」{when}。",
+    "tgNotOutExplain": "而家搵到嘅通常係戲院偷錄或者同名嘅另一部電影。有時會有畫質較低嘅早期版本，多數帶有內嵌字幕。「照樣顯示檔案」會列出現有嘅檔案。正式版本推出之後，Radarr 會自動抓取。",
+    "tgShowFilesAnyway": "照樣顯示檔案",
+    "tgPickSeasonsEpisodes": "選擇季數同集數",
+    "tgNoEpisodeInfo": "{season}：冇集數資料",
+    "tgAppliesAllDevices": "適用於使用呢個帳戶嘅所有裝置",
+    "tgNoXxxLibrary": "搵唔到名為 XXX 嘅媒體庫。",
+    "tgSearchingEachWord": "正在逐個字搜尋…（可能要半分鐘）",
+    "tgSentToQbit": "已將「{title}」（{size}）送去 qBittorrent",
+    "tgDownloadFailed": "下載失敗：{error}",
+    "tgXxxNoVideoRemoved": "「{title}」冇影片檔，已經移除。",
+    "tgXxxNoVideoNotRemoved": "「{title}」冇影片檔，但係未有移除。",
+    "tgSearchNewXxx": "搜尋新嘅 XXX",
+    "tgXxxSearchHint": "名稱、片商…",
+    "tgChecking": "正在檢查…",
+    "tgXxxVisible": "而家已顯示。XXX 會出現喺媒體庫、搜尋同主頁。",
+    "tgXxxHidden": "已隱藏。XXX 唔會出現喺應用程式任何地方。",
+    "tgShowWithPin": "顯示（PIN）",
+    "tgChangePin": "更改 PIN",
+    "tgNoLibraryList": "無法取得媒體庫清單（HTTP {code}）",
+    "tgNoUserSettings": "無法取得使用者設定（HTTP {code}）",
+    "tgJellyfinRejectedChange": "Jellyfin 拒絕咗呢項變更（HTTP {code}）",
+    "tgDeleteFailed": "刪除失敗（HTTP {code}）",
+    "tgXxxAddFailed": "無法將「{title}」加入 qBittorrent",
+    "tgSeasonEpisodeLower": "第 {season} 季第 {episode} 集",
+    "tgSearchInSeerr": "喺 Seerr 搜尋",
+    "tgSeerrSearchHint": "搜尋電影同劇集（例如「Lost S02E05」）",
+    "tgMissingInThisSeason": "呢季缺少",
+    "tgMissingSeasonsOpenSeries": "{count, plural, other{缺少第}} {list} 季 - 開啟劇集可以查看所有季",
+    "tgProjectOnGitHub": "GitHub 上嘅 Tortugarr",
+    "tgProjectOnGitHubSubtitle": "原始碼、發行版本同問題回報",
+    "tgBuiltOnMoonfinCredit": "Tortugarr 以 Moonfin（GPL）為基礎打造，Moonfin 由其開發者製作。",
+    "tgCredits": "鳴謝",
+    "tgCreditsThanks": "謹此致謝：冇呢些項目同背後嘅每一位，就唔會有 Tortugarr。",
+    "tgCreditMoonfin": "Tortugarr 所依據嘅應用程式（GPL）",
+    "tgCreditJellyfin": "媒體伺服器",
+    "tgCreditSeerr": "探索同請求",
+    "tgCreditRadarr": "電影",
+    "tgCreditSonarr": "劇集",
+    "tgCreditProwlarr": "索引器管理",
+    "tgCreditBazarr": "字幕",
+    "tgCreditFlareSolverr": "為索引器處理 Cloudflare 嘅小幫手",
+    "tgCreditQbittorrent": "下載客戶端，安裝程式嘅預設選項",
+    "tgCreditTmdb": "電影同劇集資料、海報同圖像",
+    "tgCreditOpenSubtitles": "字幕，透過 Bazarr 取得",
+    "tgTmdbNotice": "本產品使用 TMDB API，但未經 TMDB 認可或認證。",
+    "tgLoadingLogoSize": "載入標誌大小",
+    "tgLoadingLogoSizeSubtitle": "影片載入時旋轉嘅標誌",
+    "tgSubtitleLanguages": "字幕語言",
+    "tgSubtitleLanguagesSubtitle": "喺字幕選單顯示：{languages}",
+    "tgShowAllSubLangsOffChosen": "關閉：字幕選單只顯示你揀咗嘅語言",
+    "tgDiscoveryLanguages": "熱門趨勢同熱門嘅語言",
+    "tgDiscoveryLanguagesSubtitle": "顯示：{languages}",
+    "tgHideForeignOnChosen": "開啟：熱門趨勢同熱門只顯示你揀咗嘅語言",
+    "tgShowLanguageBadges": "顯示語言標籤",
+    "tgShowLanguageBadgesOn": "開啟：作品會顯示佢嘅語言 (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "關閉：作品上面唔顯示語言標籤"
 }

@@ -1,6 +1,6 @@
 {
     "@@locale": "cs",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin verze {version}",
+    "appVersionFooter": "Tortugarr verze {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin nemá přístup k vaší systémové klíčence. Přihlášení může pokračovat, ale bezpečné úložiště tokenů nemusí být dostupné, dokud nebude klíčenka odemčena.",
+    "secureStorageUnavailableMessage": "Tortugarr nemá přístup k vaší systémové klíčence. Přihlášení může pokračovat, ale bezpečné úložiště tokenů nemusí být dostupné, dokud nebude klíčenka odemčena.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Přepínejte mezi Moonfin a Neon Pulse bez restartování aplikace",
+    "settingsAppearanceThemeSubtitle": "Přepínejte mezi Tortugarr a Neon Pulse bez restartování aplikace",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Současný vzhled Moonfin, který jste si všichni zamilovali",
+    "themeMoonfinSubtitle": "Současný vzhled Tortugarr, který jste si všichni zamilovali",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonový puls",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Ukončit Moonfin?",
+    "exitApp": "Ukončit Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Není nastaveno. Moonfin zkusí výchozí mpv.conf ve složkách app/data.",
+    "notSetMpvConf": "Není nastaveno. Tortugarr zkusí výchozí mpv.conf ve složkách app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — viditelné pro ostatní aplikace",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — viditelné pro ostatní aplikace",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Stažená média se uloží do složky Downloads/Moonfin na vašem zařízení. Tyto soubory budou viditelné pro ostatní aplikace, jako je vaše galerie nebo hudební přehrávač.\n\nStávající stažené soubory zůstanou na svém aktuálním místě.",
+    "saveToDownloadsFolderDescription": "Stažená média se uloží do složky Downloads/Tortugarr na vašem zařízení. Tyto soubory budou viditelné pro ostatní aplikace, jako je vaše galerie nebo hudební přehrávač.\n\nStávající stažené soubory zůstanou na svém aktuálním místě.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Přepnout viditelnost domovské stránky podle knihovny. Restartujte Moonfin, aby se změny projevily.",
+    "libraryVisibilityDescription": "Přepnout viditelnost domovské stránky podle knihovny. Restartujte Tortugarr, aby se změny projevily.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Hrajte v Moonfin",
+    "playInMoonfin": "Hrajte v Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Požadováno {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Položka nebyla nalezena ve vaší knihovně Moonfin",
+    "itemNotFoundInLibrary": "Položka nebyla nalezena ve vaší knihovně Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Probíhá restart serveru",
-    "adminServerRebootMessage": "Probíhá restart serveru, restartujte prosím Moonfin",
+    "adminServerRebootMessage": "Probíhá restart serveru, restartujte prosím Tortugarr",
     "adminActiveSessions": "Aktivní relace",
     "adminSessionsLoadFailed": "Načtení relací se nezdařilo",
     "adminNoActiveSessions": "Žádné aktivní relace",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Zobrazit tlačítko žánry v navigační liště",
     "settingsShowFavoritesButtonInNavigation": "Zobrazit tlačítko oblíbených v navigační liště",
     "settingsShowLibrariesButtonInNavigation": "Zobrazit tlačítko knihoven v navigační liště",
-    "settingsLibraryVisibilitySubtitle": "Přepnout viditelnost domovské stránky podle knihovny. Restartujte Moonfin, aby se změny projevily.",
+    "settingsLibraryVisibilitySubtitle": "Přepnout viditelnost domovské stránky podle knihovny. Restartujte Tortugarr, aby se změny projevily.",
     "settingsMediaBarAndLocalPreviews": "Panel médií a místní náhledy",
     "settingsVisualOverlays": "Vizuální překryvy",
     "settingsSeasonalSurprise": "Sezónní překvapení",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Připojte se k Discordu",
     "settingsJoinDiscordSubtitle": "Chatujte s komunitou",
     "settingsJoinTheDiscord": "Připojte se k Discordu",
-    "settingsSupportMoonfin": "Podpořte Moonfina",
+    "settingsSupportMoonfin": "Podpořte Tortugarra",
     "settingsLegal": "PRÁVNÍ",
     "settingsLicenses": "licence",
     "settingsOpenSourceLicenseNotices": "Oznámení o licenci s otevřeným zdrojovým kódem",
     "settingsPrivacyPolicy": "Zásady ochrany osobních údajů",
-    "settingsPrivacyPolicySubtitle": "Jak Moonfin nakládá s vašimi daty",
+    "settingsPrivacyPolicySubtitle": "Jak Tortugarr nakládá s vašimi daty",
     "settingsCheckForUpdates": "Zkontrolujte aktualizace",
-    "settingsCheckForUpdatesSubtitle": "Podívejte se na nejnovější vydání Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Podívejte se na nejnovější vydání Tortugarr",
     "settingsPoweredByFlutter": "Běží na Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# licenční upozornění} few {# licenční upozornění} many {# licenčního upozornění} other {# licenčních upozornění}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Uložená témata",
-    "savedThemesDescription": "Toto jsou témata stažená z pluginu Moonfin pro aktuální server. Odstraněním se odstraní pouze tato místní kopie.",
+    "savedThemesDescription": "Toto jsou témata stažená z pluginu Tortugarr pro aktuální server. Odstraněním se odstraní pouze tato místní kopie.",
     "savedThemesEmpty": "Pro tento server nebyly nalezeny žádné uložené motivy.",
     "savedThemesCurrentThemeId": "{themeId} • Aktuálně aktivní",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Smazat uložené téma",
     "savedThemesManageSubtitle": "Spravujte stažená témata pluginů na tomto zařízení",
     "themeEditor": "Editor motivů",
-    "themeEditorSubtitle": "Otevřete ve svém prohlížeči editor motivů Moonfin",
+    "themeEditorSubtitle": "Otevřete ve svém prohlížeči editor motivů Tortugarr",
     "homeScreen": "Domovská obrazovka",
     "bottomBar": "Spodní lišta",
     "homeRowsStyleClassic": "Klasický",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Preferujte titulky SDH",
     "preferSdhSubtitlesSubtitle": "Při automatickém výběru upřednostněte stopy titulků SDH/CC.",
     "webDiagnostics": "Webová diagnostika",
-    "webDiagnosticsTitle": "Moonfin Webová diagnostika",
+    "webDiagnosticsTitle": "Tortugarr Webová diagnostika",
     "webDiagnosticsIntro": "Tato stránka slouží k diagnostice problémů s připojením prohlížeče (CORS, smíšený obsah a nastavení zjišťování).",
     "webDiagnosticsDetectedMixedContentFailure": "Zjištěno selhání smíšeného obsahu",
     "webDiagnosticsDetectedCorsPreflightFailure": "Zjištěno selhání CORS/předletové kontroly",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin zjistil HTTPS stránku, která se pokouší volat URL HTTP serveru. Prohlížeče zablokují tento požadavek dříve, než se dostane na váš server.",
-    "webDiagnosticsCorsFailureBody": "Moonfin zjistil selhání požadavku na úrovni prohlížeče, které je běžně způsobeno chybějícími hlavičkami CORS nebo preflight na serveru médií.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr zjistil HTTPS stránku, která se pokouší volat URL HTTP serveru. Prohlížeče zablokují tento požadavek dříve, než se dostane na váš server.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr zjistil selhání požadavku na úrovni prohlížeče, které je běžně způsobeno chybějícími hlavičkami CORS nebo preflight na serveru médií.",
     "webDiagnosticsTargetUrl": "Cílová adresa URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "není nakonfigurováno",
     "webDiagnosticsMixedContent": "Smíšený obsah",
     "webDiagnosticsMixedContentDetected": "Tato stránka se načítá přes HTTPS, ale jedna nebo více nakonfigurovaných adres URL je HTTP. Prohlížeče blokují stránky HTTPS ve volání rozhraní API HTTP.",
-    "webDiagnosticsMixedContentFix": "Oprava: obsluhovat váš mediální server nebo proxy koncový bod přes HTTPS nebo načíst Moonfin přes HTTP pouze v důvěryhodných místních sítích.",
+    "webDiagnosticsMixedContentFix": "Oprava: obsluhovat váš mediální server nebo proxy koncový bod přes HTTPS nebo načíst Tortugarr přes HTTP pouze v důvěryhodných místních sítích.",
     "webDiagnosticsNoMixedContentDetected": "Z aktuálního nastavení runtime nebyla zjištěna žádná zjevná konfigurace se smíšeným obsahem.",
     "webDiagnosticsCorsChecklist": "Kontrolní seznam CORS",
     "webDiagnosticsCorsChecklistItem1": "• Povolit původ prohlížeče v Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klasický je původní vystředěné rozvržení Moonfinu. Moderní je responzivní filmové rozvržení.",
+    "detailScreenStyleSubtitle": "Klasický je původní vystředěné rozvržení Tortugarru. Moderní je responzivní filmové rozvržení.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Použijte algoritmus Moonfin doporučuje pro místní knihovnu, nebo online metriky podobnosti z TMDb. Poznámka: Online doporučení vyžadují integraci Seerr.",
+    "recommendationSystemSubtitle": "Použijte algoritmus Tortugarr doporučuje pro místní knihovnu, nebo online metriky podobnosti z TMDb. Poznámka: Online doporučení vyžadují integraci Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin doporučuje",
+    "recommendationSystemMoonfin": "Tortugarr doporučuje",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Podobnost podle TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Omezit návrhy Moonfin doporučuje podle rodičovského hodnocení cílového média",
+    "recommendationsApplyParentalRatingCapSubtitle": "Omezit návrhy Tortugarr doporučuje podle rodičovského hodnocení cílového média",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Vlastní motivy mění vzhled napříč celým Moonfinem. Vyberte si možnost, která vyhovuje vašemu stylu.",
+    "customThemeSubtitle": "Vlastní motivy mění vzhled napříč celým Tortugarrem. Vyberte si možnost, která vyhovuje vašemu stylu.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Přihlaste se do Moonfinu na telefonu",
+    "carSignInPrompt": "Přihlaste se do Tortugarru na telefonu",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller je moderní GPU renderer Flutteru pro plynulejší animace a méně zadrhávání. Na některých TV boxech a starších GPU může způsobovat grafické chyby nebo černé video; v takovém případě jej vypněte. Automaticky zvolí nejlepší výchozí nastavení pro vaše zařízení. Změna se projeví po restartu Moonfinu.",
+    "impellerRenderingSubtitle": "Impeller je moderní GPU renderer Flutteru pro plynulejší animace a méně zadrhávání. Na některých TV boxech a starších GPU může způsobovat grafické chyby nebo černé video; v takovém případě jej vypněte. Automaticky zvolí nejlepší výchozí nastavení pro vaše zařízení. Změna se projeví po restartu Tortugarru.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Ke změně vykreslovacího jádra je nutné Moonfin restartovat. Zavřete aplikaci a znovu ji otevřete, aby se změna projevila.",
+    "impellerRestartMessage": "Ke změně vykreslovacího jádra je nutné Tortugarr restartovat. Zavřete aplikaci a znovu ji otevřete, aby se změna projevila.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9177,5 +9177,247 @@
     "keyboardShortcutsTitle": "Klávesové zkratky",
     "@keyboardShortcutsTitle": {
         "description": "Title of the screen and dialog that list every keyboard shortcut"
-    }
+    },
+    "tgMissing": "Chybí",
+    "tgComing": "Již brzy",
+    "tgComingOn": "Vychází {date}",
+    "tgDownloading": "Stahuje se",
+    "tgReadySoon": "Brzy připraveno",
+    "tgRequested": "Vyžádáno",
+    "tgClose": "Zavřít",
+    "tgCancel": "Zrušit",
+    "tgBack": "Zpět",
+    "tgYes": "Ano",
+    "tgNo": "Ne",
+    "tgSearch": "Hledat",
+    "tgHide": "Skrýt",
+    "tgAll": "Vše",
+    "tgNone": "Nic",
+    "tgMovies": "Filmy",
+    "tgSeries": "Seriály",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Seriál",
+    "tgCanTakeAMinute": "Může trvat až minutu",
+    "tgToday": "dnes",
+    "tgYesterday": "včera",
+    "tgDaysAgo": "před {days} dny",
+    "tgMonthsAgo": "před {months} měs.",
+    "tgYearsAgo": "před {years} lety",
+    "tgYearsMonthsAgo": "před {years} lety a {months} měs.",
+    "tgFindSubtitles": "Najít titulky",
+    "tgFreeUpSpace": "Uvolnit místo",
+    "tgDownloads": "Stahování",
+    "tgDownloadsCount": "Stahování ({count})",
+    "tgNoVideoRemoved": "„{title}“: stažený obsah neobsahoval žádný videosoubor ({files}). Byl odstraněn a zablokován – zkuste jiný soubor.",
+    "tgNoVideoNotRemoved": "„{title}“: stažený obsah neobsahoval žádný videosoubor ({files}), ale nepodařilo se ho automaticky odstranit.",
+    "tgAiredOn": "Odvysíláno {date}",
+    "tgTapToFindFiles": "Klepnutím vyhledáte soubory",
+    "tgWholeSeason": "Celá sezóna",
+    "tgEpisodesMissingFindPack": "Chybí {count} epizod – najít balíček celé sezóny",
+    "tgAddToSonarrTitle": "Přidejte do Sonarr a uvidíte chybějící epizody",
+    "tgAddToSonarrSubtitle": "Seriál se přidá, ale sám od sebe nic nestáhne",
+    "tgMissingEpisodesUnavailable": "Chybějící epizody teď nelze zobrazit",
+    "tgReasonTapRetry": "{reason} · Klepnutím zkusíte znovu",
+    "tgSeasonPackBadge": "Celá sezóna",
+    "tgMonitorSeasonTitle": "Sledovat sezónu {season}",
+    "tgMonitorSeasonQuestion": "Má Sonarr hned stáhnout chybějící epizody sezóny {season}?\n\nNe: stáhnou se jen nové epizody, až vyjdou.",
+    "tgSonarrSearchingSeason": "Sonarr hledá sezónu {season}",
+    "tgMonitored": "Sledováno",
+    "tgNotMonitored": "Nesledováno",
+    "tgSeasonStateLabel": "Sezóna {season}: {state}",
+    "tgLabelMissing": "Chybí: {label}",
+    "tgNotAiredYet": "{code} ještě nebyla odvysílána.",
+    "tgNotAiredYetComing": "{code} ještě nebyla odvysílána – vychází {date}.",
+    "tgAlreadyDownloading": "{code} se už stahuje.",
+    "tgDownloadedAppearsSoon": "{code} je stažena a za chvíli se objeví v knihovně.",
+    "tgSearchingFor": "Hledám {label} …",
+    "tgSeasonLower": "sezóna {season}",
+    "tgWholeLabel": "Celá {label}",
+    "tgSeasonNoEpisodes": "Sezóna {season} – v knihovně nejsou žádné epizody",
+    "tgNoTvdbId": "Seriál nemá TVDB id, takže ho Sonarr nemůže najít.",
+    "tgAddingToSonarr": "Přidávám do Sonarr …",
+    "tgAddToSonarrFailed": "Seriál se nepodařilo přidat do Sonarr. Zkuste to později.",
+    "tgSendingToDownload": "Odesílám „{label}“ ke stažení …",
+    "tgDownloadDidNotStart": "Stahování se nespustilo: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}“ se stahuje ({size}). V knihovně se objeví, až bude hotovo.",
+    "tgSonarrUnreachableRetry": "Nelze se spojit se Sonarr. Zkuste to za chvíli znovu.",
+    "tgNoUsableFiles": "Nenašly se žádné použitelné soubory. Zkuste to později – nové se často objeví po několika hodinách.",
+    "tgFilesCount": "{count} souborů",
+    "tgFilesRecommended": "{count} souborů – {recommended} odpovídá profilu kvality, ostatní jsou dole",
+    "tgOutsideQualityProfile": "Mimo profil kvality",
+    "tgLargerThanProfile": "Větší, než profil povoluje",
+    "tgSmallerThanProfile": "Menší, než profil povoluje",
+    "tgAlreadyExists": "Už existuje",
+    "tgMayNotFitDisk": "Možná se nevejde na disk",
+    "tgSonarrUnreachable": "Nelze se spojit se Sonarr",
+    "tgSonarrUnreachableAt": "Nelze se spojit se Sonarr na {host}",
+    "tgSonarrRejectedChange": "Sonarr změnu nepřijal",
+    "tgSeasonMonitoredNoSearch": "Sezóna je sledována, ale Sonarr nespustil hledání",
+    "tgSonarrCantSearch": "Sonarr teď nemohl hledat",
+    "tgSearchExpired": "Výsledek hledání vypršel – hledejte znovu",
+    "tgSonarrRejectedDownload": "Sonarr stahování nepřijal (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr tento seriál nemá",
+    "tgCouldNotChangeMonitoring": "Sledování se nepodařilo změnit: {error}",
+    "tgJellyfinNoIds": "Jellyfin seriál nerozpoznal (chybí TVDB i TMDB id)",
+    "tgSomethingWentWrong": "Něco se pokazilo: {error}",
+    "tgDeleteReadOnly": "Soubor nespravuje Radarr/Sonarr a Jellyfin má ke složce jen přístup pro čtení. Smažte ho ve správci souborů.",
+    "tgSonarrRequiredPerEpisode": "Sonarr není dostupný, nebo tam seriál není přidaný. Stahování po epizodách vyžaduje Sonarr.",
+    "tgEpisodesNotFound": "Vybrané epizody seriálu „{title}“ se v Sonarr nenašly (celkem nalezeno {count} epizod). Přidejte seriál do Sonarr a zkuste to znovu.",
+    "tgPartOfCollectionPrefix": "Součást kolekce ",
+    "tgViewingPartOf": "  ·  sledujete díl {current} z {total}",
+    "tgPartOf": "Díl {number} z {total}",
+    "tgUnknownTitle": "Neznámý název",
+    "tgMovieCollection": "Filmová kolekce",
+    "tgNotReleasedYet": "„{title}“ ještě nevyšel",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Zvuk spořiče obrazovky",
+    "tgScreensaverSoundSubtitle": "Vypnuto: upoutávky ve spořiči se přehrávají bez zvuku",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Odznak Tortugarr",
+    "tgLogoVhs": "Papoušek na kazetách VHS",
+    "tgLogoSign": "Papoušek na ceduli",
+    "tgHiddenBadge": "SKRYTO · {code}",
+    "tgDiskSpace": "Místo na disku",
+    "tgDiskSpaceSubtitle": "Uvolněte místo pro nová stahování",
+    "tgAdultTitle": "Filmy pro dospělé (XXX)",
+    "tgAdultSubtitle": "Zobrazit nebo skrýt knihovnu XXX (PIN)",
+    "tgHideForeign": "Skrýt zahraniční obsah",
+    "tgHideForeignOn": "Zapnuto: Trendy a Populární zobrazují jen angličtinu, norštinu, švédštinu, dánštinu, němčinu a francouzštinu",
+    "tgHideForeignOff": "Vypnuto: Trendy a Populární zobrazují všechny jazyky",
+    "tgShowHidden": "Zobrazit, co se skrývá",
+    "tgShowHiddenOn": "Zapnuto: tituly, které by byly skryté, se zobrazí s červeným štítkem SKRYTO",
+    "tgShowHiddenOff": "Řešení potíží: skryté tituly zobrazit s červeným štítkem místo jejich odstranění",
+    "tgShowAllSubLangs": "Zobrazit všechny jazyky titulků",
+    "tgShowAllSubLangsOn": "Zapnuto: nabídka titulků zobrazuje všechny jazyky",
+    "tgShowAllSubLangsOff": "Vypnuto: nabídka titulků zobrazuje jen norštinu a angličtinu",
+    "tgPreviewSound": "Zvuk náhledu",
+    "tgPreviewSoundOn": "Zapnuto: klip, který se přehraje, když se zastavíte na titulu, má zvuk",
+    "tgPreviewSoundOff": "Vypnuto: klipy se při procházení přehrávají bez zvuku",
+    "tgScreensaver": "Spořič obrazovky",
+    "tgScreensaverSubtitle": "Video nebo logo, zvuk a obraz",
+    "tgShowMissingEpisodes": "Zobrazit chybějící epizody",
+    "tgShowMissingEpisodesOn": "Zapnuto: sezóny zobrazují i epizody, které nemáte, připravené ke stažení",
+    "tgShowMissingEpisodesOff": "Vypnuto: sezóny zobrazují jen epizody, které máte",
+    "tgShowCollections": "Zobrazit filmové kolekce",
+    "tgShowCollectionsOn": "Zapnuto: u filmů se zobrazí ostatní filmy z kolekce, včetně těch, které vám chybí",
+    "tgShowCollectionsOff": "Vypnuto: stránka filmu kolekci nezobrazuje",
+    "tgNoActiveDownloads": "Žádná aktivní stahování.",
+    "tgPickDownloadToOpen": "Vyberte stahování a otevřete požadavky.",
+    "tgRefreshLibrary": "Obnovit knihovnu",
+    "tgAskingJellyfinScan": "Žádám Jellyfin o prohledání knihovny …",
+    "tgHideAll": "Skrýt vše",
+    "tgImporting": "Importuje se",
+    "tgSubsNotManaged": "Tento titul nespravuje Radarr/Sonarr, takže Bazarr k němu nemůže najít titulky.",
+    "tgBazarrUnreachable": "Nelze se spojit s Bazarr. Zkuste to za chvíli znovu.",
+    "tgSubsFoundNothing": "Zatím se nic nenašlo. Bazarr to automaticky zkouší každý den, nebo si můžete vybrat sami.",
+    "tgSubsFound": "Nalezeno: {languages} – může chvíli trvat, než se objeví v nabídce titulků.",
+    "tgAnd": "a",
+    "tgSubsDownloaded": "Staženo – může chvíli trvat, než se objeví v nabídce titulků.",
+    "tgAskingBazarr": "Ptám se Bazarr …",
+    "tgHaveAll": "Vše je k dispozici",
+    "tgSearchAutoNow": "Hledat automaticky teď",
+    "tgSearchingUpToMinute": "Hledám … může trvat až minutu",
+    "tgPickYourself": "Vybrat sám",
+    "tgAskingProviders": "Ptám se zdrojů titulků … může trvat až minutu",
+    "tgNoProviderSubs": "Žádný zdroj k tomu zatím titulky nemá.",
+    "tgLangHas": "{language}: k dispozici",
+    "tgLangMissing": "{language}: chybí",
+    "tgNoReleaseName": "(bez názvu release)",
+    "tgHearingImpaired": "{provider} · pro neslyšící",
+    "tgLangNorwegian": "Norština",
+    "tgLangEnglish": "Angličtina",
+    "tgBazarrUnknownTitle": "Bazarr tento titul ještě nezná",
+    "tgBazarrError": "Bazarr odpověděl chybou (HTTP {code})",
+    "tgLowSpaceSnack": "Málo místa na {drive}: ({free} volných). Stahování se může zastavit — řekněte to tomu, kdo spravuje server.",
+    "tgNoQbitForSpace": "Nelze se spojit s qBittorrent a zkontrolovat místo",
+    "tgNotEnoughSpace": "Nedostatek místa",
+    "tgDriveHasFree": "{drive}: má {free} volných",
+    "tgCopyInDownloads": "Kopie v Downloads · už je v knihovně",
+    "tgLastWatched": "Naposledy zhlédnuto {ago}",
+    "tgNeverWatchedAdded": "Nikdy nezhlédnuto · přidáno {ago}",
+    "tgNeverWatched": "Nikdy nezhlédnuto",
+    "tgNothingSafeToDelete": "Na {drive}: se nenašlo nic, co by šlo bezpečně smazat (vše je nedávno přidané, nedávno zhlédnuté nebo oblíbené).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{Smazat {count} titul?} few{Smazat {count} tituly?} other{Smazat {count} titulů?}}",
+    "tgDeletedForGood": "{size} bude nenávratně smazáno. Tuto akci nelze vrátit zpět.",
+    "tgYesDelete": "Ano, smazat",
+    "tgDeletingProgress": "Mažu {done}/{total} …",
+    "tgNowHasFree": " · {drive}: má teď {free} volných",
+    "tgDeletedTitles": "{count, plural, one{Smazán {count} titul} few{Smazány {count} tituly} other{Smazáno {count} titulů}}{extra}",
+    "tgDeletedFailed": "Smazáno {count}, nepodařilo se: {failed}{extra}",
+    "tgFreeGb": "Uvolnit {gb} GB",
+    "tgDownloadCopies": "Kopie stahování",
+    "tgLookingForUnwatched": "Hledám, co dlouho nikdo nesledoval …",
+    "tgSuggestionEnough": "Návrh: {size} · dost místa ✓",
+    "tgSuggestionOf": "Návrh: {size} z potřebných {target}",
+    "tgPickToSayNo": "Vyberte položku a řekněte ne — další návrh se doplní automaticky.",
+    "tgOtherCandidates": "Další kandidáti",
+    "tgDownloadAnyway": "Přesto stáhnout",
+    "tgDeleteCountSize": "Smazat {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: má {free} volných.",
+    "tgFileDoubleSpace": "Soubor má {size} a zabere dvojnásobek místa (stahování + kopie v knihovně), plus {buffer} v rezervě.",
+    "tgFileSize": "Soubor má {size}, plus {buffer} v rezervě.",
+    "tgPendingNeeds": "Probíhající stahování potřebují ještě {size}.",
+    "tgShortBy": "Chybí {size}.",
+    "tgOnlyEarlyFiles": "Našly se jen soubory zveřejněné před digitálním vydáním filmu ({count}) — ty jsou téměř vždy falešné.",
+    "tgNoDigitalDate": "ještě nemá datum digitálního vydání",
+    "tgDigitalOn": "vychází digitálně {date}",
+    "tgNotOutDigitally": "Digitálně ještě nevyšel",
+    "tgTitleWhen": "„{title}“ {when}.",
+    "tgNotOutExplain": "To, co teď existuje, je obvykle záznam z kina nebo jiný film se stejným názvem. Někdy existuje raná kopie v nižší kvalitě, často s vypálenými titulky. „Přesto zobrazit soubory“ ukáže, co existuje. Radarr stáhne správnou verzi sám, až vyjde.",
+    "tgShowFilesAnyway": "Přesto zobrazit soubory",
+    "tgPickSeasonsEpisodes": "Vyberte sezóny a epizody",
+    "tgNoEpisodeInfo": "{season}: žádné informace o epizodách",
+    "tgAppliesAllDevices": "Platí pro všechna zařízení, která používají tento účet",
+    "tgNoXxxLibrary": "Nenašla se žádná knihovna s názvem XXX.",
+    "tgSearchingEachWord": "Hledám každé slovo zvlášť … (může trvat půl minuty)",
+    "tgSentToQbit": "„{title}“ ({size}) odesláno do qBittorrent",
+    "tgDownloadFailed": "Stahování se nezdařilo: {error}",
+    "tgXxxNoVideoRemoved": "„{title}“ neobsahoval žádný videosoubor a byl odstraněn.",
+    "tgXxxNoVideoNotRemoved": "„{title}“ neobsahoval žádný videosoubor a NEBYL odstraněn.",
+    "tgSearchNewXxx": "Hledat nové XXX",
+    "tgXxxSearchHint": "Název, studio …",
+    "tgChecking": "Kontroluji …",
+    "tgXxxVisible": "Viditelné. XXX se zobrazuje v knihovnách, hledání i na domovské obrazovce.",
+    "tgXxxHidden": "Skryto. XXX se v aplikaci nikde nezobrazuje.",
+    "tgShowWithPin": "Zobrazit (PIN)",
+    "tgChangePin": "Změnit PIN",
+    "tgNoLibraryList": "Nepodařilo se načíst seznam knihoven (HTTP {code})",
+    "tgNoUserSettings": "Nepodařilo se načíst uživatelská nastavení (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin změnu odmítl (HTTP {code})",
+    "tgDeleteFailed": "Mazání se nezdařilo (HTTP {code})",
+    "tgXxxAddFailed": "„{title}“ se nepodařilo přidat do qBittorrent",
+    "tgSeasonEpisodeLower": "sezóna {season}, epizoda {episode}",
+    "tgSearchInSeerr": "Hledat v Seerr",
+    "tgSeerrSearchHint": "Hledat filmy a seriály (např. „Lost S02E05“)",
+    "tgMissingInThisSeason": "Chybí v této sezóně",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Chybí sezóna} few{Chybí sezóny} other{Chybí sezóny}} {list} - otevřete seriál a zobrazte všechny sezóny",
+    "tgProjectOnGitHub": "Tortugarr na GitHub",
+    "tgProjectOnGitHubSubtitle": "Zdrojový kód, vydání a hlášení chyb",
+    "tgBuiltOnMoonfinCredit": "Tortugarr je postaven na Moonfin (GPL) od vývojářů Moonfin.",
+    "tgCredits": "Poděkování",
+    "tgCreditsThanks": "S pokorným díkem: bez těchto projektů a lidí, kteří za nimi stojí, by Tortugarr neexistoval.",
+    "tgCreditMoonfin": "Aplikace, na které je Tortugarr postaven (GPL)",
+    "tgCreditJellyfin": "Mediální server",
+    "tgCreditSeerr": "Objevování a požadavky",
+    "tgCreditRadarr": "Filmy",
+    "tgCreditSonarr": "Seriály",
+    "tgCreditProwlarr": "Správa indexerů",
+    "tgCreditBazarr": "Titulky",
+    "tgCreditFlareSolverr": "Pomocník Cloudflare pro indexery",
+    "tgCreditQbittorrent": "Klient pro stahování, výchozí volba instalátoru",
+    "tgCreditTmdb": "Data o filmech a seriálech, plakáty a obrázky",
+    "tgCreditOpenSubtitles": "Titulky, získávané přes Bazarr",
+    "tgTmdbNotice": "Tento produkt používá API TMDB, ale není společností TMDB schválen ani certifikován.",
+    "tgLoadingLogoSize": "Velikost loga při načítání",
+    "tgLoadingLogoSizeSubtitle": "Otáčející se logo, zatímco se video načítá",
+    "tgSubtitleLanguages": "Jazyky titulků",
+    "tgSubtitleLanguagesSubtitle": "Zobrazeno v nabídce titulků: {languages}",
+    "tgShowAllSubLangsOffChosen": "Vyp.: nabídka titulků ukazuje jen vybrané jazyky",
+    "tgDiscoveryLanguages": "Jazyky v Trendech a Oblíbených",
+    "tgDiscoveryLanguagesSubtitle": "Zobrazeno: {languages}",
+    "tgHideForeignOnChosen": "Zap.: Trendy a Oblíbené ukazují jen vybrané jazyky",
+    "tgShowLanguageBadges": "Zobrazit štítky jazyka",
+    "tgShowLanguageBadgesOn": "Zap.: tituly ukazují svůj jazyk (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Vyp.: žádné štítky jazyka u titulů"
 }

@@ -1,4 +1,6 @@
 import 'dart:async';
+import '../../../data/services/tortugarr/download_features.dart';
+import '../../widgets/subtitles/find_subtitles_dialog.dart';
 import 'dart:ui';
 
 import '../../theme/focus_foreground.dart';
@@ -6,6 +8,7 @@ import '../../widgets/bounded_network_image.dart';
 import '../../widgets/offline_aware_image.dart';
 import '../../widgets/anime_marker_badge.dart';
 import '../../../data/repositories/anime_marker_repository.dart';
+import '../../widgets/download_now/download_now_button.dart';
 import '../../widgets/identify_dialog.dart';
 import '../../widgets/media_badge.dart';
 import 'detail_admin_actions.dart';
@@ -38,6 +41,7 @@ import '../../../data/viewmodels/seerr_media_detail_view_model.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../navigation/route_lifecycle_observer.dart';
 import '../../navigation/home_refresh_bus.dart';
+import '../../../data/viewmodels/media_bar_view_model.dart';
 import '../../navigation/app_router.dart';
 import '../../navigation/playback_launcher.dart';
 import 'detail_buttons.dart';
@@ -54,6 +58,9 @@ import 'spotlight/spotlight_detail_content.dart';
 import 'playlist_sort_filter_bar.dart';
 import '../../widgets/skeleton/skeleton_detail_screen.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
+import '../../../data/services/download/missing_episodes.dart';
+import '../../widgets/missing_episodes/missing_episode_card.dart';
+import '../../widgets/missing_episodes/missing_episodes_flow.dart';
 import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../l10n/app_localizations.dart';
@@ -106,6 +113,7 @@ import '../../widgets/focus/context_action.dart';
 import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/focus/dpad_list_tile.dart';
 import '../../widgets/focus/focusable_button.dart';
+import '../../widgets/focus/focusable_wrapper.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../../playback/hdr_stream_capability.dart';
@@ -125,6 +133,8 @@ import '../../../util/audio_track_logic.dart';
 import '../../../util/artwork_request_size.dart';
 import '../../../util/platform_detection.dart';
 import 'detail_layout_metrics.dart';
+import '../../navigation/single_push.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 const _textShadows = [Shadow(blurRadius: 4, color: Colors.black54)];
 
@@ -155,6 +165,21 @@ void _animateScrollToTop(ScrollPosition position) {
       curve: Curves.easeOut,
     ),
   );
+}
+
+/// Says exactly what a delete removes: a series or season takes every
+/// episode with it, which "Delete this item" did not make clear.
+@visibleForTesting
+String deleteConfirmMessage(AppLocalizations l10n, AggregatedItem item) {
+  String two(int? n) => (n ?? 0).toString().padLeft(2, '0');
+  return switch (item.type) {
+    'Movie' => l10n.tgDeleteMovieMessage(item.name),
+    'Series' => l10n.tgDeleteSeriesMessage(item.name),
+    'Season' => l10n.tgDeleteSeasonMessage(item.indexNumber ?? 0, item.seriesName ?? item.name),
+    'Episode' => l10n.tgDeleteEpisodeMessage(
+        'S${two(item.parentIndexNumber)}E${two(item.indexNumber)}', item.seriesName ?? item.name),
+    _ => l10n.deleteItemMessage,
+  };
 }
 
 const _destructiveRed = Color(0xFFD32F2F);
@@ -793,14 +818,40 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
             ),
             const SizedBox(height: 16),
             Text(
-              describeError(_viewModel.error!, AppLocalizations.of(context)),
-              style: const TextStyle(color: Colors.white54),
+              _viewModel.notFound
+                  ? appL10n().tgTitleGone
+                  : describeError(_viewModel.error!, AppLocalizations.of(context)),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
+            if (_viewModel.notFound) ...[
+              const SizedBox(height: 8),
+              Text(
+                AppLocalizations.of(context).tgTitleGoneBody,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white54),
+              ),
+            ],
             const SizedBox(height: 16),
-            FilledButton(
-              onPressed: _viewModel.load,
-              child: Text(AppLocalizations.of(context).retry),
-            ),
+            _viewModel.notFound
+                // Gone for good: back to a refreshed home screen, where the
+                // title no longer shows up.
+                ? FilledButton(
+                    autofocus: true,
+                    onPressed: () {
+                      if (GetIt.instance.isRegistered<MediaBarViewModel>()) {
+                        unawaited(GetIt.instance<MediaBarViewModel>().load(force: true));
+                      }
+                      homeRefreshBus.requestNowOrAfterNavigation();
+                      appRouter.go(Destinations.home);
+                    },
+                    child: Text(AppLocalizations.of(context).home),
+                  )
+                : FilledButton(
+                    autofocus: true,
+                    onPressed: _viewModel.load,
+                    child: Text(AppLocalizations.of(context).retry),
+                  ),
           ],
         ),
       ),
@@ -2440,6 +2491,18 @@ class _DetailContentState extends State<_DetailContent> {
 
   List<Widget> _buildSeasonContent(BuildContext context, AggregatedItem item) {
     final l10n = AppLocalizations.of(context);
+    // With Sonarr's list loaded, the episodes the library is missing are
+    // listed in between, greyed out and downloadable.
+    final arr = viewModel.arrStatus;
+    final seasonNumber = item.indexNumber;
+    final entries = arr != null && seasonNumber != null
+        ? MissingEpisodes.mergeSeason(
+            present: viewModel.episodes,
+            status: arr,
+            season: seasonNumber,
+          )
+        : [for (final e in viewModel.episodes) SeasonEntry.present(e)];
+    final seriesTitle = item.seriesName ?? item.name;
     return [
       DetailActionButtons(
         viewModel: viewModel,
@@ -2455,18 +2518,57 @@ class _DetailContentState extends State<_DetailContent> {
         const SizedBox(height: 32),
         _SectionHeader(title: l10n.episodes),
         const SizedBox(height: 12),
-        ...viewModel.episodes.map(
-          (ep) => Padding(
+        if (arr != null &&
+            seasonNumber != null &&
+            MissingEpisodes.offerSeasonPack(entries))
+          Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: DetailEpisodeCard(
-              episode: ep,
-              imageApi: viewModel.imageApi,
-              onChanged: () => viewModel.load(),
-              isActive: viewModel.nextUp?.id == ep.id,
-              contextSeasonId: item.id,
+            child: SeasonPackButton(
+              missingCount: MissingEpisodes.downloadableCount(entries),
+              onSelect: () => unawaited(openSeasonPack(
+                context,
+                vm: viewModel,
+                seriesTitle: seriesTitle,
+                season: seasonNumber,
+              )),
             ),
           ),
-        ),
+        for (final entry in entries)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: entry.present != null
+                ? DetailEpisodeCard(
+                    episode: entry.present!,
+                    imageApi: viewModel.imageApi,
+                    onChanged: () => viewModel.load(),
+                    isActive: viewModel.nextUp?.id == entry.present!.id,
+                    contextSeasonId: item.id,
+                  )
+                : MissingEpisodeCard(
+                    missing: entry.missing!,
+                    onSelect: () => unawaited(openMissingEpisode(
+                      context,
+                      vm: viewModel,
+                      seriesTitle: seriesTitle,
+                      missing: entry.missing!,
+                    )),
+                  ),
+          ),
+        if (viewModel.missingLoad == MissingEpisodesLoad.notInSonarr)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: AddToSonarrTile(
+              onSelect: () => unawaited(addSeriesToSonarr(context, viewModel)),
+            ),
+          ),
+        if (viewModel.missingLoad == MissingEpisodesLoad.unavailable)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: MissingEpisodesStatusNote(
+              reason: viewModel.missingError ?? 'Ukjent feil',
+              onRetry: () => unawaited(viewModel.loadMissingEpisodes()),
+            ),
+          ),
       ],
       // The episode list above is a column of cards rather than one row, so
       // this page moves by the geometry of what is on screen instead of a
@@ -2477,6 +2579,98 @@ class _DetailContentState extends State<_DetailContent> {
       ],
       const SizedBox(height: 48),
     ];
+  }
+
+  /// Continue Watching / Next Up open an Episode page: list what this season
+  /// is missing (same cards and season pack as the Season page), and point to
+  /// the series page for the seasons the library has none of.
+  List<Widget> _buildEpisodePageMissing(BuildContext context, AggregatedItem item) {
+    final arr = viewModel.arrStatus;
+    final season = item.parentIndexNumber;
+    final seriesTitle = item.seriesName ?? item.name;
+    final widgets = <Widget>[];
+    if (arr != null && season != null) {
+      final entries = MissingEpisodes.mergeSeason(
+        present: viewModel.episodes,
+        status: arr,
+        season: season,
+      );
+      final missing = [
+        for (final e in entries)
+          if (e.missing != null) e.missing!,
+      ];
+      final missingSeasons = MissingEpisodes.missingSeasons(
+        presentSeasons: [
+          for (final s in viewModel.seasons)
+            if (s.indexNumber != null) s.indexNumber!,
+        ],
+        status: arr,
+      );
+      if (missing.isNotEmpty) {
+        widgets.addAll([
+          const SizedBox(height: 32),
+          _SectionHeader(title: appL10n().tgMissingInThisSeason),
+          const SizedBox(height: 12),
+          if (MissingEpisodes.offerSeasonPack(entries))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: SeasonPackButton(
+                missingCount: MissingEpisodes.downloadableCount(entries),
+                onSelect: () => unawaited(openSeasonPack(
+                  context,
+                  vm: viewModel,
+                  seriesTitle: seriesTitle,
+                  season: season,
+                )),
+              ),
+            ),
+          for (final m in missing)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: MissingEpisodeCard(
+                missing: m,
+                onSelect: () => unawaited(openMissingEpisode(
+                  context,
+                  vm: viewModel,
+                  seriesTitle: seriesTitle,
+                  missing: m,
+                )),
+              ),
+            ),
+        ]);
+      }
+      final seriesId = item.seriesId;
+      if (missingSeasons.isNotEmpty && seriesId != null) {
+        widgets.addAll([
+          const SizedBox(height: 16),
+          FocusableWrapper(
+            borderRadius: 8,
+            onSelect: () => context.push(
+              Destinations.item(seriesId, serverId: item.serverId),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                appL10n().tgMissingSeasonsOpenSeries(
+                    missingSeasons.length, missingSeasons.join(', ')),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white70,
+                    ),
+              ),
+            ),
+          ),
+        ]);
+      }
+    } else if (viewModel.missingLoad == MissingEpisodesLoad.unavailable) {
+      widgets.addAll([
+        const SizedBox(height: 16),
+        MissingEpisodesStatusNote(
+          reason: viewModel.missingError ?? 'Ukjent feil',
+          onRetry: () => unawaited(viewModel.loadMissingEpisodes()),
+        ),
+      ]);
+    }
+    return widgets;
   }
 
   List<Widget> _buildEpisodeContent(BuildContext context, AggregatedItem item) {
@@ -2545,6 +2739,7 @@ class _DetailContentState extends State<_DetailContent> {
         autoPlay: widget.autoPlay,
       ),
       ..._composeSections(specs, head: actionButtonsFocusNode),
+      ..._buildEpisodePageMissing(context, item),
       const SizedBox(height: 48),
     ];
   }
@@ -3581,7 +3776,7 @@ class _DetailContentState extends State<_DetailContent> {
     final confirmed = await _showDeleteConfirmationDialog(
       context,
       title: isPlaylist ? l10n.deletePlaylist : l10n.deleteItem,
-      message: isPlaylist ? l10n.deletePlaylistMessage : l10n.deleteItemMessage,
+      message: isPlaylist ? l10n.deletePlaylistMessage : deleteConfirmMessage(l10n, item),
     );
     if (!confirmed) return;
 
@@ -7010,6 +7205,15 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
           icon: Icons.subtitles,
           onPressed: () => _openSubtitleSelector(context, item),
         ),
+      if (isPlayableVideo &&
+          (item.type == 'Movie' || item.type == 'Episode') &&
+          DownloadFeatures.subtitles &&
+          shows(DetailButton.findSubtitles))
+        DetailButton.findSubtitles: _DetailActionButton(
+          label: appL10n().tgFindSubtitles,
+          icon: Icons.closed_caption_outlined,
+          onPressed: () => showFindSubtitlesDialog(context, item),
+        ),
       if (isPlayableMedia &&
           item.mediaSources.length > 1 &&
           shows(DetailButton.version))
@@ -10265,10 +10469,14 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
     final prefs = GetIt.instance<UserPreferences>();
     _syncSubtitleSelectionFromActivePlayback();
     final canDownloadRemote = _canDownloadRemoteSubtitles(item);
-    final displayStreams = sortedSubtitleStreams(streams);
     final effectiveSubtitleIndex = _effectiveSubtitleStreamIndex(
       streams,
       audioStreams,
+    );
+    final displayStreams = filterSubtitleMenuStreams(
+      sortedSubtitleStreams(streams),
+      showAll: showAllSubtitleLanguagesSetting(),
+      languages: subtitleMenuLanguagesSetting(),
     );
     final currentIdx = computeSubtitleDialogSelectedIndex(
       displayStreams,
@@ -13157,7 +13365,8 @@ class DetailSimilarRow extends StatelessWidget {
                 final mediaType =
                     item.seerrMediaType ??
                     (item.type == 'Series' ? 'tv' : 'movie');
-                context.push(
+                SinglePush.push(
+                  context,
                   Destinations.seerrMedia(item.id, mediaType: mediaType),
                 );
               } else {
@@ -15225,6 +15434,41 @@ class DetailEpisodeCardState extends State<DetailEpisodeCard>
                           ),
                         ),
                         SizedBox(width: isMobile ? 12 : 12 * desktopScale),
+                        if (episode.isMissing && DownloadFeatures.downloadNow)
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right: isMobile ? 8 : 8 * desktopScale),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  tooltip: 'Download Now',
+                                  icon: const Icon(
+                                    Icons.download_for_offline_outlined,
+                                    color: Colors.white70,
+                                  ),
+                                  onPressed: () => DownloadNowButton.run(
+                                    context,
+                                    tmdbId: 0,
+                                    mediaType: 'tv',
+                                    title: episode.seriesName ?? episode.name,
+                                    seasons: [
+                                      if (episode.parentIndexNumber != null)
+                                        episode.parentIndexNumber!,
+                                    ],
+                                    seriesItemId: episode.seriesId,
+                                  ),
+                                ),
+                                Text(
+                                  'Missing',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(color: Colors.white54),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -16014,7 +16258,8 @@ class SeerrAppearancesRow extends StatelessWidget {
                 : (_, event) => onItemKeyEvent!(index, event),
             onTap: () {
               final mediaType = item.mediaType ?? 'movie';
-              context.push(
+              SinglePush.push(
+                context,
                 Destinations.seerrMedia(
                   item.id.toString(),
                   mediaType: mediaType,
@@ -16100,7 +16345,8 @@ class SeerrCrewCreditsRow extends StatelessWidget {
                 : (_, event) => onItemKeyEvent!(index, event),
             onTap: () {
               final mediaType = item.mediaType ?? 'movie';
-              context.push(
+              SinglePush.push(
+                context,
                 Destinations.seerrMedia(
                   item.id.toString(),
                   mediaType: mediaType,

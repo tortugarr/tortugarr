@@ -1,6 +1,7 @@
 import 'package:playback_core/playback_core.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../util/secondary_subtitle_track_selection.dart';
 import '../../../util/subtitle_track_logic.dart';
 import '../track_selector_dialog.dart';
@@ -60,7 +61,13 @@ class TrackChoices {
             }).toList(),
             preferredSecondaryLanguage,
           )
-        : sortedSubtitleStreams(streams);
+        // Only the languages the user picked for the subtitle menu, unless
+        // they chose to see every language.
+        : filterSubtitleMenuStreams(
+            sortedSubtitleStreams(streams),
+            showAll: showAllSubtitleLanguagesSetting(),
+            languages: subtitleMenuLanguagesSetting(),
+          );
 
     final int? currentStreamIndex;
     if (audio) {

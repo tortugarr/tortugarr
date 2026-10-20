@@ -333,6 +333,9 @@ class SeerrHttpClient {
   }
 
   Future<void> deleteRequest(int requestId) async {
+    // No silent swallowing here: a cancel that never reached the server must
+    // surface as an error, not a fake success. The view model verifies the
+    // request is actually gone afterwards.
     final response = await _dio.delete(
       _apiUrl('request/$requestId'),
       options: _authOptions(),

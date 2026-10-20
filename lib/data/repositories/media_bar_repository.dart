@@ -176,7 +176,7 @@ class MediaBarRepository {
       }
 
       if (selected.isEmpty) {
-        return const MediaBarError('No items with backdrop images found');
+        return const MediaBarEmpty();
       }
 
       final items = selected.map(_toSlideItem).toList();

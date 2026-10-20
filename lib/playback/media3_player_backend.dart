@@ -226,6 +226,20 @@ class Media3PlayerBackend extends PlayerBackend
   Future<bool> activateView(int viewId) async =>
       await _invoke<bool>('activateView', {'viewId': viewId}) ?? false;
 
+  /// Reserves the native player slot for the fullscreen player view that is
+  /// about to open. Releases whatever view owns the player now (a home
+  /// trailer surface, or a view left behind by an earlier screen) so the
+  /// next setSource is queued for the player screen instead of landing in a
+  /// surface that screen will tear down. Static because the backend instance
+  /// may not exist yet when playback is requested from outside the player.
+  static Future<bool> prepareMainPlayback() async {
+    try {
+      return await _control.invokeMethod<bool>('prepareMainPlayback') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> _stopActivity() async {
     if (!_activityStarted) return;
     _activityStarted = false;

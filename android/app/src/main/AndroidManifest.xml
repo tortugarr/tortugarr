@@ -16,6 +16,10 @@
     <!-- Lets the app write its own home screen channel rows on Android TV. -->
     <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA"/>
     <uses-feature android:name="android.hardware.microphone" android:required="false"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+    <!-- With "display over other apps" granted, Android lets the app bring
+         itself forward when a remote play arrives in the background. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.software.leanback" android:required="false"/>
     <application
@@ -86,6 +90,15 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="seerr_notifications" />
+
+        <!-- Push is off in Tortugarr (see PushMessagingService.enabled): no automatic
+             FCM token fetch and no automatic Firebase data collection. -->
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_data_collection_default_enabled"
+            android:value="false" />
 
         <!-- Impeller renderer, set per flavor in build.gradle.kts. Off by
              default on TV boxes, whose GPUs (often PowerVR) stutter on the

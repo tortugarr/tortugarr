@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../preference/preference_constants.dart';
 
@@ -305,10 +304,13 @@ class _MoonfinLogoAnimationState extends State<MoonfinLogoAnimation>
           child: child,
         );
       },
-      child: SvgPicture.asset(
-        'assets/icons/moonfin_logo.svg',
-        width: widget.size,
-        height: widget.size,
+      // Tortugarr's round badge in the logo slot, a little larger than the old
+      // mark so the banner text reads.
+      child: Image.asset(
+        'assets/icons/tortugarr_logo.png',
+        width: widget.size * 1.15,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.medium,
       ),
     );
   }

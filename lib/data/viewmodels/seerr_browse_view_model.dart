@@ -3,6 +3,17 @@ import 'package:flutter/foundation.dart';
 import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 
+/// Thrown when a Seerr browse filter (network/studio) fails because the
+/// TMDB ID doesn't map to a Sonarr/Radarr internal ID. This happens when
+/// clicking a network from the old hardcoded Networks/Studios rows.
+class SeerrBrowseFilterError implements Exception {
+  final String message;
+  const SeerrBrowseFilterError(this.message);
+
+  @override
+  String toString() => 'SeerrBrowseFilterError: $message';
+}
+
 enum SeerrBrowseFilter { all, available, requested }
 
 /// The six states TMDB files a series under, sent to seerr pipe joined the
@@ -118,6 +129,7 @@ class SeerrBrowseState {
   final bool isLoading;
   final bool isLoadingMore;
   final Object? error;
+  final String? filterError;
   final List<SeerrDiscoverItem> items;
   final int currentPage;
   final int totalPages;
@@ -136,6 +148,7 @@ class SeerrBrowseState {
     this.isLoading = false,
     this.isLoadingMore = false,
     this.error,
+    this.filterError,
     this.items = const [],
     this.currentPage = 0,
     this.totalPages = 1,
@@ -166,6 +179,7 @@ class SeerrBrowseState {
     bool? isLoading,
     bool? isLoadingMore,
     Object? error,
+    String? filterError,
     List<SeerrDiscoverItem>? items,
     int? currentPage,
     int? totalPages,
@@ -184,6 +198,7 @@ class SeerrBrowseState {
         isLoading: isLoading ?? this.isLoading,
         isLoadingMore: isLoadingMore ?? this.isLoadingMore,
         error: error,
+        filterError: filterError,
         items: items ?? this.items,
         currentPage: currentPage ?? this.currentPage,
         totalPages: totalPages ?? this.totalPages,
@@ -272,6 +287,14 @@ class SeerrBrowseViewModel extends ChangeNotifier {
         items: matches,
         currentPage: lastPage.page,
         totalPages: lastPage.totalPages,
+      );
+    } on SeerrBrowseFilterError catch (e) {
+      _state = _state.copyWith(
+        isLoading: false,
+        items: const [],
+        currentPage: 0,
+        totalPages: 1,
+        filterError: e.message,
       );
     } catch (e) {
       _state = _state.copyWith(isLoading: false, error: e);
@@ -451,7 +474,16 @@ class SeerrBrowseViewModel extends ChangeNotifier {
         withRuntimeLte: runtime.lte,
         firstAirDateGte: released.dateGte,
         firstAirDateLte: released.dateLte,
-      );
+      ).catchError((e) {
+        final msg = e.toString();
+        if (msg.contains('Network Id Not Found') || msg.contains('Studio Id Not Found')) {
+          // TMDB network/studio IDs don't map to Sonarr/Radarr internal IDs.
+          // This happens when clicking a network from the old hardcoded rows.
+          // Return empty page with a flag so the UI can show a friendly message.
+          throw SeerrBrowseFilterError(msg);
+        }
+        throw e;
+      });
     }
     return _repo.discoverMovies(
       page: page,
@@ -466,7 +498,13 @@ class SeerrBrowseViewModel extends ChangeNotifier {
       withRuntimeLte: runtime.lte,
       primaryReleaseDateGte: released.dateGte,
       primaryReleaseDateLte: released.dateLte,
-    );
+    ).catchError((e) {
+      final msg = e.toString();
+      if (msg.contains('Network Id Not Found') || msg.contains('Studio Id Not Found')) {
+        throw SeerrBrowseFilterError(msg);
+      }
+      throw e;
+    });
   }
 
   Future<void> _ensureRequestLookup() async {

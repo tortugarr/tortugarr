@@ -5,6 +5,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import '../../data/services/adult_library_service.dart';
+import '../../data/services/tortugarr/download_features.dart';
+import 'adult_library_dialog.dart' show searchNewAdult;
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:server_core/server_core.dart';
@@ -34,6 +37,8 @@ import 'friends_nav_slot.dart';
 import 'expandable_icon_button.dart';
 import 'marquee_text.dart';
 import 'overlay_sheet.dart';
+import 'active_downloads_dialog.dart';
+import '../../data/services/seerr_active_downloads_service.dart';
 import 'navigation_layout.dart';
 import 'settings/settings_panel.dart';
 import '../screens/downloads/downloads_panel.dart';
@@ -54,6 +59,8 @@ import '../../util/focus/dpad_keys.dart';
 import '../../util/focus/input_mode_tracker.dart';
 import '../navigation/app_router.dart';
 import 'adaptive/sf_symbol.dart';
+import 'focus/nav_chrome_focus.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 const _kToolbarHeightTV = 95.0;
 const _kToolbarHeightDesktop = 80.0;
@@ -157,6 +164,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   @override
   void initState() {
     super.initState();
+    NavChromeFocus.register(_toolbarScopeNode);
     _currentTime = ValueNotifier<String>('');
     // Guarded so a stale registration from a torn-down toolbar is a safe
     // no-op instead of focusing a disposed node.
@@ -251,6 +259,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     NavigationLayout.chromeFocusRoots.remove(_toolbarScopeNode);
     _avatarFocus.removeListener(_onAvatarFocusChanged);
     FocusManager.instance.removeListener(_trackPreviousFocus);
+    NavChromeFocus.unregister(_toolbarScopeNode);
     _toolbarScopeNode.dispose();
     _avatarFocus.dispose();
     _homeFocus.dispose();
@@ -1210,6 +1219,21 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
                         ),
                 ),
               ],
+              // TV: active downloads, while something downloads or when the
+              // user keeps the button on. The colour slot is taken here, as
+              // for the buttons after it.
+              if (PlatformDetection.isTV &&
+                  GetIt.instance.isRegistered<SeerrActiveDownloadsService>())
+                _activeDownloadsButton(
+                  navColor: nextNavColor(),
+                  alwaysExpanded: alwaysExpanded,
+                ),
+              // XXX search, only while the adult library is shown (hiding
+              // the library removes it, whatever the setting says).
+              _adultSearchButton(
+                navColor: nextNavColor(),
+                alwaysExpanded: alwaysExpanded,
+              ),
               _gap(),
               if (DownloadsNavSlot.isOffered())
                 _orderButton(
@@ -1490,6 +1514,80 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
         ? _kButtonSpacingMobile
         : _kButtonSpacing,
   );
+
+  Widget _activeDownloadsButton({
+    required Color? navColor,
+    required bool alwaysExpanded,
+  }) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        GetIt.instance<SeerrActiveDownloadsService>(),
+        GetIt.instance<UserPreferences>(),
+      ]),
+      builder: (context, _) {
+        final downloads = GetIt.instance<SeerrActiveDownloadsService>();
+        final always = GetIt.instance<UserPreferences>()
+            .get(UserPreferences.alwaysShowDownloadsButton);
+        if (!downloads.hasActive && !always) return const SizedBox.shrink();
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _gap(),
+            _orderButton(
+              order: 96,
+              child: ExpandableIconButton(
+                key: const ValueKey('toolbar_active_downloads'),
+                forceExpanded: alwaysExpanded,
+                baseColor: navColor,
+                icon: Icons.downloading_rounded,
+                label: downloads.hasActive
+                    ? appL10n().tgDownloadsCount(downloads.downloads.length)
+                    : appL10n().tgDownloadsButton,
+                onPressed: () => showActiveDownloadsDialog(context),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _adultSearchButton({
+    required Color? navColor,
+    required bool alwaysExpanded,
+  }) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        GetIt.instance<UserPreferences>(),
+        AdultLibraryService.visible,
+        DownloadFeatures.capabilities,
+      ]),
+      builder: (context, _) {
+        final show = GetIt.instance<UserPreferences>()
+                .get(UserPreferences.adultSearchInMenu) &&
+            AdultLibraryService.visible.value &&
+            DownloadFeatures.adultDownloads;
+        if (!show) return const SizedBox.shrink();
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _gap(),
+            _orderButton(
+              order: 96.5,
+              child: ExpandableIconButton(
+                key: const ValueKey('toolbar_adult_search'),
+                forceExpanded: alwaysExpanded,
+                baseColor: navColor,
+                icon: Icons.travel_explore,
+                label: appL10n().tgAdultSearchButton,
+                onPressed: () => unawaited(searchNewAdult(context)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _orderButton({required double order, required Widget child}) {
     return FocusTraversalOrder(order: NumericFocusOrder(order), child: child);

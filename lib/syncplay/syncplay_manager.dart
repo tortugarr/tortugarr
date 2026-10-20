@@ -740,8 +740,7 @@ class SyncPlayManager extends ChangeNotifier {
   }
 
   void _ensurePlayerRouteForItem(AggregatedItem item) {
-    final currentPath =
-        appRouter.routerDelegate.currentConfiguration.uri.path;
+    final currentPath = currentTopRoutePath();
     if (currentPath == Destinations.videoPlayer ||
         currentPath == Destinations.audioPlayer) {
       return;

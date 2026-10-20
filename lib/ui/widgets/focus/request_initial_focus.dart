@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import '../left_sidebar.dart';
 import '../top_toolbar.dart';
 import 'can_claim_initial_focus.dart';
+import 'nav_chrome_focus.dart';
 
 /// Wraps a screen subtree and grants focus to the first focusable descendant
 /// after the first frame so dpad navigation works on a freshly pushed route.
@@ -48,9 +49,14 @@ class _RequestInitialFocusState extends State<RequestInitialFocus> {
       // grab may have parked focus in the sidebar or toolbar, so the target
       // still wins over chrome, just never over focused content.
       final isCurrent = ModalRoute.of(context)?.isCurrent ?? true;
+      final primary = FocusManager.instance.primaryFocus;
+      final scope = FocusScope.of(context);
       final chromeHasFocus = LeftSidebar.isFocusedNotifier.value ||
-          TopToolbar.isFocusedNotifier.value;
-      if (isCurrent && (!FocusScope.of(context).hasFocus || chromeHasFocus)) {
+          TopToolbar.isFocusedNotifier.value ||
+          NavChromeFocus.contains(primary);
+      // Focus parked on the bare scope means nothing concrete was chosen yet.
+      final onlyScope = identical(primary, scope);
+      if (isCurrent && (!scope.hasFocus || chromeHasFocus || onlyScope)) {
         _retryTimer?.cancel();
         _settled = false;
         _scheduleFrameFocusCheck(0);
@@ -96,20 +102,24 @@ class _RequestInitialFocusState extends State<RequestInitialFocus> {
       return;
     }
 
-    if (_scopeHasFocus(scope)) {
+    if (_scopeHasContentFocus(scope)) {
       _settled = true;
       return;
     }
-    if (_requestFirstDescendantFocus(scope)) {
-      _settled = true;
-      return;
-    }
-    scope.requestFocus();
-    if (_scopeHasFocus(scope)) {
+    // Prefer the route's own content. Chrome (sidebar rail, toolbar) is only
+    // used once retries run out, so a screen still loading its data does not
+    // land on an invisible sidebar button.
+    if (_requestFirstDescendantFocus(scope, allowChrome: false)) {
       _settled = true;
       return;
     }
     if (attempt + 1 >= _maxAttemptsScope) {
+      // No content took focus in time: fall back to chrome, as before.
+      if (!_requestFirstDescendantFocus(scope, allowChrome: true) &&
+          !_scopeHasFocus(scope)) {
+        scope.requestFocus();
+      }
+      _settled = true;
       return;
     }
     _retryTimer = Timer(_retryDelay, () {
@@ -127,15 +137,28 @@ class _RequestInitialFocusState extends State<RequestInitialFocus> {
     });
   }
 
-  bool _requestFirstDescendantFocus(FocusScopeNode scope) {
+  bool _requestFirstDescendantFocus(
+    FocusScopeNode scope, {
+    required bool allowChrome,
+  }) {
     for (final node in scope.traversalDescendants) {
       if (identical(node, scope)) continue;
       if (node.context == null) continue;
       if (!node.canRequestFocus || node.skipTraversal) continue;
+      if (node is FocusScopeNode) continue;
+      if (!allowChrome && NavChromeFocus.contains(node)) continue;
       scope.requestFocus(node);
       if (node.hasFocus) return true;
     }
     return false;
+  }
+
+  /// Focus is inside [scope] on something other than chrome or the scope.
+  bool _scopeHasContentFocus(FocusScopeNode scope) {
+    final primary = FocusManager.instance.primaryFocus;
+    if (primary == null || identical(primary, scope)) return false;
+    if (NavChromeFocus.contains(primary)) return false;
+    return _scopeHasFocus(scope);
   }
 
   bool _scopeHasFocus(FocusScopeNode scope) {

@@ -8,6 +8,7 @@ import '../../util/platform_detection.dart';
 import '../../util/overlay_color_palette.dart';
 import 'bottom_nav/bottom_navbar.dart';
 import 'download_progress_bar.dart';
+import 'seerr_active_downloads_bar.dart';
 import 'left_sidebar.dart';
 import 'top_toolbar.dart';
 
@@ -340,7 +341,13 @@ class _NavigationLayoutState extends State<NavigationLayout>
                 header: MediaQuery.removePadding(
                   context: context,
                   removeBottom: true,
-                  child: const DownloadProgressBar(),
+                  child: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SeerrActiveDownloadsBar(),
+                      DownloadProgressBar(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -453,6 +460,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
             ],
           ),
         ),
+        const SeerrActiveDownloadsBar(),
         const DownloadProgressBar(),
       ],
     );
@@ -504,6 +512,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
               ],
             ),
           ),
+          const SeerrActiveDownloadsBar(),
           const DownloadProgressBar(),
         ],
       );
@@ -521,6 +530,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
             ],
           ),
         ),
+        const SeerrActiveDownloadsBar(),
         const DownloadProgressBar(),
       ],
     );

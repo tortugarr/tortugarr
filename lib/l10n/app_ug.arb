@@ -1,6 +1,6 @@
 {
     "@@locale": "ug",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin نەشرى {version}",
+    "appVersionFooter": "Tortugarr نەشرى {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin سىستېمىڭىزنىڭ ئاچقۇچلىرىنى زىيارەت قىلالمىدى. كىرىشنى داۋاملاشتۇرغىلى بولىدۇ ، ئەمما ئاچقۇچ ئېچىلمىغۇچە بىخەتەر بەلگە ساقلاشنى ئىشلەتكىلى بولمايدۇ.",
+    "secureStorageUnavailableMessage": "Tortugarr سىستېمىڭىزنىڭ ئاچقۇچلىرىنى زىيارەت قىلالمىدى. كىرىشنى داۋاملاشتۇرغىلى بولىدۇ ، ئەمما ئاچقۇچ ئېچىلمىغۇچە بىخەتەر بەلگە ساقلاشنى ئىشلەتكىلى بولمايدۇ.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "بۇ دېتالنى قايتا قوزغىماي Moonfin بىلەن Neon Pulse نى ئالماشتۇرۇڭ",
+    "settingsAppearanceThemeSubtitle": "بۇ دېتالنى قايتا قوزغىماي Tortugarr بىلەن Neon Pulse نى ئالماشتۇرۇڭ",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "ھازىرقى Moonfin قارىسىڭىز ھەممىڭىز ياخشى كۆرۈپ قالدىڭىز",
+    "themeMoonfinSubtitle": "ھازىرقى Tortugarr قارىسىڭىز ھەممىڭىز ياخشى كۆرۈپ قالدىڭىز",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "نېئون پۇلس",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "چىقىش Moonfin?",
+    "exitApp": "چىقىش Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "تەڭشەلمىدى. Moonfin ئەپ / سانلىق مەلۇمات قىسقۇچتا سۈكۈتتىكى mpv.conf نى سىنايدۇ.",
+    "notSetMpvConf": "تەڭشەلمىدى. Tortugarr ئەپ / سانلىق مەلۇمات قىسقۇچتا سۈكۈتتىكى mpv.conf نى سىنايدۇ.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "چۈشۈرۈش / Moonfin - باشقا ئەپلەرگە كۆرۈنىدۇ",
+    "downloadsVisibleToOtherApps": "چۈشۈرۈش / Tortugarr - باشقا ئەپلەرگە كۆرۈنىدۇ",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "چۈشۈرۈلگەن مېدىيا ئۈسكۈنىڭىزدىكى چۈشۈرۈش / Moonfin غا ساقلىنىدۇ. بۇ ھۆججەتلەر سىزنىڭ رەسىم ئامبىرىڭىز ياكى مۇزىكا قويغۇچ قاتارلىق باشقا ئەپلەرگە كۆرۈنىدۇ.\n\nھازىر بار بولغان چۈشۈرۈشلەر ھازىرقى ئورنىدا قالىدۇ.",
+    "saveToDownloadsFolderDescription": "چۈشۈرۈلگەن مېدىيا ئۈسكۈنىڭىزدىكى چۈشۈرۈش / Tortugarr غا ساقلىنىدۇ. بۇ ھۆججەتلەر سىزنىڭ رەسىم ئامبىرىڭىز ياكى مۇزىكا قويغۇچ قاتارلىق باشقا ئەپلەرگە كۆرۈنىدۇ.\n\nھازىر بار بولغان چۈشۈرۈشلەر ھازىرقى ئورنىدا قالىدۇ.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "ھەر بىر كۈتۈپخانىنىڭ باش بېتىنىڭ كۆرۈنۈشىنى توغرىلاڭ. ئۆزگەرتىشنىڭ كۈچكە ئىگە بولۇشى ئۈچۈن Moonfin نى قايتا قوزغىتىڭ.",
+    "libraryVisibilityDescription": "ھەر بىر كۈتۈپخانىنىڭ باش بېتىنىڭ كۆرۈنۈشىنى توغرىلاڭ. ئۆزگەرتىشنىڭ كۈچكە ئىگە بولۇشى ئۈچۈن Tortugarr نى قايتا قوزغىتىڭ.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3557,13 +3557,13 @@
     "@mediaBarMode": {
         "description": "Setting for choosing media bar style"
     },
-    "mediaBarModeDescription": "Moonfin ، MakD نى تاللاڭ ياكى مېدىيا بالدىقىنى ئېتىۋېتىڭ",
+    "mediaBarModeDescription": "Tortugarr ، MakD نى تاللاڭ ياكى مېدىيا بالدىقىنى ئېتىۋېتىڭ",
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin دە ئويناڭ",
+    "playInMoonfin": "Tortugarr دە ئويناڭ",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} ئىلتىماس قىلغان",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Moonfin كۈتۈپخانىسىدا تېپىلمىغان تۈر",
+    "itemNotFoundInLibrary": "Tortugarr كۈتۈپخانىسىدا تېپىلمىغان تۈر",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "مۇلازىمېتىر قايتا قوزغىتىلىۋاتىدۇ",
-    "adminServerRebootMessage": "مۇلازىمېتىرنى قايتا قوزغىتىش باسقۇچىدا ، Moonfin نى قايتا قوزغىتىڭ",
+    "adminServerRebootMessage": "مۇلازىمېتىرنى قايتا قوزغىتىش باسقۇچىدا ، Tortugarr نى قايتا قوزغىتىڭ",
     "adminActiveSessions": "ئاكتىپ يىغىن",
     "adminSessionsLoadFailed": "ئولتۇرۇشنى يۈكلىيەلمىدى",
     "adminNoActiveSessions": "ئاكتىپ يىغىن يوق",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "يولباشچى ستونىدا ژانىر كۇنۇپكىسىنى كۆرسىتىڭ",
     "settingsShowFavoritesButtonInNavigation": "يولباشچى ستونىدا ياقتۇرىدىغان كۇنۇپكىنى كۆرسىتىڭ",
     "settingsShowLibrariesButtonInNavigation": "يولباشچى ستونىدىكى كۈتۈپخانىلار كۇنۇپكىسىنى كۆرسەت",
-    "settingsLibraryVisibilitySubtitle": "ھەر بىر كۈتۈپخانىنىڭ باش بېتىنىڭ كۆرۈنۈشىنى توغرىلاڭ. ئۆزگەرتىشنىڭ كۈچكە ئىگە بولۇشى ئۈچۈن Moonfin نى قايتا قوزغىتىڭ.",
+    "settingsLibraryVisibilitySubtitle": "ھەر بىر كۈتۈپخانىنىڭ باش بېتىنىڭ كۆرۈنۈشىنى توغرىلاڭ. ئۆزگەرتىشنىڭ كۈچكە ئىگە بولۇشى ئۈچۈن Tortugarr نى قايتا قوزغىتىڭ.",
     "settingsMediaBarAndLocalPreviews": "مېدىيا بالدىقى ۋە يەرلىك ئالدىن كۆرۈشلەر",
     "settingsVisualOverlays": "كۆرۈنۈش قاپلىمىلىرى",
     "settingsSeasonalSurprise": "پەسىل خاراكتېرلىك ھەيران قېلىش",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Discord غا قوشۇلۇڭ",
     "settingsJoinDiscordSubtitle": "مەھەللە بىلەن پاراڭلىشىڭ",
     "settingsJoinTheDiscord": "Discord غا قوشۇلۇڭ",
-    "settingsSupportMoonfin": "Moonfin نى قوللاڭ",
+    "settingsSupportMoonfin": "Tortugarr نى قوللاڭ",
     "settingsLegal": "قانۇنىي ئۇچۇرلار",
     "settingsLicenses": "ئىجازەتنامە",
     "settingsOpenSourceLicenseNotices": "ئوچۇق كودلۇق ئىجازەتنامە ئۇقتۇرۇشى",
     "settingsPrivacyPolicy": "مەخپىيەتلىك تۈزۈمى",
-    "settingsPrivacyPolicySubtitle": "Moonfin سانلىق مەلۇماتلىرىڭىزنى قانداق بىر تەرەپ قىلىدۇ",
+    "settingsPrivacyPolicySubtitle": "Tortugarr سانلىق مەلۇماتلىرىڭىزنى قانداق بىر تەرەپ قىلىدۇ",
     "settingsCheckForUpdates": "يېڭىلانمىلارنى تەكشۈرۈڭ",
-    "settingsCheckForUpdatesSubtitle": "Moonfin نىڭ ئەڭ يېڭى تارقىتىلغانلىقىنى تەكشۈرۈڭ",
+    "settingsCheckForUpdatesSubtitle": "Tortugarr نىڭ ئەڭ يېڭى تارقىتىلغانلىقىنى تەكشۈرۈڭ",
     "settingsPoweredByFlutter": "Flutter تەرىپىدىن ئىشلەنگەن",
     "settingsLicenseNoticesCount": "{count, plural, one {# ئىجازەتنامە ئۇقتۇرۇشى} other {# ئىجازەتنامە ئۇقتۇرۇشى}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "ساقلانغان تېمىلار",
-    "savedThemesDescription": "بۇلار نۆۋەتتىكى مۇلازىمېتىرنىڭ Moonfin قىستۇرمىسىدىن چۈشۈرۈلگەن تېمىلار. ئۆچۈرسىڭىز پەقەت بۇ يەرلىك نۇسخىلا چىقىرىۋېتىلىدۇ.",
+    "savedThemesDescription": "بۇلار نۆۋەتتىكى مۇلازىمېتىرنىڭ Tortugarr قىستۇرمىسىدىن چۈشۈرۈلگەن تېمىلار. ئۆچۈرسىڭىز پەقەت بۇ يەرلىك نۇسخىلا چىقىرىۋېتىلىدۇ.",
     "savedThemesEmpty": "بۇ مۇلازىمېتىر ئۈچۈن ساقلانغان تېما تېپىلمىدى.",
     "savedThemesCurrentThemeId": "{themeId} • ھازىر ئاكتىپ",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "ساقلانغان تېمىنى ئۆچۈرۈش",
     "savedThemesManageSubtitle": "بۇ ئۈسكۈنىدىكى چۈشۈرۈلگەن قىستۇرما تېمىلىرىنى باشقۇرۇش",
     "themeEditor": "تېما تەھرىرلىگۈچ",
-    "themeEditorSubtitle": "Moonfin تېما تەھرىرلىگۈچىنى تور كۆرگۈچىڭىزدە ئېچىش",
+    "themeEditorSubtitle": "Tortugarr تېما تەھرىرلىگۈچىنى تور كۆرگۈچىڭىزدە ئېچىش",
     "homeScreen": "باش ئېكران",
     "bottomBar": "ئاستى بالداق",
     "homeRowsStyleClassic": "كلاسسىك",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH ئېكران خېتىنى ئالدىن تاللاش",
     "preferSdhSubtitlesSubtitle": "ئۆزلۈكىدىن تاللىغاندا SDH/CC ئېكران خېتى يوللىرىنى ئالدىنقى ئورۇنغا قويىدۇ.",
     "webDiagnostics": "تور دىئاگنوزى",
-    "webDiagnosticsTitle": "Moonfin تور دىئاگنوزى",
+    "webDiagnosticsTitle": "Tortugarr تور دىئاگنوزى",
     "webDiagnosticsIntro": "بۇ بەتنى تور كۆرگۈچ ئۇلىنىش مەسىلىلىرىنى (CORS، ئارىلاش مەزمۇن ۋە بايقاش تەڭشەكلىرى) دىئاگنوز قىلىشقا ئىشلىتىڭ.",
     "webDiagnosticsDetectedMixedContentFailure": "ئارىلاش مەزمۇن خاتالىقى بايقالدى",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Preflight خاتالىقى بايقالدى",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin بىر HTTPS بەتنىڭ HTTP مۇلازىمېتىر URL ئادرېسىنى چاقىرماقچى بولغانلىقىنى بايقىدى. تور كۆرگۈچلەر بۇ تەلەپنى مۇلازىمېتىرىڭىزغا يېتىشتىن بۇرۇن توسىدۇ.",
-    "webDiagnosticsCorsFailureBody": "Moonfin كۆپىنچە مېدىيا مۇلازىمېتىرىدا CORS ياكى preflight قېشى كەم بولغاندا كۆرۈلىدىغان تور كۆرگۈچ دەرىجىلىك تەلەپ خاتالىقىنى بايقىدى.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr بىر HTTPS بەتنىڭ HTTP مۇلازىمېتىر URL ئادرېسىنى چاقىرماقچى بولغانلىقىنى بايقىدى. تور كۆرگۈچلەر بۇ تەلەپنى مۇلازىمېتىرىڭىزغا يېتىشتىن بۇرۇن توسىدۇ.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr كۆپىنچە مېدىيا مۇلازىمېتىرىدا CORS ياكى preflight قېشى كەم بولغاندا كۆرۈلىدىغان تور كۆرگۈچ دەرىجىلىك تەلەپ خاتالىقىنى بايقىدى.",
     "webDiagnosticsTargetUrl": "نىشان URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "سەپلەنمىگەن",
     "webDiagnosticsMixedContent": "ئارىلاش مەزمۇن",
     "webDiagnosticsMixedContentDetected": "بۇ بەت HTTPS ئارقىلىق يۈكلەنگەن، ئەمما سەپلەنگەن بىر ياكى بىرنەچچە URL بولسا HTTP. تور كۆرگۈچلەر HTTPS بەتلەرنىڭ HTTP API چاقىرىشىنى توسىدۇ.",
-    "webDiagnosticsMixedContentFix": "ھەل قىلىش: مېدىيا مۇلازىمېتىرىڭىز ياكى ۋاكالەتچى ئېغىزىڭىزنى HTTPS ئارقىلىق تەمىنلەڭ، ياكى Moonfin نى پەقەت ئىشەنچلىك يەرلىك تورلاردىلا HTTP ئارقىلىق ئېچىڭ.",
+    "webDiagnosticsMixedContentFix": "ھەل قىلىش: مېدىيا مۇلازىمېتىرىڭىز ياكى ۋاكالەتچى ئېغىزىڭىزنى HTTPS ئارقىلىق تەمىنلەڭ، ياكى Tortugarr نى پەقەت ئىشەنچلىك يەرلىك تورلاردىلا HTTP ئارقىلىق ئېچىڭ.",
     "webDiagnosticsNoMixedContentDetected": "نۆۋەتتىكى ئىجرا تەڭشەكلىرىدىن ئېنىق ئارىلاش مەزمۇن سەپلىمىسى بايقالمىدى.",
     "webDiagnosticsCorsChecklist": "CORS تەكشۈرۈش تىزىملىكى",
     "webDiagnosticsCorsChecklistItem1": "• تور كۆرگۈچ Origin نى Access-Control-Allow-Origin غا كىرگۈزۈڭ.",
@@ -7395,13 +7395,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Moonfin Recommends يەرلىك ئامبار ئالگورىتمىنى ياكى توردىكى TMDb ئوخشاشلىق ئۆلچەملىرىنى ئىشلىتىڭ. ئەسكەرتىش: توردىكى تەۋسىيەلەرگە Seerr بىرىكمىسى كېرەك.",
+    "recommendationSystemSubtitle": "Tortugarr Recommends يەرلىك ئامبار ئالگورىتمىنى ياكى توردىكى TMDb ئوخشاشلىق ئۆلچەملىرىنى ئىشلىتىڭ. ئەسكەرتىش: توردىكى تەۋسىيەلەرگە Seerr بىرىكمىسى كېرەك.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ئوخشاشلىقى",
     "@recommendationSystemTmdb": {
@@ -7411,7 +7411,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Moonfin Recommends تەۋسىيەلىرىنى نىشان مېدىيانىڭ ياش چەكلىمىسى بويىچە چەكلەيدۇ",
+    "recommendationsApplyParentalRatingCapSubtitle": "Tortugarr Recommends تەۋسىيەلىرىنى نىشان مېدىيانىڭ ياش چەكلىمىسى بويىچە چەكلەيدۇ",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7459,7 +7459,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "ئىختىيارى تېمىلار Moonfin نىڭ كۆرۈنۈش ئېلېمېنتلىرىنى ئۆزگەرتىدۇ. ئۇسلۇبىڭىزغا ماس بىرىنى تاللاڭ.",
+    "customThemeSubtitle": "ئىختىيارى تېمىلار Tortugarr نىڭ كۆرۈنۈش ئېلېمېنتلىرىنى ئۆزگەرتىدۇ. ئۇسلۇبىڭىزغا ماس بىرىنى تاللاڭ.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7632,7 +7632,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "تېلېفونىڭىزدا Moonfin غا كىرىڭ",
+    "carSignInPrompt": "تېلېفونىڭىزدا Tortugarr غا كىرىڭ",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8941,7 +8941,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller بولسا Flutter نىڭ زامانىۋى GPU سىزغۇچى بولۇپ، ھەرىكەتلەرنى تېخىمۇ سىلىق قىلىپ توختاپ قېلىشنى ئازايتىدۇ. بەزى TV قۇتىلىرى ۋە كونا GPU لاردا خاتالىق ياكى قارا سىن پەيدا قىلىشى مۇمكىن؛ شۇنداق ئەھۋال كۆرۈلسە ئۇنى تاقاق قىلىڭ. ئاپتوماتىك ئۈسكۈنىڭىزگە ئەڭ ماس سۈكۈتتىكىنى تاللايدۇ. قوللىنىش ئۈچۈن Moonfin نى قايتا قوزغىتىڭ.",
+    "impellerRenderingSubtitle": "Impeller بولسا Flutter نىڭ زامانىۋى GPU سىزغۇچى بولۇپ، ھەرىكەتلەرنى تېخىمۇ سىلىق قىلىپ توختاپ قېلىشنى ئازايتىدۇ. بەزى TV قۇتىلىرى ۋە كونا GPU لاردا خاتالىق ياكى قارا سىن پەيدا قىلىشى مۇمكىن؛ شۇنداق ئەھۋال كۆرۈلسە ئۇنى تاقاق قىلىڭ. ئاپتوماتىك ئۈسكۈنىڭىزگە ئەڭ ماس سۈكۈتتىكىنى تاللايدۇ. قوللىنىش ئۈچۈن Tortugarr نى قايتا قوزغىتىڭ.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "سىزىش ماتورىنى ئۆزگەرتىش ئۈچۈن Moonfin قايتا قوزغىتىلىشى كېرەك. ئەپنى ھازىر تاقاپ، ئاندىن قايتا ئېچىڭ.",
+    "impellerRestartMessage": "سىزىش ماتورىنى ئۆزگەرتىش ئۈچۈن Tortugarr قايتا قوزغىتىلىشى كېرەك. ئەپنى ھازىر تاقاپ، ئاندىن قايتا ئېچىڭ.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "IMDb ئەڭ ئالقىشلانغان كىنولار",
     "imdbMostPopularTvShows": "IMDb ئەڭ ئالقىشلانغان تېلېۋىزىيە تىياتىرلىرى",
     "imdbLowestRatedMovies": "IMDb ئەڭ تۆۋەن باھالانغان كىنولار",
-    "imdbTopEnglishMovies": "IMDb ئەڭ يۇقىرى باھالانغان ئىنگلىزچە كىنولار"
+    "imdbTopEnglishMovies": "IMDb ئەڭ يۇقىرى باھالانغان ئىنگلىزچە كىنولار",
+    "tgMissing": "كەم",
+    "tgComing": "يېقىندا",
+    "tgComingOn": "{date} كېلىدۇ",
+    "tgDownloading": "چۈشۈرۈۋاتىدۇ",
+    "tgReadySoon": "يېقىندا تەييار",
+    "tgRequested": "تەلەپ قىلىندى",
+    "tgClose": "تاقاش",
+    "tgCancel": "بىكار قىلىش",
+    "tgBack": "قايتىش",
+    "tgYes": "ھەئە",
+    "tgNo": "ياق",
+    "tgSearch": "ئىزدەش",
+    "tgHide": "يوشۇرۇش",
+    "tgAll": "ھەممىسى",
+    "tgNone": "يوق",
+    "tgMovies": "كىنولار",
+    "tgSeries": "تېلېۋىزىيە تىياتىرلىرى",
+    "tgMovieTag": "كىنو",
+    "tgSeriesTag": "تىياتىر",
+    "tgCanTakeAMinute": "بىر مىنۇتقىچە ۋاقىت كېتىشى مۇمكىن",
+    "tgToday": "بۈگۈن",
+    "tgYesterday": "تۈنۈگۈن",
+    "tgDaysAgo": "{days} كۈن ئىلگىرى",
+    "tgMonthsAgo": "{months} ئاي ئىلگىرى",
+    "tgYearsAgo": "{years} يىل ئىلگىرى",
+    "tgYearsMonthsAgo": "{years} يىل {months} ئاي ئىلگىرى",
+    "tgFindSubtitles": "ئېكران خېتى ئىزدەش",
+    "tgFreeUpSpace": "بوشلۇق بوشىتىش",
+    "tgDownloads": "چۈشۈرۈشلەر",
+    "tgDownloadsCount": "چۈشۈرۈشلەر ({count})",
+    "tgNoVideoRemoved": "«{title}»: چۈشۈرۈلگەن نەرسىدە سىن ھۆججىتى يوق ({files}). ئۇ ئۆچۈرۈلۈپ چەكلەندى — باشقا ھۆججەتنى سىناڭ.",
+    "tgNoVideoNotRemoved": "«{title}»: چۈشۈرۈلگەن نەرسىدە سىن ھۆججىتى يوق ({files})، ئەمما ئۇنى ئاپتوماتىك ئۆچۈرگىلى بولمىدى.",
+    "tgAiredOn": "{date} قويۇلغان",
+    "tgTapToFindFiles": "ھۆججەت ئىزدەش ئۈچۈن چېكىڭ",
+    "tgWholeSeason": "پۈتۈن پەسىل",
+    "tgEpisodesMissingFindPack": "{count} بۆلۈم كەم – پەسىل بولىقى ئىزدەڭ",
+    "tgAddToSonarrTitle": "كەم بۆلۈملەرنى كۆرۈش ئۈچۈن Sonarr غا قوشۇڭ",
+    "tgAddToSonarrSubtitle": "تىياتىر قوشۇلىدۇ، ئەمما ئۆزلۈكىدىن ھېچنېمە چۈشۈرۈلمەيدۇ",
+    "tgMissingEpisodesUnavailable": "كەم بۆلۈملەرنى ھازىر كۆرسەتكىلى بولمايدۇ",
+    "tgReasonTapRetry": "{reason} · قايتا سىناش ئۈچۈن چېكىڭ",
+    "tgSeasonPackBadge": "پەسىل بولىقى",
+    "tgMonitorSeasonTitle": "{season}-پەسىلنى كۆزىتىش",
+    "tgMonitorSeasonQuestion": "Sonarr {season}-پەسىلدىكى كەم بۆلۈملەرنى ھازىر ئېلىپ كەلسۇنمۇ؟\n\nياق: پەقەت يېڭى بۆلۈملەر چىققاندا ئېلىپ كېلىنىدۇ.",
+    "tgSonarrSearchingSeason": "Sonarr {season}-پەسىلنى ئىزدەۋاتىدۇ",
+    "tgMonitored": "كۆزىتىلىۋاتىدۇ",
+    "tgNotMonitored": "كۆزىتىلمەيدۇ",
+    "tgSeasonStateLabel": "{season}-پەسىل: {state}",
+    "tgLabelMissing": "{label} كەم",
+    "tgNotAiredYet": "{code} تېخى قويۇلمىدى.",
+    "tgNotAiredYetComing": "{code} تېخى قويۇلمىدى – {date} كېلىدۇ.",
+    "tgAlreadyDownloading": "{code} ئاللىقاچان چۈشۈرۈلۈۋاتىدۇ.",
+    "tgDownloadedAppearsSoon": "{code} چۈشۈرۈلدى، ئۇزاق ئۆتمەي مېدىيا ئامبىرىدا كۆرۈنىدۇ.",
+    "tgSearchingFor": "{label} ئىزدەۋاتىدۇ …",
+    "tgSeasonLower": "{season}-پەسىل",
+    "tgWholeLabel": "پۈتۈن {label}",
+    "tgSeasonNoEpisodes": "{season}-پەسىل – مېدىيا ئامبىرىدا بۆلۈم يوق",
+    "tgNoTvdbId": "تىياتىرنىڭ TVDB id سى يوق، شۇڭا Sonarr ئۇنى تاپالمايدۇ.",
+    "tgAddingToSonarr": "Sonarr غا قوشۇۋاتىدۇ …",
+    "tgAddToSonarrFailed": "تىياتىرنى Sonarr غا قوشقىلى بولمىدى. كېيىن قايتا سىناڭ.",
+    "tgSendingToDownload": "«{label}» چۈشۈرۈشكە ئەۋەتىلىۋاتىدۇ …",
+    "tgDownloadDidNotStart": "چۈشۈرۈش باشلانمىدى: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» چۈشۈرۈلۈۋاتىدۇ ({size}). تاماملانغاندا مېدىيا ئامبىرىدا كۆرۈنىدۇ.",
+    "tgSonarrUnreachableRetry": "Sonarr غا ئۇلانغىلى بولمىدى. سەل تۇرۇپ قايتا سىناڭ.",
+    "tgNoUsableFiles": "ئىشلەتكىلى بولىدىغان ھۆججەت تېپىلمىدى. كېيىن قايتا سىناڭ – يېڭى ھۆججەتلەر كۆپىنچە بىر نەچچە سائەتتىن كېيىن چىقىدۇ.",
+    "tgFilesCount": "{count} ھۆججەت",
+    "tgFilesRecommended": "{count} ھۆججەت – {recommended} سى سۈپەت سەپلىمىسىگە ماس، قالغانلىرى ئاستىدا",
+    "tgOutsideQualityProfile": "سۈپەت سەپلىمىسىدىن سىرتتا",
+    "tgLargerThanProfile": "سەپلىمە يول قويغاندىن چوڭ",
+    "tgSmallerThanProfile": "سەپلىمە يول قويغاندىن كىچىك",
+    "tgAlreadyExists": "ئاللىقاچان بار",
+    "tgMayNotFitDisk": "دىسكىغا پاتماسلىقى مۇمكىن",
+    "tgSonarrUnreachable": "Sonarr غا ئۇلانغىلى بولمىدى",
+    "tgSonarrUnreachableAt": "{host} دىكى Sonarr غا ئۇلانغىلى بولمىدى",
+    "tgSonarrRejectedChange": "Sonarr ئۆزگەرتىشنى قوبۇل قىلمىدى",
+    "tgSeasonMonitoredNoSearch": "پەسىل كۆزىتىلىۋاتىدۇ، ئەمما Sonarr ئىزدەشنى باشلىمىدى",
+    "tgSonarrCantSearch": "Sonarr ھازىر ئىزدىيەلمىدى",
+    "tgSearchExpired": "ئىزدەش نەتىجىسىنىڭ ۋاقتى ئۆتتى – قايتا ئىزدەڭ",
+    "tgSonarrRejectedDownload": "Sonarr چۈشۈرۈشنى قوبۇل قىلمىدى (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr دا بۇ تىياتىر يوق",
+    "tgCouldNotChangeMonitoring": "كۆزىتىشنى ئۆزگەرتكىلى بولمىدى: {error}",
+    "tgJellyfinNoIds": "Jellyfin تىياتىرنى تونۇمىدى (TVDB ياكى TMDB id يوق)",
+    "tgSomethingWentWrong": "خاتالىق كۆرۈلدى: {error}",
+    "tgDeleteReadOnly": "بۇ ھۆججەتنى Radarr/Sonarr باشقۇرمايدۇ، Jellyfin نىڭ قىسقۇچقا پەقەت ئوقۇش ھوقۇقىلا بار. ئۇنى ھۆججەت باشقۇرغۇچتا ئۆچۈرۈڭ.",
+    "tgSonarrRequiredPerEpisode": "Sonarr غا ئۇلانغىلى بولمايدۇ ياكى تىياتىر ئۇنىڭغا قوشۇلمىغان. بۆلۈملەرنى ئايرىم چۈشۈرۈش ئۈچۈن Sonarr كېرەك.",
+    "tgEpisodesNotFound": "«{title}» ئۈچۈن تاللانغان بۆلۈملەر Sonarr دا تېپىلمىدى (جەمئىي {count} بۆلۈم تېپىلدى). تىياتىرنى Sonarr غا قوشۇپ قايتا سىناڭ.",
+    "tgPartOfCollectionPrefix": "بۇ توپلامنىڭ بىر قىسمى: ",
+    "tgViewingPartOf": "  ·  سىز {total} قىسىمنىڭ {current}-قىسمىنى كۆرۈۋاتىسىز",
+    "tgPartOf": "{total} قىسىمنىڭ {number}-قىسمى",
+    "tgUnknownTitle": "نامەلۇم ماۋزۇ",
+    "tgMovieCollection": "كىنو توپلىمى",
+    "tgNotReleasedYet": "«{title}» تېخى چىقمىدى",
+    "tgScreensaverModeVideo": "سىن",
+    "tgScreensaverModeLogo": "بەلگە",
+    "tgScreensaverSound": "ئېكران قوغدىغۇچ ئاۋازى",
+    "tgScreensaverSoundSubtitle": "تاقاق: ئېكران قوغدىغۇچ تونۇشتۇرمىلىرى ئاۋازسىز قويۇلىدۇ",
+    "tgScreensaverLogo": "بەلگە",
+    "tgLogoBadge": "Tortugarr بەلگىسى",
+    "tgLogoVhs": "VHS لېنتىلىرى ئۈستىدىكى توتى",
+    "tgLogoSign": "تاختا ئۈستىدىكى توتى",
+    "tgHiddenBadge": "يوشۇرۇن · {code}",
+    "tgDiskSpace": "دىسكا بوشلۇقى",
+    "tgDiskSpaceSubtitle": "يېڭى چۈشۈرۈشلەر ئۈچۈن بوشلۇق بوشىتىش",
+    "tgAdultTitle": "چوڭلار كىنولىرى (XXX)",
+    "tgAdultSubtitle": "XXX مېدىيا ئامبىرىنى كۆرسىتىش ياكى يوشۇرۇش (PIN)",
+    "tgHideForeign": "چەت ئەل مەزمۇنىنى يوشۇرۇش",
+    "tgHideForeignOn": "ئوچۇق: «قىزىق» ۋە «ئاممىباب» دا پەقەت ئىنگلىزچە، نورۋېگچە، شىۋېتچە، دانىيەچە، گېرمانچە ۋە فرانسۇزچە كۆرسىتىلىدۇ",
+    "tgHideForeignOff": "تاقاق: «قىزىق» ۋە «ئاممىباب» دا بارلىق تىللار كۆرسىتىلىدۇ",
+    "tgShowHidden": "يوشۇرۇلغانلارنى كۆرسىتىش",
+    "tgShowHiddenOn": "ئوچۇق: يوشۇرۇلىدىغان ماۋزۇلار قىزىل «يوشۇرۇن» بەلگىسى بىلەن كۆرسىتىلىدۇ",
+    "tgShowHiddenOff": "مەسىلە تەكشۈرۈش: يوشۇرۇن ماۋزۇلارنى ئۆچۈرمەي قىزىل بەلگە بىلەن كۆرسىتىش",
+    "tgShowAllSubLangs": "بارلىق ئېكران خېتى تىللىرىنى كۆرسىتىش",
+    "tgShowAllSubLangsOn": "ئوچۇق: ئېكران خېتى تىزىملىكى بارلىق تىللارنى كۆرسىتىدۇ",
+    "tgShowAllSubLangsOff": "تاقاق: ئېكران خېتى تىزىملىكى پەقەت نورۋېگچە ۋە ئىنگلىزچىنى كۆرسىتىدۇ",
+    "tgPreviewSound": "ئالدىن كۆرۈش ئاۋازى",
+    "tgPreviewSoundOn": "ئوچۇق: ماۋزۇدا توختىغاندا قويۇلىدىغان پارچىنىڭ ئاۋازى بار",
+    "tgPreviewSoundOff": "تاقاق: كۆرۈۋاتقاندا پارچىلار ئاۋازسىز قويۇلىدۇ",
+    "tgScreensaver": "ئېكران قوغدىغۇچ",
+    "tgScreensaverSubtitle": "سىن ياكى بەلگە، ئاۋاز ۋە رەسىم",
+    "tgShowMissingEpisodes": "كەم بۆلۈملەرنى كۆرسىتىش",
+    "tgShowMissingEpisodesOn": "ئوچۇق: پەسىللەر سىزدە يوق بۆلۈملەرنىمۇ كۆرسىتىدۇ، چۈشۈرۈشكە تەييار",
+    "tgShowMissingEpisodesOff": "تاقاق: پەسىللەر پەقەت سىزدە بار بۆلۈملەرنى كۆرسىتىدۇ",
+    "tgShowCollections": "كىنو توپلاملىرىنى كۆرسىتىش",
+    "tgShowCollectionsOn": "ئوچۇق: كىنولار توپلامدىكى باشقا كىنولارنى، سىزدە يوقلىرىنىمۇ كۆرسىتىدۇ",
+    "tgShowCollectionsOff": "تاقاق: كىنو بېتى توپلامنى كۆرسەتمەيدۇ",
+    "tgNoActiveDownloads": "ئاكتىپ چۈشۈرۈش يوق.",
+    "tgPickDownloadToOpen": "تەلەپلەرنى ئېچىش ئۈچۈن بىر چۈشۈرۈشنى تاللاڭ.",
+    "tgRefreshLibrary": "مېدىيا ئامبىرىنى يېڭىلاش",
+    "tgAskingJellyfinScan": "Jellyfin دىن مېدىيا ئامبىرىنى سايىلەشنى سوراۋاتىدۇ …",
+    "tgHideAll": "ھەممىنى يوشۇرۇش",
+    "tgImporting": "ئەكىرىۋاتىدۇ",
+    "tgSubsNotManaged": "بۇ ماۋزۇنى Radarr/Sonarr باشقۇرمايدۇ، شۇڭا Bazarr ئۇنىڭغا ئېكران خېتى تاپالمايدۇ.",
+    "tgBazarrUnreachable": "Bazarr غا ئۇلانغىلى بولمىدى. سەل تۇرۇپ قايتا سىناڭ.",
+    "tgSubsFoundNothing": "تېخى ھېچنېمە تېپىلمىدى. Bazarr ھەر كۈنى ئاپتوماتىك قايتا سىنايدۇ، ياكى ئۆزىڭىز تاللىسىڭىز بولىدۇ.",
+    "tgSubsFound": "{languages} تېپىلدى – ئېكران خېتى تىزىملىكىدە كۆرۈنۈشكە سەل ۋاقىت كېتىشى مۇمكىن.",
+    "tgAnd": "ۋە",
+    "tgSubsDownloaded": "چۈشۈرۈلدى – ئېكران خېتى تىزىملىكىدە كۆرۈنۈشكە سەل ۋاقىت كېتىشى مۇمكىن.",
+    "tgAskingBazarr": "Bazarr دىن سوراۋاتىدۇ …",
+    "tgHaveAll": "ھەممىسى بار",
+    "tgSearchAutoNow": "ھازىر ئاپتوماتىك ئىزدەش",
+    "tgSearchingUpToMinute": "ئىزدەۋاتىدۇ … بىر مىنۇتقىچە ۋاقىت كېتىشى مۇمكىن",
+    "tgPickYourself": "ئۆزىڭىز تاللاڭ",
+    "tgAskingProviders": "ئېكران خېتى تەمىنلىگۈچىلەردىن سوراۋاتىدۇ … بىر مىنۇتقىچە ۋاقىت كېتىشى مۇمكىن",
+    "tgNoProviderSubs": "تېخى ھېچقانداق تەمىنلىگۈچىدە بۇنىڭ ئېكران خېتى يوق.",
+    "tgLangHas": "{language}: بار",
+    "tgLangMissing": "{language}: كەم",
+    "tgNoReleaseName": "(تارقىتىش نامى يوق)",
+    "tgHearingImpaired": "{provider} · ئاڭلاش ئاجىزلار ئۈچۈن",
+    "tgLangNorwegian": "نورۋېگچە",
+    "tgLangEnglish": "ئىنگلىزچە",
+    "tgBazarrUnknownTitle": "Bazarr بۇ ماۋزۇنى تېخى بىلمەيدۇ",
+    "tgBazarrError": "Bazarr خاتالىق بىلەن جاۋاب بەردى (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: دا بوشلۇق ئاز ({free} بوش). چۈشۈرۈش توختاپ قېلىشى مۇمكىن — مۇلازىمېتىرنى باشقۇرغۇچىغا ئېيتىڭ.",
+    "tgNoQbitForSpace": "بوشلۇقنى تەكشۈرۈش ئۈچۈن qBittorrent غا ئۇلانغىلى بولمىدى",
+    "tgNotEnoughSpace": "بوشلۇق يېتەرلىك ئەمەس",
+    "tgDriveHasFree": "{drive}: دا {free} بوش",
+    "tgCopyInDownloads": "Downloads دىكى كۆپەيتىلمە · ئاللىقاچان مېدىيا ئامبىرىدا بار",
+    "tgLastWatched": "ئاخىرقى قېتىم {ago} كۆرۈلگەن",
+    "tgNeverWatchedAdded": "ھېچ كۆرۈلمىگەن · {ago} قوشۇلغان",
+    "tgNeverWatched": "ھېچ كۆرۈلمىگەن",
+    "tgNothingSafeToDelete": "{drive}: دا بىخەتەر ئۆچۈرگىلى بولىدىغان ھېچنېمە تېپىلمىدى (ھەممىسى يېقىندا قوشۇلغان، يېقىندا كۆرۈلگەن ياكى ياقتۇرۇلغان).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{1 ماۋزۇنى ئۆچۈرەمسىز؟} other{{count} ماۋزۇنى ئۆچۈرەمسىز؟}}",
+    "tgDeletedForGood": "{size} مەڭگۈلۈك ئۆچۈرۈلىدۇ. بۇنى ئەسلىگە كەلتۈرگىلى بولمايدۇ.",
+    "tgYesDelete": "ھەئە، ئۆچۈرۈش",
+    "tgDeletingProgress": "ئۆچۈرۈۋاتىدۇ {done}/{total} …",
+    "tgNowHasFree": " · {drive}: دا ھازىر {free} بوش",
+    "tgDeletedTitles": "{count, plural, one{1 ماۋزۇ ئۆچۈرۈلدى} other{{count} ماۋزۇ ئۆچۈرۈلدى}}{extra}",
+    "tgDeletedFailed": "{count} ئۆچۈرۈلدى، مەغلۇپ بولغىنى: {failed}{extra}",
+    "tgFreeGb": "{gb} GB بوشىتىش",
+    "tgDownloadCopies": "چۈشۈرۈش كۆپەيتىلمىلىرى",
+    "tgLookingForUnwatched": "ئۇزۇندىن بېرى كۆرۈلمىگەنلەرنى ئىزدەۋاتىدۇ …",
+    "tgSuggestionEnough": "تەۋسىيە: {size} · بوشلۇق يېتەرلىك ✓",
+    "tgSuggestionOf": "تەۋسىيە: كېرەكلىك {target} دىن {size}",
+    "tgPickToSayNo": "رەت قىلىش ئۈچۈن بىرنى تاللاڭ — كېيىنكى تەۋسىيە ئاپتوماتىك كېلىدۇ.",
+    "tgOtherCandidates": "باشقا تاللانمىلار",
+    "tgDownloadAnyway": "يەنىلا چۈشۈرۈش",
+    "tgDeleteCountSize": "{count} نى ئۆچۈرۈش ({size})",
+    "tgDriveHasFreeDot": "{drive}: دا {free} بوش.",
+    "tgFileDoubleSpace": "ھۆججەت {size} بولۇپ، ئىككى ھەسسە بوشلۇق ئىگىلەيدۇ (چۈشۈرۈش + مېدىيا ئامبىرىدىكى كۆپەيتىلمە)، يەنە {buffer} زاپاس.",
+    "tgFileSize": "ھۆججەت {size}، يەنە {buffer} زاپاس.",
+    "tgPendingNeeds": "داۋاملىشىۋاتقان چۈشۈرۈشلەرگە يەنە {size} كېرەك.",
+    "tgShortBy": "{size} كەم.",
+    "tgOnlyEarlyFiles": "پەقەت كىنو رەقەملىك تارقىتىلىشتىن بۇرۇن ئېلان قىلىنغان ھۆججەتلەرلا تېپىلدى ({count}) — ئۇلار دېگۈدەك ھەمىشە ساختا.",
+    "tgNoDigitalDate": "نىڭ تېخى رەقەملىك تارقىتىلىش ۋاقتى يوق",
+    "tgDigitalOn": "{date} رەقەملىك تارقىتىلىدۇ",
+    "tgNotOutDigitally": "تېخى رەقەملىك تارقىتىلمىدى",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "ھازىر بار بولغىنى ئادەتتە كىنوخانىدا خاتىرىلەنگەن نۇسخا ياكى ئوخشاش ناملىق باشقا كىنو. بەزىدە تۆۋەن سۈپەتلىك بالدۇرقى نۇسخا بولىدۇ، كۆپىنچە ئېكران خېتى سىڭدۈرۈلگەن. «يەنىلا ھۆججەتلەرنى كۆرسىتىش» نېمە بارلىقىنى كۆرسىتىدۇ. توغرا نۇسخا چىققاندا Radarr ئۇنى ئۆزلۈكىدىن ئېلىپ كېلىدۇ.",
+    "tgShowFilesAnyway": "يەنىلا ھۆججەتلەرنى كۆرسىتىش",
+    "tgPickSeasonsEpisodes": "پەسىل ۋە بۆلۈملەرنى تاللاڭ",
+    "tgNoEpisodeInfo": "{season}: بۆلۈم ئۇچۇرى يوق",
+    "tgAppliesAllDevices": "بۇ ھېساباتنى ئىشلىتىدىغان بارلىق ئۈسكۈنىلەرگە ماس كېلىدۇ",
+    "tgNoXxxLibrary": "XXX ناملىق مېدىيا ئامبىرى تېپىلمىدى.",
+    "tgSearchingEachWord": "ھەر بىر سۆزنى ئايرىم ئىزدەۋاتىدۇ … (يېرىم مىنۇت كېتىشى مۇمكىن)",
+    "tgSentToQbit": "«{title}» ({size}) qBittorrent غا ئەۋەتىلدى",
+    "tgDownloadFailed": "چۈشۈرۈش مەغلۇپ بولدى: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» دا سىن ھۆججىتى يوق ئىدى، ئۇ ئۆچۈرۈلدى.",
+    "tgXxxNoVideoNotRemoved": "«{title}» دا سىن ھۆججىتى يوق ئىدى، ئۇ ئۆچۈرۈلمىدى.",
+    "tgSearchNewXxx": "يېڭى XXX ئىزدەش",
+    "tgXxxSearchHint": "ئىسىم، ستۇدىيە …",
+    "tgChecking": "تەكشۈرۈۋاتىدۇ …",
+    "tgXxxVisible": "ھازىر كۆرۈنىدۇ. XXX مېدىيا ئامبارلىرى، ئىزدەش ۋە باش ئېكراندا كۆرۈنىدۇ.",
+    "tgXxxHidden": "يوشۇرۇن. XXX ئەپنىڭ ھېچ يېرىدە كۆرۈنمەيدۇ.",
+    "tgShowWithPin": "كۆرسىتىش (PIN)",
+    "tgChangePin": "PIN نى ئۆزگەرتىش",
+    "tgNoLibraryList": "مېدىيا ئامبىرى تىزىملىكىنى ئالغىلى بولمىدى (HTTP {code})",
+    "tgNoUserSettings": "ئىشلەتكۈچى تەڭشەكلىرىنى ئالغىلى بولمىدى (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin ئۆزگەرتىشنى رەت قىلدى (HTTP {code})",
+    "tgDeleteFailed": "ئۆچۈرۈش مەغلۇپ بولدى (HTTP {code})",
+    "tgXxxAddFailed": "«{title}» نى qBittorrent غا قوشقىلى بولمىدى",
+    "tgSeasonEpisodeLower": "{season}-پەسىل، {episode}-بۆلۈم",
+    "tgSearchInSeerr": "Seerr دا ئىزدەش",
+    "tgSeerrSearchHint": "كىنو ۋە تىياتىر ئىزدەڭ (مەسىلەن «Lost S02E05»)",
+    "tgMissingInThisSeason": "بۇ پەسىلدە كەم",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{كەم پەسىل} other{كەم پەسىللەر}} {list} - بارلىق پەسىللەرنى كۆرۈش ئۈچۈن تىياتىرنى ئېچىڭ",
+    "tgProjectOnGitHub": "GitHub دىكى Tortugarr",
+    "tgProjectOnGitHubSubtitle": "مەنبە كودى، نەشرلەر ۋە مەسىلىلەر",
+    "tgBuiltOnMoonfinCredit": "Tortugarr Moonfin ئاچقۇچىلىرىنىڭ Moonfin (GPL) ئاساسىدا قۇرۇلغان.",
+    "tgCredits": "رەھمەتنامە",
+    "tgCreditsThanks": "كەمتەرلىك بىلەن رەھمەت: بۇ تۈرلەر ۋە ئۇلارنىڭ ئارقىسىدىكى كىشىلەر بولمىغان بولسا، Tortugarr مەۋجۇت بولمايتتى.",
+    "tgCreditMoonfin": "Tortugarr ئاساسلانغان ئەپ (GPL)",
+    "tgCreditJellyfin": "مېدىيا مۇلازىمېتىرى",
+    "tgCreditSeerr": "بايقاش ۋە تەلەپلەر",
+    "tgCreditRadarr": "كىنولار",
+    "tgCreditSonarr": "تىياتىرلار",
+    "tgCreditProwlarr": "ئىندېكسلىغۇچ باشقۇرغۇچ",
+    "tgCreditBazarr": "ئېكران خېتى",
+    "tgCreditFlareSolverr": "ئىندېكسلىغۇچلار ئۈچۈن Cloudflare ياردەمچىسى",
+    "tgCreditQbittorrent": "چۈشۈرۈش خېرىدارى، قاچىلىغۇچنىڭ كۆڭۈلدىكىسى",
+    "tgCreditTmdb": "كىنو ۋە تىياتىر ئۇچۇرلىرى، ئېلانلار ۋە رەسىملەر",
+    "tgCreditOpenSubtitles": "ئېكران خېتى، Bazarr ئارقىلىق ئېلىنىدۇ",
+    "tgTmdbNotice": "بۇ مەھسۇلات TMDB API نى ئىشلىتىدۇ، ئەمما TMDB تەرىپىدىن تەستىقلانمىغان ياكى گۇۋاھلاندۇرۇلمىغان.",
+    "tgLoadingLogoSize": "يۈكلەش بەلگىسىنىڭ چوڭلۇقى",
+    "tgLoadingLogoSizeSubtitle": "سىن يۈكلىنىۋاتقاندا ئايلىنىدىغان بەلگە",
+    "tgSubtitleLanguages": "خەت تىلى",
+    "tgSubtitleLanguagesSubtitle": "خەت تىزىملىكىدە كۆرسىتىلىدۇ: {languages}",
+    "tgShowAllSubLangsOffChosen": "تاقاق: خەت تىزىملىكى پەقەت سىز تاللىغان تىللارنىلا كۆرسىتىدۇ",
+    "tgDiscoveryLanguages": "ئالقىشلىق ۋە مەشھۇر بۆلىكىدىكى تىللار",
+    "tgDiscoveryLanguagesSubtitle": "كۆرسىتىلىدۇ: {languages}",
+    "tgHideForeignOnChosen": "ئوچۇق: ئالقىشلىق ۋە مەشھۇر پەقەت سىز تاللىغان تىللارنىلا كۆرسىتىدۇ",
+    "tgShowLanguageBadges": "تىل بەلگىسىنى كۆرسەت",
+    "tgShowLanguageBadgesOn": "ئوچۇق: ماۋزۇلار ئۆز تىلىنى كۆرسىتىدۇ (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "تاقاق: ماۋزۇلاردا تىل بەلگىسى يوق"
 }

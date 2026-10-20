@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#0a0a0a</color>
+    <color name="ic_launcher_background">#73533C</color>
+    <!-- In-app window and splash background; kept black (was ic_launcher_background). -->
+    <color name="app_window_background">#0a0a0a</color>
+    <!-- Brand colour Google TV / Android may use for the app tile. -->
+    <color name="tortugarr_brand">#73533C</color>
 </resources>

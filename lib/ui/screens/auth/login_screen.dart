@@ -709,7 +709,7 @@ class _LoginScreenState extends State<LoginScreen> {
         maxWidth: _quickConnectQrBeside ? 900 : 600,
         header: Padding(
           padding: const EdgeInsets.only(bottom: 24),
-          child: Image.asset('assets/images/logo_and_text.png', height: 64),
+          child: Image.asset('assets/images/logo_and_text.png', height: 120),
         ),
         footer: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
@@ -974,6 +974,21 @@ class _LoginScreenState extends State<LoginScreen> {
               context,
             ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.5)),
           ),
+          // The server's login disclaimer (Dashboard > Branding), as on the
+          // user-select screen.
+          if (_server?.loginDisclaimer?.isNotEmpty ?? false) ...[
+            const SizedBox(height: 16),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560),
+              child: Text(
+                _server!.loginDisclaimer!,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: _loginForeground(0.7)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ] else ...[
           if (_errorMessage == null)
             const CircularProgressIndicator(),

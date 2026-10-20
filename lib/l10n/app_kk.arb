@@ -1,6 +1,6 @@
 {
     "@@locale": "kk",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin нұсқасы {version}",
+    "appVersionFooter": "Tortugarr нұсқасы {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin жүйе кілттеріне қол жеткізе алмады. Жүйеге кіруді жалғастыруға болады, бірақ кілт сақинасының құлпы ашылғанша қауіпсіз таңбалауыш қоймасы қолжетімсіз болуы мүмкін.",
+    "secureStorageUnavailableMessage": "Tortugarr жүйе кілттеріне қол жеткізе алмады. Жүйеге кіруді жалғастыруға болады, бірақ кілт сақинасының құлпы ашылғанша қауіпсіз таңбалауыш қоймасы қолжетімсіз болуы мүмкін.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Қолданбаны қайта іске қоспай, Moonfin және Neon Pulse арасында ауысыңыз",
+    "settingsAppearanceThemeSubtitle": "Қолданбаны қайта іске қоспай, Tortugarr және Neon Pulse арасында ауысыңыз",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Ағымдағы Moonfin келбеті бәріңізге ұнады",
+    "themeMoonfinSubtitle": "Ағымдағы Tortugarr келбеті бәріңізге ұнады",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неон импульсі",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin шығу керек пе?",
+    "exitApp": "Tortugarr шығу керек пе?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Орнатылмаған. Moonfin қолданба/деректер қалталарында әдепкі mpv.conf файлын қолданып көреді.",
+    "notSetMpvConf": "Орнатылмаған. Tortugarr қолданба/деректер қалталарында әдепкі mpv.conf файлын қолданып көреді.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Жүктеулер/Moonfin — басқа қолданбаларға көрінеді",
+    "downloadsVisibleToOtherApps": "Жүктеулер/Tortugarr — басқа қолданбаларға көрінеді",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Жүктеп алынған медиа құрылғыңыздағы Жүктеулер/Moonfin ішіне сақталады. Бұл файлдар галерея немесе музыка ойнатқышы сияқты басқа қолданбаларға көрінеді.\n\nБар жүктеп алынған файлдар ағымдағы орнында қалады.",
+    "saveToDownloadsFolderDescription": "Жүктеп алынған медиа құрылғыңыздағы Жүктеулер/Tortugarr ішіне сақталады. Бұл файлдар галерея немесе музыка ойнатқышы сияқты басқа қолданбаларға көрінеді.\n\nБар жүктеп алынған файлдар ағымдағы орнында қалады.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Әрбір кітапхананың басты бетінің көріну мүмкіндігін ауыстырып-қосқыш. Өзгерістердің күшіне енуі үшін Moonfin қолданбасын қайта іске қосыңыз.",
+    "libraryVisibilityDescription": "Әрбір кітапхананың басты бетінің көріну мүмкіндігін ауыстырып-қосқыш. Өзгерістердің күшіне енуі үшін Tortugarr қолданбасын қайта іске қосыңыз.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin ойынында ойнаңыз",
+    "playInMoonfin": "Tortugarr ойынында ойнаңыз",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Сұраған: {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Элемент Moonfin кітапханасынан табылмады",
+    "itemNotFoundInLibrary": "Элемент Tortugarr кітапханасынан табылмады",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Серверді қайта жүктеу орындалуда",
-    "adminServerRebootMessage": "Сервер қайта жүктелуде, Moonfin қайта іске қосыңыз",
+    "adminServerRebootMessage": "Сервер қайта жүктелуде, Tortugarr қайта іске қосыңыз",
     "adminActiveSessions": "Белсенді сессиялар",
     "adminSessionsLoadFailed": "Сеанстарды жүктеу сәтсіз аяқталды",
     "adminNoActiveSessions": "Белсенді сеанстар жоқ",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Шарлау жолағында жанрлар түймесін көрсетіңіз",
     "settingsShowFavoritesButtonInNavigation": "Навигация жолағында таңдаулылар түймесін көрсетіңіз",
     "settingsShowLibrariesButtonInNavigation": "Шарлау жолағында кітапханалар түймесін көрсетіңіз",
-    "settingsLibraryVisibilitySubtitle": "Әрбір кітапхананың басты бетінің көріну мүмкіндігін ауыстырып-қосқыш. Өзгерістердің күшіне енуі үшін Moonfin қолданбасын қайта іске қосыңыз.",
+    "settingsLibraryVisibilitySubtitle": "Әрбір кітапхананың басты бетінің көріну мүмкіндігін ауыстырып-қосқыш. Өзгерістердің күшіне енуі үшін Tortugarr қолданбасын қайта іске қосыңыз.",
     "settingsMediaBarAndLocalPreviews": "Медиа жолағы және жергілікті алдын ала қараулар",
     "settingsVisualOverlays": "Көрнекі қабаттасулар",
     "settingsSeasonalSurprise": "Маусымдық тосынсый",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Discord-қа қосылыңыз",
     "settingsJoinDiscordSubtitle": "Қауымдастықпен сөйлесу",
     "settingsJoinTheDiscord": "Discord қосылыңыз",
-    "settingsSupportMoonfin": "Қолдау Moonfin",
+    "settingsSupportMoonfin": "Қолдау Tortugarr",
     "settingsLegal": "ЗАҢДЫ",
     "settingsLicenses": "Лицензиялар",
     "settingsOpenSourceLicenseNotices": "Ашық бастапқы лицензия туралы ескертулер",
     "settingsPrivacyPolicy": "Құпиялылық саясаты",
-    "settingsPrivacyPolicySubtitle": "Moonfin деректеріңізді қалай өңдейді",
+    "settingsPrivacyPolicySubtitle": "Tortugarr деректеріңізді қалай өңдейді",
     "settingsCheckForUpdates": "Жаңартуларды тексеріңіз",
-    "settingsCheckForUpdatesSubtitle": "Соңғы Moonfin шығарылымын тексеріңіз",
+    "settingsCheckForUpdatesSubtitle": "Соңғы Tortugarr шығарылымын тексеріңіз",
     "settingsPoweredByFlutter": "Flutter арқылы қуатталған",
     "settingsLicenseNoticesCount": "{count, plural, one {# лицензиялық ескертпе} other {# лицензиялық ескертпе}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Сақталған тақырыптар",
-    "savedThemesDescription": "Бұл — ағымдағы сервер үшін Moonfin плагинінен жүктелген тақырыптар. Жою тек осы жергілікті көшірмені өшіреді.",
+    "savedThemesDescription": "Бұл — ағымдағы сервер үшін Tortugarr плагинінен жүктелген тақырыптар. Жою тек осы жергілікті көшірмені өшіреді.",
     "savedThemesEmpty": "Бұл сервер үшін сақталған тақырыптар табылмады.",
     "savedThemesCurrentThemeId": "{themeId} • Қазір белсенді",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Сақталған тақырыпты жою",
     "savedThemesManageSubtitle": "Осы құрылғыда жүктелген плагин тақырыптарын басқару",
     "themeEditor": "Тақырып өңдегіші",
-    "themeEditorSubtitle": "Браузерде Moonfin тақырып өңдегішін ашу",
+    "themeEditorSubtitle": "Браузерде Tortugarr тақырып өңдегішін ашу",
     "homeScreen": "Негізгі экран",
     "bottomBar": "Төменгі жолақ",
     "homeRowsStyleClassic": "Классикалық",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH субтитрлерін таңдау",
     "preferSdhSubtitlesSubtitle": "Автоматты таңдау кезінде SDH/CC субтитр тректеріне басымдық беру.",
     "webDiagnostics": "Веб-диагностика",
-    "webDiagnosticsTitle": "Moonfin веб-диагностикасы",
+    "webDiagnosticsTitle": "Tortugarr веб-диагностикасы",
     "webDiagnosticsIntro": "Браузердің қосылым мәселелерін (CORS, аралас мазмұн және табу параметрлері) диагностикалау үшін осы бетті пайдаланыңыз.",
     "webDiagnosticsDetectedMixedContentFailure": "Аралас мазмұн қатесі анықталды",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Preflight қатесі анықталды",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin HTTPS бетінің HTTP сервер URL-іне қоңырау шалу әрекетін анықтады. Браузерлер бұл сұранысты серверіңізге жетпей тұрып бұғаттайды.",
-    "webDiagnosticsCorsFailureBody": "Moonfin браузер деңгейіндегі сұраныс қатесін анықтады, ол әдетте медиасервердегі CORS немесе preflight тақырыптарының болмауынан туындайды.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr HTTPS бетінің HTTP сервер URL-іне қоңырау шалу әрекетін анықтады. Браузерлер бұл сұранысты серверіңізге жетпей тұрып бұғаттайды.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr браузер деңгейіндегі сұраныс қатесін анықтады, ол әдетте медиасервердегі CORS немесе preflight тақырыптарының болмауынан туындайды.",
     "webDiagnosticsTargetUrl": "Мақсатты URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "конфигурацияланбаған",
     "webDiagnosticsMixedContent": "Аралас мазмұн",
     "webDiagnosticsMixedContentDetected": "Бұл бет HTTPS арқылы жүктелген, бірақ бір немесе бірнеше конфигурацияланған URL — HTTP. Браузерлер HTTPS беттеріне HTTP API-ге қоңырау шалуды бұғаттайды.",
-    "webDiagnosticsMixedContentFix": "Түзету: медиасерверіңізді немесе прокси нүктеңізді HTTPS арқылы ұсыныңыз, немесе Moonfin-ді HTTP арқылы тек сенімді жергілікті желілерде жүктеңіз.",
+    "webDiagnosticsMixedContentFix": "Түзету: медиасерверіңізді немесе прокси нүктеңізді HTTPS арқылы ұсыныңыз, немесе Tortugarr-ді HTTP арқылы тек сенімді жергілікті желілерде жүктеңіз.",
     "webDiagnosticsNoMixedContentDetected": "Ағымдағы орындалу параметрлерінен айқын аралас мазмұн конфигурациясы анықталмады.",
     "webDiagnosticsCorsChecklist": "CORS тексеру тізімі",
     "webDiagnosticsCorsChecklistItem1": "• Браузердің бастапқы көзіне Access-Control-Allow-Origin ішінде рұқсат етіңіз.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "«Классикалық» — Moonfin бағдарламасының бастапқы, ортаға тураланған қалыбы. «Заманауи» — бейімделгіш кинематографиялық қалып.",
+    "detailScreenStyleSubtitle": "«Классикалық» — Tortugarr бағдарламасының бастапқы, ортаға тураланған қалыбы. «Заманауи» — бейімделгіш кинематографиялық қалып.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Moonfin ұсынады жергілікті кітапхана алгоритмін немесе TMDb ұсынатын желілік ұқсастық метрикаларын пайдаланыңыз. Ескертпе: желілік ұсыныстар Seerr интеграциясын талап етеді.",
+    "recommendationSystemSubtitle": "Tortugarr ұсынады жергілікті кітапхана алгоритмін немесе TMDb ұсынатын желілік ұқсастық метрикаларын пайдаланыңыз. Ескертпе: желілік ұсыныстар Seerr интеграциясын талап етеді.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin ұсынады",
+    "recommendationSystemMoonfin": "Tortugarr ұсынады",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ұқсастығы",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Moonfin ұсынады тізіміндегі ұсыныстарды таңдалған медиафайлдың жас шектеуі бойынша шектеу",
+    "recommendationsApplyParentalRatingCapSubtitle": "Tortugarr ұсынады тізіміндегі ұсыныстарды таңдалған медиафайлдың жас шектеуі бойынша шектеу",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Жеке тақырыптар Moonfin бойынша визуалды элементтерді өзгертеді. Өз стиліңізге сай нұсқаны таңдаңыз.",
+    "customThemeSubtitle": "Жеке тақырыптар Tortugarr бойынша визуалды элементтерді өзгертеді. Өз стиліңізге сай нұсқаны таңдаңыз.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Телефоныңызда Moonfin-ге кіріңіз",
+    "carSignInPrompt": "Телефоныңызда Tortugarr-ге кіріңіз",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller — плавнырақ анимациялар мен азырақ кідірістер үшін Flutter-дің заманауи GPU рендерері. Кейбір ТД-приставкаларда және ескі GPU-ларда ол ақаулар немесе қара бейне тудыруы мүмкін; мұны көрсеңіз, өшіріңіз. «Автоматты» құрылғыңызға ең қолайлы әдепкіні таңдайды. Қолдану үшін Moonfin-ді қайта іске қосыңыз.",
+    "impellerRenderingSubtitle": "Impeller — плавнырақ анимациялар мен азырақ кідірістер үшін Flutter-дің заманауи GPU рендерері. Кейбір ТД-приставкаларда және ескі GPU-ларда ол ақаулар немесе қара бейне тудыруы мүмкін; мұны көрсеңіз, өшіріңіз. «Автоматты» құрылғыңызға ең қолайлы әдепкіні таңдайды. Қолдану үшін Tortugarr-ді қайта іске қосыңыз.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Рендеринг қозғалтқышын өзгерту үшін Moonfin-ді қайта іске қосу қажет. Қолдану үшін қолданбаны қазір жауып, содан кейін қайта ашыңыз.",
+    "impellerRestartMessage": "Рендеринг қозғалтқышын өзгерту үшін Tortugarr-ді қайта іске қосу қажет. Қолдану үшін қолданбаны қазір жауып, содан кейін қайта ашыңыз.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "IMDb ең танымал фильмдер",
     "imdbMostPopularTvShows": "IMDb ең танымал сериалдар",
     "imdbLowestRatedMovies": "IMDb ең төмен бағаланған фильмдер",
-    "imdbTopEnglishMovies": "IMDb ең жоғары бағаланған ағылшын фильмдері"
+    "imdbTopEnglishMovies": "IMDb ең жоғары бағаланған ағылшын фильмдері",
+    "tgMissing": "Жоқ",
+    "tgComing": "Жақында",
+    "tgComingOn": "{date} шығады",
+    "tgDownloading": "Жүктелуде",
+    "tgReadySoon": "Жақында дайын болады",
+    "tgRequested": "Сұратылды",
+    "tgClose": "Жабу",
+    "tgCancel": "Болдырмау",
+    "tgBack": "Артқа",
+    "tgYes": "Иә",
+    "tgNo": "Жоқ",
+    "tgSearch": "Іздеу",
+    "tgHide": "Жасыру",
+    "tgAll": "Барлығы",
+    "tgNone": "Ештеңе",
+    "tgMovies": "Фильмдер",
+    "tgSeries": "Сериалдар",
+    "tgMovieTag": "Фильм",
+    "tgSeriesTag": "Сериал",
+    "tgCanTakeAMinute": "Бір минутқа дейін уақыт алуы мүмкін",
+    "tgToday": "бүгін",
+    "tgYesterday": "кеше",
+    "tgDaysAgo": "{days} күн бұрын",
+    "tgMonthsAgo": "{months} ай бұрын",
+    "tgYearsAgo": "{years} жыл бұрын",
+    "tgYearsMonthsAgo": "{years} жыл {months} ай бұрын",
+    "tgFindSubtitles": "Субтитр табу",
+    "tgFreeUpSpace": "Орын босату",
+    "tgDownloads": "Жүктеулер",
+    "tgDownloadsCount": "Жүктеулер ({count})",
+    "tgNoVideoRemoved": "«{title}»: жүктеуде бейне файл болмады ({files}). Ол жойылып, бұғатталды — басқа файлды байқап көріңіз.",
+    "tgNoVideoNotRemoved": "«{title}»: жүктеуде бейне файл болмады ({files}), бірақ оны автоматты түрде жою мүмкін болмады.",
+    "tgAiredOn": "Эфир: {date}",
+    "tgTapToFindFiles": "Файлдарды табу үшін басыңыз",
+    "tgWholeSeason": "Толық маусым",
+    "tgEpisodesMissingFindPack": "{count} эпизод жоқ — толық маусымды табу",
+    "tgAddToSonarrTitle": "Жоқ эпизодтарды көру үшін Sonarr-ға қосыңыз",
+    "tgAddToSonarrSubtitle": "Сериал ештеңе жүктемей қосылады",
+    "tgMissingEpisodesUnavailable": "Жоқ эпизодтарды қазір көрсету мүмкін емес",
+    "tgReasonTapRetry": "{reason} · Қайталау үшін басыңыз",
+    "tgSeasonPackBadge": "Толық маусым",
+    "tgMonitorSeasonTitle": "{season}-маусымды бақылау",
+    "tgMonitorSeasonQuestion": "Sonarr {season}-маусымның жоқ эпизодтарын қазір жүктесін бе?\n\nЖоқ: тек жаңа эпизодтар шыққан кезде жүктеледі.",
+    "tgSonarrSearchingSeason": "Sonarr {season}-маусымды іздеп жатыр",
+    "tgMonitored": "Бақылануда",
+    "tgNotMonitored": "Бақыланбайды",
+    "tgSeasonStateLabel": "{season}-маусым: {state}",
+    "tgLabelMissing": "{label} жоқ",
+    "tgNotAiredYet": "{code} әлі шықпаған.",
+    "tgNotAiredYetComing": "{code} әлі шықпаған — {date} шығады.",
+    "tgAlreadyDownloading": "{code} жүктеліп жатыр.",
+    "tgDownloadedAppearsSoon": "{code} жүктелді, жақында медиатекада пайда болады.",
+    "tgSearchingFor": "Ізделуде: {label} …",
+    "tgSeasonLower": "{season}-маусым",
+    "tgWholeLabel": "Толық {label}",
+    "tgSeasonNoEpisodes": "{season}-маусым — медиатекада эпизод жоқ",
+    "tgNoTvdbId": "Сериалдың TVDB id-і жоқ, сондықтан Sonarr оны таба алмайды.",
+    "tgAddingToSonarr": "Sonarr-ға қосылуда …",
+    "tgAddToSonarrFailed": "Сериалды Sonarr-ға қосу мүмкін болмады. Кейінірек қайталап көріңіз.",
+    "tgSendingToDownload": "«{label}» жүктеуге жіберілуде …",
+    "tgDownloadDidNotStart": "Жүктеу басталмады: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» жүктелуде ({size}). Аяқталған соң медиатекада пайда болады.",
+    "tgSonarrUnreachableRetry": "Sonarr-ға қосылу мүмкін болмады. Сәлден кейін қайталап көріңіз.",
+    "tgNoUsableFiles": "Жарамды файлдар табылмады. Кейінірек қайталап көріңіз — жаңалары көбіне бірнеше сағаттан кейін шығады.",
+    "tgFilesCount": "{count} файл",
+    "tgFilesRecommended": "{count} файл — {recommended} сапа профиліне сәйкес, қалғандары төменде",
+    "tgOutsideQualityProfile": "Сапа профилінен тыс",
+    "tgLargerThanProfile": "Профиль рұқсат еткеннен үлкен",
+    "tgSmallerThanProfile": "Профиль рұқсат еткеннен кіші",
+    "tgAlreadyExists": "Бұрыннан бар",
+    "tgMayNotFitDisk": "Дискіге сыймауы мүмкін",
+    "tgSonarrUnreachable": "Sonarr-ға қосылу мүмкін болмады",
+    "tgSonarrUnreachableAt": "{host} мекенжайындағы Sonarr-ға қосылу мүмкін болмады",
+    "tgSonarrRejectedChange": "Sonarr өзгерісті қабылдамады",
+    "tgSeasonMonitoredNoSearch": "Маусым бақылануда, бірақ Sonarr іздеуді бастамады",
+    "tgSonarrCantSearch": "Sonarr қазір іздей алмайды",
+    "tgSearchExpired": "Іздеу нәтижесінің мерзімі өтті — қайта іздеңіз",
+    "tgSonarrRejectedDownload": "Sonarr жүктеуді қабылдамады (HTTP {status})",
+    "tgSonarrNoSeries": "Бұл сериал Sonarr-да жоқ",
+    "tgCouldNotChangeMonitoring": "Бақылауды өзгерту мүмкін болмады: {error}",
+    "tgJellyfinNoIds": "Jellyfin сериалды танымады (TVDB немесе TMDB id жоқ)",
+    "tgSomethingWentWrong": "Бірдеңе дұрыс болмады: {error}",
+    "tgDeleteReadOnly": "Файлды Radarr/Sonarr басқармайды, ал Jellyfin-де қалтаға тек оқу рұқсаты бар. Оны файл менеджерінде жойыңыз.",
+    "tgSonarrRequiredPerEpisode": "Sonarr қолжетімсіз немесе сериал онда қосылмаған. Эпизодтарды жеке жүктеу үшін Sonarr қажет.",
+    "tgEpisodesNotFound": "«{title}» үшін таңдалған эпизодтар Sonarr-да табылмады (барлығы {count} эпизод табылды). Сериалды Sonarr-ға қосып, қайталап көріңіз.",
+    "tgPartOfCollectionPrefix": "Жинақтың бөлігі: ",
+    "tgViewingPartOf": "  ·  сіз {total} бөліктің {current}-бөлігін көріп жатырсыз",
+    "tgPartOf": "{total} бөліктің {number}-бөлігі",
+    "tgUnknownTitle": "Атауы белгісіз",
+    "tgMovieCollection": "Фильмдер жинағы",
+    "tgNotReleasedYet": "«{title}» әлі шықпаған",
+    "tgScreensaverModeVideo": "Бейне",
+    "tgScreensaverModeLogo": "Логотип",
+    "tgScreensaverSound": "Скринсейвер дыбысы",
+    "tgScreensaverSoundSubtitle": "Өшірулі: скринсейвердегі трейлерлер дыбыссыз ойнатылады",
+    "tgScreensaverLogo": "Логотип",
+    "tgLogoBadge": "Tortugarr белгісі",
+    "tgLogoVhs": "VHS кассеталарындағы тотықұс",
+    "tgLogoSign": "Маңдайшадағы тотықұс",
+    "tgHiddenBadge": "ЖАСЫРЫЛҒАН · {code}",
+    "tgDiskSpace": "Дискідегі орын",
+    "tgDiskSpaceSubtitle": "Жаңа жүктеулер үшін орын босату",
+    "tgAdultTitle": "Ересектерге арналған фильмдер (XXX)",
+    "tgAdultSubtitle": "XXX медиатекасын көрсету немесе жасыру (PIN)",
+    "tgHideForeign": "Шетелдік контентті жасыру",
+    "tgHideForeignOn": "Қосулы: «Трендте» және «Танымал» тек ағылшын, норвег, швед, дат, неміс және француз тілдерін көрсетеді",
+    "tgHideForeignOff": "Өшірулі: «Трендте» және «Танымал» барлық тілдерді көрсетеді",
+    "tgShowHidden": "Жасырылғанды көрсету",
+    "tgShowHiddenOn": "Қосулы: жасырылуы тиіс атаулар қызыл ЖАСЫРЫЛҒАН белгісімен көрсетіледі",
+    "tgShowHiddenOff": "Ақауларды жою: жасырылған атауларды алып тастаудың орнына қызыл белгімен көрсету",
+    "tgShowAllSubLangs": "Барлық субтитр тілдерін көрсету",
+    "tgShowAllSubLangsOn": "Қосулы: субтитр мәзірінде барлық тілдер көрсетіледі",
+    "tgShowAllSubLangsOff": "Өшірулі: субтитр мәзірінде тек норвег және ағылшын тілдері көрсетіледі",
+    "tgPreviewSound": "Алдын ала көру дыбысы",
+    "tgPreviewSoundOn": "Қосулы: атауда тоқтағанда ойнатылатын клип дыбыспен ойнайды",
+    "tgPreviewSoundOff": "Өшірулі: шолу кезінде клиптер дыбыссыз ойнатылады",
+    "tgScreensaver": "Скринсейвер",
+    "tgScreensaverSubtitle": "Бейне немесе логотип, дыбыс және сурет",
+    "tgShowMissingEpisodes": "Жоқ эпизодтарды көрсету",
+    "tgShowMissingEpisodesOn": "Қосулы: маусымдарда сізде жоқ эпизодтар жүктеуге дайын көрсетіледі",
+    "tgShowMissingEpisodesOff": "Өшірулі: маусымдарда тек сізде бар эпизодтар көрсетіледі",
+    "tgShowCollections": "Фильмдер жинақтарын көрсету",
+    "tgShowCollectionsOn": "Қосулы: фильм бетінде жинақтағы басқа фильмдер, соның ішінде сізде жоқтары көрсетіледі",
+    "tgShowCollectionsOff": "Өшірулі: фильм бетінде жинақ көрсетілмейді",
+    "tgNoActiveDownloads": "Белсенді жүктеулер жоқ.",
+    "tgPickDownloadToOpen": "Сұраныстарды ашу үшін жүктеуді таңдаңыз.",
+    "tgRefreshLibrary": "Медиатеканы жаңарту",
+    "tgAskingJellyfinScan": "Jellyfin-ге медиатеканы сканерлеу сұралуда …",
+    "tgHideAll": "Барлығын жасыру",
+    "tgImporting": "Импорттау",
+    "tgSubsNotManaged": "Бұл атауды Radarr/Sonarr басқармайды, сондықтан Bazarr оған субтитр таба алмайды.",
+    "tgBazarrUnreachable": "Bazarr-ға қосылу мүмкін болмады. Сәлден кейін қайталап көріңіз.",
+    "tgSubsFoundNothing": "Әзірге ештеңе табылмады. Bazarr күн сайын автоматты түрде қайта іздейді немесе өзіңіз таңдай аласыз.",
+    "tgSubsFound": "{languages} табылды — субтитр мәзірінде пайда болуына біраз уақыт кетуі мүмкін.",
+    "tgAnd": "және",
+    "tgSubsDownloaded": "Жүктелді — субтитр мәзірінде пайда болуына біраз уақыт кетуі мүмкін.",
+    "tgAskingBazarr": "Bazarr-дан сұралуда …",
+    "tgHaveAll": "Барлығы бар",
+    "tgSearchAutoNow": "Қазір автоматты іздеу",
+    "tgSearchingUpToMinute": "Ізделуде … бір минутқа дейін уақыт алуы мүмкін",
+    "tgPickYourself": "Өзіңіз таңдау",
+    "tgAskingProviders": "Субтитр көздерінен сұралуда … бір минутқа дейін уақыт алуы мүмкін",
+    "tgNoProviderSubs": "Бұған әзірге ешбір көзде субтитр жоқ.",
+    "tgLangHas": "{language}: бар",
+    "tgLangMissing": "{language}: жоқ",
+    "tgNoReleaseName": "(релиз атауы жоқ)",
+    "tgHearingImpaired": "{provider} · есту қабілеті нашарлар үшін",
+    "tgLangNorwegian": "Норвег",
+    "tgLangEnglish": "Ағылшын",
+    "tgBazarrUnknownTitle": "Bazarr бұл атауды әлі білмейді",
+    "tgBazarrError": "Bazarr қатемен жауап берді (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: дискісінде орын аз ({free} бос). Жүктеу тоқтап қалуы мүмкін — серверді басқаратын адамға хабарлаңыз.",
+    "tgNoQbitForSpace": "Орынды тексеру үшін qBittorrent-ке қосылу мүмкін болмады",
+    "tgNotEnoughSpace": "Орын жеткіліксіз",
+    "tgDriveHasFree": "{drive}: {free} бос",
+    "tgCopyInDownloads": "Downloads қалтасындағы көшірме · медиатекада бұрыннан бар",
+    "tgLastWatched": "Соңғы қаралғаны: {ago}",
+    "tgNeverWatchedAdded": "Қаралмаған · қосылған уақыты: {ago}",
+    "tgNeverWatched": "Қаралмаған",
+    "tgNothingSafeToDelete": "{drive}: дискісінде қауіпсіз жоюға болатын ештеңе табылмады (барлығы жақында қосылған, жақында қаралған немесе таңдаулы).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{{count} атауды жою керек пе?} other{{count} атауды жою керек пе?}}",
+    "tgDeletedForGood": "{size} мүлдем жойылады. Бұл әрекетті қайтару мүмкін емес.",
+    "tgYesDelete": "Иә, жою",
+    "tgDeletingProgress": "Жойылуда: {done}/{total} …",
+    "tgNowHasFree": " · {drive}: қазір {free} бос",
+    "tgDeletedTitles": "{count, plural, one{{count} атау жойылды} other{{count} атау жойылды}}{extra}",
+    "tgDeletedFailed": "Жойылды: {count}, сәтсіз: {failed}{extra}",
+    "tgFreeGb": "{gb} ГБ босату",
+    "tgDownloadCopies": "Жүктеу көшірмелері",
+    "tgLookingForUnwatched": "Ұзақ уақыт қаралмағандар ізделуде …",
+    "tgSuggestionEnough": "Ұсыныс: {size} · орын жеткілікті ✓",
+    "tgSuggestionOf": "Ұсыныс: қажетті {target} ішінен {size}",
+    "tgPickToSayNo": "Бас тарту үшін біреуін таңдаңыз — келесі ұсыныс автоматты түрде қосылады.",
+    "tgOtherCandidates": "Басқа үміткерлер",
+    "tgDownloadAnyway": "Бәрібір жүктеу",
+    "tgDeleteCountSize": "{count} жою ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} бос.",
+    "tgFileDoubleSpace": "Файл көлемі {size}, ол екі есе орын алады (жүктеу + медиатекадағы көшірме), қосымша {buffer} резервте.",
+    "tgFileSize": "Файл көлемі {size}, қосымша {buffer} резервте.",
+    "tgPendingNeeds": "Жүріп жатқан жүктеулерге тағы {size} қажет.",
+    "tgShortBy": "{size} жетпейді.",
+    "tgOnlyEarlyFiles": "Фильм цифрлық форматта шыққанға дейін жарияланған файлдар ғана табылды ({count}) — олар әрдайым дерлік жалған.",
+    "tgNoDigitalDate": "цифрлық шығу күні әлі белгісіз",
+    "tgDigitalOn": "цифрлық форматта {date} шығады",
+    "tgNotOutDigitally": "Цифрлық форматта әлі шықпаған",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "Қазір барлары — көбіне кинотеатрдан жазылған жазба немесе аты бірдей басқа фильм. Кейде сапасы төмен, субтитрлері бейнеге кіріктірілген ерте көшірме болады. «Файлдарды бәрібір көрсету» бар нәрсені көрсетеді. Фильм шыққанда Radarr дұрыс нұсқасын өзі жүктейді.",
+    "tgShowFilesAnyway": "Файлдарды бәрібір көрсету",
+    "tgPickSeasonsEpisodes": "Маусымдар мен эпизодтарды таңдаңыз",
+    "tgNoEpisodeInfo": "{season}: эпизод туралы ақпарат жоқ",
+    "tgAppliesAllDevices": "Осы аккаунтты пайдаланатын барлық құрылғыға қолданылады",
+    "tgNoXxxLibrary": "XXX атты медиатека табылмады.",
+    "tgSearchingEachWord": "Әр сөз жеке ізделуде … (жарты минутқа дейін уақыт алуы мүмкін)",
+    "tgSentToQbit": "«{title}» ({size}) qBittorrent-ке жіберілді",
+    "tgDownloadFailed": "Жүктеу сәтсіз аяқталды: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» ішінде бейне файл болмады, сол себепті жойылды.",
+    "tgXxxNoVideoNotRemoved": "«{title}» ішінде бейне файл болмады, бірақ ЖОЙЫЛМАДЫ.",
+    "tgSearchNewXxx": "Жаңа XXX іздеу",
+    "tgXxxSearchHint": "Атауы, студия …",
+    "tgChecking": "Тексерілуде …",
+    "tgXxxVisible": "Қазір көрінеді. XXX медиатекаларда, іздеуде және басты бетте көрсетіледі.",
+    "tgXxxHidden": "Жасырылған. XXX қолданбаның еш жерінде көрсетілмейді.",
+    "tgShowWithPin": "Көрсету (PIN)",
+    "tgChangePin": "PIN кодын өзгерту",
+    "tgNoLibraryList": "Медиатекалар тізімін алу мүмкін болмады (HTTP {code})",
+    "tgNoUserSettings": "Пайдаланушы параметрлерін алу мүмкін болмады (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin өзгерісті қабылдамады (HTTP {code})",
+    "tgDeleteFailed": "Жою сәтсіз аяқталды (HTTP {code})",
+    "tgXxxAddFailed": "«{title}» qBittorrent-ке қосылмады",
+    "tgSeasonEpisodeLower": "{season}-маусым, {episode}-эпизод",
+    "tgSearchInSeerr": "Seerr-де іздеу",
+    "tgSeerrSearchHint": "Фильмдер мен сериалдарды іздеу (мысалы, «Lost S02E05»)",
+    "tgMissingInThisSeason": "Бұл маусымда жоқ",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Жоқ маусым:} other{Жоқ маусымдар:}} {list} - барлық маусымды көру үшін сериалды ашыңыз",
+    "tgProjectOnGitHub": "Tortugarr GitHub-та",
+    "tgProjectOnGitHubSubtitle": "Бастапқы код, релиздер және мәселелер",
+    "tgBuiltOnMoonfinCredit": "Tortugarr Moonfin әзірлеушілері жасаған Moonfin (GPL) негізінде құрылған.",
+    "tgCredits": "Алғыс",
+    "tgCreditsThanks": "Шын жүректен алғыс айтамыз: осы жобалар мен олардың артындағы адамдар болмаса, Tortugarr болмас еді.",
+    "tgCreditMoonfin": "Tortugarr негізделген қолданба (GPL)",
+    "tgCreditJellyfin": "Медиасервер",
+    "tgCreditSeerr": "Жаңалықтар мен сұраныстар",
+    "tgCreditRadarr": "Фильмдер",
+    "tgCreditSonarr": "Сериалдар",
+    "tgCreditProwlarr": "Индексатор менеджері",
+    "tgCreditBazarr": "Субтитрлер",
+    "tgCreditFlareSolverr": "Индексаторларға арналған Cloudflare көмекшісі",
+    "tgCreditQbittorrent": "Жүктеу клиенті, орнатқыштың әдепкі таңдауы",
+    "tgCreditTmdb": "Фильм және сериал деректері, постерлер мен суреттер",
+    "tgCreditOpenSubtitles": "Bazarr арқылы алынатын субтитрлер",
+    "tgTmdbNotice": "Бұл өнім TMDB API-ін пайдаланады, бірақ TMDB мақұлдамаған және сертификаттамаған.",
+    "tgLoadingLogoSize": "Жүктеу логотипінің өлшемі",
+    "tgLoadingLogoSizeSubtitle": "Бейне жүктелген кезде айналатын логотип",
+    "tgSubtitleLanguages": "Субтитр тілдері",
+    "tgSubtitleLanguagesSubtitle": "Субтитр мәзірінде көрсетіледі: {languages}",
+    "tgShowAllSubLangsOffChosen": "Өшірулі: субтитр мәзірі тек таңдалған тілдерді көрсетеді",
+    "tgDiscoveryLanguages": "«Трендте» және «Танымал» бөлімдеріндегі тілдер",
+    "tgDiscoveryLanguagesSubtitle": "Көрсетіледі: {languages}",
+    "tgHideForeignOnChosen": "Қосулы: «Трендте» және «Танымал» тек таңдалған тілдерді көрсетеді",
+    "tgShowLanguageBadges": "Тіл белгілерін көрсету",
+    "tgShowLanguageBadgesOn": "Қосулы: атауларда олардың тілі көрсетіледі (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Өшірулі: атауларда тіл белгілері жоқ"
 }

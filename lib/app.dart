@@ -57,6 +57,7 @@ import 'ui/screensaver/screensaver_controller.dart';
 import 'ui/screensaver/screensaver_host.dart';
 import 'util/achievement_icons.dart';
 import 'util/app_exit.dart';
+import 'util/app_l10n.dart' show kForceEnglish;
 import 'util/focus/dpad_keys.dart';
 import 'util/focus/siri_remote_glide.dart';
 import 'util/fullscreen_helper.dart';
@@ -204,6 +205,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
   }
 
   Locale? _resolveLocale() {
+    if (kForceEnglish) return const Locale('en');
     final override = _prefs.get(UserPreferences.languageOverride);
     if (override == 'system') {
       return null;
@@ -246,6 +248,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
               supportedLocales: AppLocalizations.supportedLocales,
               locale: _lastResolvedLocale,
               localeResolutionCallback: (locale, supportedLocales) {
+                if (kForceEnglish) return const Locale('en');
                 // Prefer exact match (language + country/script)
                 for (final supported in supportedLocales) {
                   if (supported == locale) {

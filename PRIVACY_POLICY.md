@@ -73,7 +73,7 @@ We may update this privacy policy from time to time. Changes will be posted to t
 ## Contact
 
 If you have questions about this privacy policy, you can open an issue on our GitHub repository:
-https://github.com/Moonfin-Client/Moonfin-Core/issues
+https://github.com/tortugarr/tortugarr/issues
 
 ## Open Source
 

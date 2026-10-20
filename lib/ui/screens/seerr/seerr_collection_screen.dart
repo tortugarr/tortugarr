@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/repositories/seerr_repository.dart';
@@ -26,6 +25,7 @@ import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../widgets/offline_aware_image.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -366,7 +366,8 @@ class _SeerrCollectionScreenState extends State<SeerrCollectionScreen> {
               focusColor: focusColor,
               cardFocusExpansion: cardExpansion,
               suppressFocusGlow: suppressFocusGlow,
-              onTap: () => context.push(
+              onTap: () => SinglePush.push(
+                context,
                 Destinations.seerrMedia(
                   item.id.toString(),
                   mediaType: item.mediaType ?? 'movie',

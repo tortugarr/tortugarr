@@ -1,6 +1,6 @@
 {
     "@@locale": "zh",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin 版本 {version}",
+    "appVersionFooter": "Tortugarr 版本 {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin 无法访问系统密钥环。仍可继续登录，但在密钥环解锁前，安全令牌存储可能不可用。",
+    "secureStorageUnavailableMessage": "Tortugarr 无法访问系统密钥环。仍可继续登录，但在密钥环解锁前，安全令牌存储可能不可用。",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "可在 Moonfin 与 Neon Pulse 之间切换，无需重启应用。",
+    "settingsAppearanceThemeSubtitle": "可在 Tortugarr 与 Neon Pulse 之间切换，无需重启应用。",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "原版简洁清爽的 Moonfin 默认界面。",
+    "themeMoonfinSubtitle": "原版简洁清爽的 Tortugarr 默认界面。",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "退出 Moonfin？",
+    "exitApp": "退出 Tortugarr？",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "未设置。Moonfin 将尝试使用应用/数据文件夹中的默认 mpv.conf。",
+    "notSetMpvConf": "未设置。Tortugarr 将尝试使用应用/数据文件夹中的默认 mpv.conf。",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — 对其他应用可见",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — 对其他应用可见",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "下载的媒体将保存到你设备上的 Downloads/Moonfin 中。这些文件将对其他应用可见，例如你的图库或音乐播放器。\n\n现有下载将保留在当前位置。",
+    "saveToDownloadsFolderDescription": "下载的媒体将保存到你设备上的 Downloads/Tortugarr 中。这些文件将对其他应用可见，例如你的图库或音乐播放器。\n\n现有下载将保留在当前位置。",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "切换每个媒体库的主页可见性。重启 Moonfin 以使更改生效。",
+    "libraryVisibilityDescription": "切换每个媒体库的主页可见性。重启 Tortugarr 以使更改生效。",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "在 Moonfin 中播放",
+    "playInMoonfin": "在 Tortugarr 中播放",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "由 {name} 请求",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "在你的 Moonfin 媒体库中未找到此媒体项",
+    "itemNotFoundInLibrary": "在你的 Tortugarr 媒体库中未找到此媒体项",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "服务器正在重启",
-    "adminServerRebootMessage": "服务器正在重启，请重启 Moonfin",
+    "adminServerRebootMessage": "服务器正在重启，请重启 Tortugarr",
     "adminActiveSessions": "活跃会话",
     "adminSessionsLoadFailed": "无法加载会话",
     "adminNoActiveSessions": "暂无活跃会话",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "在导航栏中显示类型按钮",
     "settingsShowFavoritesButtonInNavigation": "在导航栏中显示收藏按钮",
     "settingsShowLibrariesButtonInNavigation": "在导航栏中显示媒体库按钮",
-    "settingsLibraryVisibilitySubtitle": "切换每个媒体库的主页可见性。重启 Moonfin 以使更改生效。",
+    "settingsLibraryVisibilitySubtitle": "切换每个媒体库的主页可见性。重启 Tortugarr 以使更改生效。",
     "settingsMediaBarAndLocalPreviews": "媒体栏和本地预览",
     "settingsVisualOverlays": "视觉叠加",
     "settingsSeasonalSurprise": "季节性惊喜",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "加入 Discord",
     "settingsJoinDiscordSubtitle": "与社区聊天",
     "settingsJoinTheDiscord": "加入 Discord",
-    "settingsSupportMoonfin": "支持 Moonfin",
+    "settingsSupportMoonfin": "支持 Tortugarr",
     "settingsLegal": "法律信息",
     "settingsLicenses": "许可证",
     "settingsOpenSourceLicenseNotices": "开源许可声明",
     "settingsPrivacyPolicy": "隐私政策",
-    "settingsPrivacyPolicySubtitle": "Moonfin 如何处理你的数据",
+    "settingsPrivacyPolicySubtitle": "Tortugarr 如何处理你的数据",
     "settingsCheckForUpdates": "检查更新",
-    "settingsCheckForUpdatesSubtitle": "检查最新的 Moonfin 版本",
+    "settingsCheckForUpdatesSubtitle": "检查最新的 Tortugarr 版本",
     "settingsPoweredByFlutter": "由 Flutter 提供支持",
     "settingsLicenseNoticesCount": "{count, plural, one {# 条许可证声明} other {# 条许可证声明}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "已保存的主题",
-    "savedThemesDescription": "这些主题来自当前服务器的 Moonfin 插件。删除时只会移除此设备上的本地副本。",
+    "savedThemesDescription": "这些主题来自当前服务器的 Tortugarr 插件。删除时只会移除此设备上的本地副本。",
     "savedThemesEmpty": "找不到该服务器的已保存主题。",
     "savedThemesCurrentThemeId": "{themeId} • 当前启用",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "移除已保存主题",
     "savedThemesManageSubtitle": "管理此设备上下载的插件主题",
     "themeEditor": "主题编辑器",
-    "themeEditorSubtitle": "在浏览器中打开 Moonfin 主题编辑器",
+    "themeEditorSubtitle": "在浏览器中打开 Tortugarr 主题编辑器",
     "homeScreen": "主屏幕",
     "bottomBar": "底栏",
     "homeRowsStyleClassic": "经典",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "优先使用 SDH 字幕",
     "preferSdhSubtitlesSubtitle": "自动选择时优先选择 SDH/CC 字幕轨道。",
     "webDiagnostics": "Web 诊断",
-    "webDiagnosticsTitle": "Moonfin Web 诊断",
+    "webDiagnosticsTitle": "Tortugarr Web 诊断",
     "webDiagnosticsIntro": "使用此页面可以诊断浏览器连接问题（CORS、混合内容和发现设置）。",
     "webDiagnosticsDetectedMixedContentFailure": "检测到混合内容失败",
     "webDiagnosticsDetectedCorsPreflightFailure": "检测到 CORS/预检失败",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin 检测到一个 HTTPS 页面试图调用 HTTP 服务器 URL。浏览器会在请求到达你的服务器之前阻止该请求。",
-    "webDiagnosticsCorsFailureBody": "Moonfin 检测到浏览器请求失败，常见原因是媒体服务器缺少 CORS 或预检请求标头。",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr 检测到一个 HTTPS 页面试图调用 HTTP 服务器 URL。浏览器会在请求到达你的服务器之前阻止该请求。",
+    "webDiagnosticsCorsFailureBody": "Tortugarr 检测到浏览器请求失败，常见原因是媒体服务器缺少 CORS 或预检请求标头。",
     "webDiagnosticsTargetUrl": "目标 URL：{url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "未配置",
     "webDiagnosticsMixedContent": "混合内容",
     "webDiagnosticsMixedContentDetected": "此页面通过 HTTPS 加载，但有一个或多个配置的 URL 使用 HTTP。浏览器会阻止 HTTPS 页面调用 HTTP API。",
-    "webDiagnosticsMixedContentFix": "修复：通过 HTTPS 为你的媒体服务器或代理端点提供服务，或仅在受信任的本地网络上通过 HTTP 加载 Moonfin。",
+    "webDiagnosticsMixedContentFix": "修复：通过 HTTPS 为你的媒体服务器或代理端点提供服务，或仅在受信任的本地网络上通过 HTTP 加载 Tortugarr。",
     "webDiagnosticsNoMixedContentDetected": "从当前运行时设置中未检测到明显的混合内容配置。",
     "webDiagnosticsCorsChecklist": "CORS 清单",
     "webDiagnosticsCorsChecklistItem1": "• 在 Access-Control-Allow-Origin 中允许浏览器来源。",
@@ -7661,7 +7661,7 @@
     "transcodeAudioChannelsNotSupported": "音频声道数不受支持。",
     "sortAlphabetical": "字母顺序",
     "sortReleaseDescending": "发行顺序（降序）",
-    "impellerRestartMessage": "Moonfin 需要重启以更改渲染引擎。立即关闭应用，然后重新打开以应用更改。",
+    "impellerRestartMessage": "Tortugarr 需要重启以更改渲染引擎。立即关闭应用，然后重新打开以应用更改。",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -7710,11 +7710,11 @@
             }
         }
     },
-    "recommendationSystemSubtitle": "可选用「Moonfin本地资料库推荐算法」，或线上 TMDb 相似度匹配算法。注意：线上推荐功能需要对接 Seerr 服务。",
+    "recommendationSystemSubtitle": "可选用「Tortugarr本地资料库推荐算法」，或线上 TMDb 相似度匹配算法。注意：线上推荐功能需要对接 Seerr 服务。",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "detailScreenStyleMoonfin": "Moonfin",
+    "detailScreenStyleMoonfin": "Tortugarr",
     "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
@@ -8102,7 +8102,7 @@
             }
         }
     },
-    "impellerRenderingSubtitle": "Impeller 是 Flutter 的现代 GPU 渲染器，可实现更流畅的动画和更少的卡顿。在某些电视盒子和旧款 GPU 上可能会导致故障或黑屏；如果遇到这些问题，请将其关闭。自动会为你的设备选择最佳默认值。重启 Moonfin 以应用。",
+    "impellerRenderingSubtitle": "Impeller 是 Flutter 的现代 GPU 渲染器，可实现更流畅的动画和更少的卡顿。在某些电视盒子和旧款 GPU 上可能会导致故障或黑屏；如果遇到这些问题，请将其关闭。自动会为你的设备选择最佳默认值。重启 Tortugarr 以应用。",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8202,7 +8202,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "在手机上登录 Moonfin",
+    "carSignInPrompt": "在手机上登录 Tortugarr",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8210,11 +8210,11 @@
     "@adminRefreshAllLibraries": {
         "description": "Floating action button text to refresh all libraries"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "按目标媒体的家长分级限制 Moonfin 推荐内容",
+    "recommendationsApplyParentalRatingCapSubtitle": "按目标媒体的家长分级限制 Tortugarr 推荐内容",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
-    "customThemeSubtitle": "自定义主题可更改 Moonfin 全部视觉元素，从中挑选一款贴合你的使用风格。",
+    "customThemeSubtitle": "自定义主题可更改 Tortugarr 全部视觉元素，从中挑选一款贴合你的使用风格。",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8234,9 +8234,9 @@
     "@deletedScenes": {
         "description": "Tab label for deleted scenes special features"
     },
-    "recommendationSystemMoonfin": "Moonfin 智能推荐",
+    "recommendationSystemMoonfin": "Tortugarr 智能推荐",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystem": "推荐系统",
     "@recommendationSystem": {
@@ -8257,7 +8257,7 @@
     },
     "audiobookNoChapters": "无章节",
     "settingsAlwaysExpandNavbarLabels": "始终显示顶部导航栏中的文本标签",
-    "detailScreenStyleSubtitle": "Moonfin 是经典布局；Modern 是自适应影院风布局。",
+    "detailScreenStyleSubtitle": "Tortugarr 是经典布局；Modern 是自适应影院风布局。",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -10724,5 +10724,247 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "tgMissing": "缺失",
+    "tgComing": "即将上线",
+    "tgComingOn": "{date}上线",
+    "tgDownloading": "下载中",
+    "tgReadySoon": "即将就绪",
+    "tgRequested": "已请求",
+    "tgClose": "关闭",
+    "tgCancel": "取消",
+    "tgBack": "返回",
+    "tgYes": "是",
+    "tgNo": "否",
+    "tgSearch": "搜索",
+    "tgHide": "隐藏",
+    "tgAll": "全部",
+    "tgNone": "无",
+    "tgMovies": "电影",
+    "tgSeries": "剧集",
+    "tgMovieTag": "电影",
+    "tgSeriesTag": "剧集",
+    "tgCanTakeAMinute": "最多可能需要一分钟",
+    "tgToday": "今天",
+    "tgYesterday": "昨天",
+    "tgDaysAgo": "{days} 天前",
+    "tgMonthsAgo": "{months} 个月前",
+    "tgYearsAgo": "{years} 年前",
+    "tgYearsMonthsAgo": "{years} 年 {months} 个月前",
+    "tgFindSubtitles": "查找字幕",
+    "tgFreeUpSpace": "释放空间",
+    "tgDownloads": "下载",
+    "tgDownloadsCount": "下载（{count}）",
+    "tgNoVideoRemoved": "“{title}”：该下载不含视频文件（{files}）。已将其移除并屏蔽 — 请试试其他文件。",
+    "tgNoVideoNotRemoved": "“{title}”：该下载不含视频文件（{files}），但无法自动移除。",
+    "tgAiredOn": "{date}播出",
+    "tgTapToFindFiles": "点按以查找文件",
+    "tgWholeSeason": "整季",
+    "tgEpisodesMissingFindPack": "缺少 {count} 集 – 查找整季合集",
+    "tgAddToSonarrTitle": "添加到 Sonarr 以查看缺失的剧集",
+    "tgAddToSonarrSubtitle": "添加后不会自动下载任何内容",
+    "tgMissingEpisodesUnavailable": "目前无法显示缺失的剧集",
+    "tgReasonTapRetry": "{reason} · 点按重试",
+    "tgSeasonPackBadge": "整季合集",
+    "tgMonitorSeasonTitle": "监控第 {season} 季",
+    "tgMonitorSeasonQuestion": "要让 Sonarr 现在就获取第 {season} 季缺失的剧集吗？\n\n否：只在新剧集播出时获取。",
+    "tgSonarrSearchingSeason": "Sonarr 正在搜索第 {season} 季",
+    "tgMonitored": "已监控",
+    "tgNotMonitored": "未监控",
+    "tgSeasonStateLabel": "第 {season} 季：{state}",
+    "tgLabelMissing": "{label}缺失",
+    "tgNotAiredYet": "{code} 尚未播出。",
+    "tgNotAiredYetComing": "{code} 尚未播出 – {date}上线。",
+    "tgAlreadyDownloading": "{code} 已在下载中。",
+    "tgDownloadedAppearsSoon": "{code} 已下载完成，稍后会出现在媒体库中。",
+    "tgSearchingFor": "正在搜索{label}…",
+    "tgSeasonLower": "第 {season} 季",
+    "tgWholeLabel": "完整的{label}",
+    "tgSeasonNoEpisodes": "第 {season} 季 – 媒体库中没有剧集",
+    "tgNoTvdbId": "该剧集没有 TVDB ID，Sonarr 无法找到它。",
+    "tgAddingToSonarr": "正在添加到 Sonarr…",
+    "tgAddToSonarrFailed": "无法将该剧集添加到 Sonarr。请稍后重试。",
+    "tgSendingToDownload": "正在将“{label}”发送至下载…",
+    "tgDownloadDidNotStart": "下载未能开始：{error}",
+    "tgDownloadingAppearsWhenDone": "“{label}”正在下载（{size}）。完成后会出现在媒体库中。",
+    "tgSonarrUnreachableRetry": "无法连接到 Sonarr。请稍后再试。",
+    "tgNoUsableFiles": "未找到可用文件。请稍后再试 – 新文件通常在几小时后出现。",
+    "tgFilesCount": "{count} 个文件",
+    "tgFilesRecommended": "{count} 个文件 – 其中 {recommended} 个符合质量配置，其余排在底部",
+    "tgOutsideQualityProfile": "不符合质量配置",
+    "tgLargerThanProfile": "超出配置允许的大小",
+    "tgSmallerThanProfile": "小于配置允许的大小",
+    "tgAlreadyExists": "已存在",
+    "tgMayNotFitDisk": "磁盘空间可能不足",
+    "tgSonarrUnreachable": "无法连接到 Sonarr",
+    "tgSonarrUnreachableAt": "无法连接到 {host} 上的 Sonarr",
+    "tgSonarrRejectedChange": "Sonarr 未接受此更改",
+    "tgSeasonMonitoredNoSearch": "该季已被监控，但 Sonarr 没有开始搜索",
+    "tgSonarrCantSearch": "Sonarr 目前无法搜索",
+    "tgSearchExpired": "搜索结果已过期 – 请重新搜索",
+    "tgSonarrRejectedDownload": "Sonarr 未接受该下载（HTTP {status}）",
+    "tgSonarrNoSeries": "Sonarr 中没有该剧集",
+    "tgCouldNotChangeMonitoring": "无法更改监控状态：{error}",
+    "tgJellyfinNoIds": "Jellyfin 无法识别该剧集（没有 TVDB 或 TMDB ID）",
+    "tgSomethingWentWrong": "出错了：{error}",
+    "tgDeleteReadOnly": "该文件不由 Radarr/Sonarr 管理，且 Jellyfin 对该文件夹只有读取权限。请在文件管理器中删除。",
+    "tgSonarrRequiredPerEpisode": "无法连接到 Sonarr，或该剧集尚未添加到 Sonarr。按单集下载需要 Sonarr。",
+    "tgEpisodesNotFound": "在 Sonarr 中找不到“{title}”所选的剧集（共找到 {count} 集）。请将该剧集添加到 Sonarr 后重试。",
+    "tgPartOfCollectionPrefix": "属于电影系列 ",
+    "tgViewingPartOf": "  ·  您正在观看第 {current} 部，共 {total} 部",
+    "tgPartOf": "第 {number} 部，共 {total} 部",
+    "tgUnknownTitle": "未知标题",
+    "tgMovieCollection": "电影系列",
+    "tgNotReleasedYet": "“{title}”尚未上映",
+    "tgScreensaverModeVideo": "视频",
+    "tgScreensaverModeLogo": "徽标",
+    "tgScreensaverSound": "屏保声音",
+    "tgScreensaverSoundSubtitle": "关闭：屏保预告片静音播放",
+    "tgScreensaverLogo": "徽标",
+    "tgLogoBadge": "Tortugarr 徽章",
+    "tgLogoVhs": "VHS 录像带上的鹦鹉",
+    "tgLogoSign": "招牌上的鹦鹉",
+    "tgHiddenBadge": "已隐藏 · {code}",
+    "tgDiskSpace": "磁盘空间",
+    "tgDiskSpaceSubtitle": "为新下载释放空间",
+    "tgAdultTitle": "成人电影（XXX）",
+    "tgAdultSubtitle": "显示或隐藏 XXX 媒体库（PIN）",
+    "tgHideForeign": "隐藏外语内容",
+    "tgHideForeignOn": "开启：“热播”和“热门”只显示英语、挪威语、瑞典语、丹麦语、德语和法语内容",
+    "tgHideForeignOff": "关闭：“热播”和“热门”显示所有语言的内容",
+    "tgShowHidden": "显示被隐藏的内容",
+    "tgShowHiddenOn": "开启：原本会被隐藏的标题会带红色“已隐藏”标记显示",
+    "tgShowHiddenOff": "排查问题：用红色标记显示被隐藏的标题，而不是将其移除",
+    "tgShowAllSubLangs": "显示所有字幕语言",
+    "tgShowAllSubLangsOn": "开启：字幕菜单显示所有语言",
+    "tgShowAllSubLangsOff": "关闭：字幕菜单只显示挪威语和英语",
+    "tgPreviewSound": "预览声音",
+    "tgPreviewSoundOn": "开启：停留在某个标题时播放的片段带有声音",
+    "tgPreviewSoundOff": "关闭：浏览时片段静音播放",
+    "tgScreensaver": "屏保",
+    "tgScreensaverSubtitle": "视频或徽标、声音和图像",
+    "tgShowMissingEpisodes": "显示缺失的剧集",
+    "tgShowMissingEpisodesOn": "开启：每季会显示您尚未拥有、可供下载的剧集",
+    "tgShowMissingEpisodesOff": "关闭：每季只显示您已拥有的剧集",
+    "tgShowCollections": "显示电影系列",
+    "tgShowCollectionsOn": "开启：电影页面会显示同系列的其他影片，包括您尚未拥有的",
+    "tgShowCollectionsOff": "关闭：电影页面不显示所属系列",
+    "tgNoActiveDownloads": "没有进行中的下载。",
+    "tgPickDownloadToOpen": "选择一个下载以打开请求。",
+    "tgRefreshLibrary": "刷新媒体库",
+    "tgAskingJellyfinScan": "正在请求 Jellyfin 扫描媒体库…",
+    "tgHideAll": "全部隐藏",
+    "tgImporting": "导入中",
+    "tgSubsNotManaged": "该标题不由 Radarr/Sonarr 管理，因此 Bazarr 无法为其查找字幕。",
+    "tgBazarrUnreachable": "无法连接到 Bazarr。请稍后再试。",
+    "tgSubsFoundNothing": "暂时没有找到。Bazarr 每天会自动重试，您也可以自行选择。",
+    "tgSubsFound": "已找到{languages} – 可能需要片刻才会出现在字幕菜单中。",
+    "tgAnd": "和",
+    "tgSubsDownloaded": "已下载 – 可能需要片刻才会出现在字幕菜单中。",
+    "tgAskingBazarr": "正在询问 Bazarr…",
+    "tgHaveAll": "全部已有",
+    "tgSearchAutoNow": "立即自动搜索",
+    "tgSearchingUpToMinute": "正在搜索…最多可能需要一分钟",
+    "tgPickYourself": "自行选择",
+    "tgAskingProviders": "正在询问字幕来源…最多可能需要一分钟",
+    "tgNoProviderSubs": "目前还没有任何来源提供此内容的字幕。",
+    "tgLangHas": "{language}：已有",
+    "tgLangMissing": "{language}：缺失",
+    "tgNoReleaseName": "（无发布名称）",
+    "tgHearingImpaired": "{provider} · 听障字幕",
+    "tgLangNorwegian": "挪威语",
+    "tgLangEnglish": "英语",
+    "tgBazarrUnknownTitle": "Bazarr 尚不认识此标题",
+    "tgBazarrError": "Bazarr 返回了错误（HTTP {code}）",
+    "tgLowSpaceSnack": "{drive}: 空间不足（剩余 {free}）。下载可能会中断 — 请告知服务器管理员。",
+    "tgNoQbitForSpace": "无法连接到 qBittorrent 以检查空间",
+    "tgNotEnoughSpace": "空间不足",
+    "tgDriveHasFree": "{drive}: 剩余 {free}",
+    "tgCopyInDownloads": "Downloads 文件夹中的副本 · 媒体库中已有",
+    "tgLastWatched": "上次观看：{ago}",
+    "tgNeverWatchedAdded": "从未观看 · {ago}添加",
+    "tgNeverWatched": "从未观看",
+    "tgNothingSafeToDelete": "在 {drive}: 上没有找到可以安全删除的内容（全部是最近添加、最近观看或收藏的）。",
+    "tgDeleteTitlesQuestion": "{count, plural, other{要删除 {count} 个标题吗？}}",
+    "tgDeletedForGood": "{size} 将被永久删除。此操作无法撤销。",
+    "tgYesDelete": "是，删除",
+    "tgDeletingProgress": "正在删除 {done}/{total}…",
+    "tgNowHasFree": " · {drive}: 现在剩余 {free}",
+    "tgDeletedTitles": "{count, plural, other{已删除 {count} 个标题}}{extra}",
+    "tgDeletedFailed": "已删除 {count} 个，失败：{failed}{extra}",
+    "tgFreeGb": "释放 {gb} GB",
+    "tgDownloadCopies": "下载副本",
+    "tgLookingForUnwatched": "正在查找很久没看过的内容…",
+    "tgSuggestionEnough": "建议：{size} · 空间足够 ✓",
+    "tgSuggestionOf": "建议：{size}，共需 {target}",
+    "tgPickToSayNo": "选择一项以排除 — 下一个建议会自动补上。",
+    "tgOtherCandidates": "其他候选",
+    "tgDownloadAnyway": "仍要下载",
+    "tgDeleteCountSize": "删除 {count} 项（{size}）",
+    "tgDriveHasFreeDot": "{drive}: 剩余 {free}。",
+    "tgFileDoubleSpace": "该文件为 {size}，需要占用双倍空间（下载 + 媒体库中的副本），另加 {buffer} 预留空间。",
+    "tgFileSize": "该文件为 {size}，另加 {buffer} 预留空间。",
+    "tgPendingNeeds": "进行中的下载还需要 {size}。",
+    "tgShortBy": "还差 {size}。",
+    "tgOnlyEarlyFiles": "只找到在电影数字发行前发布的文件（{count}）— 这类文件几乎都是假的。",
+    "tgNoDigitalDate": "尚无数字发行日期",
+    "tgDigitalOn": "将于 {date} 数字发行",
+    "tgNotOutDigitally": "尚未数字发行",
+    "tgTitleWhen": "“{title}”{when}。",
+    "tgNotOutExplain": "目前能找到的通常是影院盗录或同名的另一部电影。有时会有画质较低的早期版本，往往带有内嵌字幕。“仍要显示文件”会列出现有的文件。正式版本发布后，Radarr 会自动获取。",
+    "tgShowFilesAnyway": "仍要显示文件",
+    "tgPickSeasonsEpisodes": "选择季和剧集",
+    "tgNoEpisodeInfo": "{season}：没有剧集信息",
+    "tgAppliesAllDevices": "适用于使用此账户的所有设备",
+    "tgNoXxxLibrary": "没有找到名为 XXX 的媒体库。",
+    "tgSearchingEachWord": "正在逐词搜索…（可能需要半分钟）",
+    "tgSentToQbit": "已将“{title}”（{size}）发送到 qBittorrent",
+    "tgDownloadFailed": "下载失败：{error}",
+    "tgXxxNoVideoRemoved": "“{title}”不含视频文件，已被移除。",
+    "tgXxxNoVideoNotRemoved": "“{title}”不含视频文件，但未被移除。",
+    "tgSearchNewXxx": "搜索新的 XXX",
+    "tgXxxSearchHint": "名称、片商…",
+    "tgChecking": "正在检查…",
+    "tgXxxVisible": "现已显示。XXX 会出现在媒体库、搜索和首页中。",
+    "tgXxxHidden": "已隐藏。XXX 不会出现在应用的任何位置。",
+    "tgShowWithPin": "显示（PIN）",
+    "tgChangePin": "更改 PIN",
+    "tgNoLibraryList": "无法获取媒体库列表（HTTP {code}）",
+    "tgNoUserSettings": "无法获取用户设置（HTTP {code}）",
+    "tgJellyfinRejectedChange": "Jellyfin 拒绝了此更改（HTTP {code}）",
+    "tgDeleteFailed": "删除失败（HTTP {code}）",
+    "tgXxxAddFailed": "无法将“{title}”添加到 qBittorrent",
+    "tgSeasonEpisodeLower": "第 {season} 季第 {episode} 集",
+    "tgSearchInSeerr": "在 Seerr 中搜索",
+    "tgSeerrSearchHint": "搜索电影和剧集（例如“Lost S02E05”）",
+    "tgMissingInThisSeason": "本季缺失",
+    "tgMissingSeasonsOpenSeries": "{count, plural, other{缺少第}} {list} 季 - 打开剧集可查看全部季",
+    "tgProjectOnGitHub": "GitHub 上的 Tortugarr",
+    "tgProjectOnGitHubSubtitle": "源代码、版本发布和问题反馈",
+    "tgBuiltOnMoonfinCredit": "Tortugarr 基于 Moonfin（GPL）构建，Moonfin 由其开发者打造。",
+    "tgCredits": "致谢",
+    "tgCreditsThanks": "谨致谢意：没有这些项目以及它们背后的人，就不会有 Tortugarr。",
+    "tgCreditMoonfin": "Tortugarr 所基于的应用（GPL）",
+    "tgCreditJellyfin": "媒体服务器",
+    "tgCreditSeerr": "发现与请求",
+    "tgCreditRadarr": "电影",
+    "tgCreditSonarr": "剧集",
+    "tgCreditProwlarr": "索引器管理",
+    "tgCreditBazarr": "字幕",
+    "tgCreditFlareSolverr": "为索引器处理 Cloudflare 的助手",
+    "tgCreditQbittorrent": "下载客户端，安装程序的默认选择",
+    "tgCreditTmdb": "电影和剧集数据、海报和图片",
+    "tgCreditOpenSubtitles": "字幕，通过 Bazarr 获取",
+    "tgTmdbNotice": "本产品使用 TMDB API，但未经 TMDB 认可或认证。",
+    "tgLoadingLogoSize": "加载徽标大小",
+    "tgLoadingLogoSizeSubtitle": "视频加载时旋转的徽标",
+    "tgSubtitleLanguages": "字幕语言",
+    "tgSubtitleLanguagesSubtitle": "在字幕菜单中显示：{languages}",
+    "tgShowAllSubLangsOffChosen": "关闭：字幕菜单只显示你选择的语言",
+    "tgDiscoveryLanguages": "热门趋势和流行中的语言",
+    "tgDiscoveryLanguagesSubtitle": "显示：{languages}",
+    "tgHideForeignOnChosen": "开启：热门趋势和流行只显示你选择的语言",
+    "tgShowLanguageBadges": "显示语言标签",
+    "tgShowLanguageBadgesOn": "开启：作品显示其语言 (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "关闭：作品上不显示语言标签"
 }

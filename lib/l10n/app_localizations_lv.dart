@@ -10,7 +10,7 @@ class AppLocalizationsLv extends AppLocalizations {
   AppLocalizationsLv([String locale = 'lv']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -138,7 +138,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin versija $version';
+    return 'Tortugarr versija $version';
   }
 
   @override
@@ -190,7 +190,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin nevarēja piekļūt jūsu sistēmas atslēgu piekariņam. Pieteikšanos var turpināt, taču droša marķiera krātuve var nebūt pieejama, kamēr atslēgu piekariņš nav atbloķēts.';
+      'Tortugarr nevarēja piekļūt jūsu sistēmas atslēgu piekariņam. Pieteikšanos var turpināt, taču droša marķiera krātuve var nebūt pieejama, kamēr atslēgu piekariņš nav atbloķēts.';
 
   @override
   String get ok => 'Labi';
@@ -203,7 +203,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Klasiskais ir oriģinālais centrētais Moonfin izkārtojums. Modernais ir adaptīvs kinematogrāfisks izkārtojums.';
+      'Klasiskais ir oriģinālais centrētais Tortugarr izkārtojums. Modernais ir adaptīvs kinematogrāfisks izkārtojums.';
 
   @override
   String get detailScreenStyleMoonfin => 'Klasiskais';
@@ -443,10 +443,10 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Izmantojiet Moonfin Recommends vietējās bibliotēkas algoritmu vai tiešsaistes TMDB līdzības rādītājus. Piezīme: tiešsaistes ieteikumiem nepieciešama Seerr integrācija.';
+      'Izmantojiet Tortugarr Recommends vietējās bibliotēkas algoritmu vai tiešsaistes TMDB līdzības rādītājus. Piezīme: tiešsaistes ieteikumiem nepieciešama Seerr integrācija.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -460,7 +460,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Ierobežot Moonfin Recommends ieteikumus atbilstoši izvēlētā satura vecuma ierobežojumam';
+      'Ierobežot Tortugarr Recommends ieteikumus atbilstoši izvēlētā satura vecuma ierobežojumam';
 
   @override
   String get interfaceStyle => 'Saskarnes stils';
@@ -561,14 +561,14 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      'Pārslēdzieties starp Moonfin un Neon Pulse, nerestartējot lietotni';
+      'Pārslēdzieties starp Tortugarr un Neon Pulse, nerestartējot lietotni';
 
   @override
   String get customThemeTitle => 'Pielāgota tēma';
 
   @override
   String get customThemeSubtitle =>
-      'Pielāgotas tēmas maina vizuālos elementus visā Moonfin lietotnē. Izvēlieties vienu no šīm iespējām atbilstoši savam stilam.';
+      'Pielāgotas tēmas maina vizuālos elementus visā Tortugarr lietotnē. Izvēlieties vienu no šīm iespējām atbilstoši savam stilam.';
 
   @override
   String get keyboardPreferSystemIme => 'Dod priekšroku sistēmas tastatūrai';
@@ -588,11 +588,11 @@ class AppLocalizationsLv extends AppLocalizations {
       'Let a connected game controller move focus and select items';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Pašreizējais Moonfin izskats, ko jūs visi esat iemīlējuši';
+      'Pašreizējais Tortugarr izskats, ko jūs visi esat iemīlējuši';
 
   @override
   String get themeNeonPulse => 'Neona pulss';
@@ -668,7 +668,7 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Vai iziet no Moonfin?';
+  String get exitApp => 'Vai iziet no Tortugarr?';
 
   @override
   String get exitAppConfirmation => 'Vai tiešām vēlaties iziet?';
@@ -1858,7 +1858,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get shuffleAllMusic => 'Jaukt visu mūziku';
 
   @override
-  String get carSignInPrompt => 'Pierakstieties Moonfin savā tālrunī';
+  String get carSignInPrompt => 'Pierakstieties Tortugarr savā tālrunī';
 
   @override
   String get carServerUnreachable => 'Nevar sasniegt serveri';
@@ -4189,7 +4189,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Nav iestatīts. Moonfin izmēģinās noklusējuma mpv.conf lietotņu/datu mapēs.';
+      'Nav iestatīts. Tortugarr izmēģinās noklusējuma mpv.conf lietotņu/datu mapēs.';
 
   @override
   String get selectMpvConf => 'Atlasiet mpv.conf';
@@ -4489,7 +4489,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Lejupielādes/Moonfin — redzams citām lietotnēm';
+      'Lejupielādes/Tortugarr — redzams citām lietotnēm';
 
   @override
   String get dangerZone => 'Bīstamā zona';
@@ -4519,7 +4519,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Lejupielādētie multivide tiks saglabāti jūsu ierīces mapē Lejupielādes/Moonfin. Šie faili būs redzami citām lietotnēm, piemēram, jūsu galerijai vai mūzikas atskaņotājam.\n\nEsošās lejupielādes paliks to pašreizējā atrašanās vietā.';
+      'Lejupielādētie multivide tiks saglabāti jūsu ierīces mapē Lejupielādes/Tortugarr. Šie faili būs redzami citām lietotnēm, piemēram, jūsu galerijai vai mūzikas atskaņotājam.\n\nEsošās lejupielādes paliks to pašreizējā atrašanās vietā.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4774,7 +4774,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Moonfin, lai izmaiņas stātos spēkā.';
+      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.';
 
   @override
   String get showInNavigation => 'Rādīt navigācijā';
@@ -4836,7 +4836,7 @@ class AppLocalizationsLv extends AppLocalizations {
       'Izvēlieties starp dažādiem multivides joslas stiliem vai izslēdziet multivides joslu';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -5467,7 +5467,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get sourceCode => 'Avota kods';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Pārbaudiet atjauninājumus tūlīt';
@@ -5646,7 +5646,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Spēlē Moonfin';
+  String get playInMoonfin => 'Spēlē Tortugarr';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5692,7 +5692,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Vienums nav atrasts jūsu Moonfin bibliotēkā';
+      'Vienums nav atrasts jūsu Tortugarr bibliotēkā';
 
   @override
   String get errorSearchingLibrary => 'Meklējot bibliotēku, radās kļūda';
@@ -7690,7 +7690,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Notiek servera atsāknēšana, lūdzu, restartējiet Moonfin';
+      'Notiek servera atsāknēšana, lūdzu, restartējiet Tortugarr';
 
   @override
   String get adminActiveSessions => 'Aktīvās sesijas';
@@ -11449,7 +11449,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Moonfin, lai izmaiņas stātos spēkā.';
+      'Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11571,7 +11571,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Pievienojieties Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Atbalstiet Moonfin';
+  String get settingsSupportMoonfin => 'Atbalstiet Tortugarr';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Uzsauciet izstrādātājam kafiju';
@@ -11590,14 +11590,15 @@ class AppLocalizationsLv extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Privātuma politika';
 
   @override
-  String get settingsPrivacyPolicySubtitle => 'Kā Moonfin apstrādā jūsu datus';
+  String get settingsPrivacyPolicySubtitle =>
+      'Kā Tortugarr apstrādā jūsu datus';
 
   @override
   String get settingsCheckForUpdates => 'Pārbaudiet atjauninājumus';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Pārbaudiet jaunāko Moonfin versiju';
+      'Pārbaudiet jaunāko Tortugarr versiju';
 
   @override
   String get settingsBoth => 'Abi';
@@ -12036,7 +12037,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Tie ir motīvi, kas lejupielādēti no pašreizējā servera spraudņa Moonfin. Dzēšot, tiek noņemta tikai šī vietējā kopija.';
+      'Tie ir motīvi, kas lejupielādēti no pašreizējā servera spraudņa Tortugarr. Dzēšot, tiek noņemta tikai šī vietējā kopija.';
 
   @override
   String get savedThemesEmpty =>
@@ -12059,7 +12060,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Pārlūkprogrammā atveriet Moonfin motīvu redaktoru';
+      'Pārlūkprogrammā atveriet Tortugarr motīvu redaktoru';
 
   @override
   String get homeScreen => 'Sākuma ekrāns';
@@ -12380,7 +12381,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get webDiagnostics => 'Web diagnostika';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Tīmekļa diagnostika';
+  String get webDiagnosticsTitle => 'Tortugarr Tīmekļa diagnostika';
 
   @override
   String get webDiagnosticsIntro =>
@@ -12396,11 +12397,11 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin atklāja HTTPS lapu, kas mēģina izsaukt HTTP servera URL. Pārlūkprogrammas bloķē šo pieprasījumu, pirms tas sasniedz jūsu serveri.';
+      'Tortugarr atklāja HTTPS lapu, kas mēģina izsaukt HTTP servera URL. Pārlūkprogrammas bloķē šo pieprasījumu, pirms tas sasniedz jūsu serveri.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin atklāja pārlūkprogrammas līmeņa pieprasījuma kļūmi, ko parasti izraisa trūkstošas ​​CORS vai pirmspārbaudes galvenes multivides serverī.';
+      'Tortugarr atklāja pārlūkprogrammas līmeņa pieprasījuma kļūmi, ko parasti izraisa trūkstošas ​​CORS vai pirmspārbaudes galvenes multivides serverī.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -12450,7 +12451,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Labojums: apkalpojiet multivides serveri vai starpniekservera galapunktu, izmantojot HTTPS, vai ielādējiet Moonfin, izmantojot HTTP, tikai uzticamos lokālos tīklos.';
+      'Labojums: apkalpojiet multivides serveri vai starpniekservera galapunktu, izmantojot HTTPS, vai ielādējiet Tortugarr, izmantojot HTTP, tikai uzticamos lokālos tīklos.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -14153,7 +14154,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller ir Flutter modernais GPU renderētājs, kas nodrošina plūstošākas animācijas un mazāku raustīšanos. Dažās TV pierīcēs un vecākos GPU tas var radīt traucējumus vai melnu attēlu; tādā gadījumā izslēdziet to. “Automātiski” izvēlas jūsu ierīcei piemērotāko noklusējumu. Lai lietotu izmaiņas, restartējiet Moonfin.';
+      'Impeller ir Flutter modernais GPU renderētājs, kas nodrošina plūstošākas animācijas un mazāku raustīšanos. Dažās TV pierīcēs un vecākos GPU tas var radīt traucējumus vai melnu attēlu; tādā gadījumā izslēdziet to. “Automātiski” izvēlas jūsu ierīcei piemērotāko noklusējumu. Lai lietotu izmaiņas, restartējiet Tortugarr.';
 
   @override
   String get impellerAuto => 'Automātiski';
@@ -14169,7 +14170,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Lai mainītu renderēšanas dzinēju, Moonfin ir jārestartē. Aizveriet lietotni tagad un atveriet to no jauna.';
+      'Lai mainītu renderēšanas dzinēju, Tortugarr ir jārestartē. Aizveriet lietotni tagad un atveriet to no jauna.';
 
   @override
   String get impellerCloseNow => 'Aizvērt lietotni tagad';
@@ -15258,4 +15259,1053 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Length';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Trūkst';
+
+  @override
+  String get tgComing => 'Drīzumā';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Gaidāms $date';
+  }
+
+  @override
+  String get tgDownloading => 'Lejupielādē';
+
+  @override
+  String get tgReadySoon => 'Drīz būs gatavs';
+
+  @override
+  String get tgRequested => 'Pieprasīts';
+
+  @override
+  String get tgClose => 'Aizvērt';
+
+  @override
+  String get tgCancel => 'Atcelt';
+
+  @override
+  String get tgBack => 'Atpakaļ';
+
+  @override
+  String get tgYes => 'Jā';
+
+  @override
+  String get tgNo => 'Nē';
+
+  @override
+  String get tgSearch => 'Meklēt';
+
+  @override
+  String get tgHide => 'Paslēpt';
+
+  @override
+  String get tgAll => 'Visi';
+
+  @override
+  String get tgNone => 'Neviens';
+
+  @override
+  String get tgMovies => 'Filmas';
+
+  @override
+  String get tgSeries => 'Seriāli';
+
+  @override
+  String get tgMovieTag => 'Filma';
+
+  @override
+  String get tgSeriesTag => 'Seriāls';
+
+  @override
+  String get tgCanTakeAMinute => 'Var aizņemt līdz minūtei';
+
+  @override
+  String get tgToday => 'šodien';
+
+  @override
+  String get tgYesterday => 'vakar';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'pirms $days dienām';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'pirms $months mēn.';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'pirms $years g.';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'pirms $years g. un $months mēn.';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Atrast subtitrus';
+
+  @override
+  String get tgFreeUpSpace => 'Atbrīvot vietu';
+
+  @override
+  String get tgDownloads => 'Lejupielādes';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Lejupielādes ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '„$title”: lejupielādē nebija video faila ($files). Tā ir noņemta un bloķēta – izmēģiniet citu failu.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '„$title”: lejupielādē nebija video faila ($files), bet to neizdevās noņemt automātiski.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Pārraidīts $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Pieskarieties, lai atrastu failus';
+
+  @override
+  String get tgWholeSeason => 'Visa sezona';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Trūkst $count epizožu – atrodiet visas sezonas paketi';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Pievienojiet Sonarr, lai redzētu trūkstošās epizodes';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Seriāls tiek pievienots, pats neko nelejupielādējot';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Trūkstošās epizodes šobrīd nevar parādīt';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Pieskarieties, lai mēģinātu vēlreiz';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Sezonas pakete';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Uzraudzīt $season. sezonu';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Vai Sonarr tagad jāielādē trūkstošās $season. sezonas epizodes?\n\nNē: tiks ielādētas tikai jaunās epizodes, kad tās iznāks.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr meklē $season. sezonu';
+  }
+
+  @override
+  String get tgMonitored => 'Uzraudzīts';
+
+  @override
+  String get tgNotMonitored => 'Netiek uzraudzīts';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return '$season. sezona: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return 'Trūkst: $label';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code vēl nav pārraidīta.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code vēl nav pārraidīta – gaidāma $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code jau tiek lejupielādēta.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code ir lejupielādēta un drīz parādīsies bibliotēkā.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Meklē: $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return '$season. sezona';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Visa $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return '$season. sezona – bibliotēkā nav epizožu';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'Seriālam nav TVDB ID, tāpēc Sonarr to nevar atrast.';
+
+  @override
+  String get tgAddingToSonarr => 'Pievieno Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Neizdevās pievienot seriālu Sonarr. Mēģiniet vēlāk.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Sūta „$label” lejupielādei …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Lejupielāde nesākās: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '„$label” tiek lejupielādēts ($size). Pēc pabeigšanas tas parādīsies bibliotēkā.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Neizdevās sazināties ar Sonarr. Mēģiniet vēlreiz nedaudz vēlāk.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Netika atrasti izmantojami faili. Mēģiniet vēlāk – jauni bieži parādās pēc dažām stundām.';
+
+  @override
+  String tgFilesCount(int count) {
+    return 'Faili: $count';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return 'Faili: $count – $recommended atbilst kvalitātes profilam, pārējie ir apakšā';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Neatbilst kvalitātes profilam';
+
+  @override
+  String get tgLargerThanProfile => 'Lielāks, nekā profils atļauj';
+
+  @override
+  String get tgSmallerThanProfile => 'Mazāks, nekā profils atļauj';
+
+  @override
+  String get tgAlreadyExists => 'Jau eksistē';
+
+  @override
+  String get tgMayNotFitDisk => 'Var neietilpt diskā';
+
+  @override
+  String get tgSonarrUnreachable => 'Neizdevās sazināties ar Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Neizdevās sazināties ar Sonarr adresē $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr nepieņēma izmaiņas';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Sezona tiek uzraudzīta, bet Sonarr nesāka meklēšanu';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr šobrīd nevar meklēt';
+
+  @override
+  String get tgSearchExpired =>
+      'Meklēšanas rezultāta derīgums ir beidzies – meklējiet vēlreiz';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr nepieņēma lejupielādi (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr nav šī seriāla';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Neizdevās mainīt uzraudzību: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin neatpazina seriālu (nav TVDB vai TMDB ID)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Kaut kas nogāja greizi: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Failu nepārvalda Radarr/Sonarr, un Jellyfin mapei ir tikai lasīšanas piekļuve. Izdzēsiet to failu pārvaldniekā.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr nav sasniedzams vai seriāls tur nav pievienots. Lejupielādei pa epizodēm ir nepieciešams Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Sonarr neizdevās atrast izvēlētās „$title” epizodes (kopā atrastas $count epizodes). Pievienojiet seriālu Sonarr un mēģiniet vēlreiz.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Daļa no kolekcijas ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  jūs skatāties $current. daļu no $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return '$number. daļa no $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Nezināms nosaukums';
+
+  @override
+  String get tgMovieCollection => 'Filmu kolekcija';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '„$title” vēl nav iznākusi';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Video';
+
+  @override
+  String get tgScreensaverModeLogo => 'Logotips';
+
+  @override
+  String get tgScreensaverSound => 'Ekrānsaudzētāja skaņa';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Izslēgts: ekrānsaudzētāja treileri tiek atskaņoti bez skaņas';
+
+  @override
+  String get tgScreensaverLogo => 'Logotips';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr emblēma';
+
+  @override
+  String get tgLogoVhs => 'Papagailis uz VHS kasetēm';
+
+  @override
+  String get tgLogoSign => 'Papagailis uz izkārtnes';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'PASLĒPTS · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Vieta diskā';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Atbrīvojiet vietu jaunām lejupielādēm';
+
+  @override
+  String get tgAdultTitle => 'Pieaugušo filmas (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Rādīt vai paslēpt XXX bibliotēku (PIN)';
+
+  @override
+  String get tgHideForeign => 'Paslēpt ārzemju saturu';
+
+  @override
+  String get tgHideForeignOn =>
+      'Ieslēgts: „Aktuāli” un „Populāri” rāda tikai angļu, norvēģu, zviedru, dāņu, vācu un franču valodas saturu';
+
+  @override
+  String get tgHideForeignOff =>
+      'Izslēgts: „Aktuāli” un „Populāri” rāda visu valodu saturu';
+
+  @override
+  String get tgShowHidden => 'Rādīt, kas ir paslēpts';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Ieslēgts: nosaukumi, kas tiktu paslēpti, tiek rādīti ar sarkanu atzīmi PASLĒPTS';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Problēmu novēršana: rādīt paslēptos nosaukumus ar sarkanu atzīmi, nevis noņemt tos';
+
+  @override
+  String get tgShowAllSubLangs => 'Rādīt visas subtitru valodas';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Ieslēgts: subtitru izvēlnē tiek rādītas visas valodas';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Izslēgts: subtitru izvēlnē tiek rādīta tikai norvēģu un angļu valoda';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Izslēgts: subtitru izvēlne rāda tikai izvēlētās valodas';
+
+  @override
+  String get tgSubtitleLanguages => 'Subtitru valodas';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Rāda subtitru izvēlnē: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Priekšskatījuma skaņa';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Ieslēgts: klipam, kas tiek atskaņots, apstājoties uz nosaukuma, ir skaņa';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Izslēgts: pārlūkojot klipi tiek atskaņoti bez skaņas';
+
+  @override
+  String get tgScreensaver => 'Ekrānsaudzētājs';
+
+  @override
+  String get tgScreensaverSubtitle => 'Video vai logotips, skaņa un attēls';
+
+  @override
+  String get tgShowMissingEpisodes => 'Rādīt trūkstošās epizodes';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Ieslēgts: sezonās tiek rādītas epizodes, kuru jums nav, gatavas lejupielādei';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Izslēgts: sezonās tiek rādītas tikai tās epizodes, kuras jums ir';
+
+  @override
+  String get tgShowCollections => 'Rādīt filmu kolekcijas';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Ieslēgts: filmām tiek rādītas pārējās kolekcijas filmas, arī tās, kuru jums trūkst';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Izslēgts: filmas lapā kolekcija netiek rādīta';
+
+  @override
+  String get tgNoActiveDownloads => 'Nav aktīvu lejupielāžu.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Izvēlieties lejupielādi, lai atvērtu pieprasījumus.';
+
+  @override
+  String get tgRefreshLibrary => 'Atsvaidzināt bibliotēku';
+
+  @override
+  String get tgAskingJellyfinScan => 'Lūdz Jellyfin skenēt bibliotēku …';
+
+  @override
+  String get tgHideAll => 'Paslēpt visu';
+
+  @override
+  String get tgImporting => 'Importē';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Šo nosaukumu nepārvalda Radarr/Sonarr, tāpēc Bazarr tam nevar atrast subtitrus.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Neizdevās sazināties ar Bazarr. Mēģiniet vēlreiz nedaudz vēlāk.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Pagaidām nekas nav atrasts. Bazarr katru dienu automātiski mēģina vēlreiz, vai arī varat izvēlēties pats.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Atrasts: $languages – var paiet brīdis, līdz tie parādās subtitru izvēlnē.';
+  }
+
+  @override
+  String get tgAnd => 'un';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Lejupielādēts – var paiet brīdis, līdz tie parādās subtitru izvēlnē.';
+
+  @override
+  String get tgAskingBazarr => 'Vaicā Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Ir visi';
+
+  @override
+  String get tgSearchAutoNow => 'Meklēt automātiski tagad';
+
+  @override
+  String get tgSearchingUpToMinute => 'Meklē … var aizņemt līdz minūtei';
+
+  @override
+  String get tgPickYourself => 'Izvēlēties pašam';
+
+  @override
+  String get tgAskingProviders =>
+      'Vaicā subtitru avotiem … var aizņemt līdz minūtei';
+
+  @override
+  String get tgNoProviderSubs =>
+      'Nevienam avotam vēl nav subtitru šim nosaukumam.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: ir';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: trūkst';
+  }
+
+  @override
+  String get tgNoReleaseName => '(bez izlaiduma nosaukuma)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · vājdzirdīgajiem';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Norvēģu';
+
+  @override
+  String get tgLangEnglish => 'Angļu';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr šo nosaukumu vēl nepazīst';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr atbildēja ar kļūdu (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Diskā $drive: ir maz vietas (brīvi $free). Lejupielāde var apstāties — pasakiet tam, kurš uztur serveri.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Neizdevās sazināties ar qBittorrent, lai pārbaudītu vietu';
+
+  @override
+  String get tgNotEnoughSpace => 'Nepietiek vietas';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: brīvi $free';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Kopija mapē „Downloads” · jau ir bibliotēkā';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Pēdējoreiz skatīts $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Nekad nav skatīts · pievienots $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Nekad nav skatīts';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Diskā $drive: netika atrasts nekas, ko varētu droši izdzēst (viss ir nesen pievienots, nesen skatīts vai izlasē).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dzēst $count nosaukumus?',
+      one: 'Dzēst $count nosaukumu?',
+      zero: 'Dzēst $count nosaukumus?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size tiks neatgriezeniski izdzēsti. To nevar atsaukt.';
+  }
+
+  @override
+  String get tgYesDelete => 'Jā, dzēst';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Dzēš $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: tagad brīvi $free';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Izdzēsti $count nosaukumi',
+      one: 'Izdzēsts $count nosaukums',
+      zero: 'Izdzēsti $count nosaukumi',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Izdzēsti: $count, neizdevās: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Atbrīvot $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Lejupielāžu kopijas';
+
+  @override
+  String get tgLookingForUnwatched => 'Meklē to, kas ilgi nav skatīts …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Ieteikums: $size · vietas pietiek ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Ieteikums: $size no nepieciešamajiem $target';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Izvēlieties vienu, lai pasacītu nē — nākamais ieteikums parādīsies automātiski.';
+
+  @override
+  String get tgOtherCandidates => 'Citi kandidāti';
+
+  @override
+  String get tgDownloadAnyway => 'Lejupielādēt tomēr';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Dzēst $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: brīvi $free.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Fails ir $size un aizņem divreiz vairāk vietas (lejupielāde + kopija bibliotēkā), plus $buffer rezervē.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Fails ir $size, plus $buffer rezervē.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Notiekošajām lejupielādēm vajag vēl $size.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Pietrūkst $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Atrasti tikai faili, kas publicēti pirms filmas digitālās iznākšanas ($count) — tie gandrīz vienmēr ir viltoti.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'vēl nav digitālā izlaiduma datuma';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'digitāli iznāk $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Digitāli vēl nav iznākusi';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '„$title” $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Tas, kas šobrīd ir pieejams, parasti ir kinoteātra ieraksts vai cita filma ar tādu pašu nosaukumu. Dažkārt ir agrīna kopija zemākā kvalitātē, bieži ar iededzinātiem subtitriem. „Tomēr rādīt failus” parāda, kas ir pieejams. Radarr pats ielādēs pareizo versiju, kad tā iznāks.';
+
+  @override
+  String get tgShowFilesAnyway => 'Tomēr rādīt failus';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Izvēlieties sezonas un epizodes';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: nav informācijas par epizodēm';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Attiecas uz visām ierīcēm, kas izmanto šo kontu';
+
+  @override
+  String get tgNoXxxLibrary => 'Netika atrasta bibliotēka ar nosaukumu XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Meklē katru vārdu atsevišķi … (var aizņemt pusminūti)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '„$title” ($size) nosūtīts uz qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Lejupielāde neizdevās: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '„$title” nebija video faila, un tas ir noņemts.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '„$title” nebija video faila, un tas NAV noņemts.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Meklēt jaunu XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Nosaukums, studija …';
+
+  @override
+  String get tgChecking => 'Pārbauda …';
+
+  @override
+  String get tgXxxVisible =>
+      'Tagad redzams. XXX tiek rādīts bibliotēkās, meklēšanā un sākuma ekrānā.';
+
+  @override
+  String get tgXxxHidden => 'Paslēpts. XXX lietotnē nekur netiek rādīts.';
+
+  @override
+  String get tgShowWithPin => 'Rādīt (PIN)';
+
+  @override
+  String get tgChangePin => 'Mainīt PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Neizdevās iegūt bibliotēku sarakstu (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Neizdevās iegūt lietotāja iestatījumus (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin noraidīja izmaiņas (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Dzēšana neizdevās (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Neizdevās pievienot „$title” qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return '$season. sezona, $episode. epizode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Meklēt Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Meklējiet filmas un seriālus (piem., „Lost S02E05”)';
+
+  @override
+  String get tgMissingInThisSeason => 'Trūkst šajā sezonā';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Trūkst sezonu',
+      one: 'Trūkst sezonas',
+      zero: 'Trūkst sezonu',
+    );
+    return '$_temp0 $list - atveriet seriālu, lai redzētu visas sezonas';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr vietnē GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Pirmkods, laidieni un kļūdu ziņojumi';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr ir veidots uz Moonfin (GPL) bāzes, ko izstrādājuši Moonfin izstrādātāji.';
+
+  @override
+  String get tgCredits => 'Pateicības';
+
+  @override
+  String get tgCreditsThanks =>
+      'Ar pazemīgu pateicību: bez šiem projektiem un cilvēkiem, kas stāv aiz tiem, Tortugarr nebūtu.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Lietotne, uz kuras bāzes veidots Tortugarr (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Multivides serveris';
+
+  @override
+  String get tgCreditSeerr => 'Atklāšana un pieprasījumi';
+
+  @override
+  String get tgCreditRadarr => 'Filmas';
+
+  @override
+  String get tgCreditSonarr => 'Seriāli';
+
+  @override
+  String get tgCreditProwlarr => 'Indeksētāju pārvaldnieks';
+
+  @override
+  String get tgCreditBazarr => 'Subtitri';
+
+  @override
+  String get tgCreditFlareSolverr => 'Cloudflare palīgs indeksētājiem';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Lejupielādes klients, instalētāja noklusējums';
+
+  @override
+  String get tgCreditTmdb => 'Filmu un seriālu dati, plakāti un attēli';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Subtitri, iegūti caur Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Šis produkts izmanto TMDB API, bet TMDB to nav apstiprinājis vai sertificējis.';
+
+  @override
+  String get tgLoadingLogoSize => 'Ielādes logotipa izmērs';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Rotējošais logotips, kamēr ielādējas video';
+
+  @override
+  String get tgDiscoveryLanguages => 'Valodas sadaļās Tendences un Populāri';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Rāda: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Ieslēgts: Tendences un Populāri rāda tikai izvēlētās valodas';
+
+  @override
+  String get tgShowLanguageBadges => 'Rādīt valodas zīmes';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Ieslēgts: nosaukumi rāda savu valodu (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Izslēgts: nosaukumiem nav valodas zīmju';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }

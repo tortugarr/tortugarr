@@ -8,8 +8,10 @@ import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
+import '../../../data/services/seerr/seerr_language_filter.dart';
 import '../../../data/viewmodels/seerr_browse_view_model.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../ui/mixins/focus_state_mixin.dart';
 import '../../../util/focus/dpad_keys.dart';
@@ -22,6 +24,7 @@ import '../../util/error_message.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
+import '../../navigation/single_push.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 Color get _navyBackground => AppColorScheme.background;
@@ -209,6 +212,50 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
       );
     }
 
+    // Handle filter errors (e.g., "Network Id Not Found") with a friendly message
+    // instead of showing an empty grid.
+    if (s.filterError != null) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.filter_alt_off,
+              size: 64,
+              color: AppColorScheme.onSurface.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.seerrFilterNotSupported,
+              style: TextStyle(
+                color: AppColorScheme.onSurface.withValues(alpha: 0.7),
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.seerrFilterNotSupportedDetail,
+              style: TextStyle(
+                color: AppColorScheme.onSurface.withValues(alpha: 0.5),
+                fontSize: 13,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Clear the filter and show all items
+                vm.setFilter(SeerrBrowseFilter.all);
+              },
+              icon: const Icon(Icons.clear_all),
+              label: Text(l10n.showAll),
+            ),
+          ],
+        ),
+      );
+    }
+
     return _buildGrid(s);
   }
 
@@ -293,6 +340,16 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
                     aspectRatio: 2 / 3,
                     seerrMediaType: item.mediaType,
                     seerrStatus: item.mediaInfo?.status,
+                    seerrLanguageMark: SeerrLanguageFilter.previewMark(
+                      item,
+                      active:
+                          s.filter == SeerrBrowseFilter.all &&
+                          GetIt.instance<SeerrPreferences>()
+                              .languagePreviewActive,
+                      badges:
+                          s.filter == SeerrBrowseFilter.all &&
+                          GetIt.instance<SeerrPreferences>().showLanguageBadges,
+                    ),
                     focusColor: resolvedFocusColor,
                     cardFocusExpansion: cardExpansion,
                     suppressFocusGlow: suppressFocusGlow,
@@ -327,7 +384,8 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
                             : () => setState(() => _focusedItem = null),
                     onTap: () {
                       final mt = item.mediaType ?? widget.mediaType ?? 'movie';
-                      context.push(
+                      SinglePush.push(
+                        context,
                         Destinations.seerrMedia(
                           item.id.toString(),
                           mediaType: mt,

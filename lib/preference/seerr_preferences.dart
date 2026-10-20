@@ -1,3 +1,5 @@
+import '../util/subtitle_track_logic.dart';
+import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
 import '../auth/repositories/session_repository.dart';
@@ -79,6 +81,84 @@ class SeerrPreferences {
   bool get showRequestStatus => _store.getBool(_userKey('show_request_status')) ?? true;
   Future<void> setShowRequestStatus(bool value) =>
       _store.setBool(_userKey('show_request_status'), value);
+
+  /// Discovery rows keep only English/Scandinavian/German/French titles
+  /// (see SeerrLanguageFilter). Read by SeerrRepository under this key.
+  static const hideForeignKey = 'hide_foreign';
+  bool get hideForeignContent =>
+      _store.getBool(_userKey(hideForeignKey)) ?? true;
+  Future<void> setHideForeignContent(bool value) =>
+      _store.setBool(_userKey(hideForeignKey), value);
+
+  /// Debug view for the filter above: rows are left unfiltered and the titles
+  /// it would hide get a red "SKJULES" mark. Off by default.
+  static const previewForeignKey = 'preview_foreign';
+  bool get previewForeignContent =>
+      _store.getBool(_userKey(previewForeignKey)) ?? false;
+  Future<void> setPreviewForeignContent(bool value) =>
+      _store.setBool(_userKey(previewForeignKey), value);
+
+  /// Subtitle menus list every language instead of only Norwegian and
+  /// English. Off by default.
+  static const showAllSubtitleLanguagesKey = 'show_all_subtitle_langs';
+  bool get showAllSubtitleLanguages =>
+      _store.getBool(_userKey(showAllSubtitleLanguagesKey)) ?? false;
+  Future<void> setShowAllSubtitleLanguages(bool value) =>
+      _store.setBool(_userKey(showAllSubtitleLanguagesKey), value);
+
+  /// Languages the subtitle menus list when [showAllSubtitleLanguages] is off,
+  /// as ISO 639-2 codes. Norwegian and English by default.
+  static const subtitleMenuLanguagesKey = 'subtitle_menu_langs';
+  Set<String> get subtitleMenuLanguageCodes {
+    final raw = _store.getString(_userKey(subtitleMenuLanguagesKey));
+    if (raw == null) return Set.of(defaultSubtitleMenuLanguageCodes);
+    return raw.split(',').map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+  }
+
+  Future<void> setSubtitleMenuLanguageCodes(Set<String> codes) =>
+      _store.setString(_userKey(subtitleMenuLanguagesKey), codes.join(','));
+
+  /// Original languages the discovery filter keeps, as ISO 639-2 codes from
+  /// [discoveryMenuLanguages]. English, Norwegian, Swedish, Danish, German
+  /// and French by default.
+  static const discoveryLanguagesKey = 'discovery_langs';
+  Set<String> get discoveryLanguageCodes {
+    final raw = _store.getString(_userKey(discoveryLanguagesKey));
+    if (raw == null) return Set.of(defaultDiscoveryLanguageCodes);
+    return raw.split(',').map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+  }
+
+  Future<void> setDiscoveryLanguageCodes(Set<String> codes) =>
+      _store.setString(_userKey(discoveryLanguagesKey), codes.join(','));
+
+  /// Discovery titles in a kept language show their language badge
+  /// (EN, NO, SE ...) also when the preview is off. On by default.
+  static const showLanguageBadgesKey = 'show_language_badges';
+  bool get showLanguageBadges =>
+      _store.getBool(_userKey(showLanguageBadgesKey)) ?? true;
+  Future<void> setShowLanguageBadges(bool value) =>
+      _store.setBool(_userKey(showLanguageBadgesKey), value);
+
+  /// Season and series episode lists include the episodes Sonarr knows but
+  /// the library does not have yet, greyed out and downloadable. On by
+  /// default.
+  static const showMissingEpisodesKey = 'show_missing_episodes';
+  bool get showMissingEpisodes =>
+      _store.getBool(_userKey(showMissingEpisodesKey)) ?? true;
+  Future<void> setShowMissingEpisodes(bool value) =>
+      _store.setBool(_userKey(showMissingEpisodesKey), value);
+
+  /// Movie detail screens show the other movies of the movie's TMDB
+  /// collection ("Del av filmserien …"). On by default.
+  static const showMovieCollectionsKey = 'show_movie_collections';
+  bool get showMovieCollections =>
+      _store.getBool(_userKey(showMovieCollectionsKey)) ?? true;
+  Future<void> setShowMovieCollections(bool value) =>
+      _store.setBool(_userKey(showMovieCollectionsKey), value);
+
+  /// True when cards should carry the "SKJULES" mark.
+  bool get languagePreviewActive =>
+      hideForeignContent && previewForeignContent;
 
   bool get blockNsfw => _store.getBool(_userKey('block_nsfw')) ?? true;
   Future<void> setBlockNsfw(bool value) => _store.setBool(_userKey('block_nsfw'), value);
@@ -217,7 +297,7 @@ class SeerrPreferences {
       'last_connection_success',
       'show_in_navigation', 'show_in_toolbar', 'show_request_status',
       'requests_filter',
-      'block_nsfw', 'notify_new_requests', 'notify_library_added',
+      'block_nsfw', hideForeignKey, previewForeignKey, showAllSubtitleLanguagesKey, showMissingEpisodesKey, 'notify_new_requests', 'notify_library_added',
       'notify_issues', 'notify_new_media',
       'fetch_limit', 'rows_config', 'home_rows_config',
       'hd_movie_profile_id', '4k_movie_profile_id',
@@ -230,5 +310,79 @@ class SeerrPreferences {
     for (final key in keys) {
       await _store.remove(_userKey(key));
     }
+  }
+}
+
+/// Read by the subtitle menus. Shows everything if the prefs are missing.
+bool showAllSubtitleLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return true;
+  try {
+    return getIt<SeerrPreferences>().showAllSubtitleLanguages;
+  } catch (_) {
+    return true;
+  }
+}
+
+/// Read by the subtitle menus and the player. Norwegian and English if the
+/// prefs are missing.
+Set<String> subtitleMenuLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) {
+    return Set.of(defaultSubtitleMenuLanguageCodes);
+  }
+  try {
+    return getIt<SeerrPreferences>().subtitleMenuLanguageCodes;
+  } catch (_) {
+    return Set.of(defaultSubtitleMenuLanguageCodes);
+  }
+}
+
+/// Read by the discovery filter. The default languages if the prefs are
+/// missing.
+Set<String> discoveryLanguagesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) {
+    return Set.of(defaultDiscoveryLanguageCodes);
+  }
+  try {
+    return getIt<SeerrPreferences>().discoveryLanguageCodes;
+  } catch (_) {
+    return Set.of(defaultDiscoveryLanguageCodes);
+  }
+}
+
+/// Read by the discovery cards. Off if the prefs are missing.
+bool showLanguageBadgesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showLanguageBadges;
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Read by the episode lists. Off if the prefs are missing, so nothing new
+/// shows up when the setting cannot be read.
+bool showMissingEpisodesSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showMissingEpisodes;
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Read by the movie detail screen. Off if the prefs are missing, so nothing
+/// new shows up when the setting cannot be read.
+bool showMovieCollectionsSetting() {
+  final getIt = GetIt.instance;
+  if (!getIt.isRegistered<SeerrPreferences>()) return false;
+  try {
+    return getIt<SeerrPreferences>().showMovieCollections;
+  } catch (_) {
+    return false;
   }
 }

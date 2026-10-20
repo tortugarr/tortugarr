@@ -9,7 +9,8 @@ import 'app_localizations.dart';
 /// Respects the user's language override in preferences, falling back
 /// to the device locale resolved against supported locales.
 Locale currentAppLocale([Locale? deviceLocale]) =>
-    _overrideLocale() ?? _resolveSupportedLocale(deviceLocale ?? PlatformDispatcher.instance.locale);
+    _overrideLocale() ??
+    _resolveSupportedLocale(deviceLocale ?? PlatformDispatcher.instance.locale);
 
 /// Matches the way Flutter resolves the app locale: exact, then language with
 /// script, then language with country, then language alone. Without the
@@ -21,10 +22,15 @@ Locale _resolveSupportedLocale(Locale target) {
   final country = target.countryCode;
   return supported.where((l) => l == target).firstOrNull ??
       supported
-          .where((l) => script != null && sameLanguage(l) && l.scriptCode == script)
+          .where(
+            (l) => script != null && sameLanguage(l) && l.scriptCode == script,
+          )
           .firstOrNull ??
       supported
-          .where((l) => country != null && sameLanguage(l) && l.countryCode == country)
+          .where(
+            (l) =>
+                country != null && sameLanguage(l) && l.countryCode == country,
+          )
           .firstOrNull ??
       supported.where(sameLanguage).firstOrNull ??
       const Locale('en');

@@ -372,7 +372,7 @@ class _MprisPlayer extends DBusObject {
       case 'HasTrackList':
         return const DBusBoolean(false);
       case 'Identity':
-        return const DBusString('Moonfin');
+        return const DBusString('Tortugarr');
       case 'DesktopEntry':
         // Flatpak names the desktop entry after the ID it was installed under.
         return DBusString(

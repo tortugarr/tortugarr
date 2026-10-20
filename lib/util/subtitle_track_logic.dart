@@ -474,3 +474,156 @@ SeriesTrackPreference createSeriesTrackPreferenceFromStream({
     relativeIndex: relativeIndex,
   );
 }
+
+/// A language the user can pick for the subtitle menus. [codes] are the
+/// ISO 639 tags a track may carry, [names] the full names some files use.
+class SubtitleMenuLanguage {
+  const SubtitleMenuLanguage(this.code, this.endonym, this.codes, this.names);
+
+  /// ISO 639-2 code stored in the preference.
+  final String code;
+
+  /// The language's own name, shown in the picker without translation.
+  final String endonym;
+  final Set<String> codes;
+  final List<String> names;
+}
+
+/// The languages offered in Settings > Subtitle languages, in picker order.
+const subtitleMenuLanguages = <SubtitleMenuLanguage>[
+  SubtitleMenuLanguage('eng', 'English', {'eng', 'en'}, ['english', 'engelsk']),
+  SubtitleMenuLanguage('nor', 'Norsk', {'nor', 'nob', 'nno', 'no', 'nb', 'nn'},
+      ['norwegian', 'norsk', 'bokmal', 'bokmål', 'nynorsk']),
+  SubtitleMenuLanguage('swe', 'Svenska', {'swe', 'sv'}, ['swedish', 'svenska', 'svensk']),
+  SubtitleMenuLanguage('dan', 'Dansk', {'dan', 'da'}, ['danish', 'dansk']),
+  SubtitleMenuLanguage('ger', 'Deutsch', {'ger', 'deu', 'de'}, ['german', 'deutsch', 'tysk']),
+  SubtitleMenuLanguage('fre', 'Français', {'fre', 'fra', 'fr'},
+      ['french', 'français', 'francais', 'fransk']),
+  SubtitleMenuLanguage('spa', 'Español', {'spa', 'es'}, ['spanish', 'español', 'espanol', 'spansk']),
+  SubtitleMenuLanguage('ita', 'Italiano', {'ita', 'it'}, ['italian', 'italiano', 'italiensk']),
+  SubtitleMenuLanguage('dut', 'Nederlands', {'dut', 'nld', 'nl'},
+      ['dutch', 'nederlands', 'nederlandsk']),
+  SubtitleMenuLanguage('fin', 'Suomi', {'fin', 'fi'}, ['finnish', 'suomi', 'finsk']),
+  SubtitleMenuLanguage('por', 'Português', {'por', 'pt'},
+      ['portuguese', 'português', 'portugues', 'portugisisk']),
+  SubtitleMenuLanguage('pol', 'Polski', {'pol', 'pl'}, ['polish', 'polski', 'polsk']),
+];
+
+/// Settings > Languages in Trending and Popular: the subtitle languages plus
+/// the big non-European film and TV languages, so anyone can choose to keep
+/// (for example) Japanese for anime. Only ISO 639-1 codes matter here: TMDB
+/// tags titles with them (Cantonese is "cn" on TMDB).
+const discoveryMenuLanguages = <SubtitleMenuLanguage>[
+  ...subtitleMenuLanguages,
+  SubtitleMenuLanguage('ice', 'Íslenska · Icelandic', {'ice', 'isl', 'is'}, ['icelandic']),
+  SubtitleMenuLanguage('cze', 'Čeština · Czech', {'cze', 'ces', 'cs'}, ['czech']),
+  SubtitleMenuLanguage('hun', 'Magyar · Hungarian', {'hun', 'hu'}, ['hungarian']),
+  SubtitleMenuLanguage('rum', 'Română · Romanian', {'rum', 'ron', 'ro'}, ['romanian']),
+  SubtitleMenuLanguage('gre', 'Ελληνικά · Greek', {'gre', 'ell', 'el'}, ['greek']),
+  SubtitleMenuLanguage('tur', 'Türkçe · Turkish', {'tur', 'tr'}, ['turkish']),
+  SubtitleMenuLanguage('rus', 'Русский · Russian', {'rus', 'ru'}, ['russian']),
+  SubtitleMenuLanguage('ukr', 'Українська · Ukrainian', {'ukr', 'uk'}, ['ukrainian']),
+  SubtitleMenuLanguage('jpn', '日本語 · Japanese (anime)', {'jpn', 'ja'}, ['japanese']),
+  SubtitleMenuLanguage('kor', '한국어 · Korean', {'kor', 'ko'}, ['korean']),
+  SubtitleMenuLanguage('chi', '中文 · Chinese (Mandarin)', {'chi', 'zho', 'zh'}, ['chinese', 'mandarin']),
+  SubtitleMenuLanguage('yue', '粵語 · Cantonese', {'yue', 'cn'}, ['cantonese']),
+  SubtitleMenuLanguage('tha', 'ไทย · Thai', {'tha', 'th'}, ['thai']),
+  SubtitleMenuLanguage('vie', 'Tiếng Việt · Vietnamese', {'vie', 'vi'}, ['vietnamese']),
+  SubtitleMenuLanguage('ind', 'Bahasa Indonesia · Indonesian', {'ind', 'id'}, ['indonesian']),
+  SubtitleMenuLanguage('tgl', 'Tagalog · Filipino', {'tgl', 'fil', 'tl'}, ['tagalog', 'filipino']),
+  SubtitleMenuLanguage('hin', 'हिन्दी · Hindi', {'hin', 'hi'}, ['hindi']),
+  SubtitleMenuLanguage('tam', 'தமிழ் · Tamil', {'tam', 'ta'}, ['tamil']),
+  SubtitleMenuLanguage('tel', 'తెలుగు · Telugu', {'tel', 'te'}, ['telugu']),
+  SubtitleMenuLanguage('mal', 'മലയാളം · Malayalam', {'mal', 'ml'}, ['malayalam']),
+  SubtitleMenuLanguage('kan', 'ಕನ್ನಡ · Kannada', {'kan', 'kn'}, ['kannada']),
+  SubtitleMenuLanguage('ara', 'العربية · Arabic', {'ara', 'ar'}, ['arabic']),
+  SubtitleMenuLanguage('heb', 'עברית · Hebrew', {'heb', 'he'}, ['hebrew']),
+  SubtitleMenuLanguage('per', 'فارسی · Persian', {'per', 'fas', 'fa'}, ['persian', 'farsi']),
+];
+
+/// Picked by default: Norwegian and English.
+const defaultSubtitleMenuLanguageCodes = <String>{'nor', 'eng'};
+
+/// Picked by default for Settings > Languages in Trending and Popular:
+/// English, Norwegian, Swedish, Danish, German and French.
+const defaultDiscoveryLanguageCodes = <String>{
+  'eng', 'nor', 'swe', 'dan', 'ger', 'fre',
+};
+
+/// TMDB original_language codes (ISO 639-1) for languages picked from
+/// [languages] (stored as ISO 639-2 codes).
+Set<String> tmdbCodesFor(
+  Set<String> picked, {
+  List<SubtitleMenuLanguage> languages = subtitleMenuLanguages,
+}) => {
+  for (final language in languages)
+    if (picked.contains(language.code))
+      ...language.codes.where((c) => c.length == 2),
+};
+
+/// True when [stream] belongs in the short subtitle menu: a track in one of
+/// the [languages] the user picked (ISO 639-2 codes from
+/// [subtitleMenuLanguages]), or one whose language is unknown (it may well be
+/// one of them). Forced tracks get no special treatment.
+bool isMenuLanguageSubtitleStream(
+  Map<String, dynamic> stream, {
+  Set<String> languages = defaultSubtitleMenuLanguageCodes,
+}) {
+  final language = (stream['Language'] as String?)?.trim().toLowerCase() ?? '';
+  // No language tag: keep it whatever the title says, it may well be one of
+  // the picked languages.
+  if (language.isEmpty || language == 'und') return true;
+  for (final candidate in subtitleMenuLanguages) {
+    if (candidate.codes.contains(language)) {
+      return languages.contains(candidate.code);
+    }
+  }
+  // Some files carry a full name instead of an ISO code.
+  if (language.length > 3) {
+    for (final candidate in subtitleMenuLanguages) {
+      if (!languages.contains(candidate.code)) continue;
+      if (candidate.names.any(language.contains)) return true;
+    }
+  }
+  return false;
+}
+
+/// The subtitle streams a menu should list. With [showAll] off only tracks in
+/// the picked [languages] and unknown-language tracks are kept. A track in
+/// another language is not listed even when it is the one playing (the player
+/// switches such auto-selected tracks off, see [shouldAutoDisableSubtitle]).
+/// If anything goes wrong every stream is returned.
+List<Map<String, dynamic>> filterSubtitleMenuStreams(
+  List<Map<String, dynamic>> streams, {
+  required bool showAll,
+  Set<String> languages = defaultSubtitleMenuLanguageCodes,
+}) {
+  if (showAll || streams.isEmpty) return streams;
+  try {
+    return streams
+        .where((s) => isMenuLanguageSubtitleStream(s, languages: languages))
+        .toList(growable: false);
+  } catch (_) {
+    return streams;
+  }
+}
+
+/// True when the subtitle track [activeIndex] that playback started with
+/// (for example a forced or default track the file switches on by itself) is
+/// in a language the user did not pick, so it should be switched off.
+bool shouldAutoDisableSubtitle(
+  List<Map<String, dynamic>> subtitleStreams,
+  int? activeIndex, {
+  required bool showAll,
+  Set<String> languages = defaultSubtitleMenuLanguageCodes,
+}) {
+  if (showAll || activeIndex == null || activeIndex < 0) return false;
+  try {
+    for (final stream in subtitleStreams) {
+      if (stream['Index'] == activeIndex) {
+        return !isMenuLanguageSubtitleStream(stream, languages: languages);
+      }
+    }
+  } catch (_) {}
+  return false;
+}

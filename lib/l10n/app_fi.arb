@@ -1,6 +1,6 @@
 {
     "@@locale": "fi",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versio {version}",
+    "appVersionFooter": "Tortugarr versio {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin ei voinut käyttää järjestelmän avainketjua. \tVoit kirjautua, mutta suojatun tunnuksen tallennus ei välttämättä ole käytettävissä, ennen kuin avainketju on avattu.",
+    "secureStorageUnavailableMessage": "Tortugarr ei voinut käyttää järjestelmän avainketjua. \tVoit kirjautua, mutta suojatun tunnuksen tallennus ei välttämättä ole käytettävissä, ennen kuin avainketju on avattu.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Alkuperäinen puhdas Moonfin oletusasetus.",
+    "themeMoonfinSubtitle": "Alkuperäinen puhdas Tortugarr oletusasetus.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon pulssi",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Poistutko Moonfinista?",
+    "exitApp": "Poistutko Tortugarrista?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Ei asetettu. Moonfin yrittää oletusarvoista mpv.conf-tiedostoa app/data-kansioissa.",
+    "notSetMpvConf": "Ei asetettu. Tortugarr yrittää oletusarvoista mpv.conf-tiedostoa app/data-kansioissa.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Lataukset/Moonfin – näkyy muille sovelluksille",
+    "downloadsVisibleToOtherApps": "Lataukset/Tortugarr – näkyy muille sovelluksille",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Ladattu media tallennetaan laitteesi Downloads/Moonfin-kansioon. Nämä tiedostot näkyvät muille sovelluksille, kuten galleriallesi tai musiikkisoittimellesi.\n\nNykyiset lataukset säilyvät nykyisessä paikassaan.",
+    "saveToDownloadsFolderDescription": "Ladattu media tallennetaan laitteesi Downloads/Tortugarr-kansioon. Nämä tiedostot näkyvät muille sovelluksille, kuten galleriallesi tai musiikkisoittimellesi.\n\nNykyiset lataukset säilyvät nykyisessä paikassaan.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Moonfin uudelleen, jotta muutokset tulevat voimaan.",
+    "libraryVisibilityDescription": "Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Tortugarr uudelleen, jotta muutokset tulevat voimaan.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Toista Moonfinissä",
+    "playInMoonfin": "Toista Tortugarrissä",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Pyytäjä {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Kohdetta ei löydy Moonfin-kirjastostasi",
+    "itemNotFoundInLibrary": "Kohdetta ei löydy Tortugarr-kirjastostasi",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Palvelimen uudelleenkäynnistys käynnissä",
-    "adminServerRebootMessage": "Palvelimen uudelleenkäynnistys käynnissä, käynnistä Moonfin uudelleen",
+    "adminServerRebootMessage": "Palvelimen uudelleenkäynnistys käynnissä, käynnistä Tortugarr uudelleen",
     "adminActiveSessions": "Aktiiviset istunnot",
     "adminSessionsLoadFailed": "Istuntojen lataaminen epäonnistui",
     "adminNoActiveSessions": "Ei aktiivisia istuntoja",
@@ -6538,7 +6538,7 @@
     "settingsShowGenresButtonInNavigation": "Näytä genre-painike navigointipalkissa",
     "settingsShowFavoritesButtonInNavigation": "Näytä suosikit-painike navigointipalkissa",
     "settingsShowLibrariesButtonInNavigation": "Näytä kirjastot-painike navigointipalkissa",
-    "settingsLibraryVisibilitySubtitle": "Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Moonfin uudelleen, jotta muutokset tulevat voimaan.",
+    "settingsLibraryVisibilitySubtitle": "Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Tortugarr uudelleen, jotta muutokset tulevat voimaan.",
     "settingsMediaBarAndLocalPreviews": "Mediapalkki ja paikalliset esikatselut",
     "settingsVisualOverlays": "Visuaaliset peittokuvat",
     "settingsSeasonalSurprise": "Kauden yllätys",
@@ -6557,14 +6557,14 @@
     "settingsJoinDiscord": "Liity Discordiin",
     "settingsJoinDiscordSubtitle": "Keskustele yhteisön kanssa",
     "settingsJoinTheDiscord": "Liity Discordiin",
-    "settingsSupportMoonfin": "Tue Moonfin:ä",
+    "settingsSupportMoonfin": "Tue Tortugarr:ä",
     "settingsLegal": "OIKEUDELLISET JUTUT",
     "settingsLicenses": "Lisenssit",
     "settingsOpenSourceLicenseNotices": "Avoimen lähdekoodin lisenssi-ilmoitukset",
     "settingsPrivacyPolicy": "Tietosuojakäytäntö",
-    "settingsPrivacyPolicySubtitle": "Kuinka Moonfin käsittelee tietojasi",
+    "settingsPrivacyPolicySubtitle": "Kuinka Tortugarr käsittelee tietojasi",
     "settingsCheckForUpdates": "Tarkista päivitykset",
-    "settingsCheckForUpdatesSubtitle": "Tarkista viimeisin Moonfin-julkaisu",
+    "settingsCheckForUpdatesSubtitle": "Tarkista viimeisin Tortugarr-julkaisu",
     "settingsPoweredByFlutter": "Toteutettu Flutter-alustalla",
     "settingsLicenseNoticesCount": "{count, plural, one {# lisenssi-ilmoitus} other {# lisenssi-ilmoitusta}}",
     "@settingsLicenseNoticesCount": {
@@ -7034,7 +7034,7 @@
         }
     },
     "savedThemesTitle": "Tallennetut Teemat",
-    "savedThemesDescription": "Nämä ovat teemoja, jotka on ladattu nykyisen palvelimen Moonfin-laajennuksesta. Poistaminen poistaa vain tämän paikallisen kopion.",
+    "savedThemesDescription": "Nämä ovat teemoja, jotka on ladattu nykyisen palvelimen Tortugarr-laajennuksesta. Poistaminen poistaa vain tämän paikallisen kopion.",
     "savedThemesEmpty": "Tälle palvelimelle ei löytynyt tallennettuja teemoja.",
     "savedThemesCurrentThemeId": "{themeId} • Tällä hetkellä aktiivinen",
     "@savedThemesCurrentThemeId": {
@@ -7048,7 +7048,7 @@
     "savedThemesDeleteTooltip": "Poista tallennettu teema",
     "savedThemesManageSubtitle": "Hallinnoi ladattuja laajennusteemoja tällä laitteella",
     "themeEditor": "Teeman editori",
-    "themeEditorSubtitle": "Avaa Moonfin teemaeditori selaimessasi",
+    "themeEditorSubtitle": "Avaa Tortugarr teemaeditori selaimessasi",
     "homeScreen": "Kotinäyttö",
     "bottomBar": "Alapalkki",
     "homeRowsStyleClassic": "Klassinen",
@@ -7097,12 +7097,12 @@
     "preferSdhSubtitles": "Suosi SDH tekstityksiä",
     "preferSdhSubtitlesSubtitle": "Priorisoi SDH/CC-tekstitysraidat, kun valitset automaattisen valinnan.",
     "webDiagnostics": "Verkkodiagnostiikka",
-    "webDiagnosticsTitle": "Moonfin Verkkodiagnostiikka",
+    "webDiagnosticsTitle": "Tortugarr Verkkodiagnostiikka",
     "webDiagnosticsIntro": "Tämän sivun avulla voit diagnosoida selaimen yhteysongelmia (CORS, sekasisältö ja etsintäasetukset).",
     "webDiagnosticsDetectedMixedContentFailure": "Havaittu sekasisällön virhe",
     "webDiagnosticsDetectedCorsPreflightFailure": "Havaittu CORS/Preflight Failure",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin havaitsi HTTPS-sivun, joka yritti kutsua HTTP-palvelimen URL-osoitetta. Selaimet estävät tämän pyynnön ennen kuin se saavuttaa palvelimesi.",
-    "webDiagnosticsCorsFailureBody": "Moonfin havaitsi selaintason pyyntövirheen, joka johtuu yleensä puuttuvista CORS- tai esitarkastusotsikoista mediapalvelimelta.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr havaitsi HTTPS-sivun, joka yritti kutsua HTTP-palvelimen URL-osoitetta. Selaimet estävät tämän pyynnön ennen kuin se saavuttaa palvelimesi.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr havaitsi selaintason pyyntövirheen, joka johtuu yleensä puuttuvista CORS- tai esitarkastusotsikoista mediapalvelimelta.",
     "webDiagnosticsTargetUrl": "Kohde-URL-osoite: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7132,7 +7132,7 @@
     "notConfigured": "ei ole määritetty",
     "webDiagnosticsMixedContent": "Sekoitettu sisältö",
     "webDiagnosticsMixedContentDetected": "Tämä sivu ladataan HTTPS:n kautta, mutta yksi tai useampi määritetty URL-osoite on HTTP. Selaimet estävät HTTPS-sivuja kutsumasta HTTP API:ita.",
-    "webDiagnosticsMixedContentFix": "Korjaus: palvele mediapalvelinta tai välityspalvelinta HTTPS:n kautta tai lataa Moonfin HTTP:n kautta vain luotetuissa paikallisverkoissa.",
+    "webDiagnosticsMixedContentFix": "Korjaus: palvele mediapalvelinta tai välityspalvelinta HTTPS:n kautta tai lataa Tortugarr HTTP:n kautta vain luotetuissa paikallisverkoissa.",
     "webDiagnosticsNoMixedContentDetected": "Nykyisistä ajonaikaisista asetuksista ei havaittu ilmeisiä sekasisällön määrityksiä.",
     "webDiagnosticsCorsChecklist": "CORS-tarkistuslista",
     "webDiagnosticsCorsChecklistItem1": "• Salli selaimen alkuperä kohdassa Access-Control-Allow-Origin.",
@@ -7361,13 +7361,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Käytä Moonfin Recommends -sovelluksen paikalliskirjastoalgoritmia, Jellyfin Recommends -palvelinmoottoria tai TMDb:n verkkopalvelun samankaltaisuusmittareita. Huomautus: Verkkosuositukset edellyttävät Seerr-integraatiota.",
+    "recommendationSystemSubtitle": "Käytä Tortugarr Recommends -sovelluksen paikalliskirjastoalgoritmia, Jellyfin Recommends -palvelinmoottoria tai TMDb:n verkkopalvelun samankaltaisuusmittareita. Huomautus: Verkkosuositukset edellyttävät Seerr-integraatiota.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Suositukset",
+    "recommendationSystemMoonfin": "Tortugarr Suositukset",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb Samankaltaisuus",
     "@recommendationSystemTmdb": {
@@ -7377,7 +7377,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Rajoita Moonfin suosittelee ehdotuksia kohdemedian ikärajan mukaan",
+    "recommendationsApplyParentalRatingCapSubtitle": "Rajoita Tortugarr suosittelee ehdotuksia kohdemedian ikärajan mukaan",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7425,7 +7425,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Mukautetut teemat muuttavat Moonfinin ulkoasua kauttaaltaan. Valitse tyyliisi sopiva vaihtoehto.",
+    "customThemeSubtitle": "Mukautetut teemat muuttavat Tortugarrin ulkoasua kauttaaltaan. Valitse tyyliisi sopiva vaihtoehto.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7598,7 +7598,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Kirjaudu Moonfiniin puhelimellasi",
+    "carSignInPrompt": "Kirjaudu Tortugarriin puhelimellasi",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8934,7 +8934,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller on Flutterin moderni GPU-renderöijä, joka tuo sulavammat animaatiot ja vähemmän nykimistä. Joissakin TV-bokseissa ja vanhemmissa GPU:issa se voi aiheuttaa häiriöitä tai mustan kuvan; valitse silloin Ei käytössä. Automaattinen valitsee laitteellesi parhaan oletuksen. Ota muutos käyttöön käynnistämällä Moonfin uudelleen.",
+    "impellerRenderingSubtitle": "Impeller on Flutterin moderni GPU-renderöijä, joka tuo sulavammat animaatiot ja vähemmän nykimistä. Joissakin TV-bokseissa ja vanhemmissa GPU:issa se voi aiheuttaa häiriöitä tai mustan kuvan; valitse silloin Ei käytössä. Automaattinen valitsee laitteellesi parhaan oletuksen. Ota muutos käyttöön käynnistämällä Tortugarr uudelleen.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8945,7 +8945,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin on käynnistettävä uudelleen renderöintimoottorin vaihtamiseksi. Sulje sovellus nyt ja avaa se uudelleen, niin muutos tulee voimaan.",
+    "impellerRestartMessage": "Tortugarr on käynnistettävä uudelleen renderöintimoottorin vaihtamiseksi. Sulje sovellus nyt ja avaa se uudelleen, niin muutos tulee voimaan.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -14782,5 +14782,247 @@
     "shortcutHideControls": "Piilota hallintapainikkeet",
     "@shortcutHideControls": {
         "description": "What Backspace and Delete do in the player: hide the controls or the panel on top of them"
-    }
+    },
+    "tgMissing": "Puuttuu",
+    "tgComing": "Tulossa",
+    "tgComingOn": "Tulossa {date}",
+    "tgDownloading": "Ladataan",
+    "tgReadySoon": "Valmis pian",
+    "tgRequested": "Pyydetty",
+    "tgClose": "Sulje",
+    "tgCancel": "Peruuta",
+    "tgBack": "Takaisin",
+    "tgYes": "Kyllä",
+    "tgNo": "Ei",
+    "tgSearch": "Haku",
+    "tgHide": "Piilota",
+    "tgAll": "Kaikki",
+    "tgNone": "Ei mitään",
+    "tgMovies": "Elokuvat",
+    "tgSeries": "Sarjat",
+    "tgMovieTag": "Elokuva",
+    "tgSeriesTag": "Sarja",
+    "tgCanTakeAMinute": "Voi kestää jopa minuutin",
+    "tgToday": "tänään",
+    "tgYesterday": "eilen",
+    "tgDaysAgo": "{days} päivää sitten",
+    "tgMonthsAgo": "{months} kk sitten",
+    "tgYearsAgo": "{years} vuotta sitten",
+    "tgYearsMonthsAgo": "{years} vuotta ja {months} kk sitten",
+    "tgFindSubtitles": "Etsi tekstitykset",
+    "tgFreeUpSpace": "Vapauta tilaa",
+    "tgDownloads": "Lataukset",
+    "tgDownloadsCount": "Lataukset ({count})",
+    "tgNoVideoRemoved": "”{title}”: latauksessa ei ollut videotiedostoa ({files}). Se poistettiin ja estettiin – kokeile toista tiedostoa.",
+    "tgNoVideoNotRemoved": "”{title}”: latauksessa ei ollut videotiedostoa ({files}), mutta sitä ei voitu poistaa automaattisesti.",
+    "tgAiredOn": "Esitetty {date}",
+    "tgTapToFindFiles": "Napauta etsiäksesi tiedostoja",
+    "tgWholeSeason": "Koko kausi",
+    "tgEpisodesMissingFindPack": "{count} jaksoa puuttuu – etsi kausipaketti",
+    "tgAddToSonarrTitle": "Lisää Sonarriin nähdäksesi puuttuvat jaksot",
+    "tgAddToSonarrSubtitle": "Sarja lisätään lataamatta mitään itsestään",
+    "tgMissingEpisodesUnavailable": "Puuttuvia jaksoja ei voi näyttää juuri nyt",
+    "tgReasonTapRetry": "{reason} · Napauta yrittääksesi uudelleen",
+    "tgSeasonPackBadge": "Kausipaketti",
+    "tgMonitorSeasonTitle": "Seuraa kautta {season}",
+    "tgMonitorSeasonQuestion": "Hakeeko Sonarr kauden {season} puuttuvat jaksot nyt?\n\nEi: vain uudet jaksot haetaan, kun ne ilmestyvät.",
+    "tgSonarrSearchingSeason": "Sonarr etsii kautta {season}",
+    "tgMonitored": "Seurataan",
+    "tgNotMonitored": "Ei seurata",
+    "tgSeasonStateLabel": "Kausi {season}: {state}",
+    "tgLabelMissing": "{label} puuttuu",
+    "tgNotAiredYet": "{code} ei ole vielä esitetty.",
+    "tgNotAiredYetComing": "{code} ei ole vielä esitetty – tulossa {date}.",
+    "tgAlreadyDownloading": "{code} ladataan jo.",
+    "tgDownloadedAppearsSoon": "{code} on ladattu ja ilmestyy kirjastoon hetken kuluttua.",
+    "tgSearchingFor": "Etsitään {label} …",
+    "tgSeasonLower": "kausi {season}",
+    "tgWholeLabel": "Koko {label}",
+    "tgSeasonNoEpisodes": "Kausi {season} – ei jaksoja kirjastossa",
+    "tgNoTvdbId": "Sarjalla ei ole TVDB-tunnusta, joten Sonarr ei löydä sitä.",
+    "tgAddingToSonarr": "Lisätään Sonarriin …",
+    "tgAddToSonarrFailed": "Sarjaa ei voitu lisätä Sonarriin. Yritä myöhemmin uudelleen.",
+    "tgSendingToDownload": "Lähetetään ”{label}” ladattavaksi …",
+    "tgDownloadDidNotStart": "Lataus ei käynnistynyt: {error}",
+    "tgDownloadingAppearsWhenDone": "”{label}” ladataan ({size}). Se ilmestyy kirjastoon, kun lataus on valmis.",
+    "tgSonarrUnreachableRetry": "Sonarriin ei saatu yhteyttä. Yritä hetken päästä uudelleen.",
+    "tgNoUsableFiles": "Käyttökelpoisia tiedostoja ei löytynyt. Yritä myöhemmin uudelleen – uusia ilmestyy usein muutaman tunnin kuluessa.",
+    "tgFilesCount": "{count} tiedostoa",
+    "tgFilesRecommended": "{count} tiedostoa – {recommended} sopii laatuprofiiliin, loput ovat alimpana",
+    "tgOutsideQualityProfile": "Laatuprofiilin ulkopuolella",
+    "tgLargerThanProfile": "Suurempi kuin profiili sallii",
+    "tgSmallerThanProfile": "Pienempi kuin profiili sallii",
+    "tgAlreadyExists": "On jo olemassa",
+    "tgMayNotFitDisk": "Ei ehkä mahdu levylle",
+    "tgSonarrUnreachable": "Sonarriin ei saatu yhteyttä",
+    "tgSonarrUnreachableAt": "Sonarriin ei saatu yhteyttä osoitteessa {host}",
+    "tgSonarrRejectedChange": "Sonarr ei hyväksynyt muutosta",
+    "tgSeasonMonitoredNoSearch": "Kautta seurataan, mutta Sonarr ei aloittanut hakua",
+    "tgSonarrCantSearch": "Sonarr ei voinut hakea juuri nyt",
+    "tgSearchExpired": "Hakutulos on vanhentunut – hae uudelleen",
+    "tgSonarrRejectedDownload": "Sonarr ei hyväksynyt latausta (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarrissa ei ole tätä sarjaa",
+    "tgCouldNotChangeMonitoring": "Seurantaa ei voitu muuttaa: {error}",
+    "tgJellyfinNoIds": "Jellyfin ei tunnistanut sarjaa (ei TVDB- tai TMDB-tunnusta)",
+    "tgSomethingWentWrong": "Jokin meni vikaan: {error}",
+    "tgDeleteReadOnly": "Tiedostoa ei hallitse Radarr/Sonarr, ja Jellyfinillä on kansioon vain lukuoikeus. Poista se tiedostonhallinnassa.",
+    "tgSonarrRequiredPerEpisode": "Sonarriin ei saada yhteyttä tai sarjaa ei ole lisätty sinne. Yksittäisten jaksojen lataus vaatii Sonarrin.",
+    "tgEpisodesNotFound": "Valittuja jaksoja ei löytynyt Sonarrista sarjalle ”{title}” (löytyi yhteensä {count} jaksoa). Lisää sarja Sonarriin ja yritä uudelleen.",
+    "tgPartOfCollectionPrefix": "Osa kokoelmaa ",
+    "tgViewingPartOf": "  ·  katsot osaa {current}/{total}",
+    "tgPartOf": "Osa {number}/{total}",
+    "tgUnknownTitle": "Tuntematon nimi",
+    "tgMovieCollection": "Elokuvakokoelma",
+    "tgNotReleasedYet": "”{title}” ei ole vielä julkaistu",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Näytönsäästäjän ääni",
+    "tgScreensaverSoundSubtitle": "Pois: näytönsäästäjän trailerit toistetaan äänettömästi",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarr-merkki",
+    "tgLogoVhs": "Papukaija VHS-kaseteilla",
+    "tgLogoSign": "Papukaija kyltissä",
+    "tgHiddenBadge": "PIILOTETTU · {code}",
+    "tgDiskSpace": "Levytila",
+    "tgDiskSpaceSubtitle": "Vapauta tilaa uusille latauksille",
+    "tgAdultTitle": "Aikuisviihde (XXX)",
+    "tgAdultSubtitle": "Näytä tai piilota XXX-kirjasto (PIN)",
+    "tgHideForeign": "Piilota ulkomainen sisältö",
+    "tgHideForeignOn": "Päällä: Nousussa ja Suositut näyttävät vain englannin-, norjan-, ruotsin-, tanskan-, saksan- ja ranskankieliset",
+    "tgHideForeignOff": "Pois: Nousussa ja Suositut näyttävät kaikki kielet",
+    "tgShowHidden": "Näytä, mitä piilotetaan",
+    "tgShowHiddenOn": "Päällä: muuten piilotettavat nimikkeet näytetään punaisella PIILOTETTU-merkillä",
+    "tgShowHiddenOff": "Vianetsintä: näytä piilotetut nimikkeet punaisella merkillä sen sijaan, että ne poistetaan",
+    "tgShowAllSubLangs": "Näytä kaikki tekstityskielet",
+    "tgShowAllSubLangsOn": "Päällä: tekstitysvalikko näyttää kaikki kielet",
+    "tgShowAllSubLangsOff": "Pois: tekstitysvalikko näyttää vain norjan ja englannin",
+    "tgPreviewSound": "Esikatselun ääni",
+    "tgPreviewSoundOn": "Päällä: nimikkeen kohdalle pysähtyessä toistuvassa klipissä on ääni",
+    "tgPreviewSoundOff": "Pois: klipit toistetaan äänettömästi selatessa",
+    "tgScreensaver": "Näytönsäästäjä",
+    "tgScreensaverSubtitle": "Video tai logo, ääni ja kuva",
+    "tgShowMissingEpisodes": "Näytä puuttuvat jaksot",
+    "tgShowMissingEpisodesOn": "Päällä: kaudet näyttävät jaksot, joita sinulla ei ole, valmiina ladattaviksi",
+    "tgShowMissingEpisodesOff": "Pois: kaudet näyttävät vain jaksot, jotka sinulla on",
+    "tgShowCollections": "Näytä elokuvakokoelmat",
+    "tgShowCollectionsOn": "Päällä: elokuvat näyttävät kokoelman muut elokuvat, myös ne jotka sinulta puuttuvat",
+    "tgShowCollectionsOff": "Pois: elokuvan sivu ei näytä kokoelmaa",
+    "tgNoActiveDownloads": "Ei aktiivisia latauksia.",
+    "tgPickDownloadToOpen": "Valitse lataus avataksesi pyynnöt.",
+    "tgRefreshLibrary": "Päivitä kirjasto",
+    "tgAskingJellyfinScan": "Pyydetään Jellyfiniä skannaamaan kirjasto …",
+    "tgHideAll": "Piilota kaikki",
+    "tgImporting": "Tuodaan",
+    "tgSubsNotManaged": "Tätä nimikettä ei hallitse Radarr/Sonarr, joten Bazarr ei voi etsiä sille tekstityksiä.",
+    "tgBazarrUnreachable": "Bazarriin ei saatu yhteyttä. Yritä hetken päästä uudelleen.",
+    "tgSubsFoundNothing": "Mitään ei löytynyt vielä. Bazarr yrittää automaattisesti uudelleen joka päivä, tai voit valita itse.",
+    "tgSubsFound": "Löytyi {languages} – voi kestää hetken, ennen kuin se ilmestyy tekstitysvalikkoon.",
+    "tgAnd": "ja",
+    "tgSubsDownloaded": "Ladattu – voi kestää hetken, ennen kuin se ilmestyy tekstitysvalikkoon.",
+    "tgAskingBazarr": "Kysytään Bazarrilta …",
+    "tgHaveAll": "Kaikki on jo",
+    "tgSearchAutoNow": "Hae automaattisesti nyt",
+    "tgSearchingUpToMinute": "Haetaan … voi kestää jopa minuutin",
+    "tgPickYourself": "Valitse itse",
+    "tgAskingProviders": "Kysytään tekstityslähteiltä … voi kestää jopa minuutin",
+    "tgNoProviderSubs": "Millään lähteellä ei ole vielä tekstityksiä tähän.",
+    "tgLangHas": "{language}: löytyy",
+    "tgLangMissing": "{language}: puuttuu",
+    "tgNoReleaseName": "(ei julkaisunimeä)",
+    "tgHearingImpaired": "{provider} · kuulovammaisille",
+    "tgLangNorwegian": "Norja",
+    "tgLangEnglish": "Englanti",
+    "tgBazarrUnknownTitle": "Bazarr ei tunne tätä nimikettä vielä",
+    "tgBazarrError": "Bazarr vastasi virheellä (HTTP {code})",
+    "tgLowSpaceSnack": "Tila vähissä asemalla {drive}: ({free} vapaana). Lataus voi pysähtyä — kerro palvelimen ylläpitäjälle.",
+    "tgNoQbitForSpace": "qBittorrentiin ei saatu yhteyttä tilan tarkistamiseksi",
+    "tgNotEnoughSpace": "Tila ei riitä",
+    "tgDriveHasFree": "{drive}: {free} vapaana",
+    "tgCopyInDownloads": "Kopio Downloads-kansiossa · on jo kirjastossa",
+    "tgLastWatched": "Katsottu viimeksi {ago}",
+    "tgNeverWatchedAdded": "Ei koskaan katsottu · lisätty {ago}",
+    "tgNeverWatched": "Ei koskaan katsottu",
+    "tgNothingSafeToDelete": "Asemalta {drive}: ei löytynyt mitään, jonka voisi poistaa turvallisesti (kaikki on äskettäin lisättyä, äskettäin katsottua tai suosikkeja).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Poistetaanko 1 nimike?} other{Poistetaanko {count} nimikettä?}}",
+    "tgDeletedForGood": "{size} poistetaan pysyvästi. Tätä ei voi kumota.",
+    "tgYesDelete": "Kyllä, poista",
+    "tgDeletingProgress": "Poistetaan {done}/{total} …",
+    "tgNowHasFree": " · {drive}: nyt {free} vapaana",
+    "tgDeletedTitles": "{count, plural, =1{Poistettiin 1 nimike} other{Poistettiin {count} nimikettä}}{extra}",
+    "tgDeletedFailed": "Poistettiin {count}, epäonnistui: {failed}{extra}",
+    "tgFreeGb": "Vapauta {gb} GB",
+    "tgDownloadCopies": "Latauskopiot",
+    "tgLookingForUnwatched": "Etsitään sitä, mitä ei ole katsottu pitkään aikaan …",
+    "tgSuggestionEnough": "Ehdotus: {size} · tilaa riittää ✓",
+    "tgSuggestionOf": "Ehdotus: {size} tarvittavasta {target}",
+    "tgPickToSayNo": "Valitse yksi sanoaksesi ei — seuraava ehdotus tulee automaattisesti.",
+    "tgOtherCandidates": "Muut ehdokkaat",
+    "tgDownloadAnyway": "Lataa silti",
+    "tgDeleteCountSize": "Poista {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} vapaana.",
+    "tgFileDoubleSpace": "Tiedosto on {size} ja vie tilaa kahdesti (lataus + kopio kirjastossa), sekä {buffer} varalle.",
+    "tgFileSize": "Tiedosto on {size}, sekä {buffer} varalle.",
+    "tgPendingNeeds": "Käynnissä olevat lataukset tarvitsevat vielä {size}.",
+    "tgShortBy": "Puuttuu {size}.",
+    "tgOnlyEarlyFiles": "Löytyi vain tiedostoja, jotka on julkaistu ennen elokuvan digitaalista julkaisua ({count}) — ne ovat lähes aina väärennöksiä.",
+    "tgNoDigitalDate": "ei ole vielä saanut digitaalista julkaisupäivää",
+    "tgDigitalOn": "julkaistaan digitaalisesti {date}",
+    "tgNotOutDigitally": "Ei vielä julkaistu digitaalisesti",
+    "tgTitleWhen": "”{title}” {when}.",
+    "tgNotOutExplain": "Se, mitä nyt on saatavilla, on yleensä elokuvateatteritallenne tai toinen samanniminen elokuva. Joskus on olemassa varhainen kopio heikommalla laadulla, usein kiinteillä tekstityksillä. ”Näytä tiedostot silti” näyttää, mitä on saatavilla. Radarr hakee kunnollisen version itse, kun se julkaistaan.",
+    "tgShowFilesAnyway": "Näytä tiedostot silti",
+    "tgPickSeasonsEpisodes": "Valitse kaudet ja jaksot",
+    "tgNoEpisodeInfo": "{season}: ei jaksotietoja",
+    "tgAppliesAllDevices": "Koskee kaikkia laitteita, jotka käyttävät tätä tiliä",
+    "tgNoXxxLibrary": "Kirjastoa nimeltä XXX ei löytynyt.",
+    "tgSearchingEachWord": "Haetaan jokaista sanaa erikseen … (voi kestää puoli minuuttia)",
+    "tgSentToQbit": "Lähetettiin ”{title}” ({size}) qBittorrentiin",
+    "tgDownloadFailed": "Lataus epäonnistui: {error}",
+    "tgXxxNoVideoRemoved": "”{title}” ei sisältänyt videotiedostoa, ja se on poistettu.",
+    "tgXxxNoVideoNotRemoved": "”{title}” ei sisältänyt videotiedostoa, ja sitä EI poistettu.",
+    "tgSearchNewXxx": "Hae uutta XXX-sisältöä",
+    "tgXxxSearchHint": "Nimi, studio …",
+    "tgChecking": "Tarkistetaan …",
+    "tgXxxVisible": "Näkyvissä nyt. XXX näkyy kirjastoissa, haussa ja aloitusnäytöllä.",
+    "tgXxxHidden": "Piilotettu. XXX ei näy missään sovelluksessa.",
+    "tgShowWithPin": "Näytä (PIN)",
+    "tgChangePin": "Vaihda PIN",
+    "tgNoLibraryList": "Kirjastoluetteloa ei saatu (HTTP {code})",
+    "tgNoUserSettings": "Käyttäjäasetuksia ei saatu (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin hylkäsi muutoksen (HTTP {code})",
+    "tgDeleteFailed": "Poistaminen epäonnistui (HTTP {code})",
+    "tgXxxAddFailed": "Nimikettä ”{title}” ei voitu lisätä qBittorrentiin",
+    "tgSeasonEpisodeLower": "kausi {season}, jakso {episode}",
+    "tgSearchInSeerr": "Hae Seerristä",
+    "tgSeerrSearchHint": "Hae elokuvia ja sarjoja (esim. ”Lost S02E05”)",
+    "tgMissingInThisSeason": "Puuttuu tältä kaudelta",
+    "tgMissingSeasonsOpenSeries": "{count, plural, =1{Puuttuva kausi} other{Puuttuvat kaudet}} {list} - avaa sarja nähdäksesi kaikki kaudet",
+    "tgProjectOnGitHub": "Tortugarr GitHubissa",
+    "tgProjectOnGitHubSubtitle": "Lähdekoodi, julkaisut ja virheraportit",
+    "tgBuiltOnMoonfinCredit": "Tortugarr perustuu Moonfiniin (GPL), jonka ovat tehneet Moonfinin kehittäjät.",
+    "tgCredits": "Kiitokset",
+    "tgCreditsThanks": "Nöyrät kiitokset: ilman näitä projekteja ja niiden takana olevia ihmisiä Tortugarria ei olisi olemassa.",
+    "tgCreditMoonfin": "Sovellus, johon Tortugarr perustuu (GPL)",
+    "tgCreditJellyfin": "Mediapalvelin",
+    "tgCreditSeerr": "Löytäminen ja pyynnöt",
+    "tgCreditRadarr": "Elokuvat",
+    "tgCreditSonarr": "Sarjat",
+    "tgCreditProwlarr": "Indeksoijien hallinta",
+    "tgCreditBazarr": "Tekstitykset",
+    "tgCreditFlareSolverr": "Cloudflare-apuri indeksoijille",
+    "tgCreditQbittorrent": "Latausohjelma, asennusohjelman oletus",
+    "tgCreditTmdb": "Elokuva- ja sarjatiedot, julisteet ja kuvat",
+    "tgCreditOpenSubtitles": "Tekstitykset, haettu Bazarrin kautta",
+    "tgTmdbNotice": "Tämä tuote käyttää TMDB:n rajapintaa, mutta TMDB ei ole hyväksynyt eikä sertifioinut sitä.",
+    "tgLoadingLogoSize": "Latauslogon koko",
+    "tgLoadingLogoSizeSubtitle": "Pyörivä logo videon latautuessa",
+    "tgSubtitleLanguages": "Tekstityskielet",
+    "tgSubtitleLanguagesSubtitle": "Näytetään tekstitysvalikossa: {languages}",
+    "tgShowAllSubLangsOffChosen": "Pois: tekstitysvalikko näyttää vain valitsemasi kielet",
+    "tgDiscoveryLanguages": "Kielet osioissa Suosittu nyt ja Suositut",
+    "tgDiscoveryLanguagesSubtitle": "Näytetään: {languages}",
+    "tgHideForeignOnChosen": "Päällä: Suosittu nyt ja Suositut näyttävät vain valitsemasi kielet",
+    "tgShowLanguageBadges": "Näytä kielimerkit",
+    "tgShowLanguageBadgesOn": "Päällä: nimikkeissä näkyy niiden kieli (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Pois: ei kielimerkkejä nimikkeissä"
 }

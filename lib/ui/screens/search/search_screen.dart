@@ -43,6 +43,7 @@ import '../../widgets/focus/context_menu_sheet.dart';
 import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/sliding_pill_tabs.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
+import '../../navigation/single_push.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
@@ -1556,7 +1557,8 @@ class _SearchScreenState extends State<SearchScreen>
         'person' => context.push(Destinations.seerrPerson(item.id.toString())),
         'collection' =>
           context.push(Destinations.seerrCollection(item.id.toString())),
-        _ => context.push(
+        _ => SinglePush.push(
+          context,
           Destinations.seerrMedia(
             item.id.toString(),
             mediaType: item.mediaType ?? 'movie',

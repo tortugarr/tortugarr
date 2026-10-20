@@ -79,8 +79,9 @@ android {
 
     flavorDimensions += "device"
     productFlavors {
-        val baseAppId = "org.moonfin.androidtv"
-        val baseAppName = "Moonfin"
+        // Own id (Tortugarr), separate from upstream Moonfin. The namespace below stays as-is.
+        val baseAppId = "io.github.tortugarr"
+        val baseAppName = "Tortugarr"
         // Optional application-id suffix for on-device testing, set through the
         // environment so an unset build is byte-identical to before:
         //   MOONFIN_TEST_ID_SUFFIX=.hwtest flutter build apk --flavor androidTv --debug
@@ -131,6 +132,36 @@ android {
             ndk { abiFilters += tvAbis }
             manifestPlaceholders["appName"] = "$baseAppName Beta"
             manifestPlaceholders["enableImpeller"] = "false"
+        }
+        // Public build (build-android-tv-public.sh): no server keys, no Firebase.
+        // Own id so it never replaces the private build on a device.
+        create("androidTv-public") {
+            dimension = "device"
+            applicationId = "$baseAppId.public"
+            versionCode = androidTvVersionCode
+            versionName = androidTvVersionName
+            ndk { abiFilters += tvAbis }
+            manifestPlaceholders["appName"] = baseAppName
+            manifestPlaceholders["enableImpeller"] = "false"
+        }
+        // Public phone/tablet build (build-android-tv-public.sh --mobile).
+        create("mobile-public") {
+            dimension = "device"
+            applicationId = "$baseAppId.public"
+            versionCode = flutter.versionCode
+            versionName = flutter.versionName
+            ndk { abiFilters += mobileAbis }
+            manifestPlaceholders["appName"] = baseAppName
+        }
+    }
+
+    // The public builds use the same manifests as the private ones.
+    sourceSets {
+        getByName("androidTv-public") {
+            manifest.srcFile("src/androidTv/AndroidManifest.xml")
+        }
+        getByName("mobile-public") {
+            manifest.srcFile("src/mobile/AndroidManifest.xml")
         }
     }
 
@@ -208,4 +239,10 @@ tasks.register<Copy>("copyAndroidTvDebugApkForFlutter") {
 
 tasks.matching { it.name == "assembleDebug" }.configureEach {
     finalizedBy("copyAndroidTvDebugApkForFlutter")
+}
+
+// google-services.json is Tortugarr's own Firebase project (tortugarr-app); the
+// public build carries none of it (push is off in Tortugarr anyway).
+tasks.configureEach {
+    if (name.contains("GoogleServices") && name.contains("public", ignoreCase = true)) enabled = false
 }

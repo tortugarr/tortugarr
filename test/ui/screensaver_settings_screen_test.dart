@@ -244,7 +244,7 @@ void main() {
     });
 
     testWidgets('renders General Settings, Visual Components, and Library Content when enabled and backdrop is library', (tester) async {
-      tester.view.physicalSize = const Size(1920, 1080);
+      tester.view.physicalSize = const Size(1920, 1600); // room for Tortugarr's sound and logo rows
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
@@ -459,7 +459,7 @@ void main() {
     });
 
     testWidgets('renders Source Libraries subtitle with All (Default) when empty', (tester) async {
-      tester.view.physicalSize = const Size(1920, 1080);
+      tester.view.physicalSize = const Size(1920, 1600); // room for Tortugarr's sound and logo rows
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);

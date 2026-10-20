@@ -489,7 +489,7 @@ class _ServerSelectScreenState extends State<ServerSelectScreen> {
     return LoginScaffold(
       header: Padding(
         padding: const EdgeInsets.only(bottom: 24),
-        child: Image.asset('assets/images/logo_and_text.png', height: 80),
+        child: Image.asset('assets/images/logo_and_text.png', height: 140),
       ),
       footer: Padding(
         padding: const EdgeInsets.only(top: 16),

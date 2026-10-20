@@ -10,11 +10,15 @@ class ScreensaverItem {
     required this.name,
     required this.backdropUrl,
     this.logoUrl,
+    this.trailerUrl,
   });
 
   final String name;
   final String backdropUrl;
   final String? logoUrl;
+
+  /// First remote trailer (usually YouTube), played by the video screensaver.
+  final String? trailerUrl;
 }
 
 class ScreensaverContentService {
@@ -159,7 +163,7 @@ class ScreensaverContentService {
         recursive: true,
         startIndex: start,
         limit: _batchSize,
-        fields: 'ImageTags,BackdropImageTags,OfficialRating,Genres',
+        fields: 'ImageTags,BackdropImageTags,OfficialRating,Genres,RemoteTrailers',
         enableTotalRecordCount: false,
         enableImageTypes: 'Backdrop,Logo',
         maxOfficialRating: maxAge == 'any' ? null : maxAge,
@@ -220,10 +224,20 @@ class ScreensaverContentService {
       );
     }
 
+    String? trailerUrl;
+    for (final t in (raw['RemoteTrailers'] as List? ?? const [])) {
+      final url = (t as Map?)?['Url'] as String?;
+      if (url != null && url.isNotEmpty) {
+        trailerUrl = url;
+        break;
+      }
+    }
+
     return ScreensaverItem(
       name: raw['Name'] as String? ?? '',
       backdropUrl: backdropUrl,
       logoUrl: logoUrl,
+      trailerUrl: trailerUrl,
     );
   }
 }

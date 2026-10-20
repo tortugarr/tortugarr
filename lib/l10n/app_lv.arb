@@ -1,6 +1,6 @@
 {
     "@@locale": "lv",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versija {version}",
+    "appVersionFooter": "Tortugarr versija {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin nevarēja piekļūt jūsu sistēmas atslēgu piekariņam. Pieteikšanos var turpināt, taču droša marķiera krātuve var nebūt pieejama, kamēr atslēgu piekariņš nav atbloķēts.",
+    "secureStorageUnavailableMessage": "Tortugarr nevarēja piekļūt jūsu sistēmas atslēgu piekariņam. Pieteikšanos var turpināt, taču droša marķiera krātuve var nebūt pieejama, kamēr atslēgu piekariņš nav atbloķēts.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Pārslēdzieties starp Moonfin un Neon Pulse, nerestartējot lietotni",
+    "settingsAppearanceThemeSubtitle": "Pārslēdzieties starp Tortugarr un Neon Pulse, nerestartējot lietotni",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Pašreizējais Moonfin izskats, ko jūs visi esat iemīlējuši",
+    "themeMoonfinSubtitle": "Pašreizējais Tortugarr izskats, ko jūs visi esat iemīlējuši",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neona pulss",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Vai iziet no Moonfin?",
+    "exitApp": "Vai iziet no Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Nav iestatīts. Moonfin izmēģinās noklusējuma mpv.conf lietotņu/datu mapēs.",
+    "notSetMpvConf": "Nav iestatīts. Tortugarr izmēģinās noklusējuma mpv.conf lietotņu/datu mapēs.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Lejupielādes/Moonfin — redzams citām lietotnēm",
+    "downloadsVisibleToOtherApps": "Lejupielādes/Tortugarr — redzams citām lietotnēm",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Lejupielādētie multivide tiks saglabāti jūsu ierīces mapē Lejupielādes/Moonfin. Šie faili būs redzami citām lietotnēm, piemēram, jūsu galerijai vai mūzikas atskaņotājam.\n\nEsošās lejupielādes paliks to pašreizējā atrašanās vietā.",
+    "saveToDownloadsFolderDescription": "Lejupielādētie multivide tiks saglabāti jūsu ierīces mapē Lejupielādes/Tortugarr. Šie faili būs redzami citām lietotnēm, piemēram, jūsu galerijai vai mūzikas atskaņotājam.\n\nEsošās lejupielādes paliks to pašreizējā atrašanās vietā.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Moonfin, lai izmaiņas stātos spēkā.",
+    "libraryVisibilityDescription": "Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Spēlē Moonfin",
+    "playInMoonfin": "Spēlē Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Pieprasīja {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Vienums nav atrasts jūsu Moonfin bibliotēkā",
+    "itemNotFoundInLibrary": "Vienums nav atrasts jūsu Tortugarr bibliotēkā",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Notiek servera atsāknēšana",
-    "adminServerRebootMessage": "Notiek servera atsāknēšana, lūdzu, restartējiet Moonfin",
+    "adminServerRebootMessage": "Notiek servera atsāknēšana, lūdzu, restartējiet Tortugarr",
     "adminActiveSessions": "Aktīvās sesijas",
     "adminSessionsLoadFailed": "Neizdevās ielādēt sesijas",
     "adminNoActiveSessions": "Nav aktīvu sesiju",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Rādīt žanru pogu navigācijas joslā",
     "settingsShowFavoritesButtonInNavigation": "Parādiet izlases pogu navigācijas joslā",
     "settingsShowLibrariesButtonInNavigation": "Parādiet bibliotēkas pogu navigācijas joslā",
-    "settingsLibraryVisibilitySubtitle": "Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Moonfin, lai izmaiņas stātos spēkā.",
+    "settingsLibraryVisibilitySubtitle": "Pārslēgt mājas lapas redzamību katrai bibliotēkai. Restartējiet Tortugarr, lai izmaiņas stātos spēkā.",
     "settingsMediaBarAndLocalPreviews": "Multivides josla un vietējie priekšskatījumi",
     "settingsVisualOverlays": "Vizuālie pārklājumi",
     "settingsSeasonalSurprise": "Sezonas pārsteigums",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Pievienojieties Discord",
     "settingsJoinDiscordSubtitle": "Tērzējiet ar kopienu",
     "settingsJoinTheDiscord": "Pievienojieties Discord",
-    "settingsSupportMoonfin": "Atbalstiet Moonfin",
+    "settingsSupportMoonfin": "Atbalstiet Tortugarr",
     "settingsLegal": "JURIDISKĀS",
     "settingsLicenses": "Licences",
     "settingsOpenSourceLicenseNotices": "Atvērtā koda licences paziņojumi",
     "settingsPrivacyPolicy": "Privātuma politika",
-    "settingsPrivacyPolicySubtitle": "Kā Moonfin apstrādā jūsu datus",
+    "settingsPrivacyPolicySubtitle": "Kā Tortugarr apstrādā jūsu datus",
     "settingsCheckForUpdates": "Pārbaudiet atjauninājumus",
-    "settingsCheckForUpdatesSubtitle": "Pārbaudiet jaunāko Moonfin versiju",
+    "settingsCheckForUpdatesSubtitle": "Pārbaudiet jaunāko Tortugarr versiju",
     "settingsPoweredByFlutter": "Darbojas ar Flutter",
     "settingsLicenseNoticesCount": "{count, plural, zero {# licenču paziņojumu} one {# licences paziņojums} other {# licences paziņojumi}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Saglabātie motīvi",
-    "savedThemesDescription": "Tie ir motīvi, kas lejupielādēti no pašreizējā servera spraudņa Moonfin. Dzēšot, tiek noņemta tikai šī vietējā kopija.",
+    "savedThemesDescription": "Tie ir motīvi, kas lejupielādēti no pašreizējā servera spraudņa Tortugarr. Dzēšot, tiek noņemta tikai šī vietējā kopija.",
     "savedThemesEmpty": "Šim serverim netika atrasts neviens saglabāts motīvs.",
     "savedThemesCurrentThemeId": "{themeId} • Pašlaik aktīvs",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Dzēst saglabāto motīvu",
     "savedThemesManageSubtitle": "Pārvaldiet šajā ierīcē lejupielādētos spraudņu motīvus",
     "themeEditor": "Tēmas redaktors",
-    "themeEditorSubtitle": "Pārlūkprogrammā atveriet Moonfin motīvu redaktoru",
+    "themeEditorSubtitle": "Pārlūkprogrammā atveriet Tortugarr motīvu redaktoru",
     "homeScreen": "Sākuma ekrāns",
     "bottomBar": "Apakšējā josla",
     "homeRowsStyleClassic": "Klasika",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Dodiet priekšroku SDH subtitriem",
     "preferSdhSubtitlesSubtitle": "Veicot automātisko atlasi, piešķiriet prioritāti SDH/CC subtitru celiņiem.",
     "webDiagnostics": "Web diagnostika",
-    "webDiagnosticsTitle": "Moonfin Tīmekļa diagnostika",
+    "webDiagnosticsTitle": "Tortugarr Tīmekļa diagnostika",
     "webDiagnosticsIntro": "Izmantojiet šo lapu, lai diagnosticētu pārlūkprogrammas savienojamības problēmas (CORS, jaukts saturs un atklāšanas iestatījumi).",
     "webDiagnosticsDetectedMixedContentFailure": "Konstatēta jaukta satura kļūme",
     "webDiagnosticsDetectedCorsPreflightFailure": "Konstatēta CORS/pirmslidojuma kļūme",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin atklāja HTTPS lapu, kas mēģina izsaukt HTTP servera URL. Pārlūkprogrammas bloķē šo pieprasījumu, pirms tas sasniedz jūsu serveri.",
-    "webDiagnosticsCorsFailureBody": "Moonfin atklāja pārlūkprogrammas līmeņa pieprasījuma kļūmi, ko parasti izraisa trūkstošas ​​CORS vai pirmspārbaudes galvenes multivides serverī.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr atklāja HTTPS lapu, kas mēģina izsaukt HTTP servera URL. Pārlūkprogrammas bloķē šo pieprasījumu, pirms tas sasniedz jūsu serveri.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr atklāja pārlūkprogrammas līmeņa pieprasījuma kļūmi, ko parasti izraisa trūkstošas ​​CORS vai pirmspārbaudes galvenes multivides serverī.",
     "webDiagnosticsTargetUrl": "Mērķa URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "nav konfigurēts",
     "webDiagnosticsMixedContent": "Jaukts saturs",
     "webDiagnosticsMixedContentDetected": "Šī lapa tiek ielādēta, izmantojot HTTPS, bet viens vai vairāki konfigurētie URL ir HTTP. Pārlūkprogrammas neļauj HTTPS lapām izsaukt HTTP API.",
-    "webDiagnosticsMixedContentFix": "Labojums: apkalpojiet multivides serveri vai starpniekservera galapunktu, izmantojot HTTPS, vai ielādējiet Moonfin, izmantojot HTTP, tikai uzticamos lokālos tīklos.",
+    "webDiagnosticsMixedContentFix": "Labojums: apkalpojiet multivides serveri vai starpniekservera galapunktu, izmantojot HTTPS, vai ielādējiet Tortugarr, izmantojot HTTP, tikai uzticamos lokālos tīklos.",
     "webDiagnosticsNoMixedContentDetected": "Pašreizējos izpildlaika iestatījumos nav konstatēta acīmredzama jaukta satura konfigurācija.",
     "webDiagnosticsCorsChecklist": "CORS kontrolsaraksts",
     "webDiagnosticsCorsChecklistItem1": "• Atļaut pārlūkprogrammas izcelsmi sadaļā Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klasiskais ir oriģinālais centrētais Moonfin izkārtojums. Modernais ir adaptīvs kinematogrāfisks izkārtojums.",
+    "detailScreenStyleSubtitle": "Klasiskais ir oriģinālais centrētais Tortugarr izkārtojums. Modernais ir adaptīvs kinematogrāfisks izkārtojums.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Izmantojiet Moonfin Recommends vietējās bibliotēkas algoritmu vai tiešsaistes TMDB līdzības rādītājus. Piezīme: tiešsaistes ieteikumiem nepieciešama Seerr integrācija.",
+    "recommendationSystemSubtitle": "Izmantojiet Tortugarr Recommends vietējās bibliotēkas algoritmu vai tiešsaistes TMDB līdzības rādītājus. Piezīme: tiešsaistes ieteikumiem nepieciešama Seerr integrācija.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb līdzība",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Ierobežot Moonfin Recommends ieteikumus atbilstoši izvēlētā satura vecuma ierobežojumam",
+    "recommendationsApplyParentalRatingCapSubtitle": "Ierobežot Tortugarr Recommends ieteikumus atbilstoši izvēlētā satura vecuma ierobežojumam",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Pielāgotas tēmas maina vizuālos elementus visā Moonfin lietotnē. Izvēlieties vienu no šīm iespējām atbilstoši savam stilam.",
+    "customThemeSubtitle": "Pielāgotas tēmas maina vizuālos elementus visā Tortugarr lietotnē. Izvēlieties vienu no šīm iespējām atbilstoši savam stilam.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Pierakstieties Moonfin savā tālrunī",
+    "carSignInPrompt": "Pierakstieties Tortugarr savā tālrunī",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller ir Flutter modernais GPU renderētājs, kas nodrošina plūstošākas animācijas un mazāku raustīšanos. Dažās TV pierīcēs un vecākos GPU tas var radīt traucējumus vai melnu attēlu; tādā gadījumā izslēdziet to. “Automātiski” izvēlas jūsu ierīcei piemērotāko noklusējumu. Lai lietotu izmaiņas, restartējiet Moonfin.",
+    "impellerRenderingSubtitle": "Impeller ir Flutter modernais GPU renderētājs, kas nodrošina plūstošākas animācijas un mazāku raustīšanos. Dažās TV pierīcēs un vecākos GPU tas var radīt traucējumus vai melnu attēlu; tādā gadījumā izslēdziet to. “Automātiski” izvēlas jūsu ierīcei piemērotāko noklusējumu. Lai lietotu izmaiņas, restartējiet Tortugarr.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Lai mainītu renderēšanas dzinēju, Moonfin ir jārestartē. Aizveriet lietotni tagad un atveriet to no jauna.",
+    "impellerRestartMessage": "Lai mainītu renderēšanas dzinēju, Tortugarr ir jārestartē. Aizveriet lietotni tagad un atveriet to no jauna.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "IMDb populārākās filmas",
     "imdbMostPopularTvShows": "IMDb populārākie seriāli",
     "imdbLowestRatedMovies": "IMDb zemāk novērtētās filmas",
-    "imdbTopEnglishMovies": "IMDb augstāk novērtētās filmas angļu valodā"
+    "imdbTopEnglishMovies": "IMDb augstāk novērtētās filmas angļu valodā",
+    "tgMissing": "Trūkst",
+    "tgComing": "Drīzumā",
+    "tgComingOn": "Gaidāms {date}",
+    "tgDownloading": "Lejupielādē",
+    "tgReadySoon": "Drīz būs gatavs",
+    "tgRequested": "Pieprasīts",
+    "tgClose": "Aizvērt",
+    "tgCancel": "Atcelt",
+    "tgBack": "Atpakaļ",
+    "tgYes": "Jā",
+    "tgNo": "Nē",
+    "tgSearch": "Meklēt",
+    "tgHide": "Paslēpt",
+    "tgAll": "Visi",
+    "tgNone": "Neviens",
+    "tgMovies": "Filmas",
+    "tgSeries": "Seriāli",
+    "tgMovieTag": "Filma",
+    "tgSeriesTag": "Seriāls",
+    "tgCanTakeAMinute": "Var aizņemt līdz minūtei",
+    "tgToday": "šodien",
+    "tgYesterday": "vakar",
+    "tgDaysAgo": "pirms {days} dienām",
+    "tgMonthsAgo": "pirms {months} mēn.",
+    "tgYearsAgo": "pirms {years} g.",
+    "tgYearsMonthsAgo": "pirms {years} g. un {months} mēn.",
+    "tgFindSubtitles": "Atrast subtitrus",
+    "tgFreeUpSpace": "Atbrīvot vietu",
+    "tgDownloads": "Lejupielādes",
+    "tgDownloadsCount": "Lejupielādes ({count})",
+    "tgNoVideoRemoved": "„{title}”: lejupielādē nebija video faila ({files}). Tā ir noņemta un bloķēta – izmēģiniet citu failu.",
+    "tgNoVideoNotRemoved": "„{title}”: lejupielādē nebija video faila ({files}), bet to neizdevās noņemt automātiski.",
+    "tgAiredOn": "Pārraidīts {date}",
+    "tgTapToFindFiles": "Pieskarieties, lai atrastu failus",
+    "tgWholeSeason": "Visa sezona",
+    "tgEpisodesMissingFindPack": "Trūkst {count} epizožu – atrodiet visas sezonas paketi",
+    "tgAddToSonarrTitle": "Pievienojiet Sonarr, lai redzētu trūkstošās epizodes",
+    "tgAddToSonarrSubtitle": "Seriāls tiek pievienots, pats neko nelejupielādējot",
+    "tgMissingEpisodesUnavailable": "Trūkstošās epizodes šobrīd nevar parādīt",
+    "tgReasonTapRetry": "{reason} · Pieskarieties, lai mēģinātu vēlreiz",
+    "tgSeasonPackBadge": "Sezonas pakete",
+    "tgMonitorSeasonTitle": "Uzraudzīt {season}. sezonu",
+    "tgMonitorSeasonQuestion": "Vai Sonarr tagad jāielādē trūkstošās {season}. sezonas epizodes?\n\nNē: tiks ielādētas tikai jaunās epizodes, kad tās iznāks.",
+    "tgSonarrSearchingSeason": "Sonarr meklē {season}. sezonu",
+    "tgMonitored": "Uzraudzīts",
+    "tgNotMonitored": "Netiek uzraudzīts",
+    "tgSeasonStateLabel": "{season}. sezona: {state}",
+    "tgLabelMissing": "Trūkst: {label}",
+    "tgNotAiredYet": "{code} vēl nav pārraidīta.",
+    "tgNotAiredYetComing": "{code} vēl nav pārraidīta – gaidāma {date}.",
+    "tgAlreadyDownloading": "{code} jau tiek lejupielādēta.",
+    "tgDownloadedAppearsSoon": "{code} ir lejupielādēta un drīz parādīsies bibliotēkā.",
+    "tgSearchingFor": "Meklē: {label} …",
+    "tgSeasonLower": "{season}. sezona",
+    "tgWholeLabel": "Visa {label}",
+    "tgSeasonNoEpisodes": "{season}. sezona – bibliotēkā nav epizožu",
+    "tgNoTvdbId": "Seriālam nav TVDB ID, tāpēc Sonarr to nevar atrast.",
+    "tgAddingToSonarr": "Pievieno Sonarr …",
+    "tgAddToSonarrFailed": "Neizdevās pievienot seriālu Sonarr. Mēģiniet vēlāk.",
+    "tgSendingToDownload": "Sūta „{label}” lejupielādei …",
+    "tgDownloadDidNotStart": "Lejupielāde nesākās: {error}",
+    "tgDownloadingAppearsWhenDone": "„{label}” tiek lejupielādēts ({size}). Pēc pabeigšanas tas parādīsies bibliotēkā.",
+    "tgSonarrUnreachableRetry": "Neizdevās sazināties ar Sonarr. Mēģiniet vēlreiz nedaudz vēlāk.",
+    "tgNoUsableFiles": "Netika atrasti izmantojami faili. Mēģiniet vēlāk – jauni bieži parādās pēc dažām stundām.",
+    "tgFilesCount": "Faili: {count}",
+    "tgFilesRecommended": "Faili: {count} – {recommended} atbilst kvalitātes profilam, pārējie ir apakšā",
+    "tgOutsideQualityProfile": "Neatbilst kvalitātes profilam",
+    "tgLargerThanProfile": "Lielāks, nekā profils atļauj",
+    "tgSmallerThanProfile": "Mazāks, nekā profils atļauj",
+    "tgAlreadyExists": "Jau eksistē",
+    "tgMayNotFitDisk": "Var neietilpt diskā",
+    "tgSonarrUnreachable": "Neizdevās sazināties ar Sonarr",
+    "tgSonarrUnreachableAt": "Neizdevās sazināties ar Sonarr adresē {host}",
+    "tgSonarrRejectedChange": "Sonarr nepieņēma izmaiņas",
+    "tgSeasonMonitoredNoSearch": "Sezona tiek uzraudzīta, bet Sonarr nesāka meklēšanu",
+    "tgSonarrCantSearch": "Sonarr šobrīd nevar meklēt",
+    "tgSearchExpired": "Meklēšanas rezultāta derīgums ir beidzies – meklējiet vēlreiz",
+    "tgSonarrRejectedDownload": "Sonarr nepieņēma lejupielādi (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr nav šī seriāla",
+    "tgCouldNotChangeMonitoring": "Neizdevās mainīt uzraudzību: {error}",
+    "tgJellyfinNoIds": "Jellyfin neatpazina seriālu (nav TVDB vai TMDB ID)",
+    "tgSomethingWentWrong": "Kaut kas nogāja greizi: {error}",
+    "tgDeleteReadOnly": "Failu nepārvalda Radarr/Sonarr, un Jellyfin mapei ir tikai lasīšanas piekļuve. Izdzēsiet to failu pārvaldniekā.",
+    "tgSonarrRequiredPerEpisode": "Sonarr nav sasniedzams vai seriāls tur nav pievienots. Lejupielādei pa epizodēm ir nepieciešams Sonarr.",
+    "tgEpisodesNotFound": "Sonarr neizdevās atrast izvēlētās „{title}” epizodes (kopā atrastas {count} epizodes). Pievienojiet seriālu Sonarr un mēģiniet vēlreiz.",
+    "tgPartOfCollectionPrefix": "Daļa no kolekcijas ",
+    "tgViewingPartOf": "  ·  jūs skatāties {current}. daļu no {total}",
+    "tgPartOf": "{number}. daļa no {total}",
+    "tgUnknownTitle": "Nezināms nosaukums",
+    "tgMovieCollection": "Filmu kolekcija",
+    "tgNotReleasedYet": "„{title}” vēl nav iznākusi",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logotips",
+    "tgScreensaverSound": "Ekrānsaudzētāja skaņa",
+    "tgScreensaverSoundSubtitle": "Izslēgts: ekrānsaudzētāja treileri tiek atskaņoti bez skaņas",
+    "tgScreensaverLogo": "Logotips",
+    "tgLogoBadge": "Tortugarr emblēma",
+    "tgLogoVhs": "Papagailis uz VHS kasetēm",
+    "tgLogoSign": "Papagailis uz izkārtnes",
+    "tgHiddenBadge": "PASLĒPTS · {code}",
+    "tgDiskSpace": "Vieta diskā",
+    "tgDiskSpaceSubtitle": "Atbrīvojiet vietu jaunām lejupielādēm",
+    "tgAdultTitle": "Pieaugušo filmas (XXX)",
+    "tgAdultSubtitle": "Rādīt vai paslēpt XXX bibliotēku (PIN)",
+    "tgHideForeign": "Paslēpt ārzemju saturu",
+    "tgHideForeignOn": "Ieslēgts: „Aktuāli” un „Populāri” rāda tikai angļu, norvēģu, zviedru, dāņu, vācu un franču valodas saturu",
+    "tgHideForeignOff": "Izslēgts: „Aktuāli” un „Populāri” rāda visu valodu saturu",
+    "tgShowHidden": "Rādīt, kas ir paslēpts",
+    "tgShowHiddenOn": "Ieslēgts: nosaukumi, kas tiktu paslēpti, tiek rādīti ar sarkanu atzīmi PASLĒPTS",
+    "tgShowHiddenOff": "Problēmu novēršana: rādīt paslēptos nosaukumus ar sarkanu atzīmi, nevis noņemt tos",
+    "tgShowAllSubLangs": "Rādīt visas subtitru valodas",
+    "tgShowAllSubLangsOn": "Ieslēgts: subtitru izvēlnē tiek rādītas visas valodas",
+    "tgShowAllSubLangsOff": "Izslēgts: subtitru izvēlnē tiek rādīta tikai norvēģu un angļu valoda",
+    "tgPreviewSound": "Priekšskatījuma skaņa",
+    "tgPreviewSoundOn": "Ieslēgts: klipam, kas tiek atskaņots, apstājoties uz nosaukuma, ir skaņa",
+    "tgPreviewSoundOff": "Izslēgts: pārlūkojot klipi tiek atskaņoti bez skaņas",
+    "tgScreensaver": "Ekrānsaudzētājs",
+    "tgScreensaverSubtitle": "Video vai logotips, skaņa un attēls",
+    "tgShowMissingEpisodes": "Rādīt trūkstošās epizodes",
+    "tgShowMissingEpisodesOn": "Ieslēgts: sezonās tiek rādītas epizodes, kuru jums nav, gatavas lejupielādei",
+    "tgShowMissingEpisodesOff": "Izslēgts: sezonās tiek rādītas tikai tās epizodes, kuras jums ir",
+    "tgShowCollections": "Rādīt filmu kolekcijas",
+    "tgShowCollectionsOn": "Ieslēgts: filmām tiek rādītas pārējās kolekcijas filmas, arī tās, kuru jums trūkst",
+    "tgShowCollectionsOff": "Izslēgts: filmas lapā kolekcija netiek rādīta",
+    "tgNoActiveDownloads": "Nav aktīvu lejupielāžu.",
+    "tgPickDownloadToOpen": "Izvēlieties lejupielādi, lai atvērtu pieprasījumus.",
+    "tgRefreshLibrary": "Atsvaidzināt bibliotēku",
+    "tgAskingJellyfinScan": "Lūdz Jellyfin skenēt bibliotēku …",
+    "tgHideAll": "Paslēpt visu",
+    "tgImporting": "Importē",
+    "tgSubsNotManaged": "Šo nosaukumu nepārvalda Radarr/Sonarr, tāpēc Bazarr tam nevar atrast subtitrus.",
+    "tgBazarrUnreachable": "Neizdevās sazināties ar Bazarr. Mēģiniet vēlreiz nedaudz vēlāk.",
+    "tgSubsFoundNothing": "Pagaidām nekas nav atrasts. Bazarr katru dienu automātiski mēģina vēlreiz, vai arī varat izvēlēties pats.",
+    "tgSubsFound": "Atrasts: {languages} – var paiet brīdis, līdz tie parādās subtitru izvēlnē.",
+    "tgAnd": "un",
+    "tgSubsDownloaded": "Lejupielādēts – var paiet brīdis, līdz tie parādās subtitru izvēlnē.",
+    "tgAskingBazarr": "Vaicā Bazarr …",
+    "tgHaveAll": "Ir visi",
+    "tgSearchAutoNow": "Meklēt automātiski tagad",
+    "tgSearchingUpToMinute": "Meklē … var aizņemt līdz minūtei",
+    "tgPickYourself": "Izvēlēties pašam",
+    "tgAskingProviders": "Vaicā subtitru avotiem … var aizņemt līdz minūtei",
+    "tgNoProviderSubs": "Nevienam avotam vēl nav subtitru šim nosaukumam.",
+    "tgLangHas": "{language}: ir",
+    "tgLangMissing": "{language}: trūkst",
+    "tgNoReleaseName": "(bez izlaiduma nosaukuma)",
+    "tgHearingImpaired": "{provider} · vājdzirdīgajiem",
+    "tgLangNorwegian": "Norvēģu",
+    "tgLangEnglish": "Angļu",
+    "tgBazarrUnknownTitle": "Bazarr šo nosaukumu vēl nepazīst",
+    "tgBazarrError": "Bazarr atbildēja ar kļūdu (HTTP {code})",
+    "tgLowSpaceSnack": "Diskā {drive}: ir maz vietas (brīvi {free}). Lejupielāde var apstāties — pasakiet tam, kurš uztur serveri.",
+    "tgNoQbitForSpace": "Neizdevās sazināties ar qBittorrent, lai pārbaudītu vietu",
+    "tgNotEnoughSpace": "Nepietiek vietas",
+    "tgDriveHasFree": "{drive}: brīvi {free}",
+    "tgCopyInDownloads": "Kopija mapē „Downloads” · jau ir bibliotēkā",
+    "tgLastWatched": "Pēdējoreiz skatīts {ago}",
+    "tgNeverWatchedAdded": "Nekad nav skatīts · pievienots {ago}",
+    "tgNeverWatched": "Nekad nav skatīts",
+    "tgNothingSafeToDelete": "Diskā {drive}: netika atrasts nekas, ko varētu droši izdzēst (viss ir nesen pievienots, nesen skatīts vai izlasē).",
+    "tgDeleteTitlesQuestion": "{count, plural, zero{Dzēst {count} nosaukumus?} one{Dzēst {count} nosaukumu?} other{Dzēst {count} nosaukumus?}}",
+    "tgDeletedForGood": "{size} tiks neatgriezeniski izdzēsti. To nevar atsaukt.",
+    "tgYesDelete": "Jā, dzēst",
+    "tgDeletingProgress": "Dzēš {done}/{total} …",
+    "tgNowHasFree": " · {drive}: tagad brīvi {free}",
+    "tgDeletedTitles": "{count, plural, zero{Izdzēsti {count} nosaukumi} one{Izdzēsts {count} nosaukums} other{Izdzēsti {count} nosaukumi}}{extra}",
+    "tgDeletedFailed": "Izdzēsti: {count}, neizdevās: {failed}{extra}",
+    "tgFreeGb": "Atbrīvot {gb} GB",
+    "tgDownloadCopies": "Lejupielāžu kopijas",
+    "tgLookingForUnwatched": "Meklē to, kas ilgi nav skatīts …",
+    "tgSuggestionEnough": "Ieteikums: {size} · vietas pietiek ✓",
+    "tgSuggestionOf": "Ieteikums: {size} no nepieciešamajiem {target}",
+    "tgPickToSayNo": "Izvēlieties vienu, lai pasacītu nē — nākamais ieteikums parādīsies automātiski.",
+    "tgOtherCandidates": "Citi kandidāti",
+    "tgDownloadAnyway": "Lejupielādēt tomēr",
+    "tgDeleteCountSize": "Dzēst {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: brīvi {free}.",
+    "tgFileDoubleSpace": "Fails ir {size} un aizņem divreiz vairāk vietas (lejupielāde + kopija bibliotēkā), plus {buffer} rezervē.",
+    "tgFileSize": "Fails ir {size}, plus {buffer} rezervē.",
+    "tgPendingNeeds": "Notiekošajām lejupielādēm vajag vēl {size}.",
+    "tgShortBy": "Pietrūkst {size}.",
+    "tgOnlyEarlyFiles": "Atrasti tikai faili, kas publicēti pirms filmas digitālās iznākšanas ({count}) — tie gandrīz vienmēr ir viltoti.",
+    "tgNoDigitalDate": "vēl nav digitālā izlaiduma datuma",
+    "tgDigitalOn": "digitāli iznāk {date}",
+    "tgNotOutDigitally": "Digitāli vēl nav iznākusi",
+    "tgTitleWhen": "„{title}” {when}.",
+    "tgNotOutExplain": "Tas, kas šobrīd ir pieejams, parasti ir kinoteātra ieraksts vai cita filma ar tādu pašu nosaukumu. Dažkārt ir agrīna kopija zemākā kvalitātē, bieži ar iededzinātiem subtitriem. „Tomēr rādīt failus” parāda, kas ir pieejams. Radarr pats ielādēs pareizo versiju, kad tā iznāks.",
+    "tgShowFilesAnyway": "Tomēr rādīt failus",
+    "tgPickSeasonsEpisodes": "Izvēlieties sezonas un epizodes",
+    "tgNoEpisodeInfo": "{season}: nav informācijas par epizodēm",
+    "tgAppliesAllDevices": "Attiecas uz visām ierīcēm, kas izmanto šo kontu",
+    "tgNoXxxLibrary": "Netika atrasta bibliotēka ar nosaukumu XXX.",
+    "tgSearchingEachWord": "Meklē katru vārdu atsevišķi … (var aizņemt pusminūti)",
+    "tgSentToQbit": "„{title}” ({size}) nosūtīts uz qBittorrent",
+    "tgDownloadFailed": "Lejupielāde neizdevās: {error}",
+    "tgXxxNoVideoRemoved": "„{title}” nebija video faila, un tas ir noņemts.",
+    "tgXxxNoVideoNotRemoved": "„{title}” nebija video faila, un tas NAV noņemts.",
+    "tgSearchNewXxx": "Meklēt jaunu XXX",
+    "tgXxxSearchHint": "Nosaukums, studija …",
+    "tgChecking": "Pārbauda …",
+    "tgXxxVisible": "Tagad redzams. XXX tiek rādīts bibliotēkās, meklēšanā un sākuma ekrānā.",
+    "tgXxxHidden": "Paslēpts. XXX lietotnē nekur netiek rādīts.",
+    "tgShowWithPin": "Rādīt (PIN)",
+    "tgChangePin": "Mainīt PIN",
+    "tgNoLibraryList": "Neizdevās iegūt bibliotēku sarakstu (HTTP {code})",
+    "tgNoUserSettings": "Neizdevās iegūt lietotāja iestatījumus (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin noraidīja izmaiņas (HTTP {code})",
+    "tgDeleteFailed": "Dzēšana neizdevās (HTTP {code})",
+    "tgXxxAddFailed": "Neizdevās pievienot „{title}” qBittorrent",
+    "tgSeasonEpisodeLower": "{season}. sezona, {episode}. epizode",
+    "tgSearchInSeerr": "Meklēt Seerr",
+    "tgSeerrSearchHint": "Meklējiet filmas un seriālus (piem., „Lost S02E05”)",
+    "tgMissingInThisSeason": "Trūkst šajā sezonā",
+    "tgMissingSeasonsOpenSeries": "{count, plural, zero{Trūkst sezonu} one{Trūkst sezonas} other{Trūkst sezonu}} {list} - atveriet seriālu, lai redzētu visas sezonas",
+    "tgProjectOnGitHub": "Tortugarr vietnē GitHub",
+    "tgProjectOnGitHubSubtitle": "Pirmkods, laidieni un kļūdu ziņojumi",
+    "tgBuiltOnMoonfinCredit": "Tortugarr ir veidots uz Moonfin (GPL) bāzes, ko izstrādājuši Moonfin izstrādātāji.",
+    "tgCredits": "Pateicības",
+    "tgCreditsThanks": "Ar pazemīgu pateicību: bez šiem projektiem un cilvēkiem, kas stāv aiz tiem, Tortugarr nebūtu.",
+    "tgCreditMoonfin": "Lietotne, uz kuras bāzes veidots Tortugarr (GPL)",
+    "tgCreditJellyfin": "Multivides serveris",
+    "tgCreditSeerr": "Atklāšana un pieprasījumi",
+    "tgCreditRadarr": "Filmas",
+    "tgCreditSonarr": "Seriāli",
+    "tgCreditProwlarr": "Indeksētāju pārvaldnieks",
+    "tgCreditBazarr": "Subtitri",
+    "tgCreditFlareSolverr": "Cloudflare palīgs indeksētājiem",
+    "tgCreditQbittorrent": "Lejupielādes klients, instalētāja noklusējums",
+    "tgCreditTmdb": "Filmu un seriālu dati, plakāti un attēli",
+    "tgCreditOpenSubtitles": "Subtitri, iegūti caur Bazarr",
+    "tgTmdbNotice": "Šis produkts izmanto TMDB API, bet TMDB to nav apstiprinājis vai sertificējis.",
+    "tgLoadingLogoSize": "Ielādes logotipa izmērs",
+    "tgLoadingLogoSizeSubtitle": "Rotējošais logotips, kamēr ielādējas video",
+    "tgSubtitleLanguages": "Subtitru valodas",
+    "tgSubtitleLanguagesSubtitle": "Rāda subtitru izvēlnē: {languages}",
+    "tgShowAllSubLangsOffChosen": "Izslēgts: subtitru izvēlne rāda tikai izvēlētās valodas",
+    "tgDiscoveryLanguages": "Valodas sadaļās Tendences un Populāri",
+    "tgDiscoveryLanguagesSubtitle": "Rāda: {languages}",
+    "tgHideForeignOnChosen": "Ieslēgts: Tendences un Populāri rāda tikai izvēlētās valodas",
+    "tgShowLanguageBadges": "Rādīt valodas zīmes",
+    "tgShowLanguageBadgesOn": "Ieslēgts: nosaukumi rāda savu valodu (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Izslēgts: nosaukumiem nav valodas zīmju"
 }

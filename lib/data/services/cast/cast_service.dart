@@ -11,6 +11,7 @@ import 'cast_transport_controls.dart';
 import 'native_airplay_channel.dart';
 import 'native_cast_channel.dart';
 import 'native_dlna_channel.dart';
+import 'remote_session_cast_provider.dart';
 
 class CastService {
   final List<CastProvider> _providers;
@@ -269,6 +270,50 @@ class CastService {
     remoteVolumeNotifier.value = null;
     remoteErrorNotifier.value = null;
     _startRemotePolling(target.kind);
+  }
+
+  /// Lets a provider that learns the receiver's state by polling (a Tortugarr
+  /// session has no native event stream) feed the same notifiers the native
+  /// receivers do. Ignored once another target has taken over.
+  void updateRemoteState({
+    required CastTargetKind kind,
+    String? state,
+    int? positionTicks,
+    double? volume,
+  }) {
+    if (activeKindNotifier.value != kind) return;
+    if (state != null) remoteStateNotifier.value = state;
+    if (positionTicks != null) remotePositionNotifier.value = positionTicks;
+    if (volume != null) remoteVolumeNotifier.value = volume;
+  }
+
+  /// The receiver stopped on its own (playback finished, the TV app was
+  /// closed). Clears the mini player the same way a native disconnect does.
+  void remoteSessionEnded(CastTargetKind kind) {
+    if (activeKindNotifier.value != kind) return;
+    activeKindNotifier.value = null;
+    activeTargetNotifier.value = null;
+    castItemNotifier.value = null;
+    remoteStateNotifier.value = null;
+    remotePositionNotifier.value = 0;
+    remoteVolumeNotifier.value = null;
+  }
+
+  /// Switches a track on the receiver without restarting playback. Returns
+  /// false when the receiver kind cannot do that in place; the caller then
+  /// falls back to reloading the item with the new stream index.
+  Future<bool> selectTrack(
+    CastTargetKind kind, {
+    int? audioStreamIndex,
+    int? subtitleStreamIndex,
+  }) async {
+    final provider = _controlProviderForKind(kind);
+    if (provider is! RemoteSessionCastProvider) return false;
+    await provider.selectTrack(
+      audioStreamIndex: audioStreamIndex,
+      subtitleStreamIndex: subtitleStreamIndex,
+    );
+    return true;
   }
 
   Future<void> play(CastTargetKind kind) async {

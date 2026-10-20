@@ -975,6 +975,9 @@ extension ScreensaverMovementX on ScreensaverMovement {
       };
 }
 
+/// Tortugarr artwork the logo screensaver bounces around.
+enum ScreensaverLogoImage { badge, vhs, sign }
+
 enum ScreensaverClockMode { off, staticCorner, bouncing }
 
 enum ScreensaverTimeout {

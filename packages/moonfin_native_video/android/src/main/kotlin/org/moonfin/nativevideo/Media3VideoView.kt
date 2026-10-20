@@ -664,6 +664,8 @@ class Media3VideoView(
         // of slack can never swallow one.
         private const val AUDIO_CLOCK_CORRUPTION_MARGIN_MS = 3_600_000L
         private const val AUDIO_CLOCK_RECOVERY_MIN_INTERVAL_MS = 60_000L
+        private const val CONSTRAINED_TARGET_BUFFER_BYTES = 64 * 1024 * 1024
+        private const val CONSTRAINED_TOTAL_MEM_BYTES = 3L * 1024 * 1024 * 1024
         // Broadcast captions ride inside the video as CEA-608 messages rather
         // than as their own stream, and the extractor only looks for them when
         // the transport stream announces them in a caption service descriptor.
@@ -841,6 +843,13 @@ class Media3VideoView(
         })
     }
     private val isLowRamDevice = context.getSystemService<ActivityManager>()?.isLowRamDevice == true
+    // Budget TVs with ~2.5 GB don't report isLowRamDevice, but their OEM memory
+    // guard kills apps whose heap grows by the size of a full runway buffer.
+    private val hasConstrainedMemory by lazy {
+        val am = context.getSystemService<ActivityManager>() ?: return@lazy false
+        val info = ActivityManager.MemoryInfo().also { am.getMemoryInfo(it) }
+        info.totalMem in 1 until CONSTRAINED_TOTAL_MEM_BYTES
+    }
     private val hasHardwareAv1Decoder by lazy { queryHardwareAv1DecoderAvailability() }
     // Recreated alongside the player in createPlayer(). A TrackSelector must not
     // be shared across ExoPlayer instances: it binds to the playback thread of
@@ -1700,6 +1709,13 @@ class Media3VideoView(
     // ceiling so direct play keeps a real runway, leaving local playback
     // durations at their defaults.
     private fun buildLoadControl(): DefaultLoadControl {
+        // Constrained devices get a fixed, smaller byte budget (still ~25 s of
+        // a 20 Mbps remux) and the stock time ceiling instead of the stretched one.
+        if (hasConstrainedMemory) {
+            return DefaultLoadControl.Builder()
+                .setTargetBufferBytes(CONSTRAINED_TARGET_BUFFER_BYTES)
+                .build()
+        }
         // The floor is media3's small pre track selection minimum on purpose.
         // Its stock byte targets sit near 138MB, more than the entire heap on
         // 128MB devices like the Fire TV Stick HD, so a stock floor lets the

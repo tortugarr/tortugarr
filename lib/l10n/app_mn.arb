@@ -1,6 +1,6 @@
 {
     "@@locale": "mn",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin хувилбар {version}",
+    "appVersionFooter": "Tortugarr хувилбар {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin таны системийн түлхүүрт нэвтэрч чадсангүй. Нэвтрэхийг үргэлжлүүлж болох ч түлхүүрийн оосорыг нээх хүртэл аюулгүй жетон хадгалах боломжгүй байж магадгүй.",
+    "secureStorageUnavailableMessage": "Tortugarr таны системийн түлхүүрт нэвтэрч чадсангүй. Нэвтрэхийг үргэлжлүүлж болох ч түлхүүрийн оосорыг нээх хүртэл аюулгүй жетон хадгалах боломжгүй байж магадгүй.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Програмыг дахин эхлүүлэхгүйгээр Moonfin болон Neon Pulse хооронд сэлгэнэ үү",
+    "settingsAppearanceThemeSubtitle": "Програмыг дахин эхлүүлэхгүйгээр Tortugarr болон Neon Pulse хооронд сэлгэнэ үү",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Одоогийн Moonfin та бүгд дурласан харагдана",
+    "themeMoonfinSubtitle": "Одоогийн Tortugarr та бүгд дурласан харагдана",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неон импульс",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin гарах уу?",
+    "exitApp": "Tortugarr гарах уу?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Тохируулаагүй. Moonfin апп/өгөгдлийн хавтсанд өгөгдмөл mpv.conf-г оролдох болно.",
+    "notSetMpvConf": "Тохируулаагүй. Tortugarr апп/өгөгдлийн хавтсанд өгөгдмөл mpv.conf-г оролдох болно.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Татаж авах/Moonfin — бусад апп-д харагдана",
+    "downloadsVisibleToOtherApps": "Татаж авах/Tortugarr — бусад апп-д харагдана",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Татаж авсан медиа таны төхөөрөмж дээрх Татаж авсан файлууд/Moonfin хэсэгт хадгалагдах болно. Эдгээр файлууд нь таны галерей эсвэл хөгжим тоглуулагч зэрэг бусад програмуудад харагдах болно.\n\nОдоо байгаа татан авалтууд одоогийн байршилдаа хэвээр үлдэнэ.",
+    "saveToDownloadsFolderDescription": "Татаж авсан медиа таны төхөөрөмж дээрх Татаж авсан файлууд/Tortugarr хэсэгт хадгалагдах болно. Эдгээр файлууд нь таны галерей эсвэл хөгжим тоглуулагч зэрэг бусад програмуудад харагдах болно.\n\nОдоо байгаа татан авалтууд одоогийн байршилдаа хэвээр үлдэнэ.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Moonfin-г дахин эхлүүлнэ үү.",
+    "libraryVisibilityDescription": "Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Tortugarr-г дахин эхлүүлнэ үү.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin дээр тоглох",
+    "playInMoonfin": "Tortugarr дээр тоглох",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Хүссэн {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Таны Moonfin номын сангаас зүйл олдсонгүй",
+    "itemNotFoundInLibrary": "Таны Tortugarr номын сангаас зүйл олдсонгүй",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Серверийг дахин ачаалж байна",
-    "adminServerRebootMessage": "Серверийг дахин ачаалж байна, дахин эхлүүлнэ үү Moonfin",
+    "adminServerRebootMessage": "Серверийг дахин ачаалж байна, дахин эхлүүлнэ үү Tortugarr",
     "adminActiveSessions": "Идэвхтэй сессүүд",
     "adminSessionsLoadFailed": "Сешнүүдийг ачаалж чадсангүй",
     "adminNoActiveSessions": "Идэвхтэй сесс байхгүй",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Навигацийн талбарт жанрын товчлуурыг харуул",
     "settingsShowFavoritesButtonInNavigation": "Навигацийн талбарт дуртай товчлууруудыг харуул",
     "settingsShowLibrariesButtonInNavigation": "Навигацийн талбар дахь номын сангийн товчийг харуул",
-    "settingsLibraryVisibilitySubtitle": "Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Moonfin-г дахин эхлүүлнэ үү.",
+    "settingsLibraryVisibilitySubtitle": "Номын сан бүрийн нүүр хуудасны харагдах байдлыг асаах/унтраах. Өөрчлөлтүүд хүчин төгөлдөр болохын тулд Tortugarr-г дахин эхлүүлнэ үү.",
     "settingsMediaBarAndLocalPreviews": "Медиа талбар ба орон нутгийн урьдчилан үзэх",
     "settingsVisualOverlays": "Визуал давхаргууд",
     "settingsSeasonalSurprise": "Улирлын гэнэтийн бэлэг",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Discord-д нэгдээрэй",
     "settingsJoinDiscordSubtitle": "Нийгэмлэгтэй чатлах",
     "settingsJoinTheDiscord": "Discord-д нэгдээрэй",
-    "settingsSupportMoonfin": "Дэмжлэг Moonfin",
+    "settingsSupportMoonfin": "Дэмжлэг Tortugarr",
     "settingsLegal": "ХУУЛЬ ЗҮЙН",
     "settingsLicenses": "Лицензүүд",
     "settingsOpenSourceLicenseNotices": "Нээлттэй эхийн лицензийн мэдэгдэл",
     "settingsPrivacyPolicy": "Нууцлалын бодлого",
-    "settingsPrivacyPolicySubtitle": "Moonfin таны өгөгдлийг хэрхэн зохицуулдаг вэ",
+    "settingsPrivacyPolicySubtitle": "Tortugarr таны өгөгдлийг хэрхэн зохицуулдаг вэ",
     "settingsCheckForUpdates": "Шинэчлэлтүүдийг шалгана уу",
-    "settingsCheckForUpdatesSubtitle": "Хамгийн сүүлийн үеийн Moonfin хувилбарыг шалгана уу",
+    "settingsCheckForUpdatesSubtitle": "Хамгийн сүүлийн үеийн Tortugarr хувилбарыг шалгана уу",
     "settingsPoweredByFlutter": "Flutter-ээр дэмжигдсэн",
     "settingsLicenseNoticesCount": "{count, plural, one {# лицензийн мэдэгдэл} other {# лицензийн мэдэгдэл}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Хадгалсан загварууд",
-    "savedThemesDescription": "Эдгээр нь одоогийн серверийн Moonfin залгаасаас татаж авсан загварууд юм. Устгаснаар зөвхөн энэ дотоод хуулбарыг устгана.",
+    "savedThemesDescription": "Эдгээр нь одоогийн серверийн Tortugarr залгаасаас татаж авсан загварууд юм. Устгаснаар зөвхөн энэ дотоод хуулбарыг устгана.",
     "savedThemesEmpty": "Энэ серверт хадгалсан загвар олдсонгүй.",
     "savedThemesCurrentThemeId": "{themeId} • Одоогоор идэвхтэй байна",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Хадгалсан загварыг устгах",
     "savedThemesManageSubtitle": "Татаж авсан залгаасын загваруудыг энэ төхөөрөмж дээр удирдаарай",
     "themeEditor": "Сэдвийн редактор",
-    "themeEditorSubtitle": "Хөтөч дээрээ Moonfin загвар засварлагчийг нээнэ үү",
+    "themeEditorSubtitle": "Хөтөч дээрээ Tortugarr загвар засварлагчийг нээнэ үү",
     "homeScreen": "Үндсэн дэлгэц",
     "bottomBar": "Доод баар",
     "homeRowsStyleClassic": "Сонгодог",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH хадмал орчуулгыг илүүд үзнэ үү",
     "preferSdhSubtitlesSubtitle": "Автоматаар сонгохдоо SDH/CC хадмал орчуулгыг эрэмбэлэх.",
     "webDiagnostics": "Вэб оношлогоо",
-    "webDiagnosticsTitle": "Moonfin Вэб оношилгоо",
+    "webDiagnosticsTitle": "Tortugarr Вэб оношилгоо",
     "webDiagnosticsIntro": "Энэ хуудсыг хөтчийн холболтын асуудлыг оношлоход ашиглана уу (CORS, холимог контент болон нээлтийн тохиргоо).",
     "webDiagnosticsDetectedMixedContentFailure": "Холимог агуулгын алдаа илэрсэн",
     "webDiagnosticsDetectedCorsPreflightFailure": "Илэрсэн CORS/Нислэгийн өмнөх алдаа",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin HTTP серверийн URL руу залгахыг оролдож буй HTTPS хуудсыг илрүүллээ. Хөтөчүүд энэ хүсэлтийг таны серверт хүрэхээс өмнө блоклодог.",
-    "webDiagnosticsCorsFailureBody": "Moonfin хөтчийн түвшний хүсэлтийн алдаа илрүүллээ. Энэ нь ихэвчлэн медиа сервер дээр CORS эсвэл preflight толгой дутуугаас үүсдэг.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr HTTP серверийн URL руу залгахыг оролдож буй HTTPS хуудсыг илрүүллээ. Хөтөчүүд энэ хүсэлтийг таны серверт хүрэхээс өмнө блоклодог.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr хөтчийн түвшний хүсэлтийн алдаа илрүүллээ. Энэ нь ихэвчлэн медиа сервер дээр CORS эсвэл preflight толгой дутуугаас үүсдэг.",
     "webDiagnosticsTargetUrl": "Зорилтот URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "тохируулаагүй",
     "webDiagnosticsMixedContent": "Холимог контент",
     "webDiagnosticsMixedContentDetected": "Энэ хуудсыг HTTPS-ээр ачаалсан боловч тохируулсан нэг буюу хэд хэдэн URL нь HTTP байна. Хөтчүүд HTTPS хуудсыг HTTP API дуудахыг хориглодог.",
-    "webDiagnosticsMixedContentFix": "Засвар: медиа сервер эсвэл прокси цэгээ HTTPS-ээр нийлүүлнэ үү, эсвэл Moonfin-ийг зөвхөн итгэмжлэгдсэн дотоод сүлжээнд HTTP-ээр ачаална уу.",
+    "webDiagnosticsMixedContentFix": "Засвар: медиа сервер эсвэл прокси цэгээ HTTPS-ээр нийлүүлнэ үү, эсвэл Tortugarr-ийг зөвхөн итгэмжлэгдсэн дотоод сүлжээнд HTTP-ээр ачаална уу.",
     "webDiagnosticsNoMixedContentDetected": "Одоогийн ажиллах тохиргооноос холимог контентын илэрхий тохиргоо илрээгүй.",
     "webDiagnosticsCorsChecklist": "CORS шалгах жагсаалт",
     "webDiagnosticsCorsChecklistItem1": "• Access-Control-Allow-Origin-д хөтчийн origin-ыг зөвшөөрнө үү.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Сонгодог нь Moonfin-ий анхны төвлөрсөн байрлал. Орчин үеийн нь дэлгэцэд зохицдог кино маягийн байрлал.",
+    "detailScreenStyleSubtitle": "Сонгодог нь Tortugarr-ий анхны төвлөрсөн байрлал. Орчин үеийн нь дэлгэцэд зохицдог кино маягийн байрлал.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Moonfin Recommends дотоод сангийн алгоритм эсвэл онлайн TMDb-ийн ижил төстэй байдлын хэмжүүрийг ашиглана. Тэмдэглэл: Онлайн зөвлөмжид Seerr холболт шаардлагатай.",
+    "recommendationSystemSubtitle": "Tortugarr Recommends дотоод сангийн алгоритм эсвэл онлайн TMDb-ийн ижил төстэй байдлын хэмжүүрийг ашиглана. Тэмдэглэл: Онлайн зөвлөмжид Seerr холболт шаардлагатай.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-ийн ижил төстэй байдал",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Moonfin Recommends-ийн саналыг сонгосон медиагийн насны ангиллаар хязгаарлана",
+    "recommendationsApplyParentalRatingCapSubtitle": "Tortugarr Recommends-ийн саналыг сонгосон медиагийн насны ангиллаар хязгаарлана",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Захиалгат загвар нь Moonfin даяарх харагдах байдлыг өөрчилнө. Өөрийн хэв маягт тохирох нэгийг сонгоно уу.",
+    "customThemeSubtitle": "Захиалгат загвар нь Tortugarr даяарх харагдах байдлыг өөрчилнө. Өөрийн хэв маягт тохирох нэгийг сонгоно уу.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Утсан дээрээ Moonfin-д нэвтэрнэ үү",
+    "carSignInPrompt": "Утсан дээрээ Tortugarr-д нэвтэрнэ үү",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller бол илүү жигд хөдөлгөөн, бага доголдолтой байхад зориулсан Flutter-ийн орчин үеийн GPU дүрслэгч юм. Зарим ТВ хайрцаг болон хуучин GPU дээр гажилт эсвэл хар дэлгэц үүсгэж болзошгүй; тийм зүйл харвал Унтраах болгоно уу. Автомат нь таны төхөөрөмжид тохирох үндсэн утгыг сонгоно. Хэрэглэхийн тулд Moonfin-ийг дахин эхлүүлнэ үү.",
+    "impellerRenderingSubtitle": "Impeller бол илүү жигд хөдөлгөөн, бага доголдолтой байхад зориулсан Flutter-ийн орчин үеийн GPU дүрслэгч юм. Зарим ТВ хайрцаг болон хуучин GPU дээр гажилт эсвэл хар дэлгэц үүсгэж болзошгүй; тийм зүйл харвал Унтраах болгоно уу. Автомат нь таны төхөөрөмжид тохирох үндсэн утгыг сонгоно. Хэрэглэхийн тулд Tortugarr-ийг дахин эхлүүлнэ үү.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Дүрслэлийн хөдөлгүүрийг солихын тулд Moonfin дахин эхлэх шаардлагатай. Аппыг одоо хаагаад дахин нээж хэрэглэнэ үү.",
+    "impellerRestartMessage": "Дүрслэлийн хөдөлгүүрийг солихын тулд Tortugarr дахин эхлэх шаардлагатай. Аппыг одоо хаагаад дахин нээж хэрэглэнэ үү.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "IMDb-ийн хамгийн алдартай кино",
     "imdbMostPopularTvShows": "IMDb-ийн хамгийн алдартай ТВ цуврал",
     "imdbLowestRatedMovies": "IMDb-ийн хамгийн бага үнэлгээтэй кино",
-    "imdbTopEnglishMovies": "IMDb-ийн шилдэг үнэлгээтэй англи кино"
+    "imdbTopEnglishMovies": "IMDb-ийн шилдэг үнэлгээтэй англи кино",
+    "tgMissing": "Дутуу",
+    "tgComing": "Удахгүй",
+    "tgComingOn": "Гарах: {date}",
+    "tgDownloading": "Татаж байна",
+    "tgReadySoon": "Удахгүй бэлэн болно",
+    "tgRequested": "Хүсэлт илгээсэн",
+    "tgClose": "Хаах",
+    "tgCancel": "Цуцлах",
+    "tgBack": "Буцах",
+    "tgYes": "Тийм",
+    "tgNo": "Үгүй",
+    "tgSearch": "Хайх",
+    "tgHide": "Нуух",
+    "tgAll": "Бүгд",
+    "tgNone": "Байхгүй",
+    "tgMovies": "Кино",
+    "tgSeries": "Цуврал",
+    "tgMovieTag": "Кино",
+    "tgSeriesTag": "Цуврал",
+    "tgCanTakeAMinute": "Нэг минут хүртэл үргэлжилж болно",
+    "tgToday": "өнөөдөр",
+    "tgYesterday": "өчигдөр",
+    "tgDaysAgo": "{days} хоногийн өмнө",
+    "tgMonthsAgo": "{months} сарын өмнө",
+    "tgYearsAgo": "{years} жилийн өмнө",
+    "tgYearsMonthsAgo": "{years} жил {months} сарын өмнө",
+    "tgFindSubtitles": "Хадмал хайх",
+    "tgFreeUpSpace": "Зай чөлөөлөх",
+    "tgDownloads": "Татаж авалтууд",
+    "tgDownloadsCount": "Татаж авалтууд ({count})",
+    "tgNoVideoRemoved": "«{title}»: татаж авалтад видео файл байсангүй ({files}). Устгаж, хориглосон — өөр файл сонгоод үзнэ үү.",
+    "tgNoVideoNotRemoved": "«{title}»: татаж авалтад видео файл байсангүй ({files}), гэвч автоматаар устгаж чадсангүй.",
+    "tgAiredOn": "Цацагдсан: {date}",
+    "tgTapToFindFiles": "Файл хайхын тулд товшино уу",
+    "tgWholeSeason": "Бүтэн улирал",
+    "tgEpisodesMissingFindPack": "{count} анги дутуу – бүтэн улирлын багц хайх",
+    "tgAddToSonarrTitle": "Дутуу ангиудыг харахын тулд Sonarr-д нэмнэ үү",
+    "tgAddToSonarrSubtitle": "Цуврал нэмэгдэх боловч өөрөө юу ч татахгүй",
+    "tgMissingEpisodesUnavailable": "Дутуу ангиудыг одоогоор харуулах боломжгүй",
+    "tgReasonTapRetry": "{reason} · Дахин оролдохын тулд товшино уу",
+    "tgSeasonPackBadge": "Улирлын багц",
+    "tgMonitorSeasonTitle": "{season}-р улирлыг хянах",
+    "tgMonitorSeasonQuestion": "Sonarr {season}-р улирлын дутуу ангиудыг одоо татах уу?\n\nҮгүй: шинэ ангиуд гарах үедээ л татагдана.",
+    "tgSonarrSearchingSeason": "Sonarr {season}-р улирлыг хайж байна",
+    "tgMonitored": "Хянагдаж байна",
+    "tgNotMonitored": "Хянагдахгүй",
+    "tgSeasonStateLabel": "{season}-р улирал: {state}",
+    "tgLabelMissing": "{label} дутуу",
+    "tgNotAiredYet": "{code} хараахан цацагдаагүй байна.",
+    "tgNotAiredYetComing": "{code} хараахан цацагдаагүй – {date} гарна.",
+    "tgAlreadyDownloading": "{code} аль хэдийн татагдаж байна.",
+    "tgDownloadedAppearsSoon": "{code} татагдсан бөгөөд удахгүй медиа санд гарч ирнэ.",
+    "tgSearchingFor": "{label} хайж байна …",
+    "tgSeasonLower": "{season}-р улирал",
+    "tgWholeLabel": "Бүтэн {label}",
+    "tgSeasonNoEpisodes": "{season}-р улирал – медиа санд анги байхгүй",
+    "tgNoTvdbId": "Цувралд TVDB ID байхгүй тул Sonarr олох боломжгүй.",
+    "tgAddingToSonarr": "Sonarr-д нэмж байна …",
+    "tgAddToSonarrFailed": "Цувралыг Sonarr-д нэмж чадсангүй. Дараа дахин оролдоно уу.",
+    "tgSendingToDownload": "«{label}»-г татахаар илгээж байна …",
+    "tgDownloadDidNotStart": "Татаж авалт эхэлсэнгүй: {error}",
+    "tgDownloadingAppearsWhenDone": "«{label}» татагдаж байна ({size}). Дуусмагц медиа санд гарч ирнэ.",
+    "tgSonarrUnreachableRetry": "Sonarr-тай холбогдож чадсангүй. Хэсэг хугацааны дараа дахин оролдоно уу.",
+    "tgNoUsableFiles": "Ашиглах боломжтой файл олдсонгүй. Дараа дахин оролдоно уу – шинэ файлууд ихэвчлэн хэдэн цагийн дараа гарч ирдэг.",
+    "tgFilesCount": "{count} файл",
+    "tgFilesRecommended": "{count} файл – {recommended} нь чанарын профайлд нийцэж байна, үлдсэн нь хамгийн доор байна",
+    "tgOutsideQualityProfile": "Чанарын профайлаас гадуур",
+    "tgLargerThanProfile": "Профайлын зөвшөөрснөөс том",
+    "tgSmallerThanProfile": "Профайлын зөвшөөрснөөс жижиг",
+    "tgAlreadyExists": "Аль хэдийн байна",
+    "tgMayNotFitDisk": "Дискэнд багтахгүй байж магадгүй",
+    "tgSonarrUnreachable": "Sonarr-тай холбогдож чадсангүй",
+    "tgSonarrUnreachableAt": "{host} хаягаар Sonarr-тай холбогдож чадсангүй",
+    "tgSonarrRejectedChange": "Sonarr өөрчлөлтийг хүлээж авсангүй",
+    "tgSeasonMonitoredNoSearch": "Улирал хянагдаж байгаа ч Sonarr хайлт эхлүүлсэнгүй",
+    "tgSonarrCantSearch": "Sonarr одоогоор хайлт хийх боломжгүй байна",
+    "tgSearchExpired": "Хайлтын үр дүнгийн хугацаа дууссан – дахин хайна уу",
+    "tgSonarrRejectedDownload": "Sonarr татаж авалтыг хүлээж авсангүй (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr-д энэ цуврал байхгүй",
+    "tgCouldNotChangeMonitoring": "Хяналтыг өөрчилж чадсангүй: {error}",
+    "tgJellyfinNoIds": "Jellyfin цувралыг танисангүй (TVDB болон TMDB ID байхгүй)",
+    "tgSomethingWentWrong": "Алдаа гарлаа: {error}",
+    "tgDeleteReadOnly": "Энэ файлыг Radarr/Sonarr удирддаггүй бөгөөд Jellyfin тус хавтсанд зөвхөн унших эрхтэй. Файлын менежерээр устгана уу.",
+    "tgSonarrRequiredPerEpisode": "Sonarr-тай холбогдох боломжгүй, эсвэл цуврал тэнд нэмэгдээгүй байна. Анги тус бүрээр татахад Sonarr шаардлагатай.",
+    "tgEpisodesNotFound": "«{title}» цувралын сонгосон ангиудыг Sonarr-оос олсонгүй (нийт {count} анги олдсон). Цувралыг Sonarr-д нэмж дахин оролдоно уу.",
+    "tgPartOfCollectionPrefix": "Багтсан цуглуулга: ",
+    "tgViewingPartOf": "  ·  та {total}-с {current}-р хэсгийг үзэж байна",
+    "tgPartOf": "{total}-с {number}-р хэсэг",
+    "tgUnknownTitle": "Тодорхойгүй нэр",
+    "tgMovieCollection": "Киноны цуглуулга",
+    "tgNotReleasedYet": "«{title}» хараахан гараагүй байна",
+    "tgScreensaverModeVideo": "Видео",
+    "tgScreensaverModeLogo": "Лого",
+    "tgScreensaverSound": "Дэлгэц амраагчийн дуу",
+    "tgScreensaverSoundSubtitle": "Унтраалттай: дэлгэц амраагчийн трейлерүүд дуугүй тоглоно",
+    "tgScreensaverLogo": "Лого",
+    "tgLogoBadge": "Tortugarr тэмдэг",
+    "tgLogoVhs": "VHS кассет дээрх тоть",
+    "tgLogoSign": "Самбар дээрх тоть",
+    "tgHiddenBadge": "НУУГДСАН · {code}",
+    "tgDiskSpace": "Дискний зай",
+    "tgDiskSpaceSubtitle": "Шинэ татаж авалтад зай чөлөөлөх",
+    "tgAdultTitle": "Насанд хүрэгчдийн кино (XXX)",
+    "tgAdultSubtitle": "XXX медиа санг харуулах буюу нуух (PIN)",
+    "tgHideForeign": "Гадаад контент нуух",
+    "tgHideForeignOn": "Асаалттай: «Тренд» болон «Алдартай» хэсэгт зөвхөн англи, норвеги, швед, дани, герман, франц хэлний контент харагдана",
+    "tgHideForeignOff": "Унтраалттай: «Тренд» болон «Алдартай» хэсэгт бүх хэлний контент харагдана",
+    "tgShowHidden": "Нуусан зүйлсийг харуулах",
+    "tgShowHiddenOn": "Асаалттай: нуугдах ёстой контент улаан НУУГДСАН тэмдэгтэй харагдана",
+    "tgShowHiddenOff": "Алдаа засварлах: нуусан контентыг хасахын оронд улаан тэмдэгтэй харуулах",
+    "tgShowAllSubLangs": "Хадмалын бүх хэлийг харуулах",
+    "tgShowAllSubLangsOn": "Асаалттай: хадмалын цэсэнд бүх хэл харагдана",
+    "tgShowAllSubLangsOff": "Унтраалттай: хадмалын цэсэнд зөвхөн норвеги, англи хэл харагдана",
+    "tgPreviewSound": "Урьдчилан харах дуу",
+    "tgPreviewSoundOn": "Асаалттай: контент дээр зогсоход тоглох клип дуутай байна",
+    "tgPreviewSoundOff": "Унтраалттай: үзэж сонгох үед клипүүд дуугүй тоглоно",
+    "tgScreensaver": "Дэлгэц амраагч",
+    "tgScreensaverSubtitle": "Видео буюу лого, дуу ба зураг",
+    "tgShowMissingEpisodes": "Дутуу ангиудыг харуулах",
+    "tgShowMissingEpisodesOn": "Асаалттай: улирал бүрт танд байхгүй ангиуд татахад бэлэн харагдана",
+    "tgShowMissingEpisodesOff": "Унтраалттай: улирал бүрт зөвхөн танд байгаа ангиуд харагдана",
+    "tgShowCollections": "Киноны цуглуулга харуулах",
+    "tgShowCollectionsOn": "Асаалттай: кинон дээр цуглуулгын бусад кино, танд байхгүй кинонууд ч харагдана",
+    "tgShowCollectionsOff": "Унтраалттай: киноны хуудсанд цуглуулга харагдахгүй",
+    "tgNoActiveDownloads": "Идэвхтэй татаж авалт байхгүй.",
+    "tgPickDownloadToOpen": "Хүсэлтүүдийг нээхийн тулд татаж авалт сонгоно уу.",
+    "tgRefreshLibrary": "Медиа сан сэргээх",
+    "tgAskingJellyfinScan": "Jellyfin-ээс медиа санг скан хийхийг хүсэж байна …",
+    "tgHideAll": "Бүгдийг нуух",
+    "tgImporting": "Импортолж байна",
+    "tgSubsNotManaged": "Энэ контентыг Radarr/Sonarr удирддаггүй тул Bazarr хадмал олох боломжгүй.",
+    "tgBazarrUnreachable": "Bazarr-тай холбогдож чадсангүй. Хэсэг хугацааны дараа дахин оролдоно уу.",
+    "tgSubsFoundNothing": "Одоогоор юу ч олдсонгүй. Bazarr өдөр бүр автоматаар дахин оролддог, эсвэл та өөрөө сонгож болно.",
+    "tgSubsFound": "{languages} олдлоо – хадмалын цэсэнд гарч иртэл хэсэг хугацаа шаардагдаж болно.",
+    "tgAnd": "ба",
+    "tgSubsDownloaded": "Татагдсан – хадмалын цэсэнд гарч иртэл хэсэг хугацаа шаардагдаж болно.",
+    "tgAskingBazarr": "Bazarr-аас асууж байна …",
+    "tgHaveAll": "Бүгд байна",
+    "tgSearchAutoNow": "Одоо автоматаар хайх",
+    "tgSearchingUpToMinute": "Хайж байна … нэг минут хүртэл үргэлжилж болно",
+    "tgPickYourself": "Өөрөө сонгох",
+    "tgAskingProviders": "Хадмалын эх сурвалжуудаас асууж байна … нэг минут хүртэл үргэлжилж болно",
+    "tgNoProviderSubs": "Үүнд зориулсан хадмал ямар ч эх сурвалжид одоогоор байхгүй.",
+    "tgLangHas": "{language}: байна",
+    "tgLangMissing": "{language}: дутуу",
+    "tgNoReleaseName": "(релизийн нэргүй)",
+    "tgHearingImpaired": "{provider} · сонсголын бэрхшээлтэй хүмүүст",
+    "tgLangNorwegian": "Норвеги",
+    "tgLangEnglish": "Англи",
+    "tgBazarrUnknownTitle": "Bazarr энэ контентыг хараахан мэдэхгүй байна",
+    "tgBazarrError": "Bazarr алдаатай хариу өгсөн (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: дискний зай бага байна ({free} чөлөөтэй). Татаж авалт зогсож магадгүй — серверийг хариуцдаг хүнд мэдэгдээрэй.",
+    "tgNoQbitForSpace": "Зай шалгахын тулд qBittorrent-тэй холбогдож чадсангүй",
+    "tgNotEnoughSpace": "Зай хүрэлцэхгүй",
+    "tgDriveHasFree": "{drive}: {free} чөлөөтэй",
+    "tgCopyInDownloads": "Downloads хавтсанд хувилбар байна · медиа санд аль хэдийн байна",
+    "tgLastWatched": "Сүүлд үзсэн: {ago}",
+    "tgNeverWatchedAdded": "Хэзээ ч үзээгүй · нэмсэн: {ago}",
+    "tgNeverWatched": "Хэзээ ч үзээгүй",
+    "tgNothingSafeToDelete": "{drive}: диск дээр аюулгүй устгаж болох зүйл олдсонгүй (бүгд саяхан нэмэгдсэн, саяхан үзсэн эсвэл дуртай гэж тэмдэглэгдсэн).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{{count} контент устгах уу?} other{{count} контент устгах уу?}}",
+    "tgDeletedForGood": "{size} бүрмөсөн устгагдана. Үүнийг буцаах боломжгүй.",
+    "tgYesDelete": "Тийм, устгах",
+    "tgDeletingProgress": "Устгаж байна {done}/{total} …",
+    "tgNowHasFree": " · {drive}: одоо {free} чөлөөтэй",
+    "tgDeletedTitles": "{count, plural, one{{count} контент устгасан} other{{count} контент устгасан}}{extra}",
+    "tgDeletedFailed": "{count} устгасан, {failed} амжилтгүй{extra}",
+    "tgFreeGb": "{gb} GB чөлөөлөх",
+    "tgDownloadCopies": "Татаж авалтын хувилбарууд",
+    "tgLookingForUnwatched": "Удаан хугацаанд үзээгүй зүйлсийг хайж байна …",
+    "tgSuggestionEnough": "Санал: {size} · зай хангалттай ✓",
+    "tgSuggestionOf": "Санал: шаардлагатай {target}-с {size}",
+    "tgPickToSayNo": "Татгалзахын тулд нэгийг сонгоно уу — дараагийн санал автоматаар гарч ирнэ.",
+    "tgOtherCandidates": "Бусад сонголт",
+    "tgDownloadAnyway": "Ямар ч байсан татах",
+    "tgDeleteCountSize": "{count} устгах ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} чөлөөтэй.",
+    "tgFileDoubleSpace": "Файл {size} бөгөөд хоёр дахин зай эзэлнэ (татаж авалт + медиа сангийн хувилбар), дээр нь {buffer} нөөц.",
+    "tgFileSize": "Файл {size}, дээр нь {buffer} нөөц.",
+    "tgPendingNeeds": "Үргэлжилж буй татаж авалтуудад {size} нэмж шаардлагатай.",
+    "tgShortBy": "{size} дутуу.",
+    "tgOnlyEarlyFiles": "Кино дижитал гарахаас өмнө нийтлэгдсэн файлууд л олдсон ({count}) — тэдгээр нь бараг үргэлж хуурамч байдаг.",
+    "tgNoDigitalDate": "дижитал гарах огноо хараахан тодорхойгүй байна",
+    "tgDigitalOn": "дижитал хувилбар нь {date} гарна",
+    "tgNotOutDigitally": "Дижитал хувилбар хараахан гараагүй",
+    "tgTitleWhen": "«{title}» {when}.",
+    "tgNotOutExplain": "Одоо байгаа зүйл нь ихэвчлэн кино театрын бичлэг эсвэл ижил нэртэй өөр кино байдаг. Заримдаа чанар муутай эртний хувилбар байх бөгөөд ихэнхдээ хадмал шигтгэсэн байдаг. «Файлуудыг ямар ч байсан харуулах» одоо байгаа зүйлийг харуулна. Radarr зохих хувилбарыг гармагц өөрөө татна.",
+    "tgShowFilesAnyway": "Файлуудыг ямар ч байсан харуулах",
+    "tgPickSeasonsEpisodes": "Улирал, анги сонгох",
+    "tgNoEpisodeInfo": "{season}: ангийн мэдээлэл байхгүй",
+    "tgAppliesAllDevices": "Энэ бүртгэлийг ашигладаг бүх төхөөрөмжид үйлчилнэ",
+    "tgNoXxxLibrary": "XXX нэртэй медиа сан олдсонгүй.",
+    "tgSearchingEachWord": "Үг бүрийг тус тусад нь хайж байна … (хагас минут болж магадгүй)",
+    "tgSentToQbit": "«{title}» ({size}) qBittorrent-д илгээсэн",
+    "tgDownloadFailed": "Татаж авалт амжилтгүй: {error}",
+    "tgXxxNoVideoRemoved": "«{title}» видео файлгүй байсан тул устгасан.",
+    "tgXxxNoVideoNotRemoved": "«{title}» видео файлгүй байсан ч УСТГАСАНГҮЙ.",
+    "tgSearchNewXxx": "Шинэ XXX хайх",
+    "tgXxxSearchHint": "Нэр, студи …",
+    "tgChecking": "Шалгаж байна …",
+    "tgXxxVisible": "Одоо харагдаж байна. XXX медиа сан, хайлт болон нүүр хуудсанд харагдана.",
+    "tgXxxHidden": "Нуугдсан. XXX аппын хаана ч харагдахгүй.",
+    "tgShowWithPin": "Харуулах (PIN)",
+    "tgChangePin": "PIN солих",
+    "tgNoLibraryList": "Медиа сангийн жагсаалтыг авч чадсангүй (HTTP {code})",
+    "tgNoUserSettings": "Хэрэглэгчийн тохиргоог авч чадсангүй (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin өөрчлөлтийг хүлээж авсангүй (HTTP {code})",
+    "tgDeleteFailed": "Устгах амжилтгүй (HTTP {code})",
+    "tgXxxAddFailed": "«{title}»-г qBittorrent-д нэмж чадсангүй",
+    "tgSeasonEpisodeLower": "{season}-р улирал, {episode}-р анги",
+    "tgSearchInSeerr": "Seerr-ээс хайх",
+    "tgSeerrSearchHint": "Кино, цуврал хайх (жишээ нь «Lost S02E05»)",
+    "tgMissingInThisSeason": "Энэ улиралд дутуу",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Дутуу улирал} other{Дутуу улирлууд}} {list} - бүх улирлыг харахын тулд цувралыг нээнэ үү",
+    "tgProjectOnGitHub": "Tortugarr GitHub дээр",
+    "tgProjectOnGitHubSubtitle": "Эх код, хувилбарууд ба асуудлууд",
+    "tgBuiltOnMoonfinCredit": "Tortugarr нь Moonfin хөгжүүлэгчдийн бүтээсэн Moonfin (GPL) дээр суурилсан.",
+    "tgCredits": "Талархал",
+    "tgCreditsThanks": "Даруухан талархал илэрхийлье: эдгээр төсөл болон тэдний ард буй хүмүүс байгаагүй бол Tortugarr бий болохгүй байсан.",
+    "tgCreditMoonfin": "Tortugarr-ын суурь болсон апп (GPL)",
+    "tgCreditJellyfin": "Медиа сервер",
+    "tgCreditSeerr": "Нээлт ба хүсэлтүүд",
+    "tgCreditRadarr": "Кино",
+    "tgCreditSonarr": "Цуврал",
+    "tgCreditProwlarr": "Индексерийн менежер",
+    "tgCreditBazarr": "Хадмал орчуулга",
+    "tgCreditFlareSolverr": "Индексерүүдэд зориулсан Cloudflare туслагч",
+    "tgCreditQbittorrent": "Татаж авах клиент, суулгацын үндсэн сонголт",
+    "tgCreditTmdb": "Кино, цувралын мэдээлэл, постер, зураг",
+    "tgCreditOpenSubtitles": "Bazarr-аар авсан хадмал орчуулга",
+    "tgTmdbNotice": "Энэ бүтээгдэхүүн TMDB API ашигладаг боловч TMDB-ээр батлагдсан буюу баталгаажсан зүйл биш.",
+    "tgLoadingLogoSize": "Ачаалах логоны хэмжээ",
+    "tgLoadingLogoSizeSubtitle": "Видео ачаалах үед эргэлдэх лого",
+    "tgSubtitleLanguages": "Хадмалын хэлүүд",
+    "tgSubtitleLanguagesSubtitle": "Хадмалын цэсэд харагдана: {languages}",
+    "tgShowAllSubLangsOffChosen": "Унтраасан: хадмалын цэс зөвхөн сонгосон хэлүүдийг харуулна",
+    "tgDiscoveryLanguages": "«Тренд» ба «Алдартай» хэсгийн хэлүүд",
+    "tgDiscoveryLanguagesSubtitle": "Харагдана: {languages}",
+    "tgHideForeignOnChosen": "Асаасан: «Тренд» ба «Алдартай» зөвхөн сонгосон хэлүүдийг харуулна",
+    "tgShowLanguageBadges": "Хэлний тэмдэг харуулах",
+    "tgShowLanguageBadgesOn": "Асаасан: гарчигууд өөрийн хэлийг харуулна (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Унтраасан: гарчиг дээр хэлний тэмдэг байхгүй"
 }

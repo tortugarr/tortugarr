@@ -32,6 +32,7 @@ import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../data/services/seerr/seerr_discover_sliders.dart';
+import '../../../data/services/seerr/seerr_language_filter.dart';
 import '../../../data/utils/bounded_concurrency.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/server_url.dart';
@@ -2839,6 +2840,12 @@ class HomeViewModel extends ChangeNotifier {
         type != SeerrRowType.recentlyAdded &&
         type != SeerrRowType.recentRequests &&
         type != SeerrRowType.yourWatchlist;
+    // Only the discovery rows run through the language filter.
+    final markHidden =
+        hidesAvailable &&
+        GetIt.instance<SeerrPreferences>().languagePreviewActive;
+    final markLanguage =
+        hidesAvailable && GetIt.instance<SeerrPreferences>().showLanguageBadges;
 
     return rawItems
         .where((item) {
@@ -2871,6 +2878,11 @@ class HomeViewModel extends ChangeNotifier {
               ),
               'SeerrMediaType': item.mediaType,
               'SeerrStatus': item.mediaInfo?.status,
+              ...?SeerrLanguageFilter.previewMark(
+                item,
+                active: markHidden,
+                badges: markLanguage,
+              )?.toRaw(),
             },
           ),
         )

@@ -21,6 +21,7 @@ import 'package:server_core/server_core.dart' hide ImageType;
 import 'package:window_manager/window_manager.dart';
 
 import '../../../data/models/aggregated_item.dart';
+import '../../screensaver/screensaver_controller.dart';
 import '../../../data/models/home_row.dart';
 import '../../../data/repositories/mdblist_repository.dart';
 import '../../../data/repositories/seerr_repository.dart';
@@ -88,6 +89,7 @@ import 'home_view_model.dart';
 import '../../widgets/seerr/seerr_genre_label.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
+import '../../navigation/single_push.dart';
 
 Color get _homeBackground => AppColorScheme.background;
 
@@ -205,7 +207,7 @@ class _HomeShellState extends State<_HomeShell>
     _viewModel = GetIt.instance<HomeViewModel>();
     WidgetsBinding.instance.addObserver(this);
     appRouter.routerDelegate.addListener(_onRouteChanged);
-    _lastObservedPath = appRouter.routerDelegate.currentConfiguration.uri.path;
+    _lastObservedPath = currentTopRoutePath();
     homeRefreshBus.addListener(_onHomeRefreshRequested);
     userDataSync.addListener(_onUserDataChanged);
     if (homeRefreshBus.consumePending()) {
@@ -458,14 +460,14 @@ class _HomeShellState extends State<_HomeShell>
   }
 
   bool _isHomeRouteActive() {
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
+    final path = currentTopRoutePath();
     return path == Destinations.home ||
         path.startsWith('${Destinations.home}/');
   }
 
   void _onRouteChanged() {
     if (!mounted) return;
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
+    final path = currentTopRoutePath();
     if (path == _lastObservedPath) return;
     _lastObservedPath = path;
 
@@ -1221,7 +1223,8 @@ class _ContentRowsState extends State<_ContentRows>
       windowManager.addListener(this);
     }
     appRouter.routerDelegate.addListener(_onRouteChanged);
-    _lastObservedPath = appRouter.routerDelegate.currentConfiguration.uri.path;
+    _lastObservedPath = currentTopRoutePath();
+    _screensaverVisible.addListener(_onScreensaverVisibleChanged);
     FocusManager.instance.addListener(_onGlobalFocusChanged);
     SettingsPanel.isOpenNotifier.addListener(_onSettingsPanelOpenChanged);
     LeftSidebar.isFocusedNotifier.addListener(_onGlobalFocusChanged);
@@ -1389,6 +1392,7 @@ class _ContentRowsState extends State<_ContentRows>
     _rowPrefetchDebounce?.cancel();
     _v2Expansion.dispose();
     _audioArbiter.unregister(this);
+    _screensaverVisible.removeListener(_onScreensaverVisibleChanged);
     appRouter.routerDelegate.removeListener(_onRouteChanged);
     _resizeCheckDebounce?.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -1494,7 +1498,7 @@ class _ContentRowsState extends State<_ContentRows>
   }
 
   void _onRouteChanged() {
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
+    final path = currentTopRoutePath();
     final wasOnHome = _lastObservedPath?.startsWith(Destinations.home) ?? false;
     _lastObservedPath = path;
 
@@ -1579,6 +1583,18 @@ class _ContentRowsState extends State<_ContentRows>
     }
 
     return null;
+  }
+
+  ValueNotifier<bool> get _screensaverVisible =>
+      GetIt.instance<ScreensaverController>().visible;
+
+  /// A card preview keeps playing (with its sound) behind the screensaver
+  /// unless it is stopped when the screensaver comes up.
+  void _onScreensaverVisibleChanged() {
+    if (!_screensaverVisible.value) return;
+    _previewDelayTimer?.cancel();
+    _previewDelayTimer = null;
+    _finishSharedPreview(releaseResources: true);
   }
 
   void _schedulePreview(
@@ -1722,7 +1738,10 @@ class _ContentRowsState extends State<_ContentRows>
   ) async {
     final mainPlaybackActive =
         _mainPlaybackActive || _playbackManager.state.isPlaying;
-    if (_chromeFocusActive || mainPlaybackActive || !_isHomeRouteActive()) {
+    if (_chromeFocusActive ||
+        mainPlaybackActive ||
+        !_isHomeRouteActive() ||
+        _screensaverVisible.value) {
       _finishSharedPreview(releaseResources: true);
       return;
     }
@@ -2147,7 +2166,7 @@ class _ContentRowsState extends State<_ContentRows>
   }
 
   bool _isHomeRouteActive() {
-    final path = appRouter.routerDelegate.currentConfiguration.uri.path;
+    final path = currentTopRoutePath();
     final onHomePath =
         path == Destinations.home || path.startsWith('${Destinations.home}/');
     if (!onHomePath || !mounted) return false;
@@ -5208,6 +5227,7 @@ class _ContentRowsState extends State<_ContentRows>
                     itemType: item.type,
                     seerrMediaType: showMediaTypeBadges ? item.seerrMediaType : null,
                     seerrStatus: item.seerrStatus,
+                    seerrLanguageMark: item.seerrLanguageMark,
                     isGenreFallback: (row.rowType == HomeRowType.genres && row.id == 'genres') &&
                         (() {
                           final primaryAr = item.rawData['PrimaryImageAspectRatio'] as num?;
@@ -5582,7 +5602,8 @@ class _ContentRowsState extends State<_ContentRows>
       // Seerr can only resolve by searching, and a search can land on the
       // wrong title. The TMDB id these items also carry names exactly one.
       final tmdbId = item.tmdbId;
-      context.push(
+      SinglePush.push(
+        context,
         Destinations.seerrMedia(
           tmdbId != null && tmdbId.isNotEmpty ? tmdbId : item.id,
           mediaType: mediaType,

@@ -46,8 +46,14 @@ class DesktopUpdateInfo {
 class AppUpdateService {
   AppUpdateService(this._store, this._userPreferences);
 
+  /// GitHub owner/repo whose releases are offered as app updates. This must
+  /// match the public Tortugarr repository; it used to point at upstream
+  /// Moonfin, whose releases would replace this app. Update checks stay off in
+  /// builds without a --dart-define=DISTRIBUTION_CHANNEL (all our builds today).
+  static const releaseRepo = 'tortugarr/tortugarr';
+
   static const _latestReleaseHost = 'api.github.com';
-  static const _latestReleasePath = '/repos/Moonfin-Client/Moonfin-Core/releases/latest';
+  static const _latestReleasePath = '/repos/$releaseRepo/releases/latest';
   static const _checkCooldown = Duration(hours: 24);
 
   static const _lastCheckMsKey = 'app_update_last_check_ms';
@@ -203,7 +209,7 @@ class AppUpdateService {
 
   Future<_LatestRelease?> _fetchLatestRelease() async {
     final client = HttpClient()
-      ..userAgent = 'MoonfinUpdateChecker/1.0'
+      ..userAgent = 'TortugarrUpdateChecker/1.0'
       ..connectionTimeout = const Duration(seconds: 10);
 
     try {
@@ -228,7 +234,7 @@ class AppUpdateService {
       }
 
       final htmlUrl = decoded['html_url']?.toString() ??
-          'https://github.com/Moonfin-Client/Moonfin-Core/releases/latest';
+          'https://github.com/$releaseRepo/releases/latest';
 
       final assetsJson = decoded['assets'];
       final assets = <_ReleaseAsset>[];

@@ -10,7 +10,7 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -138,7 +138,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin версия $version';
+    return 'Tortugarr версия $version';
   }
 
   @override
@@ -190,7 +190,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin не можа да получи достъп до вашия системен ключодържател. Входът може да продължи, но защитеното съхранение на токени може да не е достъпно, докато ключодържателят не бъде отключен.';
+      'Tortugarr не можа да получи достъп до вашия системен ключодържател. Входът може да продължи, но защитеното съхранение на токени може да не е достъпно, докато ключодържателят не бъде отключен.';
 
   @override
   String get ok => 'добре';
@@ -203,7 +203,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Класически е оригиналното центрирано оформление на Moonfin. Модерен е адаптивно кинематографично оформление.';
+      'Класически е оригиналното центрирано оформление на Tortugarr. Модерен е адаптивно кинематографично оформление.';
 
   @override
   String get detailScreenStyleMoonfin => 'Класически';
@@ -443,10 +443,10 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Използвайте алгоритъма Moonfin Recommends за локалната библиотека или онлайн показателите за сходство на TMDb. Забележка: онлайн препоръките изискват интеграция със Seerr.';
+      'Използвайте алгоритъма Tortugarr Recommends за локалната библиотека или онлайн показателите за сходство на TMDb. Забележка: онлайн препоръките изискват интеграция със Seerr.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -460,7 +460,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Ограничаване на предложенията на Moonfin Recommends според родителската оценка на целевата медия';
+      'Ограничаване на предложенията на Tortugarr Recommends според родителската оценка на целевата медия';
 
   @override
   String get interfaceStyle => 'Стил на интерфейса';
@@ -561,14 +561,14 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get settingsAppearanceThemeSubtitle =>
-      'Превключвайте между Moonfin и Neon Pulse без рестартиране на приложението';
+      'Превключвайте между Tortugarr и Neon Pulse без рестартиране на приложението';
 
   @override
   String get customThemeTitle => 'Персонализирана тема';
 
   @override
   String get customThemeSubtitle =>
-      'Персонализираните теми променят визуалните елементи в Moonfin. Изберете една от тези опции според вашия стил.';
+      'Персонализираните теми променят визуалните елементи в Tortugarr. Изберете една от тези опции според вашия стил.';
 
   @override
   String get keyboardPreferSystemIme => 'Предпочитам системна клавиатура';
@@ -588,11 +588,11 @@ class AppLocalizationsBg extends AppLocalizations {
       'Let a connected game controller move focus and select items';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Текущият Moonfin вид, който всички обичате';
+      'Текущият Tortugarr вид, който всички обичате';
 
   @override
   String get themeNeonPulse => 'Неонов импулс';
@@ -666,7 +666,7 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Изход от Moonfin?';
+  String get exitApp => 'Изход от Tortugarr?';
 
   @override
   String get exitAppConfirmation => 'Сигурни ли сте, че искате да излезете?';
@@ -1849,7 +1849,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get shuffleAllMusic => 'Разбъркване на цялата музика';
 
   @override
-  String get carSignInPrompt => 'Влезте в Moonfin на телефона си';
+  String get carSignInPrompt => 'Влезте в Tortugarr на телефона си';
 
   @override
   String get carServerUnreachable => 'Сървърът не е достъпен';
@@ -4185,7 +4185,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Не е зададено. Moonfin ще опита mpv.conf по подразбиране в папки app/data.';
+      'Не е зададено. Tortugarr ще опита mpv.conf по подразбиране в папки app/data.';
 
   @override
   String get selectMpvConf => 'Изберете mpv.conf';
@@ -4486,7 +4486,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Изтегляния/Moonfin — видими за други приложения';
+      'Изтегляния/Tortugarr — видими за други приложения';
 
   @override
   String get dangerZone => 'Опасна зона';
@@ -4518,7 +4518,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Изтеглените медии ще бъдат запазени в Downloads/Moonfin на вашето устройство. Тези файлове ще бъдат видими за други приложения, като вашата галерия или музикален плейър.\n\nСъществуващите изтегляния ще останат в текущото си местоположение.';
+      'Изтеглените медии ще бъдат запазени в Downloads/Tortugarr на вашето устройство. Тези файлове ще бъдат видими за други приложения, като вашата галерия или музикален плейър.\n\nСъществуващите изтегляния ще останат в текущото си местоположение.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4774,7 +4774,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Превключване на видимостта на началната страница за библиотека. Рестартирайте Moonfin, за да влязат в сила промените.';
+      'Превключване на видимостта на началната страница за библиотека. Рестартирайте Tortugarr, за да влязат в сила промените.';
 
   @override
   String get showInNavigation => 'Показване в навигацията';
@@ -4836,7 +4836,7 @@ class AppLocalizationsBg extends AppLocalizations {
       'Изберете между различни стилове на медийната лента или я изключете';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'МакД';
@@ -5468,7 +5468,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get sourceCode => 'Изходен код';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Проверете за актуализации сега';
@@ -5647,7 +5647,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInMoonfin => 'Играйте в Moonfin';
+  String get playInMoonfin => 'Играйте в Tortugarr';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5693,7 +5693,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Елементът не е намерен във вашата Moonfin библиотека';
+      'Елементът не е намерен във вашата Tortugarr библиотека';
 
   @override
   String get errorSearchingLibrary => 'Грешка при търсене на библиотека';
@@ -7691,7 +7691,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Извършва се рестартиране на сървъра, моля, рестартирайте Moonfin';
+      'Извършва се рестартиране на сървъра, моля, рестартирайте Tortugarr';
 
   @override
   String get adminActiveSessions => 'Активни сесии';
@@ -11481,7 +11481,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Превключване на видимостта на началната страница за библиотека. Рестартирайте Moonfin, за да влязат в сила промените.';
+      'Превключване на видимостта на началната страница за библиотека. Рестартирайте Tortugarr, за да влязат в сила промените.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11603,7 +11603,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Присъединете се към Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Поддръжка Moonfin';
+  String get settingsSupportMoonfin => 'Поддръжка Tortugarr';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Дарете кафе на разработчика';
@@ -11623,14 +11623,14 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Как Moonfin обработва вашите данни';
+      'Как Tortugarr обработва вашите данни';
 
   @override
   String get settingsCheckForUpdates => 'Проверете за актуализации';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Проверете за най-новата Moonfin версия';
+      'Проверете за най-новата Tortugarr версия';
 
   @override
   String get settingsBoth => 'И двете';
@@ -12078,7 +12078,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Това са теми, изтеглени от плъгина Moonfin за текущия сървър. Изтриването премахва само това локално копие.';
+      'Това са теми, изтеглени от плъгина Tortugarr за текущия сървър. Изтриването премахва само това локално копие.';
 
   @override
   String get savedThemesEmpty => 'Няма запазени теми за този сървър.';
@@ -12100,7 +12100,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Отворете Moonfin редактора на теми във вашия браузър';
+      'Отворете Tortugarr редактора на теми във вашия браузър';
 
   @override
   String get homeScreen => 'Начален екран';
@@ -12420,7 +12420,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get webDiagnostics => 'Уеб диагностика';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin Уеб диагностика';
+  String get webDiagnosticsTitle => 'Tortugarr Уеб диагностика';
 
   @override
   String get webDiagnosticsIntro =>
@@ -12436,11 +12436,11 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin откри HTTPS страница, която се опитва да извика URL адрес на HTTP сървър. Браузърите блокират тази заявка, преди да достигне вашия сървър.';
+      'Tortugarr откри HTTPS страница, която се опитва да извика URL адрес на HTTP сървър. Браузърите блокират тази заявка, преди да достигне вашия сървър.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin откри неуспешна заявка на ниво браузър, която обикновено се причинява от липсващ CORS или предполетни заглавки на медийния сървър.';
+      'Tortugarr откри неуспешна заявка на ниво браузър, която обикновено се причинява от липсващ CORS или предполетни заглавки на медийния сървър.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -12491,7 +12491,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Поправка: обслужвайте вашия медиен сървър или прокси крайна точка чрез HTTPS или заредете Moonfin през HTTP само в надеждни локални мрежи.';
+      'Поправка: обслужвайте вашия медиен сървър или прокси крайна точка чрез HTTPS или заредете Tortugarr през HTTP само в надеждни локални мрежи.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -14194,7 +14194,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller е модерният GPU рендер на Flutter за по-плавни анимации и по-малко забавяния. На някои TV устройства и по-стари GPU може да причини дефекти или черно видео; изключете го, ако забележите такива. „Автоматично“ избира най-добрата настройка за вашето устройство. Рестартирайте Moonfin, за да приложите промяната.';
+      'Impeller е модерният GPU рендер на Flutter за по-плавни анимации и по-малко забавяния. На някои TV устройства и по-стари GPU може да причини дефекти или черно видео; изключете го, ако забележите такива. „Автоматично“ избира най-добрата настройка за вашето устройство. Рестартирайте Tortugarr, за да приложите промяната.';
 
   @override
   String get impellerAuto => 'Автоматично';
@@ -14210,7 +14210,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin трябва да се рестартира, за да смени двигателя за изобразяване. Затворете приложението сега и след това го отворете отново, за да приложите промяната.';
+      'Tortugarr трябва да се рестартира, за да смени двигателя за изобразяване. Затворете приложението сега и след това го отворете отново, за да приложите промяната.';
 
   @override
   String get impellerCloseNow => 'Затвори приложението сега';
@@ -15297,4 +15297,1050 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Length';
+
+  @override
+  String get seerrFilterNotSupported => 'Filter not supported';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'This network or studio filter is not available because the internal IDs don\'t match. Please use the filter dropdown instead.';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Built on Moonfin';
+
+  @override
+  String get tgMissing => 'Липсва';
+
+  @override
+  String get tgComing => 'Очаква се';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Очаква се $date';
+  }
+
+  @override
+  String get tgDownloading => 'Изтегля се';
+
+  @override
+  String get tgReadySoon => 'Скоро готово';
+
+  @override
+  String get tgRequested => 'Заявено';
+
+  @override
+  String get tgClose => 'Затвори';
+
+  @override
+  String get tgCancel => 'Отказ';
+
+  @override
+  String get tgBack => 'Назад';
+
+  @override
+  String get tgYes => 'Да';
+
+  @override
+  String get tgNo => 'Не';
+
+  @override
+  String get tgSearch => 'Търсене';
+
+  @override
+  String get tgHide => 'Скрий';
+
+  @override
+  String get tgAll => 'Всички';
+
+  @override
+  String get tgNone => 'Нищо';
+
+  @override
+  String get tgMovies => 'Филми';
+
+  @override
+  String get tgSeries => 'Сериали';
+
+  @override
+  String get tgMovieTag => 'Филм';
+
+  @override
+  String get tgSeriesTag => 'Сериал';
+
+  @override
+  String get tgCanTakeAMinute => 'Може да отнеме до една минута';
+
+  @override
+  String get tgToday => 'днес';
+
+  @override
+  String get tgYesterday => 'вчера';
+
+  @override
+  String tgDaysAgo(int days) {
+    return 'преди $days дни';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return 'преди $months мес.';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return 'преди $years г.';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return 'преди $years г. и $months мес.';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Намери субтитри';
+
+  @override
+  String get tgFreeUpSpace => 'Освободи място';
+
+  @override
+  String get tgDownloads => 'Изтегляния';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Изтегляния ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '„$title“: изтеглянето не съдържаше видеофайл ($files). Премахнато е и блокирано – опитай с друг файл.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '„$title“: изтеглянето не съдържаше видеофайл ($files), но не можа да бъде премахнато автоматично.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Излъчен $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Докосни, за да намериш файлове';
+
+  @override
+  String get tgWholeSeason => 'Целият сезон';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return 'Липсват $count епизода – намери пакет за сезона';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Добави в Sonarr, за да видиш липсващите епизоди';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Сериалът се добавя, без сам да изтегля нищо';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Липсващите епизоди не могат да се покажат в момента';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Докосни, за да опиташ отново';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Пакет за сезон';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Следи сезон $season';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Да изтегли ли Sonarr липсващите епизоди от сезон $season сега?\n\nНе: само новите епизоди се изтеглят, когато излязат.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr търси сезон $season';
+  }
+
+  @override
+  String get tgMonitored => 'Следи се';
+
+  @override
+  String get tgNotMonitored => 'Не се следи';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return 'Сезон $season: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label липсва';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code още не е излъчен.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code още не е излъчен – очаква се $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code вече се изтегля.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code е изтеглен и скоро ще се появи в библиотеката.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Търсене: $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return 'сезон $season';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Целият $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return 'Сезон $season – няма епизоди в библиотеката';
+  }
+
+  @override
+  String get tgNoTvdbId =>
+      'Сериалът няма TVDB ид, затова Sonarr не може да го намери.';
+
+  @override
+  String get tgAddingToSonarr => 'Добавяне в Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Сериалът не можа да бъде добавен в Sonarr. Опитай отново по-късно.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Изпращане на „$label“ за изтегляне …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Изтеглянето не започна: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '„$label“ се изтегля ($size). Ще се появи в библиотеката, когато приключи.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Няма връзка със Sonarr. Опитай отново малко по-късно.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Не са намерени използваеми файлове. Опитай отново по-късно – нови често се появяват след няколко часа.';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count файла';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count файла – $recommended отговарят на профила за качество, останалите са най-отдолу';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Извън профила за качество';
+
+  @override
+  String get tgLargerThanProfile => 'По-голям, отколкото профилът позволява';
+
+  @override
+  String get tgSmallerThanProfile => 'По-малък, отколкото профилът позволява';
+
+  @override
+  String get tgAlreadyExists => 'Вече съществува';
+
+  @override
+  String get tgMayNotFitDisk => 'Може да не се побере на диска';
+
+  @override
+  String get tgSonarrUnreachable => 'Няма връзка със Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Няма връзка със Sonarr на $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr не прие промяната';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Сезонът се следи, но Sonarr не започна търсенето';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr не може да търси в момента';
+
+  @override
+  String get tgSearchExpired =>
+      'Резултатът от търсенето е изтекъл – потърси отново';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr не прие изтеглянето (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr няма този сериал';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Следенето не можа да бъде променено: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin не разпозна сериала (няма TVDB или TMDB ид)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Нещо се обърка: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Файлът не се управлява от Radarr/Sonarr, а Jellyfin има само достъп за четене до папката. Изтрий го във файловия си мениджър.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr не е достъпен или сериалът не е добавен там. Изтеглянето на отделни епизоди изисква Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Избраните епизоди за „$title“ не бяха намерени в Sonarr (общо намерени $count епизода). Добави сериала в Sonarr и опитай отново.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Част от колекцията ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  гледаш част $current от $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return 'Част $number от $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Неизвестно заглавие';
+
+  @override
+  String get tgMovieCollection => 'Филмова колекция';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '„$title“ още не е излязъл';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Видео';
+
+  @override
+  String get tgScreensaverModeLogo => 'Лого';
+
+  @override
+  String get tgScreensaverSound => 'Звук на скрийнсейвъра';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Изключено: трейлърите в скрийнсейвъра се пускат без звук';
+
+  @override
+  String get tgScreensaverLogo => 'Лого';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr значка';
+
+  @override
+  String get tgLogoVhs => 'Папагал върху VHS касети';
+
+  @override
+  String get tgLogoSign => 'Папагал върху табела';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'СКРИТО · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Дисково пространство';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Освободи място за нови изтегляния';
+
+  @override
+  String get tgAdultTitle => 'Филми за възрастни (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Покажи или скрий XXX библиотеката (PIN)';
+
+  @override
+  String get tgHideForeign => 'Скрий чуждестранно съдържание';
+
+  @override
+  String get tgHideForeignOn =>
+      'Включено: Актуални и Популярни показват само английски, норвежки, шведски, датски, немски и френски';
+
+  @override
+  String get tgHideForeignOff =>
+      'Изключено: Актуални и Популярни показват всички езици';
+
+  @override
+  String get tgShowHidden => 'Покажи какво е скрито';
+
+  @override
+  String get tgShowHiddenOn =>
+      'Включено: заглавията, които иначе биха били скрити, се показват с червен знак СКРИТО';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Отстраняване на проблеми: покажи скритите заглавия с червен знак, вместо да ги премахваш';
+
+  @override
+  String get tgShowAllSubLangs => 'Покажи всички езици за субтитри';
+
+  @override
+  String get tgShowAllSubLangsOn =>
+      'Включено: менюто за субтитри показва всички езици';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Изключено: менюто за субтитри показва само норвежки и английски';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Изкл.: менюто за субтитри показва само избраните езици';
+
+  @override
+  String get tgSubtitleLanguages => 'Езици на субтитрите';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Показани в менюто за субтитри: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Звук при преглед';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'Включено: клипът, който се пуска, когато спреш на заглавие, е със звук';
+
+  @override
+  String get tgPreviewSoundOff =>
+      'Изключено: клиповете се пускат без звук, докато разглеждаш';
+
+  @override
+  String get tgScreensaver => 'Скрийнсейвър';
+
+  @override
+  String get tgScreensaverSubtitle => 'Видео или лого, звук и картина';
+
+  @override
+  String get tgShowMissingEpisodes => 'Покажи липсващите епизоди';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'Включено: сезоните показват епизодите, които нямаш, готови за изтегляне';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Изключено: сезоните показват само епизодите, които имаш';
+
+  @override
+  String get tgShowCollections => 'Покажи филмовите колекции';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'Включено: филмите показват другите филми от колекцията, включително тези, които ти липсват';
+
+  @override
+  String get tgShowCollectionsOff =>
+      'Изключено: страницата на филма не показва колекцията';
+
+  @override
+  String get tgNoActiveDownloads => 'Няма активни изтегляния.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Избери изтегляне, за да отвориш заявките.';
+
+  @override
+  String get tgRefreshLibrary => 'Опресни библиотеката';
+
+  @override
+  String get tgAskingJellyfinScan =>
+      'Jellyfin получава заявка да сканира библиотеката …';
+
+  @override
+  String get tgHideAll => 'Скрий всички';
+
+  @override
+  String get tgImporting => 'Импортира се';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Това заглавие не се управлява от Radarr/Sonarr, затова Bazarr не може да намери субтитри за него.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Няма връзка с Bazarr. Опитай отново малко по-късно.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Още нищо не е намерено. Bazarr опитва отново автоматично всеки ден, или можеш сам да избереш.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Намерени: $languages – може да отнеме момент, преди да се появят в менюто за субтитри.';
+  }
+
+  @override
+  String get tgAnd => 'и';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Изтеглени – може да отнеме момент, преди да се появят в менюто за субтитри.';
+
+  @override
+  String get tgAskingBazarr => 'Запитване към Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Всички са налични';
+
+  @override
+  String get tgSearchAutoNow => 'Търси автоматично сега';
+
+  @override
+  String get tgSearchingUpToMinute => 'Търсене … може да отнеме до една минута';
+
+  @override
+  String get tgPickYourself => 'Избери сам';
+
+  @override
+  String get tgAskingProviders =>
+      'Запитване към източниците на субтитри … може да отнеме до една минута';
+
+  @override
+  String get tgNoProviderSubs => 'Никой източник още няма субтитри за това.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: налични';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: липсват';
+  }
+
+  @override
+  String get tgNoReleaseName => '(без име на издание)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · за хора с увреден слух';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Норвежки';
+
+  @override
+  String get tgLangEnglish => 'Английски';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr още не познава това заглавие';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr отговори с грешка (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Малко място на $drive: ($free свободни). Изтеглянето може да спре — кажи на този, който поддържа сървъра.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Няма връзка с qBittorrent за проверка на мястото';
+
+  @override
+  String get tgNotEnoughSpace => 'Няма достатъчно място';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: има $free свободни';
+  }
+
+  @override
+  String get tgCopyInDownloads => 'Копие в Downloads · вече е в библиотеката';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Последно гледан $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Никога не е гледан · добавен $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Никога не е гледан';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'На $drive: не беше намерено нищо, което може безопасно да се изтрие (всичко е добавено наскоро, гледано наскоро или е любимо).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Да се изтрият $count заглавия?',
+      one: 'Да се изтрие $count заглавие?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size ще бъдат изтрити завинаги. Това не може да се отмени.';
+  }
+
+  @override
+  String get tgYesDelete => 'Да, изтрий';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Изтриване $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: сега има $free свободни';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Изтрити $count заглавия',
+      one: 'Изтрито $count заглавие',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Изтрити $count, неуспешни: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Освободи $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Копия от изтеглянията';
+
+  @override
+  String get tgLookingForUnwatched =>
+      'Търсене на това, което не е гледано отдавна …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Предложение: $size · достатъчно място ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Предложение: $size от нужните $target';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Избери едно, за да кажеш не — следващото предложение идва автоматично.';
+
+  @override
+  String get tgOtherCandidates => 'Други кандидати';
+
+  @override
+  String get tgDownloadAnyway => 'Изтегли въпреки това';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Изтрий $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: има $free свободни.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Файлът е $size и заема двойно място (изтегляне + копие в библиотеката), плюс $buffer резерв.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Файлът е $size, плюс $buffer резерв.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Текущите изтегляния се нуждаят от още $size.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Не достигат $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Намерени са само файлове, публикувани преди филмът да излезе дигитално ($count) — те почти винаги са фалшиви.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'още няма дата за дигитално излизане';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'излиза дигитално на $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Още не е излязъл дигитално';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '„$title“ $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Това, което съществува сега, обикновено е запис от кино или друг филм със същото име. Понякога има ранно копие с по-ниско качество, често с вградени субтитри. „Покажи файловете въпреки това“ показва какво има. Radarr сам изтегля истинската версия, когато излезе.';
+
+  @override
+  String get tgShowFilesAnyway => 'Покажи файловете въпреки това';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Избери сезони и епизоди';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: няма информация за епизодите';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Важи за всички устройства, които използват този акаунт';
+
+  @override
+  String get tgNoXxxLibrary => 'Не е намерена библиотека с име XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Търсене на всяка дума поотделно … (може да отнеме половин минута)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return '„$title“ ($size) е изпратен към qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Изтеглянето не успя: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '„$title“ не съдържаше видеофайл и беше премахнат.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '„$title“ не съдържаше видеофайл и НЕ беше премахнат.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Търси нови XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Име, студио …';
+
+  @override
+  String get tgChecking => 'Проверка …';
+
+  @override
+  String get tgXxxVisible =>
+      'Вече е видимо. XXX се показва в библиотеките, търсенето и на началния екран.';
+
+  @override
+  String get tgXxxHidden => 'Скрито. XXX не се показва никъде в приложението.';
+
+  @override
+  String get tgShowWithPin => 'Покажи (PIN)';
+
+  @override
+  String get tgChangePin => 'Смени PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Списъкът с библиотеки не можа да бъде изтеглен (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Потребителските настройки не можаха да бъдат изтеглени (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin отхвърли промяната (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Изтриването не успя (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return '„$title“ не можа да бъде добавен в qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return 'сезон $season, епизод $episode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Търси в Seerr';
+
+  @override
+  String get tgSeerrSearchHint => 'Търси филми и сериали (напр. „Lost S02E05“)';
+
+  @override
+  String get tgMissingInThisSeason => 'Липсващи в този сезон';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Липсват сезони',
+      one: 'Липсва сезон',
+    );
+    return '$_temp0 $list - отвори сериала, за да видиш всички сезони';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr в GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Изходен код, издания и доклади за грешки';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr е изграден върху Moonfin (GPL), създаден от разработчиците на Moonfin.';
+
+  @override
+  String get tgCredits => 'Благодарности';
+
+  @override
+  String get tgCreditsThanks =>
+      'Със смирена благодарност: без тези проекти и хората зад тях Tortugarr не би съществувал.';
+
+  @override
+  String get tgAboutProjectTitle => 'Behind the Sails';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr was born out of frustration with commercial streaming services. Searching for a unified, all-in-one solution led nowhere, so the stack began to snowball: first Moonfin, then Sonarr, Radarr and the rest. Stitching them together and getting them to actually talk to each other was an absolute nightmare; it is a small miracle it worked at all. Once everything was connected, the first cascade of error logs was cleverly ignored for a while.\n\nThe dealbreaker was the traditional request workflow: request a title in Seerr, wait for an admin to approve it, then rely on background polling every X minutes. Downloading a torrent manually and hitting \"Cast to device\" from Windows to the TV delivered flawless picture and sound far faster. But that missed the point entirely.\n\nThe point was total control inside a single app: search titles, delete files, and refresh the library the second a download finishes, without waiting for a polling cycle.\n\nNo corporate suits, no investors and no useless middle layers. Built as a customized TV-optimized fork of Moonfin-Core, focused on seamless local automation.\n\nSource code, releases and setup guides live on GitHub. Found a bug? Report it there. The parrot will squawk at it.';
+
+  @override
+  String get tgCreditMoonfin =>
+      'Приложението, върху което е изграден Tortugarr (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Медиен сървър';
+
+  @override
+  String get tgCreditSeerr => 'Откриване и заявки';
+
+  @override
+  String get tgCreditRadarr => 'Филми';
+
+  @override
+  String get tgCreditSonarr => 'Сериали';
+
+  @override
+  String get tgCreditProwlarr => 'Мениджър на индексери';
+
+  @override
+  String get tgCreditBazarr => 'Субтитри';
+
+  @override
+  String get tgCreditFlareSolverr => 'Cloudflare помощник за индексери';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Клиент за изтегляне, избран по подразбиране от инсталатора';
+
+  @override
+  String get tgCreditTmdb => 'Данни за филми и сериали, постери и изображения';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Субтитри, изтеглени чрез Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Този продукт използва TMDB API, но не е одобрен или сертифициран от TMDB.';
+
+  @override
+  String get tgLoadingLogoSize => 'Размер на логото при зареждане';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Въртящото се лого, докато видеото се зарежда';
+
+  @override
+  String get tgDiscoveryLanguages => 'Езици в Актуални и Популярни';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Показани: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'Вкл.: Актуални и Популярни показват само избраните езици';
+
+  @override
+  String get tgShowLanguageBadges => 'Показване на етикети за език';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'Вкл.: заглавията показват езика си (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff =>
+      'Изкл.: без етикети за език на заглавията';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Delete the movie \"$title\" and its file?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Delete the WHOLE series \"$title\": every season and episode?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Delete season $season of \"$title\" and all its episodes?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Delete episode $episode of \"$title\"?';
+  }
+
+  @override
+  String get tgTitleGone => 'This title is no longer in the library.';
+
+  @override
+  String get tgTitleGoneBody => 'It was deleted or moved on the server.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Could not load this title. Check that the server is reachable.';
+
+  @override
+  String get tgShowSdReleases => 'Show SD releases';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'On: low-quality (SD) files are listed too, marked as such';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Off: only 720p and better, or a good source';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count found, all SD (low quality). Turn on \"Show SD releases\" in Settings to see them.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count found, none usable: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Downloads';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Always show Downloads';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Off: the Downloads button is only in the menu while something downloads';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names unavailable right now: results from the other indexers only.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX search in the menu';
+
+  @override
+  String get tgAdultSearchButton => 'Search XXX';
 }

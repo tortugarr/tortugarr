@@ -1,6 +1,6 @@
 {
     "@@locale": "tr",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin sürümü {version}",
+    "appVersionFooter": "Tortugarr sürümü {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin sistem anahtarlığınıza erişemedi. Giriş işlemine devam edilebilir, ancak anahtarlık kilidi açılana kadar güvenli jeton depolama özelliği kullanılamayabilir.",
+    "secureStorageUnavailableMessage": "Tortugarr sistem anahtarlığınıza erişemedi. Giriş işlemine devam edilebilir, ancak anahtarlık kilidi açılana kadar güvenli jeton depolama özelliği kullanılamayabilir.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Orijinal, sade Moonfin varsayılanı.",
+    "themeMoonfinSubtitle": "Orijinal, sade Tortugarr varsayılanı.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Moonfin'den çıkılsın mı?",
+    "exitApp": "Tortugarr'den çıkılsın mı?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3075,7 +3075,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Ayarlanmadı. Moonfin, uygulama/veri klasörlerinde varsayılan bir mpv.conf dosyasını deneyecektir.",
+    "notSetMpvConf": "Ayarlanmadı. Tortugarr, uygulama/veri klasörlerinde varsayılan bir mpv.conf dosyasını deneyecektir.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3282,7 +3282,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "İndirilenler/Moonfin — diğer uygulamalar tarafından görülebilir",
+    "downloadsVisibleToOtherApps": "İndirilenler/Tortugarr — diğer uygulamalar tarafından görülebilir",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3318,7 +3318,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "İndirilen medya cihazınızda İndirilenler/Moonfin klasörüne kaydedilecektir. Bu dosyalar galeriniz veya müzik çalarınız gibi diğer uygulamalar tarafından görülebilecektir.\n\nMevcut indirilenler mevcut konumlarında kalacaktır.",
+    "saveToDownloadsFolderDescription": "İndirilen medya cihazınızda İndirilenler/Tortugarr klasörüne kaydedilecektir. Bu dosyalar galeriniz veya müzik çalarınız gibi diğer uygulamalar tarafından görülebilecektir.\n\nMevcut indirilenler mevcut konumlarında kalacaktır.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3503,9 +3503,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4206,9 +4206,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Moonfin'da oynat",
+    "playInMoonfin": "Tortugarr'da oynat",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} tarafından istendi",
     "@requestedByName": {
@@ -4260,7 +4260,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Öğe Moonfin kitaplığınızda bulunamadı",
+    "itemNotFoundInLibrary": "Öğe Tortugarr kitaplığınızda bulunamadı",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4516,7 +4516,7 @@
         }
     },
     "adminServerRebootInProgress": "Sunucu yeniden başlatma işlemi devam ediyor",
-    "adminServerRebootMessage": "Sunucu yeniden başlatılıyor, lütfen Moonfin'i yeniden başlatın",
+    "adminServerRebootMessage": "Sunucu yeniden başlatılıyor, lütfen Tortugarr'i yeniden başlatın",
     "adminActiveSessions": "Aktif Oturumlar",
     "adminSessionsLoadFailed": "Oturumlar yüklenemedi",
     "adminNoActiveSessions": "Aktif oturum yok",
@@ -6307,11 +6307,11 @@
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
-    "libraryVisibilityDescription": "Kitaplık başına ana sayfa görünürlüğünü değiştirin. Değişikliklerin etkili olması için Moonfin yeniden başlatın.",
+    "libraryVisibilityDescription": "Kitaplık başına ana sayfa görünürlüğünü değiştirin. Değişikliklerin etkili olması için Tortugarr yeniden başlatın.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -6552,7 +6552,7 @@
     "settingsShowGenresButtonInNavigation": "Gezinme çubuğunda türler butonunu göster",
     "settingsShowFavoritesButtonInNavigation": "Gezinme çubuğunda favoriler butonunu göster",
     "settingsShowLibrariesButtonInNavigation": "Gezinti çubuğunda kütüphaneler butonunu göster",
-    "settingsLibraryVisibilitySubtitle": "Kitaplık başına ana sayfa görünürlüğünü değiştirin. Değişikliklerin etkili olması için Moonfin yeniden başlatın.",
+    "settingsLibraryVisibilitySubtitle": "Kitaplık başına ana sayfa görünürlüğünü değiştirin. Değişikliklerin etkili olması için Tortugarr yeniden başlatın.",
     "settingsMediaBarAndLocalPreviews": "Medya Çubuğu ve Yerel Önizlemeler",
     "settingsVisualOverlays": "Görsel Kaplamalar",
     "settingsSeasonalSurprise": "Sezonluk Sürpriz",
@@ -6571,14 +6571,14 @@
     "settingsJoinDiscord": "Discord'a Katıl",
     "settingsJoinDiscordSubtitle": "Toplulukla sohbet et",
     "settingsJoinTheDiscord": "Discord'a Katıl",
-    "settingsSupportMoonfin": "Moonfin'e Destek Ol",
+    "settingsSupportMoonfin": "Tortugarr'e Destek Ol",
     "settingsLegal": "YASAL",
     "settingsLicenses": "Lisanslar",
     "settingsOpenSourceLicenseNotices": "Açık kaynak lisans bildirimleri",
     "settingsPrivacyPolicy": "Gizlilik Politikası",
-    "settingsPrivacyPolicySubtitle": "Moonfin verilerinizi nasıl işler",
+    "settingsPrivacyPolicySubtitle": "Tortugarr verilerinizi nasıl işler",
     "settingsCheckForUpdates": "Güncellemeleri Kontrol Et",
-    "settingsCheckForUpdatesSubtitle": "En son Moonfin sürümünü kontrol edin",
+    "settingsCheckForUpdatesSubtitle": "En son Tortugarr sürümünü kontrol edin",
     "settingsPoweredByFlutter": "Flutter tarafından desteklenmektedir",
     "settingsLicenseNoticesCount": "{count, plural, one {# lisans bildirimi} other {# lisans bildirimi}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Kayıtlı temalar",
-    "savedThemesDescription": "Bunlar, mevcut sunucu için Moonfin eklentisinden indirilen temalardır. Silme işlemi yalnızca bu yerel kopyayı kaldırır.",
+    "savedThemesDescription": "Bunlar, mevcut sunucu için Tortugarr eklentisinden indirilen temalardır. Silme işlemi yalnızca bu yerel kopyayı kaldırır.",
     "savedThemesEmpty": "Bu sunucu için kayıtlı tema bulunamadı.",
     "savedThemesCurrentThemeId": "{themeId} • Şu an aktif",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Kayıtlı temayı sil",
     "savedThemesManageSubtitle": "Bu cihazdaki indirilen eklenti temalarını yönetin",
     "themeEditor": "Tema Editörü",
-    "themeEditorSubtitle": "Moonfin Tema Editörünü tarayıcınızda açın",
+    "themeEditorSubtitle": "Tortugarr Tema Editörünü tarayıcınızda açın",
     "homeScreen": "Ana Sayfa",
     "bottomBar": "Alt Bar",
     "homeRowsStyleClassic": "Klasik",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "SDH altyazıları tercih et",
     "preferSdhSubtitlesSubtitle": "Otomatik seçim yaparken SDH/CC altyazı parçalarına öncelik ver.",
     "webDiagnostics": "Web Tanılama",
-    "webDiagnosticsTitle": "Moonfin Web Tanılama",
+    "webDiagnosticsTitle": "Tortugarr Web Tanılama",
     "webDiagnosticsIntro": "Tarayıcı bağlantı sorunlarını (CORS, karma içerik ve keşif ayarları) tanılamak için bu sayfayı kullanın.",
     "webDiagnosticsDetectedMixedContentFailure": "Karma İçerik Hatası Tespit Edildi",
     "webDiagnosticsDetectedCorsPreflightFailure": "CORS/Ön Kontrol Hatası Tespit Edildi",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin, bir HTTPS sayfasının HTTP sunucu URL'sini çağırmaya çalıştığını tespit etti. Tarayıcılar, bu isteği henüz sunucunuza ulaşmadan engeller.",
-    "webDiagnosticsCorsFailureBody": "Moonfin, genellikle medya sunucusundaki eksik CORS veya ön kontrol (preflight) üst bilgilerinden kaynaklanan, tarayıcı düzeyinde bir istek hatası tespit etti.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr, bir HTTPS sayfasının HTTP sunucu URL'sini çağırmaya çalıştığını tespit etti. Tarayıcılar, bu isteği henüz sunucunuza ulaşmadan engeller.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr, genellikle medya sunucusundaki eksik CORS veya ön kontrol (preflight) üst bilgilerinden kaynaklanan, tarayıcı düzeyinde bir istek hatası tespit etti.",
     "webDiagnosticsTargetUrl": "Hedef URL: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "Yapılandırılmadı",
     "webDiagnosticsMixedContent": "Karma İçerik",
     "webDiagnosticsMixedContentDetected": "Bu sayfa HTTPS üzerinden yüklendi, ancak yapılandırılan URL'lerden biri veya daha fazlası HTTP. Tarayıcılar, HTTPS sayfalarının HTTP API'lerini çağırmasını engeller.",
-    "webDiagnosticsMixedContentFix": "Çözüm: Medya sunucunuzu veya vekil sunucu (proxy) uç noktanızı HTTPS üzerinden sunun ya da Moonfin'i yalnızca güvenilir yerel ağlarda HTTP üzerinden yükleyin.",
+    "webDiagnosticsMixedContentFix": "Çözüm: Medya sunucunuzu veya vekil sunucu (proxy) uç noktanızı HTTPS üzerinden sunun ya da Tortugarr'i yalnızca güvenilir yerel ağlarda HTTP üzerinden yükleyin.",
     "webDiagnosticsNoMixedContentDetected": "Mevcut çalışma zamanı ayarlarında bariz bir karma içerik yapılandırması tespit edilmedi.",
     "webDiagnosticsCorsChecklist": "CORS Kontrol Listesi",
     "webDiagnosticsCorsChecklistItem1": "• Access-Control-Allow-Origin üst bilgisinde tarayıcı kaynağına izin verin.",
@@ -8145,7 +8145,7 @@
     "@contextMenuHideFromNextUp": {
         "description": "Context menu action to hide a show from the Next Up section"
     },
-    "carSignInPrompt": "Moonfin'e telefon üzerinden giriş yap",
+    "carSignInPrompt": "Tortugarr'e telefon üzerinden giriş yap",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8161,7 +8161,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Moonfin Önerileri'ni hedef medyanın ebeveyn yaş sınırına göre kısıtla",
+    "recommendationsApplyParentalRatingCapSubtitle": "Tortugarr Önerileri'ni hedef medyanın ebeveyn yaş sınırına göre kısıtla",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -8272,7 +8272,7 @@
     "@glassQualityReduced": {
         "description": "Glass quality option: lightweight zero-blur glass"
     },
-    "customThemeSubtitle": "Özel temalar, Moonfin genelindeki görsel ögeleri değiştirir. Tarzınıza uygun seçeneklerden birini belirleyin.",
+    "customThemeSubtitle": "Özel temalar, Tortugarr genelindeki görsel ögeleri değiştirir. Tarzınıza uygun seçeneklerden birini belirleyin.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8501,7 +8501,7 @@
     },
     "rewatchPlaylist": "Oynatma Listesini Yeniden İzle",
     "noSubtitlesFound": "Altyazı bulunamadı.",
-    "impellerRenderingSubtitle": "Impeller, daha akıcı animasyonlar ve daha az takılma sağlayan Flutter'ın modern GPU işleme motorudur. Bazı TV kutularında (TV Box) ve eski grafik işlemcilerde (GPU) ekran bozulmalarına veya siyah ekrana neden olabilir; bu gibi durumlarla karşılaşırsanız özelliği Kapatın. Otomatik seçeneği, cihazınız için en iyi varsayılanı belirler. Değişiklikleri uygulamak için Moonfin'i yeniden başlatın.",
+    "impellerRenderingSubtitle": "Impeller, daha akıcı animasyonlar ve daha az takılma sağlayan Flutter'ın modern GPU işleme motorudur. Bazı TV kutularında (TV Box) ve eski grafik işlemcilerde (GPU) ekran bozulmalarına veya siyah ekrana neden olabilir; bu gibi durumlarla karşılaşırsanız özelliği Kapatın. Otomatik seçeneği, cihazınız için en iyi varsayılanı belirler. Değişiklikleri uygulamak için Tortugarr'i yeniden başlatın.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8546,11 +8546,11 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Önerileri",
+    "recommendationSystemMoonfin": "Tortugarr Önerileri",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
-    "recommendationSystemSubtitle": "Moonfin Önerileri yerel kütüphane algoritmasını, Jellyfin Önerileri sunucu motorunu veya çevrimiçi TMDb Benzerlik Metriklerini kullanın. Not: Çevrimiçi öneriler Seerr entegrasyonu gerektirir.",
+    "recommendationSystemSubtitle": "Tortugarr Önerileri yerel kütüphane algoritmasını, Jellyfin Önerileri sunucu motorunu veya çevrimiçi TMDb Benzerlik Metriklerini kullanın. Not: Çevrimiçi öneriler Seerr entegrasyonu gerektirir.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
@@ -8571,7 +8571,7 @@
     "@detailScreenStyleModern": {
         "description": "Detail screen style option: the responsive cinematic layout"
     },
-    "detailScreenStyleSubtitle": "Klasik, orijinal ortalanmış Moonfin düzenidir. Modern, duyarlı sinematik bir düzendir. Spotlight, açılır içerik kartlarına sahip, ana görsel odaklı bir düzendir. Nouveau, bölümlerin sayfa boyunca alt alta sıralandığı tam ekran bir düzendir. Minimalist ise sadece kapak görselinden, tek bir oynatma butonundan ve bölümlerden oluşur.",
+    "detailScreenStyleSubtitle": "Klasik, orijinal ortalanmış Tortugarr düzenidir. Modern, duyarlı sinematik bir düzendir. Spotlight, açılır içerik kartlarına sahip, ana görsel odaklı bir düzendir. Nouveau, bölümlerin sayfa boyunca alt alta sıralandığı tam ekran bir düzendir. Minimalist ise sadece kapak görselinden, tek bir oynatma butonundan ve bölümlerden oluşur.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -8640,7 +8640,7 @@
     },
     "forced": "Zorunlu",
     "transcodeAudioCodecNotSupported": "Ses kodeki desteklenmiyor.",
-    "impellerRestartMessage": "İşleme motorunu değiştirmek için Moonfin'in yeniden başlatılması gerekiyor. Değişiklikleri uygulamak için uygulamayı şimdi kapatın ve ardından tekrar açın.",
+    "impellerRestartMessage": "İşleme motorunu değiştirmek için Tortugarr'in yeniden başlatılması gerekiyor. Değişiklikleri uygulamak için uygulamayı şimdi kapatın ve ardından tekrar açın.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -11400,5 +11400,247 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "tgMissing": "Eksik",
+    "tgComing": "Yakında",
+    "tgComingOn": "{date} geliyor",
+    "tgDownloading": "İndiriliyor",
+    "tgReadySoon": "Yakında hazır",
+    "tgRequested": "İstendi",
+    "tgClose": "Kapat",
+    "tgCancel": "İptal",
+    "tgBack": "Geri",
+    "tgYes": "Evet",
+    "tgNo": "Hayır",
+    "tgSearch": "Ara",
+    "tgHide": "Gizle",
+    "tgAll": "Tümü",
+    "tgNone": "Hiçbiri",
+    "tgMovies": "Filmler",
+    "tgSeries": "Diziler",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Dizi",
+    "tgCanTakeAMinute": "Bir dakika kadar sürebilir",
+    "tgToday": "bugün",
+    "tgYesterday": "dün",
+    "tgDaysAgo": "{days} gün önce",
+    "tgMonthsAgo": "{months} ay önce",
+    "tgYearsAgo": "{years} yıl önce",
+    "tgYearsMonthsAgo": "{years} yıl {months} ay önce",
+    "tgFindSubtitles": "Altyazı bul",
+    "tgFreeUpSpace": "Yer aç",
+    "tgDownloads": "İndirmeler",
+    "tgDownloadsCount": "İndirmeler ({count})",
+    "tgNoVideoRemoved": "“{title}”: indirmede video dosyası yoktu ({files}). Kaldırıldı ve engellendi – başka bir dosya deneyin.",
+    "tgNoVideoNotRemoved": "“{title}”: indirmede video dosyası yoktu ({files}) ama otomatik olarak kaldırılamadı.",
+    "tgAiredOn": "{date} yayınlandı",
+    "tgTapToFindFiles": "Dosya bulmak için dokunun",
+    "tgWholeSeason": "Tüm sezon",
+    "tgEpisodesMissingFindPack": "{count} bölüm eksik – sezon paketi bul",
+    "tgAddToSonarrTitle": "Eksik bölümleri görmek için Sonarr'a ekleyin",
+    "tgAddToSonarrSubtitle": "Dizi, kendiliğinden hiçbir şey indirmeden eklenir",
+    "tgMissingEpisodesUnavailable": "Eksik bölümler şu anda gösterilemiyor",
+    "tgReasonTapRetry": "{reason} · Tekrar denemek için dokunun",
+    "tgSeasonPackBadge": "Sezon paketi",
+    "tgMonitorSeasonTitle": "{season}. sezonu takip et",
+    "tgMonitorSeasonQuestion": "Sonarr {season}. sezondaki eksik bölümleri şimdi indirsin mi?\n\nHayır: yalnızca yeni bölümler çıktıklarında indirilir.",
+    "tgSonarrSearchingSeason": "Sonarr {season}. sezonu arıyor",
+    "tgMonitored": "Takip ediliyor",
+    "tgNotMonitored": "Takip edilmiyor",
+    "tgSeasonStateLabel": "{season}. sezon: {state}",
+    "tgLabelMissing": "{label} eksik",
+    "tgNotAiredYet": "{code} henüz yayınlanmadı.",
+    "tgNotAiredYetComing": "{code} henüz yayınlanmadı – {date} geliyor.",
+    "tgAlreadyDownloading": "{code} zaten indiriliyor.",
+    "tgDownloadedAppearsSoon": "{code} indirildi, kısa süre içinde kütüphanede görünecek.",
+    "tgSearchingFor": "{label} aranıyor …",
+    "tgSeasonLower": "{season}. sezon",
+    "tgWholeLabel": "Tüm {label}",
+    "tgSeasonNoEpisodes": "{season}. sezon – kütüphanede bölüm yok",
+    "tgNoTvdbId": "Dizinin TVDB kimliği yok, bu yüzden Sonarr onu bulamıyor.",
+    "tgAddingToSonarr": "Sonarr'a ekleniyor …",
+    "tgAddToSonarrFailed": "Dizi Sonarr'a eklenemedi. Daha sonra tekrar deneyin.",
+    "tgSendingToDownload": "“{label}” indirmeye gönderiliyor …",
+    "tgDownloadDidNotStart": "İndirme başlamadı: {error}",
+    "tgDownloadingAppearsWhenDone": "“{label}” indiriliyor ({size}). Tamamlanınca kütüphanede görünecek.",
+    "tgSonarrUnreachableRetry": "Sonarr'a ulaşılamadı. Biraz sonra tekrar deneyin.",
+    "tgNoUsableFiles": "Kullanılabilir dosya bulunamadı. Daha sonra tekrar deneyin – yeni dosyalar genellikle birkaç saat içinde çıkar.",
+    "tgFilesCount": "{count} dosya",
+    "tgFilesRecommended": "{count} dosya – {recommended} tanesi kalite profiline uyuyor, geri kalanı en altta",
+    "tgOutsideQualityProfile": "Kalite profilinin dışında",
+    "tgLargerThanProfile": "Profilin izin verdiğinden büyük",
+    "tgSmallerThanProfile": "Profilin izin verdiğinden küçük",
+    "tgAlreadyExists": "Zaten var",
+    "tgMayNotFitDisk": "Diske sığmayabilir",
+    "tgSonarrUnreachable": "Sonarr'a ulaşılamadı",
+    "tgSonarrUnreachableAt": "{host} adresindeki Sonarr'a ulaşılamadı",
+    "tgSonarrRejectedChange": "Sonarr değişikliği kabul etmedi",
+    "tgSeasonMonitoredNoSearch": "Sezon takip ediliyor ama Sonarr aramayı başlatmadı",
+    "tgSonarrCantSearch": "Sonarr şu anda arama yapamadı",
+    "tgSearchExpired": "Arama sonucunun süresi doldu – yeniden arayın",
+    "tgSonarrRejectedDownload": "Sonarr indirmeyi kabul etmedi (HTTP {status})",
+    "tgSonarrNoSeries": "Dizi Sonarr'da yok",
+    "tgCouldNotChangeMonitoring": "Takip ayarı değiştirilemedi: {error}",
+    "tgJellyfinNoIds": "Jellyfin diziyi tanımadı (TVDB veya TMDB kimliği yok)",
+    "tgSomethingWentWrong": "Bir şeyler ters gitti: {error}",
+    "tgDeleteReadOnly": "Dosya Radarr/Sonarr tarafından yönetilmiyor ve Jellyfin'in klasöre yalnızca okuma erişimi var. Dosya yöneticinizden silin.",
+    "tgSonarrRequiredPerEpisode": "Sonarr'a ulaşılamıyor veya dizi oraya eklenmemiş. Bölüm bölüm indirme için Sonarr gerekir.",
+    "tgEpisodesNotFound": "“{title}” için seçilen bölümler Sonarr'da bulunamadı (toplam {count} bölüm bulundu). Diziyi Sonarr'a ekleyip tekrar deneyin.",
+    "tgPartOfCollectionPrefix": "Şu koleksiyonun parçası: ",
+    "tgViewingPartOf": "  ·  {total} parçadan {current}. parçayı görüyorsunuz",
+    "tgPartOf": "Parça {number}/{total}",
+    "tgUnknownTitle": "Bilinmeyen başlık",
+    "tgMovieCollection": "Film koleksiyonu",
+    "tgNotReleasedYet": "“{title}” henüz çıkmadı",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Ekran koruyucu sesi",
+    "tgScreensaverSoundSubtitle": "Kapalı: ekran koruyucudaki fragmanlar sessiz oynatılır",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Tortugarr rozeti",
+    "tgLogoVhs": "VHS kasetleri üzerinde papağan",
+    "tgLogoSign": "Tabela üzerinde papağan",
+    "tgHiddenBadge": "GİZLİ · {code}",
+    "tgDiskSpace": "Disk alanı",
+    "tgDiskSpaceSubtitle": "Yeni indirmeler için yer açın",
+    "tgAdultTitle": "Yetişkin filmleri (XXX)",
+    "tgAdultSubtitle": "XXX kütüphanesini göster veya gizle (PIN)",
+    "tgHideForeign": "Yabancı içeriği gizle",
+    "tgHideForeignOn": "Açık: Trendler ve Popüler yalnızca İngilizce, Norveççe, İsveççe, Danca, Almanca ve Fransızca gösterir",
+    "tgHideForeignOff": "Kapalı: Trendler ve Popüler tüm dilleri gösterir",
+    "tgShowHidden": "Gizlenenleri göster",
+    "tgShowHiddenOn": "Açık: gizlenecek başlıklar kırmızı GİZLİ rozetiyle gösterilir",
+    "tgShowHiddenOff": "Sorun giderme: gizli başlıkları kaldırmak yerine kırmızı rozetle göster",
+    "tgShowAllSubLangs": "Tüm altyazı dillerini göster",
+    "tgShowAllSubLangsOn": "Açık: altyazı menüsü tüm dilleri gösterir",
+    "tgShowAllSubLangsOff": "Kapalı: altyazı menüsü yalnızca Norveççe ve İngilizce gösterir",
+    "tgPreviewSound": "Ön izleme sesi",
+    "tgPreviewSoundOn": "Açık: bir başlıkta durduğunuzda oynayan klibin sesi olur",
+    "tgPreviewSoundOff": "Kapalı: gezinirken klipler sessiz oynatılır",
+    "tgScreensaver": "Ekran koruyucu",
+    "tgScreensaverSubtitle": "Video veya logo, ses ve görüntü",
+    "tgShowMissingEpisodes": "Eksik bölümleri göster",
+    "tgShowMissingEpisodesOn": "Açık: sezonlar sahip olmadığınız bölümleri indirmeye hazır gösterir",
+    "tgShowMissingEpisodesOff": "Kapalı: sezonlar yalnızca sahip olduğunuz bölümleri gösterir",
+    "tgShowCollections": "Film koleksiyonlarını göster",
+    "tgShowCollectionsOn": "Açık: filmler, koleksiyondaki diğer filmleri eksik olanlar dahil gösterir",
+    "tgShowCollectionsOff": "Kapalı: film sayfası koleksiyonu göstermez",
+    "tgNoActiveDownloads": "Etkin indirme yok.",
+    "tgPickDownloadToOpen": "İstekleri açmak için bir indirme seçin.",
+    "tgRefreshLibrary": "Kütüphaneyi yenile",
+    "tgAskingJellyfinScan": "Jellyfin'den kütüphaneyi taraması isteniyor …",
+    "tgHideAll": "Tümünü gizle",
+    "tgImporting": "İçe aktarılıyor",
+    "tgSubsNotManaged": "Bu başlık Radarr/Sonarr tarafından yönetilmiyor, bu yüzden Bazarr ona altyazı bulamıyor.",
+    "tgBazarrUnreachable": "Bazarr'a ulaşılamadı. Biraz sonra tekrar deneyin.",
+    "tgSubsFoundNothing": "Henüz bir şey bulunamadı. Bazarr her gün otomatik olarak tekrar dener; isterseniz kendiniz de seçebilirsiniz.",
+    "tgSubsFound": "{languages} bulundu – altyazı menüsünde görünmesi biraz sürebilir.",
+    "tgAnd": "ve",
+    "tgSubsDownloaded": "İndirildi – altyazı menüsünde görünmesi biraz sürebilir.",
+    "tgAskingBazarr": "Bazarr'a soruluyor …",
+    "tgHaveAll": "Hepsi var",
+    "tgSearchAutoNow": "Şimdi otomatik ara",
+    "tgSearchingUpToMinute": "Aranıyor … bir dakika kadar sürebilir",
+    "tgPickYourself": "Kendin seç",
+    "tgAskingProviders": "Altyazı sağlayıcılarına soruluyor … bir dakika kadar sürebilir",
+    "tgNoProviderSubs": "Henüz hiçbir sağlayıcıda bunun için altyazı yok.",
+    "tgLangHas": "{language}: var",
+    "tgLangMissing": "{language}: eksik",
+    "tgNoReleaseName": "(sürüm adı yok)",
+    "tgHearingImpaired": "{provider} · işitme engelliler için",
+    "tgLangNorwegian": "Norveççe",
+    "tgLangEnglish": "İngilizce",
+    "tgBazarrUnknownTitle": "Bazarr bu başlığı henüz tanımıyor",
+    "tgBazarrError": "Bazarr hata döndürdü (HTTP {code})",
+    "tgLowSpaceSnack": "{drive}: sürücüsünde az yer var ({free} boş). İndirme durabilir — sunucuyu yöneten kişiye haber verin.",
+    "tgNoQbitForSpace": "Alanı kontrol etmek için qBittorrent'e ulaşılamadı",
+    "tgNotEnoughSpace": "Yeterli alan yok",
+    "tgDriveHasFree": "{drive}: {free} boş",
+    "tgCopyInDownloads": "Downloads klasöründe kopya · zaten kütüphanede",
+    "tgLastWatched": "Son izleme: {ago}",
+    "tgNeverWatchedAdded": "Hiç izlenmedi · {ago} eklendi",
+    "tgNeverWatched": "Hiç izlenmedi",
+    "tgNothingSafeToDelete": "{drive}: sürücüsünde güvenle silinebilecek bir şey bulunamadı (hepsi yeni eklenmiş, yakında izlenmiş veya favori).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{1 başlık silinsin mi?} other{{count} başlık silinsin mi?}}",
+    "tgDeletedForGood": "{size} kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+    "tgYesDelete": "Evet, sil",
+    "tgDeletingProgress": "Siliniyor {done}/{total} …",
+    "tgNowHasFree": " · {drive}: artık {free} boş",
+    "tgDeletedTitles": "{count, plural, one{1 başlık silindi} other{{count} başlık silindi}}{extra}",
+    "tgDeletedFailed": "{count} silindi, başarısız: {failed}{extra}",
+    "tgFreeGb": "{gb} GB yer aç",
+    "tgDownloadCopies": "İndirme kopyaları",
+    "tgLookingForUnwatched": "Uzun süredir izlenmeyenler aranıyor …",
+    "tgSuggestionEnough": "Öneri: {size} · yeterli alan ✓",
+    "tgSuggestionOf": "Öneri: gereken {target} içinden {size}",
+    "tgPickToSayNo": "Hayır demek için birini seçin — sonraki öneri otomatik gelir.",
+    "tgOtherCandidates": "Diğer adaylar",
+    "tgDownloadAnyway": "Yine de indir",
+    "tgDeleteCountSize": "{count} sil ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} boş.",
+    "tgFileDoubleSpace": "Dosya {size} ve iki kat yer kaplar (indirme + kütüphanedeki kopya), ayrıca {buffer} yedek.",
+    "tgFileSize": "Dosya {size}, ayrıca {buffer} yedek.",
+    "tgPendingNeeds": "Devam eden indirmeler için {size} daha gerekiyor.",
+    "tgShortBy": "{size} eksik.",
+    "tgOnlyEarlyFiles": "Yalnızca film dijital olarak çıkmadan önce yayımlanmış dosyalar bulundu ({count}) — bunlar neredeyse her zaman sahtedir.",
+    "tgNoDigitalDate": "henüz dijital çıkış tarihi almadı",
+    "tgDigitalOn": "{date} tarihinde dijital olarak çıkıyor",
+    "tgNotOutDigitally": "Henüz dijital olarak çıkmadı",
+    "tgTitleWhen": "“{title}” {when}.",
+    "tgNotOutExplain": "Şu anda var olanlar genellikle sinema kaydı ya da aynı adlı başka bir filmdir. Bazen düşük kalitede, çoğu zaman gömülü altyazılı erken bir kopya bulunur. “Dosyaları yine de göster” mevcut olanları gösterir. Radarr doğru sürümü çıktığında kendisi indirir.",
+    "tgShowFilesAnyway": "Dosyaları yine de göster",
+    "tgPickSeasonsEpisodes": "Sezon ve bölüm seçin",
+    "tgNoEpisodeInfo": "{season}: bölüm bilgisi yok",
+    "tgAppliesAllDevices": "Bu hesabı kullanan tüm cihazlar için geçerlidir",
+    "tgNoXxxLibrary": "XXX adında bir kütüphane bulunamadı.",
+    "tgSearchingEachWord": "Her kelime ayrı ayrı aranıyor … (yarım dakika sürebilir)",
+    "tgSentToQbit": "“{title}” ({size}) qBittorrent'e gönderildi",
+    "tgDownloadFailed": "İndirme başarısız: {error}",
+    "tgXxxNoVideoRemoved": "“{title}” video dosyası içermiyordu ve kaldırıldı.",
+    "tgXxxNoVideoNotRemoved": "“{title}” video dosyası içermiyordu ve KALDIRILMADI.",
+    "tgSearchNewXxx": "Yeni XXX ara",
+    "tgXxxSearchHint": "Ad, stüdyo …",
+    "tgChecking": "Kontrol ediliyor …",
+    "tgXxxVisible": "Artık görünür. XXX kütüphanelerde, aramada ve ana ekranda gösterilir.",
+    "tgXxxHidden": "Gizli. XXX uygulamanın hiçbir yerinde gösterilmez.",
+    "tgShowWithPin": "Göster (PIN)",
+    "tgChangePin": "PIN'i değiştir",
+    "tgNoLibraryList": "Kütüphane listesi alınamadı (HTTP {code})",
+    "tgNoUserSettings": "Kullanıcı ayarları alınamadı (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin değişikliği reddetti (HTTP {code})",
+    "tgDeleteFailed": "Silme başarısız (HTTP {code})",
+    "tgXxxAddFailed": "“{title}” qBittorrent'e eklenemedi",
+    "tgSeasonEpisodeLower": "{season}. sezon, {episode}. bölüm",
+    "tgSearchInSeerr": "Seerr'de ara",
+    "tgSeerrSearchHint": "Film ve dizi ara (örn. “Lost S02E05”)",
+    "tgMissingInThisSeason": "Bu sezonda eksik",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{Eksik sezon} other{Eksik sezonlar}} {list} - tüm sezonları görmek için diziyi açın",
+    "tgProjectOnGitHub": "GitHub'da Tortugarr",
+    "tgProjectOnGitHubSubtitle": "Kaynak kodu, sürümler ve sorun bildirimleri",
+    "tgBuiltOnMoonfinCredit": "Tortugarr, Moonfin geliştiricilerinin yaptığı Moonfin (GPL) üzerine inşa edilmiştir.",
+    "tgCredits": "Teşekkürler",
+    "tgCreditsThanks": "Mütevazı bir teşekkürle: bu projeler ve arkalarındaki insanlar olmasa Tortugarr var olmazdı.",
+    "tgCreditMoonfin": "Tortugarr'ın üzerine inşa edildiği uygulama (GPL)",
+    "tgCreditJellyfin": "Medya sunucusu",
+    "tgCreditSeerr": "Keşif ve istekler",
+    "tgCreditRadarr": "Filmler",
+    "tgCreditSonarr": "Diziler",
+    "tgCreditProwlarr": "Dizinleyici yöneticisi",
+    "tgCreditBazarr": "Altyazılar",
+    "tgCreditFlareSolverr": "Dizinleyiciler için Cloudflare yardımcısı",
+    "tgCreditQbittorrent": "İndirme istemcisi, yükleyicinin varsayılanı",
+    "tgCreditTmdb": "Film ve dizi verileri, afişler ve görseller",
+    "tgCreditOpenSubtitles": "Altyazılar, Bazarr aracılığıyla alınır",
+    "tgTmdbNotice": "Bu ürün TMDB API'sini kullanır ancak TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır.",
+    "tgLoadingLogoSize": "Yükleme logosu boyutu",
+    "tgLoadingLogoSizeSubtitle": "Video yüklenirken dönen logo",
+    "tgSubtitleLanguages": "Altyazı dilleri",
+    "tgSubtitleLanguagesSubtitle": "Altyazı menüsünde gösterilenler: {languages}",
+    "tgShowAllSubLangsOffChosen": "Kapalı: altyazı menüsü yalnızca seçtiğiniz dilleri gösterir",
+    "tgDiscoveryLanguages": "Trendler ve Popüler'deki diller",
+    "tgDiscoveryLanguagesSubtitle": "Gösterilenler: {languages}",
+    "tgHideForeignOnChosen": "Açık: Trendler ve Popüler yalnızca seçtiğiniz dilleri gösterir",
+    "tgShowLanguageBadges": "Dil etiketlerini göster",
+    "tgShowLanguageBadgesOn": "Açık: başlıklar dillerini gösterir (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Kapalı: başlıklarda dil etiketi yok"
 }

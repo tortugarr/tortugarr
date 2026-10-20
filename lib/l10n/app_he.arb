@@ -1,6 +1,6 @@
 {
     "@@locale": "he",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin גרסה {version}",
+    "appVersionFooter": "Tortugarr גרסה {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin לא הצליח לגשת למחזיק המפתחות של המערכת שלך. הכניסה יכולה להמשיך, אך ייתכן שאחסון אסימונים מאובטח לא יהיה זמין עד לביטול הנעילה של מחזיק המפתחות.",
+    "secureStorageUnavailableMessage": "Tortugarr לא הצליח לגשת למחזיק המפתחות של המערכת שלך. הכניסה יכולה להמשיך, אך ייתכן שאחסון אסימונים מאובטח לא יהיה זמין עד לביטול הנעילה של מחזיק המפתחות.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "מעבר בין Moonfin ל-Neon Pulse מבלי להפעיל מחדש את האפליקציה",
+    "settingsAppearanceThemeSubtitle": "מעבר בין Tortugarr ל-Neon Pulse מבלי להפעיל מחדש את האפליקציה",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "מראה Moonfin נוכחי שכולכם למדתם לאהוב",
+    "themeMoonfinSubtitle": "מראה Tortugarr נוכחי שכולכם למדתם לאהוב",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "דופק ניאון",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "לצאת מ- Moonfin?",
+    "exitApp": "לצאת מ- Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "לא מוגדר. Moonfin ינסה ברירת מחדל mpv.conf בתיקיות אפליקציות/נתונים.",
+    "notSetMpvConf": "לא מוגדר. Tortugarr ינסה ברירת מחדל mpv.conf בתיקיות אפליקציות/נתונים.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "הורדות/Moonfin — גלויות לאפליקציות אחרות",
+    "downloadsVisibleToOtherApps": "הורדות/Tortugarr — גלויות לאפליקציות אחרות",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "מדיה שהורדת תישמר להורדות/Moonfin במכשיר שלך. קבצים אלה יהיו גלויים לאפליקציות אחרות כגון הגלריה או נגן המוזיקה שלך.\n\nהורדות קיימות יישארו במיקומן הנוכחי.",
+    "saveToDownloadsFolderDescription": "מדיה שהורדת תישמר להורדות/Tortugarr במכשיר שלך. קבצים אלה יהיו גלויים לאפליקציות אחרות כגון הגלריה או נגן המוזיקה שלך.\n\nהורדות קיימות יישארו במיקומן הנוכחי.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "החלף את נראות דף הבית לכל ספריה. הפעל מחדש את Moonfin כדי שהשינויים ייכנסו לתוקף.",
+    "libraryVisibilityDescription": "החלף את נראות דף הבית לכל ספריה. הפעל מחדש את Tortugarr כדי שהשינויים ייכנסו לתוקף.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "שחקו ב- Moonfin",
+    "playInMoonfin": "שחקו ב- Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "התבקש על ידי {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "הפריט לא נמצא בספריית Moonfin שלך",
+    "itemNotFoundInLibrary": "הפריט לא נמצא בספריית Tortugarr שלך",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "אתחול השרת מתבצע",
-    "adminServerRebootMessage": "אתחול השרת מתבצע, אנא הפעל מחדש את Moonfin",
+    "adminServerRebootMessage": "אתחול השרת מתבצע, אנא הפעל מחדש את Tortugarr",
     "adminActiveSessions": "הפעלות פעילות",
     "adminSessionsLoadFailed": "טעינת ההפעלות נכשלה",
     "adminNoActiveSessions": "אין הפעלות פעילות",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "הצג את לחצן הז'אנרים בסרגל הניווט",
     "settingsShowFavoritesButtonInNavigation": "הצג את לחצן המועדפים בסרגל הניווט",
     "settingsShowLibrariesButtonInNavigation": "הצג את לחצן הספריות בסרגל הניווט",
-    "settingsLibraryVisibilitySubtitle": "החלף את נראות דף הבית לכל ספריה. הפעל מחדש את Moonfin כדי שהשינויים ייכנסו לתוקף.",
+    "settingsLibraryVisibilitySubtitle": "החלף את נראות דף הבית לכל ספריה. הפעל מחדש את Tortugarr כדי שהשינויים ייכנסו לתוקף.",
     "settingsMediaBarAndLocalPreviews": "סרגל מדיה ותצוגות מקדימות מקומיות",
     "settingsVisualOverlays": "שכבות חזותיות",
     "settingsSeasonalSurprise": "הפתעה עונתית",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "הצטרף ל-Discord",
     "settingsJoinDiscordSubtitle": "צ'אט עם הקהילה",
     "settingsJoinTheDiscord": "הצטרף ל-Discord",
-    "settingsSupportMoonfin": "תמכו ב- Moonfin",
+    "settingsSupportMoonfin": "תמכו ב- Tortugarr",
     "settingsLegal": "מִשׁפָּטִי",
     "settingsLicenses": "רישיונות",
     "settingsOpenSourceLicenseNotices": "הודעות רישיון קוד פתוח",
     "settingsPrivacyPolicy": "מדיניות פרטיות",
-    "settingsPrivacyPolicySubtitle": "כיצד Moonfin מטפל בנתונים שלך",
+    "settingsPrivacyPolicySubtitle": "כיצד Tortugarr מטפל בנתונים שלך",
     "settingsCheckForUpdates": "בדוק אם קיימים עדכונים",
-    "settingsCheckForUpdatesSubtitle": "בדוק את המהדורה האחרונה של Moonfin",
+    "settingsCheckForUpdatesSubtitle": "בדוק את המהדורה האחרונה של Tortugarr",
     "settingsPoweredByFlutter": "מופעל על ידי Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# הודעת רישיון} two {# הודעות רישיון} other {# הודעות רישיון}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "ערכות נושא שמורות",
-    "savedThemesDescription": "אלו ערכות נושא שהורדו מתוסף Moonfin עבור השרת הנוכחי. מחיקה מסירה רק את העותק המקומי הזה.",
+    "savedThemesDescription": "אלו ערכות נושא שהורדו מתוסף Tortugarr עבור השרת הנוכחי. מחיקה מסירה רק את העותק המקומי הזה.",
     "savedThemesEmpty": "לא נמצאו ערכות נושא שמורות עבור שרת זה.",
     "savedThemesCurrentThemeId": "{themeId} • פעילה כעת",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "מחק ערכת נושא שמורה",
     "savedThemesManageSubtitle": "נהל ערכות נושא של התוסף שהורדו למכשיר הזה",
     "themeEditor": "עורך ערכות הנושא",
-    "themeEditorSubtitle": "פתח את עורך ערכות הנושא של Moonfin בדפדפן",
+    "themeEditorSubtitle": "פתח את עורך ערכות הנושא של Tortugarr בדפדפן",
     "homeScreen": "מסך הבית",
     "bottomBar": "הסרגל התחתון",
     "homeRowsStyleClassic": "קלאסי",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "העדף כתוביות SDH",
     "preferSdhSubtitlesSubtitle": "תעדף רצועות כתוביות SDH/CC בבחירה אוטומטית.",
     "webDiagnostics": "אבחון ווב",
-    "webDiagnosticsTitle": "אבחון ווב של Moonfin",
+    "webDiagnosticsTitle": "אבחון ווב של Tortugarr",
     "webDiagnosticsIntro": "השתמש בעמוד זה כדי לאבחן בעיות קישוריות בדפדפן (CORS, תוכן מעורב והגדרות איתור).",
     "webDiagnosticsDetectedMixedContentFailure": "זוהה כשל תוכן מעורב",
     "webDiagnosticsDetectedCorsPreflightFailure": "זוהה כשל CORS/Preflight",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin זיהה עמוד HTTPS שמנסה לפנות לכתובת שרת HTTP. דפדפנים חוסמים בקשה זו עוד לפני שהיא מגיעה לשרת שלך.",
-    "webDiagnosticsCorsFailureBody": "Moonfin זיהה כשל בקשה ברמת הדפדפן, שנגרם בדרך כלל מכותרות CORS או preflight חסרות בשרת המדיה.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr זיהה עמוד HTTPS שמנסה לפנות לכתובת שרת HTTP. דפדפנים חוסמים בקשה זו עוד לפני שהיא מגיעה לשרת שלך.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr זיהה כשל בקשה ברמת הדפדפן, שנגרם בדרך כלל מכותרות CORS או preflight חסרות בשרת המדיה.",
     "webDiagnosticsTargetUrl": "כתובת יעד: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "לא מוגדר",
     "webDiagnosticsMixedContent": "תוכן מעורב",
     "webDiagnosticsMixedContentDetected": "עמוד זה נטען דרך HTTPS, אך אחת או יותר מהכתובות המוגדרות הן HTTP. דפדפנים חוסמים פנייה של עמודי HTTPS לממשקי API מסוג HTTP.",
-    "webDiagnosticsMixedContentFix": "פתרון: הגש את שרת המדיה או את נקודת הקצה של הפרוקסי דרך HTTPS, או טען את Moonfin דרך HTTP ברשתות מקומיות מהימנות בלבד.",
+    "webDiagnosticsMixedContentFix": "פתרון: הגש את שרת המדיה או את נקודת הקצה של הפרוקסי דרך HTTPS, או טען את Tortugarr דרך HTTP ברשתות מקומיות מהימנות בלבד.",
     "webDiagnosticsNoMixedContentDetected": "לא זוהתה תצורת תוכן מעורב מובהקת מהגדרות זמן הריצה הנוכחיות.",
     "webDiagnosticsCorsChecklist": "רשימת בדיקה ל-CORS",
     "webDiagnosticsCorsChecklistItem1": "• אפשר את מקור הדפדפן ב-Access-Control-Allow-Origin.",
@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "קלאסי הוא הפריסה הממורכזת המקורית של Moonfin. מודרני הוא פריסה קולנועית רספונסיבית.",
+    "detailScreenStyleSubtitle": "קלאסי הוא הפריסה הממורכזת המקורית של Tortugarr. מודרני הוא פריסה קולנועית רספונסיבית.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7362,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "השתמש באלגוריתם הספרייה המקומית של Moonfin Recommends או במדדי הדמיון המקוונים של TMDb. לתשומת לבך: המלצות מקוונות מחייבות שילוב עם Seerr.",
+    "recommendationSystemSubtitle": "השתמש באלגוריתם הספרייה המקומית של Tortugarr Recommends או במדדי הדמיון המקוונים של TMDb. לתשומת לבך: המלצות מקוונות מחייבות שילוב עם Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "דמיון TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7378,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "הגבל את ההצעות של Moonfin Recommends לפי דירוג ההורים של המדיה",
+    "recommendationsApplyParentalRatingCapSubtitle": "הגבל את ההצעות של Tortugarr Recommends לפי דירוג ההורים של המדיה",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7426,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "ערכות נושא מותאמות משנות רכיבים חזותיים ברחבי Moonfin. בחר אחת מהאפשרויות כדי להתאים לסגנון שלך.",
+    "customThemeSubtitle": "ערכות נושא מותאמות משנות רכיבים חזותיים ברחבי Tortugarr. בחר אחת מהאפשרויות כדי להתאים לסגנון שלך.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7599,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "היכנס ל-Moonfin בטלפון שלך",
+    "carSignInPrompt": "היכנס ל-Tortugarr בטלפון שלך",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller הוא מנוע ה-GPU המודרני של Flutter, לאנימציות חלקות יותר ולפחות קפיצות. בחלק ממכשירי הטלוויזיה ובמעבדים גרפיים ישנים הוא עלול לגרום לתקלות תצוגה או לווידאו שחור; כבה אותו אם אתה נתקל בכך. אוטומטי בוחר את ברירת המחדל הטובה ביותר עבור המכשיר שלך. הפעל מחדש את Moonfin כדי להחיל.",
+    "impellerRenderingSubtitle": "Impeller הוא מנוע ה-GPU המודרני של Flutter, לאנימציות חלקות יותר ולפחות קפיצות. בחלק ממכשירי הטלוויזיה ובמעבדים גרפיים ישנים הוא עלול לגרום לתקלות תצוגה או לווידאו שחור; כבה אותו אם אתה נתקל בכך. אוטומטי בוחר את ברירת המחדל הטובה ביותר עבור המכשיר שלך. הפעל מחדש את Tortugarr כדי להחיל.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "יש להפעיל מחדש את Moonfin כדי לשנות את מנוע הרינדור. סגור את האפליקציה עכשיו ופתח אותה שוב כדי להחיל.",
+    "impellerRestartMessage": "יש להפעיל מחדש את Tortugarr כדי לשנות את מנוע הרינדור. סגור את האפליקציה עכשיו ופתח אותה שוב כדי להחיל.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "הסרטים הפופולריים ביותר ב-IMDb",
     "imdbMostPopularTvShows": "סדרות הטלוויזיה הפופולריות ביותר ב-IMDb",
     "imdbLowestRatedMovies": "הסרטים בעלי הדירוג הנמוך ביותר ב-IMDb",
-    "imdbTopEnglishMovies": "הסרטים באנגלית עם הדירוג הגבוה ביותר ב-IMDb"
+    "imdbTopEnglishMovies": "הסרטים באנגלית עם הדירוג הגבוה ביותר ב-IMDb",
+    "tgMissing": "חסר",
+    "tgComing": "בקרוב",
+    "tgComingOn": "יוצא {date}",
+    "tgDownloading": "בהורדה",
+    "tgReadySoon": "מוכן בקרוב",
+    "tgRequested": "התבקש",
+    "tgClose": "סגור",
+    "tgCancel": "ביטול",
+    "tgBack": "חזרה",
+    "tgYes": "כן",
+    "tgNo": "לא",
+    "tgSearch": "חיפוש",
+    "tgHide": "הסתר",
+    "tgAll": "הכול",
+    "tgNone": "ללא",
+    "tgMovies": "סרטים",
+    "tgSeries": "סדרות",
+    "tgMovieTag": "סרט",
+    "tgSeriesTag": "סדרה",
+    "tgCanTakeAMinute": "עשוי לקחת עד דקה",
+    "tgToday": "היום",
+    "tgYesterday": "אתמול",
+    "tgDaysAgo": "לפני {days} ימים",
+    "tgMonthsAgo": "לפני {months} חודשים",
+    "tgYearsAgo": "לפני {years} שנים",
+    "tgYearsMonthsAgo": "לפני {years} שנים ו-{months} חודשים",
+    "tgFindSubtitles": "חיפוש כתוביות",
+    "tgFreeUpSpace": "שחרור מקום",
+    "tgDownloads": "הורדות",
+    "tgDownloadsCount": "הורדות ({count})",
+    "tgNoVideoRemoved": "\"{title}\": בהורדה לא היה קובץ וידאו ({files}). היא הוסרה ונחסמה — נסו קובץ אחר.",
+    "tgNoVideoNotRemoved": "\"{title}\": בהורדה לא היה קובץ וידאו ({files}), אך לא ניתן היה להסיר אותה אוטומטית.",
+    "tgAiredOn": "שודר {date}",
+    "tgTapToFindFiles": "הקישו לחיפוש קבצים",
+    "tgWholeSeason": "כל העונה",
+    "tgEpisodesMissingFindPack": "{count} פרקים חסרים – חפשו חבילת עונה",
+    "tgAddToSonarrTitle": "הוסיפו ל-Sonarr כדי לראות פרקים חסרים",
+    "tgAddToSonarrSubtitle": "הסדרה מתווספת בלי להוריד דבר מעצמה",
+    "tgMissingEpisodesUnavailable": "לא ניתן להציג פרקים חסרים כרגע",
+    "tgReasonTapRetry": "{reason} · הקישו לנסות שוב",
+    "tgSeasonPackBadge": "חבילת עונה",
+    "tgMonitorSeasonTitle": "מעקב אחרי עונה {season}",
+    "tgMonitorSeasonQuestion": "ש-Sonarr יוריד עכשיו את הפרקים החסרים בעונה {season}?\n\nלא: רק פרקים חדשים יורדו כשהם יוצאים.",
+    "tgSonarrSearchingSeason": "Sonarr מחפש את עונה {season}",
+    "tgMonitored": "במעקב",
+    "tgNotMonitored": "לא במעקב",
+    "tgSeasonStateLabel": "עונה {season}: {state}",
+    "tgLabelMissing": "{label} חסר",
+    "tgNotAiredYet": "{code} עוד לא שודר.",
+    "tgNotAiredYetComing": "{code} עוד לא שודר – יוצא {date}.",
+    "tgAlreadyDownloading": "{code} כבר בהורדה.",
+    "tgDownloadedAppearsSoon": "{code} הורד ויופיע בספרייה בקרוב.",
+    "tgSearchingFor": "מחפש {label} …",
+    "tgSeasonLower": "עונה {season}",
+    "tgWholeLabel": "כל {label}",
+    "tgSeasonNoEpisodes": "עונה {season} – אין פרקים בספרייה",
+    "tgNoTvdbId": "לסדרה אין מזהה TVDB, ולכן Sonarr לא יכול למצוא אותה.",
+    "tgAddingToSonarr": "מוסיף ל-Sonarr …",
+    "tgAddToSonarrFailed": "לא ניתן היה להוסיף את הסדרה ל-Sonarr. נסו שוב מאוחר יותר.",
+    "tgSendingToDownload": "שולח את \"{label}\" להורדה …",
+    "tgDownloadDidNotStart": "ההורדה לא התחילה: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" בהורדה ({size}). יופיע בספרייה כשההורדה תסתיים.",
+    "tgSonarrUnreachableRetry": "אין חיבור ל-Sonarr. נסו שוב מעט מאוחר יותר.",
+    "tgNoUsableFiles": "לא נמצאו קבצים שמישים. נסו שוב מאוחר יותר – קבצים חדשים מופיעים לרוב אחרי כמה שעות.",
+    "tgFilesCount": "{count} קבצים",
+    "tgFilesRecommended": "{count} קבצים – {recommended} מתאימים לפרופיל האיכות, השאר למטה",
+    "tgOutsideQualityProfile": "מחוץ לפרופיל האיכות",
+    "tgLargerThanProfile": "גדול ממה שהפרופיל מאפשר",
+    "tgSmallerThanProfile": "קטן ממה שהפרופיל מאפשר",
+    "tgAlreadyExists": "כבר קיים",
+    "tgMayNotFitDisk": "עשוי לא להיכנס בדיסק",
+    "tgSonarrUnreachable": "אין חיבור ל-Sonarr",
+    "tgSonarrUnreachableAt": "אין חיבור ל-Sonarr בכתובת {host}",
+    "tgSonarrRejectedChange": "Sonarr לא קיבל את השינוי",
+    "tgSeasonMonitoredNoSearch": "העונה במעקב, אך Sonarr לא התחיל את החיפוש",
+    "tgSonarrCantSearch": "Sonarr לא יכול לחפש כרגע",
+    "tgSearchExpired": "תוצאת החיפוש פגה – חפשו שוב",
+    "tgSonarrRejectedDownload": "Sonarr לא קיבל את ההורדה (HTTP {status})",
+    "tgSonarrNoSeries": "הסדרה לא קיימת ב-Sonarr",
+    "tgCouldNotChangeMonitoring": "לא ניתן היה לשנות את המעקב: {error}",
+    "tgJellyfinNoIds": "Jellyfin לא זיהה את הסדרה (אין מזהה TVDB או TMDB)",
+    "tgSomethingWentWrong": "משהו השתבש: {error}",
+    "tgDeleteReadOnly": "הקובץ לא מנוהל על ידי Radarr/Sonarr, ול-Jellyfin יש הרשאת קריאה בלבד לתיקייה. מחקו אותו במנהל הקבצים.",
+    "tgSonarrRequiredPerEpisode": "Sonarr לא זמין, או שהסדרה לא נוספה שם. הורדה לפי פרק דורשת Sonarr.",
+    "tgEpisodesNotFound": "הפרקים שנבחרו עבור \"{title}\" לא נמצאו ב-Sonarr (נמצאו {count} פרקים בסך הכול). הוסיפו את הסדרה ל-Sonarr ונסו שוב.",
+    "tgPartOfCollectionPrefix": "חלק מהאוסף ",
+    "tgViewingPartOf": "  ·  אתם צופים בחלק {current} מתוך {total}",
+    "tgPartOf": "חלק {number} מתוך {total}",
+    "tgUnknownTitle": "כותר לא ידוע",
+    "tgMovieCollection": "אוסף סרטים",
+    "tgNotReleasedYet": "\"{title}\" עוד לא יצא",
+    "tgScreensaverModeVideo": "וידאו",
+    "tgScreensaverModeLogo": "לוגו",
+    "tgScreensaverSound": "צליל בשומר המסך",
+    "tgScreensaverSoundSubtitle": "כבוי: טריילרים בשומר המסך מתנגנים ללא קול",
+    "tgScreensaverLogo": "לוגו",
+    "tgLogoBadge": "תג Tortugarr",
+    "tgLogoVhs": "תוכי על קלטות VHS",
+    "tgLogoSign": "תוכי על שלט",
+    "tgHiddenBadge": "מוסתר · {code}",
+    "tgDiskSpace": "מקום בדיסק",
+    "tgDiskSpaceSubtitle": "שחררו מקום להורדות חדשות",
+    "tgAdultTitle": "סרטים למבוגרים (XXX)",
+    "tgAdultSubtitle": "הצגה או הסתרה של ספריית XXX (PIN)",
+    "tgHideForeign": "הסתרת תוכן זר",
+    "tgHideForeignOn": "פעיל: \"טרנדי\" ו\"פופולרי\" מציגים רק אנגלית, נורווגית, שוודית, דנית, גרמנית וצרפתית",
+    "tgHideForeignOff": "כבוי: \"טרנדי\" ו\"פופולרי\" מציגים כל שפה",
+    "tgShowHidden": "הצגת מה שמוסתר",
+    "tgShowHiddenOn": "פעיל: כותרים שהיו מוסתרים מוצגים עם תג \"מוסתר\" אדום",
+    "tgShowHiddenOff": "לפתרון בעיות: הצגת כותרים מוסתרים עם תג אדום במקום להסיר אותם",
+    "tgShowAllSubLangs": "הצגת כל שפות הכתוביות",
+    "tgShowAllSubLangsOn": "פעיל: תפריט הכתוביות מציג כל שפה",
+    "tgShowAllSubLangsOff": "כבוי: תפריט הכתוביות מציג רק נורווגית ואנגלית",
+    "tgPreviewSound": "צליל בתצוגה המקדימה",
+    "tgPreviewSoundOn": "פעיל: לקליפ שמתנגן כשעוצרים על כותר יש קול",
+    "tgPreviewSoundOff": "כבוי: קליפים מתנגנים ללא קול בזמן הדפדוף",
+    "tgScreensaver": "שומר מסך",
+    "tgScreensaverSubtitle": "וידאו או לוגו, צליל ותמונה",
+    "tgShowMissingEpisodes": "הצגת פרקים חסרים",
+    "tgShowMissingEpisodesOn": "פעיל: עונות מציגות פרקים שאין לכם, מוכנים להורדה",
+    "tgShowMissingEpisodesOff": "כבוי: עונות מציגות רק את הפרקים שיש לכם",
+    "tgShowCollections": "הצגת אוספי סרטים",
+    "tgShowCollectionsOn": "פעיל: סרטים מציגים את שאר הסרטים באוסף, כולל אלה שחסרים לכם",
+    "tgShowCollectionsOff": "כבוי: עמוד הסרט לא מציג את האוסף",
+    "tgNoActiveDownloads": "אין הורדות פעילות.",
+    "tgPickDownloadToOpen": "בחרו הורדה כדי לפתוח את הבקשות.",
+    "tgRefreshLibrary": "רענון הספרייה",
+    "tgAskingJellyfinScan": "מבקש מ-Jellyfin לסרוק את הספרייה …",
+    "tgHideAll": "הסתר הכול",
+    "tgImporting": "מייבא",
+    "tgSubsNotManaged": "הכותר הזה לא מנוהל על ידי Radarr/Sonarr, ולכן Bazarr לא יכול למצוא לו כתוביות.",
+    "tgBazarrUnreachable": "אין חיבור ל-Bazarr. נסו שוב מעט מאוחר יותר.",
+    "tgSubsFoundNothing": "עדיין לא נמצא דבר. Bazarr מנסה שוב אוטומטית כל יום, או שתוכלו לבחור בעצמכם.",
+    "tgSubsFound": "נמצאו {languages} – ייתכן שיעבור רגע עד שיופיעו בתפריט הכתוביות.",
+    "tgAnd": "ו",
+    "tgSubsDownloaded": "הורד – ייתכן שיעבור רגע עד שיופיע בתפריט הכתוביות.",
+    "tgAskingBazarr": "שואל את Bazarr …",
+    "tgHaveAll": "יש את כולן",
+    "tgSearchAutoNow": "חיפוש אוטומטי עכשיו",
+    "tgSearchingUpToMinute": "מחפש … עשוי לקחת עד דקה",
+    "tgPickYourself": "בחירה ידנית",
+    "tgAskingProviders": "שואל את ספקי הכתוביות … עשוי לקחת עד דקה",
+    "tgNoProviderSubs": "לאף ספק אין עדיין כתוביות לזה.",
+    "tgLangHas": "{language}: זמין",
+    "tgLangMissing": "{language}: חסר",
+    "tgNoReleaseName": "(ללא שם גרסה)",
+    "tgHearingImpaired": "{provider} · לכבדי שמיעה",
+    "tgLangNorwegian": "נורווגית",
+    "tgLangEnglish": "אנגלית",
+    "tgBazarrUnknownTitle": "Bazarr עדיין לא מכיר את הכותר הזה",
+    "tgBazarrError": "Bazarr החזיר שגיאה (HTTP {code})",
+    "tgLowSpaceSnack": "מעט מקום בכונן {drive}: ({free} פנויים). ההורדה עשויה להיעצר — ספרו למי שמנהל את השרת.",
+    "tgNoQbitForSpace": "אין חיבור ל-qBittorrent לבדיקת המקום",
+    "tgNotEnoughSpace": "אין די מקום",
+    "tgDriveHasFree": "{drive}: {free} פנויים",
+    "tgCopyInDownloads": "עותק ב-Downloads · כבר בספרייה",
+    "tgLastWatched": "נצפה לאחרונה {ago}",
+    "tgNeverWatchedAdded": "לא נצפה מעולם · נוסף {ago}",
+    "tgNeverWatched": "לא נצפה מעולם",
+    "tgNothingSafeToDelete": "לא נמצא בכונן {drive}: דבר שאפשר למחוק בבטחה (הכול נוסף לאחרונה, נצפה לאחרונה או מועדף).",
+    "tgDeleteTitlesQuestion": "{count, plural, one{למחוק כותר אחד?} two{למחוק שני כותרים?} many{למחוק {count} כותרים?} other{למחוק {count} כותרים?}}",
+    "tgDeletedForGood": "{size} יימחקו לצמיתות. לא ניתן לבטל פעולה זו.",
+    "tgYesDelete": "כן, מחק",
+    "tgDeletingProgress": "מוחק {done}/{total} …",
+    "tgNowHasFree": " · {drive}: עכשיו {free} פנויים",
+    "tgDeletedTitles": "{count, plural, one{כותר אחד נמחק} two{שני כותרים נמחקו} many{{count} כותרים נמחקו} other{{count} כותרים נמחקו}}{extra}",
+    "tgDeletedFailed": "נמחקו {count}, נכשלו: {failed}{extra}",
+    "tgFreeGb": "שחרור {gb} GB",
+    "tgDownloadCopies": "עותקי הורדה",
+    "tgLookingForUnwatched": "מחפש מה שלא נצפה זמן רב …",
+    "tgSuggestionEnough": "הצעה: {size} · די מקום ✓",
+    "tgSuggestionOf": "הצעה: {size} מתוך {target} הדרושים",
+    "tgPickToSayNo": "בחרו פריט כדי לסרב — ההצעה הבאה מגיעה אוטומטית.",
+    "tgOtherCandidates": "מועמדים נוספים",
+    "tgDownloadAnyway": "הורד בכל זאת",
+    "tgDeleteCountSize": "מחק {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: {free} פנויים.",
+    "tgFileDoubleSpace": "גודל הקובץ {size} והוא תופס מקום כפול (הורדה + עותק בספרייה), בתוספת {buffer} ברזרבה.",
+    "tgFileSize": "גודל הקובץ {size}, בתוספת {buffer} ברזרבה.",
+    "tgPendingNeeds": "הורדות בתהליך צריכות עוד {size}.",
+    "tgShortBy": "חסרים {size}.",
+    "tgOnlyEarlyFiles": "נמצאו רק קבצים שפורסמו לפני היציאה הדיגיטלית של הסרט ({count}) — הם כמעט תמיד מזויפים.",
+    "tgNoDigitalDate": "עוד אין לו תאריך יציאה דיגיטלית",
+    "tgDigitalOn": "יוצא דיגיטלית ב-{date}",
+    "tgNotOutDigitally": "עוד לא יצא דיגיטלית",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "מה שקיים עכשיו הוא בדרך כלל הקלטה מהקולנוע או סרט אחר באותו שם. לפעמים קיים עותק מוקדם באיכות נמוכה יותר, לרוב עם כתוביות צרובות. \"הצג קבצים בכל זאת\" מציג מה שקיים. Radarr יוריד את הגרסה הראויה בעצמו כשתצא.",
+    "tgShowFilesAnyway": "הצג קבצים בכל זאת",
+    "tgPickSeasonsEpisodes": "בחירת עונות ופרקים",
+    "tgNoEpisodeInfo": "{season}: אין מידע על פרקים",
+    "tgAppliesAllDevices": "חל על כל מכשיר שמשתמש בחשבון הזה",
+    "tgNoXxxLibrary": "לא נמצאה ספרייה בשם XXX.",
+    "tgSearchingEachWord": "מחפש כל מילה בנפרד … (עשוי לקחת חצי דקה)",
+    "tgSentToQbit": "\"{title}\" ({size}) נשלח ל-qBittorrent",
+    "tgDownloadFailed": "ההורדה נכשלה: {error}",
+    "tgXxxNoVideoRemoved": "ב-\"{title}\" לא היה קובץ וידאו והוא הוסר.",
+    "tgXxxNoVideoNotRemoved": "ב-\"{title}\" לא היה קובץ וידאו והוא לא הוסר.",
+    "tgSearchNewXxx": "חיפוש XXX חדש",
+    "tgXxxSearchHint": "שם, סטודיו …",
+    "tgChecking": "בודק …",
+    "tgXxxVisible": "גלוי עכשיו. XXX מוצג בספריות, בחיפוש ובמסך הבית.",
+    "tgXxxHidden": "מוסתר. XXX לא מוצג בשום מקום באפליקציה.",
+    "tgShowWithPin": "הצג (PIN)",
+    "tgChangePin": "שינוי PIN",
+    "tgNoLibraryList": "לא ניתן היה לקבל את רשימת הספריות (HTTP {code})",
+    "tgNoUserSettings": "לא ניתן היה לקבל את הגדרות המשתמש (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin דחה את השינוי (HTTP {code})",
+    "tgDeleteFailed": "המחיקה נכשלה (HTTP {code})",
+    "tgXxxAddFailed": "לא ניתן היה להוסיף את \"{title}\" ל-qBittorrent",
+    "tgSeasonEpisodeLower": "עונה {season}, פרק {episode}",
+    "tgSearchInSeerr": "חיפוש ב-Seerr",
+    "tgSeerrSearchHint": "חפשו סרטים וסדרות (למשל \"Lost S02E05\")",
+    "tgMissingInThisSeason": "חסרים בעונה הזו",
+    "tgMissingSeasonsOpenSeries": "{count, plural, one{עונה חסרה} two{עונות חסרות} many{עונות חסרות} other{עונות חסרות}} {list} - פתחו את הסדרה כדי לראות את כל העונות",
+    "tgProjectOnGitHub": "Tortugarr ב-GitHub",
+    "tgProjectOnGitHubSubtitle": "קוד מקור, גרסאות ודיווחי באגים",
+    "tgBuiltOnMoonfinCredit": "Tortugarr בנוי על Moonfin (GPL), מאת מפתחי Moonfin.",
+    "tgCredits": "תודות",
+    "tgCreditsThanks": "בתודה ענווה: בלי הפרויקטים האלה והאנשים שמאחוריהם, Tortugarr לא היה קיים.",
+    "tgCreditMoonfin": "האפליקציה ש-Tortugarr בנוי עליה (GPL)",
+    "tgCreditJellyfin": "שרת מדיה",
+    "tgCreditSeerr": "גילוי ובקשות",
+    "tgCreditRadarr": "סרטים",
+    "tgCreditSonarr": "סדרות",
+    "tgCreditProwlarr": "מנהל אינדקסרים",
+    "tgCreditBazarr": "כתוביות",
+    "tgCreditFlareSolverr": "עוזר Cloudflare לאינדקסרים",
+    "tgCreditQbittorrent": "תוכנת הורדה, ברירת המחדל של תוכנית ההתקנה",
+    "tgCreditTmdb": "נתוני סרטים וסדרות, פוסטרים ותמונות",
+    "tgCreditOpenSubtitles": "כתוביות, מתקבלות דרך Bazarr",
+    "tgTmdbNotice": "מוצר זה משתמש ב-TMDB API אך אינו מאושר או מוסמך על ידי TMDB.",
+    "tgLoadingLogoSize": "גודל לוגו הטעינה",
+    "tgLoadingLogoSizeSubtitle": "הלוגו המסתובב בזמן טעינת וידאו",
+    "tgSubtitleLanguages": "שפות כתוביות",
+    "tgSubtitleLanguagesSubtitle": "מוצגות בתפריט הכתוביות: {languages}",
+    "tgShowAllSubLangsOffChosen": "כבוי: תפריט הכתוביות מציג רק את השפות שבחרת",
+    "tgDiscoveryLanguages": "שפות ברשימות טרנדי ופופולרי",
+    "tgDiscoveryLanguagesSubtitle": "מוצגות: {languages}",
+    "tgHideForeignOnChosen": "פועל: טרנדי ופופולרי מציגים רק את השפות שבחרת",
+    "tgShowLanguageBadges": "הצג תגי שפה",
+    "tgShowLanguageBadgesOn": "פועל: הכותרים מציגים את השפה שלהם (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "כבוי: ללא תגי שפה על הכותרים"
 }

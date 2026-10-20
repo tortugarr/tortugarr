@@ -1,3 +1,4 @@
+import '../services/seerr/seerr_language_filter.dart';
 import 'dart:convert';
 
 import '../database/offline_database.dart';
@@ -204,6 +205,10 @@ class AggregatedItem {
   String? get status => rawData['Status'] as String?;
   String? get seerrMediaType => rawData['SeerrMediaType'] as String?;
   int? get seerrStatus => _toInt(rawData['SeerrStatus']);
+
+  /// The language badge "Vis hva som skjules" puts on this title.
+  SeerrLanguageMark? get seerrLanguageMark =>
+      SeerrLanguageMark.fromRaw(rawData);
   int? get childCount => _toInt(rawData['ChildCount']);
 
   DateTime? get premiereDate {
@@ -256,6 +261,14 @@ class AggregatedItem {
 
   String? get tmdbId => providerIds['Tmdb'] ?? providerIds['tmdb'] ?? providerIds['TMDB'];
   String? get imdbId => providerIds['Imdb'] ?? providerIds['imdb'] ?? providerIds['IMDB'];
+
+  /// True for placeholder episodes Jellyfin renders when a library has
+  /// "Display missing episodes" enabled — present in the list, not playable.
+  bool get isMissing =>
+      rawData['IsMissing'] == true ||
+      rawData['IsVirtualItem'] == true ||
+      rawData['IsPlaceholder'] == true ||
+      (rawData['LocationType'] as String?)?.toLowerCase() == 'virtual';
 
   List<Map<String, dynamic>> get people => _toListOfMaps(rawData['People']);
 

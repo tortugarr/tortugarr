@@ -28,6 +28,8 @@ import 'data/services/background_download_coordinator.dart';
 import 'data/services/download_notification_service.dart';
 import 'data/services/push_messaging_service.dart';
 import 'data/services/seerr_notification_service.dart';
+import 'data/services/seerr_active_downloads_service.dart';
+import 'data/services/library_change_refresher.dart';
 import 'data/services/media_server_client_factory.dart';
 import 'data/services/crash_report_service.dart';
 import 'data/services/log_service.dart';
@@ -216,6 +218,19 @@ void _startProcessExitReporter() {
         ? GetIt.instance<ScreensaverController>().visible
         : null,
   );
+}
+
+/// Drops decoded images that nothing shows while the app is in the background,
+/// so a low-RAM TV doesn't kill it (or the app in front) to get them back.
+/// Memory pressure already clears the cache in [PaintingBinding].
+class _BackgroundImageCacheTrimmer with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.paused) {
+      PaintingBinding.instance.imageCache.clear();
+    }
+  }
 }
 
 Future<void> _restoreWindowGeometry() async {
@@ -930,6 +945,9 @@ void main() async {
 
   _configureImageCache();
   _capSkiaCache();
+  if (PlatformDetection.isAndroid) {
+    WidgetsBinding.instance.addObserver(_BackgroundImageCacheTrimmer());
+  }
   await configureImageDiskCache(tier: _resolvedTier());
 
   // On Linux the GTK font pipeline loads fonts asynchronously. The first frame
@@ -947,9 +965,11 @@ void main() async {
 
     // Registered before runApp so a background/terminated push can be handled.
     // The handler itself is a no-op; the OS draws these notifications.
-    try {
-      FirebaseMessaging.onBackgroundMessage(pushBackgroundHandler);
-    } catch (_) {}
+    if (PushMessagingService.enabled) {
+      try {
+        FirebaseMessaging.onBackgroundMessage(pushBackgroundHandler);
+      } catch (_) {}
+    }
   }
 
   await configureDependencies();
@@ -1077,6 +1097,14 @@ Future<void> _initDeferredStartupServices(UserPreferences prefs) async {
   try {
     await GetIt.instance<SeerrNotificationService>().initialize();
     await GetIt.instance<SeerrNotificationService>().handleColdStart();
+  } catch (_) {}
+
+  try {
+    GetIt.instance<SeerrActiveDownloadsService>().start();
+  } catch (_) {}
+
+  try {
+    LibraryChangeRefresher().start();
   } catch (_) {}
 
   if (PlatformDetection.isMobile) {

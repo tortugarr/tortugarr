@@ -10,7 +10,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -138,7 +138,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin versjon $version';
+    return 'Tortugarr versjon $version';
   }
 
   @override
@@ -190,7 +190,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin fikk ikke tilgang til systemets nøkkelring. Påloggingen kan fortsette, men sikker tokenlagring kan være utilgjengelig før nøkkelringen er låst opp.';
+      'Tortugarr fikk ikke tilgang til systemets nøkkelring. Påloggingen kan fortsette, men sikker tokenlagring kan være utilgjengelig før nøkkelringen er låst opp.';
 
   @override
   String get ok => 'OK';
@@ -203,7 +203,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Klassisk er den opprinnelige, midtstilte Moonfin-layouten. Moderne er en responsiv, filmatisk layout.';
+      'Klassisk er den opprinnelige, midtstilte Tortugarr-layouten. Moderne er en responsiv, filmatisk layout.';
 
   @override
   String get detailScreenStyleMoonfin => 'Klassisk';
@@ -443,10 +443,10 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Bruk den lokale bibliotekalgoritmen Moonfin anbefaler, eller TMDb-likhetsmålinger på nett. Merk: Anbefalinger på nett krever Seerr-integrasjon.';
+      'Bruk den lokale bibliotekalgoritmen Tortugarr anbefaler, eller TMDb-likhetsmålinger på nett. Merk: Anbefalinger på nett krever Seerr-integrasjon.';
 
   @override
-  String get recommendationSystemMoonfin => 'Moonfin anbefaler';
+  String get recommendationSystemMoonfin => 'Tortugarr anbefaler';
 
   @override
   String get recommendationSystemJellyfin => 'Jellyfin Recommends';
@@ -460,7 +460,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Begrens forslag fra Moonfin anbefaler etter aldersgrensen til det aktuelle innholdet';
+      'Begrens forslag fra Tortugarr anbefaler etter aldersgrensen til det aktuelle innholdet';
 
   @override
   String get interfaceStyle => 'Grensesnittstil';
@@ -568,7 +568,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Egendefinerte temaer endrer visuelle elementer i hele Moonfin. Velg et av disse alternativene som passer din stil.';
+      'Egendefinerte temaer endrer visuelle elementer i hele Tortugarr. Velg et av disse alternativene som passer din stil.';
 
   @override
   String get keyboardPreferSystemIme => 'Foretrekk systemtastatur';
@@ -588,11 +588,11 @@ class AppLocalizationsNb extends AppLocalizations {
       'La tilkoblet spillkontroll flytte markør og velge elementer';
 
   @override
-  String get themeMoonfin => 'Moonfin';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
   String get themeMoonfinSubtitle =>
-      'Det originale og stilrene Moonfin-standarden.';
+      'Det originale og stilrene Tortugarr-standarden.';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -667,7 +667,7 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Vil du avslutte Moonfin?';
+  String get exitApp => 'Vil du avslutte Tortugarr?';
 
   @override
   String get exitAppConfirmation => 'Er du sikker på at du vil avslutte?';
@@ -1847,7 +1847,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get shuffleAllMusic => 'Spill all musikk i tilfeldig rekkefølge';
 
   @override
-  String get carSignInPrompt => 'Logg på Moonfin på telefonen';
+  String get carSignInPrompt => 'Logg på Tortugarr på telefonen';
 
   @override
   String get carServerUnreachable => 'Får ikke kontakt med serveren';
@@ -2974,7 +2974,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settings => 'Innstillinger';
 
   @override
-  String get settingsSearchHint => 'Search settings';
+  String get settingsSearchHint => 'Søk i innstillinger';
 
   @override
   String get authentication => 'Autentisering';
@@ -3504,25 +3504,25 @@ class AppLocalizationsNb extends AppLocalizations {
       'Slide up or down on the player to change brightness on the left and volume on the right';
 
   @override
-  String get osdButtons => 'Player Buttons';
+  String get osdButtons => 'Spillerknapper';
 
   @override
-  String get osdButtonsDescription => 'Choose which buttons the player shows';
+  String get osdButtonsDescription => 'Velg hvilke knapper avspilleren viser';
 
   @override
   String get osdButtonsSectionDescription =>
-      'Playback controls are always shown. Everything below is up to you, and each kind of device keeps its own list.';
+      'Avspillingskontrollene vises alltid. Resten bestemmer du selv, og hver type enhet har sin egen liste.';
 
   @override
-  String get detailButtons => 'Action Buttons';
+  String get detailButtons => 'Handlingsknapper';
 
   @override
   String get detailButtonsDescription =>
-      'Choose which buttons the details screen shows';
+      'Velg hvilke knapper detaljsiden viser';
 
   @override
   String get detailButtonsSectionDescription =>
-      'Play is always first and the locked buttons are always shown. Everything else is up to you, and each kind of device keeps its own list.';
+      'Spill av er alltid først, og de låste knappene vises alltid. Resten bestemmer du selv, og hver type enhet har sin egen liste.';
 
   @override
   String get actionButtonsOnScreen => 'Action Buttons on Screen';
@@ -3729,24 +3729,24 @@ class AppLocalizationsNb extends AppLocalizations {
   String get upcomingEpisodeTomorrow => 'Tomorrow';
 
   @override
-  String get moveUp => 'Move Up';
+  String get moveUp => 'Flytt opp';
 
   @override
-  String get moveDown => 'Move Down';
+  String get moveDown => 'Flytt ned';
 
   @override
   String get buttonOrderHint =>
-      'Use the arrows to change the order. On a remote, left and right move the highlighted button. Switching one off drops it below the rest.';
+      'Bruk pilene til å endre rekkefølgen. På en fjernkontroll flytter venstre og høyre den markerte knappen. Slår du av en knapp, havner den under resten.';
 
   @override
   String get buttonShownInSyncPlayGroup =>
       'Only shows while you\'re in a SyncPlay group';
 
   @override
-  String get orientationLock => 'Orientation Lock';
+  String get orientationLock => 'Lås skjermretning';
 
   @override
-  String get fullscreen => 'Fullscreen';
+  String get fullscreen => 'Fullskjerm';
 
   @override
   String get audioBehavior => 'Lydoppførsel';
@@ -4170,7 +4170,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Ikke satt. Moonfin vil prøve en standard mpv.conf i app/data-mapper.';
+      'Ikke satt. Tortugarr vil prøve en standard mpv.conf i app/data-mapper.';
 
   @override
   String get selectMpvConf => 'Velg mpv.conf';
@@ -4371,36 +4371,36 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String resetProfileTitle(String profile) {
-    return 'Reset $profile?';
+    return 'Tilbakestille $profile?';
   }
 
   @override
   String resetProfileDescription(String profile) {
-    return 'This deletes the $profile profile from the server and puts every synced setting on this device back to its default.';
+    return 'Dette sletter profilen $profile fra serveren og setter alle synkroniserte innstillinger på denne enheten tilbake til standard.';
   }
 
   @override
   String get resetGlobalProfileDescription =>
-      'This deletes every saved profile from the server and puts every synced setting on this device back to its default.';
+      'Dette sletter alle lagrede profiler fra serveren og setter alle synkroniserte innstillinger på denne enheten tilbake til standard.';
 
   @override
   String profileReset(String profile) {
-    return 'Reset $profile profile to defaults.';
+    return 'Profilen $profile er tilbakestilt til standard.';
   }
 
   @override
-  String get resetRatingsTitle => 'Reset ratings?';
+  String get resetRatingsTitle => 'Tilbakestille vurderinger?';
 
   @override
   String get resetRatingsDescription =>
-      'This puts every ratings setting back to its default, including which sources show and the order they appear in.';
+      'Dette setter alle innstillinger for vurderinger tilbake til standard, også hvilke kilder som vises og rekkefølgen de vises i.';
 
   @override
-  String get ratingsReset => 'Reset ratings to defaults.';
+  String get ratingsReset => 'Vurderingene er tilbakestilt til standard.';
 
   @override
   String failedToResetProfile(String profile) {
-    return 'Failed to reset $profile profile.';
+    return 'Kunne ikke tilbakestille profilen $profile.';
   }
 
   @override
@@ -4469,7 +4469,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Nedlastinger/Moonfin — synlig for andre apper';
+      'Nedlastinger/Tortugarr — synlig for andre apper';
 
   @override
   String get dangerZone => 'Faresone';
@@ -4499,7 +4499,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Nedlastede medier vil bli lagret i Nedlastinger/Moonfin på enheten din. Disse filene vil være synlige for andre apper som galleriet eller musikkspilleren.\n\nEksisterende nedlastinger forblir på deres nåværende plassering.';
+      'Nedlastede medier vil bli lagret i Nedlastinger/Tortugarr på enheten din. Disse filene vil være synlige for andre apper som galleriet eller musikkspilleren.\n\nEksisterende nedlastinger forblir på deres nåværende plassering.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4753,7 +4753,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Slå av og på hjemmesidens synlighet per bibliotek. Start Moonfin på nytt for at endringer skal tre i kraft.';
+      'Slå av og på hjemmesidens synlighet per bibliotek. Start Tortugarr på nytt for at endringer skal tre i kraft.';
 
   @override
   String get showInNavigation => 'Vis i navigasjon';
@@ -4815,7 +4815,7 @@ class AppLocalizationsNb extends AppLocalizations {
       'Velg mellom ulike mediefeltstiler, eller slå av mediefeltet';
 
   @override
-  String get mediaBarModeMoonfin => 'Moonfin';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4977,15 +4977,15 @@ class AppLocalizationsNb extends AppLocalizations {
       'Kombiner begge radene til en enkelt hjemmeseksjon';
 
   @override
-  String get nextUpMaxDays => 'Max days in Next Up';
+  String get nextUpMaxDays => 'Maks dager i Neste opp';
 
   @override
   String get nextUpMaxDaysDescription =>
-      'How long a show stays in Next Up after you last watched it';
+      'Hvor lenge en serie blir liggende i Neste opp etter at du sist så den';
 
   @override
   String daysValue(int days) {
-    return '$days days';
+    return '$days dager';
   }
 
   @override
@@ -5399,11 +5399,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get seerrNotifyIssuesSubtitle => 'Nye saker, svar og løsninger';
 
   @override
-  String get seerrNotifyNewMediaTitle => 'New Media Added';
+  String get seerrNotifyNewMediaTitle => 'Nytt innhold lagt til';
 
   @override
   String get seerrNotifyNewMediaSubtitle =>
-      'Anything new added to the server library';
+      'Alt nytt som legges til i serverbiblioteket';
 
   @override
   String loggedInAs(String username) {
@@ -5442,7 +5442,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get sourceCode => 'Kildekode';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
+  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
 
   @override
   String get checkForUpdatesNow => 'Se etter oppdateringer nå';
@@ -5608,19 +5608,19 @@ class AppLocalizationsNb extends AppLocalizations {
   String get request => 'Forespør';
 
   @override
-  String get request4k => 'Forespør i 4K';
+  String get request4k => 'Be om 4K';
 
   @override
-  String get requested4k => '4K Forespurt';
+  String get requested4k => '4K forespurt';
 
   @override
   String get cancelRequest => 'Avbryt forespørsel';
 
   @override
-  String get cancelRequest4k => 'Avbryt 4K Foresørsel';
+  String get cancelRequest4k => 'Avbryt 4K-forespørsel';
 
   @override
-  String get playInMoonfin => 'Spill i Moonfin';
+  String get playInMoonfin => 'Spill i Tortugarr';
 
   @override
   String get requestedByLabel => 'Requested by';
@@ -5666,7 +5666,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Elementet ble ikke funnet i Moonfin-biblioteket';
+      'Elementet ble ikke funnet i Tortugarr-biblioteket';
 
   @override
   String get errorSearchingLibrary => 'Feil ved søk i bibliotek';
@@ -5693,7 +5693,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String requestSeriesOrMovie4k(String type) {
-    return 'Forespør i 4K $type';
+    return 'Be om $type i 4K';
   }
 
   @override
@@ -7662,7 +7662,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Server omstart pågår, vennligst start Moonfin på nytt';
+      'Server omstart pågår, vennligst start Tortugarr på nytt';
 
   @override
   String get adminActiveSessions => 'Aktive økter';
@@ -11397,7 +11397,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Slå av og på hjemmesidens synlighet per bibliotek. Start Moonfin på nytt for at endringer skal tre i kraft.';
+      'Slå av og på hjemmesidens synlighet per bibliotek. Start Tortugarr på nytt for at endringer skal tre i kraft.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11410,31 +11410,32 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settingsSeasonalSurprise => 'Sesongmessig overraskelse';
 
   @override
-  String get useNativeEmulator => 'Native Emulation';
+  String get useNativeEmulator => 'Innebygd emulering';
 
   @override
   String get useNativeEmulatorSubtitle =>
-      'Play games with native cores instead of the EmulatorJS web player';
+      'Spill med innebygde kjerner i stedet for EmulatorJS-nettspilleren';
 
   @override
-  String get emulatorCores => 'Emulator Cores';
+  String get emulatorCores => 'Emulatorkjerner';
 
   @override
-  String get emulatorCoresSubtitle => 'Download systems to play games natively';
+  String get emulatorCoresSubtitle =>
+      'Last ned systemer for å spille spill direkte på enheten';
 
   @override
   String get emulatorCoresDescription =>
-      'Choose which systems to install. Cores are provided by the libretro project and let games run natively instead of in a browser view.';
+      'Velg hvilke systemer som skal installeres. Kjernene kommer fra libretro-prosjektet og lar spill kjøre direkte på enheten i stedet for i en nettleservisning.';
 
   @override
   String get emulatorCoreDownloading => 'Laster ned';
 
   @override
-  String get emulatorCoreUnavailable => 'Not available for this device';
+  String get emulatorCoreUnavailable => 'Ikke tilgjengelig for denne enheten';
 
   @override
   String get emulatorCoreDownloadFailed =>
-      'Could not download the core. Check your connection and try again.';
+      'Kunne ikke laste ned kjernen. Sjekk tilkoblingen og prøv igjen.';
 
   @override
   String emulatorCoreResetSettings(String system) {
@@ -11452,32 +11453,32 @@ class AppLocalizationsNb extends AppLocalizations {
   String get downloadedGames => 'Nedlastede spill';
 
   @override
-  String get downloadedGamesSubtitle => 'Free up space used by game files';
+  String get downloadedGamesSubtitle => 'Frigjør plass brukt av spillfiler';
 
   @override
   String get downloadedGamesDescription =>
-      'Games are copied to this device before they play. Remove the ones you have finished to free up space. Saves are kept on the server and are not deleted.';
+      'Spill kopieres til denne enheten før de startes. Fjern dem du er ferdig med for å frigjøre plass. Lagringer ligger på serveren og slettes ikke.';
 
   @override
   String get downloadedGamesEmpty =>
-      'No games have been downloaded to this device yet.';
+      'Ingen spill er lastet ned til denne enheten ennå.';
 
   @override
   String downloadedGamesTotal(int count, String size) {
-    return '$count games, $size';
+    return '$count spill, $size';
   }
 
   @override
-  String get removeAllDownloadedGames => 'Remove All';
+  String get removeAllDownloadedGames => 'Fjern alle';
 
   @override
   String removeDownloadedGameConfirm(String title) {
-    return 'Remove $title from this device? It will download again the next time you play it.';
+    return 'Fjerne $title fra denne enheten? Spillet lastes ned igjen neste gang du spiller det.';
   }
 
   @override
   String get removeAllDownloadedGamesConfirm =>
-      'Remove all downloaded games from this device? They will download again the next time you play them.';
+      'Fjerne alle nedlastede spill fra denne enheten? De lastes ned igjen neste gang du spiller dem.';
 
   @override
   String get settingsHigh => 'Høy';
@@ -11518,7 +11519,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Bli med i Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Støtt Moonfin';
+  String get settingsSupportMoonfin => 'Støtt Tortugarr';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Spander en kaffe på utvikleren';
@@ -11538,14 +11539,14 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Hvordan Moonfin håndterer dataene dine';
+      'Hvordan Tortugarr håndterer dataene dine';
 
   @override
   String get settingsCheckForUpdates => 'Se etter oppdateringer';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Se etter den siste Moonfin-utgivelsen';
+      'Se etter den siste Tortugarr-utgivelsen';
 
   @override
   String get settingsBoth => 'Både';
@@ -11983,7 +11984,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Dette er temaer som er lastet ned fra Moonfin-tillegget for den gjeldende serveren. Sletting fjerner bare denne lokale kopien.';
+      'Dette er temaer som er lastet ned fra Tortugarr-tillegget for den gjeldende serveren. Sletting fjerner bare denne lokale kopien.';
 
   @override
   String get savedThemesEmpty =>
@@ -12006,7 +12007,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Åpne temaredigering for Moonfin i nettleseren';
+      'Åpne temaredigering for Tortugarr i nettleseren';
 
   @override
   String get homeScreen => 'Startskjerm';
@@ -12324,7 +12325,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get webDiagnostics => 'Nettdiagnostikk';
 
   @override
-  String get webDiagnosticsTitle => 'Moonfin nettdiagnostikk';
+  String get webDiagnosticsTitle => 'Tortugarr nettdiagnostikk';
 
   @override
   String get webDiagnosticsIntro =>
@@ -12340,11 +12341,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Moonfin oppdaget en HTTPS-side som prøver å kalle en HTTP-server-URL. Nettlesere blokkerer denne forespørselen før den når serveren din.';
+      'Tortugarr oppdaget en HTTPS-side som prøver å kalle en HTTP-server-URL. Nettlesere blokkerer denne forespørselen før den når serveren din.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Moonfin oppdaget en forespørselsfeil på nettlesernivå som vanligvis skyldes manglende CORS- eller preflight-hoder på medieserveren.';
+      'Tortugarr oppdaget en forespørselsfeil på nettlesernivå som vanligvis skyldes manglende CORS- eller preflight-hoder på medieserveren.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -12393,7 +12394,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Løsning: server medieserveren eller proxy-endepunktet via HTTPS, eller last Moonfin over HTTP bare på klarerte lokale nettverk.';
+      'Løsning: server medieserveren eller proxy-endepunktet via HTTPS, eller last Tortugarr over HTTP bare på klarerte lokale nettverk.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -14088,7 +14089,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller er Flutters moderne GPU-gjengiver som gir jevnere animasjoner og mindre hakking. På enkelte TV-bokser og eldre GPU-er kan den forårsake feil eller svart video – slå den av hvis du opplever det. Automatisk velger den beste standardinnstillingen for enheten din. Start Moonfin på nytt for å ta i bruk endringen.';
+      'Impeller er Flutters moderne GPU-gjengiver som gir jevnere animasjoner og mindre hakking. På enkelte TV-bokser og eldre GPU-er kan den forårsake feil eller svart video – slå den av hvis du opplever det. Automatisk velger den beste standardinnstillingen for enheten din. Start Tortugarr på nytt for å ta i bruk endringen.';
 
   @override
   String get impellerAuto => 'Automatisk';
@@ -14104,7 +14105,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin må startes på nytt for å endre gjengivelsesmotoren. Lukk appen nå, og åpne den igjen for å ta i bruk endringen.';
+      'Tortugarr må startes på nytt for å endre gjengivelsesmotoren. Lukk appen nå, og åpne den igjen for å ta i bruk endringen.';
 
   @override
   String get impellerCloseNow => 'Lukk appen nå';
@@ -14163,28 +14164,28 @@ class AppLocalizationsNb extends AppLocalizations {
   String get watchlistUpdateFailed => 'Kunne ikke oppdatere visningslisten';
 
   @override
-  String get adminSearchParameters => 'Search Parameters';
+  String get adminSearchParameters => 'Søkeparametere';
 
   @override
-  String get adminCurrentMetadata => 'Current Metadata';
+  String get adminCurrentMetadata => 'Nåværende metadata';
 
   @override
-  String get adminLabelYear => 'Year';
+  String get adminLabelYear => 'År';
 
   @override
-  String get adminReplaceImages => 'Replace existing images';
+  String get adminReplaceImages => 'Erstatt eksisterende bilder';
 
   @override
-  String get adminBackToSearch => 'Back to Search Criteria';
+  String get adminBackToSearch => 'Tilbake til søkekriterier';
 
   @override
-  String get grouping => 'Grouping';
+  String get grouping => 'Gruppering';
 
   @override
-  String get groupByType => 'Group by Type';
+  String get groupByType => 'Grupper etter type';
 
   @override
-  String get playlistTypes => 'Playlist Types';
+  String get playlistTypes => 'Spillelistetyper';
 
   @override
   String get playlistTypeVideo => 'Video';
@@ -14193,40 +14194,40 @@ class AppLocalizationsNb extends AppLocalizations {
   String get playlistTypeMusicVideo => 'Music Video';
 
   @override
-  String get playlistTypeAudio => 'Audio (Music)';
+  String get playlistTypeAudio => 'Lyd (musikk)';
 
   @override
-  String get playlistTypeAudiobook => 'Audiobook';
+  String get playlistTypeAudiobook => 'Lydbok';
 
   @override
-  String get playlistTypeBook => 'Book';
+  String get playlistTypeBook => 'Bok';
 
   @override
-  String get playlistTypePhoto => 'Photo';
+  String get playlistTypePhoto => 'Bilde';
 
   @override
-  String get playlistTypeMixed => 'Mixed';
+  String get playlistTypeMixed => 'Blandet';
 
   @override
-  String get videoPlaylistsSection => 'Video Playlists';
+  String get videoPlaylistsSection => 'Videospillelister';
 
   @override
   String get musicVideoPlaylistsSection => 'Music Video Playlists';
 
   @override
-  String get audioPlaylistsSection => 'Audio Playlists';
+  String get audioPlaylistsSection => 'Lydspillelister';
 
   @override
-  String get audiobookPlaylistsSection => 'Audiobook Playlists';
+  String get audiobookPlaylistsSection => 'Lydbokspillelister';
 
   @override
-  String get bookPlaylistsSection => 'Book Playlists';
+  String get bookPlaylistsSection => 'Bokspillelister';
 
   @override
-  String get photoPlaylistsSection => 'Photo Playlists';
+  String get photoPlaylistsSection => 'Bildespillelister';
 
   @override
-  String get mixedPlaylistsSection => 'Mixed Playlists';
+  String get mixedPlaylistsSection => 'Blandede spillelister';
 
   @override
   String get currentTime => 'Current Time';
@@ -15190,4 +15191,1044 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Length';
+
+  @override
+  String get seerrFilterNotSupported => 'Filteret støttes ikke';
+
+  @override
+  String get seerrFilterNotSupportedDetail =>
+      'Dette nettverks- eller studiofilteret er ikke tilgjengelig fordi de interne ID-ene ikke stemmer overens. Bruk filtermenyen i stedet.';
+
+  @override
+  String get showAll => 'Vis alle';
+
+  @override
+  String get settingsBuiltOnOriginal => 'Bygget på Moonfin';
+
+  @override
+  String get tgMissing => 'Mangler';
+
+  @override
+  String get tgComing => 'Kommer';
+
+  @override
+  String tgComingOn(String date) {
+    return 'Kommer $date';
+  }
+
+  @override
+  String get tgDownloading => 'Lastes ned';
+
+  @override
+  String get tgReadySoon => 'Klar snart';
+
+  @override
+  String get tgRequested => 'Bestilt';
+
+  @override
+  String get tgClose => 'Lukk';
+
+  @override
+  String get tgCancel => 'Avbryt';
+
+  @override
+  String get tgBack => 'Tilbake';
+
+  @override
+  String get tgYes => 'Ja';
+
+  @override
+  String get tgNo => 'Nei';
+
+  @override
+  String get tgSearch => 'Søk';
+
+  @override
+  String get tgHide => 'Skjul';
+
+  @override
+  String get tgAll => 'Alle';
+
+  @override
+  String get tgNone => 'Ingen';
+
+  @override
+  String get tgMovies => 'Filmer';
+
+  @override
+  String get tgSeries => 'Serier';
+
+  @override
+  String get tgMovieTag => 'Film';
+
+  @override
+  String get tgSeriesTag => 'Serie';
+
+  @override
+  String get tgCanTakeAMinute => 'Kan ta opptil ett minutt';
+
+  @override
+  String get tgToday => 'i dag';
+
+  @override
+  String get tgYesterday => 'i går';
+
+  @override
+  String tgDaysAgo(int days) {
+    return '$days dager siden';
+  }
+
+  @override
+  String tgMonthsAgo(int months) {
+    return '$months mnd siden';
+  }
+
+  @override
+  String tgYearsAgo(int years) {
+    return '$years år siden';
+  }
+
+  @override
+  String tgYearsMonthsAgo(int years, int months) {
+    return '$years år og $months mnd siden';
+  }
+
+  @override
+  String get tgFindSubtitles => 'Finn undertekster';
+
+  @override
+  String get tgFreeUpSpace => 'Frigjør plass';
+
+  @override
+  String get tgDownloads => 'Nedlastinger';
+
+  @override
+  String tgDownloadsCount(int count) {
+    return 'Nedlastinger ($count)';
+  }
+
+  @override
+  String tgNoVideoRemoved(String title, String files) {
+    return '«$title»: nedlastingen inneholdt ingen videofil ($files). Den er fjernet og blokkert – prøv en annen fil.';
+  }
+
+  @override
+  String tgNoVideoNotRemoved(String title, String files) {
+    return '«$title»: nedlastingen inneholdt ingen videofil ($files), men kunne ikke fjernes automatisk.';
+  }
+
+  @override
+  String tgAiredOn(String date) {
+    return 'Sendt $date';
+  }
+
+  @override
+  String get tgTapToFindFiles => 'Trykk for å finne filer';
+
+  @override
+  String get tgWholeSeason => 'Hele sesongen';
+
+  @override
+  String tgEpisodesMissingFindPack(int count) {
+    return '$count episoder mangler – finn en sesongpakke';
+  }
+
+  @override
+  String get tgAddToSonarrTitle =>
+      'Legg til i Sonarr for å se manglende episoder';
+
+  @override
+  String get tgAddToSonarrSubtitle =>
+      'Serien legges til uten å laste ned noe av seg selv';
+
+  @override
+  String get tgMissingEpisodesUnavailable =>
+      'Manglende episoder kan ikke vises nå';
+
+  @override
+  String tgReasonTapRetry(String reason) {
+    return '$reason · Trykk for å prøve igjen';
+  }
+
+  @override
+  String get tgSeasonPackBadge => 'Hel sesong';
+
+  @override
+  String tgMonitorSeasonTitle(int season) {
+    return 'Overvåk sesong $season';
+  }
+
+  @override
+  String tgMonitorSeasonQuestion(int season) {
+    return 'Skal Sonarr hente manglende episoder i sesong $season nå?\n\nNei: bare nye episoder blir hentet når de kommer.';
+  }
+
+  @override
+  String tgSonarrSearchingSeason(int season) {
+    return 'Sonarr søker etter sesong $season';
+  }
+
+  @override
+  String get tgMonitored => 'Overvåkes';
+
+  @override
+  String get tgNotMonitored => 'Ikke overvåket';
+
+  @override
+  String tgSeasonStateLabel(int season, String state) {
+    return 'Sesong $season: $state';
+  }
+
+  @override
+  String tgLabelMissing(String label) {
+    return '$label mangler';
+  }
+
+  @override
+  String tgNotAiredYet(String code) {
+    return '$code er ikke sendt ennå.';
+  }
+
+  @override
+  String tgNotAiredYetComing(String code, String date) {
+    return '$code er ikke sendt ennå – kommer $date.';
+  }
+
+  @override
+  String tgAlreadyDownloading(String code) {
+    return '$code lastes allerede ned.';
+  }
+
+  @override
+  String tgDownloadedAppearsSoon(String code) {
+    return '$code er lastet ned og dukker opp i biblioteket om litt.';
+  }
+
+  @override
+  String tgSearchingFor(String label) {
+    return 'Søker etter $label …';
+  }
+
+  @override
+  String tgSeasonLower(int season) {
+    return 'sesong $season';
+  }
+
+  @override
+  String tgWholeLabel(String label) {
+    return 'Hele $label';
+  }
+
+  @override
+  String tgSeasonNoEpisodes(int season) {
+    return 'Sesong $season – ingen episoder i biblioteket';
+  }
+
+  @override
+  String get tgNoTvdbId => 'Serien mangler TVDB-id, så Sonarr finner den ikke.';
+
+  @override
+  String get tgAddingToSonarr => 'Legger til i Sonarr …';
+
+  @override
+  String get tgAddToSonarrFailed =>
+      'Fikk ikke lagt serien til i Sonarr. Prøv igjen senere.';
+
+  @override
+  String tgSendingToDownload(String label) {
+    return 'Sender «$label» til nedlasting …';
+  }
+
+  @override
+  String tgDownloadDidNotStart(String error) {
+    return 'Nedlastingen startet ikke: $error';
+  }
+
+  @override
+  String tgDownloadingAppearsWhenDone(String label, String size) {
+    return '«$label» lastes ned ($size). Den dukker opp i biblioteket når den er ferdig.';
+  }
+
+  @override
+  String get tgSonarrUnreachableRetry =>
+      'Fikk ikke kontakt med Sonarr. Prøv igjen litt senere.';
+
+  @override
+  String get tgNoUsableFiles =>
+      'Fant ingen brukbare filer. Prøv igjen senere – nye dukker ofte opp etter noen timer.';
+
+  @override
+  String tgFilesCount(int count) {
+    return '$count filer';
+  }
+
+  @override
+  String tgFilesRecommended(int count, int recommended) {
+    return '$count filer – $recommended passer kvalitetsprofilen, resten er nederst';
+  }
+
+  @override
+  String get tgOutsideQualityProfile => 'Utenfor kvalitetsprofilen';
+
+  @override
+  String get tgLargerThanProfile => 'Større enn profilen tillater';
+
+  @override
+  String get tgSmallerThanProfile => 'Mindre enn profilen tillater';
+
+  @override
+  String get tgAlreadyExists => 'Finnes allerede';
+
+  @override
+  String get tgMayNotFitDisk => 'Får kanskje ikke plass på disken';
+
+  @override
+  String get tgSonarrUnreachable => 'Fikk ikke kontakt med Sonarr';
+
+  @override
+  String tgSonarrUnreachableAt(String host) {
+    return 'Fikk ikke kontakt med Sonarr på $host';
+  }
+
+  @override
+  String get tgSonarrRejectedChange => 'Sonarr godtok ikke endringen';
+
+  @override
+  String get tgSeasonMonitoredNoSearch =>
+      'Sesongen overvåkes, men Sonarr startet ikke søket';
+
+  @override
+  String get tgSonarrCantSearch => 'Sonarr kunne ikke søke nå';
+
+  @override
+  String get tgSearchExpired => 'Søkeresultatet er utløpt – søk på nytt';
+
+  @override
+  String tgSonarrRejectedDownload(String status) {
+    return 'Sonarr tok ikke imot nedlastingen (HTTP $status)';
+  }
+
+  @override
+  String get tgSonarrNoSeries => 'Sonarr har ikke serien';
+
+  @override
+  String tgCouldNotChangeMonitoring(String error) {
+    return 'Kunne ikke endre overvåkingen: $error';
+  }
+
+  @override
+  String get tgJellyfinNoIds =>
+      'Jellyfin har ikke kjent igjen serien (mangler TVDB- og TMDB-id)';
+
+  @override
+  String tgSomethingWentWrong(String error) {
+    return 'Noe gikk galt: $error';
+  }
+
+  @override
+  String get tgDeleteReadOnly =>
+      'Filen styres ikke av Radarr/Sonarr, og Jellyfin har bare lesetilgang til mappen. Slett den i Utforsker.';
+
+  @override
+  String get tgSonarrRequiredPerEpisode =>
+      'Sonarr er ikke tilgjengelig, eller serien er ikke lagt til der. Per-episode nedlasting krever Sonarr.';
+
+  @override
+  String tgEpisodesNotFound(String title, int count) {
+    return 'Kunne ikke finne de valgte episodene i Sonarr for «$title» (fant $count episoder totalt). Legg serien til i Sonarr og prøv igjen.';
+  }
+
+  @override
+  String get tgPartOfCollectionPrefix => 'Del av filmserien ';
+
+  @override
+  String tgViewingPartOf(int current, int total) {
+    return '  ·  du ser del $current av $total';
+  }
+
+  @override
+  String tgPartOf(int number, int total) {
+    return 'Del $number av $total';
+  }
+
+  @override
+  String get tgUnknownTitle => 'Ukjent tittel';
+
+  @override
+  String get tgMovieCollection => 'Filmserie';
+
+  @override
+  String tgNotReleasedYet(String title) {
+    return '«$title» er ikke kommet ut ennå';
+  }
+
+  @override
+  String get tgScreensaverModeVideo => 'Video';
+
+  @override
+  String get tgScreensaverModeLogo => 'Logo';
+
+  @override
+  String get tgScreensaverSound => 'Lyd i skjermsparer';
+
+  @override
+  String get tgScreensaverSoundSubtitle =>
+      'Av: trailerne i skjermspareren spilles uten lyd';
+
+  @override
+  String get tgScreensaverLogo => 'Logo';
+
+  @override
+  String get tgLogoBadge => 'Tortugarr-merket';
+
+  @override
+  String get tgLogoVhs => 'Papegøye på VHS-kassetter';
+
+  @override
+  String get tgLogoSign => 'Papegøye på skilt';
+
+  @override
+  String tgHiddenBadge(String code) {
+    return 'SKJULES · $code';
+  }
+
+  @override
+  String get tgDiskSpace => 'Diskplass';
+
+  @override
+  String get tgDiskSpaceSubtitle => 'Frigjør plass til nye nedlastinger';
+
+  @override
+  String get tgAdultTitle => 'Voksenfilmer (XXX)';
+
+  @override
+  String get tgAdultSubtitle => 'Vis eller skjul XXX-biblioteket (PIN)';
+
+  @override
+  String get tgHideForeign => 'Skjul utenlandsk innhold';
+
+  @override
+  String get tgHideForeignOn =>
+      'På: Trending og Populært viser bare engelsk, norsk, svensk, dansk, tysk og fransk';
+
+  @override
+  String get tgHideForeignOff => 'Av: Trending og Populært viser alle språk';
+
+  @override
+  String get tgShowHidden => 'Vis hva som skjules';
+
+  @override
+  String get tgShowHiddenOn =>
+      'På: titler som ellers skjules vises med rød SKJULES-merking';
+
+  @override
+  String get tgShowHiddenOff =>
+      'Feilsøk: vis skjulte titler med rød merking i stedet for å fjerne dem';
+
+  @override
+  String get tgShowAllSubLangs => 'Vis alle undertekstspråk';
+
+  @override
+  String get tgShowAllSubLangsOn => 'På: undertekstmenyen viser alle språk';
+
+  @override
+  String get tgShowAllSubLangsOff =>
+      'Av: undertekstmenyen viser bare norsk og engelsk';
+
+  @override
+  String get tgShowAllSubLangsOffChosen =>
+      'Av: undertekstmenyen viser bare språkene du har valgt';
+
+  @override
+  String get tgSubtitleLanguages => 'Undertekstspråk';
+
+  @override
+  String tgSubtitleLanguagesSubtitle(String languages) {
+    return 'Vises i undertekstmenyen: $languages';
+  }
+
+  @override
+  String get tgPreviewSound => 'Lyd i forhåndsvisninger';
+
+  @override
+  String get tgPreviewSoundOn =>
+      'På: klippet som spilles når du stopper på en tittel har lyd';
+
+  @override
+  String get tgPreviewSoundOff => 'Av: klipp spilles uten lyd mens du blar';
+
+  @override
+  String get tgScreensaver => 'Skjermsparer';
+
+  @override
+  String get tgScreensaverSubtitle => 'Video eller logo, lyd og bilde';
+
+  @override
+  String get tgShowMissingEpisodes => 'Vis manglende episoder';
+
+  @override
+  String get tgShowMissingEpisodesOn =>
+      'På: sesonger viser episoder du ikke har, klare til nedlasting';
+
+  @override
+  String get tgShowMissingEpisodesOff =>
+      'Av: sesonger viser bare episodene du har';
+
+  @override
+  String get tgShowCollections => 'Vis filmserier';
+
+  @override
+  String get tgShowCollectionsOn =>
+      'På: filmer viser de andre filmene i serien, også de du mangler';
+
+  @override
+  String get tgShowCollectionsOff => 'Av: filmsiden viser ikke filmserien';
+
+  @override
+  String get tgNoActiveDownloads => 'Ingen aktive nedlastinger.';
+
+  @override
+  String get tgPickDownloadToOpen =>
+      'Velg en nedlasting for å åpne forespørslene.';
+
+  @override
+  String get tgRefreshLibrary => 'Oppdater bibliotek';
+
+  @override
+  String get tgAskingJellyfinScan => 'Ber Jellyfin skanne biblioteket …';
+
+  @override
+  String get tgHideAll => 'Skjul alle';
+
+  @override
+  String get tgImporting => 'Importerer';
+
+  @override
+  String get tgSubsNotManaged =>
+      'Denne tittelen styres ikke av Radarr/Sonarr, så Bazarr kan ikke finne undertekster til den.';
+
+  @override
+  String get tgBazarrUnreachable =>
+      'Fikk ikke kontakt med Bazarr. Prøv igjen litt senere.';
+
+  @override
+  String get tgSubsFoundNothing =>
+      'Fant ingenting ennå. Bazarr prøver igjen automatisk hver dag, eller du kan velge selv.';
+
+  @override
+  String tgSubsFound(String languages) {
+    return 'Fant $languages – kan ta et øyeblikk før den dukker opp i undertekstmenyen.';
+  }
+
+  @override
+  String get tgAnd => 'og';
+
+  @override
+  String get tgSubsDownloaded =>
+      'Lastet ned – kan ta et øyeblikk før den dukker opp i undertekstmenyen.';
+
+  @override
+  String get tgAskingBazarr => 'Spør Bazarr …';
+
+  @override
+  String get tgHaveAll => 'Har alt';
+
+  @override
+  String get tgSearchAutoNow => 'Søk automatisk nå';
+
+  @override
+  String get tgSearchingUpToMinute => 'Søker … kan ta opptil ett minutt';
+
+  @override
+  String get tgPickYourself => 'Velg selv';
+
+  @override
+  String get tgAskingProviders =>
+      'Spør undertekstkildene … kan ta opptil ett minutt';
+
+  @override
+  String get tgNoProviderSubs =>
+      'Ingen kilder har undertekster til denne ennå.';
+
+  @override
+  String tgLangHas(String language) {
+    return '$language: har';
+  }
+
+  @override
+  String tgLangMissing(String language) {
+    return '$language: mangler';
+  }
+
+  @override
+  String get tgNoReleaseName => '(uten utgivelsesnavn)';
+
+  @override
+  String tgHearingImpaired(String provider) {
+    return '$provider · for hørselshemmede';
+  }
+
+  @override
+  String get tgLangNorwegian => 'Norsk';
+
+  @override
+  String get tgLangEnglish => 'Engelsk';
+
+  @override
+  String get tgBazarrUnknownTitle => 'Bazarr kjenner ikke denne tittelen ennå';
+
+  @override
+  String tgBazarrError(int code) {
+    return 'Bazarr svarte med en feil (HTTP $code)';
+  }
+
+  @override
+  String tgLowSpaceSnack(String drive, String free) {
+    return 'Lite plass på $drive: ($free ledig). Nedlastingen kan stoppe — si fra til den som styrer serveren.';
+  }
+
+  @override
+  String get tgNoQbitForSpace =>
+      'Fikk ikke kontakt med qBittorrent for å sjekke plassen';
+
+  @override
+  String get tgNotEnoughSpace => 'Ikke nok plass';
+
+  @override
+  String tgDriveHasFree(String drive, String free) {
+    return '$drive: har $free ledig';
+  }
+
+  @override
+  String get tgCopyInDownloads =>
+      'Kopi i Downloads · ligger allerede i biblioteket';
+
+  @override
+  String tgLastWatched(String ago) {
+    return 'Sist sett $ago';
+  }
+
+  @override
+  String tgNeverWatchedAdded(String ago) {
+    return 'Aldri sett · lagt til $ago';
+  }
+
+  @override
+  String get tgNeverWatched => 'Aldri sett';
+
+  @override
+  String tgNothingSafeToDelete(String drive) {
+    return 'Fant ingenting på $drive: som kan slettes trygt (alt er nylig lagt til, nylig sett eller favoritter).';
+  }
+
+  @override
+  String tgDeleteTitlesQuestion(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Slette $count titler?',
+      one: 'Slette 1 tittel?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgDeletedForGood(String size) {
+    return '$size slettes for godt. Dette kan ikke angres.';
+  }
+
+  @override
+  String get tgYesDelete => 'Ja, slett';
+
+  @override
+  String tgDeletingProgress(int done, int total) {
+    return 'Sletter $done/$total …';
+  }
+
+  @override
+  String tgNowHasFree(String drive, String free) {
+    return ' · $drive: har nå $free ledig';
+  }
+
+  @override
+  String tgDeletedTitles(int count, String extra) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Slettet $count titler',
+      one: 'Slettet 1 tittel',
+    );
+    return '$_temp0$extra';
+  }
+
+  @override
+  String tgDeletedFailed(int count, String failed, String extra) {
+    return 'Slettet $count, feilet: $failed$extra';
+  }
+
+  @override
+  String tgFreeGb(int gb) {
+    return 'Frigjør $gb GB';
+  }
+
+  @override
+  String get tgDownloadCopies => 'Nedlastingskopier';
+
+  @override
+  String get tgLookingForUnwatched =>
+      'Ser etter det som ikke er sett på lenge …';
+
+  @override
+  String tgSuggestionEnough(String size) {
+    return 'Forslag: $size · nok plass ✓';
+  }
+
+  @override
+  String tgSuggestionOf(String size, String target) {
+    return 'Forslag: $size av $target som trengs';
+  }
+
+  @override
+  String get tgPickToSayNo =>
+      'Velg en for å si nei — neste forslag kommer inn automatisk.';
+
+  @override
+  String get tgOtherCandidates => 'Andre kandidater';
+
+  @override
+  String get tgDownloadAnyway => 'Last ned likevel';
+
+  @override
+  String tgDeleteCountSize(int count, String size) {
+    return 'Slett $count ($size)';
+  }
+
+  @override
+  String tgDriveHasFreeDot(String drive, String free) {
+    return '$drive: har $free ledig.';
+  }
+
+  @override
+  String tgFileDoubleSpace(String size, String buffer) {
+    return 'Filen er $size og tar dobbelt plass (nedlasting + kopi i biblioteket), pluss $buffer i reserve.';
+  }
+
+  @override
+  String tgFileSize(String size, String buffer) {
+    return 'Filen er $size, pluss $buffer i reserve.';
+  }
+
+  @override
+  String tgPendingNeeds(String size) {
+    return 'Pågående nedlastinger trenger $size til.';
+  }
+
+  @override
+  String tgShortBy(String size) {
+    return 'Mangler $size.';
+  }
+
+  @override
+  String tgOnlyEarlyFiles(int count) {
+    return 'Fant bare filer publisert før filmen kom ut digitalt ($count) — de er nesten alltid falske.';
+  }
+
+  @override
+  String get tgNoDigitalDate => 'har ingen digital utgivelsesdato ennå';
+
+  @override
+  String tgDigitalOn(String date) {
+    return 'kommer digitalt $date';
+  }
+
+  @override
+  String get tgNotOutDigitally => 'Ikke ute digitalt ennå';
+
+  @override
+  String tgTitleWhen(String title, String when) {
+    return '«$title» $when.';
+  }
+
+  @override
+  String get tgNotOutExplain =>
+      'Det som finnes nå, er som regel kinoopptak eller en annen film med samme navn. Av og til finnes en tidlig kopi i lavere kvalitet, gjerne med innbrente undertekster. «Vis filer likevel» viser hva som finnes. Radarr henter den ordentlige versjonen selv når den kommer.';
+
+  @override
+  String get tgShowFilesAnyway => 'Vis filer likevel';
+
+  @override
+  String get tgPickSeasonsEpisodes => 'Velg sesonger og episoder';
+
+  @override
+  String tgNoEpisodeInfo(String season) {
+    return '$season: ingen episodeinfo';
+  }
+
+  @override
+  String get tgAppliesAllDevices =>
+      'Gjelder alle enheter som bruker denne kontoen';
+
+  @override
+  String get tgNoXxxLibrary => 'Fant ikke noe bibliotek som heter XXX.';
+
+  @override
+  String get tgSearchingEachWord =>
+      'Søker etter hvert ord for seg … (kan ta et halvt minutt)';
+
+  @override
+  String tgSentToQbit(String title, String size) {
+    return 'Sendt «$title» ($size) til qBittorrent';
+  }
+
+  @override
+  String tgDownloadFailed(String error) {
+    return 'Nedlasting feilet: $error';
+  }
+
+  @override
+  String tgXxxNoVideoRemoved(String title) {
+    return '«$title» inneholdt ingen videofil og er fjernet.';
+  }
+
+  @override
+  String tgXxxNoVideoNotRemoved(String title) {
+    return '«$title» inneholdt ingen videofil og er IKKE fjernet.';
+  }
+
+  @override
+  String get tgSearchNewXxx => 'Søk etter nye XXX';
+
+  @override
+  String get tgXxxSearchHint => 'Navn, studio …';
+
+  @override
+  String get tgChecking => 'Sjekker …';
+
+  @override
+  String get tgXxxVisible =>
+      'Synlig nå. XXX vises i bibliotekene, søk og på forsiden.';
+
+  @override
+  String get tgXxxHidden => 'Skjult. XXX vises ingen steder i appen.';
+
+  @override
+  String get tgShowWithPin => 'Vis (PIN)';
+
+  @override
+  String get tgChangePin => 'Endre PIN';
+
+  @override
+  String tgNoLibraryList(String code) {
+    return 'Fikk ikke bibliotekslisten (HTTP $code)';
+  }
+
+  @override
+  String tgNoUserSettings(String code) {
+    return 'Fikk ikke brukerinnstillingene (HTTP $code)';
+  }
+
+  @override
+  String tgJellyfinRejectedChange(String code) {
+    return 'Jellyfin avviste endringen (HTTP $code)';
+  }
+
+  @override
+  String tgDeleteFailed(String code) {
+    return 'Sletting feilet (HTTP $code)';
+  }
+
+  @override
+  String tgXxxAddFailed(String title) {
+    return 'Fikk ikke lagt «$title» til i qBittorrent';
+  }
+
+  @override
+  String tgSeasonEpisodeLower(int season, int episode) {
+    return 'sesong $season, episode $episode';
+  }
+
+  @override
+  String get tgSearchInSeerr => 'Søk i Seerr';
+
+  @override
+  String get tgSeerrSearchHint =>
+      'Søk etter filmer og serier (f.eks. «Lost S02E05»)';
+
+  @override
+  String get tgMissingInThisSeason => 'Mangler i denne sesongen';
+
+  @override
+  String tgMissingSeasonsOpenSeries(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Mangler sesonger',
+      one: 'Mangler sesong',
+    );
+    return '$_temp0 $list - åpne serien for å se alle sesonger';
+  }
+
+  @override
+  String get tgProjectOnGitHub => 'Tortugarr på GitHub';
+
+  @override
+  String get tgProjectOnGitHubSubtitle =>
+      'Kildekode, utgivelser og feilmeldinger';
+
+  @override
+  String get tgBuiltOnMoonfinCredit =>
+      'Tortugarr er bygget på Moonfin (GPL), laget av Moonfin-utviklerne.';
+
+  @override
+  String get tgCredits => 'Takk til';
+
+  @override
+  String get tgCreditsThanks =>
+      'Med ydmyk takk: uten disse prosjektene og menneskene bak dem hadde ikke Tortugarr eksistert.';
+
+  @override
+  String get tgAboutProjectTitle => 'Bak seilene';
+
+  @override
+  String get tgAboutProjectBody =>
+      'Tortugarr ble født av frustrasjon over de kommersielle strømmetjenestene. Letingen etter én samlet alt-i-ett-løsning førte ingen vei, så oppsettet begynte å rulle som en snøball: først Moonfin, så Sonarr, Radarr og resten. Å sy dem sammen og få dem til faktisk å snakke med hverandre var et rent mareritt; det er et lite mirakel at det virket i det hele tatt. Da alt endelig var koblet sammen, ble den første lavinen av feillogger smart nok ignorert en stund.\n\nDet som gjorde utslaget, var den tradisjonelle forespørselsflyten: be om en tittel i Seerr, vente på at en admin godkjenner, og så stole på at noe i bakgrunnen sjekker hvert X. minutt. Å laste ned en torrent manuelt og trykke «Cast til enhet» fra Windows til TV-en ga feilfritt bilde og lyd langt raskere. Men da gikk man glipp av hele poenget.\n\nPoenget var full kontroll i én enkelt app: søke etter titler, slette filer og oppdatere biblioteket i samme sekund som en nedlasting er ferdig, uten å vente på neste sjekk.\n\nIngen dresser, ingen investorer og ingen unødvendige mellomledd. Bygget som en TV-tilpasset fork av Moonfin-Core, med fokus på sømløs lokal automatisering.\n\nKildekode, utgivelser og oppsettguider ligger på GitHub. Fant du en feil? Meld den der. Papegøyen kommer til å kjefte på den.';
+
+  @override
+  String get tgCreditMoonfin => 'Appen Tortugarr er bygget på (GPL)';
+
+  @override
+  String get tgCreditJellyfin => 'Medieserver';
+
+  @override
+  String get tgCreditSeerr => 'Oppdagelse og forespørsler';
+
+  @override
+  String get tgCreditRadarr => 'Filmer';
+
+  @override
+  String get tgCreditSonarr => 'Serier';
+
+  @override
+  String get tgCreditProwlarr => 'Indekseringsstyring';
+
+  @override
+  String get tgCreditBazarr => 'Undertekster';
+
+  @override
+  String get tgCreditFlareSolverr => 'Cloudflare-hjelper for indekserere';
+
+  @override
+  String get tgCreditQbittorrent =>
+      'Nedlastingsklient, installasjonens standardvalg';
+
+  @override
+  String get tgCreditTmdb => 'Film- og seriedata, plakater og bilder';
+
+  @override
+  String get tgCreditOpenSubtitles => 'Undertekster, hentet via Bazarr';
+
+  @override
+  String get tgTmdbNotice =>
+      'Dette produktet bruker TMDB-API-et, men er ikke godkjent eller sertifisert av TMDB.';
+
+  @override
+  String get tgLoadingLogoSize => 'Størrelse på lastelogo';
+
+  @override
+  String get tgLoadingLogoSizeSubtitle =>
+      'Logoen som snurrer mens en video laster';
+
+  @override
+  String get tgDiscoveryLanguages => 'Språk i Trending og Populært';
+
+  @override
+  String tgDiscoveryLanguagesSubtitle(String languages) {
+    return 'Vises: $languages';
+  }
+
+  @override
+  String get tgHideForeignOnChosen =>
+      'På: Trending og Populært viser bare språkene du har valgt';
+
+  @override
+  String get tgShowLanguageBadges => 'Vis språkmerker';
+
+  @override
+  String get tgShowLanguageBadgesOn =>
+      'På: titlene viser språket sitt (EN, NO, SE …)';
+
+  @override
+  String get tgShowLanguageBadgesOff => 'Av: ingen språkmerker på titlene';
+
+  @override
+  String tgDeleteMovieMessage(Object title) {
+    return 'Slette filmen «$title» og fila?';
+  }
+
+  @override
+  String tgDeleteSeriesMessage(Object title) {
+    return 'Slette HELE serien «$title», alle sesonger og episoder?';
+  }
+
+  @override
+  String tgDeleteSeasonMessage(int season, Object title) {
+    return 'Slette sesong $season av «$title» med alle episodene?';
+  }
+
+  @override
+  String tgDeleteEpisodeMessage(Object episode, Object title) {
+    return 'Slette episode $episode av «$title»?';
+  }
+
+  @override
+  String get tgTitleGone => 'Denne tittelen finnes ikke lenger i biblioteket.';
+
+  @override
+  String get tgTitleGoneBody => 'Den er slettet eller flyttet på serveren.';
+
+  @override
+  String get tgCouldNotLoadTitle =>
+      'Fikk ikke lastet tittelen. Sjekk at serveren er tilgjengelig.';
+
+  @override
+  String get tgShowSdReleases => 'Vis SD-utgivelser';
+
+  @override
+  String get tgShowSdReleasesOn =>
+      'På: filer i lav kvalitet (SD) vises også, merket som det';
+
+  @override
+  String get tgShowSdReleasesOff =>
+      'Av: bare 720p og bedre, eller en god kilde';
+
+  @override
+  String tgOnlySdFound(int count) {
+    return '$count funnet, alle SD (lav kvalitet). Slå på «Vis SD-utgivelser» i Settings for å se dem.';
+  }
+
+  @override
+  String tgNothingKeptReasons(int count, Object reasons) {
+    return '$count funnet, ingen brukbare: $reasons';
+  }
+
+  @override
+  String get tgDownloadsButton => 'Nedlastinger';
+
+  @override
+  String get tgAlwaysShowDownloads => 'Vis alltid Nedlastinger';
+
+  @override
+  String get tgAlwaysShowDownloadsSubtitle =>
+      'Av: knappen Nedlastinger er bare i menyen mens noe lastes ned';
+
+  @override
+  String tgIndexersUnavailable(Object names) {
+    return '$names er utilgjengelig nå: bare treff fra de andre indekserne.';
+  }
+
+  @override
+  String get tgAdultSearchInMenu => 'XXX-søk i menyen';
+
+  @override
+  String get tgAdultSearchButton => 'Søk XXX';
 }

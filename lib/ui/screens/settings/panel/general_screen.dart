@@ -27,7 +27,7 @@ class _GeneralScreenState extends State<_GeneralScreen> {
         MediaQuery.paddingOf(context).bottom;
 
     final Map<String, String> langOptions = {
-      'system': l10n.systemLanguageDefault,
+      'system': bilingualSystemDefaultLabel(l10n.systemLanguageDefault),
     };
     final sortedLocales = List<Locale>.from(AppLocalizations.supportedLocales);
     sortedLocales.sort((a, b) {
@@ -37,7 +37,10 @@ class _GeneralScreenState extends State<_GeneralScreen> {
     });
     for (final locale in sortedLocales) {
       final tag = locale.toLanguageTag();
-      langOptions[tag] = kLocaleDisplayNames[tag] ?? locale.toString();
+      // Native name plus the English one, so a user who lands in a language
+      // they cannot read still finds their own.
+      langOptions[tag] = bilingualLocaleLabel(
+          tag, kLocaleDisplayNames[tag] ?? locale.toString());
     }
 
     final showSiriSensitivity =

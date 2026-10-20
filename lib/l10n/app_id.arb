@@ -1,6 +1,6 @@
 {
     "@@locale": "id",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versi {version}",
+    "appVersionFooter": "Tortugarr versi {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin tidak dapat mengakses keyring sistem Anda. Login tetap dapat dilanjutkan, tetapi penyimpanan token aman mungkin tidak tersedia sampai keyring dibuka.",
+    "secureStorageUnavailableMessage": "Tortugarr tidak dapat mengakses keyring sistem Anda. Login tetap dapat dilanjutkan, tetapi penyimpanan token aman mungkin tidak tersedia sampai keyring dibuka.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Beralih antara Moonfin dan Neon Pulse tanpa memulai ulang aplikasi",
+    "settingsAppearanceThemeSubtitle": "Beralih antara Tortugarr dan Neon Pulse tanpa memulai ulang aplikasi",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Moonfin",
+    "themeMoonfin": "Tortugarr",
     "@themeMoonfin": {
-        "description": "Display name for the Moonfin theme"
+        "description": "Display name for the Tortugarr theme"
     },
-    "themeMoonfinSubtitle": "Tampilan Moonfin saat ini yang sudah Anda sukai",
+    "themeMoonfinSubtitle": "Tampilan Tortugarr saat ini yang sudah Anda sukai",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Moonfin theme"
+        "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Keluar dari Moonfin?",
+    "exitApp": "Keluar dari Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3109,7 +3109,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Belum diatur. Moonfin akan mencoba mpv.conf default di folder app/data.",
+    "notSetMpvConf": "Belum diatur. Tortugarr akan mencoba mpv.conf default di folder app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3336,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Moonfin — terlihat oleh aplikasi lain",
+    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — terlihat oleh aplikasi lain",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3372,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Media yang diunduh akan disimpan ke Downloads/Moonfin di perangkat Anda. File-file ini akan terlihat oleh aplikasi lain seperti galeri atau pemutar musik Anda.\n\nUnduhan yang sudah ada akan tetap berada di lokasi saat ini.",
+    "saveToDownloadsFolderDescription": "Media yang diunduh akan disimpan ke Downloads/Tortugarr di perangkat Anda. File-file ini akan terlihat oleh aplikasi lain seperti galeri atau pemutar musik Anda.\n\nUnduhan yang sudah ada akan tetap berada di lokasi saat ini.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3512,7 +3512,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Atur visibilitas halaman beranda untuk tiap pustaka. Mulai ulang Moonfin agar perubahan berlaku.",
+    "libraryVisibilityDescription": "Atur visibilitas halaman beranda untuk tiap pustaka. Mulai ulang Tortugarr agar perubahan berlaku.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3561,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Moonfin",
+    "mediaBarModeMoonfin": "Tortugarr",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Moonfin"
+        "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4121,7 +4121,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
+    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4293,9 +4293,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Putar di Moonfin",
+    "playInMoonfin": "Putar di Tortugarr",
     "@playInMoonfin": {
-        "description": "Button to play available media in Moonfin"
+        "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Diminta oleh {name}",
     "@requestedByName": {
@@ -4347,7 +4347,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Item tidak ditemukan di pustaka Moonfin Anda",
+    "itemNotFoundInLibrary": "Item tidak ditemukan di pustaka Tortugarr Anda",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4651,7 @@
         }
     },
     "adminServerRebootInProgress": "Restart server sedang berlangsung",
-    "adminServerRebootMessage": "Restart server sedang berlangsung, silakan mulai ulang Moonfin",
+    "adminServerRebootMessage": "Restart server sedang berlangsung, silakan mulai ulang Tortugarr",
     "adminActiveSessions": "Sesi Aktif",
     "adminSessionsLoadFailed": "Gagal memuat sesi",
     "adminNoActiveSessions": "Tidak ada sesi aktif",
@@ -6539,7 +6539,7 @@
     "settingsShowGenresButtonInNavigation": "Tampilkan tombol genre di bilah navigasi",
     "settingsShowFavoritesButtonInNavigation": "Tampilkan tombol favorit di bilah navigasi",
     "settingsShowLibrariesButtonInNavigation": "Tampilkan tombol pustaka di bilah navigasi",
-    "settingsLibraryVisibilitySubtitle": "Atur visibilitas halaman beranda per pustaka. Mulai ulang Moonfin agar perubahan berlaku.",
+    "settingsLibraryVisibilitySubtitle": "Atur visibilitas halaman beranda per pustaka. Mulai ulang Tortugarr agar perubahan berlaku.",
     "settingsMediaBarAndLocalPreviews": "Media Bar & Pratinjau Lokal",
     "settingsVisualOverlays": "Overlay Visual",
     "settingsSeasonalSurprise": "Kejutan Musiman",
@@ -6558,14 +6558,14 @@
     "settingsJoinDiscord": "Gabung Discord",
     "settingsJoinDiscordSubtitle": "Mengobrol dengan komunitas",
     "settingsJoinTheDiscord": "Gabung ke Discord",
-    "settingsSupportMoonfin": "Dukung Moonfin",
+    "settingsSupportMoonfin": "Dukung Tortugarr",
     "settingsLegal": "HUKUM",
     "settingsLicenses": "Lisensi",
     "settingsOpenSourceLicenseNotices": "Pemberitahuan lisensi open source",
     "settingsPrivacyPolicy": "Kebijakan Privasi",
-    "settingsPrivacyPolicySubtitle": "Cara Moonfin menangani data Anda",
+    "settingsPrivacyPolicySubtitle": "Cara Tortugarr menangani data Anda",
     "settingsCheckForUpdates": "Periksa Pembaruan",
-    "settingsCheckForUpdatesSubtitle": "Periksa rilis Moonfin terbaru",
+    "settingsCheckForUpdatesSubtitle": "Periksa rilis Tortugarr terbaru",
     "settingsPoweredByFlutter": "Didukung oleh Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# pemberitahuan lisensi} other {# pemberitahuan lisensi}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +7035,7 @@
         }
     },
     "savedThemesTitle": "Tema tersimpan",
-    "savedThemesDescription": "Ini adalah tema yang diunduh dari plugin Moonfin untuk server saat ini. Menghapusnya hanya menghapus salinan lokal ini.",
+    "savedThemesDescription": "Ini adalah tema yang diunduh dari plugin Tortugarr untuk server saat ini. Menghapusnya hanya menghapus salinan lokal ini.",
     "savedThemesEmpty": "Tidak ada tema tersimpan yang ditemukan untuk server ini.",
     "savedThemesCurrentThemeId": "{themeId} -  Saat ini aktif",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7049,7 @@
     "savedThemesDeleteTooltip": "Hapus tema tersimpan",
     "savedThemesManageSubtitle": "Kelola tema plugin yang diunduh pada perangkat ini",
     "themeEditor": "Editor Tema",
-    "themeEditorSubtitle": "Buka Editor Tema Moonfin di browser Anda",
+    "themeEditorSubtitle": "Buka Editor Tema Tortugarr di browser Anda",
     "homeScreen": "Layar Beranda",
     "bottomBar": "Bilah Bawah",
     "homeRowsStyleClassic": "Klasik",
@@ -7098,12 +7098,12 @@
     "preferSdhSubtitles": "Utamakan subtitle SDH",
     "preferSdhSubtitlesSubtitle": "Prioritaskan track subtitle SDH/CC saat memilih otomatis.",
     "webDiagnostics": "Diagnostik web",
-    "webDiagnosticsTitle": "Diagnostik Web Moonfin",
+    "webDiagnosticsTitle": "Diagnostik Web Tortugarr",
     "webDiagnosticsIntro": "Gunakan halaman ini untuk mendiagnosis masalah konektivitas browser (CORS, mixed content, dan pengaturan discovery).",
     "webDiagnosticsDetectedMixedContentFailure": "Kegagalan Mixed Content Terdeteksi",
     "webDiagnosticsDetectedCorsPreflightFailure": "Kegagalan CORS/Preflight Terdeteksi",
-    "webDiagnosticsMixedContentFailureBody": "Moonfin mendeteksi halaman HTTPS yang mencoba memanggil URL server HTTP. Browser memblokir permintaan ini sebelum mencapai server Anda.",
-    "webDiagnosticsCorsFailureBody": "Moonfin mendeteksi kegagalan permintaan pada tingkat browser yang umumnya disebabkan oleh header CORS atau preflight yang tidak ada pada server media.",
+    "webDiagnosticsMixedContentFailureBody": "Tortugarr mendeteksi halaman HTTPS yang mencoba memanggil URL server HTTP. Browser memblokir permintaan ini sebelum mencapai server Anda.",
+    "webDiagnosticsCorsFailureBody": "Tortugarr mendeteksi kegagalan permintaan pada tingkat browser yang umumnya disebabkan oleh header CORS atau preflight yang tidak ada pada server media.",
     "webDiagnosticsTargetUrl": "URL Target: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7133,7 @@
     "notConfigured": "tidak dikonfigurasi",
     "webDiagnosticsMixedContent": "Konten Campuran",
     "webDiagnosticsMixedContentDetected": "Halaman ini dimuat melalui HTTPS, tetapi satu atau lebih URL yang dikonfigurasi menggunakan HTTP. Browser memblokir halaman HTTPS untuk memanggil API HTTP.",
-    "webDiagnosticsMixedContentFix": "Perbaikan: sajikan server media atau endpoint proxy Anda melalui HTTPS, atau muat Moonfin melalui HTTP hanya pada jaringan lokal tepercaya.",
+    "webDiagnosticsMixedContentFix": "Perbaikan: sajikan server media atau endpoint proxy Anda melalui HTTPS, atau muat Tortugarr melalui HTTP hanya pada jaringan lokal tepercaya.",
     "webDiagnosticsNoMixedContentDetected": "Tidak ada konfigurasi mixed content yang jelas terdeteksi dari pengaturan runtime saat ini.",
     "webDiagnosticsCorsChecklist": "Daftar Periksa CORS",
     "webDiagnosticsCorsChecklistItem1": "-  Izinkan origin browser di Access-Control-Allow-Origin.",
@@ -7635,7 +7635,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klasik adalah tata letak Moonfin asli yang terpusat. Modern adalah tata letak sinematik yang responsif.",
+    "detailScreenStyleSubtitle": "Klasik adalah tata letak Tortugarr asli yang terpusat. Modern adalah tata letak sinematik yang responsif.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7667,13 +7667,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Gunakan algoritme pustaka lokal Moonfin Recommends atau metrik kemiripan TMDb online. Catatan: rekomendasi online memerlukan integrasi Seerr.",
+    "recommendationSystemSubtitle": "Gunakan algoritme pustaka lokal Tortugarr Recommends atau metrik kemiripan TMDb online. Catatan: rekomendasi online memerlukan integrasi Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Kemiripan TMDb",
     "@recommendationSystemTmdb": {
@@ -7683,7 +7683,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Batasi saran Moonfin Recommends berdasarkan rating orang tua dari media yang dituju",
+    "recommendationsApplyParentalRatingCapSubtitle": "Batasi saran Tortugarr Recommends berdasarkan rating orang tua dari media yang dituju",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7731,7 +7731,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Tema kustom mengubah elemen visual di seluruh Moonfin. Pilih salah satu opsi berikut yang sesuai dengan gaya Anda.",
+    "customThemeSubtitle": "Tema kustom mengubah elemen visual di seluruh Tortugarr. Pilih salah satu opsi berikut yang sesuai dengan gaya Anda.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7879,7 +7879,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Masuk ke Moonfin di ponsel Anda",
+    "carSignInPrompt": "Masuk ke Tortugarr di ponsel Anda",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8939,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller adalah perender GPU modern dari Flutter untuk animasi yang lebih mulus dan minim patah-patah. Pada sebagian TV box dan GPU lama, Impeller dapat menyebabkan gangguan tampilan atau video hitam; matikan jika Anda mengalaminya. Otomatis memilih nilai bawaan terbaik untuk perangkat Anda. Mulai ulang Moonfin untuk menerapkannya.",
+    "impellerRenderingSubtitle": "Impeller adalah perender GPU modern dari Flutter untuk animasi yang lebih mulus dan minim patah-patah. Pada sebagian TV box dan GPU lama, Impeller dapat menyebabkan gangguan tampilan atau video hitam; matikan jika Anda mengalaminya. Otomatis memilih nilai bawaan terbaik untuk perangkat Anda. Mulai ulang Tortugarr untuk menerapkannya.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8950,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin perlu dimulai ulang untuk mengubah mesin rendering. Tutup aplikasi sekarang, lalu buka kembali untuk menerapkannya.",
+    "impellerRestartMessage": "Tortugarr perlu dimulai ulang untuk mengubah mesin rendering. Tutup aplikasi sekarang, lalu buka kembali untuk menerapkannya.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9000,5 +9000,247 @@
     "imdbMostPopularMovies": "Film Terpopuler IMDb",
     "imdbMostPopularTvShows": "Serial TV Terpopuler IMDb",
     "imdbLowestRatedMovies": "Film dengan Rating Terendah IMDb",
-    "imdbTopEnglishMovies": "Film Berbahasa Inggris dengan Rating Tertinggi IMDb"
+    "imdbTopEnglishMovies": "Film Berbahasa Inggris dengan Rating Tertinggi IMDb",
+    "tgMissing": "Belum ada",
+    "tgComing": "Segera",
+    "tgComingOn": "Tayang {date}",
+    "tgDownloading": "Mengunduh",
+    "tgReadySoon": "Segera siap",
+    "tgRequested": "Diminta",
+    "tgClose": "Tutup",
+    "tgCancel": "Batal",
+    "tgBack": "Kembali",
+    "tgYes": "Ya",
+    "tgNo": "Tidak",
+    "tgSearch": "Cari",
+    "tgHide": "Sembunyikan",
+    "tgAll": "Semua",
+    "tgNone": "Tidak ada",
+    "tgMovies": "Film",
+    "tgSeries": "Serial",
+    "tgMovieTag": "Film",
+    "tgSeriesTag": "Serial",
+    "tgCanTakeAMinute": "Bisa memakan waktu hingga satu menit",
+    "tgToday": "hari ini",
+    "tgYesterday": "kemarin",
+    "tgDaysAgo": "{days} hari lalu",
+    "tgMonthsAgo": "{months} bulan lalu",
+    "tgYearsAgo": "{years} tahun lalu",
+    "tgYearsMonthsAgo": "{years} tahun {months} bulan lalu",
+    "tgFindSubtitles": "Cari subtitle",
+    "tgFreeUpSpace": "Kosongkan ruang",
+    "tgDownloads": "Unduhan",
+    "tgDownloadsCount": "Unduhan ({count})",
+    "tgNoVideoRemoved": "\"{title}\": unduhan ini tidak berisi file video ({files}). Sudah dihapus dan diblokir — coba file lain.",
+    "tgNoVideoNotRemoved": "\"{title}\": unduhan ini tidak berisi file video ({files}), tetapi tidak bisa dihapus secara otomatis.",
+    "tgAiredOn": "Tayang {date}",
+    "tgTapToFindFiles": "Ketuk untuk mencari file",
+    "tgWholeSeason": "Seluruh musim",
+    "tgEpisodesMissingFindPack": "{count} episode belum ada – cari paket musim",
+    "tgAddToSonarrTitle": "Tambahkan ke Sonarr untuk melihat episode yang belum ada",
+    "tgAddToSonarrSubtitle": "Serial ditambahkan tanpa mengunduh apa pun dengan sendirinya",
+    "tgMissingEpisodesUnavailable": "Episode yang belum ada tidak bisa ditampilkan sekarang",
+    "tgReasonTapRetry": "{reason} · Ketuk untuk coba lagi",
+    "tgSeasonPackBadge": "Paket musim",
+    "tgMonitorSeasonTitle": "Pantau musim {season}",
+    "tgMonitorSeasonQuestion": "Apakah Sonarr harus mengambil episode yang belum ada di musim {season} sekarang?\n\nTidak: hanya episode baru yang diambil saat tayang.",
+    "tgSonarrSearchingSeason": "Sonarr sedang mencari musim {season}",
+    "tgMonitored": "Dipantau",
+    "tgNotMonitored": "Tidak dipantau",
+    "tgSeasonStateLabel": "Musim {season}: {state}",
+    "tgLabelMissing": "{label} belum ada",
+    "tgNotAiredYet": "{code} belum tayang.",
+    "tgNotAiredYetComing": "{code} belum tayang – tayang {date}.",
+    "tgAlreadyDownloading": "{code} sudah sedang diunduh.",
+    "tgDownloadedAppearsSoon": "{code} sudah diunduh dan akan muncul di pustaka sebentar lagi.",
+    "tgSearchingFor": "Mencari {label} …",
+    "tgSeasonLower": "musim {season}",
+    "tgWholeLabel": "Seluruh {label}",
+    "tgSeasonNoEpisodes": "Musim {season} – tidak ada episode di pustaka",
+    "tgNoTvdbId": "Serial ini tidak punya id TVDB, jadi Sonarr tidak bisa menemukannya.",
+    "tgAddingToSonarr": "Menambahkan ke Sonarr …",
+    "tgAddToSonarrFailed": "Serial tidak bisa ditambahkan ke Sonarr. Coba lagi nanti.",
+    "tgSendingToDownload": "Mengirim \"{label}\" untuk diunduh …",
+    "tgDownloadDidNotStart": "Unduhan tidak dimulai: {error}",
+    "tgDownloadingAppearsWhenDone": "\"{label}\" sedang diunduh ({size}). Akan muncul di pustaka setelah selesai.",
+    "tgSonarrUnreachableRetry": "Tidak bisa terhubung ke Sonarr. Coba lagi sebentar lagi.",
+    "tgNoUsableFiles": "Tidak ditemukan file yang bisa dipakai. Coba lagi nanti – file baru sering muncul setelah beberapa jam.",
+    "tgFilesCount": "{count} file",
+    "tgFilesRecommended": "{count} file – {recommended} cocok dengan profil kualitas, sisanya di bagian bawah",
+    "tgOutsideQualityProfile": "Di luar profil kualitas",
+    "tgLargerThanProfile": "Lebih besar dari yang diizinkan profil",
+    "tgSmallerThanProfile": "Lebih kecil dari yang diizinkan profil",
+    "tgAlreadyExists": "Sudah ada",
+    "tgMayNotFitDisk": "Mungkin tidak muat di disk",
+    "tgSonarrUnreachable": "Tidak bisa terhubung ke Sonarr",
+    "tgSonarrUnreachableAt": "Tidak bisa terhubung ke Sonarr di {host}",
+    "tgSonarrRejectedChange": "Sonarr tidak menerima perubahan ini",
+    "tgSeasonMonitoredNoSearch": "Musim ini dipantau, tetapi Sonarr tidak memulai pencarian",
+    "tgSonarrCantSearch": "Sonarr tidak bisa mencari sekarang",
+    "tgSearchExpired": "Hasil pencarian sudah kedaluwarsa – cari lagi",
+    "tgSonarrRejectedDownload": "Sonarr tidak menerima unduhan ini (HTTP {status})",
+    "tgSonarrNoSeries": "Sonarr tidak memiliki serial ini",
+    "tgCouldNotChangeMonitoring": "Pemantauan tidak bisa diubah: {error}",
+    "tgJellyfinNoIds": "Jellyfin tidak mengenali serial ini (tidak ada id TVDB atau TMDB)",
+    "tgSomethingWentWrong": "Terjadi kesalahan: {error}",
+    "tgDeleteReadOnly": "File ini tidak dikelola oleh Radarr/Sonarr, dan Jellyfin hanya punya akses baca ke foldernya. Hapus lewat pengelola file Anda.",
+    "tgSonarrRequiredPerEpisode": "Sonarr tidak bisa dihubungi, atau serial ini belum ditambahkan di sana. Mengunduh per episode membutuhkan Sonarr.",
+    "tgEpisodesNotFound": "Episode yang dipilih untuk \"{title}\" tidak ditemukan di Sonarr (ditemukan {count} episode secara total). Tambahkan serial ini ke Sonarr dan coba lagi.",
+    "tgPartOfCollectionPrefix": "Bagian dari koleksi ",
+    "tgViewingPartOf": "  ·  Anda sedang melihat bagian {current} dari {total}",
+    "tgPartOf": "Bagian {number} dari {total}",
+    "tgUnknownTitle": "Judul tidak diketahui",
+    "tgMovieCollection": "Koleksi film",
+    "tgNotReleasedYet": "\"{title}\" belum rilis",
+    "tgScreensaverModeVideo": "Video",
+    "tgScreensaverModeLogo": "Logo",
+    "tgScreensaverSound": "Suara screensaver",
+    "tgScreensaverSoundSubtitle": "Nonaktif: trailer di screensaver diputar tanpa suara",
+    "tgScreensaverLogo": "Logo",
+    "tgLogoBadge": "Lencana Tortugarr",
+    "tgLogoVhs": "Burung beo di atas kaset VHS",
+    "tgLogoSign": "Burung beo di atas papan nama",
+    "tgHiddenBadge": "DISEMBUNYIKAN · {code}",
+    "tgDiskSpace": "Ruang disk",
+    "tgDiskSpaceSubtitle": "Kosongkan ruang untuk unduhan baru",
+    "tgAdultTitle": "Film dewasa (XXX)",
+    "tgAdultSubtitle": "Tampilkan atau sembunyikan pustaka XXX (PIN)",
+    "tgHideForeign": "Sembunyikan konten asing",
+    "tgHideForeignOn": "Aktif: Sedang Tren dan Populer hanya menampilkan bahasa Inggris, Norwegia, Swedia, Denmark, Jerman, dan Prancis",
+    "tgHideForeignOff": "Nonaktif: Sedang Tren dan Populer menampilkan semua bahasa",
+    "tgShowHidden": "Tampilkan yang disembunyikan",
+    "tgShowHiddenOn": "Aktif: judul yang seharusnya disembunyikan ditampilkan dengan lencana merah DISEMBUNYIKAN",
+    "tgShowHiddenOff": "Pemecahan masalah: tampilkan judul tersembunyi dengan lencana merah alih-alih menghilangkannya",
+    "tgShowAllSubLangs": "Tampilkan semua bahasa subtitle",
+    "tgShowAllSubLangsOn": "Aktif: menu subtitle menampilkan semua bahasa",
+    "tgShowAllSubLangsOff": "Nonaktif: menu subtitle hanya menampilkan bahasa Norwegia dan Inggris",
+    "tgPreviewSound": "Suara pratinjau",
+    "tgPreviewSoundOn": "Aktif: klip yang diputar saat Anda berhenti di sebuah judul bersuara",
+    "tgPreviewSoundOff": "Nonaktif: klip diputar tanpa suara saat Anda menjelajah",
+    "tgScreensaver": "Screensaver",
+    "tgScreensaverSubtitle": "Video atau logo, suara dan gambar",
+    "tgShowMissingEpisodes": "Tampilkan episode yang belum ada",
+    "tgShowMissingEpisodesOn": "Aktif: musim menampilkan episode yang belum Anda miliki, siap diunduh",
+    "tgShowMissingEpisodesOff": "Nonaktif: musim hanya menampilkan episode yang Anda miliki",
+    "tgShowCollections": "Tampilkan koleksi film",
+    "tgShowCollectionsOn": "Aktif: film menampilkan film lain dalam koleksinya, termasuk yang belum Anda miliki",
+    "tgShowCollectionsOff": "Nonaktif: halaman film tidak menampilkan koleksi",
+    "tgNoActiveDownloads": "Tidak ada unduhan aktif.",
+    "tgPickDownloadToOpen": "Pilih unduhan untuk membuka permintaan.",
+    "tgRefreshLibrary": "Segarkan pustaka",
+    "tgAskingJellyfinScan": "Meminta Jellyfin memindai pustaka …",
+    "tgHideAll": "Sembunyikan semua",
+    "tgImporting": "Mengimpor",
+    "tgSubsNotManaged": "Judul ini tidak dikelola oleh Radarr/Sonarr, jadi Bazarr tidak bisa mencari subtitle untuknya.",
+    "tgBazarrUnreachable": "Tidak bisa terhubung ke Bazarr. Coba lagi sebentar lagi.",
+    "tgSubsFoundNothing": "Belum ditemukan apa pun. Bazarr mencoba lagi secara otomatis setiap hari, atau Anda bisa memilih sendiri.",
+    "tgSubsFound": "Ditemukan {languages} – mungkin perlu sesaat sebelum muncul di menu subtitle.",
+    "tgAnd": "dan",
+    "tgSubsDownloaded": "Terunduh – mungkin perlu sesaat sebelum muncul di menu subtitle.",
+    "tgAskingBazarr": "Menanyakan ke Bazarr …",
+    "tgHaveAll": "Sudah lengkap",
+    "tgSearchAutoNow": "Cari otomatis sekarang",
+    "tgSearchingUpToMinute": "Mencari … bisa memakan waktu hingga satu menit",
+    "tgPickYourself": "Pilih sendiri",
+    "tgAskingProviders": "Menanyakan ke penyedia subtitle … bisa memakan waktu hingga satu menit",
+    "tgNoProviderSubs": "Belum ada penyedia yang punya subtitle untuk ini.",
+    "tgLangHas": "{language}: tersedia",
+    "tgLangMissing": "{language}: belum ada",
+    "tgNoReleaseName": "(tanpa nama rilis)",
+    "tgHearingImpaired": "{provider} · untuk tunarungu",
+    "tgLangNorwegian": "Norwegia",
+    "tgLangEnglish": "Inggris",
+    "tgBazarrUnknownTitle": "Bazarr belum mengenal judul ini",
+    "tgBazarrError": "Bazarr membalas dengan kesalahan (HTTP {code})",
+    "tgLowSpaceSnack": "Ruang di {drive}: hampir habis ({free} tersisa). Unduhan bisa berhenti — beri tahu pengelola server.",
+    "tgNoQbitForSpace": "Tidak bisa terhubung ke qBittorrent untuk memeriksa ruang",
+    "tgNotEnoughSpace": "Ruang tidak cukup",
+    "tgDriveHasFree": "{drive}: tersisa {free}",
+    "tgCopyInDownloads": "Salinan di Downloads · sudah ada di pustaka",
+    "tgLastWatched": "Terakhir ditonton {ago}",
+    "tgNeverWatchedAdded": "Belum pernah ditonton · ditambahkan {ago}",
+    "tgNeverWatched": "Belum pernah ditonton",
+    "tgNothingSafeToDelete": "Tidak ada yang bisa dihapus dengan aman di {drive}: (semuanya baru ditambahkan, baru ditonton, atau favorit).",
+    "tgDeleteTitlesQuestion": "{count, plural, =1{Hapus 1 judul?} other{Hapus {count} judul?}}",
+    "tgDeletedForGood": "{size} akan dihapus permanen. Ini tidak bisa dibatalkan.",
+    "tgYesDelete": "Ya, hapus",
+    "tgDeletingProgress": "Menghapus {done}/{total} …",
+    "tgNowHasFree": " · {drive}: kini tersisa {free}",
+    "tgDeletedTitles": "{count, plural, =1{1 judul dihapus} other{{count} judul dihapus}}{extra}",
+    "tgDeletedFailed": "{count} dihapus, gagal: {failed}{extra}",
+    "tgFreeGb": "Kosongkan {gb} GB",
+    "tgDownloadCopies": "Salinan unduhan",
+    "tgLookingForUnwatched": "Mencari yang sudah lama tidak ditonton …",
+    "tgSuggestionEnough": "Saran: {size} · ruang cukup ✓",
+    "tgSuggestionOf": "Saran: {size} dari {target} yang dibutuhkan",
+    "tgPickToSayNo": "Pilih satu untuk menolak — saran berikutnya masuk secara otomatis.",
+    "tgOtherCandidates": "Kandidat lain",
+    "tgDownloadAnyway": "Tetap unduh",
+    "tgDeleteCountSize": "Hapus {count} ({size})",
+    "tgDriveHasFreeDot": "{drive}: tersisa {free}.",
+    "tgFileDoubleSpace": "File ini berukuran {size} dan memakai ruang dua kali lipat (unduhan + salinan di pustaka), ditambah {buffer} sebagai cadangan.",
+    "tgFileSize": "File ini berukuran {size}, ditambah {buffer} sebagai cadangan.",
+    "tgPendingNeeds": "Unduhan yang sedang berjalan membutuhkan {size} lagi.",
+    "tgShortBy": "Kurang {size}.",
+    "tgOnlyEarlyFiles": "Hanya ditemukan file yang diterbitkan sebelum film rilis digital ({count}) — hampir selalu palsu.",
+    "tgNoDigitalDate": "belum punya tanggal rilis digital",
+    "tgDigitalOn": "rilis digital pada {date}",
+    "tgNotOutDigitally": "Belum rilis digital",
+    "tgTitleWhen": "\"{title}\" {when}.",
+    "tgNotOutExplain": "Yang ada sekarang biasanya rekaman bioskop atau film lain dengan judul yang sama. Kadang ada salinan awal berkualitas rendah, sering dengan subtitle tertanam. \"Tetap tampilkan file\" menunjukkan apa yang ada. Radarr akan mengambil versi yang semestinya dengan sendirinya saat rilis.",
+    "tgShowFilesAnyway": "Tetap tampilkan file",
+    "tgPickSeasonsEpisodes": "Pilih musim dan episode",
+    "tgNoEpisodeInfo": "{season}: tidak ada info episode",
+    "tgAppliesAllDevices": "Berlaku untuk semua perangkat yang memakai akun ini",
+    "tgNoXxxLibrary": "Tidak ditemukan pustaka bernama XXX.",
+    "tgSearchingEachWord": "Mencari tiap kata secara terpisah … (bisa memakan waktu setengah menit)",
+    "tgSentToQbit": "\"{title}\" ({size}) dikirim ke qBittorrent",
+    "tgDownloadFailed": "Unduhan gagal: {error}",
+    "tgXxxNoVideoRemoved": "\"{title}\" tidak berisi file video dan sudah dihapus.",
+    "tgXxxNoVideoNotRemoved": "\"{title}\" tidak berisi file video dan TIDAK dihapus.",
+    "tgSearchNewXxx": "Cari XXX baru",
+    "tgXxxSearchHint": "Nama, studio …",
+    "tgChecking": "Memeriksa …",
+    "tgXxxVisible": "Sekarang terlihat. XXX muncul di pustaka, pencarian, dan beranda.",
+    "tgXxxHidden": "Disembunyikan. XXX tidak muncul di mana pun dalam aplikasi.",
+    "tgShowWithPin": "Tampilkan (PIN)",
+    "tgChangePin": "Ubah PIN",
+    "tgNoLibraryList": "Daftar pustaka tidak bisa diambil (HTTP {code})",
+    "tgNoUserSettings": "Pengaturan pengguna tidak bisa diambil (HTTP {code})",
+    "tgJellyfinRejectedChange": "Jellyfin menolak perubahan ini (HTTP {code})",
+    "tgDeleteFailed": "Penghapusan gagal (HTTP {code})",
+    "tgXxxAddFailed": "\"{title}\" tidak bisa ditambahkan ke qBittorrent",
+    "tgSeasonEpisodeLower": "musim {season}, episode {episode}",
+    "tgSearchInSeerr": "Cari di Seerr",
+    "tgSeerrSearchHint": "Cari film dan serial (mis. \"Lost S02E05\")",
+    "tgMissingInThisSeason": "Belum ada di musim ini",
+    "tgMissingSeasonsOpenSeries": "{count, plural, other{Belum ada musim}} {list} - buka serial untuk melihat semua musim",
+    "tgProjectOnGitHub": "Tortugarr di GitHub",
+    "tgProjectOnGitHubSubtitle": "Kode sumber, rilis, dan laporan masalah",
+    "tgBuiltOnMoonfinCredit": "Tortugarr dibangun di atas Moonfin (GPL), karya para pengembang Moonfin.",
+    "tgCredits": "Ucapan terima kasih",
+    "tgCreditsThanks": "Dengan rendah hati kami berterima kasih: tanpa proyek-proyek ini dan orang-orang di belakangnya, Tortugarr tidak akan pernah ada.",
+    "tgCreditMoonfin": "Aplikasi yang menjadi dasar Tortugarr (GPL)",
+    "tgCreditJellyfin": "Server media",
+    "tgCreditSeerr": "Penemuan dan permintaan",
+    "tgCreditRadarr": "Film",
+    "tgCreditSonarr": "Serial",
+    "tgCreditProwlarr": "Pengelola indexer",
+    "tgCreditBazarr": "Subtitle",
+    "tgCreditFlareSolverr": "Pembantu Cloudflare untuk indexer",
+    "tgCreditQbittorrent": "Klien unduhan, pilihan bawaan penginstal",
+    "tgCreditTmdb": "Data film dan serial, poster dan gambar",
+    "tgCreditOpenSubtitles": "Subtitle, diambil melalui Bazarr",
+    "tgTmdbNotice": "Produk ini menggunakan API TMDB, tetapi tidak didukung atau disertifikasi oleh TMDB.",
+    "tgLoadingLogoSize": "Ukuran logo pemuatan",
+    "tgLoadingLogoSizeSubtitle": "Logo yang berputar saat video dimuat",
+    "tgSubtitleLanguages": "Bahasa subtitle",
+    "tgSubtitleLanguagesSubtitle": "Ditampilkan di menu subtitle: {languages}",
+    "tgShowAllSubLangsOffChosen": "Mati: menu subtitle hanya menampilkan bahasa yang Anda pilih",
+    "tgDiscoveryLanguages": "Bahasa di Sedang tren dan Populer",
+    "tgDiscoveryLanguagesSubtitle": "Ditampilkan: {languages}",
+    "tgHideForeignOnChosen": "Hidup: Sedang tren dan Populer hanya menampilkan bahasa yang Anda pilih",
+    "tgShowLanguageBadges": "Tampilkan lencana bahasa",
+    "tgShowLanguageBadgesOn": "Hidup: judul menampilkan bahasanya (EN, NO, SE …)",
+    "tgShowLanguageBadgesOff": "Mati: tidak ada lencana bahasa pada judul"
 }
