@@ -73,8 +73,8 @@ def main():
               {"Id": "u2", "Name": "kid", "Policy": {"EnableAllFolders": False, "EnabledFolders": ["id-TV Shows"]}}])
     tb.jellyfin_libraries(jf)
     f = jf.folders
-    check("Movies keeps its own folders", set(f["Movies"]["Locations"]) == {"/data/media/movies", "/data/library/3", "/data/my-own"},
-          f["Movies"]["Locations"])
+    check("Movies keeps the user's folders; Tortugarr's own (Linux disk) goes, new titles go to /data/library/3",
+          set(f["Movies"]["Locations"]) == {"/data/library/3", "/data/my-own"}, f["Movies"]["Locations"])
     check("a path added by hand is left alone", "/data/my-own" in f["Movies"]["Locations"])
     check("Clips left TV Shows", "/data/library/1" not in f["TV Shows"]["Locations"])
     check("Home Videos library made for Clips",
@@ -95,6 +95,13 @@ def main():
     tb.jellyfin_libraries(jf2)
     check("without an adult library the XXX folder is not shown anywhere",
           all("/data/library/5" not in x["Locations"] for x in jf2.folders.values()))
+
+    tb.STATE["new_titles_in_extra_only"] = False
+    jf5 = FakeJellyfin({"Movies": {"CollectionType": "movies", "Locations": ["/data/library/3"]}})
+    tb.jellyfin_libraries(jf5)
+    check("with own folders as a choice too, Tortugarr's movie folder is in Movies",
+          "/data/media/movies" in jf5.folders["Movies"]["Locations"], jf5.folders)
+    del tb.STATE["new_titles_in_extra_only"]
 
     # 2026-10-20: the user made "Music & Conserts" for the MUSIC folder; Tortugarr leaves it there.
     jf3 = FakeJellyfin({"Music & Conserts": {"CollectionType": "movies", "Locations": ["/data/library/8"]},

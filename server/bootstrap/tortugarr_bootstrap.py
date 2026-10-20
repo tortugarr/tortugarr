@@ -1445,11 +1445,16 @@ def jellyfin_startup():
 EXTRA_LIBRARY = {"movies": ("Movies", "movies"), "tv": ("TV Shows", "tvshows"),
                  "music": ("Music Videos", "musicvideos"), "other": ("Home Videos", "homevideos")}
 EXTRA_PATH_RE = re.compile(r"^/data/library/[0-9]+/?$")
+OWN_MEDIA_PATHS = {"/data/media/movies", "/data/media/tv"}
 
 
 def extra_library_paths():
     """{library name: (collection type, [paths])} for Tortugarr's folders and the extra ones."""
-    wanted = {"Movies": ("movies", ["/data/media/movies"]), "TV Shows": ("tvshows", ["/data/media/tv"])}
+    # Tortugarr's own folders only while new titles may go there: with the user's own movie or
+    # series folders they stay out (on WSL they are the Linux disk; the user removed them from
+    # the libraries on 2026-10-20 and repair put them back).
+    wanted = {"Movies": ("movies", [p for p in ["/data/media/movies"] if p in new_title_roots("radarr")]),
+              "TV Shows": ("tvshows", [p for p in ["/data/media/tv"] if p in new_title_roots("sonarr")])}
     for extra in STATE.get("extra_libraries", []):
         lib = EXTRA_LIBRARY.get(extra.get("type"))
         if lib:
@@ -1503,10 +1508,11 @@ def jellyfin_libraries(h):
             continue
         keep = set(wanted.get(name, ("", []))[1]) | set(jellyfin_adult_paths() if folder_is_adult(folder) else [])
         for p in folder.get("Locations", []):
-            if EXTRA_PATH_RE.match(p) and p.rstrip("/") not in {k.rstrip("/") for k in keep}:
+            if (EXTRA_PATH_RE.match(p) or p.rstrip("/") in OWN_MEDIA_PATHS) \
+                    and p.rstrip("/") not in {k.rstrip("/") for k in keep}:
                 q = urllib.parse.urlencode({"name": name, "path": p, "refreshLibrary": "true"})
                 h.delete(f"/Library/VirtualFolders/Paths?{q}")
-                ok(f"jellyfin: removed {p} from '{name}' (that folder's type changed)")
+                ok(f"jellyfin: removed {p} from '{name}' (that folder's type changed, or new titles go to your own folders)")
     jellyfin_library_access(h, created)
     jellyfin_adult_folders(h)
 
@@ -1563,7 +1569,14 @@ def drop_stale_adult_library(h):
         locs = [l.rstrip("/") for l in f.get("Locations", [])]
         if locs != [ADULT_SAVE_PATH]:
             continue
-        items = h.get(f"/Items?ParentId={f.get('ItemId')}&Recursive=true&Limit=0")
+        # The plugin hides the adult library from every account, the administrator too, so the
+        # count is asked with Tortugarr's API key (no user).
+        path = f"/Items?ParentId={f.get('ItemId')}&Recursive=true&Limit=0"
+        try:
+            items = h.get(path)
+        except BootstrapError:
+            base = getattr(h, "base", "http://jellyfin:8096")
+            items = Http(base, headers={"Authorization": f'MediaBrowser Token="{jellyfin_api_key(h)}"'}).get(path)
         if (items or {}).get("TotalRecordCount", 1) == 0:
             h.delete(f"/Library/VirtualFolders?{urllib.parse.urlencode({'name': f['Name'], 'refreshLibrary': 'true'})}")
             ok(f"jellyfin: removed the empty library '{f['Name']}' ({ADULT_SAVE_PATH}, replaced by your adult folder)")
