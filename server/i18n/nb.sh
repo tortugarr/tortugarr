@@ -87,6 +87,7 @@ MSG[ext_failed_unattended]="Fikk ikke kontakt med den eksterne qBittorrent (EXT_
 MSG[ext_no_paths]="qBittorrent sa ikke hvor den lagrer nedlastinger (Verktøy > Innstillinger > Nedlastinger > Standard lagringssti)."
 MSG[ext_mount]="qBittorrent lagrer i %s - Radarr og Sonarr leser det fra %s (inne i Docker: %s)"
 MSG[ext_host_missing]="%s finnes ikke på denne maskinen. Radarr og Sonarr kan ikke importere derfra før den gjør det (en Windows-disk må være montert under /mnt i WSL)."
+MSG[ext_will_create]="%s blir laget (med radarr og sonarr inni) når du bekrefter oppsummeringen"
 MSG[ext_copy_note]="Merk: hardlenker virker ikke på tvers av en Windows-disk, så en ferdig nedlasting kopieres inn i biblioteket og tar dobbel plass så lenge den fortsatt deles."
 MSG[q_ext_more_drive]="Laste ned til disk %s: også (%s GB ledig)? Tortugarr legger da hver nedlasting på disken med mest plass (lager %s)"
 MSG[ext_drive_failed]="Fikk ikke laget %s - sjekk at disken er skrivbar"

@@ -89,6 +89,7 @@ MSG[ext_failed_unattended]="Could not connect to the external qBittorrent (EXT_Q
 MSG[ext_no_paths]="qBittorrent did not tell where it saves downloads (Tools > Options > Downloads > Default Save Path)."
 MSG[ext_mount]="qBittorrent saves in %s - Radarr and Sonarr read it from %s (inside Docker: %s)"
 MSG[ext_host_missing]="%s does not exist on this machine. Radarr and Sonarr cannot import from it until it does (a Windows drive must be mounted under /mnt in WSL)."
+MSG[ext_will_create]="%s will be created (with radarr and sonarr inside) when you confirm the summary"
 MSG[ext_copy_note]="Note: hardlinks do not work across a Windows drive, so a finished download is copied into the library and takes space twice while it is still seeding."
 MSG[q_ext_more_drive]="Also download to drive %s: (%s GB free)? Tortugarr then puts each download on the drive with the most room (creates %s)"
 MSG[ext_drive_failed]="Could not create %s - check that the drive is writable"

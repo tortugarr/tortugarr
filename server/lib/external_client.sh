@@ -159,7 +159,11 @@ ask_external_qbit() {
   while read -r m; do
     host=$(jq -r .host_path <<< "$m")
     note "$(t ext_mount "$(jq -r .remote <<< "$m")" "$host" "$(jq -r .container_path <<< "$m")")"
-    [ -d "$host" ] || warning "$(t ext_host_missing "$host")"
+    # A new Downloads folder on a mounted drive is made after the summary is confirmed.
+    if [ ! -d "$host" ]; then
+      if [ -d "$(cut -d/ -f1-3 <<< "$host")" ]; then note "$(t ext_will_create "$host")"
+      else warning "$(t ext_host_missing "$host")"; fi
+    fi
   done < <(jq -c '.mounts[]' <<< "$EXT_QBIT_JSON")
   say "$(t ext_copy_note)"
 }
