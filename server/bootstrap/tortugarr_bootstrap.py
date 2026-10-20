@@ -673,7 +673,7 @@ def import_existing(app, h, root):
     if not unmapped:
         return
     profile = quality_profile_id(h)
-    added, missed = [], []
+    added, missed, copies = [], [], []
     for u in unmapped:
         name = u["name"]
         m = re.match(r"^(.*?)\s*\((\d{4})\)", name)
@@ -686,6 +686,10 @@ def import_existing(app, h, root):
         pick = next((r for r in found if year and r.get("year") == year), found[0] if found else None)
         if not pick:
             missed.append(name)
+            continue
+        if pick.get("id"):
+            # Lookup gives the library id of a title Radarr/Sonarr has already: another copy.
+            copies.append(f"{name} (also in {pick.get('path', '?')})")
             continue
         body = dict(pick)
         body.update({"qualityProfileId": profile, "path": u["path"], "rootFolderPath": root, "monitored": False})
@@ -700,11 +704,14 @@ def import_existing(app, h, root):
             h.post(f"/{kind}", body)
             added.append(name)
         except BootstrapError as e:
-            missed.append(f"{name} ({str(e)[-80:]})")
+            m = re.search(r'"errorMessage":\s*"([^"]+)"', str(e))
+            missed.append(f"{name} ({m.group(1) if m else str(e)[-80:]})")
     if added:
         ok(f"{app}: {len(added)} existing title(s) in {root} registered (unmonitored)")
     if missed:
         warn(f"{app}: not recognised in {root}: {'; '.join(missed)} - add them in {app.capitalize()} > Library Import")
+    if copies:
+        info(f"{app}: second copies in {root}, left alone: {'; '.join(copies)} - delete the copy you do not want")
 
 
 def download_client_values(app, client):
@@ -933,6 +940,10 @@ def folder_names(h, path):
     return {d.get("name") for d in listing.get("directories", [])}
 
 
+def title_has_files(t):
+    return bool(t.get("hasFile") or (t.get("statistics") or {}).get("episodeFileCount"))
+
+
 def relink_moved_titles(app, h):
     """Points titles back at their folder when it is no longer where Radarr/Sonarr have it. Each
     extra media folder sits at /data/library/N; installers before 4.20.01 numbered them again
@@ -972,8 +983,11 @@ def relink_moved_titles(app, h):
         found = [r for r in roots if r != root and has(r, name)]
         if len(found) == 1:
             target = found[0]
-        elif wrong_type and not found:
+        elif wrong_type and not found and not title_has_files(t):
             target = roomiest
+        elif wrong_type and not found:
+            stray.append(t["path"])
+            continue
         else:
             continue
         new_path = f"{target}/{name}"
@@ -1002,6 +1016,14 @@ def relink_moved_titles(app, h):
     if stray:
         warn(f"{app}: in a folder that is not a {app.capitalize()} folder any more: {'; '.join(stray)} - "
              f"delete them in {app.capitalize()} if they do not belong there (do not delete the files)")
+    if app == "radarr":
+        # Radarr adds missing collection movies to the collection's root folder; one that is gone
+        # is a health error.
+        coll = [c for c in h.get("/collection") if c.get("rootFolderPath", "").rstrip("/") not in roots]
+        for c in coll:
+            h.put(f"/collection/{c['id']}", dict(c, rootFolderPath=roomiest))
+        if coll:
+            ok(f"radarr: {len(coll)} collection(s) now add to {roomiest}")
     used = {t["path"].rstrip("/").rpartition("/")[0] for t in titles}
     for f in folders:
         path = f["path"].rstrip("/")

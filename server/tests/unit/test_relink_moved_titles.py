@@ -111,6 +111,40 @@ def main():
     tb.relink_moved_titles("sonarr", sonarr)
     check("running again changes nothing", len(sonarr.puts) == puts)
 
+    # Radarr, 2026-10-20: collections kept adding to /data/library/1 after it was removed.
+    class FakeRadarr(FakeSonarr):
+        def get(self, path):
+            if path == "/movie":
+                return [dict(s) for s in self.series.values()]
+            if path == "/collection":
+                return [dict(c) for c in self.collections]
+            return super().get(path)
+
+        def put(self, path, body):
+            if path.startswith("/collection/"):
+                self.collections = [body if c["id"] == body["id"] else c for c in self.collections]
+            else:
+                super().put(path, body)
+
+    tb.STATE["extra_libraries"] = [
+        {"host_path": "/mnt/e/-=Clips=-/", "container_path": "/data/library/1", "type": "other", "arr_manage": False},
+        {"host_path": "/mnt/e/-=MOVIES=-/", "container_path": "/data/library/3", "type": "movies", "arr_manage": True}]
+    radarr = FakeRadarr(
+        series=[{"id": 1, "path": "/data/library/1/Sacrifice (2026)", "hasFile": False},
+                {"id": 2, "path": "/data/library/1/Hans Zimmer Live", "hasFile": True}],
+        folders={"/data/library/3": set()},
+        roots=["/data/library/1", "/data/media/movies", "/data/library/3"],
+        free={"/data/media/movies": 800, "/data/library/3": 50})
+    radarr.collections = [{"id": 1, "rootFolderPath": "/data/library/1"}, {"id": 2, "rootFolderPath": "/data/library/3"}]
+    del warnings[:]
+    tb.relink_moved_titles("radarr", radarr)
+    check("wanted movie leaves the clips folder for the roomiest movie folder",
+          radarr.series[1]["path"] == "/data/media/movies/Sacrifice (2026)", radarr.series[1])
+    check("movie with a file Radarr cannot see is listed, not moved",
+          radarr.series[2]["path"] == "/data/library/1/Hans Zimmer Live" and any("Hans Zimmer" in w for w in warnings), warnings)
+    check("collection moved off the clips folder, the other kept",
+          [c["rootFolderPath"] for c in radarr.collections] == ["/data/media/movies", "/data/library/3"], radarr.collections)
+
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 
