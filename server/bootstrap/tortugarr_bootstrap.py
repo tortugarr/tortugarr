@@ -673,7 +673,7 @@ def import_existing(app, h, root):
     if not unmapped:
         return
     profile = quality_profile_id(h)
-    added, missed, copies = [], [], []
+    added, missed, copies, linked, adopted = [], [], [], [], set()
     for u in unmapped:
         name = u["name"]
         m = re.match(r"^(.*?)\s*\((\d{4})\)", name)
@@ -688,8 +688,20 @@ def import_existing(app, h, root):
             missed.append(name)
             continue
         if pick.get("id"):
-            # Lookup gives the library id of a title Radarr/Sonarr has already: another copy.
-            copies.append(f"{name} (also in {pick.get('path', '?')})")
+            # Lookup gives the library id of a title Radarr/Sonarr has already. Without files there
+            # (a request whose download was moved here by hand) it takes this folder; with files
+            # this is a second copy.
+            lib = h.get(f"/{kind}/{pick['id']}")
+            if title_has_files(lib) or lib["id"] in adopted:
+                copies.append(f"{name} (also in {lib.get('path', '?')})")
+                continue
+            h.put(f"/{kind}/{lib['id']}?moveFiles=false", dict(lib, path=u["path"], rootFolderPath=root))
+            if app == "radarr":
+                h.post("/command", {"name": "RefreshMovie", "movieIds": [lib["id"]]})
+            else:
+                h.post("/command", {"name": "RefreshSeries", "seriesIds": [lib["id"]]})
+            adopted.add(lib["id"])
+            linked.append(name)
             continue
         body = dict(pick)
         body.update({"qualityProfileId": profile, "path": u["path"], "rootFolderPath": root, "monitored": False})
@@ -710,6 +722,8 @@ def import_existing(app, h, root):
         ok(f"{app}: {len(added)} existing title(s) in {root} registered (unmonitored)")
     if missed:
         warn(f"{app}: not recognised in {root}: {'; '.join(missed)} - add them in {app.capitalize()} > Library Import")
+    if linked:
+        ok(f"{app}: {len(linked)} wanted title(s) found in {root} and pointed there: {'; '.join(linked)}")
     if copies:
         info(f"{app}: second copies in {root}, left alone: {'; '.join(copies)} - delete the copy you do not want")
 
