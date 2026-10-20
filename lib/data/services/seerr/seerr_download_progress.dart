@@ -1,4 +1,43 @@
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
+import '../tortugarr/tortugarr_plugin_client.dart';
 import 'seerr_api_models.dart';
+
+/// Bytes left per download as qBittorrent reports them now. Seerr copies the
+/// figures from Radarr/Sonarr once a minute, and they ask qBittorrent once a
+/// minute: on 2026-10-20 the TV showed 17 % for a finished download. The
+/// pollers call [refresh]; [fromItems] prefers these figures when fresh.
+class LiveDownloadProgress {
+  static const _minGap = Duration(seconds: 3);
+  static const _maxAge = Duration(seconds: 60);
+  static Map<String, int> _left = const {};
+  static DateTime? _at;
+
+  static Future<void> refresh() async {
+    final at = _at;
+    if (at != null && DateTime.now().difference(at) < _minGap) return;
+    try {
+      _left = await TortugarrPluginClient().downloadsLeft();
+      _at = DateTime.now();
+    } catch (_) {
+      // No plugin or no qBittorrent: the Seerr figures stay.
+      _left = const {};
+      _at = null;
+    }
+  }
+
+  @visibleForTesting
+  static void setForTest(Map<String, int>? left) {
+    _left = left ?? const {};
+    _at = left == null ? null : DateTime.now();
+  }
+
+  static int? leftFor(String downloadId) {
+    final at = _at;
+    if (at == null || DateTime.now().difference(at) > _maxAge) return null;
+    return _left[downloadId.toUpperCase()];
+  }
+}
 
 /// Aggregated download progress for a Seerr media item, combining the
 /// Radarr/Sonarr queue entries the server reports in downloadStatus.
@@ -75,7 +114,7 @@ class SeerrDownloadSummary {
       final id = item.downloadId;
       if (id == null || id.isEmpty || !seen.add(id)) continue;
       total += size;
-      left += (item.sizeLeft ?? 0).clamp(0, size);
+      left += (LiveDownloadProgress.leftFor(id) ?? item.sizeLeft ?? 0).clamp(0, size);
     }
     if (total <= 0) return null;
     return SeerrDownloadSummary(

@@ -385,7 +385,7 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
   bool _movie4kEnabled = true;
   bool _series4kEnabled = true;
 
-  static const _downloadPollInterval = Duration(seconds: 15);
+  static const _downloadPollInterval = Duration(seconds: 5);
   static const _waitingPollInterval = Duration(seconds: 30);
 
   Timer? _statusPollTimer;
@@ -450,6 +450,7 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
       return;
     }
     try {
+      await LiveDownloadProgress.refresh();
       if (_state.isTv) {
         final details = await _repo.getTvDetails(_state.tmdbId);
         _state = _state.copyWith(tv: details);

@@ -61,4 +61,17 @@ void main() {
     });
     expect(item.downloadId, 'SABnzbd_nzo_abc');
   });
+
+  test('live qBittorrent figures win over the minute-old Seerr ones', () {
+    LiveDownloadProgress.setForTest({'ABC': 0});
+    final s = SeerrDownloadSummary.fromItems(const [
+      SeerrDownloadingItem(size: 1000, sizeLeft: 830, downloadId: 'abc'),
+    ])!;
+    expect(s.percent, 100);
+    LiveDownloadProgress.setForTest(null);
+    final old = SeerrDownloadSummary.fromItems(const [
+      SeerrDownloadingItem(size: 1000, sizeLeft: 830, downloadId: 'abc'),
+    ])!;
+    expect(old.percent, 17);
+  });
 }

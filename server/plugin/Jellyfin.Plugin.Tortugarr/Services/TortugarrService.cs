@@ -1119,6 +1119,7 @@ public sealed class TortugarrService
     public async Task<object> Downloads(CancellationToken ct)
     {
         var items = new List<object>();
+        var live = await LiveTorrents(ct).ConfigureAwait(false);
         foreach (var (arr, kind) in new[] { (Radarr, "movie"), (Sonarr, "episode") })
         {
             var q = await arr.Get(kind == "movie" ? "/queue?pageSize=200&includeMovie=true" : "/queue?pageSize=200&includeSeries=true&includeEpisode=true", ct).ConfigureAwait(false);
@@ -1131,6 +1132,12 @@ public sealed class TortugarrService
 
                 var size = (double?)r["size"] ?? 0;
                 var left = (double?)r["sizeleft"] ?? 0;
+                // Radarr/Sonarr ask the client once a minute; qBittorrent knows it now.
+                if (live.TryGetValue((string?)r["downloadId"] ?? string.Empty, out var now))
+                {
+                    (size, left) = (now.Size > 0 ? now.Size : size, now.Left);
+                }
+
                 items.Add(new
                 {
                     downloadId = (string?)r["downloadId"],
@@ -1153,6 +1160,37 @@ public sealed class TortugarrService
 
         items.AddRange(await AdultDownloads(ct).ConfigureAwait(false));
         return new { items };
+    }
+
+    /// <summary>Size and bytes left per torrent hash from qBittorrent; empty for another client
+    /// or when qBittorrent does not answer (the Radarr/Sonarr figures are used then).</summary>
+    private async Task<Dictionary<string, (double Size, double Left)>> LiveTorrents(CancellationToken ct)
+    {
+        var live = new Dictionary<string, (double, double)>(StringComparer.OrdinalIgnoreCase);
+        if (Cfg.DownloadClientType != "qbittorrent")
+        {
+            return live;
+        }
+
+        try
+        {
+            var qbit = Qbit;
+            var torrents = (await qbit.List(Cfg.MovieCategory, ct).ConfigureAwait(false))
+                .Concat(await qbit.List(Cfg.TvCategory, ct).ConfigureAwait(false));
+            foreach (var t in torrents)
+            {
+                if ((string?)t?["hash"] is { } hash)
+                {
+                    live[hash] = ((double?)t["size"] ?? 0, (double?)t["amount_left"] ?? 0);
+                }
+            }
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            _log.LogDebug(e, "Tortugarr: live qBittorrent progress unavailable");
+        }
+
+        return live;
     }
 
     private static string Status(JsonNode r)

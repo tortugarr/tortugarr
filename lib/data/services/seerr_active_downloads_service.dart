@@ -180,6 +180,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
     if (!prefs.enabled) return const [];
 
     final repo = GetIt.instance<SeerrRepository>();
+    await LiveDownloadProgress.refresh();
     // Seerr filter values: 'processing' = currently downloading or
     // partially-available, 'pending' = awaiting approval. Both produce a
     // progress bar that the user expects to see.

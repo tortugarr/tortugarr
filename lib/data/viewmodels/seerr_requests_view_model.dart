@@ -112,7 +112,7 @@ class SeerrRequestsViewModel extends ChangeNotifier {
   void _syncDownloadPolling() {
     if (_hasActiveDownloads) {
       _downloadPollTimer ??= Timer.periodic(
-        const Duration(seconds: 15),
+        const Duration(seconds: 5),
         (_) => _pollDownloads(),
       );
     } else {
@@ -132,6 +132,7 @@ class SeerrRequestsViewModel extends ChangeNotifier {
       return;
     }
     try {
+      await LiveDownloadProgress.refresh();
       final response = await _repo.getRequests(
         filter: _state.filter.apiValue,
         sort: _state.sort,
