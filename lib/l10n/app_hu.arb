@@ -9240,7 +9240,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Írd felül az észlelt elrendezést, ha az eszközt a rendszer hibásan ismeri fel. A módosítások érvénybe lépéséhez indítsd újra a Moonfint.",
+    "interfaceLayoutSubtitle": "Írd felül az észlelt elrendezést, ha az eszközt a rendszer hibásan ismeri fel. A módosítások érvénybe lépéséhez indítsd újra a Tortugarrt.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -9624,7 +9624,7 @@
     "@shortcutToggleFullscreen": {
         "description": "F11 and Alt+Enter anywhere, F in the player"
     },
-    "shortcutQuit": "Kilépés a Moonfinből",
+    "shortcutQuit": "Kilépés a Tortugarrből",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },
@@ -10030,7 +10030,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "A Moonfin alkalmazásban használt betöltési animációk testreszabása",
+    "loadingAnimationDescription": "A Tortugarr alkalmazásban használt betöltési animációk testreszabása",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10042,9 +10042,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Moonfin logo",
+    "loadingAnimationImageMoonfinLogo": "Tortugarr logo",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Moonfin Logo"
+        "description": "Loading animation image option: Tortugarr Logo"
     },
     "loadingAnimationImageSpinner": "Forgó betöltésjelző",
     "@loadingAnimationImageSpinner": {
@@ -10058,13 +10058,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Moonfin fázisok",
+    "loadingAnimationImageMoonfinPhases": "Tortugarr fázisok",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Neonfin fázisok",
+    "loadingAnimationImageNeonfinPhases": "Neon fázisok",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSize": "Animáció mérete",
     "@loadingAnimationSize": {

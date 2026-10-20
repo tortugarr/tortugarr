@@ -498,7 +498,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Moonfin pentru ca modificările să aibă efect.';
+      'Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Tortugarr pentru ca modificările să aibă efect.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automat';
@@ -2166,7 +2166,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Ecran complet activat sau dezactivat';
 
   @override
-  String get shortcutQuit => 'Ieși din Moonfin';
+  String get shortcutQuit => 'Ieși din Tortugarr';
 
   @override
   String get shortcutPlayPause => 'Redă sau pune pe pauză';
@@ -3169,7 +3169,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Personalizează animațiile de încărcare folosite în Moonfin';
+      'Personalizează animațiile de încărcare folosite în Tortugarr';
 
   @override
   String get loadingAnimationConfiguration =>
@@ -3179,7 +3179,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get loadingAnimationImage => 'Imagine';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Sigla Moonfin';
+  String get loadingAnimationImageMoonfinLogo => 'Sigla Tortugarr';
 
   @override
   String get loadingAnimationImageSpinner => 'Spinner';
@@ -3191,10 +3191,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => 'Fazele Lunii';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Fazele Moonfin';
+  String get loadingAnimationImageMoonfinPhases => 'Fazele Tortugarr';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Fazele Neonfin';
+  String get loadingAnimationImageNeonfinPhases => 'Fazele Neon';
 
   @override
   String get loadingAnimationSize => 'Dimensiunea animației';
@@ -4515,7 +4515,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android permite aplicației Moonfin să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.';
+      'Android permite aplicației Tortugarr să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.';
 
   @override
   String get saveToDownloadsFolder => 'Salvează în folderul Descărcări';
@@ -5202,7 +5202,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get screensaverBackdropBlack => 'Negru';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => 'Calm';
@@ -5217,7 +5217,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get screensaverAdditionalComponent => 'Componentă suplimentară';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Sigla Moonfin';
+  String get screensaverComponentMoonfinLogo => 'Sigla Tortugarr';
 
   @override
   String get screensaverComponentRunner => 'Alergător';
@@ -14760,7 +14760,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Calitățile transcodate se descarcă doar cât timp Moonfin este deschis. Calitatea originală se descarcă și în fundal.';
+      'Calitățile transcodate se descarcă doar cât timp Tortugarr este deschis. Calitatea originală se descarcă și în fundal.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -14768,7 +14768,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Se descarcă doar cât timp Moonfin este deschis';
+      'Se descarcă doar cât timp Tortugarr este deschis';
 
   @override
   String get autoDownloadQualityTitle => 'Calitatea descărcării automate';
@@ -14791,7 +14791,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.';
+      'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -14865,15 +14865,15 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Permite sistemului să verifice periodic dacă există episoade noi cât timp Moonfin este închis';
+      'Permite sistemului să verifice periodic dacă există episoade noi cât timp Tortugarr este închis';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Moonfin. Activeaz-o în Setările iOS.';
+      'Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Tortugarr. Activeaz-o în Setările iOS.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Utilizarea în fundal este restricționată pentru Moonfin în Setările Android.';
+      'Utilizarea în fundal este restricționată pentru Tortugarr în Setările Android.';
 
   @override
   String get autoDownloadCheckNow => 'Verifică acum';
@@ -15097,13 +15097,13 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Tortugarr icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Tortugarr banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>

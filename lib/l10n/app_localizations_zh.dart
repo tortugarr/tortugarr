@@ -477,7 +477,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get interfaceLayout => '界面布局';
 
   @override
-  String get interfaceLayoutSubtitle => '当此设备识别错误时覆盖检测到的布局。重启 Moonfin 使更改生效。';
+  String get interfaceLayoutSubtitle => '当此设备识别错误时覆盖检测到的布局。重启 Tortugarr 使更改生效。';
 
   @override
   String get interfaceLayoutAutomatic => '自动';
@@ -2089,7 +2089,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Fullscreen on or off';
 
   @override
-  String get shortcutQuit => 'Quit Moonfin';
+  String get shortcutQuit => 'Quit Tortugarr';
 
   @override
   String get shortcutPlayPause => 'Play or pause';
@@ -3061,7 +3061,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimation => '加载动画';
 
   @override
-  String get loadingAnimationDescription => '自定义 Moonfin 各处使用的加载动画';
+  String get loadingAnimationDescription => '自定义 Tortugarr 各处使用的加载动画';
 
   @override
   String get loadingAnimationConfiguration => '加载动画配置';
@@ -3070,7 +3070,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimationImage => '图像';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Moonfin 徽标';
+  String get loadingAnimationImageMoonfinLogo => 'Tortugarr 徽标';
 
   @override
   String get loadingAnimationImageSpinner => '旋转环';
@@ -3082,7 +3082,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => '月相';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Moonfin 月相';
+  String get loadingAnimationImageMoonfinPhases => 'Tortugarr 月相';
 
   @override
   String get loadingAnimationImageNeonfinPhases => '霓虹月相';
@@ -4353,7 +4353,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android 系统只允许 Moonfin 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。';
+      'Android 系统只允许 Tortugarr 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。';
 
   @override
   String get saveToDownloadsFolder => '保存到下载文件夹';
@@ -5006,7 +5006,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get screensaverBackdropBlack => '纯黑';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => '静谧';
@@ -5021,7 +5021,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get screensaverAdditionalComponent => '附加组件';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Moonfin 徽标';
+  String get screensaverComponentMoonfinLogo => 'Tortugarr 徽标';
 
   @override
   String get screensaverComponentRunner => '奔跑者';
@@ -14173,14 +14173,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      '转码画质仅在 Moonfin 运行时下载；原片画质可后台下载。';
+      '转码画质仅在 Tortugarr 运行时下载；原片画质可后台下载。';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
       '转码下载中断后无法续传，需要从头开始；原片画质支持断点续传。';
 
   @override
-  String get autoDownloadForegroundOnly => '仅 Moonfin 运行时才会下载';
+  String get autoDownloadForegroundOnly => '仅 Tortugarr 运行时才会下载';
 
   @override
   String get autoDownloadQualityTitle => '自动下载画质';
@@ -14203,7 +14203,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.';
+      'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -14276,15 +14276,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      '允许系统在 Moonfin 关闭时定期检查新剧集';
+      '允许系统在 Tortugarr 关闭时定期检查新剧集';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Moonfin 的后台应用刷新已被禁用，请前往 iOS 设置开启。';
+      'Tortugarr 的后台应用刷新已被禁用，请前往 iOS 设置开启。';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Android 设置限制了 Moonfin 后台运行权限。';
+      'Android 设置限制了 Tortugarr 后台运行权限。';
 
   @override
   String get autoDownloadCheckNow => '立即检查';
@@ -14499,13 +14499,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Tortugarr icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Tortugarr banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>

@@ -565,7 +565,7 @@ abstract class AppLocalizations {
   /// Explanation under the detail screen style setting
   ///
   /// In en, this message translates to:
-  /// **'Classic is the original centered moonfin layout. Modern is a responsive cinematic layout. Spotlight is a hero-first layout with pop-up content cards. Nouveau is a full-screen layout with sections stacked down the page. Minimalist is artwork, one play button and the episodes.'**
+  /// **'Classic is the original centered Tortugarr layout. Modern is a responsive cinematic layout. Spotlight is a hero-first layout with pop-up content cards. Nouveau is a full-screen layout with sections stacked down the page. Minimalist is artwork, one play button and the episodes.'**
   String get detailScreenStyleSubtitle;
 
   /// Detail screen style option: the classic centered layout
@@ -871,7 +871,7 @@ abstract class AppLocalizations {
   /// Subtitle for the interface layout setting
   ///
   /// In en, this message translates to:
-  /// **'Override the detected layout when this device is read wrong. Restart Moonfin for changes to take effect.'**
+  /// **'Override the detected layout when this device is read wrong. Restart Tortugarr for changes to take effect.'**
   String get interfaceLayoutSubtitle;
 
   /// Interface layout option: detect from the device
@@ -3697,7 +3697,7 @@ abstract class AppLocalizations {
   /// What Ctrl+Q does on desktop
   ///
   /// In en, this message translates to:
-  /// **'Quit Moonfin'**
+  /// **'Quit Tortugarr'**
   String get shortcutQuit;
 
   /// Player shortcut action
@@ -5413,7 +5413,7 @@ abstract class AppLocalizations {
   /// Description for loading animation customization settings
   ///
   /// In en, this message translates to:
-  /// **'Customize the loading animations used throughout Moonfin'**
+  /// **'Customize the loading animations used throughout Tortugarr'**
   String get loadingAnimationDescription;
 
   /// Subtitle header for loading animation settings
@@ -5428,10 +5428,10 @@ abstract class AppLocalizations {
   /// **'Image'**
   String get loadingAnimationImage;
 
-  /// Loading animation image option: Moonfin Logo
+  /// Loading animation image option: Tortugarr Logo
   ///
   /// In en, this message translates to:
-  /// **'Moonfin Logo'**
+  /// **'Tortugarr Logo'**
   String get loadingAnimationImageMoonfinLogo;
 
   /// Loading animation image option: Spinner
@@ -5452,16 +5452,16 @@ abstract class AppLocalizations {
   /// **'Moon Phases'**
   String get loadingAnimationImageMoonPhases;
 
-  /// Loading animation image option: Moonfin Phases in brand gradient
+  /// Loading animation image option: Tortugarr Phases in brand gradient
   ///
   /// In en, this message translates to:
-  /// **'Moonfin Phases'**
+  /// **'Tortugarr Phases'**
   String get loadingAnimationImageMoonfinPhases;
 
-  /// Loading animation image option: Neonfin Phases in neon colors
+  /// Loading animation image option: Neon Phases in neon colors
   ///
   /// In en, this message translates to:
-  /// **'Neonfin Phases'**
+  /// **'Neon Phases'**
   String get loadingAnimationImageNeonfinPhases;
 
   /// Title for loading animation size selection
@@ -7879,7 +7879,7 @@ abstract class AppLocalizations {
   /// Note shown when the only download location Android allows is the default one
   ///
   /// In en, this message translates to:
-  /// **'Android only lets Moonfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.'**
+  /// **'Android only lets Tortugarr write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.'**
   String get downloadLocationLimitedByAndroid;
 
   /// Setting for saving to downloads folder
@@ -9106,10 +9106,10 @@ abstract class AppLocalizations {
   /// **'Black'**
   String get screensaverBackdropBlack;
 
-  /// Screensaver backdrop: Moonfin
+  /// Screensaver backdrop: Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Moonfin'**
+  /// **'Tortugarr'**
   String get screensaverBackdropMoonfin;
 
   /// Screensaver backdrop: Calm
@@ -9136,10 +9136,10 @@ abstract class AppLocalizations {
   /// **'Additional Component'**
   String get screensaverAdditionalComponent;
 
-  /// Screensaver component: Moonfin Logo
+  /// Screensaver component: Tortugarr Logo
   ///
   /// In en, this message translates to:
-  /// **'Moonfin Logo'**
+  /// **'Tortugarr Logo'**
   String get screensaverComponentMoonfinLogo;
 
   /// Screensaver component: Runner
@@ -25630,7 +25630,7 @@ abstract class AppLocalizations {
   /// Shown under transcoded options when choosing the quality of an auto-download subscription
   ///
   /// In en, this message translates to:
-  /// **'Transcoded qualities only download while Moonfin is open. Original quality also downloads in the background.'**
+  /// **'Transcoded qualities only download while Tortugarr is open. Original quality also downloads in the background.'**
   String get autoDownloadTranscodedForegroundNote;
 
   /// Shown under a running transcoded download that a subscription queued
@@ -25642,7 +25642,7 @@ abstract class AppLocalizations {
   /// Short note next to a followed series in a transcoded quality
   ///
   /// In en, this message translates to:
-  /// **'Downloads only while Moonfin is open'**
+  /// **'Downloads only while Tortugarr is open'**
   String get autoDownloadForegroundOnly;
 
   /// Title of the quality sheet when it is opened to create an auto-download subscription
@@ -25678,7 +25678,7 @@ abstract class AppLocalizations {
   /// Explains the smart downloads switch, including that watched episodes are deleted
   ///
   /// In en, this message translates to:
-  /// **'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.'**
+  /// **'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.'**
   String get smartDownloadsEnableDescription;
 
   /// Setting for how many unwatched episodes of a series stay downloaded after one is watched
@@ -25798,19 +25798,19 @@ abstract class AppLocalizations {
   /// Explains the background refresh setting
   ///
   /// In en, this message translates to:
-  /// **'Allow the system to check for new episodes periodically while Moonfin is closed'**
+  /// **'Allow the system to check for new episodes periodically while Tortugarr is closed'**
   String get autoDownloadBackgroundRefreshSubtitle;
 
   /// Shown when iOS forbids background refresh for the app
   ///
   /// In en, this message translates to:
-  /// **'Background App Refresh is disabled for Moonfin. Enable it in iOS Settings.'**
+  /// **'Background App Refresh is disabled for Tortugarr. Enable it in iOS Settings.'**
   String get autoDownloadBackgroundRefreshDenied;
 
   /// Shown when Android restricts the app from running in the background
   ///
   /// In en, this message translates to:
-  /// **'Background usage is restricted for Moonfin in Android Settings.'**
+  /// **'Background usage is restricted for Tortugarr in Android Settings.'**
   String get autoDownloadBackgroundRestrictedAndroid;
 
   /// Button that runs a subscription check immediately
@@ -26099,7 +26099,7 @@ abstract class AppLocalizations {
   /// **'Apple TV home screen'**
   String get appleTvHomeScreen;
 
-  /// Apple TV settings label for what the tvOS home screen shows above the Moonfin icon. Top Shelf is Apple's name for that area
+  /// Apple TV settings label for what the tvOS home screen shows above the Tortugarr icon. Top Shelf is Apple's name for that area
   ///
   /// In en, this message translates to:
   /// **'Top Shelf'**
@@ -26108,7 +26108,7 @@ abstract class AppLocalizations {
   /// Apple TV settings subtitle for the Top Shelf option
   ///
   /// In en, this message translates to:
-  /// **'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.'**
+  /// **'What the Apple TV home screen shows above the Tortugarr icon when it is selected. This setting stays on this device.'**
   String get topShelfDescription;
 
   /// Top Shelf option that shows a carousel of the newest items from the home screen's Latest rows
@@ -26117,10 +26117,10 @@ abstract class AppLocalizations {
   /// **'Latest media'**
   String get topShelfLatestMedia;
 
-  /// Top Shelf option that shows only the static Moonfin logo banner, nothing from the library
+  /// Top Shelf option that shows only the static Tortugarr logo banner, nothing from the library
   ///
   /// In en, this message translates to:
-  /// **'Moonfin banner'**
+  /// **'Tortugarr banner'**
   String get topShelfAppBanner;
 
   /// iPhone playback setting that holds the picture back from the camera housing in landscape
@@ -26597,7 +26597,7 @@ abstract class AppLocalizations {
   /// **'Show All'**
   String get showAll;
 
-  /// Settings entry showing that this app was built on the Moonfin project
+  /// Settings entry showing that this app was built on the Tortugarr project
   ///
   /// In en, this message translates to:
   /// **'Built on Moonfin'**

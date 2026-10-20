@@ -9179,7 +9179,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Android permite aplicației Moonfin să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.",
+    "downloadLocationLimitedByAndroid": "Android permite aplicației Tortugarr să scrie doar în folderele proprii, iar acest dispozitiv nu are stocare detașabilă. Activează mai sus „Salvează în folderul Descărcări” pentru a păstra descărcările într-un loc accesibil și altor aplicații.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9662,7 +9662,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Moonfin pentru ca modificările să aibă efect.",
+    "interfaceLayoutSubtitle": "Suprascrie aspectul detectat când acest dispozitiv este recunoscut greșit. Repornește Tortugarr pentru ca modificările să aibă efect.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -10284,7 +10284,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "Personalizează animațiile de încărcare folosite în Moonfin",
+    "loadingAnimationDescription": "Personalizează animațiile de încărcare folosite în Tortugarr",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10300,9 +10300,9 @@
     "@loadingAnimationImageSpinner": {
         "description": "Loading animation image option: Spinner"
     },
-    "loadingAnimationImageMoonfinLogo": "Sigla Moonfin",
+    "loadingAnimationImageMoonfinLogo": "Sigla Tortugarr",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Moonfin Logo"
+        "description": "Loading animation image option: Tortugarr Logo"
     },
     "loadingAnimationImageRunner": "Alergător",
     "@loadingAnimationImageRunner": {
@@ -10312,13 +10312,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Fazele Moonfin",
+    "loadingAnimationImageMoonfinPhases": "Fazele Tortugarr",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Fazele Neonfin",
+    "loadingAnimationImageNeonfinPhases": "Fazele Neon",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSizeThumbnail": "Miniatură",
     "@loadingAnimationSizeThumbnail": {
@@ -10432,9 +10432,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Moonfin",
+    "screensaverBackdropMoonfin": "Tortugarr",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Moonfin"
+        "description": "Screensaver backdrop: Tortugarr"
     },
     "screensaverBackdropCalm": "Calm",
     "@screensaverBackdropCalm": {
@@ -10452,9 +10452,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Sigla Moonfin",
+    "screensaverComponentMoonfinLogo": "Sigla Tortugarr",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Moonfin Logo"
+        "description": "Screensaver component: Tortugarr Logo"
     },
     "screensaverComponentRunner": "Alergător",
     "@screensaverComponentRunner": {
@@ -10631,7 +10631,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "Calitățile transcodate se descarcă doar cât timp Moonfin este deschis. Calitatea originală se descarcă și în fundal.",
+    "autoDownloadTranscodedForegroundNote": "Calitățile transcodate se descarcă doar cât timp Tortugarr este deschis. Calitatea originală se descarcă și în fundal.",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -10639,7 +10639,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "Se descarcă doar cât timp Moonfin este deschis",
+    "autoDownloadForegroundOnly": "Se descarcă doar cât timp Tortugarr este deschis",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -10705,7 +10705,7 @@
     "@autoDownloadDeleteAfterWeek": {
         "description": "Delete-after-watching option"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "Permite sistemului să verifice periodic dacă există episoade noi cât timp Moonfin este închis",
+    "autoDownloadBackgroundRefreshSubtitle": "Permite sistemului să verifice periodic dacă există episoade noi cât timp Tortugarr este închis",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
@@ -10713,7 +10713,7 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshDenied": "Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Moonfin. Activeaz-o în Setările iOS.",
+    "autoDownloadBackgroundRefreshDenied": "Reîmprospătarea aplicațiilor în fundal este dezactivată pentru Tortugarr. Activeaz-o în Setările iOS.",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
@@ -10721,7 +10721,7 @@
     "@autoDownloadCheckNow": {
         "description": "Button that runs a subscription check immediately"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "Utilizarea în fundal este restricționată pentru Moonfin în Setările Android.",
+    "autoDownloadBackgroundRestrictedAndroid": "Utilizarea în fundal este restricționată pentru Tortugarr în Setările Android.",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },
@@ -11220,7 +11220,7 @@
     "@shortcutPlayPause": {
         "description": "Player shortcut action"
     },
-    "shortcutQuit": "Ieși din Moonfin",
+    "shortcutQuit": "Ieși din Tortugarr",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },

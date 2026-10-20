@@ -475,11 +475,11 @@ class _RemoteControlSheetState extends State<_RemoteControlSheet>
               session['DeviceName']?.toString() ??
               session['Client']?.toString() ??
               '',
-          // Moonfin's receivers replace the phrase. Others may insert text,
-          // so leave their SendString as an explicit one-shot send.
-          liveUpdates: (session['Client']?.toString() ?? '')
-              .toLowerCase()
-              .contains('moonfin'),
+          // Tortugarr's and Moonfin's receivers replace the phrase. Others
+          // may insert text, so leave their SendString as an explicit
+          // one-shot send.
+          liveUpdates: RegExp('moonfin|tortugarr')
+              .hasMatch((session['Client']?.toString() ?? '').toLowerCase()),
           connected: _searchConnected,
         ),
       );

@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "क्लासिक मूल, केंद्र में सजा moonfin लेआउट है। मॉडर्न एक रिस्पॉन्सिव सिनेमैटिक लेआउट है।",
+    "detailScreenStyleSubtitle": "क्लासिक मूल, केंद्र में सजा Tortugarr लेआउट है। मॉडर्न एक रिस्पॉन्सिव सिनेमैटिक लेआउट है।",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },

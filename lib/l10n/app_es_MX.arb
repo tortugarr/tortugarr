@@ -7223,7 +7223,7 @@
     "@settingsPlaybackTimeDisplayDescription": {
         "description": "Setting description for the progress bar time option"
     },
-    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de moonfin. Moderno es un diseño cinematográfico adaptable.",
+    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de Tortugarr. Moderno es un diseño cinematográfico adaptable.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7272,7 +7272,7 @@
             }
         }
     },
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },

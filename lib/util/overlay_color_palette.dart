@@ -102,7 +102,7 @@ abstract final class OverlayColorPalette {
       'dark_green' => l10n.darkGreen,
       'slate' => l10n.slate,
       'indigo' => l10n.indigo,
-      'moonfinCyan' => 'Moonfin Cyan',
+      'moonfinCyan' => 'Tortugarr Cyan',
       'neonPulseMagenta' => 'Neon Pulse Magenta',
       _ => normalizeKey(key),
     };

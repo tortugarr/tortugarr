@@ -9152,7 +9152,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Overstyr oppsettet dersom enheten gjenkjennes feil. Start Moonfin på nytt for å ta i bruk endringene.",
+    "interfaceLayoutSubtitle": "Overstyr oppsettet dersom enheten gjenkjennes feil. Start Tortugarr på nytt for å ta i bruk endringene.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },

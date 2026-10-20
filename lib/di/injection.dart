@@ -47,21 +47,21 @@ bool _legacyStereoAacFallbackDefaultForPlatform() {
 }
 
 String _clientName() {
-  if (PlatformDetection.isAppleTV) return 'Moonfin for tvOS';
+  if (PlatformDetection.isAppleTV) return 'Tortugarr for tvOS';
   if (PlatformDetection.isAndroid && PlatformDetection.isTV) {
-    return 'Moonfin for Android TV';
+    return 'Tortugarr for Android TV';
   }
   if (PlatformDetection.isWeb) {
     return webRuntimeConfig.pluginMode
-        ? 'Moonfin for Web'
-        : 'Moonfin on Github';
+        ? 'Tortugarr for Web'
+        : 'Tortugarr on GitHub';
   }
-  if (PlatformDetection.isAndroid) return 'Moonfin for Android';
-  if (PlatformDetection.isIOS) return 'Moonfin for iOS';
-  if (PlatformDetection.isMacOS) return 'Moonfin for macOS';
-  if (PlatformDetection.isWindows) return 'Moonfin for Windows';
-  if (PlatformDetection.isLinux) return 'Moonfin for Linux';
-  return 'Moonfin';
+  if (PlatformDetection.isAndroid) return 'Tortugarr for Android';
+  if (PlatformDetection.isIOS) return 'Tortugarr for iOS';
+  if (PlatformDetection.isMacOS) return 'Tortugarr for macOS';
+  if (PlatformDetection.isWindows) return 'Tortugarr for Windows';
+  if (PlatformDetection.isLinux) return 'Tortugarr for Linux';
+  return 'Tortugarr';
 }
 
 String _joinNonEmpty(List<String?> parts, String separator) {

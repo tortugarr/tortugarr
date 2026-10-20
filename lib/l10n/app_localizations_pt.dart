@@ -483,7 +483,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Override the detected layout when this device is read wrong. Restart Moonfin for changes to take effect.';
+      'Override the detected layout when this device is read wrong. Restart Tortugarr for changes to take effect.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automatic';
@@ -2142,7 +2142,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Fullscreen on or off';
 
   @override
-  String get shortcutQuit => 'Quit Moonfin';
+  String get shortcutQuit => 'Quit Tortugarr';
 
   @override
   String get shortcutPlayPause => 'Play or pause';
@@ -3136,7 +3136,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Customize the loading animations used throughout Moonfin';
+      'Customize the loading animations used throughout Tortugarr';
 
   @override
   String get loadingAnimationConfiguration => 'Loading Animation Configuration';
@@ -3145,7 +3145,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loadingAnimationImage => 'Image';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Moonfin Logo';
+  String get loadingAnimationImageMoonfinLogo => 'Tortugarr Logo';
 
   @override
   String get loadingAnimationImageSpinner => 'Spinner';
@@ -3157,10 +3157,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => 'Moon Phases';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Moonfin Phases';
+  String get loadingAnimationImageMoonfinPhases => 'Tortugarr Phases';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Neonfin Phases';
+  String get loadingAnimationImageNeonfinPhases => 'Neon Phases';
 
   @override
   String get loadingAnimationSize => 'Animation Size';
@@ -4477,7 +4477,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android only lets Moonfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.';
+      'Android only lets Tortugarr write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.';
 
   @override
   String get saveToDownloadsFolder => 'Salvar na pasta Downloads';
@@ -5164,7 +5164,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get screensaverBackdropBlack => 'Black';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => 'Calm';
@@ -5179,7 +5179,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get screensaverAdditionalComponent => 'Additional Component';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Moonfin Logo';
+  String get screensaverComponentMoonfinLogo => 'Tortugarr Logo';
 
   @override
   String get screensaverComponentRunner => 'Runner';
@@ -14695,7 +14695,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Transcoded qualities only download while Moonfin is open. Original quality also downloads in the background.';
+      'Transcoded qualities only download while Tortugarr is open. Original quality also downloads in the background.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -14703,7 +14703,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Downloads only while Moonfin is open';
+      'Downloads only while Tortugarr is open';
 
   @override
   String get autoDownloadQualityTitle => 'Auto-download quality';
@@ -14726,7 +14726,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.';
+      'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -14800,15 +14800,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Allow the system to check for new episodes periodically while Moonfin is closed';
+      'Allow the system to check for new episodes periodically while Tortugarr is closed';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Background App Refresh is disabled for Moonfin. Enable it in iOS Settings.';
+      'Background App Refresh is disabled for Tortugarr. Enable it in iOS Settings.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Background usage is restricted for Moonfin in Android Settings.';
+      'Background usage is restricted for Tortugarr in Android Settings.';
 
   @override
   String get autoDownloadCheckNow => 'Check Now';
@@ -15026,13 +15026,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'What the Apple TV home screen shows above the Moonfin icon when it is selected. This setting stays on this device.';
+      'What the Apple TV home screen shows above the Tortugarr icon when it is selected. This setting stays on this device.';
 
   @override
   String get topShelfLatestMedia => 'Latest media';
 
   @override
-  String get topShelfAppBanner => 'Moonfin banner';
+  String get topShelfAppBanner => 'Tortugarr banner';
 
   @override
   String get keepVideoClearOfDynamicIsland =>
@@ -16788,7 +16788,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Substituir o layout detectado quando este dispositivo for identificado incorretamente. Reinicie o Moonfin para que as alterações tenham efeito.';
+      'Substituir o layout detectado quando este dispositivo for identificado incorretamente. Reinicie o Tortugarr para que as alterações tenham efeito.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automamatico';
@@ -19436,7 +19436,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get loadingAnimationImage => 'Imagem da animação';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Logo do Moonfin';
+  String get loadingAnimationImageMoonfinLogo => 'Logo do Tortugarr';
 
   @override
   String get loadingAnimationImageSpinner => 'Indicador giratório';
@@ -19448,10 +19448,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get loadingAnimationImageMoonPhases => 'Fases da Lua';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Fases do Moonfin';
+  String get loadingAnimationImageMoonfinPhases => 'Fases do Tortugarr';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Fases do Neonfin';
+  String get loadingAnimationImageNeonfinPhases => 'Fases do Neon';
 
   @override
   String get loadingAnimationSize => 'Tamanho da animação';
@@ -21442,7 +21442,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get screensaverBackdropBlack => 'Preto';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => 'Calmo';
@@ -21457,7 +21457,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get screensaverAdditionalComponent => 'Componente adicional';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Logo do Moonfin';
+  String get screensaverComponentMoonfinLogo => 'Logo do Tortugarr';
 
   @override
   String get screensaverComponentRunner => 'Corredor';
@@ -32893,7 +32893,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Substitui a disposição detetada se não for adequada ao dispositivo. Reinicia o Moonfin para aplicar as alterações.';
+      'Substitui a disposição detetada se não for adequada ao dispositivo. Reinicia o Tortugarr para aplicar as alterações.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automática';
@@ -34510,7 +34510,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get shortcutToggleFullscreen => 'Ativar ou desativar o ecrã inteiro';
 
   @override
-  String get shortcutQuit => 'Sair do Moonfin';
+  String get shortcutQuit => 'Sair do Tortugarr';
 
   @override
   String get shortcutPlayPause => 'Reproduzir ou pausar';
@@ -35479,7 +35479,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get loadingAnimationDescription =>
-      'Personalizar as animações de carregamento utilizadas em todo o Moonfin';
+      'Personalizar as animações de carregamento utilizadas em todo o Tortugarr';
 
   @override
   String get loadingAnimationConfiguration =>
@@ -35489,7 +35489,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get loadingAnimationImage => 'Imagem';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Logótipo do Moonfin';
+  String get loadingAnimationImageMoonfinLogo => 'Logótipo do Tortugarr';
 
   @override
   String get loadingAnimationImageSpinner => 'Indicador de carregamento';
@@ -35501,10 +35501,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get loadingAnimationImageMoonPhases => 'Fases da Lua';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Fases do Moonfin';
+  String get loadingAnimationImageMoonfinPhases => 'Fases do Tortugarr';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Fases do Neonfin';
+  String get loadingAnimationImageNeonfinPhases => 'Fases do Neon';
 
   @override
   String get loadingAnimationSize => 'Tamanho da animação';
@@ -36794,7 +36794,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'O Android só permite ao Moonfin escrever nas suas próprias pastas e este dispositivo não tem armazenamento amovível. Ativa Guardar na pasta Downloads acima para guardar as transferências num local acessível a outras aplicações.';
+      'O Android só permite ao Tortugarr escrever nas suas próprias pastas e este dispositivo não tem armazenamento amovível. Ativa Guardar na pasta Downloads acima para guardar as transferências num local acessível a outras aplicações.';
 
   @override
   String get saveToDownloadsFolder => 'Guardar na pasta Downloads';
@@ -37375,7 +37375,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get screensaverBackdropBlack => 'Preto';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => 'Calmo';
@@ -37390,7 +37390,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get screensaverAdditionalComponent => 'Componente adicional';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Logótipo do Moonfin';
+  String get screensaverComponentMoonfinLogo => 'Logótipo do Tortugarr';
 
   @override
   String get screensaverComponentRunner => 'Corredor';
@@ -45414,7 +45414,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'As qualidades transcodificadas só são transferidas enquanto o Moonfin está aberto. A qualidade original também permite transferências em segundo plano.';
+      'As qualidades transcodificadas só são transferidas enquanto o Tortugarr está aberto. A qualidade original também permite transferências em segundo plano.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -45422,7 +45422,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Transfere apenas enquanto o Moonfin está aberto';
+      'Transfere apenas enquanto o Tortugarr está aberto';
 
   @override
   String get autoDownloadQualityTitle =>
@@ -45498,15 +45498,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Permitir ao sistema procurar novos episódios periodicamente enquanto o Moonfin está fechado';
+      'Permitir ao sistema procurar novos episódios periodicamente enquanto o Tortugarr está fechado';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'A atualização em segundo plano está desativada para o Moonfin. Ativa-a nas definições do iOS.';
+      'A atualização em segundo plano está desativada para o Tortugarr. Ativa-a nas definições do iOS.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'A utilização em segundo plano está restringida para o Moonfin nas definições do Android.';
+      'A utilização em segundo plano está restringida para o Tortugarr nas definições do Android.';
 
   @override
   String get autoDownloadCheckNow => 'Verificar agora';
@@ -45726,13 +45726,13 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get topShelfDescription =>
-      'O que aparece no ecrã inicial da Apple TV acima do ícone do Moonfin quando este está selecionado. Esta definição fica guardada neste dispositivo.';
+      'O que aparece no ecrã inicial da Apple TV acima do ícone do Tortugarr quando este está selecionado. Esta definição fica guardada neste dispositivo.';
 
   @override
   String get topShelfLatestMedia => 'Conteúdo recente';
 
   @override
-  String get topShelfAppBanner => 'Banner do Moonfin';
+  String get topShelfAppBanner => 'Banner do Tortugarr';
 
   @override
   String get keepVideoClearOfDynamicIsland =>

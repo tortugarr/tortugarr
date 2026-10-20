@@ -1059,15 +1059,15 @@ class DeviceProfileBuilder {
   static String _profileName() {
     if (PlatformDetection.isWeb) {
       return webRuntimeConfig.pluginMode
-          ? 'Moonfin for Web'
-          : 'Moonfin on Github';
+          ? 'Tortugarr for Web'
+          : 'Tortugarr on GitHub';
     }
-    if (PlatformDetection.isAndroid) return 'Moonfin for Android';
-    if (PlatformDetection.isIOS) return 'Moonfin iOS';
-    if (PlatformDetection.isMacOS) return 'Moonfin macOS';
-    if (PlatformDetection.isWindows) return 'Moonfin Windows';
-    if (PlatformDetection.isLinux) return 'Moonfin Linux';
-    return 'Moonfin';
+    if (PlatformDetection.isAndroid) return 'Tortugarr for Android';
+    if (PlatformDetection.isIOS) return 'Tortugarr iOS';
+    if (PlatformDetection.isMacOS) return 'Tortugarr macOS';
+    if (PlatformDetection.isWindows) return 'Tortugarr Windows';
+    if (PlatformDetection.isLinux) return 'Tortugarr Linux';
+    return 'Tortugarr';
   }
 
   static List<Map<String, dynamic>> _codecProfiles({

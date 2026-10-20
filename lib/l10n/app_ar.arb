@@ -9005,7 +9005,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "غير شكل الواجهة إذا تم التعرّف على الجهاز بشكل خاطئ. أعد تشغيل Moonfin حتى تظهر التغييرات.",
+    "interfaceLayoutSubtitle": "غير شكل الواجهة إذا تم التعرّف على الجهاز بشكل خاطئ. أعد تشغيل Tortugarr حتى تظهر التغييرات.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -9120,7 +9120,7 @@
             }
         }
     },
-    "recordSeries": "إقتراحات Moonfin",
+    "recordSeries": "إقتراحات Tortugarr",
     "@recordSeries": {
         "description": "Button label to record every showing of a live TV series"
     },

@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "«Класичний» — це початковий центрований макет moonfin. «Сучасний» — адаптивний кінематографічний макет.",
+    "detailScreenStyleSubtitle": "«Класичний» — це початковий центрований макет Tortugarr. «Сучасний» — адаптивний кінематографічний макет.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },

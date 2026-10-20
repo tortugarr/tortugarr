@@ -9270,7 +9270,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Substituir o layout detectado quando este dispositivo for identificado incorretamente. Reinicie o Moonfin para que as alterações tenham efeito.",
+    "interfaceLayoutSubtitle": "Substituir o layout detectado quando este dispositivo for identificado incorretamente. Reinicie o Tortugarr para que as alterações tenham efeito.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -9972,9 +9972,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Logo do Moonfin",
+    "loadingAnimationImageMoonfinLogo": "Logo do Tortugarr",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Moonfin Logo"
+        "description": "Loading animation image option: Tortugarr Logo"
     },
     "loadingAnimationImageSpinner": "Indicador giratório",
     "@loadingAnimationImageSpinner": {
@@ -9988,13 +9988,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Fases do Moonfin",
+    "loadingAnimationImageMoonfinPhases": "Fases do Tortugarr",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Fases do Neonfin",
+    "loadingAnimationImageNeonfinPhases": "Fases do Neon",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSize": "Tamanho da animação",
     "@loadingAnimationSize": {
@@ -10528,9 +10528,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Moonfin",
+    "screensaverBackdropMoonfin": "Tortugarr",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Moonfin"
+        "description": "Screensaver backdrop: Tortugarr"
     },
     "screensaverBackdropCalm": "Calmo",
     "@screensaverBackdropCalm": {
@@ -10548,9 +10548,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Logo do Moonfin",
+    "screensaverComponentMoonfinLogo": "Logo do Tortugarr",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Moonfin Logo"
+        "description": "Screensaver component: Tortugarr Logo"
     },
     "screensaverComponentRunner": "Corredor",
     "@screensaverComponentRunner": {
@@ -14488,7 +14488,7 @@
     },
     "topShelf": "Destaques da tela inicial",
     "@topShelf": {
-        "description": "Apple TV settings label for what the tvOS home screen shows above the Moonfin icon. Top Shelf is Apple's name for that area"
+        "description": "Apple TV settings label for what the tvOS home screen shows above the Tortugarr icon. Top Shelf is Apple's name for that area"
     },
     "topShelfDescription": "Escolha o conteúdo exibido na área de destaque da tela inicial da Apple TV",
     "@topShelfDescription": {
@@ -14500,7 +14500,7 @@
     },
     "topShelfAppBanner": "Banner do aplicativo",
     "@topShelfAppBanner": {
-        "description": "Top Shelf option that shows only the static Moonfin logo banner, nothing from the library"
+        "description": "Top Shelf option that shows only the static Tortugarr logo banner, nothing from the library"
     },
     "detailsPage": "Página de detalhes",
     "@detailsPage": {

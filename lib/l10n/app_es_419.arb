@@ -7401,7 +7401,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de moonfin. Moderno es un diseño cinematográfico adaptable.",
+    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de Tortugarr. Moderno es un diseño cinematográfico adaptable.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },

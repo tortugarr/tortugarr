@@ -7635,7 +7635,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Classic is the original centred Moonfin layout. Modern is a responsive cinematic layout. Spotlight is a hero-first layout with pop-up content cards. Nouveau is a full-screen layout with sections stacked down the page. Minimalist is artwork, one play button and the episodes.",
+    "detailScreenStyleSubtitle": "Classic is the original centred Tortugarr layout. Modern is a responsive cinematic layout. Spotlight is a hero-first layout with pop-up content cards. Nouveau is a full-screen layout with sections stacked down the page. Minimalist is artwork, one play button and the episodes.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7667,13 +7667,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Use the Moonfin Recommends local-library algorithm, Jellyfin Recommends server engine, or the online TMDb's Similarity Metrics. Note: Online recommendations require Seerr integration.",
+    "recommendationSystemSubtitle": "Use the Tortugarr Recommends local-library algorithm, Jellyfin Recommends server engine, or the online TMDb's Similarity Metrics. Note: Online recommendations require Seerr integration.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Moonfin Recommends",
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Moonfin Recommends"
+        "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb Similarity",
     "@recommendationSystemTmdb": {
@@ -7683,7 +7683,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limit Moonfin Recommends suggestions by parental rating of target media",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limit Tortugarr Recommends suggestions by parental rating of target media",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7747,7 +7747,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Custom themes alter visual elements across Moonfin. Choose one of these options to suit your style.",
+    "customThemeSubtitle": "Custom themes alter visual elements across Tortugarr. Choose one of these options to suit your style.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7933,7 +7933,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Sign in to Moonfin on your phone",
+    "carSignInPrompt": "Sign in to Tortugarr on your phone",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8201,7 +8201,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Android only lets Moonfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.",
+    "downloadLocationLimitedByAndroid": "Android only lets Tortugarr write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9333,7 +9333,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller is Flutter's modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Moonfin to apply.",
+    "impellerRenderingSubtitle": "Impeller is Flutter's modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Tortugarr to apply.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -9344,7 +9344,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin needs to restart to change the rendering engine. Close the app now, then reopen it to apply.",
+    "impellerRestartMessage": "Tortugarr needs to restart to change the rendering engine. Close the app now, then reopen it to apply.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9665,7 +9665,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Override the detected layout when this device is read wrong. Restart Moonfin for changes to take effect.",
+    "interfaceLayoutSubtitle": "Override the detected layout when this device is read wrong. Restart Tortugarr for changes to take effect.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -10715,7 +10715,7 @@
     "@shortcutToggleFullscreen": {
         "description": "F11 and Alt+Enter anywhere, F in the player"
     },
-    "shortcutQuit": "Quit Moonfin",
+    "shortcutQuit": "Quit Tortugarr",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },
@@ -10934,7 +10934,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "Customize the loading animations used throughout Moonfin",
+    "loadingAnimationDescription": "Customize the loading animations used throughout Tortugarr",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10946,9 +10946,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Moonfin Logo",
+    "loadingAnimationImageMoonfinLogo": "Tortugarr Logo",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Moonfin Logo"
+        "description": "Loading animation image option: Tortugarr Logo"
     },
     "loadingAnimationImageSpinner": "Spinner",
     "@loadingAnimationImageSpinner": {
@@ -10962,13 +10962,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Moonfin Phases",
+    "loadingAnimationImageMoonfinPhases": "Tortugarr Phases",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Neonfin Phases",
+    "loadingAnimationImageNeonfinPhases": "Neon Phases",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSize": "Animation Size",
     "@loadingAnimationSize": {
@@ -11233,9 +11233,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Moonfin",
+    "screensaverBackdropMoonfin": "Tortugarr",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Moonfin"
+        "description": "Screensaver backdrop: Tortugarr"
     },
     "screensaverBackdropCalm": "Calm",
     "@screensaverBackdropCalm": {
@@ -11253,9 +11253,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Moonfin Logo",
+    "screensaverComponentMoonfinLogo": "Tortugarr Logo",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Moonfin Logo"
+        "description": "Screensaver component: Tortugarr Logo"
     },
     "screensaverComponentRunner": "Runner",
     "@screensaverComponentRunner": {
@@ -12075,7 +12075,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "Transcoded qualities only download while Moonfin is open. Original quality also downloads in the background.",
+    "autoDownloadTranscodedForegroundNote": "Transcoded qualities only download while Tortugarr is open. Original quality also downloads in the background.",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -12083,7 +12083,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "Downloads only while Moonfin is open",
+    "autoDownloadForegroundOnly": "Downloads only while Tortugarr is open",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -12153,15 +12153,15 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "Allow the system to check for new episodes periodically while Moonfin is closed",
+    "autoDownloadBackgroundRefreshSubtitle": "Allow the system to check for new episodes periodically while Tortugarr is closed",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
-    "autoDownloadBackgroundRefreshDenied": "Background App Refresh is disabled for Moonfin. Enable it in iOS Settings.",
+    "autoDownloadBackgroundRefreshDenied": "Background App Refresh is disabled for Tortugarr. Enable it in iOS Settings.",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "Background usage is restricted for Moonfin in Android Settings.",
+    "autoDownloadBackgroundRestrictedAndroid": "Background usage is restricted for Tortugarr in Android Settings.",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },

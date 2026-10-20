@@ -480,7 +480,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      '이 기기에서 잘못 읽히는 경우 감지된 레이아웃을 재정의합니다. 변경 사항을 적용하려면 Moonfin을 다시 시작하세요.';
+      '이 기기에서 잘못 읽히는 경우 감지된 레이아웃을 재정의합니다. 변경 사항을 적용하려면 Tortugarr을 다시 시작하세요.';
 
   @override
   String get interfaceLayoutAutomatic => '자동';
@@ -2096,7 +2096,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shortcutToggleFullscreen => '전체 화면 켜기/끄기';
 
   @override
-  String get shortcutQuit => 'Moonfin 종료';
+  String get shortcutQuit => 'Tortugarr 종료';
 
   @override
   String get shortcutPlayPause => '재생/일시정지';
@@ -3068,7 +3068,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Moonfin 전체에서 사용하는 로딩 애니메이션을 사용자 지정합니다';
+      'Tortugarr 전체에서 사용하는 로딩 애니메이션을 사용자 지정합니다';
 
   @override
   String get loadingAnimationConfiguration => '로딩 애니메이션 설정';
@@ -3077,7 +3077,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get loadingAnimationImage => '이미지';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Moonfin 로고';
+  String get loadingAnimationImageMoonfinLogo => 'Tortugarr 로고';
 
   @override
   String get loadingAnimationImageSpinner => '스피너';
@@ -3089,10 +3089,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => '달의 위상';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Moonfin 위상';
+  String get loadingAnimationImageMoonfinPhases => 'Tortugarr 위상';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Neonfin 위상';
+  String get loadingAnimationImageNeonfinPhases => 'Neon 위상';
 
   @override
   String get loadingAnimationSize => '애니메이션 크기';
@@ -4371,7 +4371,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android에서는 Moonfin이 소유한 폴더에만 쓸 수 있도록 제한하고 있으며, 이 기기에는 이동식 저장소가 없습니다. 다른 앱이 접근할 수 있는 위치에 다운로드 항목을 보관하려면 위의 \'다운로드 폴더에 저장\'을 켜세요.';
+      'Android에서는 Tortugarr이 소유한 폴더에만 쓸 수 있도록 제한하고 있으며, 이 기기에는 이동식 저장소가 없습니다. 다른 앱이 접근할 수 있는 위치에 다운로드 항목을 보관하려면 위의 \'다운로드 폴더에 저장\'을 켜세요.';
 
   @override
   String get saveToDownloadsFolder => '다운로드 폴더에 저장';
@@ -5029,7 +5029,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get screensaverBackdropBlack => '검은색';
 
   @override
-  String get screensaverBackdropMoonfin => 'Moonfin';
+  String get screensaverBackdropMoonfin => 'Tortugarr';
 
   @override
   String get screensaverBackdropCalm => '차분함';
@@ -5044,7 +5044,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get screensaverAdditionalComponent => '추가 요소';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Moonfin 로고';
+  String get screensaverComponentMoonfinLogo => 'Tortugarr 로고';
 
   @override
   String get screensaverComponentRunner => '러너';
@@ -14156,14 +14156,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      '트랜스코딩 품질은 Moonfin이 열려 있을 때만 다운로드됩니다. 원본 품질은 백그라운드에서도 다운로드됩니다.';
+      '트랜스코딩 품질은 Tortugarr이 열려 있을 때만 다운로드됩니다. 원본 품질은 백그라운드에서도 다운로드됩니다.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
       '트랜스코딩 다운로드는 중단되면 이어받을 수 없어 처음부터 다시 시작합니다. 원본 품질은 이어받을 수 있습니다.';
 
   @override
-  String get autoDownloadForegroundOnly => 'Moonfin이 열려 있을 때만 다운로드';
+  String get autoDownloadForegroundOnly => 'Tortugarr이 열려 있을 때만 다운로드';
 
   @override
   String get autoDownloadQualityTitle => '자동 다운로드 품질';
@@ -14186,7 +14186,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.';
+      'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => '다운로드해 둘 에피소드 수';
@@ -14260,15 +14260,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Moonfin이 닫혀 있어도 시스템이 주기적으로 새 에피소드를 확인할 수 있게 합니다';
+      'Tortugarr이 닫혀 있어도 시스템이 주기적으로 새 에피소드를 확인할 수 있게 합니다';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Moonfin의 백그라운드 앱 새로 고침이 꺼져 있습니다. iOS 설정에서 켜세요.';
+      'Tortugarr의 백그라운드 앱 새로 고침이 꺼져 있습니다. iOS 설정에서 켜세요.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Android 설정에서 Moonfin의 백그라운드 사용이 제한되어 있습니다.';
+      'Android 설정에서 Tortugarr의 백그라운드 사용이 제한되어 있습니다.';
 
   @override
   String get autoDownloadCheckNow => '지금 확인';
@@ -14482,13 +14482,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'Moonfin 아이콘을 선택했을 때 Apple TV 홈 화면에서 아이콘 위에 표시되는 내용입니다. 이 설정은 이 기기에만 저장됩니다.';
+      'Tortugarr 아이콘을 선택했을 때 Apple TV 홈 화면에서 아이콘 위에 표시되는 내용입니다. 이 설정은 이 기기에만 저장됩니다.';
 
   @override
   String get topShelfLatestMedia => '최신 미디어';
 
   @override
-  String get topShelfAppBanner => 'Moonfin 배너';
+  String get topShelfAppBanner => 'Tortugarr 배너';
 
   @override
   String get keepVideoClearOfDynamicIsland => 'Dynamic Island를 피해 영상 표시';

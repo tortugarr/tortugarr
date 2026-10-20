@@ -9318,7 +9318,7 @@
     },
     "emulatorCoreUnavailable": "Auf diesem Gerät nicht verfügbar",
     "sortOrder": "Sortierreihenfolge",
-    "interfaceLayoutSubtitle": "Überschreibt das automatisch erkannte Layout, wenn Ihr Gerät falsch erkannt wurde. Starten Sie Moonfin neu, damit die Änderungen wirksam werden.",
+    "interfaceLayoutSubtitle": "Überschreibt das automatisch erkannte Layout, wenn Ihr Gerät falsch erkannt wurde. Starten Sie Tortugarr neu, damit die Änderungen wirksam werden.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -9538,7 +9538,7 @@
     "@tvOfflineDownloadsSubtitle": {
         "description": "Subtitle for the TV-only offline downloads toggle"
     },
-    "downloadLocationLimitedByAndroid": "Android erlaubt Moonfin auf diesem Gerät nur den Zugriff auf eigene Ordner. Da kein Wechselspeicher vorhanden ist, aktivieren Sie oben „Im Downloads-Ordner speichern“, damit auch andere Apps auf die Downloads zugreifen können.",
+    "downloadLocationLimitedByAndroid": "Android erlaubt Tortugarr auf diesem Gerät nur den Zugriff auf eigene Ordner. Da kein Wechselspeicher vorhanden ist, aktivieren Sie oben „Im Downloads-Ordner speichern“, damit auch andere Apps auf die Downloads zugreifen können.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -10416,7 +10416,7 @@
     "@shortcutToggleFullscreen": {
         "description": "F11 and Alt+Enter anywhere, F in the player"
     },
-    "shortcutQuit": "Moonfin Beenden",
+    "shortcutQuit": "Tortugarr Beenden",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },
@@ -10500,13 +10500,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Moonfin Phasenweise",
+    "loadingAnimationImageMoonfinPhases": "Tortugarr Phasenweise",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Neonfin Phasenweise",
+    "loadingAnimationImageNeonfinPhases": "Neon Phasenweise",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSize": "Animationsgröße",
     "@loadingAnimationSize": {

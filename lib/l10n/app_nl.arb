@@ -7330,7 +7330,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Klassiek is de oorspronkelijke gecentreerde Moonfin-lay-out. Modern is een responsieve, filmische lay-out.",
+    "detailScreenStyleSubtitle": "Klassiek is de oorspronkelijke gecentreerde Tortugarr-lay-out. Modern is een responsieve, filmische lay-out.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -9254,7 +9254,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Android laat Moonfin alleen toe in de folders die door Moonfin gemaakt zijn. Dit apparaat heeft geen verwijderbare opslag. Zet 'opslaan naar downloadmap' aan om de downloads op te slaan op een plek waar Moonfin bij kan.",
+    "downloadLocationLimitedByAndroid": "Android laat Tortugarr alleen toe in de folders die door Tortugarr gemaakt zijn. Dit apparaat heeft geen verwijderbare opslag. Zet 'opslaan naar downloadmap' aan om de downloads op te slaan op een plek waar Tortugarr bij kan.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9639,7 +9639,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "De gedetecteerde lay-out overschrijven als dit apparaat onjuist wordt gelezen. Start Moonfin opnieuw op om de wijzigingen door te voeren.",
+    "interfaceLayoutSubtitle": "De gedetecteerde lay-out overschrijven als dit apparaat onjuist wordt gelezen. Start Tortugarr opnieuw op om de wijzigingen door te voeren.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },

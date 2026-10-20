@@ -9226,7 +9226,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Android 系统只允许 Moonfin 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。",
+    "downloadLocationLimitedByAndroid": "Android 系统只允许 Tortugarr 写入其拥有的文件夹，而此设备没有可移动存储设备。请启用上方的“保存到下载文件夹”选项，将下载内容保存到其他应用可以访问的位置。",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9460,7 +9460,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "当此设备识别错误时覆盖检测到的布局。重启 Moonfin 使更改生效。",
+    "interfaceLayoutSubtitle": "当此设备识别错误时覆盖检测到的布局。重启 Tortugarr 使更改生效。",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -10069,7 +10069,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "自定义 Moonfin 各处使用的加载动画",
+    "loadingAnimationDescription": "自定义 Tortugarr 各处使用的加载动画",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10081,9 +10081,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Moonfin 徽标",
+    "loadingAnimationImageMoonfinLogo": "Tortugarr 徽标",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Moonfin Logo"
+        "description": "Loading animation image option: Tortugarr Logo"
     },
     "loadingAnimationImageSpinner": "旋转环",
     "@loadingAnimationImageSpinner": {
@@ -10097,13 +10097,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Moonfin 月相",
+    "loadingAnimationImageMoonfinPhases": "Tortugarr 月相",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Moonfin Phases in brand gradient"
+        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
     },
     "loadingAnimationImageNeonfinPhases": "霓虹月相",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neonfin Phases in neon colors"
+        "description": "Loading animation image option: Neon Phases in neon colors"
     },
     "loadingAnimationSize": "动画尺寸",
     "@loadingAnimationSize": {
@@ -10253,9 +10253,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Moonfin",
+    "screensaverBackdropMoonfin": "Tortugarr",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Moonfin"
+        "description": "Screensaver backdrop: Tortugarr"
     },
     "screensaverBackdropCalm": "静谧",
     "@screensaverBackdropCalm": {
@@ -10273,9 +10273,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Moonfin 徽标",
+    "screensaverComponentMoonfinLogo": "Tortugarr 徽标",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Moonfin Logo"
+        "description": "Screensaver component: Tortugarr Logo"
     },
     "screensaverComponentRunner": "奔跑者",
     "@screensaverComponentRunner": {
@@ -10429,7 +10429,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "转码画质仅在 Moonfin 运行时下载；原片画质可后台下载。",
+    "autoDownloadTranscodedForegroundNote": "转码画质仅在 Tortugarr 运行时下载；原片画质可后台下载。",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -10437,7 +10437,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "仅 Moonfin 运行时才会下载",
+    "autoDownloadForegroundOnly": "仅 Tortugarr 运行时才会下载",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -10507,15 +10507,15 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "允许系统在 Moonfin 关闭时定期检查新剧集",
+    "autoDownloadBackgroundRefreshSubtitle": "允许系统在 Tortugarr 关闭时定期检查新剧集",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
-    "autoDownloadBackgroundRefreshDenied": "Moonfin 的后台应用刷新已被禁用，请前往 iOS 设置开启。",
+    "autoDownloadBackgroundRefreshDenied": "Tortugarr 的后台应用刷新已被禁用，请前往 iOS 设置开启。",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "Android 设置限制了 Moonfin 后台运行权限。",
+    "autoDownloadBackgroundRestrictedAndroid": "Android 设置限制了 Tortugarr 后台运行权限。",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },
