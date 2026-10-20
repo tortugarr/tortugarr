@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../widgets/overlay_sheet.dart' show InlineBackInterceptor;
+
 /// D-pad navigation for the admin area on TV.
 ///
 /// The admin pages are built for touch. A text field keeps Up/Down for its
@@ -21,8 +23,11 @@ import 'package:flutter/services.dart';
 /// to Exit, where Back stops. Leaving is Exit's job, which goes back to
 /// Settings. Back went straight to the home screen before.
 ///
-/// A HardwareKeyboard handler sees the key before the focused widget does,
-/// which a Focus or Shortcuts above the page would not.
+/// A HardwareKeyboard handler sees the arrow keys before the focused widget
+/// does, which a Focus or Shortcuts above the page would not. Back goes
+/// through InlineBackInterceptor, which the app's own Back handling (key and
+/// system popRoute) asks first; taking the key here as well left the area
+/// anyway, because Android still delivered popRoute.
 class AdminTvKeys extends StatefulWidget {
   const AdminTvKeys({super.key, required this.child, this.pages, this.exit});
 
@@ -45,12 +50,30 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   void initState() {
     super.initState();
     HardwareKeyboard.instance.addHandler(_onKey);
+    InlineBackInterceptor.push(_onBack);
   }
 
   @override
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_onKey);
+    InlineBackInterceptor.remove(_onBack);
     super.dispose();
+  }
+
+  bool _onBack() {
+    final node = FocusManager.instance.primaryFocus;
+    final ctx = node?.context;
+    if (node == null || ctx == null || !mounted || !_insideArea(ctx)) return false;
+    final inText = ctx.widget is EditableText ||
+        ctx.findAncestorWidgetOfExactType<EditableText>() != null;
+    if (inText) {
+      SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+      if (!node.focusInDirection(TraversalDirection.down)) {
+        node.focusInDirection(TraversalDirection.up);
+      }
+      return true;
+    }
+    return _back(node, ctx);
   }
 
   bool _onKey(KeyEvent event) {
@@ -75,15 +98,6 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
       _move(node, ctx, direction);
       return true;
     }
-    final back = key == LogicalKeyboardKey.goBack || key == LogicalKeyboardKey.escape;
-    if (back && inText) {
-      SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
-      if (!node.focusInDirection(TraversalDirection.down)) {
-        node.focusInDirection(TraversalDirection.up);
-      }
-      return true;
-    }
-    if (back) return _back(node, ctx);
     return false;
   }
 

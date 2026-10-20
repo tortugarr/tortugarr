@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moonfin/ui/screens/admin/widgets/admin_tv_keys.dart';
+import 'package:moonfin/ui/widgets/overlay_sheet.dart' show InlineBackInterceptor;
 
 void main() {
   late FocusNode top;
@@ -50,8 +51,8 @@ void main() {
     top.requestFocus();
     await tester.pump();
 
-    // The test harness has no physical key for goBack; Escape takes the same path.
-    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    // The app's Back handling (key and popRoute) asks InlineBackInterceptor.
+    expect(InlineBackInterceptor.handleBack(), isTrue);
     await tester.pump();
     expect(top.hasPrimaryFocus, isFalse);
     expect(slider.hasPrimaryFocus, isTrue);
@@ -153,18 +154,18 @@ void main() {
     scan.requestFocus();
     await tester.pumpAndSettle();
 
-    // The test harness has no physical key for goBack; Escape takes the same path.
-    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    // The app's Back handling (key and popRoute) asks InlineBackInterceptor.
+    expect(InlineBackInterceptor.handleBack(), isTrue);
     await tester.pumpAndSettle();
     expect(list.hasPrimaryFocus, isTrue);
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    expect(InlineBackInterceptor.handleBack(), isTrue);
     await tester.pumpAndSettle();
     expect(rail.hasPrimaryFocus, isTrue);
 
     // Back stops on Exit, however often it is pressed.
     for (var i = 0; i < 3; i++) {
-      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      expect(InlineBackInterceptor.handleBack(), isTrue);
       await tester.pumpAndSettle();
     }
     expect(rail.hasPrimaryFocus, isTrue);
