@@ -1571,7 +1571,8 @@ def drop_stale_adult_library(h):
             continue
         # The plugin hides the adult library from every account, the administrator too, so the
         # count is asked with Tortugarr's API key (no user).
-        path = f"/Items?ParentId={f.get('ItemId')}&Recursive=true&Limit=0"
+        # Files only: Jellyfin counts the library's own folder as an item.
+        path = f"/Items?ParentId={f.get('ItemId')}&Recursive=true&IsFolder=false&Limit=0"
         try:
             items = h.get(path)
         except BootstrapError:
