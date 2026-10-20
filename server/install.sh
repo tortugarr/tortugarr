@@ -326,6 +326,9 @@ show_summary() {
     "$(t s_vpn)" "$(yes_no "$VPN")" "$(t s_hwaccel)" "$(yes_no "$HWACCEL")" "$(t s_lan_ip)" "$LAN_IP" "$(t s_owner)" "$PUID:$PGID" \
     "$(t s_ports)" "Jellyfin $P_JELLYFIN, Seerr $P_SEERR, Sonarr $P_SONARR, Radarr $P_RADARR, Prowlarr $P_PROWLARR, Bazarr $P_BAZARR"
   local n; n=$(jq length <<< "${EXTRA_LIBS_JSON:-[]}")
+  if [ "$TORRENT_CLIENT" = qbittorrent-ext ]; then
+    printf '  %-26s %s\n' "$(t s_ext_downloads)" "$(jq -r '[.mounts[]?.remote] | join(", ")' <<< "${EXT_QBIT_JSON:-{\}}")"
+  fi
   [ "$n" -gt 0 ] && jq -r '.[] | "  + \(.host_path) (\(.type))"' <<< "$EXTRA_LIBS_JSON"
   echo
 }
