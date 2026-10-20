@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Kasalukuyang hitsura ng Tortugarr na nagustuhan mo",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Kasalukuyang hitsura ng Tortugarr na nagustuhan mo",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Maglaro sa Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Maglaro sa Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Hiniling ni {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Sumali sa Discord",
     "settingsJoinDiscordSubtitle": "Makipag-chat sa komunidad",
     "settingsJoinTheDiscord": "Sumali sa Discord",
-    "settingsSupportNotflix": "Suportahan ang Tortugarr",
+    "settingsSupportMoonfin": "Suportahan ang Tortugarr",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Mga lisensya",
     "settingsOpenSourceLicenseNotices": "Open-source na mga paunawa sa lisensya",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Awtomatikong i-enable ang HDR para sa HDR video playback at ibalik ang display mode pag-labas.",
     "whenFullscreen": "Kapag fullscreen",
     "transcodingLimits": "Mga Limitasyon sa Transcoding",
-    "settingsSupportNotflixSubtitle": "Mag-donate ng kape sa developer",
+    "settingsSupportMoonfinSubtitle": "Mag-donate ng kape sa developer",
     "accountPreferences": "MGA KAGUSTUHAN SA ACCOUNT",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Classic",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Classic",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb Similarity",

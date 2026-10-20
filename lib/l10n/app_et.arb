@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Praegune Tortugarr välimus, mida olete kõik armastama hakanud",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Praegune Tortugarr välimus, mida olete kõik armastama hakanud",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neoonpulss",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Mängi Tortugarris",
-    "@playInNotflix": {
+    "playInMoonfin": "Mängi Tortugarris",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Taotleja {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Liituge Discordiga",
     "settingsJoinDiscordSubtitle": "Vestelge kogukonnaga",
     "settingsJoinTheDiscord": "Liituge Discordiga",
-    "settingsSupportNotflix": "Toetage Tortugarrit",
+    "settingsSupportMoonfin": "Toetage Tortugarrit",
     "settingsLegal": "ÕIGUSLIK",
     "settingsLicenses": "Litsentsid",
     "settingsOpenSourceLicenseNotices": "Avatud lähtekoodiga litsentsi teatised",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Lubage HDR-i automaatselt HDR-video taasesitamiseks ja taastage väljumisel kuvarežiim.",
     "whenFullscreen": "Täisekraanil",
     "transcodingLimits": "Ümberkodeerimise piirangud",
-    "settingsSupportNotflixSubtitle": "Annetage arendajale kohv",
+    "settingsSupportMoonfinSubtitle": "Annetage arendajale kohv",
     "accountPreferences": "KONTO EELISTUSED",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klassikaline",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klassikaline",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moodne",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr soovitab",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr soovitab",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb sarnasus",

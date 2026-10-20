@@ -148,7 +148,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'A klasszikus az eredeti, középre igazított Tortugarr elrendezés. A modern egy reszponzív, moziszerű elrendezés.';
 
   @override
-  String get detailScreenStyleNotflix => 'Klasszikus';
+  String get detailScreenStyleMoonfin => 'Klasszikus';
 
   @override
   String get detailScreenStyleModern => 'Modern';
@@ -175,7 +175,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Használd a Tortugarr ajánlásai helyi könyvtári algoritmust vagy az online TMDb hasonlósági mutatóit. Megjegyzés: Az online ajánlásokhoz Seerr-integráció szükséges.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr ajánlásai';
+  String get recommendationSystemMoonfin => 'Tortugarr ajánlásai';
 
   @override
   String get recommendationSystemTmdb => 'TMDb hasonlóság';
@@ -240,10 +240,10 @@ class AppLocalizationsHu extends AppLocalizations {
       'Használd alapértelmezetten az eszközöd beviteli módját a szövegbevitelhez';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Az eredeti, letisztult Tortugarr alapértelmezés.';
 
   @override
@@ -3347,7 +3347,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Válassz a különböző médiasáv-stílusok közül, vagy kapcsold ki a médiasávot';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4047,7 +4047,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Lejátszás a Tortugarrben';
+  String get playInMoonfin => 'Lejátszás a Tortugarrben';
 
   @override
   String requestedByName(String name) {
@@ -8649,10 +8649,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Csatlakozz a Discordhoz';
 
   @override
-  String get settingsSupportNotflix => 'Tortugarr támogatása';
+  String get settingsSupportMoonfin => 'Tortugarr támogatása';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Hívd meg a fejlesztőt egy kávéra';
 
   @override

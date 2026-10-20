@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Поточний Tortugarr вигляд, який вам усім сподобався",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Поточний Tortugarr вигляд, який вам усім сподобався",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неоновий пульс",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Грайте в Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Грайте в Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Запит від {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Приєднуйтесь до Discord",
     "settingsJoinDiscordSubtitle": "Спілкуйтеся зі спільнотою",
     "settingsJoinTheDiscord": "Приєднуйтесь до Discord",
-    "settingsSupportNotflix": "Підтримка Tortugarr",
+    "settingsSupportMoonfin": "Підтримка Tortugarr",
     "settingsLegal": "ЮРИДИЧНИЙ",
     "settingsLicenses": "Ліцензії",
     "settingsOpenSourceLicenseNotices": "Повідомлення про ліцензію на відкрите програмне забезпечення",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Автоматично вмикайте HDR для відтворення відео HDR і відновлюйте режим відображення після виходу.",
     "whenFullscreen": "У повноекранному режимі",
     "transcodingLimits": "Обмеження перекодування",
-    "settingsSupportNotflixSubtitle": "Пригостіть розробника кавою",
+    "settingsSupportMoonfinSubtitle": "Пригостіть розробника кавою",
     "accountPreferences": "НАЛАШТУВАННЯ ОБЛІКОВОГО ЗАПИСУ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Класичний",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Класичний",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Сучасний",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr рекомендує",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr рекомендує",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Схожість TMDb",

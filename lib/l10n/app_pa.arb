@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "ਮੌਜੂਦਾ Tortugarr ਦਿੱਖ ਤੁਹਾਨੂੰ ਸਭ ਨੂੰ ਪਿਆਰ ਹੋ ਗਈ ਹੈ",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "ਮੌਜੂਦਾ Tortugarr ਦਿੱਖ ਤੁਹਾਨੂੰ ਸਭ ਨੂੰ ਪਿਆਰ ਹੋ ਗਈ ਹੈ",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "ਨਿਓਨ ਪਲਸ",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "ਮਾਕਡੀ",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr ਵਿੱਚ ਚਲਾਓ",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr ਵਿੱਚ ਚਲਾਓ",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} ਦੁਆਰਾ ਬੇਨਤੀ ਕੀਤੀ",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ",
     "settingsJoinDiscordSubtitle": "ਭਾਈਚਾਰੇ ਨਾਲ ਗੱਲਬਾਤ ਕਰੋ",
     "settingsJoinTheDiscord": "Discord ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ",
-    "settingsSupportNotflix": "ਸਹਾਇਤਾ Tortugarr",
+    "settingsSupportMoonfin": "ਸਹਾਇਤਾ Tortugarr",
     "settingsLegal": "ਕਾਨੂੰਨੀ",
     "settingsLicenses": "ਲਾਇਸੰਸ",
     "settingsOpenSourceLicenseNotices": "ਓਪਨ-ਸੋਰਸ ਲਾਇਸੰਸ ਨੋਟਿਸ",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR ਵੀਡੀਓ ਪਲੇਬੈਕ ਲਈ ਆਪਣੇ-ਆਪ HDR ਸਮਰੱਥ ਕਰੋ ਅਤੇ ਬਾਹਰ ਨਿਕਲਣ 'ਤੇ ਡਿਸਪਲੇ ਮੋਡ ਬਹਾਲ ਕਰੋ।",
     "whenFullscreen": "ਜਦੋਂ ਪੂਰੀ ਸਕ੍ਰੀਨ ਹੋਵੇ",
     "transcodingLimits": "ਟ੍ਰਾਂਸਕੋਡਿੰਗ ਸੀਮਾਵਾਂ",
-    "settingsSupportNotflixSubtitle": "ਡਿਵੈਲਪਰ ਨੂੰ ਇੱਕ ਕੌਫੀ ਦਾਨ ਕਰੋ",
+    "settingsSupportMoonfinSubtitle": "ਡਿਵੈਲਪਰ ਨੂੰ ਇੱਕ ਕੌਫੀ ਦਾਨ ਕਰੋ",
     "accountPreferences": "ਖਾਤਾ ਤਰਜੀਹਾਂ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "ਕਲਾਸਿਕ",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "ਕਲਾਸਿਕ",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "ਮਾਡਰਨ",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ਸਮਾਨਤਾ",

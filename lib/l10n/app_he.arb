@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "מראה Tortugarr נוכחי שכולכם למדתם לאהוב",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "מראה Tortugarr נוכחי שכולכם למדתם לאהוב",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "דופק ניאון",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "שחקו ב- Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "שחקו ב- Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "התבקש על ידי {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "הצטרף ל-Discord",
     "settingsJoinDiscordSubtitle": "צ'אט עם הקהילה",
     "settingsJoinTheDiscord": "הצטרף ל-Discord",
-    "settingsSupportNotflix": "תמכו ב- Tortugarr",
+    "settingsSupportMoonfin": "תמכו ב- Tortugarr",
     "settingsLegal": "מִשׁפָּטִי",
     "settingsLicenses": "רישיונות",
     "settingsOpenSourceLicenseNotices": "הודעות רישיון קוד פתוח",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "הפעל אוטומטית HDR בהפעלת וידאו HDR ושחזר את מצב התצוגה ביציאה.",
     "whenFullscreen": "במסך מלא",
     "transcodingLimits": "מגבלות המרת קידוד",
-    "settingsSupportNotflixSubtitle": "תרום כוס קפה למפתח",
+    "settingsSupportMoonfinSubtitle": "תרום כוס קפה למפתח",
     "accountPreferences": "העדפות חשבון",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "קלאסי",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "קלאסי",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "מודרני",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "דמיון TMDb",

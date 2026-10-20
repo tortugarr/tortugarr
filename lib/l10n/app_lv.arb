@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Pašreizējais Tortugarr izskats, ko jūs visi esat iemīlējuši",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Pašreizējais Tortugarr izskats, ko jūs visi esat iemīlējuši",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neona pulss",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Spēlē Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Spēlē Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Pieprasīja {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Pievienojieties Discord",
     "settingsJoinDiscordSubtitle": "Tērzējiet ar kopienu",
     "settingsJoinTheDiscord": "Pievienojieties Discord",
-    "settingsSupportNotflix": "Atbalstiet Tortugarr",
+    "settingsSupportMoonfin": "Atbalstiet Tortugarr",
     "settingsLegal": "JURIDISKĀS",
     "settingsLicenses": "Licences",
     "settingsOpenSourceLicenseNotices": "Atvērtā koda licences paziņojumi",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Automātiski ieslēgt HDR HDR video atskaņošanai un pēc iziešanas atjaunot ekrāna režīmu.",
     "whenFullscreen": "Pilnekrāna režīmā",
     "transcodingLimits": "Pārkodēšanas ierobežojumi",
-    "settingsSupportNotflixSubtitle": "Uzsauciet izstrādātājam kafiju",
+    "settingsSupportMoonfinSubtitle": "Uzsauciet izstrādātājam kafiju",
     "accountPreferences": "KONTA PREFERENCES",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasiskais",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasiskais",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modernais",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb līdzība",

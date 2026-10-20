@@ -148,7 +148,7 @@ class AppLocalizationsUk extends AppLocalizations {
       '«Класичний» — це початковий центрований макет moonfin. «Сучасний» — адаптивний кінематографічний макет.';
 
   @override
-  String get detailScreenStyleNotflix => 'Класичний';
+  String get detailScreenStyleMoonfin => 'Класичний';
 
   @override
   String get detailScreenStyleModern => 'Сучасний';
@@ -175,7 +175,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Використовуйте локальний алгоритм «Tortugarr рекомендує» або онлайн-метрики схожості TMDb. Примітка: онлайн-рекомендації потребують інтеграції з Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr рекомендує';
+  String get recommendationSystemMoonfin => 'Tortugarr рекомендує';
 
   @override
   String get recommendationSystemTmdb => 'Схожість TMDb';
@@ -240,10 +240,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Типово використовувати метод введення вашого пристрою для введення тексту';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Поточний Tortugarr вигляд, який вам усім сподобався';
 
   @override
@@ -3351,7 +3351,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Виберіть Tortugarr, MakD або вимкніть медіа-панель';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'МакД';
@@ -4044,7 +4044,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Грайте в Tortugarr';
+  String get playInMoonfin => 'Грайте в Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8641,10 +8641,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Приєднуйтесь до Discord';
 
   @override
-  String get settingsSupportNotflix => 'Підтримка Tortugarr';
+  String get settingsSupportMoonfin => 'Підтримка Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Пригостіть розробника кавою';
+  String get settingsSupportMoonfinSubtitle => 'Пригостіть розробника кавою';
 
   @override
   String get settingsLegal => 'ЮРИДИЧНИЙ';

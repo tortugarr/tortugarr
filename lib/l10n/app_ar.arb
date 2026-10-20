@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "المظهر الحالي Tortugarr الذي أحببته جميعًا",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "المظهر الحالي Tortugarr الذي أحببته جميعًا",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "نبض النيون",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "ماكد",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "العب في Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "العب في Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "تم الطلب بواسطة {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "انضم إلى Discord",
     "settingsJoinDiscordSubtitle": "الدردشة مع المجتمع",
     "settingsJoinTheDiscord": "انضم إلى Discord",
-    "settingsSupportNotflix": "الدعم Tortugarr",
+    "settingsSupportMoonfin": "الدعم Tortugarr",
     "settingsLegal": "قانوني",
     "settingsLicenses": "التراخيص",
     "settingsOpenSourceLicenseNotices": "إشعارات الترخيص مفتوحة المصدر",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "تمكين HDR تلقائيًا لتشغيل فيديو HDR واستعادة وضع العرض عند الخروج.",
     "whenFullscreen": "عندما ملء الشاشة",
     "transcodingLimits": "حدود تحويل الترميز",
-    "settingsSupportNotflixSubtitle": "تبرع بالقهوة للمطور",
+    "settingsSupportMoonfinSubtitle": "تبرع بالقهوة للمطور",
     "accountPreferences": "تفضيلات الحساب",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "كلاسيكي",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "كلاسيكي",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "حديث",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "تشابه TMDb",

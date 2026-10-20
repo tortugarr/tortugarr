@@ -147,7 +147,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '클래식은 기존의 가운데 정렬 Tortugarr 레이아웃입니다. 모던은 반응형 시네마틱 레이아웃입니다.';
 
   @override
-  String get detailScreenStyleNotflix => '클래식';
+  String get detailScreenStyleMoonfin => '클래식';
 
   @override
   String get detailScreenStyleModern => '모던';
@@ -173,7 +173,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '로컬 라이브러리 기반 Tortugarr 추천 알고리즘 또는 온라인 TMDb 유사도 지표를 사용합니다. 참고: 온라인 추천에는 Seerr 연동이 필요합니다.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr 추천';
+  String get recommendationSystemMoonfin => 'Tortugarr 추천';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 유사도';
@@ -236,10 +236,10 @@ class AppLocalizationsKo extends AppLocalizations {
       '텍스트 입력 시 기기의 입력기를 기본으로 사용합니다';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '현재 Tortugarr 룩은 여러분 모두가 좋아하게 되었습니다.';
+  String get themeMoonfinSubtitle => '현재 Tortugarr 룩은 여러분 모두가 좋아하게 되었습니다.';
 
   @override
   String get themeNeonPulse => '네온 펄스';
@@ -3248,7 +3248,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mediaBarModeDescription => '다양한 미디어 바 스타일 중 하나를 선택하거나 미디어 바를 끄십시오';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -3907,7 +3907,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Tortugarr에 플레이';
+  String get playInMoonfin => 'Tortugarr에 플레이';
 
   @override
   String requestedByName(String name) {
@@ -8315,10 +8315,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord에 가입하세요';
 
   @override
-  String get settingsSupportNotflix => 'Tortugarr 지원';
+  String get settingsSupportMoonfin => 'Tortugarr 지원';
 
   @override
-  String get settingsSupportNotflixSubtitle => '개발자에게 커피 한 잔 후원하기';
+  String get settingsSupportMoonfinSubtitle => '개발자에게 커피 한 잔 후원하기';
 
   @override
   String get settingsLegal => '합법적인';

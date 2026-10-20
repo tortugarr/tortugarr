@@ -148,7 +148,7 @@ class AppLocalizationsSw extends AppLocalizations {
       'Klasiki ni mpangilio asili wa Tortugarr ulio katikati. Kisasa ni mpangilio wa kisinema unaojirekebisha.';
 
   @override
-  String get detailScreenStyleNotflix => 'Klasiki';
+  String get detailScreenStyleMoonfin => 'Klasiki';
 
   @override
   String get detailScreenStyleModern => 'Kisasa';
@@ -175,7 +175,7 @@ class AppLocalizationsSw extends AppLocalizations {
       'Tumia algoriti ya maktaba ya ndani ya Tortugarr Recommends au Vipimo vya Ufanano vya TMDb mtandaoni. Kumbuka: Mapendekezo ya mtandaoni yanahitaji muunganisho wa Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'Ufanano wa TMDb';
@@ -239,10 +239,10 @@ class AppLocalizationsSw extends AppLocalizations {
       'Tumia mbinu ya kuingiza maandishi ya kifaa chako kama chaguo-msingi';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Mwonekano wa sasa wa Tortugarr nyote mmependa';
 
   @override
@@ -3346,7 +3346,7 @@ class AppLocalizationsSw extends AppLocalizations {
       'Chagua kati ya mitindo mbalimbali ya upau wa midia, au zima upau wa midia';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4045,7 +4045,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Cheza katika Tortugarr';
+  String get playInMoonfin => 'Cheza katika Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8637,10 +8637,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Jiunge na Discord';
 
   @override
-  String get settingsSupportNotflix => 'Msaada Tortugarr';
+  String get settingsSupportMoonfin => 'Msaada Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Mchangie msanidi kahawa';
+  String get settingsSupportMoonfinSubtitle => 'Mchangie msanidi kahawa';
 
   @override
   String get settingsLegal => 'KISHERIA';

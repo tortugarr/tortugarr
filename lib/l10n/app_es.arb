@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Aspecto actual de Tortugarr que a todos les encanta",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Aspecto actual de Tortugarr que a todos les encanta",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Pulso de neón",
@@ -3527,8 +3527,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4238,8 +4238,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Reproducir en Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Reproducir en Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Solicitado por {name}",
@@ -6603,7 +6603,7 @@
     "settingsJoinDiscord": "Únase a Discord",
     "settingsJoinDiscordSubtitle": "Chatea con la comunidad",
     "settingsJoinTheDiscord": "Únase al Discord",
-    "settingsSupportNotflix": "Apoyar Tortugarr",
+    "settingsSupportMoonfin": "Apoyar Tortugarr",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Licencias",
     "settingsOpenSourceLicenseNotices": "Avisos de licencia de código abierto",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Habilite HDR automáticamente para la reproducción de video HDR y restaure el modo de visualización al salir.",
     "whenFullscreen": "Cuando pantalla completa",
     "transcodingLimits": "Límites de transcodificación",
-    "settingsSupportNotflixSubtitle": "Dona un café al desarrollador",
+    "settingsSupportMoonfinSubtitle": "Dona un café al desarrollador",
     "accountPreferences": "PREFERENCIAS DE LA CUENTA",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Clásico",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Clásico",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moderno",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Similitud de TMDb",

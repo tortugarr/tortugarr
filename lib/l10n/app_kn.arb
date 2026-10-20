@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "ಪ್ರಸ್ತುತ Tortugarr ನೋಟ ನೀವೆಲ್ಲರೂ ಪ್ರೀತಿಸುವಂತೆ ಮಾಡಿದ್ದೀರಿ",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "ಪ್ರಸ್ತುತ Tortugarr ನೋಟ ನೀವೆಲ್ಲರೂ ಪ್ರೀತಿಸುವಂತೆ ಮಾಡಿದ್ದೀರಿ",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "ನಿಯಾನ್ ಪಲ್ಸ್",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr ನಲ್ಲಿ ಪ್ಲೇ ಮಾಡಿ",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr ನಲ್ಲಿ ಪ್ಲೇ ಮಾಡಿ",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} ವಿನಂತಿಸಿದ್ದಾರೆ",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord ಸೇರಿ",
     "settingsJoinDiscordSubtitle": "ಸಮುದಾಯದೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
     "settingsJoinTheDiscord": "Discord ಸೇರಿ",
-    "settingsSupportNotflix": "ಬೆಂಬಲ Tortugarr",
+    "settingsSupportMoonfin": "ಬೆಂಬಲ Tortugarr",
     "settingsLegal": "ಕಾನೂನುಬದ್ಧ",
     "settingsLicenses": "ಪರವಾನಗಿಗಳು",
     "settingsOpenSourceLicenseNotices": "ಓಪನ್ ಸೋರ್ಸ್ ಪರವಾನಗಿ ಸೂಚನೆಗಳು",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR ವಿಡಿಯೋ ಪ್ಲೇಬ್ಯಾಕ್‌ಗಾಗಿ HDR ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಕ್ರಿಯಗೊಳಿಸಿ ಮತ್ತು ನಿರ್ಗಮಿಸಿದಾಗ ಪ್ರದರ್ಶನ ಮೋಡ್ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಿ.",
     "whenFullscreen": "ಪೂರ್ಣಪರದೆಯಲ್ಲಿದ್ದಾಗ",
     "transcodingLimits": "ಟ್ರಾನ್ಸ್‌ಕೋಡಿಂಗ್ ಮಿತಿಗಳು",
-    "settingsSupportNotflixSubtitle": "ಡೆವಲಪರ್‌ಗೆ ಒಂದು ಕಾಫಿ ದಾನ ಮಾಡಿ",
+    "settingsSupportMoonfinSubtitle": "ಡೆವಲಪರ್‌ಗೆ ಒಂದು ಕಾಫಿ ದಾನ ಮಾಡಿ",
     "accountPreferences": "ಖಾತೆ ಆದ್ಯತೆಗಳು",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "ಕ್ಲಾಸಿಕ್",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "ಕ್ಲಾಸಿಕ್",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "ಮಾಡರ್ನ್",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ಸಾಮ್ಯತೆ",

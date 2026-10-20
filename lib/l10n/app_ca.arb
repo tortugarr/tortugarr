@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "L'aspecte original de Tortugarr.",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "L'aspecte original de Tortugarr.",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "pols de neó",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Reprodueix a Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Reprodueix a Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Sol·licitat per {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Uneix-te a Discord",
     "settingsJoinDiscordSubtitle": "Xateja amb la comunitat",
     "settingsJoinTheDiscord": "Uneix-te al Discord",
-    "settingsSupportNotflix": "Suport Tortugarr",
+    "settingsSupportMoonfin": "Suport Tortugarr",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Llicències",
     "settingsOpenSourceLicenseNotices": "Avisos de llicència de codi obert",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Activa automàticament HDR per a la reproducció de vídeo HDR i restaura el mode de visualització en sortir.",
     "whenFullscreen": "Quan a pantalla completa",
     "transcodingLimits": "Límits de transcodificació",
-    "settingsSupportNotflixSubtitle": "Dona un cafè al desenvolupador",
+    "settingsSupportMoonfinSubtitle": "Dona un cafè al desenvolupador",
     "enableTunnelingSubtitle": "Avançat. Envia àudio i vídeo a través d'una ruta de maquinari acoblada. Desactivat per defecte perquè causa caigudes d'àudio / vídeo en alguns dispositius.",
     "@enableTunnelingSubtitle": {
         "description": "Setting subtitle for enable tunneling"
@@ -7580,8 +7580,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Recomanacions Tortugarr",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Recomanacions Tortugarr",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "gameMenu": "Menú",
@@ -7635,8 +7635,8 @@
         "description": "In-game menu action opening the emulator settings"
     },
     "forced": "Forçat",
-    "detailScreenStyleNotflix": "Clàssic",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Clàssic",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "expandedTabs": "Pestanyes desplegades",

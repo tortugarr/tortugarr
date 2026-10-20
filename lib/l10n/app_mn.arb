@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Одоогийн Tortugarr та бүгд дурласан харагдана",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Одоогийн Tortugarr та бүгд дурласан харагдана",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неон импульс",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr дээр тоглох",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr дээр тоглох",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Хүссэн {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord-д нэгдээрэй",
     "settingsJoinDiscordSubtitle": "Нийгэмлэгтэй чатлах",
     "settingsJoinTheDiscord": "Discord-д нэгдээрэй",
-    "settingsSupportNotflix": "Дэмжлэг Tortugarr",
+    "settingsSupportMoonfin": "Дэмжлэг Tortugarr",
     "settingsLegal": "ХУУЛЬ ЗҮЙН",
     "settingsLicenses": "Лицензүүд",
     "settingsOpenSourceLicenseNotices": "Нээлттэй эхийн лицензийн мэдэгдэл",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR видео тоглуулахад HDR-ийг автоматаар идэвхжүүлж, гарахад дэлгэцийн горимыг сэргээнэ.",
     "whenFullscreen": "Бүрэн дэлгэцэд байхад",
     "transcodingLimits": "Хөрвүүлэлтийн хязгаар",
-    "settingsSupportNotflixSubtitle": "Хөгжүүлэгчид кофе хандивлах",
+    "settingsSupportMoonfinSubtitle": "Хөгжүүлэгчид кофе хандивлах",
     "accountPreferences": "БҮРТГЭЛИЙН ТОХИРГОО",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Сонгодог",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Сонгодог",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Орчин үеийн",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-ийн ижил төстэй байдал",

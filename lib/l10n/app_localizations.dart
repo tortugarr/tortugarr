@@ -476,7 +476,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Classic'**
-  String get detailScreenStyleNotflix;
+  String get detailScreenStyleMoonfin;
 
   /// Detail screen style option: the responsive cinematic layout
   ///
@@ -524,7 +524,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Tortugarr Recommends'**
-  String get recommendationSystemNotflix;
+  String get recommendationSystemMoonfin;
 
   /// Recommendation system option: TMDb Similarity
   ///
@@ -638,13 +638,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Tortugarr'**
-  String get themeNotflix;
+  String get themeMoonfin;
 
   /// Preview description for the Tortugarr theme
   ///
   /// In en, this message translates to:
   /// **'The original clean Tortugarr default.'**
-  String get themeNotflixSubtitle;
+  String get themeMoonfinSubtitle;
 
   /// Display name for the Neon Pulse theme
   ///
@@ -6026,7 +6026,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Tortugarr'**
-  String get mediaBarModeNotflix;
+  String get mediaBarModeMoonfin;
 
   /// Media bar style option: MakD
   ///
@@ -7274,7 +7274,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Play in Tortugarr'**
-  String get playInNotflix;
+  String get playInMoonfin;
 
   /// Label showing who requested media
   ///
@@ -15268,17 +15268,17 @@ abstract class AppLocalizations {
   /// **'Join the Discord'**
   String get settingsJoinTheDiscord;
 
-  /// No description provided for @settingsSupportNotflix.
+  /// No description provided for @settingsSupportMoonfin.
   ///
   /// In en, this message translates to:
   /// **'Support Tortugarr'**
-  String get settingsSupportNotflix;
+  String get settingsSupportMoonfin;
 
-  /// No description provided for @settingsSupportNotflixSubtitle.
+  /// No description provided for @settingsSupportMoonfinSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Donate a coffee to the developer'**
-  String get settingsSupportNotflixSubtitle;
+  String get settingsSupportMoonfinSubtitle;
 
   /// No description provided for @settingsLegal.
   ///

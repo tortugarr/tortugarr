@@ -40,7 +40,7 @@ class _PlayerLoadingOverlayState extends State<PlayerLoadingOverlay>
   static const _labelGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [Color(0xFFE50914), Color(0xFFFFC21A)], // Notflix red to the yellow "not"
+    colors: [Color(0xFFE50914), Color(0xFFFFC21A)], // red to yellow
   );
 
   late final AnimationController _logoController;

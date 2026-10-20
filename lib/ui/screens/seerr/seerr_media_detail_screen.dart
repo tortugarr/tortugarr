@@ -767,7 +767,7 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
       tiles.add(
         _ActionTile(
           icon: Icons.play_arrow,
-          label: l10n.playInNotflix,
+          label: l10n.playInMoonfin,
           onTap: () => _playInMoonfin(s),
           primary: playIsPrimary,
           focusNode: takeFirst(),
@@ -1408,7 +1408,7 @@ class _SeerrMediaDetailScreenState extends State<SeerrMediaDetailScreen> {
                 ElevatedButton.icon(
                   onPressed: () => _playInMoonfin(s),
                   icon: const Icon(Icons.play_arrow),
-                  label: Text(l10n.playInNotflix),
+                  label: Text(l10n.playInMoonfin),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
                     foregroundColor: Colors.white,

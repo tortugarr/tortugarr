@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "현재 Tortugarr 룩은 여러분 모두가 좋아하게 되었습니다.",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "현재 Tortugarr 룩은 여러분 모두가 좋아하게 되었습니다.",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "네온 펄스",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr에 플레이",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr에 플레이",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} 요청",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord에 가입하세요",
     "settingsJoinDiscordSubtitle": "커뮤니티와 채팅",
     "settingsJoinTheDiscord": "Discord에 가입하세요",
-    "settingsSupportNotflix": "Tortugarr 지원",
+    "settingsSupportMoonfin": "Tortugarr 지원",
     "settingsLegal": "합법적인",
     "settingsLicenses": "라이센스",
     "settingsOpenSourceLicenseNotices": "오픈소스 라이선스 공지",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR 영상을 재생할 때 HDR을 자동으로 켜고, 종료하면 원래 디스플레이 모드로 되돌립니다.",
     "whenFullscreen": "전체 화면일 때",
     "transcodingLimits": "트랜스코딩 제한",
-    "settingsSupportNotflixSubtitle": "개발자에게 커피 한 잔 후원하기",
+    "settingsSupportMoonfinSubtitle": "개발자에게 커피 한 잔 후원하기",
     "accountPreferences": "계정 환경설정",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "클래식",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "클래식",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "모던",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr 추천",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr 추천",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb 유사도",

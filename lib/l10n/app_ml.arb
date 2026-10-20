@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "നിലവിലെ Tortugarr നിങ്ങൾ എല്ലാവരും ഇഷ്ടപ്പെട്ടു",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "നിലവിലെ Tortugarr നിങ്ങൾ എല്ലാവരും ഇഷ്ടപ്പെട്ടു",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "നിയോൺ പൾസ്",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr എന്നതിൽ പ്ലേ ചെയ്യുക",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr എന്നതിൽ പ്ലേ ചെയ്യുക",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} അഭ്യർത്ഥിച്ചു",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "ചേരുക Discord",
     "settingsJoinDiscordSubtitle": "കമ്മ്യൂണിറ്റിയുമായി ചാറ്റ് ചെയ്യുക",
     "settingsJoinTheDiscord": "Discord എന്നതിൽ ചേരുക",
-    "settingsSupportNotflix": "പിന്തുണ Tortugarr",
+    "settingsSupportMoonfin": "പിന്തുണ Tortugarr",
     "settingsLegal": "നിയമപരമായ",
     "settingsLicenses": "ലൈസൻസുകൾ",
     "settingsOpenSourceLicenseNotices": "ഓപ്പൺ സോഴ്സ് ലൈസൻസ് അറിയിപ്പുകൾ",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR വീഡിയോ പ്ലേബാക്കിനായി HDR സ്വയമേവ പ്രവർത്തനക്ഷമമാക്കുകയും പുറത്തുകടക്കുമ്പോൾ ഡിസ്പ്ലേ മോഡ് പുനഃസ്ഥാപിക്കുകയും ചെയ്യുക.",
     "whenFullscreen": "ഫുൾസ്ക്രീൻ ആയിരിക്കുമ്പോൾ",
     "transcodingLimits": "ട്രാൻസ്കോഡിംഗ് പരിധികൾ",
-    "settingsSupportNotflixSubtitle": "ഡെവലപ്പർക്ക് ഒരു കോഫി സംഭാവന ചെയ്യുക",
+    "settingsSupportMoonfinSubtitle": "ഡെവലപ്പർക്ക് ഒരു കോഫി സംഭാവന ചെയ്യുക",
     "accountPreferences": "അക്കൗണ്ട് മുൻഗണനകൾ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "ക്ലാസിക്",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "ക്ലാസിക്",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "മോഡേൺ",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb സാമ്യത",

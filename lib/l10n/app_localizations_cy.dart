@@ -148,7 +148,7 @@ class AppLocalizationsCy extends AppLocalizations {
       'Clasurol yw cynllun canolog gwreiddiol Tortugarr. Modern yw cynllun sinematig ymatebol.';
 
   @override
-  String get detailScreenStyleNotflix => 'Clasurol';
+  String get detailScreenStyleMoonfin => 'Clasurol';
 
   @override
   String get detailScreenStyleModern => 'Modern';
@@ -175,7 +175,7 @@ class AppLocalizationsCy extends AppLocalizations {
       'Defnyddiwch algorithm llyfrgell leol Tortugarr Recommends neu Fetrigau Tebygrwydd ar-lein TMDb. Sylwer: mae angen integreiddio Seerr ar gyfer argymhellion ar-lein.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'Tebygrwydd TMDb';
@@ -239,10 +239,10 @@ class AppLocalizationsCy extends AppLocalizations {
       'Defnyddiwch eich dull mewnbwn dyfais yn ddiofyn ar gyfer mewnbynnu testun';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Golwg gyfredol Tortugarr rydych chi i gyd wedi dod i garu';
 
   @override
@@ -3351,7 +3351,7 @@ class AppLocalizationsCy extends AppLocalizations {
       'Dewiswch rhwng gwahanol arddulliau bar cyfryngau, neu diffoddwch y bar cyfryngau';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4041,7 +4041,7 @@ class AppLocalizationsCy extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Chwarae yn Tortugarr';
+  String get playInMoonfin => 'Chwarae yn Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8618,10 +8618,10 @@ class AppLocalizationsCy extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Ymunwch â\'r Discord';
 
   @override
-  String get settingsSupportNotflix => 'Cefnogwch Tortugarr';
+  String get settingsSupportMoonfin => 'Cefnogwch Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Rhowch goffi i\'r datblygwr';
+  String get settingsSupportMoonfinSubtitle => 'Rhowch goffi i\'r datblygwr';
 
   @override
   String get settingsLegal => 'CYFREITHIOL';

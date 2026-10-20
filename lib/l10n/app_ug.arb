@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "ھازىرقى Tortugarr قارىسىڭىز ھەممىڭىز ياخشى كۆرۈپ قالدىڭىز",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "ھازىرقى Tortugarr قارىسىڭىز ھەممىڭىز ياخشى كۆرۈپ قالدىڭىز",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "نېئون پۇلس",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr دە ئويناڭ",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr دە ئويناڭ",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} ئىلتىماس قىلغان",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord غا قوشۇلۇڭ",
     "settingsJoinDiscordSubtitle": "مەھەللە بىلەن پاراڭلىشىڭ",
     "settingsJoinTheDiscord": "Discord غا قوشۇلۇڭ",
-    "settingsSupportNotflix": "Tortugarr نى قوللاڭ",
+    "settingsSupportMoonfin": "Tortugarr نى قوللاڭ",
     "settingsLegal": "قانۇنىي ئۇچۇرلار",
     "settingsLicenses": "ئىجازەتنامە",
     "settingsOpenSourceLicenseNotices": "ئوچۇق كودلۇق ئىجازەتنامە ئۇقتۇرۇشى",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR سىن قويۇلغاندا HDR نى ئۆزلۈكىدىن قوزغىتىپ، چېكىنگەندە ئېكران ھالىتىنى ئەسلىگە قايتۇرىدۇ.",
     "whenFullscreen": "پۈتۈن ئېكران بولغاندا",
     "transcodingLimits": "كود ئۆزگەرتىش چەكلىمىلىرى",
-    "settingsSupportNotflixSubtitle": "ئىجادىيەتچىگە بىر چىنە قەھۋە ئىئانە قىلىڭ",
+    "settingsSupportMoonfinSubtitle": "ئىجادىيەتچىگە بىر چىنە قەھۋە ئىئانە قىلىڭ",
     "scrollWheelActionOff": "تاقاق",
     "@scrollWheelActionOff": {
         "description": "Scroll wheel action option: do nothing"
@@ -7367,8 +7367,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "كلاسسىك",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "كلاسسىك",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "زامانىۋى",
@@ -7399,8 +7399,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ئوخشاشلىقى",

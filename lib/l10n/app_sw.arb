@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Mwonekano wa sasa wa Tortugarr nyote mmependa",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Mwonekano wa sasa wa Tortugarr nyote mmependa",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Cheza katika Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Cheza katika Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Imeombwa na {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Jiunge na Discord",
     "settingsJoinDiscordSubtitle": "Piga gumzo na jumuiya",
     "settingsJoinTheDiscord": "Jiunge na Discord",
-    "settingsSupportNotflix": "Msaada Tortugarr",
+    "settingsSupportMoonfin": "Msaada Tortugarr",
     "settingsLegal": "KISHERIA",
     "settingsLicenses": "Leseni",
     "settingsOpenSourceLicenseNotices": "Notisi za leseni ya chanzo huria",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Washa HDR kiotomatiki kwa uchezaji wa video ya HDR na urejeshe modi ya onyesho unapotoka.",
     "whenFullscreen": "Wakati wa skrini nzima",
     "transcodingLimits": "Vikomo vya Kubadilisha Msimbo",
-    "settingsSupportNotflixSubtitle": "Mchangie msanidi kahawa",
+    "settingsSupportMoonfinSubtitle": "Mchangie msanidi kahawa",
     "accountPreferences": "MAPENDELEO YA AKAUNTI",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasiki",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasiki",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Kisasa",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Ufanano wa TMDb",

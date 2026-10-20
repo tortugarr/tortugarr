@@ -16,7 +16,7 @@ class RemoteSessionCastProvider implements CastProvider, CastTransportControls {
   String? _activeSessionId;
   String? _activeServerId;
 
-  // A Notflix session reports no events back to us, so its progress is read
+  // A Tortugarr session reports no events back to us, so its progress is read
   // from the server's session list. Two seconds keeps the bar moving without
   // hammering Jellyfin; a few empty polls in a row mean the receiver stopped.
   static const _pollInterval = Duration(seconds: 2);

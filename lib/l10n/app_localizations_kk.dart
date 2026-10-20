@@ -148,7 +148,7 @@ class AppLocalizationsKk extends AppLocalizations {
       '«Классикалық» — Tortugarr бағдарламасының бастапқы, ортаға тураланған қалыбы. «Заманауи» — бейімделгіш кинематографиялық қалып.';
 
   @override
-  String get detailScreenStyleNotflix => 'Классикалық';
+  String get detailScreenStyleMoonfin => 'Классикалық';
 
   @override
   String get detailScreenStyleModern => 'Заманауи';
@@ -175,7 +175,7 @@ class AppLocalizationsKk extends AppLocalizations {
       'Tortugarr ұсынады жергілікті кітапхана алгоритмін немесе TMDb ұсынатын желілік ұқсастық метрикаларын пайдаланыңыз. Ескертпе: желілік ұсыныстар Seerr интеграциясын талап етеді.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr ұсынады';
+  String get recommendationSystemMoonfin => 'Tortugarr ұсынады';
 
   @override
   String get recommendationSystemTmdb => 'TMDb ұқсастығы';
@@ -239,10 +239,10 @@ class AppLocalizationsKk extends AppLocalizations {
       'Мәтін енгізу үшін әдепкіде құрылғыңыздың енгізу әдісін пайдалану';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Ағымдағы Tortugarr келбеті бәріңізге ұнады';
 
   @override
@@ -3337,7 +3337,7 @@ class AppLocalizationsKk extends AppLocalizations {
       'Түрлі медиа жолақ мәнерлерінің бірін таңдаңыз немесе медиа жолағын өшіріңіз';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'МакД';
@@ -4034,7 +4034,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Tortugarr ойынында ойнаңыз';
+  String get playInMoonfin => 'Tortugarr ойынында ойнаңыз';
 
   @override
   String requestedByName(String name) {
@@ -8610,10 +8610,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord қосылыңыз';
 
   @override
-  String get settingsSupportNotflix => 'Қолдау Tortugarr';
+  String get settingsSupportMoonfin => 'Қолдау Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Әзірлеушіге бір кесе кофеге қайыр беру';
 
   @override

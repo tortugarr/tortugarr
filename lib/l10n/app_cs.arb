@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Současný vzhled Tortugarr, který jste si všichni zamilovali",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Současný vzhled Tortugarr, který jste si všichni zamilovali",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonový puls",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Hrajte v Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Hrajte v Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Požadováno {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Připojte se k Discordu",
     "settingsJoinDiscordSubtitle": "Chatujte s komunitou",
     "settingsJoinTheDiscord": "Připojte se k Discordu",
-    "settingsSupportNotflix": "Podpořte Tortugarra",
+    "settingsSupportMoonfin": "Podpořte Tortugarra",
     "settingsLegal": "PRÁVNÍ",
     "settingsLicenses": "licence",
     "settingsOpenSourceLicenseNotices": "Oznámení o licenci s otevřeným zdrojovým kódem",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Automaticky povolte HDR pro přehrávání videa HDR a obnovte režim zobrazení při ukončení.",
     "whenFullscreen": "Při zobrazení na celou obrazovku",
     "transcodingLimits": "Limity překódování",
-    "settingsSupportNotflixSubtitle": "Darujte kávu vývojáři",
+    "settingsSupportMoonfinSubtitle": "Darujte kávu vývojáři",
     "accountPreferences": "PŘEDVOLBY ÚČTU",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasický",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasický",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moderní",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr doporučuje",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr doporučuje",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Podobnost podle TMDb",

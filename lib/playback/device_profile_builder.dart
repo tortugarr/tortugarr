@@ -1121,7 +1121,7 @@ class DeviceProfileBuilder {
     if (PlatformDetection.isMacOS) return 'Moonfin macOS';
     if (PlatformDetection.isWindows) return 'Moonfin Windows';
     if (PlatformDetection.isLinux) return 'Moonfin Linux';
-    return 'Notflix';
+    return 'Moonfin';
   }
 
   static List<Map<String, dynamic>> _codecProfiles({

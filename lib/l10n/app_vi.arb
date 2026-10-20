@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Diện mạo Tortugarr hiện tại được tất cả các bạn yêu thích",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Diện mạo Tortugarr hiện tại được tất cả các bạn yêu thích",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Xung neon",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Chơi ở Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Chơi ở Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Được yêu cầu bởi {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Tham gia Discord",
     "settingsJoinDiscordSubtitle": "Trò chuyện với cộng đồng",
     "settingsJoinTheDiscord": "Tham gia Discord",
-    "settingsSupportNotflix": "Hỗ trợ Tortugarr",
+    "settingsSupportMoonfin": "Hỗ trợ Tortugarr",
     "settingsLegal": "HỢP PHÁP",
     "settingsLicenses": "Giấy phép",
     "settingsOpenSourceLicenseNotices": "Thông báo giấy phép nguồn mở",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Tự động bật HDR để phát lại video HDR và ​​khôi phục chế độ hiển thị khi thoát.",
     "whenFullscreen": "Khi toàn màn hình",
     "transcodingLimits": "Giới hạn chuyển mã",
-    "settingsSupportNotflixSubtitle": "Mời nhà phát triển một ly cà phê",
+    "settingsSupportMoonfinSubtitle": "Mời nhà phát triển một ly cà phê",
     "accountPreferences": "TÙY CHỌN TÀI KHOẢN",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Cổ điển",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Cổ điển",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Hiện đại",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Gợi ý",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Gợi ý",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Độ tương đồng TMDb",

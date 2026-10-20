@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Цяперашні Tortugarr выгляд, які вам усім спадабаўся",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Цяперашні Tortugarr выгляд, які вам усім спадабаўся",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неонавы імпульс",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Гуляць у Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Гуляць у Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Запытаў {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Далучайцеся да Discord",
     "settingsJoinDiscordSubtitle": "Чат з супольнасцю",
     "settingsJoinTheDiscord": "Далучайцеся да Discord",
-    "settingsSupportNotflix": "Падтрымка Tortugarr",
+    "settingsSupportMoonfin": "Падтрымка Tortugarr",
     "settingsLegal": "ЗАКОННЫ",
     "settingsLicenses": "Ліцэнзіі",
     "settingsOpenSourceLicenseNotices": "Паведамленні аб ліцэнзіі з адкрытым зыходным кодам",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Аўтаматычна ўключыць HDR для прайгравання HDR-відэа і аднавіць рэжым адлюстравання пры выхадзе.",
     "whenFullscreen": "У поўнаэкранным рэжыме",
     "transcodingLimits": "Абмежаванні перакадавання",
-    "settingsSupportNotflixSubtitle": "Ахвяруйце каву распрацоўніку",
+    "settingsSupportMoonfinSubtitle": "Ахвяруйце каву распрацоўніку",
     "accountPreferences": "НАЛАДЫ ЎЛІКОВАГА ЗАПІСУ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Класічны",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Класічны",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Сучасны",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr рэкамендуе",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr рэкамендуе",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Падабенства TMDb",

@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "皆さんが気に入った現在の Tortugarr の外観",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "皆さんが気に入った現在の Tortugarr の外観",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neon Pulse",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "マクド",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr でプレイする",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr でプレイする",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} がリクエスト",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord に参加する",
     "settingsJoinDiscordSubtitle": "コミュニティとチャットする",
     "settingsJoinTheDiscord": "Discord に参加する",
-    "settingsSupportNotflix": "Tortugarr をサポート",
+    "settingsSupportMoonfin": "Tortugarr をサポート",
     "settingsLegal": "法律上の",
     "settingsLicenses": "ライセンス",
     "settingsOpenSourceLicenseNotices": "オープンソースライセンスに関する通知",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR 動画の再生時に自動的に HDR を有効にし、終了時に表示モードを元に戻します。",
     "whenFullscreen": "全画面表示のとき",
     "transcodingLimits": "トランスコードの制限",
-    "settingsSupportNotflixSubtitle": "開発者にコーヒーを 1 杯おごる",
+    "settingsSupportMoonfinSubtitle": "開発者にコーヒーを 1 杯おごる",
     "accountPreferences": "アカウント設定",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "クラシック",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "クラシック",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "モダン",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb 類似度",

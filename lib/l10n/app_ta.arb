@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "தற்போதைய Tortugarr நீங்கள் அனைவரும் விரும்பி இருக்கிறீர்கள்",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "தற்போதைய Tortugarr நீங்கள் அனைவரும் விரும்பி இருக்கிறீர்கள்",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "நியான் பல்ஸ்",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr இல் விளையாடு",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr இல் விளையாடு",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} கோரியுள்ளார்",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord இல் சேரவும்",
     "settingsJoinDiscordSubtitle": "சமூகத்துடன் அரட்டையடிக்கவும்",
     "settingsJoinTheDiscord": "Discord இல் சேரவும்",
-    "settingsSupportNotflix": "ஆதரவு Tortugarr",
+    "settingsSupportMoonfin": "ஆதரவு Tortugarr",
     "settingsLegal": "சட்டபூர்வமானது",
     "settingsLicenses": "உரிமங்கள்",
     "settingsOpenSourceLicenseNotices": "திறந்த மூல உரிம அறிவிப்புகள்",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR வீடியோ இயக்கத்திற்கு HDR ஐத் தானாக இயக்கி, வெளியேறும்போது காட்சி முறையை மீட்டமைக்கும்.",
     "whenFullscreen": "முழுத்திரையில் இருக்கும்போது",
     "transcodingLimits": "டிரான்ஸ்கோடிங் வரம்புகள்",
-    "settingsSupportNotflixSubtitle": "டெவலப்பருக்கு ஒரு காபி வழங்குங்கள்",
+    "settingsSupportMoonfinSubtitle": "டெவலப்பருக்கு ஒரு காபி வழங்குங்கள்",
     "accountPreferences": "கணக்கு விருப்பங்கள்",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "கிளாசிக்",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "கிளாசிக்",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "மாடர்ன்",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr பரிந்துரைகள்",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr பரிந்துரைகள்",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ஒற்றுமை",

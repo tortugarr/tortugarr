@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Dabartinė Tortugarr išvaizda, kurią jūs visi pamėgote",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Dabartinė Tortugarr išvaizda, kurią jūs visi pamėgote",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neoninis pulsas",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Žaisk „Tortugarr“.",
-    "@playInNotflix": {
+    "playInMoonfin": "Žaisk „Tortugarr“.",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Užklausą pateikė {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Prisijunkite prie „Discord“.",
     "settingsJoinDiscordSubtitle": "Kalbėkitės su bendruomene",
     "settingsJoinTheDiscord": "Prisijunkite prie Discord",
-    "settingsSupportNotflix": "Palaikykite Tortugarr",
+    "settingsSupportMoonfin": "Palaikykite Tortugarr",
     "settingsLegal": "TEISINĖ",
     "settingsLicenses": "Licencijos",
     "settingsOpenSourceLicenseNotices": "Atvirojo kodo licencijos pranešimai",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Automatiškai įgalinkite HDR HDR vaizdo įrašams atkurti ir atkurkite rodymo režimą išėjus.",
     "whenFullscreen": "Kai per visą ekraną",
     "transcodingLimits": "Perkodavimo ribos",
-    "settingsSupportNotflixSubtitle": "Pavaišinkite kūrėją kava",
+    "settingsSupportMoonfinSubtitle": "Pavaišinkite kūrėją kava",
     "accountPreferences": "PASKYROS NUOSTATOS",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasikinis",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasikinis",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modernus",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb panašumas",

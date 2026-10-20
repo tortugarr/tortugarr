@@ -95,7 +95,7 @@ class _AboutCategoryScreen extends StatelessWidget {
             ),
           adaptiveListSection(
             children: [
-              // Removed: Check for Updates, Source Code, Report an Issue, Join Discord, Support Notflix, Licenses, Privacy Policy.
+              // Removed: Check for Updates, Source Code, Report an Issue, Join Discord, Support Moonfin, Licenses, Privacy Policy.
             ],
           ),
           _SectionHeader(l10n.settingsLegal),

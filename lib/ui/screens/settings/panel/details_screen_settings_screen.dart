@@ -45,7 +45,7 @@ class _DetailsScreenSettingsScreenState
                     icon: Icons.movie_outlined,
                     labelOf: (v) => switch (v) {
                       DetailScreenStyle.classic =>
-                        l10n.detailScreenStyleNotflix,
+                        l10n.detailScreenStyleMoonfin,
                       DetailScreenStyle.modern => l10n.detailScreenStyleModern,
                     },
                   ),
@@ -93,7 +93,7 @@ class _DetailsScreenSettingsScreenState
                       icon: Icons.auto_awesome,
                       labelOf: (v) => switch (v) {
                         RecommendationSystemSource.local =>
-                          l10n.recommendationSystemNotflix,
+                          l10n.recommendationSystemMoonfin,
                         RecommendationSystemSource.online =>
                           l10n.recommendationSystemTmdb,
                       },

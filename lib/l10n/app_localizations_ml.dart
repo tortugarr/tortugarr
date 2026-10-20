@@ -148,7 +148,7 @@ class AppLocalizationsMl extends AppLocalizations {
       'ക്ലാസിക് എന്നത് യഥാർത്ഥ കേന്ദ്രീകൃത Tortugarr ലേഔട്ടാണ്. മോഡേൺ എന്നത് ഒരു റെസ്പോൺസീവ് സിനിമാറ്റിക് ലേഔട്ടാണ്.';
 
   @override
-  String get detailScreenStyleNotflix => 'ക്ലാസിക്';
+  String get detailScreenStyleMoonfin => 'ക്ലാസിക്';
 
   @override
   String get detailScreenStyleModern => 'മോഡേൺ';
@@ -175,7 +175,7 @@ class AppLocalizationsMl extends AppLocalizations {
       'Tortugarr Recommends ലോക്കൽ-ലൈബ്രറി അൽഗോരിതം അല്ലെങ്കിൽ ഓൺലൈൻ TMDb യുടെ സാമ്യതാ മെട്രിക്സ് ഉപയോഗിക്കുക. ശ്രദ്ധിക്കുക: ഓൺലൈൻ ശുപാർശകൾക്ക് Seerr സംയോജനം ആവശ്യമാണ്.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb സാമ്യത';
@@ -239,10 +239,10 @@ class AppLocalizationsMl extends AppLocalizations {
       'ടെക്സ്റ്റ് നൽകുന്നതിന് ഡിഫോൾട്ടായി നിങ്ങളുടെ ഉപകരണത്തിന്റെ ഇൻപുട്ട് രീതി ഉപയോഗിക്കുക';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'നിലവിലെ Tortugarr നിങ്ങൾ എല്ലാവരും ഇഷ്ടപ്പെട്ടു';
 
   @override
@@ -3345,7 +3345,7 @@ class AppLocalizationsMl extends AppLocalizations {
       'Tortugarr, MakD എന്നിവയ്ക്കിടയിൽ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ മീഡിയ ബാർ ഓഫാക്കുക';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4045,7 +4045,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Tortugarr എന്നതിൽ പ്ലേ ചെയ്യുക';
+  String get playInMoonfin => 'Tortugarr എന്നതിൽ പ്ലേ ചെയ്യുക';
 
   @override
   String requestedByName(String name) {
@@ -8675,10 +8675,10 @@ class AppLocalizationsMl extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord എന്നതിൽ ചേരുക';
 
   @override
-  String get settingsSupportNotflix => 'പിന്തുണ Tortugarr';
+  String get settingsSupportMoonfin => 'പിന്തുണ Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'ഡെവലപ്പർക്ക് ഒരു കോഫി സംഭാവന ചെയ്യുക';
 
   @override

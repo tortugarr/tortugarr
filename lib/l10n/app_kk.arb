@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Ағымдағы Tortugarr келбеті бәріңізге ұнады",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Ағымдағы Tortugarr келбеті бәріңізге ұнады",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Неон импульсі",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "МакД",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr ойынында ойнаңыз",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr ойынында ойнаңыз",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Сұраған: {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord-қа қосылыңыз",
     "settingsJoinDiscordSubtitle": "Қауымдастықпен сөйлесу",
     "settingsJoinTheDiscord": "Discord қосылыңыз",
-    "settingsSupportNotflix": "Қолдау Tortugarr",
+    "settingsSupportMoonfin": "Қолдау Tortugarr",
     "settingsLegal": "ЗАҢДЫ",
     "settingsLicenses": "Лицензиялар",
     "settingsOpenSourceLicenseNotices": "Ашық бастапқы лицензия туралы ескертулер",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR бейнесін ойнату үшін HDR-ды автоматты түрде қосу және шыққанда дисплей режимін қалпына келтіру.",
     "whenFullscreen": "Толық экран кезінде",
     "transcodingLimits": "Транскодтау шектеулері",
-    "settingsSupportNotflixSubtitle": "Әзірлеушіге бір кесе кофеге қайыр беру",
+    "settingsSupportMoonfinSubtitle": "Әзірлеушіге бір кесе кофеге қайыр беру",
     "accountPreferences": "ТІРКЕЛГІ ПАРАМЕТРЛЕРІ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Классикалық",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Классикалық",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Заманауи",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr ұсынады",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr ұсынады",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb ұқсастығы",

@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "目前的 Tortugarr 外觀你們都喜歡",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "目前的 Tortugarr 外觀你們都喜歡",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "霓虹脈動",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "馬克D",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "玩 Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "玩 Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "由 {name} 請求",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "加入 Discord",
     "settingsJoinDiscordSubtitle": "與社群聊天",
     "settingsJoinTheDiscord": "加入 Discord",
-    "settingsSupportNotflix": "支援Tortugarr",
+    "settingsSupportMoonfin": "支援Tortugarr",
     "settingsLegal": "合法的",
     "settingsLicenses": "許可證",
     "settingsOpenSourceLicenseNotices": "開源授權聲明",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "播放 HDR 影片嗰陣自動開 HDR，退出嗰陣還原顯示模式。",
     "whenFullscreen": "全螢幕嗰陣",
     "transcodingLimits": "轉碼限制",
-    "settingsSupportNotflixSubtitle": "請開發者飲杯咖啡",
+    "settingsSupportMoonfinSubtitle": "請開發者飲杯咖啡",
     "accountPreferences": "帳戶偏好設定",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "經典",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "經典",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "現代",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb 相似度",

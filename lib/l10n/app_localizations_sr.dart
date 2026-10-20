@@ -148,7 +148,7 @@ class AppLocalizationsSr extends AppLocalizations {
       'Класични је оригинални центрирани Tortugarr распоред. Модерни је прилагодљив биоскопски распоред.';
 
   @override
-  String get detailScreenStyleNotflix => 'Класични';
+  String get detailScreenStyleMoonfin => 'Класични';
 
   @override
   String get detailScreenStyleModern => 'Модерни';
@@ -175,7 +175,7 @@ class AppLocalizationsSr extends AppLocalizations {
       'Користите алгоритам локалне библиотеке Tortugarr Recommends или онлајн TMDb метрике сличности. Напомена: онлајн препоруке захтевају Seerr интеграцију.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb сличност';
@@ -239,10 +239,10 @@ class AppLocalizationsSr extends AppLocalizations {
       'За унос текста подразумевано користи метод уноса вашег уређаја';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => 'Оригинални, чист Tortugarr изглед.';
+  String get themeMoonfinSubtitle => 'Оригинални, чист Tortugarr изглед.';
 
   @override
   String get themeNeonPulse => 'Неон Пулсе';
@@ -3448,7 +3448,7 @@ class AppLocalizationsSr extends AppLocalizations {
       'Изаберите један од стилова медијске траке или је искључите';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'МакД';
@@ -4144,7 +4144,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Пусти у Tortugarr-у';
+  String get playInMoonfin => 'Пусти у Tortugarr-у';
 
   @override
   String requestedByName(String name) {
@@ -8778,10 +8778,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Придружите се Discord серверу';
 
   @override
-  String get settingsSupportNotflix => 'Подржите Tortugarr';
+  String get settingsSupportMoonfin => 'Подржите Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Частите програмера кафом';
+  String get settingsSupportMoonfinSubtitle => 'Частите програмера кафом';
 
   @override
   String get settingsLegal => 'ЛЕГАЛ';

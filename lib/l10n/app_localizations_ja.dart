@@ -147,7 +147,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'クラシックは従来の Tortugarr の中央寄せレイアウトです。モダンはレスポンシブなシネマティックレイアウトです。';
 
   @override
-  String get detailScreenStyleNotflix => 'クラシック';
+  String get detailScreenStyleMoonfin => 'クラシック';
 
   @override
   String get detailScreenStyleModern => 'モダン';
@@ -172,7 +172,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'Tortugarr Recommends のローカルライブラリ用アルゴリズム、またはオンラインの TMDb 類似度指標を使用します。注: オンラインのおすすめには Seerr 連携が必要です。';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 類似度';
@@ -234,10 +234,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get keyboardPreferSystemImeDescription => '文字入力に標準でデバイスの入力方式を使用します';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '皆さんが気に入った現在の Tortugarr の外観';
+  String get themeMoonfinSubtitle => '皆さんが気に入った現在の Tortugarr の外観';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -3256,7 +3256,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'さまざまなメディアバーのスタイルから選択するか、メディアバーをオフにします。';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'マクド';
@@ -3915,7 +3915,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Tortugarr でプレイする';
+  String get playInMoonfin => 'Tortugarr でプレイする';
 
   @override
   String requestedByName(String name) {
@@ -8326,10 +8326,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord に参加する';
 
   @override
-  String get settingsSupportNotflix => 'Tortugarr をサポート';
+  String get settingsSupportMoonfin => 'Tortugarr をサポート';
 
   @override
-  String get settingsSupportNotflixSubtitle => '開発者にコーヒーを 1 杯おごる';
+  String get settingsSupportMoonfinSubtitle => '開発者にコーヒーを 1 杯おごる';
 
   @override
   String get settingsLegal => '法律上の';

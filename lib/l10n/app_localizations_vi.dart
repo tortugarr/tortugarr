@@ -148,7 +148,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cổ điển là bố cục Tortugarr gốc căn giữa. Hiện đại là bố cục điện ảnh tự điều chỉnh.';
 
   @override
-  String get detailScreenStyleNotflix => 'Cổ điển';
+  String get detailScreenStyleMoonfin => 'Cổ điển';
 
   @override
   String get detailScreenStyleModern => 'Hiện đại';
@@ -175,7 +175,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Dùng thuật toán Tortugarr Gợi ý dựa trên thư viện cục bộ hoặc Chỉ số tương đồng trực tuyến của TMDb. Lưu ý: Gợi ý trực tuyến cần tích hợp Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Gợi ý';
+  String get recommendationSystemMoonfin => 'Tortugarr Gợi ý';
 
   @override
   String get recommendationSystemTmdb => 'Độ tương đồng TMDb';
@@ -239,10 +239,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Sử dụng phương thức nhập thiết bị của bạn theo mặc định để nhập văn bản';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Diện mạo Tortugarr hiện tại được tất cả các bạn yêu thích';
 
   @override
@@ -3327,7 +3327,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Chọn giữa Tortugarr, MakD hoặc tắt thanh phương tiện';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4018,7 +4018,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Chơi ở Tortugarr';
+  String get playInMoonfin => 'Chơi ở Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8567,10 +8567,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Tham gia Discord';
 
   @override
-  String get settingsSupportNotflix => 'Hỗ trợ Tortugarr';
+  String get settingsSupportMoonfin => 'Hỗ trợ Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Mời nhà phát triển một ly cà phê';
 
   @override

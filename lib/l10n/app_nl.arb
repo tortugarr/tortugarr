@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "De originele, schone Tortugarr-standaard.",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "De originele, schone Tortugarr-standaard.",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonpuls",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Speel in Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Speel in Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Aangevraagd door {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Sluit je aan bij Discord",
     "settingsJoinDiscordSubtitle": "Chat met de gemeenschap",
     "settingsJoinTheDiscord": "Sluit je aan bij de Discord",
-    "settingsSupportNotflix": "Steun Tortugarr",
+    "settingsSupportMoonfin": "Steun Tortugarr",
     "settingsLegal": "JURIDISCH",
     "settingsLicenses": "Licenties",
     "settingsOpenSourceLicenseNotices": "Kennisgevingen over open-sourcelicenties",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Schakel HDR automatisch in bij het afspelen van HDR-video en herstel de weergavemodus bij het afsluiten.",
     "whenFullscreen": "In volledig scherm",
     "transcodingLimits": "Transcodeerlimieten",
-    "settingsSupportNotflixSubtitle": "Doneer een kop koffie aan de ontwikkelaar",
+    "settingsSupportMoonfinSubtitle": "Doneer een kop koffie aan de ontwikkelaar",
     "accountPreferences": "ACCOUNTVOORKEUREN",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klassiek",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klassiek",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-gelijkenis",

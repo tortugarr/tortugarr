@@ -213,7 +213,7 @@ class CastService {
     remoteErrorNotifier.value = null;
   }
 
-  /// Lets a provider that learns the receiver's state by polling (a Notflix
+  /// Lets a provider that learns the receiver's state by polling (a Tortugarr
   /// session has no native event stream) feed the same notifiers the native
   /// receivers do. Ignored once another target has taken over.
   void updateRemoteState({

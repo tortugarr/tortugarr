@@ -148,7 +148,7 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਕਲਾਸਿਕ ਅਸਲ ਕੇਂਦਰਿਤ Tortugarr ਲੇਆਉਟ ਹੈ। ਮਾਡਰਨ ਇੱਕ ਜਵਾਬਦੇਹ ਸਿਨੇਮੈਟਿਕ ਲੇਆਉਟ ਹੈ।';
 
   @override
-  String get detailScreenStyleNotflix => 'ਕਲਾਸਿਕ';
+  String get detailScreenStyleMoonfin => 'ਕਲਾਸਿਕ';
 
   @override
   String get detailScreenStyleModern => 'ਮਾਡਰਨ';
@@ -175,7 +175,7 @@ class AppLocalizationsPa extends AppLocalizations {
       'Tortugarr Recommends ਲੋਕਲ-ਲਾਇਬ੍ਰੇਰੀ ਐਲਗੋਰਿਦਮ ਜਾਂ ਆਨਲਾਈਨ TMDb ਦੇ ਸਮਾਨਤਾ ਮੈਟ੍ਰਿਕਸ ਵਰਤੋ। ਨੋਟ: ਆਨਲਾਈਨ ਸਿਫਾਰਸ਼ਾਂ ਲਈ Seerr ਏਕੀਕਰਨ ਦੀ ਲੋੜ ਹੈ।';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb ਸਮਾਨਤਾ';
@@ -239,10 +239,10 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਟੈਕਸਟ ਦਾਖਲ ਕਰਨ ਲਈ ਡਿਫਾਲਟ ਰੂਪ ਵਿੱਚ ਆਪਣੇ ਡਿਵਾਈਸ ਦੀ ਇਨਪੁੱਟ ਵਿਧੀ ਵਰਤੋ';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'ਮੌਜੂਦਾ Tortugarr ਦਿੱਖ ਤੁਹਾਨੂੰ ਸਭ ਨੂੰ ਪਿਆਰ ਹੋ ਗਈ ਹੈ';
 
   @override
@@ -3315,7 +3315,7 @@ class AppLocalizationsPa extends AppLocalizations {
       'Tortugarr, MakD ਵਿੱਚੋਂ ਚੁਣੋ, ਜਾਂ ਮੀਡੀਆ ਬਾਰ ਨੂੰ ਬੰਦ ਕਰੋ';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'ਮਾਕਡੀ';
@@ -4002,7 +4002,7 @@ class AppLocalizationsPa extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Tortugarr ਵਿੱਚ ਚਲਾਓ';
+  String get playInMoonfin => 'Tortugarr ਵਿੱਚ ਚਲਾਓ';
 
   @override
   String requestedByName(String name) {
@@ -8533,10 +8533,10 @@ class AppLocalizationsPa extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Discord ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ';
 
   @override
-  String get settingsSupportNotflix => 'ਸਹਾਇਤਾ Tortugarr';
+  String get settingsSupportMoonfin => 'ਸਹਾਇਤਾ Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'ਡਿਵੈਲਪਰ ਨੂੰ ਇੱਕ ਕੌਫੀ ਦਾਨ ਕਰੋ';
+  String get settingsSupportMoonfinSubtitle => 'ਡਿਵੈਲਪਰ ਨੂੰ ਇੱਕ ਕੌਫੀ ਦਾਨ ਕਰੋ';
 
   @override
   String get settingsLegal => 'ਕਾਨੂੰਨੀ';

@@ -150,7 +150,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Klassinen on alkuperäinen keskitetty Tortugarr-asettelu. Moderni on mukautuva, elokuvamainen asettelu.';
 
   @override
-  String get detailScreenStyleNotflix => 'Klassinen';
+  String get detailScreenStyleMoonfin => 'Klassinen';
 
   @override
   String get detailScreenStyleModern => 'Moderni';
@@ -177,7 +177,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Käytä paikalliseen kirjastoon perustuvaa Tortugarr suosittelee -algoritmia tai TMDb:n verkossa toimivia samankaltaisuusmittareita. Huomaa: verkkosuositukset vaativat Seerr-integraation.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr suosittelee';
+  String get recommendationSystemMoonfin => 'Tortugarr suosittelee';
 
   @override
   String get recommendationSystemTmdb => 'TMDb-samankaltaisuus';
@@ -241,10 +241,10 @@ class AppLocalizationsFi extends AppLocalizations {
       'Käytä oletusarvoisesti laitteesi syöttötapaa tekstin syöttämiseen';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Nykyinen Tortugarr look, johon olette kaikki rakastuneet';
 
   @override
@@ -3337,7 +3337,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Valitse eri mediapalkkityylien välillä tai poista mediapalkki käytöstä';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4030,7 +4030,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Pelaa Tortugarrissä';
+  String get playInMoonfin => 'Pelaa Tortugarrissä';
 
   @override
   String requestedByName(String name) {
@@ -8598,10 +8598,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Liity Discordiin';
 
   @override
-  String get settingsSupportNotflix => 'Tue Tortugarr';
+  String get settingsSupportMoonfin => 'Tue Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Lahjoita kahvi kehittäjälle';
+  String get settingsSupportMoonfinSubtitle => 'Lahjoita kahvi kehittäjälle';
 
   @override
   String get settingsLegal => 'LAKI';

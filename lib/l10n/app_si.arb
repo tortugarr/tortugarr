@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "වත්මන් Tortugarr පෙනුම ඔබ සියලු දෙනාටම ආදරය කර ඇත",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "වත්මන් Tortugarr පෙනුම ඔබ සියලු දෙනාටම ආදරය කර ඇත",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "නියොන් ස්පන්දනය",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "මැක්ඩී",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Tortugarr හි සෙල්ලම් කරන්න",
-    "@playInNotflix": {
+    "playInMoonfin": "Tortugarr හි සෙල්ලම් කරන්න",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "{name} විසින් ඉල්ලා ඇත",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Discord එක්වන්න",
     "settingsJoinDiscordSubtitle": "ප්රජාව සමඟ කතාබස් කරන්න",
     "settingsJoinTheDiscord": "Discord එකට එකතු වෙන්න",
-    "settingsSupportNotflix": "Tortugarr සඳහා සහය වන්න",
+    "settingsSupportMoonfin": "Tortugarr සඳහා සහය වන්න",
     "settingsLegal": "නීතිමය",
     "settingsLicenses": "බලපත්ර",
     "settingsOpenSourceLicenseNotices": "විවෘත මූලාශ්‍ර බලපත්‍ර දැන්වීම්",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "HDR වීඩියෝ ධාවනය සඳහා ස්වයංක්‍රීයව HDR සබල කර පිටවීමේදී සංදර්ශන ප්‍රකාරය ප්‍රතිසාධනය කරන්න.",
     "whenFullscreen": "පූර්ණ තිරයේදී",
     "transcodingLimits": "ට්‍රාන්ස්කෝඩිං සීමා",
-    "settingsSupportNotflixSubtitle": "සංවර්ධකයාට කෝපි කෝප්පයක් පරිත්‍යාග කරන්න",
+    "settingsSupportMoonfinSubtitle": "සංවර්ධකයාට කෝපි කෝප්පයක් පරිත්‍යාග කරන්න",
     "accountPreferences": "ගිණුම් මනාප",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "සම්භාව්‍ය",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "සම්භාව්‍ය",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "නවීන",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr නිර්දේශ",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr නිර්දේශ",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb සමානතාව",

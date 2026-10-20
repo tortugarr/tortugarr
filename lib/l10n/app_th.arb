@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "ปัจจุบัน Tortugarr ดูสิ พวกคุณทุกคนต้องหลงรัก",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "ปัจจุบัน Tortugarr ดูสิ พวกคุณทุกคนต้องหลงรัก",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "นีออนพัลส์",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "หมากดี",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "เล่นใน Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "เล่นใน Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "ร้องขอโดย {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "เข้าร่วม Discord",
     "settingsJoinDiscordSubtitle": "พูดคุยกับชุมชน",
     "settingsJoinTheDiscord": "เข้าร่วม Discord",
-    "settingsSupportNotflix": "สนับสนุน Tortugarr",
+    "settingsSupportMoonfin": "สนับสนุน Tortugarr",
     "settingsLegal": "ถูกกฎหมาย",
     "settingsLicenses": "ใบอนุญาต",
     "settingsOpenSourceLicenseNotices": "ประกาศเกี่ยวกับใบอนุญาตโอเพ่นซอร์ส",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "เปิดใช้งาน HDR โดยอัตโนมัติสำหรับการเล่นวิดีโอ HDR และคืนค่าโหมดการแสดงผลเมื่อออก",
     "whenFullscreen": "เมื่อเปิดเต็มจอ",
     "transcodingLimits": "ขีดจำกัดการแปลงรหัส",
-    "settingsSupportNotflixSubtitle": "เลี้ยงกาแฟให้นักพัฒนา",
+    "settingsSupportMoonfinSubtitle": "เลี้ยงกาแฟให้นักพัฒนา",
     "accountPreferences": "การตั้งค่าบัญชี",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "คลาสสิก",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "คลาสสิก",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "โมเดิร์น",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr แนะนำ",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr แนะนำ",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "ความคล้ายคลึงจาก TMDb",

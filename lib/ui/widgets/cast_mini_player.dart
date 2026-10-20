@@ -341,7 +341,7 @@ class _CastMiniPlayerContentState extends State<_CastMiniPlayerContent> {
                           final positionTicks =
                               _castService.remotePositionNotifier.value;
                           _doAction(() async {
-                            // A Notflix session switches in place; only
+                            // A Tortugarr session switches in place; only
                             // receivers that cannot get the item reloaded.
                             final switched = await _castService.selectTrack(
                               _kind,

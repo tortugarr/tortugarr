@@ -98,7 +98,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
 
   static String _titleForTheme(AppLocalizations l10n, ThemeSpec spec) {
     return switch (spec.id) {
-      ThemeRegistry.moonfinId => l10n.themeNotflix,
+      ThemeRegistry.moonfinId => l10n.themeMoonfin,
       ThemeRegistry.neonPulseId => l10n.themeNeonPulse,
       ThemeRegistry.glassId => l10n.themeGlass,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHero,
@@ -108,7 +108,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
 
   static String? _subtitleForTheme(AppLocalizations l10n, ThemeSpec spec) {
     return switch (spec.id) {
-      ThemeRegistry.moonfinId => l10n.themeNotflixSubtitle,
+      ThemeRegistry.moonfinId => l10n.themeMoonfinSubtitle,
       ThemeRegistry.neonPulseId => l10n.themeNeonPulseSubtitle,
       ThemeRegistry.glassId => l10n.themeGlassSubtitle,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHeroSubtitle,

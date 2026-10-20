@@ -149,7 +149,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'Klassiek is de oorspronkelijke gecentreerde moonfin-lay-out. Modern is een responsieve, filmische lay-out.';
 
   @override
-  String get detailScreenStyleNotflix => 'Klassiek';
+  String get detailScreenStyleMoonfin => 'Klassiek';
 
   @override
   String get detailScreenStyleModern => 'Modern';
@@ -176,7 +176,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'Gebruik het lokale bibliotheekalgoritme van Tortugarr Recommends of de online gelijkeniswaarden van TMDb. Let op: online aanbevelingen vereisen Seerr-integratie.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb-gelijkenis';
@@ -240,10 +240,10 @@ class AppLocalizationsNl extends AppLocalizations {
       'Gebruik standaard de invoermethode van uw apparaat voor tekstinvoer';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'De originele, schone Tortugarr-standaard.';
 
   @override
@@ -3338,7 +3338,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'Kies uit verschillende stijlen voor de mediabalk of schakel de mediabalk uit';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4035,7 +4035,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Speel in Tortugarr';
+  String get playInMoonfin => 'Speel in Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8611,10 +8611,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Sluit je aan bij de Discord';
 
   @override
-  String get settingsSupportNotflix => 'Steun Tortugarr';
+  String get settingsSupportMoonfin => 'Steun Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Doneer een kop koffie aan de ontwikkelaar';
 
   @override

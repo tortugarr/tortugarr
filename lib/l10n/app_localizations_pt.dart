@@ -148,7 +148,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Clássico é o layout centralizado original do Tortugarr. Moderno é um layout cinematográfico responsivo.';
 
   @override
-  String get detailScreenStyleNotflix => 'Clássico';
+  String get detailScreenStyleMoonfin => 'Clássico';
 
   @override
   String get detailScreenStyleModern => 'Moderno';
@@ -175,7 +175,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Use o algoritmo de biblioteca local do Tortugarr Recomenda ou as métricas de similaridade online do TMDb. Nota: as recomendações online exigem a integração com o Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recomenda';
+  String get recommendationSystemMoonfin => 'Tortugarr Recomenda';
 
   @override
   String get recommendationSystemTmdb => 'Similaridade TMDb';
@@ -239,10 +239,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Use o método de entrada do seu dispositivo por padrão para entrada de texto';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Visual Tortugarr atual que todos vocês adoraram';
 
   @override
@@ -3340,7 +3340,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Escolha entre vários estilos de barra de mídia ou desative a barra de mídia';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4040,7 +4040,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Reproduzir no Tortugarr';
+  String get playInMoonfin => 'Reproduzir no Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8635,10 +8635,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Participe do Discord';
 
   @override
-  String get settingsSupportNotflix => 'Suporte Tortugarr';
+  String get settingsSupportMoonfin => 'Suporte Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Doe um café para o desenvolvedor';
 
   @override
@@ -11621,7 +11621,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       'Clássico é o layout centralizado original do Tortugarr. Moderno é um layout cinematográfico responsivo.';
 
   @override
-  String get detailScreenStyleNotflix => 'Clássico';
+  String get detailScreenStyleMoonfin => 'Clássico';
 
   @override
   String get detailScreenStyleModern => 'Moderno';
@@ -11648,7 +11648,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       'Use o algoritmo de biblioteca local do Tortugarr Recommends ou as métricas de similaridade online do TMDb. Observação: recomendações online exigem a integração com o Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'Similaridade do TMDb';
@@ -11712,10 +11712,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       'Usar o método de entrada do seu dispositivo por padrão para digitar';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Look atual do Tortugarr que todos vocês adoraram';
 
   @override
@@ -14714,7 +14714,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       'Escolha entre vários estilos de barra de mídia ou desative a barra de mídia';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -15365,7 +15365,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get cancelRequest => 'Cancelar solicitação';
 
   @override
-  String get playInNotflix => 'Reproduzir no Tortugarr';
+  String get playInMoonfin => 'Reproduzir no Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -19905,10 +19905,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get settingsJoinTheDiscord => 'Participe do Discord';
 
   @override
-  String get settingsSupportNotflix => 'Apoie Tortugarr';
+  String get settingsSupportMoonfin => 'Apoie Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Pague um café para o desenvolvedor';
 
   @override
@@ -22708,7 +22708,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
       'Clássico é a disposição centrada original do Tortugarr. Moderno é uma disposição cinematográfica responsiva.';
 
   @override
-  String get detailScreenStyleNotflix => 'Clássico';
+  String get detailScreenStyleMoonfin => 'Clássico';
 
   @override
   String get detailScreenStyleModern => 'Moderno';
@@ -22735,7 +22735,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
       'Usa o algoritmo de biblioteca local do Tortugarr Recomenda ou as métricas de semelhança online do TMDb. Nota: as recomendações online requerem a integração com o Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recomenda';
+  String get recommendationSystemMoonfin => 'Tortugarr Recomenda';
 
   @override
   String get recommendationSystemTmdb => 'Semelhança TMDb';
@@ -22799,10 +22799,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
       'Usa o método de entrada do teu dispositivo por predefinição para entrada de texto';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'O visual atual do Tortugarr que todos adoram';
 
   @override
@@ -25807,7 +25807,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
       'Escolhe entre vários estilos de barra de conteúdo ou desativa a barra de conteúdo';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -26458,7 +26458,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get cancelRequest => 'Cancelar pedido';
 
   @override
-  String get playInNotflix => 'Reproduzir no Tortugarr';
+  String get playInMoonfin => 'Reproduzir no Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -30996,10 +30996,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get settingsJoinTheDiscord => 'Participa no Discord';
 
   @override
-  String get settingsSupportNotflix => 'Apoia o Tortugarr';
+  String get settingsSupportMoonfin => 'Apoia o Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Doe um café para o programador';
+  String get settingsSupportMoonfinSubtitle => 'Doe um café para o programador';
 
   @override
   String get settingsLegal => 'JURÍDICO';

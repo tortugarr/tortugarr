@@ -13,7 +13,7 @@ Future<void> showSupportDialog(BuildContext context) =>
     showQrOrLaunch(
       context,
       url: _supportUrl,
-      title: AppLocalizations.of(context).settingsSupportNotflix,
+      title: AppLocalizations.of(context).settingsSupportMoonfin,
     );
 
 Future<void> showQrOrLaunch(

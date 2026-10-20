@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Nuna aspekto de Tortugarr, kiun vi ĉiuj amis",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Nuna aspekto de Tortugarr, kiun vi ĉiuj amis",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neona Pulso",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Ludu en Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Ludu en Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Petite de {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Aliĝu al Discord",
     "settingsJoinDiscordSubtitle": "Babilu kun la komunumo",
     "settingsJoinTheDiscord": "Aliĝu al la Discord",
-    "settingsSupportNotflix": "Subtenu Tortugarr",
+    "settingsSupportMoonfin": "Subtenu Tortugarr",
     "settingsLegal": "LEGALE",
     "settingsLicenses": "Licencoj",
     "settingsOpenSourceLicenseNotices": "Malfermfontaj licencaj avizoj",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Aŭtomate ebligu HDR por HDR-video-reproduktado kaj restarigu ekranreĝimon ĉe eliro.",
     "whenFullscreen": "Kiam plenekrana",
     "transcodingLimits": "Transkodigaj Limoj",
-    "settingsSupportNotflixSubtitle": "Donacu kafon al la programisto",
+    "settingsSupportMoonfinSubtitle": "Donacu kafon al la programisto",
     "accountPreferences": "KONTAJ PREFEROJ",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasika",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasika",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moderna",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-simileco",

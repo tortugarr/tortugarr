@@ -147,7 +147,7 @@ class AppLocalizationsYue extends AppLocalizations {
       '「經典」係 Tortugarr 原本嘅置中版面。「現代」係自適應嘅電影感版面。';
 
   @override
-  String get detailScreenStyleNotflix => '經典';
+  String get detailScreenStyleMoonfin => '經典';
 
   @override
   String get detailScreenStyleModern => '現代';
@@ -172,7 +172,7 @@ class AppLocalizationsYue extends AppLocalizations {
       '用 Tortugarr Recommends 嘅本機媒體庫演算法，或者網上 TMDb 嘅相似度指標。注意：網上推薦需要整合 Seerr。';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 相似度';
@@ -233,10 +233,10 @@ class AppLocalizationsYue extends AppLocalizations {
   String get keyboardPreferSystemImeDescription => '預設用你部裝置嘅輸入法嚟打字';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
+  String get themeMoonfinSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => '霓虹脈動';
@@ -3226,7 +3226,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get mediaBarModeDescription => '在 Tortugarr、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -3881,7 +3881,7 @@ class AppLocalizationsYue extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => '玩 Tortugarr';
+  String get playInMoonfin => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8265,10 +8265,10 @@ class AppLocalizationsYue extends AppLocalizations {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportNotflix => '支援Tortugarr';
+  String get settingsSupportMoonfin => '支援Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => '請開發者飲杯咖啡';
+  String get settingsSupportMoonfinSubtitle => '請開發者飲杯咖啡';
 
   @override
   String get settingsLegal => '合法的';
@@ -11071,10 +11071,10 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get keyboardPreferSystemImeDescription => '默认情况下使用您的设备输入法进行文本输入';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '目前的 Tortugarr 外观你们都喜欢';
+  String get themeMoonfinSubtitle => '目前的 Tortugarr 外观你们都喜欢';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -13627,7 +13627,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get mediaBarModeDescription => '在 Tortugarr、MakD 之间进行选择，或关闭媒体栏';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '马克D';
@@ -14120,7 +14120,7 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get cancelRequest => '取消请求';
 
   @override
-  String get playInNotflix => '玩 Tortugarr';
+  String get playInMoonfin => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -17444,10 +17444,10 @@ class AppLocalizationsYueCn extends AppLocalizationsYue {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportNotflix => '支持Tortugarr';
+  String get settingsSupportMoonfin => '支持Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Donate a coffee to the developer';
 
   @override
@@ -19474,10 +19474,10 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
       'Use your device input method by default for text entry';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
+  String get themeMoonfinSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -22030,7 +22030,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get mediaBarModeDescription => '在 Tortugarr、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -22523,7 +22523,7 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get cancelRequest => '取消請求';
 
   @override
-  String get playInNotflix => '玩 Tortugarr';
+  String get playInMoonfin => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -25847,10 +25847,10 @@ class AppLocalizationsYueHk extends AppLocalizationsYue {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportNotflix => '支援Tortugarr';
+  String get settingsSupportMoonfin => '支援Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Donate a coffee to the developer';
 
   @override

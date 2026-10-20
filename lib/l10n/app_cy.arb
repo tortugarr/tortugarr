@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Golwg gyfredol Tortugarr rydych chi i gyd wedi dod i garu",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Golwg gyfredol Tortugarr rydych chi i gyd wedi dod i garu",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Pwls Neon",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Chwarae yn Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Chwarae yn Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Cais gan {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Ymunwch â Discord",
     "settingsJoinDiscordSubtitle": "Sgwrsio gyda'r gymuned",
     "settingsJoinTheDiscord": "Ymunwch â'r Discord",
-    "settingsSupportNotflix": "Cefnogwch Tortugarr",
+    "settingsSupportMoonfin": "Cefnogwch Tortugarr",
     "settingsLegal": "CYFREITHIOL",
     "settingsLicenses": "Trwyddedau",
     "settingsOpenSourceLicenseNotices": "Hysbysiadau trwydded ffynhonnell agored",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Galluogi HDR yn awtomatig ar gyfer chwarae fideo HDR ac adfer modd arddangos wrth ymadael.",
     "whenFullscreen": "Pan fydd sgrin lawn",
     "transcodingLimits": "Terfynau Trawsgodio",
-    "settingsSupportNotflixSubtitle": "Rhowch goffi i'r datblygwr",
+    "settingsSupportMoonfinSubtitle": "Rhowch goffi i'r datblygwr",
     "accountPreferences": "DEWISIADAU CYFRIF",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Clasurol",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Clasurol",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Modern",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Recommends",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Tebygrwydd TMDb",

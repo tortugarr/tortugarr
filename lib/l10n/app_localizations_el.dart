@@ -150,7 +150,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Το Κλασικό είναι η αρχική, κεντραρισμένη διάταξη του Tortugarr. Το Μοντέρνο είναι μια προσαρμοστική, κινηματογραφική διάταξη.';
 
   @override
-  String get detailScreenStyleNotflix => 'Κλασικό';
+  String get detailScreenStyleMoonfin => 'Κλασικό';
 
   @override
   String get detailScreenStyleModern => 'Μοντέρνο';
@@ -177,7 +177,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Χρησιμοποιήστε τον αλγόριθμο τοπικής βιβλιοθήκης «Προτάσεις Tortugarr» ή τις διαδικτυακές μετρήσεις ομοιότητας του TMDb. Σημείωση: οι διαδικτυακές προτάσεις απαιτούν ενσωμάτωση με το Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Προτάσεις Tortugarr';
+  String get recommendationSystemMoonfin => 'Προτάσεις Tortugarr';
 
   @override
   String get recommendationSystemTmdb => 'Ομοιότητα TMDb';
@@ -241,10 +241,10 @@ class AppLocalizationsEl extends AppLocalizations {
       'Χρησιμοποιήστε τη μέθοδο εισαγωγής της συσκευής σας από προεπιλογή για την εισαγωγή κειμένου';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle =>
+  String get themeMoonfinSubtitle =>
       'Η τρέχουσα εμφάνιση Tortugarr που όλοι έχετε αγαπήσει.';
 
   @override
@@ -3362,7 +3362,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε ανάμεσα σε διάφορα στυλ γραμμής πολυμέσων ή απενεργοποιήστε τη γραμμή πολυμέσων';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4063,7 +4063,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Αναπαραγωγή στο Tortugarr';
+  String get playInMoonfin => 'Αναπαραγωγή στο Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8705,10 +8705,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Εγγραφείτε στο Discord';
 
   @override
-  String get settingsSupportNotflix => 'Υποστήριξη Tortugarr';
+  String get settingsSupportMoonfin => 'Υποστήριξη Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle =>
+  String get settingsSupportMoonfinSubtitle =>
       'Δωρίστε έναν καφέ στον προγραμματιστή';
 
   @override

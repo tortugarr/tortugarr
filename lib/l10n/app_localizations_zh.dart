@@ -146,7 +146,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get detailScreenStyleSubtitle => 'Tortugarr 是经典布局；Modern 是自适应影院风布局。';
 
   @override
-  String get detailScreenStyleNotflix => 'Tortugarr';
+  String get detailScreenStyleMoonfin => 'Tortugarr';
 
   @override
   String get detailScreenStyleModern => '现代';
@@ -171,7 +171,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '可选用「Tortugarr本地资料库推荐算法」，或线上 TMDb 相似度匹配算法。注意：线上推荐功能需要对接 Seerr 服务。';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr 智能推荐';
+  String get recommendationSystemMoonfin => 'Tortugarr 智能推荐';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 相似影片推荐';
@@ -232,10 +232,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get keyboardPreferSystemImeDescription => '文本输入默认使用设备输入法';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '原版简洁清爽的 Tortugarr 默认界面。';
+  String get themeMoonfinSubtitle => '原版简洁清爽的 Tortugarr 默认界面。';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -3221,7 +3221,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mediaBarModeDescription => '选择不同的媒体栏样式，或关闭媒体栏';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -3872,7 +3872,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => '在 Tortugarr 中播放';
+  String get playInMoonfin => '在 Tortugarr 中播放';
 
   @override
   String requestedByName(String name) {
@@ -8251,10 +8251,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportNotflix => '支持 Tortugarr';
+  String get settingsSupportMoonfin => '支持 Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => '请开发者喝杯咖啡';
+  String get settingsSupportMoonfinSubtitle => '请开发者喝杯咖啡';
 
   @override
   String get settingsLegal => '法律信息';
@@ -11068,7 +11068,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '「經典」是 Tortugarr 原本的置中版面；「現代」是自適應的電影感版面。';
 
   @override
-  String get detailScreenStyleNotflix => '經典';
+  String get detailScreenStyleMoonfin => '經典';
 
   @override
   String get detailScreenStyleModern => '現代';
@@ -11093,7 +11093,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '使用 Tortugarr Recommends 的本機媒體庫演算法，或線上 TMDb 的相似度指標。注意：線上推薦需要整合 Seerr。';
 
   @override
-  String get recommendationSystemNotflix => 'Tortugarr Recommends';
+  String get recommendationSystemMoonfin => 'Tortugarr Recommends';
 
   @override
   String get recommendationSystemTmdb => 'TMDb 相似度';
@@ -11154,10 +11154,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get keyboardPreferSystemImeDescription => '預設使用您裝置的輸入法輸入文字';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
+  String get themeMoonfinSubtitle => '目前的 Tortugarr 外觀你們都喜歡';
 
   @override
   String get themeNeonPulse => '霓虹脈動';
@@ -14049,7 +14049,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get mediaBarModeDescription => '在 Tortugarr、MakD 之間進行選擇，或關閉媒體列';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => '馬克D';
@@ -14656,7 +14656,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cancelRequest => '取消請求';
 
   @override
-  String get playInNotflix => '玩 Tortugarr';
+  String get playInMoonfin => '玩 Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -18977,10 +18977,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsJoinTheDiscord => '加入 Discord';
 
   @override
-  String get settingsSupportNotflix => '支援Tortugarr';
+  String get settingsSupportMoonfin => '支援Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => '請開發者喝杯咖啡';
+  String get settingsSupportMoonfinSubtitle => '請開發者喝杯咖啡';
 
   @override
   String get settingsLegal => '合法的';

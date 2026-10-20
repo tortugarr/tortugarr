@@ -23,7 +23,7 @@ REPO_ROOT="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --path-format=abs
 REPO_ROOT="$(cd "$REPO_ROOT" && pwd)"
 REF="${1:-public-build}"
 WORK="${PUBLIC_BUILD_DIR:-$HOME/workspace/tortugarr-public-build}"
-OUT_DIR="${PUBLIC_APK_DIR:-$HOME/workspace/notflix-apks}"
+OUT_DIR="${PUBLIC_APK_DIR:-$HOME/workspace/tortugarr-apks}"
 SECRETS_REL="lib/data/services/download/download_now_secrets.dart"
 TEMPLATE_REL="lib/data/services/download/download_now_secrets.example.dart"
 

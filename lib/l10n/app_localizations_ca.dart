@@ -148,7 +148,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Clàssic es el disseny original de moonfin centrat. Modern es el disseny cinemàtic interactiu.';
 
   @override
-  String get detailScreenStyleNotflix => 'Clàssic';
+  String get detailScreenStyleMoonfin => 'Clàssic';
 
   @override
   String get detailScreenStyleModern => 'Modern';
@@ -175,7 +175,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Utilitza l\'algorisme local de recomanacions de Tortugarr (Tortugarr Recommends) o les mètriques de similitud en línia de TMDb. Nota: Les recomanacions en línia requereixen la integració amb Seerr.';
 
   @override
-  String get recommendationSystemNotflix => 'Recomanacions Tortugarr';
+  String get recommendationSystemMoonfin => 'Recomanacions Tortugarr';
 
   @override
   String get recommendationSystemTmdb => 'Similitud de TMDb';
@@ -239,10 +239,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Utilitzeu el mètode d\'entrada del dispositiu de manera predeterminada per a l\'entrada de text';
 
   @override
-  String get themeNotflix => 'Tortugarr';
+  String get themeMoonfin => 'Tortugarr';
 
   @override
-  String get themeNotflixSubtitle => 'L\'aspecte original de Tortugarr.';
+  String get themeMoonfinSubtitle => 'L\'aspecte original de Tortugarr.';
 
   @override
   String get themeNeonPulse => 'pols de neó';
@@ -3360,7 +3360,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Trieu entre Tortugarr, MakD o desactiva la barra multimèdia';
 
   @override
-  String get mediaBarModeNotflix => 'Tortugarr';
+  String get mediaBarModeMoonfin => 'Tortugarr';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4063,7 +4063,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get cancelRequest4k => 'Cancel 4K Request';
 
   @override
-  String get playInNotflix => 'Reprodueix a Tortugarr';
+  String get playInMoonfin => 'Reprodueix a Tortugarr';
 
   @override
   String requestedByName(String name) {
@@ -8702,10 +8702,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Uneix-te al Discord';
 
   @override
-  String get settingsSupportNotflix => 'Suport Tortugarr';
+  String get settingsSupportMoonfin => 'Suport Tortugarr';
 
   @override
-  String get settingsSupportNotflixSubtitle => 'Dona un cafè al desenvolupador';
+  String get settingsSupportMoonfinSubtitle => 'Dona un cafè al desenvolupador';
 
   @override
   String get settingsLegal => 'LEGAL';

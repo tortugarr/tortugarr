@@ -54,7 +54,7 @@ String _clientName() {
   if (PlatformDetection.isMacOS) return 'Moonfin for macOS';
   if (PlatformDetection.isWindows) return 'Moonfin for Windows';
   if (PlatformDetection.isLinux) return 'Moonfin for Linux';
-  return 'Notflix';
+  return 'Moonfin';
 }
 
 String _joinNonEmpty(List<String?> parts, String separator) {

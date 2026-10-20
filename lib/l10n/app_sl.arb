@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Trenutni videz Tortugarr, ki ste ga vsi vzljubili",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Trenutni videz Tortugarr, ki ste ga vsi vzljubili",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonski utrip",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Igrajte v Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Igrajte v Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Zahteval {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Pridružite se Discordu",
     "settingsJoinDiscordSubtitle": "Klepetajte s skupnostjo",
     "settingsJoinTheDiscord": "Pridružite se Discordu",
-    "settingsSupportNotflix": "Podprite Tortugarr",
+    "settingsSupportMoonfin": "Podprite Tortugarr",
     "settingsLegal": "PRAVNO",
     "settingsLicenses": "Licence",
     "settingsOpenSourceLicenseNotices": "Obvestila o odprtokodnih licencah",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Samodejno omogoči HDR pri predvajanju videa HDR in ob izhodu obnovi način prikaza.",
     "whenFullscreen": "Na celotnem zaslonu",
     "transcodingLimits": "Omejitve prekodiranja",
-    "settingsSupportNotflixSubtitle": "Kupite razvijalcu kavo",
+    "settingsSupportMoonfinSubtitle": "Kupite razvijalcu kavo",
     "accountPreferences": "NASTAVITVE RAČUNA",
     "@accountPreferences": {
         "description": "Section header for account preferences settings"
@@ -7334,8 +7334,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klasični",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klasični",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Sodobni",
@@ -7366,8 +7366,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr priporoča",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr priporoča",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "Podobnost TMDb",

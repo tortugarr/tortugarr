@@ -172,12 +172,12 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeNotflix": "Tortugarr",
-    "@themeNotflix": {
+    "themeMoonfin": "Tortugarr",
+    "@themeMoonfin": {
         "description": "Display name for the Tortugarr theme"
     },
-    "themeNotflixSubtitle": "Det nuværende Tortugarr-udseende, som alle vil komme til at elske",
-    "@themeNotflixSubtitle": {
+    "themeMoonfinSubtitle": "Det nuværende Tortugarr-udseende, som alle vil komme til at elske",
+    "@themeMoonfinSubtitle": {
         "description": "Preview description for the Tortugarr theme"
     },
     "themeNeonPulse": "Neonpuls",
@@ -3561,8 +3561,8 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeNotflix": "Tortugarr",
-    "@mediaBarModeNotflix": {
+    "mediaBarModeMoonfin": "Tortugarr",
+    "@mediaBarModeMoonfin": {
         "description": "Media bar style option: Tortugarr"
     },
     "mediaBarModeMakd": "MakD",
@@ -4293,8 +4293,8 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInNotflix": "Spil i Tortugarr",
-    "@playInNotflix": {
+    "playInMoonfin": "Spil i Tortugarr",
+    "@playInMoonfin": {
         "description": "Button to play available media in Tortugarr"
     },
     "requestedByName": "Anmodet af {name}",
@@ -6558,7 +6558,7 @@
     "settingsJoinDiscord": "Tilmeld dig Discord",
     "settingsJoinDiscordSubtitle": "Chat med fællesskabet",
     "settingsJoinTheDiscord": "Deltag i Discord",
-    "settingsSupportNotflix": "Støt Tortugarr",
+    "settingsSupportMoonfin": "Støt Tortugarr",
     "settingsLegal": "JURIDISK",
     "settingsLicenses": "Licenser",
     "settingsOpenSourceLicenseNotices": "Open source-licensmeddelelser",
@@ -7309,7 +7309,7 @@
     "autoHdrSwitchingDescription": "Aktiver automatisk HDR for HDR-videoafspilning og gendan visningstilstand ved afslutning.",
     "whenFullscreen": "Når fuldskærm",
     "transcodingLimits": "Omkodningsgrænser",
-    "settingsSupportNotflixSubtitle": "Doner en kop kaffe til udvikleren",
+    "settingsSupportMoonfinSubtitle": "Doner en kop kaffe til udvikleren",
     "interfaceLanguage": "Sprog i brugerflade",
     "@interfaceLanguage": {
         "description": "Label for the app interface language setting"
@@ -7383,8 +7383,8 @@
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
-    "detailScreenStyleNotflix": "Klassisk",
-    "@detailScreenStyleNotflix": {
+    "detailScreenStyleMoonfin": "Klassisk",
+    "@detailScreenStyleMoonfin": {
         "description": "Detail screen style option: the classic centered layout"
     },
     "detailScreenStyleModern": "Moderne",
@@ -7415,8 +7415,8 @@
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemNotflix": "Tortugarr Anbefaler",
-    "@recommendationSystemNotflix": {
+    "recommendationSystemMoonfin": "Tortugarr Anbefaler",
+    "@recommendationSystemMoonfin": {
         "description": "Recommendation system option: Tortugarr Recommends"
     },
     "recommendationSystemTmdb": "TMDb-lighed",
