@@ -111,6 +111,8 @@ enum BottomNavHubAction {
   syncPlay,
   quickConnect,
   remoteControl,
+  activeDownloads,
+  adultSearch,
 }
 
 /// A tile in the bottom navbar hub: a destination that isn't pinned, or an
@@ -147,6 +149,8 @@ List<BottomNavHubTile> resolveHubTiles({
   required bool shuffle,
   required bool syncPlay,
   required bool quickConnect,
+  bool activeDownloads = false,
+  bool adultSearch = false,
   Set<BottomNavTab> alsoOnBar = const {},
 }) {
   final onBar = {
@@ -156,6 +160,10 @@ List<BottomNavHubTile> resolveHubTiles({
   };
   return [
     if (savedAvailable) const BottomNavHubTile.action(BottomNavHubAction.saved),
+    // Tortugarr: what the TV's menu offers next to its tabs.
+    if (activeDownloads)
+      const BottomNavHubTile.action(BottomNavHubAction.activeDownloads),
+    if (adultSearch) const BottomNavHubTile.action(BottomNavHubAction.adultSearch),
     for (final tab in BottomNavTab.values)
       if (!onBar.contains(tab) && gates.offers(tab) && isAvailable(tab))
         BottomNavHubTile.tab(tab),

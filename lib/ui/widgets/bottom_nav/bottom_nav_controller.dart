@@ -11,10 +11,13 @@ import '../../../data/models/aggregated_library.dart';
 import '../../../data/repositories/multi_server_repository.dart';
 import '../../../data/repositories/user_views_repository.dart';
 import '../../../data/services/achievements_service.dart';
+import '../../../data/services/adult_library_service.dart';
 import '../../../data/services/library_scope_service.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../../data/services/saved_media_presence.dart';
+import '../../../data/services/seerr_active_downloads_service.dart';
 import '../../../data/services/server_messages_service.dart';
+import '../../../data/services/tortugarr/download_features.dart';
 import '../../../preference/bottom_nav_tabs.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
@@ -35,6 +38,9 @@ class BottomNavController extends ChangeNotifier {
     _messages?.addListener(notifyListeners);
     _achievements?.addListener(notifyListeners);
     _savedMedia?.addListener(notifyListeners);
+    _activeDownloads?.addListener(notifyListeners);
+    AdultLibraryService.visible.addListener(notifyListeners);
+    DownloadFeatures.capabilities.addListener(notifyListeners);
     _userSub = _userRepo.currentUserStream.listen((_) {
       _loadUser();
       notifyListeners();
@@ -52,6 +58,8 @@ class BottomNavController extends ChangeNotifier {
   final ServerMessagesService? _messages = _maybe<ServerMessagesService>();
   final AchievementsService? _achievements = _maybe<AchievementsService>();
   final SavedMediaPresence? _savedMedia = _maybe<SavedMediaPresence>();
+  final SeerrActiveDownloadsService? _activeDownloads =
+      _maybe<SeerrActiveDownloadsService>();
 
   static T? _maybe<T extends Object>() =>
       GetIt.instance.isRegistered<T>() ? GetIt.instance<T>() : null;
@@ -135,6 +143,12 @@ class BottomNavController extends ChangeNotifier {
       syncPlay: syncPlay,
       quickConnect:
           _maybe<MediaServerClient>()?.serverType == ServerType.jellyfin,
+      activeDownloads: _activeDownloads != null &&
+          (_activeDownloads!.hasActive ||
+              _prefs.get(UserPreferences.alwaysShowDownloadsButton)),
+      adultSearch: _prefs.get(UserPreferences.adultSearchInMenu) &&
+          AdultLibraryService.visible.value &&
+          DownloadFeatures.adultDownloads,
       alsoOnBar: style == BottomNavbarStyle.split
           ? const {BottomNavTab.search}
           : const {},
@@ -272,6 +286,9 @@ class BottomNavController extends ChangeNotifier {
       _messages?.removeListener(notifyListeners);
       _achievements?.removeListener(notifyListeners);
       _savedMedia?.removeListener(notifyListeners);
+      _activeDownloads?.removeListener(notifyListeners);
+      AdultLibraryService.visible.removeListener(notifyListeners);
+      DownloadFeatures.capabilities.removeListener(notifyListeners);
     } catch (_) {}
     _userSub?.cancel();
     _librariesReloadDebounce?.cancel();

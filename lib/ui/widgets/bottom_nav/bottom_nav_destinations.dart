@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +12,9 @@ import '../../navigation/destinations.dart';
 import '../../navigation/home_refresh_bus.dart';
 import '../../screens/downloads/downloads_panel.dart';
 import '../../screens/syncplay/syncplay_screen.dart';
+import '../active_downloads_dialog.dart';
 import '../adaptive/sf_symbol.dart';
+import '../adult_library_dialog.dart' show searchNewAdult;
 import '../remote_control_dialog.dart';
 import '../seerr_icons.dart';
 import '../shuffle_overlay.dart';
@@ -41,6 +45,8 @@ String bottomNavHubActionLabel(
       BottomNavHubAction.syncPlay => l10n.syncPlay,
       BottomNavHubAction.quickConnect => l10n.quickConnect,
       BottomNavHubAction.remoteControl => l10n.remoteControl,
+      BottomNavHubAction.activeDownloads => l10n.tgDownloads,
+      BottomNavHubAction.adultSearch => l10n.tgAdultSearchButton,
     };
 
 String bottomNavbarStyleLabel(
@@ -66,6 +72,8 @@ IconData bottomNavHubActionIcon(BottomNavHubAction action) => switch (action) {
       BottomNavHubAction.syncPlay => Icons.groups_rounded,
       BottomNavHubAction.quickConnect => Icons.devices,
       BottomNavHubAction.remoteControl => Icons.settings_remote_rounded,
+      BottomNavHubAction.activeDownloads => Icons.downloading_rounded,
+      BottomNavHubAction.adultSearch => Icons.travel_explore,
     };
 
 /// Filled when active and outlined when not, the way both platforms mark
@@ -183,5 +191,9 @@ void runBottomNavHubAction(BuildContext context, BottomNavHubAction action) {
       showQuickConnectCodeDialog(context);
     case BottomNavHubAction.remoteControl:
       showRemoteControlDialog(context);
+    case BottomNavHubAction.activeDownloads:
+      showActiveDownloadsDialog(context);
+    case BottomNavHubAction.adultSearch:
+      unawaited(searchNewAdult(context));
   }
 }

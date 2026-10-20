@@ -36,12 +36,15 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
       ).resolvePins(prefs.get(UserPreferences.bottomNavbarTabs));
 
   String _bottomTabsSummary(AppLocalizations l10n, UserPreferences prefs) {
-    final labels =
-        _barTabs(prefs).map((t) => bottomNavTabLabel(l10n, t)).join(', ');
+    final labels = _barTabs(prefs)
+        .map((t) => bottomNavTabLabel(l10n, t))
+        .join(', ');
     final raw = prefs.get(UserPreferences.bottomNavbarTabs);
     if (!isAutomaticBottomNavTabs(raw)) return labels;
-    return [l10n.bottomNavbarTabsAutomatic, if (labels.isNotEmpty) labels]
-        .join(' · ');
+    return [
+      l10n.bottomNavbarTabsAutomatic,
+      if (labels.isNotEmpty) labels,
+    ].join(' · ');
   }
 
   @override
@@ -202,13 +205,12 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       icon: Icons.favorite,
                       onChanged: _pushPersonalizationSync,
                     ),
-                  if (PlatformDetection.isTV)
-                    SwitchPreferenceTile(
-                      preference: UserPreferences.alwaysShowDownloadsButton,
-                      title: appL10n().tgAlwaysShowDownloads,
-                      subtitle: appL10n().tgAlwaysShowDownloadsSubtitle,
-                      icon: Icons.downloading_rounded,
-                    ),
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.alwaysShowDownloadsButton,
+                    title: appL10n().tgAlwaysShowDownloads,
+                    subtitle: appL10n().tgAlwaysShowDownloadsSubtitle,
+                    icon: Icons.downloading_rounded,
+                  ),
                   if (!onBar.contains(BottomNavTab.liveTv))
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.liveTv),
@@ -226,7 +228,8 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       subtitle: l10n.settingsShowLibrariesButtonInNavigation,
                       icon: Icons.video_library,
                       onChanged: _pushPersonalizationSync,
-                    ),                  SwitchPreferenceTile(
+                    ),
+                  SwitchPreferenceTile(
                     preference: UserPreferences.showSyncPlayButton,
                     title: l10n.settingsSyncplayButton,
                     subtitle: l10n.settingsSyncplayButtonSubtitle,

@@ -107,6 +107,28 @@ void main() {
       ]);
     });
 
+    // 2026-10-21: the phone gets what the TV's menu has next to its tabs.
+    test('active downloads and adult search, after saved media', () {
+      final hub = resolveHubTiles(
+        gates: const BottomNavTabGates(),
+        barItems: resolveBarItems(const BottomNavTabGates(), ''),
+        isAvailable: (_) => true,
+        savedAvailable: true,
+        shuffle: false,
+        syncPlay: false,
+        quickConnect: false,
+        activeDownloads: true,
+        adultSearch: true,
+      );
+      expect(hub.take(3), const [
+        BottomNavHubTile.action(BottomNavHubAction.saved),
+        BottomNavHubTile.action(BottomNavHubAction.activeDownloads),
+        BottomNavHubTile.action(BottomNavHubAction.adultSearch),
+      ]);
+      expect(tiles().map((t) => t.action),
+          isNot(contains(BottomNavHubAction.activeDownloads)));
+    });
+
     test('Kids Mode keeps what children may use', () {
       final kids = tiles(
         gates: const BottomNavTabGates(
