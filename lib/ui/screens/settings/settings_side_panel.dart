@@ -5,7 +5,6 @@ import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart' show CupertinoSlider;
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -240,18 +239,8 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
     await pin.removePin();
   }
 
-  /// The router is taken before the panel closes: after the pop this
-  /// context is unmounted, navigateTopLevel returned without navigating, and
-  /// Administration only closed Settings.
-  void _openAdmin(BuildContext context) {
-    final router = GoRouter.of(context);
-    _closeSettingsPanel();
-    if (PlatformDetection.isWeb) {
-      router.go(Destinations.admin);
-    } else {
-      router.push(Destinations.admin);
-    }
-  }
+  void _openAdmin(BuildContext context) =>
+      closeThenNavigateTopLevel(context, _closeSettingsPanel, Destinations.admin);
 
   void _closeSettingsPanel() {
     final rootNavigator = Navigator.of(context, rootNavigator: true);

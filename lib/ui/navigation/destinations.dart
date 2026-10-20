@@ -29,6 +29,20 @@ extension NavigationX on BuildContext {
   }
 }
 
+/// Closes a panel or sheet with [close], then opens [route] at the top level.
+/// The router is looked up first: the close unmounts [context], and
+/// navigateTopLevel on an unmounted context returns without navigating, so
+/// Settings > Administration only closed Settings (2026-10-20).
+void closeThenNavigateTopLevel(BuildContext context, VoidCallback close, String route) {
+  final router = GoRouter.of(context);
+  close();
+  if (PlatformDetection.isWeb) {
+    router.go(route);
+  } else {
+    router.push(route);
+  }
+}
+
 class Destinations {
   const Destinations._();
 

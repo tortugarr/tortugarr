@@ -71,8 +71,9 @@ void openSavedItem(
   DownloadedItem item, {
   bool autoPlay = true,
 }) {
-  closeDownloadsPanel(context);
-  context.navigateTopLevel(
+  closeThenNavigateTopLevel(
+    context,
+    () => closeDownloadsPanel(context),
     Destinations.item(item.itemId, serverId: item.serverId, autoPlay: autoPlay),
   );
 }

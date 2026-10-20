@@ -552,8 +552,9 @@ Future<bool> _confirm(
 /// Leaves the settings panel behind and opens the item on the main navigator.
 void _openItem(BuildContext context, String itemId) {
   final root = Navigator.of(context, rootNavigator: true);
-  if (root.canPop()) root.pop();
-  context.navigateTopLevel(Destinations.item(itemId));
+  closeThenNavigateTopLevel(context, () {
+    if (root.canPop()) root.pop();
+  }, Destinations.item(itemId));
 }
 
 /// The rarity tiers keep recognisable hues, because people read rarity by
