@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// D-pad way out of the admin pages' text fields and sliders on TV.
+/// D-pad navigation for the admin area on TV.
 ///
 /// The admin pages are built for touch. A text field keeps Up/Down for its
 /// cursor and a slider for its value, so a remote got stuck on them and the
 /// app had to be closed; a mouse was the only way out (2026-10-20). Here Up
 /// and Down always move to the field above or below, Left/Right still edit,
 /// and Back in a text field leaves the field instead of the page.
+///
+/// Each page also sits in the shell's own navigator, whose focus scope kept
+/// the remote from reaching the rail, the page list and the search box, and a
+/// page whose top has nothing focusable (the dashboard's tiles) never scrolled
+/// back up. When the usual move finds nothing, Up first scrolls the page to
+/// its top, and then the nearest control in that direction anywhere in the
+/// admin area takes focus.
 ///
 /// A HardwareKeyboard handler sees the key before the focused widget does,
 /// which a Focus or Shortcuts above the page would not.
@@ -46,15 +53,15 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
         ctx.findAncestorWidgetOfExactType<EditableText>() != null;
     final inSlider = ctx.findAncestorWidgetOfExactType<Slider>() != null ||
         ctx.findAncestorWidgetOfExactType<RangeSlider>() != null;
-    if (!inText && !inSlider) return false;
 
     final key = event.logicalKey;
-    if (key == LogicalKeyboardKey.arrowUp) {
-      node.focusInDirection(TraversalDirection.up);
-      return true;
-    }
-    if (key == LogicalKeyboardKey.arrowDown) {
-      node.focusInDirection(TraversalDirection.down);
+    final direction = _directions[key];
+    if (direction != null) {
+      // Left/Right edit a text field or a slider.
+      final horizontal = direction == TraversalDirection.left ||
+          direction == TraversalDirection.right;
+      if (horizontal && (inText || inSlider)) return false;
+      _move(node, ctx, direction);
       return true;
     }
     if (inText &&
@@ -67,6 +74,67 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
     }
     return false;
   }
+
+  static final _directions = <LogicalKeyboardKey, TraversalDirection>{
+    LogicalKeyboardKey.arrowUp: TraversalDirection.up,
+    LogicalKeyboardKey.arrowDown: TraversalDirection.down,
+    LogicalKeyboardKey.arrowLeft: TraversalDirection.left,
+    LogicalKeyboardKey.arrowRight: TraversalDirection.right,
+  };
+
+  void _move(FocusNode node, BuildContext ctx, TraversalDirection direction) {
+    if (node.focusInDirection(direction)) return;
+    if (direction == TraversalDirection.up) {
+      final position = Scrollable.maybeOf(ctx)?.position;
+      if (position != null && position.pixels > position.minScrollExtent + 1) {
+        position.animateTo(position.minScrollExtent,
+            duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+        return;
+      }
+    }
+    _nearestInArea(node, direction)?.requestFocus();
+  }
+
+  /// The closest focusable control in [direction] across the whole admin
+  /// area, past the page navigator's focus scope.
+  FocusNode? _nearestInArea(FocusNode from, TraversalDirection direction) {
+    final r = from.rect;
+    FocusNode? best;
+    var bestScore = double.infinity;
+    for (final n in FocusManager.instance.rootScope.traversalDescendants) {
+      if (n == from || n is FocusScopeNode || !n.canRequestFocus) continue;
+      final c = n.context;
+      if (c == null || !_insideArea(c)) continue;
+      final o = n.rect;
+      if (o.isEmpty) continue;
+      final double gap;
+      final double cross;
+      switch (direction) {
+        case TraversalDirection.up:
+          gap = r.top - o.bottom;
+          cross = _rangeGap(r.left, r.right, o.left, o.right);
+        case TraversalDirection.down:
+          gap = o.top - r.bottom;
+          cross = _rangeGap(r.left, r.right, o.left, o.right);
+        case TraversalDirection.left:
+          gap = r.left - o.right;
+          cross = _rangeGap(r.top, r.bottom, o.top, o.bottom);
+        case TraversalDirection.right:
+          gap = o.left - r.right;
+          cross = _rangeGap(r.top, r.bottom, o.top, o.bottom);
+      }
+      if (gap < -1) continue;
+      final score = gap + cross * 2;
+      if (score < bestScore) {
+        bestScore = score;
+        best = n;
+      }
+    }
+    return best;
+  }
+
+  static double _rangeGap(double a1, double a2, double b1, double b2) =>
+      b2 < a1 ? a1 - b2 : (b1 > a2 ? b1 - a2 : 0);
 
   /// Only the admin area: the handler is global while this widget lives.
   bool _insideArea(BuildContext ctx) {

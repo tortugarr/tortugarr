@@ -56,4 +56,63 @@ void main() {
     expect(top.hasPrimaryFocus, isFalse);
     expect(slider.hasPrimaryFocus, isTrue);
   });
+
+  // 2026-10-20 on the TV: the dashboard's top (tiles, server info) has nothing
+  // focusable and the page sits in the shell's own navigator, so the remote
+  // could neither scroll back to the top nor reach the menu on the left.
+  testWidgets('Up scrolls a page to its top, Left leaves the page navigator',
+      (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final menu = FocusNode();
+    final scan = FocusNode();
+    final below = FocusNode();
+    final scroll = ScrollController();
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: TextButton(focusNode: menu, onPressed: () {}, child: const Text('Dashboard')),
+              ),
+              Expanded(
+                child: Navigator(
+                  onGenerateRoute: (_) => MaterialPageRoute<void>(
+                    builder: (_) => ListView(
+                      controller: scroll,
+                      children: [
+                        const SizedBox(height: 600, child: Text('tiles and server info')),
+                        TextButton(focusNode: scan, onPressed: () {}, child: const Text('Scan All Libraries')),
+                        const SizedBox(height: 400),
+                        TextButton(focusNode: below, onPressed: () {}, child: const Text('See All')),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
+    scroll.jumpTo(500);
+    scan.requestFocus();
+    await tester.pumpAndSettle();
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.pumpAndSettle();
+    expect(scroll.offset, 0);
+    expect(scan.hasPrimaryFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pumpAndSettle();
+    expect(menu.hasPrimaryFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(menu.hasPrimaryFocus, isFalse);
+  });
 }
