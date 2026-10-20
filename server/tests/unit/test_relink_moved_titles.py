@@ -145,6 +145,21 @@ def main():
     check("collection moved off the clips folder, the other kept",
           [c["rootFolderPath"] for c in radarr.collections] == ["/data/library/3", "/data/library/3"], radarr.collections)
 
+    # A wanted series in Tortugarr's own folder (inside the WSL disk) moves to the user's folder;
+    # one with files there is listed, never moved by Tortugarr.
+    sonarr.series = {8: {"id": 8, "path": "/data/media/tv/WWE Raw", "statistics": {"episodeFileCount": 0}},
+                     9: {"id": 9, "path": "/data/media/tv/Kept", "statistics": {"episodeFileCount": 3}}}
+    sonarr.folders["/data/media/tv"] = {"Kept"}
+    tb.STATE["extra_libraries"] = [
+        {"host_path": "/mnt/e/-=Serier=-/", "container_path": "/data/library/4", "type": "tv", "arr_manage": True}]
+    sonarr.roots = [{"id": 1, "path": "/data/media/tv", "freeSpace": 900}, {"id": 2, "path": "/data/library/4", "freeSpace": 50}]
+    del warnings[:]
+    tb.relink_moved_titles("sonarr", sonarr)
+    check("wanted series leaves the WSL disk for the user's folder", sonarr.series[8]["path"] == "/data/library/4/WWE Raw", sonarr.series[8])
+    check("series with files in the WSL disk is listed, not moved",
+          sonarr.series[9]["path"] == "/data/media/tv/Kept" and any("Kept" in w for w in warnings), warnings)
+    check("Tortugarr's own root folder is kept", any(r["path"] == "/data/media/tv" for r in sonarr.roots))
+
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 

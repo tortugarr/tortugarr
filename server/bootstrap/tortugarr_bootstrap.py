@@ -1012,14 +1012,16 @@ def relink_moved_titles(app, h):
     moved, stray, failed = [], [], []
     for t in titles:
         root, _, name = t["path"].rstrip("/").rpartition("/")
-        wrong_type = root.startswith("/data/library/") and root not in roots
+        # Tortugarr's own folder when new titles go only to the user's folders: on WSL it is the
+        # Linux disk, and a title waiting there would be downloaded into it.
+        wrong_type = (root.startswith("/data/library/") and root not in roots) or (root == roots[0] and root not in targets)
         if not name:
             continue
         if has(root, name):
             if wrong_type:
                 stray.append(t["path"])
             continue
-        found = [r for r in roots if r != root and has(r, name)]
+        found = [r for r in targets if r != root and has(r, name)] or [r for r in roots if r != root and has(r, name)]
         if len(found) == 1:
             target = found[0]
         elif wrong_type and not found and not title_has_files(t):
