@@ -82,6 +82,9 @@ r=$(call "$ADMIN" DELETE /Downloads/NOPE); code=${r%%$'\t'*}
 
 # ---- Adult library (spec 3.9): off by default, then switched on as the admin page does.
 GUID=19f30fb1bb78444ba75e2997883b215c
+# The installed Tortugarr plugin version (dist/Tortugarr_<version>), so the checks below follow a bump.
+PVER=$(ls -d "$(dirname "$0")"/../plugin/dist/Tortugarr_* 2>/dev/null | sed -n 's:.*/Tortugarr_::p' | head -1)
+PVER=${PVER:-1.1.0.0}
 r=$(call "$ADMIN" GET /Capabilities); body=${r#*$'\t'}
 [ "$(jq .features.adult <<< "$body")" = false ] && pass "adult library: off by default" || fail "adult flag by default: $body"
 r=$(call "$ADMIN" POST /Adult/Searches '{"query":"anything"}'); code=${r%%$'\t'*}; body=${r#*$'\t'}
@@ -174,15 +177,15 @@ hk() { curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: applicat
 [ "$(hk -H "X-Tortugarr-Hook-Key: $HK")" = 204 ] && pass "refresh hook with the shared key: 204" || fail "refresh hook with the shared key answered $(hk -H "X-Tortugarr-Hook-Key: $HK")"
 
 # The plugin's picture and a real server name instead of the container id.
-[ "$(curl -s -o /dev/null -w '%{http_code}:%{content_type}' -H "Authorization: MediaBrowser Token=\"$ADMIN\"" "$J/Plugins/$GUID/1.0.0.0/Image")" = "200:image/png" ] \
-  && pass "the plugin has its picture (the parrot logo)" || fail "plugin image: $(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: MediaBrowser Token=\"$ADMIN\"" "$J/Plugins/$GUID/1.0.0.0/Image")"
+[ "$(curl -s -o /dev/null -w '%{http_code}:%{content_type}' -H "Authorization: MediaBrowser Token=\"$ADMIN\"" "$J/Plugins/$GUID/$PVER/Image")" = "200:image/png" ] \
+  && pass "the plugin has its picture (the parrot logo)" || fail "plugin image: $(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: MediaBrowser Token=\"$ADMIN\"" "$J/Plugins/$GUID/$PVER/Image")"
 sn=$(curl -s "$J/System/Info/Public" | jq -r .ServerName)
 [ "$sn" = Tortugarr ] && pass "server name: $sn" || fail "server name is '$sn'"
 
 # 3.13 the plugin's own catalog: the plugin page finds Tortugarr in a repository.
 man=$(curl -s "$J/Tortugarr/v1/Repository/manifest.json")
 [ "$(curl -s -o /dev/null -w '%{http_code}' "$(jq -r '.[0].imageUrl' <<< "$man" | sed "s#^http://[^/]*#$J#")")" = 200 ] && pass "the catalog shows the logo" || fail "catalog imageUrl does not answer"
-[ "$(jq -r '.[0].versions[0].version' <<< "$man")" = 1.0.0.0 ] && pass "the catalog is served without login and lists the installed version" || fail "catalog: $(head -c 200 <<< "$man")"
+[ "$(jq -r '.[0].versions[0].version' <<< "$man")" = "$PVER" ] && pass "the catalog is served without login and lists the installed version" || fail "catalog: $(head -c 200 <<< "$man")"
 curl -s -o /tmp/tortugarr-pkg.zip "$(jq -r '.[0].versions[0].sourceUrl' <<< "$man" | sed "s#^http://[^/]*#$J#")"
 [ "$(md5sum /tmp/tortugarr-pkg.zip | cut -d' ' -f1)" = "$(jq -r '.[0].versions[0].checksum' <<< "$man")" ] && pass "the package zip matches the catalog's checksum" || fail "package zip checksum differs"
 [ "$(curl -s -H "Authorization: MediaBrowser Token=\"$ADMIN\"" "$J/Repositories" | jq 'any(.[]; .Name == "Tortugarr")')" = true ] && pass "the installer registered the Tortugarr catalog in Jellyfin" || fail "no Tortugarr repository in Jellyfin"

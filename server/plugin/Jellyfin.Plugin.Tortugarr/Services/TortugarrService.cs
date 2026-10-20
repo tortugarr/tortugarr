@@ -97,8 +97,77 @@ public sealed class TortugarrService
     public ArrClient Seerr => new(Http, "Seerr", Cfg.SeerrUrl, Cfg.SeerrApiKey, "/api/v1");
 
     internal QbitClient Qbit => Cfg.DownloadClientType == "qbittorrent"
-        ? new QbitClient(Http, Cfg.DownloadClientUrl, Cfg.DownloadClientUsername, Cfg.DownloadClientPassword)
+        ? new QbitClient(Http, QbitUrl, Cfg.DownloadClientUsername, Cfg.DownloadClientPassword)
         : throw new NotConfiguredException("qBittorrent");
+
+    private static readonly TimeSpan QbitAddressFresh = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan QbitAddressFirstWait = TimeSpan.FromSeconds(3);
+    private static (string Url, DateTime At)? _arrQbit;
+    private static DateTime _arrQbitTried = DateTime.MinValue;
+    private static Task? _arrQbitRefresh;
+    private static readonly object ArrQbitLock = new();
+
+    /// <summary>
+    /// qBittorrent's address: the one Radarr (else Sonarr) downloads to, so the plugin cannot
+    /// drift from the *arrs when the download client is moved there; the configured
+    /// DownloadClientUrl when neither answers. Re-read every few minutes in the background.
+    /// </summary>
+    internal string QbitUrl
+    {
+        get
+        {
+            var known = _arrQbit;
+            Task? refresh = null;
+            lock (ArrQbitLock)
+            {
+                var stale = DateTime.UtcNow - _arrQbitTried > QbitAddressFresh;
+                if (stale && (_arrQbitRefresh is null || _arrQbitRefresh.IsCompleted))
+                {
+                    _arrQbitTried = DateTime.UtcNow;
+                    _arrQbitRefresh = RefreshQbitUrlAsync();
+                }
+
+                refresh = _arrQbitRefresh;
+            }
+
+            if (known is null && refresh is not null)
+            {
+                // First use: give the *arr a moment rather than starting on a stale setting.
+                refresh.Wait(QbitAddressFirstWait);
+                known = _arrQbit;
+            }
+
+            return known?.Url ?? Cfg.DownloadClientUrl;
+        }
+    }
+
+    private async Task RefreshQbitUrlAsync()
+    {
+        foreach (var (name, arr) in new (string, Func<ArrClient>)[] { ("Radarr", () => Radarr), ("Sonarr", () => Sonarr) })
+        {
+            try
+            {
+                var url = ArrQbitAddress.From(
+                    await arr().Get("/downloadclient", CancellationToken.None, 10).ConfigureAwait(false));
+                if (url is null)
+                {
+                    continue;
+                }
+
+                if (_arrQbit?.Url != url)
+                {
+                    _log.LogInformation("qBittorrent address from {Arr}: {Url} (plugin setting: {Configured})", name, url, Cfg.DownloadClientUrl);
+                }
+
+                _arrQbit = (url, DateTime.UtcNow);
+                return;
+            }
+            catch (Exception e)
+            {
+                _log.LogDebug(e, "qBittorrent address from {Arr} not available", name);
+            }
+        }
+    }
 
     /// <summary>The adult library is usable: switched on, Prowlarr set, qBittorrent as the client.</summary>
     public static bool AdultReady(Configuration.PluginConfiguration c) =>
@@ -1034,7 +1103,7 @@ public sealed class TortugarrService
 
         // qBittorrent itself, not the Radarr/Sonarr queue: a grab is not in the queue at once, and a
         // fast download is imported and gone from it before the app asks (lab: 404 for 79 s).
-        var qbit = new QbitClient(Http, c.DownloadClientUrl, c.DownloadClientUsername, c.DownloadClientPassword);
+        var qbit = new QbitClient(Http, QbitUrl, c.DownloadClientUsername, c.DownloadClientPassword);
         var torrent = (await qbit.ListAll(ct).ConfigureAwait(false))
             .FirstOrDefault(t => string.Equals((string?)t?["hash"], downloadId, StringComparison.OrdinalIgnoreCase));
         var category = (string?)torrent?["category"];
@@ -1100,7 +1169,7 @@ public sealed class TortugarrService
         var c = Cfg;
         if (c.DownloadClientType == "qbittorrent")
         {
-            var qbit = new QbitClient(Http, c.DownloadClientUrl, c.DownloadClientUsername, c.DownloadClientPassword);
+            var qbit = new QbitClient(Http, QbitUrl, c.DownloadClientUsername, c.DownloadClientPassword);
             var free = await qbit.FreeSpace(ct).ConfigureAwait(false);
             if (free is not null)
             {

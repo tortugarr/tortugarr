@@ -101,6 +101,47 @@ public sealed class ArrClient
 }
 
 /// <summary>qBittorrent Web API (v2): login, torrent files, free space.</summary>
+/// <summary>
+/// Where Radarr or Sonarr sends torrents: the enabled qBittorrent client with the best
+/// priority, as an address. The plugin follows it, so a download client moved in Radarr
+/// (to a qBittorrent on the host, say) needs no change in the plugin's own settings.
+/// The *arrs hide passwords in this list, so only the address comes from here.
+/// </summary>
+public static class ArrQbitAddress
+{
+    public static string? From(JsonNode? clients)
+    {
+        if (clients is not JsonArray list)
+        {
+            return null;
+        }
+
+        var best = list
+            .Where(c => c is not null
+                && string.Equals((string?)c["implementation"], "QBittorrent", StringComparison.OrdinalIgnoreCase)
+                && ((bool?)c["enable"] ?? false))
+            .OrderBy(c => (int?)c!["priority"] ?? 1)
+            .FirstOrDefault();
+        if (best?["fields"] is not JsonArray fields)
+        {
+            return null;
+        }
+
+        JsonNode? Field(string name) => fields.FirstOrDefault(f => (string?)f?["name"] == name)?["value"];
+        var host = (string?)Field("host");
+        if (string.IsNullOrWhiteSpace(host))
+        {
+            return null;
+        }
+
+        var port = (int?)Field("port") ?? 8080;
+        var scheme = ((bool?)Field("useSsl") ?? false) ? "https" : "http";
+        var urlBase = ((string?)Field("urlBase") ?? string.Empty).Trim('/');
+        var url = $"{scheme}://{host.Trim()}:{port}";
+        return urlBase.Length > 0 ? $"{url}/{urlBase}" : url;
+    }
+}
+
 public sealed class QbitClient
 {
     private readonly HttpClient _http;
