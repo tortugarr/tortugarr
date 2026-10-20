@@ -253,7 +253,7 @@ You need these installed first (setting them up is up to you):
 
 | To build | You need |
 |---|---|
-| The **app** (TV and phone APK) | [Flutter](https://flutter.dev) 3.44 (stable) with the Android SDK, and a JDK 17 or newer |
+| The **app** (TV and phone APK) | [Flutter](https://flutter.dev) 3.44.8 (newer versions need a Gradle update first) with the Android SDK, and a JDK 17 or newer |
 | The **server plugin** | The [.NET 10 SDK](https://dotnet.microsoft.com) |
 
 App:
