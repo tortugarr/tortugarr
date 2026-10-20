@@ -84,7 +84,7 @@ r=$(call "$ADMIN" DELETE /Downloads/NOPE); code=${r%%$'\t'*}
 GUID=19f30fb1bb78444ba75e2997883b215c
 # The installed Tortugarr plugin version (dist/Tortugarr_<version>), so the checks below follow a bump.
 PVER=$(ls -d "$(dirname "$0")"/../plugin/dist/Tortugarr_* 2>/dev/null | sed -n 's:.*/Tortugarr_::p' | head -1)
-PVER=${PVER:-1.1.0.0}
+PVER=${PVER:-1.1.1.0}
 r=$(call "$ADMIN" GET /Capabilities); body=${r#*$'\t'}
 [ "$(jq .features.adult <<< "$body")" = false ] && pass "adult library: off by default" || fail "adult flag by default: $body"
 r=$(call "$ADMIN" POST /Adult/Searches '{"query":"anything"}'); code=${r%%$'\t'*}; body=${r#*$'\t'}

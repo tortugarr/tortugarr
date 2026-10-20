@@ -961,27 +961,42 @@ public sealed class TortugarrService
         return want.Length == 0 ? null : list.FirstOrDefault(t => Name((string?)t["name"] ?? string.Empty) == want);
     }
 
+    /// <summary>
+    /// True once Radarr/Sonarr has the grab in its queue (or already imported it). The app makes
+    /// the Seerr request only then: that request makes the *arr search, and its search only sees
+    /// downloads in its queue. The queue is rebuilt from the download client about once a minute,
+    /// so a "grabbed" history entry alone is too early - on 2026-10-20 a Seerr request seven
+    /// seconds after the grab got a second copy of the same movie. Asking for
+    /// RefreshMonitoredDownloads puts the grab in the queue within seconds.
+    /// </summary>
     private static async Task<(bool, string?)> WaitQueued(ArrClient arr, SearchJob job, TimeSpan wait, CancellationToken ct)
     {
         var since = DateTimeOffset.UtcNow.AddSeconds(-5);
         var end = DateTimeOffset.UtcNow + wait;
+        string? downloadId = null;
+        var refreshed = DateTimeOffset.MinValue;
         while (DateTimeOffset.UtcNow < end)
         {
-            // A fast download can be imported - and gone from the queue - before we look, so a
-            // "grabbed" history entry since the grab also counts (and carries the download id).
             // No eventType in the query: Sonarr 4 only takes it as a number there (HTTP 400 for
             // "grabbed"), while every answer names it as text - so it is filtered here.
             var hist = await arr.Get(job.IsMovie ? $"/history/movie?movieId={job.ArrId}"
                 : job.Request.Type == "episode" ? $"/history?episodeId={job.ArrId}&pageSize=50&sortKey=date&sortDirection=descending"
                 : $"/history/series?seriesId={job.ArrId}", ct).ConfigureAwait(false);
-            var grabbed = (hist as JsonArray ?? hist?["records"] as JsonArray ?? new JsonArray())
-                .Where(h => string.Equals((string?)h?["eventType"], "grabbed", StringComparison.OrdinalIgnoreCase))
+            var recent = (hist as JsonArray ?? hist?["records"] as JsonArray ?? new JsonArray())
                 .Where(h => DateTimeOffset.TryParse((string?)h?["date"], out var d) && d >= since)
+                .ToList();
+            downloadId ??= recent
+                .Where(h => string.Equals((string?)h?["eventType"], "grabbed", StringComparison.OrdinalIgnoreCase))
                 .OrderByDescending(h => (string?)h?["date"])
+                .Select(h => (string?)h?["downloadId"])
                 .FirstOrDefault();
-            if (grabbed is not null)
+
+            // A fast download can be imported - and gone from the queue - before we look.
+            if (downloadId is not null && recent.Any(h =>
+                    string.Equals((string?)h?["downloadId"], downloadId, StringComparison.OrdinalIgnoreCase)
+                    && ((string?)h?["eventType"] ?? string.Empty).Contains("Imported", StringComparison.OrdinalIgnoreCase)))
             {
-                return (true, (string?)grabbed["downloadId"]);
+                return (true, downloadId);
             }
 
             var q = await arr.Get("/queue?pageSize=200", ct).ConfigureAwait(false);
@@ -996,10 +1011,27 @@ public sealed class TortugarrService
                 }
             }
 
+            // Grabbed but not in the queue yet: have the *arr read the download client now
+            // instead of at its next minute.
+            if (downloadId is not null && DateTimeOffset.UtcNow - refreshed > TimeSpan.FromSeconds(10))
+            {
+                refreshed = DateTimeOffset.UtcNow;
+                try
+                {
+                    await arr.Post("/command", new JsonObject { ["name"] = "RefreshMonitoredDownloads" }, ct).ConfigureAwait(false);
+                }
+                catch (UpstreamException)
+                {
+                    // The minute refresh still comes.
+                }
+            }
+
             await Task.Delay(2000, ct).ConfigureAwait(false);
         }
 
-        return (false, null);
+        // Not in the queue in time: report it as not queued, so the app leaves Seerr alone
+        // rather than risk a second download.
+        return (false, downloadId);
     }
 
     // ------------------------------------------------------------------ downloads (3.4 - 3.6)

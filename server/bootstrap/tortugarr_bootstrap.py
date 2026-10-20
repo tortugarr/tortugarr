@@ -848,6 +848,9 @@ def configure_media_management(app, h):
         "extraFileExtensions": "srt,ass,ssa,sub,idx",
         "setPermissionsLinux": False,
         "deleteEmptyFolders": True,
+        # The user picks the exact release; a repack or proper must not replace it (or be grabbed
+        # next to it) by itself. Still preferred when the *arr chooses on its own.
+        "downloadPropersAndRepacks": "doNotUpgrade",
     })
     # When a downloaded file is deleted (watched and cleaned up), stop monitoring that
     # episode/movie, or Sonarr/Radarr would simply download it again.
