@@ -498,6 +498,40 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
 
   UserPreferences get _userPrefs => GetIt.instance<UserPreferences>();
 
+  int get _loadingLogoScale =>
+      (loadingLogoScale(_userPrefs.get(UserPreferences.loadingLogoScale)) * 100).round();
+
+  /// Size of the spinning loading logo, 25-100 % in steps of 5.
+  Future<void> _pickLoadingLogoScale() async {
+    final current = _loadingLogoScale;
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(appL10n().tgLoadingLogoSize),
+        content: SizedBox(
+          width: 320,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              for (var v = 25; v <= 100; v += 5)
+                _choiceRow(
+                  label: '$v %',
+                  selected: v == current,
+                  multi: false,
+                  autofocus: v == current,
+                  onTap: () {
+                    unawaited(_userPrefs.set(UserPreferences.loadingLogoScale, v));
+                    Navigator.of(dialogContext).pop();
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (mounted) setState(() {});
+  }
+
   /// Sound for the clip that plays when you stop on a title while browsing
   /// (home row previews and media bar trailers). On by default.
   bool get _previewAudio => _userPrefs.get(UserPreferences.previewAudioEnabled);
@@ -730,6 +764,12 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
                 onTap: () =>
                     context.pushSettingsScreen(const ScreensaverSettingsScreen()),
               ),
+            _PanelEntry(
+              icon: Icons.photo_size_select_large,
+              title: appL10n().tgLoadingLogoSize,
+              subtitle: '${appL10n().tgLoadingLogoSizeSubtitle} · $_loadingLogoScale %',
+              onTap: () => unawaited(_pickLoadingLogoScale()),
+            ),
             _PanelEntry(
               icon: Icons.playlist_add_check,
               title: appL10n().tgShowMissingEpisodes,

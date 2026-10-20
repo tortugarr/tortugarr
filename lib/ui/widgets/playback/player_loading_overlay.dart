@@ -5,6 +5,12 @@ import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import 'loading_animation_widget.dart';
 
+/// The loading logo's size factor for a stored percentage: 25-100 %, and
+/// 45 % when nothing is stored. 100 % was the size before 2026-10-21, which
+/// was too large on the TV.
+double loadingLogoScale(int? percent) =>
+    (percent ?? UserPreferences.loadingLogoScale.defaultValue).clamp(25, 100) / 100;
+
 class PlayerLoadingOverlay extends StatefulWidget {
   const PlayerLoadingOverlay({
     super.key,
@@ -75,10 +81,12 @@ class _PlayerLoadingOverlayState extends State<PlayerLoadingOverlay>
         prefs?.get(UserPreferences.loadingAnimationImage) ??
         LoadingAnimationImage.moonfinLogo;
 
-    final sizePref = prefs?.get(UserPreferences.loadingAnimationSize) ??
-        LoadingAnimationSize.medium;
+    // One size setting, Tortugarr's Loading logo size, in percent of the
+    // medium size; the small/medium/large choice is not offered.
+    const sizePref = LoadingAnimationSize.medium;
 
-    final effectiveSize = widget.customSize ?? sizePref.pixelSize;
+    final effectiveSize = widget.customSize ??
+        sizePref.pixelSize * loadingLogoScale(prefs?.get(UserPreferences.loadingLogoScale));
 
     final effectivePosition = widget.customPosition ??
         prefs?.get(UserPreferences.loadingAnimationPosition) ??

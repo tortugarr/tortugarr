@@ -19,7 +19,6 @@ class _LoadingAnimationScreenState extends State<_LoadingAnimationScreen> {
     final l10n = AppLocalizations.of(context);
     final currentImage = _prefs.get(UserPreferences.loadingAnimationImage);
     final isNone = currentImage == LoadingAnimationImage.none;
-    final currentSize = _prefs.get(UserPreferences.loadingAnimationSize);
     final currentPos = _prefs.get(UserPreferences.loadingAnimationPosition);
     final currentSpeed = _prefs.get(UserPreferences.loadingAnimationSpeed);
     final showText = _prefs.get(UserPreferences.showLoadingAnimationText);
@@ -60,7 +59,7 @@ class _LoadingAnimationScreenState extends State<_LoadingAnimationScreen> {
               child: _buildPreviewWindow(
                 context,
                 image: currentImage,
-                size: currentSize,
+                scale: loadingLogoScale(_prefs.get(UserPreferences.loadingLogoScale)),
                 position: currentPos,
                 speed: currentSpeed,
                 showText: showText,
@@ -68,20 +67,6 @@ class _LoadingAnimationScreenState extends State<_LoadingAnimationScreen> {
             ),
             adaptiveListSection(
               children: [
-                EnumPreferenceTile<LoadingAnimationSize>(
-                  preference: UserPreferences.loadingAnimationSize,
-                  title: l10n.loadingAnimationSize,
-                  icon: Icons.photo_size_select_actual_outlined,
-                  onChanged: () => setState(() {}),
-                  labelOf: (value) => switch (value) {
-                    LoadingAnimationSize.thumbnail =>
-                      l10n.loadingAnimationSizeThumbnail,
-                    LoadingAnimationSize.small => l10n.loadingAnimationSizeSmall,
-                    LoadingAnimationSize.medium =>
-                      l10n.loadingAnimationSizeMedium,
-                    LoadingAnimationSize.large => l10n.loadingAnimationSizeLarge,
-                  },
-                ),
                 EnumPreferenceTile<LoadingAnimationPosition>(
                   preference: UserPreferences.loadingAnimationPosition,
                   title: l10n.loadingAnimationPosition,
@@ -143,7 +128,7 @@ class _LoadingAnimationScreenState extends State<_LoadingAnimationScreen> {
   Widget _buildPreviewWindow(
     BuildContext context, {
     required LoadingAnimationImage image,
-    required LoadingAnimationSize size,
+    required double scale,
     required LoadingAnimationPosition position,
     required LoadingAnimationSpeed speed,
     required bool showText,
@@ -151,20 +136,10 @@ class _LoadingAnimationScreenState extends State<_LoadingAnimationScreen> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    // Scale down dimensions slightly so large fits nicely inside the 200px preview viewport
-    final previewPixelSize = switch (size) {
-      LoadingAnimationSize.thumbnail => 24.0,
-      LoadingAnimationSize.small => 44.0,
-      LoadingAnimationSize.medium => 72.0,
-      LoadingAnimationSize.large => 104.0,
-    };
-
-    final previewSpacing = switch (size) {
-      LoadingAnimationSize.thumbnail => 6.0,
-      LoadingAnimationSize.small => 10.0,
-      LoadingAnimationSize.medium => 14.0,
-      LoadingAnimationSize.large => 20.0,
-    };
+    // The player's size (Tortugarr's Loading logo size setting), scaled
+    // down to fit the 200px preview viewport.
+    final previewPixelSize = 72.0 * scale;
+    const previewSpacing = 14.0;
 
     return Container(
       height: 220,

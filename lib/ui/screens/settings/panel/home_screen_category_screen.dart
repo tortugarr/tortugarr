@@ -343,13 +343,6 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 icon: Icons.ondemand_video,
                 onChanged: _pushPersonalizationSync,
               ),
-              SwitchPreferenceTile(
-                preference: UserPreferences.previewAudioEnabled,
-                title: l10n.previewAudio,
-                subtitle: l10n.enablePreviewAudio,
-                icon: Icons.volume_up,
-                onChanged: _pushPersonalizationSync,
-              ),
             ],
           ),
 

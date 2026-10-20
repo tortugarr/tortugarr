@@ -3402,6 +3402,13 @@ class UserPreferences extends ChangeNotifier {
     values: LoadingAnimationImage.values,
   );
 
+  /// Size of the loading logo in the player, in percent of the medium size
+  /// (25-100). Replaces the small/medium/large choice.
+  static final loadingLogoScale = Preference(
+    key: 'pref_loading_logo_scale',
+    defaultValue: 45,
+  );
+
   static final loadingAnimationSize = EnumPreference(
     key: 'loading_animation_size',
     defaultValue: LoadingAnimationSize.medium,

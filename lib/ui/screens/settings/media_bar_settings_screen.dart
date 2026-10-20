@@ -374,13 +374,6 @@ class _MediaBarSettingsScreenState extends State<MediaBarSettingsScreen> {
                   onChanged: _pushSync,
                 ),
                 SwitchPreferenceTile(
-                  preference: UserPreferences.mediaBarTrailerAudio,
-                  title: l10n.trailerAudio,
-                  subtitle: l10n.enableTrailerAudio,
-                  icon: Icons.volume_up,
-                  onChanged: _pushSync,
-                ),
-                SwitchPreferenceTile(
                   preference: UserPreferences.mediaBarTrailerCaptions,
                   title: l10n.trailerCaptions,
                   subtitle: l10n.trailerCaptionsDescription,

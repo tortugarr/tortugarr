@@ -933,12 +933,6 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       l10n.mediaPreview,
       subtitle: l10n.mediaPreviewDescription,
     ),
-    home.leaf(
-      'previewAudioEnabled',
-      l10n.previewAudio,
-      subtitle: l10n.enablePreviewAudio,
-      keywords: ['mute'],
-    ),
     home.leaf('home_rows_padding', l10n.homeRowsPadding, keywords: [
       'spacing',
       'gap',
@@ -1225,12 +1219,6 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       subtitle: l10n.autoPlayTrailers,
     ),
     mediaBar.leaf(
-      'mediaBarTrailerAudio',
-      l10n.trailerAudio,
-      subtitle: l10n.enableTrailerAudio,
-      keywords: ['mute'],
-    ),
-    mediaBar.leaf(
       'mediaBarTrailerCaptions',
       l10n.trailerCaptions,
       subtitle: l10n.trailerCaptionsDescription,
@@ -1263,10 +1251,6 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     loadingAnimation.leaf(
       'loadingAnimationImage',
       l10n.loadingAnimationImage,
-    ),
-    loadingAnimation.leaf(
-      'loadingAnimationSize',
-      l10n.loadingAnimationSize,
     ),
     loadingAnimation.leaf(
       'loadingAnimationPosition',
