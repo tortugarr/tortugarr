@@ -81,15 +81,6 @@ ext_qbit_discover() {
     [ $under = 0 ] && roots+=("$p")
   done
   [ ${#roots[@]} -gt 0 ] || return 1
-  # Download folders on other drives that already exist (X:\\Downloads with radarr or sonarr
-  # folders in it): qBittorrent can be pointed at each, and Tortugarr picks the roomiest per
-  # download. Windows drives ignore case, so Downloads and downloads are one folder.
-  local dl drive
-  for dl in /mnt/[a-z]/[Dd]ownloads; do
-    [ -d "$dl/radarr" ] || [ -d "$dl/sonarr" ] || continue
-    drive=${dl#/mnt/}; drive=${drive%%/*}
-    ext_add_root roots "${drive^^}:\\${dl##*/}"
-  done
   EXT_ROOTS=("${roots[@]}")
   ext_build_json
 }
@@ -116,24 +107,25 @@ ext_build_json() {
     '{url:$url, username:$user, mounts:$m}')
 }
 
-# Offers the other Windows drives with room as download folders too (X:\\Downloads\\radarr and
-# \\sonarr are created on yes).
+# Asks about every other Windows drive as a download folder too. Nothing is used without a yes:
+# the default is yes only for a drive chosen last time. Drive C: and drives with less than
+# 20 GB free (unless chosen before) are not offered. X:\\Downloads\\radarr and \\sonarr are created
+# after the summary is confirmed (write_external_client_override).
 ext_offer_more_drives() {
-  local d free letter used
+  local before="${EXT_QBIT_PREVIOUS:-{\}}" d free letter used def r
   for d in /mnt/[a-z]; do
     letter=${d#/mnt/}
     [ "$letter" = c ] && continue
-    mountpoint -q "$d" 2>/dev/null || [ -d "$d" ] || continue
+    [ -d "$d" ] || continue
     used=0
     for r in "${EXT_ROOTS[@]}"; do [ "$(ext_host_path_for "$r" | cut -d/ -f3)" = "$letter" ] && used=1; done
     [ $used = 1 ] && continue
-    free=$(free_gb "$d"); [ "${free:-0}" -ge 20 ] || continue
-    if confirm "EXT_DRIVE_${letter^^}" "$(t q_ext_more_drive "${letter^^}" "$free" "${letter^^}")" n; then
-      if mkdir -p "$d/Downloads/radarr" "$d/Downloads/sonarr" 2>/dev/null; then
-        EXT_ROOTS+=("${letter^^}:\\Downloads")
-      else
-        warning "$(t ext_drive_failed "${letter^^}:\\Downloads")"
-      fi
+    def=n
+    jq -e --arg p "/mnt/$letter/" 'any(.mounts[]?; (.host_path + "/") | startswith($p))' <<< "$before" >/dev/null 2>&1 && def=y
+    free=$(free_gb "$d")
+    [ "$def" = y ] || [ "${free:-0}" -ge 20 ] || continue
+    if confirm "EXT_DRIVE_${letter^^}" "$(t q_ext_more_drive "${letter^^}" "$free" "${letter^^}:\\Downloads\\radarr + sonarr")" "$def"; then
+      EXT_ROOTS+=("${letter^^}:\\Downloads")
     fi
   done
   ext_build_json
@@ -141,6 +133,7 @@ ext_offer_more_drives() {
 
 ask_external_qbit() {
   say "$(t ext_intro)"
+  EXT_QBIT_PREVIOUS=${EXT_QBIT_JSON:-{\}}
   local def="${EXT_QBIT_URL:-$(jq -r '.url // empty' <<< "${EXT_QBIT_JSON:-{\}}")}"
   [ -z "$def" ] && def="http://$(detect_lan_ip):8080"
   while :; do
@@ -177,6 +170,12 @@ write_external_client_override() {  # overrides-dir
   local o=$1
   rm -f "$o/download-client.yml"
   [ "$TORRENT_CLIENT" = qbittorrent-ext ] || return 1
+  # Download folders on drives the user added: make their radarr and sonarr folders now.
+  local host
+  while read -r host; do
+    [ -n "$host" ] || continue
+    mkdir -p "$host/radarr" "$host/sonarr" 2>/dev/null || warning "$(t ext_drive_failed "$host")"
+  done < <(jq -r '.mounts[].host_path' <<< "$EXT_QBIT_JSON")
   # Jellyfin gets them read-only: the Tortugarr plugin runs there and picks the folder with the
   # most free space for each download.
   jq -r '
