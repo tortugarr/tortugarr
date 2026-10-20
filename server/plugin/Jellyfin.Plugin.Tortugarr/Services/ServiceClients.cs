@@ -208,6 +208,14 @@ public sealed class QbitClient
         await Request(HttpMethod.Post, "/api/v2/torrents/delete", form, cookie, ct).ConfigureAwait(false);
     }
 
+    /// <summary>Points a category at a folder; torrents added to it from now on save there.</summary>
+    public async Task EditCategory(string category, string savePath, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        var form = new FormUrlEncodedContent(new Dictionary<string, string> { ["category"] = category, ["savePath"] = savePath });
+        await Request(HttpMethod.Post, "/api/v2/torrents/editCategory", form, cookie, ct).ConfigureAwait(false);
+    }
+
     public async Task<long?> FreeSpace(CancellationToken ct)
     {
         var cookie = await Login(ct).ConfigureAwait(false);
@@ -225,6 +233,13 @@ public sealed class QbitClient
         using var res = await SendRaw(req, ct).ConfigureAwait(false);
         // qBittorrent 4 answers "Ok.", qBittorrent 5 an empty 204; both set the session cookie.
         var cookie = res.Headers.TryGetValues("Set-Cookie", out var v) ? v.FirstOrDefault()?.Split(';')[0] : null;
+        if (res.IsSuccessStatusCode && cookie is null && string.IsNullOrEmpty(_user))
+        {
+            // No login set: a qBittorrent that lets this network in without one (Web UI >
+            // bypass authentication for whitelisted subnets) answers without a session.
+            return string.Empty;
+        }
+
         if (!res.IsSuccessStatusCode || cookie is null)
         {
             throw new UpstreamException("qBittorrent", $"login refused (HTTP {(int)res.StatusCode})");
@@ -236,7 +251,11 @@ public sealed class QbitClient
     private async Task<JsonNode?> Request(HttpMethod method, string path, HttpContent? content, string cookie, CancellationToken ct)
     {
         using var req = new HttpRequestMessage(method, _base + path) { Content = content };
-        req.Headers.Add("Cookie", cookie);
+        if (cookie.Length > 0)
+        {
+            req.Headers.Add("Cookie", cookie);
+        }
+
         req.Headers.Referrer = new Uri(_base);
         using var res = await SendRaw(req, ct).ConfigureAwait(false);
         var text = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);

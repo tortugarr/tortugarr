@@ -35,6 +35,8 @@ export TORTUGARR_APP
 . "$TORTUGARR_APP/lib/windows.sh"
 # shellcheck source=lib/external_client.sh
 . "$TORTUGARR_APP/lib/external_client.sh"
+# shellcheck source=lib/extra_libs.sh
+. "$TORTUGARR_APP/lib/extra_libs.sh"
 # shellcheck source=lib/support.sh
 . "$TORTUGARR_APP/lib/support.sh"
 
@@ -188,36 +190,8 @@ ask_questions() {
     fi
   fi
 
-  # Existing media folders, added as extra library paths.
-  if [ "$reconf" = 0 ] || confirm REDO_LIBS "$(t q_change_extra_libs)" n; then
-    EXTRA_LIBS_JSON="[]"
-    local n=0
-    if confirm HAS_EXTRA "$(t q_extra_libs)" n; then
-      while :; do
-        n=$((n + 1))
-        local path type manage
-        ask "EXTRA_PATH_$n" "$(t q_extra_path "$n")" ""
-        path=$(eval echo "\${EXTRA_PATH_$n}")
-        [ -z "$path" ] && break
-        # On WSL people type Windows paths (E:\Movies); use the same folder as WSL sees it.
-        if is_wsl && [[ $path =~ ^[A-Za-z]:([\\/]|$) ]]; then
-          local win=$path
-          path=$(wslpath -u "$win" 2>/dev/null) || path=""
-          [ -n "$path" ] && note "$(t win_path_converted "$win" "$path")"
-          [ -z "$path" ] && path=$win
-        fi
-        if [ ! -d "$path" ]; then warning "$(t not_a_dir "$path")"; n=$((n - 1)); [ "$UNATTENDED" = 1 ] && break; continue; fi
-        choose "EXTRA_TYPE_$n" "$(t q_extra_type)" movies movies "$(t movies)" tv "$(t tv)"
-        type=$(eval echo "\${EXTRA_TYPE_$n}")
-        manage=false
-        confirm "EXTRA_MANAGE_$n" "$(t q_extra_manage)" n && manage=true
-        EXTRA_LIBS_JSON=$(jq -c --arg h "$path" --arg c "/data/library/$n" --arg t "$type" --argjson m "$manage" \
-          '. + [{host_path:$h, container_path:$c, type:$t, arr_manage:$m}]' <<< "$EXTRA_LIBS_JSON")
-        [ "$UNATTENDED" = 1 ] && continue
-        confirm MORE_LIBS "$(t q_extra_more)" n || break
-      done
-    fi
-  fi
+  # Existing media folders, each with one type (lib/extra_libs.sh).
+  ask_extra_libs "$reconf"
 
   say "$(t client_intro)"
   choose TORRENT_CLIENT "$(t q_torrent_client)" "${TORRENT_CLIENT:-qbittorrent}" \

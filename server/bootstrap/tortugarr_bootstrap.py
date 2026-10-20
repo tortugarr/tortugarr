@@ -509,6 +509,10 @@ def tortugarr_plugin_config(h):
         "DownloadClientUrl": download_client_url(),
         "DownloadClientUsername": download_client_login()[0], "DownloadClientPassword": download_client_login()[1],
         "MovieCategory": CATEGORY["radarr"], "TvCategory": CATEGORY["sonarr"],
+        # Several download folders (one per drive): the plugin picks the roomiest per grab.
+        "DownloadRoots": "\n".join(f"{m['remote']}|{m['container_path']}" for m in external_qbit().get("mounts", [])),
+        # New titles only go to root folders of their own type (never a folder not mounted there).
+        "MovieRoots": ",".join(arr_roots("radarr")), "TvRoots": ",".join(arr_roots("sonarr")),
         # Radarr/Sonarr send this to the refresh hook (plugin spec 3.12) instead of a Jellyfin key.
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
         # The adult library stays as the administrator set it (off by default); only its place is set.
@@ -910,6 +914,15 @@ def configure_jellyfin_refresh(app, h):
         warn(f"{app}: the Tortugarr plugin is not active - every import scans all libraries (run repair) {res}")
 
 
+def arr_roots(app):
+    """The root folders Radarr/Sonarr should add new titles to: Tortugarr's own folder and the
+    extra folders of that type it may manage."""
+    kind = "tv" if app == "sonarr" else "movies"
+    own = "/data/media/tv" if app == "sonarr" else "/data/media/movies"
+    return [own] + [e["container_path"] for e in STATE.get("extra_libraries", [])
+                    if e.get("type") == kind and e.get("arr_manage")]
+
+
 def configure_arr(app):
     h = wait_arr(app)
     set_arr_auth(app, h)
@@ -1265,16 +1278,29 @@ def jellyfin_startup():
     ok(f"jellyfin: startup wizard completed, admin user '{SECRETS['admin_user']}' created")
 
 
+# Jellyfin library per extra-folder type (lib/extra_libs.sh). Adult folders go into the
+# plugin's hidden adult library instead (jellyfin_adult_folders).
+EXTRA_LIBRARY = {"movies": ("Movies", "movies"), "tv": ("TV Shows", "tvshows"),
+                 "music": ("Music Videos", "musicvideos"), "other": ("Home Videos", "homevideos")}
+EXTRA_PATH_RE = re.compile(r"^/data/library/[0-9]+/?$")
+
+
+def extra_library_paths():
+    """{library name: (collection type, [paths])} for Tortugarr's folders and the extra ones."""
+    wanted = {"Movies": ("movies", ["/data/media/movies"]), "TV Shows": ("tvshows", ["/data/media/tv"])}
+    for extra in STATE.get("extra_libraries", []):
+        lib = EXTRA_LIBRARY.get(extra.get("type"))
+        if lib:
+            wanted.setdefault(lib[0], (lib[1], []))[1].append(extra["container_path"])
+    return wanted
+
+
 def jellyfin_libraries(h):
     existing = {f["Name"]: f for f in h.get("/Library/VirtualFolders")}
-    wanted = {
-        "Movies": ("movies", ["/data/media/movies"]),
-        "TV Shows": ("tvshows", ["/data/media/tv"]),
-    }
-    for extra in STATE.get("extra_libraries", []):
-        lib = "Movies" if extra["type"] == "movies" else "TV Shows"
-        wanted[lib][1].append(extra["container_path"])
+    wanted = extra_library_paths()
     for name, (ctype, paths) in wanted.items():
+        if not paths:
+            continue
         if name not in existing:
             opts = {"LibraryOptions": {
                 "EnableRealtimeMonitor": True,
@@ -1300,6 +1326,47 @@ def jellyfin_libraries(h):
                     h.post("/Library/VirtualFolders/Paths?refreshLibrary=true",
                            {"Name": name, "PathInfo": {"Path": p}})
                     ok(f"jellyfin: added {p} to '{name}'")
+    # An extra folder whose type changed (or that was removed) leaves its old library. Only the
+    # installer's own /data/library/N paths are touched, never folders added by hand.
+    for name, folder in existing.items():
+        keep = set(wanted.get(name, ("", []))[1]) | set(jellyfin_adult_paths() if folder_is_adult(folder) else [])
+        for p in folder.get("Locations", []):
+            if EXTRA_PATH_RE.match(p) and p.rstrip("/") not in {k.rstrip("/") for k in keep}:
+                q = urllib.parse.urlencode({"name": name, "path": p, "refreshLibrary": "true"})
+                h.delete(f"/Library/VirtualFolders/Paths?{q}")
+                ok(f"jellyfin: removed {p} from '{name}' (that folder's type changed)")
+    jellyfin_adult_folders(h)
+
+
+ADULT_SAVE_PATH = "/data/media/adult"
+
+
+def jellyfin_adult_paths():
+    return [e["container_path"] for e in STATE.get("extra_libraries", []) if e.get("type") == "adult"]
+
+
+def folder_is_adult(folder):
+    return any(l.rstrip("/") == ADULT_SAVE_PATH for l in folder.get("Locations", []))
+
+
+def jellyfin_adult_folders(h):
+    """Adult extra folders join the plugin's adult library, which the plugin creates and hides
+    from everyone when an administrator switches it on. Never created here, so it cannot show
+    up for everyone by accident."""
+    paths = jellyfin_adult_paths()
+    if not paths:
+        return
+    adult = next((f for f in h.get("/Library/VirtualFolders") if folder_is_adult(f)), None)
+    if adult is None:
+        info("jellyfin: adult folders wait for the adult library - switch it on in the app "
+             "(Settings > Adult library), then run: sudo tortugarr repair")
+        return
+    have = {l.rstrip("/") for l in adult.get("Locations", [])}
+    for p in paths:
+        if p.rstrip("/") not in have:
+            h.post("/Library/VirtualFolders/Paths?refreshLibrary=true",
+                   {"Name": adult["Name"], "PathInfo": {"Path": p}})
+            ok(f"jellyfin: added {p} to the adult library '{adult['Name']}'")
 
 
 def jellyfin_api_key(h):
@@ -1854,7 +1921,20 @@ def cmd_doctor():
                                  f"and choose the qBittorrent you already have")
         return f"{want}"
 
+    def root_folders(app):
+        """Root folders outside the ones Tortugarr gives this app (a folder of another type, or one
+        not mounted into it) are never picked for new titles; titles already there keep working
+        only if the folder is really there. Reported, never removed."""
+        allowed = {p.rstrip("/") for p in arr_roots(app)}
+        odd = [r["path"] for r in arr(app).get("/rootfolder") if r["path"].rstrip("/") not in allowed]
+        if odd:
+            warn(f"{app}: root folder(s) {', '.join(odd)} are not {app.capitalize()} folders in Tortugarr's setup "
+                 f"(another type, or not mounted there) - new titles do not go there. Move their titles in "
+                 f"{app.capitalize()} (Movies/Series > Edit > Root Folder) and remove the folder there")
+        return f"{len(allowed)} in use"
+
     for app in ("sonarr", "radarr"):
+        bad += not check(f"{app} root folders", lambda a=app: root_folders(a))
         bad += not check(f"{app} path mappings", lambda a=app: path_mappings(a))
         bad += not check(f"{app} uses Tortugarr's download client", lambda a=app: client_matches(a))
 

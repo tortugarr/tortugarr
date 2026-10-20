@@ -47,6 +47,17 @@ public class PluginConfiguration : BasePluginConfiguration
 
     public string DownloadClientPassword { get; set; } = string.Empty;
 
+    /// <summary>Folders the client downloads to, one per line as "its path|our path"
+    /// (H:\Downloads\|/data/torrents-ext/1). With more than one, each grab goes to the one with
+    /// the most free space. Written by the installer.</summary>
+    public string DownloadRoots { get; set; } = string.Empty;
+
+    /// <summary>Radarr root folders a new movie may go to (comma-separated); empty = any.</summary>
+    public string MovieRoots { get; set; } = string.Empty;
+
+    /// <summary>Sonarr root folders a new series may go to (comma-separated); empty = any.</summary>
+    public string TvRoots { get; set; } = string.Empty;
+
     public string MovieCategory { get; set; } = "radarr";
 
     public string TvCategory { get; set; } = "sonarr";

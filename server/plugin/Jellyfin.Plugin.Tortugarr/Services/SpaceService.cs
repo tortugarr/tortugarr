@@ -47,7 +47,14 @@ public sealed class SpaceService
         }
 
         var qbit = _svc.Qbit;
-        var free = await qbit.FreeSpace(ct).ConfigureAwait(false) ?? throw new UpstreamException("qBittorrent", "no free-space figure");
+        // With several download folders the next download goes to the roomiest (see
+        // TortugarrService.PointCategoryAtRoomiestDrive); qBittorrent itself only reports its
+        // default folder's drive.
+        var roomiest = TortugarrService.RoomiestDownloadRoot(
+            TortugarrService.ParseDownloadRoots(Cfg.DownloadRoots), TortugarrService.FreeBytes);
+        var free = roomiest?.Free
+            ?? await qbit.FreeSpace(ct).ConfigureAwait(false)
+            ?? throw new UpstreamException("qBittorrent", "no free-space figure");
         var pending = (await qbit.ListAll(ct).ConfigureAwait(false))
             .Where(t => t is not null && ((double?)t["progress"] ?? 0) < 1).Sum(t => (long?)t!["amount_left"] ?? 0);
         var buffer = Math.Max(0, Cfg.SpaceBufferBytes);

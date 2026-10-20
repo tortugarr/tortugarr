@@ -28,6 +28,7 @@ system instead of a weekend of configuration:
 - [What you get](#what-you-get)
 - [Requirements](#requirements)
 - [Install](#install)
+- [Media folders you already have](#media-folders-you-already-have)
 - [Using a qBittorrent you already have](#using-a-qbittorrent-you-already-have)
 - [After installing](#after-installing-your-part)
 - [Managing it](#managing-it)
@@ -116,6 +117,23 @@ Copy [answers.example.env](answers.example.env), fill it in, then:
 sudo ./install.sh install --answers answers.env
 ```
 
+## Media folders you already have
+
+The installer asks for folders with videos you already have, and **what is in each one**. The
+name of the folder does not matter; the type decides where it shows up:
+
+| Type | Shown in Jellyfin as | Radarr/Sonarr |
+|---|---|---|
+| Movies | Movies | Radarr may add to it, if you allow it |
+| TV series | TV Shows | Sonarr may add to it, if you allow it |
+| Adult | the hidden adult library (switch it on in the app first) | - |
+| Music videos and concerts | Music Videos | - |
+| Other videos (clips, home videos) | Home Videos | - |
+
+With several folders of one type, possibly on several drives, a new movie or series goes to the
+one with the most free space. `sudo tortugarr reconfigure` lists your folders and lets you change
+the type of each, remove one (nothing on the drive is deleted) or add more.
+
 ## Using a qBittorrent you already have
 
 The installer's torrent client question offers **qBittorrent I already have**. Choose it when
@@ -139,6 +157,9 @@ What the installer then sets up:
   (`H:\Downloads\` -> `/data/torrents-ext/1/`), so finished downloads are found and imported.
   Older mappings for the same qBittorrent that point elsewhere are removed.
 - **A check** that Radarr and Sonarr reach qBittorrent and can see the folder.
+- **More drives:** other drives with room can be added as download folders (the installer offers
+  them and creates `X:\Downloads\radarr` and `\sonarr`). Each download then goes to the drive
+  with the most free space.
 
 Your qBittorrent's settings are otherwise left alone. If it does not block program files, the
 installer says so: turn on *Tools > Options > Downloads > Excluded file names* with

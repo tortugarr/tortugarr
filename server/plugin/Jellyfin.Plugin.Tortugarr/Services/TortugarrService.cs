@@ -831,8 +831,86 @@ public sealed class TortugarrService
     private static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct)
     {
         var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
-        var best = roots.Where(r => (bool?)r?["accessible"] != false).OrderByDescending(r => (long?)r?["freeSpace"] ?? 0).FirstOrDefault();
-        return (string?)best?["path"] ?? throw new UpstreamException(arr.Name, "no root folder");
+        var allowed = AllowedRoots(arr.Name == "Radarr" ? Cfg.MovieRoots : Cfg.TvRoots);
+        return PickRoot(roots, allowed) ?? throw new UpstreamException(arr.Name, "no root folder");
+    }
+
+    internal static HashSet<string> AllowedRoots(string list) =>
+        list.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(p => p.TrimEnd('/')).ToHashSet(StringComparer.Ordinal);
+
+    /// <summary>The accessible root with the most free space, among the folders of the right type
+    /// when the installer named them. A root folder of another type is skipped: on 2026-10-20 a
+    /// series folder that was not mounted into Radarr reported the WSL disk's 866 GB and got
+    /// three new movies.</summary>
+    internal static string? PickRoot(JsonArray roots, HashSet<string> allowed) =>
+        (string?)roots
+            .Where(r => (bool?)r?["accessible"] != false)
+            .Where(r => allowed.Count == 0 || allowed.Contains(((string?)r?["path"] ?? string.Empty).TrimEnd('/')))
+            .OrderByDescending(r => (long?)r?["freeSpace"] ?? 0)
+            .FirstOrDefault()?["path"];
+
+    internal static List<(string Remote, string Local)> ParseDownloadRoots(string text) =>
+        text.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(l => l.Split('|'))
+            .Where(p => p.Length == 2 && p[0].Length > 0 && p[1].Length > 0)
+            .Select(p => (p[0], p[1]))
+            .ToList();
+
+    internal static long? FreeBytes(string path)
+    {
+        try
+        {
+            return Directory.Exists(path) ? new DriveInfo(path).AvailableFreeSpace : null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>The download folder with the most free space, as the client writes it, and its
+    /// free bytes. Null with fewer than one usable folder.</summary>
+    internal static (string Remote, long Free)? RoomiestDownloadRoot(IEnumerable<(string Remote, string Local)> roots, Func<string, long?> free) =>
+        roots.Select(r => (r.Remote, Free: free(r.Local)))
+            .Where(r => r.Free is not null)
+            .OrderByDescending(r => r.Free)
+            .Select(r => ((string Remote, long Free)?)(r.Remote, r.Free!.Value))
+            .FirstOrDefault();
+
+    /// <summary>The category's folder on a client path: H:\Downloads\ + radarr -> H:\Downloads\radarr.</summary>
+    internal static string CategoryPath(string root, string category)
+    {
+        var sep = root.Contains('\\') ? "\\" : "/";
+        return root.TrimEnd('\\', '/') + sep + category;
+    }
+
+    /// <summary>With several download folders (on several drives), point the category at the
+    /// one with the most free space before a grab, so the download lands where there is room.</summary>
+    private async Task PointCategoryAtRoomiestDrive(string category, CancellationToken ct)
+    {
+        var roots = ParseDownloadRoots(Cfg.DownloadRoots);
+        if (roots.Count < 2 || Cfg.DownloadClientType != "qbittorrent")
+        {
+            return;
+        }
+
+        var best = RoomiestDownloadRoot(roots, FreeBytes);
+        if (best is null)
+        {
+            return;
+        }
+
+        var path = CategoryPath(best.Value.Remote, category);
+        try
+        {
+            await Qbit.EditCategory(category, path, ct).ConfigureAwait(false);
+            _log.LogInformation("Download folder for {Category}: {Path} ({Free} GB free)", category, path, best.Value.Free / (1L << 30));
+        }
+        catch (Exception e) when (e is UpstreamException or HttpRequestException or TaskCanceledException)
+        {
+            _log.LogWarning("Could not point {Category} at {Path}: {Error}", category, path, e.Message);
+        }
     }
 
     private static DateTimeOffset? HomeRelease(JsonNode movie)
@@ -887,6 +965,7 @@ public sealed class TortugarrService
             }
         }
 
+        await PointCategoryAtRoomiestDrive(job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory, ct).ConfigureAwait(false);
         try
         {
             await arr.Post("/release", GrabBody(job.Request.Type, job.ArrId, g.Guid, g.IndexerId), ct, 60).ConfigureAwait(false);
