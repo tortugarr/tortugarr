@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moonfin/data/services/seerr/seerr_api_models.dart';
 import 'package:moonfin/data/services/seerr/seerr_download_progress.dart';
+import 'package:moonfin/data/services/tortugarr/tortugarr_plugin_client.dart';
 
 void main() {
   const gb = 1000 * 1000 * 1000;
@@ -84,5 +85,44 @@ void main() {
       isNull,
     );
     LiveDownloadProgress.setForTest(null);
+  });
+
+  // 2026-10-20 on the TV: a new download first showed at 30-60 %, once Seerr
+  // had synced it from Radarr. Radarr's queue has it within seconds.
+  test('a download Seerr has not synced yet shows from the queue', () {
+    LiveDownloadProgress.setQueueForTest(const [
+      TortugarrQueueItem(downloadId: 'NEW', kind: 'movie', tmdbId: 7, size: 1000, sizeLeft: 900),
+      TortugarrQueueItem(downloadId: 'EP', kind: 'episode', tvdbId: 7, size: 500, sizeLeft: 0),
+    ]);
+    final movie = SeerrDownloadSummary.forMedia(status: 3, items: const [], tmdbId: 7)!;
+    expect(movie.percent, 10);
+    expect(movie.totalBytes, 1000);
+    // TMDB numbers movies and series apart: the series with tvdb 7 is not it.
+    expect(SeerrDownloadSummary.forMedia(status: 3, items: null, tmdbId: 8), isNull);
+    expect(SeerrDownloadSummary.forMedia(status: 5, items: null, tmdbId: 7), isNull);
+    LiveDownloadProgress.setForTest(null);
+  });
+
+  test('a download Seerr already lists is counted once', () {
+    LiveDownloadProgress.setQueueForTest(const [
+      TortugarrQueueItem(downloadId: 'ABC', kind: 'movie', tmdbId: 7, size: 1000, sizeLeft: 500),
+    ]);
+    final s = SeerrDownloadSummary.forMedia(
+      status: 3,
+      items: const [SeerrDownloadingItem(size: 1000, sizeLeft: 900, downloadId: 'abc')],
+      tmdbId: 7,
+    )!;
+    expect(s.totalBytes, 1000);
+    expect(s.percent, 50);
+    LiveDownloadProgress.setForTest(null);
+  });
+
+  test('an older plugin without size: worked out from the progress', () {
+    final q = TortugarrQueueItem.fromJson(const {
+      'downloadId': 'abc', 'kind': 'movie', 'title': 'Some.Movie.2024.1080p', 'progress': 0.75, 'sizeLeft': 250,
+    });
+    expect(q.downloadId, 'ABC');
+    expect(q.size, 1000);
+    expect(q.name, 'Some.Movie.2024.1080p');
   });
 }

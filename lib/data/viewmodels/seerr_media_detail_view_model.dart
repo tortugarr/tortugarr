@@ -56,6 +56,7 @@ class SeerrQualityStatus {
     required SeerrMediaInfo? mediaInfo,
     required bool canManageRequests,
     required int? currentUserId,
+    bool isMovie = true,
   }) {
     final status = (is4k ? mediaInfo?.status4k : mediaInfo?.status) ?? 0;
     final requests = (mediaInfo?.requests ?? const <SeerrRequest>[])
@@ -73,6 +74,8 @@ class SeerrQualityStatus {
       download: SeerrDownloadSummary.forMedia(
         status: status,
         items: is4k ? mediaInfo?.downloadStatus4k : mediaInfo?.downloadStatus,
+        tmdbId: isMovie ? mediaInfo?.tmdbId : null,
+        tvdbId: isMovie ? null : mediaInfo?.tvdbId,
       ),
       canManageRequests: canManageRequests,
       currentUserId: currentUserId,
@@ -293,6 +296,7 @@ class SeerrMediaDetailState {
         mediaInfo: mediaInfo,
         canManageRequests: canManageRequests,
         currentUserId: currentUser?.id,
+        isMovie: isMovie,
       );
 
   SeerrQualityStatus get hd => quality(is4k: false);

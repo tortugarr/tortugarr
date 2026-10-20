@@ -513,16 +513,16 @@ class TortugarrPluginClient {
     await _send('DELETE', '/Space/Duplicates/${Uri.encodeComponent(hash)}');
   }
 
-  /// Bytes left per download id (upper case) of what Radarr and Sonarr are
-  /// downloading; the plugin takes them from qBittorrent itself (spec 3.4).
-  Future<Map<String, int>> downloadsLeft() async {
+  /// What Radarr and Sonarr are downloading, with the bytes left taken from
+  /// qBittorrent itself (spec 3.4).
+  Future<List<TortugarrQueueItem>> downloadQueue() async {
     final data = await _send('GET', '/Downloads');
     final items = data is Map ? data['items'] : null;
-    return {
+    return [
       for (final i in (items is List ? items : const []))
-        if (i is Map && i['downloadId'] is String)
-          (i['downloadId'] as String).toUpperCase(): (i['sizeLeft'] as num?)?.toInt() ?? 0,
-    };
+        if (i is Map && i['downloadId'] is String && i['kind'] != 'adult')
+          TortugarrQueueItem.fromJson(i.cast<String, dynamic>()),
+    ];
   }
 
   /// Video check of a download (spec 3.6).
@@ -556,4 +556,47 @@ class TortugarrPluginClient {
       await Future<void>.delayed(every);
     }
   }
+}
+
+/// One download in Radarr's or Sonarr's queue (spec 3.4).
+class TortugarrQueueItem {
+  const TortugarrQueueItem({
+    required this.downloadId,
+    required this.kind,
+    this.name,
+    this.tmdbId,
+    this.tvdbId,
+    this.size = 0,
+    this.sizeLeft = 0,
+  });
+
+  factory TortugarrQueueItem.fromJson(Map<String, dynamic> j) {
+    final left = (j['sizeLeft'] as num?)?.toInt() ?? 0;
+    final progress = (j['progress'] as num?)?.toDouble() ?? 0;
+    // A plugin before 1.2.3.0 sends no size; work it out from the progress.
+    final size = (j['size'] as num?)?.toInt() ??
+        (progress < 1 ? (left / (1 - progress)).round() : left);
+    return TortugarrQueueItem(
+      downloadId: (j['downloadId'] as String).toUpperCase(),
+      kind: '${j['kind']}',
+      name: (j['name'] ?? j['title']) as String?,
+      tmdbId: (j['tmdbId'] as num?)?.toInt(),
+      tvdbId: (j['tvdbId'] as num?)?.toInt(),
+      size: size,
+      sizeLeft: left,
+    );
+  }
+
+  /// The download client's id, upper case.
+  final String downloadId;
+
+  /// 'movie' or 'episode'.
+  final String kind;
+
+  /// The movie's or series' title.
+  final String? name;
+  final int? tmdbId;
+  final int? tvdbId;
+  final int size;
+  final int sizeLeft;
 }

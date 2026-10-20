@@ -7,6 +7,7 @@ import '../repositories/seerr_repository.dart';
 import '../../ui/navigation/home_refresh_bus.dart';
 import 'seerr/seerr_api_models.dart';
 import 'seerr/seerr_download_progress.dart';
+import 'tortugarr/tortugarr_plugin_client.dart' show TortugarrQueueItem;
 import '../../preference/seerr_preferences.dart' show SeerrPreferences;
 
 /// One active Seerr download — a request whose media is in a non-final
@@ -102,7 +103,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
         ? const Duration(milliseconds: 1500)
         : (_downloads.isNotEmpty
             ? const Duration(seconds: 5)
-            : const Duration(seconds: 20));
+            : const Duration(seconds: 10));
     _timer = Timer(delay, _poll);
   }
 
@@ -194,18 +195,32 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
     }
 
     final out = <SeerrActiveDownload>[];
+    final claimed = <String>{};
     for (final req in results) {
       final media = req.media;
       if (media == null) continue;
+      final type = media.mediaType ?? req.type;
+      final tmdbId = type == 'movie' ? media.tmdbId : null;
+      final tvdbId = type == 'tv' ? media.tvdbId : null;
       final hd = SeerrDownloadSummary.forMedia(
         status: media.status,
         items: media.downloadStatus,
+        tmdbId: req.is4k ? null : tmdbId,
+        tvdbId: req.is4k ? null : tvdbId,
       );
       final uhd = SeerrDownloadSummary.forMedia(
         status: media.status4k,
         items: media.downloadStatus4k,
+        tmdbId: req.is4k ? tmdbId : null,
+        tvdbId: req.is4k ? tvdbId : null,
       );
       if (hd == null && uhd == null) continue;
+      claimed.addAll([
+        for (final q in LiveDownloadProgress.queue)
+          if (LiveDownloadProgress.matches(q, tmdbId: tmdbId, tvdbId: tvdbId)) q.downloadId,
+        for (final i in [...?media.downloadStatus, ...?media.downloadStatus4k])
+          if (i.downloadId != null) i.downloadId!.toUpperCase(),
+      ]);
       out.add(SeerrActiveDownload(
         requestId: req.id,
         title: media.title ?? media.name ?? '',
@@ -215,7 +230,35 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
         uhdSummary: uhd,
       ));
     }
+    out.addAll(_withoutRequest(claimed));
     return out;
+  }
+
+  /// Downloads no Seerr request shows yet: a request Seerr has not marked as
+  /// processing, or episodes picked with Download Now, which never get one.
+  /// One row per movie or series, with a negative id so it never clashes
+  /// with a request's.
+  static List<SeerrActiveDownload> _withoutRequest(Set<String> claimed) {
+    final groups = <String, List<TortugarrQueueItem>>{};
+    for (final q in LiveDownloadProgress.queue) {
+      if (claimed.contains(q.downloadId) || q.size <= 0) continue;
+      final key = q.kind == 'movie' ? 'm${q.tmdbId ?? q.downloadId}' : 't${q.tvdbId ?? q.downloadId}';
+      groups.putIfAbsent(key, () => []).add(q);
+    }
+    return [
+      for (final e in groups.entries)
+        if (SeerrDownloadSummary.fromItems([
+          for (final q in e.value)
+            SeerrDownloadingItem(size: q.size, sizeLeft: q.sizeLeft, downloadId: q.downloadId),
+        ]) case final summary?)
+          SeerrActiveDownload(
+            requestId: -(e.key.hashCode & 0x3fffffff) - 1,
+            title: e.value.first.name ?? '',
+            mediaType: e.value.first.kind == 'movie' ? 'movie' : 'tv',
+            is4k: false,
+            hdSummary: summary,
+          ),
+    ];
   }
 
   bool _listEquals(List<SeerrActiveDownload> a, List<SeerrActiveDownload> b) {

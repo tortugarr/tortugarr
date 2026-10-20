@@ -3,13 +3,16 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import '../tortugarr/tortugarr_plugin_client.dart';
 import 'seerr_api_models.dart';
 
-/// Bytes left per download as qBittorrent reports them now. Seerr copies the
-/// figures from Radarr/Sonarr once a minute, and they ask qBittorrent once a
-/// minute: on 2026-10-20 the TV showed 17 % for a finished download. The
-/// pollers call [refresh]; [fromItems] prefers these figures when fresh.
+/// What Radarr and Sonarr are downloading, with the bytes left as
+/// qBittorrent reports them now. Seerr copies the figures from Radarr/Sonarr
+/// once a minute, and they ask qBittorrent once a minute: on 2026-10-20 the
+/// TV showed 17 % for a finished download, and a new download first showed
+/// up at 30-60 %. The pollers call [refresh]; [fromItems] prefers these
+/// figures when fresh, and [itemsFor] stands in until Seerr has synced.
 class LiveDownloadProgress {
   static const _minGap = Duration(seconds: 3);
   static const _maxAge = Duration(seconds: 60);
+  static List<TortugarrQueueItem> _queue = const [];
   static Map<String, int> _left = const {};
   static DateTime? _at;
 
@@ -17,34 +20,71 @@ class LiveDownloadProgress {
     final at = _at;
     if (at != null && DateTime.now().difference(at) < _minGap) return;
     try {
-      _left = await TortugarrPluginClient().downloadsLeft();
-      _at = DateTime.now();
+      _set(await TortugarrPluginClient().downloadQueue());
     } catch (_) {
       // No plugin or no qBittorrent: the Seerr figures stay.
+      _queue = const [];
       _left = const {};
       _at = null;
     }
   }
 
+  static void _set(List<TortugarrQueueItem> queue) {
+    _queue = queue;
+    _left = {for (final q in queue) q.downloadId: q.sizeLeft};
+    _at = DateTime.now();
+  }
+
+  static bool get _fresh {
+    final at = _at;
+    return at != null && DateTime.now().difference(at) <= _maxAge;
+  }
+
   @visibleForTesting
   static void setForTest(Map<String, int>? left) {
-    _left = left ?? const {};
-    _at = left == null ? null : DateTime.now();
+    if (left == null) {
+      _queue = const [];
+      _left = const {};
+      _at = null;
+      return;
+    }
+    _set([
+      for (final e in left.entries)
+        TortugarrQueueItem(downloadId: e.key, kind: 'movie', sizeLeft: e.value),
+    ]);
   }
+
+  @visibleForTesting
+  static void setQueueForTest(List<TortugarrQueueItem> queue) => _set(queue);
+
+  /// The queue as last read, empty when it is stale or unknown.
+  static List<TortugarrQueueItem> get queue => _fresh ? _queue : const [];
 
   /// True when Radarr/Sonarr no longer have [downloadId] in their queue, so it
   /// was imported (or removed); Seerr only notices on its next sync.
-  static bool isGone(String downloadId) {
-    final at = _at;
-    if (at == null || DateTime.now().difference(at) > _maxAge) return false;
-    return !_left.containsKey(downloadId.toUpperCase());
-  }
+  static bool isGone(String downloadId) =>
+      _fresh && !_left.containsKey(downloadId.toUpperCase());
 
-  static int? leftFor(String downloadId) {
-    final at = _at;
-    if (at == null || DateTime.now().difference(at) > _maxAge) return null;
-    return _left[downloadId.toUpperCase()];
-  }
+  static int? leftFor(String downloadId) =>
+      _fresh ? _left[downloadId.toUpperCase()] : null;
+
+  /// Queue entries for one movie ([tmdbId]) or series ([tvdbId]), in Seerr's
+  /// form. Radarr/Sonarr list a grab within seconds; Seerr up to a minute or
+  /// more later.
+  static List<SeerrDownloadingItem> itemsFor({int? tmdbId, int? tvdbId}) => [
+        for (final q in queue)
+          if (matches(q, tmdbId: tmdbId, tvdbId: tvdbId))
+            SeerrDownloadingItem(
+              size: q.size,
+              sizeLeft: q.sizeLeft,
+              downloadId: q.downloadId,
+            ),
+      ];
+
+  static bool matches(TortugarrQueueItem q, {int? tmdbId, int? tvdbId}) =>
+      q.kind == 'movie'
+          ? tmdbId != null && q.tmdbId == tmdbId
+          : tvdbId != null && q.tvdbId == tvdbId;
 }
 
 /// Aggregated download progress for a Seerr media item, combining the
@@ -81,14 +121,28 @@ class SeerrDownloadSummary {
   /// Builds a summary for one quality flavor of a media item, or null when
   /// nothing is downloading and the status chip alone should show. The status
   /// gate keeps stale queue entries from drawing a bar after availability.
+  ///
+  /// With [tmdbId] for a movie or [tvdbId] for a series (never both: TMDB
+  /// numbers movies and series apart), a download Radarr or Sonarr already
+  /// has but Seerr has not synced yet shows too.
   static SeerrDownloadSummary? forMedia({
     required int? status,
     required List<SeerrDownloadingItem>? items,
+    int? tmdbId,
+    int? tvdbId,
   }) {
     if (status != _statusProcessing && status != _statusPartiallyAvailable) {
       return null;
     }
-    return fromItems(items);
+    final known = {
+      for (final i in items ?? const <SeerrDownloadingItem>[])
+        if (i.downloadId != null) i.downloadId!.toUpperCase(),
+    };
+    final early = [
+      for (final i in LiveDownloadProgress.itemsFor(tmdbId: tmdbId, tvdbId: tvdbId))
+        if (!known.contains(i.downloadId)) i,
+    ];
+    return fromItems([...?items, ...early]);
   }
 
   /// Summary for a request card, using the request's quality flavor and
@@ -103,6 +157,8 @@ class SeerrDownloadSummary {
     return forMedia(
       status: request.is4k ? media.status4k : media.status,
       items: request.is4k ? media.downloadStatus4k : media.downloadStatus,
+      tmdbId: (media.mediaType ?? request.type) == 'movie' ? media.tmdbId : null,
+      tvdbId: (media.mediaType ?? request.type) == 'tv' ? media.tvdbId : null,
     );
   }
 
