@@ -129,6 +129,7 @@ void main() {
       home: Scaffold(
         body: AdminTvKeys(
           pages: pages,
+          exit: rail,
           child: Row(
             children: [
               SizedBox(width: 100, child: TextButton(focusNode: rail, onPressed: () {}, child: const Text('Exit'))),
@@ -159,6 +160,13 @@ void main() {
 
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
     await tester.pumpAndSettle();
+    expect(rail.hasPrimaryFocus, isTrue);
+
+    // Back stops on Exit, however often it is pressed.
+    for (var i = 0; i < 3; i++) {
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+    }
     expect(rail.hasPrimaryFocus, isTrue);
   });
 }

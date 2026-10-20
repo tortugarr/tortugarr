@@ -65,6 +65,11 @@ class _DraftPageState extends State<_DraftPage> {
 void main() {
   late AppLocalizations l10n;
 
+  // Exit reopens Settings in the app; the panel needs services these tests
+  // do not register.
+  setUpAll(() => AdminShellScreen.reopenSettingsOnExit = false);
+  tearDownAll(() => AdminShellScreen.reopenSettingsOnExit = true);
+
   void setWindow(WidgetTester tester, Size size) {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;

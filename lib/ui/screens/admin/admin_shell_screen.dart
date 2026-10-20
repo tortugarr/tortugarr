@@ -8,6 +8,8 @@ import 'admin_nav.dart';
 import 'providers/admin_websocket_handler.dart';
 import 'widgets/admin_settings_search.dart';
 import 'widgets/admin_tv_keys.dart';
+import '../../widgets/settings/settings_panel.dart';
+import '../settings/settings_side_panel.dart';
 import 'widgets/admin_unsaved_bar.dart';
 import '../../../util/platform_detection.dart';
 import '../../widgets/focus/tv_focus_ring.dart';
@@ -21,6 +23,14 @@ class AdminShellScreen extends StatelessWidget {
   /// The admin area's own navigator, so its stack can be told apart from the
   /// root one, which also holds the home screen the whole area was pushed over.
   static final navigatorKey = GlobalKey<NavigatorState>(debugLabel: 'admin');
+
+  /// The rail's Exit, where Back stops on TV.
+  static final exitFocus = FocusNode(debugLabel: 'admin exit');
+
+  /// Exit reopens Settings over the home screen. Tests without the app's
+  /// services turn it off.
+  @visibleForTesting
+  static bool reopenSettingsOnExit = true;
 
   static const wideBreakpoint = 900.0;
 
@@ -101,7 +111,11 @@ class AdminShellScreen extends StatelessWidget {
     return Theme(
       data: TvFocusRing.theme(theme),
       child: TvFocusRing(
-        child: AdminTvKeys(pages: AdminShellScreen.navigatorKey, child: shell),
+        child: AdminTvKeys(
+          pages: AdminShellScreen.navigatorKey,
+          exit: AdminShellScreen.exitFocus,
+          child: shell,
+        ),
       ),
     );
   }
@@ -586,7 +600,19 @@ class _ExitMark extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
-    void leave() => context.go(Destinations.home);
+    // Exit goes back to Settings, where Administration was opened, rather
+    // than leaving the user on the home screen.
+    void leave() {
+      final router = GoRouter.of(context);
+      router.go(Destinations.home);
+      if (!AdminShellScreen.reopenSettingsOnExit) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final root = router.routerDelegate.navigatorKey.currentContext;
+        if (root != null && root.mounted) {
+          SettingsPanel.open(root, const SettingsSidePanel());
+        }
+      });
+    }
     return Semantics(
       button: true,
       label: l10n.adminExitTooltip,
@@ -597,6 +623,7 @@ class _ExitMark extends StatelessWidget {
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
+            focusNode: AdminShellScreen.exitFocus,
             borderRadius: AppRadius.circular(10),
             onTap: leave,
             child: Padding(

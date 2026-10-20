@@ -17,18 +17,22 @@ import 'package:flutter/services.dart';
 /// admin area takes focus.
 ///
 /// Back goes one step at a time: a screen opened inside the area closes, the
-/// page hands focus to the page list, the page list to the rail, and only the
-/// rail leaves the area. It went straight to the home screen before.
+/// page hands focus to the page list, the page list to the rail, and the rail
+/// to Exit, where Back stops. Leaving is Exit's job, which goes back to
+/// Settings. Back went straight to the home screen before.
 ///
 /// A HardwareKeyboard handler sees the key before the focused widget does,
 /// which a Focus or Shortcuts above the page would not.
 class AdminTvKeys extends StatefulWidget {
-  const AdminTvKeys({super.key, required this.child, this.pages});
+  const AdminTvKeys({super.key, required this.child, this.pages, this.exit});
 
   final Widget child;
 
   /// The navigator the admin pages live in.
   final GlobalKey<NavigatorState>? pages;
+
+  /// The rail's Exit: where Back stops.
+  final FocusNode? exit;
 
   @override
   State<AdminTvKeys> createState() => _AdminTvKeysState();
@@ -93,8 +97,14 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
       TraversalDirection.left,
       where: (c) => pages == null || !_isInside(c, pages),
     );
-    if (target == null) return false;
-    target.requestFocus();
+    if (target != null) {
+      target.requestFocus();
+      return true;
+    }
+    // Nothing further left: stop on Exit instead of leaving the area.
+    final exit = widget.exit;
+    if (exit == null) return false;
+    if (exit.canRequestFocus) exit.requestFocus();
     return true;
   }
 
