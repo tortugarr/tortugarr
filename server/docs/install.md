@@ -14,7 +14,7 @@ system instead of a weekend of configuration:
 | **Sonarr / Radarr** | Find, download and organise TV shows / movies |
 | **Prowlarr** (+ FlareSolverr) | Manages your indexers for Sonarr and Radarr |
 | **Bazarr** | Fetches subtitles for everything Sonarr and Radarr download |
-| **Torrent client** | Your choice: **qBittorrent**, **Transmission** or **Deluge** (or none) |
+| **Torrent client** | Your choice: **qBittorrent**, **Transmission** or **Deluge** in Docker, a **qBittorrent you already have** (on Windows, say), or none |
 | **SABnzbd** (optional) | Usenet downloads |
 | **gluetun** (optional) | Sends all torrent traffic through your VPN, with a kill switch |
 | **Moonfin plugin** | Server side of the Tortugarr app (settings sync, Seerr proxy) |
@@ -28,6 +28,7 @@ system instead of a weekend of configuration:
 - [What you get](#what-you-get)
 - [Requirements](#requirements)
 - [Install](#install)
+- [Using a qBittorrent you already have](#using-a-qbittorrent-you-already-have)
 - [After installing](#after-installing-your-part)
 - [Managing it](#managing-it)
 - [Languages](#languages)
@@ -114,6 +115,42 @@ Copy [answers.example.env](answers.example.env), fill it in, then:
 ```bash
 sudo ./install.sh install --answers answers.env
 ```
+
+## Using a qBittorrent you already have
+
+The installer's torrent client question offers **qBittorrent I already have**. Choose it when
+qBittorrent is installed outside Tortugarr, for example on Windows next to WSL. Tortugarr then
+starts no qBittorrent container and uses yours:
+
+1. **Web UI on.** In qBittorrent: *Tools > Options > Web UI*. Note its port.
+2. **Let Docker in.** Radarr and Sonarr reach qBittorrent from Docker's network. Either give the
+   installer qBittorrent's user name and password, or under *Web UI > Bypass authentication for
+   clients in whitelisted IP subnets* add `172.16.0.0/12`.
+3. **Answer the questions.** The address (for example `http://192.168.1.15:8080`) and, if you
+   use one, the login. The installer reads where qBittorrent saves downloads (its default save
+   folder and the `radarr` and `sonarr` categories, which it adds when missing) and shows what
+   it will do with them.
+
+What the installer then sets up:
+
+- **The download folder in Docker.** A Windows folder such as `H:\Downloads` is `/mnt/h/Downloads`
+  in WSL; it is mounted into Radarr and Sonarr as `/data/torrents-ext/1`.
+- **Remote path mappings** in Radarr and Sonarr from qBittorrent's paths to that folder
+  (`H:\Downloads\` -> `/data/torrents-ext/1/`), so finished downloads are found and imported.
+  Older mappings for the same qBittorrent that point elsewhere are removed.
+- **A check** that Radarr and Sonarr reach qBittorrent and can see the folder.
+
+Your qBittorrent's settings are otherwise left alone. If it does not block program files, the
+installer says so: turn on *Tools > Options > Downloads > Excluded file names* with
+`*.exe`, `*.scr`, `*.lnk`, `*.msi`, `*.bat`, `*.cmd`, `*.com`, `*.pif`, `*.vbs`, `*.js`.
+
+Hardlinks do not work across a Windows drive, so a finished download is **copied** into the
+library and takes its space twice while it is still seeding. Keep room for that on the drive.
+
+Already switched to your own qBittorrent by hand? Run `sudo tortugarr reconfigure` and choose
+**qBittorrent I already have**; the Tortugarr container is removed and the paths are set up.
+`sudo tortugarr doctor` points this out when Radarr or Sonarr download somewhere else than the
+client Tortugarr set up.
 
 ## After installing (your part)
 

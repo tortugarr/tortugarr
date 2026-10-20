@@ -34,6 +34,8 @@ load_state() {
   TZ_NAME=$(state_get .tz)
   LAN_IP=$(state_get .lan_ip); BIND_IP=$(state_get .bind_ip)
   TORRENT_CLIENT=$(state_get .torrent_client)
+  EXT_QBIT_JSON=$(jq -c '.external_qbit // {}' "$f")
+  EXT_QBIT_URL=$(jq -r '.external_qbit.url // empty' "$f")
   USENET=$(state_get .usenet); VPN=$(state_get .vpn); HWACCEL=$(state_get .hwaccel)
   PLATFORM=$(state_get .platform)
   DOCKER_MODE=$(state_get .docker_mode); DOCKER_MODE=${DOCKER_MODE:-engine}
@@ -71,7 +73,7 @@ write_state() {
     --argjson extra "${EXTRA_LIBS_JSON:-[]}" --arg profile "${QUALITY_PROFILE:-HD-1080p}" \
     --argjson scan "${SCAN_MINUTES:-30}" --arg sublangs "${SUB_LANGS:-en}" \
     --arg prepo "$MOONFIN_PLUGIN_REPO" --arg pguid "$MOONFIN_PLUGIN_GUID" --arg pver "$MOONFIN_PLUGIN_VERSION" --arg pmin "${MOONFIN_PLUGIN_MIN_VERSION:-$MOONFIN_PLUGIN_VERSION}" \
-    --argjson created "${CREATED_JSON:-{\}}" \
+    --argjson created "${CREATED_JSON:-{\}}" --argjson extqb "${EXT_QBIT_JSON:-null}" \
     '{tortugarr_version:$version, installed_at:$installed_at, updated_at:$updated_at, platform:$platform, docker_mode:$docker_mode,
       install_dir:$install_dir, config_dir:$config_dir, data_dir:$data_dir, puid:$puid, pgid:$pgid,
       tz:$tz, lan_ip:$lan_ip, bind_ip:$bind_ip, language:$language,
@@ -82,7 +84,8 @@ write_state() {
       extra_libraries:$extra, default_quality_profile:$profile, library_scan_minutes:$scan,
       subtitle_languages:($sublangs | split(",") | map(select(length > 0))),
       moonfin_plugin:true, moonfin_plugin_repo:$prepo, moonfin_plugin_guid:$pguid,
-      moonfin_plugin_version:$pver, moonfin_plugin_min_version:$pmin, created:$created}' > "$(STATE_FILE).tmp" \
+      moonfin_plugin_version:$pver, moonfin_plugin_min_version:$pmin, created:$created}
+      + (if $client == "qbittorrent-ext" then {external_qbit:$extqb} else {} end)' > "$(STATE_FILE).tmp" \
     || die "could not write state.json"
   mv "$(STATE_FILE).tmp" "$(STATE_FILE)"
   chmod 600 "$(STATE_FILE)"
@@ -103,12 +106,16 @@ write_secrets_if_missing() {
   else
     jq -n --arg u "$ADMIN_USER" --arg p "$ADMIN_PASSWORD" '{admin_user:$u, admin_password:$p}' > "$f"
   fi
+  # The password of a qBittorrent outside the stack, when it has one (state.json holds the rest).
+  if [ -n "${EXT_QBIT_PASSWORD:-}" ]; then
+    jq --arg p "$EXT_QBIT_PASSWORD" '.external_qbit_password = $p' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  fi
   chmod 600 "$f"
 }
 
 compose_profiles() {
   local p=()
-  [ "$TORRENT_CLIENT" != none ] && p+=("$TORRENT_CLIENT")
+  client_in_stack && p+=("$TORRENT_CLIENT")
   [ "$USENET" = true ] && p+=(sabnzbd)
   [ "$VPN" = true ] && p+=(vpn)
   local IFS=,; echo "${p[*]}"
@@ -119,6 +126,7 @@ write_overrides() {
   mkdir -p "$o"
   rm -f "$o/media.yml" "$o/vpn.yml" "$o/hwaccel.yml"
   local files="compose.yml"
+  write_external_client_override "$o" && files="$files:overrides/download-client.yml"
 
   if [ "$(jq length <<< "${EXTRA_LIBS_JSON:-[]}")" -gt 0 ]; then
     # Jellyfin gets every extra folder read-only; Sonarr/Radarr only the folders
@@ -139,7 +147,7 @@ write_overrides() {
     files="$files:overrides/media.yml"
   fi
 
-  if [ "$VPN" = true ] && [ "$TORRENT_CLIENT" != none ]; then
+  if [ "$VPN" = true ] && client_in_stack; then
     local web_internal
     case "$TORRENT_CLIENT" in qbittorrent) web_internal=8080 ;; transmission) web_internal=9091 ;; deluge) web_internal=8112 ;; esac
     cat > "$o/vpn.yml" <<EOF
@@ -311,9 +319,9 @@ engine() {
 
 expected_services() {
   local s=(jellyfin sonarr radarr prowlarr bazarr seerr flaresolverr)
-  [ "$TORRENT_CLIENT" != none ] && s+=("$TORRENT_CLIENT")
+  client_in_stack && s+=("$TORRENT_CLIENT")
   [ "$USENET" = true ] && s+=(sabnzbd)
-  [ "$VPN" = true ] && [ "$TORRENT_CLIENT" != none ] && s+=(gluetun)
+  [ "$VPN" = true ] && client_in_stack && s+=(gluetun)
   echo "${s[@]}"
 }
 
@@ -333,7 +341,7 @@ wait_containers() {
 
 published_ports() {
   local p=("$P_JELLYFIN" "$P_SEERR" "$P_SONARR" "$P_RADARR" "$P_PROWLARR" "$P_BAZARR")
-  [ "$TORRENT_CLIENT" != none ] && p+=("$P_TORRENT_WEB")
+  client_in_stack && p+=("$P_TORRENT_WEB")
   [ "$USENET" = true ] && p+=("$P_SABNZBD")
   echo "${p[@]}"
 }

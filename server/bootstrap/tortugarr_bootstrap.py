@@ -271,6 +271,40 @@ def torrent_client():
     return STATE.get("torrent_client", "qbittorrent")
 
 
+def client_kind():
+    """The client's software. qbittorrent-ext is a qBittorrent outside the stack (on the
+    Windows host, a NAS, ...), reached by address instead of as a container."""
+    client = torrent_client()
+    return "qbittorrent" if client == "qbittorrent-ext" else client
+
+
+def external_qbit():
+    return STATE.get("external_qbit") or {}
+
+
+def url_parts(url):
+    """http://192.168.1.15:8070/qbt -> ("192.168.1.15", 8070, False, "/qbt")."""
+    u = urllib.parse.urlsplit(url)
+    ssl = u.scheme == "https"
+    return u.hostname or "", u.port or (443 if ssl else 80), ssl, u.path.rstrip("/")
+
+
+def download_client_url():
+    """Where the plugin and the app's private build reach the torrent client."""
+    client = torrent_client()
+    if client == "none":
+        return ""
+    if client == "qbittorrent-ext":
+        return external_qbit().get("url", "")
+    return f"http://{client_host(client)}:{CLIENT_INTERNAL_PORT[client]}"
+
+
+def download_client_login():
+    if torrent_client() == "qbittorrent-ext":
+        return external_qbit().get("username", ""), SECRETS.get("external_qbit_password", "")
+    return SECRETS["admin_user"], SECRETS["admin_password"]
+
+
 def client_host(service):
     """Container-to-container host name. Behind the VPN every client lives in gluetun's netns."""
     if STATE.get("vpn") and service in ("qbittorrent", "transmission", "deluge"):
@@ -471,9 +505,9 @@ def tortugarr_plugin_config(h):
         "RadarrUrl": "http://radarr:7878", "RadarrApiKey": secret("radarr_api_key"),
         "ProwlarrUrl": "http://prowlarr:9696", "ProwlarrApiKey": secret("prowlarr_api_key"),
         "BazarrUrl": "http://bazarr:6767", "BazarrApiKey": bazarr_key(),
-        "DownloadClientType": client,
-        "DownloadClientUrl": f"http://{client_host(client)}:{CLIENT_INTERNAL_PORT[client]}" if client != "none" else "",
-        "DownloadClientUsername": SECRETS["admin_user"], "DownloadClientPassword": SECRETS["admin_password"],
+        "DownloadClientType": client_kind(),
+        "DownloadClientUrl": download_client_url(),
+        "DownloadClientUsername": download_client_login()[0], "DownloadClientPassword": download_client_login()[1],
         "MovieCategory": CATEGORY["radarr"], "TvCategory": CATEGORY["sonarr"],
         # Radarr/Sonarr send this to the refresh hook (plugin spec 3.12) instead of a Jellyfin key.
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
@@ -671,6 +705,13 @@ def import_existing(app, h, root):
 
 def download_client_values(app, client):
     """Field values for a Sonarr/Radarr/Prowlarr download client, per client type."""
+    category = CATEGORY[app]
+    cat_field = {"sonarr": "tvCategory", "radarr": "movieCategory", "prowlarr": "category"}[app]
+    if client == "qbittorrent-ext":
+        host, port, ssl, base = url_parts(external_qbit()["url"])
+        user, pw = download_client_login()
+        return {"host": host, "port": port, "useSsl": ssl, "urlBase": base,
+                "username": user, "password": pw, cat_field: category}
     host = client_host(client)
     port = CLIENT_INTERNAL_PORT[client]
     user, pw = SECRETS["admin_user"], SECRETS["admin_password"]
@@ -692,7 +733,7 @@ def download_client_values(app, client):
     return v
 
 
-CLIENT_IMPL = {"qbittorrent": "QBittorrent", "transmission": "Transmission",
+CLIENT_IMPL = {"qbittorrent": "QBittorrent", "qbittorrent-ext": "QBittorrent", "transmission": "Transmission",
                "deluge": "Deluge", "sabnzbd": "Sabnzbd"}
 
 
@@ -702,18 +743,67 @@ def configure_download_clients(app, h):
         wanted.append(torrent_client())
     if STATE.get("usenet"):
         wanted.append("sabnzbd")
+    have = h.get("/downloadclient")
     for client in wanted:
         values = download_client_values(app, client)
         name = CLIENT_IMPL[client]
+        # A client of the same kind added by hand as "qBittorrent" is taken over, not doubled.
+        name = next((p["name"] for p in have if p.get("implementation") == CLIENT_IMPL[client]
+                     and p.get("name", "").lower() == name.lower()), name)
         res = upsert_provider(h, "/downloadclient", name, CLIENT_IMPL[client], values,
                               extra={"enable": True, "priority": 1})
         ok(f"{app}: download client {name} {res}")
+        if client == "qbittorrent-ext" and app != "prowlarr":
+            mine = next(p for p in h.get("/downloadclient") if p["name"] == name)
+            try:
+                h.post("/downloadclient/test", mine)
+                ok(f"{app}: reaches the qBittorrent at {external_qbit().get('url')}")
+            except BootstrapError as e:
+                warn(f"{app}: cannot reach the qBittorrent at {external_qbit().get('url')} ({str(e)[-160:]}). "
+                     "In qBittorrent, give the installer its user name and password, or allow Docker in: "
+                     "Web UI > Bypass authentication for clients in whitelisted IP subnets: 172.16.0.0/12")
     # Remove clients this installer created earlier but which are no longer selected
     # (the user switched torrent client with `reconfigure`).
     for p in h.get("/downloadclient"):
         if p["name"] in CLIENT_IMPL.values() and p["name"] not in [CLIENT_IMPL[c] for c in wanted]:
             h.delete(f"/downloadclient/{p['id']}")
             ok(f"{app}: removed download client {p['name']} (no longer selected)")
+
+
+def configure_remote_paths(app, h):
+    """A qBittorrent outside the stack reports its own paths (H:\\Downloads\\radarr\\...). Map
+    them to the folders mounted into Sonarr/Radarr, drop older mappings for that host that point
+    elsewhere (the *arrs use the most specific one, so a stale one would win), and check the
+    container can see each mounted folder."""
+    if torrent_client() != "qbittorrent-ext":
+        return
+    host = url_parts(external_qbit()["url"])[0]
+    mounts = external_qbit().get("mounts", [])
+    for m in mounts:
+        remote, local = m["remote"], m["container_path"].rstrip("/") + "/"
+        for p in h.get("/remotepathmapping"):
+            if p["host"].lower() != host.lower():
+                continue
+            under = p["remotePath"].lower().startswith(remote.lower())
+            if under and not (p["remotePath"].lower() == remote.lower() and p["localPath"] == local):
+                if p["localPath"].startswith(local):
+                    continue  # points inside the mounted folder: still right
+                h.delete(f"/remotepathmapping/{p['id']}")
+                ok(f"{app}: removed path mapping {p['remotePath']} -> {p['localPath']} (not in the mounted folder)")
+        if not any(p["host"].lower() == host.lower() and p["remotePath"].lower() == remote.lower()
+                   for p in h.get("/remotepathmapping")):
+            h.post("/remotepathmapping", {"host": host, "remotePath": remote, "localPath": local})
+        ok(f"{app}: {remote} on {host} -> {local}")
+        listing = h.get(f"/filesystem?path={urllib.parse.quote(local)}&includeFiles=false"
+                        f"&allowFoldersWithoutTrailingSlashes=true")
+        parent = h.get(f"/filesystem?path={urllib.parse.quote(local.rstrip('/').rsplit('/', 1)[0] + '/')}"
+                       f"&includeFiles=false&allowFoldersWithoutTrailingSlashes=true")
+        if not any(d.get("path", "").rstrip("/") == local.rstrip("/") for d in parent.get("directories", [])):
+            warn(f"{app}: {local} is not visible inside {app} - downloads from {remote} cannot be imported. "
+                 f"Check that {m['host_path']} exists on this machine, then run: sudo tortugarr repair")
+        else:
+            seen = ", ".join(d.get("name", "") for d in listing.get("directories", [])[:6])
+            ok(f"{app}: sees {local}" + (f" ({seen})" if seen else ""))
 
 
 def configure_quality(app, h):
@@ -827,6 +917,7 @@ def configure_arr(app):
             ensure_root_folder(app, h, extra["container_path"])
             import_existing(app, h, extra["container_path"])
     configure_download_clients(app, h)
+    configure_remote_paths(app, h)
     configure_quality(app, h)
     configure_release_filter(app, h)
     configure_media_management(app, h)
@@ -924,6 +1015,36 @@ def configure_bazarr():
 
 
 # --------------------------------------------------------------------------- torrent / usenet clients
+
+def configure_external_qbittorrent():
+    """A qBittorrent outside the stack is the user's own: only the radarr and sonarr categories
+    are added when missing, next to its save folder. Its settings are left alone; a missing
+    block on .exe and other program files is pointed out instead."""
+    base = external_qbit()["url"].rstrip("/")
+    wait_http("qBittorrent", base + "/", accept=(200, 401, 403), timeout=60)
+    h = Http(base, cookies=True, headers={"Referer": base, "Origin": base})
+    user, pw = download_client_login()
+    if user:
+        res = h.request("POST", "/api/v2/auth/login", form={"username": user, "password": pw}, raw=True)
+        if b"Fails" in (res or b""):
+            raise BootstrapError("your qBittorrent refused the user name or password in state.json/secrets.json "
+                                 "(external_qbit). Fix them, then run: sudo tortugarr repair")
+    prefs = h.get("/api/v2/app/preferences")
+    save = prefs.get("save_path", "")
+    sep = "\\" if re.match(r"^[A-Za-z]:", save) else "/"
+    cats = h.get("/api/v2/torrents/categories") or {}
+    for app in ("radarr", "sonarr"):
+        cat = CATEGORY[app]
+        if cat in cats:
+            continue
+        h.request("POST", "/api/v2/torrents/createCategory",
+                  form={"category": cat, "savePath": save.rstrip("\\/") + sep + cat}, raw=True)
+        ok(f"qbittorrent: category {cat} added (saves under {save})")
+    if not prefs.get("excluded_file_names_enabled"):
+        warn("qbittorrent: your qBittorrent downloads program files too. Turn on Tools > Options > Downloads > "
+             "Excluded file names and add: " + ", ".join(BLOCKED_FILE_PATTERNS))
+    ok(f"qbittorrent: yours at {base} (not managed by Tortugarr)")
+
 
 def configure_qbittorrent():
     base = f"http://{client_host('qbittorrent')}:8080"
@@ -1512,12 +1633,16 @@ def write_app_config():
         "sonarrApiKey": secret("sonarr_api_key"),
         "radarrBaseUrl": lan_url("radarr"),
         "radarrApiKey": secret("radarr_api_key"),
-        "torrentClient": torrent_client(),
+        "torrentClient": client_kind(),
     }
     if torrent_client() == "qbittorrent":
         cfg.update({"qbittorrentBaseUrl": lan_url("torrent_web"),
                     "qbittorrentUsername": SECRETS["admin_user"],
                     "qbittorrentPassword": SECRETS["admin_password"]})
+    elif torrent_client() == "qbittorrent-ext":
+        user, pw = download_client_login()
+        cfg.update({"qbittorrentBaseUrl": external_qbit().get("url", ""),
+                    "qbittorrentUsername": user, "qbittorrentPassword": pw})
     save_json(f"{INSTALL}/app-config.json", cfg)
 
     def dart(v):
@@ -1565,6 +1690,8 @@ def cmd_configure():
     client = torrent_client()
     if client == "qbittorrent":
         steps.append(("qbittorrent", configure_qbittorrent))
+    elif client == "qbittorrent-ext":
+        steps.append(("qbittorrent", configure_external_qbittorrent))
     elif client == "transmission":
         steps.append(("transmission", configure_transmission))
     elif client == "deluge":
@@ -1669,6 +1796,53 @@ def cmd_doctor():
     for app in ("sonarr", "radarr"):
         bad += not check(f"{app} download client", lambda a=app: arr_clients(a))
 
+    def path_mappings(app):
+        """Every remote path mapping must land in a folder the container can see; one that does
+        not leaves finished downloads stuck with "No files found are eligible for import"."""
+        h = arr(app)
+        maps = h.get("/remotepathmapping")
+        if not maps:
+            if torrent_client() == "qbittorrent-ext":
+                raise BootstrapError("no remote path mapping for your qBittorrent - run repair")
+            return "none needed"
+        mounted = [x["container_path"].rstrip("/") for x in external_qbit().get("mounts", [])]
+        bad_maps = []
+        for m in maps:
+            local = m["localPath"].rstrip("/")
+            if mounted and not any(local == c or local.startswith(c + "/") for c in mounted):
+                bad_maps.append(f"{m['remotePath']} -> {m['localPath']} (outside the folders mounted from your qBittorrent)")
+                continue
+            parent = local.rsplit("/", 1)[0] or "/"
+            listing = h.get(f"/filesystem?path={urllib.parse.quote(parent + '/')}&includeFiles=false"
+                            f"&allowFoldersWithoutTrailingSlashes=true")
+            if not any(d.get("path", "").rstrip("/") == local for d in listing.get("directories", [])):
+                bad_maps.append(f"{m['remotePath']} -> {m['localPath']}")
+        if bad_maps:
+            raise BootstrapError("mapped to a folder this container cannot see: " + "; ".join(bad_maps)
+                                 + " - run repair, or fix the mapping in " + app.capitalize())
+        return f"{len(maps)} mapping(s), all visible"
+
+    def client_matches(app):
+        """Radarr/Sonarr download to the client Tortugarr set up. A client switched by hand (the
+        container stopped for a qBittorrent on the host) needs reconfigure, which mounts that
+        client's folders and maps its paths; otherwise its downloads are never imported."""
+        if torrent_client() in ("none", "qbittorrent-ext"):
+            return "ok"
+        want = client_host(torrent_client())
+        hosts = {next((f.get("value") for f in c.get("fields", []) if f.get("name") == "host"), "")
+                 for c in arr(app).get("/downloadclient")
+                 if c.get("enable") and c.get("implementation") == CLIENT_IMPL[torrent_client()]}
+        other = sorted(h for h in hosts if h and h != want)
+        if other:
+            raise BootstrapError(f"downloads go to {', '.join(other)}, not to Tortugarr's {torrent_client()} "
+                                 f"({want}). If that is your own qBittorrent, run: sudo tortugarr reconfigure "
+                                 f"and choose the qBittorrent you already have")
+        return f"{want}"
+
+    for app in ("sonarr", "radarr"):
+        bad += not check(f"{app} path mappings", lambda a=app: path_mappings(a))
+        bad += not check(f"{app} uses Tortugarr's download client", lambda a=app: client_matches(a))
+
     def jf():
         h, r = jellyfin_login()
         i = h.get("/System/Info")
@@ -1764,12 +1938,14 @@ def cmd_summary():
     rows = [("Jellyfin", "jellyfin"), ("Seerr (requests)", "seerr"), ("Sonarr (TV)", "sonarr"),
             ("Radarr (movies)", "radarr"), ("Prowlarr (indexers)", "prowlarr"),
             ("Bazarr (subtitles)", "bazarr")]
-    if torrent_client() != "none":
+    if torrent_client() not in ("none", "qbittorrent-ext"):
         rows.append((torrent_client().capitalize(), "torrent_web"))
     if s.get("usenet"):
         rows.append(("SABnzbd", "sabnzbd"))
     for label, key in rows:
         print(f"URL\t{label}\t{lan_url(key)}")
+    if torrent_client() == "qbittorrent-ext":
+        print(f"URL\tqBittorrent (yours)\t{external_qbit().get('url', '')}")
     print(f"CRED\tusername\t{user}")
     print(f"CRED\tpassword\t{pw}")
     # Things only the user can do, repeated until they are done.
@@ -1778,7 +1954,7 @@ def cmd_summary():
             print(f"NOTE\tno_indexers\t{lan_url('prowlarr')}")
     except BootstrapError:
         pass
-    if s.get("vpn") and torrent_client() != "none":
+    if s.get("vpn") and torrent_client() not in ("none", "qbittorrent-ext"):
         vpn_env = {}
         try:
             with open(f"{INSTALL}/overrides/vpn.env") as f:

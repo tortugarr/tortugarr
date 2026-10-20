@@ -33,6 +33,8 @@ export TORTUGARR_APP
 . "$TORTUGARR_APP/lib/stack.sh"
 # shellcheck source=lib/windows.sh
 . "$TORTUGARR_APP/lib/windows.sh"
+# shellcheck source=lib/external_client.sh
+. "$TORTUGARR_APP/lib/external_client.sh"
 # shellcheck source=lib/support.sh
 . "$TORTUGARR_APP/lib/support.sh"
 
@@ -217,17 +219,21 @@ ask_questions() {
     fi
   fi
 
+  say "$(t client_intro)"
   choose TORRENT_CLIENT "$(t q_torrent_client)" "${TORRENT_CLIENT:-qbittorrent}" \
     qbittorrent "qBittorrent  $(t client_qbit_note)" \
+    qbittorrent-ext "$(t client_qbit_ext)" \
     transmission "Transmission" \
     deluge "Deluge" \
     none "$(t client_none)"
+  [ "$TORRENT_CLIENT" = qbittorrent-ext ] && ask_external_qbit
 
   local u=false; [ "${USENET:-false}" = true ] && u=y
   if confirm USENET_ANS "$(t q_usenet)" "${u/false/n}"; then USENET=true; else USENET=false; fi
 
   VPN=${VPN:-false}
-  if [ "$TORRENT_CLIENT" != none ]; then
+  # The VPN container can only carry a client that runs in the stack.
+  if client_in_stack; then
     local v=n; [ "$VPN" = true ] && v=y
     if confirm VPN_ANS "$(t q_vpn)" "$v"; then VPN=true; else VPN=false; fi
   else
@@ -270,7 +276,7 @@ ask_questions() {
     pick_port P_BAZARR "${P_BAZARR:-6767}" Bazarr
     local def_web=8080
     case "$TORRENT_CLIENT" in transmission) def_web=9091 ;; deluge) def_web=8112 ;; esac
-    if [ "$TORRENT_CLIENT" != none ]; then
+    if client_in_stack; then
       pick_port P_TORRENT_WEB "${P_TORRENT_WEB:-$def_web}" "$(client_label "$TORRENT_CLIENT") (web UI)"
       pick_port P_TORRENT_PEER "${P_TORRENT_PEER:-6881}" "$(t peer_port)"
     fi
@@ -336,7 +342,7 @@ ask_vpn() {
 
 yes_no() { [ "$1" = true ] && t yes || t no; }
 client_label() {
-  case $1 in qbittorrent) echo qBittorrent ;; transmission) echo Transmission ;; deluge) echo Deluge ;; *) t client_none_short ;; esac
+  case $1 in qbittorrent) echo qBittorrent ;; qbittorrent-ext) echo "qBittorrent ($(t client_ext_short) ${EXT_QBIT_URL:-})" ;; transmission) echo Transmission ;; deluge) echo Deluge ;; *) t client_none_short ;; esac
 }
 
 show_summary() {

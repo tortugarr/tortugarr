@@ -38,13 +38,13 @@ win_ports() {
   local f; f=$(STATE_FILE)
   jq -r --arg c "$(jq -r .torrent_client "$f")" --argjson u "$(jq -r '.usenet // false' "$f")" '
     [.ports.jellyfin, .ports.seerr, .ports.sonarr, .ports.radarr, .ports.prowlarr, .ports.bazarr]
-    + (if $c != "none" then [.ports.torrent_web] else [] end)
+    + (if $c != "none" and $c != "qbittorrent-ext" then [.ports.torrent_web] else [] end)
     + (if $u then [.ports.sabnzbd] else [] end)
     | map(select(. != null) | tostring) | join(",")' "$f"
 }
 win_peer_port() {
   local f; f=$(STATE_FILE)
-  [ "$(jq -r .torrent_client "$f")" = none ] && { echo 0; return; }
+  case "$(jq -r .torrent_client "$f")" in none|qbittorrent-ext) echo 0; return ;; esac
   jq -r '.ports.torrent_peer // 0' "$f"
 }
 

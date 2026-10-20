@@ -20,6 +20,16 @@ qbittorrent, transmission, deluge, sabnzbd, gluetun). Installer logs are in
 
 ## Symptoms
 
+**Downloads finish but never show up; the queue says "No files found are eligible for import".**
+Radarr or Sonarr cannot see the folder the download client saved to. This happens when the
+client was switched by hand, for example from Tortugarr's qBittorrent container to a qBittorrent
+on Windows: the files are on `H:\Downloads`, which is not mounted into the containers. Run
+`sudo tortugarr doctor` (it names the mapping or client that is off), then
+`sudo tortugarr reconfigure` and choose **qBittorrent I already have**. See
+[Using a qBittorrent you already have](install.md#using-a-qbittorrent-you-already-have).
+Downloads already stuck in the queue: once the paths are right, use *Manual Import* in Radarr or
+Sonarr, or remove them from the queue if you moved the files yourself.
+
 **Nothing is found / nothing downloads.**
 You need indexers: Prowlarr > Indexers > Add Indexer. The doctor warns until you
 have at least one.

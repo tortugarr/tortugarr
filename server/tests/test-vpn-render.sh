@@ -4,7 +4,7 @@
 set -u
 APP=/opt/tortugarr/app
 export TORTUGARR_APP=$APP
-. $APP/lib/common.sh; . $APP/lib/detect.sh; . $APP/lib/docker.sh; . $APP/lib/stack.sh
+. $APP/lib/common.sh; . $APP/lib/detect.sh; . $APP/lib/docker.sh; . $APP/lib/stack.sh; . $APP/lib/external_client.sh
 load_language en
 INSTALL_DIR=$(mktemp -d); TORTUGARR_LOG=/dev/null
 cp /opt/tortugarr/state.json /opt/tortugarr/secrets.json "$INSTALL_DIR/"
