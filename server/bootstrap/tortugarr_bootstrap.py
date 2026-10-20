@@ -923,11 +923,64 @@ def arr_roots(app):
                     if e.get("type") == kind and e.get("arr_manage")]
 
 
+def folder_names(h, path):
+    """The sub-folder names of a folder as Radarr/Sonarr see it; empty when it is not there."""
+    try:
+        listing = h.get(f"/filesystem?path={urllib.parse.quote(path.rstrip('/') + '/')}"
+                        f"&includeFiles=false&allowFoldersWithoutTrailingSlashes=true")
+    except BootstrapError:
+        return set()
+    return {d.get("name") for d in listing.get("directories", [])}
+
+
+def relink_moved_titles(app, h):
+    """Points titles back at their folder when it is no longer where Radarr/Sonarr have it. Each
+    extra media folder sits at /data/library/N; installers before 4.20.01 numbered them again
+    when the list was entered anew, so on 2026-10-20 45 series and 74 movies pointed at a folder
+    that now held other things. A title is moved only when its folder is missing in its own root
+    and found in exactly one root of this type. Files are never touched (moveFiles=false), and
+    root folders under /data/library that are left empty and are not of this type are removed."""
+    kind = "series" if app == "sonarr" else "movie"
+    roots = arr_roots(app)
+    names = {}
+
+    def has(root, name):
+        if root not in names:
+            names[root] = folder_names(h, root)
+        return name in names[root]
+
+    titles = h.get(f"/{kind}")
+    moved = []
+    for t in titles:
+        root, _, name = t["path"].rstrip("/").rpartition("/")
+        if not name or has(root, name):
+            continue
+        found = [r for r in roots if r != root and has(r, name)]
+        if len(found) != 1:
+            continue
+        t.update({"path": f"{found[0]}/{name}", "rootFolderPath": found[0]})
+        h.put(f"/{kind}/{t['id']}?moveFiles=false", t)
+        moved.append(t["id"])
+    if moved:
+        if app == "sonarr":
+            h.post("/command", {"name": "RefreshSeries", "seriesIds": moved})
+        else:
+            h.post("/command", {"name": "RefreshMovie", "movieIds": moved})
+        ok(f"{app}: {len(moved)} title(s) pointed back at the folder they are in (no files moved)")
+    used = {t["path"].rstrip("/").rpartition("/")[0] for t in titles}
+    for f in h.get("/rootfolder"):
+        path = f["path"].rstrip("/")
+        if path.startswith("/data/library/") and path not in roots and path not in used:
+            h.delete(f"/rootfolder/{f['id']}")
+            ok(f"{app}: removed root folder {path} (not a {app.capitalize()} folder in Tortugarr's setup, no titles)")
+
+
 def configure_arr(app):
     h = wait_arr(app)
     set_arr_auth(app, h)
     root = "/data/media/tv" if app == "sonarr" else "/data/media/movies"
     ensure_root_folder(app, h, root)
+    relink_moved_titles(app, h)
     for extra in STATE.get("extra_libraries", []):
         if extra["type"] == ("tv" if app == "sonarr" else "movies") and extra.get("arr_manage"):
             ensure_root_folder(app, h, extra["container_path"])
