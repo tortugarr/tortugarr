@@ -70,7 +70,7 @@ write_state() {
     --argjson pp "$P_PROWLARR" --argjson ptw "$P_TORRENT_WEB" --argjson ptp "$P_TORRENT_PEER" --argjson psab "$P_SABNZBD" --argjson pbz "${P_BAZARR:-6767}" \
     --argjson extra "${EXTRA_LIBS_JSON:-[]}" --arg profile "${QUALITY_PROFILE:-HD-1080p}" \
     --argjson scan "${SCAN_MINUTES:-30}" --arg sublangs "${SUB_LANGS:-en}" \
-    --arg prepo "$MOONFIN_PLUGIN_REPO" --arg pguid "$MOONFIN_PLUGIN_GUID" --arg pver "$MOONFIN_PLUGIN_VERSION" \
+    --arg prepo "$MOONFIN_PLUGIN_REPO" --arg pguid "$MOONFIN_PLUGIN_GUID" --arg pver "$MOONFIN_PLUGIN_VERSION" --arg pmin "${MOONFIN_PLUGIN_MIN_VERSION:-$MOONFIN_PLUGIN_VERSION}" \
     --argjson created "${CREATED_JSON:-{\}}" \
     '{tortugarr_version:$version, installed_at:$installed_at, updated_at:$updated_at, platform:$platform, docker_mode:$docker_mode,
       install_dir:$install_dir, config_dir:$config_dir, data_dir:$data_dir, puid:$puid, pgid:$pgid,
@@ -82,7 +82,7 @@ write_state() {
       extra_libraries:$extra, default_quality_profile:$profile, library_scan_minutes:$scan,
       subtitle_languages:($sublangs | split(",") | map(select(length > 0))),
       moonfin_plugin:true, moonfin_plugin_repo:$prepo, moonfin_plugin_guid:$pguid,
-      moonfin_plugin_version:$pver, created:$created}' > "$(STATE_FILE).tmp" \
+      moonfin_plugin_version:$pver, moonfin_plugin_min_version:$pmin, created:$created}' > "$(STATE_FILE).tmp" \
     || die "could not write state.json"
   mv "$(STATE_FILE).tmp" "$(STATE_FILE)"
   chmod 600 "$(STATE_FILE)"

@@ -565,7 +565,7 @@ exposed to the LAN for the plugin's sake.
 ## 6. What the installer does
 
 Points Radarr's and Sonarr's refresh webhook at 3.12 (and at `/Library/Refresh` only when the
-plugin is not active). Installs the plugin (pinned version, auto-update off, like Moonfin), writes its configuration from
+plugin is not active). Installs the plugin (pinned version, auto-update off: it ships with Tortugarr), writes its configuration from
 `secrets.json` (the Seerr key is read from Seerr's `/settings/main` after the installer's admin
 login, since `secrets.json` has none), and tests every route: admin served, non-admin 403, missing service 503, and each
 action visible in Radarr/Sonarr/qBittorrent/Bazarr. Distribution: the installer carries the built plugin itself.

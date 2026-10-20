@@ -54,10 +54,11 @@ with the Tortugarr app. Leave the notice; updating from the web page does not wo
 anyway. Newer versions come with `sudo tortugarr update` when Tortugarr itself is updated.
 
 **Jellyfin's dashboard says "Plugin updates available".**
-That is the Moonfin plugin: it is pinned on purpose to the version the Tortugarr app is
-built and tested against, with automatic updates switched off, so nothing is installed by
-itself. Leave it. If a newer Moonfin was installed by hand, `sudo tortugarr repair` puts the
-pinned version back. (Only administrators see this notice.)
+Usually the Moonfin plugin. It may be updated: Tortugarr installs the version it was tested
+with and keeps Jellyfin's automatic plugin updates on, so the update normally installs itself
+at Jellyfin's next plugin check. Installing it from the dashboard is fine too.
+`sudo tortugarr repair` only replaces Moonfin plugin versions older than the one this
+Tortugarr release needs. (Only administrators see this notice.)
 
 **Some videos will not play on the TV, others do.**
 Check the audio codec of the ones that fail. If it is only Dolby (AC3/EAC3/Atmos)

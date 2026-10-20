@@ -55,8 +55,9 @@ With Transmission or Deluge these four are unavailable; downloading still works.
 The installer names the download categories `radarr` and `sonarr` (saved under
 `torrents/movies` and `torrents/tv`), which is what the app looks for.
 
-## Keep app and plugin versions together
+## App and plugin versions
 
-The installer pins the Moonfin server plugin to the version the app was tested with
-and switches off Jellyfin's automatic plugin updates for it. Update the plugin
-together with the app, not separately.
+The app is built on a Moonfin release and needs at least the matching Moonfin server
+plugin (`MOONFIN_PLUGIN_MIN_VERSION` in `versions.env`). The installer puts that version
+in place and leaves Jellyfin's automatic plugin updates on, so newer Moonfin plugin
+releases arrive by themselves. When you update Tortugarr, update the app too.

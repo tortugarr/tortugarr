@@ -48,8 +48,8 @@ tortugarr-server/                 this repository
   (Docker installed, docker group, ufw rules). Uninstall removes
   exactly that and nothing else.
 - **Media is never touched** by repair, restore or uninstall.
-- **Pinned versions.** Images are pinned by digest in `versions.env`; the Moonfin
-  plugin by version, with Jellyfin's auto-update switched off for it.
+- **Pinned versions.** Images are pinned by digest in `versions.env`. The Moonfin
+  plugin has a minimum version there and otherwise follows Jellyfin's auto-update.
 
 ## Ports
 

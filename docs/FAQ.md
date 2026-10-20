@@ -320,27 +320,21 @@ through a VPN with a kill switch.
 
 **Jellyfin says "Plugin updates available" for Moonfin. Should I update?**
 
-No — this is deliberate. Tortugarr is a fully integrated, tested stack: the installer, the
-Jellyfin / Seerr / Sonarr / Radarr containers, and the Moonfin (Moonbase) server plugin are all
-pinning to specific versions and validated together end-to-end, including the plugin version
-**2.0.2.0**. Updating the plugin to a newer upstream release is not supported: Tortugarr's own
-features — automated download routing, junk-release filtering, missing-episode handling, and
-free-space enforcement — are built against the pinned plugin and can break with upstream changes.
-The installer keeps the pinned version in place, and if it is ever updated anyway,
-`sudo tortugarr repair` restores 2.0.2.0. See [troubleshooting](../server/docs/troubleshooting.md).
-
-This is why the update prompt appears — and why you should ignore it. If you see a plugin update
-and are unsure what it means, or if Tortugarr's automation stops working, **report it at the
-Tortugarr issue tracker** (`https://github.com/tortugarr/tortugarr/issues`), not in Moonfin's
-tracker. The Tortugarr maintainers are the only ones who can fix Tortugarr-specific features.
+Yes. The Moonfin server plugin (Moonbase) is the server side of the Moonfin app Tortugarr is
+built on. Tortugarr installs the version it was tested with (2.4.0.0) and leaves Jellyfin's
+automatic plugin updates on, so newer Moonfin plugin releases usually arrive by themselves.
+Installing an update from the dashboard is fine too. Only versions older than 2.4.0.0 are
+replaced by `sudo tortugarr repair`. If something stops working after a plugin update,
+**report it at the Tortugarr issue tracker** (`https://github.com/tortugarr/tortugarr/issues`),
+not in Moonfin's tracker.
 
 **Where to report problems.** Bugs, support questions, and unexpected behaviour are handled
 **only by the Tortugarr maintainers**. Please file **every** issue at the [Tortugarr GitHub
 issues page](https://github.com/tortugarr/tortugarr/issues), and not in the upstream Moonfin
 tracker. The upstream Moonfin project maintains and supports only its own media-player client
 (`Moonfin`, org.moonfin.androidtv). The Moonfin developers bear **no responsibility for**, and
-provide **no support for**, Tortugarr-specific builds, the pinned server plugin version,
-Tortugarr's server stack, or its automation features.
+provide **no support for**, Tortugarr-specific builds, Tortugarr's server stack, or its
+automation features.
 
 **A series shows up under the wrong name (e.g. "Ted" appears as "Ted Lasso").**
 The folder name was ambiguous. Rename the folder to `Title (Year)`. If that's not enough, add the

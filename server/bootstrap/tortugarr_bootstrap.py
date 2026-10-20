@@ -53,7 +53,7 @@ BLOCKED_FILE_PATTERNS = ["*.exe", "*.scr", "*.lnk", "*.msi", "*.bat", "*.cmd", "
 
 
 # Seerr -> Moonfin plugin webhook: the plugin's own path, event mask and payload template
-# (Moonfin plugin 2.0.2, SeerrProvisioningService). Kept identical, so the plugin sees the
+# (Moonfin plugin SeerrProvisioningService, unchanged from 2.0.2 to 2.4.0). Kept identical, so the plugin sees the
 # webhook as its own and leaves it alone.
 MOONFIN_WEBHOOK_PATH = "/Moonfin/Seerr/Webhook"
 MOONFIN_WEBHOOK_TYPES = 3918  # pending, approved, available, declined, and the four issue events
@@ -1205,13 +1205,31 @@ def jellyfin_scan_interval(h):
     ok(f"jellyfin: library scan every {STATE.get('library_scan_minutes', 30)} minutes")
 
 
+def plugin_version_tuple(version):
+    """'2.4.0.0' -> (2, 4, 0, 0); anything unreadable sorts lowest."""
+    try:
+        return tuple(int(part) for part in str(version).split("."))
+    except ValueError:
+        return (0,)
+
+
+def moonfin_plugin_min_version():
+    return STATE.get("moonfin_plugin_min_version") or STATE["moonfin_plugin_version"]
+
+
+def moonfin_plugin_recent_enough(version):
+    return plugin_version_tuple(version) >= plugin_version_tuple(moonfin_plugin_min_version())
+
+
 def jellyfin_plugin(h):
     guid = STATE["moonfin_plugin_guid"]
     version = STATE["moonfin_plugin_version"]
     repo = STATE["moonfin_plugin_repo"]
     plugins = h.get("/Plugins")
     mine = [p for p in plugins if p.get("Id", "").replace("-", "") == guid.replace("-", "")]
-    if any(p.get("Version") == version and p.get("Status") == "Active" for p in mine):
+    # Any active version from the minimum up is fine; Jellyfin's updater may
+    # already have moved it past the version this release installs.
+    if any(moonfin_plugin_recent_enough(p.get("Version")) and p.get("Status") == "Active" for p in mine):
         return False
     repos = h.get("/Repositories")
     if not any(r.get("Url") == repo for r in repos):
@@ -1233,13 +1251,14 @@ def jellyfin_plugin_versions(h):
 
 
 def jellyfin_plugin_pin():
-    """Keep exactly the pinned Moonfin plugin version.
+    """Keep the Moonfin plugin at the minimum version or newer, and up to date.
 
-    Jellyfin auto-updates plugins that come from a repository, which would move the
-    server plugin ahead of what the Tortugarr app was built and tested against. Other
-    versions are removed and auto-update is switched off in the plugin's meta.json.
+    Versions older than the minimum (the server side of the Moonfin release the app is
+    built on) are removed. Auto-update is switched on in the plugin's meta.json, so
+    Jellyfin installs new Moonfin plugin releases by itself. Earlier Tortugarr releases
+    pinned one exact version with auto-update off; this undoes that.
     Returns True when a restart is needed."""
-    pinned = STATE["moonfin_plugin_version"]
+    minimum = moonfin_plugin_min_version()
     root = f"{CFG}/jellyfin/plugins"
     changed = False
     if not os.path.isdir(root):
@@ -1255,13 +1274,13 @@ def jellyfin_plugin_pin():
             continue
         if meta.get("guid", "").replace("-", "") != STATE["moonfin_plugin_guid"].replace("-", ""):
             continue
-        if meta.get("version") != pinned:
+        if not moonfin_plugin_recent_enough(meta.get("version")):
             import shutil
             shutil.rmtree(os.path.join(root, d), ignore_errors=True)
-            info(f"jellyfin: removed Moonfin plugin {meta.get('version')} (pinned to {pinned})")
+            info(f"jellyfin: removed Moonfin plugin {meta.get('version')} (older than {minimum})")
             changed = True
-        elif meta.get("autoUpdate", True) or meta.get("status") != "Active":
-            meta["autoUpdate"] = False
+        elif not meta.get("autoUpdate", True) or meta.get("status") != "Active":
+            meta["autoUpdate"] = True
             meta["status"] = "Active"
             with open(meta_path, "w") as f:
                 json.dump(meta, f, indent=2)
@@ -1335,8 +1354,9 @@ def configure_jellyfin():
             jellyfin_restart_and_wait(h)
             h, _ = jellyfin_login()
         versions = [(p.get("Version"), p.get("Status")) for p in jellyfin_plugin_versions(h)]
-        if versions == [(STATE["moonfin_plugin_version"], "Active")]:
-            ok(f"jellyfin: Moonfin plugin {STATE['moonfin_plugin_version']} active (pinned, auto-update off)")
+        active = [v for v, st in versions if st == "Active" and moonfin_plugin_recent_enough(v)]
+        if active and len(versions) == 1:
+            ok(f"jellyfin: Moonfin plugin {active[0]} active (auto-update on)")
         else:
             warn(f"jellyfin: Moonfin plugin versions/status: {versions or 'not installed'}")
         jellyfin_plugin_config(h)
@@ -1657,8 +1677,10 @@ def cmd_doctor():
         moon = "missing"
         if versions:
             moon = ", ".join(f"{v} {st}" for v, st in versions)
-        if STATE.get("moonfin_plugin", True) and (STATE["moonfin_plugin_version"], "Active") not in versions:
-            warn(f"jellyfin: Moonfin plugin {STATE['moonfin_plugin_version']} not active ({moon}) - run repair")
+        if STATE.get("moonfin_plugin", True) and not any(
+            st == "Active" and moonfin_plugin_recent_enough(v) for v, st in versions
+        ):
+            warn(f"jellyfin: Moonfin plugin {moonfin_plugin_min_version()} or newer not active ({moon}) - run repair")
         return f"v{i['Version']}, admin login ok, {len(libs)} libraries, Moonfin plugin {moon}"
 
     bad += not check("jellyfin", jf)

@@ -50,10 +50,9 @@ system instead of a weekend of configuration:
   downloads are hardlinked into the library - no copying, no double disk use.
 - **Pinned, tested versions**: every image is pinned by digest. An install today and
   one in a year run exactly the same software. Updates are deliberate.
-  The Moonfin Jellyfin plugin is pinned too, to the version the Tortugarr app is built
-  and tested against. Jellyfin's dashboard will say "Plugin updates available" when
-  Moonfin publishes a newer version - that is expected; do not install it
-  (`sudo tortugarr repair` puts the pinned version back if it happens).
+  The Moonfin Jellyfin plugin starts at the version the Tortugarr app was tested with and
+  then keeps itself up to date through Jellyfin's automatic plugin updates; installing a
+  newer one from the dashboard is fine.
   Likewise, Radarr, Sonarr, Prowlarr, Bazarr, Seerr and qBittorrent may show "New update is
   available" in their web pages. That is expected and harmless: each is pinned in
   `versions.env` to a version tested together with the app. Do not update them from their web
