@@ -540,7 +540,7 @@ def tortugarr_plugin_config(h):
         # Radarr/Sonarr send this to the refresh hook (plugin spec 3.12) instead of a Jellyfin key.
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
         # The adult library stays as the administrator set it (off by default); only its place is set.
-        "AdultCategory": "adult", "AdultSavePath": "/data/media/adult", "AdultDownloadPath": adult_download_path(),
+        "AdultCategory": "adult", "AdultSavePath": adult_save_path(), "AdultDownloadPath": adult_download_path(),
     })
     h.post(f"/Plugins/{TORTUGARR_PLUGIN_GUID}/Configuration", conf)
     ok("jellyfin: Tortugarr plugin linked to Sonarr, Radarr, Bazarr and the download client")
@@ -1537,8 +1537,36 @@ def jellyfin_adult_paths():
     return [e["container_path"] for e in STATE.get("extra_libraries", []) if e.get("type") == "adult"]
 
 
+def adult_save_path():
+    """The folder of the plugin's adult library. With a qBittorrent outside the stack and an adult
+    folder of the user's own, that folder: adult downloads are saved there (AdultDownloadPath) and
+    nothing lands in the Linux disk. On 2026-10-20 the user took /data/media/adult out of the
+    adult library, and the plugin, finding no library on it, made a second one ("Adult2")."""
+    if torrent_client() == "qbittorrent-ext":
+        paths = jellyfin_adult_paths()
+        if paths:
+            return paths[0]
+    return ADULT_SAVE_PATH
+
+
 def folder_is_adult(folder):
-    return any(l.rstrip("/") == ADULT_SAVE_PATH for l in folder.get("Locations", []))
+    mark = adult_save_path().rstrip("/")
+    return any(l.rstrip("/") == mark for l in folder.get("Locations", []))
+
+
+def drop_stale_adult_library(h):
+    """Removes an empty library that only holds /data/media/adult once the adult library lives in
+    the user's own folder (the "Adult2" the plugin made before). Jellyfin leaves the files alone."""
+    if adult_save_path() == ADULT_SAVE_PATH:
+        return
+    for f in h.get("/Library/VirtualFolders"):
+        locs = [l.rstrip("/") for l in f.get("Locations", [])]
+        if locs != [ADULT_SAVE_PATH]:
+            continue
+        items = h.get(f"/Items?ParentId={f.get('ItemId')}&Recursive=true&Limit=0")
+        if (items or {}).get("TotalRecordCount", 1) == 0:
+            h.delete(f"/Library/VirtualFolders?{urllib.parse.urlencode({'name': f['Name'], 'refreshLibrary': 'true'})}")
+            ok(f"jellyfin: removed the empty library '{f['Name']}' ({ADULT_SAVE_PATH}, replaced by your adult folder)")
 
 
 def jellyfin_adult_folders(h):
@@ -1548,6 +1576,7 @@ def jellyfin_adult_folders(h):
     paths = jellyfin_adult_paths()
     if not paths:
         return
+    drop_stale_adult_library(h)
     adult = next((f for f in h.get("/Library/VirtualFolders") if folder_is_adult(f)), None)
     if adult is None:
         info("jellyfin: adult folders wait for the adult library - switch it on in the app "

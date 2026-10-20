@@ -5,6 +5,7 @@ import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart' show CupertinoSlider;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -237,6 +238,19 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
     // time Kids Mode goes on, someone picks a code for it rather than a
     // forgotten one still quietly being the way out.
     await pin.removePin();
+  }
+
+  /// The router is taken before the panel closes: after the pop this
+  /// context is unmounted, navigateTopLevel returned without navigating, and
+  /// Administration only closed Settings.
+  void _openAdmin(BuildContext context) {
+    final router = GoRouter.of(context);
+    _closeSettingsPanel();
+    if (PlatformDetection.isWeb) {
+      router.go(Destinations.admin);
+    } else {
+      router.push(Destinations.admin);
+    }
   }
 
   void _closeSettingsPanel() {
@@ -605,10 +619,7 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
                 icon: Icons.admin_panel_settings,
                 title: l10n.administration,
                 subtitle: l10n.settingsAdministrationSubtitle,
-                onTap: () {
-                  _closeSettingsPanel();
-                  context.navigateTopLevel(Destinations.admin);
-                },
+                onTap: () => _openAdmin(context),
               ),
             if (showAdmin && DownloadFeatures.freeSpace)
               _PanelEntry(
@@ -864,10 +875,7 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
       showAdmin: showAdmin,
       showThemeEditor: _showThemeEditorEntry,
       push: (screen) => context.pushSettingsScreen(screen),
-      openAdmin: () {
-        _closeSettingsPanel();
-        context.navigateTopLevel(Destinations.admin);
-      },
+      openAdmin: () => _openAdmin(context),
       openThemeEditor: () => unawaited(_openThemeEditor(context)),
     );
     final results = _filterSettingsIndex(index, _query);

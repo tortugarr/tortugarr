@@ -26,6 +26,8 @@ class FakeJellyfin:
     def get(self, path):
         if path == "/Users":
             return [dict(u) for u in self.users]
+        if path.startswith("/Items?"):
+            return {"TotalRecordCount": 0}
         assert path == "/Library/VirtualFolders", path
         return [{"Name": n, "ItemId": "id-" + n, "CollectionType": f["CollectionType"], "Locations": list(f["Locations"])}
                 for n, f in self.folders.items()]
@@ -45,6 +47,9 @@ class FakeJellyfin:
 
     def delete(self, path):
         q = urllib.parse.parse_qs(path.split("?", 1)[1])
+        if "path" not in q:
+            del self.folders[q["name"][0]]
+            return
         self.folders[q["name"][0]]["Locations"].remove(q["path"][0])
 
 
@@ -98,6 +103,18 @@ def main():
     check("a folder in the user's own library stays there, no second library",
           jf3.folders["Music & Conserts"]["Locations"] == ["/data/library/8"] and "Music Videos" not in jf3.folders,
           jf3.folders)
+
+    # 2026-10-20: the adult library was moved to the user's XXX folder and the plugin made an
+    # empty "Adult2" on /data/media/adult. With a qBittorrent on Windows the adult library is the
+    # user's folder, and the empty leftover goes.
+    tb.STATE["torrent_client"] = "qbittorrent-ext"
+    check("adult library lives in the user's adult folder", tb.adult_save_path() == "/data/library/5")
+    jf4 = FakeJellyfin({"Adult": {"CollectionType": "homevideos", "Locations": ["/data/library/5"]},
+                        "Adult2": {"CollectionType": "homevideos", "Locations": ["/data/media/adult"]}})
+    tb.jellyfin_libraries(jf4)
+    check("the empty Adult2 on the Linux disk is removed, Adult stays",
+          "Adult2" not in jf4.folders and jf4.folders["Adult"]["Locations"] == ["/data/library/5"], jf4.folders)
+    tb.STATE["torrent_client"] = "qbittorrent"
 
     check("Radarr roots: own folder + managed movie folders", tb.arr_roots("radarr") == ["/data/media/movies", "/data/library/3"])
     check("Sonarr roots: own folder + managed tv folders", tb.arr_roots("sonarr") == ["/data/media/tv", "/data/library/9"])
