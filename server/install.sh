@@ -39,6 +39,8 @@ export TORTUGARR_APP
 . "$TORTUGARR_APP/lib/extra_libs.sh"
 # shellcheck source=lib/support.sh
 . "$TORTUGARR_APP/lib/support.sh"
+# shellcheck source=lib/vpn.sh
+. "$TORTUGARR_APP/lib/vpn.sh"
 
 load_versions
 
@@ -282,36 +284,6 @@ ask_questions() {
       PUID=1000; PGID=1000
     fi
   fi
-}
-
-ask_vpn() {
-  local f="$INSTALL_DIR/overrides/vpn.env"
-  mkdir -p "$INSTALL_DIR/overrides"
-  if [ -f "$f" ]; then
-    note "$(t vpn_env_exists "$f")"
-    return
-  fi
-  say "$(t vpn_intro)"
-  ask_valid VPN_PROVIDER "$(t q_vpn_provider)" "${VPN_PROVIDER:-}" valid_nonempty value_required
-  choose VPN_TYPE "$(t q_vpn_type)" "${VPN_TYPE:-wireguard}" wireguard WireGuard openvpn OpenVPN
-  {
-    echo "# gluetun settings - see https://github.com/qdm12/gluetun-wiki for your provider."
-    echo "VPN_SERVICE_PROVIDER=$VPN_PROVIDER"
-    echo "VPN_TYPE=$VPN_TYPE"
-  } > "$f"
-  if [ "$VPN_TYPE" = wireguard ]; then
-    ask_valid VPN_WG_KEY "$(t q_vpn_wg_key)" "${VPN_WG_KEY:-}" valid_wg_key wg_key_invalid
-    ask_valid VPN_WG_ADDR "$(t q_vpn_wg_addr)" "${VPN_WG_ADDR:-}" valid_wg_addr wg_addr_invalid
-    { echo "WIREGUARD_PRIVATE_KEY=$VPN_WG_KEY"; echo "WIREGUARD_ADDRESSES=$VPN_WG_ADDR"; } >> "$f"
-  else
-    ask_valid VPN_USER "$(t q_vpn_user)" "${VPN_USER:-}" valid_nonempty value_required
-    ask_valid VPN_PASS "$(t q_vpn_pass)" "${VPN_PASS:-}" valid_nonempty value_required
-    { echo "OPENVPN_USER=$VPN_USER"; echo "OPENVPN_PASSWORD=$VPN_PASS"; } >> "$f"
-  fi
-  ask VPN_COUNTRIES "$(t q_vpn_countries)" "${VPN_COUNTRIES:-}"
-  [ -n "$VPN_COUNTRIES" ] && echo "SERVER_COUNTRIES=$VPN_COUNTRIES" >> "$f"
-  chmod 600 "$f"
-  good "$(t vpn_env_written "$f")"
 }
 
 yes_no() { [ "$1" = true ] && t yes || t no; }

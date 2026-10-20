@@ -166,6 +166,13 @@ services:
       - /dev/net/tun:/dev/net/tun
     # Relative paths in override files resolve against the project dir (INSTALL_DIR).
     env_file: [overrides/vpn.env]
+EOF
+    # A custom OpenVPN server: the user's own .ovpn file (OPENVPN_CUSTOM_CONFIG).
+    [ -f "$INSTALL_DIR/overrides/custom.ovpn" ] && cat >> "$o/vpn.yml" <<EOF
+    volumes:
+      - ./overrides/custom.ovpn:/gluetun/custom.ovpn:ro
+EOF
+    cat >> "$o/vpn.yml" <<EOF
     environment:
       TZ: \${TZ}
       FIREWALL_INPUT_PORTS: "$web_internal,\${TORRENT_PEER_PORT}"
