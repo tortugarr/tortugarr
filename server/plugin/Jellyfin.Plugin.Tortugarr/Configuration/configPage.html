@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tortugarr</title>
+</head>
+<body>
+    <div id="TortugarrConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <h2>Tortugarr</h2>
+                <p>Server side of the Tortugarr app. The addresses and keys of Sonarr, Radarr, Prowlarr,
+                   Bazarr and the download client are set by the Tortugarr installer and are never sent to the app.</p>
+                <form id="TortugarrConfigForm">
+                    <h3>Adult library</h3>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="AdultEnabled" type="checkbox" is="emby-checkbox" />
+                            <span>Adult library</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Off by default. When switched on, a separate library is created on
+                            <code id="AdultPath"></code> and hidden from every user who is not an administrator,
+                            including users created later. Give a user access in Dashboard &gt; Users &gt; the user &gt; Access.
+                            Only administrators can search and download for it. No indexers are added - add your own in Prowlarr.
+                            It needs qBittorrent as the download client.
+                        </div>
+                    </div>
+                    <p id="TortugarrStatus" class="fieldDescription"></p>
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Save</span></button>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function () {
+                var pluginId = '19f30fb1-bb78-444b-a75e-2997883b215c';
+                var page = document.querySelector('#TortugarrConfigPage');
+                function status(text) { page.querySelector('#TortugarrStatus').textContent = text; }
+                function refreshStatus() {
+                    // Asking for the capabilities also sets the library up once it is switched on.
+                    return ApiClient.fetch({ url: ApiClient.getUrl('Tortugarr/v1/Capabilities'), type: 'GET', dataType: 'json' })
+                        .then(function (c) {
+                            status(c.features.adult ? 'Adult library: on.' :
+                                   (page.querySelector('#AdultEnabled').checked ? 'Adult library: switched on, but not ready (it needs qBittorrent and Prowlarr).' : 'Adult library: off.'));
+                        }, function () { status('Could not read the status.'); });
+                }
+                page.addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        page.querySelector('#AdultEnabled').checked = !!config.AdultEnabled;
+                        page.querySelector('#AdultPath').textContent = config.AdultSavePath;
+                        Dashboard.hideLoadingMsg();
+                        refreshStatus();
+                    });
+                });
+                page.querySelector('#TortugarrConfigForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        config.AdultEnabled = page.querySelector('#AdultEnabled').checked;
+                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                            refreshStatus();
+                        });
+                    });
+                    return false;
+                });
+            })();
+        </script>
+    </div>
+</body>
+</html>

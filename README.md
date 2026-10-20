@@ -253,13 +253,12 @@ You need these installed first (setting them up is up to you):
 
 | To build | You need |
 |---|---|
-| The **app** (TV and phone APK) | [Flutter](https://flutter.dev) 3.44.8 (newer versions need a Gradle update first) with the Android SDK, and a JDK 17 or newer |
+| The **app** (TV and phone APK) | [Flutter](https://flutter.dev) 3.47 or newer (stable) with the Android SDK, and a JDK 17 or newer |
 | The **server plugin** | The [.NET 10 SDK](https://dotnet.microsoft.com) |
 
-App:
+App (from the repository root):
 
 ```bash
-cd app
 cp lib/data/services/download/download_now_secrets.example.dart \
    lib/data/services/download/download_now_secrets.dart
 flutter pub get
@@ -267,7 +266,7 @@ flutter build apk --release --flavor androidTv-public --dart-define=TORTUGARR_PU
 flutter build apk --release --flavor mobile-public    --dart-define=TORTUGARR_PUBLIC=true   # phone
 ```
 
-The APKs land in `app/build/app/outputs/flutter-apk/`. Without your own signing key
+The APKs land in `build/app/outputs/flutter-apk/`. Without your own signing key
 (`android/app/release.keystore`) they are signed with the debug key, which is fine for
 sideloading.
 
@@ -317,7 +316,7 @@ Every pirate ship started as somebody else's boat. This one started as Moonfin.
 
 | Folder | What |
 |---|---|
-| [`app/`](app/) | The Tortugarr app, a fork of [Moonfin-Core](https://github.com/Moonfin-Client/Moonfin-Core). |
+| [`lib/`](lib/), [`android/`](android/), … | The Tortugarr app, a fork of [Moonfin-Core](https://github.com/Moonfin-Client/Moonfin-Core) with its full history. |
 | [`server/`](server/) | The installer and the Tortugarr Jellyfin plugin. |
 | [`docs/`](docs/) | [FAQ](docs/FAQ.md), images and videos. |
 
