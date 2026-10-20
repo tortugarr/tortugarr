@@ -30,14 +30,14 @@ From the folder above this one, after building the plugin:
 
 ```bash
 server/plugin/build.sh
-tar -cf tortugarr-server-4.20.0.tar --exclude=bin --exclude=obj \
+tar -cf tortugarr-server-4.20.01.tar --exclude=bin --exclude=obj \
     --transform 's,^server,tortugarr-server,' server
 ```
 
 Users then run:
 
 ```bash
-tar -xf tortugarr-server-4.20.0.tar
+tar -xf tortugarr-server-4.20.01.tar
 cd tortugarr-server
 sudo ./install.sh
 ```
