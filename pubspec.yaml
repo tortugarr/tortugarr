@@ -5,7 +5,7 @@ version: 4.20.01+2000051
 
 moonfin:
   android_tv_version: 4.20.01
-  android_tv_build_number: 2000050
+  android_tv_build_number: 2000051
   beta: false
   beta_number: 1
 
