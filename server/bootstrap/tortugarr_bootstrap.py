@@ -2297,6 +2297,13 @@ def cmd_doctor():
                  f"(another type, or not mounted there) - new titles do not go there. Move their titles in "
                  f"{app.capitalize()} (Movies/Series > Edit > Root Folder) and remove the folder there")
         used = [r for r in arr(app).get("/rootfolder") if r["path"].rstrip("/") in allowed]
+        # A folder of the user's that Radarr/Sonarr lost (removed by hand on 2026-10-21, on the
+        # Library Import page): its titles stay, but collections and new titles break.
+        have = {r["path"].rstrip("/") for r in used}
+        gone = [p for p in arr_roots(app)[1:] if p.rstrip("/") not in have]
+        if gone:
+            raise BootstrapError(f"root folder(s) {', '.join(gone)} are missing in {app.capitalize()} "
+                                 f"- run: sudo tortugarr repair")
         return f"{len(used)} in use"
 
     for app in ("sonarr", "radarr"):
