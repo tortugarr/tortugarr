@@ -70,6 +70,40 @@ def main():
           r.movies[3]["path"] == f"{ROOT}/7 Days In Hell (2015) [1080p] [WEBRip]" and len(r.puts) == 2, r.puts)
     check("adopted titles refreshed", [c["movieIds"] for c in r.commands] == [[1], [3]], r.commands)
     check("the second copies are reported", any("Cliffhanger" in n and "AMZN" in n for n in notes), notes)
+    # 2026-10-21: Radarr filled in the Lord of the Rings collection while The Two Towers was
+    # added, and the add failed on a UNIQUE constraint. One retry a moment later adds it.
+    class Collection(FakeRadarr):
+        def __init__(self):
+            super().__init__()
+            self.movies = {}
+            self.unmapped = ["The.Lord.of.the.Rings.The.Two.Towers.2002.2160p"]
+            self.posts = 0
+
+        def get(self, path):
+            if path.startswith("/movie/lookup?term="):
+                return [{"tmdbId": 121, "title": "The Two Towers", "year": 2002}]
+            return super().get(path)
+
+        def post(self, path, body):
+            self.posts += 1
+            if self.posts == 1:
+                raise tb.BootstrapError('HTTP 500: {"errorMessage": "code = Constraint (19), message = '
+                                        'constraint failed\\nUNIQUE constraint failed: MovieMetadata.TmdbId\\n   at x"}')
+
+    sleeps, real_sleep = [], tb.time.sleep
+    tb.time.sleep = sleeps.append
+    try:
+        c = Collection()
+        out = []
+        real_ok, real_warn = tb.ok, tb.warn
+        tb.ok, tb.warn = out.append, out.append
+        tb.import_existing("radarr", c, ROOT)
+        tb.ok, tb.warn = real_ok, real_warn
+    finally:
+        tb.time.sleep = real_sleep
+    check("a collection race is retried once and the title is added",
+          c.posts == 2 and sleeps == [5] and any("1 existing title" in o for o in out), out)
+
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 

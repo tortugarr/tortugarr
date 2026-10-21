@@ -697,6 +697,13 @@ def quality_profile_id(h):
     return next((p["id"] for p in profiles if p["name"] == want), profiles[0]["id"])
 
 
+def arr_error_line(e):
+    """The first line of Radarr's/Sonarr's error message, without a .NET stack trace."""
+    m = re.search(r'"errorMessage":\s*"([^"]+)"', str(e))
+    text = (m.group(1) if m else str(e)).replace("\\n", "\n").splitlines()[0]
+    return text[:100]
+
+
 def import_existing(app, h, root):
     """Register the titles that already sit in an existing media folder, so Sonarr/Radarr
     know them (and don't fetch them again). They are added unmonitored: nothing is
@@ -745,12 +752,19 @@ def import_existing(app, h, root):
             body.update({"seasonFolder": True,
                          "addOptions": {"monitor": "none", "searchForMissingEpisodes": False,
                                         "searchForCutoffUnmetEpisodes": False}})
-        try:
-            h.post(f"/{kind}", body)
-            added.append(name)
-        except BootstrapError as e:
-            m = re.search(r'"errorMessage":\s*"([^"]+)"', str(e))
-            missed.append(f"{name} ({m.group(1) if m else str(e)[-80:]})")
+        for attempt in (1, 2):
+            try:
+                h.post(f"/{kind}", body)
+                added.append(name)
+                break
+            except BootstrapError as e:
+                # Radarr fills in the other films of a collection while the first one is
+                # added; adding one of them at that moment hits "UNIQUE constraint failed:
+                # MovieMetadata.TmdbId" (2026-10-21, The Two Towers). A moment later it works.
+                if attempt == 1 and "constraint" in str(e).lower():
+                    time.sleep(5)
+                    continue
+                missed.append(f"{name} ({arr_error_line(e)})")
     if added:
         ok(f"{app}: {len(added)} existing title(s) in {root} registered (unmonitored)")
     if missed:
