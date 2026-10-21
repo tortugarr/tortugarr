@@ -835,8 +835,13 @@ def configure_remote_paths(app, h):
                 continue
             under = p["remotePath"].lower().startswith(remote.lower())
             if under and not (p["remotePath"].lower() == remote.lower() and p["localPath"] == local):
-                if p["localPath"].startswith(local):
-                    continue  # points inside the mounted folder: still right
+                # A deeper mapping is right only when it lands on the same sub-folder
+                # (E:\Downloads\radarr\ -> .../2/radarr/). One left from a mount of the
+                # category folder itself (E:\Downloads\radarr\ -> .../2/, 2026-10-21) won
+                # as the most specific and sent every import to the wrong folder.
+                rest = p["remotePath"][len(remote):].replace("\\", "/").strip("/")
+                if p["localPath"].rstrip("/") == (local + rest).rstrip("/"):
+                    continue
                 h.delete(f"/remotepathmapping/{p['id']}")
                 ok(f"{app}: removed path mapping {p['remotePath']} -> {p['localPath']} (not in the mounted folder)")
         if not any(p["host"].lower() == host.lower() and p["remotePath"].lower() == remote.lower()
@@ -1823,6 +1828,19 @@ def seerr_login():
     return h
 
 
+def arr_titles_per_root(app):
+    """How many movies or series Radarr/Sonarr have in each root folder; empty on any error."""
+    try:
+        items = arr(app).get("/movie" if app == "radarr" else "/series")
+    except BootstrapError:
+        return {}
+    counts = {}
+    for i in items or []:
+        root = (i.get("rootFolderPath") or i.get("path", "").rsplit("/", 1)[0]).rstrip("/")
+        counts[root] = counts.get(root, 0) + 1
+    return counts
+
+
 def seerr_sync_libraries(h):
     """Reads Jellyfin's libraries into Seerr and turns on the movie and series ones.
 
@@ -1898,8 +1916,12 @@ def configure_seerr():
         prof = next((p for p in profiles if p["name"] == STATE.get("default_quality_profile", "HD-1080p")), None) \
             or (profiles[0] if profiles else None)
         # Seerr adds a request to one fixed folder: the roomiest of those new titles go to now.
+        # Folders on one drive have the same free space: the one with the most titles is
+        # the main one (2026-10-21: E:\-=MOVIES=- over E:\-=Dokumentarer=-).
         targets = set(new_title_roots(app))
-        root = max((r for r in roots if r["path"].rstrip("/") in targets), key=lambda r: r.get("freeSpace") or 0,
+        titles = arr_titles_per_root(app)
+        root = max((r for r in roots if r["path"].rstrip("/") in targets),
+                   key=lambda r: ((r.get("freeSpace") or 0) // (1 << 30), titles.get(r["path"].rstrip("/"), 0)),
                    default=roots[0] if roots else None)
         if not prof or not root:
             raise BootstrapError(f"seerr: {app} returned no quality profile or root folder")
