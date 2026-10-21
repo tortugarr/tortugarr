@@ -19,7 +19,7 @@ import '../overlay_sheet.dart';
 import '../progress_snack_bar.dart';
 import '../track_selector_dialog.dart';
 import 'delay_footer.dart';
-import 'secondary_subtitle_appearance_footer.dart';
+import 'subtitle_appearance_footer.dart';
 import 'track_choices.dart';
 
 /// Runs a change to the player, returning false when it was refused.
@@ -69,7 +69,6 @@ abstract final class TrackPicker {
     required PlaybackManager manager,
     required bool audio,
     required MediaServerClient Function(AggregatedItem item) clientFor,
-    bool secondary = false,
     bool useRootNavigator = true,
     PlayerMutation? runMutation,
     VoidCallback? onSubtitlesChanged,
@@ -80,7 +79,6 @@ abstract final class TrackPicker {
     final item = manager.queueService.currentItem;
     final canDownloadRemote =
         !audio &&
-        !secondary &&
         item is AggregatedItem &&
         canDownloadRemoteSubtitles(item);
     final mutate = runMutation ?? _runDirectly;
@@ -89,10 +87,6 @@ abstract final class TrackPicker {
       manager,
       l10n,
       audio: audio,
-      secondary: secondary,
-      preferredSecondaryLanguage: secondary
-          ? prefs.get(UserPreferences.preferredSecondarySubtitleLanguage)
-          : '',
     );
     final streams = choices.streams;
     final options = <TrackOption>[
@@ -106,15 +100,8 @@ abstract final class TrackPicker {
     if (!context.mounted) return;
 
     final backend = manager.backend;
-    final delayLimits = secondary
-        ? (
-            -PlaybackManager.secondarySubtitleMaxDelaySeconds,
-            PlaybackManager.secondarySubtitleMaxDelaySeconds,
-          )
-        : delayLimitsFor(backend, audio: audio);
-    final delay = secondary
-        ? manager.secondarySubtitleDelaySeconds
-        : audio
+    final delayLimits = delayLimitsFor(backend, audio: audio);
+    final delay = audio
         ? audioDelay
         : backend is Media3PlayerBackend
         ? backend.subtitleDelaySeconds
@@ -132,65 +119,12 @@ abstract final class TrackPicker {
         ),
       );
     }
-    Widget? footer;
-    if (secondary) {
-      final style = SubtitleStyle.forResolution(
-        prefs,
-        manager.currentResolution,
-      );
-      footer = Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.08),
-            ),
-          ),
-          SecondarySubtitleAppearanceFooter(
-            initialFontSize:
-                manager.secondarySubtitleFontSize ?? style.fontSize,
-            initialOffset: manager.secondarySubtitleOffset,
-            initialTextColor: manager.secondarySubtitleTextColor,
-            defaultTextColor: style.textColor,
-            onChanged: (fontSize, offset, textColor) {
-              unawaited(
-                manager.configureSecondarySubtitleStyle(
-                  fontSize: fontSize,
-                  verticalOffset: offset,
-                  textColor: textColor,
-                ),
-              );
-              unawaited(
-                prefs.set(UserPreferences.secondarySubtitleTextSize, fontSize),
-              );
-              unawaited(
-                prefs.set(
-                  UserPreferences.secondarySubtitleOffsetPosition,
-                  offset,
-                ),
-              );
-              unawaited(
-                prefs.set(
-                  UserPreferences.secondarySubtitleTextColor,
-                  textColor ?? -1,
-                ),
-              );
-            },
-          ),
-        ],
-      );
-    }
+    final footer = audio ? null : _appearanceFooter(manager, prefs);
     final result = await _whileOpen(
       onDialogOpenChanged,
       () => TrackSelectorDialog.show(
         context,
-        title: audio
-            ? l10n.audioTrack
-            : secondary
-            ? l10n.secondarySubtitleTrack
-            : l10n.subtitleTrack,
+        title: audio ? l10n.audioTrack : l10n.subtitleTrack,
         options: options,
         selectedIndex: choices.selectedIndex,
         useRootNavigator: useRootNavigator,
@@ -209,9 +143,8 @@ abstract final class TrackPicker {
             label: delayLabel,
             minDelay: delayLimits.$1,
             maxDelay: delayLimits.$2,
-            onDelayChanged: (d) => secondary
-                ? unawaited(manager.setSecondarySubtitleDelay(d))
-                : _applyDelay(manager, audio: audio, delay: d),
+            onDelayChanged: (d) =>
+                _applyDelay(manager, audio: audio, delay: d),
             formatDelay: formatDelay,
           ),
         ),
@@ -219,25 +152,6 @@ abstract final class TrackPicker {
       return;
     }
     final streamIndex = choices.streamIndexFor(result);
-    if (secondary) {
-      if (streamIndex == null) return;
-      final target = streamIndex == -1 ? null : streamIndex;
-      try {
-        await mutate(
-          target == null
-              ? 'secondary_subtitles_off'
-              : 'secondary_subtitle_$target',
-          () => manager.changeSecondarySubtitleTrack(target),
-        );
-      } catch (error) {
-        GetIt.instance<LogService>().playback(
-          'Could not change the secondary subtitle track',
-          level: LogLevel.warning,
-          error: error,
-        );
-      }
-      return;
-    }
     if (!audio) {
       if (streamIndex == -1) {
         await mutate('subtitles_off', manager.disableSubtitles);
@@ -273,6 +187,54 @@ abstract final class TrackPicker {
         () => manager.changeAudioTrack(streamIndex),
       );
     }
+  }
+
+  /// Size, height and colour of the subtitles. They are written to the same
+  /// preferences as the subtitle settings (the HDR ones while HDR plays and
+  /// those are kept apart), and the player restyles on every write.
+  static Widget _appearanceFooter(
+    PlaybackManager manager,
+    UserPreferences prefs,
+  ) {
+    final resolution = manager.currentResolution;
+    final hdr =
+        prefs.get(UserPreferences.subtitlesHdrSeparate) &&
+        isHdrSubtitleOutput(
+          videoRangeType: resolution?.videoRangeType,
+          isTranscoding: resolution?.playMethod == StreamPlayMethod.transcode,
+        );
+    final size = hdr
+        ? UserPreferences.subtitlesHdrTextSize
+        : UserPreferences.subtitlesTextSize;
+    final offset = hdr
+        ? UserPreferences.subtitlesHdrOffsetPosition
+        : UserPreferences.subtitlesOffsetPosition;
+    final color = hdr
+        ? UserPreferences.subtitlesHdrTextColor
+        : UserPreferences.subtitlesTextColor;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            height: 1,
+            color: Colors.white.withValues(alpha: 0.08),
+          ),
+        ),
+        SubtitleAppearanceFooter(
+          initialFontSize: prefs.get(size),
+          initialOffset: prefs.get(offset),
+          initialTextColor: prefs.get(color),
+          defaultTextColor: color.defaultValue,
+          onChanged: (fontSize, verticalOffset, textColor) {
+            unawaited(prefs.set(size, fontSize));
+            unawaited(prefs.set(offset, verticalOffset));
+            unawaited(prefs.set(color, textColor ?? color.defaultValue));
+          },
+        ),
+      ],
+    );
   }
 
   static Future<bool> _runDirectly(

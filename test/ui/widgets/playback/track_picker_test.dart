@@ -47,7 +47,7 @@ void main() {
   Future<void> openPicker(
     WidgetTester tester,
     PlaybackManager manager, {
-    bool secondary = false,
+    bool subtitles = false,
     ValueChanged<bool>? onDialogOpenChanged,
   }) async {
     await tester.pumpWidget(
@@ -59,8 +59,7 @@ void main() {
             onPressed: () => TrackPicker.show(
               context,
               manager: manager,
-              audio: !secondary,
-              secondary: secondary,
+              audio: !subtitles,
               clientFor: (_) => throw UnimplementedError(),
               onDialogOpenChanged: onDialogOpenChanged,
             ),
@@ -112,18 +111,17 @@ void main() {
     expect(events, [true, false, true, false]);
   });
 
-  testWidgets('the secondary subtitle delay opens in the same bar', (
-    tester,
-  ) async {
-    final manager = PlaybackManager();
-    await openPicker(tester, manager, secondary: true);
+  // One subtitle menu: the track list with size, height and colour under it,
+  // written to the subtitle settings the player draws with.
+  testWidgets('the subtitle menu sets the subtitle size', (tester) async {
+    await openPicker(tester, PlaybackManager(), subtitles: true);
+    expect(find.text(l10n.subtitleTrack), findsOneWidget);
+    expect(find.text(l10n.subtitleSize), findsOneWidget);
 
-    await tester.tap(find.text(l10n.subtitleDelay));
-    await tester.pumpAndSettle();
-    expect(find.text(l10n.secondarySubtitleTrack), findsNothing);
-    await tester.tap(find.byTooltip(l10n.delayPlusMs(100)));
+    await tester.tap(find.byTooltip(l10n.increaseValue(l10n.subtitleSize)));
     await tester.pump();
-    expect(manager.secondarySubtitleDelaySeconds, 0.1);
+    final prefs = GetIt.instance<UserPreferences>();
+    expect(prefs.get(UserPreferences.subtitlesTextSize), 22.0);
   });
 
   testWidgets('the delay bar starts with Reset focused for a remote', (

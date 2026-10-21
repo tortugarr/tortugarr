@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
 
-class SecondarySubtitleAppearanceFooter extends StatefulWidget {
-  const SecondarySubtitleAppearanceFooter({
+/// Size, height and colour of the subtitles, under the track list so they can
+/// be set while the subtitles are on screen.
+class SubtitleAppearanceFooter extends StatefulWidget {
+  const SubtitleAppearanceFooter({
     super.key,
     required this.initialFontSize,
     required this.initialOffset,
@@ -19,12 +21,12 @@ class SecondarySubtitleAppearanceFooter extends StatefulWidget {
   final void Function(double fontSize, double offset, int? textColor) onChanged;
 
   @override
-  State<SecondarySubtitleAppearanceFooter> createState() =>
-      _SecondarySubtitleAppearanceFooterState();
+  State<SubtitleAppearanceFooter> createState() =>
+      _SubtitleAppearanceFooterState();
 }
 
-class _SecondarySubtitleAppearanceFooterState
-    extends State<SecondarySubtitleAppearanceFooter> {
+class _SubtitleAppearanceFooterState
+    extends State<SubtitleAppearanceFooter> {
   late double _fontSize = widget.initialFontSize;
   late double _offset = widget.initialOffset;
   late int? _textColor = widget.initialTextColor;
