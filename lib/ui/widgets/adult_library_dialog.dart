@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:async';
 
@@ -20,6 +21,7 @@ import 'pin_entry_dialog.dart';
 import 'seerr/seerr_tv_controls.dart';
 import 'track_selector_dialog.dart' show showStyledPlayerDialog;
 import 'package:moonfin/util/app_l10n.dart';
+import 'package:moonfin/util/focus/dpad_keys.dart';
 
 /// Settings > "Voksenfilmer (XXX)": show or hide the XXX library. Showing it
 /// needs the library's own PIN (set the first time); hiding never does.
@@ -331,13 +333,32 @@ Future<String?> _askAdultQuery(BuildContext context) {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            controller: controller,
-            autofocus: true,
-            textInputAction: TextInputAction.search,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(hintText: appL10n().tgXxxSearchHint),
-            onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+          // On a TV, Back in the field left it with nothing focused, and the
+          // remote could neither reach the buttons nor close the dialog
+          // (2026-10-21). Back closes it, and down goes to the buttons.
+          Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onKeyEvent: (node, event) {
+              if (event is! KeyDownEvent) return KeyEventResult.ignored;
+              if (event.logicalKey.isBackKey) {
+                Navigator.of(ctx).pop();
+                return KeyEventResult.handled;
+              }
+              if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                FocusScope.of(ctx).nextFocus();
+                return KeyEventResult.handled;
+              }
+              return KeyEventResult.ignored;
+            },
+            child: TextField(
+              controller: controller,
+              autofocus: true,
+              textInputAction: TextInputAction.search,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(hintText: appL10n().tgXxxSearchHint),
+              onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+            ),
           ),
           const SizedBox(height: 16),
           Row(
