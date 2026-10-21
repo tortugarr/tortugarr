@@ -99,7 +99,17 @@ void main() {
     expect(movie.totalBytes, 1000);
     // TMDB numbers movies and series apart: the series with tvdb 7 is not it.
     expect(SeerrDownloadSummary.forMedia(status: 3, items: null, tmdbId: 8), isNull);
-    expect(SeerrDownloadSummary.forMedia(status: 5, items: null, tmdbId: 7), isNull);
+    // Available in Seerr, but Radarr is fetching for it: the queue shows it.
+    expect(SeerrDownloadSummary.forMedia(status: 5, items: null, tmdbId: 7)!.percent, 10);
+    // Seerr's own leftovers for an available title do not.
+    expect(
+      SeerrDownloadSummary.forMedia(
+        status: 5,
+        items: const [SeerrDownloadingItem(size: 1000, sizeLeft: 500, downloadId: 'OLD')],
+        tmdbId: 8,
+      ),
+      isNull,
+    );
     LiveDownloadProgress.setForTest(null);
   });
 

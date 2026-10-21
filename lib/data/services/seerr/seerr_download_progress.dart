@@ -144,18 +144,22 @@ class SeerrDownloadSummary {
     int? tmdbId,
     int? tvdbId,
   }) {
+    final early = LiveDownloadProgress.itemsFor(tmdbId: tmdbId, tvdbId: tvdbId);
     if (status != _statusProcessing && status != _statusPartiallyAvailable) {
-      return null;
+      // Seerr calls the title available, but Radarr/Sonarr may still be
+      // fetching for it: an episode from the missing-episodes list of a
+      // series Seerr has as complete. Only their queue counts then.
+      return fromItems(early);
     }
     final known = {
       for (final i in items ?? const <SeerrDownloadingItem>[])
         if (i.downloadId != null) i.downloadId!.toUpperCase(),
     };
-    final early = [
-      for (final i in LiveDownloadProgress.itemsFor(tmdbId: tmdbId, tvdbId: tvdbId))
+    return fromItems([
+      ...?items,
+      for (final i in early)
         if (!known.contains(i.downloadId)) i,
-    ];
-    return fromItems([...?items, ...early]);
+    ]);
   }
 
   /// Summary for a request card, using the request's quality flavor and
