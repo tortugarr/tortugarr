@@ -1192,12 +1192,15 @@ public sealed class TortugarrService
         foreach (var (arr, kind) in new[] { (Radarr, "movie"), (Sonarr, "episode") })
         {
             var q = await arr.Get(kind == "movie" ? "/queue?pageSize=200&includeMovie=true" : "/queue?pageSize=200&includeSeries=true&includeEpisode=true", ct).ConfigureAwait(false);
+            var queued = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var r in q?["records"] as JsonArray ?? new JsonArray())
             {
                 if (r is null)
                 {
                     continue;
                 }
+
+                queued.Add((string?)r["downloadId"] ?? string.Empty);
 
                 var size = (double?)r["size"] ?? 0;
                 var left = (double?)r["sizeleft"] ?? 0;
@@ -1227,10 +1230,83 @@ public sealed class TortugarrService
                         .Where(x => !string.IsNullOrEmpty(x)).ToList(),
                 });
             }
+
+            items.AddRange(await EarlyGrabItems(arr, kind, queued, live, ct).ConfigureAwait(false));
         }
 
         items.AddRange(await AdultDownloads(ct).ConfigureAwait(false));
         return new { items };
+    }
+
+    /// <summary>
+    /// Grabs Radarr/Sonarr have not put in their queue yet. They read the download client once a
+    /// minute, so a new download had no bar for up to a minute (2026-10-21, Clean Hands). Their
+    /// history has the grab at once; qBittorrent has its progress.
+    /// </summary>
+    private async Task<List<object>> EarlyGrabItems(ArrClient arr, string kind, HashSet<string> queued, Dictionary<string, (double Size, double Left)> live, CancellationToken ct)
+    {
+        var items = new List<object>();
+        if (live.Count == 0)
+        {
+            return items;
+        }
+
+        try
+        {
+            var path = kind == "movie"
+                ? "/history?pageSize=50&sortKey=date&sortDirection=descending&includeMovie=true"
+                : "/history?pageSize=50&sortKey=date&sortDirection=descending&includeSeries=true&includeEpisode=true";
+            var history = (await arr.Get(path, ct).ConfigureAwait(false))?["records"] as JsonArray ?? new JsonArray();
+            foreach (var g in EarlyGrabs(history, queued, DateTimeOffset.UtcNow))
+            {
+                var id = (string?)g["downloadId"] ?? string.Empty;
+                if (!live.TryGetValue(id, out var now))
+                {
+                    continue; // not in qBittorrent (yet): nothing to show a bar for
+                }
+
+                items.Add(new
+                {
+                    downloadId = id.ToUpperInvariant(),
+                    kind,
+                    title = (string?)g["sourceTitle"],
+                    name = kind == "movie" ? (string?)g["movie"]?["title"] : (string?)g["series"]?["title"],
+                    tmdbId = kind == "movie" ? (int?)g["movie"]?["tmdbId"] : null,
+                    tvdbId = kind == "episode" ? (int?)g["series"]?["tvdbId"] : null,
+                    season = kind == "episode" ? (int?)g["episode"]?["seasonNumber"] : null,
+                    episode = kind == "episode" ? (int?)g["episode"]?["episodeNumber"] : null,
+                    status = "downloading",
+                    progress = now.Size > 0 ? Math.Round((now.Size - now.Left) / now.Size, 3) : 0,
+                    size = (long)now.Size,
+                    sizeLeft = (long)now.Left,
+                    etaSeconds = (long?)null,
+                    messages = new List<string>(),
+                });
+            }
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            _log.LogDebug(e, "Tortugarr: {Arr} history unavailable for new grabs", arr.Name);
+        }
+
+        return items;
+    }
+
+    /// <summary>Grabs of the last 10 minutes that are not queued, imported or failed yet, one per
+    /// download (a season pack is one grab per episode). Newest first, as the history is.</summary>
+    internal static List<JsonNode> EarlyGrabs(JsonArray history, HashSet<string> queued, DateTimeOffset now)
+    {
+        var done = history
+            .Where(h => (string?)h?["eventType"] is not null and not "grabbed")
+            .Select(h => (string?)h!["downloadId"] ?? string.Empty)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        return history
+            .Where(h => h is not null && (string?)h["eventType"] == "grabbed")
+            .Where(h => DateTimeOffset.TryParse((string?)h!["date"], out var at) && now - at < TimeSpan.FromMinutes(10))
+            .Where(h => (string?)h!["downloadId"] is { Length: > 0 } id && !queued.Contains(id) && !done.Contains(id) && seen.Add(id))
+            .Select(h => h!)
+            .ToList();
     }
 
     /// <summary>Size and bytes left per torrent hash from qBittorrent; empty for another client

@@ -22,10 +22,9 @@ class LiveDownloadProgress {
     try {
       _set(await TortugarrPluginClient().downloadQueue());
     } catch (_) {
-      // No plugin or no qBittorrent: the Seerr figures stay.
-      _queue = const [];
-      _left = const {};
-      _at = null;
+      // No plugin, or one slow answer: the last queue holds until it is a
+      // minute old, then the Seerr figures take over. Clearing it at once
+      // made the bar blink out between two good reads.
     }
   }
 
