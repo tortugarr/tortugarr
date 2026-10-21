@@ -553,6 +553,13 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
     if (mounted) setState(() {});
   }
 
+  bool get _shortIntro => _userPrefs.get(UserPreferences.shortIntro);
+
+  Future<void> _toggleShortIntro() async {
+    await _userPrefs.set(UserPreferences.shortIntro, !_shortIntro);
+    if (mounted) setState(() {});
+  }
+
   bool get _showSdReleases => _userPrefs.get(UserPreferences.showSdReleases);
 
   Future<void> _toggleShowSdReleases() async {
@@ -764,6 +771,17 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
                 onTap: () =>
                     context.pushSettingsScreen(const ScreensaverSettingsScreen()),
               ),
+            _PanelEntry(
+              icon: Icons.movie_outlined,
+              title: appL10n().tgShortIntro,
+              subtitle: _shortIntro ? appL10n().tgShortIntroOn : appL10n().tgShortIntroOff,
+              trailing: ExcludeFocus(
+                child: IgnorePointer(
+                  child: Switch(value: _shortIntro, onChanged: (_) {}),
+                ),
+              ),
+              onTap: () => unawaited(_toggleShortIntro()),
+            ),
             _PanelEntry(
               icon: Icons.photo_size_select_large,
               title: appL10n().tgLoadingLogoSize,

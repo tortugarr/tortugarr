@@ -28115,6 +28115,24 @@ abstract class AppLocalizations {
   /// **'Could not load this title. Check that the server is reachable.'**
   String get tgCouldNotLoadTitle;
 
+  /// No description provided for @tgShortIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Short intro'**
+  String get tgShortIntro;
+
+  /// No description provided for @tgShortIntroOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: the short intro (about 4 seconds) plays at start-up'**
+  String get tgShortIntroOn;
+
+  /// No description provided for @tgShortIntroOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: the full intro (about 10 seconds) plays at start-up'**
+  String get tgShortIntroOff;
+
   /// No description provided for @tgShowSdReleases.
   ///
   /// In en, this message translates to:

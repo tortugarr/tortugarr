@@ -16202,6 +16202,17 @@ class AppLocalizationsNb extends AppLocalizations {
       'Fikk ikke lastet tittelen. Sjekk at serveren er tilgjengelig.';
 
   @override
+  String get tgShortIntro => 'Kort intro';
+
+  @override
+  String get tgShortIntroOn =>
+      'På: den korte introen (ca. 4 sekunder) spilles ved oppstart';
+
+  @override
+  String get tgShortIntroOff =>
+      'Av: hele introen (ca. 10 sekunder) spilles ved oppstart';
+
+  @override
   String get tgShowSdReleases => 'Vis SD-utgivelser';
 
   @override

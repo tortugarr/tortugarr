@@ -16279,6 +16279,17 @@ class AppLocalizationsLv extends AppLocalizations {
       'Could not load this title. Check that the server is reachable.';
 
   @override
+  String get tgShortIntro => 'Short intro';
+
+  @override
+  String get tgShortIntroOn =>
+      'On: the short intro (about 4 seconds) plays at start-up';
+
+  @override
+  String get tgShortIntroOff =>
+      'Off: the full intro (about 10 seconds) plays at start-up';
+
+  @override
   String get tgShowSdReleases => 'Show SD releases';
 
   @override

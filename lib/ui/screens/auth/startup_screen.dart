@@ -17,6 +17,7 @@ import '../../../data/services/connectivity_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../util/pin_code_util.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/user_preferences.dart';
 import '../../navigation/destinations.dart';
 import '../../widgets/adaptive/adaptive_dialog.dart';
 import '../../widgets/overlay_sheet.dart';
@@ -39,6 +40,7 @@ class _StartupScreenState extends State<StartupScreen>
     with SingleTickerProviderStateMixin {
   static const Duration _minSplashDuration = Duration(seconds: 5);
   static const String _introAssetPath = 'assets/intro/tortugarr_intro.mp4';
+  static const String _shortIntroAssetPath = 'assets/intro/tortugarr_intro_short.mp4';
 
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
@@ -81,7 +83,11 @@ class _StartupScreenState extends State<StartupScreen>
       });
       await player.setPlaylistMode(PlaylistMode.none);
       await player.setVolume(100);
-      await player.open(Media('asset:///$_introAssetPath'));
+      final short = GetIt.instance.isRegistered<UserPreferences>() &&
+          GetIt.instance<UserPreferences>().get(UserPreferences.shortIntro);
+      await player.open(
+        Media('asset:///${short ? _shortIntroAssetPath : _introAssetPath}'),
+      );
       if (!mounted) return;
       setState(() => _videoReady = true);
     } catch (_) {

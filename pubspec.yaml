@@ -289,6 +289,7 @@ flutter:
     - assets/subtitle_fonts/
     - assets/licenses/cores/
     - assets/intro/tortugarr_intro.mp4
+    - assets/intro/tortugarr_intro_short.mp4
 
   fonts:
     # The web engine fetches Roboto from fonts.gstatic.com unless it finds a

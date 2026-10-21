@@ -21,8 +21,6 @@ import 'seerr_row_config.dart';
 class UserPreferences extends ChangeNotifier {
   static const _lastServerIdPreferenceKey = 'pref_last_server_id';
   static const _lastUserIdPreferenceKey = 'pref_last_user_id';
-  static const _itemSecondarySubtitleSelectionPrefix =
-      'pref_item_secondary_subtitle_selection_';
 
   static const mediaBarModeMoonfin = 'moonfin';
   static const mediaBarModeMakd = 'makd';
@@ -2129,6 +2127,12 @@ class UserPreferences extends ChangeNotifier {
 
   /// Keep releases below the quality minimum (SD) in the release lists. Only
   /// that rule is relaxed; cam copies, executables and the rest stay out.
+  /// Plays the short intro (about 4 s) at start-up instead of the full one.
+  static final shortIntro = Preference(
+    key: 'pref_short_intro',
+    defaultValue: false,
+  );
+
   static final showSdReleases = Preference(
     key: 'pref_show_sd_releases',
     defaultValue: false,
@@ -2473,10 +2477,6 @@ class UserPreferences extends ChangeNotifier {
     key: 'pref_subtitle_language',
     defaultValue: '',
   );
-  static final preferredSecondarySubtitleLanguage = Preference<String>(
-    key: 'pref_secondary_subtitle_language',
-    defaultValue: '',
-  );
 
   static final subtitlesBackgroundColor = Preference(
     key: 'subtitles_background_color',
@@ -2506,22 +2506,6 @@ class UserPreferences extends ChangeNotifier {
   static final subtitlesOffsetPosition = Preference(
     key: 'subtitles_offset_position',
     defaultValue: 0.04,
-  );
-
-  static final secondarySubtitleTextSize = Preference<double>(
-    key: 'secondary_subtitle_text_size',
-    defaultValue: 0.0,
-  );
-
-  static final secondarySubtitleOffsetPosition = Preference<double>(
-    key: 'secondary_subtitle_offset_position',
-    defaultValue: 0.08,
-  );
-
-  /// -1 means the secondary track uses the primary subtitle color.
-  static final secondarySubtitleTextColor = Preference<int>(
-    key: 'secondary_subtitle_text_color',
-    defaultValue: -1,
   );
 
   /// A second appearance used only while HDR reaches the screen, defaulting to
@@ -3982,40 +3966,6 @@ class UserPreferences extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic>? getItemSecondarySubtitleSelection(String itemId) {
-    final pref = Preference<String>(
-      key: _itemSecondarySubtitleSelectionKey(itemId),
-      defaultValue: '',
-    );
-    final raw = _store.get(pref);
-    if (raw.isEmpty) return null;
-    try {
-      final decoded = jsonDecode(raw);
-      return decoded is Map ? decoded.cast<String, dynamic>() : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Future<void> setItemSecondarySubtitleSelection(
-    String itemId,
-    Map<String, dynamic> selection,
-  ) async {
-    if (itemId.trim().isEmpty) return;
-    final pref = Preference<String>(
-      key: _itemSecondarySubtitleSelectionKey(itemId),
-      defaultValue: '',
-    );
-    await _store.set(pref, jsonEncode(selection));
-    notifyListeners();
-  }
-
-  String _itemSecondarySubtitleSelectionKey(String itemId) {
-    final suffix = _activeProfileScopeSuffix();
-    return suffix == null
-        ? '$_itemSecondarySubtitleSelectionPrefix$itemId'
-        : '$_itemSecondarySubtitleSelectionPrefix${suffix}_$itemId';
-  }
 
   int getItemAudioStreamIndex(String itemId) {
     final pref = Preference<int>(
