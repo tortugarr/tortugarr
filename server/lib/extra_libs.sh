@@ -3,6 +3,8 @@
 # has exactly one type, and the type decides who sees it (lib/stack.sh, write_overrides):
 #
 #   movies  Radarr (when it may manage the folder) + Jellyfin "Movies"
+#   docs    Radarr (when it may manage the folder) + Jellyfin "Documentaries"; only movies
+#           TMDB lists as documentaries go there, and no other movie does
 #   tv      Sonarr (when it may manage the folder) + Jellyfin "TV Shows"
 #   adult   the Tortugarr plugin's hidden adult library only
 #   music   Jellyfin "Music Videos" (concerts, music videos) only
@@ -12,11 +14,11 @@
 # (/data/library/N) never changes for a folder, so Jellyfin, Radarr and Sonarr keep what they
 # registered there when its type changes.
 
-EXTRA_TYPES=(movies tv adult music other)
+EXTRA_TYPES=(movies docs tv adult music other)
 
 extra_type_label() {
   case $1 in
-    movies) t extra_type_movies ;; tv) t extra_type_tv ;; adult) t extra_type_adult ;;
+    movies) t extra_type_movies ;; docs) t extra_type_docs ;; tv) t extra_type_tv ;; adult) t extra_type_adult ;;
     music) t extra_type_music ;; other) t extra_type_other ;; *) echo "$1" ;;
   esac
 }
@@ -30,6 +32,12 @@ choose_extra_type() {
   choose "$var" "$(t q_extra_type)" "$def" "${opts[@]}"
 }
 
+# The type a folder most likely has: one named for documentaries is that, else [default].
+guess_extra_type() {  # path default
+  local name=${1,,}
+  if [ "$2" = movies ] && [[ $name == *dokument* || $name == *document* ]]; then echo docs; else echo "$2"; fi
+}
+
 list_extra_libs() {
   jq -r '.[] | "\(.host_path)\t\(.type)"' <<< "${EXTRA_LIBS_JSON:-[]}" | while IFS=$'\t' read -r path ty; do
     printf '   %-40s %s\n' "$path" "$(extra_type_label "$ty")"
@@ -39,7 +47,7 @@ list_extra_libs() {
 # Whether Radarr/Sonarr may rename and add to a folder of this type.
 ask_extra_manage() {  # VAR type default(y|n)
   local var=$1 ty=$2
-  case $ty in movies|tv) confirm "$var" "$(t q_extra_manage)" "$3" ;; *) return 1 ;; esac
+  case $ty in movies|docs|tv) confirm "$var" "$(t q_extra_manage)" "$3" ;; *) return 1 ;; esac
 }
 
 edit_extra_libs() {
@@ -48,7 +56,8 @@ edit_extra_libs() {
     i=$((i + 1))
     path=$(jq -r .host_path <<< "$entry")
     say "$(t extra_lib_edit "$path")"
-    choose_extra_type "EXTRA_EDIT_TYPE_$i" "$(jq -r .type <<< "$entry")" with-remove
+    # A movie folder of documentaries from before the type existed is offered as one.
+    choose_extra_type "EXTRA_EDIT_TYPE_$i" "$(guess_extra_type "$path" "$(jq -r .type <<< "$entry")")" with-remove
     ty=$(eval echo "\${EXTRA_EDIT_TYPE_$i}")
     [ "$ty" = remove ] && { note "$(t extra_lib_removed "$path")"; continue; }
     def_manage=n; [ "$(jq -r .arr_manage <<< "$entry")" = true ] && def_manage=y
@@ -79,7 +88,7 @@ add_extra_libs() {
     if jq -e --arg h "$path" 'any(.[]; .host_path == $h)' <<< "${EXTRA_LIBS_JSON:-[]}" >/dev/null; then
       warning "$(t extra_lib_already "$path")"; k=$((k - 1)); [ "$UNATTENDED" = 1 ] && break; continue
     fi
-    choose_extra_type "EXTRA_TYPE_$k" movies
+    choose_extra_type "EXTRA_TYPE_$k" "$(guess_extra_type "$path" movies)"
     ty=$(eval echo "\${EXTRA_TYPE_$k}")
     manage=false; ask_extra_manage "EXTRA_MANAGE_$k" "$ty" n && manage=true
     n=$((n + 1))
@@ -92,7 +101,7 @@ add_extra_libs() {
 
 # With movie or series folders Radarr/Sonarr may add to: do new titles go only there?
 ask_new_in_extra() {
-  jq -e 'any(.[]; .arr_manage and (.type == "movies" or .type == "tv"))' <<< "${EXTRA_LIBS_JSON:-[]}" >/dev/null || return 0
+  jq -e 'any(.[]; .arr_manage and (.type == "movies" or .type == "docs" or .type == "tv"))' <<< "${EXTRA_LIBS_JSON:-[]}" >/dev/null || return 0
   confirm NEW_IN_EXTRA "$(t q_new_in_extra "${DATA_DIR:-/srv/tortugarr}/media")" "${NEW_IN_EXTRA:-y}" || NEW_IN_EXTRA=n
 }
 

@@ -545,6 +545,7 @@ def tortugarr_plugin_config(h):
         "DownloadRoots": "\n".join(f"{m['remote']}|{m['container_path']}" for m in external_qbit().get("mounts", [])),
         # New titles only go to root folders of their own type (never a folder not mounted there).
         "MovieRoots": ",".join(new_title_roots("radarr")), "TvRoots": ",".join(new_title_roots("sonarr")),
+        "DocumentaryRoots": ",".join(doc_roots()),
         # Radarr/Sonarr send this to the refresh hook (plugin spec 3.12) instead of a Jellyfin key.
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
         # The adult library stays as the administrator set it (off by default); only its place is set.
@@ -962,8 +963,12 @@ def configure_jellyfin_refresh(app, h):
         values = {"url": "http://jellyfin:8096/Library/Refresh", "method": 1,
                   "headers": [{"key": "Authorization", "value": f'MediaBrowser Token="{key}"'}]}
 
+    # A movie added (by Seerr) is sent too, so the plugin can put a documentary in a documentary
+    # folder before anything is downloaded. Only the plugin knows what to do with it.
+    wanted = REFRESH_EVENTS + (["onMovieAdded"] if targeted and doc_roots() else [])
+
     def events(item):
-        return {e: True for e in REFRESH_EVENTS if item.get("supports" + e[0].upper() + e[1:])}
+        return {e: True for e in wanted if item.get("supports" + e[0].upper() + e[1:])}
 
     res = upsert_provider(h, "/notification", "Tortugarr: refresh Jellyfin", "Webhook", values, extra=events)
     if targeted:
@@ -973,12 +978,20 @@ def configure_jellyfin_refresh(app, h):
 
 
 def arr_roots(app):
-    """The root folders Radarr/Sonarr should add new titles to: Tortugarr's own folder and the
-    extra folders of that type it may manage."""
+    """The root folders Radarr/Sonarr manage: Tortugarr's own folder, the extra folders of that
+    type it may manage, and for Radarr the documentary folders after them."""
     kind = "tv" if app == "sonarr" else "movies"
     own = "/data/media/tv" if app == "sonarr" else "/data/media/movies"
     return [own] + [e["container_path"] for e in STATE.get("extra_libraries", [])
-                    if e.get("type") == kind and e.get("arr_manage")]
+                    if e.get("type") == kind and e.get("arr_manage")] + (doc_roots() if app == "radarr" else [])
+
+
+def doc_roots():
+    """Documentary folders Radarr manages. Only documentaries go there (the plugin picks them by
+    TMDB genre); a movie never does. Before they had a type of their own they were movie folders,
+    and Fall landed among the documentaries (2026-10-21)."""
+    return [e["container_path"] for e in STATE.get("extra_libraries", [])
+            if e.get("type") == "docs" and e.get("arr_manage")]
 
 
 def folder_names(h, path):
@@ -1086,12 +1099,29 @@ def relink_moved_titles(app, h):
             ok(f"{app}: removed root folder {path} (not a {app.capitalize()} folder in Tortugarr's setup, no titles)")
 
 
+def remove_unused_own_root(app, h, root):
+    """Tortugarr's own folder leaves Radarr/Sonarr while new titles go to the user's folders and
+    it holds none: a folder in the list that is never used puzzled the user (2026-10-21). It comes
+    back when the user's folders of this type are gone."""
+    if root in new_title_roots(app):
+        return
+    folder = next((f for f in h.get("/rootfolder") if f["path"].rstrip("/") == root), None)
+    if folder is None:
+        return
+    kind = "series" if app == "sonarr" else "movie"
+    if any(t["path"].rstrip("/").rpartition("/")[0] == root for t in h.get(f"/{kind}")):
+        return
+    h.delete(f"/rootfolder/{folder['id']}")
+    ok(f"{app}: removed root folder {root} (Tortugarr's own folder; new titles go to your folders)")
+
+
 def new_title_roots(app):
     """The root folders new titles go to: the user's own folders of this type when there are any
     and new_titles_in_extra_only is on (the default), else every root of this type. On WSL
     Tortugarr's own folder lives inside the distro's virtual disk, which reports its 1 TB limit
     as free space; on 2026-10-20 it took every new movie away from the drives the user chose."""
-    roots = arr_roots(app)
+    docs = set(doc_roots())
+    roots = [r for r in arr_roots(app) if r not in docs]
     if len(roots) > 1 and STATE.get("new_titles_in_extra_only", True):
         return roots[1:]
     return roots
@@ -1101,12 +1131,13 @@ def configure_arr(app):
     h = wait_arr(app)
     set_arr_auth(app, h)
     root = "/data/media/tv" if app == "sonarr" else "/data/media/movies"
-    ensure_root_folder(app, h, root)
+    if root in new_title_roots(app):
+        ensure_root_folder(app, h, root)
     relink_moved_titles(app, h)
-    for extra in STATE.get("extra_libraries", []):
-        if extra["type"] == ("tv" if app == "sonarr" else "movies") and extra.get("arr_manage"):
-            ensure_root_folder(app, h, extra["container_path"])
-            import_existing(app, h, extra["container_path"])
+    for path in arr_roots(app)[1:]:
+        ensure_root_folder(app, h, path)
+        import_existing(app, h, path)
+    remove_unused_own_root(app, h, root)
     configure_download_clients(app, h)
     configure_remote_paths(app, h)
     configure_quality(app, h)
@@ -1466,7 +1497,7 @@ def jellyfin_startup():
 
 # Jellyfin library per extra-folder type (lib/extra_libs.sh). Adult folders go into the
 # plugin's hidden adult library instead (jellyfin_adult_folders).
-EXTRA_LIBRARY = {"movies": ("Movies", "movies"), "tv": ("TV Shows", "tvshows"),
+EXTRA_LIBRARY = {"movies": ("Movies", "movies"), "docs": ("Documentaries", "movies"), "tv": ("TV Shows", "tvshows"),
                  "music": ("Music Videos", "musicvideos"), "other": ("Home Videos", "homevideos")}
 EXTRA_PATH_RE = re.compile(r"^/data/library/[0-9]+/?$")
 OWN_MEDIA_PATHS = {"/data/media/movies", "/data/media/tv"}

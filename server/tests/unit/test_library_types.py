@@ -132,9 +132,46 @@ def main():
     tb.STATE["new_titles_in_extra_only"] = False
     check("switched off: Tortugarr's own folder is a choice too",
           tb.new_title_roots("radarr") == ["/data/media/movies", "/data/library/3"])
+    del tb.STATE["new_titles_in_extra_only"]
+
+    # 2026-10-21: Fall landed in the documentary folder. Documentary folders are Radarr's, but
+    # never a place for new movies, and they make their own Jellyfin library.
+    tb.STATE["extra_libraries"].append({"host_path": "/mnt/e/-=Dokumentarer=-", "container_path": "/data/library/2",
+                                        "type": "docs", "arr_manage": True})
+    check("documentary folders are Radarr roots", "/data/library/2" in tb.arr_roots("radarr"))
+    check("documentary folders are not Sonarr roots", "/data/library/2" not in tb.arr_roots("sonarr"))
+    check("new movies never go to a documentary folder", tb.new_title_roots("radarr") == ["/data/library/3"])
+    check("documentary roots", tb.doc_roots() == ["/data/library/2"])
+    check("documentaries have a library of their own",
+          tb.extra_library_paths()["Documentaries"] == ("movies", ["/data/library/2"]))
     tb.STATE["extra_libraries"] = []
     tb.STATE["new_titles_in_extra_only"] = True
     check("without own folders Tortugarr's folder is used", tb.new_title_roots("radarr") == ["/data/media/movies"])
+
+    # 2026-10-21: Tortugarr's own folder sat unused in Radarr's list and puzzled the user.
+    class FakeArr:
+        def __init__(self, folders, titles):
+            self.folders, self.titles, self.deleted = folders, titles, []
+
+        def get(self, path):
+            return self.folders if path == "/rootfolder" else self.titles
+
+        def delete(self, path):
+            self.deleted.append(path)
+
+    tb.STATE["extra_libraries"] = [{"host_path": "/mnt/e/m", "container_path": "/data/library/3", "type": "movies",
+                                    "arr_manage": True}]
+    folders = [{"id": 1, "path": "/data/media/movies"}, {"id": 2, "path": "/data/library/3"}]
+    empty = FakeArr(folders, [{"path": "/data/library/3/Fall (2022)"}])
+    tb.remove_unused_own_root("radarr", empty, "/data/media/movies")
+    check("an empty own folder leaves Radarr when new movies go to the user's", empty.deleted == ["/rootfolder/1"])
+    used = FakeArr(folders, [{"path": "/data/media/movies/Old (1999)"}])
+    tb.remove_unused_own_root("radarr", used, "/data/media/movies")
+    check("one with a movie in it stays", used.deleted == [])
+    tb.STATE["extra_libraries"] = []
+    alone = FakeArr(folders, [])
+    tb.remove_unused_own_root("radarr", alone, "/data/media/movies")
+    check("without own folders it is the movie folder and stays", alone.deleted == [])
 
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)

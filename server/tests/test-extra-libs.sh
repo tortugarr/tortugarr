@@ -36,6 +36,12 @@ check "MUSIC becomes music, keeps /data/library/8" '[ "$(q ".[] | select(.host_p
 check "removed folder is gone" '[ "$(q "[.[] | select(.host_path==\"/mnt/h/-=Serier=-/\")] | length")" = 0 ]'
 check "new folder gets the next free number" '[ "$(q ".[] | select(.host_path==\"$TMP/Konserter\") | \"\(.type) \(.container_path)\"")" = "music /data/library/9" ]'
 
+# 2026-10-21: documentary folders were movie folders; they are offered as documentaries.
+check "a movie folder named for documentaries is offered as docs" '[ "$(guess_extra_type "/mnt/e/-=Dokumentarer=-" movies)" = docs ]'
+check "an English one too" '[ "$(guess_extra_type "/mnt/h/Documentaries" movies)" = docs ]'
+check "another type is kept" '[ "$(guess_extra_type "/mnt/e/Dokumentarer" tv)" = tv ]'
+check "a movie folder stays movies" '[ "$(guess_extra_type "/mnt/e/-=MOVIES=-" movies)" = movies ]'
+
 unset NEW_IN_EXTRA; ask_new_in_extra; check "new titles in own folders by default" '[ "$NEW_IN_EXTRA" = y ]'
 NEW_IN_EXTRA=n; ask_new_in_extra; check "the answer no is kept" '[ "$NEW_IN_EXTRA" = n ]'
 

@@ -34,6 +34,15 @@ public class DriveChoiceTests
         Assert.Equal("/data/library/3", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), titles));
     }
 
+    // 2026-10-21: documentaries have folders of their own, and only they go there.
+    [Theory]
+    [InlineData("[\"Documentary\",\"Music\"]", true)]
+    [InlineData("[\"documentary\"]", true)]
+    [InlineData("[\"Thriller\",\"Drama\"]", false)]
+    [InlineData("[]", false)]
+    public void Documentaries_are_told_by_their_TMDB_genre(string genres, bool documentary) =>
+        Assert.Equal(documentary, TortugarrService.IsDocumentary(new JsonObject { ["genres"] = JsonNode.Parse(genres) }));
+
     [Fact]
     public void Without_a_list_every_root_counts()
     {

@@ -797,7 +797,7 @@ public sealed class TortugarrService
                     ?? throw new UpstreamException("Radarr", $"no movie with TMDB id {tmdbId}");
         var body = found.DeepClone().AsObject();
         body["qualityProfileId"] = await DefaultProfile(radarr, ct).ConfigureAwait(false);
-        body["rootFolderPath"] = await RootWithMostSpace(radarr, ct).ConfigureAwait(false);
+        body["rootFolderPath"] = await RootWithMostSpace(radarr, ct, IsDocumentary(found)).ConfigureAwait(false);
         body["monitored"] = true;
         body["minimumAvailability"] = "released";
         body["addOptions"] = new JsonObject { ["searchForMovie"] = false, ["monitor"] = "movieOnly" };
@@ -878,10 +878,13 @@ public sealed class TortugarrService
         return (int?)profiles.FirstOrDefault(p => Regex.IsMatch((string?)p?["name"] ?? string.Empty, "^(" + pattern + ")$", RegexOptions.IgnoreCase))?["id"];
     }
 
-    private static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct)
+    private static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct, bool documentary = false)
     {
         var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
-        var allowed = AllowedRoots(arr.Name == "Radarr" ? Cfg.MovieRoots : Cfg.TvRoots);
+        var docs = AllowedRoots(Cfg.DocumentaryRoots);
+        var allowed = arr.Name != "Radarr" ? AllowedRoots(Cfg.TvRoots)
+            : documentary && docs.Count > 0 ? docs
+            : AllowedRoots(Cfg.MovieRoots);
         var titles = await arr.Get(arr.Name == "Radarr" ? "/movie" : "/series", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
         return PickRoot(roots, allowed, TitlesPerRoot(titles)) ?? throw new UpstreamException(arr.Name, "no root folder");
     }
@@ -900,6 +903,41 @@ public sealed class TortugarrService
         }
 
         return counts;
+    }
+
+    /// <summary>A movie TMDB lists as a documentary (Radarr's genres come from TMDB).</summary>
+    internal static bool IsDocumentary(JsonNode? movie) =>
+        (movie?["genres"] as JsonArray ?? new JsonArray()).Any(g => string.Equals((string?)g, "Documentary", StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>
+    /// A movie Radarr just added (Seerr adds to one fixed folder) goes to a documentary folder when
+    /// it is a documentary, and nothing else moves: a movie already on disk, or already in a
+    /// documentary folder, stays where it is.
+    /// </summary>
+    public async Task PlaceDocumentaryAsync(int movieId, CancellationToken ct)
+    {
+        var docs = AllowedRoots(Cfg.DocumentaryRoots);
+        if (docs.Count == 0)
+        {
+            return;
+        }
+
+        var radarr = Radarr;
+        var movie = await radarr.Get($"/movie/{movieId}", ct).ConfigureAwait(false);
+        var root = ((string?)movie?["rootFolderPath"] ?? string.Empty).TrimEnd('/');
+        if (movie is null || !IsDocumentary(movie) || docs.Contains(root) || (bool?)movie["hasFile"] == true)
+        {
+            return;
+        }
+
+        var target = await RootWithMostSpace(radarr, ct, documentary: true).ConfigureAwait(false);
+        await radarr.Put("/movie/editor", new JsonObject
+        {
+            ["movieIds"] = new JsonArray(movieId),
+            ["rootFolderPath"] = target,
+            ["moveFiles"] = true,
+        }, ct).ConfigureAwait(false);
+        _log.LogInformation("Tortugarr: {Title} is a documentary - moved from {From} to {To}", (string?)movie["title"], root, target);
     }
 
     internal static HashSet<string> AllowedRoots(string list) =>

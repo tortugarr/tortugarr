@@ -55,6 +55,11 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>Radarr root folders a new movie may go to (comma-separated); empty = any.</summary>
     public string MovieRoots { get; set; } = string.Empty;
 
+    /// <summary>Radarr root folders for documentaries (comma-separated), the only folders a movie
+    /// TMDB lists as a documentary goes to, and never another movie. Empty: documentaries are
+    /// movies like any other.</summary>
+    public string DocumentaryRoots { get; set; } = string.Empty;
+
     /// <summary>Sonarr root folders a new series may go to (comma-separated); empty = any.</summary>
     public string TvRoots { get; set; } = string.Empty;
 

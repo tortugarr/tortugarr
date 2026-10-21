@@ -120,6 +120,17 @@ Tortugarr never turns on automatic downloading for you. It only happens for seas
 switched to *monitored* yourself (see the next section). If a title you deleted comes back, it
 was still monitored: turn monitoring off for it.
 
+**Which folder does a new movie go to?**
+When you added your own movie folders during install, new movies go there: to the folder on the
+drive with the most free space, and on one drive to the folder that already holds the most
+movies. Documentaries go to the folders you marked as *Documentaries*, and no other movie does.
+Tortugarr reads that from the movie's genre on TMDB, also for movies requested through Seerr.
+
+**Radarr lists `/data/media/movies` (or Sonarr `/data/media/tv`). What is it?**
+Tortugarr's own movie and series folders, used when you have no media folders of your own. With
+your own folders they hold nothing and are removed from Radarr and Sonarr at the next repair.
+Removing your own folders brings them back, since new titles need somewhere to go.
+
 **Why did a finished download disappear from the download client?**
 On many setups the file is moved into your library once it is done, so the torrent is removed
 after import. Check the app: the title is in your library.

@@ -18,14 +18,16 @@ public sealed class ArrHookService
     private readonly IProviderManager _providers;
     private readonly IFileSystem _fileSystem;
     private readonly SeerrSync _seerr;
+    private readonly TortugarrService _svc;
     private readonly ILogger<ArrHookService> _log;
 
-    public ArrHookService(ILibraryManager library, IProviderManager providers, IFileSystem fileSystem, SeerrSync seerr, ILogger<ArrHookService> log)
+    public ArrHookService(ILibraryManager library, IProviderManager providers, IFileSystem fileSystem, SeerrSync seerr, TortugarrService svc, ILogger<ArrHookService> log)
     {
         _library = library;
         _providers = providers;
         _fileSystem = fileSystem;
         _seerr = seerr;
+        _svc = svc;
         _log = log;
     }
 
@@ -69,6 +71,17 @@ public sealed class ArrHookService
         var evt = (string?)body["eventType"] ?? string.Empty;
         if (evt == "Test")
         {
+            return;
+        }
+
+        if (evt == "MovieAdded")
+        {
+            // Nothing on disk yet, so nothing for Jellyfin: only a documentary's folder.
+            if ((int?)body["movie"]?["id"] is { } id)
+            {
+                await _svc.PlaceDocumentaryAsync(id, CancellationToken.None).ConfigureAwait(false);
+            }
+
             return;
         }
 

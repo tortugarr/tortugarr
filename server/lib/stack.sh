@@ -135,7 +135,7 @@ write_overrides() {
     jq -r '
       def mounts($s):
         [ .[] | select($s == "jellyfin"
-                       or (.arr_manage and ((.type == "tv" and $s == "sonarr") or (.type == "movies" and $s == "radarr")))
+                       or (.arr_manage and ((.type == "tv" and $s == "sonarr") or ((.type == "movies" or .type == "docs") and $s == "radarr")))
                        or (.arr_manage and $s == "bazarr"))
               | "      - \"\(.host_path):\(.container_path)\(if $s == "jellyfin" then ":ro" else "" end)\"" ];
       "# Generated: existing media folders added during install. Regenerated on repair.",
