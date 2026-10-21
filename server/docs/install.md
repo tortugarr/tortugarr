@@ -126,9 +126,20 @@ name of the folder does not matter; the type decides where it shows up:
 |---|---|---|
 | Movies | Movies | Radarr may add to it, if you allow it |
 | TV series | TV Shows | Sonarr may add to it, if you allow it |
-| Adult | the hidden adult library (switch it on in the app first) | - |
+| Adult | the hidden adult library (switch it on first, see below) | - |
 | Music videos and concerts | Music Videos | - |
 | Other videos (clips, home videos) | Home Videos | - |
+
+**Adult library (optional).** It is off until an administrator switches it on, and only
+Jellyfin's plugin page can do that - not the app:
+
+1. Open Jellyfin in a browser (`http://<server>:8096`) and log in as the administrator.
+2. **Dashboard > Plugins > Tortugarr**, tick **Adult library**, and **Save**.
+3. Run `sudo tortugarr repair`, so your adult folders join it.
+4. In the app: **Settings > Adult content (XXX) > Show (PIN)**.
+
+The library is hidden from every user who is not an administrator; give someone access in
+Dashboard > Users > the user > Access.
 
 With several folders of one type, possibly on several drives, a new movie or series goes to the
 one with the most free space. `sudo tortugarr reconfigure` lists your folders and lets you change

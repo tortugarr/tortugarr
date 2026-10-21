@@ -16003,6 +16003,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get tgAdultOffOnServer =>
+      'Voksenbiblioteket er slått av på serveren, så det er ingenting å vise eller søke i. En administrator slår det på i Jellyfin i en nettleser: Dashboard > Plugins > Tortugarr > Adult library > Lagre, og kjører så \'sudo tortugarr repair\'.';
+
+  @override
   String get tgSearchNewXxx => 'Søk etter nye XXX';
 
   @override

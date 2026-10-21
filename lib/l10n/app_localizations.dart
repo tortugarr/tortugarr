@@ -27803,6 +27803,12 @@ abstract class AppLocalizations {
   /// **'\"{title}\" had no video file and was NOT removed.'**
   String tgXxxNoVideoNotRemoved(String title);
 
+  /// No description provided for @tgAdultOffOnServer.
+  ///
+  /// In en, this message translates to:
+  /// **'The adult library is off on the server, so there is nothing to show or search. An administrator switches it on in Jellyfin in a browser: Dashboard > Plugins > Tortugarr > Adult library > Save, then runs \'sudo tortugarr repair\'.'**
+  String get tgAdultOffOnServer;
+
   /// No description provided for @tgSearchNewXxx.
   ///
   /// In en, this message translates to:

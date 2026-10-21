@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:get_it/get_it.dart';
+import 'package:server_core/server_core.dart' show MediaServerClient;
 
 import '../../preference/user_preferences.dart';
 
@@ -53,6 +54,13 @@ class _AdultLibraryBodyState extends State<_AdultLibraryBody> {
 
   Future<void> _load() async {
     try {
+      // What the server allows is otherwise asked only at login: switching the adult
+      // library on in Jellyfin while the app ran left the search hidden (2026-10-21).
+      if (DownloadFeatures.viaPlugin && GetIt.instance.isRegistered<MediaServerClient>()) {
+        try {
+          await DownloadFeatures.refresh(GetIt.instance<MediaServerClient>());
+        } catch (_) {}
+      }
       final visible = await _service.isVisible();
       if (!mounted) return;
       setState(() {
@@ -177,6 +185,15 @@ class _AdultLibraryBodyState extends State<_AdultLibraryBody> {
                   onChanged: (v) => unawaited(prefs.set(UserPreferences.adultSearchInMenu, v)),
                 );
               },
+            ),
+          ],
+          // The app cannot switch the server's adult library on; say where it is done
+          // (2026-10-21: the search was simply missing after a fresh install).
+          if (DownloadFeatures.viaPlugin && !DownloadFeatures.adultDownloads) ...[
+            const SizedBox(height: 12),
+            Text(
+              appL10n().tgAdultOffOnServer,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
           if (visible == true && DownloadFeatures.adultDownloads) ...[

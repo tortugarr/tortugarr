@@ -9473,6 +9473,7 @@
     "tgDownloadFailed": "Nedlasting feilet: {error}",
     "tgXxxNoVideoRemoved": "«{title}» inneholdt ingen videofil og er fjernet.",
     "tgXxxNoVideoNotRemoved": "«{title}» inneholdt ingen videofil og er IKKE fjernet.",
+    "tgAdultOffOnServer": "Voksenbiblioteket er slått av på serveren, så det er ingenting å vise eller søke i. En administrator slår det på i Jellyfin i en nettleser: Dashboard > Plugins > Tortugarr > Adult library > Lagre, og kjører så 'sudo tortugarr repair'.",
     "tgSearchNewXxx": "Søk etter nye XXX",
     "tgXxxSearchHint": "Navn, studio …",
     "tgChecking": "Sjekker …",

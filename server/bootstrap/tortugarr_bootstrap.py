@@ -1618,8 +1618,11 @@ def jellyfin_adult_folders(h):
     drop_stale_adult_library(h)
     adult = next((f for f in h.get("/Library/VirtualFolders") if folder_is_adult(f)), None)
     if adult is None:
-        info("jellyfin: adult folders wait for the adult library - switch it on in the app "
-             "(Settings > Adult library), then run: sudo tortugarr repair")
+        # The app cannot switch it on: only the plugin's page in Jellyfin can (2026-10-21).
+        info("jellyfin: adult folders wait for the adult library, which is off")
+        important(f"Adult library: switch it on at {lan_url('jellyfin')} > Dashboard > Plugins > Tortugarr > "
+                  "tick Adult library > Save, then run: sudo tortugarr repair. In the app it then shows under "
+                  "Settings > Adult content > Show (PIN)")
         return
     have = {l.rstrip("/") for l in adult.get("Locations", [])}
     for p in paths:
@@ -2275,7 +2278,7 @@ def cmd_doctor():
         off = [k for k, v in (caps.get("features") or {}).items() if not v and k != "adult"]
         if off:
             raise BootstrapError(f"features off for the admin: {', '.join(off)} - run repair")
-        adult = "on" if (caps.get("features") or {}).get("adult") else "off (switch it on in the plugin's page if wanted)"
+        adult = "on" if (caps.get("features") or {}).get("adult") else f"off (to use it: {lan_url('jellyfin')} > Dashboard > Plugins > Tortugarr > Adult library)"
         conf = h.get(f"/Plugins/{TORTUGARR_PLUGIN_GUID}/Configuration")
         if not (conf.get("SeerrUrl") and conf.get("SeerrApiKey")):
             raise BootstrapError("not linked to Seerr (deletes would leave titles 'available' there) - run repair")

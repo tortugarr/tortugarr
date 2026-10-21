@@ -289,8 +289,11 @@ Yes. The administration pages work with the remote, so most everyday tasks don't
 ## Adult content
 
 **Where is the adult library?**
-Hidden by default. **Settings > Adult content (XXX) > Show (PIN)**. You choose the PIN the first
-time. It is separate from any login PIN and stored per device.
+It is off on the server until an administrator switches it on, and the app cannot do that:
+open Jellyfin in a browser (`http://<server>:8096`), **Dashboard > Plugins > Tortugarr**, tick
+**Adult library** and **Save**, then run `sudo tortugarr repair`. After that it is hidden in the
+app until you choose **Settings > Adult content (XXX) > Show (PIN)**. You choose the PIN the
+first time. It is separate from any login PIN and stored per device.
 
 **Why can't I find adult titles in the normal search?**
 The movie database behind discovery doesn't list them. Use *Search for new XXX* in the same

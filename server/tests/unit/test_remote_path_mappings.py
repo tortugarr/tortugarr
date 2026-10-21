@@ -40,7 +40,7 @@ class FakeArr:
 
 
 def main():
-    tb.ok = tb.info = tb.warn = lambda *a: None
+    tb.ok = tb.info = tb.warn = tb.important = lambda *a: None
     tb.STATE.clear()
     tb.STATE["torrent_client"] = "qbittorrent-ext"
     tb.STATE["external_qbit"] = {"url": "http://192.168.1.15:8070", "mounts": [

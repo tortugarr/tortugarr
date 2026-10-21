@@ -54,8 +54,9 @@ class FakeJellyfin:
 
 
 def main():
-    tb.ok = tb.info = tb.warn = lambda *a: None
+    tb.ok = tb.info = tb.warn = tb.important = lambda *a: None
     tb.STATE.clear()
+    tb.STATE.update(lan_ip="192.168.1.15", ports={"jellyfin": 8096})
     tb.STATE["extra_libraries"] = [
         {"host_path": "/mnt/e/-=Clips=-/", "container_path": "/data/library/1", "type": "other", "arr_manage": False},
         {"host_path": "/mnt/e/-=MOVIES=-/", "container_path": "/data/library/3", "type": "movies", "arr_manage": True},

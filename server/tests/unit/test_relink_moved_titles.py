@@ -55,7 +55,7 @@ class FakeSonarr:
 
 
 def main():
-    tb.ok = tb.info = tb.warn = lambda *a: None
+    tb.ok = tb.info = tb.warn = tb.important = lambda *a: None
     tb.STATE.clear()
     tb.STATE["extra_libraries"] = [
         {"host_path": "/mnt/e/-=Dokumentarer=-/", "container_path": "/data/library/2", "type": "movies", "arr_manage": True},

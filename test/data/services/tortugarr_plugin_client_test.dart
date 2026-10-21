@@ -259,7 +259,9 @@ void main() {
     expect(
       explainPluginError(const TortugarrPluginException(null, 'no_indexers', '1 disabled until 05:21 UTC')),
       'No search sources are active on the server (1 disabled until 05:21 UTC). '
-      'Check your indexers in Prowlarr.',
+      'Check your indexers in Prowlarr. '
+      "Does an indexer's test fail with a Cloudflare error (1337x and others)? "
+      'Type flaresolverr under Tags at the bottom of its settings and test again.',
     );
   });
 
