@@ -406,6 +406,7 @@ print_access() {
   echo
   say "$C_BOLD$(t next_steps)$C_RESET"
   say "  1. $(t next_indexers "http://$LAN_IP:$P_PROWLARR")"
+  important "$(t cf_title)" "$(t cf_line1)" "$(t cf_line2)" "$(t cf_line3)"
   [ "$USENET" = true ] && say "  •  $(t next_usenet "http://$LAN_IP:$P_SABNZBD")"
   say "  2. $(t next_seerr "http://$LAN_IP:$P_SEERR")"
   say "  •  $(t next_subtitles "http://$LAN_IP:$P_BAZARR")"

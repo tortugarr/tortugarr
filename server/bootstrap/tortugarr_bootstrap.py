@@ -106,6 +106,14 @@ def warn(msg):
     out("WARN", msg)
 
 
+CLOUDFLARE_TIP = ("Indexer test fails with a Cloudflare or 403 error (1337x and others)? Type flaresolverr under Tags at the bottom of its settings and press Test again")
+
+
+def important(msg):
+    """Shown in its own colour by the installer: advice that must not be missed."""
+    out("IMPORTANT", msg)
+
+
 def fail(msg):
     out("FAIL", msg)
 
@@ -1128,13 +1136,24 @@ def configure_prowlarr():
     res = upsert_provider(h, "/indexerProxy", "FlareSolverr", "FlareSolverr",
                           {"host": "http://flaresolverr:8191/", "requestTimeout": 60},
                           extra={"tags": [tag]})
-    ok(f"prowlarr: FlareSolverr proxy {res} (tag indexers with 'flaresolverr' to use it)")
+    ok(f"prowlarr: FlareSolverr proxy {res} (steps in only when Cloudflare blocks an indexer)")
     configure_download_clients("prowlarr", h)
-    n = len(h.get("/indexer"))
-    if n == 0:
+    indexers = h.get("/indexer")
+    if not indexers:
         warn("prowlarr: no indexers yet - add your own in Prowlarr (Indexers > Add Indexer)")
-    else:
-        ok(f"prowlarr: {n} indexer(s) configured")
+        important(CLOUDFLARE_TIP)
+        return
+    # Every indexer carries the proxy's tag (the plugin keeps it so for new ones):
+    # FlareSolverr only steps in on a Cloudflare challenge, so other sites are unchanged.
+    tagged = []
+    for ix in indexers:
+        if tag not in (ix.get("tags") or []):
+            ix["tags"] = (ix.get("tags") or []) + [tag]
+            h.put(f"/indexer/{ix['id']}?forceSave=true", ix)
+            tagged.append(ix.get("name", str(ix["id"])))
+    if tagged:
+        ok(f"prowlarr: {', '.join(tagged)} now go(es) through FlareSolverr when Cloudflare blocks it")
+    ok(f"prowlarr: {len(indexers)} indexer(s) configured, all with the flaresolverr tag")
 
 
 # --------------------------------------------------------------------------- bazarr
@@ -2167,6 +2186,7 @@ def cmd_doctor():
     try:
         if not arr("prowlarr").get("/indexer"):
             warn("no indexers yet: nothing can be searched or downloaded until you add indexers in Prowlarr")
+            important(CLOUDFLARE_TIP)
     except BootstrapError:
         pass
     for app in ("sonarr", "radarr"):

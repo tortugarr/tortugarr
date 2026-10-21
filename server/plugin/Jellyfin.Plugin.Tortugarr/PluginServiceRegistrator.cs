@@ -26,5 +26,6 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddSingleton<ArrHookService>();
         serviceCollection.AddSingleton<SeriesService>();
         serviceCollection.AddSingleton<SpaceService>();
+        serviceCollection.AddHostedService<FlareSolverrTagger>();
     }
 }

@@ -179,7 +179,9 @@ String explainPluginError(TortugarrPluginException e) => switch (e.code) {
       'search_expired' => 'The search is too old, search again',
       'timeout' => 'The search took too long, try again',
       'no_indexers' => 'No search sources are active on the server'
-          '${e.message.isEmpty ? '' : ' (${e.message})'}. Check your indexers in Prowlarr.',
+          '${e.message.isEmpty ? '' : ' (${e.message})'}. Check your indexers in Prowlarr. '
+          'Does an indexer\'s test fail with a Cloudflare error (1337x and others)? '
+          'Type flaresolverr under Tags at the bottom of its settings and test again.',
       'already_in_client' => (e.progress ?? 0) >= 1
           ? 'Already downloaded: the download client has this file already'
           : 'Already downloading (${((e.progress ?? 0) * 100).round()} %)',

@@ -23,6 +23,16 @@ warning() { printf '%s  !!%s  %s\n' "$C_YELLOW" "$C_RESET" "$*" >&2; _log "WARN 
 error()   { printf '%s  xx%s  %s\n' "$C_RED" "$C_RESET" "$*" >&2; _log "ERROR $*"; }
 die()     { error "$*"; say "$(t log_hint "$TORTUGARR_LOG")"; exit 1; }
 
+# important "title" "line" ... - a framed block in its own colour, for what must not be
+# missed among the other lines (2026-10-21: the FlareSolverr tag for 1337x).
+important() {
+  local title=$1 line; shift
+  printf '\n%s  ┏━ %s %s\n' "$C_BOLD$C_CYAN" "$title" "$C_RESET"
+  for line in "$@"; do printf '%s  ┃%s %s\n' "$C_BOLD$C_CYAN" "$C_RESET$C_BOLD" "$line$C_RESET"; done
+  printf '%s  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n\n' "$C_BOLD$C_CYAN" "$C_RESET"
+  _log "IMPORTANT $title: $*"
+}
+
 # Run a command, log its output, and show it only when it fails.
 run() {
   _log "\$ $*"
@@ -43,6 +53,7 @@ render_engine_output() {
       OK)   good "$msg" ;;
       INFO) note "$msg" ;;
       WARN) warning "$msg" ;;
+      IMPORTANT) printf '%s  >>  %s%s\n' "$C_BOLD$C_CYAN" "$msg" "$C_RESET"; _log "IMPORTANT $msg" ;;
       FAIL) error "$msg"; rc=1 ;;
       URL|CRED|NOTE) printf '%s\t%s\n' "$level" "$msg" ;;
       *)    [ -n "$level$msg" ] && note "$level $msg" ;;
