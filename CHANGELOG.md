@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.20.01 - not released yet
+## 4.20.01 - 2026-10-21
 
 **App** (now built on Moonfin 2.7.0, with Moonfin's full git history)
 
