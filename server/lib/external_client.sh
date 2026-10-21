@@ -71,6 +71,13 @@ ext_qbit_discover() {
   for c in radarr sonarr; do
     p=$(jq -r --arg c "$c" '.[$c].savePath // empty' <<< "$cats")
     [ -z "$p" ] && continue
+    # X:\Downloads\radarr is Tortugarr's own layout (the plugin points the category at the
+    # drive with the most room): the download folder is X:\Downloads. Mounting the category
+    # folder itself nested the next downloads in X:\Downloads\radarr\radarr (2026-10-21).
+    local tail=${p//\\//}; tail=${tail%/}
+    if [ "${tail##*/}" = "$c" ] || [ "${tail##*/}" = "${c^}" ]; then
+      p=${p%[\\/]}; p=${p%"${p##*[\\/]}"}
+    fi
     # A category folder under the save folder is covered by that mount already.
     local under=0 r np nr
     np=${p//\\//}; np=${np,,}
