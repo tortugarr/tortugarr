@@ -87,7 +87,14 @@ fi
 
 if [ "$(id -u)" -ne 0 ]; then
   if command -v sudo >/dev/null 2>&1; then
-    exec sudo -E TORTUGARR_INVOKER="${USER:-}" bash "$0" "${ORIG_ARGS[@]}"
+    # The settings the installer reads from the environment go along by name: sudo -E is not
+    # supported by sudo-rs (Ubuntu 26.04), which warns and drops it (2026-10-21).
+    keep=(TORTUGARR_INVOKER="${USER:-}")
+    for v in DATA_DIR INSTALL_DIR NO_COLOR UNATTENDED TORTUGARR_FLOATING_IMAGES TORTUGARR_HOME \
+             TORTUGARR_LANGUAGE TORTUGARR_LOG TORTUGARR_MAY_CREATE_MEDIA TORTUGARR_ONLY TORTUGARR_PLATFORM; do
+      [ -n "${!v+x}" ] && keep+=("$v=${!v}")
+    done
+    exec sudo env "${keep[@]}" bash "$0" "${ORIG_ARGS[@]}"
   fi
   die "$(t need_root)"
 fi
