@@ -1,7 +1,8 @@
 #!/bin/bash
 # Builds the Tortugarr plugin into plugin/dist/Tortugarr_<version>/ (the DLL plus Jellyfin's
 # meta.json), which the installer copies into Jellyfin. Needs the .NET 10 SDK; the
-# installer itself does not, it uses what is committed in dist/.
+# installer itself does not, it uses the dist/ that comes in the release tar (dist/ is not
+# kept in git).
 set -euo pipefail
 cd "$(dirname "$0")"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1

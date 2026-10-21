@@ -71,8 +71,9 @@ No laptop. No copying files around. No fiddling with five web pages.
 - 🧹 **Cleans up after itself.** Delete from the TV and the file, the download and the request
   all go. Running low on space? It tells you what is safe to remove.
 - 🔒 **Nothing phones home.** No account with us, no tracking, no analytics. The app talks to
-  your server, and fetches posters and trailers from public sites such as TMDB and YouTube. The
-  app itself holds no keys or passwords.
+  your server, fetches posters and trailers from public sites such as TMDB and YouTube, and
+  asks GitHub whether a new Tortugarr release is out. The app itself holds no keys or
+  passwords. Details: [privacy policy](PRIVACY_POLICY.md).
 - 📱 **TV, phone and tablet.** Same library everywhere; start on the phone, finish on the TV.
   The phone app does everything the TV app does, and doubles as a remote for the TV.
 
