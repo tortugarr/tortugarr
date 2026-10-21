@@ -1,5 +1,31 @@
 # Changelog
 
+## 4.20.01 - not released yet
+
+**App** (now built on Moonfin 2.7.0, with Moonfin's full git history)
+
+- The phone app does everything the TV app does, and has a remote control for the TV.
+- Download progress shows from the moment a file is picked, also for episodes of a series that
+  is otherwise complete. Cancelling a request stops its download.
+- Missing episodes: the file list has 2160p / 1080p / 720p / other / all tabs, as for movies.
+- Subtitles: one menu with only your languages, and size, height and colour at the bottom.
+  Showing two subtitle tracks at once is gone.
+- Settings: *Short intro*, *Loading logo size* (25-100 %), and language filter changes that
+  show at once on an open Seerr page.
+
+**Server** (Tortugarr plugin 1.2.8.0, Moonfin plugin 2.4.0.0)
+
+- VPN: any provider gluetun knows, or *custom* with your own WireGuard `.conf` or OpenVPN
+  `.ovpn` file.
+- Answer *no* at the summary to go through the questions again, with your answers kept.
+- Every Prowlarr indexer gets the `flaresolverr` tag, so sites behind Cloudflare work.
+- A new folder type *Documentaries*: only documentaries go there, also when requested in Seerr.
+  On one drive a new movie goes to the folder that already holds the most movies.
+- Tortugarr's own empty movie and series folders leave Radarr and Sonarr when you have your own.
+- An uninstall that deletes the settings keeps every backup, in `/var/backups/tortugarr`.
+- The adult library is switched on by an administrator in Jellyfin: Dashboard > Plugins >
+  Tortugarr > Adult library.
+
 ## 4.20.0 - 2026-10-07
 
 First release of Tortugarr: your own streaming service at home.

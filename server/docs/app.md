@@ -21,39 +21,36 @@ their own user in Jellyfin (Dashboard > Users) and connect the same way.
 Requests in the app go through the Moonfin plugin in Jellyfin to Seerr - the
 installer has already connected them.
 
-## "Download Now" and building the app
+## "Download Now" and the Tortugarr plugin
 
-The current app version reads the addresses and API keys for Download Now **when
-the app is built**, from `lib/data/services/download/download_now_secrets.dart`.
-The installer writes a ready-made copy of that file for your server:
+The released app (the APKs on the Releases page) holds no addresses, keys or passwords. After
+the normal Jellyfin login it asks the **Tortugarr plugin** in Jellyfin what this server offers,
+and the plugin does the work there: searching your indexers, handing the picked release to
+Radarr or Sonarr, download progress, the disk space check, the file-list check that removes
+torrents without a video file, subtitles, deletes and the optional adult library. These
+features are for Jellyfin administrators.
+
+Downloading works with every download client the installer supports. The file-list check, the
+suggestions for making room and the adult library need qBittorrent (in Docker, or one you
+already have).
+
+The installer names the download categories `radarr` and `sonarr`, which is what the plugin
+looks for.
+
+### A private build with keys inside
+
+An older way still works for a build of your own: the installer writes the addresses and API
+keys to
 
 ```
 /opt/tortugarr/download_now_secrets.dart   (root only - it contains API keys)
 /opt/tortugarr/app-config.json             (the same values as JSON)
 ```
 
-**For a private build only.** An app built with this file carries your server's API
-keys and download-client password inside the APK: install it on your own devices and
-never share or publish it. A later app version will get this access after the normal
-Jellyfin login instead, with no keys inside the app.
-
-To build the app for your server, copy that file into the app source at
-`lib/data/services/download/download_now_secrets.dart` and build as described in
-the app's README. Never commit it - it is in the app's `.gitignore`.
-
-Download Now hands the picked release to Radarr/Sonarr (grab, or push when they
-do not know it), so downloading itself works with every download client the
-installer supports. The app also talks to **qBittorrent directly** for:
-
-- the disk space check before a download,
-- the file-list check that removes torrents without a video file,
-- the last-resort fallback when Radarr/Sonarr refuse a release,
-- downloads into the optional adult library.
-
-With Transmission or Deluge these four are unavailable; downloading still works.
-
-The installer names the download categories `radarr` and `sonarr` (saved under
-`torrents/movies` and `torrents/tv`), which is what the app looks for.
+Copy the first into the app source at `lib/data/services/download/download_now_secrets.dart`
+and build without `--dart-define=TORTUGARR_PUBLIC=true`. Such an APK carries your server's API
+keys and download-client password: install it on your own devices only, never share or
+publish it, and never commit the file (it is in `.gitignore`).
 
 ## App and plugin versions
 

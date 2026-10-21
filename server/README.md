@@ -1,6 +1,6 @@
 # Tortugarr server
 
-The server side of Tortugarr, version 4.20.0 (the same version as the app):
+The server side of Tortugarr, version 4.20.01 (the same version as the app):
 
 - **The installer** (`install.sh`, `lib/`, `bootstrap/`, `compose/`, `i18n/`): one command that
   sets up Jellyfin, Seerr, Sonarr, Radarr, Prowlarr, Bazarr and a download client on a Linux

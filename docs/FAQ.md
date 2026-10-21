@@ -69,6 +69,8 @@ Yes. Turn on **Settings > Show what is hidden**. Nothing is removed then. Hidden
 "HIDDEN · KO" style badge with their language code, and the ones you keep get a small green
 badge (EN, NO, SE, DK, DE, FR). Turn it off again when you are done looking.
 
+Changes to these settings show at once, also on a Seerr page that is already open.
+
 **Will the rows look empty when the filter removes a lot?**
 No. When titles are filtered out, the app fetches more until the row is full again.
 
@@ -115,6 +117,21 @@ Fake releases do that, often with a perfectly normal name. Tortugarr checks the 
 soon as the download starts and removes and blocks such torrents automatically. The download
 client is also set up never to download executables.
 
+**Where do I see how far a download is?**
+On the title's page, where the request button was, and in **Downloads**. The bar appears as soon
+as the file is picked, before Radarr or Sonarr list it in their own queue. On the phone,
+Downloads sits in the bottom bar while something downloads; to keep it there, turn on
+**Settings > Appearance > Navigation Bar > Always show Downloads**.
+
+**I cancelled a request. Does the download stop?**
+Yes. Cancelling a request in the app also removes what Radarr or Sonarr were downloading for it,
+files included.
+
+**The download is done, but the app says "Importing" for a minute or two.**
+The file is being copied into your library. With a download client on Windows (or downloads and
+library on separate mounts) it cannot simply be moved, so a large file takes a while. It shows up
+in the library once the copy is done.
+
 **Something downloaded "by itself".**
 Tortugarr never turns on automatic downloading for you. It only happens for seasons you have
 switched to *monitored* yourself (see the next section). If a title you deleted comes back, it
@@ -147,6 +164,10 @@ Open a series. Every season and every episode is listed, also the ones you don't
 - **Ready soon**: downloaded, being added to the library.
 
 This works however you get to the series: from Series, search, or *Continue watching*.
+
+**Can I choose the quality of an episode?**
+Yes. The file list has the same tabs as for movies: 2160p, 1080p, 720p, other and all, each with
+the number of files. It opens on the best quality that has files.
 
 **Can I download a whole season at once?**
 Yes. When three or more episodes of a season are missing, **Whole season** appears at the top.
@@ -198,6 +219,11 @@ The menu shows only the languages you picked in Settings (plus Off), and any tra
 language tag. The subtitle you are currently using always stays visible. Turn on **Settings > Show all subtitle
 languages** to see every track again.
 
+**How do I change the subtitle size or colour while watching?**
+Press the subtitle button. One menu opens with the tracks in your languages, and at the bottom
+the size, the height on screen and the colour. Changes show at once and are kept for next time.
+(Showing two subtitle tracks at the same time is not offered.)
+
 **Does it use subtitles already inside the video file?**
 Yes. Subtitles built into the file count, so nothing is downloaded for a language the file
 already has.
@@ -211,7 +237,13 @@ catching up on a large old library takes a few days and happens by itself.
 ## Watching
 
 **Why is there a parrot spinning when I press play?**
-That's the loading screen. On a good connection you will barely see it.
+That's the loading screen. On a good connection you will barely see it. Its size is set in
+**Settings > Loading logo size** (25-100 %; full size on a TV and 40 % on a phone until you
+pick one).
+
+**Can the intro at start-up be shorter?**
+Yes. Turn on **Settings > Short intro** for a four-second version instead of the full one.
+Any button on the remote skips the intro.
 
 **Can I watch 4K away from home?**
 Yes, if your home upload speed allows it. 4K streams from a home server over a VPN start quickly
@@ -251,6 +283,10 @@ Yes. With Termux and an SSH key you log in without a password, at home and over 
 ---
 
 ## The TV remote
+
+**Can I use my phone as the remote?**
+Yes. The phone app has a remote control in its bottom bar. It lists the devices playing from your
+server, so pick the TV, and you can steer it from the phone.
 
 **Can the Netflix / YouTube / brand buttons open Tortugarr?**
 On many Android TVs, yes, with the free app **Button Mapper** (by flar2) from the Play Store:
@@ -308,7 +344,12 @@ first time. It is separate from any login PIN and stored per device.
 
 **Why can't I find adult titles in the normal search?**
 The movie database behind discovery doesn't list them. Use *Search for new XXX* in the same
-dialog, which searches your indexers directly.
+dialog, which searches your indexers directly. Turn on *XXX search in the menu* there to have it
+in the menu (on the phone, in the bottom bar) while the library is shown.
+
+**A finished adult download stays in the download client.**
+That is expected. It is saved straight into the adult folder, so there is nothing to move and the
+torrent keeps seeding there.
 
 **Does hiding it affect everyone on the same account?**
 Yes, on every device. Use separate users if people need different settings.

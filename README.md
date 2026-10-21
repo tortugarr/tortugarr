@@ -10,8 +10,9 @@
 </p>
 
 > **Built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core).** The Tortugarr app is a
-> fork of Moonfin-Core (from commit `567e2a8c`). Media playback, multi-server support and the
-> design engine are the work of Moonfin and its contributors. Tortugarr adds the one-command
+> fork of Moonfin-Core 2.7.0, with Moonfin's full git history kept and Tortugarr's work on top.
+> Media playback, multi-server support and the design engine are the work of Moonfin and its
+> contributors. Tortugarr adds the one-command
 > server installer, the Tortugarr Jellyfin plugin, junk-release filtering and Download Now from
 > the TV. Report Tortugarr bugs to the [Tortugarr issue tracker](https://github.com/tortugarr/tortugarr/issues),
 > not to Moonfin: the Moonfin developers do not support Tortugarr builds.
@@ -72,6 +73,7 @@ No laptop. No copying files around. No fiddling with five web pages.
 - 🔒 **Nothing phones home.** The app talks to your server and nothing else. No account with
   us, no tracking. The app itself holds no keys or passwords.
 - 📱 **TV, phone and tablet.** Same library everywhere; start on the phone, finish on the TV.
+  The phone app does everything the TV app does, and doubles as a remote for the TV.
 
 <p align="center">
   <img src="docs/images/tv-collection.webp" alt="Film series: see which parts you are missing" width="900"><br>
@@ -187,6 +189,12 @@ installer prints the addresses of everything it set up.
 Open Prowlarr at `http://<server-address>:9696` and add the indexers you want under
 **Indexers > Add Indexer**. They are passed on to the rest automatically. This is the one thing
 Tortugarr cannot do for you.
+
+Sites behind Cloudflare (1337x and others) need FlareSolverr, which the installer sets up.
+Tortugarr gives every indexer the `flaresolverr` tag, also ones you add later (within a few
+minutes). If an indexer's test still fails with a Cloudflare or 403 error, type `flaresolverr`
+under **Tags** at the bottom of its settings yourself and press **Test** again; the test can
+take a few minutes.
 
 ### 3. Put the app on your TV
 

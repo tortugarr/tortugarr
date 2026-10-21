@@ -34,6 +34,17 @@ Sonarr, or remove them from the queue if you moved the files yourself.
 You need indexers: Prowlarr > Indexers > Add Indexer. The doctor warns until you
 have at least one.
 
+**An indexer's test fails with a Cloudflare or 403 error (1337x and others).**
+The site is behind Cloudflare and needs FlareSolverr. Tortugarr gives every indexer the tag
+`flaresolverr` within a few minutes of adding it; to go faster, type `flaresolverr` under
+**Tags** at the bottom of the indexer's settings and press **Test** again. The test can then
+take several minutes.
+
+**A finished download sits on "Importing" for a few minutes.**
+With a download client on Windows, or downloads and library on different drives or mounts,
+Radarr and Sonarr copy the file instead of moving it. A large file takes a few minutes; it is
+not stuck. Keep free room for the second copy while the torrent seeds.
+
 **A new episode "has no file" and sits in the queue with a warning about `.exe`.**
 It was a fake release (a Windows program pretending to be a video). Sonarr/Radarr
 refuse to import it. Remove it from the queue with *Remove and blocklist*. With

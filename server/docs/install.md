@@ -107,7 +107,9 @@ sudo ./install.sh
 
 The installer checks the machine, asks a few questions (most with sensible defaults;
 the login you choose yourself), shows a summary, and then does the rest. It takes
-5-15 minutes, mostly downloading images.
+5-15 minutes, mostly downloading images. Typed something wrong? Answer **no** at the summary
+and go through the questions again: your answers so far are the defaults, so Enter keeps each
+one and you only retype the wrong ones. Nothing is changed before you say yes.
 
 ### Unattended install
 
@@ -125,6 +127,7 @@ name of the folder does not matter; the type decides where it shows up:
 | Type | Shown in Jellyfin as | Radarr/Sonarr |
 |---|---|---|
 | Movies | Movies | Radarr may add to it, if you allow it |
+| Documentaries | Documentaries | Radarr may add to it, if you allow it - documentaries only |
 | TV series | TV Shows | Sonarr may add to it, if you allow it |
 | Adult | the hidden adult library (switch it on first, see below) | - |
 | Music videos and concerts | Music Videos | - |
@@ -142,8 +145,19 @@ The library is hidden from every user who is not an administrator; give someone 
 Dashboard > Users > the user > Access.
 
 With several folders of one type, possibly on several drives, a new movie or series goes to the
-one with the most free space. `sudo tortugarr reconfigure` lists your folders and lets you change
-the type of each, remove one (nothing on the drive is deleted) or add more.
+one with the most free space; folders on the same drive have the same free space, and then the
+one that already holds the most titles wins. `sudo tortugarr reconfigure` lists your folders and
+lets you change the type of each, remove one (nothing on the drive is deleted) or add more.
+
+**Documentaries.** A movie folder of documentaries can have the type *Documentaries* (a folder
+named for documentaries is offered as one). Radarr manages it, but only movies TMDB lists as
+documentaries go there, and no other movie does. That holds for Download Now in the app and for
+requests through Seerr: Seerr adds every movie to one folder, and the Tortugarr plugin moves a
+documentary to a documentary folder as soon as Radarr has it, before anything is downloaded.
+
+**Tortugarr's own folders.** Without folders of your own, new movies and series go to
+`/data/media/movies` and `/data/media/tv` in the data folder. With your own folders those stay
+empty, and repair removes them from Radarr and Sonarr so they do not show up there.
 
 ## Using a qBittorrent you already have
 
@@ -178,6 +192,7 @@ installer says so: turn on *Tools > Options > Downloads > Excluded file names* w
 
 Hardlinks do not work across a Windows drive, so a finished download is **copied** into the
 library and takes its space twice while it is still seeding. Keep room for that on the drive.
+The copy also takes time: a few minutes for a large file, while the app shows *Importing*.
 
 Already switched to your own qBittorrent by hand? Run `sudo tortugarr reconfigure` and choose
 **qBittorrent I already have**; the Tortugarr container is removed and the paths are set up.
@@ -190,11 +205,19 @@ The installer prints the addresses at the end; you log in everywhere with the us
 and password you chose (show them again any time with `sudo tortugarr credentials`). Then:
 
 1. **Add indexers in Prowlarr** (`http://<server>:9696` > Indexers > Add Indexer).
-   They appear in Sonarr and Radarr automatically. If an indexer is behind
-   Cloudflare (its test fails with a Cloudflare or 403 error), give it the tag
-   `flaresolverr`. Its test can then take several minutes - wait for it.
+   They appear in Sonarr and Radarr automatically. Sites behind Cloudflare (1337x and
+   others) go through FlareSolverr, which only steps in when Cloudflare blocks a site:
+   every indexer gets the tag `flaresolverr`, also ones you add later (the Tortugarr plugin
+   checks every few minutes). If an indexer's test fails with a Cloudflare or 403 error
+   before that, type `flaresolverr` under **Tags** at the bottom of its settings and press
+   **Test** again. The test can then take several minutes - wait for it.
 2. *(Usenet)* add your provider in SABnzbd (Config > Servers).
-3. *(VPN)* the settings are in `/opt/tortugarr/overrides/vpn.env`.
+3. *(VPN)* the installer asks for your provider by its gluetun name (nordvpn, mullvad,
+   protonvpn, surfshark, ...), or **custom** for any other provider or a VPN server of your
+   own: give the path to its WireGuard `.conf` or OpenVPN `.ovpn` file (a Windows path such as
+   `C:\Users\you\Downloads\wg0.conf` works inside WSL). The settings end up in
+   `/opt/tortugarr/overrides/vpn.env`; see the [gluetun wiki](https://github.com/qdm12/gluetun-wiki)
+   for your provider.
 4. **Install the Tortugarr app** on your TV/phone and point it at
    `http://<server>:8096`. See [docs/app.md](app.md).
 5. Request something in Seerr or in the app. Done.
@@ -228,6 +251,7 @@ sudo tortugarr doctor       # find problems, with a fix for each
 sudo tortugarr repair       # fix containers, settings, ports and connections - keeps everything
 sudo tortugarr reconfigure  # switch torrent client, VPN, usenet, ports, extra folders
 sudo tortugarr update       # newer versions: backup first, automatic rollback if it fails
+sudo tortugarr update --latest  # newest published images instead of the tested ones (testing only)
 sudo tortugarr backup [--with-images]
 sudo tortugarr restore <backup.tar.gz>
 sudo tortugarr uninstall [--purge]
@@ -244,7 +268,8 @@ identical software even if those versions are no longer downloadable.
 
 **Uninstall** removes exactly what the installer created (containers, network,
 firewall rules) and asks before deleting settings. Your media is
-never deleted.
+never deleted. When settings are deleted, the backups are moved to `/var/backups/tortugarr`
+first, so a restore is still possible.
 
 ## Languages
 
