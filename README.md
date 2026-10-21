@@ -164,8 +164,8 @@ them (and Docker, if needed) from the internet while it runs, about 5 GB the fir
 Open a terminal on the machine that will be your server and run:
 
 ```bash
-wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.01.tar \
-     https://github.com/tortugarr/tortugarr/releases/latest/download/SHA256SUMS.txt
+wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.01.tar
+wget https://github.com/tortugarr/tortugarr/releases/latest/download/SHA256SUMS.txt
 sha256sum --check --ignore-missing SHA256SUMS.txt   # should print: tortugarr-server-4.20.01.tar: OK
 tar -xf tortugarr-server-4.20.01.tar
 cd tortugarr-server
