@@ -373,6 +373,13 @@ through a VPN with a kill switch.
 
 ## When something looks wrong
 
+**I changed something in Radarr, Sonarr, Prowlarr or Jellyfin, and now something is off.**
+Run `sudo tortugarr doctor` on the server: it says what is wrong. Then run
+`sudo tortugarr repair`. Repair is always safe: it keeps your settings, titles and files, and only
+puts back what Tortugarr set up, such as a media folder that was removed from Radarr or Sonarr,
+a download client, a path mapping or a library. See also
+[Troubleshooting](../server/docs/troubleshooting.md).
+
 **Jellyfin says "Plugin updates available" for Moonfin. Should I update?**
 
 Yes. The Moonfin server plugin (Moonbase) is the server side of the Moonfin app Tortugarr is
