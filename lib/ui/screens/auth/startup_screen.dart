@@ -39,8 +39,12 @@ class StartupScreen extends StatefulWidget {
 class _StartupScreenState extends State<StartupScreen>
     with SingleTickerProviderStateMixin {
   static const Duration _minSplashDuration = Duration(seconds: 5);
-  static const String _introAssetPath = 'assets/intro/tortugarr_intro.mp4';
-  static const String _shortIntroAssetPath = 'assets/intro/tortugarr_intro_short.mp4';
+  // media_kit copies an asset to the app's files once and reuses that copy, so
+  // a new video needs a new file name: under the old name an updated app kept
+  // playing the previous intro (2026-10-21).
+  static const String _introAssetPath = 'assets/intro/tortugarr_intro_1080p.mp4';
+  static const String _shortIntroAssetPath =
+      'assets/intro/tortugarr_intro_short_1080p.mp4';
 
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
