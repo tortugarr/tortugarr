@@ -19,7 +19,8 @@ tortugarr-server/                 this repository
 ├── secrets.json                admin password and API keys (0600)
 ├── .env                        generated Compose environment (0600)
 ├── compose.yml                 copy of compose/compose.yml
-├── overrides/                  media.yml, vpn.yml, vpn.env, hwaccel.yml (generated)
+├── overrides/                  media.yml, vpn.yml, vpn.env, custom.ovpn, hwaccel.yml,
+│                               download-client.yml (generated)
 │                               local.yml (yours; never overwritten)
 ├── config/<service>/           each service's own settings and database
 ├── backups/                    tortugarr-backup-*.tar.gz (newest 10 kept)
@@ -31,6 +32,11 @@ tortugarr-server/                 this repository
 ├── media/movies  media/tv      the library (Jellyfin reads it read-only)
 ├── torrents/{movies,tv,prowlarr}
 └── usenet/{complete,incomplete}
+
+Inside the containers, your own media folders are /data/library/<n>, and the download folders
+of a qBittorrent outside Docker (on Windows, say) are /data/torrents-ext/<n>.
+
+/var/backups/tortugarr/          backups kept when an uninstall deletes the settings
 ```
 
 ## Principles
@@ -57,10 +63,11 @@ tortugarr-server/                 this repository
 |---|---|---|
 | 8096 | Jellyfin | LAN |
 | 5055 | Seerr | LAN |
-| 8989 | Sonarr | LAN (the app's Download Now uses it) |
-| 7878 | Radarr | LAN (the app's Download Now uses it) |
-| 9696 | Prowlarr | LAN (the app's quality probe uses it) |
-| 8080 / 9091 / 8112 | qBittorrent / Transmission / Deluge web UI | LAN |
+| 8989 | Sonarr | LAN (web page; the app reaches it through the Tortugarr plugin) |
+| 7878 | Radarr | LAN (web page; the app reaches it through the Tortugarr plugin) |
+| 9696 | Prowlarr | LAN (web page, where you add indexers) |
+| 6767 | Bazarr | LAN |
+| 8080 / 9091 / 8112 | qBittorrent / Transmission / Deluge web UI | LAN (not used with your own qBittorrent outside Docker) |
 | 6881 tcp+udp | torrent peers | all interfaces |
 | 8085 | SABnzbd | LAN |
 | 8191 | FlareSolverr | not published (Prowlarr only) |
@@ -71,16 +78,18 @@ tortugarr-server/                 this repository
   with forms login, qBittorrent/Transmission/Deluge/SABnzbd with the password).
 - The services are meant for your home network. Do not forward these ports on your
   router; use a VPN (e.g. WireGuard/Tailscale) to reach them from outside.
-- `secrets.json`, `.env`, backups and the app files are readable by root only.
+- `secrets.json`, `.env`, backups and the app files (`app-config.json`,
+  `download_now_secrets.dart`) are readable by root only.
 
 ## Known limitations
 
 - Sonarr/Radarr's built-in *Emby / Jellyfin* connection cannot notify Jellyfin
   10.11+/12 - it still sends an authentication header Jellyfin removed, and fails
   with 401 even with a valid key. The installer instead adds a *Webhook* connection
-  ("Tortugarr: refresh Jellyfin") that POSTs to `/Library/Refresh` with the header
-  `Authorization: MediaBrowser Token="<Jellyfin API key>"` after every import, rename
-  or delete. The library scan every 30 minutes stays as a safety net.
+  ("Tortugarr: refresh Jellyfin") to the Tortugarr plugin, which refreshes only the folder
+  that changed after every import, rename or delete (it carries its own hook key, not a
+  Jellyfin key). Without the plugin it calls `/Library/Refresh`, a scan of every library.
+  The library scan every 30 minutes stays as a safety net.
 - Transmission and Deluge cannot block file types; the title filter and
   Sonarr/Radarr import checks still stop fake `.exe` releases, but the file is
   downloaded first. qBittorrent is recommended for that reason.

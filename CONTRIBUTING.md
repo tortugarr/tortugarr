@@ -9,7 +9,7 @@ the repository and the releases clean.
 |---|---|
 | [`lib/`](lib/), [`android/`](android/), … | The Tortugarr app, a fork of [Moonfin-Core](https://github.com/Moonfin-Client/Moonfin-Core) with its full history. |
 | [`server/`](server/) | The installer and the Tortugarr Jellyfin plugin. |
-| [`docs/`](docs/) | [FAQ](docs/FAQ.md), user guide and manual. |
+| [`docs/`](docs/) | [FAQ](docs/FAQ.md), images and videos. The install guide and the rest of the server docs are in [`server/docs/`](server/docs/). |
 
 ## Build the app
 
@@ -23,6 +23,9 @@ flutter build apk --release --flavor androidTv-public --dart-define=TORTUGARR_PU
 flutter build apk --release --flavor mobile-public    --dart-define=TORTUGARR_PUBLIC=true   # phone
 ```
 
+The APKs land in `build/app/outputs/flutter-apk/`. Without your own signing key
+(`android/app/release.keystore` and `android/keystore.properties`) they are signed with the
+debug key, which is fine for sideloading but cannot update an APK signed with another key.
 
 ## Build the plugin
 

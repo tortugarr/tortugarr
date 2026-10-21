@@ -178,11 +178,15 @@ retry always apply, and no download ever bypasses them. A refused release can on
 Merged queues of Radarr and Sonarr, plus the adult category in qBittorrent when `adult` is on:
 ```json
 { "items": [ { "downloadId": "…", "kind": "movie|episode|adult", "title": "…",
-               "tmdbId": 9761, "tvdbId": null, "season": null, "episode": null,
+               "name": "…", "tmdbId": 9761, "tvdbId": null, "season": null, "episode": null,
                "status": "downloading|queued|paused|importPending|importing|completed|failed|warning",
-               "progress": 0.42, "sizeLeft": 215000000, "etaSeconds": 120,
+               "progress": 0.42, "size": 1300000000, "sizeLeft": 215000000, "etaSeconds": 120,
                "messages": ["…"] } ] }
 ```
+`title` is the release, `name` the movie or series. With qBittorrent, `size` and `sizeLeft` come
+from qBittorrent itself (Radarr/Sonarr read the client once a minute). A grab Radarr/Sonarr have
+not put in their queue yet (their history has it, qBittorrent has the torrent) is listed too, so
+a new download shows at once.
 
 ### 3.5 `DELETE /Tortugarr/v1/Downloads/{downloadId}?blocklist=true|false`
 
@@ -233,8 +237,10 @@ same path.
 
 **Switching it on.** The plugin's admin page (Jellyfin Dashboard > Plugins > Tortugarr) has one
 switch, "Adult library", off by default. Switching it on:
-1. makes the folder `/data/media/adult` (saved to by qBittorrent with category `adult`; the
-   installer mounts it for both qBittorrent and Jellyfin);
+1. uses the adult folder (`AdultSavePath`: the folder the user gave the *Adult* type during
+   install, else `/data/media/adult`), saved to by qBittorrent with category `adult`; a
+   qBittorrent outside Docker saves to the same folder by its own path (`AdultDownloadPath`,
+   for example `E:\-=XxX=-`);
 2. creates **its own Jellyfin library** "Adult" (type: movies, home videos style metadata off,
    no internet metadata) on that folder;
 3. **hides that library from every non-administrator** (their access lists in Jellyfin are set
@@ -264,8 +270,9 @@ not be synced to Sonarr/Radarr; Prowlarr's per-application tags handle that).
       "size": 0, "seeders": 0, "leechers": 0, "publishDate": "…", "matchedWords": 2 } ] }
   ```
 - `POST /Tortugarr/v1/Adult/Grab` with `{ "searchId": "…", "guid": "…", "indexerId": 7 }` → the plugin
-  takes the release's magnet link or download URL from Prowlarr's result and adds it to
-  qBittorrent with category `adult` and save path `/data/media/adult`. Answer
+  takes the release's magnet link from Prowlarr's result, or fetches the `.torrent` behind its
+  download URL itself (a qBittorrent outside Docker cannot open Prowlarr's address), and adds it
+  to qBittorrent with category `adult` and the adult folder as save path. Answer
   `{ "downloadId": "<torrent hash>", "title": "…" }`. Only releases shown in that search can be
   taken (else 409 `search_expired`). Never through Sonarr/Radarr.
 - Adult downloads appear in 3.4 (`kind: "adult"`), can be removed with 3.5 and checked with 3.6.
@@ -367,7 +374,9 @@ like Jellyfin's own folder watcher, refreshes the nearest item that still exists
 season, the series, the movie folder, or the library's own folder for a new title. Only that part
 of that library is scanned, at once (the folder watcher waits about 60 s). A path that is in no
 library falls back to a full library scan, as before. `eventType: "Test"` (sent when the webhook
-is saved) does nothing. After an import (`Download`) the plugin also starts Seerr's
+is saved) does nothing. `MovieAdded` (sent only when there are documentary folders) moves a
+movie TMDB lists as a documentary into a documentary folder (`DocumentaryRoots`) before anything
+is downloaded, so Seerr requests land there too; nothing is scanned. After an import (`Download`) the plugin also starts Seerr's
 "recently added" scan 30 s later (imports close together give one run), so a request shows as
 available at once instead of at Seerr's next 5-minute run. Answer: 204.
 
@@ -553,8 +562,12 @@ Filters (defaults = section 4; editable on the admin page): JunkRegex, QualityRe
   MinSdMovieBytes = 350 MB, BannedExtensions,
   EarlyReleaseDays = 2, HardRejectionRegex, VideoExtensions, MinVideoBytes = 50 MB,
   SearchTimeoutSeconds = 150
+MovieRoots, TvRoots, DocumentaryRoots (the Radarr/Sonarr root folders new titles may go to; a
+  documentary goes only to DocumentaryRoots), DownloadRoots (a qBittorrent outside Docker: its
+  download folders and where they are mounted, one per drive),
 AdultEnabled = false (the admin-page switch), AdultCategory = "adult",
-  AdultSavePath = "/data/media/adult", AdultMinBytes = 20 MB,
+  AdultSavePath = "/data/media/adult" (the user's adult folder when there is one),
+  AdultDownloadPath (the same folder as an outside qBittorrent sees it), AdultMinBytes = 20 MB,
   AdultUnsafeRegex = \b(exe|scr|lnk|msi)\b, AdultCategories = 6000-6090
 ```
 Keys are only readable for administrators through Jellyfin's own plugin-configuration API
@@ -569,3 +582,6 @@ plugin is not active). Installs the plugin (pinned version, auto-update off: it 
 `secrets.json` (the Seerr key is read from Seerr's `/settings/main` after the installer's admin
 login, since `secrets.json` has none), and tests every route: admin served, non-admin 403, missing service 503, and each
 action visible in Radarr/Sonarr/qBittorrent/Bazarr. Distribution: the installer carries the built plugin itself.
+
+Without a route, the plugin itself gives every Prowlarr indexer the tag of the installer's
+FlareSolverr proxy, every few minutes, so sites behind Cloudflare work.

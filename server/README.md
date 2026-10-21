@@ -44,9 +44,12 @@ sudo ./install.sh
 
 ## Tests
 
-Without an install: `bash -n` on the shell files, `python3 -I tests/unit/test_jellyfin_start.py`,
-the plugin's unit tests (in `plugin/build.sh`), and `tests/windows/crash-test.sh` (the Windows
-helper against a fake Windows, PowerShell 7 for Linux). With an install, on a clean test VM
+Without an install: `bash -n` on the shell files, the configuration engine's unit tests
+(`for t in tests/unit/*.py; do python3 -I "$t"; done`), the installer's question and template
+tests (`tests/test-extra-libs.sh`, `tests/test-vpn-custom.sh`,
+`tests/test-external-client-render.sh`), the plugin's unit tests (in `plugin/build.sh`), and
+`tests/windows/crash-test.sh` (the Windows helper against a fake Windows, PowerShell 7 for
+Linux). With an install, on a clean test VM
 only: see [tests/README.md](tests/README.md). The answers files in `tests/` hold a throwaway
 test login - never use them for a real server.
 
