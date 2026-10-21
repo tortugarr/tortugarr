@@ -43,7 +43,7 @@ change it and share it. Changed versions must stay open source too.
 
 **Which devices does it run on?**
 - **App:** Android TV / Google TV (TVs and sticks), and Android phones and tablets.
-- **Server:** Linux (Ubuntu 22.04/24.04). Windows 11 with WSL2 works through an optional
+- **Server:** Linux (Ubuntu 22.04, 24.04 or 26.04). Windows 11 with WSL2 works through an optional
   helper, but is not officially supported.
 - TVs without Android (LG webOS, Samsung Tizen) can use an Android TV stick.
 

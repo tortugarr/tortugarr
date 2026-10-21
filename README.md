@@ -21,7 +21,7 @@
   <a href="https://github.com/tortugarr/tortugarr/releases/latest"><img alt="Release 4.20.01" src="https://img.shields.io/badge/release-4.20.01-8b5a2b"></a>
   <a href="LICENSE"><img alt="License: GPL-2.0" src="https://img.shields.io/badge/license-GPL--2.0-blue"></a>
   <img alt="App: Android TV, Google TV, phone" src="https://img.shields.io/badge/app-Android%20TV%20%C2%B7%20Google%20TV%20%C2%B7%20phone-3ddc84">
-  <img alt="Server: Ubuntu 22.04, 24.04" src="https://img.shields.io/badge/server-Ubuntu%2022.04%20%C2%B7%2024.04-e95420">
+  <img alt="Server: Ubuntu 22.04, 24.04, 26.04" src="https://img.shields.io/badge/server-Ubuntu%2022.04%20%C2%B7%2024.04%20%C2%B7%2026.04-e95420">
 </p>
 
 <p align="center">
@@ -70,8 +70,9 @@ No laptop. No copying files around. No fiddling with five web pages.
   the TV.
 - 🧹 **Cleans up after itself.** Delete from the TV and the file, the download and the request
   all go. Running low on space? It tells you what is safe to remove.
-- 🔒 **Nothing phones home.** The app talks to your server and nothing else. No account with
-  us, no tracking. The app itself holds no keys or passwords.
+- 🔒 **Nothing phones home.** No account with us, no tracking, no analytics. The app talks to
+  your server, and fetches posters and trailers from public sites such as TMDB and YouTube. The
+  app itself holds no keys or passwords.
 - 📱 **TV, phone and tablet.** Same library everywhere; start on the phone, finish on the TV.
   The phone app does everything the TV app does, and doubles as a remote for the TV.
 
@@ -128,7 +129,7 @@ flowchart LR
   jf --> bazarr["Bazarr<br/>subtitles"]
   seerr["Seerr<br/>requests"] --> arr
   prowlarr["Prowlarr<br/>your indexers"] --> arr
-  arr --> dl["Download client<br/>qBittorrent · SABnzbd"]
+  arr --> dl["Download client<br/>qBittorrent · Transmission · Deluge · SABnzbd"]
   dl --> media[("Your media folder")]
   media --> jf
 ```
@@ -149,7 +150,7 @@ Jellyfin, Seerr, Sonarr and the other tools are not inside these files: the inst
 them (and Docker, if needed) from the internet while it runs, about 5 GB the first time.
 
 **Before you start, you need:**
-- A PC or server with **Linux**: Ubuntu 22.04 or 24.04 (64-bit). Other Debian-based systems
+- A PC or server with **Linux**: Ubuntu 22.04, 24.04 or 26.04 (64-bit). Other Debian-based systems
   usually work but are not tested.
 - **4 GB RAM**, about **5 GB** for the software, and room for your movies and series.
 - An **internet connection** during the install.
@@ -300,8 +301,8 @@ sideloading.
 
 | | |
 |---|---|
-| **Server** | Ubuntu 24.04.5 LTS. Windows 11 with WSL2 works with an optional helper (not officially supported). |
-| **App** | Android TV and Google TV (real TV and emulator). Android phones: first runs in an emulator. |
+| **Server** | Ubuntu 26.04 LTS in WSL2 on Windows 11 (with the optional Windows helper, not officially supported); earlier releases on Ubuntu 24.04.5 LTS. |
+| **App** | Android TV and Google TV (a real TCL TV and the emulator), and a real Android phone. |
 | **Version** | 4.20.01 |
 
 ## Take it further 🏴‍☠️
