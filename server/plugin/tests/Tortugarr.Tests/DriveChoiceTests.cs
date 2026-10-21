@@ -26,6 +26,15 @@ public class DriveChoiceTests
     }
 
     [Fact]
+    public void On_one_drive_the_folder_with_most_titles_wins()
+    {
+        var roots = Roots(("/data/library/2", 52), ("/data/library/3", 52));
+        var titles = TortugarrService.TitlesPerRoot(JsonNode.Parse(
+            "[{\"rootFolderPath\":\"/data/library/2/\"},{\"rootFolderPath\":\"/data/library/3\"},{\"rootFolderPath\":\"/data/library/3\"}]")!.AsArray());
+        Assert.Equal("/data/library/3", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), titles));
+    }
+
+    [Fact]
     public void Without_a_list_every_root_counts()
     {
         var roots = Roots(("/data/library/1", 866), ("/data/library/3", 52));

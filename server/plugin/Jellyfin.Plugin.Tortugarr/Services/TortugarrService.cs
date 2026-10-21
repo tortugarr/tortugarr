@@ -882,7 +882,24 @@ public sealed class TortugarrService
     {
         var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
         var allowed = AllowedRoots(arr.Name == "Radarr" ? Cfg.MovieRoots : Cfg.TvRoots);
-        return PickRoot(roots, allowed) ?? throw new UpstreamException(arr.Name, "no root folder");
+        var titles = await arr.Get(arr.Name == "Radarr" ? "/movie" : "/series", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
+        return PickRoot(roots, allowed, TitlesPerRoot(titles)) ?? throw new UpstreamException(arr.Name, "no root folder");
+    }
+
+    /// <summary>How many movies or series each root folder holds.</summary>
+    internal static Dictionary<string, int> TitlesPerRoot(JsonArray titles)
+    {
+        var counts = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var t in titles)
+        {
+            var root = ((string?)t?["rootFolderPath"] ?? string.Empty).TrimEnd('/');
+            if (root.Length > 0)
+            {
+                counts[root] = counts.GetValueOrDefault(root) + 1;
+            }
+        }
+
+        return counts;
     }
 
     internal static HashSet<string> AllowedRoots(string list) =>
@@ -892,12 +909,15 @@ public sealed class TortugarrService
     /// <summary>The accessible root with the most free space, among the folders of the right type
     /// when the installer named them. A root folder of another type is skipped: on 2026-10-20 a
     /// series folder that was not mounted into Radarr reported the WSL disk's 866 GB and got
-    /// three new movies.</summary>
-    internal static string? PickRoot(JsonArray roots, HashSet<string> allowed) =>
+    /// three new movies. Folders on one drive have the same free space; the one with the most
+    /// titles is the main one, so a movie went to E:\-=MOVIES=- and not E:\-=Dokumentarer=-
+    /// (2026-10-21: Fall landed among the documentaries and not in Movies).</summary>
+    internal static string? PickRoot(JsonArray roots, HashSet<string> allowed, IReadOnlyDictionary<string, int>? titles = null) =>
         (string?)roots
             .Where(r => (bool?)r?["accessible"] != false)
             .Where(r => allowed.Count == 0 || allowed.Contains(((string?)r?["path"] ?? string.Empty).TrimEnd('/')))
-            .OrderByDescending(r => (long?)r?["freeSpace"] ?? 0)
+            .OrderByDescending(r => ((long?)r?["freeSpace"] ?? 0) >> 30)
+            .ThenByDescending(r => titles?.GetValueOrDefault(((string?)r?["path"] ?? string.Empty).TrimEnd('/')) ?? 0)
             .FirstOrDefault()?["path"];
 
     internal static List<(string Remote, string Local)> ParseDownloadRoots(string text) =>
