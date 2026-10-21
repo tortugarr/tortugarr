@@ -1841,6 +1841,29 @@ def arr_titles_per_root(app):
     return counts
 
 
+def seerr_root(app, roots):
+    """The folder Seerr adds requests to (one fixed folder): the roomiest of those new
+    titles go to now. Folders on one drive have the same free space, and the one with the
+    most titles is the main one (2026-10-21: E:\\-=MOVIES=- over E:\\-=Dokumentarer=-).
+    The free space comes from Radarr/Sonarr themselves: Seerr's test answer has none, so
+    every folder looked empty and the one with the most titles, on an 11 GB drive, won."""
+    targets = set(new_title_roots(app))
+    titles = arr_titles_per_root(app)
+    free = arr_free_per_root(app)
+    return max((r for r in roots if r["path"].rstrip("/") in targets),
+               key=lambda r: (free.get(r["path"].rstrip("/"), r.get("freeSpace") or 0) // (1 << 30),
+                              titles.get(r["path"].rstrip("/"), 0)),
+               default=roots[0] if roots else None)
+
+
+def arr_free_per_root(app):
+    """Free bytes of each Radarr/Sonarr root folder; empty on any error."""
+    try:
+        return {r["path"].rstrip("/"): r.get("freeSpace") or 0 for r in arr(app).get("/rootfolder") or []}
+    except BootstrapError:
+        return {}
+
+
 def seerr_sync_libraries(h):
     """Reads Jellyfin's libraries into Seerr and turns on the movie and series ones.
 
@@ -1915,14 +1938,7 @@ def configure_seerr():
         roots = test.get("rootFolders", [])
         prof = next((p for p in profiles if p["name"] == STATE.get("default_quality_profile", "HD-1080p")), None) \
             or (profiles[0] if profiles else None)
-        # Seerr adds a request to one fixed folder: the roomiest of those new titles go to now.
-        # Folders on one drive have the same free space: the one with the most titles is
-        # the main one (2026-10-21: E:\-=MOVIES=- over E:\-=Dokumentarer=-).
-        targets = set(new_title_roots(app))
-        titles = arr_titles_per_root(app)
-        root = max((r for r in roots if r["path"].rstrip("/") in targets),
-                   key=lambda r: ((r.get("freeSpace") or 0) // (1 << 30), titles.get(r["path"].rstrip("/"), 0)),
-                   default=roots[0] if roots else None)
+        root = seerr_root(app, roots)
         if not prof or not root:
             raise BootstrapError(f"seerr: {app} returned no quality profile or root folder")
         body = {
