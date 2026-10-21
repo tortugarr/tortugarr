@@ -16,6 +16,9 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         // swallow Set-Cookie into its own container and hide it from the code.
         serviceCollection.AddHttpClient("tortugarr")
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false });
+        // Indexer links can redirect to a magnet: link, which must be read, not followed.
+        serviceCollection.AddHttpClient("tortugarr-noredirect")
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false });
         serviceCollection.AddSingleton<TortugarrService>();
         serviceCollection.AddSingleton<AdultLibraryService>();
         serviceCollection.AddScoped<IEventConsumer<UserCreatedEventArgs>, HideAdultFromNewUsers>();

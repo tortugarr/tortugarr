@@ -186,6 +186,20 @@ public sealed class QbitClient
         await Request(HttpMethod.Post, "/api/v2/torrents/add", form, cookie, ct).ConfigureAwait(false);
     }
 
+    /// <summary>Adds a .torrent file's bytes with a category and save path.</summary>
+    public async Task AddFile(byte[] torrent, string category, string savePath, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        var form = new MultipartFormDataContent
+        {
+            { new ByteArrayContent(torrent), "torrents", "release.torrent" },
+            { new StringContent(category), "category" },
+            { new StringContent(savePath), "savepath" },
+            { new StringContent("false"), "autoTMM" },
+        };
+        await Request(HttpMethod.Post, "/api/v2/torrents/add", form, cookie, ct).ConfigureAwait(false);
+    }
+
     /// <summary>Torrents in a category (newest first).</summary>
     public async Task<JsonArray> List(string category, CancellationToken ct)
     {

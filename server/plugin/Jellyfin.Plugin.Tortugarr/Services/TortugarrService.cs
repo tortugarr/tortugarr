@@ -645,7 +645,25 @@ public sealed class TortugarrService
         var qbit = Qbit;
         var before = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false)).Select(t => (string?)t?["hash"]).ToHashSet();
         var savePath = string.IsNullOrWhiteSpace(Cfg.AdultDownloadPath) ? Cfg.AdultSavePath : Cfg.AdultDownloadPath;
-        await qbit.Add(url, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
+        if (url.StartsWith("magnet:", StringComparison.OrdinalIgnoreCase))
+        {
+            await qbit.Add(url, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
+        }
+        else
+        {
+            // Prowlarr's link (http://prowlarr:9696/...?apikey=) works only inside Docker: a
+            // qBittorrent on Windows could not open it, and showed the key in its error
+            // (2026-10-21). The plugin fetches the .torrent (or the magnet it redirects to).
+            var (torrent, magnet) = await FetchTorrent(url, ct).ConfigureAwait(false);
+            if (magnet is not null)
+            {
+                await qbit.Add(magnet, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
+            }
+            else
+            {
+                await qbit.AddFile(torrent!, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
+            }
+        }
         string? hash = null;
         for (var i = 0; i < 15 && hash is null; i++)
         {
@@ -659,6 +677,37 @@ public sealed class TortugarrService
         }
 
         return new { downloadId = hash?.ToUpperInvariant(), title = rel.Title };
+    }
+
+    /// <summary>The .torrent behind an indexer link, or the magnet the link redirects to.</summary>
+    private async Task<(byte[]? Torrent, string? Magnet)> FetchTorrent(string url, CancellationToken ct)
+    {
+        var next = url;
+        for (var hop = 0; hop < 5; hop++)
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Get, next);
+            using var res = await _httpFactory.CreateClient("tortugarr-noredirect").SendAsync(req, ct).ConfigureAwait(false);
+            var location = res.Headers.Location?.ToString();
+            if ((int)res.StatusCode is >= 300 and < 400 && location is not null)
+            {
+                if (location.StartsWith("magnet:", StringComparison.OrdinalIgnoreCase))
+                {
+                    return (null, location);
+                }
+
+                next = new Uri(new Uri(next), location).ToString();
+                continue;
+            }
+
+            if (!res.IsSuccessStatusCode)
+            {
+                throw new UpstreamException("Prowlarr", $"the release could not be fetched (HTTP {(int)res.StatusCode})");
+            }
+
+            return (await res.Content.ReadAsByteArrayAsync(ct).ConfigureAwait(false), null);
+        }
+
+        throw new UpstreamException("Prowlarr", "too many redirects for the release");
     }
 
     /// <summary>
