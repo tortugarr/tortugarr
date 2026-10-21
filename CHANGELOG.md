@@ -25,6 +25,10 @@
 - An uninstall that deletes the settings keeps every backup, in `/var/backups/tortugarr`.
 - The adult library is switched on by an administrator in Jellyfin: Dashboard > Plugins >
   Tortugarr > Adult library.
+- Installer: answers can be edited with the arrow keys, and arrow up brings back earlier ones.
+  Ubuntu 26.04 is supported.
+- Tested together and pinned: Jellyfin 12.2.0, Seerr 3.5.0, Sonarr 4.0.20, Radarr 6.4.4,
+  Prowlarr 2.6.5, Bazarr 1.6.2, FlareSolverr 3.5.2.
 
 ## 4.20.0 - 2026-10-07
 
