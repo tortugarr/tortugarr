@@ -74,6 +74,8 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _prefs.addListener(_onChanged);
+    // Browse is not filtered; only the language badges change.
+    SeerrPreferences.languageFilterChanged.addListener(_onChanged);
     _init();
   }
 
@@ -115,6 +117,7 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
     _vm?.removeListener(_onChanged);
     _vm?.dispose();
     _prefs.removeListener(_onChanged);
+    SeerrPreferences.languageFilterChanged.removeListener(_onChanged);
     _scrollController.dispose();
     super.dispose();
   }

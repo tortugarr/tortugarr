@@ -139,6 +139,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
   void initState() {
     super.initState();
     _prefs.addListener(_onPrefsChanged);
+    SeerrPreferences.languageFilterChanged.addListener(_onLanguageFilterChanged);
     _initialFocusNode.addListener(_onInitialFocusNodeChanged);
     _initViewModel();
     if (_wantsInitialFocus) {
@@ -206,6 +207,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
     }
     _viewModel?.removeListener(_onChanged);
     _prefs.removeListener(_onPrefsChanged);
+    SeerrPreferences.languageFilterChanged.removeListener(_onLanguageFilterChanged);
     _initialFocusNode.removeListener(_onInitialFocusNodeChanged);
     _initialFocusNode.dispose();
     _loadingHoldFocusNode.dispose();
@@ -283,6 +285,11 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
 
   void _onPrefsChanged() {
     _viewModel?.applyRowConfig();
+  }
+
+  /// The filter decides which titles the rows load, so they load again.
+  void _onLanguageFilterChanged() {
+    unawaited(_viewModel?.refresh());
   }
 
   void _onChanged() {

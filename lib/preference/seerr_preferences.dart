@@ -1,4 +1,5 @@
 import '../util/subtitle_track_logic.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 
@@ -12,6 +13,15 @@ class SeerrPreferences {
   final SessionRepository _session;
 
   SeerrPreferences(this._store, this._session);
+
+  /// Ticks when a setting of the discovery language filter changes, so an
+  /// open Seerr screen shows the change without leaving it.
+  static final languageFilterChanged = ValueNotifier<int>(0);
+
+  Future<void> _setFilter(Future<void> write) async {
+    await write;
+    languageFilterChanged.value++;
+  }
 
   String _userKey(String key) {
     final uid = _session.activeUserId ?? '';
@@ -88,7 +98,7 @@ class SeerrPreferences {
   bool get hideForeignContent =>
       _store.getBool(_userKey(hideForeignKey)) ?? true;
   Future<void> setHideForeignContent(bool value) =>
-      _store.setBool(_userKey(hideForeignKey), value);
+      _setFilter(_store.setBool(_userKey(hideForeignKey), value));
 
   /// Debug view for the filter above: rows are left unfiltered and the titles
   /// it would hide get a red "SKJULES" mark. Off by default.
@@ -96,7 +106,7 @@ class SeerrPreferences {
   bool get previewForeignContent =>
       _store.getBool(_userKey(previewForeignKey)) ?? false;
   Future<void> setPreviewForeignContent(bool value) =>
-      _store.setBool(_userKey(previewForeignKey), value);
+      _setFilter(_store.setBool(_userKey(previewForeignKey), value));
 
   /// Subtitle menus list every language instead of only Norwegian and
   /// English. Off by default.
@@ -129,7 +139,7 @@ class SeerrPreferences {
   }
 
   Future<void> setDiscoveryLanguageCodes(Set<String> codes) =>
-      _store.setString(_userKey(discoveryLanguagesKey), codes.join(','));
+      _setFilter(_store.setString(_userKey(discoveryLanguagesKey), codes.join(',')));
 
   /// Discovery titles in a kept language show their language badge
   /// (EN, NO, SE ...) also when the preview is off. On by default.
@@ -137,7 +147,7 @@ class SeerrPreferences {
   bool get showLanguageBadges =>
       _store.getBool(_userKey(showLanguageBadgesKey)) ?? true;
   Future<void> setShowLanguageBadges(bool value) =>
-      _store.setBool(_userKey(showLanguageBadgesKey), value);
+      _setFilter(_store.setBool(_userKey(showLanguageBadgesKey), value));
 
   /// Season and series episode lists include the episodes Sonarr knows but
   /// the library does not have yet, greyed out and downloadable. On by
