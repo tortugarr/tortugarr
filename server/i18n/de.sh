@@ -118,6 +118,7 @@ MSG[no]="nein"
 MSG[client_none_short]="keiner"
 MSG[q_start_install]="Installation starten"
 MSG[q_apply]="Diese Änderungen übernehmen"
+MSG[backups_moved]="%s Sicherung(en) aufbewahrt in %s"
 MSG[q_answers_again]="Die Fragen noch einmal durchgehen? Deine Antworten sind die Vorgaben - Enter behält sie (nein = abbrechen, nichts wurde geändert)"
 
 # install steps

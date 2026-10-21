@@ -118,6 +118,7 @@ MSG[no]="nej"
 MSG[client_none_short]="ingen"
 MSG[q_start_install]="Start installationen"
 MSG[q_apply]="Anvend disse ændringer"
+MSG[backups_moved]="%s backup(s) gemt i %s"
 MSG[q_answers_again]="Gå spørgsmålene igennem igen? Dine svar er forslagene - tryk Enter for at beholde (nej = stop, intet er ændret)"
 
 # install steps

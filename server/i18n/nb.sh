@@ -159,6 +159,7 @@ MSG[no]="nei"
 MSG[client_none_short]="ingen"
 MSG[q_start_install]="Starte installasjonen"
 MSG[q_apply]="Bruke disse endringene"
+MSG[backups_moved]="%s backup(er) tatt vare på i %s"
 MSG[q_answers_again]="Gå gjennom spørsmålene på nytt? Svarene dine er forslaget - trykk Enter for å beholde (nei = avbryt, ingenting er endret)"
 
 # installasjon

@@ -739,6 +739,15 @@ cmd_uninstall() {
     # The log lives in the install dir; keep it where the backups are kept.
     mkdir -p /var/backups/tortugarr
     cp "$TORTUGARR_LOG" /var/backups/tortugarr/ 2>/dev/null && TORTUGARR_LOG=/var/backups/tortugarr/$(basename "$TORTUGARR_LOG")
+    # Every backup goes along, not only the one just taken: on 2026-10-21 a backup
+    # made with `tortugarr backup` minutes before was deleted with the settings.
+    local kept=0 f
+    for f in "$INSTALL_DIR"/backups/tortugarr-backup-*.tar.gz; do
+      [ -f "$f" ] || continue
+      [ -f "/var/backups/tortugarr/$(basename "$f")" ] || mv "$f" /var/backups/tortugarr/
+      kept=$((kept + 1))
+    done
+    [ "$kept" -gt 0 ] && note "$(t backups_moved "$kept" /var/backups/tortugarr)"
     rm -rf "$CONFIG_DIR"
     rm -rf "$INSTALL_DIR"
     good "$(t settings_removed)"

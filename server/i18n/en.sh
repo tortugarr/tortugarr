@@ -161,6 +161,7 @@ MSG[no]="no"
 MSG[client_none_short]="none"
 MSG[q_start_install]="Start the installation"
 MSG[q_apply]="Apply these changes"
+MSG[backups_moved]="%s backup(s) kept in %s"
 MSG[q_answers_again]="Go through the questions again? Your answers are the defaults - press Enter to keep one (no = stop, nothing has been changed)"
 
 # install steps
