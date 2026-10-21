@@ -97,6 +97,32 @@ t() {
 
 UNATTENDED=${UNATTENDED:-0}
 
+# Answers are typed with line editing (readline): the arrow keys move through the text, and
+# arrow up brings back earlier answers. They are kept in memory only (no history file), and
+# secret answers stay out. History is on only while a line is read, so the script's own
+# commands never end up in it.
+_ANSWERS=()
+
+# Colour codes in a readline prompt are wrapped, or editing puts the cursor in the wrong place.
+_rl() { [ -z "$1" ] || printf '\001%s\002' "$1"; }
+
+# read_answer VAR "prompt" NAME - one line from the terminal; NAME decides if it is remembered.
+read_answer() {
+  local __var=$1 __prompt=$2 __name=${3:-} __ans __a HISTFILE=
+  set -o history
+  history -c
+  for __a in "${_ANSWERS[@]}"; do history -s -- "$__a"; done
+  if ! read -e -r -p "$__prompt" __ans </dev/tty; then
+    set +o history
+    return 1 # no terminal any more (closed input): as a plain read failed
+  fi
+  set +o history
+  if [ -n "$__ans" ] && ! [[ ${__name^^} =~ PASS|KEY|SECRET|TOKEN ]]; then
+    _ANSWERS+=("$__ans")
+  fi
+  printf -v "$__var" '%s' "$__ans"
+}
+
 # ask VAR "question" "default"
 ask() {
   local var=$1 q=$2 def=${3:-} ans
@@ -105,9 +131,9 @@ ask() {
     note "$q: $ans"
   else
     if [ -n "$def" ]; then
-      read -r -p "$(printf '%s? %s%s [%s]: ' "$C_BOLD" "$q" "$C_RESET" "$def")" ans </dev/tty
+      read_answer ans "$(printf '%s? %s%s [%s]: ' "$(_rl "$C_BOLD")" "$q" "$(_rl "$C_RESET")" "$def")" "$var"
     else
-      read -r -p "$(printf '%s? %s%s: ' "$C_BOLD" "$q" "$C_RESET")" ans </dev/tty
+      read_answer ans "$(printf '%s? %s%s: ' "$(_rl "$C_BOLD")" "$q" "$(_rl "$C_RESET")")" "$var"
     fi
     ans=${ans:-$def}
   fi
@@ -122,7 +148,7 @@ confirm() {
     ans=${!var:-$def}
   else
     local hint="[Y/n]"; [ "$def" = n ] && hint="[y/N]"
-    read -r -p "$(printf '%s? %s%s %s: ' "$C_BOLD" "$q" "$C_RESET" "$hint")" ans </dev/tty
+    read_answer ans "$(printf '%s? %s%s %s: ' "$(_rl "$C_BOLD")" "$q" "$(_rl "$C_RESET")" "$hint")" "$var"
     ans=${ans:-$def}
   fi
   while :; do
@@ -133,7 +159,7 @@ confirm() {
     # Anything else used to count as "no" without a word; ask again instead.
     [ "$UNATTENDED" = 1 ] && die "$(t answer_not_yes_no "$var" "$ans")"
     warning "$(t answer_yes_no)"
-    read -r -p "$(printf '%s? %s%s %s: ' "$C_BOLD" "$q" "$C_RESET" "$hint")" ans </dev/tty
+    read_answer ans "$(printf '%s? %s%s %s: ' "$(_rl "$C_BOLD")" "$q" "$(_rl "$C_RESET")" "$hint")" "$var"
     ans=${ans:-$def}
   done
 }
@@ -156,7 +182,7 @@ choose() {
   done
   local ans
   while :; do
-    read -r -p "   [$defn]: " ans </dev/tty
+    read_answer ans "   [$defn]: " "$var"
     ans=${ans:-$defn}
     if [[ $ans =~ ^[0-9]+$ ]] && [ "$ans" -ge 1 ] && [ "$ans" -le ${#keys[@]} ]; then
       printf -v "$var" '%s' "${keys[$((ans - 1))]}"; _log "answer $var=${keys[$((ans - 1))]}"; return
