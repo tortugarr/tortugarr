@@ -118,6 +118,7 @@ MSG[no]="nej"
 MSG[client_none_short]="ingen"
 MSG[q_start_install]="Starta installationen"
 MSG[q_apply]="Genomför ändringarna"
+MSG[q_answers_again]="Gå igenom frågorna igen? Dina svar är förslagen - tryck Enter för att behålla (nej = avbryt, inget har ändrats)"
 
 # install steps
 MSG[installing]="Installerar"

@@ -169,12 +169,25 @@ pick_port() {  # VAR default label
   done
 }
 
+# The summary, then go or not. A no offers the questions again with every answer
+# as the default, so one wrong answer (a drive, a folder type) needs only Enter
+# through the rest - nothing has been written yet.
+confirm_answers() {  # reconf(0|1) question-key
+  while :; do
+    show_summary
+    confirm GO "$(t "$2")" y && return 0
+    [ "$UNATTENDED" = 1 ] && die "$(t aborted)"
+    confirm REDO "$(t q_answers_again)" y || die "$(t aborted)"
+    ask_questions "$1" 1
+  done
+}
+
 ask_questions() {
-  local reconf=${1:-0}
+  local reconf=${1:-0} again=${2:-0}
   header "$(t questions)"
   USED_PORTS=()
 
-  if [ "$reconf" = 0 ] && [ -z "$LANG_FORCED" ] && [ "$UNATTENDED" = 0 ]; then
+  if [ "$reconf" = 0 ] && [ "$again" = 0 ] && [ -z "$LANG_FORCED" ] && [ "$UNATTENDED" = 0 ]; then
     choose TORTUGARR_LANGUAGE "Language / Språk / Sprache" "$TORTUGARR_LANG" \
       en "English" nb "Norsk (bokmål)" sv "Svenska" da "Dansk" de "Deutsch"
     load_language "$TORTUGARR_LANGUAGE"
@@ -193,7 +206,8 @@ ask_questions() {
   fi
 
   # Existing media folders, each with one type (lib/extra_libs.sh).
-  ask_extra_libs "$reconf"
+  # A second round keeps the folders already given, to change or add to.
+  if [ "$again" = 1 ]; then ask_extra_libs 1; else ask_extra_libs "$reconf"; fi
 
   say "$(t client_intro)"
   choose TORRENT_CLIENT "$(t q_torrent_client)" "${TORRENT_CLIENT:-qbittorrent}" \
@@ -424,8 +438,7 @@ cmd_install() {
   check_foreign_stack
   install_prereqs
   ask_questions 0
-  show_summary
-  confirm GO "$(t q_start_install)" y || die "$(t aborted)"
+  confirm_answers 0 q_start_install
 
   header "$(t installing)"
   install_docker
@@ -508,8 +521,7 @@ cmd_reconfigure() {
   fi
   header "$(t reconfiguring)"
   ask_questions 1
-  show_summary
-  confirm GO "$(t q_apply)" y || die "$(t aborted)"
+  confirm_answers 1 q_apply
   step "$(t backup_first)"
   local b; b=$(make_backup quiet) && note "$(t backup_created "$b")"
   write_state

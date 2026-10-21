@@ -53,10 +53,13 @@ wg_conf_to_env() {
 ask_vpn() {
   local f="$INSTALL_DIR/overrides/vpn.env"
   mkdir -p "$INSTALL_DIR/overrides"
-  if [ -f "$f" ]; then
+  # Settings from an earlier install are kept; ones given in this run may be
+  # given again when the questions are gone through a second time.
+  if [ -f "$f" ] && [ "${VPN_ENV_THIS_RUN:-0}" != 1 ]; then
     note "$(t vpn_env_exists "$f")"
     return
   fi
+  VPN_ENV_THIS_RUN=1
   say "$(t vpn_intro)"
   ask_valid VPN_PROVIDER "$(t q_vpn_provider)" "${VPN_PROVIDER:-}" valid_nonempty value_required
   VPN_PROVIDER=$(tr '[:upper:]' '[:lower:]' <<< "$VPN_PROVIDER")
