@@ -1171,8 +1171,8 @@ def configure_prowlarr():
     configure_download_clients("prowlarr", h)
     indexers = h.get("/indexer")
     if not indexers:
+        # The Cloudflare tip is in the closing box of install and reconfigure.
         warn("prowlarr: no indexers yet - add your own in Prowlarr (Indexers > Add Indexer)")
-        important(CLOUDFLARE_TIP)
         return
     # Every indexer carries the proxy's tag (the plugin keeps it so for new ones):
     # FlareSolverr only steps in on a Cloudflare challenge, so other sites are unchanged.
@@ -2220,7 +2220,10 @@ def cmd_doctor():
     try:
         if not arr("prowlarr").get("/indexer"):
             warn("no indexers yet: nothing can be searched or downloaded until you add indexers in Prowlarr")
-            important(CLOUDFLARE_TIP)
+            # Doctor run on its own has no closing box, so it gives the tip; inside install the
+            # box at the end does.
+            if os.environ.get("TORTUGARR_CLOSING_BOX") != "1":
+                important(CLOUDFLARE_TIP)
     except BootstrapError:
         pass
     for app in ("sonarr", "radarr"):
@@ -2279,7 +2282,8 @@ def cmd_doctor():
             warn(f"{app}: root folder(s) {', '.join(odd)} are not {app.capitalize()} folders in Tortugarr's setup "
                  f"(another type, or not mounted there) - new titles do not go there. Move their titles in "
                  f"{app.capitalize()} (Movies/Series > Edit > Root Folder) and remove the folder there")
-        return f"{len(allowed)} in use"
+        used = [r for r in arr(app).get("/rootfolder") if r["path"].rstrip("/") in allowed]
+        return f"{len(used)} in use"
 
     for app in ("sonarr", "radarr"):
         bad += not check(f"{app} root folders", lambda a=app: root_folders(a))

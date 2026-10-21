@@ -331,6 +331,15 @@ show_summary() {
 # Registries throttle many parallel layer downloads at times ("error from registry:
 # retry-after ..."). Try again after a pause, then one image at a time.
 pull_images() {
+  pull_stack_images || return 1
+  # The installer's own engine runs in this image; fetched here with the rest, quietly, instead
+  # of by its first `docker run`, which printed every layer (2026-10-21).
+  load_versions
+  docker image inspect "$IMAGE_TOOLS" >/dev/null 2>&1 \
+    || run docker pull -q "$IMAGE_TOOLS" || { sleep 20; run docker pull -q "$IMAGE_TOOLS"; }
+}
+
+pull_stack_images() {
   local attempt svc
   for attempt in 1 2 3; do
     run dc pull -q && return 0
@@ -467,7 +476,8 @@ cmd_install() {
   # The Windows side first: inside WSL the LAN ports only answer once it is set up, so the
   # health check after it shows the real state.
   offer_windows_helper
-  run_doctor quick
+  # print_access closes with the Cloudflare box, so the health check leaves the tip to it.
+  TORTUGARR_CLOSING_BOX=1 run_doctor quick
   print_access
 }
 
@@ -541,7 +551,8 @@ cmd_reconfigure() {
   # Ports may have changed: the Windows side follows (only when it was set up before) - before
   # the health check, so that checks the new forwarding.
   win_helper_set_up && offer_windows_helper
-  run_doctor quick
+  # print_access closes with the Cloudflare box, so the health check leaves the tip to it.
+  TORTUGARR_CLOSING_BOX=1 run_doctor quick
   print_access
 }
 

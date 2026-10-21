@@ -321,6 +321,7 @@ engine() {
   docker run --rm --network "$net" \
     -v "$INSTALL_DIR:/tortugarr" -v "$CONFIG_DIR:/cfg" -v "$INSTALL_DIR/app/bootstrap:/app:ro" \
     -e TORTUGARR_ONLY="${TORTUGARR_ONLY:-}" -e DEST="${ENGINE_DEST:-}" -e TORTUGARR_VERSION="$TORTUGARR_VERSION" \
+    -e TORTUGARR_CLOSING_BOX="${TORTUGARR_CLOSING_BOX:-}" \
     "$IMAGE_TOOLS" python3 -u /app/tortugarr_bootstrap.py "$@" 2>&1 | tee -a "$TORTUGARR_LOG" | render_engine_output
   return "${PIPESTATUS[0]}"
 }
