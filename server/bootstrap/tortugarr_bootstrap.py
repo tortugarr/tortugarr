@@ -1823,6 +1823,27 @@ def seerr_login():
     return h
 
 
+def seerr_sync_libraries(h):
+    """Reads Jellyfin's libraries into Seerr and turns on the movie and series ones.
+
+    Seerr 3.5 made this POST /library/sync and one PUT per library; GET ?sync=true
+    and ?enable= answer 400 there ("Unknown query parameter 'sync'", 2026-10-21).
+    Seerr 3.4 has only the GET form, so that stays as the fallback."""
+    try:
+        libs = h.post("/settings/jellyfin/library/sync", {})
+    except BootstrapError as e:
+        if "HTTP 404" not in str(e) and "HTTP 405" not in str(e):
+            raise
+        libs = h.get("/settings/jellyfin/library?sync=true")
+        ids = ",".join(lib["id"] for lib in libs if lib.get("type") in ("movie", "show"))
+        if ids:
+            h.get(f"/settings/jellyfin/library?enable={ids}")
+        return
+    for lib in libs or []:
+        if lib.get("type") in ("movie", "show") and not lib.get("enabled"):
+            h.put(f"/settings/jellyfin/library/{lib['id']}", {"enabled": True})
+
+
 def configure_seerr():
     wait_http("seerr", "http://seerr:5055/api/v1/status", accept=(200,))
     h = seerr()
@@ -1849,10 +1870,7 @@ def configure_seerr():
     # Without an external address Seerr builds "Play" links to http://jellyfin:8096,
     # a container name no browser or TV can resolve.
     h.post("/settings/jellyfin", {"externalHostname": lan_url("jellyfin")})
-    libs = h.get("/settings/jellyfin/library?sync=true")
-    ids = ",".join(lib["id"] for lib in libs if lib.get("type") in ("movie", "show"))
-    if ids:
-        h.get(f"/settings/jellyfin/library?enable={ids}")
+    seerr_sync_libraries(h)
     ok("seerr: Jellyfin libraries synced")
 
     # Seerr 3 rejects read-only fields (apiKey, ...) in settings bodies, so only
