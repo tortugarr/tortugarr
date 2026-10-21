@@ -291,7 +291,10 @@ class MissingEpisodes {
         ];
       }
       if (rejections.any(_hardRejection.hasMatch)) continue;
-      if (!ProwlarrSearchClient.acceptsRelease(_asProwlarr(r), 'tv')) continue;
+      if (!ProwlarrSearchClient.acceptsRelease(_asProwlarr(r), 'tv',
+          needsLink: false)) {
+        continue;
+      }
       final soft = rejections.isEmpty ? null : softReasonLabel(rejections.first);
       out.add(EpisodeReleaseOption(r, soft));
     }

@@ -211,6 +211,26 @@ void main() {
   });
 
   group('pickable', () {
+    // 2026-10-21: the Tortugarr plugin sends no magnet or torrent link (it grabs
+    // by guid), and every episode was dropped as "no download method".
+    test('a release without a link is kept: it is grabbed by its guid', () {
+      final options = MissingEpisodes.pickable([
+        SonarrRelease(
+          guid: 'https://www.torrentdownload.info/077A/VisionQuest-S01E03',
+          indexerId: 3,
+          indexer: 'TorrentDownload (Prowlarr)',
+          title: 'VisionQuest S01E03 1080p WEB h264 ETHEL',
+          size: 1964947537,
+          seeders: 2196,
+          protocol: 'torrent',
+          quality: 'WEBDL-1080p',
+          approved: true,
+          rejections: const [],
+        ),
+      ]);
+      expect(options, hasLength(1));
+    });
+
     test('drops CAM/TS, executables, dead and blocked releases', () {
       final options = MissingEpisodes.pickable([
         _rel('Show.S01E01.1080p.WEB.H264-GRP'),

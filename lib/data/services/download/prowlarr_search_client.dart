@@ -153,14 +153,20 @@ class ProwlarrSearchClient {
 
   /// The same CAM/TS/screener/exe, quality and size rules the picker applies,
   /// for releases that come from elsewhere (Sonarr's interactive search).
-  static bool acceptsRelease(ProwlarrRelease r, String mediaType) =>
-      _isValidMedia(r, mediaType);
+  /// Without [needsLink] a release without a magnet or torrent link passes:
+  /// Sonarr (or the Tortugarr plugin) grabs it by its guid, and the plugin
+  /// sends no links at all - every episode was dropped as "no download
+  /// method" (2026-10-21).
+  static bool acceptsRelease(ProwlarrRelease r, String mediaType,
+          {bool needsLink = true}) =>
+      _isValidMedia(r, mediaType, needsLink: needsLink);
 
   /// Executables are never media, whatever the category.
   static final _executable =
       RegExp(r'\b(exe|scr|lnk|msi)\b', caseSensitive: false);
 
-  static bool _isValidMedia(ProwlarrRelease r, String mediaType) {
+  static bool _isValidMedia(ProwlarrRelease r, String mediaType,
+      {bool needsLink = true}) {
     final titleLower = r.title.toLowerCase();
 
     // Adult releases rarely follow scene naming (no source tags, short
@@ -209,7 +215,7 @@ class ProwlarrSearchClient {
     final hasMagnet = (r.guid.isNotEmpty && r.guid.startsWith('magnet:')) ||
         (r.magnetUrl?.isNotEmpty == true && r.magnetUrl!.startsWith('magnet:'));
     final hasTorrentUrl = r.downloadUrl?.isNotEmpty == true;
-    if (!hasMagnet && !hasTorrentUrl) {
+    if (needsLink && !hasMagnet && !hasTorrentUrl) {
       debugPrint('[Prowlarr] Filtered (no download method): "${r.title}"');
       return false;
     }
