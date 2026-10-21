@@ -751,19 +751,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
             aspectRatio: 2 / 3,
             seerrMediaType: item.mediaType,
             seerrStatus: item.mediaInfo?.status,
-            seerrLanguageMark: SeerrLanguageFilter.previewMark(
-              item,
-              active:
-                  row.type != SeerrRowType.yourWatchlist &&
-                  row.type != SeerrRowType.recentRequests &&
-                  row.type != SeerrRowType.recentlyAdded &&
-                  GetIt.instance<SeerrPreferences>().languagePreviewActive,
-              badges:
-                  row.type != SeerrRowType.yourWatchlist &&
-                  row.type != SeerrRowType.recentRequests &&
-                  row.type != SeerrRowType.recentlyAdded &&
-                  GetIt.instance<SeerrPreferences>().showLanguageBadges,
-            ),
+            seerrLanguageMark: _languageMark(row, item),
             focusColor: focusColor,
             cardFocusExpansion: cardExpansion,
             suppressFocusGlow: suppressFocusGlow,
@@ -925,6 +913,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
                 aspectRatio: expanded ? 16 / 9 : 2 / 3,
                 seerrMediaType: item.mediaType,
                 seerrStatus: item.mediaInfo?.status,
+                seerrLanguageMark: _languageMark(row, item),
                 focusColor: focusColor,
                 cardFocusExpansion: false,
                 suppressFocusGlow: suppressFocusGlow,
@@ -1332,6 +1321,22 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
       hasItems: row.studios.isNotEmpty,
       scrollController: _getRowScroll(rowIndex),
       child: child,
+    );
+  }
+
+  /// The language mark of a card: the "hidden" mark while previewing the
+  /// foreign filter, the language badge when badges are on. The modern rows
+  /// had none, so the phone (modern rows by default) showed no badges
+  /// (2026-10-21). Rows of the user's own titles carry no mark.
+  static SeerrLanguageMark? _languageMark(SeerrDiscoverRow row, SeerrDiscoverItem item) {
+    final own = row.type == SeerrRowType.yourWatchlist ||
+        row.type == SeerrRowType.recentRequests ||
+        row.type == SeerrRowType.recentlyAdded;
+    final prefs = GetIt.instance<SeerrPreferences>();
+    return SeerrLanguageFilter.previewMark(
+      item,
+      active: !own && prefs.languagePreviewActive,
+      badges: !own && prefs.showLanguageBadges,
     );
   }
 

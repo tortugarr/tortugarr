@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../services/tortugarr/download_features.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
 
@@ -735,6 +736,14 @@ class SeerrMediaDetailViewModel extends ChangeNotifier {
     try {
       for (final id in requestIds) {
         await _repo.deleteRequest(id);
+      }
+      // Seerr forgets the request but Radarr/Sonarr keep downloading it.
+      if (DownloadFeatures.viaPlugin) {
+        final info = _state.mediaInfo;
+        await LiveDownloadProgress.removeFor(
+          tmdbId: _state.isMovie ? info?.tmdbId : null,
+          tvdbId: _state.isMovie ? null : info?.tvdbId,
+        );
       }
       await _reloadDetails('Request cancelled');
       // Verify the requests are actually gone. A silent network failure or a

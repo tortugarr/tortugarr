@@ -513,6 +513,12 @@ class TortugarrPluginClient {
     await _send('DELETE', '/Space/Duplicates/${Uri.encodeComponent(hash)}');
   }
 
+  /// Removes a download from Radarr's/Sonarr's queue and from the download
+  /// client, with its files (spec 3.5).
+  Future<void> removeDownload(String downloadId) async {
+    await _send('DELETE', '/Downloads/${Uri.encodeComponent(downloadId)}');
+  }
+
   /// What Radarr and Sonarr are downloading, with the bytes left taken from
   /// qBittorrent itself (spec 3.4).
   Future<List<TortugarrQueueItem>> downloadQueue() async {

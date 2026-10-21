@@ -16,9 +16,9 @@ class LiveDownloadProgress {
   static Map<String, int> _left = const {};
   static DateTime? _at;
 
-  static Future<void> refresh() async {
+  static Future<void> refresh({bool force = false}) async {
     final at = _at;
-    if (at != null && DateTime.now().difference(at) < _minGap) return;
+    if (!force && at != null && DateTime.now().difference(at) < _minGap) return;
     try {
       _set(await TortugarrPluginClient().downloadQueue());
     } catch (_) {
@@ -80,6 +80,20 @@ class LiveDownloadProgress {
               downloadId: q.downloadId,
             ),
       ];
+
+  /// Stops what Radarr/Sonarr download for one movie or series, files and
+  /// all. A cancelled request left its torrent running, and the downloads
+  /// bar came back with it from the queue (2026-10-21). Best effort.
+  static Future<void> removeFor({int? tmdbId, int? tvdbId}) async {
+    await refresh(force: true);
+    for (final q in queue) {
+      if (!matches(q, tmdbId: tmdbId, tvdbId: tvdbId)) continue;
+      try {
+        await TortugarrPluginClient().removeDownload(q.downloadId);
+      } catch (_) {}
+    }
+    await refresh(force: true);
+  }
 
   static bool matches(TortugarrQueueItem q, {int? tmdbId, int? tvdbId}) =>
       q.kind == 'movie'

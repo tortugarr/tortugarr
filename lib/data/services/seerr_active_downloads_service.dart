@@ -20,6 +20,11 @@ class SeerrActiveDownload {
   final SeerrDownloadSummary? uhdSummary;
   final bool is4k;
 
+  /// The download client's ids behind this row (upper case), so a dismiss
+  /// also hides the row the queue gives the same download once its request
+  /// is gone.
+  final Set<String> downloadIds;
+
   const SeerrActiveDownload({
     required this.requestId,
     required this.title,
@@ -27,6 +32,7 @@ class SeerrActiveDownload {
     required this.is4k,
     this.hdSummary,
     this.uhdSummary,
+    this.downloadIds = const {},
   });
 
   /// Combined best-known fraction across both quality flavors.
@@ -53,6 +59,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
   bool _started = false;
   List<SeerrActiveDownload> _downloads = const [];
   final Set<int> _dismissedRequestIds = <int>{};
+  final Set<String> _dismissedDownloadIds = <String>{};
   final Set<String> _dismissedTitles = <String>{};
   final Map<int, DateTime> _firstSeen = <int, DateTime>{};
   final Map<int, double> _lastFraction = <int, double>{};
@@ -77,6 +84,9 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
   /// and is dropped once the underlying request no longer shows up.
   void dismiss(int requestId) {
     _dismissedRequestIds.add(requestId);
+    for (final d in _downloads) {
+      if (d.requestId == requestId) _dismissedDownloadIds.addAll(d.downloadIds);
+    }
     final filtered = _downloads.where((d) => d.requestId != requestId).toList();
     if (filtered.length != _downloads.length) {
       _downloads = filtered;
@@ -89,6 +99,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
   void dismissAll() {
     for (final d in _downloads) {
       _dismissedRequestIds.add(d.requestId);
+      _dismissedDownloadIds.addAll(d.downloadIds);
       if (d.title.isNotEmpty) _dismissedTitles.add(d.title);
     }
     _downloads = const [];
@@ -128,6 +139,10 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
       final visible = <SeerrActiveDownload>[];
       for (final d in fetched) {
         if (_dismissedRequestIds.contains(d.requestId)) continue;
+        if (d.downloadIds.isNotEmpty &&
+            d.downloadIds.every(_dismissedDownloadIds.contains)) {
+          continue;
+        }
         if (d.title.isNotEmpty && _dismissedTitles.contains(d.title)) continue;
 
         final lastFraction = _lastFraction[d.requestId] ?? 0.0;
@@ -161,6 +176,8 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
       _lastFraction.removeWhere((id, _) => !liveIds.contains(id));
       _lastImporting.removeWhere((id, _) => !liveIds.contains(id));
       _dismissedRequestIds.removeWhere((id) => !liveIds.contains(id));
+      final liveDownloads = {for (final d in fetched) ...d.downloadIds};
+      _dismissedDownloadIds.removeWhere((id) => !liveDownloads.contains(id));
 
       if (!_listEquals(visible, _downloads)) {
         _downloads = visible;
@@ -215,6 +232,12 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
         tvdbId: req.is4k ? tvdbId : null,
       );
       if (hd == null && uhd == null) continue;
+      final ids = {
+        for (final q in LiveDownloadProgress.queue)
+          if (LiveDownloadProgress.matches(q, tmdbId: tmdbId, tvdbId: tvdbId)) q.downloadId,
+        for (final i in [...?media.downloadStatus, ...?media.downloadStatus4k])
+          if (i.downloadId != null) i.downloadId!.toUpperCase(),
+      };
       claimed.addAll([
         for (final q in LiveDownloadProgress.queue)
           if (LiveDownloadProgress.matches(q, tmdbId: tmdbId, tvdbId: tvdbId)) q.downloadId,
@@ -228,6 +251,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
         is4k: req.is4k,
         hdSummary: hd,
         uhdSummary: uhd,
+        downloadIds: ids,
       ));
     }
     out.addAll(_withoutRequest(claimed));
@@ -257,6 +281,7 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
             mediaType: e.value.first.kind == 'movie' ? 'movie' : 'tv',
             is4k: false,
             hdSummary: summary,
+            downloadIds: {for (final q in e.value) q.downloadId},
           ),
     ];
   }
