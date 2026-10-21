@@ -23,8 +23,7 @@ qbittorrent, transmission, deluge, sabnzbd, gluetun). Installer logs are in
 **Radarr says "Missing root folder for movie collection", or a media folder is gone from Radarr or Sonarr.**
 One of your media folders was removed from Radarr's or Sonarr's list of root folders, often by
 accident on the *Library Import* page, which lists them with a delete button. The titles and files
-are still there. `sudo tortugarr doctor` names the missing folder, and `sudo tortugarr repair`
-puts it back.
+are still there. `sudo tortugarr repair` puts the folder back.
 
 **Downloads finish but never show up; the queue says "No files found are eligible for import".**
 Radarr or Sonarr cannot see the folder the download client saved to. This happens when the
