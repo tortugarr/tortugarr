@@ -3,13 +3,17 @@ import 'package:get_it/get_it.dart';
 
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
+import '../../../util/platform_detection.dart';
 import 'loading_animation_widget.dart';
 
-/// The loading logo's size factor for a stored percentage: 25-100 %, and
-/// 45 % when nothing is stored. 100 % was the size before 2026-10-21, which
-/// was too large on the TV.
-double loadingLogoScale(int? percent) =>
-    (percent ?? UserPreferences.loadingLogoScale.defaultValue).clamp(25, 100) / 100;
+/// The loading logo's size factor for a stored percentage: 25-100 %. Until
+/// one is picked it is 100 % on a TV and 40 % on a phone, where the full
+/// size covers most of the screen (2026-10-21).
+double loadingLogoScale(int? percent, {bool? tv}) {
+  final picked = percent ?? 0;
+  final value = picked > 0 ? picked : ((tv ?? PlatformDetection.isTV) ? 100 : 40);
+  return value.clamp(25, 100) / 100;
+}
 
 class PlayerLoadingOverlay extends StatefulWidget {
   const PlayerLoadingOverlay({

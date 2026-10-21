@@ -3387,10 +3387,11 @@ class UserPreferences extends ChangeNotifier {
   );
 
   /// Size of the loading logo in the player, in percent of the medium size
-  /// (25-100). Replaces the small/medium/large choice.
+  /// (25-100). Replaces the small/medium/large choice. 0 until one is picked:
+  /// the default depends on the device (see loadingLogoScale).
   static final loadingLogoScale = Preference(
     key: 'pref_loading_logo_scale',
-    defaultValue: 45,
+    defaultValue: 0,
   );
 
   static final loadingAnimationSize = EnumPreference(

@@ -7,7 +7,6 @@ import 'package:server_core/server_core.dart';
 
 import '../../../auth/repositories/user_repository.dart';
 import '../../../data/models/aggregated_item.dart';
-import '../../../data/services/log_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../playback/delay_limits.dart';
 import '../../../playback/media3_player_backend.dart';
