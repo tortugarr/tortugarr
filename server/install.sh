@@ -748,6 +748,12 @@ cmd_uninstall() {
       docker image rm "$i" >/dev/null 2>&1 || true
     done
     docker image rm "$IMAGE_TOOLS" >/dev/null 2>&1 || true
+    # Older versions of the same images that lost their tag to a newer pull (update, or
+    # --latest) stayed behind as <none> (2026-10-21: four on TVapp after an uninstall).
+    local repos; repos=$(printf '%s\n' $images "$IMAGE_TOOLS" | sed -E 's/@sha256:[0-9a-f]+$//; s/:[^:/]+$//' | sort -u)
+    docker images --format '{{.Repository}} {{.Tag}} {{.ID}}' | while read -r repo tag id; do
+      [ "$tag" = "<none>" ] && grep -qxF "$repo" <<< "$repos" && docker image rm "$id" >/dev/null 2>&1
+    done || true
     good "$(t images_removed)"
   fi
   firewall_close
