@@ -264,8 +264,11 @@ class MissingEpisodes {
         publishDate: r.publishDate,
       );
 
+  /// "2160p", "1080p", "720p" or "other", the tiers the movie picker uses.
+  static String tierOf(SonarrRelease r) => _asProwlarr(r).tierLabel;
+
   static int _tierRank(SonarrRelease r) =>
-      switch (_asProwlarr(r).tierLabel) {
+      switch (tierOf(r)) {
         '2160p' => 3,
         '1080p' => 2,
         '720p' => 1,

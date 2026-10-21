@@ -309,8 +309,14 @@ class _ReleaseSearchBody extends StatefulWidget {
 }
 
 class _ReleaseSearchBodyState extends State<_ReleaseSearchBody> {
+  static const _tiers = ['2160p', '1080p', '720p', 'other'];
+
   List<EpisodeReleaseOption>? _options;
   String? _error;
+
+  /// The quality shown, as in the movie picker: the best one with files, or
+  /// "all".
+  String _tier = 'all';
 
   // "Avbryt" holds focus while searching; the first result takes it over.
   final _firstRow = FocusNode(debugLabel: 'firstRelease');
@@ -339,7 +345,13 @@ class _ReleaseSearchBodyState extends State<_ReleaseSearchBody> {
     try {
       final found = await widget.search();
       if (!mounted) return;
-      setState(() => _options = found);
+      setState(() {
+        _options = found;
+        _tier = _tiers.firstWhere(
+          (t) => found.any((o) => MissingEpisodes.tierOf(o.release) == t),
+          orElse: () => 'all',
+        );
+      });
       if (found.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _firstRow.requestFocus();
@@ -386,10 +398,31 @@ class _ReleaseSearchBodyState extends State<_ReleaseSearchBody> {
       children.add(_text(recommended == options.length
           ? appL10n().tgFilesCount(options.length)
           : appL10n().tgFilesRecommended(options.length, recommended)));
+      children.add(const SizedBox(height: 8));
+      int count(String t) => t == 'all'
+          ? options.length
+          : options.where((o) => MissingEpisodes.tierOf(o.release) == t).length;
+      children.add(Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final t in [..._tiers, 'all'])
+            if (t == 'all' || count(t) > 0)
+              SeerrChoiceChip(
+                label: '$t · ${count(t)}',
+                selected: t == _tier,
+                onSelected: (_) => setState(() => _tier = t),
+              ),
+        ],
+      ));
       children.add(const SizedBox(height: 4));
-      for (var i = 0; i < options.length; i++) {
+      // pickable() already put them best first; a tier keeps that order.
+      final visible = _tier == 'all'
+          ? options
+          : options.where((o) => MissingEpisodes.tierOf(o.release) == _tier).toList();
+      for (var i = 0; i < visible.length; i++) {
         children.add(_ReleaseRow(
-          option: options[i],
+          option: visible[i],
           focusNode: i == 0 ? _firstRow : null,
           showPackBadge: widget.seasonPack,
         ));

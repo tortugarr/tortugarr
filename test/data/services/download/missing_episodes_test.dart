@@ -325,4 +325,12 @@ void main() {
     expect(e.hasFile, isFalse);
     expect(e.airDateUtc, DateTime.utc(2026, 7, 6, 1));
   });
+
+  // The episode picker groups by the same tiers as the movie picker.
+  test('tierOf sorts episode releases into the picker tiers', () {
+    expect(MissingEpisodes.tierOf(_rel('Show.S01E01.2160p.WEB-DL')), '2160p');
+    expect(MissingEpisodes.tierOf(_rel('Show.S01E01.1080p.WEB')), '1080p');
+    expect(MissingEpisodes.tierOf(_rel('Show.S01E01.720p.HDTV')), '720p');
+    expect(MissingEpisodes.tierOf(_rel('Show.S01E01.HDTV.x264')), 'other');
+  });
 }
