@@ -158,6 +158,9 @@ them (and Docker, if needed) from the internet while it runs, about 5 GB the fir
 - Your own indexers (and, if you want, a usenet provider or a VPN subscription).
 - Windows? It is not supported, but you can run the installer inside WSL2. See
   [Windows and WSL2](server/docs/install.md#requirements) in the install guide first.
+  To set up WSL2 with a fixed IP address, use
+  [Sentinel Greenhorn](https://github.com/sentinelarmory/greenhorn), a one-file WSL installer
+  that also downloads Tortugarr for you.
 
 ### 1. Install the server
 
