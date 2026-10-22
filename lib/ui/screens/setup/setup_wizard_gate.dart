@@ -5,6 +5,7 @@ import '../../../data/services/connectivity_service.dart';
 import '../../../data/services/media_server_client_factory.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../preference/user_preferences.dart';
 import '../../widgets/navigation_layout.dart';
 
@@ -14,7 +15,18 @@ import '../../widgets/navigation_layout.dart';
 /// [navbarStyle] follows it and only shows once Bottom has been picked, see
 /// [visibleSetupSteps]. [tour] is never suppressed, since it asks nothing
 /// that could already have been answered.
-enum SetupStep { navbar, navbarStyle, mediaBar, homeRows, detailStyle, tour }
+///
+/// [languages] is Tortugarr's: the foreign-title filter is on by default, and
+/// new users should know it is there.
+enum SetupStep {
+  navbar,
+  navbarStyle,
+  mediaBar,
+  homeRows,
+  detailStyle,
+  languages,
+  tour,
+}
 
 /// [steps] as the user sees them, given the navbar position in effect. The
 /// style question only means something for the bottom navbar.
@@ -124,6 +136,9 @@ class SetupWizardGate {
         SetupStep.homeRows,
       if (!_prefs.containsPreference(UserPreferences.detailScreenStyle))
         SetupStep.detailStyle,
+      if (GetIt.instance.isRegistered<SeerrPreferences>() &&
+          !GetIt.instance<SeerrPreferences>().hideForeignContentChosen)
+        SetupStep.languages,
     ];
     // The tour only pays for itself alongside something else. On its own it is
     // a splash screen between the user and the app they came to open.

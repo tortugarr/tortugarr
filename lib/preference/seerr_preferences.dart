@@ -97,6 +97,9 @@ class SeerrPreferences {
   static const hideForeignKey = 'hide_foreign';
   bool get hideForeignContent =>
       _store.getBool(_userKey(hideForeignKey)) ?? true;
+  /// False until someone picks a value, so the first-run wizard can ask.
+  bool get hideForeignContentChosen =>
+      _store.getBool(_userKey(hideForeignKey)) != null;
   Future<void> setHideForeignContent(bool value) =>
       _setFilter(_store.setBool(_userKey(hideForeignKey), value));
 

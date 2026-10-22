@@ -10,10 +10,13 @@ import 'package:server_core/server_core.dart';
 import '../../../data/services/media_server_client_factory.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../preference/preference_constants.dart';
+import '../../../preference/seerr_preferences.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/focus/dpad_keys.dart';
 import '../../../util/language_codes.dart';
 import '../../../util/platform_detection.dart';
+import '../../../util/subtitle_track_logic.dart';
+import 'package:moonfin/util/app_l10n.dart';
 import '../../navigation/destinations.dart';
 import '../../theme/app_theme_controller.dart';
 import '../../widgets/bottom_nav/bottom_nav_destinations.dart';
@@ -65,6 +68,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   String? _mediaBar;
   HomeRowsStyle? _homeRows;
   DetailScreenStyle? _detailStyle;
+  bool? _hideForeign;
   String? _audioLanguage;
   String? _subtitleLanguage;
   SubtitleMode? _subtitleMode;
@@ -162,6 +166,13 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
       final detailStyle = _detailStyle;
       if (detailStyle != null) {
         await _prefs.set(UserPreferences.detailScreenStyle, detailStyle);
+      }
+      final hideForeign = _hideForeign;
+      if (hideForeign != null &&
+          GetIt.instance.isRegistered<SeerrPreferences>()) {
+        await GetIt.instance<SeerrPreferences>().setHideForeignContent(
+          hideForeign,
+        );
       }
       // Mode goes first because changing it can rewrite the subtitle language.
       // With subtitles off the language stays cleared.
@@ -427,6 +438,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     SetupStep.mediaBar => l10n.setupMediaBarQuestion,
     SetupStep.homeRows => l10n.setupHomeRowsQuestion,
     SetupStep.detailStyle => l10n.setupDetailQuestion,
+    SetupStep.languages => appL10n().tgSetupLanguagesQuestion,
     SetupStep.tour => l10n.setupTourQuestion,
   };
 
@@ -440,11 +452,65 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     SetupStep.mediaBar => _buildMediaBarStep(l10n),
     SetupStep.homeRows => _buildHomeRowsStep(l10n),
     SetupStep.detailStyle => _buildDetailStyleStep(l10n),
+    SetupStep.languages => _buildLanguagesStep(),
     SetupStep.tour => _SetupTourStep(
       prefs: _prefs,
       playback: _buildPlaybackSection(l10n),
     ),
   };
+
+  /// Tortugarr: the foreign-title filter is on unless someone turns it off,
+  /// so new users see it here instead of wondering why rows look thin.
+  Widget _buildLanguagesStep() {
+    final seerr = GetIt.instance<SeerrPreferences>();
+    final selected = _hideForeign ?? seerr.hideForeignContent;
+    final picked = seerr.discoveryLanguageCodes;
+    final names = discoveryMenuLanguages
+        .where((l) => picked.contains(l.code))
+        .map((l) => l.endonym)
+        .join(', ');
+    Widget preview(IconData icon) => SetupPreview(
+          child: Center(
+            child: Icon(icon, size: 56, color: AppColorScheme.onSurface),
+          ),
+        );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _OptionLayout(
+          columns: 2,
+          children: [
+            _OptionCard(
+              order: 0,
+              label: appL10n().tgSetupLanguagesMine,
+              hint: names,
+              selected: selected,
+              autofocus: selected,
+              preview: preview(Icons.translate),
+              onPressed: () => setState(() => _hideForeign = true),
+            ),
+            _OptionCard(
+              order: 1,
+              label: appL10n().tgSetupLanguagesAll,
+              hint: appL10n().tgSetupLanguagesAllHint,
+              selected: !selected,
+              autofocus: !selected,
+              preview: preview(Icons.public),
+              onPressed: () => setState(() => _hideForeign = false),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.spaceSm),
+        Text(
+          appL10n().tgSetupLanguagesLater,
+          style: TextStyle(
+            color: AppColorScheme.onSurface.withValues(alpha: 0.7),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildNavbarStep(AppLocalizations l10n) {
     // The bottom bar is only offered where the app can actually draw one, so
