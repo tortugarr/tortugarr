@@ -16258,4 +16258,871 @@ class AppLocalizationsPa extends AppLocalizations {
   @override
   String get tgSetupLanguagesLater =>
       'You can change this any time under Settings › Language.';
+
+  @override
+  String get tgDiagReportSent => 'Report sent to server';
+
+  @override
+  String tgDiagReportSentFile(String fileName) {
+    return 'Report sent to server: $fileName';
+  }
+
+  @override
+  String tgDiagSendFailed(String detail) {
+    return 'Could not send report: $detail';
+  }
+
+  @override
+  String get tgDiagLogsCopied => 'Logs copied to clipboard';
+
+  @override
+  String get tgDiagEntryCopied => 'Entry copied to clipboard';
+
+  @override
+  String get tgDiagLogsCleared => 'Logs cleared';
+
+  @override
+  String get tgDiagAllCategories => 'All categories';
+
+  @override
+  String get tgDiagnosticsLogging => 'Diagnostics & Logging';
+
+  @override
+  String get tgLogging => 'Logging';
+
+  @override
+  String get tgDiagLoggingTitle => 'Diagnostic Logging';
+
+  @override
+  String get tgDiagLoggingSubtitle =>
+      'Capture media, Seerr login, network and other diagnostics so they can be sent to the server as a report.';
+
+  @override
+  String get tgDiagCrashReports => 'Send Crash Reports to Server';
+
+  @override
+  String get tgDiagCrashReportsSubtitle =>
+      'Save a report when the app crashes and send it to your own server the next time it connects. Nothing is sent anywhere else.';
+
+  @override
+  String tgDiagReportsCount(int count) {
+    return 'Reports ($count entries captured)';
+  }
+
+  @override
+  String get tgDiagReports => 'Reports';
+
+  @override
+  String get tgDiagSendReport => 'Send report to server';
+
+  @override
+  String get tgDiagCopyAll => 'Copy all logs';
+
+  @override
+  String get tgDiagCopyAllSubtitle => 'Copy the full report to the clipboard.';
+
+  @override
+  String get tgDiagClearLogs => 'Clear captured logs';
+
+  @override
+  String get tgDiagClearLogsSubtitle =>
+      'Discard everything in the current buffer.';
+
+  @override
+  String get tgDiagRecentLogs => 'Recent logs';
+
+  @override
+  String tgDiagRecentLogsCount(int shown, int total) {
+    return 'Recent logs ($shown of $total)';
+  }
+
+  @override
+  String get tgFilter => 'Filter';
+
+  @override
+  String get tgDiagEnableFirst => 'Enable diagnostic logging first.';
+
+  @override
+  String get tgDiagNoEntriesYet => 'No entries captured yet.';
+
+  @override
+  String get tgDiagUploadSubtitle =>
+      'Upload the captured logs to the active server.';
+
+  @override
+  String tgDiagEmptyFiltered(String category, int total) {
+    return 'No $category entries. $total captured in other categories. Tap Filter to change.';
+  }
+
+  @override
+  String get tgDiagEmptyEnabled =>
+      'No log entries yet. Reproduce the issue, then send a report.';
+
+  @override
+  String get tgDiagEmptyOff =>
+      'Logging is off. Turn it on, reproduce the issue, then send a report to the server.';
+
+  @override
+  String get tgLogCatMedia => 'Media';
+
+  @override
+  String get tgLogCatSeerr => 'Seerr login';
+
+  @override
+  String get tgLogCatSync => 'Sync';
+
+  @override
+  String get tgLogCatArtwork => 'Artwork';
+
+  @override
+  String get tgCoreNotDownloaded => 'This core is not downloaded yet.';
+
+  @override
+  String get tgCoreSettingsUnreadable =>
+      'This core\'s settings cannot be read on this device. You can still reset them to defaults below.';
+
+  @override
+  String get tgCoreSettingsReadFailed =>
+      'Could not read this core\'s settings.';
+
+  @override
+  String get tgCoreSettingsSaveFailed => 'Could not save these settings.';
+
+  @override
+  String get tgCoreSettingsResetDone => 'Settings reset to defaults.';
+
+  @override
+  String get tgCoreSettingsResetFailed => 'Could not reset these settings.';
+
+  @override
+  String tgCoreSettingsTitle(String system) {
+    return '$system settings';
+  }
+
+  @override
+  String get tgCoreSettingsWarning =>
+      'These are the emulator core\'s own settings. Some combinations can stop a game from starting, or close the app while it runs. If something breaks, use Reset to defaults below.';
+
+  @override
+  String get tgAudioRedetect => 'Re-detect & apply recommended';
+
+  @override
+  String get tgAudioRedetectSubtitle =>
+      'Re-run audio detection and reset to the recommended settings.';
+
+  @override
+  String tgAudioRedetected(String route) {
+    return 'Audio re-detected: $route';
+  }
+
+  @override
+  String get tgAudioStream => 'Audio Stream';
+
+  @override
+  String get tgAudioOutput => 'Audio Output';
+
+  @override
+  String get tgPassthroughSettings => 'Passthrough Settings';
+
+  @override
+  String get tgAdvanced => 'Advanced';
+
+  @override
+  String get tgDecodingRendering => 'Decoding & Rendering';
+
+  @override
+  String get tgAboutDiagnosticsSubtitle =>
+      'Capture media, login and network logs and send them to the server as a report';
+
+  @override
+  String get tgRewatch => 'Rewatch';
+
+  @override
+  String get tgDisplayRewatchRow => 'Display Rewatch Row';
+
+  @override
+  String get tgDisplayRewatchRowSubtitle => 'Show Rewatch row in Home Sections';
+
+  @override
+  String get tgRewatchSortDescription =>
+      'Choose sorting method for completed items';
+
+  @override
+  String get tgIncludeMovies => 'Include Movies';
+
+  @override
+  String get tgRewatchIncludeMoviesSubtitle =>
+      'Show watched movies in the rewatch row';
+
+  @override
+  String get tgIncludeShows => 'Include Shows';
+
+  @override
+  String get tgRewatchIncludeShowsSubtitle =>
+      'Show watched TV shows in the rewatch row';
+
+  @override
+  String get tgIncludeCollections => 'Include Collections';
+
+  @override
+  String get tgRewatchIncludeCollectionsSubtitle =>
+      'Show watched collections in the rewatch row';
+
+  @override
+  String get tgSinceYouWatched => 'Since You Watched';
+
+  @override
+  String get tgDisplaySinceYouWatchedRows => 'Display Since You Watched Rows';
+
+  @override
+  String get tgDisplaySinceYouWatchedRowsSubtitle =>
+      'Show and customize Since You Watched rows in Home Sections.';
+
+  @override
+  String get tgRecommendationSource => 'Recommendation Source';
+
+  @override
+  String get tgRecommendationSourceDescription =>
+      'Choose recommendation source (Tortugarr Recommends custom local algorithm, Jellyfin Recommends server engine, or TMDb\'s similarity metrics. Note: Online recommendations require Seerr integration).';
+
+  @override
+  String get tgSourceType => 'Source Type';
+
+  @override
+  String get tgSourceTypeDescription => 'Choose type of items to recommend';
+
+  @override
+  String get tgSourceItem => 'Source Item';
+
+  @override
+  String get tgSourceItemDescription =>
+      'Choose which source item to base recommendations on';
+
+  @override
+  String get tgNumberOfRowsToAdd => 'Number of Rows to Add';
+
+  @override
+  String get tgNumberOfRowsToAddDescription =>
+      'Choose how many Since You Watched rows to display (1-5)';
+
+  @override
+  String get tgIncludePreviouslyWatched => 'Include Previously Watched';
+
+  @override
+  String get tgIncludePreviouslyWatchedSubtitle =>
+      'Include watched items in recommendations';
+
+  @override
+  String tgErrorLoadingStudios(String error) {
+    return 'Error loading studios: $error';
+  }
+
+  @override
+  String get tgNoStudiosFound => 'No studios found in library.';
+
+  @override
+  String get tgFavoriteMovies => 'Favorite Movies';
+
+  @override
+  String get tgFavoriteSeries => 'Favorite Series';
+
+  @override
+  String get tgFavoriteEpisodes => 'Favorite Episodes';
+
+  @override
+  String get tgFavoritePeople => 'Favorite People';
+
+  @override
+  String get tgFavoriteArtists => 'Favorite Artists';
+
+  @override
+  String get tgFavoriteMusicVideos => 'Favorite Music Videos';
+
+  @override
+  String get tgFavoriteAlbums => 'Favorite Albums';
+
+  @override
+  String get tgFavoriteSongs => 'Favorite Songs';
+
+  @override
+  String get tgRowUpcomingMoviesRadarr => 'Upcoming Movies (Radarr)';
+
+  @override
+  String get tgRowUpcomingTvSonarr => 'Upcoming TV Shows (Sonarr)';
+
+  @override
+  String get tgRowTopRatedMovies => 'Top Rated Movies';
+
+  @override
+  String get tgRowNowPlayingMovies => 'Now Playing Movies';
+
+  @override
+  String get tgRowPopularTv => 'Popular TV';
+
+  @override
+  String get tgRowTopRatedTv => 'Top Rated TV';
+
+  @override
+  String get tgRowAiringTodayTv => 'Airing Today TV';
+
+  @override
+  String get tgRowOnTheAirTv => 'On The Air TV';
+
+  @override
+  String get tgRowTrendingMoviesDaily => 'Trending Movies (Daily)';
+
+  @override
+  String get tgRowTrendingMoviesWeekly => 'Trending Movies (Weekly)';
+
+  @override
+  String get tgRowTrendingTvDaily => 'Trending TV (Daily)';
+
+  @override
+  String get tgRowTrendingTvWeekly => 'Trending TV (Weekly)';
+
+  @override
+  String get tgRowTrendingAllWeekly => 'Trending All (Weekly)';
+
+  @override
+  String tgRowSinceYouWatchedNumber(int number) {
+    return 'Since You Watched Row $number';
+  }
+
+  @override
+  String get tgRowSinceYouWatched => 'Since you watched';
+
+  @override
+  String get tgRowUpcomingReleases => 'Upcoming Releases';
+
+  @override
+  String get tgReleaseCinema => 'Cinema';
+
+  @override
+  String get tgReleaseDigital => 'Digital';
+
+  @override
+  String get tgReleasePhysical => 'Physical';
+
+  @override
+  String tgReleaseOnDate(String type, String date) {
+    return '$type: $date';
+  }
+
+  @override
+  String tgNextEpisodeDateCode(String date, String code) {
+    return 'Next Episode: $date ($code)';
+  }
+
+  @override
+  String tgNextEpisodeDate(String date) {
+    return 'Next Episode: $date';
+  }
+
+  @override
+  String tgNextEpisodeCode(String code) {
+    return 'Next Episode: ($code)';
+  }
+
+  @override
+  String get tgAudioRow => 'Audio row';
+
+  @override
+  String get tgImdbList => 'IMDb List';
+
+  @override
+  String get tgTmdbLists => 'TMDB Lists';
+
+  @override
+  String tgCollectionsRowFrom(String server) {
+    return 'Collections row from $server';
+  }
+
+  @override
+  String get tgCollectionsRow => 'Collections row';
+
+  @override
+  String get tgGenresRow => 'Genres row';
+
+  @override
+  String get tgPlaylistsRow => 'Playlists row';
+
+  @override
+  String get tgCustomList => 'Custom List';
+
+  @override
+  String get tgWatchlistLabel => 'Watchlist';
+
+  @override
+  String get tgFilms => 'Films';
+
+  @override
+  String get tgAwardsEvents => 'Awards/Events';
+
+  @override
+  String get tgMovieCollectionTitle => 'Movie Collection';
+
+  @override
+  String tgFetchingList(String title) {
+    return 'Fetching $title';
+  }
+
+  @override
+  String get tgDownloadingFromMoonbase =>
+      'Downloading list from Moonbase and saving locally...';
+
+  @override
+  String tgFetchFromMoonbaseFailed(String title, String error) {
+    return 'Failed to fetch $title from Moonbase: $error';
+  }
+
+  @override
+  String get tgUpcomingCalendars => 'Upcoming Calendars';
+
+  @override
+  String get tgEnableRadarrCalendar => 'Enable Radarr\'s Upcoming Calendar';
+
+  @override
+  String get tgShowCinemaReleases => 'Show Upcoming Cinema Releases';
+
+  @override
+  String get tgShowDigitalReleases => 'Show Upcoming Digital Releases';
+
+  @override
+  String get tgShowPhysicalReleases => 'Show Upcoming Physical Releases';
+
+  @override
+  String get tgShowReleaseDateOnHome => 'Show Release Date on Home Screen';
+
+  @override
+  String get tgEnableSonarrCalendar => 'Enable Sonarr\'s Upcoming Calendar';
+
+  @override
+  String get tgDisplayEpisodeInfo => 'Display Episode Information';
+
+  @override
+  String get tgMergeCalendars => 'Merge Sonarr and Radarr Calendars';
+
+  @override
+  String get tgSeerrRows => 'Seerr Rows';
+
+  @override
+  String get tgSeerrHomePageRows => 'Seerr Home Page Rows';
+
+  @override
+  String get tgDeleteCustomRow => 'Delete Custom Row';
+
+  @override
+  String tgDeleteCustomRowConfirm(String name) {
+    return 'Are you sure you want to delete \"$name\"?';
+  }
+
+  @override
+  String get tgListLabel => 'List';
+
+  @override
+  String get tgListFromUserId => 'List from User ID';
+
+  @override
+  String get tgListFromUrl => 'List from URL';
+
+  @override
+  String get tgDiary => 'Diary';
+
+  @override
+  String get tgCompleteFilms => 'Complete Films';
+
+  @override
+  String get tgListFromTmdbIdOrUrl => 'List from TMDB List ID or URL';
+
+  @override
+  String get tgCollectionFromTmdbIdOrUrl =>
+      'Collection from TMDB Collection ID or URL';
+
+  @override
+  String get tgCustomRows => 'Custom Rows';
+
+  @override
+  String get tgAddNewCustomHomeRow => 'Add a New Custom Home Row';
+
+  @override
+  String get tgAddCustomRowSubtitle =>
+      'Create a custom row from TMDB, Letterboxd, or MDBList.';
+
+  @override
+  String get tgSavedCustomHomeRows => 'Saved Custom Home Rows';
+
+  @override
+  String get tgCustomRow => 'Custom Row';
+
+  @override
+  String tgCustomRowSourceType(String source, String type) {
+    return 'Source: $source | Type: $type';
+  }
+
+  @override
+  String get tgDiscardChanges => 'Discard Changes?';
+
+  @override
+  String get tgDiscardChangesWizard =>
+      'Unsaved changes, do you want to exit the wizard?';
+
+  @override
+  String get tgCustomRowValidationFailed =>
+      'Warning: Custom Row Validation Failed';
+
+  @override
+  String get tgCustomRowFetchFailed =>
+      'Failed to fetch items from the custom row.';
+
+  @override
+  String tgErrorDetails(String error) {
+    return 'Error details: $error';
+  }
+
+  @override
+  String get tgEditCustomHomeRow => 'Edit Custom Home Row';
+
+  @override
+  String get tgAddCustomHomeRow => 'Add Custom Home Row';
+
+  @override
+  String get tgSourceLabel => 'Source';
+
+  @override
+  String get tgLetterboxdUsername => 'Letterboxd Username';
+
+  @override
+  String get tgLetterboxdTmdbWarning =>
+      'WARNING: TMDB API Key must be configured in settings to resolve Letterboxd list items.';
+
+  @override
+  String get tgTmdbCollectionIdOrUrl => 'TMDB Collection ID or URL';
+
+  @override
+  String get tgTmdbListIdOrUrl => 'TMDB List ID or URL';
+
+  @override
+  String get tgTmdbCollectionHint =>
+      '12345 OR https://www.themoviedb.org/collection/12345';
+
+  @override
+  String get tgTmdbListHint => '12345 OR https://www.themoviedb.org/list/12345';
+
+  @override
+  String get tgTmdbApiKeyWarning =>
+      'WARNING: TMDB API Key must be configured in settings to fetch TMDB lists.';
+
+  @override
+  String get tgMdblistUsername => 'MDBList Username';
+
+  @override
+  String get tgMdblistUrlHint =>
+      'e.g. https://mdblist.com/lists/username/list-slug';
+
+  @override
+  String get tgListNameSlug => 'List Name (slug)';
+
+  @override
+  String get tgMdblistApiKeyWarning =>
+      'WARNING: MDBList API Key must be configured in settings (or server-wide by your admin) to fetch MDBList lists.';
+
+  @override
+  String get tgSortOrder => 'Sort Order';
+
+  @override
+  String get tgSortDefaultWhenAdded => 'Default (When Added)';
+
+  @override
+  String get tgSortFilmName => 'Film Name';
+
+  @override
+  String get tgSortFilmPopularity => 'Film Popularity';
+
+  @override
+  String get tgSortAverageRating => 'Average Rating';
+
+  @override
+  String get tgAToZ => 'A to Z';
+
+  @override
+  String get tgZToA => 'Z to A';
+
+  @override
+  String get tgNewestFirst => 'Newest First';
+
+  @override
+  String get tgEarliestFirst => 'Earliest First';
+
+  @override
+  String get tgMostPopularFirst => 'Most Popular First';
+
+  @override
+  String get tgLeastPopularFirst => 'Least Popular First';
+
+  @override
+  String get tgHighestFirst => 'Highest First';
+
+  @override
+  String get tgLowestFirst => 'Lowest First';
+
+  @override
+  String get tgShowUserRatings => 'Show User Ratings?';
+
+  @override
+  String get tgHomeRowCustomName => 'Home Row Custom Name';
+
+  @override
+  String get tgEnterRowName => 'Enter row name...';
+
+  @override
+  String get tgRefreshingCustomRows => 'Refreshing Custom Rows';
+
+  @override
+  String get tgRefreshingCustomRowsBody =>
+      'Refreshing your custom rows and updating their caches...';
+
+  @override
+  String get tgRefreshedCustomRows => 'Refreshed your custom rows.';
+
+  @override
+  String tgRefreshCustomRowsFailed(String error) {
+    return 'Failed to refresh custom rows: $error';
+  }
+
+  @override
+  String get tgImdbLists => 'IMDb Lists';
+
+  @override
+  String get tgImdbListsSubtitle =>
+      'Configure IMDb Top 250, Popular, and other charts.';
+
+  @override
+  String get tgTmdbListsSubtitle =>
+      'Configure Popular, Top Rated, and Trending TMDB lists.';
+
+  @override
+  String get tgTmdbApiKeyRequired =>
+      'TMDB API key must be configured in Moonbase settings to use this feature.';
+
+  @override
+  String get tgUpcomingCalendarsSubtitle =>
+      'Toggle Upcoming Calendars from Radarr/Sonarr.';
+
+  @override
+  String get tgSeerrRowsSubtitle => 'Configure Seerr Discovery Rows.';
+
+  @override
+  String get tgCustomRowsSubtitle =>
+      'ADVANCED: Configure customized home rows from a variety of sources.';
+
+  @override
+  String get tgMediaTypeBadges => 'Media type badges';
+
+  @override
+  String get tgMediaTypeBadgesDescription =>
+      'Show MOVIE / SERIES labels on external home-row cards';
+
+  @override
+  String get tgRefreshCustomRows => 'Refresh Custom Rows';
+
+  @override
+  String get tgRefreshCustomRowsSubtitle =>
+      'Force a full update of the custom row caches.';
+
+  @override
+  String get tgStillWatchingDescription =>
+      'Prompt to Continue Watching after X consecutive episodes.';
+
+  @override
+  String tgEpisodeCount(int count) {
+    return '$count episodes';
+  }
+
+  @override
+  String get tgSyncPlayOptions => 'SyncPlay Options';
+
+  @override
+  String get tgActiveSessions => 'Active Sessions';
+
+  @override
+  String get tgOpenInExternalPlayer => 'Open in External Player';
+
+  @override
+  String get tgTranscodeHigh => 'Transcode Stream: High Quality (1080p)';
+
+  @override
+  String get tgTranscodeMedium => 'Transcode Stream: Medium Quality (720p)';
+
+  @override
+  String get tgTranscodeLow => 'Transcode Stream: Low Quality (480p)';
+
+  @override
+  String get tgAdvancedPlayback => 'Advanced Playback';
+
+  @override
+  String get tgDownloadNow => 'Download Now';
+
+  @override
+  String tgNotFoundOnDownloadService(String title) {
+    return 'Could not find \"$title\" on the download service';
+  }
+
+  @override
+  String get tgSearchingReleases => 'Searching releases…';
+
+  @override
+  String tgSendingToDownloadClient(String title) {
+    return 'Sending \"$title\" to the download client…';
+  }
+
+  @override
+  String tgSentToQbittorrent(String title, String size) {
+    return 'Sent \"$title\" ($size) to qBittorrent';
+  }
+
+  @override
+  String tgNoTvdbIdForTitle(String title) {
+    return '\"$title\" has no TVDB id, so it cannot be downloaded here';
+  }
+
+  @override
+  String get tgWorking => 'Working…';
+
+  @override
+  String tgDownloadingTitle(String title, String size) {
+    return 'Downloading \"$title\" ($size)';
+  }
+
+  @override
+  String tgCountTooEarly(int count) {
+    return '$count too early';
+  }
+
+  @override
+  String get tgNoReleasesFound => 'No releases found';
+
+  @override
+  String get tgPluginNotAdmin =>
+      'Only administrators can download on this server';
+
+  @override
+  String get tgPluginFeatureOff => 'Downloads are switched off on this server';
+
+  @override
+  String get tgPluginNotConfigured =>
+      'The server is not set up for downloads yet';
+
+  @override
+  String get tgPluginSearchExpired => 'The search is too old, search again';
+
+  @override
+  String get tgPluginTimeout => 'The search took too long, try again';
+
+  @override
+  String tgPluginNoIndexers(String detail) {
+    return 'No search sources are active on the server$detail. Check your indexers in Prowlarr. Does an indexer\'s test fail with a Cloudflare error (1337x and others)? Type flaresolverr under Tags at the bottom of its settings and test again.';
+  }
+
+  @override
+  String get tgAlreadyDownloaded =>
+      'Already downloaded: the download client has this file already';
+
+  @override
+  String tgAlreadyDownloadingPercent(int percent) {
+    return 'Already downloading ($percent %)';
+  }
+
+  @override
+  String get tgNoReasonGiven => 'No reason given';
+
+  @override
+  String get tgDownloadAnywayQuestion => 'Download anyway?';
+
+  @override
+  String tgServerWouldNotPick(String reasons) {
+    return 'The server would not pick this file by itself:\n$reasons';
+  }
+
+  @override
+  String get tgNoReleasesOnProwlarr => 'No releases found on Prowlarr';
+
+  @override
+  String tgChooseFileResults(int count) {
+    return 'Choose file ($count results)';
+  }
+
+  @override
+  String tgChooseFileResultsNote(int count, String note) {
+    return 'Choose file ($count results) · $note';
+  }
+
+  @override
+  String get tgSdLowQuality => 'SD · low quality';
+
+  @override
+  String tgSeedersCount(int count) {
+    return '$count seeders';
+  }
+
+  @override
+  String get tgTierAll => 'all';
+
+  @override
+  String get tgTierOther => 'other';
+
+  @override
+  String tgSearchingReleasesElapsed(String elapsed) {
+    return 'Searching releases… $elapsed';
+  }
+
+  @override
+  String get tgSearchSlowIndexerNote =>
+      'The server asks every indexer. A slow one (for example behind Cloudflare) can make this take a few minutes.';
+
+  @override
+  String tgSeerrActiveCount(int count) {
+    return 'Seerr · $count active';
+  }
+
+  @override
+  String get tgRefreshJellyfinLibrary => 'Refresh Jellyfin library';
+
+  @override
+  String tgMoreCount(int count) {
+    return '+ $count more';
+  }
+
+  @override
+  String tgSortLabel(String value) {
+    return 'Sort: $value';
+  }
+
+  @override
+  String tgFilterLabel(String value) {
+    return 'Filter: $value';
+  }
+
+  @override
+  String tgCountOfTotal(int count, int total) {
+    return '$count of $total';
+  }
+
+  @override
+  String get tgEndOfTrack => 'End of track';
+
+  @override
+  String get tgSaveQueueAsPlaylist => 'Save queue as playlist';
+
+  @override
+  String tgSavedName(String name) {
+    return 'Saved \"$name\"';
+  }
+
+  @override
+  String tgSavePlaylistFailed(String error) {
+    return 'Could not save playlist: $error';
+  }
+
+  @override
+  String get tgMyPlaylist => 'My Playlist';
 }

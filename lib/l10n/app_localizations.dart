@@ -28264,6 +28264,1488 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can change this any time under Settings › Language.'**
   String get tgSetupLanguagesLater;
+
+  /// No description provided for @tgDiagReportSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sent to server'**
+  String get tgDiagReportSent;
+
+  /// No description provided for @tgDiagReportSentFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sent to server: {fileName}'**
+  String tgDiagReportSentFile(String fileName);
+
+  /// No description provided for @tgDiagSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send report: {detail}'**
+  String tgDiagSendFailed(String detail);
+
+  /// No description provided for @tgDiagLogsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs copied to clipboard'**
+  String get tgDiagLogsCopied;
+
+  /// No description provided for @tgDiagEntryCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry copied to clipboard'**
+  String get tgDiagEntryCopied;
+
+  /// No description provided for @tgDiagLogsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs cleared'**
+  String get tgDiagLogsCleared;
+
+  /// No description provided for @tgDiagAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get tgDiagAllCategories;
+
+  /// No description provided for @tgDiagnosticsLogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics & Logging'**
+  String get tgDiagnosticsLogging;
+
+  /// No description provided for @tgLogging.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging'**
+  String get tgLogging;
+
+  /// No description provided for @tgDiagLoggingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic Logging'**
+  String get tgDiagLoggingTitle;
+
+  /// No description provided for @tgDiagLoggingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture media, Seerr login, network and other diagnostics so they can be sent to the server as a report.'**
+  String get tgDiagLoggingSubtitle;
+
+  /// No description provided for @tgDiagCrashReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Crash Reports to Server'**
+  String get tgDiagCrashReports;
+
+  /// No description provided for @tgDiagCrashReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a report when the app crashes and send it to your own server the next time it connects. Nothing is sent anywhere else.'**
+  String get tgDiagCrashReportsSubtitle;
+
+  /// No description provided for @tgDiagReportsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports ({count} entries captured)'**
+  String tgDiagReportsCount(int count);
+
+  /// No description provided for @tgDiagReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get tgDiagReports;
+
+  /// No description provided for @tgDiagSendReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report to server'**
+  String get tgDiagSendReport;
+
+  /// No description provided for @tgDiagCopyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy all logs'**
+  String get tgDiagCopyAll;
+
+  /// No description provided for @tgDiagCopyAllSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the full report to the clipboard.'**
+  String get tgDiagCopyAllSubtitle;
+
+  /// No description provided for @tgDiagClearLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear captured logs'**
+  String get tgDiagClearLogs;
+
+  /// No description provided for @tgDiagClearLogsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard everything in the current buffer.'**
+  String get tgDiagClearLogsSubtitle;
+
+  /// No description provided for @tgDiagRecentLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent logs'**
+  String get tgDiagRecentLogs;
+
+  /// No description provided for @tgDiagRecentLogsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent logs ({shown} of {total})'**
+  String tgDiagRecentLogsCount(int shown, int total);
+
+  /// No description provided for @tgFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get tgFilter;
+
+  /// No description provided for @tgDiagEnableFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable diagnostic logging first.'**
+  String get tgDiagEnableFirst;
+
+  /// No description provided for @tgDiagNoEntriesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No entries captured yet.'**
+  String get tgDiagNoEntriesYet;
+
+  /// No description provided for @tgDiagUploadSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload the captured logs to the active server.'**
+  String get tgDiagUploadSubtitle;
+
+  /// No description provided for @tgDiagEmptyFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'No {category} entries. {total} captured in other categories. Tap Filter to change.'**
+  String tgDiagEmptyFiltered(String category, int total);
+
+  /// No description provided for @tgDiagEmptyEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'No log entries yet. Reproduce the issue, then send a report.'**
+  String get tgDiagEmptyEnabled;
+
+  /// No description provided for @tgDiagEmptyOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging is off. Turn it on, reproduce the issue, then send a report to the server.'**
+  String get tgDiagEmptyOff;
+
+  /// No description provided for @tgLogCatMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Media'**
+  String get tgLogCatMedia;
+
+  /// No description provided for @tgLogCatSeerr.
+  ///
+  /// In en, this message translates to:
+  /// **'Seerr login'**
+  String get tgLogCatSeerr;
+
+  /// No description provided for @tgLogCatSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get tgLogCatSync;
+
+  /// No description provided for @tgLogCatArtwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Artwork'**
+  String get tgLogCatArtwork;
+
+  /// No description provided for @tgCoreNotDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'This core is not downloaded yet.'**
+  String get tgCoreNotDownloaded;
+
+  /// No description provided for @tgCoreSettingsUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'This core\'s settings cannot be read on this device. You can still reset them to defaults below.'**
+  String get tgCoreSettingsUnreadable;
+
+  /// No description provided for @tgCoreSettingsReadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this core\'s settings.'**
+  String get tgCoreSettingsReadFailed;
+
+  /// No description provided for @tgCoreSettingsSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save these settings.'**
+  String get tgCoreSettingsSaveFailed;
+
+  /// No description provided for @tgCoreSettingsResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings reset to defaults.'**
+  String get tgCoreSettingsResetDone;
+
+  /// No description provided for @tgCoreSettingsResetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reset these settings.'**
+  String get tgCoreSettingsResetFailed;
+
+  /// No description provided for @tgCoreSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{system} settings'**
+  String tgCoreSettingsTitle(String system);
+
+  /// No description provided for @tgCoreSettingsWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'These are the emulator core\'s own settings. Some combinations can stop a game from starting, or close the app while it runs. If something breaks, use Reset to defaults below.'**
+  String get tgCoreSettingsWarning;
+
+  /// No description provided for @tgAudioRedetect.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-detect & apply recommended'**
+  String get tgAudioRedetect;
+
+  /// No description provided for @tgAudioRedetectSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-run audio detection and reset to the recommended settings.'**
+  String get tgAudioRedetectSubtitle;
+
+  /// No description provided for @tgAudioRedetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio re-detected: {route}'**
+  String tgAudioRedetected(String route);
+
+  /// No description provided for @tgAudioStream.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Stream'**
+  String get tgAudioStream;
+
+  /// No description provided for @tgAudioOutput.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Output'**
+  String get tgAudioOutput;
+
+  /// No description provided for @tgPassthroughSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Passthrough Settings'**
+  String get tgPassthroughSettings;
+
+  /// No description provided for @tgAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get tgAdvanced;
+
+  /// No description provided for @tgDecodingRendering.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoding & Rendering'**
+  String get tgDecodingRendering;
+
+  /// No description provided for @tgAboutDiagnosticsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture media, login and network logs and send them to the server as a report'**
+  String get tgAboutDiagnosticsSubtitle;
+
+  /// No description provided for @tgRewatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewatch'**
+  String get tgRewatch;
+
+  /// No description provided for @tgDisplayRewatchRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Rewatch Row'**
+  String get tgDisplayRewatchRow;
+
+  /// No description provided for @tgDisplayRewatchRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Rewatch row in Home Sections'**
+  String get tgDisplayRewatchRowSubtitle;
+
+  /// No description provided for @tgRewatchSortDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose sorting method for completed items'**
+  String get tgRewatchSortDescription;
+
+  /// No description provided for @tgIncludeMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Movies'**
+  String get tgIncludeMovies;
+
+  /// No description provided for @tgRewatchIncludeMoviesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show watched movies in the rewatch row'**
+  String get tgRewatchIncludeMoviesSubtitle;
+
+  /// No description provided for @tgIncludeShows.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Shows'**
+  String get tgIncludeShows;
+
+  /// No description provided for @tgRewatchIncludeShowsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show watched TV shows in the rewatch row'**
+  String get tgRewatchIncludeShowsSubtitle;
+
+  /// No description provided for @tgIncludeCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Collections'**
+  String get tgIncludeCollections;
+
+  /// No description provided for @tgRewatchIncludeCollectionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show watched collections in the rewatch row'**
+  String get tgRewatchIncludeCollectionsSubtitle;
+
+  /// No description provided for @tgSinceYouWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Since You Watched'**
+  String get tgSinceYouWatched;
+
+  /// No description provided for @tgDisplaySinceYouWatchedRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Since You Watched Rows'**
+  String get tgDisplaySinceYouWatchedRows;
+
+  /// No description provided for @tgDisplaySinceYouWatchedRowsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show and customize Since You Watched rows in Home Sections.'**
+  String get tgDisplaySinceYouWatchedRowsSubtitle;
+
+  /// No description provided for @tgRecommendationSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation Source'**
+  String get tgRecommendationSource;
+
+  /// No description provided for @tgRecommendationSourceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose recommendation source (Tortugarr Recommends custom local algorithm, Jellyfin Recommends server engine, or TMDb\'s similarity metrics. Note: Online recommendations require Seerr integration).'**
+  String get tgRecommendationSourceDescription;
+
+  /// No description provided for @tgSourceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Type'**
+  String get tgSourceType;
+
+  /// No description provided for @tgSourceTypeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose type of items to recommend'**
+  String get tgSourceTypeDescription;
+
+  /// No description provided for @tgSourceItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Item'**
+  String get tgSourceItem;
+
+  /// No description provided for @tgSourceItemDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which source item to base recommendations on'**
+  String get tgSourceItemDescription;
+
+  /// No description provided for @tgNumberOfRowsToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Rows to Add'**
+  String get tgNumberOfRowsToAdd;
+
+  /// No description provided for @tgNumberOfRowsToAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how many Since You Watched rows to display (1-5)'**
+  String get tgNumberOfRowsToAddDescription;
+
+  /// No description provided for @tgIncludePreviouslyWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Previously Watched'**
+  String get tgIncludePreviouslyWatched;
+
+  /// No description provided for @tgIncludePreviouslyWatchedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include watched items in recommendations'**
+  String get tgIncludePreviouslyWatchedSubtitle;
+
+  /// No description provided for @tgErrorLoadingStudios.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading studios: {error}'**
+  String tgErrorLoadingStudios(String error);
+
+  /// No description provided for @tgNoStudiosFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No studios found in library.'**
+  String get tgNoStudiosFound;
+
+  /// No description provided for @tgFavoriteMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Movies'**
+  String get tgFavoriteMovies;
+
+  /// No description provided for @tgFavoriteSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Series'**
+  String get tgFavoriteSeries;
+
+  /// No description provided for @tgFavoriteEpisodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Episodes'**
+  String get tgFavoriteEpisodes;
+
+  /// No description provided for @tgFavoritePeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite People'**
+  String get tgFavoritePeople;
+
+  /// No description provided for @tgFavoriteArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Artists'**
+  String get tgFavoriteArtists;
+
+  /// No description provided for @tgFavoriteMusicVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Music Videos'**
+  String get tgFavoriteMusicVideos;
+
+  /// No description provided for @tgFavoriteAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Albums'**
+  String get tgFavoriteAlbums;
+
+  /// No description provided for @tgFavoriteSongs.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Songs'**
+  String get tgFavoriteSongs;
+
+  /// No description provided for @tgRowUpcomingMoviesRadarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Movies (Radarr)'**
+  String get tgRowUpcomingMoviesRadarr;
+
+  /// No description provided for @tgRowUpcomingTvSonarr.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming TV Shows (Sonarr)'**
+  String get tgRowUpcomingTvSonarr;
+
+  /// No description provided for @tgRowTopRatedMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated Movies'**
+  String get tgRowTopRatedMovies;
+
+  /// No description provided for @tgRowNowPlayingMovies.
+  ///
+  /// In en, this message translates to:
+  /// **'Now Playing Movies'**
+  String get tgRowNowPlayingMovies;
+
+  /// No description provided for @tgRowPopularTv.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular TV'**
+  String get tgRowPopularTv;
+
+  /// No description provided for @tgRowTopRatedTv.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Rated TV'**
+  String get tgRowTopRatedTv;
+
+  /// No description provided for @tgRowAiringTodayTv.
+  ///
+  /// In en, this message translates to:
+  /// **'Airing Today TV'**
+  String get tgRowAiringTodayTv;
+
+  /// No description provided for @tgRowOnTheAirTv.
+  ///
+  /// In en, this message translates to:
+  /// **'On The Air TV'**
+  String get tgRowOnTheAirTv;
+
+  /// No description provided for @tgRowTrendingMoviesDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending Movies (Daily)'**
+  String get tgRowTrendingMoviesDaily;
+
+  /// No description provided for @tgRowTrendingMoviesWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending Movies (Weekly)'**
+  String get tgRowTrendingMoviesWeekly;
+
+  /// No description provided for @tgRowTrendingTvDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending TV (Daily)'**
+  String get tgRowTrendingTvDaily;
+
+  /// No description provided for @tgRowTrendingTvWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending TV (Weekly)'**
+  String get tgRowTrendingTvWeekly;
+
+  /// No description provided for @tgRowTrendingAllWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending All (Weekly)'**
+  String get tgRowTrendingAllWeekly;
+
+  /// No description provided for @tgRowSinceYouWatchedNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Since You Watched Row {number}'**
+  String tgRowSinceYouWatchedNumber(int number);
+
+  /// No description provided for @tgRowSinceYouWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Since you watched'**
+  String get tgRowSinceYouWatched;
+
+  /// No description provided for @tgRowUpcomingReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Releases'**
+  String get tgRowUpcomingReleases;
+
+  /// No description provided for @tgReleaseCinema.
+  ///
+  /// In en, this message translates to:
+  /// **'Cinema'**
+  String get tgReleaseCinema;
+
+  /// No description provided for @tgReleaseDigital.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital'**
+  String get tgReleaseDigital;
+
+  /// No description provided for @tgReleasePhysical.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical'**
+  String get tgReleasePhysical;
+
+  /// No description provided for @tgReleaseOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'{type}: {date}'**
+  String tgReleaseOnDate(String type, String date);
+
+  /// No description provided for @tgNextEpisodeDateCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Episode: {date} ({code})'**
+  String tgNextEpisodeDateCode(String date, String code);
+
+  /// No description provided for @tgNextEpisodeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Episode: {date}'**
+  String tgNextEpisodeDate(String date);
+
+  /// No description provided for @tgNextEpisodeCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Episode: ({code})'**
+  String tgNextEpisodeCode(String code);
+
+  /// No description provided for @tgAudioRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio row'**
+  String get tgAudioRow;
+
+  /// No description provided for @tgImdbList.
+  ///
+  /// In en, this message translates to:
+  /// **'IMDb List'**
+  String get tgImdbList;
+
+  /// No description provided for @tgTmdbLists.
+  ///
+  /// In en, this message translates to:
+  /// **'TMDB Lists'**
+  String get tgTmdbLists;
+
+  /// No description provided for @tgCollectionsRowFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Collections row from {server}'**
+  String tgCollectionsRowFrom(String server);
+
+  /// No description provided for @tgCollectionsRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Collections row'**
+  String get tgCollectionsRow;
+
+  /// No description provided for @tgGenresRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Genres row'**
+  String get tgGenresRow;
+
+  /// No description provided for @tgPlaylistsRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlists row'**
+  String get tgPlaylistsRow;
+
+  /// No description provided for @tgCustomList.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom List'**
+  String get tgCustomList;
+
+  /// No description provided for @tgWatchlistLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Watchlist'**
+  String get tgWatchlistLabel;
+
+  /// No description provided for @tgFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'Films'**
+  String get tgFilms;
+
+  /// No description provided for @tgAwardsEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Awards/Events'**
+  String get tgAwardsEvents;
+
+  /// No description provided for @tgMovieCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie Collection'**
+  String get tgMovieCollectionTitle;
+
+  /// No description provided for @tgFetchingList.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching {title}'**
+  String tgFetchingList(String title);
+
+  /// No description provided for @tgDownloadingFromMoonbase.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading list from Moonbase and saving locally...'**
+  String get tgDownloadingFromMoonbase;
+
+  /// No description provided for @tgFetchFromMoonbaseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch {title} from Moonbase: {error}'**
+  String tgFetchFromMoonbaseFailed(String title, String error);
+
+  /// No description provided for @tgUpcomingCalendars.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Calendars'**
+  String get tgUpcomingCalendars;
+
+  /// No description provided for @tgEnableRadarrCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Radarr\'s Upcoming Calendar'**
+  String get tgEnableRadarrCalendar;
+
+  /// No description provided for @tgShowCinemaReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Upcoming Cinema Releases'**
+  String get tgShowCinemaReleases;
+
+  /// No description provided for @tgShowDigitalReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Upcoming Digital Releases'**
+  String get tgShowDigitalReleases;
+
+  /// No description provided for @tgShowPhysicalReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Upcoming Physical Releases'**
+  String get tgShowPhysicalReleases;
+
+  /// No description provided for @tgShowReleaseDateOnHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Release Date on Home Screen'**
+  String get tgShowReleaseDateOnHome;
+
+  /// No description provided for @tgEnableSonarrCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Sonarr\'s Upcoming Calendar'**
+  String get tgEnableSonarrCalendar;
+
+  /// No description provided for @tgDisplayEpisodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Episode Information'**
+  String get tgDisplayEpisodeInfo;
+
+  /// No description provided for @tgMergeCalendars.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge Sonarr and Radarr Calendars'**
+  String get tgMergeCalendars;
+
+  /// No description provided for @tgSeerrRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Seerr Rows'**
+  String get tgSeerrRows;
+
+  /// No description provided for @tgSeerrHomePageRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Seerr Home Page Rows'**
+  String get tgSeerrHomePageRows;
+
+  /// No description provided for @tgDeleteCustomRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Custom Row'**
+  String get tgDeleteCustomRow;
+
+  /// No description provided for @tgDeleteCustomRowConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{name}\"?'**
+  String tgDeleteCustomRowConfirm(String name);
+
+  /// No description provided for @tgListLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get tgListLabel;
+
+  /// No description provided for @tgListFromUserId.
+  ///
+  /// In en, this message translates to:
+  /// **'List from User ID'**
+  String get tgListFromUserId;
+
+  /// No description provided for @tgListFromUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'List from URL'**
+  String get tgListFromUrl;
+
+  /// No description provided for @tgDiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Diary'**
+  String get tgDiary;
+
+  /// No description provided for @tgCompleteFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Films'**
+  String get tgCompleteFilms;
+
+  /// No description provided for @tgListFromTmdbIdOrUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'List from TMDB List ID or URL'**
+  String get tgListFromTmdbIdOrUrl;
+
+  /// No description provided for @tgCollectionFromTmdbIdOrUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection from TMDB Collection ID or URL'**
+  String get tgCollectionFromTmdbIdOrUrl;
+
+  /// No description provided for @tgCustomRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Rows'**
+  String get tgCustomRows;
+
+  /// No description provided for @tgAddNewCustomHomeRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a New Custom Home Row'**
+  String get tgAddNewCustomHomeRow;
+
+  /// No description provided for @tgAddCustomRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a custom row from TMDB, Letterboxd, or MDBList.'**
+  String get tgAddCustomRowSubtitle;
+
+  /// No description provided for @tgSavedCustomHomeRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Custom Home Rows'**
+  String get tgSavedCustomHomeRows;
+
+  /// No description provided for @tgCustomRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Row'**
+  String get tgCustomRow;
+
+  /// No description provided for @tgCustomRowSourceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {source} | Type: {type}'**
+  String tgCustomRowSourceType(String source, String type);
+
+  /// No description provided for @tgDiscardChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard Changes?'**
+  String get tgDiscardChanges;
+
+  /// No description provided for @tgDiscardChangesWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved changes, do you want to exit the wizard?'**
+  String get tgDiscardChangesWizard;
+
+  /// No description provided for @tgCustomRowValidationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: Custom Row Validation Failed'**
+  String get tgCustomRowValidationFailed;
+
+  /// No description provided for @tgCustomRowFetchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch items from the custom row.'**
+  String get tgCustomRowFetchFailed;
+
+  /// No description provided for @tgErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Error details: {error}'**
+  String tgErrorDetails(String error);
+
+  /// No description provided for @tgEditCustomHomeRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Custom Home Row'**
+  String get tgEditCustomHomeRow;
+
+  /// No description provided for @tgAddCustomHomeRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Home Row'**
+  String get tgAddCustomHomeRow;
+
+  /// No description provided for @tgSourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get tgSourceLabel;
+
+  /// No description provided for @tgLetterboxdUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Letterboxd Username'**
+  String get tgLetterboxdUsername;
+
+  /// No description provided for @tgLetterboxdTmdbWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'WARNING: TMDB API Key must be configured in settings to resolve Letterboxd list items.'**
+  String get tgLetterboxdTmdbWarning;
+
+  /// No description provided for @tgTmdbCollectionIdOrUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'TMDB Collection ID or URL'**
+  String get tgTmdbCollectionIdOrUrl;
+
+  /// No description provided for @tgTmdbListIdOrUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'TMDB List ID or URL'**
+  String get tgTmdbListIdOrUrl;
+
+  /// No description provided for @tgTmdbCollectionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'12345 OR https://www.themoviedb.org/collection/12345'**
+  String get tgTmdbCollectionHint;
+
+  /// No description provided for @tgTmdbListHint.
+  ///
+  /// In en, this message translates to:
+  /// **'12345 OR https://www.themoviedb.org/list/12345'**
+  String get tgTmdbListHint;
+
+  /// No description provided for @tgTmdbApiKeyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'WARNING: TMDB API Key must be configured in settings to fetch TMDB lists.'**
+  String get tgTmdbApiKeyWarning;
+
+  /// No description provided for @tgMdblistUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'MDBList Username'**
+  String get tgMdblistUsername;
+
+  /// No description provided for @tgMdblistUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. https://mdblist.com/lists/username/list-slug'**
+  String get tgMdblistUrlHint;
+
+  /// No description provided for @tgListNameSlug.
+  ///
+  /// In en, this message translates to:
+  /// **'List Name (slug)'**
+  String get tgListNameSlug;
+
+  /// No description provided for @tgMdblistApiKeyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'WARNING: MDBList API Key must be configured in settings (or server-wide by your admin) to fetch MDBList lists.'**
+  String get tgMdblistApiKeyWarning;
+
+  /// No description provided for @tgSortOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort Order'**
+  String get tgSortOrder;
+
+  /// No description provided for @tgSortDefaultWhenAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Default (When Added)'**
+  String get tgSortDefaultWhenAdded;
+
+  /// No description provided for @tgSortFilmName.
+  ///
+  /// In en, this message translates to:
+  /// **'Film Name'**
+  String get tgSortFilmName;
+
+  /// No description provided for @tgSortFilmPopularity.
+  ///
+  /// In en, this message translates to:
+  /// **'Film Popularity'**
+  String get tgSortFilmPopularity;
+
+  /// No description provided for @tgSortAverageRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Rating'**
+  String get tgSortAverageRating;
+
+  /// No description provided for @tgAToZ.
+  ///
+  /// In en, this message translates to:
+  /// **'A to Z'**
+  String get tgAToZ;
+
+  /// No description provided for @tgZToA.
+  ///
+  /// In en, this message translates to:
+  /// **'Z to A'**
+  String get tgZToA;
+
+  /// No description provided for @tgNewestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest First'**
+  String get tgNewestFirst;
+
+  /// No description provided for @tgEarliestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Earliest First'**
+  String get tgEarliestFirst;
+
+  /// No description provided for @tgMostPopularFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Popular First'**
+  String get tgMostPopularFirst;
+
+  /// No description provided for @tgLeastPopularFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Least Popular First'**
+  String get tgLeastPopularFirst;
+
+  /// No description provided for @tgHighestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest First'**
+  String get tgHighestFirst;
+
+  /// No description provided for @tgLowestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest First'**
+  String get tgLowestFirst;
+
+  /// No description provided for @tgShowUserRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'Show User Ratings?'**
+  String get tgShowUserRatings;
+
+  /// No description provided for @tgHomeRowCustomName.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Row Custom Name'**
+  String get tgHomeRowCustomName;
+
+  /// No description provided for @tgEnterRowName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter row name...'**
+  String get tgEnterRowName;
+
+  /// No description provided for @tgRefreshingCustomRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing Custom Rows'**
+  String get tgRefreshingCustomRows;
+
+  /// No description provided for @tgRefreshingCustomRowsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing your custom rows and updating their caches...'**
+  String get tgRefreshingCustomRowsBody;
+
+  /// No description provided for @tgRefreshedCustomRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshed your custom rows.'**
+  String get tgRefreshedCustomRows;
+
+  /// No description provided for @tgRefreshCustomRowsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to refresh custom rows: {error}'**
+  String tgRefreshCustomRowsFailed(String error);
+
+  /// No description provided for @tgImdbLists.
+  ///
+  /// In en, this message translates to:
+  /// **'IMDb Lists'**
+  String get tgImdbLists;
+
+  /// No description provided for @tgImdbListsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure IMDb Top 250, Popular, and other charts.'**
+  String get tgImdbListsSubtitle;
+
+  /// No description provided for @tgTmdbListsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure Popular, Top Rated, and Trending TMDB lists.'**
+  String get tgTmdbListsSubtitle;
+
+  /// No description provided for @tgTmdbApiKeyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'TMDB API key must be configured in Moonbase settings to use this feature.'**
+  String get tgTmdbApiKeyRequired;
+
+  /// No description provided for @tgUpcomingCalendarsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Upcoming Calendars from Radarr/Sonarr.'**
+  String get tgUpcomingCalendarsSubtitle;
+
+  /// No description provided for @tgSeerrRowsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure Seerr Discovery Rows.'**
+  String get tgSeerrRowsSubtitle;
+
+  /// No description provided for @tgCustomRowsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ADVANCED: Configure customized home rows from a variety of sources.'**
+  String get tgCustomRowsSubtitle;
+
+  /// No description provided for @tgMediaTypeBadges.
+  ///
+  /// In en, this message translates to:
+  /// **'Media type badges'**
+  String get tgMediaTypeBadges;
+
+  /// No description provided for @tgMediaTypeBadgesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show MOVIE / SERIES labels on external home-row cards'**
+  String get tgMediaTypeBadgesDescription;
+
+  /// No description provided for @tgRefreshCustomRows.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Custom Rows'**
+  String get tgRefreshCustomRows;
+
+  /// No description provided for @tgRefreshCustomRowsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Force a full update of the custom row caches.'**
+  String get tgRefreshCustomRowsSubtitle;
+
+  /// No description provided for @tgStillWatchingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt to Continue Watching after X consecutive episodes.'**
+  String get tgStillWatchingDescription;
+
+  /// No description provided for @tgEpisodeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} episodes'**
+  String tgEpisodeCount(int count);
+
+  /// No description provided for @tgSyncPlayOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'SyncPlay Options'**
+  String get tgSyncPlayOptions;
+
+  /// No description provided for @tgActiveSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Sessions'**
+  String get tgActiveSessions;
+
+  /// No description provided for @tgOpenInExternalPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in External Player'**
+  String get tgOpenInExternalPlayer;
+
+  /// No description provided for @tgTranscodeHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcode Stream: High Quality (1080p)'**
+  String get tgTranscodeHigh;
+
+  /// No description provided for @tgTranscodeMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcode Stream: Medium Quality (720p)'**
+  String get tgTranscodeMedium;
+
+  /// No description provided for @tgTranscodeLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcode Stream: Low Quality (480p)'**
+  String get tgTranscodeLow;
+
+  /// No description provided for @tgAdvancedPlayback.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Playback'**
+  String get tgAdvancedPlayback;
+
+  /// No description provided for @tgDownloadNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Now'**
+  String get tgDownloadNow;
+
+  /// No description provided for @tgNotFoundOnDownloadService.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not find \"{title}\" on the download service'**
+  String tgNotFoundOnDownloadService(String title);
+
+  /// No description provided for @tgSearchingReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching releases…'**
+  String get tgSearchingReleases;
+
+  /// No description provided for @tgSendingToDownloadClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending \"{title}\" to the download client…'**
+  String tgSendingToDownloadClient(String title);
+
+  /// No description provided for @tgSentToQbittorrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent \"{title}\" ({size}) to qBittorrent'**
+  String tgSentToQbittorrent(String title, String size);
+
+  /// No description provided for @tgNoTvdbIdForTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" has no TVDB id, so it cannot be downloaded here'**
+  String tgNoTvdbIdForTitle(String title);
+
+  /// No description provided for @tgWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Working…'**
+  String get tgWorking;
+
+  /// No description provided for @tgDownloadingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading \"{title}\" ({size})'**
+  String tgDownloadingTitle(String title, String size);
+
+  /// No description provided for @tgCountTooEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} too early'**
+  String tgCountTooEarly(int count);
+
+  /// No description provided for @tgNoReleasesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No releases found'**
+  String get tgNoReleasesFound;
+
+  /// No description provided for @tgPluginNotAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Only administrators can download on this server'**
+  String get tgPluginNotAdmin;
+
+  /// No description provided for @tgPluginFeatureOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads are switched off on this server'**
+  String get tgPluginFeatureOff;
+
+  /// No description provided for @tgPluginNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is not set up for downloads yet'**
+  String get tgPluginNotConfigured;
+
+  /// No description provided for @tgPluginSearchExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'The search is too old, search again'**
+  String get tgPluginSearchExpired;
+
+  /// No description provided for @tgPluginTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The search took too long, try again'**
+  String get tgPluginTimeout;
+
+  /// No description provided for @tgPluginNoIndexers.
+  ///
+  /// In en, this message translates to:
+  /// **'No search sources are active on the server{detail}. Check your indexers in Prowlarr. Does an indexer\'s test fail with a Cloudflare error (1337x and others)? Type flaresolverr under Tags at the bottom of its settings and test again.'**
+  String tgPluginNoIndexers(String detail);
+
+  /// No description provided for @tgAlreadyDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Already downloaded: the download client has this file already'**
+  String get tgAlreadyDownloaded;
+
+  /// No description provided for @tgAlreadyDownloadingPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Already downloading ({percent} %)'**
+  String tgAlreadyDownloadingPercent(int percent);
+
+  /// No description provided for @tgNoReasonGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'No reason given'**
+  String get tgNoReasonGiven;
+
+  /// No description provided for @tgDownloadAnywayQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Download anyway?'**
+  String get tgDownloadAnywayQuestion;
+
+  /// No description provided for @tgServerWouldNotPick.
+  ///
+  /// In en, this message translates to:
+  /// **'The server would not pick this file by itself:\n{reasons}'**
+  String tgServerWouldNotPick(String reasons);
+
+  /// No description provided for @tgNoReleasesOnProwlarr.
+  ///
+  /// In en, this message translates to:
+  /// **'No releases found on Prowlarr'**
+  String get tgNoReleasesOnProwlarr;
+
+  /// No description provided for @tgChooseFileResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file ({count} results)'**
+  String tgChooseFileResults(int count);
+
+  /// No description provided for @tgChooseFileResultsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file ({count} results) · {note}'**
+  String tgChooseFileResultsNote(int count, String note);
+
+  /// No description provided for @tgSdLowQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'SD · low quality'**
+  String get tgSdLowQuality;
+
+  /// No description provided for @tgSeedersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} seeders'**
+  String tgSeedersCount(int count);
+
+  /// No description provided for @tgTierAll.
+  ///
+  /// In en, this message translates to:
+  /// **'all'**
+  String get tgTierAll;
+
+  /// No description provided for @tgTierOther.
+  ///
+  /// In en, this message translates to:
+  /// **'other'**
+  String get tgTierOther;
+
+  /// No description provided for @tgSearchingReleasesElapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching releases… {elapsed}'**
+  String tgSearchingReleasesElapsed(String elapsed);
+
+  /// No description provided for @tgSearchSlowIndexerNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The server asks every indexer. A slow one (for example behind Cloudflare) can make this take a few minutes.'**
+  String get tgSearchSlowIndexerNote;
+
+  /// No description provided for @tgSeerrActiveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Seerr · {count} active'**
+  String tgSeerrActiveCount(int count);
+
+  /// No description provided for @tgRefreshJellyfinLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Jellyfin library'**
+  String get tgRefreshJellyfinLibrary;
+
+  /// No description provided for @tgMoreCount.
+  ///
+  /// In en, this message translates to:
+  /// **'+ {count} more'**
+  String tgMoreCount(int count);
+
+  /// No description provided for @tgSortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort: {value}'**
+  String tgSortLabel(String value);
+
+  /// No description provided for @tgFilterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter: {value}'**
+  String tgFilterLabel(String value);
+
+  /// No description provided for @tgCountOfTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total}'**
+  String tgCountOfTotal(int count, int total);
+
+  /// No description provided for @tgEndOfTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'End of track'**
+  String get tgEndOfTrack;
+
+  /// No description provided for @tgSaveQueueAsPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Save queue as playlist'**
+  String get tgSaveQueueAsPlaylist;
+
+  /// No description provided for @tgSavedName.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved \"{name}\"'**
+  String tgSavedName(String name);
+
+  /// No description provided for @tgSavePlaylistFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save playlist: {error}'**
+  String tgSavePlaylistFailed(String error);
+
+  /// No description provided for @tgMyPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'My Playlist'**
+  String get tgMyPlaylist;
 }
 
 class _AppLocalizationsDelegate
