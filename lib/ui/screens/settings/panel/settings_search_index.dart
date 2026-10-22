@@ -1836,6 +1836,12 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       advanced.screen(keywords: ['mpv', 'tuning', 'external player']),
     if (PlatformDetection.isAndroid && PlatformDetection.isTV) ...[
       quality.leaf(
+        'auto_player',
+        appL10n().tgAutoPlayerTitle,
+        subtitle: appL10n().tgAutoPlayerSubtitle,
+        keywords: ['mpv', 'media3', 'engine', 'stutter', 'hakker'],
+      ),
+      quality.leaf(
         'media3_tunneling_disabled',
         l10n.enableTunnelingTitle,
         subtitle: l10n.enableTunnelingSubtitle,

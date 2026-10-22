@@ -2440,6 +2440,27 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: true,
   );
 
+  /// Tortugarr: on Android TV the app picks Media3 or mpv per film (see
+  /// AutoPlayer), switches when playback stutters and remembers what worked.
+  /// Off: [playbackEnginePreference] decides, as in Moonfin.
+  static final autoPlayerEnabled = Preference(
+    key: 'auto_player_enabled',
+    defaultValue: true,
+  );
+
+  /// Player picked in the player menu, per media source, as JSON.
+  static final autoPlayerTitleChoices = Preference(
+    key: 'auto_player_title_choices',
+    defaultValue: '{}',
+  );
+
+  /// Engine that played a kind of file cleanly after the other one stuttered,
+  /// per file profile, as JSON. Local to the device on purpose.
+  static final autoPlayerLearned = Preference(
+    key: 'auto_player_learned',
+    defaultValue: '{}',
+  );
+
   static final dolbyVisionFallbackBehavior = EnumPreference(
     key: 'dolby_vision_fallback_behavior',
     defaultValue: DolbyVisionFallbackBehavior.ask,

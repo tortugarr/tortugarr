@@ -20,6 +20,7 @@ import '../../data/services/media_server_client_factory.dart';
 import '../../data/services/offline_playback_tracker.dart';
 import '../../data/services/remove_watched_planner.dart';
 import '../../data/services/remove_watched_service.dart';
+import '../../playback/auto_player.dart';
 import '../../playback/local_aware_player_service.dart';
 import '../../playback/local_first_media_stream_resolver.dart';
 
@@ -444,6 +445,9 @@ void registerPlaybackModule() {
     _getIt<UserPreferences>().setSeriesAudioPreference(series.seriesId, pref);
   };
 
+  final autoPlayer = AutoPlayer(prefs);
+  _getIt.registerSingleton<AutoPlayer>(autoPlayer);
+
   manager.setBackend(initialBackend);
   manager.setBackendSelector((resolution, currentBackend) {
     if (PlatformDetection.isAppleTV) {
@@ -470,7 +474,20 @@ void registerPlaybackModule() {
     }
 
     if (PlatformDetection.isAndroid) {
-      final preferMedia3 = prefs.prefersMedia3Now;
+      // Tortugarr: Media3 or mpv per film, see AutoPlayer. Off (or not a TV)
+      // it comes back to the engine setting.
+      final decision = autoPlayer.decide(
+        itemKey: resolution.mediaSourceId,
+        streams: resolution.mediaStreams,
+        selectedAudioStreamIndex: resolution.selectedAudioStreamIndex,
+      );
+      _getIt<LogService>().log(
+        LogCategory.playback,
+        'Auto player: ${decision.choice.engine.name}'
+        '${decision.choice.tunneling == true ? ' + tunneling' : ''} '
+        '(${decision.reason.name}, ${decision.profile.key})',
+      );
+      final preferMedia3 = decision.choice.engine == PlayerEngine.media3;
       if (preferMedia3) {
         if (currentBackend is Media3PlayerBackend) return currentBackend;
         return _getIt<Media3PlayerBackend>();

@@ -1,3 +1,4 @@
+import 'auto_player.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -795,6 +796,10 @@ class MediaKitPlayerBackend extends PlayerBackend
         (await _liveStartupObserverReady);
     if (!_ownsPlayback(generation)) return;
 
+    if (payload['mediaType']?.toString().toLowerCase() != 'audio' &&
+        payload['isLive'] != true) {
+      _startDropPoll(generation);
+    }
     await _notifyNativeHandleReady();
     await _configureAppleMobileLibassFont();
     await _configureAndroidLibassFonts();
@@ -2285,6 +2290,7 @@ class MediaKitPlayerBackend extends PlayerBackend
   @override
   Future<void> stop() async {
     ++_playbackGeneration;
+    _stopDropPoll();
     _resetSubtitleState();
     _setSelectedExternalSubtitle(null);
     _isStale = true;
@@ -2303,7 +2309,45 @@ class MediaKitPlayerBackend extends PlayerBackend
 
   @override
   Future<void> seekTo(Duration position) async {
+    AutoPlayer.instance?.settle();
     await _player.seek(position);
+  }
+
+  /// Feeds mpv's dropped frames to the automatic player, which tries Media3
+  /// when a film stutters here. Media3 reports its drops itself.
+  Timer? _dropPoll;
+  int? _dropBaseline;
+
+  void _startDropPoll(int generation) {
+    _stopDropPoll();
+    final auto = AutoPlayer.instance;
+    if (auto == null || !auto.automatic) return;
+    _dropPoll = Timer.periodic(const Duration(seconds: 5), (_) async {
+      if (!_ownsPlayback(generation) || !_player.state.playing) return;
+      final native = _player.platform;
+      if (native is! NativePlayer) return;
+      final vo = int.tryParse(
+            await _tryNativeGetProperty(native, 'frame-drop-count') ?? '',
+          ) ??
+          0;
+      final dec = int.tryParse(
+            await _tryNativeGetProperty(native, 'decoder-frame-drop-count') ??
+                '',
+          ) ??
+          0;
+      final total = vo + dec;
+      final base = _dropBaseline;
+      _dropBaseline = total;
+      if (base != null && total > base) {
+        auto.reportDroppedFrames(total - base);
+      }
+    });
+  }
+
+  void _stopDropPoll() {
+    _dropPoll?.cancel();
+    _dropPoll = null;
+    _dropBaseline = null;
   }
 
   @override
@@ -3106,6 +3150,7 @@ class MediaKitPlayerBackend extends PlayerBackend
 
   @override
   void dispose() {
+    _stopDropPoll();
     _setSelectedExternalSubtitle(null);
     _isDisposed = true;
     ++_playbackGeneration;

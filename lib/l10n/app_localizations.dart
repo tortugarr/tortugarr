@@ -20503,7 +20503,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPlaybackEngineAndroidTvDescription.
   ///
   /// In en, this message translates to:
-  /// **'Media3 is the standard. Try mpv if a film stutters or the sound drops out. Applies from the next film.'**
+  /// **'Used when Automatic player is off. Media3 is the standard; try mpv if a film stutters or the sound drops out. Applies from the next film.'**
   String get settingsPlaybackEngineAndroidTvDescription;
 
   /// No description provided for @settingsPlaybackEngineMedia3Recommended.
@@ -29770,6 +29770,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Films and episodes saved on this device to watch without internet'**
   String get tgShowSavedDownloadsSubtitle;
+
+  /// No description provided for @tgPlayerMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Player'**
+  String get tgPlayerMenu;
+
+  /// No description provided for @tgPlayerAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic (recommended)'**
+  String get tgPlayerAutomatic;
+
+  /// No description provided for @tgPlayerAutomaticNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Now: {engine} – {reason}'**
+  String tgPlayerAutomaticNow(String engine, String reason);
+
+  /// No description provided for @tgAutoReasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'picked for this title'**
+  String get tgAutoReasonTitle;
+
+  /// No description provided for @tgAutoReasonSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'from Settings'**
+  String get tgAutoReasonSetting;
+
+  /// No description provided for @tgAutoReasonBluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth audio'**
+  String get tgAutoReasonBluetooth;
+
+  /// No description provided for @tgAutoReasonLearned.
+  ///
+  /// In en, this message translates to:
+  /// **'worked best with this kind of file before'**
+  String get tgAutoReasonLearned;
+
+  /// No description provided for @tgAutoReasonHeavy.
+  ///
+  /// In en, this message translates to:
+  /// **'4K, HDR or HEVC file'**
+  String get tgAutoReasonHeavy;
+
+  /// No description provided for @tgAutoReasonLight.
+  ///
+  /// In en, this message translates to:
+  /// **'ordinary 1080p file'**
+  String get tgAutoReasonLight;
+
+  /// No description provided for @tgPlayerMedia3Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'The TV\'s own video player'**
+  String get tgPlayerMedia3Hint;
+
+  /// No description provided for @tgPlayerMedia3Tunneling.
+  ///
+  /// In en, this message translates to:
+  /// **'Media3 + tunneling'**
+  String get tgPlayerMedia3Tunneling;
+
+  /// No description provided for @tgPlayerMedia3TunnelingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For 4K films that stutter'**
+  String get tgPlayerMedia3TunnelingHint;
+
+  /// No description provided for @tgPlayerMpvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady timing for ordinary films'**
+  String get tgPlayerMpvHint;
+
+  /// No description provided for @tgAutoPlayerSwitching.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback stutters – switching to {engine}'**
+  String tgAutoPlayerSwitching(String engine);
+
+  /// No description provided for @tgAutoPlayerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic player'**
+  String get tgAutoPlayerTitle;
+
+  /// No description provided for @tgAutoPlayerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player.'**
+  String get tgAutoPlayerSubtitle;
 }
 
 class _AppLocalizationsDelegate

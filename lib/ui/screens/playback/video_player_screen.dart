@@ -20,6 +20,8 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../../data/utils/chapter_markers.dart';
 import '../../../data/utils/video_range_label.dart';
+import 'package:moonfin/util/app_l10n.dart';
+import '../../../playback/auto_player.dart';
 import '../../../playback/subtitle_style.dart';
 import '../../../playback/subtitle_view_config.dart';
 import '../../../util/fullscreen_helper.dart';
@@ -371,6 +373,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   StreamSubscription? _positionSub;
   StreamSubscription? _queueSub;
   StreamSubscription<PlayerBackend>? _backendSub;
+  StreamSubscription<AutoPlayerDecision>? _autoPlayerStutterSub;
+
+  /// Films the automatic player already switched once in this screen, so two
+  /// engines that both stutter can't keep handing a film back and forth.
+  final _autoSwitchedKeys = <String>{};
   StreamSubscription<bool>? _letterboxCropAppliedSub;
   StreamSubscription<Object?>? _letterboxCropGeometrySub;
   bool _letterboxCropApplied = false;
@@ -786,6 +793,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       unawaited(_exitPlayback());
     });
     _listenToLetterboxCropState(_activeBackend);
+    if (GetIt.instance.isRegistered<AutoPlayer>()) {
+      _autoPlayerStutterSub = GetIt.instance<AutoPlayer>().stutters.stream
+          .listen(_onAutoPlayerStutter);
+    }
     _backendSub = _manager.backendChangedStream.listen((backend) {
       _listenToLetterboxCropState(backend);
       if (backend is Media3PlayerBackend) {
@@ -1003,6 +1014,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     _queueSub?.cancel();
     _episodeBrowser?.dispose();
     _backendSub?.cancel();
+    _autoPlayerStutterSub?.cancel();
     _letterboxCropAppliedSub?.cancel();
     _letterboxCropGeometrySub?.cancel();
     _bringupSub?.cancel();
@@ -5945,6 +5957,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
               iconSize: secondaryIconSize,
               tooltip: l10n.playerTooltipVolume,
             ),
+          if (shows(OsdButton.player))
+            OsdButton.player: _controlButton(
+              Icons.swap_horiz_rounded,
+              onPressed: _showPlayerMenu,
+              size: secondaryIconSize,
+              extent: secondaryExtent,
+              tooltip: l10n.tgPlayerMenu,
+            ),
           if (shows(OsdButton.quality))
             OsdButton.quality: _buildBitrateButton(
               extent: secondaryExtent,
@@ -7258,6 +7278,97 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       if (changed && mounted) {
         setState(() {});
       }
+    }());
+    _showControls();
+  }
+
+  String _engineLabel(PlayerEngine engine) => switch (engine) {
+    PlayerEngine.media3 => 'Media3',
+    PlayerEngine.mpv => 'mpv',
+  };
+
+  String _autoReasonLabel(AutoPlayerReason reason) => switch (reason) {
+    AutoPlayerReason.title => appL10n().tgAutoReasonTitle,
+    AutoPlayerReason.setting => appL10n().tgAutoReasonSetting,
+    AutoPlayerReason.bluetooth => appL10n().tgAutoReasonBluetooth,
+    AutoPlayerReason.learned => appL10n().tgAutoReasonLearned,
+    AutoPlayerReason.heavy => appL10n().tgAutoReasonHeavy,
+    AutoPlayerReason.light => appL10n().tgAutoReasonLight,
+  };
+
+  /// Playback stuttered on the engine the automatic player picked: try the
+  /// other one from the same spot, once, and remember it for this kind of
+  /// file on this TV.
+  void _onAutoPlayerStutter(AutoPlayerDecision decision) {
+    if (!mounted || decision.reason == AutoPlayerReason.title) return;
+    if (!_autoSwitchedKeys.add(decision.itemKey)) return;
+    final other = decision.choice.engine == PlayerEngine.media3
+        ? PlayerEngine.mpv
+        : PlayerEngine.media3;
+    final auto = GetIt.instance<AutoPlayer>();
+    _showPlayerToast(appL10n().tgAutoPlayerSwitching(_engineLabel(other)));
+    unawaited(() async {
+      await auto.learn(decision.profile.key, other);
+      if (!mounted) return;
+      await _manager.reselectBackendAtCurrentPosition();
+    }());
+  }
+
+  /// The player menu: automatic, or Media3 / Media3 with tunneling / mpv for
+  /// this title. A change restarts the film at the same spot.
+  void _showPlayerMenu() {
+    if (!GetIt.instance.isRegistered<AutoPlayer>()) return;
+    final auto = GetIt.instance<AutoPlayer>();
+    final itemKey = _manager.currentResolution?.mediaSourceId;
+    if (itemKey == null) return;
+    final current = auto.current;
+    final choices = <PlayerChoice?>[
+      null,
+      const PlayerChoice(PlayerEngine.media3, tunneling: false),
+      const PlayerChoice(PlayerEngine.media3, tunneling: true),
+      const PlayerChoice(PlayerEngine.mpv),
+    ];
+    final options = [
+      TrackOption(
+        label: appL10n().tgPlayerAutomatic,
+        subtitle: current == null || current.reason == AutoPlayerReason.title
+            ? null
+            : appL10n().tgPlayerAutomaticNow(
+                _engineLabel(current.choice.engine),
+                _autoReasonLabel(current.reason),
+              ),
+      ),
+      TrackOption(label: 'Media3', subtitle: appL10n().tgPlayerMedia3Hint),
+      TrackOption(
+        label: appL10n().tgPlayerMedia3Tunneling,
+        subtitle: appL10n().tgPlayerMedia3TunnelingHint,
+      ),
+      TrackOption(label: 'mpv', subtitle: appL10n().tgPlayerMpvHint),
+    ];
+    final picked = auto.titleChoice(itemKey);
+    final selected = picked == null
+        ? 0
+        : choices.indexWhere(
+            (c) =>
+                c != null &&
+                c.engine == picked.engine &&
+                (c.tunneling ?? false) == (picked.tunneling ?? false),
+          );
+    unawaited(() async {
+      final result = await TrackSelectorDialog.show(
+        context,
+        title: appL10n().tgPlayerMenu,
+        options: options,
+        selectedIndex: selected >= 0 ? selected : null,
+      );
+      if (result == null || !mounted || result == selected) return;
+      await auto.setTitleChoice(itemKey, choices[result]);
+      if (!mounted) return;
+      await _runSinglePlayerMutation(
+        'player_engine_$result',
+        () async => _manager.reselectBackendAtCurrentPosition(),
+        suppressBackFor: const Duration(seconds: 3),
+      );
     }());
     _showControls();
   }

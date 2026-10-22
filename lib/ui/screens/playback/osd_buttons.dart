@@ -26,6 +26,8 @@ enum OsdButton {
   castControls('castControls'),
   volume('volume'),
   quality('quality'),
+  // Tortugarr: Media3 or mpv for this film.
+  player('player'),
   zoom('zoom'),
   orientation('orientation'),
   info('info'),
@@ -40,6 +42,7 @@ enum OsdButton {
   /// never gets drawn here isn't worth offering a switch for.
   bool get isOffered => switch (this) {
     OsdButton.castControls => false,
+    OsdButton.player => PlatformDetection.isAndroid && PlatformDetection.isTV,
     OsdButton.cast => !PlatformDetection.isTV,
     OsdButton.volume => PlatformDetection.useDesktopUi,
     OsdButton.orientation => PlatformDetection.isMobile,
@@ -62,6 +65,7 @@ enum OsdButton {
     OsdButton.castControls => Icons.cast_connected,
     OsdButton.volume => Icons.volume_up_rounded,
     OsdButton.quality => Icons.video_settings_outlined,
+    OsdButton.player => Icons.swap_horiz_rounded,
     OsdButton.zoom => Icons.zoom_out_map,
     OsdButton.orientation => Icons.screen_rotation_outlined,
     OsdButton.info => Icons.info_outline_rounded,
@@ -82,6 +86,7 @@ enum OsdButton {
     OsdButton.castControls => l10n.playerTooltipCastControls,
     OsdButton.volume => l10n.playerTooltipVolume,
     OsdButton.quality => l10n.playerTooltipPlaybackQuality,
+    OsdButton.player => l10n.tgPlayerMenu,
     OsdButton.zoom => l10n.playerZoomMode,
     OsdButton.orientation => l10n.orientationLock,
     OsdButton.info => l10n.playbackInformation,

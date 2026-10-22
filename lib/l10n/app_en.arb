@@ -10981,7 +10981,7 @@
     "settingsMaxResolutionDescription": "Limit the maximum resolution the player will request. Higher-resolution content will be transcoded down.",
     "settingsPlayerZoomDescription": "How video is scaled to the screen. Zoom to Fill enlarges the picture until it fills the screen and cuts off the edges. It doesn't detect black bars.",
     "settingsPlaybackEngineAndroidTv": "Playback Engine (Android TV)",
-    "settingsPlaybackEngineAndroidTvDescription": "Media3 is the standard. Try mpv if a film stutters or the sound drops out. Applies from the next film.",
+    "settingsPlaybackEngineAndroidTvDescription": "Used when Automatic player is off. Media3 is the standard; try mpv if a film stutters or the sound drops out. Applies from the next film.",
     "settingsPlaybackEngineMedia3Recommended": "Media3 (recommended)",
     "settingsPlaybackEngineMpvLegacy": "mpv",
     "settingsMpvOnBluetooth": "Use mpv with Bluetooth audio",
@@ -15908,5 +15908,38 @@
     "tgSoundSystem": "Sound system",
     "tgSoundSystemLink": "Amplifier and passthrough",
     "tgSoundSystemLinkSubtitle": "Dolby, DTS and Atmos to the amplifier, night mode",
-    "tgShowSavedDownloadsSubtitle": "Films and episodes saved on this device to watch without internet"
+    "tgShowSavedDownloadsSubtitle": "Films and episodes saved on this device to watch without internet",
+    "tgPlayerMenu": "Player",
+    "tgPlayerAutomatic": "Automatic (recommended)",
+    "tgPlayerAutomaticNow": "Now: {engine} – {reason}",
+    "@tgPlayerAutomaticNow": {
+        "placeholders": {
+            "engine": {
+                "type": "String"
+            },
+            "reason": {
+                "type": "String"
+            }
+        }
+    },
+    "tgAutoReasonTitle": "picked for this title",
+    "tgAutoReasonSetting": "from Settings",
+    "tgAutoReasonBluetooth": "Bluetooth audio",
+    "tgAutoReasonLearned": "worked best with this kind of file before",
+    "tgAutoReasonHeavy": "4K, HDR or HEVC file",
+    "tgAutoReasonLight": "ordinary 1080p file",
+    "tgPlayerMedia3Hint": "The TV's own video player",
+    "tgPlayerMedia3Tunneling": "Media3 + tunneling",
+    "tgPlayerMedia3TunnelingHint": "For 4K films that stutter",
+    "tgPlayerMpvHint": "Steady timing for ordinary films",
+    "tgAutoPlayerSwitching": "Playback stutters – switching to {engine}",
+    "@tgAutoPlayerSwitching": {
+        "placeholders": {
+            "engine": {
+                "type": "String"
+            }
+        }
+    },
+    "tgAutoPlayerTitle": "Automatic player",
+    "tgAutoPlayerSubtitle": "Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player."
 }

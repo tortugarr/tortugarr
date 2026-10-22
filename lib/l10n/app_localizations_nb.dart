@@ -11638,7 +11638,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get settingsPlaybackEngineAndroidTvDescription =>
-      'Media3 er standard. Prøv mpv hvis en film hakker eller lyden faller ut. Gjelder fra neste film.';
+      'Brukes når Automatisk avspiller er av. Media3 er standard; prøv mpv hvis en film hakker eller lyden faller ut. Gjelder fra neste film.';
 
   @override
   String get settingsPlaybackEngineMedia3Recommended => 'Media3 (anbefalt)';
@@ -17197,4 +17197,57 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get tgShowSavedDownloadsSubtitle =>
       'Filmer og episoder lagret på denne enheten, til å se uten internett';
+
+  @override
+  String get tgPlayerMenu => 'Avspiller';
+
+  @override
+  String get tgPlayerAutomatic => 'Automatisk (anbefalt)';
+
+  @override
+  String tgPlayerAutomaticNow(String engine, String reason) {
+    return 'Nå: $engine – $reason';
+  }
+
+  @override
+  String get tgAutoReasonTitle => 'valgt for denne tittelen';
+
+  @override
+  String get tgAutoReasonSetting => 'fra Innstillinger';
+
+  @override
+  String get tgAutoReasonBluetooth => 'Bluetooth-lyd';
+
+  @override
+  String get tgAutoReasonLearned => 'virket best med denne filtypen før';
+
+  @override
+  String get tgAutoReasonHeavy => '4K-, HDR- eller HEVC-fil';
+
+  @override
+  String get tgAutoReasonLight => 'vanlig 1080p-fil';
+
+  @override
+  String get tgPlayerMedia3Hint => 'TV-ens egen videospiller';
+
+  @override
+  String get tgPlayerMedia3Tunneling => 'Media3 + tunneling';
+
+  @override
+  String get tgPlayerMedia3TunnelingHint => 'For 4K-filmer som hakker';
+
+  @override
+  String get tgPlayerMpvHint => 'Jevn takt for vanlige filmer';
+
+  @override
+  String tgAutoPlayerSwitching(String engine) {
+    return 'Avspillingen hakker – bytter til $engine';
+  }
+
+  @override
+  String get tgAutoPlayerTitle => 'Automatisk avspiller';
+
+  @override
+  String get tgAutoPlayerSubtitle =>
+      'Velger Media3 eller mpv for hver film, bytter hvis det hakker og husker hva som virket. Endre per film med Avspiller-knappen i avspilleren.';
 }

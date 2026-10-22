@@ -69,6 +69,13 @@ class _QualityDecodingScreen extends StatelessWidget {
           _SectionHeader(l10n.tgDecodingRendering),
           adaptiveListSection(
             children: [
+              if (PlatformDetection.isAndroid && PlatformDetection.isTV)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.autoPlayerEnabled,
+                  title: appL10n().tgAutoPlayerTitle,
+                  subtitle: appL10n().tgAutoPlayerSubtitle,
+                  icon: Icons.auto_mode,
+                ),
               if (PlatformDetection.isAndroid)
                 EnumPreferenceTile<PlaybackEnginePreference>(
                   preference: UserPreferences.playbackEnginePreference,

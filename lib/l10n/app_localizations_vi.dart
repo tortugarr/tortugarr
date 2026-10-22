@@ -17186,4 +17186,57 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get tgShowSavedDownloadsSubtitle =>
       'Films and episodes saved on this device to watch without internet';
+
+  @override
+  String get tgPlayerMenu => 'Player';
+
+  @override
+  String get tgPlayerAutomatic => 'Automatic (recommended)';
+
+  @override
+  String tgPlayerAutomaticNow(String engine, String reason) {
+    return 'Now: $engine – $reason';
+  }
+
+  @override
+  String get tgAutoReasonTitle => 'picked for this title';
+
+  @override
+  String get tgAutoReasonSetting => 'from Settings';
+
+  @override
+  String get tgAutoReasonBluetooth => 'Bluetooth audio';
+
+  @override
+  String get tgAutoReasonLearned => 'worked best with this kind of file before';
+
+  @override
+  String get tgAutoReasonHeavy => '4K, HDR or HEVC file';
+
+  @override
+  String get tgAutoReasonLight => 'ordinary 1080p file';
+
+  @override
+  String get tgPlayerMedia3Hint => 'The TV\'s own video player';
+
+  @override
+  String get tgPlayerMedia3Tunneling => 'Media3 + tunneling';
+
+  @override
+  String get tgPlayerMedia3TunnelingHint => 'For 4K films that stutter';
+
+  @override
+  String get tgPlayerMpvHint => 'Steady timing for ordinary films';
+
+  @override
+  String tgAutoPlayerSwitching(String engine) {
+    return 'Playback stutters – switching to $engine';
+  }
+
+  @override
+  String get tgAutoPlayerTitle => 'Automatic player';
+
+  @override
+  String get tgAutoPlayerSubtitle =>
+      'Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player.';
 }

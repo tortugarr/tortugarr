@@ -11,6 +11,7 @@ import '../preference/preference_constants.dart';
 import '../preference/user_preferences.dart';
 import '../util/platform_detection.dart';
 
+import 'auto_player.dart';
 import 'device_profile_builder.dart';
 import 'known_defects.dart';
 import 'media3_letterbox_crop.dart';
@@ -432,12 +433,14 @@ class Media3PlayerBackend extends PlayerBackend
         _sawFirstFrame = true;
         _diag('Media3: first frame rendered @ ${_toInt(map['positionMs'])}ms');
       case 'droppedFrames':
+        AutoPlayer.instance?.reportDroppedFrames(_toInt(map['count']));
         _diag(
           'Media3: dropped ${_toInt(map['count'])} video frames in '
           '${_toInt(map['elapsedMs'])}ms',
           level: LogLevel.warning,
         );
       case 'audioUnderrun':
+        AutoPlayer.instance?.reportUnderrun();
         _diag(
           'Media3: audio underrun (buffer ${_toInt(map['bufferSizeMs'])}ms, '
           '${_toInt(map['elapsedMs'])}ms since last feed)',
@@ -1119,9 +1122,12 @@ class Media3PlayerBackend extends PlayerBackend
       payload['preferredTextLanguage']?.toString() ??
           _prefs.get(UserPreferences.defaultSubtitleLanguage),
     );
-    final tunnelingDisabledByUser = _prefs.get(
-      UserPreferences.media3TunnelingDisabled,
-    );
+    // The automatic player turns tunneling on for 4K and HDR files; null
+    // leaves it to the setting.
+    final autoTunneling = AutoPlayer.instance?.sessionTunneling;
+    final tunnelingDisabledByUser = autoTunneling != null
+        ? !autoTunneling
+        : _prefs.get(UserPreferences.media3TunnelingDisabled);
     _sessionTunnelingDisabled =
         _prefs.get(UserPreferences.tunnelingFallbackDisabled) ||
         tunnelingDisabledByUser;
@@ -1293,6 +1299,7 @@ class Media3PlayerBackend extends PlayerBackend
 
   @override
   Future<void> seekTo(Duration position) async {
+    AutoPlayer.instance?.settle();
     await _invoke<void>('seek', {'positionMs': position.inMilliseconds});
   }
 

@@ -34,6 +34,7 @@ void main() {
       OsdButton.audio.id,
       OsdButton.castAndCrew.id,
       OsdButton.quality.id,
+      OsdButton.player.id,
       OsdButton.zoom.id,
       OsdButton.info.id,
     ]);
@@ -71,6 +72,7 @@ void main() {
         OsdButton.audio.id,
         OsdButton.castAndCrew.id,
         OsdButton.quality.id,
+        OsdButton.player.id,
         OsdButton.zoom.id,
       ]);
     },

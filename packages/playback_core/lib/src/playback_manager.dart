@@ -3901,6 +3901,12 @@ class PlaybackManager implements AudioOwnable {
     await _reResolveAtCurrentPosition(forceTranscode: mbps != null);
   }
 
+  /// Plays the current item again from where it is and lets the backend
+  /// selector choose afresh, for a player switched mid-film (Tortugarr's
+  /// player menu, or the automatic switch when playback stutters).
+  Future<void> reselectBackendAtCurrentPosition() =>
+      _reResolveAtCurrentPosition(reason: 'backend-switch', reselectBackend: true);
+
   /// Serializes re-resolves so rapid track switches can't tear down the same
   /// session twice or race two restarts.
   Future<void> _reResolveAtCurrentPosition({
@@ -3919,6 +3925,7 @@ class PlaybackManager implements AudioOwnable {
     // on a startup failure doubles an attempt into two and forces a re-encode
     // the budget deliberately leaves optional.
     bool allowStartupRecovery = true,
+    bool reselectBackend = false,
   }) {
     final previous = _reResolveQueue;
 
@@ -3940,6 +3947,7 @@ class PlaybackManager implements AudioOwnable {
         autoPlayAfterResolve: autoPlayAfterResolve,
         reason: reason,
         allowStartupRecovery: allowStartupRecovery,
+        reselectBackend: reselectBackend,
       );
     }();
 
@@ -3954,6 +3962,7 @@ class PlaybackManager implements AudioOwnable {
     required bool autoPlayAfterResolve,
     required String reason,
     bool allowStartupRecovery = true,
+    bool reselectBackend = false,
   }) async {
     // A re-resolve stops the backend, reports the stop and kills the server
     // job, so it is one of the few things that can clear the player's
@@ -4026,6 +4035,9 @@ class PlaybackManager implements AudioOwnable {
       _transcodeSwitchRecoveryConsumed = false;
     }
 
+    // The old backend is stopped above, so the selector may hand the restart
+    // to the other one.
+    if (reselectBackend) _resetBackendSelectionLock();
     try {
       await _playCurrentItem(
         startPosition: currentPos,
