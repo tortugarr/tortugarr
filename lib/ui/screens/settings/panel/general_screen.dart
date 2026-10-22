@@ -26,23 +26,6 @@ class _GeneralScreenState extends State<_GeneralScreen> {
         (PlatformDetection.isTV ? 96.0 : 24.0) +
         MediaQuery.paddingOf(context).bottom;
 
-    final Map<String, String> langOptions = {
-      'system': bilingualSystemDefaultLabel(l10n.systemLanguageDefault),
-    };
-    final sortedLocales = List<Locale>.from(AppLocalizations.supportedLocales);
-    sortedLocales.sort((a, b) {
-      final nameA = kLocaleDisplayNames[a.toLanguageTag()] ?? a.toLanguageTag();
-      final nameB = kLocaleDisplayNames[b.toLanguageTag()] ?? b.toLanguageTag();
-      return nameA.toLowerCase().compareTo(nameB.toLowerCase());
-    });
-    for (final locale in sortedLocales) {
-      final tag = locale.toLanguageTag();
-      // Native name plus the English one, so a user who lands in a language
-      // they cannot read still finds their own.
-      langOptions[tag] = bilingualLocaleLabel(
-          tag, kLocaleDisplayNames[tag] ?? locale.toString());
-    }
-
     final showSiriSensitivity =
         GamepadNavigationScope.isConfigurable && PlatformDetection.isAppleTV;
     final showInput =
@@ -58,17 +41,7 @@ class _GeneralScreenState extends State<_GeneralScreen> {
         child: ListView(
           padding: EdgeInsets.only(bottom: bottomPad),
           children: [
-            _SectionHeader(l10n.settingsLanguageSection),
-            adaptiveListSection(
-              children: [
-                StringPickerPreferenceTile(
-                  preference: UserPreferences.languageOverride,
-                  title: l10n.interfaceLanguage,
-                  icon: Icons.language,
-                  options: langOptions,
-                ),
-              ],
-            ),
+            // Interface language lives under Settings > Language.
             _SectionHeader(l10n.clock),
             adaptiveListSection(
               children: [

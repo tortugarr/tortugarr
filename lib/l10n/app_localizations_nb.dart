@@ -16253,4 +16253,41 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgAdultSearchButton => 'Søk XXX';
+
+  @override
+  String get tgLanguageGroup => 'Språk';
+
+  @override
+  String get tgLanguageGroupSubtitle =>
+      'Appens språk, utenlandske titler og undertekstspråk';
+
+  @override
+  String get tgAdminGroupSubtitle =>
+      'Jellyfin-adminpanelet, diskplass, XXX og SD-utgivelser';
+
+  @override
+  String get tgAdminPanel => 'Jellyfin-adminpanelet';
+
+  @override
+  String get tgStartupSection => 'Oppstart';
+
+  @override
+  String get tgBrowsingSection => 'Når du blar';
+
+  @override
+  String get tgSetupLanguagesQuestion =>
+      'Hvilke titler skal Trending og Populært vise?';
+
+  @override
+  String get tgSetupLanguagesMine => 'Bare titler på mine språk';
+
+  @override
+  String get tgSetupLanguagesAll => 'Alle språk';
+
+  @override
+  String get tgSetupLanguagesAllHint => 'Også anime, K-drama og alt annet';
+
+  @override
+  String get tgSetupLanguagesLater =>
+      'Du kan endre dette når som helst under Innstillinger › Språk.';
 }

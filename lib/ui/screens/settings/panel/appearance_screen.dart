@@ -7,7 +7,8 @@ class _AppearanceScreen extends StatefulWidget {
   State<_AppearanceScreen> createState() => _AppearanceScreenState();
 }
 
-class _AppearanceScreenState extends State<_AppearanceScreen> {
+class _AppearanceScreenState extends State<_AppearanceScreen>
+    with _TortugarrQuickSettings {
   final _appearanceScope = FocusScopeNode(
     debugLabel: 'AppearanceSettingsScope',
     traversalEdgeBehavior: TraversalEdgeBehavior.stop,
@@ -36,11 +37,37 @@ class _AppearanceScreenState extends State<_AppearanceScreen> {
           builder: (context, _) => ListView(
             padding: EdgeInsets.only(bottom: bottomPad),
             children: [
+              _SectionHeader(appL10n().tgStartupSection),
+              adaptiveListSection(
+                children: [
+                  for (final (i, entry) in _startupEntries().indexed)
+                    _TvSettingsListTile(
+                      autofocus: i == 0,
+                      leading: Icon(entry.icon),
+                      title: Text(entry.title),
+                      subtitle: Text(entry.subtitle),
+                      trailing: entry.trailing,
+                      onTap: entry.onTap,
+                    ),
+                ],
+              ),
+              _SectionHeader(appL10n().tgBrowsingSection),
+              adaptiveListSection(
+                children: [
+                  for (final entry in _browsingEntries())
+                    _TvSettingsListTile(
+                      leading: Icon(entry.icon),
+                      title: Text(entry.title),
+                      subtitle: Text(entry.subtitle),
+                      trailing: entry.trailing,
+                      onTap: entry.onTap,
+                    ),
+                ],
+              ),
               _SectionHeader(l10n.navigation),
               adaptiveListSection(
                 children: [
                   _TvSettingsListTile(
-                    autofocus: true,
                     leading: const Icon(Icons.view_sidebar),
                     title: Text(l10n.navigationBar),
                     subtitle: Text(l10n.navbarStyleToolbarAppearance),

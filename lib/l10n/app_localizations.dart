@@ -28198,6 +28198,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search XXX'**
   String get tgAdultSearchButton;
+
+  /// No description provided for @tgLanguageGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get tgLanguageGroup;
+
+  /// No description provided for @tgLanguageGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App language, foreign titles and subtitle languages'**
+  String get tgLanguageGroupSubtitle;
+
+  /// No description provided for @tgAdminGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jellyfin admin panel, disk space, XXX and SD releases'**
+  String get tgAdminGroupSubtitle;
+
+  /// No description provided for @tgAdminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Jellyfin admin panel'**
+  String get tgAdminPanel;
+
+  /// No description provided for @tgStartupSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup'**
+  String get tgStartupSection;
+
+  /// No description provided for @tgBrowsingSection.
+  ///
+  /// In en, this message translates to:
+  /// **'While browsing'**
+  String get tgBrowsingSection;
+
+  /// No description provided for @tgSetupLanguagesQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Which titles should Trending and Popular show?'**
+  String get tgSetupLanguagesQuestion;
+
+  /// No description provided for @tgSetupLanguagesMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Only titles in my languages'**
+  String get tgSetupLanguagesMine;
+
+  /// No description provided for @tgSetupLanguagesAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All languages'**
+  String get tgSetupLanguagesAll;
+
+  /// No description provided for @tgSetupLanguagesAllHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Anime, K-drama and everything else too'**
+  String get tgSetupLanguagesAllHint;
+
+  /// No description provided for @tgSetupLanguagesLater.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this any time under Settings › Language.'**
+  String get tgSetupLanguagesLater;
 }
 
 class _AppLocalizationsDelegate

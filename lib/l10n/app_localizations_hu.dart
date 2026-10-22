@@ -16369,4 +16369,42 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tgAdultSearchButton => 'Search XXX';
+
+  @override
+  String get tgLanguageGroup => 'Language';
+
+  @override
+  String get tgLanguageGroupSubtitle =>
+      'App language, foreign titles and subtitle languages';
+
+  @override
+  String get tgAdminGroupSubtitle =>
+      'Jellyfin admin panel, disk space, XXX and SD releases';
+
+  @override
+  String get tgAdminPanel => 'Jellyfin admin panel';
+
+  @override
+  String get tgStartupSection => 'Startup';
+
+  @override
+  String get tgBrowsingSection => 'While browsing';
+
+  @override
+  String get tgSetupLanguagesQuestion =>
+      'Which titles should Trending and Popular show?';
+
+  @override
+  String get tgSetupLanguagesMine => 'Only titles in my languages';
+
+  @override
+  String get tgSetupLanguagesAll => 'All languages';
+
+  @override
+  String get tgSetupLanguagesAllHint =>
+      'Anime, K-drama and everything else too';
+
+  @override
+  String get tgSetupLanguagesLater =>
+      'You can change this any time under Settings › Language.';
 }

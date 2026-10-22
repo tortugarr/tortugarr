@@ -151,6 +151,18 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     icon: Icons.extension,
     open: () => push(const _PluginScreen()),
   );
+  final tgLanguage = _SearchSection(
+    slug: 'tortugarr-language',
+    path: [appL10n().tgLanguageGroup],
+    icon: Icons.language,
+    open: () => push(const _TortugarrLanguageScreen()),
+  );
+  final tgAdmin = _SearchSection(
+    slug: 'tortugarr-admin',
+    path: [l10n.administration],
+    icon: Icons.admin_panel_settings,
+    open: () => push(_TortugarrAdminScreen(openAdmin: openAdmin)),
+  );
   final general = _SearchSection(
     slug: 'general',
     path: [l10n.general],
@@ -452,6 +464,40 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
             '${l10n.administration} ${l10n.settingsAdministrationSubtitle} '
             'server dashboard users',
       ),
+    if (showAdmin) ...[
+      tgAdmin.screen(keywords: ['server', 'disk', 'xxx', 'adult', 'sd']),
+      if (DownloadFeatures.freeSpace)
+        tgAdmin.leaf('disk_space', appL10n().tgDiskSpace,
+            subtitle: appL10n().tgDiskSpaceSubtitle,
+            keywords: ['storage', 'free space']),
+      tgAdmin.leaf('adult', appL10n().tgAdultTitle,
+          subtitle: appL10n().tgAdultSubtitle, keywords: ['xxx', 'adult']),
+      if (DownloadFeatures.viaPlugin && DownloadFeatures.downloadNow)
+        tgAdmin.leaf('sd_releases', appL10n().tgShowSdReleases,
+            keywords: ['quality', 'sd', '480p']),
+    ],
+    tgLanguage.screen(keywords: ['language', 'subtitles', 'foreign']),
+    if (!kForceEnglish)
+      tgLanguage.leaf('pref_language_override', l10n.interfaceLanguage,
+          keywords: ['locale', 'translation']),
+    tgLanguage.leaf('hide_foreign', appL10n().tgHideForeign,
+        keywords: ['foreign', 'anime', 'k-drama', 'trending']),
+    tgLanguage.leaf('discovery_languages', appL10n().tgDiscoveryLanguages,
+        keywords: ['foreign', 'trending', 'popular']),
+    tgLanguage.leaf('language_badges', appL10n().tgShowLanguageBadges,
+        keywords: ['badge', 'flag']),
+    tgLanguage.leaf('subtitle_languages', appL10n().tgSubtitleLanguages,
+        keywords: ['subtitles', 'menu']),
+    style.leaf('short_intro', appL10n().tgShortIntro,
+        keywords: ['intro', 'startup', 'video']),
+    style.leaf('loading_logo_size', appL10n().tgLoadingLogoSize,
+        keywords: ['logo', 'loading', 'spinner']),
+    style.leaf('preview_sound', appL10n().tgPreviewSound,
+        keywords: ['sound', 'trailer', 'audio', 'mute']),
+    style.leaf('missing_episodes', appL10n().tgShowMissingEpisodes,
+        keywords: ['episodes', 'missing']),
+    style.leaf('movie_collections', appL10n().tgShowCollections,
+        keywords: ['collections', 'film series']),
     if (showThemeEditor)
       _SettingsSearchEntry(
         id: 'theme-editor',
@@ -516,11 +562,7 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     ),
 
 
-    general.screen(keywords: ['language', 'clock', 'input', 'keyboard']),
-    general.leaf('pref_language_override', l10n.interfaceLanguage, keywords: [
-      'locale',
-      'translation',
-    ]),
+    general.screen(keywords: ['clock', 'input', 'keyboard']),
     general.leaf('pref_clock_behavior', l10n.clockDisplay, keywords: ['time']),
     general.leaf(
       'pref_use_24_hour_clock',

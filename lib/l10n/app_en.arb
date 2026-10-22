@@ -15329,5 +15329,16 @@
         }
     },
     "tgAdultSearchInMenu": "XXX search in the menu",
-    "tgAdultSearchButton": "Search XXX"
+    "tgAdultSearchButton": "Search XXX",
+    "tgLanguageGroup": "Language",
+    "tgLanguageGroupSubtitle": "App language, foreign titles and subtitle languages",
+    "tgAdminGroupSubtitle": "Jellyfin admin panel, disk space, XXX and SD releases",
+    "tgAdminPanel": "Jellyfin admin panel",
+    "tgStartupSection": "Startup",
+    "tgBrowsingSection": "While browsing",
+    "tgSetupLanguagesQuestion": "Which titles should Trending and Popular show?",
+    "tgSetupLanguagesMine": "Only titles in my languages",
+    "tgSetupLanguagesAll": "All languages",
+    "tgSetupLanguagesAllHint": "Anime, K-drama and everything else too",
+    "tgSetupLanguagesLater": "You can change this any time under Settings › Language."
 }

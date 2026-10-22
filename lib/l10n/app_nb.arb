@@ -9608,5 +9608,16 @@
     "seerrFilterNotSupported": "Filteret støttes ikke",
     "seerrFilterNotSupportedDetail": "Dette nettverks- eller studiofilteret er ikke tilgjengelig fordi de interne ID-ene ikke stemmer overens. Bruk filtermenyen i stedet.",
     "showAll": "Vis alle",
-    "settingsBuiltOnOriginal": "Bygget på Moonfin"
+    "settingsBuiltOnOriginal": "Bygget på Moonfin",
+    "tgLanguageGroup": "Språk",
+    "tgLanguageGroupSubtitle": "Appens språk, utenlandske titler og undertekstspråk",
+    "tgAdminGroupSubtitle": "Jellyfin-adminpanelet, diskplass, XXX og SD-utgivelser",
+    "tgAdminPanel": "Jellyfin-adminpanelet",
+    "tgStartupSection": "Oppstart",
+    "tgBrowsingSection": "Når du blar",
+    "tgSetupLanguagesQuestion": "Hvilke titler skal Trending og Populært vise?",
+    "tgSetupLanguagesMine": "Bare titler på mine språk",
+    "tgSetupLanguagesAll": "Alle språk",
+    "tgSetupLanguagesAllHint": "Også anime, K-drama og alt annet",
+    "tgSetupLanguagesLater": "Du kan endre dette når som helst under Innstillinger › Språk."
 }
