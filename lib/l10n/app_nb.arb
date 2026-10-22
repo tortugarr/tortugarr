@@ -11414,5 +11414,6 @@
     "tgPlayerMpvHint": "Jevn takt for vanlige filmer",
     "tgAutoPlayerSwitching": "Avspillingen hakker – bytter til {engine}",
     "tgAutoPlayerTitle": "Automatisk avspiller",
-    "tgAutoPlayerSubtitle": "Velger Media3 eller mpv for hver film, bytter hvis det hakker og husker hva som virket. Endre per film med Avspiller-knappen i avspilleren."
+    "tgAutoPlayerSubtitle": "Velger Media3 eller mpv for hver film, bytter hvis det hakker og husker hva som virket. Endre per film med Avspiller-knappen i avspilleren.",
+    "tgAutoReasonStutter": "byttet etter hakking"
 }

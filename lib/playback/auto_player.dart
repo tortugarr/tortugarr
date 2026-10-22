@@ -92,6 +92,9 @@ enum AutoPlayerReason {
   /// This kind of file stuttered on the other engine before.
   learned,
 
+  /// Playback stuttered a moment ago, so this session switched engine.
+  stutter,
+
   /// 4K, HDR, HEVC or HD audio: Media3.
   heavy,
 
@@ -157,6 +160,7 @@ AutoPlayerDecision decideAutoPlayer({
   required bool settingPrefersMedia3,
   required bool bluetoothToMpv,
   PlayerChoice? titleChoice,
+  PlayerChoice? sessionChoice,
   PlayerEngine? learned,
 }) {
   AutoPlayerDecision pick(PlayerChoice choice, AutoPlayerReason reason) =>
@@ -178,9 +182,7 @@ AutoPlayerDecision decideAutoPlayer({
           : AutoPlayerReason.setting,
     );
   }
-  if (bluetoothToMpv) {
-    return pick(const PlayerChoice(PlayerEngine.mpv), AutoPlayerReason.bluetooth);
-  }
+  if (sessionChoice != null) return pick(sessionChoice, AutoPlayerReason.stutter);
   final tunneling = profile.wantsTunneling ? true : null;
   if (learned != null) {
     return pick(
@@ -197,7 +199,13 @@ AutoPlayerDecision decideAutoPlayer({
       AutoPlayerReason.heavy,
     );
   }
-  return pick(const PlayerChoice(PlayerEngine.mpv), AutoPlayerReason.light);
+  // mpv decodes in software here, which a TV can't do for 4K, so Bluetooth
+  // only moves files that were going to mpv anyway (2026-10-22: Dune on a
+  // headset stuttered on mpv and played cleanly on Media3 with tunneling).
+  return pick(
+    const PlayerChoice(PlayerEngine.mpv),
+    bluetoothToMpv ? AutoPlayerReason.bluetooth : AutoPlayerReason.light,
+  );
 }
 
 /// Counts dropped frames and audio underruns and says when playback has
@@ -271,10 +279,17 @@ class AutoPlayer {
 
   bool _reported = false;
 
-  /// Only Android TV has two engines worth choosing between automatically.
-  bool get available => PlatformDetection.isAndroid && PlatformDetection.isTV;
+  /// Android has both engines, so the player menu works there; the automatic
+  /// choice is tuned for TVs and stays on Android TV.
+  bool get available => PlatformDetection.isAndroid;
 
-  bool get automatic => available && _prefs.get(UserPreferences.autoPlayerEnabled);
+  bool get automatic =>
+      available &&
+      PlatformDetection.isTV &&
+      _prefs.get(UserPreferences.autoPlayerEnabled);
+
+  /// Engine picked after a stutter, per title, for the rest of this run.
+  final _sessionChoices = <String, PlayerChoice>{};
 
   AutoPlayerDecision decide({
     required String itemKey,
@@ -297,6 +312,7 @@ class AutoPlayer {
       settingPrefersMedia3: _prefs.prefersMedia3Now,
       bluetoothToMpv: bluetooth,
       titleChoice: available ? titleChoice(itemKey) : null,
+      sessionChoice: _sessionChoices[itemKey],
       learned: _learned()[profile.key],
     );
     current = decision;
@@ -327,6 +343,22 @@ class AutoPlayer {
       all.remove(all.keys.first);
     }
     await _prefs.set(UserPreferences.autoPlayerTitleChoices, jsonEncode(all));
+  }
+
+  /// Hands [decision]'s title to the other engine for the rest of this run and
+  /// remembers it for this kind of file. Returns the engine switched to.
+  Future<PlayerEngine> switchAfterStutter(AutoPlayerDecision decision) async {
+    final other = decision.choice.engine == PlayerEngine.media3
+        ? PlayerEngine.mpv
+        : PlayerEngine.media3;
+    _sessionChoices[decision.itemKey] = PlayerChoice(
+      other,
+      tunneling: other == PlayerEngine.media3 && decision.profile.wantsTunneling
+          ? true
+          : null,
+    );
+    await learn(decision.profile.key, other);
+    return other;
   }
 
   /// Remembers that [engine] is the one to start this kind of file with.

@@ -129,10 +129,31 @@ void main() {
       expect(d.reason, AutoPlayerReason.title);
     });
 
-    test('Bluetooth sends everything to mpv', () {
+    test('Bluetooth keeps heavy files on Media3, which mpv cannot decode', () {
       final d = _decide(heavy, bluetooth: true);
+      expect(d.choice, const PlayerChoice(PlayerEngine.media3, tunneling: true));
+      expect(d.reason, AutoPlayerReason.heavy);
+    });
+
+    test('Bluetooth names itself for light files on mpv', () {
+      final d = _decide(light, bluetooth: true);
       expect(d.choice.engine, PlayerEngine.mpv);
       expect(d.reason, AutoPlayerReason.bluetooth);
+    });
+
+    test('a switch after a stutter beats the rules and the learned engine', () {
+      const switched = PlayerChoice(PlayerEngine.media3, tunneling: true);
+      final d = decideAutoPlayer(
+        itemKey: 'item',
+        profile: light,
+        automatic: true,
+        settingPrefersMedia3: true,
+        bluetoothToMpv: true,
+        sessionChoice: switched,
+        learned: PlayerEngine.mpv,
+      );
+      expect(d.choice, switched);
+      expect(d.reason, AutoPlayerReason.stutter);
     });
 
     test('a learned engine beats the rules', () {

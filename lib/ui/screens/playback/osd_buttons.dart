@@ -42,7 +42,7 @@ enum OsdButton {
   /// never gets drawn here isn't worth offering a switch for.
   bool get isOffered => switch (this) {
     OsdButton.castControls => false,
-    OsdButton.player => PlatformDetection.isAndroid && PlatformDetection.isTV,
+    OsdButton.player => PlatformDetection.isAndroid,
     OsdButton.cast => !PlatformDetection.isTV,
     OsdButton.volume => PlatformDetection.useDesktopUi,
     OsdButton.orientation => PlatformDetection.isMobile,

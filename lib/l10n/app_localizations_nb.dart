@@ -17250,4 +17250,7 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String get tgAutoPlayerSubtitle =>
       'Velger Media3 eller mpv for hver film, bytter hvis det hakker og husker hva som virket. Endre per film med Avspiller-knappen i avspilleren.';
+
+  @override
+  String get tgAutoReasonStutter => 'byttet etter hakking';
 }

@@ -5957,7 +5957,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
               iconSize: secondaryIconSize,
               tooltip: l10n.playerTooltipVolume,
             ),
-          if (shows(OsdButton.player))
+          if (PlatformDetection.isAndroid && shows(OsdButton.player))
             OsdButton.player: _controlButton(
               Icons.swap_horiz_rounded,
               onPressed: _showPlayerMenu,
@@ -7292,6 +7292,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     AutoPlayerReason.setting => appL10n().tgAutoReasonSetting,
     AutoPlayerReason.bluetooth => appL10n().tgAutoReasonBluetooth,
     AutoPlayerReason.learned => appL10n().tgAutoReasonLearned,
+    AutoPlayerReason.stutter => appL10n().tgAutoReasonStutter,
     AutoPlayerReason.heavy => appL10n().tgAutoReasonHeavy,
     AutoPlayerReason.light => appL10n().tgAutoReasonLight,
   };
@@ -7305,10 +7306,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
     final other = decision.choice.engine == PlayerEngine.media3
         ? PlayerEngine.mpv
         : PlayerEngine.media3;
-    final auto = GetIt.instance<AutoPlayer>();
     _showPlayerToast(appL10n().tgAutoPlayerSwitching(_engineLabel(other)));
     unawaited(() async {
-      await auto.learn(decision.profile.key, other);
+      await GetIt.instance<AutoPlayer>().switchAfterStutter(decision);
       if (!mounted) return;
       await _manager.reselectBackendAtCurrentPosition();
     }());

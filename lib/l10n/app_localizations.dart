@@ -29866,6 +29866,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player.'**
   String get tgAutoPlayerSubtitle;
+
+  /// No description provided for @tgAutoReasonStutter.
+  ///
+  /// In en, this message translates to:
+  /// **'switched after it stuttered'**
+  String get tgAutoReasonStutter;
 }
 
 class _AppLocalizationsDelegate

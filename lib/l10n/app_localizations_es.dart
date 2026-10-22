@@ -17358,6 +17358,9 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get tgAutoPlayerSubtitle =>
       'Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player.';
+
+  @override
+  String get tgAutoReasonStutter => 'switched after it stuttered';
 }
 
 /// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
