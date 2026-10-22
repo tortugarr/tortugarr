@@ -105,13 +105,62 @@ class _AboutCategoryScreen extends StatelessWidget {
             ),
           adaptiveListSection(
             children: [
-              // Removed: Check for Updates, Source Code, Report an Issue, Join Discord, Support Moonfin, Licenses, Privacy Policy.
+              const _CheckForUpdatesTile(),
+              _TvSettingsListTile(
+                leading: const Icon(Icons.bug_report),
+                title: Text(l10n.settingsReportAnIssue),
+                subtitle: const Text('$_tortugarrGitHub/tortugarr/issues'),
+                onTap: () => showQrOrLaunch(
+                  context,
+                  url: '$_tortugarrGitHub/tortugarr/issues',
+                  title: l10n.settingsReportAnIssue,
+                ),
+              ),
+              _TvSettingsListTile(
+                leading: const Icon(Icons.troubleshoot),
+                title: const Text('Diagnostics & Logging'),
+                subtitle: const Text(
+                  'Capture media, login and network logs and send them to the '
+                  'server as a report',
+                ),
+                onTap: () => context.pushSettingsScreen(
+                  const DiagnosticsSettingsScreen(),
+                ),
+              ),
+              if (PlatformDetection.useDesktopUi)
+                _TvSettingsListTile(
+                  leading: const Icon(Icons.keyboard_outlined),
+                  title: Text(l10n.keyboardShortcutsTitle),
+                  subtitle: Text(l10n.keyboardShortcutsSubtitle),
+                  onTap: () => context.pushSettingsScreen(
+                    const _KeyboardShortcutsScreen(),
+                  ),
+                ),
             ],
           ),
           _SectionHeader(l10n.settingsLegal),
           adaptiveListSection(
             children: [
-              // Removed: Licenses, Privacy Policy.
+              _TvSettingsListTile(
+                leading: const Icon(Icons.description),
+                title: Text(l10n.settingsLicenses),
+                subtitle: Text(l10n.settingsOpenSourceLicenseNotices),
+                onTap: () => showQrOrLaunch(
+                  context,
+                  url: '$_tortugarrGitHub/tortugarr/blob/main/LICENSE',
+                  title: l10n.settingsLicenses,
+                ),
+              ),
+              _TvSettingsListTile(
+                leading: const Icon(Icons.privacy_tip),
+                title: Text(l10n.settingsPrivacyPolicy),
+                subtitle: Text(l10n.settingsPrivacyPolicySubtitle),
+                onTap: () => showQrOrLaunch(
+                  context,
+                  url: '$_tortugarrGitHub/tortugarr/blob/main/PRIVACY_POLICY.md',
+                  title: l10n.settingsPrivacyPolicy,
+                ),
+              ),
             ],
           ),
           const Divider(),
