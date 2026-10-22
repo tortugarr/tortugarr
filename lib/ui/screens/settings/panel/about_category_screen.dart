@@ -62,47 +62,6 @@ class _AboutCategoryScreen extends StatelessWidget {
               context.navigateTopLevel(Destinations.setup);
             },
           ),
-          _SectionHeader(l10n.tgCredits),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Text(
-              l10n.tgCreditsThanks,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontStyle: FontStyle.italic,
-                  ),
-            ),
-          ),
-          for (final credit in _credits(l10n))
-            _TvSettingsListTile(
-              leading: const Icon(Icons.favorite_border),
-              title: Text(credit.name),
-              subtitle: Text(
-                '${credit.role}\n${credit.url}',
-                style: const TextStyle(fontSize: 13),
-              ),
-              onTap: () => showQrOrLaunch(
-                context,
-                url: credit.url,
-                title: credit.name,
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-            child: Text(
-              l10n.tgTmdbNotice,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-          // TMDB's terms specify this exact English sentence; keep it under the
-          // translation in every language.
-          if (l10n.tgTmdbNotice != _tmdbNoticeEnglish)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Text(
-                _tmdbNoticeEnglish,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ),
           adaptiveListSection(
             children: [
               const _CheckForUpdatesTile(),
@@ -160,6 +119,47 @@ class _AboutCategoryScreen extends StatelessWidget {
               ),
             ],
           ),
+          _SectionHeader(l10n.tgCredits),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Text(
+              l10n.tgCreditsThanks,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
+            ),
+          ),
+          for (final credit in _credits(l10n))
+            _TvSettingsListTile(
+              leading: const Icon(Icons.favorite_border),
+              title: Text(credit.name),
+              subtitle: Text(
+                '${credit.role}\n${credit.url}',
+                style: const TextStyle(fontSize: 13),
+              ),
+              onTap: () => showQrOrLaunch(
+                context,
+                url: credit.url,
+                title: credit.name,
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: Text(
+              l10n.tgTmdbNotice,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          // TMDB's terms specify this exact English sentence; keep it under the
+          // translation in every language.
+          if (l10n.tgTmdbNotice != _tmdbNoticeEnglish)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Text(
+                _tmdbNoticeEnglish,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
           const Divider(),
           _SectionHeader(l10n.tgAboutProjectTitle),
           // One focus stop per paragraph, so the remote can scroll down to the
