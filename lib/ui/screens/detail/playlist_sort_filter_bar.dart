@@ -321,7 +321,7 @@ class PlaylistSortFilterBar extends StatelessWidget {
           _PlaylistPillButton(
             focusNode: sortFocusNode,
             icon: Icons.sort_rounded,
-            label: 'Sort: ${librarySortLabel(sortBy, l10n)}',
+            label: l10n.tgSortLabel(librarySortLabel(sortBy, l10n)),
             trailing: sortBy != LibrarySortBy.random &&
                     (sortBy != LibrarySortBy.playlistOrder ||
                         sortDirection == SortDirection.descending)
@@ -344,7 +344,7 @@ class PlaylistSortFilterBar extends StatelessWidget {
           _PlaylistPillButton(
             focusNode: filterFocusNode,
             icon: Icons.filter_list_rounded,
-            label: 'Filter: ${_filterSummary(l10n)}',
+            label: l10n.tgFilterLabel(_filterSummary(l10n)),
             trailing: const Icon(
               Icons.arrow_drop_down_rounded,
               size: 16,
@@ -372,7 +372,7 @@ class PlaylistSortFilterBar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 4.0),
               child: Text(
-                '$filteredCount of $totalCount',
+                l10n.tgCountOfTotal(filteredCount, totalCount),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.white54,
                     ),

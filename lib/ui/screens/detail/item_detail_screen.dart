@@ -2565,7 +2565,7 @@ class _DetailContentState extends State<_DetailContent> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: MissingEpisodesStatusNote(
-              reason: viewModel.missingError ?? 'Ukjent feil',
+              reason: viewModel.missingError ?? appL10n().adminUnknownError,
               onRetry: () => unawaited(viewModel.loadMissingEpisodes()),
             ),
           ),
@@ -2665,7 +2665,7 @@ class _DetailContentState extends State<_DetailContent> {
       widgets.addAll([
         const SizedBox(height: 16),
         MissingEpisodesStatusNote(
-          reason: viewModel.missingError ?? 'Ukjent feil',
+          reason: viewModel.missingError ?? appL10n().adminUnknownError,
           onRetry: () => unawaited(viewModel.loadMissingEpisodes()),
         ),
       ]);
@@ -8574,14 +8574,14 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
               .trim()
               .isNotEmpty)
         _AdvancedPlaybackOption(
-          label: 'Open in External Player',
+          label: appL10n().tgOpenInExternalPlayer,
           icon: Icons.open_in_new,
           onTap: () {
             _play(context, item, resume: resume, openInExternalPlayer: true);
           },
         ),
       _AdvancedPlaybackOption(
-        label: 'Transcode Stream: High Quality (1080p)',
+        label: appL10n().tgTranscodeHigh,
         icon: Icons.high_quality,
         onTap: () {
           _play(
@@ -8594,7 +8594,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         },
       ),
       _AdvancedPlaybackOption(
-        label: 'Transcode Stream: Medium Quality (720p)',
+        label: appL10n().tgTranscodeMedium,
         icon: Icons.video_settings,
         onTap: () {
           _play(
@@ -8607,7 +8607,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
         },
       ),
       _AdvancedPlaybackOption(
-        label: 'Transcode Stream: Low Quality (480p)',
+        label: appL10n().tgTranscodeLow,
         icon: Icons.sd,
         onTap: () {
           _play(
@@ -8626,7 +8626,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       context: context,
       useRootNavigator: false,
       builder: (dialogContext) => SimpleDialog(
-        title: const Text('Advanced Playback'),
+        title: Text(appL10n().tgAdvancedPlayback),
         children: options.asMap().entries.map((entry) {
           final i = entry.key;
           final option = entry.value;
@@ -11052,8 +11052,8 @@ String? channelLayoutFromStreams(List<Map<String, dynamic>> streams) {
   final channels = audio['Channels'];
   if (channels is int) {
     return switch (channels) {
-      1 => 'Mono',
-      2 => 'Stereo',
+      1 => appL10n().mono,
+      2 => appL10n().stereo,
       6 => '5.1',
       8 => '7.1',
       _ => '${channels}ch',
@@ -15442,7 +15442,7 @@ class DetailEpisodeCardState extends State<DetailEpisodeCard>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  tooltip: 'Download Now',
+                                  tooltip: appL10n().tgDownloadNow,
                                   icon: const Icon(
                                     Icons.download_for_offline_outlined,
                                     color: Colors.white70,
@@ -15640,23 +15640,8 @@ class PersonDates extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
-  }
+  /// The date in the app's language ("October 12, 2026" / "12. oktober 2026").
+  String _formatDate(DateTime date) => appLongDate(date);
 
   int _calculateAge(DateTime birth) {
     final now = DateTime.now();
@@ -15710,23 +15695,8 @@ class PersonDatesVertical extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
-  }
+  /// The date in the app's language ("October 12, 2026" / "12. oktober 2026").
+  String _formatDate(DateTime date) => appLongDate(date);
 
   int _calculateAge(DateTime birth) {
     final now = DateTime.now();

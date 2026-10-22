@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:moonfin/util/app_l10n.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -279,7 +280,7 @@ class DownloadSettingsScreen extends ConsumerWidget {
             .where((q) => q.name == name)
             .map((q) => q.label)
             .firstOrNull ??
-        'Original';
+        appL10n().original;
   }
 
   static void showQualityPicker(

@@ -7,6 +7,7 @@ import 'package:server_core/server_core.dart' show MediaServerClient;
 import '../../data/services/seerr_active_downloads_service.dart';
 import '../navigation/destinations.dart';
 import '../navigation/home_refresh_bus.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 /// Global, persistent status bar that shows every Seerr download currently
 /// in flight. Hidden when no downloads are active. Tapping the body jumps
@@ -85,7 +86,7 @@ class _SeerrActiveDownloadsBarBody extends StatelessWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Seerr · ${downloads.length} active',
+                        appL10n().tgSeerrActiveCount(downloads.length),
                         style: TextStyle(
                           color: onAccent,
                           fontSize: 11,
@@ -97,11 +98,11 @@ class _SeerrActiveDownloadsBarBody extends StatelessWidget {
                       ),
                     ),
                     _DismissButton(
-                      tooltip: 'Hide all',
+                      tooltip: appL10n().tgHideAll,
                       onTap: service.dismissAll,
                     ),
                     _DismissButton(
-                      tooltip: 'Refresh Jellyfin library',
+                      tooltip: appL10n().tgRefreshJellyfinLibrary,
                       icon: Icons.refresh,
                       onTap: _refreshLibrary,
                     ),
@@ -116,7 +117,7 @@ class _SeerrActiveDownloadsBarBody extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 4, left: 22),
                     child: Text(
-                      '+ $overflow more',
+                      appL10n().tgMoreCount(overflow),
                       style: TextStyle(
                         color: onAccent.withValues(alpha: 0.7),
                         fontSize: 10,
@@ -144,10 +145,10 @@ class _DownloadRow extends StatelessWidget {
     final isTv = download.mediaType == 'tv';
     final fraction = download.fraction.clamp(0.0, 1.0);
     final label = download.isImporting
-        ? 'Importing'
+        ? appL10n().tgImporting
         : '${(fraction * 100).round()}%';
     final suffix = download.is4k ? ' · 4K' : '';
-    final mediaTag = isTv ? 'Series' : 'Movie';
+    final mediaTag = isTv ? appL10n().tgSeriesTag : appL10n().tgMovieTag;
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Row(
@@ -196,7 +197,7 @@ class _DownloadRow extends StatelessWidget {
             ),
           ),
           _DismissButton(
-            tooltip: 'Hide',
+            tooltip: appL10n().tgHide,
             onTap: onDismiss,
           ),
         ],

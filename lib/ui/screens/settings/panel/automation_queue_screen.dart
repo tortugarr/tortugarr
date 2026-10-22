@@ -176,15 +176,14 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
               EnumPreferenceTile<StillWatchingBehavior>(
                 preference: UserPreferences.stillWatchingBehavior,
                 title: l10n.stillWatchingPrompt,
-                description:
-                    'Prompt to Continue Watching after X consecutive episodes.',
+                description: l10n.tgStillWatchingDescription,
                 icon: Icons.visibility,
                 labelOf: (v) => switch (v) {
-                  StillWatchingBehavior.short_ => '2 episodes',
-                  StillWatchingBehavior.medium => '3 episodes',
-                  StillWatchingBehavior.long_ => '5 episodes',
-                  StillWatchingBehavior.veryLong => '8 episodes',
-                  StillWatchingBehavior.disabled => 'Off',
+                  StillWatchingBehavior.short_ => l10n.tgEpisodeCount(2),
+                  StillWatchingBehavior.medium => l10n.tgEpisodeCount(3),
+                  StillWatchingBehavior.long_ => l10n.tgEpisodeCount(5),
+                  StillWatchingBehavior.veryLong => l10n.tgEpisodeCount(8),
+                  StillWatchingBehavior.disabled => l10n.off,
                 },
               ),
             ],

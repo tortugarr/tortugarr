@@ -564,21 +564,21 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                 ],
               ),
 
-              _SectionHeader('REWATCH'),
+              _SectionHeader(l10n.tgRewatch),
               adaptiveListSection(
                 children: [
                   SwitchPreferenceTile(
                     preference: UserPreferences.displayRewatchRow,
-                    title: 'Display Rewatch Row',
-                    subtitle: 'Show Rewatch row in Home Sections',
+                    title: l10n.tgDisplayRewatchRow,
+                    subtitle: l10n.tgDisplayRewatchRowSubtitle,
                     icon: Icons.replay,
                     onChanged: _onRewatchRowToggleChanged,
                   ),
                   if (showRewatchRow) ...[
                     EnumPreferenceTile<RewatchSortBy>(
                       preference: UserPreferences.rewatchSortBy,
-                      title: 'Sort By',
-                      description: 'Choose sorting method for completed items',
+                      title: l10n.sortBy,
+                      description: l10n.tgRewatchSortDescription,
                       icon: Icons.sort,
                       values: RewatchSortBy.values,
                       labelOf: (v) => v.displayName,
@@ -586,22 +586,22 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.rewatchIncludeMovies,
-                      title: 'Include Movies',
-                      subtitle: 'Show watched movies in the rewatch row',
+                      title: l10n.tgIncludeMovies,
+                      subtitle: l10n.tgRewatchIncludeMoviesSubtitle,
                       icon: Icons.movie,
                       onChanged: _onRewatchConfigChanged,
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.rewatchIncludeShows,
-                      title: 'Include Shows',
-                      subtitle: 'Show watched TV shows in the rewatch row',
+                      title: l10n.tgIncludeShows,
+                      subtitle: l10n.tgRewatchIncludeShowsSubtitle,
                       icon: Icons.tv,
                       onChanged: _onRewatchConfigChanged,
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.rewatchIncludeCollections,
-                      title: 'Include Collections',
-                      subtitle: 'Show watched collections in the rewatch row',
+                      title: l10n.tgIncludeCollections,
+                      subtitle: l10n.tgRewatchIncludeCollectionsSubtitle,
                       icon: Icons.collections,
                       onChanged: _onRewatchConfigChanged,
                     ),
@@ -609,21 +609,21 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                 ],
               ),
 
-              _SectionHeader('SINCE YOU WATCHED'),
+              _SectionHeader(l10n.tgSinceYouWatched),
               adaptiveListSection(
                 children: [
                   SwitchPreferenceTile(
                     preference: UserPreferences.displaySinceYouWatchedRows,
-                    title: 'Display Since You Watched Rows',
-                    subtitle: 'Show and customize Since You Watched rows in Home Sections.',
+                    title: l10n.tgDisplaySinceYouWatchedRows,
+                    subtitle: l10n.tgDisplaySinceYouWatchedRowsSubtitle,
                     icon: Icons.recommend,
                     onChanged: _onSinceYouWatchedRowsToggleChanged,
                   ),
                   if (showSinceYouWatchedRows) ...[
                     EnumPreferenceTile<SinceYouWatchedSource>(
                       preference: UserPreferences.sinceYouWatchedSource,
-                      title: 'Recommendation Source',
-                      description: "Choose recommendation source (Tortugarr Recommends custom local algorithm, Jellyfin Recommends server engine, or TMDb's similarity metrics. Note: Online recommendations require Seerr integration).",
+                      title: l10n.tgRecommendationSource,
+                      description: l10n.tgRecommendationSourceDescription,
                       icon: Icons.source,
                       values: SinceYouWatchedSource.values,
                       labelOf: (v) => v.displayName,
@@ -631,8 +631,8 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     ),
                     EnumPreferenceTile<SinceYouWatchedSourceType>(
                       preference: UserPreferences.sinceYouWatchedSourceType,
-                      title: 'Source Type',
-                      description: 'Choose type of items to recommend',
+                      title: l10n.tgSourceType,
+                      description: l10n.tgSourceTypeDescription,
                       icon: Icons.merge_type,
                       values: SinceYouWatchedSourceType.values,
                       labelOf: (v) => v.displayName,
@@ -640,8 +640,8 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     ),
                     EnumPreferenceTile<SinceYouWatchedSourceItem>(
                       preference: UserPreferences.sinceYouWatchedSourceItem,
-                      title: 'Source Item',
-                      description: 'Choose which source item to base recommendations on',
+                      title: l10n.tgSourceItem,
+                      description: l10n.tgSourceItemDescription,
                       icon: Icons.play_circle_filled,
                       values: SinceYouWatchedSourceItem.values,
                       labelOf: (v) => v.displayName,
@@ -649,8 +649,8 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     ),
                     EnumPreferenceTile<SinceYouWatchedNumRows>(
                       preference: UserPreferences.sinceYouWatchedNumRows,
-                      title: 'Number of Rows to Add',
-                      description: 'Choose how many Since You Watched rows to display (1-5)',
+                      title: l10n.tgNumberOfRowsToAdd,
+                      description: l10n.tgNumberOfRowsToAddDescription,
                       icon: Icons.format_list_numbered,
                       values: SinceYouWatchedNumRows.values,
                       labelOf: (v) => v.displayName,
@@ -659,15 +659,15 @@ class _HomeRowTogglesScreenState extends State<HomeRowTogglesScreen> {
                     if (sinceYouWatchedSource != SinceYouWatchedSource.online)
                       SwitchPreferenceTile(
                         preference: UserPreferences.sinceYouWatchedIncludeWatched,
-                        title: 'Include Previously Watched',
-                        subtitle: 'Include watched items in recommendations',
+                        title: l10n.tgIncludePreviouslyWatched,
+                        subtitle: l10n.tgIncludePreviouslyWatchedSubtitle,
                         icon: Icons.history,
                         onChanged: _onSinceYouWatchedConfigChanged,
                       ),
                   ],
                 ],
               ),
-              _SectionHeader('STUDIOS'),
+              _SectionHeader(l10n.studios),
               adaptiveListSection(
                 children: [
                   SwitchPreferenceTile(
@@ -1017,9 +1017,9 @@ class _StudioSelectionDialogState extends State<StudioSelectionDialog> {
           child: _loading
               ? const Center(child: CircularProgressIndicator())
               : _error != null
-                  ? Center(child: Text('Error loading studios: $_error'))
+                  ? Center(child: Text(l10n.tgErrorLoadingStudios('$_error')))
                   : _allStudios.isEmpty
-                      ? const Center(child: Text('No studios found in library.'))
+                      ? Center(child: Text(l10n.tgNoStudiosFound))
                       : Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

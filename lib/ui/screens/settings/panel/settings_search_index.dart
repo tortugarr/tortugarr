@@ -267,19 +267,19 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
   );
   final calendars = _SearchSection(
     slug: 'calendars',
-    path: [l10n.appearance, l10n.homeScreen, 'Upcoming Calendars'],
+    path: [l10n.appearance, l10n.homeScreen, l10n.tgUpcomingCalendars],
     icon: Icons.calendar_month,
     open: () => push(const _UpcomingCalendarsScreen()),
   );
   final seerrLists = _SearchSection(
     slug: 'seerr-rows',
-    path: [l10n.appearance, l10n.homeScreen, 'Seerr Rows'],
+    path: [l10n.appearance, l10n.homeScreen, l10n.tgSeerrRows],
     icon: Icons.list_alt,
     open: () => push(const _SeerrListsScreen()),
   );
   final customRows = _SearchSection(
     slug: 'custom-rows',
-    path: [l10n.appearance, l10n.homeScreen, 'Custom Rows'],
+    path: [l10n.appearance, l10n.homeScreen, l10n.tgCustomRows],
     icon: Icons.dashboard_customize,
     open: () => push(const _CustomListsScreen()),
   );
@@ -441,7 +441,7 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
   );
   final diagnostics = _SearchSection(
     slug: 'diagnostics',
-    path: [l10n.aboutTitle, 'Diagnostics & Logging'],
+    path: [l10n.aboutTitle, l10n.tgDiagnosticsLogging],
     icon: Icons.bug_report,
     open: () => push(const DiagnosticsSettingsScreen()),
   );
@@ -1050,14 +1050,14 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     ),
     rowToggles.leaf(
       'pref_display_rewatch_row',
-      'Display Rewatch Row',
-      subtitle: 'Show Rewatch row in Home Sections',
+      l10n.tgDisplayRewatchRow,
+      subtitle: l10n.tgDisplayRewatchRowSubtitle,
       keywords: ['watch again'],
     ),
     rowToggles.leaf(
       'pref_display_since_you_watched_rows',
-      'Display Since You Watched Rows',
-      subtitle: 'Show and customize Since You Watched rows in Home Sections.',
+      l10n.tgDisplaySinceYouWatchedRows,
+      subtitle: l10n.tgDisplaySinceYouWatchedRowsSubtitle,
       keywords: ['recommendations'],
     ),
     rowImages.screen(keywords: ['poster', 'thumbnail', 'banner']),
@@ -1089,76 +1089,76 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
       ),
       if (tmdbAvailable) ...[
         tmdbLists.screen(keywords: ['popular', 'top rated', 'trending']),
-        tmdbLists.leaf('tmdb_popular_movies_enabled', 'Popular Movies'),
-        tmdbLists.leaf('tmdb_top_rated_movies_enabled', 'Top Rated Movies'),
-        tmdbLists.leaf('tmdb_now_playing_movies_enabled', 'Now Playing Movies'),
-        tmdbLists.leaf('tmdb_upcoming_movies_enabled', 'Upcoming Movies'),
-        tmdbLists.leaf('tmdb_popular_tv_enabled', 'Popular TV'),
-        tmdbLists.leaf('tmdb_top_rated_tv_enabled', 'Top Rated TV'),
-        tmdbLists.leaf('tmdb_airing_today_tv_enabled', 'Airing Today TV'),
-        tmdbLists.leaf('tmdb_on_the_air_tv_enabled', 'On The Air TV'),
+        tmdbLists.leaf('tmdb_popular_movies_enabled', l10n.popularMovies),
+        tmdbLists.leaf('tmdb_top_rated_movies_enabled', l10n.tgRowTopRatedMovies),
+        tmdbLists.leaf('tmdb_now_playing_movies_enabled', l10n.tgRowNowPlayingMovies),
+        tmdbLists.leaf('tmdb_upcoming_movies_enabled', l10n.upcomingMovies),
+        tmdbLists.leaf('tmdb_popular_tv_enabled', l10n.tgRowPopularTv),
+        tmdbLists.leaf('tmdb_top_rated_tv_enabled', l10n.tgRowTopRatedTv),
+        tmdbLists.leaf('tmdb_airing_today_tv_enabled', l10n.tgRowAiringTodayTv),
+        tmdbLists.leaf('tmdb_on_the_air_tv_enabled', l10n.tgRowOnTheAirTv),
         tmdbLists.leaf(
           'tmdb_trending_movie_daily_enabled',
-          'Trending Movies (Daily)',
+          l10n.tgRowTrendingMoviesDaily,
         ),
         tmdbLists.leaf(
           'tmdb_trending_movie_weekly_enabled',
-          'Trending Movies (Weekly)',
+          l10n.tgRowTrendingMoviesWeekly,
         ),
-        tmdbLists.leaf('tmdb_trending_tv_daily_enabled', 'Trending TV (Daily)'),
+        tmdbLists.leaf('tmdb_trending_tv_daily_enabled', l10n.tgRowTrendingTvDaily),
         tmdbLists.leaf(
           'tmdb_trending_tv_weekly_enabled',
-          'Trending TV (Weekly)',
+          l10n.tgRowTrendingTvWeekly,
         ),
         tmdbLists.leaf(
           'tmdb_trending_all_weekly_enabled',
-          'Trending All (Weekly)',
+          l10n.tgRowTrendingAllWeekly,
         ),
       ],
       if (seerrAvailable) ...[
         calendars.screen(keywords: ['radarr', 'sonarr', 'upcoming releases']),
         calendars.leaf(
           'merge_radarr_sonarr_calendars',
-          'Merge Sonarr and Radarr Calendars',
+          l10n.tgMergeCalendars,
         ),
         calendars.leaf(
           'enable_radarr_calendar',
-          "Enable Radarr's Upcoming Calendar",
+          l10n.tgEnableRadarrCalendar,
           keywords: ['movies'],
         ),
         calendars.leaf(
           'radarr_calendar_show_cinema',
-          'Show Upcoming Cinema Releases',
+          l10n.tgShowCinemaReleases,
           header: 'Radarr',
         ),
         calendars.leaf(
           'radarr_calendar_show_digital',
-          'Show Upcoming Digital Releases',
+          l10n.tgShowDigitalReleases,
           header: 'Radarr',
         ),
         calendars.leaf(
           'radarr_calendar_show_physical',
-          'Show Upcoming Physical Releases',
+          l10n.tgShowPhysicalReleases,
           header: 'Radarr',
         ),
         calendars.leaf(
           'radarr_calendar_show_date',
-          'Show Release Date on Home Screen',
+          l10n.tgShowReleaseDateOnHome,
           header: 'Radarr',
         ),
         calendars.leaf(
           'enable_sonarr_calendar',
-          "Enable Sonarr's Upcoming Calendar",
+          l10n.tgEnableSonarrCalendar,
           keywords: ['shows', 'episodes'],
         ),
         calendars.leaf(
           'sonarr_calendar_show_episode_info',
-          'Display Episode Information',
+          l10n.tgDisplayEpisodeInfo,
           header: 'Sonarr',
         ),
         calendars.leaf(
           'sonarr_calendar_show_date',
-          'Show Release Date on Home Screen',
+          l10n.tgShowReleaseDateOnHome,
           header: 'Sonarr',
         ),
         seerrLists.screen(keywords: ['discovery rows', 'watchlist', 'trending']),
@@ -1711,7 +1711,7 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     automation.leaf(
       'enable_still_watching',
       l10n.stillWatchingPrompt,
-      subtitle: 'Prompt to Continue Watching after X consecutive episodes.',
+      subtitle: l10n.tgStillWatchingDescription,
       keywords: ['are you still watching'],
     ),
 
@@ -1905,7 +1905,7 @@ List<_SettingsSearchEntry> _buildSettingsSearchIndex({
     diagnostics.screen(keywords: ['logs', 'report', 'debug']),
     diagnostics.leaf(
       'pref_crash_reports_enabled',
-      'Send Crash Reports to Server',
+      l10n.tgDiagCrashReports,
       keywords: ['error', 'bug', 'crashes'],
     ),
   ];

@@ -12,6 +12,7 @@ import '../../widgets/overlay_sheet.dart';
 import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../../l10n/app_localizations.dart';
+import 'package:moonfin/util/app_l10n.dart';
 import '../../util/error_message.dart';
 import 'settings_app_bar.dart';
 
@@ -37,13 +38,13 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
       if (!mounted) return;
       _showSnack(
         fileName == null
-            ? 'Report sent to server'
-            : 'Report sent to server: $fileName',
+            ? appL10n().tgDiagReportSent
+            : appL10n().tgDiagReportSentFile(fileName),
       );
     } catch (e) {
       if (!mounted) return;
       final detail = describeError(e, AppLocalizations.of(context));
-      _showSnack('Could not send report: $detail');
+      _showSnack(appL10n().tgDiagSendFailed(detail));
     } finally {
       if (mounted) setState(() => _uploading = false);
     }
@@ -52,17 +53,17 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
   Future<void> _copyAll() async {
     ArtworkTimings.prepareReport();
     await Clipboard.setData(ClipboardData(text: _log.exportText()));
-    _showSnack('Logs copied to clipboard');
+    _showSnack(appL10n().tgDiagLogsCopied);
   }
 
   Future<void> _copyEntry(LogEntry entry) async {
     await Clipboard.setData(ClipboardData(text: entry.format()));
-    _showSnack('Entry copied to clipboard');
+    _showSnack(appL10n().tgDiagEntryCopied);
   }
 
   void _clearLogs() {
     _log.clear();
-    _showSnack('Logs cleared');
+    _showSnack(appL10n().tgDiagLogsCleared);
   }
 
   void _showSnack(String message) {
@@ -85,7 +86,7 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile<LogCategory?>(
-                title: const Text('All categories'),
+                title: Text(appL10n().tgDiagAllCategories),
                 value: null,
               ),
               for (final category in LogCategory.values)
@@ -111,7 +112,7 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
         Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('Diagnostics & Logging'),
+            Text(appL10n().tgDiagnosticsLogging),
           ),
           body: AnimatedBuilder(
             animation: _log,
@@ -139,32 +140,27 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const _Section(title: 'Logging'),
+              _Section(title: appL10n().tgLogging),
               SwitchPreferenceTile(
                 preference: UserPreferences.diagnosticLoggingEnabled,
-                title: 'Diagnostic Logging',
-                subtitle:
-                    'Capture media, Seerr login, network and other '
-                    'diagnostics so they can be sent to the server as a report.',
+                title: appL10n().tgDiagLoggingTitle,
+                subtitle: appL10n().tgDiagLoggingSubtitle,
                 icon: Icons.bug_report,
               ),
               SwitchPreferenceTile(
                 preference: UserPreferences.crashReportsEnabled,
-                title: 'Send Crash Reports to Server',
-                subtitle:
-                    'Save a report when the app crashes and send it to your '
-                    'own server the next time it connects. Nothing is sent '
-                    'anywhere else.',
+                title: appL10n().tgDiagCrashReports,
+                subtitle: appL10n().tgDiagCrashReportsSubtitle,
                 icon: Icons.report_outlined,
               ),
               _Section(
                 title: enabled
-                    ? 'Reports ($count entries captured)'
-                    : 'Reports',
+                    ? appL10n().tgDiagReportsCount(count)
+                    : appL10n().tgDiagReports,
               ),
               _ActionTile(
                 icon: Icons.cloud_upload,
-                title: 'Send report to server',
+                title: appL10n().tgDiagSendReport,
                 subtitle: _sendSubtitle(enabled),
                 enabled:
                     enabled && hasEntries && _supportsUpload && !_uploading,
@@ -179,29 +175,29 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
               ),
               _ActionTile(
                 icon: Icons.copy_all,
-                title: 'Copy all logs',
-                subtitle: 'Copy the full report to the clipboard.',
+                title: appL10n().tgDiagCopyAll,
+                subtitle: appL10n().tgDiagCopyAllSubtitle,
                 enabled: hasEntries,
                 onTap: _copyAll,
               ),
               _ActionTile(
                 icon: Icons.delete_outline,
-                title: 'Clear captured logs',
-                subtitle: 'Discard everything in the current buffer.',
+                title: appL10n().tgDiagClearLogs,
+                subtitle: appL10n().tgDiagClearLogsSubtitle,
                 enabled: hasEntries,
                 destructive: true,
                 onTap: _clearLogs,
               ),
               _Section(
                 title: _filter == null
-                    ? 'Recent logs'
-                    : 'Recent logs (${entries.length} of $count)',
+                    ? appL10n().tgDiagRecentLogs
+                    : appL10n().tgDiagRecentLogsCount(entries.length, count),
               ),
               _ActionTile(
                 icon: Icons.filter_list,
-                title: 'Filter',
+                title: appL10n().tgFilter,
                 subtitle: _filter == null
-                    ? 'All categories'
+                    ? appL10n().tgDiagAllCategories
                     : _categoryLabel(_filter!),
                 enabled: enabled || hasEntries,
                 trailing: const Icon(Icons.expand_more, size: 20),
@@ -230,10 +226,10 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
   }
 
   String _sendSubtitle(bool enabled) {
-    if (!enabled) return 'Enable diagnostic logging first.';
+    if (!enabled) return appL10n().tgDiagEnableFirst;
     if (!_supportsUpload) return _log.uploadUnavailableReason;
-    if (_log.entryCount == 0) return 'No entries captured yet.';
-    return 'Upload the captured logs to the active server.';
+    if (_log.entryCount == 0) return appL10n().tgDiagNoEntriesYet;
+    return appL10n().tgDiagUploadSubtitle;
   }
 
   Widget _buildEmptyState(BuildContext context, bool enabled) {
@@ -244,17 +240,13 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
     final String message;
     if (filtered) {
       icon = Icons.filter_list_off;
-      message =
-          'No ${_categoryLabel(_filter!)} entries. $total captured in other '
-          'categories. Tap Filter to change.';
+      message = appL10n().tgDiagEmptyFiltered(_categoryLabel(_filter!), total);
     } else if (enabled) {
       icon = Icons.hourglass_empty;
-      message = 'No log entries yet. Reproduce the issue, then send a report.';
+      message = appL10n().tgDiagEmptyEnabled;
     } else {
       icon = Icons.toggle_off_outlined;
-      message =
-          'Logging is off. Turn it on, reproduce the issue, then send '
-          'a report to the server.';
+      message = appL10n().tgDiagEmptyOff;
     }
 
     return Padding(
@@ -280,14 +272,14 @@ class _DiagnosticsSettingsScreenState extends State<DiagnosticsSettingsScreen> {
   }
 
   static String _categoryLabel(LogCategory category) => switch (category) {
-    LogCategory.general => 'General',
-    LogCategory.media => 'Media',
-    LogCategory.seerr => 'Seerr login',
-    LogCategory.network => 'Network',
-    LogCategory.auth => 'Authentication',
-    LogCategory.playback => 'Playback',
-    LogCategory.sync => 'Sync',
-    LogCategory.artwork => 'Artwork',
+    LogCategory.general => appL10n().general,
+    LogCategory.media => appL10n().tgLogCatMedia,
+    LogCategory.seerr => appL10n().tgLogCatSeerr,
+    LogCategory.network => appL10n().network,
+    LogCategory.auth => appL10n().authentication,
+    LogCategory.playback => appL10n().playback,
+    LogCategory.sync => appL10n().tgLogCatSync,
+    LogCategory.artwork => appL10n().tgLogCatArtwork,
   };
 }
 

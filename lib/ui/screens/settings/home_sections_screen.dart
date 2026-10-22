@@ -31,6 +31,7 @@ import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../widgets/settings/settings_section_header.dart';
 import '../../../l10n/app_localizations.dart';
+import 'package:moonfin/util/app_l10n.dart';
 import 'settings_app_bar.dart';
 
 const double _kHomeSectionTileRadius = 16;
@@ -1796,21 +1797,21 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         HomeSectionType.audioAlbums => l10n.albums,
         HomeSectionType.audioPlaylists => l10n.audioPlaylists,
         HomeSectionType.favoriteMovies =>
-          'Favorite ${FavoriteTypeFilter.movie.displayName}',
+          l10n.tgFavoriteMovies,
         HomeSectionType.favoriteSeries =>
-          'Favorite ${FavoriteTypeFilter.series.displayName}',
+          l10n.tgFavoriteSeries,
         HomeSectionType.favoriteEpisodes =>
-          'Favorite ${FavoriteTypeFilter.episode.displayName}',
+          l10n.tgFavoriteEpisodes,
         HomeSectionType.favoritePeople =>
-          'Favorite ${FavoriteTypeFilter.person.displayName}',
+          l10n.tgFavoritePeople,
         HomeSectionType.favoriteArtists =>
-          'Favorite ${FavoriteTypeFilter.musicArtist.displayName}',
+          l10n.tgFavoriteArtists,
         HomeSectionType.favoriteMusicVideos =>
-          'Favorite ${FavoriteTypeFilter.musicVideo.displayName}',
+          l10n.tgFavoriteMusicVideos,
         HomeSectionType.favoriteAlbums =>
-          'Favorite ${FavoriteTypeFilter.musicAlbum.displayName}',
+          l10n.tgFavoriteAlbums,
         HomeSectionType.favoriteSongs =>
-          'Favorite ${FavoriteTypeFilter.audio.displayName}',
+          l10n.tgFavoriteSongs,
         HomeSectionType.collections => l10n.collections,
         HomeSectionType.genres => l10n.genres,
         HomeSectionType.studios => l10n.studios,
@@ -1829,33 +1830,33 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         HomeSectionType.seerrStudios => l10n.studios,
         HomeSectionType.seerrSeriesGenres => l10n.seriesGenres,
         HomeSectionType.seerrNetworks => l10n.networks,
-        HomeSectionType.radarrCalendar => 'Upcoming Movies (Radarr)',
-        HomeSectionType.sonarrCalendar => 'Upcoming TV Shows (Sonarr)',
+        HomeSectionType.radarrCalendar => l10n.tgRowUpcomingMoviesRadarr,
+        HomeSectionType.sonarrCalendar => l10n.tgRowUpcomingTvSonarr,
         HomeSectionType.imdbTop250Movies => l10n.imdbTop250Movies,
         HomeSectionType.imdbTop250TvShows => l10n.imdbTop250TvShows,
         HomeSectionType.imdbMostPopularMovies => l10n.imdbMostPopularMovies,
         HomeSectionType.imdbMostPopularTvShows => l10n.imdbMostPopularTvShows,
         HomeSectionType.imdbLowestRatedMovies => l10n.imdbLowestRatedMovies,
         HomeSectionType.imdbTopEnglishMovies => l10n.imdbTopEnglishMovies,
-        HomeSectionType.tmdbPopularMovies => 'Popular Movies',
-        HomeSectionType.tmdbTopRatedMovies => 'Top Rated Movies',
-        HomeSectionType.tmdbNowPlayingMovies => 'Now Playing Movies',
-        HomeSectionType.tmdbUpcomingMovies => 'Upcoming Movies',
-        HomeSectionType.tmdbPopularTv => 'Popular TV',
-        HomeSectionType.tmdbTopRatedTv => 'Top Rated TV',
-        HomeSectionType.tmdbAiringTodayTv => 'Airing Today TV',
-        HomeSectionType.tmdbOnTheAirTv => 'On The Air TV',
-        HomeSectionType.tmdbTrendingMovieDaily => 'Trending Movies (Daily)',
-        HomeSectionType.tmdbTrendingMovieWeekly => 'Trending Movies (Weekly)',
-        HomeSectionType.tmdbTrendingTvDaily => 'Trending TV (Daily)',
-        HomeSectionType.tmdbTrendingTvWeekly => 'Trending TV (Weekly)',
-        HomeSectionType.tmdbTrendingAllWeekly => 'Trending All (Weekly)',
-        HomeSectionType.sinceYouWatched1 => 'Since You Watched Row 1',
-        HomeSectionType.sinceYouWatched2 => 'Since You Watched Row 2',
-        HomeSectionType.sinceYouWatched3 => 'Since You Watched Row 3',
-        HomeSectionType.sinceYouWatched4 => 'Since You Watched Row 4',
-        HomeSectionType.sinceYouWatched5 => 'Since You Watched Row 5',
-        HomeSectionType.rewatch => 'Rewatch',
+        HomeSectionType.tmdbPopularMovies => l10n.popularMovies,
+        HomeSectionType.tmdbTopRatedMovies => l10n.tgRowTopRatedMovies,
+        HomeSectionType.tmdbNowPlayingMovies => l10n.tgRowNowPlayingMovies,
+        HomeSectionType.tmdbUpcomingMovies => l10n.upcomingMovies,
+        HomeSectionType.tmdbPopularTv => l10n.tgRowPopularTv,
+        HomeSectionType.tmdbTopRatedTv => l10n.tgRowTopRatedTv,
+        HomeSectionType.tmdbAiringTodayTv => l10n.tgRowAiringTodayTv,
+        HomeSectionType.tmdbOnTheAirTv => l10n.tgRowOnTheAirTv,
+        HomeSectionType.tmdbTrendingMovieDaily => l10n.tgRowTrendingMoviesDaily,
+        HomeSectionType.tmdbTrendingMovieWeekly => l10n.tgRowTrendingMoviesWeekly,
+        HomeSectionType.tmdbTrendingTvDaily => l10n.tgRowTrendingTvDaily,
+        HomeSectionType.tmdbTrendingTvWeekly => l10n.tgRowTrendingTvWeekly,
+        HomeSectionType.tmdbTrendingAllWeekly => l10n.tgRowTrendingAllWeekly,
+        HomeSectionType.sinceYouWatched1 => l10n.tgRowSinceYouWatchedNumber(1),
+        HomeSectionType.sinceYouWatched2 => l10n.tgRowSinceYouWatchedNumber(2),
+        HomeSectionType.sinceYouWatched3 => l10n.tgRowSinceYouWatchedNumber(3),
+        HomeSectionType.sinceYouWatched4 => l10n.tgRowSinceYouWatchedNumber(4),
+        HomeSectionType.sinceYouWatched5 => l10n.tgRowSinceYouWatchedNumber(5),
+        HomeSectionType.rewatch => l10n.tgRewatch,
         HomeSectionType.seasonal => l10n.seasonalRow,
         HomeSectionType.none => l10n.none,
       };
@@ -2449,7 +2450,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                     )
                   : (_isAudioSectionType(section.type)
                         ? Text(
-                            'Audio row',
+                            appL10n().tgAudioRow,
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: kCleanSettingsFontFamily,
@@ -2460,7 +2461,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                           )
                         : (_isSeerrSectionType(section.type)
                               ? Text(
-                                  'Seerr Discovery Rows',
+                                  appL10n().seerrDiscoveryRows,
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontFamily: kCleanSettingsFontFamily,
@@ -2470,7 +2471,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                 )
                               : (_isImdbSectionType(section.type)
                                     ? Text(
-                                        'IMDb List',
+                                        appL10n().tgImdbList,
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontFamily:
@@ -2481,7 +2482,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                       )
                                     : (_isTmdbSectionType(section.type)
                                           ? Text(
-                                              'TMDB Lists',
+                                              appL10n().tgTmdbLists,
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontFamily:
@@ -2586,13 +2587,13 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         subtitle: section.isPluginDynamic
             ? _pluginSubtitle(section)
             : (_isAudioSectionType(section.type)
-                  ? 'Audio row'
+                  ? appL10n().tgAudioRow
                   : (_isSeerrSectionType(section.type)
-                        ? 'Seerr Discovery Rows'
+                        ? appL10n().seerrDiscoveryRows
                         : (_isImdbSectionType(section.type)
-                              ? 'IMDb List'
+                              ? appL10n().tgImdbList
                               : (_isTmdbSectionType(section.type)
-                                    ? 'TMDB Lists'
+                                    ? appL10n().tgTmdbLists
                                     : null)))),
         enabled: section.enabled,
         isFirst: isFirst,
@@ -2902,13 +2903,13 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
             subtitle: section.isPluginDynamic
                 ? Text(_pluginSubtitle(section))
                 : (_isAudioSectionType(section.type)
-                      ? const Text('Audio row')
+                      ? Text(appL10n().tgAudioRow)
                       : (_isSeerrSectionType(section.type)
-                            ? const Text('Seerr Discovery Rows')
+                            ? Text(appL10n().seerrDiscoveryRows)
                             : (_isImdbSectionType(section.type)
-                                  ? const Text('IMDb List')
+                                  ? Text(appL10n().tgImdbList)
                                   : (_isTmdbSectionType(section.type)
-                                        ? const Text('TMDB Lists')
+                                        ? Text(appL10n().tgTmdbLists)
                                         : null)))),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -2944,11 +2945,11 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       HomeSectionPluginSource.collections => switch (_otherServerName(
         section,
       )) {
-        final server? => 'Collections row from $server',
-        null => 'Collections row',
+        final server? => appL10n().tgCollectionsRowFrom(server),
+        null => appL10n().tgCollectionsRow,
       },
-      HomeSectionPluginSource.genres => 'Genres row',
-      HomeSectionPluginSource.playlists => 'Playlists row',
+      HomeSectionPluginSource.genres => appL10n().tgGenresRow,
+      HomeSectionPluginSource.playlists => appL10n().tgPlaylistsRow,
       HomeSectionPluginSource.seerr =>
         AppLocalizations.of(context).seerrDiscoveryRows,
       HomeSectionPluginSource.custom => (() {
@@ -2968,11 +2969,11 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
           _ => source.toUpperCase(),
         };
         final typeLabel = switch (type) {
-          'user_list' => 'Custom List',
-          'watchlist' => 'Watchlist',
-          'films' => 'Films',
-          'awards_events' => 'Awards/Events',
-          'movie_collection' => 'Movie Collection',
+          'user_list' => appL10n().tgCustomList,
+          'watchlist' => appL10n().tgWatchlistLabel,
+          'films' => appL10n().tgFilms,
+          'awards_events' => appL10n().tgAwardsEvents,
+          'movie_collection' => appL10n().tgMovieCollectionTitle,
           _ => type,
         };
         return '$sourceLabel $typeLabel';

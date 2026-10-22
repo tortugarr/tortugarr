@@ -103,17 +103,16 @@ class _SearchProgressBodyState<T> extends State<_SearchProgressBody<T>> {
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  'Searching releases… $elapsed',
+                  appL10n().tgSearchingReleasesElapsed(elapsed),
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          const Text(
-            'The server asks every indexer. A slow one (for example behind '
-            'Cloudflare) can make this take a few minutes.',
-            style: TextStyle(color: Colors.white60, fontSize: 13, height: 1.4),
+          Text(
+            appL10n().tgSearchSlowIndexerNote,
+            style: const TextStyle(color: Colors.white60, fontSize: 13, height: 1.4),
           ),
           const SizedBox(height: 20),
           SeerrDialogButton(

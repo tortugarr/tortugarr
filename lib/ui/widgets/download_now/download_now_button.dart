@@ -105,7 +105,7 @@ class DownloadNowButton extends StatefulWidget {
       }
       if (resolvedTmdbId == 0) {
         messenger?.showSnackBar(SnackBar(
-          content: Text('Could not find "$title" on the download service'),
+          content: Text(appL10n().tgNotFoundOnDownloadService(title)),
         ));
         return;
       }
@@ -149,9 +149,9 @@ class DownloadNowButton extends StatefulWidget {
 
       // Always let the user pick the exact file themselves.
       if (!context.mounted) return;
-      messenger?.showSnackBar(const SnackBar(
-        content: Text('Searching releases…'),
-        duration: Duration(seconds: 2),
+      messenger?.showSnackBar(SnackBar(
+        content: Text(appL10n().tgSearchingReleases),
+        duration: const Duration(seconds: 2),
       ));
       var query = title;
       if (mediaType == 'tv' &&
@@ -191,7 +191,7 @@ class DownloadNowButton extends StatefulWidget {
       // The grab can take a while (Radarr/Sonarr may need to add the title
       // first) — show persistent feedback so it never looks dead.
       messenger?.showSnackBar(SnackBar(
-        content: Text('Sending "${release.title}" to the download client…'),
+        content: Text(appL10n().tgSendingToDownloadClient(release.title)),
         duration: const Duration(minutes: 2),
       ));
       final tier = switch (release.tierLabel) {
@@ -216,7 +216,7 @@ class DownloadNowButton extends StatefulWidget {
       messenger?..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(
           content: Text(
-            'Sent "${release.title}" (${release.sizeLabel}) to qBittorrent',
+            appL10n().tgSentToQbittorrent(release.title, release.sizeLabel),
           ),
         ));
       // Fake releases can look clean by title and carry only an .exe.
@@ -247,7 +247,7 @@ class DownloadNowButton extends StatefulWidget {
       );
     } catch (e) {
       messenger?..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('Download failed: $e')));
+        ..showSnackBar(SnackBar(content: Text(appL10n().tgDownloadFailed('$e'))));
     }
   }
 
@@ -274,7 +274,7 @@ class DownloadNowButton extends StatefulWidget {
     }
     if (tvdbId == null || tvdbId <= 0) {
       messenger?.showSnackBar(SnackBar(
-        content: Text('"$title" has no TVDB id, so it cannot be downloaded here'),
+        content: Text(appL10n().tgNoTvdbIdForTitle(title)),
       ));
       return;
     }
@@ -345,7 +345,7 @@ class _DownloadNowButtonState extends State<DownloadNowButton> {
     if (widget.compact) {
       return IconButton(
         focusNode: widget.focusNode,
-        tooltip: 'Download Now',
+        tooltip: appL10n().tgDownloadNow,
         onPressed: _busy ? null : _run,
         icon: _busy
             ? const SizedBox(
@@ -360,7 +360,7 @@ class _DownloadNowButtonState extends State<DownloadNowButton> {
           ? const SizedBox(
               width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
           : const Icon(Icons.download_for_offline_outlined),
-      label: Text(_busy ? 'Working…' : 'Download Now'),
+      label: Text(_busy ? appL10n().tgWorking : appL10n().tgDownloadNow),
     );
   }
 }

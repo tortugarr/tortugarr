@@ -186,7 +186,7 @@ class _DownloadNowDialogState extends State<_DownloadNowDialog> {
               const SizedBox(width: 12),
               Expanded(
                 child: SeerrDialogButton(
-                  label: 'Download',
+                  label: l10n.download,
                   primary: true,
                   primaryColor: const Color(0xFF6366F1),
                   onPressed: _canSubmit()

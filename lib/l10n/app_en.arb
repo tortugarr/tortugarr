@@ -15340,5 +15340,569 @@
     "tgSetupLanguagesMine": "Only titles in my languages",
     "tgSetupLanguagesAll": "All languages",
     "tgSetupLanguagesAllHint": "Anime, K-drama and everything else too",
-    "tgSetupLanguagesLater": "You can change this any time under Settings › Language."
+    "tgSetupLanguagesLater": "You can change this any time under Settings › Language.",
+    "tgDiagReportSent": "Report sent to server",
+    "tgDiagReportSentFile": "Report sent to server: {fileName}",
+    "@tgDiagReportSentFile": {
+        "placeholders": {
+            "fileName": {
+                "type": "String"
+            }
+        }
+    },
+    "tgDiagSendFailed": "Could not send report: {detail}",
+    "@tgDiagSendFailed": {
+        "placeholders": {
+            "detail": {
+                "type": "String"
+            }
+        }
+    },
+    "tgDiagLogsCopied": "Logs copied to clipboard",
+    "tgDiagEntryCopied": "Entry copied to clipboard",
+    "tgDiagLogsCleared": "Logs cleared",
+    "tgDiagAllCategories": "All categories",
+    "tgDiagnosticsLogging": "Diagnostics & Logging",
+    "tgLogging": "Logging",
+    "tgDiagLoggingTitle": "Diagnostic Logging",
+    "tgDiagLoggingSubtitle": "Capture media, Seerr login, network and other diagnostics so they can be sent to the server as a report.",
+    "tgDiagCrashReports": "Send Crash Reports to Server",
+    "tgDiagCrashReportsSubtitle": "Save a report when the app crashes and send it to your own server the next time it connects. Nothing is sent anywhere else.",
+    "tgDiagReportsCount": "Reports ({count} entries captured)",
+    "@tgDiagReportsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgDiagReports": "Reports",
+    "tgDiagSendReport": "Send report to server",
+    "tgDiagCopyAll": "Copy all logs",
+    "tgDiagCopyAllSubtitle": "Copy the full report to the clipboard.",
+    "tgDiagClearLogs": "Clear captured logs",
+    "tgDiagClearLogsSubtitle": "Discard everything in the current buffer.",
+    "tgDiagRecentLogs": "Recent logs",
+    "tgDiagRecentLogsCount": "Recent logs ({shown} of {total})",
+    "@tgDiagRecentLogsCount": {
+        "placeholders": {
+            "shown": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "tgFilter": "Filter",
+    "tgDiagEnableFirst": "Enable diagnostic logging first.",
+    "tgDiagNoEntriesYet": "No entries captured yet.",
+    "tgDiagUploadSubtitle": "Upload the captured logs to the active server.",
+    "tgDiagEmptyFiltered": "No {category} entries. {total} captured in other categories. Tap Filter to change.",
+    "@tgDiagEmptyFiltered": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "tgDiagEmptyEnabled": "No log entries yet. Reproduce the issue, then send a report.",
+    "tgDiagEmptyOff": "Logging is off. Turn it on, reproduce the issue, then send a report to the server.",
+    "tgLogCatMedia": "Media",
+    "tgLogCatSeerr": "Seerr login",
+    "tgLogCatSync": "Sync",
+    "tgLogCatArtwork": "Artwork",
+    "tgCoreNotDownloaded": "This core is not downloaded yet.",
+    "tgCoreSettingsUnreadable": "This core's settings cannot be read on this device. You can still reset them to defaults below.",
+    "tgCoreSettingsReadFailed": "Could not read this core's settings.",
+    "tgCoreSettingsSaveFailed": "Could not save these settings.",
+    "tgCoreSettingsResetDone": "Settings reset to defaults.",
+    "tgCoreSettingsResetFailed": "Could not reset these settings.",
+    "tgCoreSettingsTitle": "{system} settings",
+    "@tgCoreSettingsTitle": {
+        "placeholders": {
+            "system": {
+                "type": "String"
+            }
+        }
+    },
+    "tgCoreSettingsWarning": "These are the emulator core's own settings. Some combinations can stop a game from starting, or close the app while it runs. If something breaks, use Reset to defaults below.",
+    "tgAudioRedetect": "Re-detect & apply recommended",
+    "tgAudioRedetectSubtitle": "Re-run audio detection and reset to the recommended settings.",
+    "tgAudioRedetected": "Audio re-detected: {route}",
+    "@tgAudioRedetected": {
+        "placeholders": {
+            "route": {
+                "type": "String"
+            }
+        }
+    },
+    "tgAudioStream": "Audio Stream",
+    "tgAudioOutput": "Audio Output",
+    "tgPassthroughSettings": "Passthrough Settings",
+    "tgAdvanced": "Advanced",
+    "tgDecodingRendering": "Decoding & Rendering",
+    "tgAboutDiagnosticsSubtitle": "Capture media, login and network logs and send them to the server as a report",
+    "tgRewatch": "Rewatch",
+    "tgDisplayRewatchRow": "Display Rewatch Row",
+    "tgDisplayRewatchRowSubtitle": "Show Rewatch row in Home Sections",
+    "tgRewatchSortDescription": "Choose sorting method for completed items",
+    "tgIncludeMovies": "Include Movies",
+    "tgRewatchIncludeMoviesSubtitle": "Show watched movies in the rewatch row",
+    "tgIncludeShows": "Include Shows",
+    "tgRewatchIncludeShowsSubtitle": "Show watched TV shows in the rewatch row",
+    "tgIncludeCollections": "Include Collections",
+    "tgRewatchIncludeCollectionsSubtitle": "Show watched collections in the rewatch row",
+    "tgSinceYouWatched": "Since You Watched",
+    "tgDisplaySinceYouWatchedRows": "Display Since You Watched Rows",
+    "tgDisplaySinceYouWatchedRowsSubtitle": "Show and customize Since You Watched rows in Home Sections.",
+    "tgRecommendationSource": "Recommendation Source",
+    "tgRecommendationSourceDescription": "Choose recommendation source (Tortugarr Recommends custom local algorithm, Jellyfin Recommends server engine, or TMDb's similarity metrics. Note: Online recommendations require Seerr integration).",
+    "tgSourceType": "Source Type",
+    "tgSourceTypeDescription": "Choose type of items to recommend",
+    "tgSourceItem": "Source Item",
+    "tgSourceItemDescription": "Choose which source item to base recommendations on",
+    "tgNumberOfRowsToAdd": "Number of Rows to Add",
+    "tgNumberOfRowsToAddDescription": "Choose how many Since You Watched rows to display (1-5)",
+    "tgIncludePreviouslyWatched": "Include Previously Watched",
+    "tgIncludePreviouslyWatchedSubtitle": "Include watched items in recommendations",
+    "tgErrorLoadingStudios": "Error loading studios: {error}",
+    "@tgErrorLoadingStudios": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNoStudiosFound": "No studios found in library.",
+    "tgFavoriteMovies": "Favorite Movies",
+    "tgFavoriteSeries": "Favorite Series",
+    "tgFavoriteEpisodes": "Favorite Episodes",
+    "tgFavoritePeople": "Favorite People",
+    "tgFavoriteArtists": "Favorite Artists",
+    "tgFavoriteMusicVideos": "Favorite Music Videos",
+    "tgFavoriteAlbums": "Favorite Albums",
+    "tgFavoriteSongs": "Favorite Songs",
+    "tgRowUpcomingMoviesRadarr": "Upcoming Movies (Radarr)",
+    "tgRowUpcomingTvSonarr": "Upcoming TV Shows (Sonarr)",
+    "tgRowTopRatedMovies": "Top Rated Movies",
+    "tgRowNowPlayingMovies": "Now Playing Movies",
+    "tgRowPopularTv": "Popular TV",
+    "tgRowTopRatedTv": "Top Rated TV",
+    "tgRowAiringTodayTv": "Airing Today TV",
+    "tgRowOnTheAirTv": "On The Air TV",
+    "tgRowTrendingMoviesDaily": "Trending Movies (Daily)",
+    "tgRowTrendingMoviesWeekly": "Trending Movies (Weekly)",
+    "tgRowTrendingTvDaily": "Trending TV (Daily)",
+    "tgRowTrendingTvWeekly": "Trending TV (Weekly)",
+    "tgRowTrendingAllWeekly": "Trending All (Weekly)",
+    "tgRowSinceYouWatchedNumber": "Since You Watched Row {number}",
+    "@tgRowSinceYouWatchedNumber": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "tgRowSinceYouWatched": "Since you watched",
+    "tgRowUpcomingReleases": "Upcoming Releases",
+    "tgReleaseCinema": "Cinema",
+    "tgReleaseDigital": "Digital",
+    "tgReleasePhysical": "Physical",
+    "tgReleaseOnDate": "{type}: {date}",
+    "@tgReleaseOnDate": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNextEpisodeDateCode": "Next Episode: {date} ({code})",
+    "@tgNextEpisodeDateCode": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "code": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNextEpisodeDate": "Next Episode: {date}",
+    "@tgNextEpisodeDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNextEpisodeCode": "Next Episode: ({code})",
+    "@tgNextEpisodeCode": {
+        "placeholders": {
+            "code": {
+                "type": "String"
+            }
+        }
+    },
+    "tgAudioRow": "Audio row",
+    "tgImdbList": "IMDb List",
+    "tgTmdbLists": "TMDB Lists",
+    "tgCollectionsRowFrom": "Collections row from {server}",
+    "@tgCollectionsRowFrom": {
+        "placeholders": {
+            "server": {
+                "type": "String"
+            }
+        }
+    },
+    "tgCollectionsRow": "Collections row",
+    "tgGenresRow": "Genres row",
+    "tgPlaylistsRow": "Playlists row",
+    "tgCustomList": "Custom List",
+    "tgWatchlistLabel": "Watchlist",
+    "tgFilms": "Films",
+    "tgAwardsEvents": "Awards/Events",
+    "tgMovieCollectionTitle": "Movie Collection",
+    "tgFetchingList": "Fetching {title}",
+    "@tgFetchingList": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "tgDownloadingFromMoonbase": "Downloading list from Moonbase and saving locally...",
+    "tgFetchFromMoonbaseFailed": "Failed to fetch {title} from Moonbase: {error}",
+    "@tgFetchFromMoonbaseFailed": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            },
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tgUpcomingCalendars": "Upcoming Calendars",
+    "tgEnableRadarrCalendar": "Enable Radarr's Upcoming Calendar",
+    "tgShowCinemaReleases": "Show Upcoming Cinema Releases",
+    "tgShowDigitalReleases": "Show Upcoming Digital Releases",
+    "tgShowPhysicalReleases": "Show Upcoming Physical Releases",
+    "tgShowReleaseDateOnHome": "Show Release Date on Home Screen",
+    "tgEnableSonarrCalendar": "Enable Sonarr's Upcoming Calendar",
+    "tgDisplayEpisodeInfo": "Display Episode Information",
+    "tgMergeCalendars": "Merge Sonarr and Radarr Calendars",
+    "tgSeerrRows": "Seerr Rows",
+    "tgSeerrHomePageRows": "Seerr Home Page Rows",
+    "tgDeleteCustomRow": "Delete Custom Row",
+    "tgDeleteCustomRowConfirm": "Are you sure you want to delete \"{name}\"?",
+    "@tgDeleteCustomRowConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "tgListLabel": "List",
+    "tgListFromUserId": "List from User ID",
+    "tgListFromUrl": "List from URL",
+    "tgDiary": "Diary",
+    "tgCompleteFilms": "Complete Films",
+    "tgListFromTmdbIdOrUrl": "List from TMDB List ID or URL",
+    "tgCollectionFromTmdbIdOrUrl": "Collection from TMDB Collection ID or URL",
+    "tgCustomRows": "Custom Rows",
+    "tgAddNewCustomHomeRow": "Add a New Custom Home Row",
+    "tgAddCustomRowSubtitle": "Create a custom row from TMDB, Letterboxd, or MDBList.",
+    "tgSavedCustomHomeRows": "Saved Custom Home Rows",
+    "tgCustomRow": "Custom Row",
+    "tgCustomRowSourceType": "Source: {source} | Type: {type}",
+    "@tgCustomRowSourceType": {
+        "placeholders": {
+            "source": {
+                "type": "String"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "tgDiscardChanges": "Discard Changes?",
+    "tgDiscardChangesWizard": "Unsaved changes, do you want to exit the wizard?",
+    "tgCustomRowValidationFailed": "Warning: Custom Row Validation Failed",
+    "tgCustomRowFetchFailed": "Failed to fetch items from the custom row.",
+    "tgErrorDetails": "Error details: {error}",
+    "@tgErrorDetails": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tgEditCustomHomeRow": "Edit Custom Home Row",
+    "tgAddCustomHomeRow": "Add Custom Home Row",
+    "tgSourceLabel": "Source",
+    "tgLetterboxdUsername": "Letterboxd Username",
+    "tgLetterboxdTmdbWarning": "WARNING: TMDB API Key must be configured in settings to resolve Letterboxd list items.",
+    "tgTmdbCollectionIdOrUrl": "TMDB Collection ID or URL",
+    "tgTmdbListIdOrUrl": "TMDB List ID or URL",
+    "tgTmdbCollectionHint": "12345 OR https://www.themoviedb.org/collection/12345",
+    "tgTmdbListHint": "12345 OR https://www.themoviedb.org/list/12345",
+    "tgTmdbApiKeyWarning": "WARNING: TMDB API Key must be configured in settings to fetch TMDB lists.",
+    "tgMdblistUsername": "MDBList Username",
+    "tgMdblistUrlHint": "e.g. https://mdblist.com/lists/username/list-slug",
+    "tgListNameSlug": "List Name (slug)",
+    "tgMdblistApiKeyWarning": "WARNING: MDBList API Key must be configured in settings (or server-wide by your admin) to fetch MDBList lists.",
+    "tgSortOrder": "Sort Order",
+    "tgSortDefaultWhenAdded": "Default (When Added)",
+    "tgSortFilmName": "Film Name",
+    "tgSortFilmPopularity": "Film Popularity",
+    "tgSortAverageRating": "Average Rating",
+    "tgAToZ": "A to Z",
+    "tgZToA": "Z to A",
+    "tgNewestFirst": "Newest First",
+    "tgEarliestFirst": "Earliest First",
+    "tgMostPopularFirst": "Most Popular First",
+    "tgLeastPopularFirst": "Least Popular First",
+    "tgHighestFirst": "Highest First",
+    "tgLowestFirst": "Lowest First",
+    "tgShowUserRatings": "Show User Ratings?",
+    "tgHomeRowCustomName": "Home Row Custom Name",
+    "tgEnterRowName": "Enter row name...",
+    "tgRefreshingCustomRows": "Refreshing Custom Rows",
+    "tgRefreshingCustomRowsBody": "Refreshing your custom rows and updating their caches...",
+    "tgRefreshedCustomRows": "Refreshed your custom rows.",
+    "tgRefreshCustomRowsFailed": "Failed to refresh custom rows: {error}",
+    "@tgRefreshCustomRowsFailed": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tgImdbLists": "IMDb Lists",
+    "tgImdbListsSubtitle": "Configure IMDb Top 250, Popular, and other charts.",
+    "tgTmdbListsSubtitle": "Configure Popular, Top Rated, and Trending TMDB lists.",
+    "tgTmdbApiKeyRequired": "TMDB API key must be configured in Moonbase settings to use this feature.",
+    "tgUpcomingCalendarsSubtitle": "Toggle Upcoming Calendars from Radarr/Sonarr.",
+    "tgSeerrRowsSubtitle": "Configure Seerr Discovery Rows.",
+    "tgCustomRowsSubtitle": "ADVANCED: Configure customized home rows from a variety of sources.",
+    "tgMediaTypeBadges": "Media type badges",
+    "tgMediaTypeBadgesDescription": "Show MOVIE / SERIES labels on external home-row cards",
+    "tgRefreshCustomRows": "Refresh Custom Rows",
+    "tgRefreshCustomRowsSubtitle": "Force a full update of the custom row caches.",
+    "tgStillWatchingDescription": "Prompt to Continue Watching after X consecutive episodes.",
+    "tgEpisodeCount": "{count} episodes",
+    "@tgEpisodeCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgSyncPlayOptions": "SyncPlay Options",
+    "tgActiveSessions": "Active Sessions",
+    "tgOpenInExternalPlayer": "Open in External Player",
+    "tgTranscodeHigh": "Transcode Stream: High Quality (1080p)",
+    "tgTranscodeMedium": "Transcode Stream: Medium Quality (720p)",
+    "tgTranscodeLow": "Transcode Stream: Low Quality (480p)",
+    "tgAdvancedPlayback": "Advanced Playback",
+    "tgDownloadNow": "Download Now",
+    "tgNotFoundOnDownloadService": "Could not find \"{title}\" on the download service",
+    "@tgNotFoundOnDownloadService": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "tgSearchingReleases": "Searching releases…",
+    "tgSendingToDownloadClient": "Sending \"{title}\" to the download client…",
+    "@tgSendingToDownloadClient": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "tgSentToQbittorrent": "Sent \"{title}\" ({size}) to qBittorrent",
+    "@tgSentToQbittorrent": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            },
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNoTvdbIdForTitle": "\"{title}\" has no TVDB id, so it cannot be downloaded here",
+    "@tgNoTvdbIdForTitle": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "tgWorking": "Working…",
+    "tgDownloadingTitle": "Downloading \"{title}\" ({size})",
+    "@tgDownloadingTitle": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            },
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "tgCountTooEarly": "{count} too early",
+    "@tgCountTooEarly": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgNoReleasesFound": "No releases found",
+    "tgPluginNotAdmin": "Only administrators can download on this server",
+    "tgPluginFeatureOff": "Downloads are switched off on this server",
+    "tgPluginNotConfigured": "The server is not set up for downloads yet",
+    "tgPluginSearchExpired": "The search is too old, search again",
+    "tgPluginTimeout": "The search took too long, try again",
+    "tgPluginNoIndexers": "No search sources are active on the server{detail}. Check your indexers in Prowlarr. Does an indexer's test fail with a Cloudflare error (1337x and others)? Type flaresolverr under Tags at the bottom of its settings and test again.",
+    "@tgPluginNoIndexers": {
+        "placeholders": {
+            "detail": {
+                "type": "String"
+            }
+        }
+    },
+    "tgAlreadyDownloaded": "Already downloaded: the download client has this file already",
+    "tgAlreadyDownloadingPercent": "Already downloading ({percent} %)",
+    "@tgAlreadyDownloadingPercent": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    },
+    "tgNoReasonGiven": "No reason given",
+    "tgDownloadAnywayQuestion": "Download anyway?",
+    "tgServerWouldNotPick": "The server would not pick this file by itself:\n{reasons}",
+    "@tgServerWouldNotPick": {
+        "placeholders": {
+            "reasons": {
+                "type": "String"
+            }
+        }
+    },
+    "tgNoReleasesOnProwlarr": "No releases found on Prowlarr",
+    "tgChooseFileResults": "Choose file ({count} results)",
+    "@tgChooseFileResults": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgChooseFileResultsNote": "Choose file ({count} results) · {note}",
+    "@tgChooseFileResultsNote": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "note": {
+                "type": "String"
+            }
+        }
+    },
+    "tgSdLowQuality": "SD · low quality",
+    "tgSeedersCount": "{count} seeders",
+    "@tgSeedersCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgTierAll": "all",
+    "tgTierOther": "other",
+    "tgSearchingReleasesElapsed": "Searching releases… {elapsed}",
+    "@tgSearchingReleasesElapsed": {
+        "placeholders": {
+            "elapsed": {
+                "type": "String"
+            }
+        }
+    },
+    "tgSearchSlowIndexerNote": "The server asks every indexer. A slow one (for example behind Cloudflare) can make this take a few minutes.",
+    "tgSeerrActiveCount": "Seerr · {count} active",
+    "@tgSeerrActiveCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgRefreshJellyfinLibrary": "Refresh Jellyfin library",
+    "tgMoreCount": "+ {count} more",
+    "@tgMoreCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tgSortLabel": "Sort: {value}",
+    "@tgSortLabel": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "tgFilterLabel": "Filter: {value}",
+    "@tgFilterLabel": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "tgCountOfTotal": "{count} of {total}",
+    "@tgCountOfTotal": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "tgEndOfTrack": "End of track",
+    "tgSaveQueueAsPlaylist": "Save queue as playlist",
+    "tgSavedName": "Saved \"{name}\"",
+    "@tgSavedName": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "tgSavePlaylistFailed": "Could not save playlist: {error}",
+    "@tgSavePlaylistFailed": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tgMyPlaylist": "My Playlist"
 }

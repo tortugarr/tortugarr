@@ -31,6 +31,7 @@ import '../../widgets/remote_play_to_session_dialog.dart';
 import '../../widgets/playback/audio_quality_badge.dart';
 import '../../widgets/playback/lyrics_view.dart';
 import '../../../l10n/app_localizations.dart';
+import 'package:moonfin/util/app_l10n.dart';
 import '../../util/error_message.dart';
 import 'audiobook_player_view.dart';
 
@@ -595,11 +596,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
   Future<void> _showOverflowSheet(AggregatedItem item) async {
     const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
-    const sleepOptions = <String, Duration?>{
-      'Off': null,
-      '15 min': Duration(minutes: 15),
-      '30 min': Duration(minutes: 30),
-      '60 min': Duration(minutes: 60),
+    final sleepOptions = <String, Duration?>{
+      appL10n().off: null,
+      '15 min': const Duration(minutes: 15),
+      '30 min': const Duration(minutes: 30),
+      '60 min': const Duration(minutes: 60),
     };
 
     await showFocusRestoringModalBottomSheet<void>(
@@ -626,7 +627,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  sectionTitle('PLAYBACK SPEED'),
+                  sectionTitle(appL10n().audiobookPlaybackSpeed.toUpperCase()),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Wrap(
@@ -645,7 +646,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                       ],
                     ),
                   ),
-                  sectionTitle('SLEEP TIMER'),
+                  sectionTitle(appL10n().audiobookSleepTimer.toUpperCase()),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Wrap(
@@ -661,7 +662,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                             },
                           ),
                         ChoiceChip(
-                          label: const Text('End of track'),
+                          label: Text(appL10n().tgEndOfTrack),
                           selected: false,
                           onSelected: (_) {
                             _setSleepTimer(_state.duration - _state.position);
@@ -678,7 +679,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                       color: AppColorScheme.onSurface,
                     ),
                     title: Text(
-                      'Save queue as playlist',
+                      appL10n().tgSaveQueueAsPlaylist,
                       style: TextStyle(color: AppColorScheme.onSurface),
                     ),
                     onTap: () {
@@ -711,44 +712,44 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Saved "${name.trim()}"')));
+        ).showSnackBar(SnackBar(content: Text(appL10n().tgSavedName(name.trim()))));
       }
     } catch (e) {
       if (mounted) {
         final detail = describeError(e, AppLocalizations.of(context));
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Could not save playlist: $detail')));
+        ).showSnackBar(SnackBar(content: Text(appL10n().tgSavePlaylistFailed(detail))));
       }
     }
   }
 
   Future<String?> _promptPlaylistName() {
     final controller = TextEditingController(
-      text: _resolveCurrentItem()?.album ?? 'My Playlist',
+      text: _resolveCurrentItem()?.album ?? appL10n().tgMyPlaylist,
     );
     return showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColorScheme.surface,
         title: Text(
-          'Save queue as playlist',
+          appL10n().tgSaveQueueAsPlaylist,
           style: TextStyle(color: AppColorScheme.onSurface),
         ),
         content: TextField(
           controller: controller,
           autofocus: true,
           style: TextStyle(color: AppColorScheme.onSurface),
-          decoration: const InputDecoration(hintText: 'Playlist name'),
+          decoration: InputDecoration(hintText: appL10n().playlistName),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child: Text(appL10n().tgCancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(controller.text),
-            child: const Text('Save'),
+            child: Text(appL10n().save),
           ),
         ],
       ),
@@ -1456,13 +1457,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         child: Row(
           children: [
             if (hasLyrics)
-              chip('Lyrics', _showLyrics, () {
+              chip(appL10n().audiobookLyrics, _showLyrics, () {
                 setState(() {
                   _showLyrics = !_showLyrics;
                   if (_showLyrics) _showQueue = false;
                 });
               }),
-            chip('Up Next', _showQueue, _toggleQueuePanel),
+            chip(appL10n().upNext, _showQueue, _toggleQueuePanel),
           ],
         ),
       ),
@@ -1636,8 +1637,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                tab('Up Next', 0, _tvViewTab == 0 || !showLyricsTab),
-                if (showLyricsTab) tab('Lyrics', 1, _tvViewTab == 1),
+                tab(appL10n().upNext, 0, _tvViewTab == 0 || !showLyricsTab),
+                if (showLyricsTab) tab(appL10n().audiobookLyrics, 1, _tvViewTab == 1),
               ],
             ),
           ),

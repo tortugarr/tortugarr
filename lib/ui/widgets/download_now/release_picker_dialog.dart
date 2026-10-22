@@ -59,7 +59,7 @@ Future<ReleaseChoice?> showReleasePickerDialog(
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(found.isEmpty
-            ? 'No releases found on Prowlarr'
+            ? appL10n().tgNoReleasesOnProwlarr
             : appL10n().tgOnlyEarlyFiles(found.length)),
       ));
     }
@@ -91,8 +91,8 @@ Future<ReleaseChoice?> showReleaseListDialog(
     context,
     title: title,
     subtitle: note == null
-        ? 'Choose file (${releases.length} results)'
-        : 'Choose file (${releases.length} results) · $note',
+        ? appL10n().tgChooseFileResults(releases.length)
+        : appL10n().tgChooseFileResultsNote(releases.length, note),
     builder: (_) => _ReleasePickerBody(
       releases: releases,
       initialTier: initialTier,
@@ -236,7 +236,11 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
                   ? widget.releases.length
                   : (_byTier[t] ?? const []).length;
               return SeerrChoiceChip(
-                label: '$t · $count',
+                label: '${switch (t) {
+                  'all' => appL10n().tgTierAll,
+                  'other' => appL10n().tgTierOther,
+                  _ => t,
+                }} · $count',
                 selected: t == _tier,
                 onSelected: (_) => setState(() => _tier = t),
               );
@@ -326,9 +330,9 @@ class _ReleaseRow extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       [
-                        if (release.lowQuality) 'SD · low quality',
+                        if (release.lowQuality) appL10n().tgSdLowQuality,
                         release.indexer,
-                        '${release.seeders} seeders',
+                        appL10n().tgSeedersCount(release.seeders),
                         if (release.publishDate != null)
                           _age(release.publishDate!),
                       ].join(' · '),

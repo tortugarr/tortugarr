@@ -118,11 +118,8 @@ class _AboutCategoryScreen extends StatelessWidget {
               ),
               _TvSettingsListTile(
                 leading: const Icon(Icons.troubleshoot),
-                title: const Text('Diagnostics & Logging'),
-                subtitle: const Text(
-                  'Capture media, login and network logs and send them to the '
-                  'server as a report',
-                ),
+                title: Text(l10n.tgDiagnosticsLogging),
+                subtitle: Text(l10n.tgAboutDiagnosticsSubtitle),
                 onTap: () => context.pushSettingsScreen(
                   const DiagnosticsSettingsScreen(),
                 ),

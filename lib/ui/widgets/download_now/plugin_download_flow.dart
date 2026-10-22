@@ -82,7 +82,7 @@ Future<bool> runPluginDownload(
     }
 
     messenger?.showSnackBar(SnackBar(
-      content: Text('Sending "${picked.title}" to the download client…'),
+      content: Text(appL10n().tgSendingToDownloadClient(picked.title)),
       duration: const Duration(minutes: 2),
     ));
     final grab = await plugin.grab(
@@ -103,7 +103,7 @@ Future<bool> runPluginDownload(
     }
     messenger?..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        content: Text('Downloading "${picked.title}" (${asPickerRelease(picked).sizeLabel})'),
+        content: Text(appL10n().tgDownloadingTitle(picked.title, asPickerRelease(picked).sizeLabel)),
       ));
 
     final downloadId = grab.downloadId;
@@ -117,7 +117,7 @@ Future<bool> runPluginDownload(
     return false;
   } catch (e) {
     messenger?..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('Download failed: $e')));
+      ..showSnackBar(SnackBar(content: Text(appL10n().tgDownloadFailed('$e'))));
     return false;
   }
 }
@@ -143,12 +143,12 @@ String _nothingFoundReason(TortugarrSearchResult result) {
   if (result.onlySdDropped) return appL10n().tgOnlySdFound(result.found);
   if (result.found > 0) {
     final reasons = [
-      if (result.droppedEarly > 0) '${result.droppedEarly} too early',
+      if (result.droppedEarly > 0) appL10n().tgCountTooEarly(result.droppedEarly),
       for (final e in result.dropped.entries) '${e.value} ${e.key}',
     ].join(', ');
     return appL10n().tgNothingKeptReasons(result.found, reasons);
   }
-  return 'No releases found';
+  return appL10n().tgNoReleasesFound;
 }
 
 /// The picker shows [ProwlarrRelease]s; the plugin's fields map one to one.
@@ -173,19 +173,18 @@ DownloadQualityTier _tierOf(ProwlarrRelease r) => switch (r.tierLabel) {
 
 /// The user-facing text for a plugin error code.
 String explainPluginError(TortugarrPluginException e) => switch (e.code) {
-      'not_admin' => 'Only administrators can download on this server',
-      'feature_off' => 'Downloads are switched off on this server',
-      'not_configured' => 'The server is not set up for downloads yet',
-      'search_expired' => 'The search is too old, search again',
-      'timeout' => 'The search took too long, try again',
-      'no_indexers' => 'No search sources are active on the server'
-          '${e.message.isEmpty ? '' : ' (${e.message})'}. Check your indexers in Prowlarr. '
-          'Does an indexer\'s test fail with a Cloudflare error (1337x and others)? '
-          'Type flaresolverr under Tags at the bottom of its settings and test again.',
+      'not_admin' => appL10n().tgPluginNotAdmin,
+      'feature_off' => appL10n().tgPluginFeatureOff,
+      'not_configured' => appL10n().tgPluginNotConfigured,
+      'search_expired' => appL10n().tgPluginSearchExpired,
+      'timeout' => appL10n().tgPluginTimeout,
+      'no_indexers' => appL10n().tgPluginNoIndexers(
+          e.message.isEmpty ? '' : ' (${e.message})',
+        ),
       'already_in_client' => (e.progress ?? 0) >= 1
-          ? 'Already downloaded: the download client has this file already'
-          : 'Already downloading (${((e.progress ?? 0) * 100).round()} %)',
-      _ => 'Download failed: $e',
+          ? appL10n().tgAlreadyDownloaded
+          : appL10n().tgAlreadyDownloadingPercent(((e.progress ?? 0) * 100).round()),
+      _ => appL10n().tgDownloadFailed('$e'),
     };
 
 Future<void> _watchVideo(
@@ -208,10 +207,10 @@ Future<void> _watchVideo(
 }
 
 Future<bool> _confirmSoftRejected(BuildContext context, TortugarrRelease r) async {
-  final reasons = r.rejections.isEmpty ? 'No reason given' : r.rejections.join('\n');
+  final reasons = r.rejections.isEmpty ? appL10n().tgNoReasonGiven : r.rejections.join('\n');
   final result = await showStyledPlayerDialog<bool>(
     context,
-    title: 'Download anyway?',
+    title: appL10n().tgDownloadAnywayQuestion,
     subtitle: r.title,
     builder: (ctx) => Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
@@ -220,7 +219,7 @@ Future<bool> _confirmSoftRejected(BuildContext context, TortugarrRelease r) asyn
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'The server would not pick this file by itself:\n$reasons',
+            appL10n().tgServerWouldNotPick(reasons),
             style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
           ),
           const SizedBox(height: 20),
@@ -237,7 +236,7 @@ Future<bool> _confirmSoftRejected(BuildContext context, TortugarrRelease r) asyn
               const SizedBox(width: 12),
               Expanded(
                 child: SeerrDialogButton(
-                  label: 'Download anyway',
+                  label: appL10n().tgDownloadAnyway,
                   onPressed: () => Navigator.of(ctx).pop(true),
                 ),
               ),

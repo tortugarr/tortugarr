@@ -44,6 +44,7 @@ import '../../../data/utils/blocked_ratings.dart';
 import '../../../util/seasonal_country.dart';
 import '../../../util/seerr_genre_art.dart';
 import '../../util/home_row_title_localizer.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 class HomeViewModel extends ChangeNotifier {
   /// Cards in a merged row, matching what a single library row shows.
@@ -1710,31 +1711,31 @@ class HomeViewModel extends ChangeNotifier {
           'imdb_top_english_movies',
         );
       case HomeSectionType.tmdbPopularMovies:
-        return _loadTmdbChartRow(HomeSectionType.tmdbPopularMovies, 'Popular Movies', 'tmdb_popular_movies');
+        return _loadTmdbChartRow(HomeSectionType.tmdbPopularMovies, appL10n().popularMovies, 'tmdb_popular_movies');
       case HomeSectionType.tmdbTopRatedMovies:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTopRatedMovies, 'Top Rated Movies', 'tmdb_top_rated_movies');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTopRatedMovies, appL10n().tgRowTopRatedMovies, 'tmdb_top_rated_movies');
       case HomeSectionType.tmdbNowPlayingMovies:
-        return _loadTmdbChartRow(HomeSectionType.tmdbNowPlayingMovies, 'Now Playing Movies', 'tmdb_now_playing_movies');
+        return _loadTmdbChartRow(HomeSectionType.tmdbNowPlayingMovies, appL10n().tgRowNowPlayingMovies, 'tmdb_now_playing_movies');
       case HomeSectionType.tmdbUpcomingMovies:
-        return _loadTmdbChartRow(HomeSectionType.tmdbUpcomingMovies, 'Upcoming Movies', 'tmdb_upcoming_movies');
+        return _loadTmdbChartRow(HomeSectionType.tmdbUpcomingMovies, appL10n().upcomingMovies, 'tmdb_upcoming_movies');
       case HomeSectionType.tmdbPopularTv:
-        return _loadTmdbChartRow(HomeSectionType.tmdbPopularTv, 'Popular TV', 'tmdb_popular_tv');
+        return _loadTmdbChartRow(HomeSectionType.tmdbPopularTv, appL10n().tgRowPopularTv, 'tmdb_popular_tv');
       case HomeSectionType.tmdbTopRatedTv:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTopRatedTv, 'Top Rated TV', 'tmdb_top_rated_tv');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTopRatedTv, appL10n().tgRowTopRatedTv, 'tmdb_top_rated_tv');
       case HomeSectionType.tmdbAiringTodayTv:
-        return _loadTmdbChartRow(HomeSectionType.tmdbAiringTodayTv, 'Airing Today TV', 'tmdb_airing_today_tv');
+        return _loadTmdbChartRow(HomeSectionType.tmdbAiringTodayTv, appL10n().tgRowAiringTodayTv, 'tmdb_airing_today_tv');
       case HomeSectionType.tmdbOnTheAirTv:
-        return _loadTmdbChartRow(HomeSectionType.tmdbOnTheAirTv, 'On The Air TV', 'tmdb_on_the_air_tv');
+        return _loadTmdbChartRow(HomeSectionType.tmdbOnTheAirTv, appL10n().tgRowOnTheAirTv, 'tmdb_on_the_air_tv');
       case HomeSectionType.tmdbTrendingMovieDaily:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingMovieDaily, 'Trending Movies (Daily)', 'tmdb_trending_movie_daily');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingMovieDaily, appL10n().tgRowTrendingMoviesDaily, 'tmdb_trending_movie_daily');
       case HomeSectionType.tmdbTrendingMovieWeekly:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingMovieWeekly, 'Trending Movies (Weekly)', 'tmdb_trending_movie_weekly');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingMovieWeekly, appL10n().tgRowTrendingMoviesWeekly, 'tmdb_trending_movie_weekly');
       case HomeSectionType.tmdbTrendingTvDaily:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingTvDaily, 'Trending TV (Daily)', 'tmdb_trending_tv_daily');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingTvDaily, appL10n().tgRowTrendingTvDaily, 'tmdb_trending_tv_daily');
       case HomeSectionType.tmdbTrendingTvWeekly:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingTvWeekly, 'Trending TV (Weekly)', 'tmdb_trending_tv_weekly');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingTvWeekly, appL10n().tgRowTrendingTvWeekly, 'tmdb_trending_tv_weekly');
       case HomeSectionType.tmdbTrendingAllWeekly:
-        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingAllWeekly, 'Trending All (Weekly)', 'tmdb_trending_all_weekly');
+        return _loadTmdbChartRow(HomeSectionType.tmdbTrendingAllWeekly, appL10n().tgRowTrendingAllWeekly, 'tmdb_trending_all_weekly');
       case HomeSectionType.recentlyReleased:
         return _loadRecentlyReleasedRow();
       case HomeSectionType.seasonal:
@@ -2096,14 +2097,14 @@ class HomeViewModel extends ChangeNotifier {
       case HomeSectionType.radarrCalendar:
         return HomeRow(
           id: 'radarr_calendar',
-          title: 'Upcoming Movies (Radarr)',
+          title: appL10n().tgRowUpcomingMoviesRadarr,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.sonarrCalendar:
         return HomeRow(
           id: 'sonarr_calendar',
-          title: 'Upcoming TV Shows (Sonarr)',
+          title: appL10n().tgRowUpcomingTvSonarr,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
@@ -2152,91 +2153,91 @@ class HomeViewModel extends ChangeNotifier {
       case HomeSectionType.tmdbPopularMovies:
         return HomeRow(
           id: 'tmdb_popular_movies',
-          title: 'Popular Movies',
+          title: appL10n().popularMovies,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTopRatedMovies:
         return HomeRow(
           id: 'tmdb_top_rated_movies',
-          title: 'Top Rated Movies',
+          title: appL10n().tgRowTopRatedMovies,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbNowPlayingMovies:
         return HomeRow(
           id: 'tmdb_now_playing_movies',
-          title: 'Now Playing Movies',
+          title: appL10n().tgRowNowPlayingMovies,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbUpcomingMovies:
         return HomeRow(
           id: 'tmdb_upcoming_movies',
-          title: 'Upcoming Movies',
+          title: appL10n().upcomingMovies,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbPopularTv:
         return HomeRow(
           id: 'tmdb_popular_tv',
-          title: 'Popular TV',
+          title: appL10n().tgRowPopularTv,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTopRatedTv:
         return HomeRow(
           id: 'tmdb_top_rated_tv',
-          title: 'Top Rated TV',
+          title: appL10n().tgRowTopRatedTv,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbAiringTodayTv:
         return HomeRow(
           id: 'tmdb_airing_today_tv',
-          title: 'Airing Today TV',
+          title: appL10n().tgRowAiringTodayTv,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbOnTheAirTv:
         return HomeRow(
           id: 'tmdb_on_the_air_tv',
-          title: 'On The Air TV',
+          title: appL10n().tgRowOnTheAirTv,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTrendingMovieDaily:
         return HomeRow(
           id: 'tmdb_trending_movie_daily',
-          title: 'Trending Movies (Daily)',
+          title: appL10n().tgRowTrendingMoviesDaily,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTrendingMovieWeekly:
         return HomeRow(
           id: 'tmdb_trending_movie_weekly',
-          title: 'Trending Movies (Weekly)',
+          title: appL10n().tgRowTrendingMoviesWeekly,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTrendingTvDaily:
         return HomeRow(
           id: 'tmdb_trending_tv_daily',
-          title: 'Trending TV (Daily)',
+          title: appL10n().tgRowTrendingTvDaily,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTrendingTvWeekly:
         return HomeRow(
           id: 'tmdb_trending_tv_weekly',
-          title: 'Trending TV (Weekly)',
+          title: appL10n().tgRowTrendingTvWeekly,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
       case HomeSectionType.tmdbTrendingAllWeekly:
         return HomeRow(
           id: 'tmdb_trending_all_weekly',
-          title: 'Trending All (Weekly)',
+          title: appL10n().tgRowTrendingAllWeekly,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
@@ -2272,14 +2273,14 @@ class HomeViewModel extends ChangeNotifier {
         final index = section.sinceYouWatchedRow;
         return HomeRow(
           id: 'sinceYouWatched$index',
-          title: 'Since you watched',
+          title: appL10n().tgRowSinceYouWatched,
           rowType: HomeRowType.latestMedia,
           isLoading: true,
         );
       case HomeSectionType.rewatch:
         return HomeRow(
           id: 'rewatch',
-          title: 'Rewatch',
+          title: appL10n().tgRewatch,
           rowType: HomeRowType.latestMedia,
           isLoading: true,
         );
@@ -2321,8 +2322,17 @@ class HomeViewModel extends ChangeNotifier {
     HomeSectionType type,
     AppLocalizations l10n,
   ) {
-    final filter = _favoriteFilterForSection(type);
-    return 'Favorite ${filter.displayName}';
+    return switch (type) {
+      HomeSectionType.favoriteMovies => l10n.tgFavoriteMovies,
+      HomeSectionType.favoriteSeries => l10n.tgFavoriteSeries,
+      HomeSectionType.favoriteEpisodes => l10n.tgFavoriteEpisodes,
+      HomeSectionType.favoritePeople => l10n.tgFavoritePeople,
+      HomeSectionType.favoriteArtists => l10n.tgFavoriteArtists,
+      HomeSectionType.favoriteMusicVideos => l10n.tgFavoriteMusicVideos,
+      HomeSectionType.favoriteAlbums => l10n.tgFavoriteAlbums,
+      HomeSectionType.favoriteSongs => l10n.tgFavoriteSongs,
+      _ => l10n.favorites,
+    };
   }
 
   Future<void> _loadResumeAndNextUpInBackground() {
@@ -3365,13 +3375,13 @@ class HomeViewModel extends ChangeNotifier {
 
       final enabledReleases = <DateTime, String>{};
       if (showCinema && inCinemas != null && inCinemas.isAfter(now.subtract(const Duration(days: 1)))) {
-        enabledReleases[inCinemas] = 'Cinema: ';
+        enabledReleases[inCinemas] = appL10n().tgReleaseCinema;
       }
       if (showDigital && digitalRelease != null && digitalRelease.isAfter(now.subtract(const Duration(days: 1)))) {
-        enabledReleases[digitalRelease] = 'Digital: ';
+        enabledReleases[digitalRelease] = appL10n().tgReleaseDigital;
       }
       if (showPhysical && physicalRelease != null && physicalRelease.isAfter(now.subtract(const Duration(days: 1)))) {
-        enabledReleases[physicalRelease] = 'Physical: ';
+        enabledReleases[physicalRelease] = appL10n().tgReleasePhysical;
       }
 
       if (enabledReleases.isEmpty) continue;
@@ -3383,7 +3393,7 @@ class HomeViewModel extends ChangeNotifier {
       String? subtitleText;
       if (showDate) {
         final dateStr = _formatDateHuman(targetReleaseDate);
-        subtitleText = '$releaseType$dateStr';
+        subtitleText = appL10n().tgReleaseOnDate(releaseType, dateStr);
       }
 
       final newRawData = Map<String, dynamic>.from(item.rawData);
@@ -3421,12 +3431,12 @@ class HomeViewModel extends ChangeNotifier {
       String? subtitleText;
       if (showDate && showEpisodeInfo) {
         final dateStr = _formatDateHuman(airDateUtc);
-        subtitleText = 'Next Episode: $dateStr (S$sNum:E$eNum)';
+        subtitleText = appL10n().tgNextEpisodeDateCode(dateStr, 'S$sNum:E$eNum');
       } else if (showDate) {
         final dateStr = _formatDateHuman(airDateUtc);
-        subtitleText = 'Next Episode: $dateStr';
+        subtitleText = appL10n().tgNextEpisodeDate(dateStr);
       } else if (showEpisodeInfo) {
-        subtitleText = 'Next Episode: (S$sNum:E$eNum)';
+        subtitleText = appL10n().tgNextEpisodeCode('S$sNum:E$eNum');
       }
 
       final newRawData = Map<String, dynamic>.from(item.rawData);
@@ -3478,7 +3488,7 @@ class HomeViewModel extends ChangeNotifier {
       return [
         HomeRow(
           id: 'radarr_calendar',
-          title: 'Upcoming Movies (Radarr)',
+          title: appL10n().tgRowUpcomingMoviesRadarr,
           rowType: HomeRowType.pluginDynamic,
           items: items,
         )
@@ -3532,7 +3542,7 @@ class HomeViewModel extends ChangeNotifier {
       return [
         HomeRow(
           id: 'sonarr_calendar',
-          title: 'Upcoming TV Shows (Sonarr)',
+          title: appL10n().tgRowUpcomingTvSonarr,
           rowType: HomeRowType.pluginDynamic,
           items: items,
         )
@@ -3879,31 +3889,8 @@ class HomeViewModel extends ChangeNotifier {
     return 'https://image.tmdb.org/t/p/w$width$path';
   }
 
-  String _formatDateHuman(DateTime date) {
-    final months = [
-      'Jan.',
-      'Feb.',
-      'Mar.',
-      'Apr.',
-      'May',
-      'Jun.',
-      'Jul.',
-      'Aug.',
-      'Sep.',
-      'Oct.',
-      'Nov.',
-      'Dec.'
-    ];
-    final month = months[date.month - 1];
-    final day = date.day;
-    final suffix = switch (day) {
-      1 || 21 || 31 => 'st',
-      2 || 22 => 'nd',
-      3 || 23 => 'rd',
-      _ => 'th',
-    };
-    return '$month $day$suffix';
-  }
+  /// A short date in the app's language ("Oct 12" / "12. okt.").
+  String _formatDateHuman(DateTime date) => appShortDate(date);
 
   Future<List<HomeRow>> _loadMergedCalendarRow({bool forceRefresh = false}) async {
     try {
@@ -3976,7 +3963,7 @@ class HomeViewModel extends ChangeNotifier {
       return [
         HomeRow(
           id: 'merged_calendar',
-          title: 'Upcoming Releases',
+          title: appL10n().tgRowUpcomingReleases,
           rowType: HomeRowType.pluginDynamic,
           items: mergedItems,
         )

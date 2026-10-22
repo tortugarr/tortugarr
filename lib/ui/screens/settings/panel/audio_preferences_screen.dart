@@ -183,10 +183,8 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
   Widget _buildRedetectTile() {
     return _TvSettingsListTile(
       leading: const Icon(Icons.refresh),
-      title: const Text('Re-detect & apply recommended'),
-      subtitle: const Text(
-        'Re-run audio detection and reset to the recommended settings.',
-      ),
+      title: Text(appL10n().tgAudioRedetect),
+      subtitle: Text(appL10n().tgAudioRedetectSubtitle),
       onTap: _redetectAndReset,
     );
   }
@@ -213,7 +211,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
         : _audioRouteLabel(l10n, profile.activeRouteType);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('Audio re-detected: $route')));
+    ).showSnackBar(SnackBar(content: Text(l10n.tgAudioRedetected(route))));
   }
 
   @override
@@ -246,7 +244,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
               ),
             ],
           ),
-          const _SectionHeader('Audio Stream'),
+          _SectionHeader(l10n.tgAudioStream),
           adaptiveListSection(
             children: [
               StringPickerPreferenceTile(
@@ -277,7 +275,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
           ),
 
           if (!PlatformDetection.isWeb) ...[
-            const _SectionHeader('Audio Output'),
+            _SectionHeader(l10n.tgAudioOutput),
             adaptiveListSection(
               children: [
                 EnumPreferenceTile<AudioPassthroughMode>(
@@ -339,7 +337,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
               ],
             ),
             if (isManual && _showPassthroughToggles) ...[
-              const _SectionHeader('Passthrough Settings'),
+              _SectionHeader(l10n.tgPassthroughSettings),
               adaptiveListSection(
                 children: [
                   SwitchPreferenceTile(
@@ -395,7 +393,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
                 ],
               ),
             ],
-            const _SectionHeader('Advanced'),
+            _SectionHeader(l10n.tgAdvanced),
             adaptiveListSection(
               children: [
                 IntPickerPreferenceTile(

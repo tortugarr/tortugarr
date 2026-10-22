@@ -68,22 +68,22 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
             ctx,
             PopScope(
               canPop: false,
-              child: const AlertDialog(
-                title: Text('Refreshing Custom Rows'),
+              child: AlertDialog(
+                title: Text(appL10n().tgRefreshingCustomRows),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 8),
-                    SizedBox(
+                    const SizedBox(height: 8),
+                    const SizedBox(
                       width: 50,
                       height: 50,
                       child: CircularProgressIndicator(),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Text(
-                      'Refreshing your custom rows and updating their caches...',
+                      appL10n().tgRefreshingCustomRowsBody,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -131,7 +131,7 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Refreshed your custom rows.')),
+          SnackBar(content: Text(appL10n().tgRefreshedCustomRows)),
         );
       }
     } catch (e) {
@@ -141,7 +141,7 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
       if (mounted) {
         final detail = describeError(e, AppLocalizations.of(context));
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to refresh custom rows: $detail')),
+          SnackBar(content: Text(appL10n().tgRefreshCustomRowsFailed(detail))),
         );
       }
     }
@@ -354,20 +354,18 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
               children: [
                 _TvSettingsListTile(
                   leading: const Icon(Icons.movie_outlined),
-                  title: const Text('IMDb Lists'),
-                  subtitle: const Text(
-                    'Configure IMDb Top 250, Popular, and other charts.',
-                  ),
+                  title: Text(l10n.tgImdbLists),
+                  subtitle: Text(l10n.tgImdbListsSubtitle),
                   onTap: () =>
                       context.pushSettingsScreen(const _ImdbListsScreen()),
                 ),
                 _TvSettingsListTile(
                   leading: const Icon(Icons.trending_up),
-                  title: const Text('TMDB Lists'),
+                  title: Text(l10n.tgTmdbLists),
                   subtitle: Text(
                     tmdbAvailable
-                        ? 'Configure Popular, Top Rated, and Trending TMDB lists.'
-                        : 'TMDB API key must be configured in Moonbase settings to use this feature.',
+                        ? l10n.tgTmdbListsSubtitle
+                        : l10n.tgTmdbApiKeyRequired,
                   ),
                   onTap: tmdbAvailable
                       ? () => context.pushSettingsScreen(const _TmdbListsScreen())
@@ -383,10 +381,8 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 if (showUpcomingCalendars)
                   _TvSettingsListTile(
                     leading: const Icon(Icons.calendar_month),
-                    title: const Text('Upcoming Calendars'),
-                    subtitle: const Text(
-                      'Toggle Upcoming Calendars from Radarr/Sonarr.',
-                    ),
+                    title: Text(l10n.tgUpcomingCalendars),
+                    subtitle: Text(l10n.tgUpcomingCalendarsSubtitle),
                     onTap: () => context.pushSettingsScreen(
                       const _UpcomingCalendarsScreen(),
                     ),
@@ -398,25 +394,22 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                       width: 24,
                       height: 24,
                     ),
-                    title: const Text('Seerr Rows'),
-                    subtitle: const Text('Configure Seerr Discovery Rows.'),
+                    title: Text(l10n.tgSeerrRows),
+                    subtitle: Text(l10n.tgSeerrRowsSubtitle),
                     onTap: () =>
                         context.pushSettingsScreen(const _SeerrListsScreen()),
                   ),
                 _TvSettingsListTile(
                   leading: const Icon(Icons.tune_outlined),
-                  title: const Text('Custom Rows'),
-                  subtitle: const Text(
-                    'ADVANCED: Configure customized home rows from a variety of sources.',
-                  ),
+                  title: Text(l10n.tgCustomRows),
+                  subtitle: Text(l10n.tgCustomRowsSubtitle),
                   onTap: () =>
                       context.pushSettingsScreen(const _CustomListsScreen()),
                 ),
                 EnumPreferenceTile<MediaTypeBadgeBehavior>(
                   preference: UserPreferences.mediaTypeBadgeBehavior,
-                  title: 'Media type badges',
-                  description:
-                      'Show MOVIE / SERIES labels on external home-row cards',
+                  title: l10n.tgMediaTypeBadges,
+                  description: l10n.tgMediaTypeBadgesDescription,
                   icon: Icons.info_outline,
                   labelOf: (behavior) =>
                       _mediaTypeBadgeBehaviorLabel(l10n, behavior),
@@ -427,10 +420,8 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 ),
                 _TvSettingsListTile(
                   leading: const Icon(Icons.refresh),
-                  title: const Text('Refresh Custom Rows'),
-                  subtitle: const Text(
-                    'Force a full update of the custom row caches.',
-                  ),
+                  title: Text(l10n.tgRefreshCustomRows),
+                  subtitle: Text(l10n.tgRefreshCustomRowsSubtitle),
                   onTap: _refreshCustomRows,
                 ),
               ],

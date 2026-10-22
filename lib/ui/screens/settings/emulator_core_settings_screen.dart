@@ -7,6 +7,7 @@ import '../../../util/game_cores.dart';
 import '../../../util/game_storage.dart';
 import '../../widgets/focus/dpad_list_tile.dart';
 import '../../widgets/overlay_sheet.dart';
+import 'package:moonfin/util/app_l10n.dart';
 
 /// Emulator settings for a core that is not running.
 ///
@@ -63,7 +64,7 @@ class _EmulatorCoreSettingsScreenState
         if (!mounted) return;
         setState(() {
           _loading = false;
-          _error = 'This core is not downloaded yet.';
+          _error = appL10n().tgCoreNotDownloaded;
         });
         return;
       }
@@ -92,17 +93,15 @@ class _EmulatorCoreSettingsScreenState
         // Empty covers both "the core has no options" and "this platform
         // cannot probe" -- only Android implements it so far. Reset still
         // works either way, so point at that rather than dead-ending.
-        // TODO: Localize this.
         _error = probed.isEmpty
-            ? 'This core\'s settings cannot be read on this device. '
-                'You can still reset them to defaults below.'
+            ? appL10n().tgCoreSettingsUnreadable
             : null;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _error = 'Could not read this core\'s settings.';
+        _error = appL10n().tgCoreSettingsReadFailed;
       });
     }
   }
@@ -161,7 +160,7 @@ class _EmulatorCoreSettingsScreenState
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not save these settings.')),
+          SnackBar(content: Text(appL10n().tgCoreSettingsSaveFailed)),
         );
       }
     } finally {
@@ -187,13 +186,13 @@ class _EmulatorCoreSettingsScreenState
         _saving = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Settings reset to defaults.')),
+        SnackBar(content: Text(appL10n().tgCoreSettingsResetDone)),
       );
     } catch (_) {
       if (!mounted) return;
       setState(() => _saving = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not reset these settings.')),
+        SnackBar(content: Text(appL10n().tgCoreSettingsResetFailed)),
       );
     }
   }
@@ -203,7 +202,7 @@ class _EmulatorCoreSettingsScreenState
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.system} settings'),
+        title: Text(appL10n().tgCoreSettingsTitle(widget.system)),
         actions: [
           if (_saving)
             const Padding(
@@ -248,7 +247,7 @@ class _EmulatorCoreSettingsScreenState
                     child: OutlinedButton.icon(
                       onPressed: _saving ? null : _resetToDefaults,
                       icon: const Icon(Icons.settings_backup_restore),
-                      label: const Text('Reset to defaults'),
+                      label: Text(appL10n().resetToDefaults),
                     ),
                   ),
                 ),
@@ -282,9 +281,7 @@ class _WarningBanner extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'These are the emulator core\'s own settings. Some combinations '
-              'can stop a game from starting, or close the app while it runs. '
-              'If something breaks, use Reset to defaults below.',
+              appL10n().tgCoreSettingsWarning,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onTertiaryContainer,
               ),

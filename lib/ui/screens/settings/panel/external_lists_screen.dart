@@ -171,21 +171,21 @@ class _ImdbListsScreenState extends State<_ImdbListsScreen> {
             PopScope(
               canPop: false,
               child: AlertDialog(
-                title: Text('Fetching $title'),
-                content: const Column(
+                title: Text(appL10n().tgFetchingList(title)),
+                content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 8),
-                    SizedBox(
+                    const SizedBox(height: 8),
+                    const SizedBox(
                       width: 50,
                       height: 50,
                       child: CircularProgressIndicator(),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Text(
-                      'Downloading list from Moonbase and saving locally...',
+                      appL10n().tgDownloadingFromMoonbase,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -223,8 +223,10 @@ class _ImdbListsScreenState extends State<_ImdbListsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Failed to fetch $title from Moonbase: '
-              '${describeError(e, AppLocalizations.of(context))}',
+              appL10n().tgFetchFromMoonbaseFailed(
+                title,
+                describeError(e, AppLocalizations.of(context)),
+              ),
             ),
           ),
         );
@@ -286,7 +288,7 @@ class _ImdbListsScreenState extends State<_ImdbListsScreen> {
         child: Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('IMDb Lists'),
+            Text(appL10n().tgImdbLists),
           ),
           body: FocusScope(
             node: _scope,
@@ -511,7 +513,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
         child: Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('TMDB Lists'),
+            Text(appL10n().tgTmdbLists),
           ),
           body: FocusScope(
             node: _scope,
@@ -523,7 +525,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     SwitchPreferenceTile(
                       focusNode: _firstFocusNode,
                       preference: UserPreferences.tmdbPopularMoviesEnabled,
-                      title: 'Popular Movies',
+                      title: appL10n().popularMovies,
                       icon: Icons.movie_outlined,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -531,7 +533,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbPopularMovies,
-                            'Popular Movies',
+                            appL10n().popularMovies,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbPopularMoviesEnabled, false);
@@ -547,7 +549,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTopRatedMoviesEnabled,
-                      title: 'Top Rated Movies',
+                      title: appL10n().tgRowTopRatedMovies,
                       icon: Icons.star_border,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -555,7 +557,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTopRatedMovies,
-                            'Top Rated Movies',
+                            appL10n().tgRowTopRatedMovies,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTopRatedMoviesEnabled, false);
@@ -571,7 +573,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbNowPlayingMoviesEnabled,
-                      title: 'Now Playing Movies',
+                      title: appL10n().tgRowNowPlayingMovies,
                       icon: Icons.play_arrow_outlined,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -579,7 +581,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbNowPlayingMovies,
-                            'Now Playing Movies',
+                            appL10n().tgRowNowPlayingMovies,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbNowPlayingMoviesEnabled, false);
@@ -595,7 +597,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbUpcomingMoviesEnabled,
-                      title: 'Upcoming Movies',
+                      title: appL10n().upcomingMovies,
                       icon: Icons.upcoming,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -603,7 +605,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbUpcomingMovies,
-                            'Upcoming Movies',
+                            appL10n().upcomingMovies,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbUpcomingMoviesEnabled, false);
@@ -619,7 +621,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbPopularTvEnabled,
-                      title: 'Popular TV',
+                      title: appL10n().tgRowPopularTv,
                       icon: Icons.live_tv,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -627,7 +629,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbPopularTv,
-                            'Popular TV',
+                            appL10n().tgRowPopularTv,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbPopularTvEnabled, false);
@@ -643,7 +645,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTopRatedTvEnabled,
-                      title: 'Top Rated TV',
+                      title: appL10n().tgRowTopRatedTv,
                       icon: Icons.live_tv,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -651,7 +653,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTopRatedTv,
-                            'Top Rated TV',
+                            appL10n().tgRowTopRatedTv,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTopRatedTvEnabled, false);
@@ -667,7 +669,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbAiringTodayTvEnabled,
-                      title: 'Airing Today TV',
+                      title: appL10n().tgRowAiringTodayTv,
                       icon: Icons.calendar_today,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -675,7 +677,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbAiringTodayTv,
-                            'Airing Today TV',
+                            appL10n().tgRowAiringTodayTv,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbAiringTodayTvEnabled, false);
@@ -691,7 +693,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbOnTheAirTvEnabled,
-                      title: 'On The Air TV',
+                      title: appL10n().tgRowOnTheAirTv,
                       icon: Icons.live_tv,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -699,7 +701,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbOnTheAirTv,
-                            'On The Air TV',
+                            appL10n().tgRowOnTheAirTv,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbOnTheAirTvEnabled, false);
@@ -715,7 +717,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTrendingMovieDailyEnabled,
-                      title: 'Trending Movies (Daily)',
+                      title: appL10n().tgRowTrendingMoviesDaily,
                       icon: Icons.trending_up,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -723,7 +725,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTrendingMovieDaily,
-                            'Trending Movies (Daily)',
+                            appL10n().tgRowTrendingMoviesDaily,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTrendingMovieDailyEnabled, false);
@@ -739,7 +741,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTrendingMovieWeeklyEnabled,
-                      title: 'Trending Movies (Weekly)',
+                      title: appL10n().tgRowTrendingMoviesWeekly,
                       icon: Icons.trending_up,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -747,7 +749,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTrendingMovieWeekly,
-                            'Trending Movies (Weekly)',
+                            appL10n().tgRowTrendingMoviesWeekly,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTrendingMovieWeeklyEnabled, false);
@@ -763,7 +765,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTrendingTvDailyEnabled,
-                      title: 'Trending TV (Daily)',
+                      title: appL10n().tgRowTrendingTvDaily,
                       icon: Icons.trending_up,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -771,7 +773,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTrendingTvDaily,
-                            'Trending TV (Daily)',
+                            appL10n().tgRowTrendingTvDaily,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTrendingTvDailyEnabled, false);
@@ -787,7 +789,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTrendingTvWeeklyEnabled,
-                      title: 'Trending TV (Weekly)',
+                      title: appL10n().tgRowTrendingTvWeekly,
                       icon: Icons.trending_up,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -795,7 +797,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTrendingTvWeekly,
-                            'Trending TV (Weekly)',
+                            appL10n().tgRowTrendingTvWeekly,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTrendingTvWeeklyEnabled, false);
@@ -811,7 +813,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                     ),
                     SwitchPreferenceTile(
                       preference: UserPreferences.tmdbTrendingAllWeeklyEnabled,
-                      title: 'Trending All (Weekly)',
+                      title: appL10n().tgRowTrendingAllWeekly,
                       icon: Icons.trending_up,
                       enabled: !_isFetching,
                       onChangedValue: (isEnabled) async {
@@ -819,7 +821,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
                         if (isEnabled) {
                           final success = await _fetchAndCacheList(
                             HomeSectionType.tmdbTrendingAllWeekly,
-                            'Trending All (Weekly)',
+                            appL10n().tgRowTrendingAllWeekly,
                           );
                           if (!success) {
                             await prefs.set(UserPreferences.tmdbTrendingAllWeeklyEnabled, false);
@@ -907,7 +909,7 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
         child: Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('Upcoming Calendars'),
+            Text(appL10n().tgUpcomingCalendars),
           ),
           body: FocusScope(
             node: _scope,
@@ -921,7 +923,7 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
                       key: const ValueKey('enableRadarrCalendar'),
                       focusNode: _firstNode,
                       preference: UserPreferences.enableRadarrCalendar,
-                      title: "Enable Radarr's Upcoming Calendar",
+                      title: appL10n().tgEnableRadarrCalendar,
                       icon: Icons.movie_outlined,
                       onChangedValue: (isEnabled) {
                         _syncCalendarSectionState(
@@ -935,28 +937,28 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
                       SwitchPreferenceTile(
                         key: const ValueKey('radarrCalendarShowCinema'),
                         preference: UserPreferences.radarrCalendarShowCinema,
-                        title: 'Show Upcoming Cinema Releases',
+                        title: appL10n().tgShowCinemaReleases,
                         icon: Icons.theater_comedy,
                         onChanged: () => setState(() {}),
                       ),
                       SwitchPreferenceTile(
                         key: const ValueKey('radarrCalendarShowDigital'),
                         preference: UserPreferences.radarrCalendarShowDigital,
-                        title: 'Show Upcoming Digital Releases',
+                        title: appL10n().tgShowDigitalReleases,
                         icon: Icons.tv,
                         onChanged: () => setState(() {}),
                       ),
                       SwitchPreferenceTile(
                         key: const ValueKey('radarrCalendarShowPhysical'),
                         preference: UserPreferences.radarrCalendarShowPhysical,
-                        title: 'Show Upcoming Physical Releases',
+                        title: appL10n().tgShowPhysicalReleases,
                         icon: Icons.album,
                         onChanged: () => setState(() {}),
                       ),
                       SwitchPreferenceTile(
                         key: const ValueKey('radarrCalendarShowDate'),
                         preference: UserPreferences.radarrCalendarShowDate,
-                        title: 'Show Release Date on Home Screen',
+                        title: appL10n().tgShowReleaseDateOnHome,
                         icon: Icons.calendar_month,
                         onChanged: () => setState(() {}),
                       ),
@@ -969,7 +971,7 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey('enableSonarrCalendar'),
                       preference: UserPreferences.enableSonarrCalendar,
-                      title: "Enable Sonarr's Upcoming Calendar",
+                      title: appL10n().tgEnableSonarrCalendar,
                       icon: Icons.live_tv,
                       onChangedValue: (isEnabled) {
                         _syncCalendarSectionState(
@@ -983,14 +985,14 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
                       SwitchPreferenceTile(
                         key: const ValueKey('sonarrCalendarShowEpisodeInfo'),
                         preference: UserPreferences.sonarrCalendarShowEpisodeInfo,
-                        title: 'Display Episode Information',
+                        title: appL10n().tgDisplayEpisodeInfo,
                         icon: Icons.info_outline,
                         onChanged: () => setState(() {}),
                       ),
                       SwitchPreferenceTile(
                         key: const ValueKey('sonarrCalendarShowDate'),
                         preference: UserPreferences.sonarrCalendarShowDate,
-                        title: 'Show Release Date on Home Screen',
+                        title: appL10n().tgShowReleaseDateOnHome,
                         icon: Icons.calendar_month,
                         onChanged: () => setState(() {}),
                       ),
@@ -1002,7 +1004,7 @@ class _UpcomingCalendarsScreenState extends State<_UpcomingCalendarsScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey('mergeRadarrSonarrCalendars'),
                       preference: UserPreferences.mergeRadarrSonarrCalendars,
-                      title: 'Merge Sonarr and Radarr Calendars',
+                      title: appL10n().tgMergeCalendars,
                       icon: Icons.merge_type,
                       enabled: calendarsCanMerge,
                       onChanged: () => setState(() {}),
@@ -1134,14 +1136,14 @@ class _SeerrListsScreenState extends State<_SeerrListsScreen> {
         child: Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('Seerr Rows'),
+            Text(appL10n().tgSeerrRows),
           ),
           body: FocusScope(
             node: _scope,
             autofocus: true,
             child: ListView(
               children: [
-                const _SectionHeader('Seerr Home Page Rows'),
+                _SectionHeader(appL10n().tgSeerrHomePageRows),
                 adaptiveListSection(
                   children: _rows.asMap().entries.map((entry) {
                     final rowIndex = entry.key;
@@ -1273,16 +1275,16 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
       builder: (ctx) => withCleanSettingsTypography(
         ctx,
         AlertDialog(
-          title: const Text('Delete Custom Row'),
-          content: Text('Are you sure you want to delete "${config.pluginDisplayText}"?'),
+          title: Text(appL10n().tgDeleteCustomRow),
+          content: Text(appL10n().tgDeleteCustomRowConfirm(config.pluginDisplayText ?? '')),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel'),
+              child: Text(appL10n().tgCancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+              child: Text(appL10n().delete, style: const TextStyle(color: Colors.red)),
             ),
           ],
         ),
@@ -1328,30 +1330,30 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
     switch (type) {
       case 'user_list':
         if (source == 'tmdb') {
-          return 'List';
+          return appL10n().tgListLabel;
         }
         if (source == 'mdblist') {
-          return 'List from User ID';
+          return appL10n().tgListFromUserId;
         }
-        return 'List from URL';
+        return appL10n().tgListFromUrl;
       case 'list_url':
         if (source == 'mdblist') {
-          return 'List from URL';
+          return appL10n().tgListFromUrl;
         }
-        return 'List from URL';
+        return appL10n().tgListFromUrl;
       case 'user_diary':
-        return 'Diary';
+        return appL10n().tgDiary;
       case 'watchlist':
-        return 'Watchlist';
+        return appL10n().tgWatchlistLabel;
       case 'films':
-        return 'Complete Films';
+        return appL10n().tgCompleteFilms;
       case 'awards_events':
-        return 'Awards/Events';
+        return appL10n().tgAwardsEvents;
       case 'movie_collection':
         if (source == 'tmdb') {
-          return 'Collection';
+          return appL10n().collection;
         }
-        return 'Movie Collection';
+        return appL10n().tgMovieCollectionTitle;
       default:
         return type;
     }
@@ -1375,7 +1377,7 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
         child: Scaffold(
           appBar: buildSettingsAppBar(
             context,
-            const Text('Custom Rows'),
+            Text(appL10n().tgCustomRows),
           ),
           body: FocusScope(
             node: _scope,
@@ -1387,14 +1389,14 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
                     _TvSettingsListTile(
                       focusNode: _addFocusNode,
                       leading: const Icon(Icons.add),
-                      title: const Text('Add a New Custom Home Row'),
-                      subtitle: const Text('Create a custom row from TMDB, Letterboxd, or MDBList.'),
+                      title: Text(appL10n().tgAddNewCustomHomeRow),
+                      subtitle: Text(appL10n().tgAddCustomRowSubtitle),
                       onTap: () => _showAddEditDialog(null),
                     ),
                   ],
                 ),
                 if (customConfigs.isNotEmpty) ...[
-                  const _SectionHeader('Saved Custom Home Rows'),
+                  _SectionHeader(appL10n().tgSavedCustomHomeRows),
                   adaptiveListSection(
                     children: customConfigs.map((config) {
                       Map<String, dynamic> rowConfig = {};
@@ -1424,7 +1426,7 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    config.pluginDisplayText ?? 'Custom Row',
+                                    config.pluginDisplayText ?? appL10n().tgCustomRow,
                                     style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -1448,7 +1450,7 @@ class _CustomListsScreenState extends State<_CustomListsScreen> {
                               ],
                             ),
                             subtitle: Text(
-                              'Source: ${_getSourceLabel(source)} | Type: ${_getTypeLabel(type, source)}',
+                              appL10n().tgCustomRowSourceType(_getSourceLabel(source), _getTypeLabel(type, source)),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: focused ? Colors.black54 : AppColorScheme.onSurface.withValues(alpha: 0.5),
@@ -1598,30 +1600,30 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
     switch (type) {
       case 'user_list':
         if (_source == 'tmdb') {
-          return 'List from TMDB List ID or URL';
+          return appL10n().tgListFromTmdbIdOrUrl;
         }
         if (_source == 'mdblist') {
-          return 'List from User ID';
+          return appL10n().tgListFromUserId;
         }
-        return 'List from URL';
+        return appL10n().tgListFromUrl;
       case 'list_url':
         if (_source == 'mdblist') {
-          return 'List from URL';
+          return appL10n().tgListFromUrl;
         }
-        return 'List from URL';
+        return appL10n().tgListFromUrl;
       case 'user_diary':
-        return 'Diary';
+        return appL10n().tgDiary;
       case 'watchlist':
-        return 'Watchlist';
+        return appL10n().tgWatchlistLabel;
       case 'films':
-        return 'Complete Films';
+        return appL10n().tgCompleteFilms;
       case 'awards_events':
-        return 'Awards/Events';
+        return appL10n().tgAwardsEvents;
       case 'movie_collection':
         if (_source == 'tmdb') {
-          return 'Collection from TMDB Collection ID or URL';
+          return appL10n().tgCollectionFromTmdbIdOrUrl;
         }
-        return 'Movie Collection';
+        return appL10n().tgMovieCollectionTitle;
       default:
         return type;
     }
@@ -1639,22 +1641,22 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
         ctx,
         AlertDialog(
           backgroundColor: Colors.grey[900],
-          title: const Text(
-            'Discard Changes?',
+          title: Text(
+            appL10n().tgDiscardChanges,
             style: TextStyle(color: Colors.white),
           ),
-          content: const Text(
-            'Unsaved changes, do you want to exit the wizard?',
+          content: Text(
+            appL10n().tgDiscardChangesWizard,
             style: TextStyle(color: Colors.white70),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('No'),
+              child: Text(appL10n().tgNo),
             ),
             TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Yes'),
+              child: Text(appL10n().tgYes),
             ),
           ],
         ),
@@ -1776,16 +1778,16 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
           ctx,
           AlertDialog(
             backgroundColor: Colors.grey[900],
-            title: const Text(
-              'Warning: Custom Row Validation Failed',
+            title: Text(
+              appL10n().tgCustomRowValidationFailed,
               style: TextStyle(color: Colors.white),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Failed to fetch items from the custom row.',
+                Text(
+                  appL10n().tgCustomRowFetchFailed,
                   style: TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 16),
@@ -1801,7 +1803,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Error details: $errorString',
+                  appL10n().tgErrorDetails(errorString),
                   style: const TextStyle(color: Colors.white70),
                 ),
               ],
@@ -1809,7 +1811,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('OK'),
+                child: Text(appL10n().ok),
               ),
             ],
           ),
@@ -1881,7 +1883,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                     ? EdgeInsets.fromLTRB(40, 24, 40, isKeyboardVisible ? 280 : 24)
                     : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
                 title: Text(
-                  widget.existing != null ? 'Edit Custom Home Row' : 'Add Custom Home Row',
+                  widget.existing != null ? appL10n().tgEditCustomHomeRow : appL10n().tgAddCustomHomeRow,
                   style: const TextStyle(color: Colors.white),
                 ),
                 content: child!,
@@ -1899,11 +1901,11 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                     : [
                         TextButton(
                           onPressed: () => _dismiss(false),
-                          child: const Text('Cancel'),
+                          child: Text(appL10n().tgCancel),
                         ),
                         TextButton(
                           onPressed: _save,
-                          child: const Text('Save'),
+                          child: Text(appL10n().save),
                         ),
                       ],
               );
@@ -1919,7 +1921,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                   mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   const Text('Source', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                   Text(appL10n().tgSourceLabel, style: TextStyle(color: Colors.grey, fontSize: 12)),
                    const SizedBox(height: 4),
                    ListenableBuilder(
                      listenable: _sourceFocusNode,
@@ -1986,7 +1988,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                    ),
                      if (typeOptions.length > 1) ...[
                        const SizedBox(height: 16),
-                       const Text('Type', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                       Text(appL10n().type, style: TextStyle(color: Colors.grey, fontSize: 12)),
                        const SizedBox(height: 4),
                        ListenableBuilder(
                          listenable: _typeFocusNode,
@@ -2054,36 +2056,36 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                    // Source + Type specific parameters
  
                    if (_source == 'letterboxd') ...[
-                     const Text('Letterboxd Username', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                     Text(appL10n().tgLetterboxdUsername, style: TextStyle(color: Colors.grey, fontSize: 12)),
                      const SizedBox(height: 4),
                      _SettingsTextField(
                        controller: _letterboxdUsernameController,
-                       hint: 'Username',
+                       hint: appL10n().username,
                        focusNode: _letterboxdUsernameFocusNode,
                      ),
                      if (tmdbApiKey.isEmpty) ...[
                        const SizedBox(height: 12),
-                       const Text(
-                         'WARNING: TMDB API Key must be configured in settings to resolve Letterboxd list items.',
+                       Text(
+                         appL10n().tgLetterboxdTmdbWarning,
                          style: TextStyle(color: Colors.orangeAccent, fontSize: 11, fontWeight: FontWeight.bold),
                        ),
                      ],
                    ],
  
                    if (_source == 'tmdb') ...[
-                     Text(_type == 'movie_collection' ? 'TMDB Collection ID or URL' : 'TMDB List ID or URL', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                     Text(_type == 'movie_collection' ? appL10n().tgTmdbCollectionIdOrUrl : appL10n().tgTmdbListIdOrUrl, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                      const SizedBox(height: 4),
                      _SettingsTextField(
                        controller: _tmdbIdController,
                        hint: _type == 'movie_collection'
-                           ? '12345 OR https://www.themoviedb.org/collection/12345'
-                           : '12345 OR https://www.themoviedb.org/list/12345',
+                           ? appL10n().tgTmdbCollectionHint
+                           : appL10n().tgTmdbListHint,
                        focusNode: _tmdbIdFocusNode,
                      ),
                      if (tmdbApiKey.isEmpty) ...[
                        const SizedBox(height: 12),
-                       const Text(
-                         'WARNING: TMDB API Key must be configured in settings to fetch TMDB lists.',
+                       Text(
+                         appL10n().tgTmdbApiKeyWarning,
                          style: TextStyle(color: Colors.orangeAccent, fontSize: 11, fontWeight: FontWeight.bold),
                        ),
                      ],
@@ -2095,19 +2097,19 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                        const SizedBox(height: 4),
                        _SettingsTextField(
                          controller: _mdblistListNameController,
-                         hint: 'e.g. https://mdblist.com/lists/username/list-slug',
+                         hint: appL10n().tgMdblistUrlHint,
                          focusNode: _mdblistListNameFocusNode,
                        ),
                      ] else ...[
-                       const Text('MDBList Username', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                       Text(appL10n().tgMdblistUsername, style: TextStyle(color: Colors.grey, fontSize: 12)),
                        const SizedBox(height: 4),
                        _SettingsTextField(
                          controller: _mdblistUsernameController,
-                         hint: 'Username',
+                         hint: appL10n().username,
                          focusNode: _mdblistUsernameFocusNode,
                        ),
                        const SizedBox(height: 16),
-                       const Text('List Name (slug)', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                       Text(appL10n().tgListNameSlug, style: TextStyle(color: Colors.grey, fontSize: 12)),
                        const SizedBox(height: 4),
                        _SettingsTextField(
                          controller: _mdblistListNameController,
@@ -2117,15 +2119,15 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                      ],
                      if (!mdblistConfigured) ...[
                        const SizedBox(height: 12),
-                       const Text(
-                         'WARNING: MDBList API Key must be configured in settings (or server-wide by your admin) to fetch MDBList lists.',
+                       Text(
+                         appL10n().tgMdblistApiKeyWarning,
                          style: TextStyle(color: Colors.orangeAccent, fontSize: 11, fontWeight: FontWeight.bold),
                        ),
                      ],
                    ],
  
                    const SizedBox(height: 16),
-                   const Text('Sort By', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                   Text(appL10n().sortBy, style: TextStyle(color: Colors.grey, fontSize: 12)),
                    const SizedBox(height: 4),
                    ListenableBuilder(
                      listenable: _sortByFocusNode,
@@ -2173,13 +2175,13 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                              ),
                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                            ),
-                           items: const [
-                             DropdownMenuItem(value: 'none', child: Text('Default (When Added)')),
-                             DropdownMenuItem(value: 'title', child: Text('Film Name')),
-                             DropdownMenuItem(value: 'popularity', child: Text('Film Popularity')),
-                             DropdownMenuItem(value: 'year', child: Text('Release Date')),
-                             DropdownMenuItem(value: 'rating', child: Text('Average Rating')),
-                             DropdownMenuItem(value: 'shuffle', child: Text('Shuffle')),
+                           items: [
+                             DropdownMenuItem(value: 'none', child: Text(appL10n().tgSortDefaultWhenAdded)),
+                             DropdownMenuItem(value: 'title', child: Text(appL10n().tgSortFilmName)),
+                             DropdownMenuItem(value: 'popularity', child: Text(appL10n().tgSortFilmPopularity)),
+                             DropdownMenuItem(value: 'year', child: Text(appL10n().releaseDateLabel)),
+                             DropdownMenuItem(value: 'rating', child: Text(appL10n().tgSortAverageRating)),
+                             DropdownMenuItem(value: 'shuffle', child: Text(appL10n().shuffle)),
                            ],
                            onChanged: (val) {
                              if (val != null) {
@@ -2199,7 +2201,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                    ),
                    if (_sortBy != 'none' && _sortBy != 'shuffle') ...[
                      const SizedBox(height: 16),
-                     const Text('Sort Order', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                     Text(appL10n().tgSortOrder, style: TextStyle(color: Colors.grey, fontSize: 12)),
                      const SizedBox(height: 4),
                      ListenableBuilder(
                        listenable: _sortOrderFocusNode,
@@ -2248,23 +2250,23 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                              ),
                              items: _sortBy == 'title'
-                                 ? const [
-                                     DropdownMenuItem(value: 'asc', child: Text('A to Z')),
-                                     DropdownMenuItem(value: 'desc', child: Text('Z to A')),
+                                 ? [
+                                     DropdownMenuItem(value: 'asc', child: Text(appL10n().tgAToZ)),
+                                     DropdownMenuItem(value: 'desc', child: Text(appL10n().tgZToA)),
                                    ]
                                  : (_sortBy == 'year'
-                                     ? const [
-                                         DropdownMenuItem(value: 'desc', child: Text('Newest First')),
-                                         DropdownMenuItem(value: 'asc', child: Text('Earliest First')),
+                                     ? [
+                                         DropdownMenuItem(value: 'desc', child: Text(appL10n().tgNewestFirst)),
+                                         DropdownMenuItem(value: 'asc', child: Text(appL10n().tgEarliestFirst)),
                                        ]
                                      : (_sortBy == 'popularity'
-                                         ? const [
-                                             DropdownMenuItem(value: 'desc', child: Text('Most Popular First')),
-                                             DropdownMenuItem(value: 'asc', child: Text('Least Popular First')),
+                                         ? [
+                                             DropdownMenuItem(value: 'desc', child: Text(appL10n().tgMostPopularFirst)),
+                                             DropdownMenuItem(value: 'asc', child: Text(appL10n().tgLeastPopularFirst)),
                                            ]
-                                         : const [
-                                             DropdownMenuItem(value: 'desc', child: Text('Highest First')),
-                                             DropdownMenuItem(value: 'asc', child: Text('Lowest First')),
+                                         : [
+                                             DropdownMenuItem(value: 'desc', child: Text(appL10n().tgHighestFirst)),
+                                             DropdownMenuItem(value: 'asc', child: Text(appL10n().tgLowestFirst)),
                                            ])),
                              onChanged: (val) {
                                if (val != null) {
@@ -2294,7 +2296,7 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                                 focusNode: _showUserRatingsFocusNode,
                                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                                 title: Text(
-                                  'Show User Ratings?',
+                                  appL10n().tgShowUserRatings,
                                   style: TextStyle(
                                     color: focused && settingsTileInvertsOnFocus
                                         ? AppColors.black.withValues(alpha: 0.87)
@@ -2318,11 +2320,11 @@ class _AddEditCustomRowDialogState extends State<_AddEditCustomRowDialog> {
                   })(),
 
                   const SizedBox(height: 16),
-                  const Text('Home Row Custom Name', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text(appL10n().tgHomeRowCustomName, style: TextStyle(color: Colors.grey, fontSize: 12)),
                   const SizedBox(height: 4),
                   _SettingsTextField(
                     controller: _nameController,
-                    hint: 'Enter row name...',
+                    hint: appL10n().tgEnterRowName,
                     focusNode: _nameFocusNode,
                   ),
                 ],
