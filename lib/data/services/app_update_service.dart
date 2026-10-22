@@ -49,7 +49,8 @@ class AppUpdateService {
   /// GitHub owner/repo whose releases are offered as app updates. This must
   /// match the public Tortugarr repository; it used to point at upstream
   /// Moonfin, whose releases would replace this app. Update checks stay off in
-  /// builds without a --dart-define=DISTRIBUTION_CHANNEL (all our builds today).
+  /// builds without a --dart-define=DISTRIBUTION_CHANNEL; the public APKs from
+  /// build-android-tv-public.sh set it.
   static const releaseRepo = 'tortugarr/tortugarr';
 
   static const _latestReleaseHost = 'api.github.com';

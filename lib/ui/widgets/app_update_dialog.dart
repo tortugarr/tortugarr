@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../data/services/app_update_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../util/platform_detection.dart';
+import 'support_dialog.dart';
 import 'track_selector_dialog.dart';
 
 /// Checks for an update and shows the dialog or an appropriate snackbar.
@@ -76,6 +77,15 @@ Future<void> showAppUpdateDialog(
 
   final uri =
       choice == 'notes' ? Uri.parse(update.releaseNotesUrl) : update.downloadUri;
+  // A TV has no browser to hand the page to: show it as a QR code instead.
+  if (PlatformDetection.isTV) {
+    await showQrOrLaunch(
+      context,
+      url: uri.toString(),
+      title: l10n.updateAvailableTitle(update.version),
+    );
+    return;
+  }
   await launchUrl(uri, mode: LaunchMode.externalApplication);
 }
 

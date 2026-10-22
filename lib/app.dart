@@ -201,6 +201,9 @@ class _MoonfinAppState extends State<MoonfinApp> {
       if (mounted) {
         setState(() {});
       }
+      // Home row titles are written when the rows load, so they stay in the
+      // old language until Home loads them again.
+      homeRefreshBus.requestNowOrAfterNavigation();
     }
   }
 

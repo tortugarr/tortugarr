@@ -13,9 +13,12 @@ set -euo pipefail
 
 FLAVOR="androidTv-public"
 NAME="tv"
+# Turns on "Check for updates" against the tortugarr/tortugarr releases.
+CHANNEL="android_tv_apk"
 if [ "${1:-}" = "--mobile" ]; then
   FLAVOR="mobile-public"
   NAME="mobile"
+  CHANNEL="apk"
   shift
 fi
 
@@ -47,7 +50,8 @@ cp "$WORK/$TEMPLATE_REL" "$WORK/$SECRETS_REL"
 cd "$WORK"
 flutter pub get
 flutter build apk --release --flavor "$FLAVOR" \
-  --dart-define=TORTUGARR_PUBLIC=true
+  --dart-define=TORTUGARR_PUBLIC=true \
+  --dart-define=DISTRIBUTION_CHANNEL="$CHANNEL"
 
 apk="build/app/outputs/flutter-apk/app-${FLAVOR,,}-release.apk"
 if [ ! -f "$apk" ]; then
