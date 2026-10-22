@@ -68,6 +68,10 @@ system instead of a weekend of configuration:
   x86-64 or ARM64, 4 GB RAM, systemd. Docker is installed for you if missing.
 - **Windows is not supported.** Windows users can set up WSL2 or a Linux VM themselves
   and run the Linux installer there; it warns and asks before it continues inside WSL2.
+  To set up WSL2, [Sentinel Greenhorn](https://github.com/sentinelarmory/greenhorn) is a
+  one-file installer (`Sentinel-Greenhorn.bat`) that installs WSL2 and Ubuntu, gives Linux a
+  fixed IP address that does not change after a restart, and downloads the Tortugarr installer
+  and apps. It is a separate project.
   Only inside WSL2 it then offers an optional, best-effort **Windows helper**, and you have to
   choose actively - there is no default: *let the installer do it* (one administrator approval:
   port forwarding from your Windows LAN address into WSL, firewall rules for exactly the

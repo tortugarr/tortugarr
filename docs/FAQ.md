@@ -44,7 +44,8 @@ change it and share it. Changed versions must stay open source too.
 **Which devices does it run on?**
 - **App:** Android TV / Google TV (TVs and sticks), and Android phones and tablets.
 - **Server:** Linux (Ubuntu 22.04, 24.04 or 26.04). Windows 11 with WSL2 works through an optional
-  helper, but is not officially supported.
+  helper, but is not officially supported. To set up WSL2 with a fixed IP address, use
+  [Sentinel Greenhorn](https://github.com/sentinelarmory/greenhorn).
 - TVs without Android (LG webOS, Samsung Tizen) can use an Android TV stick.
 
 **Do I need to know Docker, Linux or networking?**
