@@ -387,9 +387,11 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     try {
       final media = await _repo.getRecentlyAdded(limit: _localRowsFetchLimit);
       final items = await Future.wait(media.map(_mediaToDiscoverItem));
-      // Apply the same filter as other discover rows: hide already-available items
-      final filtered = _filterItems(items);
-      _updateRow(index, row.copyWith(items: filtered, isLoading: false));
+      // Only the adult filter: everything in this row is available by
+      // definition, and hiding available titles left it empty (2026-10-22).
+      final blockNsfw = _prefs.blockNsfw;
+      final shown = items.where((item) => !(blockNsfw && _isNsfw(item))).toList();
+      _updateRow(index, row.copyWith(items: shown, isLoading: false));
     } catch (_) {
       _updateRow(index, row.copyWith(isLoading: false));
     }
