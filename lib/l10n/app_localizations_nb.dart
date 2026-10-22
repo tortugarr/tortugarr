@@ -15081,7 +15081,7 @@ class AppLocalizationsNb extends AppLocalizations {
       'Pålogging, PIN-kode, barnemodus, foreldrekontroll og synkronisering av innstillinger';
 
   @override
-  String get settingsGeneralSubtitle => 'Språk, klokke, inndata og ytelse';
+  String get settingsGeneralSubtitle => 'Klokke, inndata og ytelse';
 
   @override
   String get settingsAppearanceSubtitle =>

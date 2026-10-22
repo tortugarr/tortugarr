@@ -14173,7 +14173,7 @@
     "@settingsAccountSubtitle": {
         "description": "Subtitle for the Account settings root entry"
     },
-    "settingsGeneralSubtitle": "Language, clock, input, and performance",
+    "settingsGeneralSubtitle": "Clock, input, and performance",
     "@settingsGeneralSubtitle": {
         "description": "Subtitle for the General settings root entry"
     },

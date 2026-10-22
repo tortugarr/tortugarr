@@ -26336,7 +26336,7 @@ abstract class AppLocalizations {
   /// Subtitle for the General settings root entry
   ///
   /// In en, this message translates to:
-  /// **'Language, clock, input, and performance'**
+  /// **'Clock, input, and performance'**
   String get settingsGeneralSubtitle;
 
   /// Subtitle for the Appearance settings root entry

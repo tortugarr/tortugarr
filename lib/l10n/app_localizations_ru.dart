@@ -15140,8 +15140,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Sign-in, PIN code, Kids Mode, parental controls, and settings sync';
 
   @override
-  String get settingsGeneralSubtitle =>
-      'Language, clock, input, and performance';
+  String get settingsGeneralSubtitle => 'Clock, input, and performance';
 
   @override
   String get settingsAppearanceSubtitle =>
