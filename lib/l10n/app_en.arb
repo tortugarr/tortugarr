@@ -5431,7 +5431,7 @@
     "@hardwareDecoding": {
         "description": "Label for hardware decoding toggle"
     },
-    "hardwareDecodingSubtitle": "May improve performance but can cause playback issues on some devices.",
+    "hardwareDecodingSubtitle": "Lets the device's video chip unpack the picture. Leave it on unless playback fails.",
     "@hardwareDecodingSubtitle": {
         "description": "Description for hardware decoding toggle"
     },
@@ -6003,7 +6003,7 @@
     "@showLiveTvButton": {
         "description": "Setting for showing live TV button"
     },
-    "showDownloadsButton": "Show Downloads Button",
+    "showDownloadsButton": "Show Saved on device button",
     "@showDownloadsButton": {
         "description": "Setting for showing downloads button"
     },
@@ -10981,9 +10981,9 @@
     "settingsMaxResolutionDescription": "Limit the maximum resolution the player will request. Higher-resolution content will be transcoded down.",
     "settingsPlayerZoomDescription": "How video is scaled to the screen. Zoom to Fill enlarges the picture until it fills the screen and cuts off the edges. It doesn't detect black bars.",
     "settingsPlaybackEngineAndroidTv": "Playback Engine (Android TV)",
-    "settingsPlaybackEngineAndroidTvDescription": "Choose the default playback engine on Android TV devices. Changes apply to the next playback session.",
+    "settingsPlaybackEngineAndroidTvDescription": "Media3 is the standard. Try mpv if a film stutters or the sound drops out. Applies from the next film.",
     "settingsPlaybackEngineMedia3Recommended": "Media3 (recommended)",
-    "settingsPlaybackEngineMpvLegacy": "mpv (legacy)",
+    "settingsPlaybackEngineMpvLegacy": "mpv",
     "settingsMpvOnBluetooth": "Use mpv with Bluetooth audio",
     "settingsMpvOnBluetoothDescription": "Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.",
     "settingsRedetectDisplay": "Re-detect display",
@@ -11129,11 +11129,11 @@
     "@disableTunnelingSubtitle": {
         "description": "Setting subtitle for disable tunneling"
     },
-    "enableTunnelingTitle": "Enable Tunneling",
+    "enableTunnelingTitle": "Tunneling",
     "@enableTunnelingTitle": {
         "description": "Setting title: enable tunneled video playback (advanced)"
     },
-    "enableTunnelingSubtitle": "Advanced. Routes audio and video through a coupled hardware path. Off by default because it causes audio/video dropouts on some devices.",
+    "enableTunnelingSubtitle": "Try this if 4K films stutter. Picture and sound go straight to the TV's video chip. Some TVs lose sound with it on.",
     "@enableTunnelingSubtitle": {
         "description": "Setting subtitle for enable tunneling"
     },
@@ -11327,7 +11327,7 @@
     "replaceSkipOutroWithNextUpDisplaySubtitle": "Show the Next Up overlay instead of the Skip Outro button.",
     "playerRouting": "Player Routing",
     "preferSoftwareDecoders": "Prefer Software Decoders",
-    "preferSoftwareDecodersSubtitle": "Use FFmpeg (audio) and libgav1 (AV1) before hardware decoders. Disable if HDMI audio passthrough breaks.",
+    "preferSoftwareDecodersSubtitle": "Unpacks sound and AV1 video in the app instead of the video chip. Turn off if Dolby or DTS to the amplifier stops working.",
     "useExternalPlayer": "Always Use External Player",
     "useExternalPlayerSubtitle": "Open video playback in your selected external app on Android TV.",
     "automaticQueuing": "Automatic Queuing",
@@ -14149,11 +14149,11 @@
     "@externalSources": {
         "description": "Section header on the Home Screen settings screen for rows that come from IMDb, TMDB, calendars, Seerr and custom lists"
     },
-    "qualityAndDecoding": "Quality & Decoding",
+    "qualityAndDecoding": "Picture & Sound System",
     "@qualityAndDecoding": {
         "description": "Settings screen for streaming limits, decoding, HDR and Dolby Vision"
     },
-    "qualityAndDecodingSubtitle": "Bitrate, resolution, decoding, HDR, and Dolby Vision",
+    "qualityAndDecodingSubtitle": "Player engine, 4K, HDR, Dolby Vision and tunneling. Look here if films stutter",
     "@qualityAndDecodingSubtitle": {
         "description": "Subtitle for the Quality & Decoding entry"
     },
@@ -15320,7 +15320,7 @@
         }
     },
     "tgDownloadsButton": "Downloads",
-    "tgAlwaysShowDownloads": "Always show Downloads",
+    "tgAlwaysShowDownloads": "Always show server downloads",
     "tgAlwaysShowDownloadsSubtitle": "Off: the Downloads button is only in the menu while something downloads",
     "tgIndexersUnavailable": "{names} unavailable right now: results from the other indexers only.",
     "@tgIndexersUnavailable": {
@@ -15904,5 +15904,9 @@
             }
         }
     },
-    "tgMyPlaylist": "My Playlist"
+    "tgMyPlaylist": "My Playlist",
+    "tgSoundSystem": "Sound system",
+    "tgSoundSystemLink": "Amplifier and passthrough",
+    "tgSoundSystemLinkSubtitle": "Dolby, DTS and Atmos to the amplifier, night mode",
+    "tgShowSavedDownloadsSubtitle": "Films and episodes saved on this device to watch without internet"
 }

@@ -4091,7 +4091,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hardwareDecodingSubtitle =>
-      'May improve performance but can cause playback issues on some devices.';
+      'Lets the device\'s video chip unpack the picture. Leave it on unless playback fails.';
 
   @override
   String get nextUpAndQueuing => 'Next Up & Queuing';
@@ -4526,7 +4526,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showLiveTvButton => 'Show Live TV Button';
 
   @override
-  String get showDownloadsButton => 'Show Downloads Button';
+  String get showDownloadsButton => 'Show Saved on device button';
 
   @override
   String get showLibrariesInToolbar => 'Show Libraries in Toolbar';
@@ -11558,13 +11558,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPlaybackEngineAndroidTvDescription =>
-      'Choose the default playback engine on Android TV devices. Changes apply to the next playback session.';
+      'Media3 is the standard. Try mpv if a film stutters or the sound drops out. Applies from the next film.';
 
   @override
   String get settingsPlaybackEngineMedia3Recommended => 'Media3 (recommended)';
 
   @override
-  String get settingsPlaybackEngineMpvLegacy => 'mpv (legacy)';
+  String get settingsPlaybackEngineMpvLegacy => 'mpv';
 
   @override
   String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
@@ -11820,11 +11820,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Force non-tunneled playback. Useful on devices with tunneling audio/video discontinuities.';
 
   @override
-  String get enableTunnelingTitle => 'Enable Tunneling';
+  String get enableTunnelingTitle => 'Tunneling';
 
   @override
   String get enableTunnelingSubtitle =>
-      'Advanced. Routes audio and video through a coupled hardware path. Off by default because it causes audio/video dropouts on some devices.';
+      'Try this if 4K films stutter. Picture and sound go straight to the TV\'s video chip. Some TVs lose sound with it on.';
 
   @override
   String get mapDolbyVisionP7Title =>
@@ -12226,7 +12226,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preferSoftwareDecodersSubtitle =>
-      'Use FFmpeg (audio) and libgav1 (AV1) before hardware decoders. Disable if HDMI audio passthrough breaks.';
+      'Unpacks sound and AV1 video in the app instead of the video chip. Turn off if Dolby or DTS to the amplifier stops working.';
 
   @override
   String get useExternalPlayer => 'Always Use External Player';
@@ -14969,11 +14969,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalSources => 'External Sources';
 
   @override
-  String get qualityAndDecoding => 'Quality & Decoding';
+  String get qualityAndDecoding => 'Picture & Sound System';
 
   @override
   String get qualityAndDecodingSubtitle =>
-      'Bitrate, resolution, decoding, HDR, and Dolby Vision';
+      'Player engine, 4K, HDR, Dolby Vision and tunneling. Look here if films stutter';
 
   @override
   String get skippingAndAutoplay => 'Skipping & Autoplay';
@@ -16164,7 +16164,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tgDownloadsButton => 'Downloads';
 
   @override
-  String get tgAlwaysShowDownloads => 'Always show Downloads';
+  String get tgAlwaysShowDownloads => 'Always show server downloads';
 
   @override
   String get tgAlwaysShowDownloadsSubtitle =>
@@ -17085,6 +17085,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tgMyPlaylist => 'My Playlist';
+
+  @override
+  String get tgSoundSystem => 'Sound system';
+
+  @override
+  String get tgSoundSystemLink => 'Amplifier and passthrough';
+
+  @override
+  String get tgSoundSystemLinkSubtitle =>
+      'Dolby, DTS and Atmos to the amplifier, night mode';
+
+  @override
+  String get tgShowSavedDownloadsSubtitle =>
+      'Films and episodes saved on this device to watch without internet';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).

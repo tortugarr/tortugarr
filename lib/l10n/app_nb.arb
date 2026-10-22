@@ -2852,7 +2852,7 @@
     "@scaleOnDevice": {
         "description": "Refresh rate option: scale on device"
     },
-    "trickPlay": "Trikselek",
+    "trickPlay": "Forhåndsbilder ved spoling",
     "@trickPlay": {
         "description": "Setting for trick play thumbnails"
     },
@@ -3016,7 +3016,7 @@
     "@hardwareDecoding": {
         "description": "Label for hardware decoding toggle"
     },
-    "hardwareDecodingSubtitle": "Kan forbedre ytelsen, men kan forårsake avspillingsproblemer på enkelte enheter.",
+    "hardwareDecodingSubtitle": "Lar videobrikken i enheten pakke ut bildet. La den stå på, med mindre avspillingen feiler.",
     "@hardwareDecodingSubtitle": {
         "description": "Description for hardware decoding toggle"
     },
@@ -6595,12 +6595,12 @@
     "settingsMaxResolutionDescription": "Begrens den maksimale oppløsningen spilleren vil be om. Innhold med høyere oppløsning vil bli omkodet ned.",
     "settingsPlayerZoomDescription": "Hvordan video skal skaleres for å passe til skjermen.",
     "settingsPlaybackEngineAndroidTv": "Avspillingsmotor (Android TV)",
-    "settingsPlaybackEngineAndroidTvDescription": "Velg standard avspillingsmotor på Android TV-enheter. Endringer gjelder for neste avspillingsøkt.",
+    "settingsPlaybackEngineAndroidTvDescription": "Media3 er standard. Prøv mpv hvis en film hakker eller lyden faller ut. Gjelder fra neste film.",
     "settingsPlaybackEngineMedia3Recommended": "Media3 (anbefalt)",
-    "settingsPlaybackEngineMpvLegacy": "mpv (eldre)",
+    "settingsPlaybackEngineMpvLegacy": "mpv",
     "settingsMpvOnBluetooth": "Bruk mpv med Bluetooth-lyd",
     "settingsMpvOnBluetoothDescription": "Spiller av med mpv når lyden går til Bluetooth-hodetelefoner eller en høyttaler. Media3 kan hakke og hoppe med Bluetooth på noen TV-er.",
-    "settingsDolbyVisionFallback": "Dolby Vision Reserve",
+    "settingsDolbyVisionFallback": "Reserve for Dolby Vision",
     "settingsDolbyVisionFallbackDescription": "Atferd for Dolby Vision-titler på enheter uten Dolby Vision-dekoding.",
     "settingsAskEachTime": "Spør hver gang",
     "settingsPreferHdr10Fallback": "Foretrekker HDR10 reserve",
@@ -6976,11 +6976,11 @@
     "@disableTunnelingSubtitle": {
         "description": "Setting subtitle for disable tunneling"
     },
-    "mapDolbyVisionP7Title": "Tilordne Dolby Vision-profil 7 til HEVC",
+    "mapDolbyVisionP7Title": "Spill alltid Dolby Vision profil 7 som HDR10",
     "@mapDolbyVisionP7Title": {
         "description": "Setting title: play DV P7 as HDR10 HEVC on non-DV devices"
     },
-    "mapDolbyVisionP7Subtitle": "Spill av Dolby Vision profil 7-strømmer som HDR10-kompatibel HEVC på enheter uten DV-støtte.",
+    "mapDolbyVisionP7Subtitle": "Hopper over omgjøringen til profil 8. Bruk dette hvis omgjorte filmer ser feil ut.",
     "@mapDolbyVisionP7Subtitle": {
         "description": "Setting subtitle for DV P7 to HEVC mapping"
     },
@@ -7093,7 +7093,7 @@
     "replaceSkipOutroWithNextUpDisplaySubtitle": "Vis Neste opp-overlegget i stedet for Hopp over outro-knappen.",
     "playerRouting": "Spillerruting",
     "preferSoftwareDecoders": "Foretrekk programvaredekodere",
-    "preferSoftwareDecodersSubtitle": "Bruk FFmpeg (lyd) og libgav1 (AV1) før maskinvaredekodere. Deaktiver hvis HDMI-lydpassthrough slutter å virke.",
+    "preferSoftwareDecodersSubtitle": "Pakker ut lyd og AV1-video i appen i stedet for i videobrikken. Slå av hvis Dolby eller DTS til forsterkeren slutter å virke.",
     "useExternalPlayer": "Use external player",
     "useExternalPlayerSubtitle": "Åpne videoavspilling i den valgte eksterne appen på Android TV.",
     "automaticQueuing": "Automatisk køing",
@@ -8562,11 +8562,11 @@
             }
         }
     },
-    "enableTunnelingTitle": "Aktiver tunnelering",
+    "enableTunnelingTitle": "Tunneling",
     "@enableTunnelingTitle": {
         "description": "Setting title: enable tunneled video playback (advanced)"
     },
-    "enableTunnelingSubtitle": "Avansert. Ruter lyd og video gjennom en koblet maskinvarebane. Av som standard fordi det gir lyd-/videobrudd på enkelte enheter.",
+    "enableTunnelingSubtitle": "Prøv dette hvis 4K-filmer hakker. Bilde og lyd går rett til TV-ens videobrikke. Noen TV-er mister lyden med dette på.",
     "@enableTunnelingSubtitle": {
         "description": "Setting subtitle for enable tunneling"
     },
@@ -9534,7 +9534,7 @@
     "tgOnlySdFound": "{count} funnet, alle SD (lav kvalitet). Slå på «Vis SD-utgivelser» i Settings for å se dem.",
     "tgNothingKeptReasons": "{count} funnet, ingen brukbare: {reasons}",
     "tgDownloadsButton": "Nedlastinger",
-    "tgAlwaysShowDownloads": "Vis alltid Nedlastinger",
+    "tgAlwaysShowDownloads": "Vis alltid nedlastinger til serveren",
     "tgAlwaysShowDownloadsSubtitle": "Av: knappen Nedlastinger er bare i menyen mens noe lastes ned",
     "tgIndexersUnavailable": "{names} er utilgjengelig nå: bare treff fra de andre indekserne.",
     "tgAdultSearchInMenu": "XXX-søk i menyen",
@@ -10236,7 +10236,7 @@
     "sdCard": "SD-kort",
     "downloadLocationLimitedByAndroid": "Android lar bare Tortugarr skrive til egne mapper, og denne enheten har ingen flyttbar lagring. Slå på Lagre i Nedlastinger-mappen over for å legge nedlastinger et sted andre apper når dem.",
     "showLiveTvButton": "Vis Direkte-TV-knapp",
-    "showDownloadsButton": "Vis Nedlastinger-knapp",
+    "showDownloadsButton": "Vis knappen Lagret på enheten",
     "mergeRecentRowsByType": "Slå sammen nylige rader etter type",
     "mergeRecentRowsByTypeDescription": "Slå sammen separate biblioteker av samme type for radene Nylig lagt til og Nylig utgitt på startskjermen.",
     "libraryView": "Bibliotekvisning",
@@ -11348,8 +11348,8 @@
     "rowOptionsSubtitle": "Sortering og innhold for hver rad",
     "imageTypePerRow": "Bildetype per rad",
     "externalSources": "Eksterne kilder",
-    "qualityAndDecoding": "Kvalitet og dekoding",
-    "qualityAndDecodingSubtitle": "Bithastighet, oppløsning, dekoding, HDR og Dolby Vision",
+    "qualityAndDecoding": "Bilde og lydanlegg",
+    "qualityAndDecodingSubtitle": "Avspillingsmotor, 4K, HDR, Dolby Vision og tunneling. Se her hvis filmer hakker",
     "skippingAndAutoplay": "Hopp over og automatisk avspilling",
     "advancedPlayback": "Avansert avspilling",
     "advancedPlaybackSubtitle": "Spillerruting, eksterne spillere og mpv",
@@ -11394,5 +11394,9 @@
     "librarySortTrackNumber": "Spornummer",
     "librarySortGenre": "Sjanger",
     "librarySortFoldersFirst": "Mapper først",
-    "librarySortLength": "Lengde"
+    "librarySortLength": "Lengde",
+    "tgSoundSystem": "Lydanlegg",
+    "tgSoundSystemLink": "Forsterker og passthrough",
+    "tgSoundSystemLinkSubtitle": "Dolby, DTS og Atmos til forsterkeren, nattmodus",
+    "tgShowSavedDownloadsSubtitle": "Filmer og episoder lagret på denne enheten, til å se uten internett"
 }

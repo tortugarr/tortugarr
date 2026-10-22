@@ -4542,7 +4542,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get showLiveTvButton => 'Show Live TV Button';
 
   @override
-  String get showDownloadsButton => 'Show Downloads Button';
+  String get showDownloadsButton => 'Show Saved on device button';
 
   @override
   String get showLibrariesInToolbar => 'Хэрэгслийн самбарт номын санг харуулах';
@@ -15066,11 +15066,11 @@ class AppLocalizationsMn extends AppLocalizations {
   String get externalSources => 'External Sources';
 
   @override
-  String get qualityAndDecoding => 'Quality & Decoding';
+  String get qualityAndDecoding => 'Picture & Sound System';
 
   @override
   String get qualityAndDecodingSubtitle =>
-      'Bitrate, resolution, decoding, HDR, and Dolby Vision';
+      'Player engine, 4K, HDR, Dolby Vision and tunneling. Look here if films stutter';
 
   @override
   String get skippingAndAutoplay => 'Skipping & Autoplay';
@@ -16271,7 +16271,7 @@ class AppLocalizationsMn extends AppLocalizations {
   String get tgDownloadsButton => 'Downloads';
 
   @override
-  String get tgAlwaysShowDownloads => 'Always show Downloads';
+  String get tgAlwaysShowDownloads => 'Always show server downloads';
 
   @override
   String get tgAlwaysShowDownloadsSubtitle =>
@@ -17192,4 +17192,18 @@ class AppLocalizationsMn extends AppLocalizations {
 
   @override
   String get tgMyPlaylist => 'My Playlist';
+
+  @override
+  String get tgSoundSystem => 'Sound system';
+
+  @override
+  String get tgSoundSystemLink => 'Amplifier and passthrough';
+
+  @override
+  String get tgSoundSystemLinkSubtitle =>
+      'Dolby, DTS and Atmos to the amplifier, night mode';
+
+  @override
+  String get tgShowSavedDownloadsSubtitle =>
+      'Films and episodes saved on this device to watch without internet';
 }

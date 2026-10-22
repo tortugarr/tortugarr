@@ -7237,7 +7237,7 @@ abstract class AppLocalizations {
   /// Description for hardware decoding toggle
   ///
   /// In en, this message translates to:
-  /// **'May improve performance but can cause playback issues on some devices.'**
+  /// **'Lets the device\'s video chip unpack the picture. Leave it on unless playback fails.'**
   String get hardwareDecodingSubtitle;
 
   /// Section title for next up and queuing
@@ -8017,7 +8017,7 @@ abstract class AppLocalizations {
   /// Setting for showing downloads button
   ///
   /// In en, this message translates to:
-  /// **'Show Downloads Button'**
+  /// **'Show Saved on device button'**
   String get showDownloadsButton;
 
   /// Setting for showing libraries in toolbar
@@ -20503,7 +20503,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPlaybackEngineAndroidTvDescription.
   ///
   /// In en, this message translates to:
-  /// **'Choose the default playback engine on Android TV devices. Changes apply to the next playback session.'**
+  /// **'Media3 is the standard. Try mpv if a film stutters or the sound drops out. Applies from the next film.'**
   String get settingsPlaybackEngineAndroidTvDescription;
 
   /// No description provided for @settingsPlaybackEngineMedia3Recommended.
@@ -20515,7 +20515,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPlaybackEngineMpvLegacy.
   ///
   /// In en, this message translates to:
-  /// **'mpv (legacy)'**
+  /// **'mpv'**
   String get settingsPlaybackEngineMpvLegacy;
 
   /// No description provided for @settingsMpvOnBluetooth.
@@ -20959,13 +20959,13 @@ abstract class AppLocalizations {
   /// Setting title: enable tunneled video playback (advanced)
   ///
   /// In en, this message translates to:
-  /// **'Enable Tunneling'**
+  /// **'Tunneling'**
   String get enableTunnelingTitle;
 
   /// Setting subtitle for enable tunneling
   ///
   /// In en, this message translates to:
-  /// **'Advanced. Routes audio and video through a coupled hardware path. Off by default because it causes audio/video dropouts on some devices.'**
+  /// **'Try this if 4K films stutter. Picture and sound go straight to the TV\'s video chip. Some TVs lose sound with it on.'**
   String get enableTunnelingSubtitle;
 
   /// Setting title: force DV P7 streams to the HDR10 strip path
@@ -21673,7 +21673,7 @@ abstract class AppLocalizations {
   /// No description provided for @preferSoftwareDecodersSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Use FFmpeg (audio) and libgav1 (AV1) before hardware decoders. Disable if HDMI audio passthrough breaks.'**
+  /// **'Unpacks sound and AV1 video in the app instead of the video chip. Turn off if Dolby or DTS to the amplifier stops working.'**
   String get preferSoftwareDecodersSubtitle;
 
   /// No description provided for @useExternalPlayer.
@@ -26300,13 +26300,13 @@ abstract class AppLocalizations {
   /// Settings screen for streaming limits, decoding, HDR and Dolby Vision
   ///
   /// In en, this message translates to:
-  /// **'Quality & Decoding'**
+  /// **'Picture & Sound System'**
   String get qualityAndDecoding;
 
   /// Subtitle for the Quality & Decoding entry
   ///
   /// In en, this message translates to:
-  /// **'Bitrate, resolution, decoding, HDR, and Dolby Vision'**
+  /// **'Player engine, 4K, HDR, Dolby Vision and tunneling. Look here if films stutter'**
   String get qualityAndDecodingSubtitle;
 
   /// Settings screen for media segment skipping, cinema mode and autoplay
@@ -28172,7 +28172,7 @@ abstract class AppLocalizations {
   /// No description provided for @tgAlwaysShowDownloads.
   ///
   /// In en, this message translates to:
-  /// **'Always show Downloads'**
+  /// **'Always show server downloads'**
   String get tgAlwaysShowDownloads;
 
   /// No description provided for @tgAlwaysShowDownloadsSubtitle.
@@ -29746,6 +29746,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Playlist'**
   String get tgMyPlaylist;
+
+  /// No description provided for @tgSoundSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound system'**
+  String get tgSoundSystem;
+
+  /// No description provided for @tgSoundSystemLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Amplifier and passthrough'**
+  String get tgSoundSystemLink;
+
+  /// No description provided for @tgSoundSystemLinkSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dolby, DTS and Atmos to the amplifier, night mode'**
+  String get tgSoundSystemLinkSubtitle;
+
+  /// No description provided for @tgShowSavedDownloadsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Films and episodes saved on this device to watch without internet'**
+  String get tgShowSavedDownloadsSubtitle;
 }
 
 class _AppLocalizationsDelegate

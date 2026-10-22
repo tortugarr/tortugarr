@@ -3437,7 +3437,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get scaleOnDevice => 'Skala på enheten';
 
   @override
-  String get trickPlay => 'Trikselek';
+  String get trickPlay => 'Forhåndsbilder ved spoling';
 
   @override
   String get showPreviewThumbnailsWhenSeeking =>
@@ -4103,7 +4103,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get hardwareDecodingSubtitle =>
-      'Kan forbedre ytelsen, men kan forårsake avspillingsproblemer på enkelte enheter.';
+      'Lar videobrikken i enheten pakke ut bildet. La den stå på, med mindre avspillingen feiler.';
 
   @override
   String get nextUpAndQueuing => 'Neste opp og kø';
@@ -4540,7 +4540,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get showLiveTvButton => 'Vis Direkte-TV-knapp';
 
   @override
-  String get showDownloadsButton => 'Vis Nedlastinger-knapp';
+  String get showDownloadsButton => 'Vis knappen Lagret på enheten';
 
   @override
   String get showLibrariesInToolbar => 'Vis biblioteker i verktøylinjen';
@@ -11638,13 +11638,13 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get settingsPlaybackEngineAndroidTvDescription =>
-      'Velg standard avspillingsmotor på Android TV-enheter. Endringer gjelder for neste avspillingsøkt.';
+      'Media3 er standard. Prøv mpv hvis en film hakker eller lyden faller ut. Gjelder fra neste film.';
 
   @override
   String get settingsPlaybackEngineMedia3Recommended => 'Media3 (anbefalt)';
 
   @override
-  String get settingsPlaybackEngineMpvLegacy => 'mpv (eldre)';
+  String get settingsPlaybackEngineMpvLegacy => 'mpv';
 
   @override
   String get settingsMpvOnBluetooth => 'Bruk mpv med Bluetooth-lyd';
@@ -11679,7 +11679,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settingsDisplayMarkedSdr => 'Skjermen er lagret som SDR';
 
   @override
-  String get settingsDolbyVisionFallback => 'Dolby Vision Reserve';
+  String get settingsDolbyVisionFallback => 'Reserve for Dolby Vision';
 
   @override
   String get settingsDolbyVisionFallbackDescription =>
@@ -11905,18 +11905,19 @@ class AppLocalizationsNb extends AppLocalizations {
       'Tving avspilling uten tunnelering. Nyttig på enheter med lyd-/videobrudd ved tunnelering.';
 
   @override
-  String get enableTunnelingTitle => 'Aktiver tunnelering';
+  String get enableTunnelingTitle => 'Tunneling';
 
   @override
   String get enableTunnelingSubtitle =>
-      'Avansert. Ruter lyd og video gjennom en koblet maskinvarebane. Av som standard fordi det gir lyd-/videobrudd på enkelte enheter.';
+      'Prøv dette hvis 4K-filmer hakker. Bilde og lyd går rett til TV-ens videobrikke. Noen TV-er mister lyden med dette på.';
 
   @override
-  String get mapDolbyVisionP7Title => 'Tilordne Dolby Vision-profil 7 til HEVC';
+  String get mapDolbyVisionP7Title =>
+      'Spill alltid Dolby Vision profil 7 som HDR10';
 
   @override
   String get mapDolbyVisionP7Subtitle =>
-      'Spill av Dolby Vision profil 7-strømmer som HDR10-kompatibel HEVC på enheter uten DV-støtte.';
+      'Hopper over omgjøringen til profil 8. Bruk dette hvis omgjorte filmer ser feil ut.';
 
   @override
   String get subtitlesUseEmbeddedStyles => 'Bruk innebygde undertekststiler';
@@ -12313,7 +12314,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get preferSoftwareDecodersSubtitle =>
-      'Bruk FFmpeg (lyd) og libgav1 (AV1) før maskinvaredekodere. Deaktiver hvis HDMI-lydpassthrough slutter å virke.';
+      'Pakker ut lyd og AV1-video i appen i stedet for i videobrikken. Slå av hvis Dolby eller DTS til forsterkeren slutter å virke.';
 
   @override
   String get useExternalPlayer => 'Use external player';
@@ -15059,11 +15060,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get externalSources => 'Eksterne kilder';
 
   @override
-  String get qualityAndDecoding => 'Kvalitet og dekoding';
+  String get qualityAndDecoding => 'Bilde og lydanlegg';
 
   @override
   String get qualityAndDecodingSubtitle =>
-      'Bithastighet, oppløsning, dekoding, HDR og Dolby Vision';
+      'Avspillingsmotor, 4K, HDR, Dolby Vision og tunneling. Se her hvis filmer hakker';
 
   @override
   String get skippingAndAutoplay => 'Hopp over og automatisk avspilling';
@@ -16256,7 +16257,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tgDownloadsButton => 'Nedlastinger';
 
   @override
-  String get tgAlwaysShowDownloads => 'Vis alltid Nedlastinger';
+  String get tgAlwaysShowDownloads => 'Vis alltid nedlastinger til serveren';
 
   @override
   String get tgAlwaysShowDownloadsSubtitle =>
@@ -17182,4 +17183,18 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgMyPlaylist => 'Min spilleliste';
+
+  @override
+  String get tgSoundSystem => 'Lydanlegg';
+
+  @override
+  String get tgSoundSystemLink => 'Forsterker og passthrough';
+
+  @override
+  String get tgSoundSystemLinkSubtitle =>
+      'Dolby, DTS og Atmos til forsterkeren, nattmodus';
+
+  @override
+  String get tgShowSavedDownloadsSubtitle =>
+      'Filmer og episoder lagret på denne enheten, til å se uten internett';
 }

@@ -54,6 +54,18 @@ class _QualityDecodingScreen extends StatelessWidget {
             ],
           ),
 
+          _SectionHeader(appL10n().tgSoundSystem),
+          adaptiveListSection(
+            children: [
+              _TvSettingsListTile(
+                leading: const Icon(Icons.speaker),
+                title: Text(appL10n().tgSoundSystemLink),
+                subtitle: Text(appL10n().tgSoundSystemLinkSubtitle),
+                onTap: () =>
+                    context.pushSettingsScreen(const _AudioPreferencesScreen()),
+              ),
+            ],
+          ),
           _SectionHeader(l10n.tgDecodingRendering),
           adaptiveListSection(
             children: [
@@ -84,6 +96,16 @@ class _QualityDecodingScreen extends StatelessWidget {
                   title: l10n.settingsMpvOnBluetooth,
                   subtitle: l10n.settingsMpvOnBluetoothDescription,
                   icon: Icons.bluetooth_audio,
+                ),
+              // Next to the engine choice: both are what to try when a film
+              // stutters on the TV.
+              if (PlatformDetection.isAndroid && PlatformDetection.isTV)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.media3TunnelingDisabled,
+                  inverted: true,
+                  title: l10n.enableTunnelingTitle,
+                  subtitle: l10n.enableTunnelingSubtitle,
+                  icon: Icons.tv,
                 ),
               // Hidden on Apple TV: AetherEngine always uses VideoToolbox for
               // hardware-capable codecs and software decode otherwise, so there

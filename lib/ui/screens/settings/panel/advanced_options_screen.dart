@@ -46,13 +46,6 @@ class _AdvancedOptionsScreenState extends State<_AdvancedOptionsScreen> {
                       subtitle: l10n.allowExternalAudioEffectsSubtitle,
                       icon: Icons.equalizer,
                     ),
-                    SwitchPreferenceTile(
-                      preference: UserPreferences.media3TunnelingDisabled,
-                      inverted: true,
-                      title: l10n.enableTunnelingTitle,
-                      subtitle: l10n.enableTunnelingSubtitle,
-                      icon: Icons.tv,
-                    ),
                   ],
                   SwitchPreferenceTile(
                     preference: UserPreferences.useExternalPlayer,
