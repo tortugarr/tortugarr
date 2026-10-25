@@ -361,6 +361,8 @@ class Destinations {
   static String nextUpFor(String itemId) => '/player/next-up/$itemId';
   static String stillWatchingFor(String itemId) =>
       '/player/still-watching/$itemId';
+  /// The main search with its Seerr tab first (from Seerr's Discover).
+  static const searchSeerr = '/search?tab=seerr';
   static String searchWith(String query) =>
       '/search?query=${Uri.encodeComponent(query)}';
   static String searchInLibrary(String libraryId, {String? query}) {

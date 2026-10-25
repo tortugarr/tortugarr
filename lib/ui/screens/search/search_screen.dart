@@ -50,11 +50,16 @@ class SearchScreen extends StatefulWidget {
   final String? scopedLibraryId;
   final RemoteSearchSession? remoteSearch;
 
+  /// Opened from Seerr's Discover: the Seerr tab comes first when there are
+  /// Seerr results, instead of All.
+  final bool preferSeerr;
+
   const SearchScreen({
     super.key,
     this.initialQuery,
     this.scopedLibraryId,
     this.remoteSearch,
+    this.preferSeerr = false,
   });
 
   @override
@@ -188,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen>
     _shownTabKeys = tabKeys;
     if (_tabCount > 0 && query != _tabSelectionQuery) {
       _tabSelectionQuery = query;
-      _selectedTab = _leadingTabCount;
+      _selectedTab = _defaultTab;
     } else if (keptTab >= 0) {
       _selectedTab = keptTab;
     } else if (_selectedTab >= _tabCount) {
@@ -196,7 +201,7 @@ class _SearchScreenState extends State<SearchScreen>
     }
     if (_focusTabsAfterResults && _tabCount > 0) {
       _focusTabsAfterResults = false;
-      _selectedTab = _leadingTabCount;
+      _selectedTab = _defaultTab;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _tabsFocusNode.canRequestFocus) {
           _tabsFocusNode.requestFocus();
@@ -371,6 +376,9 @@ class _SearchScreenState extends State<SearchScreen>
 
   // How many special tabs sit before the All tab. This is also the All index.
   int get _leadingTabCount => (_hasSeerr ? 1 : 0) + (_hasGames ? 1 : 0);
+
+  /// The tab new results open on: All, or Seerr when opened from Seerr.
+  int get _defaultTab => widget.preferSeerr && _hasSeerr ? 0 : _leadingTabCount;
 
   bool _tabIsSeerr(int index) => _hasSeerr && index == 0;
 
