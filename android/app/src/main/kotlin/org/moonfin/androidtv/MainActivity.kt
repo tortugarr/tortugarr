@@ -31,6 +31,7 @@ import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Rational
 import android.view.KeyEvent
+import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.WindowManager
 import androidx.mediarouter.media.MediaRouteSelector
@@ -968,6 +969,13 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     }
 
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
+        // A mouse wheel goes straight to Flutter. A wireless keyboard + mouse
+        // receiver can show up as one device with the joystick source too (the
+        // Microsoft Nano Transceiver on the TCL TV, 2026-10-25), and the gamepad
+        // handlers then swallowed its scroll events: the wheel did nothing.
+        if (event.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+            return super.dispatchGenericMotionEvent(event)
+        }
         val pad = nativePad
         if (pad != null && pad.active && pad.onMotion(event)) return true
         if (gameInputRouter.onMotionEvent(event)) return true
