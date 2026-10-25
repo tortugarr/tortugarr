@@ -16,6 +16,8 @@
 - Seerr: the Networks and Studios rows (Netflix, HBO, Disney+, Viaplay …) are back, *Recently
   Added* shows titles again, and the search button opens the main search on its Seerr tab.
 - Cancel in a release search closes at once, also after a quick double tap.
+- Android TV: the mouse wheel scrolls again with a wireless keyboard + mouse receiver, and
+  Down in the admin menu moves one step (Library and People were skipped).
 - Settings: Administration and Language at the top, *Picture & Sound System* in Playback, and
   About has check for updates, diagnostics, licenses and the privacy policy again.
 - New users are asked in the setup wizard whether Trending and Popular show only titles in
