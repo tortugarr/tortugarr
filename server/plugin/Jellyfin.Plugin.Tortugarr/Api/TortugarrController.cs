@@ -10,7 +10,8 @@ namespace Jellyfin.Plugin.Tortugarr.Api;
 
 /// <summary>
 /// The routes of docs/design/tortugarr-plugin-api.md. Every route needs a Jellyfin session;
-/// everything except Capabilities needs an administrator (version 1).
+/// everything except Capabilities needs an administrator (version 1), except that a limited
+/// downloader (a non-administrator with download limits) may search, grab and see a series.
 /// </summary>
 [ApiController]
 [Authorize]
@@ -25,14 +26,16 @@ public class TortugarrController : ControllerBase
     private readonly ArrHookService _hook;
     private readonly SeriesService _series;
     private readonly SpaceService _space;
+    private readonly UserLimitService _limits;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits)
     {
         _svc = svc;
         _delete = delete;
         _hook = hook;
         _series = series;
         _space = space;
+        _limits = limits;
     }
 
     private Guid UserId
@@ -45,6 +48,16 @@ public class TortugarrController : ControllerBase
     }
 
     private bool IsAdmin => User.IsInRole("Administrator");
+
+    /// <summary>An administrator, or a limited downloader (whose limits come back in <paramref name="limit"/>).</summary>
+    private bool MayDownload(out Configuration.UserLimit? limit)
+    {
+        limit = IsAdmin ? null : _limits.For(UserId);
+        return IsAdmin || limit is not null;
+    }
+
+    private static ContentResult NotAllowed() =>
+        Error(403, "forbidden", "downloading needs an administrator or download limits set by one");
 
     // Jellyfin answers in PascalCase; the spec says camelCase, so these routes serialize themselves.
     private static ContentResult Json(object? body, int status = 200) => new()
@@ -87,6 +100,10 @@ public class TortugarrController : ControllerBase
         {
             return Json(new { error = new { code = "already_in_client", message = e.Message, downloadId = e.DownloadId, category = e.Category, progress = e.Progress, state = e.State } }, 409);
         }
+        catch (LimitException e)
+        {
+            return Error(403, e.Code, e.Message);
+        }
         catch (NotConfiguredException e)
         {
             return Error(503, "not_configured", e.Message);
@@ -100,22 +117,30 @@ public class TortugarrController : ControllerBase
     /// <summary>3.1 - what this user may do on this server. Any logged-in user.</summary>
     [HttpGet("Capabilities")]
     public Task<IActionResult> Capabilities() =>
-        Run(async () => Json(await _svc.CapabilitiesAsync(IsAdmin).ConfigureAwait(false)));
+        Run(async () => Json(await _svc.CapabilitiesAsync(IsAdmin, UserId).ConfigureAwait(false)));
 
     /// <summary>3.2 - start a search (asynchronous).</summary>
     [HttpPost("Searches")]
-    [Authorize(Policy = Admin)]
     public Task<IActionResult> StartSearch([FromBody] SearchRequest req) => Run(() =>
     {
-        var job = _svc.StartSearch(UserId, req);
+        if (!MayDownload(out var limit))
+        {
+            return Task.FromResult<IActionResult>(NotAllowed());
+        }
+
+        var job = _svc.StartSearch(UserId, req, limit);
         return Task.FromResult<IActionResult>(Json(new { searchId = job.Id, pollAfterSeconds = 2 }, StatusCodes.Status202Accepted));
     });
 
     /// <summary>3.2 - how a search is doing, and its result.</summary>
     [HttpGet("Searches/{searchId}")]
-    [Authorize(Policy = Admin)]
     public IActionResult GetSearch([FromRoute] string searchId)
     {
+        if (!MayDownload(out _))
+        {
+            return NotAllowed();
+        }
+
         var job = _svc.GetJob(UserId, searchId);
         if (job is null)
         {
@@ -132,17 +157,18 @@ public class TortugarrController : ControllerBase
 
     /// <summary>3.2 - the user cancelled: stop the search.</summary>
     [HttpDelete("Searches/{searchId}")]
-    [Authorize(Policy = Admin)]
     public IActionResult CancelSearch([FromRoute] string searchId) =>
-        _svc.CancelSearch(UserId, searchId)
+        !MayDownload(out _) ? NotAllowed()
+        : _svc.CancelSearch(UserId, searchId)
             ? NoContent()
             : Error(404, "not_found", "no such search (finished searches are kept 30 minutes)");
 
     /// <summary>3.3 - download a release the user was shown.</summary>
     [HttpPost("Grab")]
-    [Authorize(Policy = Admin)]
     public Task<IActionResult> Grab([FromBody] TortugarrService.GrabRequest req) =>
-        Run(async () => Json(await _svc.Grab(UserId, req, HttpContext.RequestAborted).ConfigureAwait(false)));
+        Run(async () => MayDownload(out _)
+            ? Json(await _svc.Grab(UserId, req, HttpContext.RequestAborted).ConfigureAwait(false))
+            : NotAllowed());
 
     /// <summary>3.4 - what is downloading.</summary>
     [HttpGet("Downloads")]
@@ -191,9 +217,39 @@ public class TortugarrController : ControllerBase
 
     /// <summary>3.14 - a series as Sonarr sees it, with the queue (missing-episodes view).</summary>
     [HttpGet("Series/{tvdbId:int}")]
-    [Authorize(Policy = Admin)]
     public Task<IActionResult> Series([FromRoute] int tvdbId) =>
-        Run(async () => Json(await _series.GetAsync(tvdbId, HttpContext.RequestAborted).ConfigureAwait(false)));
+        Run(async () => MayDownload(out _)
+            ? Json(await _series.GetAsync(tvdbId, HttpContext.RequestAborted).ConfigureAwait(false))
+            : NotAllowed());
+
+    /// <summary>A user's download limits and what they used this week (administrator).</summary>
+    [HttpGet("Users/{userId:guid}/Limits")]
+    [Authorize(Policy = Admin)]
+    public IActionResult GetLimits([FromRoute] Guid userId)
+    {
+        var all = Plugin.Instance?.Configuration.UserLimits ?? Array.Empty<Configuration.UserLimit>();
+        var limit = UserLimitService.Find(all, userId) ?? new Configuration.UserLimit { UserId = userId.ToString("N") };
+        var (movies, episodes) = _limits.Used(userId, DateTimeOffset.UtcNow);
+        return Json(new
+        {
+            enabled = limit.Enabled,
+            maxMovieMb = limit.MaxMovieMb,
+            maxEpisodeMb = limit.MaxEpisodeMb,
+            moviesPerWeek = limit.MoviesPerWeek,
+            episodesPerWeek = limit.EpisodesPerWeek,
+            moviesUsed = movies,
+            episodesUsed = episodes,
+        });
+    }
+
+    /// <summary>Sets a user's download limits (administrator). Has no effect on administrators.</summary>
+    [HttpPut("Users/{userId:guid}/Limits")]
+    [Authorize(Policy = Admin)]
+    public Task<IActionResult> SetLimits([FromRoute] Guid userId, [FromBody] Configuration.UserLimit limit) => Run(() =>
+    {
+        _limits.Set(userId, limit);
+        return Task.FromResult<IActionResult>(GetLimits(userId));
+    });
 
     /// <summary>3.14 - switch a season's monitoring, the app's way.</summary>
     [HttpPut("Series/{tvdbId:int}/Seasons/{seasonNumber:int}")]

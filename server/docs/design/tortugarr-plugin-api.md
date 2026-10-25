@@ -18,7 +18,9 @@ build uses it.
   Sonarr/Radarr's own interactive search by ID (using the indexers Prowlarr synced), so quality
   profiles and blocklists apply. On top, the plugin applies exactly the filters the app applies
   today (section 4), so the picker behaves the same after the switch.
-- **Administrators only in the first version**; no per-user flag yet.
+- **Limited downloaders (since 2026-10-25):** an administrator can give a non-administrator
+  download limits (3.16). That user may then search, grab and see a series (3.2, 3.3, 3.14 GET)
+  within the limits; every other route stays administrators only.
 - **Adult library: in the public plugin, off by default** (decision changed 2026-10-06, section 3.9):
   switched on by an administrator on the plugin's admin page, administrators only in v1, its own
   Jellyfin library so access is controlled per user in Jellyfin, no indexers pre-filled, neutral
@@ -39,6 +41,8 @@ build uses it.
 | 400 | `bad_request` | missing/invalid parameter |
 | 401 | (Jellyfin) | no or invalid session |
 | 403 | `not_admin` / `feature_off` | not an administrator / the feature is switched off on this server |
+| 403 | `forbidden` | search/grab by a non-administrator without download limits (3.16) |
+| 403 | `limit_exceeded` / `quota_exceeded` | Grab (3.3) by a limited downloader: the file is over their size limit / the weekly count is used up (3.16) |
 | 404 | `not_found` | unknown title, release or download |
 | 409 | `search_expired` | the release is no longer in Sonarr/Radarr's search cache (search again) |
 | 409 | `already_in_client` | Grab (3.3): qBittorrent already has the release; the error also carries `downloadId`, `category`, `progress`, `state` |
@@ -61,7 +65,9 @@ build uses it.
   "categories": { "movies": "radarr", "tv": "sonarr" }
 }
 ```
-A non-admin gets the same shape with every feature `false`. A feature is `false` when its service
+A non-admin gets the same shape with every feature `false`, except a limited downloader (3.16):
+`downloadNow` and `missingEpisodes` follow the services, and `limits` holds their limits and use
+this week (`null` for everyone else). A feature is `false` when its service
 is not configured (for example `subtitles` without Bazarr). `adult` is true only when an
 administrator switched it on (3.9), Prowlarr is configured and the download client is qBittorrent.
 `deleteTitles` (3.10) needs Radarr or Sonarr; Seerr is optional for it (without Seerr the title is
@@ -482,6 +488,26 @@ not in a queue); otherwise 404. Answer: 204.
 
 **Capabilities (3.1):** `missingEpisodes` (Sonarr configured) and `freeSpace` (qBittorrent and
 Radarr or Sonarr configured), admins only like the rest.
+
+### 3.16 Download limits per user (limited downloaders)
+
+**`GET /Tortugarr/v1/Users/{userId}/Limits`** and **`PUT`** with the same body - administrators.
+```json
+{ "enabled": true, "maxMovieMb": 2560, "maxEpisodeMb": 950, "moviesPerWeek": 4,
+  "episodesPerWeek": 5, "moviesUsed": 1, "episodesUsed": 3 }
+```
+- `0` means no limit for that field. `moviesUsed`/`episodesUsed` are read-only: grabs of the last
+  7 days (rolling), kept in `user-grabs.json` in the plugin's data folder.
+- Has no effect on administrators. Stored in the plugin configuration (`UserLimits`).
+- **Search (3.2):** a release over the user's size limit comes back with `overLimit: true`,
+  `approved`/`recommended` false and the reason first in `rejections`
+  ("Over your size limit (2.5 GB per movie)"). The app shows it greyed and does not offer it.
+- **Grab (3.3):** refused with 403 `limit_exceeded` (over the size limit) or `quota_exceeded`
+  (the weekly count would be exceeded); `force` does not pass either. A season pack counts as
+  the season's episodes and is judged per episode (its size / episodes against `maxEpisodeMb`);
+  with an unknown episode count it is over the limit.
+- **Cancel (3.2):** `DELETE /Tortugarr/v1/Searches/{searchId}` stops a running search (the job ends
+  with `error.code` `cancelled`); the same search can then start fresh. 204, or 404.
 
 ## 4. Filters (the same as the app today)
 

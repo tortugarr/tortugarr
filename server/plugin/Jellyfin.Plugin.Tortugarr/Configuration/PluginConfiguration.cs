@@ -124,4 +124,24 @@ public class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>The libraries that existed at the last check; a library not in here is new.</summary>
     public string[] KnownLibraryIds { get; set; } = Array.Empty<string>();
+
+    /// <summary>Non-administrators who may use Download Now within these limits (a "limited downloader").</summary>
+    public UserLimit[] UserLimits { get; set; } = Array.Empty<UserLimit>();
+}
+
+/// <summary>Download limits for one non-administrator. 0 means no limit for that field.</summary>
+public class UserLimit
+{
+    /// <summary>The Jellyfin user id, as Guid.ToString("N").</summary>
+    public string UserId { get; set; } = string.Empty;
+
+    public bool Enabled { get; set; }
+
+    public int MaxMovieMb { get; set; }
+
+    public int MaxEpisodeMb { get; set; }
+
+    public int MoviesPerWeek { get; set; }
+
+    public int EpisodesPerWeek { get; set; }
 }

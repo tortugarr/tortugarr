@@ -58,6 +58,12 @@ public sealed class SearchJob
 
     public bool IsMovie => Request.Type == "movie";
 
+    /// <summary>The limits of a non-administrator who searched (null for an administrator).</summary>
+    public UserLimit? Limit { get; init; }
+
+    /// <summary>Episodes in the searched season, for a limited user's season pack (0 = unknown).</summary>
+    public int SeasonEpisodes { get; set; }
+
     /// <summary>Set when the user cancels; stops the search's calls to Radarr/Sonarr.</summary>
     public CancellationTokenSource Cancel { get; } = new();
 }
@@ -70,12 +76,14 @@ public sealed class TortugarrService
     private readonly ILogger<TortugarrService> _log;
     private readonly ConcurrentDictionary<string, SearchJob> _jobs = new();
     private readonly AdultLibraryService _adultLibrary;
+    private readonly UserLimitService _limits;
 
-    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary)
+    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary, UserLimitService limits)
     {
         _httpFactory = httpFactory;
         _log = log;
         _adultLibrary = adultLibrary;
+        _limits = limits;
     }
 
     private static PluginConfiguration Cfg => Plugin.Instance?.Configuration ?? new PluginConfiguration();
@@ -179,19 +187,22 @@ public sealed class TortugarrService
 
     // ------------------------------------------------------------------ capabilities
 
-    public async Task<object> CapabilitiesAsync(bool isAdmin)
+    public async Task<object> CapabilitiesAsync(bool isAdmin, Guid userId)
     {
         if (AdultReady(Cfg))
         {
             await _adultLibrary.EnsureAsync().ConfigureAwait(false); // creates and hides the library once
         }
 
-        return Capabilities(isAdmin);
+        var limit = isAdmin ? null : _limits.For(userId);
+        return Capabilities(isAdmin, limit is null ? null : _limits.Describe(limit, userId, DateTimeOffset.UtcNow));
     }
 
-    public object Capabilities(bool isAdmin)
+    /// <param name="limits">A limited downloader's limits and use this week; null for everyone else.</param>
+    public object Capabilities(bool isAdmin, object? limits = null)
     {
         var c = Cfg;
+        var limited = limits is not null;
         bool Has(string url, string key) => !string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(key);
         var arrs = Has(c.SonarrUrl, c.SonarrApiKey) && Has(c.RadarrUrl, c.RadarrApiKey);
         var qbit = c.DownloadClientType == "qbittorrent" && !string.IsNullOrWhiteSpace(c.DownloadClientUrl);
@@ -202,23 +213,24 @@ public sealed class TortugarrService
             isAdmin,
             features = new
             {
-                downloadNow = isAdmin && arrs,
+                downloadNow = (isAdmin || limited) && arrs,
                 downloads = isAdmin && arrs,
                 diskSpace = isAdmin && (qbit || arrs),
                 videoCheck = isAdmin && arrs && qbit,
                 subtitles = isAdmin && arrs && Has(c.BazarrUrl, c.BazarrApiKey),
                 deleteTitles = isAdmin && (Has(c.SonarrUrl, c.SonarrApiKey) || Has(c.RadarrUrl, c.RadarrApiKey)),
-                missingEpisodes = isAdmin && Has(c.SonarrUrl, c.SonarrApiKey),
+                missingEpisodes = (isAdmin || limited) && Has(c.SonarrUrl, c.SonarrApiKey),
                 freeSpace = isAdmin && qbit && (Has(c.SonarrUrl, c.SonarrApiKey) || Has(c.RadarrUrl, c.RadarrApiKey)),
                 adult = isAdmin && AdultReady(c),
             },
             categories = new { movies = c.MovieCategory, tv = c.TvCategory },
+            limits,
         };
     }
 
     // ------------------------------------------------------------------ search jobs
 
-    public SearchJob StartSearch(Guid userId, SearchRequest req)
+    public SearchJob StartSearch(Guid userId, SearchRequest req, UserLimit? limit = null)
     {
         Validate(req);
         Cleanup();
@@ -228,7 +240,7 @@ public sealed class TortugarrService
             return running; // the same search again: the job that is already running
         }
 
-        var job = new SearchJob { UserId = userId, Request = req };
+        var job = new SearchJob { UserId = userId, Request = req, Limit = limit };
         _jobs[job.Id] = job;
         _ = Task.Run(() => RunSearch(job));
         return job;
@@ -362,6 +374,7 @@ public sealed class TortugarrService
         var filter = new ReleaseFilter(Cfg);
         var (releases, early) = filter.Apply(raw.Where(x => x is not null).Select(x => ArrRelease.FromJson(x!)), "movie", home, job.Request.AllowSd);
         LogSearch(job, "Radarr", raw.Count, releases.Count, filter, early);
+        MarkOverLimit(job, releases);
         Remember(job, releases);
         var unavailable = await UnavailableIndexers(radarr, ct).ConfigureAwait(false);
         return new { title = (string?)movie["title"], year = (int?)movie["year"], arrId = job.ArrId, droppedEarly = early, dropped = filter.Dropped, unavailableIndexers = unavailable, releases };
@@ -400,6 +413,12 @@ public sealed class TortugarrService
         var filter = new ReleaseFilter(Cfg);
         var (releases, early) = filter.Apply(raw.Where(x => x is not null).Select(x => ArrRelease.FromJson(x!)), r.Type, null, r.AllowSd);
         LogSearch(job, "Sonarr", raw.Count, releases.Count, filter, early);
+        if (job.Limit is not null && r.Type == "season")
+        {
+            job.SeasonEpisodes = await SeasonEpisodeCount(sonarr, series, seriesId, r.Season!.Value, ct).ConfigureAwait(false);
+        }
+
+        MarkOverLimit(job, releases);
         Remember(job, releases);
         var unavailable = await UnavailableIndexers(sonarr, ct).ConfigureAwait(false);
         return new { title = (string?)series["title"], year = (int?)series["year"], arrId = job.ArrId, droppedEarly = early, dropped = filter.Dropped, unavailableIndexers = unavailable, releases };
@@ -544,6 +563,40 @@ public sealed class TortugarrService
         var what = r.Type == "movie" ? $"movie tmdb={r.TmdbId}" : $"{r.Type} tvdb={r.TvdbId} S{r.Season:00}" + (r.Type == "episode" ? $"E{r.Episode:00}" : string.Empty);
         _log.LogInformation("Tortugarr search {What}: {Arr} {Raw} release(s), kept {Kept}, dropped: {Dropped}; droppedEarly {Early}; {Seconds:0} s",
             what, arr, raw, kept, filter.DroppedText(), early, (DateTimeOffset.UtcNow - job.Started).TotalSeconds);
+    }
+
+    /// <summary>A limited user sees files over the size limit greyed out with the reason (never grabbable).</summary>
+    private static void MarkOverLimit(SearchJob job, List<ReleaseDto> releases)
+    {
+        if (job.Limit is null)
+        {
+            return;
+        }
+
+        foreach (var x in releases)
+        {
+            if (UserLimitService.SizeProblem(job.Limit, job.Request.Type, x.Size, job.SeasonEpisodes) is string why)
+            {
+                x.OverLimit = true;
+                x.Approved = false;
+                x.Recommended = false;
+                x.Rejections.Insert(0, why);
+            }
+        }
+    }
+
+    /// <summary>Episodes in a season, from the series' statistics or else Sonarr's episode list.</summary>
+    private static async Task<int> SeasonEpisodeCount(ArrClient sonarr, JsonNode series, int seriesId, int season, CancellationToken ct)
+    {
+        var stats = (series["seasons"] as JsonArray)?
+            .FirstOrDefault(x => (int?)x?["seasonNumber"] == season)?["statistics"];
+        if ((int?)stats?["totalEpisodeCount"] is int n && n > 0)
+        {
+            return n;
+        }
+
+        var episodes = await sonarr.Get($"/episode?seriesId={seriesId}&seasonNumber={season}", ct).ConfigureAwait(false) as JsonArray;
+        return episodes?.Count ?? 0;
     }
 
     private static void Remember(SearchJob job, List<ReleaseDto> releases)
@@ -886,8 +939,25 @@ public sealed class TortugarrService
     private static async Task<int> DefaultProfile(ArrClient arr, CancellationToken ct)
     {
         var profiles = await arr.Get("/qualityprofile", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
-        var pick = profiles.FirstOrDefault(p => (string?)p?["name"] == "HD-1080p") ?? profiles.FirstOrDefault();
-        return (int?)pick?["id"] ?? throw new UpstreamException(arr.Name, "no quality profile");
+        return PickDefaultProfile(profiles) ?? throw new UpstreamException(arr.Name, "no quality profile");
+    }
+
+    /// <summary>The wide 720p-2160p profile when the server has one, else HD-1080p, else the first.</summary>
+    internal static int? PickDefaultProfile(JsonArray profiles)
+    {
+        JsonNode? Named(string name) => profiles.FirstOrDefault(p => (string?)p?["name"] == name);
+        var pick = Named("720p-2160p") ?? Named("HD-1080p") ?? profiles.FirstOrDefault();
+        return (int?)pick?["id"];
+    }
+
+    /// <summary>Whether a quality profile already takes this quality (e.g. "WEBDL-2160p"), also inside groups.</summary>
+    internal static bool ProfileAllows(JsonNode? profile, string quality)
+    {
+        static IEnumerable<JsonNode> Allowed(JsonArray? items) =>
+            (items ?? new JsonArray()).Where(i => i is not null && ((bool?)i!["allowed"] ?? false))
+                .SelectMany(i => i!["items"] is JsonArray { Count: > 0 } inner ? inner.Where(x => x is not null).Select(x => x!) : new[] { i! });
+        return Allowed(profile?["items"] as JsonArray)
+            .Any(i => string.Equals((string?)i["quality"]?["name"], quality, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>Quality profile by the picked release's tier, as the app does: Ultra-HD/4K/2160p, HD-1080p, HD-720p.</summary>
@@ -1084,6 +1154,22 @@ public sealed class TortugarrService
             throw new SearchExpiredException();
         }
 
+        // The limits of a limited user come first: force never passes them.
+        var limit = job.Limit;
+        var episodes = UserLimitService.Episodes(job.Request.Type, job.SeasonEpisodes);
+        if (limit is not null)
+        {
+            if (UserLimitService.SizeProblem(limit, job.Request.Type, shown.Size, job.SeasonEpisodes) is string tooBig)
+            {
+                throw new LimitException("limit_exceeded", tooBig);
+            }
+
+            if (UserLimitService.QuotaProblem(limit, _limits.Used(userId, DateTimeOffset.UtcNow), job.Request.Type, job.SeasonEpisodes) is string used)
+            {
+                throw new LimitException("quota_exceeded", used);
+            }
+        }
+
         if (!shown.Recommended && !g.Force)
         {
             throw new ArgumentException("this release has soft rejections; send force: true to take it anyway");
@@ -1093,8 +1179,10 @@ public sealed class TortugarrService
         if (job.IsMovie && await ProfileForTier(arr, shown.Title, ct).ConfigureAwait(false) is int profile)
         {
             var movie = await arr.Get($"/movie/{job.ArrId}", ct).ConfigureAwait(false);
-            if (movie is JsonObject m && (int?)m["qualityProfileId"] != profile)
+            if (movie is JsonObject m && (int?)m["qualityProfileId"] is int current && current != profile
+                && !ProfileAllows(await arr.Get($"/qualityprofile/{current}", ct).ConfigureAwait(false), shown.Quality))
             {
+                // Only when the movie's profile does not take this quality: a wide profile stays.
                 m["qualityProfileId"] = profile;
                 await arr.Put($"/movie/{job.ArrId}", m, ct).ConfigureAwait(false);
             }
@@ -1133,6 +1221,11 @@ public sealed class TortugarrService
             }
 
             throw;
+        }
+
+        if (limit is not null)
+        {
+            _limits.Record(userId, job.Request.Type, job.IsMovie ? 1 : episodes, shown.Size, DateTimeOffset.UtcNow);
         }
 
         // The movie's Seerr request (made by the app) must wait until Radarr has it queued.

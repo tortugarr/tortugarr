@@ -127,11 +127,14 @@ public sealed class ReleaseDto
     /// <summary>Below the quality minimum, kept only because the search asked for SD (allowSd).</summary>
     public bool Sd { get; init; }
 
-    public bool Approved { get; init; }
+    public bool Approved { get; set; }
 
-    public bool Recommended { get; init; }
+    public bool Recommended { get; set; }
 
     public List<string> Rejections { get; init; } = new();
+
+    /// <summary>Bigger than the searching user's size limit: shown greyed, never grabbable (limited users only).</summary>
+    public bool OverLimit { get; set; }
 
     /// <summary>Server side only (spec 3.3), never sent to the app.</summary>
     [System.Text.Json.Serialization.JsonIgnore]
