@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.20.02 - unreleased
+
+**App**
+
+- **Automatic player** (Android TV): each film starts on Media3 or mpv, whichever plays that
+  kind of file best, and the app switches by itself when playback stutters or never gets going.
+  The new *Player* button in the player picks one by hand for a film.
+- **Download limits** for users who are not administrators: a size limit per movie and per
+  episode and a number per week. Files over the limit are greyed out; the server refuses a
+  download over a limit. Set them under Administration > Users > a user > Permissions.
+- Audio: the language you chose wins over the file's default track (a release that marks an
+  Italian dub as default now starts in English for someone who picked English).
+- Norwegian: about 1,700 texts that showed in English are translated.
+- Seerr: the Networks and Studios rows (Netflix, HBO, Disney+, Viaplay …) are back, *Recently
+  Added* shows titles again, and the search button opens the main search on its Seerr tab.
+- Cancel in a release search closes at once, also after a quick double tap.
+- Settings: Administration and Language at the top, *Picture & Sound System* in Playback, and
+  About has check for updates, diagnostics, licenses and the privacy policy again.
+- New users are asked in the setup wizard whether Trending and Popular show only titles in
+  their languages.
+
+**Server** (Tortugarr plugin 1.3.0.0, Moonfin plugin 2.4.0.0)
+
+- The plugin's page in Jellyfin (Dashboard > Plugins > Tortugarr) holds all its settings:
+  connections with a Test button, download limits per user, download folders, the adult
+  library and the release filters. Keys and passwords are never shown.
+- New series and movies get a quality profile named `720p-2160p` when Radarr/Sonarr have one,
+  and a download no longer moves a movie off a profile that already takes its quality.
+- The installer retries a library import that hit Radarr's collection race, and `doctor`
+  reports a user folder that Radarr or Sonarr lost.
+
 ## 4.20.01 - 2026-10-21
 
 **App** (now built on Moonfin 2.7.0, with Moonfin's full git history)

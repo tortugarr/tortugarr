@@ -1,6 +1,6 @@
 # Tortugarr server
 
-The server side of Tortugarr, version 4.20.01 (the same version as the app):
+The server side of Tortugarr, version 4.20.02 (the same version as the app):
 
 - **The installer** (`install.sh`, `lib/`, `bootstrap/`, `compose/`, `i18n/`): one command that
   sets up Jellyfin, Seerr, Sonarr, Radarr, Prowlarr, Bazarr and a download client on a Linux
@@ -30,14 +30,14 @@ From the folder above this one, after building the plugin:
 
 ```bash
 server/plugin/build.sh
-tar -cf tortugarr-server-4.20.01.tar --exclude=bin --exclude=obj \
+tar -cf tortugarr-server-4.20.02.tar --exclude=bin --exclude=obj \
     --transform 's,^server,tortugarr-server,' server
 ```
 
 Users then run:
 
 ```bash
-tar -xf tortugarr-server-4.20.01.tar
+tar -xf tortugarr-server-4.20.02.tar
 cd tortugarr-server
 sudo ./install.sh
 ```

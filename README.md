@@ -18,7 +18,7 @@
 > not to Moonfin: the Moonfin developers do not support Tortugarr builds.
 
 <p align="center">
-  <a href="https://github.com/tortugarr/tortugarr/releases/latest"><img alt="Release 4.20.01" src="https://img.shields.io/badge/release-4.20.01-8b5a2b"></a>
+  <a href="https://github.com/tortugarr/tortugarr/releases/latest"><img alt="Release 4.20.02" src="https://img.shields.io/badge/release-4.20.02-8b5a2b"></a>
   <a href="LICENSE"><img alt="License: GPL-2.0" src="https://img.shields.io/badge/license-GPL--2.0-blue"></a>
   <img alt="App: Android TV, Google TV, phone" src="https://img.shields.io/badge/app-Android%20TV%20%C2%B7%20Google%20TV%20%C2%B7%20phone-3ddc84">
   <img alt="Server: Ubuntu 22.04, 24.04, 26.04" src="https://img.shields.io/badge/server-Ubuntu%2022.04%20%C2%B7%2024.04%20%C2%B7%2026.04-e95420">
@@ -143,9 +143,9 @@ Everything you need is on the **[Releases page](https://github.com/tortugarr/tor
 
 | File | For |
 |---|---|
-| `tortugarr-server-4.20.01.tar` | The server: installer + Tortugarr plugin, ready to run |
-| `tortugarr-tv-4.20.01.apk` | The app for Android TV / Google TV |
-| `tortugarr-phone-4.20.01.apk` | The app for Android phones and tablets |
+| `tortugarr-server-4.20.02.tar` | The server: installer + Tortugarr plugin, ready to run |
+| `tortugarr-tv-4.20.02.apk` | The app for Android TV / Google TV |
+| `tortugarr-phone-4.20.02.apk` | The app for Android phones and tablets |
 
 Jellyfin, Seerr, Sonarr and the other tools are not inside these files: the installer downloads
 them (and Docker, if needed) from the internet while it runs, about 5 GB the first time.
@@ -167,10 +167,10 @@ them (and Docker, if needed) from the internet while it runs, about 5 GB the fir
 Open a terminal on the machine that will be your server and run:
 
 ```bash
-wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.01.tar
+wget https://github.com/tortugarr/tortugarr/releases/latest/download/tortugarr-server-4.20.02.tar
 wget https://github.com/tortugarr/tortugarr/releases/latest/download/SHA256SUMS.txt
-sha256sum --check --ignore-missing SHA256SUMS.txt   # should print: tortugarr-server-4.20.01.tar: OK
-tar -xf tortugarr-server-4.20.01.tar
+sha256sum --check --ignore-missing SHA256SUMS.txt   # should print: tortugarr-server-4.20.02.tar: OK
+tar -xf tortugarr-server-4.20.02.tar
 cd tortugarr-server
 sudo ./install.sh
 ```
@@ -208,14 +208,14 @@ The TV needs to allow apps from outside the Play Store:
 1. On the TV, install **Downloader** (by AFTVnews) from the Play Store.
 2. Allow it to install apps: **Settings > Apps > Security & restrictions > Unknown sources >
    Downloader**.
-3. Open Downloader, type the address of `tortugarr-tv-4.20.01.apk` from the Releases page, and
+3. Open Downloader, type the address of `tortugarr-tv-4.20.02.apk` from the Releases page, and
    install it.
 
-Other ways work too: a USB stick with the APK, or `adb install tortugarr-tv-4.20.01.apk`.
+Other ways work too: a USB stick with the APK, or `adb install tortugarr-tv-4.20.02.apk`.
 
 ### 4. Put the app on your phone (optional)
 
-Open the Releases page on the phone, tap `tortugarr-phone-4.20.01.apk`, and allow your browser
+Open the Releases page on the phone, tap `tortugarr-phone-4.20.02.apk`, and allow your browser
 to install apps when Android asks.
 
 > 💡 **Stay up to date without thinking about it:** add this repository to
@@ -307,7 +307,7 @@ sideloading.
 |---|---|
 | **Server** | Ubuntu 26.04 LTS in WSL2 on Windows 11 (with the optional Windows helper, not officially supported); earlier releases on Ubuntu 24.04.5 LTS. |
 | **App** | Android TV and Google TV (a real TCL TV and the emulator), and a real Android phone. |
-| **Version** | 4.20.01 |
+| **Version** | 4.20.02 |
 
 ## Take it further 🏴‍☠️
 
