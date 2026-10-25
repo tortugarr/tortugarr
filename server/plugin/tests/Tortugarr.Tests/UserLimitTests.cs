@@ -111,6 +111,46 @@ public class UserLimitTests
     }
 
     [Fact]
+    public void Reserve_takes_the_place_before_the_grab_and_stops_the_third_movie()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "tortugarr-limits-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var svc = new UserLimitService(NullLogger<UserLimitService>.Instance, Path.Combine(dir, "user-grabs.json"));
+            var two = new UserLimit { Enabled = true, MoviesPerWeek = 2, EpisodesPerWeek = 1 };
+            var now = DateTimeOffset.UtcNow;
+            svc.Reserve(Her, two, "movie", 1, 1, now);   // counted even if Radarr answers late
+            var second = svc.Reserve(Her, two, "movie", 1, 1, now);
+            var e = Assert.Throws<LimitException>(() => svc.Reserve(Her, two, "movie", 1, 1, now));
+            Assert.Equal("quota_exceeded", e.Code);
+
+            // A refused grab gives its place back.
+            svc.Release(second);
+            svc.Reserve(Her, two, "movie", 1, 1, now);
+            Assert.Equal((2, 0), svc.Used(Her, now));
+
+            svc.Reserve(Her, two, "episode", 1, 1, now);
+            Assert.Throws<LimitException>(() => svc.Reserve(Her, two, "episode", 1, 1, now));
+        }
+        finally
+        {
+            if (Directory.Exists(dir))
+            {
+                Directory.Delete(dir, true);
+            }
+        }
+    }
+
+    [Fact]
+    public void Only_a_grab_we_stopped_waiting_for_keeps_its_place()
+    {
+        Assert.True(UserLimitService.MayHaveGrabbed(new TaskCanceledException()));
+        Assert.True(UserLimitService.MayHaveGrabbed(new UpstreamException("Radarr", "no answer within 60 s")));
+        Assert.False(UserLimitService.MayHaveGrabbed(new UpstreamException("Radarr", "HTTP 400 Unable to find matching movie")));
+        Assert.False(UserLimitService.MayHaveGrabbed(new SearchExpiredException()));
+    }
+
+    [Fact]
     public void Disabled_or_unknown_user_has_no_limit_entry_found_only_by_id()
     {
         var all = new[] { Limit() };

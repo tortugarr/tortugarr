@@ -1163,11 +1163,6 @@ public sealed class TortugarrService
             {
                 throw new LimitException("limit_exceeded", tooBig);
             }
-
-            if (UserLimitService.QuotaProblem(limit, _limits.Used(userId, DateTimeOffset.UtcNow), job.Request.Type, job.SeasonEpisodes) is string used)
-            {
-                throw new LimitException("quota_exceeded", used);
-            }
         }
 
         if (!shown.Recommended && !g.Force)
@@ -1175,7 +1170,32 @@ public sealed class TortugarrService
             throw new ArgumentException("this release has soft rejections; send force: true to take it anyway");
         }
 
-        var arr = job.IsMovie ? Radarr : Sonarr;
+        // The weekly count is taken before Radarr/Sonarr is asked, not after: a grab that times out
+        // here can still finish there (2026-10-25: qBittorrent was slow, the plugin gave up after
+        // 60 s, Radarr grabbed the movie anyway and a third movie got past a limit of two).
+        var reservation = limit is null ? null
+            : _limits.Reserve(userId, limit, job.Request.Type, job.IsMovie ? 1 : episodes, shown.Size, DateTimeOffset.UtcNow);
+        try
+        {
+            await SendGrab(job, g, shown, ct).ConfigureAwait(false);
+        }
+        catch (Exception e) when (reservation is not null && !UserLimitService.MayHaveGrabbed(e))
+        {
+            _limits.Release(reservation);
+            throw;
+        }
+
+        // The movie's Seerr request (made by the app) must wait until Radarr has it queued.
+        var (queued, downloadId) = await WaitQueued(Arr(job), job, TimeSpan.FromSeconds(job.IsMovie ? 60 : 30), ct).ConfigureAwait(false);
+        return new { downloadId, title = shown.Title, queued };
+    }
+
+    private ArrClient Arr(SearchJob job) => job.IsMovie ? Radarr : Sonarr;
+
+    /// <summary>Asks Radarr/Sonarr to download the release the user picked.</summary>
+    private async Task SendGrab(SearchJob job, GrabRequest g, ReleaseDto shown, CancellationToken ct)
+    {
+        var arr = Arr(job);
         if (job.IsMovie && await ProfileForTier(arr, shown.Title, ct).ConfigureAwait(false) is int profile)
         {
             var movie = await arr.Get($"/movie/{job.ArrId}", ct).ConfigureAwait(false);
@@ -1222,15 +1242,6 @@ public sealed class TortugarrService
 
             throw;
         }
-
-        if (limit is not null)
-        {
-            _limits.Record(userId, job.Request.Type, job.IsMovie ? 1 : episodes, shown.Size, DateTimeOffset.UtcNow);
-        }
-
-        // The movie's Seerr request (made by the app) must wait until Radarr has it queued.
-        var (queued, downloadId) = await WaitQueued(arr, job, TimeSpan.FromSeconds(job.IsMovie ? 60 : 30), ct).ConfigureAwait(false);
-        return new { downloadId, title = shown.Title, queued };
     }
 
     /// <summary>

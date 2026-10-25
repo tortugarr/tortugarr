@@ -20,6 +20,9 @@ public sealed class LimitException : Exception
 /// <summary>One grab by a limited user, kept for the rolling week.</summary>
 public sealed class UserGrab
 {
+    /// <summary>Lets a grab that surely did not happen give its place back.</summary>
+    public string Id { get; set; } = Guid.NewGuid().ToString("N");
+
     public string UserId { get; set; } = string.Empty;
 
     public string Type { get; set; } = string.Empty;
@@ -72,12 +75,54 @@ public sealed class UserLimitService
         }
     }
 
-    public void Record(Guid userId, string type, int count, long bytes, DateTimeOffset now)
+    public void Record(Guid userId, string type, int count, long bytes, DateTimeOffset now) =>
+        Add(new UserGrab { UserId = userId.ToString("N"), Type = type, Count = count, Bytes = bytes, At = now });
+
+    /// <summary>
+    /// Checks the weekly count and takes the place in one step, so two grabs at once cannot both
+    /// pass. Throws <see cref="LimitException"/> (quota_exceeded) when the count is used up.
+    /// </summary>
+    public string Reserve(Guid userId, UserLimit limit, string type, int count, long bytes, DateTimeOffset now)
     {
         lock (_gate)
         {
             var grabs = Load().Where(g => now - g.At < Week).ToList();
-            grabs.Add(new UserGrab { UserId = userId.ToString("N"), Type = type, Count = count, Bytes = bytes, At = now });
+            var episodes = type == "movie" ? 0 : count;
+            if (QuotaProblem(limit, Count(grabs, userId, now), type, episodes) is string used)
+            {
+                throw new LimitException("quota_exceeded", used);
+            }
+
+            var grab = new UserGrab { UserId = userId.ToString("N"), Type = type, Count = count, Bytes = bytes, At = now };
+            grabs.Add(grab);
+            Save(grabs);
+            return grab.Id;
+        }
+    }
+
+    /// <summary>Gives a reserved place back: the grab surely did not happen.</summary>
+    public void Release(string id)
+    {
+        lock (_gate)
+        {
+            Save(Load().Where(g => g.Id != id).ToList());
+        }
+    }
+
+    /// <summary>
+    /// After a failed grab: could Radarr/Sonarr still have taken it? Yes when we stopped waiting
+    /// (timeout, cancelled request); no when they answered with a refusal.
+    /// </summary>
+    internal static bool MayHaveGrabbed(Exception e) =>
+        e is OperationCanceledException
+        || (e is UpstreamException u && u.Message.Contains("no answer within", StringComparison.Ordinal));
+
+    private void Add(UserGrab grab)
+    {
+        lock (_gate)
+        {
+            var grabs = Load().Where(g => grab.At - g.At < Week).ToList();
+            grabs.Add(grab);
             Save(grabs);
         }
     }
