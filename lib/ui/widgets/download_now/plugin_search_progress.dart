@@ -29,29 +29,48 @@ class PluginSearchOutcome<T> {
 /// the user cancel. Being modal it also keeps a second search from starting
 /// and finishing out of order. [start] gets a function that tells the search
 /// whether the user cancelled, so its polling can stop.
+///
+/// Only one search dialog is open at a time: a second tap that lands before
+/// the first dialog is up (a double tap on a season) returns cancelled
+/// instead of stacking an identical dialog that Cancel seems not to close.
 Future<PluginSearchOutcome<T>> showPluginSearchProgress<T>(
   BuildContext context, {
   required String title,
   required Future<T> Function(bool Function() isCancelled) start,
 }) async {
+  if (_searchOpen) return const PluginSearchOutcome.cancelled();
+  _searchOpen = true;
   var cancelled = false;
-  final future = start(() => cancelled);
-  final outcome = await showStyledPlayerDialog<PluginSearchOutcome<T>>(
-    context,
-    title: title,
-    barrierDismissible: false,
-    builder: (_) => _SearchProgressBody<T>(future: future),
-  );
-  if (outcome == null || outcome.cancelled) {
-    cancelled = true;
-    return const PluginSearchOutcome.cancelled();
+  try {
+    final future = start(() => cancelled);
+    final outcome = await showStyledPlayerDialog<PluginSearchOutcome<T>>(
+      context,
+      title: title,
+      barrierDismissible: false,
+      builder: (_) => _SearchProgressBody<T>(
+        future: future,
+        onCancel: () => cancelled = true,
+      ),
+    );
+    if (outcome == null || outcome.cancelled) {
+      cancelled = true;
+      return const PluginSearchOutcome.cancelled();
+    }
+    return outcome;
+  } finally {
+    _searchOpen = false;
   }
-  return outcome;
 }
+
+bool _searchOpen = false;
+
+@visibleForTesting
+void resetPluginSearchProgressForTest() => _searchOpen = false;
 
 class _SearchProgressBody<T> extends StatefulWidget {
   final Future<T> future;
-  const _SearchProgressBody({required this.future});
+  final VoidCallback onCancel;
+  const _SearchProgressBody({required this.future, required this.onCancel});
 
   @override
   State<_SearchProgressBody<T>> createState() => _SearchProgressBodyState<T>();
@@ -60,6 +79,7 @@ class _SearchProgressBody<T> extends StatefulWidget {
 class _SearchProgressBodyState<T> extends State<_SearchProgressBody<T>> {
   final _watch = Stopwatch()..start();
   late final Timer _tick;
+  var _closed = false;
 
   @override
   void initState() {
@@ -74,7 +94,15 @@ class _SearchProgressBodyState<T> extends State<_SearchProgressBody<T>> {
   }
 
   void _close(PluginSearchOutcome<T> outcome) {
-    if (mounted) Navigator.of(context).pop(outcome);
+    if (_closed || !mounted) return;
+    _closed = true;
+    Navigator.of(context).pop(outcome);
+  }
+
+  /// Tells the search to stop at once, then closes.
+  void _cancel() {
+    widget.onCancel();
+    _close(PluginSearchOutcome<T>.cancelled());
   }
 
   @override
@@ -118,7 +146,7 @@ class _SearchProgressBodyState<T> extends State<_SearchProgressBody<T>> {
           SeerrDialogButton(
             label: appL10n().tgCancel,
             autofocus: true,
-            onPressed: () => Navigator.of(context).pop(const PluginSearchOutcome.cancelled()),
+            onPressed: _cancel,
           ),
         ],
       ),

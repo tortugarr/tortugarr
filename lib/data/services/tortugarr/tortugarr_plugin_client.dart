@@ -320,9 +320,16 @@ class TortugarrPluginClient {
       // The user's "Show SD releases" setting (spec 3.2).
       if (_showSd()) 'allowSd': true,
     }) as Map;
-    final result = await _poll('/Searches/${job['searchId']}', job['pollAfterSeconds'],
-        isCancelled: isCancelled);
-    return TortugarrSearchResult.fromJson(result);
+    final path = '/Searches/${job['searchId']}';
+    try {
+      final result = await _poll(path, job['pollAfterSeconds'], isCancelled: isCancelled);
+      return TortugarrSearchResult.fromJson(result);
+    } on TortugarrPluginException catch (e) {
+      // Let the server stop asking the indexers; an older plugin without the
+      // route just answers 404.
+      if (e.code == 'cancelled') unawaited(_send('DELETE', path).catchError((_) => null));
+      rethrow;
+    }
   }
 
   Future<Map<String, dynamic>> _poll(
@@ -333,10 +340,18 @@ class TortugarrPluginClient {
     final every = Duration(seconds: (pollAfter as num?)?.toInt() ?? 2);
     // The server ends a search after 150 s; stop a little later.
     final deadline = DateTime.now().add(const Duration(seconds: 170));
-    while (DateTime.now().isBefore(deadline)) {
-      await Future<void>.delayed(every);
+    void checkCancelled() {
       if (isCancelled?.call() ?? false) {
         throw const TortugarrPluginException(null, 'cancelled', 'Search cancelled');
+      }
+    }
+
+    while (DateTime.now().isBefore(deadline)) {
+      // Wait in short steps so a cancel stops the polling at once.
+      final next = DateTime.now().add(every);
+      while (DateTime.now().isBefore(next)) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        checkCancelled();
       }
       final data = (await _send('GET', path) as Map).cast<String, dynamic>();
       switch (data['status']) {

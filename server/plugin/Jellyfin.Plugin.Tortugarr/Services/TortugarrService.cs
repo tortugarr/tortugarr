@@ -57,6 +57,9 @@ public sealed class SearchJob
     public int ArrId { get; set; }
 
     public bool IsMovie => Request.Type == "movie";
+
+    /// <summary>Set when the user cancels; stops the search's calls to Radarr/Sonarr.</summary>
+    public CancellationTokenSource Cancel { get; } = new();
 }
 
 /// <summary>Everything the routes do, on the server. The app never sees a key.</summary>
@@ -237,6 +240,23 @@ public sealed class TortugarrService
         return _jobs.TryGetValue(id, out var j) && j.UserId == userId ? j : null;
     }
 
+    /// <summary>The user cancelled: stop a running search so the same search can start fresh.</summary>
+    public bool CancelSearch(Guid userId, string id)
+    {
+        var job = GetJob(userId, id);
+        if (job is null)
+        {
+            return false;
+        }
+
+        if (job.Status == "running")
+        {
+            job.Cancel.Cancel();
+        }
+
+        return true;
+    }
+
     private static void Validate(SearchRequest r)
     {
         var ok = r.Type switch
@@ -266,12 +286,19 @@ public sealed class TortugarrService
     private async Task RunSearch(SearchJob job)
     {
         var timeout = Math.Max(30, Cfg.SearchTimeoutSeconds);
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(job.Cancel.Token);
+        cts.CancelAfter(TimeSpan.FromSeconds(timeout));
         try
         {
             job.Result = job.IsMovie ? await SearchMovie(job, timeout, cts.Token).ConfigureAwait(false)
                                      : await SearchTv(job, timeout, cts.Token).ConfigureAwait(false);
             job.Status = "done";
+        }
+        catch (OperationCanceledException) when (job.Cancel.IsCancellationRequested)
+        {
+            job.Status = "failed";
+            job.ErrorCode = "cancelled";
+            job.ErrorMessage = "the user cancelled the search";
         }
         catch (OperationCanceledException)
         {

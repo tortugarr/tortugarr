@@ -130,6 +130,14 @@ public class TortugarrController : ControllerBase
         };
     }
 
+    /// <summary>3.2 - the user cancelled: stop the search.</summary>
+    [HttpDelete("Searches/{searchId}")]
+    [Authorize(Policy = Admin)]
+    public IActionResult CancelSearch([FromRoute] string searchId) =>
+        _svc.CancelSearch(UserId, searchId)
+            ? NoContent()
+            : Error(404, "not_found", "no such search (finished searches are kept 30 minutes)");
+
     /// <summary>3.3 - download a release the user was shown.</summary>
     [HttpPost("Grab")]
     [Authorize(Policy = Admin)]
