@@ -125,6 +125,9 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
     SeerrNetwork(id: 2552, name: 'Apple TV+', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/4KAy34EHvRM25Ih8wb82AuGU7zJ.png'),
     SeerrNetwork(id: 453, name: 'Hulu', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/pqUTCleNUiTLAVlelGxUgWn1ELh.png'),
     SeerrNetwork(id: 49, name: 'HBO', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/tuomPhY2UtuPTqqFnKMVHvSb724.png'),
+    SeerrNetwork(id: 3186, name: 'HBO Max', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/nmU0UMDJB3dRRQSTUqawzF2Od1a.png'),
+    SeerrNetwork(id: 6783, name: 'Max', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/rAb4M1LjGpWASxpk6Va791A7Nkw.png'),
+    SeerrNetwork(id: 2869, name: 'Viaplay', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/zs2yhnfMzRLoRtZgGRf41mqrLL0.png'),
     SeerrNetwork(id: 4353, name: 'Discovery+', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/1D1bS3Dyw4ScYnFWTlBOvJXC3nb.png'),
     SeerrNetwork(id: 2, name: 'ABC', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/ndAvF4JLsliGreX87jAc9GdjmJY.png'),
     SeerrNetwork(id: 19, name: 'FOX', logoPath: 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/1DSpHrWyOORkL9N2QHX7Adt31mQ.png'),
@@ -324,13 +327,12 @@ class SeerrDiscoverViewModel extends ChangeNotifier {
           await _loadGenres(index, isMovie: true);
         case SeerrRowType.seriesGenres:
           await _loadGenres(index, isMovie: false);
+        // The ids are TMDB ids, which Seerr's discover takes as they are (all
+        // checked against Seerr on 2026-10-25).
         case SeerrRowType.networks:
+          _updateRow(index, row.copyWith(isLoading: false, networks: popularNetworks));
         case SeerrRowType.studios:
-          // Removed: TMDB network/studio IDs don't map to Sonarr/Radarr internal IDs.
-          // When clicked, the browse screen fails with "Network Id Not Found".
-          // These rows showed stale hardcoded data anyway. Users can still access
-          // network/studio filters via the browse screen's filter dropdowns.
-          _updateRow(index, row.copyWith(isLoading: false, items: const []));
+          _updateRow(index, row.copyWith(isLoading: false, studios: popularStudios));
         default:
           final page = await _loadPage(row, 1);
           if (page != null) {

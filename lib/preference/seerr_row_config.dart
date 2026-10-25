@@ -51,6 +51,9 @@ class SeerrRowConfig {
         SeerrRowConfig(type: SeerrRowType.popularSeries, order: 8),
         SeerrRowConfig(type: SeerrRowType.seriesGenres, order: 9),
         SeerrRowConfig(type: SeerrRowType.upcomingSeries, order: 10),
+        // Streaming services and studios: off until the user turns them on.
+        SeerrRowConfig(type: SeerrRowType.networks, enabled: false, order: 11),
+        SeerrRowConfig(type: SeerrRowType.studios, enabled: false, order: 12),
       ];
 
   static List<SeerrRowConfig> fromJsonString(String jsonString) {
