@@ -46,6 +46,12 @@ class AdminTvKeys extends StatefulWidget {
 class _AdminTvKeysState extends State<AdminTvKeys> {
   final _area = GlobalKey();
 
+  /// The arrow this handler just moved focus for. The same key press then
+  /// reaches the focused widget and the app's arrow-key shortcut, which moved
+  /// focus a second time: in the menu every other button was skipped
+  /// (2026-10-25: Library and People could only be reached with a mouse).
+  LogicalKeyboardKey? _moved;
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +83,7 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   }
 
   bool _onKey(KeyEvent event) {
+    _moved = null;
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) return false;
     final node = FocusManager.instance.primaryFocus;
     final ctx = node?.context;
@@ -96,6 +103,7 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
           direction == TraversalDirection.right;
       if (horizontal && (inText || inSlider)) return false;
       _move(node, ctx, direction);
+      _moved = key;
       return true;
     }
     return false;
@@ -203,7 +211,21 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
     return inside;
   }
 
+  /// Ends the key press this handler already acted on, before it bubbles up to
+  /// the app's arrow-key shortcut.
+  KeyEventResult _swallowMoved(FocusNode _, KeyEvent event) {
+    if (_moved == null || event.logicalKey != _moved) {
+      return KeyEventResult.ignored;
+    }
+    _moved = null;
+    return KeyEventResult.handled;
+  }
+
   @override
-  Widget build(BuildContext context) =>
-      KeyedSubtree(key: _area, child: widget.child);
+  Widget build(BuildContext context) => Focus(
+        canRequestFocus: false,
+        skipTraversal: true,
+        onKeyEvent: _swallowMoved,
+        child: KeyedSubtree(key: _area, child: widget.child),
+      );
 }

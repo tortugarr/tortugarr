@@ -46,6 +46,36 @@ void main() {
     expect(slider.hasPrimaryFocus, isTrue);
   });
 
+  // 2026-10-25 on the TV: in the menu (Exit, Overview, Library, Playback,
+  // People, System) Down skipped every other button. The arrow moved focus
+  // here and then once more through the app's own arrow-key shortcut.
+  testWidgets('Down on plain buttons moves one step, not two', (tester) async {
+    final nodes = List.generate(5, (i) => FocusNode(debugLabel: 'b$i'));
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          child: Column(
+            children: [
+              for (var i = 0; i < 5; i++)
+                TextButton(focusNode: nodes[i], onPressed: () {}, child: Text('b$i')),
+            ],
+          ),
+        ),
+      ),
+    ));
+    nodes[0].requestFocus();
+    await tester.pump();
+
+    for (var i = 1; i < 5; i++) {
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pump();
+      expect(nodes[i].hasPrimaryFocus, isTrue, reason: 'Down #$i should land on b$i');
+    }
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.pump();
+    expect(nodes[3].hasPrimaryFocus, isTrue);
+  });
+
   testWidgets('Back in a text field leaves the field, not the page', (tester) async {
     await pump(tester);
     top.requestFocus();
