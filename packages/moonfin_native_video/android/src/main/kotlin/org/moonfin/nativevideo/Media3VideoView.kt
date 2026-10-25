@@ -1284,9 +1284,12 @@ class Media3VideoView(
                 }
             }
             pendingAudioIndex?.let { index ->
-                if (selectTrack(C.TRACK_TYPE_AUDIO, index) ||
-                    index in 1..trackCount(C.TRACK_TYPE_AUDIO)
-                ) {
+                val selected = selectTrack(C.TRACK_TYPE_AUDIO, index)
+                // Which track the app asked for and which the player plays, so a
+                // file that starts in the wrong language can be traced from logcat
+                // (2026-10-25: ITA-ENG files started in Italian).
+                logAudioSelection("start", index, selected)
+                if (selected || index in 1..trackCount(C.TRACK_TYPE_AUDIO)) {
                     pendingAudioIndex = null
                 }
             }
@@ -4896,6 +4899,22 @@ class Media3VideoView(
         }
 
         return applyTrackOverride(trackType, entry)
+    }
+
+    private fun logAudioSelection(reason: String, wanted: Int, selected: Boolean) {
+        val tracks = collectTracks(C.TRACK_TYPE_AUDIO).mapIndexed { i, e ->
+            val f = e.group.getFormat(e.trackIndex)
+            "#${i + 1}=${f.language}/${f.sampleMimeType}" +
+                (if (e.supported) "" else "(unsupported)")
+        }
+        val playing = player.currentTracks.groups
+            .firstOrNull { it.type == C.TRACK_TYPE_AUDIO && it.isSelected }
+            ?.let { g -> (0 until g.length).firstOrNull { g.isTrackSelected(it) }?.let { g.getTrackFormat(it).language } }
+        AndroidLog.i(
+            "TortugarrAudio",
+            "$reason wanted=#$wanted selected=$selected playing=$playing " +
+                "preferred=$preferredAudioLanguage tracks=$tracks",
+        )
     }
 
     private fun applyTrackOverride(trackType: Int, entry: TrackEntry): Boolean {

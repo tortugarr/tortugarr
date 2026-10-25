@@ -852,6 +852,7 @@ class Media3PlayerBackend extends PlayerBackend
         'pos=${_position.inMilliseconds}ms, suspected preroll-to-feature freeze)',
         level: LogLevel.warning,
       );
+      AutoPlayer.instance?.reportStall();
     }
 
     // First-frame watchdog: the player reports playing but the picture never
@@ -868,6 +869,7 @@ class Media3PlayerBackend extends PlayerBackend
         'pos=${_position.inMilliseconds}ms)',
         level: LogLevel.warning,
       );
+      AutoPlayer.instance?.reportStall();
     }
 
     // Position-stall watchdog: playing and not buffering, but the position is
@@ -887,6 +889,7 @@ class Media3PlayerBackend extends PlayerBackend
           'for ${_watchdogStallMs ~/ 1000}s while playing (suspected freeze)',
           level: LogLevel.warning,
         );
+        AutoPlayer.instance?.reportStall();
       }
     } else {
       // Paused or buffering: keep the stall baseline fresh so it does not fire

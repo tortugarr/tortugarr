@@ -164,6 +164,22 @@ void main() {
       expect(h.choice, const PlayerChoice(PlayerEngine.mpv));
     });
 
+    // 2026-10-25: Musk (1080p H.264) froze on Media3 without tunneling and
+    // played cleanly with it on the TCL TV.
+    test('a light file learned for Media3 gets tunneling', () {
+      final d = _decide(light, learned: PlayerEngine.media3);
+      expect(d.choice, const PlayerChoice(PlayerEngine.media3, tunneling: true));
+    });
+
+    test('tunneling stays off for a light file kept on Media3 for HD audio', () {
+      final p = FileProfile.of([
+        _video('h264', 1080),
+        _audio('truehd', profile: 'Dolby TrueHD'),
+      ]);
+      expect(media3Tunneling(p), isNull);
+      expect(media3Tunneling(light), isTrue);
+    });
+
     test('off: the engine setting decides and tunneling follows the setting', () {
       final d = _decide(heavy, automatic: false, settingPrefersMedia3: false);
       expect(d.choice, const PlayerChoice(PlayerEngine.mpv));

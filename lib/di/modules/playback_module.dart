@@ -605,7 +605,7 @@ void registerPlaybackModule() {
         manager.lastExplicitAudioLanguage ??
         (prefs.get(UserPreferences.defaultAudioLanguage) as String? ?? 'auto');
 
-    return computeEffectiveAudioIndex(
+    final chosen = computeEffectiveAudioIndex(
       audioStreams: audioStreams,
       preferredAudioLanguage: preferredAudioLanguage,
       fallbackAudioLanguage:
@@ -618,6 +618,13 @@ void registerPlaybackModule() {
       lastExplicitAudioIndex: manager.lastExplicitAudioIndex,
       lastExplicitAudioTitle: manager.lastExplicitAudioTitle,
     );
+    // Traces a film that starts in the wrong language (2026-10-25: ITA-ENG
+    // files started in Italian); the player's side logs as TortugarrAudio.
+    debugPrint(
+      '[Audio] chose $chosen (preferred=$preferredAudioLanguage) from '
+      '${[for (final s in audioStreams) '${s['Index']}=${s['Language']}${s['IsDefault'] == true ? '*' : ''}'].join(' ')}',
+    );
+    return chosen;
   };
 
   manager

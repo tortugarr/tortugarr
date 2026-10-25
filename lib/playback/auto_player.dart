@@ -153,6 +153,13 @@ class AutoPlayerDecision {
 }
 
 /// The engine rules as a pure function, so tests can walk every branch.
+/// Tunneling for a file the automatic player sends to Media3: on, except for a
+/// light file kept on Media3 only to pass TrueHD/DTS-HD through. On the TCL TV
+/// Media3 without tunneling froze on plain 1080p H.264 (Musk, 2026-10-25) and
+/// stuttered on 4K, while both played cleanly with it.
+bool? media3Tunneling(FileProfile profile) =>
+    profile.wantsTunneling || profile.heavy || !profile.hdAudio ? true : null;
+
 AutoPlayerDecision decideAutoPlayer({
   required String itemKey,
   required FileProfile profile,
@@ -183,7 +190,7 @@ AutoPlayerDecision decideAutoPlayer({
     );
   }
   if (sessionChoice != null) return pick(sessionChoice, AutoPlayerReason.stutter);
-  final tunneling = profile.wantsTunneling ? true : null;
+  final tunneling = media3Tunneling(profile);
   if (learned != null) {
     return pick(
       PlayerChoice(
@@ -353,8 +360,8 @@ class AutoPlayer {
         : PlayerEngine.media3;
     _sessionChoices[decision.itemKey] = PlayerChoice(
       other,
-      tunneling: other == PlayerEngine.media3 && decision.profile.wantsTunneling
-          ? true
+      tunneling: other == PlayerEngine.media3
+          ? media3Tunneling(decision.profile)
           : null,
     );
     await learn(decision.profile.key, other);
@@ -378,6 +385,11 @@ class AutoPlayer {
   void reportUnderrun() {
     if (_meter.addUnderrun()) _report();
   }
+
+  /// The player never got going, or its picture froze: try the other engine
+  /// at once. Unlike stutter this needs no counting (2026-10-25: Musk and
+  /// MacGyver stood still on one engine and played on the other).
+  void reportStall() => _report();
 
   void _report() {
     final decision = current;

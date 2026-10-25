@@ -2318,12 +2318,40 @@ class MediaKitPlayerBackend extends PlayerBackend
   Timer? _dropPoll;
   int? _dropBaseline;
 
+  /// The position at the last poll and how many polls in a row it stood
+  /// still while mpv was meant to be playing.
+  Duration? _stallPosition;
+  int _stalledPolls = 0;
+
+  /// Polls in a row (5 s each) without progress before the automatic player
+  /// tries the other engine: a start that never gets going, or a frozen film
+  /// (2026-10-25: MacGyver stood still on mpv, Media3 played it).
+  static const _stallPollsLimit = 2;
+
   void _startDropPoll(int generation) {
     _stopDropPoll();
     final auto = AutoPlayer.instance;
     if (auto == null || !auto.automatic) return;
     _dropPoll = Timer.periodic(const Duration(seconds: 5), (_) async {
-      if (!_ownsPlayback(generation) || !_player.state.playing) return;
+      if (!_ownsPlayback(generation)) return;
+      final state = _player.state;
+      // Paused by the user: standing still is fine.
+      if (!state.playing && !state.buffering) {
+        _stallPosition = null;
+        _stalledPolls = 0;
+        return;
+      }
+      if (state.position == _stallPosition) {
+        if (++_stalledPolls >= _stallPollsLimit) {
+          _stalledPolls = 0;
+          debugPrint('[AutoPlayer] mpv stood still at ${state.position}: trying the other engine');
+          auto.reportStall();
+        }
+      } else {
+        _stallPosition = state.position;
+        _stalledPolls = 0;
+      }
+      if (!state.playing) return;
       final native = _player.platform;
       if (native is! NativePlayer) return;
       final vo = int.tryParse(
@@ -2348,6 +2376,8 @@ class MediaKitPlayerBackend extends PlayerBackend
     _dropPoll?.cancel();
     _dropPoll = null;
     _dropBaseline = null;
+    _stallPosition = null;
+    _stalledPolls = 0;
   }
 
   @override
