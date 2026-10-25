@@ -2325,8 +2325,10 @@ class MediaKitPlayerBackend extends PlayerBackend
 
   /// Polls in a row (5 s each) without progress before the automatic player
   /// tries the other engine: a start that never gets going, or a frozen film
-  /// (2026-10-25: MacGyver stood still on mpv, Media3 played it).
-  static const _stallPollsLimit = 2;
+  /// (2026-10-25: MacGyver stood still on mpv, Media3 played it). One poll
+  /// after the first reading switches about 10 s in; two took 15 s, which the
+  /// user waited through.
+  static const _stallPollsLimit = 1;
 
   void _startDropPoll(int generation) {
     _stopDropPoll();

@@ -224,7 +224,9 @@ void main() {
       expect(index, 1); // default track Index 1
     });
 
-    test('preferDefaultAudioTrack = true prioritizes IsDefault track regardless of language match', () {
+    // 2026-10-25: ITA-ENG files flag the Italian dub as default; a user who
+    // picked English must get English even with "prefer default" on.
+    test('preferDefaultAudioTrack = true still lets the chosen language win', () {
       final index = computeEffectiveAudioIndex(
         audioStreams: testStreams,
         preferredAudioLanguage: 'spa',
@@ -232,7 +234,32 @@ void main() {
         preferDefaultAudioTrack: true,
         preferAudioDescription: false,
       );
-      expect(index, 0); // fre has IsDefault == true, SPA does not.
+      expect(index, 2); // Spanish, though French (Index 0) is the default.
+    });
+
+    test('preferDefaultAudioTrack = true picks the default when no track is in the user\'s languages', () {
+      final index = computeEffectiveAudioIndex(
+        audioStreams: testStreams,
+        preferredAudioLanguage: 'nor',
+        fallbackAudioLanguage: 'dan',
+        preferDefaultAudioTrack: true,
+        preferAudioDescription: false,
+      );
+      expect(index, 0); // the default track
+    });
+
+    test('ITA-ENG file with prefer default on and English chosen plays English', () {
+      final index = computeEffectiveAudioIndex(
+        audioStreams: [
+          {'Type': 'Audio', 'Index': 1, 'Language': 'it', 'IsDefault': true, 'Channels': 2},
+          {'Type': 'Audio', 'Index': 2, 'Language': 'en', 'IsDefault': false, 'Channels': 2},
+        ],
+        preferredAudioLanguage: 'eng',
+        fallbackAudioLanguage: '',
+        preferDefaultAudioTrack: true,
+        preferAudioDescription: false,
+      );
+      expect(index, 2);
     });
 
     test('preferDefaultAudioTrack = false prioritizes language match over default track', () {

@@ -63,14 +63,6 @@ int? computeEffectiveAudioIndex({
     }
   }
 
-  // 4. Prefer Default Audio Track
-  if (preferDefaultAudioTrack) {
-    final defaultTracks = candidates.where((s) => s['IsDefault'] == true).toList();
-    if (defaultTracks.isNotEmpty) {
-      return _rankAudioCandidates(defaultTracks, preferDefaultAudioTrack, preferAudioDescription)['Index'] as int?;
-    }
-  }
-
   final normTitle = lastExplicitAudioTitle?.trim().toLowerCase();
 
   int? preferRemembered(List<Map<String, dynamic>> matches) {
@@ -93,10 +85,22 @@ int? computeEffectiveAudioIndex({
     return _rankAudioCandidates(matches, preferDefaultAudioTrack, preferAudioDescription)['Index'] as int?;
   }
 
-  // 5-6. Match preferred language, then fallback language
+  // 4-5. Match preferred language, then fallback language. A language the
+  // user picked beats the file's default flag: ITA-ENG releases flag the
+  // Italian dub as default, and "prefer default" then started them in
+  // Italian for a user who chose English (2026-10-25).
   for (final language in [preferredAudioLanguage, fallbackAudioLanguage]) {
     final matches = candidates.where((s) => matchLang(s['Language'], language)).toList();
     if (matches.isNotEmpty) return preferRemembered(matches);
+  }
+
+  // 6. No track in the user's languages: the default track when preferred
+  // (the original language over a dub).
+  if (preferDefaultAudioTrack) {
+    final defaultTracks = candidates.where((s) => s['IsDefault'] == true).toList();
+    if (defaultTracks.isNotEmpty) {
+      return _rankAudioCandidates(defaultTracks, preferDefaultAudioTrack, preferAudioDescription)['Index'] as int?;
+    }
   }
 
   // 7. Match English fallback
