@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../../preference/user_preferences.dart';
+import '../../../util/app_l10n.dart';
 import '../download/bazarr_client.dart' show BazarrCandidate, BazarrSubtitleState;
 
 /// What the server's Tortugarr plugin allows the logged-in user
@@ -23,6 +24,10 @@ class TortugarrCapabilities {
   final bool freeSpace;
   final bool adult;
 
+  /// Set for a limited downloader (a non-administrator with download
+  /// limits); null for administrators and everyone else.
+  final TortugarrUserLimits? limits;
+
   const TortugarrCapabilities({
     this.isAdmin = false,
     this.downloadNow = false,
@@ -34,6 +39,7 @@ class TortugarrCapabilities {
     this.missingEpisodes = false,
     this.freeSpace = false,
     this.adult = false,
+    this.limits,
   });
 
   static const none = TortugarrCapabilities();
@@ -52,8 +58,119 @@ class TortugarrCapabilities {
       missingEpisodes: on('missingEpisodes'),
       freeSpace: on('freeSpace'),
       adult: on('adult'),
+      limits: json['limits'] is Map
+          ? TortugarrUserLimits.fromJson((json['limits'] as Map).cast<String, dynamic>())
+          : null,
     );
   }
+}
+
+/// A user's download limits and what they used this week (spec 3.16).
+/// 0 means no limit for that field.
+class TortugarrUserLimits {
+  final bool enabled;
+  final int maxMovieMb;
+  final int maxEpisodeMb;
+  final int moviesPerWeek;
+  final int episodesPerWeek;
+  final int moviesUsed;
+  final int episodesUsed;
+
+  const TortugarrUserLimits({
+    this.enabled = true,
+    this.maxMovieMb = 0,
+    this.maxEpisodeMb = 0,
+    this.moviesPerWeek = 0,
+    this.episodesPerWeek = 0,
+    this.moviesUsed = 0,
+    this.episodesUsed = 0,
+  });
+
+  factory TortugarrUserLimits.fromJson(Map<String, dynamic> json) {
+    int n(String key) => (json[key] as num?)?.toInt() ?? 0;
+    return TortugarrUserLimits(
+      enabled: json['enabled'] != false,
+      maxMovieMb: n('maxMovieMb'),
+      maxEpisodeMb: n('maxEpisodeMb'),
+      moviesPerWeek: n('moviesPerWeek'),
+      episodesPerWeek: n('episodesPerWeek'),
+      moviesUsed: n('moviesUsed'),
+      episodesUsed: n('episodesUsed'),
+    );
+  }
+
+  /// The body of `PUT Users/{id}/Limits`; the used counts are read-only.
+  Map<String, dynamic> toJson() => {
+        'enabled': enabled,
+        'maxMovieMb': maxMovieMb,
+        'maxEpisodeMb': maxEpisodeMb,
+        'moviesPerWeek': moviesPerWeek,
+        'episodesPerWeek': episodesPerWeek,
+      };
+
+  /// "This week: 1 of 4 movies, 3 of 5 episodes · max 2.5 GB per movie,
+  /// 950 MB per episode" - the parts that have a limit.
+  String describe() {
+    final l = appL10n();
+    final used = [
+      if (moviesPerWeek > 0) l.tgLimitMoviesUsed(moviesUsed, moviesPerWeek),
+      if (episodesPerWeek > 0) l.tgLimitEpisodesUsed(episodesUsed, episodesPerWeek),
+    ];
+    final sizes = [
+      if (maxMovieMb > 0) l.tgLimitMaxMovie(showMb(maxMovieMb)),
+      if (maxEpisodeMb > 0) l.tgLimitMaxEpisode(showMb(maxEpisodeMb)),
+    ];
+    return [
+      if (used.isNotEmpty) l.tgLimitThisWeek(used.join(', ')),
+      if (sizes.isNotEmpty) sizes.join(', '),
+    ].join(' · ');
+  }
+
+  /// 950 MB, 2.5 GB - as the plugin writes it.
+  static String showMb(int mb) {
+    if (mb < 1024) return '$mb MB';
+    final gb = mb / 1024;
+    return '${gb == gb.roundToDouble() ? gb.toStringAsFixed(0) : gb.toStringAsFixed(1)} GB';
+  }
+}
+
+/// The user's text for a refused download of a limited downloader
+/// (`forbidden`, `limit_exceeded`, `quota_exceeded`), or null for other
+/// errors.
+String? limitErrorText(TortugarrPluginException e) => switch (e.code) {
+      'forbidden' => appL10n().tgPluginForbidden,
+      'limit_exceeded' => appL10n().tgLimitExceeded(_limitDetail(e.message)),
+      'quota_exceeded' => appL10n().tgQuotaExceeded(_quotaDetail(e.message)),
+      _ => null,
+    };
+
+/// "2.5 GB per movie" from "Over your size limit (2.5 GB per movie)", in the
+/// user's language.
+String _limitDetail(String message) =>
+    (overLimitLabel(message) ?? message).replaceFirst(RegExp(r'^[^(]*\('), '').replaceFirst(RegExp(r'\)$'), '');
+
+/// "4 of 4 movies" from "You have used 4 of 4 movies this week", in the
+/// user's language.
+String _quotaDetail(String message) {
+  final m = RegExp(r'(\d+) of (\d+) (movies|episodes)').firstMatch(message);
+  if (m == null) return message;
+  final used = int.parse(m.group(1)!), limit = int.parse(m.group(2)!);
+  return m.group(3) == 'movies'
+      ? appL10n().tgLimitMoviesUsed(used, limit)
+      : appL10n().tgLimitEpisodesUsed(used, limit);
+}
+
+/// The user's language for a size-limit reason from the plugin ("Over your
+/// size limit (2.5 GB per movie)"), or null when [rejection] is another
+/// reason.
+String? overLimitLabel(String rejection) {
+  if (!rejection.startsWith('Over your size limit')) return null;
+  final detail = RegExp(r'\((\S+ [GM]B) per (movie|episode)\)').firstMatch(rejection);
+  final l = appL10n();
+  if (detail == null) return l.tgOverSizeLimitUnknown;
+  return detail.group(2) == 'movie'
+      ? l.tgOverSizeLimit(l.tgLimitMaxMovie(detail.group(1)!))
+      : l.tgOverSizeLimit(l.tgLimitMaxEpisode(detail.group(1)!));
 }
 
 /// One release from a plugin search, already filtered and sorted by the
@@ -77,6 +194,10 @@ class TortugarrRelease {
   /// Below the quality minimum, kept because the search asked for SD.
   final bool sd;
 
+  /// Over the searching user's size limit (limited downloaders): shown
+  /// greyed and never offered (spec 3.16).
+  final bool overLimit;
+
   const TortugarrRelease({
     required this.guid,
     required this.indexerId,
@@ -93,6 +214,7 @@ class TortugarrRelease {
     this.recommended = true,
     this.rejections = const [],
     this.sd = false,
+    this.overLimit = false,
   });
 
   factory TortugarrRelease.fromJson(Map<String, dynamic> json) => TortugarrRelease(
@@ -110,6 +232,7 @@ class TortugarrRelease {
         approved: json['approved'] != false,
         recommended: json['recommended'] != false,
         sd: json['sd'] == true,
+        overLimit: json['overLimit'] == true,
         rejections: [
           for (final r in (json['rejections'] as List? ?? const [])) '$r',
         ],
@@ -306,6 +429,18 @@ class TortugarrPluginClient {
       debugPrint('[Tortugarr] capabilities unavailable: $e');
     }
     return TortugarrCapabilities.none;
+  }
+
+  /// A user's download limits (spec 3.16, administrators).
+  Future<TortugarrUserLimits> userLimits(String userId) async {
+    final data = await _send('GET', '/Users/$userId/Limits');
+    return TortugarrUserLimits.fromJson((data as Map).cast<String, dynamic>());
+  }
+
+  /// Saves a user's download limits (spec 3.16, administrators).
+  Future<TortugarrUserLimits> setUserLimits(String userId, TortugarrUserLimits limits) async {
+    final data = await _send('PUT', '/Users/$userId/Limits', body: limits.toJson());
+    return TortugarrUserLimits.fromJson((data as Map).cast<String, dynamic>());
   }
 
   /// Starts a search and waits for it (spec 3.2). [body] is

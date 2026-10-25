@@ -15942,5 +15942,98 @@
     },
     "tgAutoPlayerTitle": "Automatic player",
     "tgAutoPlayerSubtitle": "Picks Media3 or mpv for each film, switches if it stutters and remembers what worked. Change it per film with the Player button in the player.",
-    "tgAutoReasonStutter": "switched after it stuttered"
+    "tgAutoReasonStutter": "switched after it stuttered",
+    "tgOverSizeLimit": "Over your size limit ({limit})",
+    "@tgOverSizeLimit": {
+        "placeholders": {
+            "limit": {
+                "type": "String"
+            }
+        }
+    },
+    "tgOverSizeLimitUnknown": "Over your size limit (the season's episode count is unknown)",
+    "tgLimitThisWeek": "This week: {used}",
+    "@tgLimitThisWeek": {
+        "placeholders": {
+            "used": {
+                "type": "String"
+            }
+        }
+    },
+    "tgLimitMoviesUsed": "{used} of {limit} movies",
+    "@tgLimitMoviesUsed": {
+        "placeholders": {
+            "used": {
+                "type": "int"
+            },
+            "limit": {
+                "type": "int"
+            }
+        }
+    },
+    "tgLimitEpisodesUsed": "{used} of {limit} episodes",
+    "@tgLimitEpisodesUsed": {
+        "placeholders": {
+            "used": {
+                "type": "int"
+            },
+            "limit": {
+                "type": "int"
+            }
+        }
+    },
+    "tgLimitMaxMovie": "max {size} per movie",
+    "@tgLimitMaxMovie": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "tgLimitMaxEpisode": "max {size} per episode",
+    "@tgLimitMaxEpisode": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "tgLimitExceeded": "This file is over your size limit ({limit}).",
+    "@tgLimitExceeded": {
+        "placeholders": {
+            "limit": {
+                "type": "String"
+            }
+        }
+    },
+    "tgQuotaExceeded": "You have used this week's downloads ({used}).",
+    "@tgQuotaExceeded": {
+        "placeholders": {
+            "used": {
+                "type": "String"
+            }
+        }
+    },
+    "tgPluginForbidden": "Downloading is not on for this user. An administrator can set download limits for you.",
+    "tgDownloadLimits": "Download limits",
+    "tgDownloadLimitsHelp": "Lets this user use Download Now and missing episodes within these limits. Files over the size limit are shown greyed. 0 means no limit. Administrators are never limited.",
+    "tgDownloadLimitsEnable": "Allow downloads with limits",
+    "tgMaxMovieSizeGb": "Max size per movie (GB)",
+    "tgMaxEpisodeSizeMb": "Max size per episode (MB)",
+    "tgMoviesPerWeek": "Movies per week",
+    "tgEpisodesPerWeek": "Episodes per week",
+    "tgLimitsUsedThisWeek": "Used in the last 7 days: {movies} movies, {episodes} episodes",
+    "@tgLimitsUsedThisWeek": {
+        "placeholders": {
+            "movies": {
+                "type": "int"
+            },
+            "episodes": {
+                "type": "int"
+            }
+        }
+    },
+    "tgLimitsSaved": "Download limits saved",
+    "tgLimitsUnavailable": "Download limits need the Tortugarr plugin on the server.",
+    "tgLimitsSave": "Save limits"
 }

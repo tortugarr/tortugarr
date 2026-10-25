@@ -30,6 +30,10 @@ class ProwlarrRelease {
   /// SD releases (public build, plugin's `sd: true`).
   final bool lowQuality;
 
+  /// Why the user may not take this release (over their size limit, public
+  /// build); the picker shows it greyed with this reason.
+  final String? blockedReason;
+
   const ProwlarrRelease({
     required this.guid,
     required this.title,
@@ -45,6 +49,7 @@ class ProwlarrRelease {
     this.tmdbId,
     this.publishDate,
     this.lowQuality = false,
+    this.blockedReason,
   });
 
   factory ProwlarrRelease.fromJson(Map<String, dynamic> json) => ProwlarrRelease(

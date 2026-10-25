@@ -29872,6 +29872,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'switched after it stuttered'**
   String get tgAutoReasonStutter;
+
+  /// No description provided for @tgOverSizeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Over your size limit ({limit})'**
+  String tgOverSizeLimit(String limit);
+
+  /// No description provided for @tgOverSizeLimitUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Over your size limit (the season\'s episode count is unknown)'**
+  String get tgOverSizeLimitUnknown;
+
+  /// No description provided for @tgLimitThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week: {used}'**
+  String tgLimitThisWeek(String used);
+
+  /// No description provided for @tgLimitMoviesUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {limit} movies'**
+  String tgLimitMoviesUsed(int used, int limit);
+
+  /// No description provided for @tgLimitEpisodesUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {limit} episodes'**
+  String tgLimitEpisodesUsed(int used, int limit);
+
+  /// No description provided for @tgLimitMaxMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'max {size} per movie'**
+  String tgLimitMaxMovie(String size);
+
+  /// No description provided for @tgLimitMaxEpisode.
+  ///
+  /// In en, this message translates to:
+  /// **'max {size} per episode'**
+  String tgLimitMaxEpisode(String size);
+
+  /// No description provided for @tgLimitExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is over your size limit ({limit}).'**
+  String tgLimitExceeded(String limit);
+
+  /// No description provided for @tgQuotaExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'You have used this week\'s downloads ({used}).'**
+  String tgQuotaExceeded(String used);
+
+  /// No description provided for @tgPluginForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading is not on for this user. An administrator can set download limits for you.'**
+  String get tgPluginForbidden;
+
+  /// No description provided for @tgDownloadLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Download limits'**
+  String get tgDownloadLimits;
+
+  /// No description provided for @tgDownloadLimitsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets this user use Download Now and missing episodes within these limits. Files over the size limit are shown greyed. 0 means no limit. Administrators are never limited.'**
+  String get tgDownloadLimitsHelp;
+
+  /// No description provided for @tgDownloadLimitsEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow downloads with limits'**
+  String get tgDownloadLimitsEnable;
+
+  /// No description provided for @tgMaxMovieSizeGb.
+  ///
+  /// In en, this message translates to:
+  /// **'Max size per movie (GB)'**
+  String get tgMaxMovieSizeGb;
+
+  /// No description provided for @tgMaxEpisodeSizeMb.
+  ///
+  /// In en, this message translates to:
+  /// **'Max size per episode (MB)'**
+  String get tgMaxEpisodeSizeMb;
+
+  /// No description provided for @tgMoviesPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies per week'**
+  String get tgMoviesPerWeek;
+
+  /// No description provided for @tgEpisodesPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Episodes per week'**
+  String get tgEpisodesPerWeek;
+
+  /// No description provided for @tgLimitsUsedThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Used in the last 7 days: {movies} movies, {episodes} episodes'**
+  String tgLimitsUsedThisWeek(int movies, int episodes);
+
+  /// No description provided for @tgLimitsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Download limits saved'**
+  String get tgLimitsSaved;
+
+  /// No description provided for @tgLimitsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Download limits need the Tortugarr plugin on the server.'**
+  String get tgLimitsUnavailable;
+
+  /// No description provided for @tgLimitsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save limits'**
+  String get tgLimitsSave;
 }
 
 class _AppLocalizationsDelegate

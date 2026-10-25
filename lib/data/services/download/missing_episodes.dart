@@ -92,7 +92,11 @@ class EpisodeReleaseOption {
   final SonarrRelease release;
   final String? softReason;
 
-  const EpisodeReleaseOption(this.release, [this.softReason]);
+  /// Over the user's size limit (limited downloaders, public build): shown
+  /// greyed with [softReason] and never taken.
+  final bool blocked;
+
+  const EpisodeReleaseOption(this.release, [this.softReason, this.blocked = false]);
 
   bool get recommended => softReason == null;
 }
@@ -298,10 +302,12 @@ class MissingEpisodes {
           needsLink: false)) {
         continue;
       }
-      final soft = rejections.isEmpty ? null : softReasonLabel(rejections.first);
-      out.add(EpisodeReleaseOption(r, soft));
+      final overLimit = rejections.isEmpty ? null : overLimitLabel(rejections.first);
+      final soft = overLimit ?? (rejections.isEmpty ? null : softReasonLabel(rejections.first));
+      out.add(EpisodeReleaseOption(r, soft, overLimit != null));
     }
     out.sort((a, b) {
+      if (a.blocked != b.blocked) return a.blocked ? 1 : -1;
       if (seasonPack && a.release.fullSeason != b.release.fullSeason) {
         return a.release.fullSeason ? -1 : 1;
       }
@@ -357,7 +363,7 @@ class MissingEpisodesService {
     try {
       return await call();
     } on TortugarrPluginException catch (e) {
-      throw MissingEpisodesException(e.toString());
+      throw MissingEpisodesException(limitErrorText(e) ?? e.toString());
     }
   }
 

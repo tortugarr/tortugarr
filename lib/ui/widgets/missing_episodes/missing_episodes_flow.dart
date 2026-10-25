@@ -476,13 +476,14 @@ class _ReleaseRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: FocusableWrapper(
-        onSelect: () => Navigator.of(context).pop(option),
+        // A file over the user's size limit stays focusable but is never taken.
+        onSelect: option.blocked ? () {} : () => Navigator.of(context).pop(option),
         focusNode: focusNode,
         autoScroll: true,
         borderRadius: 10,
         disableScale: true,
         child: Opacity(
-          opacity: option.recommended ? 1 : 0.6,
+          opacity: option.blocked ? 0.4 : (option.recommended ? 1 : 0.6),
           child: Container(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
             decoration: BoxDecoration(

@@ -60,7 +60,10 @@ Future<bool> runPluginDownload(
       title: title,
       releases: [for (final r in result.releases) asPickerRelease(r)],
       initialTier: initialTier,
-      note: unavailableNote(result.unavailableIndexers),
+      note: [
+        DownloadFeatures.capabilities.value.limits?.describe(),
+        unavailableNote(result.unavailableIndexers),
+      ].nonNulls.where((n) => n.isNotEmpty).join('\n').ifEmptyNull,
     );
     final picked = choice == null ? null : byGuid[choice.release.guid];
     if (picked == null) return false;
@@ -110,8 +113,10 @@ Future<bool> runPluginDownload(
     if (downloadId != null && DownloadFeatures.capabilities.value.videoCheck) {
       unawaited(_watchVideo(plugin, downloadId, title, messenger));
     }
+    unawaited(_refreshLimits(plugin));
     return true;
   } on TortugarrPluginException catch (e) {
+    if (e.code == 'quota_exceeded' || e.code == 'limit_exceeded') unawaited(_refreshLimits(plugin));
     messenger?..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(explainPluginError(e))));
     return false;
@@ -163,6 +168,9 @@ ProwlarrRelease asPickerRelease(TortugarrRelease r) => ProwlarrRelease(
       protocol: r.protocol,
       publishDate: r.publishDate,
       lowQuality: r.sd,
+      blockedReason: r.overLimit
+          ? (r.rejections.map(overLimitLabel).nonNulls.firstOrNull ?? appL10n().tgOverSizeLimitUnknown)
+          : null,
     );
 
 DownloadQualityTier _tierOf(ProwlarrRelease r) => switch (r.tierLabel) {
@@ -181,11 +189,23 @@ String explainPluginError(TortugarrPluginException e) => switch (e.code) {
       'no_indexers' => appL10n().tgPluginNoIndexers(
           e.message.isEmpty ? '' : ' (${e.message})',
         ),
+      'forbidden' || 'limit_exceeded' || 'quota_exceeded' => limitErrorText(e)!,
       'already_in_client' => (e.progress ?? 0) >= 1
           ? appL10n().tgAlreadyDownloaded
           : appL10n().tgAlreadyDownloadingPercent(((e.progress ?? 0) * 100).round()),
       _ => appL10n().tgDownloadFailed('$e'),
     };
+
+/// A limited downloader's counts this week changed: ask the plugin again.
+Future<void> _refreshLimits(TortugarrPluginClient plugin) async {
+  if (DownloadFeatures.capabilities.value.limits == null) return;
+  final fresh = await plugin.capabilities();
+  if (fresh.downloadNow) DownloadFeatures.capabilities.value = fresh;
+}
+
+extension on String {
+  String? get ifEmptyNull => isEmpty ? null : this;
+}
 
 Future<void> _watchVideo(
   TortugarrPluginClient plugin,

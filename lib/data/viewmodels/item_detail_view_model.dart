@@ -343,7 +343,11 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   /// Whether Sonarr follows [season]; null when Sonarr has no such season
   /// (or the series is not in Sonarr), so no toggle is shown.
-  bool? seasonMonitored(int season) => arrStatus?.seasonMonitored[season];
+  /// Null (no switch) for a limited downloader: season monitoring stays with
+  /// administrators.
+  bool? seasonMonitored(int season) => DownloadFeatures.capabilities.value.limits != null
+      ? null
+      : arrStatus?.seasonMonitored[season];
 
   /// Turns Sonarr's monitoring of [season] on or off. Returns null on
   /// success, or the message to show when it failed.

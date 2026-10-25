@@ -276,6 +276,15 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
     for (final r in releases) {
       out[r.tierLabel]?.add(r);
     }
+    // Files the user may not take (over their size limit) go last.
+    for (final list in out.values) {
+      final ok = list.where((r) => r.blockedReason == null).toList();
+      final blocked = list.where((r) => r.blockedReason != null).toList();
+      list
+        ..clear()
+        ..addAll(ok)
+        ..addAll(blocked);
+    }
     return out;
   }
 }
@@ -296,74 +305,89 @@ class _ReleaseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blocked = release.blockedReason;
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: FocusableWrapper(
-        onSelect: () =>
-            Navigator.of(context).pop(ReleaseChoice(release)),
+        // Still focusable so the remote can move past it, but never taken.
+        onSelect: blocked != null
+            ? () {}
+            : () => Navigator.of(context).pop(ReleaseChoice(release)),
         borderRadius: 10,
         disableScale: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.06),
-            borderRadius: AppRadius.circular(10),
-            border: Border.all(color: Colors.white12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      release.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
+        child: Opacity(
+          opacity: blocked != null ? 0.45 : 1,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.06),
+              borderRadius: AppRadius.circular(10),
+              border: Border.all(color: Colors.white12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        release.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      [
-                        if (release.lowQuality) appL10n().tgSdLowQuality,
-                        release.indexer,
-                        appL10n().tgSeedersCount(release.seeders),
-                        if (release.publishDate != null)
-                          _age(release.publishDate!),
-                      ].join(' · '),
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.55),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
+                      const SizedBox(height: 4),
+                      Text(
+                        [
+                          if (release.lowQuality) appL10n().tgSdLowQuality,
+                          release.indexer,
+                          appL10n().tgSeedersCount(release.seeders),
+                          if (release.publishDate != null)
+                            _age(release.publishDate!),
+                        ].join(' · '),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.55),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColorScheme.accent.withValues(alpha: 0.85),
-                  borderRadius: AppRadius.circular(8),
-                ),
-                child: Text(
-                  release.sizeLabel,
-                  style: TextStyle(
-                    color: AppColorScheme.onAccent,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                      if (blocked != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          blocked,
+                          style: const TextStyle(color: Colors.orangeAccent, fontSize: 11),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: blocked != null
+                        ? Colors.white24
+                        : AppColorScheme.accent.withValues(alpha: 0.85),
+                    borderRadius: AppRadius.circular(8),
+                  ),
+                  child: Text(
+                    release.sizeLabel,
+                    style: TextStyle(
+                      color: blocked != null ? Colors.white : AppColorScheme.onAccent,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

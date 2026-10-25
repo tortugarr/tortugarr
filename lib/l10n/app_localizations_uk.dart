@@ -17330,4 +17330,89 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tgAutoReasonStutter => 'switched after it stuttered';
+
+  @override
+  String tgOverSizeLimit(String limit) {
+    return 'Over your size limit ($limit)';
+  }
+
+  @override
+  String get tgOverSizeLimitUnknown =>
+      'Over your size limit (the season\'s episode count is unknown)';
+
+  @override
+  String tgLimitThisWeek(String used) {
+    return 'This week: $used';
+  }
+
+  @override
+  String tgLimitMoviesUsed(int used, int limit) {
+    return '$used of $limit movies';
+  }
+
+  @override
+  String tgLimitEpisodesUsed(int used, int limit) {
+    return '$used of $limit episodes';
+  }
+
+  @override
+  String tgLimitMaxMovie(String size) {
+    return 'max $size per movie';
+  }
+
+  @override
+  String tgLimitMaxEpisode(String size) {
+    return 'max $size per episode';
+  }
+
+  @override
+  String tgLimitExceeded(String limit) {
+    return 'This file is over your size limit ($limit).';
+  }
+
+  @override
+  String tgQuotaExceeded(String used) {
+    return 'You have used this week\'s downloads ($used).';
+  }
+
+  @override
+  String get tgPluginForbidden =>
+      'Downloading is not on for this user. An administrator can set download limits for you.';
+
+  @override
+  String get tgDownloadLimits => 'Download limits';
+
+  @override
+  String get tgDownloadLimitsHelp =>
+      'Lets this user use Download Now and missing episodes within these limits. Files over the size limit are shown greyed. 0 means no limit. Administrators are never limited.';
+
+  @override
+  String get tgDownloadLimitsEnable => 'Allow downloads with limits';
+
+  @override
+  String get tgMaxMovieSizeGb => 'Max size per movie (GB)';
+
+  @override
+  String get tgMaxEpisodeSizeMb => 'Max size per episode (MB)';
+
+  @override
+  String get tgMoviesPerWeek => 'Movies per week';
+
+  @override
+  String get tgEpisodesPerWeek => 'Episodes per week';
+
+  @override
+  String tgLimitsUsedThisWeek(int movies, int episodes) {
+    return 'Used in the last 7 days: $movies movies, $episodes episodes';
+  }
+
+  @override
+  String get tgLimitsSaved => 'Download limits saved';
+
+  @override
+  String get tgLimitsUnavailable =>
+      'Download limits need the Tortugarr plugin on the server.';
+
+  @override
+  String get tgLimitsSave => 'Save limits';
 }

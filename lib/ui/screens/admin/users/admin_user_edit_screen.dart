@@ -14,6 +14,8 @@ import '../widgets/admin_form_styles.dart';
 import '../widgets/premiere_note.dart';
 import '../providers/admin_user_providers.dart';
 import 'admin_user_delete_dialog.dart';
+import 'download_limits_section.dart';
+import '../../../../data/services/tortugarr/download_features.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../util/error_message.dart';
 import '../../../../util/platform_detection.dart';
@@ -567,6 +569,9 @@ class _AdminUserEditScreenState extends ConsumerState<AdminUserEditScreen>
             if (_embyHas(key)) _policySwitch(key, label),
         ],
       ),
+      // Tortugarr: Download Now within limits for a non-administrator.
+      if (!_isAdmin && DownloadFeatures.viaPlugin)
+        DownloadLimitsSection(userId: widget.userId),
       adminSection(
         context,
         title: l10n.sessions,

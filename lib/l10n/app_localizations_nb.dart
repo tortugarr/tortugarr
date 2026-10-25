@@ -17253,4 +17253,89 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgAutoReasonStutter => 'byttet etter hakking';
+
+  @override
+  String tgOverSizeLimit(String limit) {
+    return 'Over størrelsesgrensen din ($limit)';
+  }
+
+  @override
+  String get tgOverSizeLimitUnknown =>
+      'Over størrelsesgrensen din (antall episoder i sesongen er ukjent)';
+
+  @override
+  String tgLimitThisWeek(String used) {
+    return 'Denne uka: $used';
+  }
+
+  @override
+  String tgLimitMoviesUsed(int used, int limit) {
+    return '$used av $limit filmer';
+  }
+
+  @override
+  String tgLimitEpisodesUsed(int used, int limit) {
+    return '$used av $limit episoder';
+  }
+
+  @override
+  String tgLimitMaxMovie(String size) {
+    return 'maks $size per film';
+  }
+
+  @override
+  String tgLimitMaxEpisode(String size) {
+    return 'maks $size per episode';
+  }
+
+  @override
+  String tgLimitExceeded(String limit) {
+    return 'Denne filen er over størrelsesgrensen din ($limit).';
+  }
+
+  @override
+  String tgQuotaExceeded(String used) {
+    return 'Du har brukt opp ukas nedlastinger ($used).';
+  }
+
+  @override
+  String get tgPluginForbidden =>
+      'Nedlasting er ikke slått på for denne brukeren. En administrator kan gi deg nedlastingsgrenser.';
+
+  @override
+  String get tgDownloadLimits => 'Nedlastingsgrenser';
+
+  @override
+  String get tgDownloadLimitsHelp =>
+      'Lar denne brukeren bruke Last ned nå og manglende episoder innenfor grensene. Filer over størrelsesgrensen vises grå. 0 betyr ingen grense. Administratorer har aldri grenser.';
+
+  @override
+  String get tgDownloadLimitsEnable => 'Tillat nedlasting med grenser';
+
+  @override
+  String get tgMaxMovieSizeGb => 'Maks størrelse per film (GB)';
+
+  @override
+  String get tgMaxEpisodeSizeMb => 'Maks størrelse per episode (MB)';
+
+  @override
+  String get tgMoviesPerWeek => 'Filmer per uke';
+
+  @override
+  String get tgEpisodesPerWeek => 'Episoder per uke';
+
+  @override
+  String tgLimitsUsedThisWeek(int movies, int episodes) {
+    return 'Brukt siste 7 dager: $movies filmer, $episodes episoder';
+  }
+
+  @override
+  String get tgLimitsSaved => 'Nedlastingsgrensene er lagret';
+
+  @override
+  String get tgLimitsUnavailable =>
+      'Nedlastingsgrenser krever Tortugarr-pluginen på serveren.';
+
+  @override
+  String get tgLimitsSave => 'Lagre grensene';
 }
