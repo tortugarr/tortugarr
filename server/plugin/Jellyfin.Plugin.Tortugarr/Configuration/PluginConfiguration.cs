@@ -3,7 +3,8 @@ using MediaBrowser.Model.Plugins;
 namespace Jellyfin.Plugin.Tortugarr.Configuration;
 
 /// <summary>
-/// Server-side settings. Written by the Tortugarr installer; never returned by any route.
+/// Server-side settings. Written by the Tortugarr installer and changed on the settings page;
+/// keys and passwords are never returned by any route (the page only learns whether one is set).
 /// Addresses are container names on the stack's network (http://radarr:7878 ...).
 /// </summary>
 public class PluginConfiguration : BasePluginConfiguration

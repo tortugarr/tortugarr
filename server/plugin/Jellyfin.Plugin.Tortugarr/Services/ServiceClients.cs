@@ -237,6 +237,26 @@ public sealed class QbitClient
         return (long?)res?["server_state"]?["free_space_on_disk"];
     }
 
+    /// <summary>The Web UI's version ("v5.0.1"); logs in first, so it also checks the login.</summary>
+    public async Task<string> Version(CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        using var req = new HttpRequestMessage(HttpMethod.Get, _base + "/api/v2/app/version");
+        if (cookie.Length > 0)
+        {
+            req.Headers.Add("Cookie", cookie);
+        }
+
+        req.Headers.Referrer = new Uri(_base);
+        using var res = await SendRaw(req, ct).ConfigureAwait(false);
+        if (!res.IsSuccessStatusCode)
+        {
+            throw new UpstreamException("qBittorrent", $"HTTP {(int)res.StatusCode}");
+        }
+
+        return (await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false)).Trim();
+    }
+
     private async Task<string> Login(CancellationToken ct)
     {
         using var req = new HttpRequestMessage(HttpMethod.Post, _base + "/api/v2/auth/login")

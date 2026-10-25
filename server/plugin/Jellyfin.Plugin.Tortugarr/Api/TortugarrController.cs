@@ -27,9 +27,11 @@ public class TortugarrController : ControllerBase
     private readonly SeriesService _series;
     private readonly SpaceService _space;
     private readonly UserLimitService _limits;
+    private readonly SettingsService _settings;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings)
     {
+        _settings = settings;
         _svc = svc;
         _delete = delete;
         _hook = hook;
@@ -221,6 +223,29 @@ public class TortugarrController : ControllerBase
         Run(async () => MayDownload(out _)
             ? Json(await _series.GetAsync(tvdbId, HttpContext.RequestAborted).ConfigureAwait(false))
             : NotAllowed());
+
+    /// <summary>The settings page: every setting an administrator may change; keys only as set/not set.</summary>
+    [HttpGet("Settings")]
+    [Authorize(Policy = Admin)]
+    public IActionResult GetSettings() =>
+        Json(SettingsService.View(Plugin.Instance?.Configuration ?? new Configuration.PluginConfiguration()));
+
+    /// <summary>Saves the settings page. An empty key or password keeps the saved one.</summary>
+    [HttpPut("Settings")]
+    [Authorize(Policy = Admin)]
+    public Task<IActionResult> SaveSettings([FromBody] System.Text.Json.Nodes.JsonObject body) => Run(() =>
+    {
+        var plugin = Plugin.Instance ?? throw new NotConfiguredException("the plugin is not loaded");
+        SettingsService.Apply(plugin.Configuration, body);
+        plugin.SaveConfiguration();
+        return Task.FromResult<IActionResult>(GetSettings());
+    });
+
+    /// <summary>Tests the connection to one service with the address on the page (and the saved key when none is typed).</summary>
+    [HttpPost("Settings/Test")]
+    [Authorize(Policy = Admin)]
+    public Task<IActionResult> TestConnection([FromBody] SettingsService.TestRequest req) => Run(async () =>
+        Json(await _settings.TestAsync(Plugin.Instance?.Configuration ?? new Configuration.PluginConfiguration(), req, HttpContext.RequestAborted).ConfigureAwait(false)));
 
     /// <summary>A user's download limits and what they used this week (administrator).</summary>
     [HttpGet("Users/{userId:guid}/Limits")]

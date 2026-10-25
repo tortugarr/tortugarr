@@ -24,7 +24,7 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
 
     public override Guid Id => Guid.Parse("19f30fb1-bb78-444b-a75e-2997883b215c");
 
-    /// <summary>The admin page (Dashboard > Plugins > Tortugarr): the adult-library switch.</summary>
+    /// <summary>The settings page (Dashboard > Plugins > Tortugarr): connections, download limits, downloads, adult library, filters.</summary>
     public IEnumerable<PluginPageInfo> GetPages() => new[]
     {
         new PluginPageInfo { Name = Name, EmbeddedResourcePath = GetType().Namespace + ".Configuration.configPage.html" },

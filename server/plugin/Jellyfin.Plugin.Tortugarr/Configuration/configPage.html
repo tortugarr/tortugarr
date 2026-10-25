@@ -5,13 +5,42 @@
     <title>Tortugarr</title>
 </head>
 <body>
-    <div id="TortugarrConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+    <div id="TortugarrConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox,emby-select">
+        <style>
+            #TortugarrConfigPage .tg-conn { display: grid; grid-template-columns: 1fr 1fr auto; gap: .6em; align-items: end; margin-bottom: 1.2em; }
+            #TortugarrConfigPage .tg-conn .inputContainer { margin-bottom: 0; }
+            #TortugarrConfigPage .tg-conn h4 { grid-column: 1 / -1; margin: .4em 0 0; }
+            #TortugarrConfigPage .tg-result { grid-column: 1 / -1; font-size: .9em; min-height: 1.2em; }
+            #TortugarrConfigPage .tg-ok { color: #52b54b; }
+            #TortugarrConfigPage .tg-bad { color: #cc3333; }
+            #TortugarrConfigPage .tg-users { width: 100%; border-collapse: collapse; }
+            #TortugarrConfigPage .tg-users th, #TortugarrConfigPage .tg-users td { text-align: left; padding: .35em .5em; border-bottom: 1px solid rgba(255,255,255,.1); }
+            #TortugarrConfigPage .tg-users input[type=number] { width: 6em; }
+            #TortugarrConfigPage details { margin: 1.5em 0; }
+            #TortugarrConfigPage summary { cursor: pointer; font-size: 1.17em; font-weight: bold; }
+            @media (max-width: 700px) { #TortugarrConfigPage .tg-conn { grid-template-columns: 1fr; } }
+        </style>
         <div data-role="content">
             <div class="content-primary">
                 <h2>Tortugarr</h2>
-                <p>Server side of the Tortugarr app. The addresses and keys of Sonarr, Radarr, Prowlarr,
-                   Bazarr and the download client are set by the Tortugarr installer and are never sent to the app.</p>
+                <p class="fieldDescription">Server side of the Tortugarr app. Keys and passwords are never shown here
+                    and never sent to the app: leave a key field empty to keep the saved key.</p>
                 <form id="TortugarrConfigForm">
+                    <h3>Connections</h3>
+                    <div id="TgConnections"></div>
+                    <p class="fieldDescription">qBittorrent: when Radarr has an enabled qBittorrent download client,
+                        the plugin follows that address and only the login comes from here.</p>
+
+                    <h3>Download limits</h3>
+                    <p class="fieldDescription">Lets a user who is not an administrator use Download Now and
+                        missing episodes within these limits. Files over the size limit are shown greyed in the app;
+                        the server refuses a download over a limit. Empty or 0 = no limit. "Used" counts the last 7 days.
+                        Administrators are never limited.</p>
+                    <div id="TgUsers">Loading users …</div>
+
+                    <h3>Downloads</h3>
+                    <div id="TgDownloads"></div>
+
                     <h3>Adult library</h3>
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label class="emby-checkbox-label">
@@ -19,49 +48,262 @@
                             <span>Adult library</span>
                         </label>
                         <div class="fieldDescription checkboxFieldDescription">
-                            Off by default. When switched on, a separate library is created on
-                            <code id="AdultPath"></code> and hidden from every user who is not an administrator,
-                            including users created later. Give a user access in Dashboard &gt; Users &gt; the user &gt; Access.
-                            Only administrators can search and download for it. No indexers are added - add your own in Prowlarr.
-                            It needs qBittorrent as the download client.
+                            Off by default. When switched on, a separate library is created on the save path below and
+                            hidden from every user who is not an administrator, including users created later. Give a user
+                            access in Dashboard &gt; Users &gt; the user &gt; Access. Only administrators can search and
+                            download for it. No indexers are added - add your own in Prowlarr. It needs qBittorrent.
                         </div>
                     </div>
+                    <div id="TgAdult"></div>
                     <p id="TortugarrStatus" class="fieldDescription"></p>
+
+                    <details>
+                        <summary>Advanced: release filters</summary>
+                        <p class="fieldDescription">What Download Now leaves out before the app sees a release. The
+                            defaults are what the app always did; change them only when you know why.</p>
+                        <div id="TgAdvanced"></div>
+                    </details>
+
+                    <p id="TgSaveStatus" class="fieldDescription"></p>
                     <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Save</span></button>
                 </form>
             </div>
         </div>
         <script type="text/javascript">
             (function () {
-                var pluginId = '19f30fb1-bb78-444b-a75e-2997883b215c';
                 var page = document.querySelector('#TortugarrConfigPage');
-                function status(text) { page.querySelector('#TortugarrStatus').textContent = text; }
+                var MB = 1024 * 1024, GB = 1024 * MB;
+
+                // Services with an address and a key (qBittorrent: user + password) and a Test button.
+                var connections = [
+                    { id: 'sonarr', name: 'Sonarr', url: 'SonarrUrl', key: 'SonarrApiKey', hint: 'http://sonarr:8989' },
+                    { id: 'radarr', name: 'Radarr', url: 'RadarrUrl', key: 'RadarrApiKey', hint: 'http://radarr:7878' },
+                    { id: 'prowlarr', name: 'Prowlarr', url: 'ProwlarrUrl', key: 'ProwlarrApiKey', hint: 'http://prowlarr:9696' },
+                    { id: 'bazarr', name: 'Bazarr (subtitles)', url: 'BazarrUrl', key: 'BazarrApiKey', hint: 'http://bazarr:6767' },
+                    { id: 'seerr', name: 'Seerr', url: 'SeerrUrl', key: 'SeerrApiKey', hint: 'http://seerr:5055' },
+                    { id: 'qbittorrent', name: 'qBittorrent', url: 'DownloadClientUrl', key: 'DownloadClientPassword', user: 'DownloadClientUsername', hint: 'http://qbittorrent:8080' }
+                ];
+
+                // [field, label, description, unit] - unit turns bytes into MB/GB on the page.
+                var downloads = [
+                    ['DownloadClientType', 'Download client', 'Only qBittorrent can check what was downloaded, free space and the adult library.', 'select'],
+                    ['MovieCategory', 'Movie category', 'The qBittorrent category Radarr uses.'],
+                    ['TvCategory', 'Series category', 'The qBittorrent category Sonarr uses.'],
+                    ['DownloadRoots', 'Download folders', 'One per line: the folder as the download client sees it, a |, and the same folder as Jellyfin sees it (/data/torrents-ext/1). With more than one, each download goes to the one with the most free space.', 'lines'],
+                    ['MovieRoots', 'Movie folders', 'Radarr root folders a new movie may go to, comma-separated. Empty = any.'],
+                    ['DocumentaryRoots', 'Documentary folders', 'Radarr root folders for documentaries, comma-separated. Empty = documentaries are movies like any other.'],
+                    ['TvRoots', 'Series folders', 'Sonarr root folders a new series may go to, comma-separated. Empty = any.'],
+                    ['SpaceBufferBytes', 'Free space to keep (GB)', 'Kept free on top of a download before the app offers to make room.', 'GB'],
+                    ['SearchTimeoutSeconds', 'Search time limit (seconds)', 'How long a search may ask the indexers.', 'number']
+                ];
+                var adult = [
+                    ['AdultSavePath', 'Save path', 'Where the adult downloads and the library live, as Jellyfin sees it.'],
+                    ['AdultDownloadPath', 'Save path for qBittorrent', 'When qBittorrent sees the folder by another path (a Windows drive, say). Empty = the save path.'],
+                    ['AdultLibraryName', 'Library name', ''],
+                    ['AdultCategory', 'qBittorrent category', ''],
+                    ['AdultCategories', 'Indexer categories', 'Newznab categories searched, comma-separated.'],
+                    ['AdultMinBytes', 'Smallest file (MB)', '', 'MB'],
+                    ['AdultUnsafeRegex', 'Unsafe names (pattern)', 'A release whose name matches is left out.']
+                ];
+                var advanced = [
+                    ['MinMovieBytes', 'Smallest movie (MB)', '', 'MB'],
+                    ['MinEpisodeBytes', 'Smallest episode (MB)', '', 'MB'],
+                    ['MinSdMovieBytes', 'Smallest SD movie (MB)', 'Used when the app asks for SD releases.', 'MB'],
+                    ['MinSdEpisodeBytes', 'Smallest SD episode (MB)', '', 'MB'],
+                    ['MinVideoBytes', 'Smallest video file (MB)', 'A download with no file this big has no video (the video check).', 'MB'],
+                    ['EarlyReleaseDays', 'Early release days', 'A WEB release this many days before the digital release is treated as fake.', 'number'],
+                    ['JunkRegex', 'Junk words (pattern)', 'CAM, telesync and the like.'],
+                    ['QualityRegex', 'Quality words (pattern)', 'A release must name a quality.'],
+                    ['HardRejectionRegex', 'Hard rejections (pattern)', 'Radarr/Sonarr reasons that leave a release out entirely.'],
+                    ['BannedExtensions', 'Banned file types', 'Space-separated.'],
+                    ['VideoExtensions', 'Video file types', 'Space-separated.']
+                ];
+
+                var settings = {};
+                var userRows = [];
+
+                function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+                function field(id) { return page.querySelector('#tg_' + id); }
+
+                function renderFields(target, list) {
+                    target.innerHTML = list.map(function (f) {
+                        var input;
+                        if (f[3] === 'select') {
+                            input = '<select is="emby-select" id="tg_' + f[0] + '" label="' + esc(f[1]) + '">' +
+                                ['qbittorrent', 'transmission', 'deluge', 'none'].map(function (v) { return '<option value="' + v + '">' + v + '</option>'; }).join('') +
+                                '</select>';
+                        } else if (f[3] === 'lines') {
+                            input = '<label class="textareaLabel" for="tg_' + f[0] + '">' + esc(f[1]) + '</label>' +
+                                '<textarea is="emby-textarea" class="emby-textarea" rows="3" id="tg_' + f[0] + '"></textarea>';
+                        } else {
+                            var numeric = f[3] === 'MB' || f[3] === 'GB' || f[3] === 'number';
+                            input = '<input is="emby-input" type="' + (numeric ? 'number' : 'text') + '" min="0" step="any" id="tg_' + f[0] + '" label="' + esc(f[1]) + '" />';
+                        }
+                        return '<div class="' + (f[3] === 'select' ? 'selectContainer' : 'inputContainer') + '">' + input +
+                            (f[2] ? '<div class="fieldDescription">' + esc(f[2]) + '</div>' : '') + '</div>';
+                    }).join('');
+                }
+
+                function fill(list) {
+                    list.forEach(function (f) {
+                        var v = settings[f[0]];
+                        field(f[0]).value = f[3] === 'MB' ? Math.round(v / MB) : f[3] === 'GB' ? +(v / GB).toFixed(1) : (v === null || v === undefined ? '' : v);
+                    });
+                }
+
+                function collect(list, out) {
+                    list.forEach(function (f) {
+                        var v = field(f[0]).value;
+                        if (f[3] === 'MB') { v = String(Math.round((parseFloat(v) || 0) * MB)); }
+                        else if (f[3] === 'GB') { v = String(Math.round((parseFloat(v) || 0) * GB)); }
+                        else if (f[3] === 'number') { v = String(parseInt(v, 10) || 0); }
+                        out[f[0]] = v;
+                    });
+                }
+
+                function renderConnections() {
+                    page.querySelector('#TgConnections').innerHTML = connections.map(function (c) {
+                        var second = c.user
+                            ? '<div class="inputContainer"><input is="emby-input" type="text" id="tg_' + c.user + '" label="User name" /></div>'
+                            : '';
+                        return '<div class="tg-conn"><h4>' + esc(c.name) + '</h4>' +
+                            '<div class="inputContainer"><input is="emby-input" type="text" id="tg_' + c.url + '" label="Address" placeholder="' + c.hint + '" /></div>' +
+                            (second || '') +
+                            '<div class="inputContainer"><input is="emby-input" type="password" autocomplete="new-password" id="tg_' + c.key + '" label="' + (c.user ? 'Password' : 'API key') + '" /></div>' +
+                            '<button is="emby-button" type="button" class="raised emby-button" data-test="' + c.id + '"><span>Test</span></button>' +
+                            '<div class="tg-result" id="tg_result_' + c.id + '"></div></div>';
+                    }).join('');
+                    page.querySelectorAll('[data-test]').forEach(function (b) {
+                        b.addEventListener('click', function () { test(b.getAttribute('data-test')); });
+                    });
+                }
+
+                function fillConnections() {
+                    connections.forEach(function (c) {
+                        field(c.url).value = settings[c.url] || '';
+                        if (c.user) { field(c.user).value = settings[c.user] || ''; }
+                        var key = field(c.key);
+                        key.value = '';
+                        key.setAttribute('placeholder', settings[c.key + 'Set'] ? '●●●●●●●● (saved - leave empty to keep)' : 'not set');
+                    });
+                }
+
+                function test(id) {
+                    var c = connections.filter(function (x) { return x.id === id; })[0];
+                    var out = page.querySelector('#tg_result_' + id);
+                    out.className = 'tg-result';
+                    out.textContent = 'Testing …';
+                    ApiClient.fetch({
+                        url: ApiClient.getUrl('Tortugarr/v1/Settings/Test'), type: 'POST', dataType: 'json', contentType: 'application/json',
+                        data: JSON.stringify({ service: id, url: field(c.url).value, key: field(c.key).value, username: c.user ? field(c.user).value : '' })
+                    }).then(function (r) {
+                        out.className = 'tg-result ' + (r.ok ? 'tg-ok' : 'tg-bad');
+                        out.textContent = r.ok ? '✓ Connected' + (r.version ? ' (version ' + r.version + ')' : '') : '✗ ' + r.message;
+                    }, function () { out.className = 'tg-result tg-bad'; out.textContent = '✗ The test failed.'; });
+                }
+
+                function loadUsers() {
+                    var box = page.querySelector('#TgUsers');
+                    return ApiClient.getUsers().then(function (users) {
+                        var limited = users.filter(function (u) { return !(u.Policy && u.Policy.IsAdministrator); });
+                        if (!limited.length) { box.textContent = 'Every user is an administrator.'; return; }
+                        return Promise.all(limited.map(function (u) {
+                            return ApiClient.fetch({ url: ApiClient.getUrl('Tortugarr/v1/Users/' + u.Id + '/Limits'), type: 'GET', dataType: 'json' })
+                                .then(function (l) { return { user: u, limits: l }; });
+                        })).then(function (rows) {
+                            userRows = rows;
+                            box.innerHTML = '<table class="tg-users"><thead><tr><th>User</th><th>On</th><th>Max per movie (GB)</th>' +
+                                '<th>Max per episode (MB)</th><th>Movies / week</th><th>Episodes / week</th><th>Used</th></tr></thead><tbody>' +
+                                rows.map(function (r, i) {
+                                    var l = r.limits;
+                                    function num(name, value, step) {
+                                        return '<td><input type="number" min="0" step="' + step + '" data-row="' + i + '" data-f="' + name + '" value="' + (value > 0 ? value : '') + '" /></td>';
+                                    }
+                                    return '<tr><td>' + esc(r.user.Name) + '</td>' +
+                                        '<td><input type="checkbox" data-row="' + i + '" data-f="enabled"' + (l.enabled ? ' checked' : '') + ' /></td>' +
+                                        num('maxMovieGb', l.maxMovieMb > 0 ? +(l.maxMovieMb / 1024).toFixed(2) : 0, 'any') +
+                                        num('maxEpisodeMb', l.maxEpisodeMb, '1') +
+                                        num('moviesPerWeek', l.moviesPerWeek, '1') +
+                                        num('episodesPerWeek', l.episodesPerWeek, '1') +
+                                        '<td>' + l.moviesUsed + ' movies, ' + l.episodesUsed + ' episodes</td></tr>';
+                                }).join('') + '</tbody></table>';
+                            box.querySelectorAll('[data-row]').forEach(function (el) {
+                                el.addEventListener('change', function () { userRows[+el.getAttribute('data-row')].dirty = true; });
+                            });
+                        });
+                    }, function () { box.textContent = 'Could not read the users.'; });
+                }
+
+                function saveUsers() {
+                    return Promise.all(userRows.map(function (r, i) {
+                        if (!r.dirty) { return null; }
+                        function v(name) { var el = page.querySelector('[data-row="' + i + '"][data-f="' + name + '"]'); return el.type === 'checkbox' ? el.checked : (parseFloat(el.value) || 0); }
+                        return ApiClient.fetch({
+                            url: ApiClient.getUrl('Tortugarr/v1/Users/' + r.user.Id + '/Limits'), type: 'PUT', dataType: 'json', contentType: 'application/json',
+                            data: JSON.stringify({
+                                enabled: v('enabled'), maxMovieMb: Math.round(v('maxMovieGb') * 1024), maxEpisodeMb: Math.round(v('maxEpisodeMb')),
+                                moviesPerWeek: Math.round(v('moviesPerWeek')), episodesPerWeek: Math.round(v('episodesPerWeek'))
+                            })
+                        });
+                    }));
+                }
+
                 function refreshStatus() {
                     // Asking for the capabilities also sets the library up once it is switched on.
                     return ApiClient.fetch({ url: ApiClient.getUrl('Tortugarr/v1/Capabilities'), type: 'GET', dataType: 'json' })
                         .then(function (c) {
-                            status(c.features.adult ? 'Adult library: on.' :
-                                   (page.querySelector('#AdultEnabled').checked ? 'Adult library: switched on, but not ready (it needs qBittorrent and Prowlarr).' : 'Adult library: off.'));
-                        }, function () { status('Could not read the status.'); });
+                            page.querySelector('#TortugarrStatus').textContent = c.features.adult ? 'Adult library: on.' :
+                                (page.querySelector('#AdultEnabled').checked ? 'Adult library: switched on, but not ready (it needs qBittorrent and Prowlarr).' : 'Adult library: off.');
+                        }, function () { page.querySelector('#TortugarrStatus').textContent = 'Could not read the status.'; });
                 }
-                page.addEventListener('pageshow', function () {
+
+                function load() {
                     Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-                        page.querySelector('#AdultEnabled').checked = !!config.AdultEnabled;
-                        page.querySelector('#AdultPath').textContent = config.AdultSavePath;
+                    return ApiClient.fetch({ url: ApiClient.getUrl('Tortugarr/v1/Settings'), type: 'GET', dataType: 'json' }).then(function (s) {
+                        settings = s;
+                        fillConnections();
+                        fill(downloads); fill(adult); fill(advanced);
+                        page.querySelector('#AdultEnabled').checked = !!s.AdultEnabled;
                         Dashboard.hideLoadingMsg();
                         refreshStatus();
-                    });
-                });
+                        return loadUsers();
+                    }, function () { Dashboard.hideLoadingMsg(); page.querySelector('#TgSaveStatus').textContent = 'Could not read the settings.'; });
+                }
+
+                renderConnections();
+                renderFields(page.querySelector('#TgDownloads'), downloads);
+                renderFields(page.querySelector('#TgAdult'), adult);
+                renderFields(page.querySelector('#TgAdvanced'), advanced);
+
+                page.addEventListener('pageshow', load);
+
                 page.querySelector('#TortugarrConfigForm').addEventListener('submit', function (e) {
                     e.preventDefault();
+                    var body = { AdultEnabled: page.querySelector('#AdultEnabled').checked };
+                    connections.forEach(function (c) {
+                        body[c.url] = field(c.url).value;
+                        if (c.user) { body[c.user] = field(c.user).value; }
+                        body[c.key] = field(c.key).value; // empty = keep the saved one
+                    });
+                    collect(downloads, body); collect(adult, body); collect(advanced, body);
+                    var status = page.querySelector('#TgSaveStatus');
                     Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-                        config.AdultEnabled = page.querySelector('#AdultEnabled').checked;
-                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
-                            Dashboard.processPluginConfigurationUpdateResult(result);
-                            refreshStatus();
-                        });
+                    ApiClient.fetch({
+                        url: ApiClient.getUrl('Tortugarr/v1/Settings'), type: 'PUT', dataType: 'json', contentType: 'application/json',
+                        data: JSON.stringify(body)
+                    }).then(function () {
+                        return saveUsers();
+                    }).then(function () {
+                        status.textContent = 'Saved.';
+                        Dashboard.hideLoadingMsg();
+                        return load();
+                    }, function (err) {
+                        Dashboard.hideLoadingMsg();
+                        var show = function (t) {
+                            var m = /"message"\s*:\s*"([^"]*)"/.exec(t || '');
+                            status.textContent = 'Not saved: ' + (m ? m[1] : 'the server refused it.');
+                        };
+                        if (err && err.text) { err.text().then(show, function () { show(''); }); } else { show(''); }
                     });
                     return false;
                 });

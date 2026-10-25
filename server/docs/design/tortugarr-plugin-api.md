@@ -509,6 +509,21 @@ Radarr or Sonarr configured), admins only like the rest.
 - **Cancel (3.2):** `DELETE /Tortugarr/v1/Searches/{searchId}` stops a running search (the job ends
   with `error.code` `cancelled`); the same search can then start fresh. 204, or 404.
 
+### 3.17 Settings page (administrators)
+
+The plugin's page in Jellyfin (Dashboard › Plugins › Tortugarr) uses its own routes, not Jellyfin's
+plugin-configuration route, so keys never reach the browser.
+- **`GET /Tortugarr/v1/Settings`**: every setting the page shows. A key or password comes only as
+  `<Name>Set: true|false`. Internal state (`HookKey`, `KnownLibraryIds`, `ManagedUserIds`) and
+  `UserLimits` (3.16) are left out.
+- **`PUT /Tortugarr/v1/Settings`** with the same names: fields left out stay as they are; an empty
+  key or password keeps the saved one. Everything is checked first (addresses http/https, patterns
+  that compile, whole numbers 0 or more, the download client type); one wrong field gives 400
+  `bad_request` naming it and nothing is saved. Answers like the GET.
+- **`POST /Tortugarr/v1/Settings/Test`** `{ service, url, key, username }` (service: sonarr, radarr,
+  prowlarr, bazarr, seerr, qbittorrent; an empty key or password means the saved one):
+  `{ ok: true, version }` or `{ ok: false, message }`.
+
 ## 4. Filters (the same as the app today)
 
 From the app code (the app's `prowlarr_search_client.dart` `_isValidMedia`,
