@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.20.02 - unreleased
+## 4.20.02 - 2026-10-27
 
 **App**
 
