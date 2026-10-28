@@ -5,8 +5,8 @@
 <h1 align="center">Every pirate needs a harbor.</h1>
 
 <p align="center">
-  <b>Your own streaming service. On your TV. Yours forever.</b><br>
-  No subscriptions. No ads. Nothing disappears because a licence ran out.
+  <b>Moonfin for Jellyfin on Android TV, taken further: find and download right from the remote.</b><br>
+  One installer sets up the whole *arr stack for you. No subscriptions, no ads, nothing disappears.
 </p>
 
 > **Built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core).** The Tortugarr app is a
