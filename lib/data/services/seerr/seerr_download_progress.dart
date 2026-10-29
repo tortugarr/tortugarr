@@ -29,6 +29,8 @@ class LiveDownloadProgress {
   }
 
   static void _set(List<TortugarrQueueItem> queue) {
+    // An imported download counts as gone, like one that left the queue.
+    queue = [for (final q in queue) if (!q.isImported) q];
     _queue = queue;
     _left = {for (final q in queue) q.downloadId: q.sizeLeft};
     _at = DateTime.now();

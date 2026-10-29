@@ -724,6 +724,7 @@ class TortugarrQueueItem {
     this.tvdbId,
     this.size = 0,
     this.sizeLeft = 0,
+    this.status,
   });
 
   factory TortugarrQueueItem.fromJson(Map<String, dynamic> j) {
@@ -740,6 +741,7 @@ class TortugarrQueueItem {
       tvdbId: (j['tvdbId'] as num?)?.toInt(),
       size: size,
       sizeLeft: left,
+      status: j['status'] as String?,
     );
   }
 
@@ -755,4 +757,14 @@ class TortugarrQueueItem {
   final int? tvdbId;
   final int size;
   final int sizeLeft;
+
+  /// The plugin's status: downloading, queued, paused, importPending,
+  /// importing, completed, failed or warning.
+  final String? status;
+
+  /// Sonarr/Radarr keep an imported download in their queue until their next
+  /// look at the client, up to a minute or more; the plugin reports it as
+  /// completed. The file is in the library by then (2026-10-29, VisionQuest
+  /// S01E06 showed Importing for minutes after the import).
+  bool get isImported => status == 'completed';
 }

@@ -660,7 +660,38 @@ class ItemDetailViewModel extends ChangeNotifier {
     if (_isSeerrOnly && _seerrResolvedLibraryId == null && seerr != null) {
       _seerrResolvedLibraryId = _libraryIdFromSeerr(seerr.state);
     }
+    final downloading = seerr != null &&
+        (seerr.state.hdDownload != null || seerr.state.download4k != null);
+    if (_seerrWasDownloading && !downloading) _reloadAfterImport();
+    _seerrWasDownloading = downloading;
     notifyListeners();
+  }
+
+  bool _seerrWasDownloading = false;
+  Timer? _importReloadTimer;
+
+  /// A download for this title just finished: fetch the episodes again so the
+  /// new one can be played without leaving the page. The plugin refreshes the
+  /// season in Jellyfin as Sonarr imports, so the first look usually has it;
+  /// the second catches a slower library scan.
+  void _reloadAfterImport() {
+    void reload() {
+      if (_isDisposed) return;
+      final type = _item?.type;
+      if (type == 'Series') {
+        unawaited(_loadSeasons());
+        unawaited(_loadNextUp());
+        unawaited(loadMissingEpisodes());
+      } else if (type == 'Season' || type == 'Episode') {
+        unawaited(_loadEpisodes());
+        unawaited(_loadSeasons());
+        unawaited(loadMissingEpisodes());
+      }
+    }
+
+    reload();
+    _importReloadTimer?.cancel();
+    _importReloadTimer = Timer(const Duration(seconds: 15), reload);
   }
 
   // Seerr hands back the media server's own id for a title it knows is there.
@@ -2795,6 +2826,7 @@ class ItemDetailViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    _importReloadTimer?.cancel();
     userDataSync.removeListener(_onUserDataChanged);
     // The child owns a download poll timer, so this is what stops it.
     _seerr?.removeListener(_onSeerrChanged);

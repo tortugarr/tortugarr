@@ -113,6 +113,41 @@ void main() {
     LiveDownloadProgress.setForTest(null);
   });
 
+  // 2026-10-29 on the TV: VisionQuest S01E06 showed Importing for minutes
+  // after Sonarr imported it, as Sonarr kept it in its queue as completed.
+  test('an imported download in the queue counts as gone', () {
+    LiveDownloadProgress.setQueueForTest(const [
+      TortugarrQueueItem(
+          downloadId: 'DONE', kind: 'episode', tvdbId: 7, size: 500, sizeLeft: 0, status: 'completed'),
+      TortugarrQueueItem(
+          downloadId: 'WAIT', kind: 'episode', tvdbId: 8, size: 500, sizeLeft: 0, status: 'importPending'),
+    ]);
+    expect(LiveDownloadProgress.isGone('done'), isTrue);
+    expect(
+      SeerrDownloadSummary.forMedia(
+        status: 3,
+        items: const [SeerrDownloadingItem(size: 500, sizeLeft: 0, downloadId: 'done')],
+        tvdbId: 7,
+      ),
+      isNull,
+    );
+    // Downloaded, Sonarr not done yet: still importing.
+    expect(SeerrDownloadSummary.forMedia(status: 5, items: null, tvdbId: 8)!.isImporting, isTrue);
+    LiveDownloadProgress.setForTest(null);
+  });
+
+  test('the queue item reads the plugin status', () {
+    final item = TortugarrQueueItem.fromJson(const {
+      'downloadId': 'abc',
+      'kind': 'episode',
+      'size': 10,
+      'sizeLeft': 0,
+      'status': 'completed',
+    });
+    expect(item.isImported, isTrue);
+    expect(TortugarrQueueItem.fromJson(const {'downloadId': 'abc', 'kind': 'movie'}).isImported, isFalse);
+  });
+
   test('a download Seerr already lists is counted once', () {
     LiveDownloadProgress.setQueueForTest(const [
       TortugarrQueueItem(downloadId: 'ABC', kind: 'movie', tmdbId: 7, size: 1000, sizeLeft: 500),
