@@ -91,7 +91,7 @@ public class PluginConfiguration : BasePluginConfiguration
     public int EarlyReleaseDays { get; set; } = 2;
 
     public string HardRejectionRegex { get; set; } =
-        @"blocklist|not enough seeders|must not contain|terms which are not allowed|unknown series|unable to parse|not requested|wasn.t requested|does not match|doesn.t match|wrong (series|episode|season)";
+        @"blocklist|not enough seeders|must not contain|terms which are not allowed|unknown series|unknown movie|unable to match|unable to parse|not requested|wasn.t requested|does not match|doesn.t match|wrong (series|episode|season)";
 
     public string VideoExtensions { get; set; } = ".mkv .mp4 .m4v .avi .mov .wmv .ts .m2ts .webm .mpg .mpeg .vob";
 

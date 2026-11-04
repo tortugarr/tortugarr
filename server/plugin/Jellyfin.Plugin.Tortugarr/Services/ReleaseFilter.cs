@@ -147,6 +147,16 @@ public sealed class ReleaseFilter
     private static readonly Regex UpgradeRejection =
         new(@"existing file|not an upgrade|does not allow upgrades", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+    /// <summary>
+    /// Radarr's/Sonarr's verdict that a release is a different title ("Unknown Movie. Unable to
+    /// match to correct movie using release title."). Always a hard rejection, also for a saved
+    /// HardRejectionRegex from before "unknown movie" was in the default: an indexer that answers
+    /// an unknown query with its newest uploads (Torrent9) would otherwise fill the picker with
+    /// unrelated films.
+    /// </summary>
+    private static readonly Regex WrongTitle =
+        new(@"unknown (movie|series)|unable to match", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
     private readonly PluginConfiguration _cfg;
     private readonly Regex _junk;
     private readonly Regex _quality;
@@ -255,7 +265,7 @@ public sealed class ReleaseFilter
                 continue;
             }
 
-            if (r.Rejections.FirstOrDefault(x => _hard.IsMatch(x)) is { } hard)
+            if (r.Rejections.FirstOrDefault(x => WrongTitle.IsMatch(x) || _hard.IsMatch(x)) is { } hard)
             {
                 Drop(hard); // Sonarr's/Radarr's own reason, e.g. "Unknown Series"
                 continue; // 4.2

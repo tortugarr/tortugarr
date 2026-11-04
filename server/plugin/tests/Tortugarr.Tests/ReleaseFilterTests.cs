@@ -250,4 +250,26 @@ public class SdSizeAndReasonTests
         f.Apply(new[] { R("Other.Show.S01E04.Bonanza.1080p.WEB-DL-GRP", 900 * MB, "Unknown Series") }, "episode", null);
         Assert.Equal(1, f.Dropped["Unknown Series"]);
     }
+
+    private const string WrongMovie = "Unknown Movie. Unable to match to correct movie using release title.";
+
+    [Fact]
+    public void A_release_radarr_matched_to_another_movie_is_dropped()
+    {
+        var f = new ReleaseFilter(new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration());
+        var (kept, _) = f.Apply(new[] { R("Jim.Queen.2026.FRENCH.1080p.WEB.H264-SUPPLY", 4000 * MB, WrongMovie) }, "movie", null);
+        Assert.Empty(kept);
+        Assert.Equal(1, f.Dropped[WrongMovie]);
+    }
+
+    [Fact]
+    public void A_wrong_movie_is_dropped_with_a_hard_rejection_regex_saved_before_the_fix()
+    {
+        var cfg = new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration
+        {
+            HardRejectionRegex = @"blocklist|not enough seeders|must not contain|terms which are not allowed|unknown series|unable to parse|not requested|wasn.t requested|does not match|doesn.t match|wrong (series|episode|season)",
+        };
+        var (kept, _) = new ReleaseFilter(cfg).Apply(new[] { R("A.Voix.Basse.2026.FRENCH.1080p.WEB.DD5.1.H264-BraD", 4000 * MB, WrongMovie) }, "movie", null);
+        Assert.Empty(kept);
+    }
 }
