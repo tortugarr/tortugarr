@@ -975,7 +975,7 @@ public sealed class TortugarrService
         return (int?)profiles.FirstOrDefault(p => Regex.IsMatch((string?)p?["name"] ?? string.Empty, "^(" + pattern + ")$", RegexOptions.IgnoreCase))?["id"];
     }
 
-    private static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct, bool documentary = false)
+    internal static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct, bool documentary = false)
     {
         var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
         var docs = AllowedRoots(Cfg.DocumentaryRoots);

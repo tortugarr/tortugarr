@@ -35,5 +35,6 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddHostedService<FlareSolverrTagger>();
         serviceCollection.AddHostedService<MoonbaseGate>();
         serviceCollection.AddHostedService<QbitWatchdog>();
+        serviceCollection.AddHostedService<SpaceRescue>();
     }
 }
