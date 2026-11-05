@@ -22,6 +22,21 @@ public sealed class SeriesService
     private static bool Aired(JsonNode e, DateTimeOffset now) =>
         DateTimeOffset.TryParse((string?)e["airDateUtc"], out var d) && d <= now;
 
+    /// <summary>
+    /// The TVDB id of the series with TMDB id <paramref name="tmdbId"/>, from Sonarr's lookup
+    /// ("tmdb:N"), or null. For a new title TMDB often has no TVDB link yet while TVDB already
+    /// lists it (The Traitor Within, 2026), and Seerr only knows what TMDB knows. The lookup
+    /// also reads N as a TVDB id, so only a result whose own TMDB id matches is taken.
+    /// </summary>
+    public async Task<int?> TvdbIdForTmdbAsync(int tmdbId, CancellationToken ct) =>
+        PickTvdbForTmdb(await _svc.Sonarr.Get($"/series/lookup?term=tmdb:{tmdbId}", ct).ConfigureAwait(false) as JsonArray, tmdbId);
+
+    internal static int? PickTvdbForTmdb(JsonArray? results, int tmdbId) =>
+        (results ?? new JsonArray())
+            .Where(r => r is not null && (int?)r["tmdbId"] == tmdbId && ((int?)r["tvdbId"] ?? 0) > 0)
+            .Select(r => (int?)r!["tvdbId"])
+            .FirstOrDefault();
+
     public async Task<object> GetAsync(int tvdbId, CancellationToken ct)
     {
         var sonarr = _svc.Sonarr;

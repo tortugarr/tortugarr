@@ -75,6 +75,7 @@ class DownloadNowButton extends StatefulWidget {
       return _runPluginTv(
         context,
         title: title,
+        tmdbId: tmdbId,
         tvdbId: tvdbId,
         seriesItemId: seriesItemId,
         seasons: seasons,
@@ -256,6 +257,7 @@ class DownloadNowButton extends StatefulWidget {
   static Future<void> _runPluginTv(
     BuildContext context, {
     required String title,
+    int? tmdbId,
     int? tvdbId,
     String? seriesItemId,
     List<int>? seasons,
@@ -270,6 +272,12 @@ class DownloadNowButton extends StatefulWidget {
     if ((tvdbId == null || tvdbId <= 0) && seriesItemId != null) {
       final ids = await TortugarrPluginClient().jellyfinProviderIds(seriesItemId);
       tvdbId = int.tryParse(ids['Tvdb'] ?? '');
+      if (!context.mounted) return;
+    }
+    // From Seerr (a title not in the library): TMDB may not link the TVDB
+    // id yet, but Sonarr's lookup knows it.
+    if ((tvdbId == null || tvdbId <= 0) && tmdbId != null && tmdbId > 0) {
+      tvdbId = await TortugarrPluginClient().tvdbIdForTmdb(tmdbId);
       if (!context.mounted) return;
     }
     if (tvdbId == null || tvdbId <= 0) {

@@ -616,6 +616,19 @@ class TortugarrPluginClient {
     });
   }
 
+  /// The TVDB id Sonarr has for the series with [tmdbId], or null. New
+  /// series often lack the TVDB link on TMDB (so Seerr has none) while TVDB
+  /// already lists them. Null too on a plugin from before this endpoint.
+  Future<int?> tvdbIdForTmdb(int tmdbId) async {
+    try {
+      final data = await _send('GET', '/Series/Tvdb', query: {'tmdbId': tmdbId});
+      final id = data is Map ? data['tvdbId'] : null;
+      return id is int && id > 0 ? id : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Sonarr's view of a series (spec 3.14), or null when Sonarr does not
   /// have it (`inSonarr: false`).
   Future<Map<String, dynamic>?> seriesStatus(int tvdbId) async {

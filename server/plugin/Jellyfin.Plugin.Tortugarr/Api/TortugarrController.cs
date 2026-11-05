@@ -217,6 +217,20 @@ public class TortugarrController : ControllerBase
         && System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(
             System.Text.Encoding.UTF8.GetBytes(configured), System.Text.Encoding.UTF8.GetBytes(sent));
 
+    /// <summary>The TVDB id for a TMDB id when TMDB (and so Seerr) has none: {"tvdbId": n} or 404 not_found.</summary>
+    [HttpGet("Series/Tvdb")]
+    public Task<IActionResult> SeriesTvdb([FromQuery] int tmdbId) =>
+        Run(async () =>
+        {
+            if (!MayDownload(out _))
+            {
+                return NotAllowed();
+            }
+
+            var tvdbId = tmdbId > 0 ? await _series.TvdbIdForTmdbAsync(tmdbId, HttpContext.RequestAborted).ConfigureAwait(false) : null;
+            return tvdbId is { } id ? Json(new { tvdbId = id }) : Error(404, "not_found", $"Sonarr knows no series with TMDB id {tmdbId}");
+        });
+
     /// <summary>3.14 - a series as Sonarr sees it, with the queue (missing-episodes view).</summary>
     [HttpGet("Series/{tvdbId:int}")]
     public Task<IActionResult> Series([FromRoute] int tvdbId) =>
