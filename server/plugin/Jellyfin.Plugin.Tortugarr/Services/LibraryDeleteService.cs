@@ -96,7 +96,9 @@ public sealed class LibraryDeleteService
                 seerr = await ClearSeerr("tv", tvTmdb, ct).ConfigureAwait(false);
                 break;
             default:
-                throw new ArgumentException("only a movie, an episode, a season or a series can be deleted");
+                // A playlist, collection, music, book...: nothing of Radarr's/Sonarr's. not_managed makes
+                // the app delete it through Jellyfin itself (a playlist could not be deleted, 2026-11-05).
+                throw new ConflictException("not_managed", "only a movie, an episode, a season or a series is deleted through Radarr/Sonarr");
         }
 
         var torrentsRemoved = await RemoveTorrents(torrents, item is Movie ? Cfg.MovieCategory : Cfg.TvCategory, ct).ConfigureAwait(false);

@@ -1523,6 +1523,10 @@ class ItemDetailViewModel extends ChangeNotifier {
     }
   }
 
+  /// What Radarr/Sonarr manage, and so the Tortugarr plugin deletes. Anything
+  /// else (a playlist, a collection, music...) goes straight to Jellyfin.
+  static const _arrManagedTypes = {'Movie', 'Episode', 'Season', 'Series'};
+
   /// Returns `null` when the item was deleted, otherwise why it failed.
   Future<DeleteItemFailure?> deleteItem() async {
     // Jellyfin only has read access to the media folders here, so files that
@@ -1537,7 +1541,10 @@ class ItemDetailViewModel extends ChangeNotifier {
         debugPrint('[ItemDetailViewModel] Radarr/Sonarr delete failed: $e');
         return DeleteItemFailure(detail: '$e');
       }
-    } else if (current != null && DownloadFeatures.viaPlugin && DownloadFeatures.deleteTitles) {
+    } else if (current != null &&
+        DownloadFeatures.viaPlugin &&
+        DownloadFeatures.deleteTitles &&
+        _arrManagedTypes.contains(current.rawData['Type'])) {
       // Public build: the server's Tortugarr plugin deletes through
       // Radarr/Sonarr and clears Seerr; the app only waits for the removal.
       try {
