@@ -222,6 +222,21 @@ public sealed class QbitClient
         await Request(HttpMethod.Post, "/api/v2/torrents/delete", form, cookie, ct).ConfigureAwait(false);
     }
 
+    /// <summary>Asks qBittorrent to hash the torrents' files again.</summary>
+    public async Task Recheck(IEnumerable<string> hashes, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        var form = new FormUrlEncodedContent(new Dictionary<string, string> { ["hashes"] = string.Join('|', hashes).ToLowerInvariant() });
+        await Request(HttpMethod.Post, "/api/v2/torrents/recheck", form, cookie, ct).ConfigureAwait(false);
+    }
+
+    /// <summary>Closes qBittorrent cleanly; something on its machine has to start it again.</summary>
+    public async Task Shutdown(CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        await Request(HttpMethod.Post, "/api/v2/app/shutdown", null, cookie, ct).ConfigureAwait(false);
+    }
+
     /// <summary>Points a category at a folder; torrents added to it from now on save there.</summary>
     public async Task EditCategory(string category, string savePath, CancellationToken ct)
     {

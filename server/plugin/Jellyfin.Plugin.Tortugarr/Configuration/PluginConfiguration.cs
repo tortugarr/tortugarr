@@ -137,6 +137,18 @@ public class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>The last check's result, e.g. "Moonbase 3.1.0.0 held back: it no longer has ...".</summary>
     public string MoonbaseGateStatus { get; set; } = string.Empty;
+
+    /// <summary>Rechecks torrents that qBittorrent shows as 100 % but never finishes (QbitWatchdog).</summary>
+    public bool QbitWatchdogEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Lets the watchdog close qBittorrent when a recheck hangs. Only turn on when something on
+    /// qBittorrent's machine starts it again (the Windows keepalive task); off by default.
+    /// </summary>
+    public bool QbitWatchdogRestart { get; set; }
+
+    /// <summary>The watchdog's last action, e.g. "2026-11-05 04:40Z rechecked 3 stuck torrents".</summary>
+    public string QbitWatchdogStatus { get; set; } = string.Empty;
 }
 
 /// <summary>Download limits for one non-administrator. 0 means no limit for that field.</summary>
