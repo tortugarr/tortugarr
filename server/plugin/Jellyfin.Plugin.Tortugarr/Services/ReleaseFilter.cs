@@ -155,7 +155,7 @@ public sealed class ReleaseFilter
     /// unrelated films.
     /// </summary>
     private static readonly Regex FreeSpaceRejection =
-        new(@"free space|may not fit", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        new(@"free space|disk space|may not fit", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     private static readonly Regex WrongTitle =
         new(@"unknown (movie|series)|unable to match", RegexOptions.IgnoreCase | RegexOptions.Compiled);

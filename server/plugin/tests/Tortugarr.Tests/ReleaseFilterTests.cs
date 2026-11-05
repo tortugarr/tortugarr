@@ -280,10 +280,11 @@ public class SdSizeAndReasonTests
         var f = new ReleaseFilter(new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration());
         var (kept, _) = f.Apply(new[]
         {
-            R("Jo.Nesbos.Detective.Hole.S01E04.2160p.WEB.h265-ETHEL", 9000 * MB, "Episode may not fit on disk"),
+            R("Jo.Nesbos.Detective.Hole.S01E04.2160p.WEB.h265-ETHEL", 9000 * MB, "Not enough disk space"),
+            R("Jo.Nesbos.Detective.Hole.S01E04.2160p.WEB.h265-OTHER", 9000 * MB, "Episode may not fit on disk"),
             R("Jo.Nesbos.Detective.Hole.S01E04.1080p.WEB.h264-ETHEL", 3000 * MB, "Not enough free space (100.00 MB) to import after download: 67.2 MB. (Settings: Media Management: Minimum Free Space)"),
         }, "episode", null);
-        Assert.Equal(2, kept.Count);
+        Assert.Equal(3, kept.Count);
         Assert.All(kept, k => Assert.True(k.Recommended));
     }
 
