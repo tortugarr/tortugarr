@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased (TV test build 2000059, Tortugarr plugin 1.3.0.2)
+
+**App**
+
+- A series that TMDB has not linked to TVDB yet (common for new titles, e.g. *The Traitor
+  Within*) can be downloaded: the app asks the server for the TVDB id instead of stopping with
+  "has no TVDB id".
+
+**Server** (Tortugarr plugin 1.3.0.2)
+
+- The release picker no longer lists torrents for other films. Radarr marks them "Unknown
+  Movie"; that is now always a hard rejection, also with release filters saved earlier.
+- New `GET /Tortugarr/v1/Series/Tvdb?tmdbId=`: the TVDB id Sonarr knows for a TMDB id.
+
 ## 4.20.02 - 2026-10-27
 
 **App**

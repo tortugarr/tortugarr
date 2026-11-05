@@ -342,6 +342,21 @@ void main() {
     expect(TortugarrPluginClient.seasonMonitoringOf({'0': false, '2': true, 'x': true}), {0: false, 2: true});
   });
 
+  test('tvdbIdForTmdb: the id Sonarr knows, null when unknown or on an older plugin', () async {
+    final adapter = _FakeAdapter({
+      'GET /Series/Tvdb': [
+        (200, {'tvdbId': 469502}),
+        (404, {'error': {'code': 'not_found', 'message': 'Sonarr knows no series with TMDB id 1'}}),
+      ],
+    });
+    final plugin = _plugin(adapter);
+    expect(await plugin.tvdbIdForTmdb(300755), 469502);
+    expect(adapter.sent.last.queryParameters['tmdbId'], 300755);
+    expect(await plugin.tvdbIdForTmdb(1), isNull);
+    // A plugin from before the endpoint answers 404 without a body.
+    expect(await _plugin(_FakeAdapter({})).tvdbIdForTmdb(300755), isNull);
+  });
+
   test('dropped reasons explain an empty search', () {
     final sdOnly = TortugarrSearchResult.fromJson({
       'arrId': 1,
