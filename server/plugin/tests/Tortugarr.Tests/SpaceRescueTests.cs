@@ -41,6 +41,7 @@ public class SpaceRescueTests
         Assert.Equal("/data/library/9", (string?)changed["activeDirectory"]);
         Assert.Equal("/data/library/9", (string?)changed["activeAnimeDirectory"]);
         Assert.Equal("k", (string?)changed["apiKey"]); // the rest is sent back unchanged
+        Assert.False(changed.ContainsKey("id")); // read-only in Seerr's API
         Assert.Equal("/data/library/4", (string?)server["activeDirectory"]); // the input is not touched
     }
 

@@ -56,7 +56,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
                     }
                     catch (Exception e)
                     {
-                        _log.LogDebug(e, "Tortugarr: free-space check step skipped");
+                        _log.LogWarning(e, "Tortugarr: free-space check step failed");
                     }
                 }
 
@@ -120,6 +120,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
         }
 
         var changed = (JsonObject)server.DeepClone();
+        changed.Remove("id"); // read-only: Seerr answers 400 when it is sent back (2026-11-05)
         changed["activeDirectory"] = target;
         if (((string?)changed["activeAnimeDirectory"] ?? string.Empty).TrimEnd('/') == current)
         {

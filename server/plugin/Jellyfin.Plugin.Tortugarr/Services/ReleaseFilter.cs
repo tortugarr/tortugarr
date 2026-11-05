@@ -154,6 +154,9 @@ public sealed class ReleaseFilter
     /// an unknown query with its newest uploads (Torrent9) would otherwise fill the picker with
     /// unrelated films.
     /// </summary>
+    private static readonly Regex FreeSpaceRejection =
+        new(@"free space|may not fit", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
     private static readonly Regex WrongTitle =
         new(@"unknown (movie|series)|unable to match", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -271,7 +274,9 @@ public sealed class ReleaseFilter
                 continue; // 4.2
             }
 
-            var rejections = r.Rejections;
+            // A full drive is not the release's fault: the grab moves the title to the drive with
+            // the most free space first (TortugarrService.MakeRoomAsync).
+            var rejections = r.Rejections.Where(x => !FreeSpaceRejection.IsMatch(x)).ToList();
             if (rejections.Any(x => UpgradeRejection.IsMatch(x)))
             {
                 if (!r.SeasonPack)

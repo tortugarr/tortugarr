@@ -1192,6 +1192,53 @@ public sealed class TortugarrService
 
     private ArrClient Arr(SearchJob job) => job.IsMovie ? Radarr : Sonarr;
 
+    /// <summary>
+    /// A title whose folder's drive cannot hold the download moves, with its files, to the root
+    /// with the most free space before the grab, so the download can be imported. Sonarr always
+    /// imports into the series' folder (2026-11-05: Detective Hole sat on E: with 67 MB left and
+    /// every release said "may not fit"). Where files live does not matter to the app.
+    /// </summary>
+    private async Task MakeRoomAsync(ArrClient arr, SearchJob job, long size, CancellationToken ct)
+    {
+        var id = job.ArrId;
+        if (job.Request.Type == "episode")
+        {
+            id = (int?)(await arr.Get($"/episode/{job.ArrId}", ct).ConfigureAwait(false))?["seriesId"] ?? 0;
+        }
+
+        var path = job.IsMovie ? $"/movie/{id}" : $"/series/{id}";
+        var title = id > 0 ? await arr.Get(path, ct).ConfigureAwait(false) : null;
+        var from = ((string?)title?["rootFolderPath"] ?? string.Empty).TrimEnd('/');
+        if (title is null || from.Length == 0)
+        {
+            return;
+        }
+
+        var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
+        var free = (long?)roots.FirstOrDefault(r => ((string?)r?["path"] ?? string.Empty).TrimEnd('/') == from)?["freeSpace"];
+        if (!NeedsRoom(free, size))
+        {
+            return;
+        }
+
+        var target = (await RootWithMostSpace(arr, ct, job.IsMovie && IsDocumentary(title)).ConfigureAwait(false)).TrimEnd('/');
+        if (target == from)
+        {
+            return;
+        }
+
+        await arr.Put(job.IsMovie ? "/movie/editor" : "/series/editor", new JsonObject
+        {
+            [job.IsMovie ? "movieIds" : "seriesIds"] = new JsonArray(id),
+            ["rootFolderPath"] = target,
+            ["moveFiles"] = true,
+        }, ct).ConfigureAwait(false);
+        _log.LogWarning("Tortugarr: {Title} moved from {From} to {To} before the grab: no room for {Size} MB", (string?)title["title"], from, target, size >> 20);
+    }
+
+    /// <summary>True when a drive with this much free space cannot take the download (2 GB to spare).</summary>
+    internal static bool NeedsRoom(long? free, long size) => free is long f && f < size + (2L << 30);
+
     /// <summary>Asks Radarr/Sonarr to download the release the user picked.</summary>
     private async Task SendGrab(SearchJob job, GrabRequest g, ReleaseDto shown, CancellationToken ct)
     {
@@ -1209,6 +1256,7 @@ public sealed class TortugarrService
         }
 
         await PointCategoryAtRoomiestDrive(job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory, ct).ConfigureAwait(false);
+        await MakeRoomAsync(arr, job, shown.Size, ct).ConfigureAwait(false);
         try
         {
             await arr.Post("/release", GrabBody(job.Request.Type, job.ArrId, g.Guid, g.IndexerId), ct, 60).ConfigureAwait(false);

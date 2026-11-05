@@ -272,4 +272,25 @@ public class SdSizeAndReasonTests
         var (kept, _) = new ReleaseFilter(cfg).Apply(new[] { R("A.Voix.Basse.2026.FRENCH.1080p.WEB.DD5.1.H264-BraD", 4000 * MB, WrongMovie) }, "movie", null);
         Assert.Empty(kept);
     }
+
+    [Fact]
+    public void A_full_drive_does_not_count_against_a_release()
+    {
+        // Detective Hole S01E04 on 2026-11-05: the series sat on a full drive; the grab moves it.
+        var f = new ReleaseFilter(new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration());
+        var (kept, _) = f.Apply(new[]
+        {
+            R("Jo.Nesbos.Detective.Hole.S01E04.2160p.WEB.h265-ETHEL", 9000 * MB, "Episode may not fit on disk"),
+            R("Jo.Nesbos.Detective.Hole.S01E04.1080p.WEB.h264-ETHEL", 3000 * MB, "Not enough free space (100.00 MB) to import after download: 67.2 MB. (Settings: Media Management: Minimum Free Space)"),
+        }, "episode", null);
+        Assert.Equal(2, kept.Count);
+        Assert.All(kept, k => Assert.True(k.Recommended));
+    }
+
+    [Theory]
+    [InlineData(67_200_000L, 3_000_000_000L, true)]
+    [InlineData(170_000_000_000L, 3_000_000_000L, false)]
+    [InlineData(4_500_000_000L, 3_000_000_000L, true)] // 2 GB to spare
+    public void A_grab_needs_room_when_the_drive_is_too_full(long free, long size, bool needs) =>
+        Assert.Equal(needs, Jellyfin.Plugin.Tortugarr.Services.TortugarrService.NeedsRoom(free, size));
 }
