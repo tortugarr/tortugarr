@@ -190,6 +190,10 @@ final List<SyncedField> syncedFields = <SyncedField>[
   SyncedField('homeImageUseSeriesImage', UserPreferences.seriesThumbnailsEnabled, SyncCodec.boolean),
   SyncedField('mediaTypeBadgeBehavior', UserPreferences.mediaTypeBadgeBehavior, SyncCodec.enumName, enumValues: prefs.MediaTypeBadgeBehavior.values),
   SyncedField('backdropEnabled', UserPreferences.backdropEnabled, SyncCodec.boolean),
+  // Moonbase 2.5.0 (2026-10-30) split backdropEnabled into home and details. The app has one
+  // switch for both, so it writes all three and takes whichever the server sends.
+  SyncedField('homeBackdropEnabled', UserPreferences.backdropEnabled, SyncCodec.boolean),
+  SyncedField('detailsBackdropEnabled', UserPreferences.backdropEnabled, SyncCodec.boolean),
   SyncedField('detailsScreenBlur', UserPreferences.detailsBackgroundBlurAmount, SyncCodec.intAsText),
   SyncedField('browsingBlur', UserPreferences.browsingBackgroundBlurAmount, SyncCodec.intAsText),
   SyncedField('mdblistEnabled', UserPreferences.enableAdditionalRatings, SyncCodec.boolean),

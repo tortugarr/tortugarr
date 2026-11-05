@@ -27,6 +27,8 @@ void main() {
     'autoDownloadKeepUnwatched',
     'autoplayNextEpisode',
     'backdropEnabled',
+    'detailsBackdropEnabled',
+    'homeBackdropEnabled',
     'browsingBlur',
     'cardFocusExpansion',
     'cinemaModeEnabled',

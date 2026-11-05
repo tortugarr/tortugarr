@@ -85,6 +85,7 @@ detailScreenStyle
 detailShowTechnicalDetails
 detailTrailersExternal
 detailUseSeriesThumbnails
+detailsBackdropEnabled
 detailsScreenBlur
 diagnosticLoggingEnabled
 displayAudioAlbumArtists
@@ -139,6 +140,7 @@ hiddenOsdButtonsTv
 hideBackdropsInLibraries
 hideDetailsMediaDescription
 hideHomeMediaDescription
+homeBackdropEnabled
 homeImageTypeContinueWatching
 homeImageUseSeriesImage
 homeRowInfoOverlay
