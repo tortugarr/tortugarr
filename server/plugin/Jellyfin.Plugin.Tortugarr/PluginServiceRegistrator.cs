@@ -32,5 +32,6 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddSingleton<SeriesService>();
         serviceCollection.AddSingleton<SpaceService>();
         serviceCollection.AddHostedService<FlareSolverrTagger>();
+        serviceCollection.AddHostedService<MoonbaseGate>();
     }
 }

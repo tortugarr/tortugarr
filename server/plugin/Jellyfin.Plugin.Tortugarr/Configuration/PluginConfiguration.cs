@@ -128,6 +128,15 @@ public class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Non-administrators who may use Download Now within these limits (a "limited downloader").</summary>
     public UserLimit[] UserLimits { get; set; } = Array.Empty<UserLimit>();
+
+    /// <summary>Moonbase updates only through the Tortugarr repository, after the app-contract check (MoonbaseGate).</summary>
+    public bool MoonbaseGateEnabled { get; set; } = true;
+
+    /// <summary>The newest Moonbase version that passed the check (empty: the installed one on the first run).</summary>
+    public string MoonbaseApprovedVersion { get; set; } = string.Empty;
+
+    /// <summary>The last check's result, e.g. "Moonbase 3.1.0.0 held back: it no longer has ...".</summary>
+    public string MoonbaseGateStatus { get; set; } = string.Empty;
 }
 
 /// <summary>Download limits for one non-administrator. 0 means no limit for that field.</summary>

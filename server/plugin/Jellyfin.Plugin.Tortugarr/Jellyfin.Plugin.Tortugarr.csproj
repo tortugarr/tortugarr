@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Jellyfin.Plugin.Tortugarr</RootNamespace>
-    <AssemblyVersion>1.3.0.3</AssemblyVersion>
-    <FileVersion>1.3.0.3</FileVersion>
+    <AssemblyVersion>1.3.0.4</AssemblyVersion>
+    <FileVersion>1.3.0.4</FileVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Configuration\configPage.html" />
+    <EmbeddedResource Include="Configuration\moonbase-contract.txt" />
   </ItemGroup>
 
   <ItemGroup>

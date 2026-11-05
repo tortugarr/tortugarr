@@ -11,7 +11,8 @@ namespace Jellyfin.Plugin.Tortugarr.Api;
 /// <summary>
 /// Spec 3.13: a plugin catalog served by the plugin itself, so Jellyfin's plugin page finds
 /// Tortugarr in a repository (without one it shows "error fetching repository details").
-/// It lists only the installed version and serves that version's files as the package zip.
+/// It lists the installed version (served as the package zip) and the approved Moonbase versions
+/// (downloaded from the Moonfin releases, see Services/MoonbaseGate).
 /// No login: it holds nothing but the plugin itself - never configuration or keys.
 /// </summary>
 [ApiController]
@@ -101,10 +102,18 @@ public class RepositoryController : ControllerBase
                 },
             },
         };
+        var list = JsonSerializer.SerializeToNode(manifest)!.AsArray();
+        // Moonbase, up to the version that passed the app-contract check (Services/MoonbaseGate):
+        // the Moonfin repository is switched off, so Jellyfin updates Moonbase only from here.
+        if (Services.MoonbaseGate.ApprovedPackage() is { } moonbase)
+        {
+            list.Add(moonbase);
+        }
+
         return new ContentResult
         {
             ContentType = "application/json; charset=utf-8",
-            Content = JsonSerializer.Serialize(manifest),
+            Content = list.ToJsonString(),
         };
     }
 
