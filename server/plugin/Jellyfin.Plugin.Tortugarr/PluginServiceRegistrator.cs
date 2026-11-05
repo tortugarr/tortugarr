@@ -20,6 +20,7 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddHttpClient("tortugarr-noredirect")
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false });
         serviceCollection.AddSingleton<TortugarrService>();
+        serviceCollection.AddSingleton<AdminNotice>();
         serviceCollection.AddSingleton<UserLimitService>();
         serviceCollection.AddSingleton<SettingsService>();
         serviceCollection.AddSingleton<AdultLibraryService>();

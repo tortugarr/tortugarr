@@ -35,14 +35,16 @@ public sealed class MoonbaseGate : Microsoft.Extensions.Hosting.IHostedService
     private readonly IServerConfigurationManager _serverConfig;
     private readonly IApplicationPaths _paths;
     private readonly ILogger<MoonbaseGate> _log;
+    private readonly AdminNotice _notice;
     private CancellationTokenSource? _stop;
 
-    public MoonbaseGate(IHttpClientFactory httpFactory, IServerConfigurationManager serverConfig, IApplicationPaths paths, ILogger<MoonbaseGate> log)
+    public MoonbaseGate(IHttpClientFactory httpFactory, IServerConfigurationManager serverConfig, IApplicationPaths paths, ILogger<MoonbaseGate> log, AdminNotice notice)
     {
         _httpFactory = httpFactory;
         _serverConfig = serverConfig;
         _paths = paths;
         _log = log;
+        _notice = notice;
     }
 
     /// <summary>The contract: one entry per line, # for comments (generated from the app).</summary>
@@ -270,6 +272,8 @@ public sealed class MoonbaseGate : Microsoft.Extensions.Hosting.IHostedService
             if (dll is null)
             {
                 Status(plugin, $"Moonbase {version} held back: download or checksum failed");
+                await _notice.PostAsync("Moonbase", $"Moonbase {version} not installed yet",
+                    "The download or its checksum failed; Tortugarr tries again in 12 hours. Nothing to do.", LogLevel.Information).ConfigureAwait(false);
                 return;
             }
 
@@ -279,6 +283,10 @@ public sealed class MoonbaseGate : Microsoft.Extensions.Hosting.IHostedService
                 var msg = $"Moonbase {version} held back: it no longer has {string.Join(", ", missing.Take(20))} (used by the Tortugarr app)";
                 _log.LogWarning("Tortugarr: {Message}", msg);
                 Status(plugin, msg);
+                await _notice.PostAsync("Moonbase", $"Moonbase {version} held back - Tortugarr update needed",
+                    $"Moonbase {version} no longer has {string.Join(", ", missing.Take(20))}, which the Tortugarr app uses. "
+                    + $"Moonbase stays on {cfg.MoonbaseApprovedVersion} until Tortugarr is updated for it. The app keeps working.",
+                    LogLevel.Warning).ConfigureAwait(false);
                 return;
             }
 
@@ -286,6 +294,9 @@ public sealed class MoonbaseGate : Microsoft.Extensions.Hosting.IHostedService
             approvedDll = dll;
             _log.LogInformation("Tortugarr: Moonbase {Version} approved (contract of {Count} entries kept)", version, Contract.Count);
             Status(plugin, $"Moonbase {version} approved");
+            await _notice.PostAsync("Moonbase", $"Moonbase {version} approved",
+                $"Moonbase {version} passed the Tortugarr check ({Contract.Count} settings and routes the app uses are all there). "
+                + "Jellyfin installs it with its next plugin update; nothing to do.", LogLevel.Information).ConfigureAwait(false);
         }
     }
 

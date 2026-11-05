@@ -27,13 +27,15 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 
     private readonly TortugarrService _svc;
     private readonly ILogger<QbitWatchdog> _log;
+    private readonly AdminNotice _notice;
     private readonly WatchdogState _state = new();
     private CancellationTokenSource? _stop;
 
-    public QbitWatchdog(TortugarrService svc, ILogger<QbitWatchdog> log)
+    public QbitWatchdog(TortugarrService svc, ILogger<QbitWatchdog> log, AdminNotice notice)
     {
         _svc = svc;
         _log = log;
+        _notice = notice;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -84,12 +86,18 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
         {
             await qbit.Recheck(plan.Recheck, ct).ConfigureAwait(false);
             Report($"rechecked {plan.Recheck.Count} torrent(s) stuck at 100 %: {string.Join(", ", plan.RecheckNames)}");
+            await _notice.PostAsync("Qbit", $"Download repaired: {string.Join(", ", plan.RecheckNames)}",
+                "qBittorrent showed 100 % but never finished; Tortugarr asked it to check the files again. Nothing to do.",
+                LogLevel.Information).ConfigureAwait(false);
         }
 
         if (plan.Restart)
         {
             await qbit.Shutdown(ct).ConfigureAwait(false);
             Report($"closed qBittorrent for a restart: the recheck of {string.Join(", ", plan.HungNames)} hung");
+            await _notice.PostAsync("Qbit", "qBittorrent restarted",
+                $"The file check of {string.Join(", ", plan.HungNames)} hung; Tortugarr closed qBittorrent so it starts fresh.",
+                LogLevel.Warning).ConfigureAwait(false);
         }
     }
 
