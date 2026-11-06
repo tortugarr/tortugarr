@@ -222,7 +222,12 @@ class _AdultLibraryBodyState extends State<_AdultLibraryBody> {
 /// "Search for new XXX": asks for words, then searches the indexers and
 /// downloads into the adult library. From the XXX settings and, when switched
 /// on, from its own menu button.
-Future<void> searchNewAdult(BuildContext context) async {
+Future<void> searchNewAdult(BuildContext buttonContext) async {
+  // The rest runs against the root navigator, which lives as long as the app.
+  // The button that opened this can leave the tree while the dialog is up: on
+  // a TV the sidebar folds up under the keyboard and drops it, and the search
+  // then stopped without a word after Enter (2026-11-07).
+  final context = Navigator.of(buttonContext, rootNavigator: true).context;
   final query = await _askAdultQuery(context);
   if (query == null || query.isEmpty || !context.mounted) return;
   if (DownloadFeatures.viaPlugin) return _searchNewAdultViaPlugin(context, query);
