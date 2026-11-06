@@ -322,6 +322,12 @@ Future<void> _searchNewAdultViaPlugin(BuildContext context, String query) async 
   }
 }
 
+/// Back for a dialog whose focus sits in a text field: every Back key except
+/// Backspace, which belongs to the text.
+@visibleForTesting
+bool isDialogBackKeyInTextField(LogicalKeyboardKey key) =>
+    key.isBackKey && key != LogicalKeyboardKey.backspace;
+
 Future<String?> _askAdultQuery(BuildContext context) {
   final controller = TextEditingController();
   return showStyledPlayerDialog<String>(
@@ -336,12 +342,15 @@ Future<String?> _askAdultQuery(BuildContext context) {
           // On a TV, Back in the field left it with nothing focused, and the
           // remote could neither reach the buttons nor close the dialog
           // (2026-10-21). Back closes it, and down goes to the buttons.
+          // Backspace counts as Back elsewhere in the app, but here it must
+          // erase text: treating it as Back closed the dialog on every
+          // correction, since the phone/TV keyboard sends it as a key (2026-11-07).
           Focus(
             canRequestFocus: false,
             skipTraversal: true,
             onKeyEvent: (node, event) {
               if (event is! KeyDownEvent) return KeyEventResult.ignored;
-              if (event.logicalKey.isBackKey) {
+              if (isDialogBackKeyInTextField(event.logicalKey)) {
                 Navigator.of(ctx).pop();
                 return KeyEventResult.handled;
               }
