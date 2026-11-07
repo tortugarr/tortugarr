@@ -97,23 +97,23 @@ public class QbitWatchdogTests
     };
 
     [Fact]
-    public void A_download_without_new_data_gets_fresh_peers_after_15_minutes_and_a_restart_after_30()
+    public void A_download_without_new_data_gets_fresh_peers_after_5_minutes_and_a_restart_after_10()
     {
         var tracks = new Dictionary<string, StallTrack>();
         Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0).Reannounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(12)).Reannounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(3)).Reannounce);
 
-        var at15 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(15));
-        Assert.Equal(new[] { "42e4fa93" }, at15.Reannounce);
-        Assert.Empty(at15.Bounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(18)).Reannounce); // not every pass
+        var at6 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(6));
+        Assert.Equal(new[] { "42e4fa93" }, at6.Reannounce);
+        Assert.Empty(at6.Bounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(9)).Reannounce); // not every pass
 
-        var at30 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(30));
-        Assert.Equal(new[] { "42e4fa93" }, at30.Bounce);
-        Assert.Empty(at30.Reannounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(33)).Bounce); // not again within 2 h
-        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(60)).Reannounce);
-        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(150)).Bounce);
+        var at12 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(12));
+        Assert.Equal(new[] { "42e4fa93" }, at12.Bounce);
+        Assert.Empty(at12.Reannounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(15)).Bounce); // not again within 1 h
+        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(24)).Reannounce);
+        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(72)).Bounce);
     }
 
     [Fact]
@@ -121,8 +121,8 @@ public class QbitWatchdogTests
     {
         var tracks = new Dictionary<string, StallTrack>();
         QbitWatchdog.DecideStalls(List(Slow()), tracks, T0);
-        QbitWatchdog.DecideStalls(List(Slow("downloading", 2600000000L)), tracks, T0.AddMinutes(12));
-        var plan = QbitWatchdog.DecideStalls(List(Slow("stalledDL", 2600000000L)), tracks, T0.AddMinutes(20));
+        QbitWatchdog.DecideStalls(List(Slow("downloading", 2600000000L)), tracks, T0.AddMinutes(4));
+        var plan = QbitWatchdog.DecideStalls(List(Slow("stalledDL", 2600000000L)), tracks, T0.AddMinutes(8));
         Assert.Empty(plan.Reannounce);
         Assert.Empty(plan.Bounce);
     }

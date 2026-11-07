@@ -15,8 +15,8 @@ namespace Jellyfin.Plugin.Tortugarr.Services;
 ///
 /// It also nudges downloads that stop moving (QbitStallNudge, 2026-11-07): a torrent sat
 /// "stalled" at 59.7 % with ten seeds announced, because the few seeds it reached would not
-/// send to it. Asking the trackers for fresh peers got it going. After 15 minutes without new
-/// data the watchdog does that; after 30 it stops and starts the torrent so every connection
+/// send to it. Asking the trackers for fresh peers got it going. After 5 minutes without new
+/// data the watchdog does that; after 10 it stops and starts the torrent so every connection
 /// is made fresh. Torrents the user stopped, forced, queued or finished are never touched.
 /// </summary>
 public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
@@ -25,10 +25,10 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     internal static readonly TimeSpan HangAfter = TimeSpan.FromMinutes(10);
     internal static readonly TimeSpan RecheckAgainAfter = TimeSpan.FromMinutes(30);
     internal static readonly TimeSpan RestartAgainAfter = TimeSpan.FromMinutes(30);
-    internal static readonly TimeSpan StallAfter = TimeSpan.FromMinutes(15);
-    internal static readonly TimeSpan ReannounceAgainAfter = TimeSpan.FromMinutes(30);
-    internal static readonly TimeSpan BounceAfter = TimeSpan.FromMinutes(30);
-    internal static readonly TimeSpan BounceAgainAfter = TimeSpan.FromHours(2);
+    internal static readonly TimeSpan StallAfter = TimeSpan.FromMinutes(5);
+    internal static readonly TimeSpan ReannounceAgainAfter = TimeSpan.FromMinutes(10);
+    internal static readonly TimeSpan BounceAfter = TimeSpan.FromMinutes(10);
+    internal static readonly TimeSpan BounceAgainAfter = TimeSpan.FromHours(1);
 
     private static readonly HashSet<string> DownloadStates = new(StringComparer.Ordinal)
     {

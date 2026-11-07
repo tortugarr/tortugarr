@@ -344,12 +344,17 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              // Movies or series only; a second press shows both again.
-              for (final k in const [SeerrRequestKind.movies, SeerrRequestKind.series]) ...[
+              // One of three, like the status chips: pressing the chosen one
+              // again keeps it (a toggle back to "all" read as a glitch).
+              for (final k in SeerrRequestKind.values) ...[
                 _HubChip(
-                  label: k == SeerrRequestKind.movies ? l10n.movies : l10n.series,
+                  label: switch (k) {
+                    SeerrRequestKind.all => l10n.all,
+                    SeerrRequestKind.movies => l10n.movies,
+                    SeerrRequestKind.series => l10n.series,
+                  },
                   selected: s.kind == k,
-                  onTap: () => vm.setKind(s.kind == k ? SeerrRequestKind.all : k),
+                  onTap: () => vm.setKind(k),
                 ),
                 const SizedBox(width: 8),
               ],
@@ -1175,8 +1180,10 @@ class _HubChipState extends State<_HubChip> with FocusStateMixin {
                 vertical: 6 * scale - (showFocusBorder ? 1 : 0),
               ),
               decoration: BoxDecoration(
+                // Strong fill: on a TV across the room 18 % accent was
+                // hard to tell from an unselected chip.
                 color: widget.selected
-                    ? AppColorScheme.accent.withValues(alpha: 0.18)
+                    ? AppColorScheme.accent.withValues(alpha: 0.45)
                     : ThemeRegistry.active.borders.chipBackground,
                 borderRadius: ThemeRegistry.active.borders.chipRadius,
                 border: Border.fromBorderSide(
@@ -1184,7 +1191,7 @@ class _HubChipState extends State<_HubChip> with FocusStateMixin {
                     color: showFocusBorder
                         ? focusColor
                         : widget.selected
-                        ? AppColorScheme.accent.withValues(alpha: 0.6)
+                        ? AppColorScheme.accent
                         : ThemeRegistry.active.borders.chipBorder.color,
                     width: showFocusBorder ? 2 : 1,
                   ),
@@ -1194,6 +1201,7 @@ class _HubChipState extends State<_HubChip> with FocusStateMixin {
                 label,
                 style: TextStyle(
                   fontSize: 13 * scale,
+                  fontWeight: widget.selected ? FontWeight.w700 : FontWeight.w400,
                   color: widget.selected
                       ? AppColorScheme.onSurface
                       : AppColorScheme.onSurface.withValues(alpha: 0.7),
