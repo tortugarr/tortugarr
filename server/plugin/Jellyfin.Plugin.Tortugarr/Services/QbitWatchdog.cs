@@ -15,8 +15,8 @@ namespace Jellyfin.Plugin.Tortugarr.Services;
 ///
 /// It also nudges downloads that stop moving (QbitStallNudge, 2026-11-07): a torrent sat
 /// "stalled" at 59.7 % with ten seeds announced, because the few seeds it reached would not
-/// send to it. Asking the trackers for fresh peers got it going. After 5 minutes without new
-/// data the watchdog does that; after 10 it stops and starts the torrent so every connection
+/// send to it. Asking the trackers for fresh peers got it going. After 1 minute without new
+/// data the watchdog does that; after 3 it stops and starts the torrent so every connection
 /// is made fresh. Torrents the user stopped, forced, queued or finished are never touched.
 /// </summary>
 public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
@@ -25,10 +25,14 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     internal static readonly TimeSpan HangAfter = TimeSpan.FromMinutes(10);
     internal static readonly TimeSpan RecheckAgainAfter = TimeSpan.FromMinutes(30);
     internal static readonly TimeSpan RestartAgainAfter = TimeSpan.FromMinutes(30);
-    internal static readonly TimeSpan StallAfter = TimeSpan.FromMinutes(5);
-    internal static readonly TimeSpan ReannounceAgainAfter = TimeSpan.FromMinutes(10);
-    internal static readonly TimeSpan BounceAfter = TimeSpan.FromMinutes(10);
-    internal static readonly TimeSpan BounceAgainAfter = TimeSpan.FromHours(1);
+    // Stalls are checked on their own quick loop: waiting minutes on a torrent that sits
+    // still felt like forever (user, 2026-11-07).
+    internal static readonly TimeSpan StallEvery = TimeSpan.FromSeconds(30);
+    internal static readonly TimeSpan StallAfter = TimeSpan.FromMinutes(1);
+    internal static readonly TimeSpan ReannounceAgainAfter = TimeSpan.FromMinutes(2);
+    internal static readonly TimeSpan BounceAfter = TimeSpan.FromMinutes(3);
+    internal static readonly TimeSpan BounceAgainAfter = TimeSpan.FromMinutes(15);
+    private static readonly TimeSpan QuietAfterRestart = TimeSpan.FromMinutes(2);
 
     private static readonly HashSet<string> DownloadStates = new(StringComparer.Ordinal)
     {
@@ -40,6 +44,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     private readonly AdminNotice _notice;
     private readonly WatchdogState _state = new();
     private CancellationTokenSource? _stop;
+    private long _restartedAtTicks;
 
     public QbitWatchdog(TortugarrService svc, ILogger<QbitWatchdog> log, AdminNotice notice)
     {
@@ -73,6 +78,27 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
                 await Task.Delay(Every, token).ConfigureAwait(false);
             }
         });
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(TimeSpan.FromMinutes(2), token).ConfigureAwait(false);
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    await NudgeAsync(token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+                catch (Exception e)
+                {
+                    _log.LogDebug(e, "Tortugarr: stall pass skipped");
+                }
+
+                await Task.Delay(StallEvery, token).ConfigureAwait(false);
+            }
+        });
         return Task.CompletedTask;
     }
 
@@ -102,13 +128,9 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
                 LogLevel.Information).ConfigureAwait(false);
         }
 
-        if (cfg.QbitStallNudge)
-        {
-            await NudgeAsync(qbit, torrents, plan.Restart, ct).ConfigureAwait(false);
-        }
-
         if (plan.Restart)
         {
+            Interlocked.Exchange(ref _restartedAtTicks, DateTimeOffset.UtcNow.UtcTicks);
             await qbit.Shutdown(ct).ConfigureAwait(false);
             Report($"closed qBittorrent for a restart: the recheck of {string.Join(", ", plan.HungNames)} hung");
             await _notice.PostAsync("Qbit", "qBittorrent restarted",
@@ -117,13 +139,23 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
         }
     }
 
-    private async Task NudgeAsync(QbitClient qbit, JsonArray torrents, bool restarting, CancellationToken ct)
+    private async Task NudgeAsync(CancellationToken ct)
     {
-        if (restarting)
+        var cfg = Plugin.Instance?.Configuration;
+        if (cfg is null || !cfg.QbitWatchdogEnabled || !cfg.QbitStallNudge || cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(cfg.DownloadClientUrl))
         {
-            return; // qBittorrent is about to close; every connection starts fresh anyway
+            return;
         }
 
+        // The watchdog just closed qBittorrent: every connection starts fresh anyway.
+        var restarted = new DateTimeOffset(Interlocked.Read(ref _restartedAtTicks), TimeSpan.Zero);
+        if (DateTimeOffset.UtcNow - restarted < QuietAfterRestart)
+        {
+            return;
+        }
+
+        var qbit = _svc.Qbit;
+        var torrents = await qbit.ListAll(ct).ConfigureAwait(false);
         var nudge = DecideStalls(torrents, _state.Stalls, DateTimeOffset.UtcNow);
         if (nudge.Reannounce.Count > 0)
         {

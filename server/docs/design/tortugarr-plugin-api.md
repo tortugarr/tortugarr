@@ -546,7 +546,7 @@ as a read-only card in Requests, with a Movies / Series choice above the list.
 `AdultFolders` lists every adult folder (`qBittorrent path|Jellyfin path`, one per line, written
 by the installer); all of them are in the adult library and each adult download goes to the one
 with the most free space. The qBittorrent watchdog also nudges downloads that get no new data:
-a reannounce after 5 minutes, a stop/start after 10 (at most once an hour), never for stopped,
+checked every 30 s: a reannounce after 1 minute (again every 2), a stop/start after 3 (at most every 15 min), never for stopped,
 queued, forced, checking or finished torrents (`QbitStallNudge`).
 
 ## 4. Filters (the same as the app today)

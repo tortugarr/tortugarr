@@ -97,32 +97,33 @@ public class QbitWatchdogTests
     };
 
     [Fact]
-    public void A_download_without_new_data_gets_fresh_peers_after_5_minutes_and_a_restart_after_10()
+    public void A_download_without_new_data_gets_fresh_peers_after_1_minute_and_a_restart_after_3()
     {
         var tracks = new Dictionary<string, StallTrack>();
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0).Reannounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(3)).Reannounce);
+        DecideAt(tracks, 0);
+        Assert.Empty(DecideAt(tracks, 0.5).Reannounce);
 
-        var at6 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(6));
-        Assert.Equal(new[] { "42e4fa93" }, at6.Reannounce);
-        Assert.Empty(at6.Bounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(9)).Reannounce); // not every pass
-
-        var at12 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(12));
-        Assert.Equal(new[] { "42e4fa93" }, at12.Bounce);
-        Assert.Empty(at12.Reannounce);
-        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(15)).Bounce); // not again within 1 h
-        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(24)).Reannounce);
-        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(72)).Bounce);
+        var at1 = DecideAt(tracks, 1);
+        Assert.Equal(new[] { "42e4fa93" }, at1.Reannounce);
+        Assert.Empty(at1.Bounce);
+        Assert.Empty(DecideAt(tracks, 1.5).Reannounce); // not every pass
+        Assert.Equal(new[] { "42e4fa93" }, DecideAt(tracks, 3).Bounce);
+        Assert.Empty(DecideAt(tracks, 3.5).Bounce); // not again within 15 min
+        Assert.Equal(new[] { "42e4fa93" }, DecideAt(tracks, 5).Reannounce); // fresh peers every 2 min meanwhile
+        Assert.Empty(DecideAt(tracks, 17.5).Bounce);
+        Assert.Equal(new[] { "42e4fa93" }, DecideAt(tracks, 18).Bounce);
     }
+
+    private static StallPlan DecideAt(Dictionary<string, StallTrack> tracks, double minutes) =>
+        QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(minutes));
 
     [Fact]
     public void New_data_starts_the_clock_again_even_when_qbittorrent_says_stalled_in_between()
     {
         var tracks = new Dictionary<string, StallTrack>();
         QbitWatchdog.DecideStalls(List(Slow()), tracks, T0);
-        QbitWatchdog.DecideStalls(List(Slow("downloading", 2600000000L)), tracks, T0.AddMinutes(4));
-        var plan = QbitWatchdog.DecideStalls(List(Slow("stalledDL", 2600000000L)), tracks, T0.AddMinutes(8));
+        QbitWatchdog.DecideStalls(List(Slow("downloading", 2600000000L)), tracks, T0.AddMinutes(1));
+        var plan = QbitWatchdog.DecideStalls(List(Slow("stalledDL", 2600000000L)), tracks, T0.AddMinutes(1.5));
         Assert.Empty(plan.Reannounce);
         Assert.Empty(plan.Bounce);
     }
