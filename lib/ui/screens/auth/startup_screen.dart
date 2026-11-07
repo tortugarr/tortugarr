@@ -89,11 +89,24 @@ class _StartupScreenState extends State<StartupScreen>
       await player.setVolume(100);
       final short = GetIt.instance.isRegistered<UserPreferences>() &&
           GetIt.instance<UserPreferences>().get(UserPreferences.shortIntro);
+      // Opened paused, and started only once its first picture is on screen:
+      // playing straight away ran the opening into a surface that did not
+      // exist yet, so on the TV the intro stuttered and caught up again at
+      // the start, while the rest of the app was still booting (2026-11-08).
       await player.open(
         Media('asset:///${short ? _shortIntroAssetPath : _introAssetPath}'),
+        play: false,
       );
       if (!mounted) return;
       setState(() => _videoReady = true);
+      try {
+        await _videoController!.waitUntilFirstFrameRendered
+            .timeout(const Duration(seconds: 2));
+      } catch (_) {
+        // No first-frame signal on this device; start anyway.
+      }
+      if (!mounted || _videoFinished) return;
+      await player.play();
     } catch (_) {
       // Asset missing or unsupported on this platform — fall through to the
       // normal splash hold so the app still boots.
