@@ -1701,6 +1701,46 @@ def jellyfin_api_key(h):
     raise BootstrapError("jellyfin: could not create an API key")
 
 
+OMDB_FETCHER = "The Open Movie Database"
+TV_TYPES = ("Series", "Season", "Episode")
+
+
+def jellyfin_tv_without_omdb(h):
+    """OMDb off for series, seasons and episodes in every TV library. Its episode lookups
+    answer with broken data: 480 errors in one day in Jellyfin's log on 2026-11-07, while
+    TVDB/TMDB already give everything shown. Movies keep it (their Rotten Tomatoes score).
+    A library without its own type settings gets Jellyfin's defaults minus OMDb; one the
+    user set up keeps its choices, only OMDb goes."""
+    avail = h.get("/Libraries/AvailableOptions?libraryContentType=tvshows&isNewLibrary=false") or {}
+    defaults = {t.get("Type"): t for t in avail.get("TypeOptions") or []}
+    for folder in h.get("/Library/VirtualFolders"):
+        if folder.get("CollectionType") != "tvshows" or folder_is_adult(folder):
+            continue
+        opts = folder.get("LibraryOptions") or {}
+        types = {t.get("Type"): t for t in opts.get("TypeOptions") or []}
+        changed = False
+        for typ in TV_TYPES:
+            t = types.get(typ)
+            if t is None:
+                d = defaults.get(typ) or {}
+                meta = [f["Name"] for f in d.get("MetadataFetchers") or [] if f.get("DefaultEnabled")]
+                if OMDB_FETCHER not in meta:
+                    continue
+                images = [f["Name"] for f in d.get("ImageFetchers") or [] if f.get("DefaultEnabled")]
+                t = {"Type": typ, "MetadataFetchers": meta, "MetadataFetcherOrder": list(meta),
+                     "ImageFetchers": images, "ImageFetcherOrder": list(images),
+                     "ImageOptions": d.get("DefaultImageOptions") or []}
+                types[typ] = t
+            if OMDB_FETCHER in (t.get("MetadataFetchers") or []):
+                t["MetadataFetchers"] = [n for n in t["MetadataFetchers"] if n != OMDB_FETCHER]
+                changed = True
+        if not changed:
+            continue
+        opts["TypeOptions"] = list(types.values())
+        h.post("/Library/VirtualFolders/LibraryOptions", {"Id": folder.get("ItemId"), "LibraryOptions": opts})
+        ok(f"jellyfin: OMDb off for series and episodes in '{folder.get('Name')}'")
+
+
 def jellyfin_scan_interval(h):
     """Sonarr/Radarr cannot notify Jellyfin 10.11+/12 (they still send the removed
     X-Emby-Token header), and inotify does not fire on network or WSL /mnt drives,
@@ -1855,6 +1895,7 @@ def configure_jellyfin():
     save_json(f"{INSTALL}/secrets.json", SECRETS)
     jellyfin_server_name(h)
     jellyfin_libraries(h)
+    jellyfin_tv_without_omdb(h)
     jellyfin_scan_interval(h)
     # An update copies a new Tortugarr plugin in while Jellyfin runs and removes the old folder.
     # Until Jellyfin restarts it still has the old version loaded, and its package catalog fails
