@@ -61,6 +61,64 @@ public sealed class SeriesRequestLog
         }
     }
 
+    /// <summary>True once the list has taken in Sonarr's earlier grabs (done once per server).</summary>
+    public bool Backfilled => _path is null || File.Exists(_path + ".backfilled");
+
+    /// <summary>
+    /// Adds earlier series grabs (from Sonarr's history) once, leaving out downloads already
+    /// listed. 2026-11-07: the list started empty; the user wanted the recent series too.
+    /// </summary>
+    public int Backfill(IEnumerable<SeriesGrab> earlier, DateTimeOffset now)
+    {
+        lock (_gate)
+        {
+            if (Backfilled)
+            {
+                return 0;
+            }
+
+            var all = Load();
+            var known = all.Select(g => g.DownloadId).Where(d => d is { Length: > 0 }).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var added = earlier.Where(g => g.DownloadId is not { Length: > 0 } d || !known.Contains(d)).Where(g => now - g.At < Keep).ToList();
+            Save(all.Concat(added).OrderBy(g => g.At).TakeLast(MaxEntries).ToList());
+            File.WriteAllText(_path + ".backfilled", now.ToString("O"));
+            return added.Count;
+        }
+    }
+
+    /// <summary>
+    /// Sonarr's "grabbed" history as series grabs for one user (the administrator who opened the
+    /// list: Sonarr does not know who asked). A season pack is one grab per episode in Sonarr; it
+    /// becomes one grab of the season here.
+    /// </summary>
+    internal static List<SeriesGrab> FromSonarrHistory(JsonArray records, string userId, DateTimeOffset since) =>
+        records
+            .Where(r => r is not null && (string?)r["eventType"] is "grabbed" or "1")
+            .Select(r => (
+                Rec: r!,
+                At: DateTimeOffset.TryParse((string?)r!["date"], out var d) ? d : DateTimeOffset.MinValue,
+                Id: (string?)r["downloadId"] ?? string.Empty))
+            .Where(x => x.At >= since && ((int?)x.Rec["series"]?["tvdbId"] ?? 0) > 0)
+            .GroupBy(x => x.Id.Length > 0 ? x.Id : Guid.NewGuid().ToString("N"))
+            .Select(group =>
+            {
+                var first = group.OrderBy(x => x.At).First();
+                var episodes = group.Select(x => ((int?)x.Rec["episode"]?["seasonNumber"], (int?)x.Rec["episode"]?["episodeNumber"])).Distinct().ToList();
+                var series = first.Rec["series"]!;
+                return new SeriesGrab
+                {
+                    UserId = userId,
+                    TvdbId = (int?)series["tvdbId"] ?? 0,
+                    TmdbId = (int?)series["tmdbId"] is int t and > 0 ? t : null,
+                    Title = (string?)series["title"] ?? string.Empty,
+                    Season = episodes.Select(e => e.Item1).FirstOrDefault(s => s is not null),
+                    Episode = episodes.Count == 1 ? episodes[0].Item2 : null,
+                    DownloadId = first.Id.Length > 0 ? first.Id : null,
+                    At = first.At,
+                };
+            })
+            .ToList();
+
     public List<SeriesGrab> All()
     {
         lock (_gate)

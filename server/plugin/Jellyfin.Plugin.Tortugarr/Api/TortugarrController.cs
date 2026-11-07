@@ -178,7 +178,7 @@ public class TortugarrController : ControllerBase
     /// for an administrator. Series file no Seerr request, so Seerr cannot list them.</summary>
     [HttpGet("SeriesRequests")]
     public Task<IActionResult> SeriesRequests() =>
-        Run(async () => Json(await _svc.SeriesRequests(IsAdmin ? null : UserId, UserName, HttpContext.RequestAborted).ConfigureAwait(false)));
+        Run(async () => Json(await _svc.SeriesRequests(IsAdmin ? null : UserId, UserName, HttpContext.RequestAborted, IsAdmin && UserId != Guid.Empty ? UserId : null).ConfigureAwait(false)));
 
     private string? UserName(string userId) =>
         Guid.TryParse(userId, out var id) ? _users.GetUserById(id)?.Username : null;

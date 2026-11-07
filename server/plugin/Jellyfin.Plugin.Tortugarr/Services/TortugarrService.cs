@@ -1235,9 +1235,49 @@ public sealed class TortugarrService
         }
     }
 
-    /// <summary>The series the app downloaded (the user's own, or everyone's for an administrator).</summary>
-    public async Task<object> SeriesRequests(Guid? onlyUser, Func<string, string?> userName, CancellationToken ct)
+    /// <summary>
+    /// Once per server, the first time an administrator opens the list: the series grabs of the
+    /// last 90 days from Sonarr's history join it, as that administrator's.
+    /// </summary>
+    private async Task BackfillSeriesRequests(Guid admin, CancellationToken ct)
     {
+        try
+        {
+            var records = new JsonArray();
+            for (var page = 1; page <= 10; page++)
+            {
+                var res = await Sonarr.Get($"/history?eventType=1&page={page}&pageSize=250&sortKey=date&sortDirection=descending&includeSeries=true&includeEpisode=true", ct).ConfigureAwait(false);
+                var batch = res?["records"] as JsonArray ?? new JsonArray();
+                foreach (var r in batch.ToList())
+                {
+                    batch.Remove(r);
+                    records.Add(r);
+                }
+
+                if (page * 250 >= ((int?)res?["totalRecords"] ?? 0))
+                {
+                    break;
+                }
+            }
+
+            var now = DateTimeOffset.UtcNow;
+            var added = _seriesLog.Backfill(SeriesRequestLog.FromSonarrHistory(records, admin.ToString("N"), now.AddDays(-90)), now);
+            _log.LogInformation("Tortugarr: {Count} earlier series download(s) from Sonarr added to Requests", added);
+        }
+        catch (Exception e) when (e is UpstreamException or NotConfiguredException or HttpRequestException)
+        {
+            _log.LogWarning("Tortugarr: earlier series downloads not added to Requests yet: {Error}", e.Message);
+        }
+    }
+
+    /// <summary>The series the app downloaded (the user's own, or everyone's for an administrator).</summary>
+    public async Task<object> SeriesRequests(Guid? onlyUser, Func<string, string?> userName, CancellationToken ct, Guid? admin = null)
+    {
+        if (admin is Guid me && !_seriesLog.Backfilled)
+        {
+            await BackfillSeriesRequests(me, ct).ConfigureAwait(false);
+        }
+
         var queued = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         try
         {
