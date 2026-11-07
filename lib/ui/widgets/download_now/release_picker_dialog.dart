@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../focus/focusable_wrapper.dart';
 import '../seerr/seerr_tv_controls.dart';
 import '../track_selector_dialog.dart' show showStyledPlayerDialog;
+import 'package:moonfin/util/release_audio.dart';
 import 'package:moonfin/util/app_l10n.dart';
 
 /// What the user picked (or null if they cancelled).
@@ -173,6 +174,39 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
   /// Per-tier sort order: tier label -> ordered list of releases.
   late final Map<String, List<ProwlarrRelease>> _byTier = _bucket(widget.releases);
 
+  final _scroll = ScrollController();
+  final _firstRow = FocusNode(debugLabel: 'release_picker_first_row');
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    _firstRow.dispose();
+    super.dispose();
+  }
+
+  List<String> get _availableTiers => [
+    if ((_byTier['2160p'] ?? const []).isNotEmpty) '2160p',
+    if ((_byTier['1080p'] ?? const []).isNotEmpty) '1080p',
+    if ((_byTier['720p'] ?? const []).isNotEmpty) '720p',
+    if ((_byTier['other'] ?? const []).isNotEmpty) 'other',
+    'all',
+  ];
+
+  /// Left/Right in the list: the next tier, from its top (2026-11-07). Before,
+  /// leaving the bottom of 2160p for 1080p meant scrolling all the way up to
+  /// the chips first. No wrap-around at either end.
+  void _stepTier(int by) {
+    final tiers = _availableTiers;
+    final next = tiers.indexOf(_tier) + by;
+    if (next < 0 || next >= tiers.length) return;
+    setState(() => _tier = tiers[next]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_scroll.hasClients) _scroll.jumpTo(0); // the chips show where you are
+      _firstRow.requestFocus();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -199,13 +233,7 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final availableTiers = <String>[
-      if ((_byTier['2160p'] ?? const []).isNotEmpty) '2160p',
-      if ((_byTier['1080p'] ?? const []).isNotEmpty) '1080p',
-      if ((_byTier['720p'] ?? const []).isNotEmpty) '720p',
-      if ((_byTier['other'] ?? const []).isNotEmpty) 'other',
-      'all',
-    ];
+    final availableTiers = _availableTiers;
     final visible = _tier == 'all'
         ? widget.releases
         : (_byTier[_tier] ?? const <ProwlarrRelease>[]);
@@ -222,6 +250,7 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
         return b.seeders.compareTo(a.seeders);
       }));
     return SingleChildScrollView(
+      controller: _scroll,
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -247,7 +276,15 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
             }).toList(),
           ),
           const SizedBox(height: 12),
-          for (final r in sorted) _ReleaseRow(release: r),
+          for (final (i, r) in sorted.indexed)
+            _ReleaseRow(
+              // Keyed by tier, so a switch builds fresh rows and focus starts at the top.
+              key: ValueKey('$_tier/${r.guid}/$i'),
+              release: r,
+              focusNode: i == 0 ? _firstRow : null,
+              onLeft: () => _stepTier(-1),
+              onRight: () => _stepTier(1),
+            ),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -301,14 +338,27 @@ String _age(DateTime published) {
 
 class _ReleaseRow extends StatelessWidget {
   final ProwlarrRelease release;
-  const _ReleaseRow({required this.release});
+  final FocusNode? focusNode;
+  final VoidCallback? onLeft;
+  final VoidCallback? onRight;
+  const _ReleaseRow({
+    super.key,
+    required this.release,
+    this.focusNode,
+    this.onLeft,
+    this.onRight,
+  });
 
   @override
   Widget build(BuildContext context) {
     final blocked = release.blockedReason;
+    final audio = releaseAudioBadges(release.title);
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: FocusableWrapper(
+        focusNode: focusNode,
+        onNavigateLeft: onLeft,
+        onNavigateRight: onRight,
         // Still focusable so the remote can move past it, but never taken.
         onSelect: blocked != null
             ? () {}
@@ -358,6 +408,14 @@ class _ReleaseRow extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      if (audio.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: [for (final a in audio) _AudioBadge(a)],
+                        ),
+                      ],
                       if (blocked != null) ...[
                         const SizedBox(height: 2),
                         Text(
@@ -389,6 +447,35 @@ class _ReleaseRow extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One sound badge under a release (Atmos, DD+, 5.1 ...). Atmos stands out.
+class _AudioBadge extends StatelessWidget {
+  final String label;
+  const _AudioBadge(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    final atmos = label == 'Atmos';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: atmos ? const Color(0xFF4A9EE0).withValues(alpha: 0.25) : Colors.white10,
+        borderRadius: AppRadius.circular(4),
+        border: Border.all(
+          color: atmos ? const Color(0xFF4A9EE0) : Colors.white24,
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: atmos ? Colors.white : Colors.white70,
+          fontSize: 10,
+          fontWeight: atmos ? FontWeight.w700 : FontWeight.w500,
         ),
       ),
     );
