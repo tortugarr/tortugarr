@@ -524,6 +524,31 @@ plugin-configuration route, so keys never reach the browser.
   prowlarr, bazarr, seerr, qbittorrent; an empty key or password means the saved one):
   `{ ok: true, version }` or `{ ok: false, message }`.
 
+
+### 3.18 `GET /Tortugarr/v1/SeriesRequests` - series downloaded in the app
+
+Seerr › Requests lists Seerr requests only. A movie downloaded in the app files one; a series
+does not, on purpose (Seerr requests whole seasons), so series never showed (2026-11-07). The
+plugin notes every series grab (`series-grabs.json`, 180 days) and lists them here: the
+caller's own, or everyone's for an administrator. One row per series and user, newest first:
+
+```json
+{ "items": [ { "tvdbId": 81189, "tmdbId": 1396, "title": "Breaking Bad", "userId": "…",
+  "userName": "odd", "at": "2026-11-07T12:00:00Z", "firstAt": "…", "downloads": 3,
+  "seasons": [1, 2], "downloading": true } ] }
+```
+
+`downloading` is true while one of its downloads is in Sonarr's queue. The app shows each row
+as a read-only card in Requests, with a Movies / Series choice above the list.
+
+### Adult folders and stalled downloads (no route)
+
+`AdultFolders` lists every adult folder (`qBittorrent path|Jellyfin path`, one per line, written
+by the installer); all of them are in the adult library and each adult download goes to the one
+with the most free space. The qBittorrent watchdog also nudges downloads that get no new data:
+a reannounce after 15 minutes, a stop/start after 30 (at most every 2 hours), never for stopped,
+queued, forced, checking or finished torrents (`QbitStallNudge`).
+
 ## 4. Filters (the same as the app today)
 
 From the app code (the app's `prowlarr_search_client.dart` `_isValidMedia`,

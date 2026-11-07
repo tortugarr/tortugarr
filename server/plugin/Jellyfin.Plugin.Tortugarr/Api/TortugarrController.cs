@@ -28,9 +28,11 @@ public class TortugarrController : ControllerBase
     private readonly SpaceService _space;
     private readonly UserLimitService _limits;
     private readonly SettingsService _settings;
+    private readonly MediaBrowser.Controller.Library.IUserManager _users;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users)
     {
+        _users = users;
         _settings = settings;
         _svc = svc;
         _delete = delete;
@@ -171,6 +173,15 @@ public class TortugarrController : ControllerBase
         Run(async () => MayDownload(out _)
             ? Json(await _svc.Grab(UserId, req, HttpContext.RequestAborted).ConfigureAwait(false))
             : NotAllowed());
+
+    /// <summary>Series downloaded in the app, for Seerr › Requests: the caller's own, or everyone's
+    /// for an administrator. Series file no Seerr request, so Seerr cannot list them.</summary>
+    [HttpGet("SeriesRequests")]
+    public Task<IActionResult> SeriesRequests() =>
+        Run(async () => Json(await _svc.SeriesRequests(IsAdmin ? null : UserId, UserName, HttpContext.RequestAborted).ConfigureAwait(false)));
+
+    private string? UserName(string userId) =>
+        Guid.TryParse(userId, out var id) ? _users.GetUserById(id)?.Username : null;
 
     /// <summary>3.4 - what is downloading.</summary>
     [HttpGet("Downloads")]

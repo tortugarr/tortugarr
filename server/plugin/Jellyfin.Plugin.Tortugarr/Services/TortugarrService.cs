@@ -77,9 +77,11 @@ public sealed class TortugarrService
     private readonly ConcurrentDictionary<string, SearchJob> _jobs = new();
     private readonly AdultLibraryService _adultLibrary;
     private readonly UserLimitService _limits;
+    private readonly SeriesRequestLog _seriesLog;
 
-    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary, UserLimitService limits)
+    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary, UserLimitService limits, SeriesRequestLog seriesLog)
     {
+        _seriesLog = seriesLog;
         _httpFactory = httpFactory;
         _log = log;
         _adultLibrary = adultLibrary;
@@ -1192,7 +1194,68 @@ public sealed class TortugarrService
 
         // The movie's Seerr request (made by the app) must wait until Radarr has it queued.
         var (queued, downloadId) = await WaitQueued(Arr(job), job, TimeSpan.FromSeconds(job.IsMovie ? 60 : 30), ct).ConfigureAwait(false);
+        if (!job.IsMovie)
+        {
+            await RememberSeriesGrab(userId, job, downloadId, ct).ConfigureAwait(false);
+        }
+
         return new { downloadId, title = shown.Title, queued };
+    }
+
+    /// <summary>For Seerr › Requests (series file no Seerr request). Never fails the grab.</summary>
+    private async Task RememberSeriesGrab(Guid userId, SearchJob job, string? downloadId, CancellationToken ct)
+    {
+        try
+        {
+            var r = job.Request;
+            var series = r.TvdbId is int tvdb
+                ? (await Sonarr.Get($"/series?tvdbId={tvdb}", ct).ConfigureAwait(false) as JsonArray)?.FirstOrDefault()
+                : null;
+            var tvdbId = r.TvdbId ?? (int?)series?["tvdbId"] ?? 0;
+            if (tvdbId <= 0)
+            {
+                return;
+            }
+
+            _seriesLog.Add(new SeriesGrab
+            {
+                UserId = userId.ToString("N"),
+                TvdbId = tvdbId,
+                TmdbId = r.TmdbId is > 0 ? r.TmdbId : (int?)series?["tmdbId"] is int t and > 0 ? t : null,
+                Title = (string?)series?["title"] ?? string.Empty,
+                Season = r.Season,
+                Episode = r.Type == "episode" ? r.Episode : null,
+                DownloadId = downloadId,
+                At = DateTimeOffset.UtcNow,
+            });
+        }
+        catch (Exception e) when (e is not OperationCanceledException || !ct.IsCancellationRequested)
+        {
+            _log.LogWarning("Tortugarr: could not note the series download for Requests: {Error}", e.Message);
+        }
+    }
+
+    /// <summary>The series the app downloaded (the user's own, or everyone's for an administrator).</summary>
+    public async Task<object> SeriesRequests(Guid? onlyUser, Func<string, string?> userName, CancellationToken ct)
+    {
+        var queued = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        try
+        {
+            var q = await Sonarr.Get("/queue?pageSize=500", ct).ConfigureAwait(false);
+            foreach (var rec in q?["records"] as JsonArray ?? new JsonArray())
+            {
+                if ((string?)rec?["downloadId"] is { Length: > 0 } id)
+                {
+                    queued.Add(id);
+                }
+            }
+        }
+        catch (Exception e) when (e is UpstreamException or NotConfiguredException or HttpRequestException)
+        {
+            // Without Sonarr every row shows as done; the list itself still answers.
+        }
+
+        return new { items = SeriesRequestLog.Rows(_seriesLog.All(), onlyUser, queued, userName) };
     }
 
     private ArrClient Arr(SearchJob job) => job.IsMovie ? Radarr : Sonarr;

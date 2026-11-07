@@ -22,6 +22,7 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddSingleton<TortugarrService>();
         serviceCollection.AddSingleton<AdminNotice>();
         serviceCollection.AddSingleton<UserLimitService>();
+        serviceCollection.AddSingleton<SeriesRequestLog>();
         serviceCollection.AddSingleton<SettingsService>();
         serviceCollection.AddSingleton<AdultLibraryService>();
         serviceCollection.AddScoped<IEventConsumer<UserCreatedEventArgs>, HideAdultFromNewUsers>();
