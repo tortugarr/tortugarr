@@ -7,6 +7,9 @@ import '../repositories/seerr_repository.dart';
 import '../services/seerr/seerr_api_models.dart';
 import '../services/seerr/seerr_download_progress.dart';
 import '../services/seerr/seerr_models.dart';
+import '../services/tortugarr/download_features.dart';
+import '../services/tortugarr/series_requests.dart';
+import '../services/tortugarr/tortugarr_plugin_client.dart';
 
 enum SeerrRequestFilter { all, pending, approved, processing, available, failed }
 
@@ -30,6 +33,9 @@ class SeerrRequestsState {
   final SeerrRequestCounts? counts;
   final Map<String, SeerrMediaSummary> summaries;
 
+  /// Movies, series or both.
+  final SeerrRequestKind kind;
+
   const SeerrRequestsState({
     this.isLoading = false,
     this.isRefreshing = false,
@@ -43,6 +49,7 @@ class SeerrRequestsState {
     this.sort = 'added',
     this.counts,
     this.summaries = const {},
+    this.kind = SeerrRequestKind.all,
   });
 
   bool get canManageRequests =>
@@ -67,6 +74,7 @@ class SeerrRequestsState {
     String? sort,
     SeerrRequestCounts? counts,
     Map<String, SeerrMediaSummary>? summaries,
+    SeerrRequestKind? kind,
   }) => SeerrRequestsState(
     isLoading: isLoading ?? this.isLoading,
     isRefreshing: isRefreshing ?? this.isRefreshing,
@@ -82,6 +90,7 @@ class SeerrRequestsState {
     sort: sort ?? this.sort,
     counts: counts ?? this.counts,
     summaries: summaries ?? this.summaries,
+    kind: kind ?? this.kind,
   );
 }
 
@@ -96,7 +105,51 @@ class SeerrRequestsViewModel extends ChangeNotifier {
 
   Timer? _downloadPollTimer;
 
-  SeerrRequestsViewModel(this._repo, [this._prefs]);
+  /// The series downloaded in the app (they file no Seerr request).
+  final Future<List<SeerrRequest>> Function() _seriesLoader;
+
+  /// Seerr's own requests as loaded, how many it sent, and whether it has
+  /// more; the list shown is these with [_series] merged in.
+  List<SeerrRequest> _seerr = const [];
+  int _seerrOffset = 0;
+  List<SeerrRequest> _series = const [];
+
+  SeerrRequestsViewModel(
+    this._repo, [
+    this._prefs,
+    Future<List<SeerrRequest>> Function()? seriesLoader,
+  ]) : _seriesLoader = seriesLoader ?? _pluginSeries;
+
+  /// Empty without the plugin, or a plugin too old to keep the list.
+  static Future<List<SeerrRequest>> _pluginSeries() async {
+    if (!DownloadFeatures.viaPlugin) return const [];
+    try {
+      return seriesRequestsFromPlugin(
+        await TortugarrPluginClient().seriesRequests(),
+      );
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  List<SeerrRequest> _shown({
+    SeerrRequestFilter? filter,
+    bool? hasMore,
+    SeerrRequestKind? kind,
+  }) => mergeSeriesRequests(
+    seerr: _seerr,
+    series: seriesForStatus(_series, (filter ?? _state.filter).apiValue),
+    seerrHasMore: hasMore ?? _state.hasMore,
+    sort: _state.sort,
+    kind: kind ?? _state.kind,
+  );
+
+  /// Shows movies, series or both. Nothing is fetched again.
+  void setKind(SeerrRequestKind kind) {
+    if (kind == _state.kind) return;
+    _state = _state.copyWith(kind: kind, requests: _shown(kind: kind));
+    notifyListeners();
+  }
 
   @override
   void dispose() {
@@ -142,14 +195,19 @@ class SeerrRequestsViewModel extends ChangeNotifier {
       );
       final fresh = {for (final r in response.results) r.id: r};
       var changed = false;
-      final requests = _state.requests.map((r) {
+      _seerr = _seerr.map((r) {
         final updated = fresh[r.id];
         if (updated == null) return r;
         changed = true;
         return updated;
       }).toList();
+      final series = await _seriesLoader();
+      if (series.isNotEmpty || _series.isNotEmpty) {
+        _series = series;
+        changed = true;
+      }
       if (changed) {
-        _state = _state.copyWith(requests: requests);
+        _state = _state.copyWith(requests: _shown());
         notifyListeners();
       }
     } catch (_) {
@@ -184,6 +242,7 @@ class SeerrRequestsViewModel extends ChangeNotifier {
           ? _restoreFilter(user)
           : _state.filter;
 
+      final series = _seriesLoader();
       final response = await _repo.getRequests(
         filter: filter.apiValue,
         sort: _state.sort,
@@ -191,15 +250,20 @@ class SeerrRequestsViewModel extends ChangeNotifier {
         limit: _pageSize,
         offset: 0,
       );
+      _seerr = _visibleRequests(response.results, filter);
+      _seerrOffset = response.results.length;
+      _series = await series;
+      final hasMore = _hasMorePages(response, _seerrOffset);
 
       _state = SeerrRequestsState(
-        requests: _visibleRequests(response.results, filter),
+        requests: _shown(filter: filter, hasMore: hasMore),
         currentUser: user,
         filter: filter,
         sort: _state.sort,
-        hasMore: _hasMorePages(response, response.results.length),
+        hasMore: hasMore,
         counts: _state.counts,
         summaries: _state.summaries,
+        kind: _state.kind,
       );
       notifyListeners();
       _syncDownloadPolling();
@@ -235,19 +299,21 @@ class SeerrRequestsViewModel extends ChangeNotifier {
         sort: _state.sort,
         requestedBy: user.canViewAllRequests ? null : user.id,
         limit: _pageSize,
-        offset: _state.requests.length,
+        offset: _seerrOffset,
       );
 
-      final merged = [
-        ..._state.requests,
+      _seerr = [
+        ..._seerr,
         ..._visibleRequests(response.results, _state.filter)
-            .where((r) => !_state.requests.any((e) => e.id == r.id)),
+            .where((r) => !_seerr.any((e) => e.id == r.id)),
       ];
+      _seerrOffset += response.results.length;
+      final hasMore = response.results.isNotEmpty &&
+          _hasMorePages(response, _seerrOffset);
       _state = _state.copyWith(
         isLoadingMore: false,
-        requests: merged,
-        hasMore: response.results.isNotEmpty &&
-            _hasMorePages(response, merged.length),
+        requests: _shown(hasMore: hasMore),
+        hasMore: hasMore,
       );
       _hydrateSummaries(response.results);
     } catch (_) {
@@ -367,11 +433,9 @@ class SeerrRequestsViewModel extends ChangeNotifier {
   Future<void> _patchRequest(int requestId) async {
     try {
       final updated = await _repo.getRequest(requestId);
-      final requests = _state.requests
-          .map((r) => r.id == requestId ? updated : r)
-          .toList();
+      _seerr = _seerr.map((r) => r.id == requestId ? updated : r).toList();
       _state = _state.copyWith(
-        requests: requests,
+        requests: _shown(),
         actioningRequestId: null,
       );
       notifyListeners();

@@ -10,6 +10,7 @@ import '../../../data/repositories/seerr_repository.dart';
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../data/services/seerr/seerr_download_progress.dart';
 import '../../../data/services/seerr/seerr_models.dart';
+import '../../../data/services/tortugarr/series_requests.dart';
 import '../../../data/viewmodels/seerr_issues_view_model.dart';
 import '../../../data/viewmodels/seerr_requests_view_model.dart';
 import '../../mixins/focus_state_mixin.dart';
@@ -343,6 +344,16 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
+              // Movies or series only; a second press shows both again.
+              for (final k in const [SeerrRequestKind.movies, SeerrRequestKind.series]) ...[
+                _HubChip(
+                  label: k == SeerrRequestKind.movies ? l10n.movies : l10n.series,
+                  selected: s.kind == k,
+                  onTap: () => vm.setKind(s.kind == k ? SeerrRequestKind.all : k),
+                ),
+                const SizedBox(width: 8),
+              ],
+              const SizedBox(width: 8),
               for (final f in SeerrRequestFilter.values) ...[
                 _HubChip(
                   label: filterLabel(f),
@@ -438,7 +449,8 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
         child: _RequestCard(
           request: req,
           summary: s.summaryFor(req),
-          canManage: s.canManageRequests,
+          // A series downloaded in the app is no Seerr request: nothing to approve.
+          canManage: s.canManageRequests && !isPluginSeriesRequest(req),
           isActioning: s.actioningRequestId == req.id,
           onTap: () => _onRequestTap(req),
           onApprove: () => vm.approveRequest(req.id),
@@ -512,7 +524,8 @@ class _SeerrRequestsScreenState extends State<SeerrRequestsScreen>
               child: _RequestCard(
                 request: req,
                 summary: s.summaryFor(req),
-                canManage: s.canManageRequests,
+                // A series downloaded in the app is no Seerr request: nothing to approve.
+                canManage: s.canManageRequests && !isPluginSeriesRequest(req),
                 isActioning: s.actioningRequestId == req.id,
                 onTap: () => _onRequestTap(req),
                 onApprove: () => vm.approveRequest(req.id),

@@ -694,6 +694,18 @@ class TortugarrPluginClient {
     ];
   }
 
+  /// Series downloaded in the app (the caller's own, or everyone's for an
+  /// administrator), for Seerr › Requests: series file no Seerr request.
+  /// Raw rows; see `series_requests.dart`.
+  Future<List<Map<String, dynamic>>> seriesRequests() async {
+    final data = await _send('GET', '/SeriesRequests');
+    final items = data is Map ? data['items'] : null;
+    return [
+      for (final i in (items is List ? items : const []))
+        if (i is Map) i.cast<String, dynamic>(),
+    ];
+  }
+
   /// Video check of a download (spec 3.6).
   Future<TortugarrVideoCheck> checkVideo(String downloadId) async {
     final data = (await _send('POST', '/Downloads/${Uri.encodeComponent(downloadId)}/Check') as Map)
