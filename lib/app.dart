@@ -25,6 +25,8 @@ import 'data/services/download_service.dart';
 import 'data/services/seerr_notification_service.dart';
 import 'data/services/plugin_sync_service.dart';
 import 'data/services/server_messages_service.dart';
+import 'data/services/tortugarr/download_notice_watcher.dart';
+import 'package:server_core/server_core.dart' show ActivityLogEntry;
 import 'data/services/retro_artwork/retro_artwork_data_source.dart';
 import 'data/services/theme_music_service.dart';
 import 'data/services/deep_link_service.dart';
@@ -51,6 +53,7 @@ import 'ui/widgets/offline_banner.dart';
 import 'ui/widgets/times_up_gate.dart';
 import 'ui/widgets/settings/settings_panel.dart';
 import 'ui/widgets/server_messages_dialog.dart';
+import 'ui/widgets/track_selector_dialog.dart';
 import 'ui/widgets/exit_confirmation_dialog.dart';
 import 'ui/widgets/keyboard_shortcuts/keyboard_shortcut_reference.dart';
 import 'ui/screensaver/screensaver_controller.dart';
@@ -1063,6 +1066,7 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
   StreamSubscription<ChatThread>? _chatMessageSub;
   StreamSubscription<AchievementUnlocks>? _unlockSub;
   StreamSubscription<SeerrNotificationEvent>? _seerrNotificationSub;
+  StreamSubscription<List<ActivityLogEntry>>? _downloadNoticeSub;
 
   @override
   void initState() {
@@ -1085,6 +1089,12 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
               isRequest: event.isRequest,
             ),
           );
+    }
+    if (GetIt.instance.isRegistered<DownloadNoticeWatcher>()) {
+      final watcher = GetIt.instance<DownloadNoticeWatcher>()
+        // Not over a film: it waits and comes after playback.
+        ..canShow = () => !_onPlayerRoute();
+      _downloadNoticeSub = watcher.notices.listen(_handleDownloadNotices);
     }
     if (GetIt.instance.isRegistered<ServerMessagesService>()) {
       GetIt.instance<ServerMessagesService>().addListener(
@@ -1113,6 +1123,7 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
     _chatMessageSub?.cancel();
     _unlockSub?.cancel();
     _seerrNotificationSub?.cancel();
+    _downloadNoticeSub?.cancel();
     if (GetIt.instance.isRegistered<ServerMessagesService>()) {
       GetIt.instance<ServerMessagesService>().removeListener(
         _handleServerMessagesChanged,
@@ -1188,6 +1199,35 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
           ),
         );
     }
+  }
+
+  /// The plugin gave up one or more stalled downloads (admin only).
+  void _handleDownloadNotices(List<ActivityLogEntry> entries) {
+    final navContext = _navigatorContext();
+    if (navContext == null) return;
+    showStyledPlayerDialog<void>(
+      navContext,
+      title: entries.length == 1
+          ? entries.single.name
+          : 'Downloads given up (${entries.length})',
+      showCancel: true,
+      maxWidth: 640,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final e in entries) ...[
+              if (entries.length > 1)
+                Text(e.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+              if (e.overview != null) Text(e.overview!),
+              const SizedBox(height: 12),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   void _handleDownloadError(String message) {

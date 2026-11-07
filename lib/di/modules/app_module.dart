@@ -9,6 +9,8 @@ import 'package:server_core/server_core.dart';
 import '../../auth/models/user.dart';
 import '../../auth/repositories/session_repository.dart';
 import '../../auth/repositories/user_repository.dart';
+import '../../data/services/tortugarr/download_features.dart';
+import '../../data/services/tortugarr/download_notice_watcher.dart';
 import '../../auth/store/authentication_store.dart';
 import '../../auth/store/credential_store.dart';
 import '../../data/repositories/anime_marker_repository.dart';
@@ -103,6 +105,7 @@ void resetUserScopedSingletons() {
 }
 
 StreamSubscription<User?>? _accessScheduleUserSubscription;
+StreamSubscription<User?>? _downloadNoticeUserSubscription;
 
 /// The signed in user's access schedule, or null when it can't be read.
 Future<List<AccessSchedule>?> _loadAccessSchedules(String userId) =>
@@ -180,6 +183,27 @@ void registerAppModule() {
   }, dispose: (service) {
     unawaited(_accessScheduleUserSubscription?.cancel());
     service.dispose();
+  });
+  _getIt.registerLazySingleton(() {
+    final users = _getIt<UserRepository>();
+    final watcher = DownloadNoticeWatcher(
+      _getIt<PreferenceStore>(),
+      fetch: (since) async => (await _getIt<MediaServerClient>()
+              .adminSystemApi
+              .getActivityLog(minDate: since, limit: 50, hasUserId: false))
+          .items,
+    );
+    // The activity log is admin only, and so are these popups.
+    bool admin(User? user) =>
+        DownloadFeatures.viaPlugin && (user?.isAdministrator ?? false);
+    watcher.setActive(admin(users.currentUser));
+    _downloadNoticeUserSubscription = users.currentUserStream.listen(
+      (user) => watcher.setActive(admin(user)),
+    );
+    return watcher;
+  }, dispose: (watcher) {
+    unawaited(_downloadNoticeUserSubscription?.cancel());
+    watcher.dispose();
   });
   _getIt.registerLazySingleton(() => SetupWizardGate(_getIt<UserPreferences>()));
   _getIt.registerLazySingleton(() => const NativeCastChannel());

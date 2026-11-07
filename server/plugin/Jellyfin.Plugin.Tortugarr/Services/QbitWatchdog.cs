@@ -17,7 +17,10 @@ namespace Jellyfin.Plugin.Tortugarr.Services;
 /// "stalled" at 59.7 % with ten seeds announced, because the few seeds it reached would not
 /// send to it. Asking the trackers for fresh peers got it going. After 1 minute without new
 /// data the watchdog does that; after 3 it stops and starts the torrent so every connection
-/// is made fresh. Torrents the user stopped, forced, queued or finished are never touched.
+/// is made fresh. After 3 hours with nothing new it gives up: a Radarr/Sonarr download is
+/// swapped for the best-seeded release of about the same size, an XXX download is deleted
+/// with its partial files, and the admin gets a popup in the app (activity log type
+/// "TortugarrStall"). Torrents the user stopped, forced, queued or finished are never touched.
 /// </summary>
 public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 {
@@ -32,6 +35,10 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     internal static readonly TimeSpan ReannounceAgainAfter = TimeSpan.FromMinutes(2);
     internal static readonly TimeSpan BounceAfter = TimeSpan.FromMinutes(3);
     internal static readonly TimeSpan BounceAgainAfter = TimeSpan.FromMinutes(15);
+
+    // When nothing helped: Radarr/Sonarr downloads are swapped for another release, XXX ones
+    // deleted with their partial files, and the admin gets a popup (user, 2026-11-07).
+    internal static readonly TimeSpan GiveUpAfter = TimeSpan.FromHours(3);
     private static readonly TimeSpan QuietAfterRestart = TimeSpan.FromMinutes(2);
 
     private static readonly HashSet<string> DownloadStates = new(StringComparer.Ordinal)
@@ -170,6 +177,31 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
             await qbit.Start(nudge.Bounce, ct).ConfigureAwait(false);
             Report($"restarted {nudge.Bounce.Count} stalled download(s): {string.Join(", ", nudge.BounceNames)}");
         }
+
+        foreach (var dead in nudge.GiveUp)
+        {
+            await GiveUpAsync(dead, ct).ConfigureAwait(false);
+        }
+    }
+
+    private async Task GiveUpAsync(StalledDownload dead, CancellationToken ct)
+    {
+        var hours = (int)GiveUpAfter.TotalHours;
+        string outcome;
+        try
+        {
+            outcome = await _svc.GiveUpStalled(dead, ct).ConfigureAwait(false);
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            _log.LogWarning(e, "Tortugarr: could not give up the stalled download {Name}", dead.Name);
+            outcome = $"Tortugarr could not remove it ({e.Message}); it is still in qBittorrent.";
+        }
+
+        Report($"gave up {dead.Name} at {dead.Progress * 100:0.#} % after {hours} h without new data: {outcome}");
+        await _notice.PostAsync("Stall", $"Download given up: {dead.Name}",
+            $"Stuck at {dead.Progress * 100:0.#} % for {hours} hours although Tortugarr asked for new peers and restarted it. {outcome}",
+            LogLevel.Warning).ConfigureAwait(false);
     }
 
     /// <summary>Downloads that got no new data for a while, and what to do about them.</summary>
@@ -208,6 +240,17 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 
             var still = now - track.Since;
             var name = (string?)t["name"] ?? hash;
+            if (still >= GiveUpAfter)
+            {
+                if (!track.GaveUp)
+                {
+                    plan.GiveUp.Add(new StalledDownload(hash, name, (string?)t["category"] ?? string.Empty, Num(t["size"], 0), Num(t["progress"], 0)));
+                    track.GaveUp = true;
+                }
+
+                continue;
+            }
+
             if (still >= BounceAfter && (track.Bounced is null || now - track.Bounced >= BounceAgainAfter))
             {
                 plan.Bounce.Add(hash);
@@ -354,7 +397,12 @@ internal sealed class StallTrack
     public DateTimeOffset? Reannounced { get; set; }
 
     public DateTimeOffset? Bounced { get; set; }
+
+    public bool GaveUp { get; set; }
 }
+
+/// <summary>A download the watchdog gives up on.</summary>
+internal sealed record StalledDownload(string Hash, string Name, string Category, double Size, double Progress);
 
 /// <summary>One pass's nudges for downloads that do not move.</summary>
 internal sealed class StallPlan
@@ -366,6 +414,8 @@ internal sealed class StallPlan
     public List<string> Bounce { get; } = new();
 
     public List<string> BounceNames { get; } = new();
+
+    public List<StalledDownload> GiveUp { get; } = new();
 }
 
 /// <summary>One pass's actions.</summary>

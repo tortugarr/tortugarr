@@ -1715,6 +1715,120 @@ public sealed class TortugarrService
         await arr.Delete($"/queue/{(int)rec["id"]!}?removeFromClient=true&blocklist={(blocklist ? "true" : "false")}&skipRedownload=false", ct).ConfigureAwait(false);
     }
 
+    // ------------------------------------------------------------------ stalled downloads
+
+    /// <summary>How far a replacement may be from the stalled release's size.</summary>
+    internal const long ReplacementSizeSlack = 2L << 30;
+
+    /// <summary>
+    /// Ends a download that got no data for hours. Radarr/Sonarr ones leave the queue (removed
+    /// from qBittorrent with their files, release blocklisted) and get the best-seeded release
+    /// within 2 GB of the old size; with none, Radarr/Sonarr search on their own. XXX downloads
+    /// are deleted with their files. Anything else is only stopped. Returns what happened, for
+    /// the admin.
+    /// </summary>
+    internal async Task<string> GiveUpStalled(StalledDownload dead, CancellationToken ct)
+    {
+        var c = Cfg;
+        if (await IsAdultDownload(dead.Hash, ct).ConfigureAwait(false))
+        {
+            await Qbit.Delete(dead.Hash, deleteFiles: true, ct).ConfigureAwait(false);
+            return "It was removed from qBittorrent together with its partial files.";
+        }
+
+        var isMovie = dead.Category == c.MovieCategory;
+        var isTv = dead.Category == c.TvCategory;
+        if (isMovie || isTv)
+        {
+            var arr = isMovie ? Radarr : Sonarr;
+            var q = await arr.Get(isMovie ? "/queue?pageSize=1000" : "/queue?pageSize=1000&includeUnknownSeriesItems=false", ct).ConfigureAwait(false);
+            var records = (q?["records"] as JsonArray ?? new JsonArray())
+                .Where(r => string.Equals((string?)r?["downloadId"], dead.Hash, StringComparison.OrdinalIgnoreCase))
+                .Select(r => r!).ToList();
+            if (records.Count > 0)
+            {
+                return await ReplaceStalled(arr, isMovie, records, (long)dead.Size, ct).ConfigureAwait(false);
+            }
+        }
+
+        await Qbit.Stop(new[] { dead.Hash }, ct).ConfigureAwait(false);
+        return "Radarr/Sonarr do not know it, so Tortugarr only stopped it; remove it in qBittorrent if you do not want it.";
+    }
+
+    private async Task<string> ReplaceStalled(ArrClient arr, bool isMovie, List<JsonNode> records, long size, CancellationToken ct)
+    {
+        var first = records[0];
+        string type;
+        int arrId;
+        string releasePath;
+        object fallback;
+        DateTimeOffset? home = null;
+        if (isMovie)
+        {
+            type = "movie";
+            arrId = (int)first["movieId"]!;
+            releasePath = $"/release?movieId={arrId}";
+            fallback = new { name = "MoviesSearch", movieIds = new[] { arrId } };
+            if (await arr.Get($"/movie/{arrId}", ct).ConfigureAwait(false) is { } movie)
+            {
+                home = HomeRelease(movie);
+            }
+        }
+        else
+        {
+            var episodes = records.Select(r => (int?)r["episodeId"]).Where(i => i is not null).Select(i => i!.Value).Distinct().ToArray();
+            var seriesId = (int)first["seriesId"]!;
+            var season = (int?)first["seasonNumber"] ?? 0;
+            if (episodes.Length > 1)
+            {
+                type = "season";
+                arrId = seriesId;
+                releasePath = $"/release?seriesId={seriesId}&seasonNumber={season}";
+                fallback = new { name = "SeasonSearch", seriesId, seasonNumber = season };
+            }
+            else
+            {
+                type = "episode";
+                arrId = episodes.FirstOrDefault();
+                releasePath = $"/release?episodeId={arrId}";
+                fallback = new { name = "EpisodeSearch", episodeIds = episodes };
+            }
+        }
+
+        // Out of the queue and qBittorrent, release blocklisted; no automatic redownload, the
+        // replacement is picked here.
+        await arr.Delete($"/queue/{(int)first["id"]!}?removeFromClient=true&blocklist=true&skipRedownload=true", ct).ConfigureAwait(false);
+
+        var raw = await arr.Get(releasePath, ct, 120).ConfigureAwait(false) as JsonArray ?? new JsonArray();
+        var (releases, _) = new ReleaseFilter(Cfg).Apply(raw.Where(x => x is not null).Select(x => ArrRelease.FromJson(x!)), type, home);
+        var pick = PickReplacement(releases, size, wantPack: type == "season");
+        var app = isMovie ? "Radarr" : "Sonarr";
+        if (pick is null)
+        {
+            await arr.Post("/command", fallback, ct).ConfigureAwait(false);
+            return $"It was removed with its partial files and blocklisted. No release within 2 GB of its size had seeders, so {app} is searching for another one itself.";
+        }
+
+        await arr.Post("/release", GrabBody(type, arrId, pick.Guid, pick.IndexerId), ct, 60).ConfigureAwait(false);
+        _log.LogInformation("Tortugarr replaced a stalled download with {Title} ({Seeders} seeders, {Size} bytes)", pick.Title, pick.Seeders, pick.Size);
+        return $"It was removed with its partial files and blocklisted, and {app} now downloads {pick.Title} instead ({pick.Seeders} seeders, {pick.Size / (double)(1L << 30):0.0} GB).";
+    }
+
+    /// <summary>
+    /// The replacement for a stalled release: torrents with seeders, within 2 GB of the old size,
+    /// most seeders first (468 seeders at 2.6 GB beat 2 at 2.2 GB); the closer size breaks a tie.
+    /// Blocklisted and wrong-title releases never get here (ReleaseFilter drops them).
+    /// </summary>
+    internal static ReleaseDto? PickReplacement(IEnumerable<ReleaseDto> releases, long size, bool wantPack = false) =>
+        releases
+            .Where(r => r.SeasonPack == wantPack) // a pack for a pack, one episode for one
+            .Where(r => (r.Seeders ?? 0) > 0)
+            .Where(r => !string.Equals(r.Protocol, "usenet", StringComparison.OrdinalIgnoreCase))
+            .Where(r => size <= 0 || Math.Abs(r.Size - size) <= ReplacementSizeSlack)
+            .OrderByDescending(r => r.Seeders ?? 0)
+            .ThenBy(r => Math.Abs(r.Size - size))
+            .FirstOrDefault();
+
     public async Task<object> Check(string downloadId, CancellationToken ct)
     {
         var c = Cfg;

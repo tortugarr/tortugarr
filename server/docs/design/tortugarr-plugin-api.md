@@ -546,7 +546,7 @@ as a read-only card in Requests, with a Movies / Series choice above the list.
 `AdultFolders` lists every adult folder (`qBittorrent path|Jellyfin path`, one per line, written
 by the installer); all of them are in the adult library and each adult download goes to the one
 with the most free space. The qBittorrent watchdog also nudges downloads that get no new data:
-checked every 30 s: a reannounce after 1 minute (again every 2), a stop/start after 3 (at most every 15 min), never for stopped,
+checked every 30 s: a reannounce after 1 minute (again every 2), a stop/start after 3 (at most every 15 min); after 3 hours with no new data the download is given up: a Radarr/Sonarr one leaves the queue (removed with its files, release blocklisted) and the best-seeded torrent release within 2 GB of its size is grabbed (else Radarr/Sonarr search themselves), an XXX one is deleted with its files, anything else is only stopped. Each give-up is an activity log entry of type `TortugarrStall`, which the app shows the administrator as a popup, never for stopped,
 queued, forced, checking or finished torrents (`QbitStallNudge`).
 
 ## 4. Filters (the same as the app today)
