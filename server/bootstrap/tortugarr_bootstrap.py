@@ -523,6 +523,17 @@ def adult_download_path():
     return ext_join(mounts[0]["remote"], "adult") if mounts else ""
 
 
+def adult_folders():
+    """Every adult folder as "qBittorrent's path|Jellyfin's path", one per line, for a qBittorrent
+    outside the stack: the plugin saves each adult download to the one with the most free space
+    (2026-11-07: E: was full while H:\\-=XxX=- sat empty). Empty for the stack's own qBittorrent,
+    which only sees /data/media/adult."""
+    if torrent_client() != "qbittorrent-ext":
+        return ""
+    return "\n".join(f"{p}|{e['container_path']}" for e in STATE.get("extra_libraries", [])
+                     if e.get("type") == "adult" and (p := windows_path(e["host_path"])))
+
+
 def ext_join(root, name):
     sep = "\\" if re.match(r"^[A-Za-z]:", root) else "/"
     return root.rstrip("\\/") + sep + name
@@ -550,6 +561,7 @@ def tortugarr_plugin_config(h):
         "HookKey": secret("tortugarr_hook_key", lambda: os.urandom(32).hex()),
         # The adult library stays as the administrator set it (off by default); only its place is set.
         "AdultCategory": "adult", "AdultSavePath": adult_save_path(), "AdultDownloadPath": adult_download_path(),
+        "AdultFolders": adult_folders(),
     })
     h.post(f"/Plugins/{TORTUGARR_PLUGIN_GUID}/Configuration", conf)
     ok("jellyfin: Tortugarr plugin linked to Sonarr, Radarr, Bazarr and the download client")

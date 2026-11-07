@@ -53,6 +53,7 @@ public sealed class SettingsService
         [nameof(PluginConfiguration.AdultCategory)] = Kind.Text,
         [nameof(PluginConfiguration.AdultSavePath)] = Kind.Text,
         [nameof(PluginConfiguration.AdultDownloadPath)] = Kind.Text,
+        [nameof(PluginConfiguration.AdultFolders)] = Kind.Text,
         [nameof(PluginConfiguration.AdultLibraryName)] = Kind.Text,
         [nameof(PluginConfiguration.AdultCategories)] = Kind.Text,
         [nameof(PluginConfiguration.AdultMinBytes)] = Kind.Number,

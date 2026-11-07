@@ -160,13 +160,15 @@ public sealed class LibraryDeleteService
             throw new ConflictException("not_managed", "the adult title has no file - nothing was deleted");
         }
 
-        var root = Cfg.AdultSavePath;
+        var folders = AdultLibraryService.Folders(Cfg);
+        var root = AdultLibraryService.FolderOf(Cfg, item.Path) ?? Cfg.AdultSavePath;
+        var clientRoot = folders.FirstOrDefault(f => f.Local.TrimEnd('/') == root.TrimEnd('/')).Client;
         var torrentsRemoved = 0;
         if (Cfg.DownloadClientType == "qbittorrent")
         {
             var qbit = _svc.Qbit;
             var torrent = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false))
-                .FirstOrDefault(t => t is not null && OwnsFile((string?)t["content_path"], item.Path, root));
+                .FirstOrDefault(t => t is not null && OwnsFile((string?)t["content_path"], item.Path, root, clientRoot));
             if (torrent is not null)
             {
                 await qbit.Delete((string)torrent["hash"]!, true, ct).ConfigureAwait(false);
@@ -241,7 +243,7 @@ public sealed class LibraryDeleteService
     /// /data/library/5/Clip.mp4), so the download's name is also matched against the file's place
     /// inside <paramref name="root"/>.
     /// </summary>
-    internal static bool OwnsFile(string? contentPath, string file, string? root = null)
+    internal static bool OwnsFile(string? contentPath, string file, string? root = null, string? clientRoot = null)
     {
         if (string.IsNullOrWhiteSpace(contentPath))
         {
@@ -260,9 +262,20 @@ public sealed class LibraryDeleteService
             return false;
         }
 
-        var name = contentPath.Replace('\\', '/').TrimEnd('/');
-        name = name[(name.LastIndexOf('/') + 1)..];
         var rel = file[(top.Length + 1)..];
+        var name = contentPath.Replace('\\', '/').TrimEnd('/');
+        var croot = clientRoot?.Replace('\\', '/').TrimEnd('/');
+        if (!string.IsNullOrEmpty(croot) && name.StartsWith(croot + "/", StringComparison.OrdinalIgnoreCase))
+        {
+            // The download's place under the adult folder as qBittorrent sees it: a single file
+            // inside the torrent's own folder (E:\-=XxX=-\HMN-594\a.mp4) is HMN-594/a.mp4.
+            name = name[(croot.Length + 1)..];
+        }
+        else
+        {
+            name = name[(name.LastIndexOf('/') + 1)..];
+        }
+
         return name.Length > 0
             && (string.Equals(rel, name, StringComparison.OrdinalIgnoreCase) || rel.StartsWith(name + "/", StringComparison.OrdinalIgnoreCase));
     }
@@ -501,8 +514,7 @@ public sealed class SeerrSync
             return;
         }
 
-        var adult = Cfg.AdultSavePath.TrimEnd('/') + "/";
-        if (!string.IsNullOrEmpty(item.Path) && item.Path.StartsWith(adult, StringComparison.Ordinal))
+        if (AdultLibraryService.FolderOf(Cfg, item.Path) is not null)
         {
             return; // Seerr knows nothing about the adult library
         }

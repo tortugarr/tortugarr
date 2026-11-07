@@ -711,6 +711,11 @@ public sealed class TortugarrService
         public int IndexerId { get; set; }
     }
 
+    /// <summary>The adult folder with the most free space, as qBittorrent writes it. A folder
+    /// Jellyfin cannot see (not mounted) is skipped; with none visible, the first one.</summary>
+    internal static string AdultSaveFolder(List<(string Client, string Local)> folders, Func<string, long?> free) =>
+        RoomiestDownloadRoot(folders.Select(f => (f.Client, f.Local)), free)?.Remote ?? folders[0].Client;
+
     /// <summary>Only a release shown in that search; straight to qBittorrent (no *arr).</summary>
     public async Task<object> AdultGrab(Guid userId, AdultGrabRequest g, CancellationToken ct)
     {
@@ -724,7 +729,7 @@ public sealed class TortugarrService
         var url = !string.IsNullOrWhiteSpace(rel.MagnetUrl) ? rel.MagnetUrl : rel.DownloadUrl;
         var qbit = Qbit;
         var before = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false)).Select(t => (string?)t?["hash"]).ToHashSet();
-        var savePath = string.IsNullOrWhiteSpace(Cfg.AdultDownloadPath) ? Cfg.AdultSavePath : Cfg.AdultDownloadPath;
+        var savePath = AdultSaveFolder(AdultLibraryService.Folders(Cfg), FreeBytes);
         if (url.StartsWith("magnet:", StringComparison.OrdinalIgnoreCase))
         {
             await qbit.Add(url, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);

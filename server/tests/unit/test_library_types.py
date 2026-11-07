@@ -173,6 +173,19 @@ def main():
     tb.remove_unused_own_root("radarr", alone, "/data/media/movies")
     check("without own folders it is the movie folder and stays", alone.deleted == [])
 
+    # 2026-11-07: both XXX folders reach the plugin, so a download can go to H: when E: is full.
+    tb.STATE["torrent_client"] = "qbittorrent-ext"
+    tb.STATE["extra_libraries"] = [
+        {"host_path": "/mnt/e/-=XxX=-", "container_path": "/data/library/5", "type": "adult"},
+        {"host_path": "/mnt/e/-=MOVIES=-", "container_path": "/data/library/3", "type": "movies"},
+        {"host_path": "/mnt/h/-=XxX=-", "container_path": "/data/library/10", "type": "adult"},
+    ]
+    check("every adult folder goes to the plugin with qBittorrent's path",
+          tb.adult_folders() == "E:\\-=XxX=-|/data/library/5\nH:\\-=XxX=-|/data/library/10", tb.adult_folders())
+    check("the first stays the save path", tb.adult_download_path() == "E:\\-=XxX=-" and tb.adult_save_path() == "/data/library/5")
+    tb.STATE["torrent_client"] = "qbittorrent"
+    check("the stack's own qBittorrent keeps one folder", tb.adult_folders() == "")
+
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 

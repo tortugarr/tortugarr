@@ -112,6 +112,14 @@ public class PluginConfiguration : BasePluginConfiguration
     /// (a qBittorrent on Windows: E:\XxX). Empty: <see cref="AdultSavePath"/>.</summary>
     public string AdultDownloadPath { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Every adult folder, one per line: the folder as qBittorrent sees it, a |, and the same
+    /// folder as Jellyfin sees it (E:\-=XxX=-|/data/library/5). Each download goes to the one
+    /// with the most free space, and all of them are in the adult library (2026-11-07: E: was
+    /// full and adult downloads still went there). Empty: only <see cref="AdultSavePath"/>.
+    /// </summary>
+    public string AdultFolders { get; set; } = string.Empty;
+
     public string AdultLibraryName { get; set; } = "Adult";
 
     public long AdultMinBytes { get; set; } = 20L * 1024 * 1024;

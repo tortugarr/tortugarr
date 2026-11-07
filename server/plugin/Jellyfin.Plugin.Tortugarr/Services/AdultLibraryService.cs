@@ -35,6 +35,30 @@ public sealed class AdultLibraryService
 
     private static Configuration.PluginConfiguration Cfg => Plugin.Instance?.Configuration ?? new Configuration.PluginConfiguration();
 
+    /// <summary>
+    /// Every adult folder as (as qBittorrent sees it, as Jellyfin sees it). The save path comes
+    /// first; <see cref="Configuration.PluginConfiguration.AdultFolders"/> adds more.
+    /// </summary>
+    internal static List<(string Client, string Local)> Folders(Configuration.PluginConfiguration c)
+    {
+        var first = (Client: string.IsNullOrWhiteSpace(c.AdultDownloadPath) ? c.AdultSavePath : c.AdultDownloadPath, Local: c.AdultSavePath);
+        var list = new List<(string Client, string Local)> { first };
+        foreach (var (client, local) in TortugarrService.ParseDownloadRoots(c.AdultFolders))
+        {
+            if (!list.Any(f => PathEq(f.Local, local)))
+            {
+                list.Add((client, local));
+            }
+        }
+
+        return list;
+    }
+
+    /// <summary>The adult folder (as Jellyfin sees it) a file is in, or null.</summary>
+    internal static string? FolderOf(Configuration.PluginConfiguration c, string? path) =>
+        string.IsNullOrEmpty(path) ? null
+            : Folders(c).Select(f => f.Local.TrimEnd('/')).FirstOrDefault(l => path.StartsWith(l + "/", StringComparison.Ordinal));
+
     /// <summary>The library's id, or null when it does not exist.</summary>
     public Guid? LibraryId()
     {
@@ -101,6 +125,8 @@ public sealed class AdultLibraryService
                 return;
             }
 
+            AddMissingFolders();
+
             foreach (var user in _users.GetUsers().ToList())
             {
                 await HideFrom(user.Id, id.Value).ConfigureAwait(false);
@@ -117,6 +143,33 @@ public sealed class AdultLibraryService
         finally
         {
             _lock.Release();
+        }
+    }
+
+    /// <summary>Adult folders added in the settings join the library (once their folder exists).</summary>
+    private void AddMissingFolders()
+    {
+        var library = _library.GetVirtualFolders().FirstOrDefault(v => v.Locations.Any(l => PathEq(l, Cfg.AdultSavePath)));
+        if (library is null)
+        {
+            return;
+        }
+
+        foreach (var (_, local) in Folders(Cfg).Skip(1))
+        {
+            if (library.Locations.Any(l => PathEq(l, local)))
+            {
+                continue;
+            }
+
+            if (!Directory.Exists(local))
+            {
+                _log.LogWarning("Tortugarr: adult folder {Path} is not there (not mounted?) - left out of the library", local);
+                continue;
+            }
+
+            _library.AddMediaPath(library.Name, new MediaPathInfo(local));
+            _log.LogInformation("Tortugarr: added {Path} to the adult library", local);
         }
     }
 
