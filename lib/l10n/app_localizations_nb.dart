@@ -17338,4 +17338,42 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgLimitsSave => 'Lagre grensene';
+
+  @override
+  String get tgHealthTitle => 'Serverhelse';
+
+  @override
+  String get tgHealthOk => 'Alt i orden';
+
+  @override
+  String get tgHealthWarning => 'Bør sees på';
+
+  @override
+  String get tgHealthError => 'Noe er nede';
+
+  @override
+  String get tgHealthServices => 'Tjenester';
+
+  @override
+  String get tgHealthDisks => 'Bibliotekdisker';
+
+  @override
+  String get tgHealthWarnings => 'Advarsler';
+
+  @override
+  String get tgHealthDown => 'svarer ikke';
+
+  @override
+  String get tgHealthDisk => 'Disk';
+
+  @override
+  String tgHealthFree(String free, String total) {
+    return '$free ledig av $total';
+  }
+
+  @override
+  String get tgHealthUnavailable => 'Fikk ikke svar fra Tortugarr-pluginen.';
+
+  @override
+  String get tgHealthRefresh => 'Sjekk igjen';
 }

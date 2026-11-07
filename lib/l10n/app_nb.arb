@@ -11436,5 +11436,17 @@
     "tgLimitsUsedThisWeek": "Brukt siste 7 dager: {movies} filmer, {episodes} episoder",
     "tgLimitsSaved": "Nedlastingsgrensene er lagret",
     "tgLimitsUnavailable": "Nedlastingsgrenser krever Tortugarr-pluginen på serveren.",
-    "tgLimitsSave": "Lagre grensene"
+    "tgLimitsSave": "Lagre grensene",
+    "tgHealthTitle": "Serverhelse",
+    "tgHealthOk": "Alt i orden",
+    "tgHealthWarning": "Bør sees på",
+    "tgHealthError": "Noe er nede",
+    "tgHealthServices": "Tjenester",
+    "tgHealthDisks": "Bibliotekdisker",
+    "tgHealthWarnings": "Advarsler",
+    "tgHealthDown": "svarer ikke",
+    "tgHealthDisk": "Disk",
+    "tgHealthFree": "{free} ledig av {total}",
+    "tgHealthUnavailable": "Fikk ikke svar fra Tortugarr-pluginen.",
+    "tgHealthRefresh": "Sjekk igjen"
 }

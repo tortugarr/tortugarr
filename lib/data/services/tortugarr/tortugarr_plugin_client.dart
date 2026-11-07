@@ -24,6 +24,9 @@ class TortugarrCapabilities {
   final bool freeSpace;
   final bool adult;
 
+  /// The server health card on the admin dashboard (plugin 1.3.0.22+).
+  final bool health;
+
   /// Set for a limited downloader (a non-administrator with download
   /// limits); null for administrators and everyone else.
   final TortugarrUserLimits? limits;
@@ -39,6 +42,7 @@ class TortugarrCapabilities {
     this.missingEpisodes = false,
     this.freeSpace = false,
     this.adult = false,
+    this.health = false,
     this.limits,
   });
 
@@ -58,6 +62,7 @@ class TortugarrCapabilities {
       missingEpisodes: on('missingEpisodes'),
       freeSpace: on('freeSpace'),
       adult: on('adult'),
+      health: on('health'),
       limits: json['limits'] is Map
           ? TortugarrUserLimits.fromJson((json['limits'] as Map).cast<String, dynamic>())
           : null,
@@ -673,6 +678,10 @@ class TortugarrPluginClient {
             if (int.tryParse('${e.key}') != null) int.parse('${e.key}'): e.value == true,
       };
 
+  /// Services, library disks and *arr warnings in one look (admin dashboard).
+  Future<TortugarrHealth> health() async =>
+      TortugarrHealth.fromJson(((await _send('GET', '/Health')) as Map).cast<String, dynamic>());
+
   /// Free space and what is still downloading (spec 3.15, Space/Check).
   Future<Map<String, dynamic>> spaceCheck(int bytes) async =>
       ((await _send('GET', '/Space/Check', query: {'bytes': bytes})) as Map).cast<String, dynamic>();
@@ -803,4 +812,90 @@ class TortugarrQueueItem {
   /// completed. The file is in the library by then (2026-10-29, VisionQuest
   /// S01E06 showed Importing for minutes after the import).
   bool get isImported => status == 'completed';
+}
+
+/// The plugin's server health (GET /Health): every service, each library disk
+/// and what Radarr, Sonarr and Prowlarr warn about.
+class TortugarrHealth {
+  /// "ok", "warning" or "error": the worst of everything below.
+  final String overall;
+  final List<TortugarrServiceState> services;
+  final List<TortugarrDiskState> disks;
+  final List<TortugarrHealthWarning> warnings;
+
+  const TortugarrHealth({
+    required this.overall,
+    this.services = const [],
+    this.disks = const [],
+    this.warnings = const [],
+  });
+
+  static List<Map<String, dynamic>> _list(Object? raw) =>
+      raw is List ? raw.whereType<Map>().map((m) => m.cast<String, dynamic>()).toList() : const [];
+
+  factory TortugarrHealth.fromJson(Map<String, dynamic> json) => TortugarrHealth(
+        overall: '${json['overall'] ?? 'ok'}',
+        services: [
+          for (final s in _list(json['services']))
+            TortugarrServiceState(
+              name: '${s['name'] ?? s['id'] ?? ''}',
+              ok: s['ok'] == true,
+              version: '${s['version'] ?? ''}',
+              message: s['message'] as String?,
+            ),
+        ],
+        disks: [
+          for (final d in _list(json['disks']))
+            TortugarrDiskState(
+              drive: d['drive'] as String?,
+              libraries: [for (final l in (d['libraries'] as List? ?? const [])) '$l'],
+              freeBytes: (d['freeBytes'] as num?)?.toInt() ?? 0,
+              totalBytes: (d['totalBytes'] as num?)?.toInt() ?? 0,
+              level: '${d['level'] ?? 'ok'}',
+            ),
+        ],
+        warnings: [
+          for (final w in _list(json['warnings']))
+            TortugarrHealthWarning(
+              source: '${w['source'] ?? ''}',
+              level: '${w['level'] ?? 'warning'}',
+              message: '${w['message'] ?? ''}',
+            ),
+        ],
+      );
+}
+
+class TortugarrServiceState {
+  final String name;
+  final bool ok;
+  final String version;
+  final String? message;
+  const TortugarrServiceState({required this.name, required this.ok, this.version = '', this.message});
+}
+
+class TortugarrDiskState {
+  /// "E:" for a Windows drive; null when the server cannot tell.
+  final String? drive;
+  final List<String> libraries;
+  final int freeBytes;
+  final int totalBytes;
+  final String level;
+  const TortugarrDiskState({
+    this.drive,
+    this.libraries = const [],
+    required this.freeBytes,
+    required this.totalBytes,
+    this.level = 'ok',
+  });
+
+  double get usedFraction => totalBytes <= 0 ? 0 : (1 - freeBytes / totalBytes).clamp(0, 1).toDouble();
+}
+
+class TortugarrHealthWarning {
+  final String source;
+
+  /// "info", "warning" or "error".
+  final String level;
+  final String message;
+  const TortugarrHealthWarning({required this.source, required this.level, required this.message});
 }

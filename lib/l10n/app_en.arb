@@ -16035,5 +16035,27 @@
     },
     "tgLimitsSaved": "Download limits saved",
     "tgLimitsUnavailable": "Download limits need the Tortugarr plugin on the server.",
-    "tgLimitsSave": "Save limits"
+    "tgLimitsSave": "Save limits",
+    "tgHealthTitle": "Server health",
+    "tgHealthOk": "All good",
+    "tgHealthWarning": "Needs a look",
+    "tgHealthError": "Something is down",
+    "tgHealthServices": "Services",
+    "tgHealthDisks": "Library disks",
+    "tgHealthWarnings": "Warnings",
+    "tgHealthDown": "not answering",
+    "tgHealthDisk": "Disk",
+    "tgHealthFree": "{free} free of {total}",
+    "@tgHealthFree": {
+        "placeholders": {
+            "free": {
+                "type": "String"
+            },
+            "total": {
+                "type": "String"
+            }
+        }
+    },
+    "tgHealthUnavailable": "No answer from the Tortugarr plugin.",
+    "tgHealthRefresh": "Check again"
 }

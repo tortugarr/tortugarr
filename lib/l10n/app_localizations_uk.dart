@@ -17415,4 +17415,42 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tgLimitsSave => 'Save limits';
+
+  @override
+  String get tgHealthTitle => 'Server health';
+
+  @override
+  String get tgHealthOk => 'All good';
+
+  @override
+  String get tgHealthWarning => 'Needs a look';
+
+  @override
+  String get tgHealthError => 'Something is down';
+
+  @override
+  String get tgHealthServices => 'Services';
+
+  @override
+  String get tgHealthDisks => 'Library disks';
+
+  @override
+  String get tgHealthWarnings => 'Warnings';
+
+  @override
+  String get tgHealthDown => 'not answering';
+
+  @override
+  String get tgHealthDisk => 'Disk';
+
+  @override
+  String tgHealthFree(String free, String total) {
+    return '$free free of $total';
+  }
+
+  @override
+  String get tgHealthUnavailable => 'No answer from the Tortugarr plugin.';
+
+  @override
+  String get tgHealthRefresh => 'Check again';
 }

@@ -29998,6 +29998,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save limits'**
   String get tgLimitsSave;
+
+  /// No description provided for @tgHealthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Server health'**
+  String get tgHealthTitle;
+
+  /// No description provided for @tgHealthOk.
+  ///
+  /// In en, this message translates to:
+  /// **'All good'**
+  String get tgHealthOk;
+
+  /// No description provided for @tgHealthWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs a look'**
+  String get tgHealthWarning;
+
+  /// No description provided for @tgHealthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something is down'**
+  String get tgHealthError;
+
+  /// No description provided for @tgHealthServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get tgHealthServices;
+
+  /// No description provided for @tgHealthDisks.
+  ///
+  /// In en, this message translates to:
+  /// **'Library disks'**
+  String get tgHealthDisks;
+
+  /// No description provided for @tgHealthWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Warnings'**
+  String get tgHealthWarnings;
+
+  /// No description provided for @tgHealthDown.
+  ///
+  /// In en, this message translates to:
+  /// **'not answering'**
+  String get tgHealthDown;
+
+  /// No description provided for @tgHealthDisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Disk'**
+  String get tgHealthDisk;
+
+  /// No description provided for @tgHealthFree.
+  ///
+  /// In en, this message translates to:
+  /// **'{free} free of {total}'**
+  String tgHealthFree(String free, String total);
+
+  /// No description provided for @tgHealthUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer from the Tortugarr plugin.'**
+  String get tgHealthUnavailable;
+
+  /// No description provided for @tgHealthRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Check again'**
+  String get tgHealthRefresh;
 }
 
 class _AppLocalizationsDelegate

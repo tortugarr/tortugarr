@@ -224,6 +224,7 @@ public sealed class TortugarrService
                 missingEpisodes = (isAdmin || limited) && Has(c.SonarrUrl, c.SonarrApiKey),
                 freeSpace = isAdmin && qbit && (Has(c.SonarrUrl, c.SonarrApiKey) || Has(c.RadarrUrl, c.RadarrApiKey)),
                 adult = isAdmin && AdultReady(c),
+                health = isAdmin,
             },
             categories = new { movies = c.MovieCategory, tv = c.TvCategory },
             limits,
@@ -2109,7 +2110,7 @@ public sealed class TortugarrService
 
     // ------------------------------------------------------------------ subtitles (3.8)
 
-    private BazarrClient Bazarr => new(Http, Cfg.BazarrUrl, Cfg.BazarrApiKey);
+    internal BazarrClient Bazarr => new(Http, Cfg.BazarrUrl, Cfg.BazarrApiKey);
 
     /// <summary>Bazarr knows movies by Radarr id and episodes by Sonarr episode id.</summary>
     private async Task<(string Kind, int MovieId, int SeriesId, int EpisodeId)> BazarrIds(string type, int? tmdbId, int? tvdbId, int? season, int? episode, CancellationToken ct)

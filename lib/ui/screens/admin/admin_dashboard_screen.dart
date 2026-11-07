@@ -21,6 +21,8 @@ import 'widgets/active_sessions_card.dart';
 import 'widgets/activity_log_card.dart';
 import 'widgets/running_tasks_card.dart';
 import 'widgets/server_actions_card.dart';
+import '../../../data/services/tortugarr/download_features.dart';
+import 'widgets/tortugarr_health_card.dart';
 
 class AdminDashboardScreen extends ConsumerStatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -225,6 +227,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               // Emby reports its folders without their sizes.
               showDisk: !isEmby,
             ),
+            // Radarr, Sonarr, qBittorrent & co. and the library disks (plugin).
+            if (DownloadFeatures.viaPlugin && DownloadFeatures.capabilities.value.health)
+              const TortugarrHealthCard(),
             ServerInfoCard(systemInfo: _systemInfo!),
             ServerActionsCard(
               client: _client,

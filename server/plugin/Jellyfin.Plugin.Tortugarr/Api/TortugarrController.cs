@@ -29,9 +29,11 @@ public class TortugarrController : ControllerBase
     private readonly UserLimitService _limits;
     private readonly SettingsService _settings;
     private readonly MediaBrowser.Controller.Library.IUserManager _users;
+    private readonly HealthService _health;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users, HealthService health)
     {
+        _health = health;
         _users = users;
         _settings = settings;
         _svc = svc;
@@ -333,6 +335,12 @@ public class TortugarrController : ControllerBase
     [Authorize(Policy = Admin)]
     public Task<IActionResult> Check([FromRoute] string downloadId) =>
         Run(async () => Json(await _svc.Check(downloadId, HttpContext.RequestAborted).ConfigureAwait(false)));
+
+    /// <summary>Server health for the admin dashboard: services, library disks, *arr warnings.</summary>
+    [HttpGet("Health")]
+    [Authorize(Policy = Admin)]
+    public Task<IActionResult> Health() =>
+        Run(async () => Json(await _health.CheckAsync(HttpContext.RequestAborted).ConfigureAwait(false)));
 
     /// <summary>3.7 - free space where downloads land.</summary>
     [HttpGet("Space")]

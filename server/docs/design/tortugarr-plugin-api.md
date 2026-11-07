@@ -651,3 +651,21 @@ action visible in Radarr/Sonarr/qBittorrent/Bazarr. Distribution: the installer 
 
 Without a route, the plugin itself gives every Prowlarr indexer the tag of the installer's
 FlareSolverr proxy, every few minutes, so sites behind Cloudflare work.
+
+### GET /Tortugarr/v1/Health (administrator, plugin 1.3.0.22+, capability `health`)
+
+One look at the server for the app's admin dashboard. Every configured service is asked for
+its version (Radarr, Sonarr, Prowlarr, qBittorrent, Bazarr, Seerr; 8 s each, in parallel);
+each library folder's disk is measured, folders on the same device are one entry, named by
+the Windows drive letter when the mount table shows one (WSL drvfs, e.g. `E:`); Radarr/Sonarr/
+Prowlarr `/health` entries are passed on (update notices as `info`; Radarr's root-folder
+warning is left out, Tortugarr lays out downloads that way on purpose). Collections (boxsets)
+are not a disk. A disk is `error` under 2 GB free and `warning` under 25 GB or under 5 %.
+
+```json
+{ "checkedAt": "...", "overall": "ok|warning|error",
+  "services": [{ "id": "radarr", "name": "Radarr", "ok": true, "version": "6.4.4", "message": null }],
+  "disks": [{ "drive": "E:", "libraries": ["Movies", "TV Shows"], "freeBytes": 0, "totalBytes": 0, "level": "warning" }],
+  "warnings": [{ "source": "Prowlarr", "level": "info", "message": "New update is available" }] }
+```
+
