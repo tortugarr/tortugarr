@@ -17277,6 +17277,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tgHealthRefresh => 'Check again';
+
+  @override
+  String get tgTopListsRow => 'Top lists';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).

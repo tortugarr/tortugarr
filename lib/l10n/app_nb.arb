@@ -11448,5 +11448,6 @@
     "tgHealthDisk": "Disk",
     "tgHealthFree": "{free} ledig av {total}",
     "tgHealthUnavailable": "Fikk ikke svar fra Tortugarr-pluginen.",
-    "tgHealthRefresh": "Sjekk igjen"
+    "tgHealthRefresh": "Sjekk igjen",
+    "tgTopListsRow": "Topplister"
 }

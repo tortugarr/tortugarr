@@ -1550,7 +1550,7 @@ class PluginSyncService extends ChangeNotifier {
             }
             if (!enabledTypes.contains(type)) {
               sections.add(
-                HomeSectionConfig(type: type, enabled: false, order: order++),
+                HomeSectionConfig(type: type, enabled: _keptOnWhenUnsynced(type), order: order++),
               );
             }
           }
@@ -1655,7 +1655,7 @@ class PluginSyncService extends ChangeNotifier {
         continue;
       }
       sections.add(
-        HomeSectionConfig(type: type, enabled: false, order: order++),
+        HomeSectionConfig(type: type, enabled: _keptOnWhenUnsynced(type), order: order++),
       );
     }
 
@@ -1676,6 +1676,17 @@ class PluginSyncService extends ChangeNotifier {
   /// synced fields already set them, and writing false would push that back.
   /// The seasonal row is the exception: a layout that leaves it out still
   /// travels with its synced toggle, so the toggle decides.
+  /// Tortugarr's top lists are newer than most synced layouts: a layout from
+  /// the server that does not name them keeps this device's choice (on by
+  /// default) instead of switching them off.
+  bool _keptOnWhenUnsynced(prefs.HomeSectionType type) {
+    if (type != prefs.HomeSectionType.tortugarrTopLists) return false;
+    for (final c in _prefs.homeSectionsConfig) {
+      if (c.isBuiltin && c.type == type) return c.enabled;
+    }
+    return true;
+  }
+
   int _appendDisabledBuiltinSections(
     List<HomeSectionConfig> sections,
     int order,
@@ -1685,8 +1696,9 @@ class PluginSyncService extends ChangeNotifier {
       if (type == prefs.HomeSectionType.none || present.contains(type)) {
         continue;
       }
-      final enabled = type == prefs.HomeSectionType.seasonal &&
-          _prefs.get(UserPreferences.seasonalRowEnabled);
+      final enabled = (type == prefs.HomeSectionType.seasonal &&
+              _prefs.get(UserPreferences.seasonalRowEnabled)) ||
+          _keptOnWhenUnsynced(type);
       sections.add(
         HomeSectionConfig(type: type, enabled: enabled, order: order++),
       );

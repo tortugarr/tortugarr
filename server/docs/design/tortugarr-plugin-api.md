@@ -669,3 +669,22 @@ are not a disk. A disk is `error` under 2 GB free and `warning` under 25 GB or u
   "warnings": [{ "source": "Prowlarr", "level": "info", "message": "New update is available" }] }
 ```
 
+### GET /Tortugarr/v1/TopLists and /TopLists/{index}?limit=30 (any user, plugin 1.3.0.24+, capability `topLists`)
+
+Home rows from public MDBList lists (no key; `https://mdblist.com/lists/{user}/{list}/json`). The
+lists are the `TopLists` setting, one `Title|user/list` per line; defaults: most watched films
+this week, most watched shows this week, new on digital, IMDb Top 250. A list is cached 6 h (an
+old copy is served when MDBList fails); each title gets poster, backdrop and overview from Seerr
+(cached 3 days) and, when the calling user can see it, `libraryItemId` (movies by TMDB id,
+series by TVDB id). Adult entries are left out.
+
+```json
+{ "index": 1, "title": "Most watched shows this week",
+  "items": [{ "tmdbId": 247718, "tvdbId": 446831, "imdbId": "tt31510819", "mediaType": "tv",
+              "title": "MobLand", "year": 2025, "overview": "...", "posterUrl": "https://image.tmdb.org/t/p/w342/...",
+              "backdropUrl": "...", "libraryItemId": null }] }
+```
+
+The app's home section "Top lists" (`tortugarr_top_lists`, on by default) shows one row per list:
+owned titles as library cards, the rest as Seerr cards that lead to Download now.
+

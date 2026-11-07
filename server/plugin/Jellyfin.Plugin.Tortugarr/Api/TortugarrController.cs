@@ -30,9 +30,11 @@ public class TortugarrController : ControllerBase
     private readonly SettingsService _settings;
     private readonly MediaBrowser.Controller.Library.IUserManager _users;
     private readonly HealthService _health;
+    private readonly TopListService _top;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users, HealthService health)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users, HealthService health, TopListService top)
     {
+        _top = top;
         _health = health;
         _users = users;
         _settings = settings;
@@ -335,6 +337,15 @@ public class TortugarrController : ControllerBase
     [Authorize(Policy = Admin)]
     public Task<IActionResult> Check([FromRoute] string downloadId) =>
         Run(async () => Json(await _svc.Check(downloadId, HttpContext.RequestAborted).ConfigureAwait(false)));
+
+    /// <summary>The top lists the home screen may show. Any logged-in user.</summary>
+    [HttpGet("TopLists")]
+    public IActionResult TopLists() => Json(new { lists = _top.Lists() });
+
+    /// <summary>One top list with posters and, for titles the user has, the library item id. Any logged-in user.</summary>
+    [HttpGet("TopLists/{index:int}")]
+    public Task<IActionResult> TopList([FromRoute] int index, [FromQuery] int limit = 30) =>
+        Run(async () => Json(await _top.GetAsync(index, limit, UserId, HttpContext.RequestAborted).ConfigureAwait(false)));
 
     /// <summary>Server health for the admin dashboard: services, library disks, *arr warnings.</summary>
     [HttpGet("Health")]

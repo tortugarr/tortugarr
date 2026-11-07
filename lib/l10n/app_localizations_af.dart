@@ -17362,4 +17362,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get tgHealthRefresh => 'Check again';
+
+  @override
+  String get tgTopListsRow => 'Top lists';
 }

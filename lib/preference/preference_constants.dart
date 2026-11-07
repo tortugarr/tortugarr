@@ -550,6 +550,7 @@ enum HomeSectionType {
   sinceYouWatched5('sinceyouwatched5'),
   rewatch('rewatch'),
   seasonal('seasonal'),
+  tortugarrTopLists('tortugarr_top_lists'),
   none('none');
 
   const HomeSectionType(this.serializedName);

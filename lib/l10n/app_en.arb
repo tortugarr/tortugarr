@@ -16057,5 +16057,6 @@
         }
     },
     "tgHealthUnavailable": "No answer from the Tortugarr plugin.",
-    "tgHealthRefresh": "Check again"
+    "tgHealthRefresh": "Check again",
+    "tgTopListsRow": "Top lists"
 }

@@ -1858,6 +1858,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         HomeSectionType.sinceYouWatched5 => l10n.tgRowSinceYouWatchedNumber(5),
         HomeSectionType.rewatch => l10n.tgRewatch,
         HomeSectionType.seasonal => l10n.seasonalRow,
+        HomeSectionType.tortugarrTopLists => l10n.tgTopListsRow,
         HomeSectionType.none => l10n.none,
       };
 

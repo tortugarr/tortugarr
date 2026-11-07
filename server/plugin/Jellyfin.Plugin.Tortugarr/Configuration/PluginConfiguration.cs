@@ -85,6 +85,16 @@ public class PluginConfiguration : BasePluginConfiguration
 
     public long MinSdMovieBytes { get; set; } = 350L * 1024 * 1024;
 
+    /// <summary>
+    /// Home rows from public MDBList lists, one "Title|user/list" per line (2026-11-08). The lists
+    /// are kept by MDBList users; when one moves, put another here.
+    /// </summary>
+    public string TopLists { get; set; } =
+        "Most watched films this week|linaspurinis/top-watched-movies-of-the-week\n" +
+        "Most watched shows this week|jah57/trakt-most-watched-shows-of-the-week\n" +
+        "New on digital|snoak/latest-movies-digital-release\n" +
+        "IMDb Top 250|georgenilas/imdb-top-250";
+
     public string BannedExtensions { get; set; } =
         ".exe .msi .apk .app .dmg .pkg .bat .cmd .ps1 .sh .scr .com .jar .py .rb .pl .php .zip .rar .7z .tar .gz .bz2 .xz .iso .img .vhd .vhdx .pdf .doc .docx .txt .rtf";
 

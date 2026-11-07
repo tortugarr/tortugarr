@@ -16869,6 +16869,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tgHealthRefresh => 'Check again';
+
+  @override
+  String get tgTopListsRow => 'Top lists';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

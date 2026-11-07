@@ -396,6 +396,12 @@ class HomeSectionConfig {
       enabled: false,
       order: 47,
     ),
+    // One row per top list the Tortugarr plugin offers (2026-11-08).
+    HomeSectionConfig(
+      type: HomeSectionType.tortugarrTopLists,
+      enabled: true,
+      order: 48,
+    ),
   ];
 
   static bool isSupportedJson(Map<String, dynamic> json) {

@@ -232,7 +232,8 @@ void main() {
       hold: longPress,
     );
 
-    expect(enabledOrder(), [before[1], before[2], before[0], before[3]]);
+    // Rows after the merged pair (the top lists, 2026-11-08) stay where they were.
+    expect(enabledOrder(), [before[1], before[2], before[0], ...before.skip(3)]);
   });
 
   testWidgets('a row ticked after a drag still lands at the bottom', (

@@ -45,6 +45,8 @@ import '../../../util/seasonal_country.dart';
 import '../../../util/seerr_genre_art.dart';
 import '../../util/home_row_title_localizer.dart';
 import 'package:moonfin/util/app_l10n.dart';
+import '../../../data/services/tortugarr/download_features.dart';
+import '../../../data/services/tortugarr/tortugarr_plugin_client.dart';
 
 class HomeViewModel extends ChangeNotifier {
   /// Cards in a merged row, matching what a single library row shows.
@@ -241,7 +243,8 @@ class HomeViewModel extends ChangeNotifier {
       HomeSectionType.audioPlaylists ||
       HomeSectionType.radarrCalendar ||
       HomeSectionType.sonarrCalendar ||
-      HomeSectionType.seasonal =>
+      HomeSectionType.seasonal ||
+      HomeSectionType.tortugarrTopLists =>
         false,
       final t when _isSeerrSectionType(t) || _isTmdbSectionType(t) => false,
       _ => true,
@@ -486,7 +489,8 @@ class HomeViewModel extends ChangeNotifier {
                 (c.type != HomeSectionType.sonarrCalendar || _prefs.get(UserPreferences.enableSonarrCalendar)) &&
                 (c.type.sinceYouWatchedRow == 0 || (showSinceYouWatched && c.type.sinceYouWatchedRow <= sinceYouWatchedNum)) &&
                 (c.type != HomeSectionType.rewatch || showRewatch) &&
-                (c.type != HomeSectionType.seasonal || showSeasonal),
+                (c.type != HomeSectionType.seasonal || showSeasonal) &&
+                (c.type != HomeSectionType.tortugarrTopLists || _topListsAvailable),
           )
           .toList(growable: false);
 
@@ -970,6 +974,8 @@ class HomeViewModel extends ChangeNotifier {
         return row.id == 'sonarr_calendar';
       case HomeSectionType.seasonal:
         return row.id == 'seasonal';
+      case HomeSectionType.tortugarrTopLists:
+        return row.id == _topListsPlaceholderId || row.id.startsWith(_topListRowPrefix);
       case HomeSectionType.mediaBar:
       case HomeSectionType.recentlyReleased:
         return row.rowType == HomeRowType.recentlyReleased;
@@ -1324,6 +1330,8 @@ class HomeViewModel extends ChangeNotifier {
         return const {'sonarrCalendar'};
       case HomeSectionType.seasonal:
         return const {'seasonal'};
+      case HomeSectionType.tortugarrTopLists:
+        return const <String>{};
       case HomeSectionType.sinceYouWatched1:
         return const {'sinceYouWatched1'};
       case HomeSectionType.sinceYouWatched2:
@@ -1740,6 +1748,8 @@ class HomeViewModel extends ChangeNotifier {
         return _loadRecentlyReleasedRow();
       case HomeSectionType.seasonal:
         return _loadSeasonalRow(l10n, forceRefresh: forceRefresh);
+      case HomeSectionType.tortugarrTopLists:
+        return _loadTortugarrTopLists();
       case HomeSectionType.sinceYouWatched1:
       case HomeSectionType.sinceYouWatched2:
       case HomeSectionType.sinceYouWatched3:
@@ -2245,6 +2255,13 @@ class HomeViewModel extends ChangeNotifier {
         return HomeRow(
           id: 'seasonal',
           title: l10n.seasonalRow,
+          rowType: HomeRowType.pluginDynamic,
+          isLoading: true,
+        );
+      case HomeSectionType.tortugarrTopLists:
+        return HomeRow(
+          id: _topListsPlaceholderId,
+          title: appL10n().tgTopListsRow,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
@@ -3266,6 +3283,118 @@ class HomeViewModel extends ChangeNotifier {
       debugPrint('[SeasonalRow] Failed to load the seasonal row: $e');
       return const [];
     }
+  }
+
+  static const _topListsPlaceholderId = 'tortugarr_top_lists';
+  static const _topListRowPrefix = 'tortugarr_top_';
+  static const _topListOwnedFields =
+      'DateCreated,Type,UserData,Overview,Genres,CommunityRating,CriticRating,'
+      'OfficialRating,RunTimeTicks,ProductionYear,Status,ImageTags,BackdropImageTags,'
+      'PrimaryImageTag,PrimaryImageAspectRatio';
+
+  /// Top lists need the Tortugarr plugin (public build); the section's own
+  /// switch in the home sections list turns them off.
+  bool get _topListsAvailable =>
+      DownloadFeatures.viaPlugin && DownloadFeatures.capabilities.value.topLists;
+
+  /// One row per top list the Tortugarr plugin offers (2026-11-08): this
+  /// week's most watched, new on digital, IMDb Top 250. Titles the viewer has
+  /// open from the library; the rest are Seerr cards that lead to Download now.
+  Future<List<HomeRow>> _loadTortugarrTopLists() async {
+    if (!_topListsAvailable) return const [];
+    try {
+      final plugin = TortugarrPluginClient();
+      final lists = await plugin.topLists();
+      final answers = await Future.wait(lists.map((l) async {
+        try {
+          return await plugin.topList(l.index);
+        } catch (e) {
+          debugPrint('[TopLists] List ${l.index} failed: $e');
+          return null;
+        }
+      }));
+      final ownedIds = <String>{
+        for (final a in answers.nonNulls)
+          for (final i in (a['items'] as List? ?? const []).whereType<Map>())
+            if ((i['libraryItemId'] as String?)?.isNotEmpty == true) i['libraryItemId'] as String,
+      };
+      final owned = <String, Map<String, dynamic>>{};
+      if (ownedIds.isNotEmpty) {
+        final res = await _client.itemsApi.getItems(
+          ids: ownedIds.toList(),
+          fields: _topListOwnedFields,
+          enableImageTypes: 'Primary,Backdrop,Thumb',
+          imageTypeLimit: 1,
+        );
+        for (final raw in (res['Items'] as List? ?? const []).whereType<Map>()) {
+          final item = Map<String, dynamic>.from(raw);
+          final id = item['Id']?.toString().replaceAll('-', '').toLowerCase();
+          if (id != null) owned[id] = item;
+        }
+      }
+      return [
+        for (final a in answers.nonNulls)
+          if (mapTopList(a, owned: owned, serverId: _serverId) case final row?)
+            row.copyWith(items: [
+              ...withoutBlockedItems(row.items.where((i) => i.serverId != 'seerr').toList()),
+              ...withoutUnratedOrBlockedItems(row.items.where((i) => i.serverId == 'seerr').toList()),
+            ]),
+      ];
+    } catch (e) {
+      debugPrint('[TopLists] Failed to load the top lists: $e');
+      return const [];
+    }
+  }
+
+  /// A plugin top list as a home row, in list order: owned titles as library
+  /// cards (from [owned], keyed by the item id without dashes, lower case),
+  /// the rest as Seerr cards with a TMDB id. Null when nothing is left.
+  @visibleForTesting
+  static HomeRow? mapTopList(
+    Map<String, dynamic> body, {
+    required Map<String, Map<String, dynamic>> owned,
+    required String serverId,
+  }) {
+    final index = body['index'];
+    if (index is! num) return null;
+    final items = <AggregatedItem>[];
+    for (final raw in (body['items'] as List? ?? const []).whereType<Map>()) {
+      final libraryId = (raw['libraryItemId'] as String?)?.replaceAll('-', '').toLowerCase();
+      final mine = libraryId == null ? null : owned[libraryId];
+      if (mine != null) {
+        items.add(AggregatedItem(id: '${mine['Id']}', serverId: serverId, rawData: mine));
+        continue;
+      }
+      final tmdb = raw['tmdbId']?.toString() ?? '';
+      if (tmdb.isEmpty || tmdb == '0') continue;
+      final tv = raw['mediaType'] == 'tv';
+      final imdb = raw['imdbId']?.toString() ?? '';
+      items.add(AggregatedItem(
+        id: tmdb,
+        serverId: 'seerr',
+        rawData: {
+          'Name': raw['title'] ?? '',
+          'Type': tv ? 'Series' : 'Movie',
+          'Overview': raw['overview'] ?? '',
+          'PosterPath': raw['posterUrl'] ?? '',
+          'BackdropPath': raw['backdropUrl'] ?? '',
+          'ProductionYear': raw['year'],
+          'SeerrMediaType': tv ? 'tv' : 'movie',
+          'ProviderIds': {
+            'Tmdb': tmdb,
+            if (imdb.isNotEmpty) 'Imdb': imdb,
+            if (raw['tvdbId'] != null) 'Tvdb': '${raw['tvdbId']}',
+          },
+        },
+      ));
+    }
+    if (items.isEmpty) return null;
+    return HomeRow(
+      id: '$_topListRowPrefix${index.toInt()}',
+      title: '${body['title'] ?? ''}',
+      rowType: HomeRowType.pluginDynamic,
+      items: items,
+    );
   }
 
   /// The parts of a seasonal answer Home can show, or null when the viewer hid

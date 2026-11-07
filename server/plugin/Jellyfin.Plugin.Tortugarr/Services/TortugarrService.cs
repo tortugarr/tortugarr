@@ -90,7 +90,7 @@ public sealed class TortugarrService
 
     private static PluginConfiguration Cfg => Plugin.Instance?.Configuration ?? new PluginConfiguration();
 
-    private HttpClient Http
+    internal HttpClient Http
     {
         get
         {
@@ -225,6 +225,7 @@ public sealed class TortugarrService
                 freeSpace = isAdmin && qbit && (Has(c.SonarrUrl, c.SonarrApiKey) || Has(c.RadarrUrl, c.RadarrApiKey)),
                 adult = isAdmin && AdultReady(c),
                 health = isAdmin,
+                topLists = !string.IsNullOrWhiteSpace(c.TopLists),
             },
             categories = new { movies = c.MovieCategory, tv = c.TvCategory },
             limits,

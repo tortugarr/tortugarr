@@ -34,6 +34,7 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddSingleton<SeriesService>();
         serviceCollection.AddSingleton<SpaceService>();
         serviceCollection.AddSingleton<HealthService>();
+        serviceCollection.AddSingleton<TopListService>();
         serviceCollection.AddHostedService<FlareSolverrTagger>();
         serviceCollection.AddHostedService<MoonbaseGate>();
         serviceCollection.AddHostedService<QbitWatchdog>();

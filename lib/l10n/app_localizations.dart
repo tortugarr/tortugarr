@@ -30070,6 +30070,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check again'**
   String get tgHealthRefresh;
+
+  /// No description provided for @tgTopListsRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Top lists'**
+  String get tgTopListsRow;
 }
 
 class _AppLocalizationsDelegate

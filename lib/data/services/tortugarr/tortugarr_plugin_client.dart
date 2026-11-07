@@ -27,6 +27,9 @@ class TortugarrCapabilities {
   /// The server health card on the admin dashboard (plugin 1.3.0.22+).
   final bool health;
 
+  /// Top lists as home rows (plugin 1.3.0.24+).
+  final bool topLists;
+
   /// Set for a limited downloader (a non-administrator with download
   /// limits); null for administrators and everyone else.
   final TortugarrUserLimits? limits;
@@ -43,6 +46,7 @@ class TortugarrCapabilities {
     this.freeSpace = false,
     this.adult = false,
     this.health = false,
+    this.topLists = false,
     this.limits,
   });
 
@@ -63,6 +67,7 @@ class TortugarrCapabilities {
       freeSpace: on('freeSpace'),
       adult: on('adult'),
       health: on('health'),
+      topLists: on('topLists'),
       limits: json['limits'] is Map
           ? TortugarrUserLimits.fromJson((json['limits'] as Map).cast<String, dynamic>())
           : null,
@@ -677,6 +682,22 @@ class TortugarrPluginClient {
           for (final e in raw.entries)
             if (int.tryParse('${e.key}') != null) int.parse('${e.key}'): e.value == true,
       };
+
+  /// The top lists the server offers as home rows: index and title.
+  Future<List<({int index, String title})>> topLists() async {
+    final data = await _send('GET', '/TopLists');
+    final lists = data is Map ? data['lists'] : null;
+    return [
+      if (lists is List)
+        for (final l in lists.whereType<Map>())
+          if (l['index'] is num) (index: (l['index'] as num).toInt(), title: '${l['title'] ?? ''}'),
+    ];
+  }
+
+  /// One top list: its titles with posters and, for those the user has, the
+  /// library item id.
+  Future<Map<String, dynamic>> topList(int index, {int limit = 30}) async =>
+      ((await _send('GET', '/TopLists/$index', query: {'limit': limit})) as Map).cast<String, dynamic>();
 
   /// Services, library disks and *arr warnings in one look (admin dashboard).
   Future<TortugarrHealth> health() async =>

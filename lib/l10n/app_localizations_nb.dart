@@ -17376,4 +17376,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgHealthRefresh => 'Sjekk igjen';
+
+  @override
+  String get tgTopListsRow => 'Topplister';
 }

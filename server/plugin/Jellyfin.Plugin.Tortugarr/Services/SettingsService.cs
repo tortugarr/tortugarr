@@ -68,6 +68,7 @@ public sealed class SettingsService
         [nameof(PluginConfiguration.MinVideoBytes)] = Kind.Number,
         [nameof(PluginConfiguration.EarlyReleaseDays)] = Kind.Number,
         [nameof(PluginConfiguration.BannedExtensions)] = Kind.Text,
+        [nameof(PluginConfiguration.TopLists)] = Kind.Text,
         [nameof(PluginConfiguration.VideoExtensions)] = Kind.Text,
     };
 

@@ -17445,6 +17445,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tgHealthRefresh => 'Check again';
+
+  @override
+  String get tgTopListsRow => 'Top lists';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
