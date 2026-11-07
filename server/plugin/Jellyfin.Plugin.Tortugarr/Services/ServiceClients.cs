@@ -230,6 +230,35 @@ public sealed class QbitClient
         await Request(HttpMethod.Post, "/api/v2/torrents/recheck", form, cookie, ct).ConfigureAwait(false);
     }
 
+    /// <summary>Asks the trackers (and DHT) for fresh peers now.</summary>
+    public async Task Reannounce(IEnumerable<string> hashes, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        await Request(HttpMethod.Post, "/api/v2/torrents/reannounce", Hashes(hashes), cookie, ct).ConfigureAwait(false);
+    }
+
+    /// <summary>Stops the torrents. qBittorrent 5 calls it stop, 4 calls it pause; the name
+    /// a version lacks answers 404, which is ignored, so both are sent.</summary>
+    public async Task Stop(IEnumerable<string> hashes, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        var list = hashes.ToList();
+        await Request(HttpMethod.Post, "/api/v2/torrents/stop", Hashes(list), cookie, ct).ConfigureAwait(false);
+        await Request(HttpMethod.Post, "/api/v2/torrents/pause", Hashes(list), cookie, ct).ConfigureAwait(false);
+    }
+
+    /// <summary>Starts the torrents again (start in qBittorrent 5, resume in 4).</summary>
+    public async Task Start(IEnumerable<string> hashes, CancellationToken ct)
+    {
+        var cookie = await Login(ct).ConfigureAwait(false);
+        var list = hashes.ToList();
+        await Request(HttpMethod.Post, "/api/v2/torrents/start", Hashes(list), cookie, ct).ConfigureAwait(false);
+        await Request(HttpMethod.Post, "/api/v2/torrents/resume", Hashes(list), cookie, ct).ConfigureAwait(false);
+    }
+
+    private static FormUrlEncodedContent Hashes(IEnumerable<string> hashes) =>
+        new(new Dictionary<string, string> { ["hashes"] = string.Join('|', hashes).ToLowerInvariant() });
+
     /// <summary>Closes qBittorrent cleanly; something on its machine has to start it again.</summary>
     public async Task Shutdown(CancellationToken ct)
     {

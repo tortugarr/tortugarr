@@ -147,6 +147,12 @@ public class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public bool QbitWatchdogRestart { get; set; }
 
+    /// <summary>
+    /// Nudges downloads that make no progress (2026-11-07: a torrent sat at 59.7 % "stalled" with
+    /// ten seeds announced; a reannounce got it going). Part of the watchdog; on by default.
+    /// </summary>
+    public bool QbitStallNudge { get; set; } = true;
+
     /// <summary>The watchdog's last action, e.g. "2026-11-05 04:40Z rechecked 3 stuck torrents".</summary>
     public string QbitWatchdogStatus { get; set; } = string.Empty;
 }

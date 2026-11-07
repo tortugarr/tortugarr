@@ -87,4 +87,84 @@ public class QbitWatchdogTests
         QbitWatchdog.Decide(new JsonArray(), s, T0.AddMinutes(9), true);
         Assert.Empty(s.Rechecked);
     }
+
+    // ---- stalled downloads (2026-11-07: "dengus" at 59.7 %, stalledDL, ten seeds announced)
+
+    private static JsonObject Slow(string state = "stalledDL", long left = 2629112144L, bool forced = false) => new()
+    {
+        ["hash"] = "42e4fa93", ["name"] = "dengus", ["state"] = state, ["progress"] = 0.597,
+        ["amount_left"] = left, ["size"] = 6536892752L, ["completion_on"] = -1, ["force_start"] = forced,
+    };
+
+    [Fact]
+    public void A_download_without_new_data_gets_fresh_peers_after_15_minutes_and_a_restart_after_30()
+    {
+        var tracks = new Dictionary<string, StallTrack>();
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0).Reannounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(12)).Reannounce);
+
+        var at15 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(15));
+        Assert.Equal(new[] { "42e4fa93" }, at15.Reannounce);
+        Assert.Empty(at15.Bounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(18)).Reannounce); // not every pass
+
+        var at30 = QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(30));
+        Assert.Equal(new[] { "42e4fa93" }, at30.Bounce);
+        Assert.Empty(at30.Reannounce);
+        Assert.Empty(QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(33)).Bounce); // not again within 2 h
+        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(60)).Reannounce);
+        Assert.Equal(new[] { "42e4fa93" }, QbitWatchdog.DecideStalls(List(Slow()), tracks, T0.AddMinutes(150)).Bounce);
+    }
+
+    [Fact]
+    public void New_data_starts_the_clock_again_even_when_qbittorrent_says_stalled_in_between()
+    {
+        var tracks = new Dictionary<string, StallTrack>();
+        QbitWatchdog.DecideStalls(List(Slow()), tracks, T0);
+        QbitWatchdog.DecideStalls(List(Slow("downloading", 2600000000L)), tracks, T0.AddMinutes(12));
+        var plan = QbitWatchdog.DecideStalls(List(Slow("stalledDL", 2600000000L)), tracks, T0.AddMinutes(20));
+        Assert.Empty(plan.Reannounce);
+        Assert.Empty(plan.Bounce);
+    }
+
+    [Theory]
+    [InlineData("stoppedDL")] // the user stopped it
+    [InlineData("pausedDL")]
+    [InlineData("queuedDL")]
+    [InlineData("checkingDL")]
+    [InlineData("metaDL")]
+    [InlineData("forcedDL")]
+    [InlineData("stalledUP")] // finished, seeding
+    [InlineData("uploading")]
+    public void Torrents_qbittorrent_does_not_run_on_its_own_are_never_touched(string state)
+    {
+        var tracks = new Dictionary<string, StallTrack>();
+        for (var m = 0; m <= 180; m += 3)
+        {
+            var plan = QbitWatchdog.DecideStalls(List(Slow(state)), tracks, T0.AddMinutes(m));
+            Assert.Empty(plan.Reannounce);
+            Assert.Empty(plan.Bounce);
+        }
+    }
+
+    [Fact]
+    public void Force_started_and_falsely_complete_torrents_are_left_alone()
+    {
+        var tracks = new Dictionary<string, StallTrack>();
+        for (var m = 0; m <= 60; m += 3)
+        {
+            var plan = QbitWatchdog.DecideStalls(List(Slow(forced: true), Stuck()), tracks, T0.AddMinutes(m));
+            Assert.Empty(plan.Reannounce);
+            Assert.Empty(plan.Bounce);
+        }
+    }
+
+    [Fact]
+    public void A_removed_torrent_is_forgotten()
+    {
+        var tracks = new Dictionary<string, StallTrack>();
+        QbitWatchdog.DecideStalls(List(Slow()), tracks, T0);
+        QbitWatchdog.DecideStalls(new JsonArray(), tracks, T0.AddMinutes(3));
+        Assert.Empty(tracks);
+    }
 }
