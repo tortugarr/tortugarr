@@ -1790,6 +1790,87 @@ public sealed class TortugarrService
         await arr.Delete($"/queue/{(int)rec["id"]!}?removeFromClient=true&blocklist={(blocklist ? "true" : "false")}&skipRedownload=false", ct).ConfigureAwait(false);
     }
 
+    // ------------------------------------------------------------------ fake downloads
+
+    /// <summary>
+    /// Why Radarr/Sonarr refuse to import a finished download that holds no video: an .exe
+    /// (qBittorrent skips those, so nothing is left), a .zip, a sample only. Seen 2026-11-07:
+    /// Sonarr grabbed "Nocturne S01E03 … MeGusta" by itself, the torrent was an .exe, and it
+    /// sat at 100 % in qBittorrent forever.
+    /// </summary>
+    internal static readonly System.Text.RegularExpressions.Regex FakeImportReason = new(
+        @"no files found are eligible for import|unsupported extension|potentially dangerous|dangerous file|executable file|not a video file|no video files? found",
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    /// <summary>Finished downloads one *arr will never import because they hold no video.</summary>
+    internal static List<FakeDownload> FindFakes(string arrName, JsonArray? records)
+    {
+        var found = new List<FakeDownload>();
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var r in records ?? new JsonArray())
+        {
+            if (r is null)
+            {
+                continue;
+            }
+
+            var tracked = ((string?)r["trackedDownloadState"] ?? string.Empty).ToLowerInvariant();
+            if (tracked is not ("importpending" or "importblocked"))
+            {
+                continue;
+            }
+
+            var done = string.Equals((string?)r["status"], "completed", StringComparison.OrdinalIgnoreCase)
+                || (double.TryParse(r["sizeleft"]?.ToString(), System.Globalization.CultureInfo.InvariantCulture, out var left) && left == 0);
+            var downloadId = (string?)r["downloadId"];
+            if (!done || string.IsNullOrEmpty(downloadId) || r["id"] is null)
+            {
+                continue;
+            }
+
+            var why = string.Join("; ", (r["statusMessages"] as JsonArray ?? new JsonArray())
+                .SelectMany(m => (m?["messages"] as JsonArray ?? new JsonArray()).Select(x => (string?)x))
+                .Where(x => !string.IsNullOrWhiteSpace(x)));
+            var match = FakeImportReason.Match(why);
+            if (!match.Success || !ids.Add(downloadId))
+            {
+                continue; // a season pack has one record per episode; the download is one
+            }
+
+            found.Add(new FakeDownload(arrName, (int)r["id"]!, downloadId, (string?)r["title"] ?? downloadId, why));
+        }
+
+        return found;
+    }
+
+    /// <summary>All fake downloads Radarr and Sonarr hold right now.</summary>
+    internal async Task<List<FakeDownload>> ListFakes(CancellationToken ct)
+    {
+        var all = new List<FakeDownload>();
+        foreach (var name in new[] { "Radarr", "Sonarr" })
+        {
+            try
+            {
+                var arr = name == "Radarr" ? Radarr : Sonarr; // throws when not set up
+                var q = await arr.Get("/queue?pageSize=1000", ct).ConfigureAwait(false);
+                all.AddRange(FindFakes(name, q?["records"] as JsonArray));
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                _log.LogDebug(e, "Tortugarr: queue unavailable for the fake-download check");
+            }
+        }
+
+        return all;
+    }
+
+    /// <summary>Removes a fake from qBittorrent with its files, blocklists it and lets the *arr search again.</summary>
+    internal async Task RemoveFake(FakeDownload fake, CancellationToken ct)
+    {
+        var arr = fake.Arr == "Radarr" ? Radarr : Sonarr;
+        await arr.Delete($"/queue/{fake.QueueId}?removeFromClient=true&blocklist=true&skipRedownload=false", ct).ConfigureAwait(false);
+    }
+
     // ------------------------------------------------------------------ stalled downloads
 
     /// <summary>How far a replacement may be from the stalled release's size.</summary>

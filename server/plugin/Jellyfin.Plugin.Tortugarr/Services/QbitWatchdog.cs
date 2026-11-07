@@ -44,6 +44,9 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     internal static readonly TimeSpan MetadataGiveUpAfter = TimeSpan.FromMinutes(30);
     private static readonly TimeSpan QuietAfterRestart = TimeSpan.FromMinutes(2);
 
+    // A fake must look fake on two passes before it goes: Radarr/Sonarr may still be busy.
+    internal static readonly TimeSpan FakeConfirmAfter = Every - TimeSpan.FromSeconds(30);
+
     private static readonly HashSet<string> DownloadStates = new(StringComparer.Ordinal)
     {
         "downloading", "stalledDL", "forcedDL", "queuedDL", "metaDL", "forcedMetaDL",
@@ -138,6 +141,8 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
                 LogLevel.Information).ConfigureAwait(false);
         }
 
+        await SweepFakesAsync(ct).ConfigureAwait(false);
+
         if (plan.Restart)
         {
             Interlocked.Exchange(ref _restartedAtTicks, DateTimeOffset.UtcNow.UtcTicks);
@@ -147,6 +152,65 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
                 $"The file check of {string.Join(", ", plan.HungNames)} hung; Tortugarr closed qBittorrent so it starts fresh.",
                 LogLevel.Warning).ConfigureAwait(false);
         }
+    }
+
+    /// <summary>
+    /// Finished Radarr/Sonarr downloads with no video in them (an .exe, a .zip) never import
+    /// and would sit in qBittorrent forever. They are removed with their files, the release is
+    /// blocklisted and Radarr/Sonarr search for another one (user, 2026-11-07: only XXX may
+    /// stay in qBittorrent).
+    /// </summary>
+    private async Task SweepFakesAsync(CancellationToken ct)
+    {
+        var found = await _svc.ListFakes(ct).ConfigureAwait(false);
+        foreach (var fake in DecideFakes(found, _state.Fakes, DateTimeOffset.UtcNow))
+        {
+            try
+            {
+                await _svc.RemoveFake(fake, ct).ConfigureAwait(false);
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                _log.LogWarning(e, "Tortugarr: could not remove the fake download {Title}", fake.Title);
+                continue;
+            }
+
+            Report($"removed fake download {fake.Title} ({fake.Reason}); blocklisted, {fake.Arr} searches again");
+            await _notice.PostAsync("Stall", $"Fake download removed: {fake.Title}",
+                $"It held no video ({fake.Reason}). Tortugarr removed it from qBittorrent with its files, blocklisted the release, and {fake.Arr} is looking for another one.",
+                LogLevel.Warning).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>Fakes seen on an earlier pass too; forgets the ones that are gone.</summary>
+    internal static List<FakeDownload> DecideFakes(List<FakeDownload> found, Dictionary<string, DateTimeOffset> seen, DateTimeOffset now)
+    {
+        var act = new List<FakeDownload>();
+        var present = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var f in found)
+        {
+            present.Add(f.DownloadId);
+            if (!seen.TryGetValue(f.DownloadId, out var first))
+            {
+                seen[f.DownloadId] = now;
+            }
+            else if (now - first >= FakeConfirmAfter)
+            {
+                act.Add(f);
+            }
+        }
+
+        foreach (var gone in seen.Keys.Where(k => !present.Contains(k)).ToList())
+        {
+            seen.Remove(gone);
+        }
+
+        foreach (var f in act)
+        {
+            seen.Remove(f.DownloadId);
+        }
+
+        return act;
     }
 
     private async Task NudgeAsync(CancellationToken ct)
@@ -388,6 +452,8 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 /// <summary>What the watchdog remembers between passes.</summary>
 internal sealed class WatchdogState
 {
+    public Dictionary<string, DateTimeOffset> Fakes { get; } = new(StringComparer.OrdinalIgnoreCase);
+
     public Dictionary<string, DateTimeOffset> FirstSeen { get; } = new(StringComparer.Ordinal);
 
     public Dictionary<string, DateTimeOffset> Rechecked { get; } = new(StringComparer.Ordinal);
@@ -439,3 +505,6 @@ internal sealed class WatchdogPlan
 
     public bool Restart { get; set; }
 }
+
+/// <summary>A finished Radarr/Sonarr download that will never import: it holds no video.</summary>
+internal sealed record FakeDownload(string Arr, int QueueId, string DownloadId, string Title, string Reason);
