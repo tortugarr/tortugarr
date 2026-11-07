@@ -39,6 +39,9 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     // When nothing helped: Radarr/Sonarr downloads are swapped for another release, XXX ones
     // deleted with their partial files, and the admin gets a popup (user, 2026-11-07).
     internal static readonly TimeSpan GiveUpAfter = TimeSpan.FromHours(3);
+
+    // A magnet that never gets its metadata has nobody sharing it: given up much sooner.
+    internal static readonly TimeSpan MetadataGiveUpAfter = TimeSpan.FromMinutes(30);
     private static readonly TimeSpan QuietAfterRestart = TimeSpan.FromMinutes(2);
 
     private static readonly HashSet<string> DownloadStates = new(StringComparer.Ordinal)
@@ -225,7 +228,14 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
             // it shows while connected seeds refuse to send). Stopped, queued, checking,
             // forced, metadata and finished torrents are left alone, as are the 100 % ones the
             // recheck above deals with.
-            if (state is not ("stalledDL" or "downloading") || forced || left <= 0 || FalselyComplete(t))
+            // "metaDL": a magnet still waiting for its metadata (no peer has answered at all).
+            var meta = state == "metaDL";
+            if (meta)
+            {
+                left = -1; // unknown until the metadata arrives; any change then restarts the clock
+            }
+
+            if (!(meta || state is "stalledDL" or "downloading") || forced || (!meta && (left <= 0 || FalselyComplete(t))))
             {
                 tracks.Remove(hash);
                 continue;
@@ -240,7 +250,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 
             var still = now - track.Since;
             var name = (string?)t["name"] ?? hash;
-            if (still >= GiveUpAfter)
+            if (still >= (meta ? MetadataGiveUpAfter : GiveUpAfter))
             {
                 if (!track.GaveUp)
                 {

@@ -377,6 +377,7 @@ public sealed class TortugarrService
         var (releases, early) = filter.Apply(raw.Where(x => x is not null).Select(x => ArrRelease.FromJson(x!)), "movie", home, job.Request.AllowSd);
         LogSearch(job, "Radarr", raw.Count, releases.Count, filter, early);
         MarkOverLimit(job, releases);
+        await CheckLiveSeeds(releases, ct).ConfigureAwait(false);
         Remember(job, releases);
         var unavailable = await UnavailableIndexers(radarr, ct).ConfigureAwait(false);
         return new { title = (string?)movie["title"], year = (int?)movie["year"], arrId = job.ArrId, droppedEarly = early, dropped = filter.Dropped, unavailableIndexers = unavailable, releases };
@@ -421,6 +422,7 @@ public sealed class TortugarrService
         }
 
         MarkOverLimit(job, releases);
+        await CheckLiveSeeds(releases, ct).ConfigureAwait(false);
         Remember(job, releases);
         var unavailable = await UnavailableIndexers(sonarr, ct).ConfigureAwait(false);
         return new { title = (string?)series["title"], year = (int?)series["year"], arrId = job.ArrId, droppedEarly = early, dropped = filter.Dropped, unavailableIndexers = unavailable, releases };
@@ -601,6 +603,74 @@ public sealed class TortugarrService
         return episodes?.Count ?? 0;
     }
 
+    // ------------------------------------------------------------------ live seeders (2026-11-07)
+
+    private static bool IsUsenet(string protocol) => string.Equals(protocol, "usenet", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Live seeders for the torrents in a search, dead ones last (order kept otherwise).</summary>
+    private async Task CheckLiveSeeds(List<ReleaseDto> releases, CancellationToken ct)
+    {
+        var live = await LiveAnswers(releases.Where(r => !IsUsenet(r.Protocol)).Select(r => (r.InfoHash, r.MagnetUrl)), ct).ConfigureAwait(false);
+        ApplyLive(releases, live);
+    }
+
+    internal static void ApplyLive(List<ReleaseDto> releases, IReadOnlyDictionary<string, LiveSeedCheck.Answer> live)
+    {
+        if (live.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var r in releases)
+        {
+            (r.LiveSeeders, r.Dead) = LiveOf(live, r.InfoHash, r.MagnetUrl, r.Title, r.Indexer);
+        }
+
+        var ordered = releases.OrderBy(r => r.Dead).ToList(); // OrderBy is stable
+        releases.Clear();
+        releases.AddRange(ordered);
+    }
+
+    /// <summary>
+    /// What the trackers said about one release. Dead: its own trackers answered 0 seeders, or
+    /// an old RARBG release (the site closed in 2023, its trackers are gone) with none anywhere.
+    /// </summary>
+    internal static (int? Live, bool Dead) LiveOf(IReadOnlyDictionary<string, LiveSeedCheck.Answer> live, string infoHash, string magnet, string title, string indexer)
+    {
+        var hash = LiveSeedCheck.HashOf(infoHash, magnet);
+        if (hash is null || !live.TryGetValue(hash, out var a))
+        {
+            return (null, false);
+        }
+
+        var rarbg = Regex.IsMatch(title, @"[-.\[ ]rarbg\b", RegexOptions.IgnoreCase) || indexer.Contains("rarbg", StringComparison.OrdinalIgnoreCase);
+        return (a.Seeders, a.Seeders == 0 && (a.OwnTrackerAnswered || rarbg));
+    }
+
+    private async Task<IReadOnlyDictionary<string, LiveSeedCheck.Answer>> LiveAnswers(IEnumerable<(string InfoHash, string Magnet)> torrents, CancellationToken ct)
+    {
+        if (!Cfg.LiveSeedCheck)
+        {
+            return new Dictionary<string, LiveSeedCheck.Answer>();
+        }
+
+        var items = torrents
+            .Select(t => (Hash: LiveSeedCheck.HashOf(t.InfoHash, t.Magnet), t.Magnet))
+            .Where(t => t.Hash is not null)
+            .GroupBy(t => t.Hash!, StringComparer.OrdinalIgnoreCase)
+            .Select(g => new LiveSeedCheck.Item(g.Key, g.SelectMany(t => LiveSeedCheck.TrackersOf(t.Magnet)).Distinct(StringComparer.OrdinalIgnoreCase).ToList()))
+            .ToList();
+        try
+        {
+            return await new LiveSeedCheck(Http, _log).CheckAsync(items, TimeSpan.FromSeconds(4), ct).ConfigureAwait(false);
+        }
+        catch (Exception e) when (e is not OperationCanceledException || !ct.IsCancellationRequested)
+        {
+            _log.LogDebug(e, "Tortugarr live seed check skipped");
+            return new Dictionary<string, LiveSeedCheck.Answer>();
+        }
+    }
+
     private static void Remember(SearchJob job, List<ReleaseDto> releases)
     {
         foreach (var x in releases)
@@ -663,14 +733,19 @@ public sealed class TortugarrService
             }
 
             var ranked = new ReleaseFilter(Cfg).AdultMerge(job.Request.Query, all);
+            var live = await LiveAnswers(ranked.Select(x => x.Release).Where(x => !IsUsenet(x.Protocol)).Select(x => (x.InfoHash, x.MagnetUrl)), cts.Token).ConfigureAwait(false);
             _log.LogInformation("Tortugarr adult search: Prowlarr {Raw} release(s), kept {Kept}; {Seconds:0} s",
                 all.Count, ranked.Count, (DateTimeOffset.UtcNow - job.Started).TotalSeconds);
-            var releases = ranked.Select(x => new
+            var releases = ranked.Select(x =>
             {
-                guid = x.Release.Guid, indexerId = x.Release.IndexerId, indexer = x.Release.Indexer, title = x.Release.Title,
-                size = x.Release.Size, seeders = x.Release.Seeders, leechers = x.Release.Leechers,
-                publishDate = x.Release.PublishDate, matchedWords = x.MatchedWords,
-            }).ToList();
+                var (liveSeeders, dead) = LiveOf(live, x.Release.InfoHash, x.Release.MagnetUrl, x.Release.Title, x.Release.Indexer);
+                return new
+                {
+                    guid = x.Release.Guid, indexerId = x.Release.IndexerId, indexer = x.Release.Indexer, title = x.Release.Title,
+                    size = x.Release.Size, seeders = x.Release.Seeders, leechers = x.Release.Leechers,
+                    publishDate = x.Release.PublishDate, matchedWords = x.MatchedWords, liveSeeders, dead,
+                };
+            }).OrderBy(x => x.dead).ToList(); // stable: the ranking stays, dead ones go last
             foreach (var x in ranked)
             {
                 job.AdultShown[$"{x.Release.Guid}|{x.Release.IndexerId}"] = x.Release;
@@ -1747,7 +1822,9 @@ public sealed class TortugarrService
                 .Select(r => r!).ToList();
             if (records.Count > 0)
             {
-                return await ReplaceStalled(arr, isMovie, records, (long)dead.Size, ct).ConfigureAwait(false);
+                // A magnet without metadata has no size in qBittorrent; the queue knows the release's.
+                var size = dead.Size > 0 ? (long)dead.Size : (long?)records[0]["size"] ?? 0;
+                return await ReplaceStalled(arr, isMovie, records, size, ct).ConfigureAwait(false);
             }
         }
 
@@ -1801,6 +1878,7 @@ public sealed class TortugarrService
 
         var raw = await arr.Get(releasePath, ct, 120).ConfigureAwait(false) as JsonArray ?? new JsonArray();
         var (releases, _) = new ReleaseFilter(Cfg).Apply(raw.Where(x => x is not null).Select(x => ArrRelease.FromJson(x!)), type, home);
+        await CheckLiveSeeds(releases, ct).ConfigureAwait(false);
         var pick = PickReplacement(releases, size, wantPack: type == "season");
         var app = isMovie ? "Radarr" : "Sonarr";
         if (pick is null)
@@ -1810,8 +1888,9 @@ public sealed class TortugarrService
         }
 
         await arr.Post("/release", GrabBody(type, arrId, pick.Guid, pick.IndexerId), ct, 60).ConfigureAwait(false);
-        _log.LogInformation("Tortugarr replaced a stalled download with {Title} ({Seeders} seeders, {Size} bytes)", pick.Title, pick.Seeders, pick.Size);
-        return $"It was removed with its partial files and blocklisted, and {app} now downloads {pick.Title} instead ({pick.Seeders} seeders, {pick.Size / (double)(1L << 30):0.0} GB).";
+        var seeds = pick.LiveSeeders ?? pick.Seeders;
+        _log.LogInformation("Tortugarr replaced a stalled download with {Title} ({Seeders} seeders, {Size} bytes)", pick.Title, seeds, pick.Size);
+        return $"It was removed with its partial files and blocklisted, and {app} now downloads {pick.Title} instead ({seeds} seeders, {pick.Size / (double)(1L << 30):0.0} GB).";
     }
 
     /// <summary>
@@ -1822,10 +1901,10 @@ public sealed class TortugarrService
     internal static ReleaseDto? PickReplacement(IEnumerable<ReleaseDto> releases, long size, bool wantPack = false) =>
         releases
             .Where(r => r.SeasonPack == wantPack) // a pack for a pack, one episode for one
-            .Where(r => (r.Seeders ?? 0) > 0)
+            .Where(r => !r.Dead && (r.LiveSeeders ?? r.Seeders ?? 0) > 0)
             .Where(r => !string.Equals(r.Protocol, "usenet", StringComparison.OrdinalIgnoreCase))
             .Where(r => size <= 0 || Math.Abs(r.Size - size) <= ReplacementSizeSlack)
-            .OrderByDescending(r => r.Seeders ?? 0)
+            .OrderByDescending(r => r.LiveSeeders ?? r.Seeders ?? 0) // the trackers' number beats the indexer's
             .ThenBy(r => Math.Abs(r.Size - size))
             .FirstOrDefault();
 

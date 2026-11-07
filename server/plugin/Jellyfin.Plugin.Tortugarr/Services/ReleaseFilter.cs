@@ -139,6 +139,16 @@ public sealed class ReleaseDto
     /// <summary>Server side only (spec 3.3), never sent to the app.</summary>
     [System.Text.Json.Serialization.JsonIgnore]
     public string InfoHash { get; init; } = string.Empty;
+
+    /// <summary>Server side only: the magnet, for its trackers (live seed check).</summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    public string MagnetUrl { get; init; } = string.Empty;
+
+    /// <summary>Seeders the trackers report right now; null when not checked or no tracker answered.</summary>
+    public int? LiveSeeders { get; set; }
+
+    /// <summary>Its own trackers say nobody seeds it (or an old RARBG release with no live seeders).</summary>
+    public bool Dead { get; set; }
 }
 
 /// <summary>The app's release filters (spec section 4), applied on the server.</summary>
@@ -307,6 +317,7 @@ public sealed class ReleaseFilter
                 Recommended = rejections.Count == 0,
                 Rejections = rejections,
                 InfoHash = r.InfoHash,
+                MagnetUrl = r.MagnetUrl,
             });
         }
 

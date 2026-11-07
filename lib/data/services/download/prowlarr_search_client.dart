@@ -34,6 +34,13 @@ class ProwlarrRelease {
   /// build); the picker shows it greyed with this reason.
   final String? blockedReason;
 
+  /// Seeders the trackers report right now (public build, plugin's live
+  /// check); null when not checked.
+  final int? liveSeeders;
+
+  /// Nobody shares it according to its own trackers; listed last.
+  final bool dead;
+
   const ProwlarrRelease({
     required this.guid,
     required this.title,
@@ -50,6 +57,8 @@ class ProwlarrRelease {
     this.publishDate,
     this.lowQuality = false,
     this.blockedReason,
+    this.liveSeeders,
+    this.dead = false,
   });
 
   factory ProwlarrRelease.fromJson(Map<String, dynamic> json) => ProwlarrRelease(

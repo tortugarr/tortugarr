@@ -161,6 +161,12 @@ public class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public bool QbitStallNudge { get; set; } = true;
 
+    /// <summary>
+    /// Asks the trackers for live seeders when a search shows its releases, and marks dead
+    /// torrents (2026-11-07). On by default; adds at most a few seconds to a search.
+    /// </summary>
+    public bool LiveSeedCheck { get; set; } = true;
+
     /// <summary>The watchdog's last action, e.g. "2026-11-05 04:40Z rechecked 3 stuck torrents".</summary>
     public string QbitWatchdogStatus { get; set; } = string.Empty;
 }

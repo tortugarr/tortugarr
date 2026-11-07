@@ -168,6 +168,8 @@ ProwlarrRelease asPickerRelease(TortugarrRelease r) => ProwlarrRelease(
       protocol: r.protocol,
       publishDate: r.publishDate,
       lowQuality: r.sd,
+      liveSeeders: r.liveSeeders,
+      dead: r.dead,
       blockedReason: r.overLimit
           ? (r.rejections.map(overLimitLabel).nonNulls.firstOrNull ?? appL10n().tgOverSizeLimitUnknown)
           : null,

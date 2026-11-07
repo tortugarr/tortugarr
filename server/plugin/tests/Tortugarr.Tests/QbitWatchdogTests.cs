@@ -133,7 +133,6 @@ public class QbitWatchdogTests
     [InlineData("pausedDL")]
     [InlineData("queuedDL")]
     [InlineData("checkingDL")]
-    [InlineData("metaDL")]
     [InlineData("forcedDL")]
     [InlineData("stalledUP")] // finished, seeding
     [InlineData("uploading")]

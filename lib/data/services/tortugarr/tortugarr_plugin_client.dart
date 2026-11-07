@@ -198,6 +198,13 @@ class TortugarrRelease {
   /// greyed and never offered (spec 3.16).
   final bool overLimit;
 
+  /// Seeders the trackers report right now (null: not checked, or no
+  /// tracker answered). The indexer's [seeders] can be months old.
+  final int? liveSeeders;
+
+  /// Its own trackers say nobody shares it (2026-11-07).
+  final bool dead;
+
   const TortugarrRelease({
     required this.guid,
     required this.indexerId,
@@ -215,6 +222,8 @@ class TortugarrRelease {
     this.rejections = const [],
     this.sd = false,
     this.overLimit = false,
+    this.liveSeeders,
+    this.dead = false,
   });
 
   factory TortugarrRelease.fromJson(Map<String, dynamic> json) => TortugarrRelease(
@@ -233,6 +242,8 @@ class TortugarrRelease {
         recommended: json['recommended'] != false,
         sd: json['sd'] == true,
         overLimit: json['overLimit'] == true,
+        liveSeeders: (json['liveSeeders'] as num?)?.toInt(),
+        dead: json['dead'] == true,
         rejections: [
           for (final r in (json['rejections'] as List? ?? const [])) '$r',
         ],

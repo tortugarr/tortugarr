@@ -241,13 +241,15 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
     // (Remux) is the default pick, but the user can scroll to smaller
     // encodes if they want to save space.
     // Browse mode keeps the order it was given (keyword search ranks it).
+    // Dead torrents (no seeders on their own trackers) always go last.
     final sorted = widget.browse
-        ? visible
+        ? [...visible.where((r) => !r.dead), ...visible.where((r) => r.dead)]
         : ([...visible]
       ..sort((a, b) {
+        if (a.dead != b.dead) return a.dead ? 1 : -1;
         final bySize = b.size.compareTo(a.size);
         if (bySize != 0) return bySize;
-        return b.seeders.compareTo(a.seeders);
+        return (b.liveSeeders ?? b.seeders).compareTo(a.liveSeeders ?? a.seeders);
       }));
     return SingleChildScrollView(
       controller: _scroll,
@@ -366,7 +368,7 @@ class _ReleaseRow extends StatelessWidget {
         borderRadius: 10,
         disableScale: false,
         child: Opacity(
-          opacity: blocked != null ? 0.45 : 1,
+          opacity: blocked != null ? 0.45 : (release.dead ? 0.6 : 1),
           child: Container(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
             decoration: BoxDecoration(
@@ -396,7 +398,10 @@ class _ReleaseRow extends StatelessWidget {
                         [
                           if (release.lowQuality) appL10n().tgSdLowQuality,
                           release.indexer,
-                          appL10n().tgSeedersCount(release.seeders),
+                          // The trackers' number when the plugin checked it ("live").
+                          release.liveSeeders != null
+                              ? '${appL10n().tgSeedersCount(release.liveSeeders!)} (live)'
+                              : appL10n().tgSeedersCount(release.seeders),
                           if (release.publishDate != null)
                             _age(release.publishDate!),
                         ].join(' · '),
@@ -408,12 +413,15 @@ class _ReleaseRow extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (audio.isNotEmpty) ...[
+                      if (audio.isNotEmpty || release.dead) ...[
                         const SizedBox(height: 6),
                         Wrap(
                           spacing: 6,
                           runSpacing: 4,
-                          children: [for (final a in audio) _AudioBadge(a)],
+                          children: [
+                            if (release.dead) const _DeadBadge(),
+                            for (final a in audio) _AudioBadge(a),
+                          ],
                         ),
                       ],
                       if (blocked != null) ...[
@@ -477,6 +485,27 @@ class _AudioBadge extends StatelessWidget {
           fontSize: 10,
           fontWeight: atmos ? FontWeight.w700 : FontWeight.w500,
         ),
+      ),
+    );
+  }
+}
+
+/// "Dead": its own trackers say nobody shares it. Still selectable.
+class _DeadBadge extends StatelessWidget {
+  const _DeadBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE05260).withValues(alpha: 0.25),
+        borderRadius: AppRadius.circular(4),
+        border: Border.all(color: const Color(0xFFE05260)),
+      ),
+      child: const Text(
+        'Dead · 0 seeders',
+        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700),
       ),
     );
   }
