@@ -2008,20 +2008,47 @@ public sealed class TortugarrService
             throw new KeyNotFoundException("download not found in qBittorrent");
         }
 
-        var files = await qbit.Files(downloadId, ct).ConfigureAwait(false);
-        if (files is null)
+        var (hasVideo, files) = await ScreenDownload(qbit, downloadId, category!, ct).ConfigureAwait(false);
+        if (hasVideo is null)
         {
             return new { hasVideo = (bool?)null, files = Array.Empty<object>(), action = "wait" };
         }
 
-        var filter = new ReleaseFilter(c);
+        return new { hasVideo, files = files!.Select(f => new { name = f.Name, size = f.Size }), action = hasVideo == true ? "kept" : "removed" };
+    }
+
+    /// <summary>
+    /// The video check itself: null while a magnet has no file list yet, true when a video is in
+    /// it, false when there is none - then the download is removed and blocklisted. The app asks
+    /// for it after its own grabs; the watchdog runs it on every new torrent (2026-11-07: Sonarr's
+    /// own RSS grabs of an .exe and a .zip never passed it and sat in qBittorrent for hours).
+    /// </summary>
+    internal async Task<(bool? HasVideo, List<(string Name, long Size)>? Files)> ScreenDownload(QbitClient qbit, string hash, string category, CancellationToken ct)
+    {
+        var files = await qbit.Files(hash, ct).ConfigureAwait(false);
+        if (files is null)
+        {
+            return (null, null);
+        }
+
+        var filter = new ReleaseFilter(Cfg);
         var hasVideo = files.Any(f => filter.IsVideo(f.Name, f.Size));
         if (!hasVideo)
         {
-            await RemoveWithoutVideo(downloadId, category!, ct).ConfigureAwait(false);
+            await RemoveWithoutVideo(hash, category, ct).ConfigureAwait(false);
         }
 
-        return new { hasVideo, files = files.Select(f => new { name = f.Name, size = f.Size }), action = hasVideo ? "kept" : "removed" };
+        return (hasVideo, files);
+    }
+
+    /// <summary>
+    /// The categories the watchdog screens: Radarr's and Sonarr's. XXX downloads always come
+    /// from the app, which checks them itself, and short clips may be under the video minimum.
+    /// </summary>
+    internal bool IsScreenedCategory(string? category)
+    {
+        var c = Cfg;
+        return !string.IsNullOrEmpty(category) && (category == c.MovieCategory || category == c.TvCategory);
     }
 
     /// <summary>

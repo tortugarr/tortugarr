@@ -98,6 +98,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
             {
                 try
                 {
+                    await ScreenNewAsync(token).ConfigureAwait(false);
                     await NudgeAsync(token).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
@@ -211,6 +212,58 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
         }
 
         return act;
+    }
+
+    /// <summary>
+    /// Runs the video check on every torrent once it has its file list, whoever added it:
+    /// Radarr/Sonarr RSS grabs never pass the app's check. A torrent without a video is removed
+    /// and blocklisted within a minute of getting its metadata.
+    /// </summary>
+    private async Task ScreenNewAsync(CancellationToken ct)
+    {
+        var cfg = Plugin.Instance?.Configuration;
+        if (cfg is null || !cfg.QbitWatchdogEnabled || cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(cfg.DownloadClientUrl))
+        {
+            return;
+        }
+
+        var qbit = _svc.Qbit;
+        var torrents = await qbit.ListAll(ct).ConfigureAwait(false);
+        var present = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var t in torrents)
+        {
+            var hash = (string?)t?["hash"];
+            var category = (string?)t?["category"];
+            if (hash is null)
+            {
+                continue;
+            }
+
+            present.Add(hash);
+            if (_state.Screened.Contains(hash) || !_svc.IsScreenedCategory(category))
+            {
+                continue;
+            }
+
+            var (hasVideo, files) = await _svc.ScreenDownload(qbit, hash, category!, ct).ConfigureAwait(false);
+            if (hasVideo is null)
+            {
+                continue; // no file list yet; next pass
+            }
+
+            _state.Screened.Add(hash);
+            if (hasVideo == false)
+            {
+                var name = (string?)t!["name"] ?? hash;
+                var what = string.Join(", ", files!.Take(3).Select(f => Path.GetFileName(f.Name)));
+                Report($"removed {name}: no video in it ({what}); blocklisted");
+                await _notice.PostAsync("Stall", $"Fake download removed: {name}",
+                    $"It held no video ({what}). Tortugarr removed it before it downloaded and blocklisted the release; Radarr/Sonarr look for another one.",
+                    LogLevel.Warning).ConfigureAwait(false);
+            }
+        }
+
+        _state.Screened.RemoveWhere(h => !present.Contains(h));
     }
 
     private async Task NudgeAsync(CancellationToken ct)
@@ -452,6 +505,8 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 /// <summary>What the watchdog remembers between passes.</summary>
 internal sealed class WatchdogState
 {
+    public HashSet<string> Screened { get; } = new(StringComparer.OrdinalIgnoreCase);
+
     public Dictionary<string, DateTimeOffset> Fakes { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public Dictionary<string, DateTimeOffset> FirstSeen { get; } = new(StringComparer.Ordinal);
