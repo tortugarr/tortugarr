@@ -147,39 +147,101 @@ public sealed class LibraryDeleteService
     }
 
     /// <summary>
-    /// The adult library has no Radarr/Sonarr behind it: the file belongs to a qBittorrent download
-    /// (category adult) saved straight into the library. That download is removed with its files -
-    /// Jellyfin itself cannot, its media folders are read-only - then the entry and the library scan.
+    /// The adult library has no Radarr/Sonarr behind it. A file that still belongs to a qBittorrent
+    /// download (category adult) goes with that download and its files. A file no download holds
+    /// any more (removed from qBittorrent after seeding, or copied in by hand) is deleted directly:
+    /// the adult folder is the one media folder Jellyfin may write to (2026-11-07). Then the entry
+    /// and the library scan.
     /// </summary>
     private async Task<object> DeleteAdult(BaseItem item, CollectionFolder library, CancellationToken ct)
     {
-        if (Cfg.DownloadClientType != "qbittorrent" || string.IsNullOrEmpty(item.Path))
+        if (string.IsNullOrEmpty(item.Path))
         {
-            throw new ConflictException("not_managed", "the adult library's files can only be deleted through qBittorrent - nothing was deleted");
+            throw new ConflictException("not_managed", "the adult title has no file - nothing was deleted");
         }
 
-        var qbit = _svc.Qbit;
-        var torrent = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false))
-            .FirstOrDefault(t => t is not null && OwnsFile((string?)t["content_path"], item.Path));
-        if (torrent is null)
+        var root = Cfg.AdultSavePath;
+        var torrentsRemoved = 0;
+        if (Cfg.DownloadClientType == "qbittorrent")
         {
-            throw new ConflictException("not_managed", "no download in qBittorrent holds this file - nothing was deleted");
+            var qbit = _svc.Qbit;
+            var torrent = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false))
+                .FirstOrDefault(t => t is not null && OwnsFile((string?)t["content_path"], item.Path, root));
+            if (torrent is not null)
+            {
+                await qbit.Delete((string)torrent["hash"]!, true, ct).ConfigureAwait(false);
+                torrentsRemoved = 1;
+                for (var i = 0; i < 20 && File.Exists(item.Path); i++)
+                {
+                    await Task.Delay(500, ct).ConfigureAwait(false); // qBittorrent deletes the files in the background
+                }
+            }
         }
 
-        await qbit.Delete((string)torrent["hash"]!, true, ct).ConfigureAwait(false);
-        for (var i = 0; i < 20 && File.Exists(item.Path); i++)
+        var files = 0;
+        if (File.Exists(item.Path))
         {
-            await Task.Delay(500, ct).ConfigureAwait(false); // qBittorrent deletes the files in the background
+            files = DeleteAdultFile(item.Path, root);
         }
 
         DropIfGone(item);
         await _adult.RescanAsync().ConfigureAwait(false);
-        _log.LogInformation("Tortugarr: deleted adult title {Title} (its download removed with its files)", item.Name);
-        return new { deleted = "adult", title = item.Name, files = 1, torrentsRemoved = 1, libraryId = library.Id.ToString("N"), seerr = "not_applicable" };
+        _log.LogInformation("Tortugarr: deleted adult title {Title} ({Torrents} download(s) removed, {Files} file(s) deleted directly)", item.Name, torrentsRemoved, files);
+        return new { deleted = "adult", title = item.Name, files = Math.Max(files, 1), torrentsRemoved, libraryId = library.Id.ToString("N"), seerr = "not_applicable" };
     }
 
-    /// <summary>The download's content path is the file itself, or a folder the file is in.</summary>
-    internal static bool OwnsFile(string? contentPath, string file)
+    /// <summary>Files left in a release folder that are not media: the folder goes when only these remain.</summary>
+    private static readonly HashSet<string> JunkExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".nfo", ".txt", ".jpg", ".jpeg", ".png", ".gif", ".webp", ".srt", ".sub", ".idx", ".ass", ".url", ".sfv", ".md5", ".html", ".htm",
+    };
+
+    /// <summary>
+    /// Deletes one adult video, the subtitle/nfo/image files named after it, and then each
+    /// folder above it that holds nothing but such leftovers - never the adult folder itself and
+    /// never anything outside it. Returns how many files were deleted.
+    /// </summary>
+    internal static int DeleteAdultFile(string file, string root)
+    {
+        var full = Path.GetFullPath(file);
+        var top = Path.GetFullPath(root).TrimEnd('/');
+        if (!full.StartsWith(top + "/", StringComparison.Ordinal))
+        {
+            throw new ConflictException("not_managed", "the file is not in the adult folder - nothing was deleted");
+        }
+
+        var dir = Path.GetDirectoryName(full)!;
+        var stem = Path.GetFileNameWithoutExtension(full);
+        File.Delete(full);
+        var deleted = 1;
+        foreach (var side in Directory.EnumerateFiles(dir))
+        {
+            var name = Path.GetFileName(side);
+            if (name.StartsWith(stem + ".", StringComparison.OrdinalIgnoreCase) && JunkExtensions.Contains(Path.GetExtension(side)))
+            {
+                File.Delete(side);
+                deleted++;
+            }
+        }
+
+        while (!string.Equals(dir, top, StringComparison.Ordinal) && dir.StartsWith(top + "/", StringComparison.Ordinal)
+               && Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).All(f => JunkExtensions.Contains(Path.GetExtension(f))))
+        {
+            deleted += Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).Count();
+            Directory.Delete(dir, true);
+            dir = Path.GetDirectoryName(dir)!;
+        }
+
+        return deleted;
+    }
+
+    /// <summary>
+    /// The download's content path is the file itself, or a folder the file is in. qBittorrent can
+    /// see the adult folder under another path than Jellyfin (on Windows: E:\-=XxX=-\Clip.mp4 for
+    /// /data/library/5/Clip.mp4), so the download's name is also matched against the file's place
+    /// inside <paramref name="root"/>.
+    /// </summary>
+    internal static bool OwnsFile(string? contentPath, string file, string? root = null)
     {
         if (string.IsNullOrWhiteSpace(contentPath))
         {
@@ -187,7 +249,22 @@ public sealed class LibraryDeleteService
         }
 
         var c = contentPath.TrimEnd('/');
-        return string.Equals(c, file, StringComparison.Ordinal) || file.StartsWith(c + "/", StringComparison.Ordinal);
+        if (string.Equals(c, file, StringComparison.Ordinal) || file.StartsWith(c + "/", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        var top = root?.TrimEnd('/');
+        if (string.IsNullOrEmpty(top) || !file.StartsWith(top + "/", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var name = contentPath.Replace('\\', '/').TrimEnd('/');
+        name = name[(name.LastIndexOf('/') + 1)..];
+        var rel = file[(top.Length + 1)..];
+        return name.Length > 0
+            && (string.Equals(rel, name, StringComparison.OrdinalIgnoreCase) || rel.StartsWith(name + "/", StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>

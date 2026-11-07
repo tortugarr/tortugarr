@@ -1525,7 +1525,11 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   /// What Radarr/Sonarr manage, and so the Tortugarr plugin deletes. Anything
   /// else (a playlist, a collection, music...) goes straight to Jellyfin.
-  static const _arrManagedTypes = {'Movie', 'Episode', 'Season', 'Series'};
+  /// Video is the adult library's type (a home-videos library): the plugin
+  /// deletes those through qBittorrent or straight from the adult folder, and
+  /// answers not_managed for any other video, which then goes to Jellyfin as
+  /// before (2026-11-07).
+  static const _arrManagedTypes = {'Movie', 'Episode', 'Season', 'Series', 'Video'};
 
   /// Returns `null` when the item was deleted, otherwise why it failed.
   Future<DeleteItemFailure?> deleteItem() async {

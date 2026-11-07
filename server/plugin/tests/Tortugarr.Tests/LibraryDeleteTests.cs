@@ -135,6 +135,66 @@ public class AdultDeleteTests
     [InlineData(null, "/data/media/adult/Clip.m4v", false)]
     public void A_download_owns_its_file_or_the_files_in_its_folder(string? contentPath, string file, bool owns) =>
         Assert.Equal(owns, LibraryDeleteService.OwnsFile(contentPath, file));
+
+    // qBittorrent on Windows sees the adult folder as E:\-=XxX=-, Jellyfin as /data/library/5.
+    [Theory]
+    [InlineData(@"E:\-=XxX=-\Clip.mp4", "/data/library/5/Clip.mp4", true)]
+    [InlineData(@"E:\-=XxX=-\Pack", "/data/library/5/Pack/part1.mp4", true)]
+    [InlineData(@"E:\-=XxX=-\Pack", "/data/library/5/Package/part1.mp4", false)]
+    [InlineData(@"E:\-=XxX=-\Other.mp4", "/data/library/5/Clip.mp4", false)]
+    [InlineData(@"E:\-=XxX=-\Clip.mp4", "/data/library/3/Clip.mp4", false)]
+    public void A_download_is_found_under_another_mount_path(string contentPath, string file, bool owns) =>
+        Assert.Equal(owns, LibraryDeleteService.OwnsFile(contentPath, file, "/data/library/5"));
+
+    [Fact]
+    public void A_file_without_a_download_is_deleted_with_its_leftovers_and_nothing_else()
+    {
+        var root = Directory.CreateTempSubdirectory("adult").FullName;
+        try
+        {
+            var pack = Directory.CreateDirectory(Path.Combine(root, "Pack")).FullName;
+            File.WriteAllText(Path.Combine(pack, "Clip.mp4"), "v");
+            File.WriteAllText(Path.Combine(pack, "Clip.nfo"), "n");
+            File.WriteAllText(Path.Combine(pack, "cover.jpg"), "i");
+            var shared = Directory.CreateDirectory(Path.Combine(root, "Shared")).FullName;
+            File.WriteAllText(Path.Combine(shared, "A.mp4"), "v");
+            File.WriteAllText(Path.Combine(shared, "B.mp4"), "v");
+            File.WriteAllText(Path.Combine(root, "Loose.mp4"), "v");
+
+            Assert.Equal(3, LibraryDeleteService.DeleteAdultFile(Path.Combine(pack, "Clip.mp4"), root));
+            Assert.False(Directory.Exists(pack)); // only leftovers were in it
+
+            Assert.Equal(1, LibraryDeleteService.DeleteAdultFile(Path.Combine(shared, "A.mp4"), root));
+            Assert.True(File.Exists(Path.Combine(shared, "B.mp4"))); // another video keeps the folder
+
+            Assert.Equal(1, LibraryDeleteService.DeleteAdultFile(Path.Combine(root, "Loose.mp4"), root));
+            Assert.True(Directory.Exists(root)); // the adult folder itself always stays
+        }
+        finally
+        {
+            Directory.Delete(root, true);
+        }
+    }
+
+    [Fact]
+    public void A_file_outside_the_adult_folder_is_never_deleted()
+    {
+        var root = Directory.CreateTempSubdirectory("adult").FullName;
+        var other = Directory.CreateTempSubdirectory("movies").FullName;
+        try
+        {
+            var file = Path.Combine(other, "Movie.mkv");
+            File.WriteAllText(file, "v");
+            Assert.Throws<ConflictException>(() => LibraryDeleteService.DeleteAdultFile(file, root));
+            Assert.Throws<ConflictException>(() => LibraryDeleteService.DeleteAdultFile(Path.Combine(root, "..", Path.GetFileName(other), "Movie.mkv"), root));
+            Assert.True(File.Exists(file));
+        }
+        finally
+        {
+            Directory.Delete(root, true);
+            Directory.Delete(other, true);
+        }
+    }
 }
 
 public class SpaceRuleTests

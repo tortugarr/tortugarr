@@ -130,14 +130,16 @@ write_overrides() {
   write_external_client_override "$o" && files="$files:overrides/download-client.yml"
 
   if [ "$(jq length <<< "${EXTRA_LIBS_JSON:-[]}")" -gt 0 ]; then
-    # Jellyfin gets every extra folder read-only; Sonarr/Radarr only the folders
-    # of their type that the user wants them to manage, and Bazarr all of those.
+    # Jellyfin gets every extra folder read-only except the adult folder, which
+    # has no Radarr/Sonarr behind it: the Tortugarr plugin deletes adult titles
+    # there itself. Sonarr/Radarr only the folders of their type that the user
+    # wants them to manage, and Bazarr all of those.
     jq -r '
       def mounts($s):
         [ .[] | select($s == "jellyfin"
                        or (.arr_manage and ((.type == "tv" and $s == "sonarr") or ((.type == "movies" or .type == "docs") and $s == "radarr")))
                        or (.arr_manage and $s == "bazarr"))
-              | "      - \"\(.host_path):\(.container_path)\(if $s == "jellyfin" then ":ro" else "" end)\"" ];
+              | "      - \"\(.host_path):\(.container_path)\(if $s == "jellyfin" and .type != "adult" then ":ro" else "" end)\"" ];
       "# Generated: existing media folders added during install. Regenerated on repair.",
       "services:",
       ( ["jellyfin", "sonarr", "radarr", "bazarr"][] as $s
