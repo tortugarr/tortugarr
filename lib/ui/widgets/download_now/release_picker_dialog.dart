@@ -172,7 +172,12 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
   String _tier = '2160p';
 
   /// Per-tier sort order: tier label -> ordered list of releases.
-  late final Map<String, List<ProwlarrRelease>> _byTier = _bucket(widget.releases);
+  /// Dead torrents (their own trackers say nobody shares them) are never
+  /// listed (2026-11-07) — there is nothing to download.
+  late final List<ProwlarrRelease> _releases =
+      widget.releases.where((r) => !r.dead).toList();
+
+  late final Map<String, List<ProwlarrRelease>> _byTier = _bucket(_releases);
 
   final _scroll = ScrollController();
   final _firstRow = FocusNode(debugLabel: 'release_picker_first_row');
@@ -235,22 +240,18 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
     final l10n = AppLocalizations.of(context);
     final availableTiers = _availableTiers;
     final visible = _tier == 'all'
-        ? widget.releases
+        ? _releases
         : (_byTier[_tier] ?? const <ProwlarrRelease>[]);
-    // Stable sort inside the tier: by size desc so the biggest 2160p
-    // (Remux) is the default pick, but the user can scroll to smaller
-    // encodes if they want to save space.
-    // Browse mode keeps the order it was given (keyword search ranks it).
-    // Dead torrents (no seeders on their own trackers) always go last.
-    final sorted = widget.browse
-        ? [...visible.where((r) => !r.dead), ...visible.where((r) => r.dead)]
-        : ([...visible]
+    // Most seeders first in every list (2026-11-07; was biggest file first):
+    // the best-shared release downloads fastest. The live tracker count wins
+    // over the indexer's number; equal seeders put the bigger file first.
+    final sorted = [...visible]
       ..sort((a, b) {
-        if (a.dead != b.dead) return a.dead ? 1 : -1;
-        final bySize = b.size.compareTo(a.size);
-        if (bySize != 0) return bySize;
-        return (b.liveSeeders ?? b.seeders).compareTo(a.liveSeeders ?? a.seeders);
-      }));
+        final bySeeds =
+            (b.liveSeeders ?? b.seeders).compareTo(a.liveSeeders ?? a.seeders);
+        if (bySeeds != 0) return bySeeds;
+        return b.size.compareTo(a.size);
+      });
     return SingleChildScrollView(
       controller: _scroll,
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
@@ -264,7 +265,7 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
             runSpacing: 8,
             children: availableTiers.map((t) {
               final count = t == 'all'
-                  ? widget.releases.length
+                  ? _releases.length
                   : (_byTier[t] ?? const []).length;
               return SeerrChoiceChip(
                 label: '${switch (t) {
@@ -368,7 +369,7 @@ class _ReleaseRow extends StatelessWidget {
         borderRadius: 10,
         disableScale: false,
         child: Opacity(
-          opacity: blocked != null ? 0.45 : (release.dead ? 0.6 : 1),
+          opacity: blocked != null ? 0.45 : 1,
           child: Container(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
             decoration: BoxDecoration(
@@ -413,13 +414,12 @@ class _ReleaseRow extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (audio.isNotEmpty || release.dead) ...[
+                      if (audio.isNotEmpty) ...[
                         const SizedBox(height: 6),
                         Wrap(
                           spacing: 6,
                           runSpacing: 4,
                           children: [
-                            if (release.dead) const _DeadBadge(),
                             for (final a in audio) _AudioBadge(a),
                           ],
                         ),
@@ -485,27 +485,6 @@ class _AudioBadge extends StatelessWidget {
           fontSize: 10,
           fontWeight: atmos ? FontWeight.w700 : FontWeight.w500,
         ),
-      ),
-    );
-  }
-}
-
-/// "Dead": its own trackers say nobody shares it. Still selectable.
-class _DeadBadge extends StatelessWidget {
-  const _DeadBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE05260).withValues(alpha: 0.25),
-        borderRadius: AppRadius.circular(4),
-        border: Border.all(color: const Color(0xFFE05260)),
-      ),
-      child: const Text(
-        'Dead · 0 seeders',
-        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700),
       ),
     );
   }

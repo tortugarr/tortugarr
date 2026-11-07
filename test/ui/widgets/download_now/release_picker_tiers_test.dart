@@ -99,7 +99,7 @@ void main() {
     expect(find.text('5.1'), findsOneWidget);
   });
 
-  testWidgets('a dead torrent goes last with its badge; live seeders are shown as live', (tester) async {
+  testWidgets('dead torrents are hidden; most (live) seeders first', (tester) async {
     tester.view.physicalSize = const Size(1920, 1080);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -108,6 +108,8 @@ void main() {
           seeders: 900, protocol: 'torrent', liveSeeders: 0, dead: true),
       ProwlarrRelease(guid: 'small', title: 'Film.2160p.Small', size: 10 << 30, indexerId: 1, indexer: 'i',
           seeders: 3, protocol: 'torrent', liveSeeders: 150),
+      ProwlarrRelease(guid: 'mid', title: 'Film.2160p.Mid', size: 30 << 30, indexerId: 1, indexer: 'i',
+          seeders: 40, protocol: 'torrent'),
     ];
     await tester.pumpWidget(MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -123,10 +125,10 @@ void main() {
     ));
     await tester.tap(find.text('open'));
     await tester.pumpAndSettle();
+    expect(find.text('Film.2160p.Big'), findsNothing, reason: 'dead is never listed');
     final small = tester.getTopLeft(find.text('Film.2160p.Small')).dy;
-    final big = tester.getTopLeft(find.text('Film.2160p.Big')).dy;
-    expect(small < big, isTrue, reason: 'the dead one is last although it is bigger');
-    expect(find.text('Dead · 0 seeders'), findsOneWidget);
-    expect(find.textContaining('(live)'), findsNWidgets(2));
+    final mid = tester.getTopLeft(find.text('Film.2160p.Mid')).dy;
+    expect(small < mid, isTrue, reason: '150 live seeders beat 40 although the file is smaller');
+    expect(find.textContaining('(live)'), findsOneWidget);
   });
 }
