@@ -5108,15 +5108,24 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                                 return KeyEventResult.ignored;
                               }
                               switch (event.logicalKey) {
+                                // A press skips as set; holding speeds up
+                                // gently, the same both ways (Tortugarr,
+                                // lost in the 2.7 rebuild, back 2026-11-08).
                                 case LogicalKeyboardKey.arrowLeft:
                                   _seekRelativeAccumulate(
-                                    -_prefs.get(UserPreferences.skipBackLength),
+                                    -_accelerateSeekStep(
+                                      _prefs.get(UserPreferences.skipBackLength),
+                                      event,
+                                    ),
                                   );
                                   return KeyEventResult.handled;
                                 case LogicalKeyboardKey.arrowRight:
                                   _seekRelativeAccumulate(
-                                    _prefs.get(
-                                      UserPreferences.skipForwardLength,
+                                    _accelerateSeekStep(
+                                      _prefs.get(
+                                        UserPreferences.skipForwardLength,
+                                      ),
+                                      event,
                                     ),
                                   );
                                   return KeyEventResult.handled;
@@ -8464,15 +8473,16 @@ class _CastPersonTileState extends State<_CastPersonTile> {
 }
 
 /// How fast a held seek key moves the marker, in video milliseconds per real
-/// millisecond: slow at first, then faster, like other streaming apps.
-/// 0-1 s: 30x, 1-2 s: 60x, 2-3.5 s: 120x, 3.5-5 s: 300x, then 600x
-/// (half a minute to ten minutes of video per second held).
+/// millisecond: gentle at first and rising slowly to a ceiling, the same both
+/// ways (user, 2026-11-08: "not too fast, up to a set point").
+/// 0-2 s: 20x, 2-4 s: 40x, 4-6 s: 90x, 6-8 s: 180x, then 300x
+/// (20 seconds to 5 minutes of video per second held).
 @visibleForTesting
 double holdSeekSpeed(Duration held) {
   final s = held.inMilliseconds / 1000;
-  if (s < 1) return 30;
-  if (s < 2) return 60;
-  if (s < 3.5) return 120;
-  if (s < 5) return 300;
-  return 600;
+  if (s < 2) return 20;
+  if (s < 4) return 40;
+  if (s < 6) return 90;
+  if (s < 8) return 180;
+  return 300;
 }

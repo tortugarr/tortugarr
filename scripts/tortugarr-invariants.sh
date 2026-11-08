@@ -15,6 +15,8 @@ check "Download Now flow"                                      "test -f lib/ui/w
 check "Tortugarr intro videos"                                 "test -f assets/intro/tortugarr_intro_1080p.mp4 && test -f assets/intro/tortugarr_intro_short_1080p.mp4"
 check "intro plays only after its first frame"                 "grep -q 'waitUntilFirstFrameRendered' lib/ui/screens/auth/startup_screen.dart"
 check "Tortugarr settings in the side panel"                   "grep -q 'tgNotifyTitle' lib/ui/screens/settings/settings_side_panel.dart && grep -q '_TortugarrAdminScreen' lib/ui/screens/settings/settings_side_panel.dart"
+check "held seek speeds up on the seek bar too"                "[ \$(grep -c '_accelerateSeekStep(' lib/ui/screens/playback/video_player_screen.dart) -ge 6 ]"
+check "subtitle menu keeps the chosen languages"               "grep -q 'filterSubtitleMenuStreams' lib/ui/widgets/playback/track_choices.dart"
 check "Top lists home section"                                 "grep -q 'tortugarrTopLists' lib/preference/preference_constants.dart"
 check "Server health card on the admin dashboard"              "grep -q 'TortugarrHealthCard' lib/ui/screens/admin/admin_dashboard_screen.dart"
 en=$(grep -c '"tg[A-Z]' lib/l10n/app_en.arb); nb=$(grep -c '"tg[A-Z]' lib/l10n/app_nb.arb)
