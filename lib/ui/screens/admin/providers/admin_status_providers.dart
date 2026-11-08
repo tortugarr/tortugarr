@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:server_core/server_core.dart';
@@ -55,30 +56,62 @@ final adminDashboardAlertsProvider =
   );
 });
 
-/// Alerts that came in after the administrator last looked at them, so the
-/// Alerts tile turns orange for new ones only instead of counting every
-/// "fake download removed" of the past week (user, 2026-11-08).
-final adminUnseenAlertsProvider = FutureProvider.autoDispose<int>((ref) async {
-  final seenMs = GetIt.instance.isRegistered<UserPreferences>()
-      ? GetIt.instance<UserPreferences>().get(UserPreferences.adminAlertsSeenAt)
-      : 0;
+/// Alerts the administrator has not seen yet (user, 2026-11-08): warnings
+/// count until the dashboard was looked at, so the tile turns orange for new
+/// ones only; errors and critical alerts stay (red) until the alert list was
+/// opened, so an important one can never be passed by unseen.
+final adminUnseenAlertsProvider =
+    FutureProvider.autoDispose<({int warnings, int errors})>((ref) async {
+  final prefs = GetIt.instance.isRegistered<UserPreferences>() ? GetIt.instance<UserPreferences>() : null;
   final weekAgo = DateTime.now().subtract(const Duration(days: 7));
-  final seen = DateTime.fromMillisecondsSinceEpoch(seenMs);
-  final since = seen.isAfter(weekAgo) ? seen : weekAgo;
+  DateTime since(int ms) {
+    final t = DateTime.fromMillisecondsSinceEpoch(ms);
+    return t.isAfter(weekAgo) ? t : weekAgo;
+  }
+
+  final warnSince = since(prefs?.get(UserPreferences.adminAlertsSeenAt) ?? 0);
+  final errSince = since(prefs?.get(UserPreferences.adminErrorsSeenAt) ?? 0);
+  final from = warnSince.isBefore(errSince) ? warnSince : errSince;
   final result = await GetIt.instance<MediaServerClient>().adminSystemApi.getActivityLog(
     startIndex: 0,
-    limit: 1,
-    minDate: since,
+    limit: 200,
+    minDate: from,
     hasUserId: false,
   );
-  return result.totalRecordCount;
+  return countUnseenAlerts(result.items, warningsSince: warnSince, errorsSince: errSince);
 });
 
-/// Marks the alerts as seen now.
+/// Splits alerts into unseen warnings and unseen errors/critical ones.
+@visibleForTesting
+({int warnings, int errors}) countUnseenAlerts(
+  Iterable<ActivityLogEntry> items, {
+  required DateTime warningsSince,
+  required DateTime errorsSince,
+}) {
+  var warnings = 0, errors = 0;
+  for (final e in items) {
+    final severity = e.severity.toLowerCase();
+    if ((severity == 'error' || severity == 'critical') && e.date.isAfter(errorsSince)) {
+      errors++;
+    } else if (severity == 'warning' && e.date.isAfter(warningsSince)) {
+      warnings++;
+    }
+  }
+  return (warnings: warnings, errors: errors);
+}
+
+/// Warnings count as seen when the dashboard was looked at.
 Future<void> markAdminAlertsSeen() async {
   if (!GetIt.instance.isRegistered<UserPreferences>()) return;
   await GetIt.instance<UserPreferences>()
       .set(UserPreferences.adminAlertsSeenAt, DateTime.now().millisecondsSinceEpoch);
+}
+
+/// Errors count as seen only when the alert list was opened.
+Future<void> markAdminErrorsSeen() async {
+  if (!GetIt.instance.isRegistered<UserPreferences>()) return;
+  await GetIt.instance<UserPreferences>()
+      .set(UserPreferences.adminErrorsSeenAt, DateTime.now().millisecondsSinceEpoch);
 }
 
 final adminNotificationSummaryProvider =

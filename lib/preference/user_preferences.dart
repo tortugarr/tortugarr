@@ -3790,6 +3790,13 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: 0,
   );
 
+  /// Errors and critical alerts only count as seen once the alert list itself
+  /// was opened, never by passing the dashboard (2026-11-08).
+  static final adminErrorsSeenAt = Preference(
+    key: 'admin_errors_seen_at',
+    defaultValue: 0,
+  );
+
   static final seasonalRowEnabled = Preference(
     key: 'seasonal_row_enabled',
     defaultValue: false,

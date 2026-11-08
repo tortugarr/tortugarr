@@ -69,20 +69,20 @@ void main() {
       sub(7, 'jpn'),
     ];
 
-    test('keeps only Norwegian, English and unknown by default', () {
-      expect(indexes(filterSubtitleMenuStreams(streams, showAll: false)), [2, 5, 6]);
+    test('keeps only Norwegian and English by default (unknown only when nothing else)', () {
+      expect(indexes(filterSubtitleMenuStreams(streams, showAll: false)), [2, 5]);
     });
 
     test('uses the picked languages', () {
       expect(
         indexes(filterSubtitleMenuStreams(streams, showAll: false, languages: {'ita', 'spa'})),
-        [3, 4, 6],
+        [3, 4],
       );
     });
 
     test('keeps the order of the input', () {
       final reversed = streams.reversed.toList();
-      expect(indexes(filterSubtitleMenuStreams(reversed, showAll: false)), [6, 5, 2]);
+      expect(indexes(filterSubtitleMenuStreams(reversed, showAll: false)), [5, 2]);
     });
 
     test('showAll returns every stream', () {
@@ -149,5 +149,18 @@ void main() {
     expect(defaultSubtitleMenuLanguageCodes, {'nor', 'eng'});
     expect(subtitleMenuLanguages.map((l) => l.code), contains('pol'));
     expect(subtitleMenuLanguages.length, 12);
+  });
+
+  // 2026-11-08: The Dark Knight Rises listed 30 "Undefined - PGSSUB" tracks
+  // under its English one.
+  test('untagged tracks go when a picked language is there, stay when nothing else is', () {
+    final withEnglish = [sub(1, 'eng'), for (var i = 2; i < 32; i++) sub(i, 'und'), sub(40, 'spa')];
+    final shown = filterSubtitleMenuStreams(withEnglish, showAll: false);
+    expect(shown.map((s) => s['Index']), [1]);
+
+    final onlyUntagged = [sub(1, null), sub(2, 'und'), sub(3, 'spa')];
+    expect(filterSubtitleMenuStreams(onlyUntagged, showAll: false).map((s) => s['Index']), [1, 2]);
+
+    expect(filterSubtitleMenuStreams(withEnglish, showAll: true), hasLength(32));
   });
 }

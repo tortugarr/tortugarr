@@ -126,8 +126,15 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     await _loadData();
   }
 
+  /// Errors first: while any is unseen the tile shows how many (in red).
+  static int _alertCount(({int warnings, int errors})? unseen) =>
+      unseen == null ? 0 : (unseen.errors > 0 ? unseen.errors : unseen.warnings);
+
   void _openActivity(bool userActivity) {
-    if (!userActivity) unawaited(markAdminAlertsSeen());
+    if (!userActivity) {
+      unawaited(markAdminAlertsSeen());
+      unawaited(markAdminErrorsSeen());
+    }
     context.push('${Destinations.adminActivity}?useractivity=$userActivity');
   }
 
@@ -227,7 +234,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               _AdminAttentionCard(summary: summary),
             _DashboardKpiStrip(
               sessionCount: sessionCount,
-              alertCount: ref.watch(adminUnseenAlertsProvider).valueOrNull ?? 0,
+              alertCount: _alertCount(ref.watch(adminUnseenAlertsProvider).valueOrNull),
+              alertIsError: (ref.watch(adminUnseenAlertsProvider).valueOrNull?.errors ?? 0) > 0,
               worstStorageFill: _worstStorageFill(_storageInfo),
               // Emby reports its folders without their sizes.
               showDisk: !isEmby,
@@ -345,12 +353,16 @@ class _AdminAttentionCard extends StatelessWidget {
 class _DashboardKpiStrip extends StatelessWidget {
   final int sessionCount;
   final int alertCount;
+
+  /// Unseen errors or critical alerts: the tile turns red.
+  final bool alertIsError;
   final double? worstStorageFill;
   final bool showDisk;
 
   const _DashboardKpiStrip({
     required this.sessionCount,
     required this.alertCount,
+    this.alertIsError = false,
     this.worstStorageFill,
     required this.showDisk,
   });
@@ -386,7 +398,9 @@ class _DashboardKpiStrip extends StatelessWidget {
               icon: Icons.notification_important_outlined,
               label: l10n.adminDashboardAlerts,
               value: '$alertCount',
-              color: alertCount > 0
+              color: alertIsError
+                  ? theme.colorScheme.error
+                  : alertCount > 0
                   ? AppColorScheme.recordingScheduled
                   : theme.colorScheme.onSurfaceVariant,
             ),

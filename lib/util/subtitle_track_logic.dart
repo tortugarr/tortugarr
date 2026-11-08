@@ -647,12 +647,22 @@ List<Map<String, dynamic>> filterSubtitleMenuStreams(
 }) {
   if (showAll || streams.isEmpty) return streams;
   try {
-    return streams
+    final kept = streams
         .where((s) => isMenuLanguageSubtitleStream(s, languages: languages))
         .toList(growable: false);
+    // Tracks without a language only count when none is in a picked language:
+    // a Blu-ray copy listed 30 "Undefined - PGSSUB" tracks under its English
+    // one (2026-11-08). A file with nothing but untagged tracks keeps them.
+    final tagged = kept.where((s) => !_isUntagged(s)).toList(growable: false);
+    return tagged.isEmpty ? kept : tagged;
   } catch (_) {
     return streams;
   }
+}
+
+bool _isUntagged(Map<String, dynamic> stream) {
+  final language = (stream['Language'] as String?)?.trim().toLowerCase() ?? '';
+  return language.isEmpty || language == 'und';
 }
 
 /// True when the subtitle track [activeIndex] that playback started with

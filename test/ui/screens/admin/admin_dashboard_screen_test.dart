@@ -275,7 +275,7 @@ void main() {
     expect(system.logCalls, hasLength(3));
     final activity = system.logCalls.singleWhere((c) => c['limit'] == 7);
     final alerts = system.logCalls.singleWhere((c) => c['limit'] == 4);
-    final unseen = system.logCalls.singleWhere((c) => c['limit'] == 1);
+    final unseen = system.logCalls.singleWhere((c) => c['limit'] == 200);
     expect(unseen['hasUserId'], isFalse);
     expect(activity['startIndex'], 0);
     expect(activity['hasUserId'], isTrue);
