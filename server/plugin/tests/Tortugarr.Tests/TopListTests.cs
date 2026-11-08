@@ -42,3 +42,28 @@ public class TopListTests
         Assert.Equal(("movie", 278, (int?)null), (e[1].MediaType, e[1].TmdbId, e[1].TvdbId));
     }
 }
+
+/// <summary>2026-11-08: two films with the same title and year.</summary>
+public class FolderCollisionTests
+{
+    [Fact]
+    public void A_taken_folder_is_recognised_and_gets_the_id_tag()
+    {
+        var radarr = new UpstreamException("Radarr", "HTTP 400 [{\"propertyName\":\"Path\",\"errorMessage\":\"Path '/data/library/7/The Odyssey (2026)' is already configured for an existing movie\",\"errorCode\":\"MoviePathValidator\"}]");
+        Assert.True(TortugarrService.IsFolderTaken(radarr));
+        Assert.False(TortugarrService.IsFolderTaken(new UpstreamException("Radarr", "HTTP 500")));
+        Assert.False(TortugarrService.IsFolderTaken(new InvalidOperationException("is already configured for an existing movie")));
+        Assert.Equal("/data/library/7/The Odyssey (2026) [tmdbid-1698863]", TortugarrService.TaggedFolder("/data/library/7/", "The Odyssey (2026)", "tmdbid-1698863"));
+    }
+}
+
+public class FolderNameTests
+{
+    [Fact]
+    public void Folder_name_falls_back_to_title_and_year_without_bad_characters()
+    {
+        Assert.Equal("The Odyssey (2026)", TortugarrService.FolderName(new System.Text.Json.Nodes.JsonObject { ["title"] = "The Odyssey", ["year"] = 2026 }));
+        Assert.Equal("Mission Impossible (1996)", TortugarrService.FolderName(new System.Text.Json.Nodes.JsonObject { ["title"] = "Mission: Impossible", ["year"] = 1996 }).Replace("  ", " "));
+        Assert.Equal("Given (2020)", TortugarrService.FolderName(new System.Text.Json.Nodes.JsonObject { ["folder"] = "Given (2020)", ["title"] = "x" }));
+    }
+}

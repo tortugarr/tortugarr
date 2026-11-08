@@ -965,7 +965,49 @@ public sealed class TortugarrService
         body["monitored"] = true;
         body["minimumAvailability"] = "released";
         body["addOptions"] = new JsonObject { ["searchForMovie"] = false, ["monitor"] = "movieOnly" };
-        return await radarr.Post("/movie", body, ct).ConfigureAwait(false) ?? throw new UpstreamException("Radarr", "adding the movie failed");
+        return await AddWithFreeFolder(radarr, "/movie", body, $"tmdbid-{tmdbId}", ct).ConfigureAwait(false)
+               ?? throw new UpstreamException("Radarr", "adding the movie failed");
+    }
+
+    /// <summary>Radarr's/Sonarr's answer when the title's folder already belongs to another title.</summary>
+    internal static bool IsFolderTaken(Exception e) =>
+        e is UpstreamException && (e.Message.Contains("PathValidator", StringComparison.Ordinal)
+            || e.Message.Contains("is already configured for an existing", StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>The lookup's folder name, else "Title (Year)" without characters a folder cannot hold.</summary>
+    internal static string FolderName(JsonObject lookup)
+    {
+        var folder = (string?)lookup["folder"];
+        if (string.IsNullOrWhiteSpace(folder))
+        {
+            var year = (int?)lookup["year"] ?? 0;
+            folder = year > 0 ? $"{(string?)lookup["title"]} ({year})" : (string?)lookup["title"] ?? "Untitled";
+        }
+
+        return string.Concat(folder.Split(Path.GetInvalidFileNameChars().Concat(new[] { ':', '*', '?', '"', '<', '>', '|' }).ToArray())).Trim();
+    }
+
+    /// <summary>The folder for a title whose plain "Title (Year)" folder is taken; Jellyfin reads the id tag.</summary>
+    internal static string TaggedFolder(string root, string folder, string idTag) =>
+        $"{root.TrimEnd('/')}/{folder} [{idTag}]";
+
+    /// <summary>
+    /// Adds a title; when its folder is taken by another title of the same name and year (2026-11-08:
+    /// a mockbuster "The Odyssey (2026)" next to Nolan's), it goes to "Title (Year) [tmdbid-N]".
+    /// </summary>
+    private static async Task<JsonNode?> AddWithFreeFolder(ArrClient arr, string path, JsonObject body, string idTag, CancellationToken ct)
+    {
+        try
+        {
+            return await arr.Post(path, body, ct).ConfigureAwait(false);
+        }
+        catch (Exception e) when (IsFolderTaken(e) && body["rootFolderPath"] is not null)
+        {
+            var retry = body.DeepClone().AsObject();
+            retry["path"] = TaggedFolder((string)retry["rootFolderPath"]!, FolderName(retry), idTag);
+            retry.Remove("rootFolderPath");
+            return await arr.Post(path, retry, ct).ConfigureAwait(false);
+        }
     }
 
     /// <summary>A series missing in Sonarr is added unmonitored, without a search - as the app does.</summary>
@@ -996,7 +1038,8 @@ public sealed class TortugarrService
         }
 
         body["addOptions"] = new JsonObject { ["monitor"] = "none", ["searchForMissingEpisodes"] = false, ["searchForCutoffUnmetEpisodes"] = false };
-        return await sonarr.Post("/series", body, ct).ConfigureAwait(false) ?? throw new UpstreamException("Sonarr", "adding the series failed");
+        return await AddWithFreeFolder(sonarr, "/series", body, $"tvdbid-{tvdbId}", ct).ConfigureAwait(false)
+               ?? throw new UpstreamException("Sonarr", "adding the series failed");
     }
 
     private static async Task<JsonNode> FindEpisode(ArrClient sonarr, int seriesId, int season, int episode, CancellationToken ct)
