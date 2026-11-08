@@ -55,30 +55,62 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   LogicalKeyboardKey? _moved;
 
   Timer? _startTimer;
+  Timer? _settleTimer;
+
+  /// The remote moved focus already: the start focus must not take it back.
+  bool _userMoved = false;
+
+  /// Whether the focused control is in the admin area and on the screen.
+  bool _focusVisible() {
+    final f = FocusManager.instance.primaryFocus;
+    final ctx = f?.context;
+    if (f == null || ctx == null || !mounted || !_insideArea(ctx) || f is FocusScopeNode) {
+      return false;
+    }
+    final screen = Offset.zero & MediaQuery.sizeOf(context);
+    return screen.contains(f.rect.center);
+  }
+
+  /// Scrolls the focused control into view. Focus moved by this handler (or
+  /// put on a page's first button) could sit below the screen, so the
+  /// highlight vanished and the remote seemed dead (2026-11-08).
+  void _reveal() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = FocusManager.instance.primaryFocus?.context;
+      if (!mounted || ctx == null || !_insideArea(ctx)) return;
+      Scrollable.ensureVisible(ctx,
+          alignment: 0.5,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+          duration: const Duration(milliseconds: 200));
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     HardwareKeyboard.instance.addHandler(_onKey);
     InlineBackInterceptor.push(_onBack);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusStart());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusStart();
+      // Something in the page can still take the focus once its data is in
+      // (the dashboard put it on Scan All Libraries, below the screen).
+      _settleTimer = Timer(const Duration(milliseconds: 600), () {
+        if (!_focusVisible()) _focusStart();
+      });
+    });
   }
 
   /// The area opened with nothing in it focused, so the remote did nothing
   /// until Back put the focus on Exit (2026-11-08). Start on the page list,
   /// next to Exit, the way Back would get there.
   void _focusStart([int tries = 0]) {
-    if (!mounted) return;
-    final ctx = FocusManager.instance.primaryFocus?.context;
-    if (ctx != null && _insideArea(ctx) &&
-        FocusManager.instance.primaryFocus is! FocusScopeNode) {
-      return;
-    }
+    if (!mounted || _userMoved) return;
     final exit = widget.exit;
     if (exit == null) return;
     final start = _nearestInArea(exit, TraversalDirection.right);
     if (start != null) {
       start.requestFocus();
+      _reveal();
     } else if (exit.canRequestFocus) {
       exit.requestFocus();
     } else if (tries < 5) {
@@ -90,12 +122,14 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   @override
   void dispose() {
     _startTimer?.cancel();
+    _settleTimer?.cancel();
     HardwareKeyboard.instance.removeHandler(_onKey);
     InlineBackInterceptor.remove(_onBack);
     super.dispose();
   }
 
   bool _onBack() {
+    _userMoved = true;
     final node = FocusManager.instance.primaryFocus;
     final ctx = node?.context;
     if (node == null || ctx == null || !mounted || !_insideArea(ctx)) return false;
@@ -131,8 +165,12 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
       final horizontal = direction == TraversalDirection.left ||
           direction == TraversalDirection.right;
       if (horizontal && (inText || inSlider)) return false;
+      _userMoved = true;
       _move(node, ctx, direction);
       _moved = key;
+      // Only when the focus went somewhere: Up at a page's top scrolls the
+      // page itself and keeps the focus where it is.
+      if (FocusManager.instance.primaryFocus != node) _reveal();
       return true;
     }
     return false;
