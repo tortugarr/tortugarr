@@ -10,7 +10,8 @@
 </p>
 
 > **Built on [Moonfin](https://github.com/Moonfin-Client/Moonfin-Core).** The Tortugarr app is a
-> fork of Moonfin-Core 2.7.0, with Moonfin's full git history kept and Tortugarr's work on top.
+> fork of Moonfin-Core, kept up to date with Moonfin's releases (now Moonfin 3.0.0), with
+> Moonfin's full git history kept and Tortugarr's work on top.
 > Media playback, multi-server support and the design engine are the work of Moonfin and its
 > contributors. Tortugarr adds the one-command
 > server installer, the Tortugarr Jellyfin plugin, junk-release filtering and Download Now from

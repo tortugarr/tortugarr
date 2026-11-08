@@ -4,9 +4,11 @@
 
 **App**
 
-- **Moonfin 3.0.0** is in, with every Tortugarr change kept. A routine and checks
-  (`docs/MOONFIN-UPSTREAM.md`, `scripts/tortugarr-invariants.sh`) now guard against an upstream
-  update quietly undoing Tortugarr features.
+- **Now based on Moonfin 3.0.0.** Everything new from Moonfin since 2.7.0 is the work of the
+  [Moonfin team and contributors](https://github.com/Moonfin-Client/Moonfin-Core/releases); see
+  their release notes for what it brings. Tortugarr's own changes are kept on top, and a
+  routine with checks (`docs/MOONFIN-UPSTREAM.md`) makes sure a Moonfin update cannot quietly
+  undo them. The points below are Tortugarr's own work.
 - **Release picker:** most seeders first, live seeder counts from the trackers, dead torrents
   hidden, and Left/Right switches resolution tier straight from the list, with sound badges per
   release.
