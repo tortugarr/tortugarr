@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../data/services/tortugarr/tortugarr_plugin_client.dart';
 import '../../../widgets/download_now/free_space_dialog.dart' show formatBytes;
 import '../../../../util/platform_detection.dart';
+import '../../../widgets/focus/focusable_wrapper.dart';
 import 'admin_form_styles.dart';
 
 /// Server health on the admin dashboard (2026-11-08): every service Tortugarr
@@ -235,8 +236,15 @@ class _TortugarrHealthCardState extends State<TortugarrHealthCard> {
       icon: Icons.monitor_heart_outlined,
       children: children,
     );
-    // On TV the card is read-only: nothing in it takes the remote's focus.
-    return PlatformDetection.isTV ? ExcludeFocus(child: section) : section;
+    // On TV the card is one stop for the remote: Right from the page list
+    // lands on it (it is at the top of the dashboard), Down goes on to the
+    // buttons below. Nothing inside it takes the focus (2026-11-08).
+    if (!PlatformDetection.isTV) return section;
+    return FocusableWrapper(
+      disableScale: true,
+      borderRadius: 18,
+      child: ExcludeFocus(child: section),
+    );
   }
 
   Widget _label(BuildContext context, String text) => Padding(
