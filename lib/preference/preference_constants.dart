@@ -66,6 +66,20 @@ enum PlaybackEnginePreference {
   mpv,
 }
 
+/// Which player plays video on iPhone and iPad. Native is the player the
+/// Apple TV app uses.
+enum ApplePlayerUi {
+  flutter,
+  native,
+}
+
+/// Where the play, skip and seek buttons sit on phones, tablets and desktop.
+/// TVs always dock them, since the remote walks the bottom row.
+enum PlayerTransportPosition {
+  onScreen,
+  docked,
+}
+
 enum DolbyVisionFallbackBehavior {
   ask,
   hdr10Fallback,
@@ -280,6 +294,14 @@ enum DesktopScrollWheelAction {
   off,
   seek,
   volume,
+}
+
+/// Where brightness and volume swipe gesture indicators are placed on the screen.
+/// [same] places the indicator on the side being swiped (brightness left, volume right).
+/// [inverted] places the indicator on the opposite side (brightness right, volume left).
+enum GestureIndicatorPlacement {
+  same,
+  inverted,
 }
 
 /// Glass rendering budget. `auto` picks per-device (real blur on capable
@@ -577,6 +599,33 @@ enum HomeSectionType {
   }
 }
 
+/// The IMDb charts Moonbase serves, each asked for by its own serialized name.
+const imdbChartSections = [
+  HomeSectionType.imdbTop250Movies,
+  HomeSectionType.imdbTop250TvShows,
+  HomeSectionType.imdbMostPopularMovies,
+  HomeSectionType.imdbMostPopularTvShows,
+  HomeSectionType.imdbLowestRatedMovies,
+  HomeSectionType.imdbTopEnglishMovies,
+];
+
+/// The TMDB chart behind each TMDB section, as the path Moonbase asks TMDB for.
+const tmdbChartPaths = {
+  HomeSectionType.tmdbPopularMovies: 'movie/popular',
+  HomeSectionType.tmdbTopRatedMovies: 'movie/top_rated',
+  HomeSectionType.tmdbNowPlayingMovies: 'movie/now_playing',
+  HomeSectionType.tmdbUpcomingMovies: 'movie/upcoming',
+  HomeSectionType.tmdbPopularTv: 'tv/popular',
+  HomeSectionType.tmdbTopRatedTv: 'tv/top_rated',
+  HomeSectionType.tmdbAiringTodayTv: 'tv/airing_today',
+  HomeSectionType.tmdbOnTheAirTv: 'tv/on_the_air',
+  HomeSectionType.tmdbTrendingMovieDaily: 'trending/movie/day',
+  HomeSectionType.tmdbTrendingMovieWeekly: 'trending/movie/week',
+  HomeSectionType.tmdbTrendingTvDaily: 'trending/tv/day',
+  HomeSectionType.tmdbTrendingTvWeekly: 'trending/tv/week',
+  HomeSectionType.tmdbTrendingAllWeekly: 'trending/all/week',
+};
+
 /// Every sort ends on SortName so items the server ranks equally keep a stable
 /// order between pages, which a bare key leaves to whatever the database
 /// returns.
@@ -725,6 +774,19 @@ enum SortDirection {
   const SortDirection(this.apiValue);
 
   final String apiValue;
+}
+
+enum ExternalRowSortBy {
+  none('Default (List Order)'),
+  name('Name'),
+  releaseDate('Release Date'),
+  rating('Rating'),
+  popularity('Popularity'),
+  shuffle('Shuffle');
+
+  const ExternalRowSortBy(this.displayName);
+
+  final String displayName;
 }
 
 enum PlayedStatusFilter {
@@ -1058,6 +1120,9 @@ enum RewatchSortBy {
 /// series carries its first episode's date, so a long running show stops
 /// surfacing. The row shows series cards whichever of these is picked.
 enum RecentlyReleasedSeriesType { series, season, episode }
+
+/// What single-clicking on a Continue Watching or Next Up home card does.
+enum ContinueWatchingDefaultAction { details, play }
 
 /// When a home row card shows its MOVIE or SERIES label. Only external rows
 /// carry a media type, so the rest are unaffected either way.

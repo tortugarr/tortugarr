@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:moonfin/data/database/offline_database.dart';
+import 'package:moonfin/data/offline/offline_media_segments.dart';
 import 'package:moonfin/data/repositories/offline_repository.dart';
 import 'package:moonfin/data/services/connectivity_service.dart';
 import 'package:moonfin/data/services/pending_rating_store.dart';
@@ -45,6 +46,8 @@ class _FakeServer {
   final List<Map<String, dynamic>> stopReports = [];
   final List<String> markedPlayed = [];
   final List<String> itemFetches = [];
+  final Map<String, List<Map<String, dynamic>>> segments = {};
+  bool segmentsDown = false;
   final playback = _MockPlaybackApi();
 
   /// Holds the user-data batch until completed, to keep a sync in flight.
@@ -64,6 +67,7 @@ class _FakeServer {
     final items = _MockItemsApi();
     final library = _MockUserLibraryApi();
     when(() => client.baseUrl).thenReturn(baseUrl);
+    when(() => client.serverType).thenReturn(ServerType.jellyfin);
     when(() => client.itemsApi).thenReturn(items);
     when(() => client.playbackApi).thenReturn(playback);
     when(() => client.userLibraryApi).thenReturn(library);
@@ -89,9 +93,14 @@ class _FakeServer {
       if (!userData.containsKey(id)) throw Exception('404');
       return {
         'Id': id,
+        'MediaType': 'Video',
         'RunTimeTicks': _runtime,
         'UserData': Map<String, dynamic>.from(userData[id]!),
       };
+    });
+    when(() => items.getMediaSegments(any())).thenAnswer((inv) async {
+      if (segmentsDown) throw Exception('503');
+      return segments[inv.positionalArguments.first as String] ?? const [];
     });
     when(() => playback.reportPlaybackStopped(any())).thenAnswer((inv) async {
       final info = inv.positionalArguments.first as Map<String, dynamic>;
@@ -176,6 +185,45 @@ void main() {
       (await repo.getItem(id))!.playbackPositionTicks;
   Future<bool> localSynced(String id) async =>
       (await repo.getItem(id))!.progressSynced;
+
+  group('media segments', () {
+    late _FakeServer server;
+
+    setUp(() => server = _FakeServer('http://server-a.test'));
+
+    final intro = {
+      'Id': 's1',
+      'ItemId': 'm',
+      'Type': 'Intro',
+      'StartTicks': 0,
+      'EndTicks': 300000000,
+    };
+
+    Future<List<Map<String, dynamic>>> saved(String id) async =>
+        storedMediaSegmentsJson((await repo.getItem(id))!.metadataJson);
+
+    test('the refresh saves the server segments with the download', () async {
+      await download('m');
+      server.set('m');
+      server.segments['m'] = [intro];
+
+      await sync.refreshMetadata(server.client, serverId: 'server-a');
+
+      expect(await saved('m'), [intro]);
+    });
+
+    test('a failed segment request keeps the segments already saved', () async {
+      await download('m');
+      server.set('m');
+      server.segments['m'] = [intro];
+      await sync.refreshMetadata(server.client, serverId: 'server-a');
+
+      server.segmentsDown = true;
+      await sync.refreshMetadata(server.client, serverId: 'server-a');
+
+      expect(await saved('m'), [intro]);
+    });
+  });
 
   // The rules from PR #560: whichever side got further wins, and a completion
   // on either side beats a partial position on the other.

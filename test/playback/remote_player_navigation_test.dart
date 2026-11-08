@@ -73,6 +73,10 @@ class _Cast extends Fake implements CastService {
   @override
   final activeKindNotifier = ValueNotifier<CastTargetKind?>(null);
   @override
+  final remoteStateNotifier = ValueNotifier<String?>(null);
+  @override
+  final remotePositionNotifier = ValueNotifier<int>(0);
+  @override
   CastTargetKind? get activeKind => null;
 }
 

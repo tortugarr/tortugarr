@@ -75,4 +75,29 @@ void main() {
     expect(passed, isTrue);
     expect(pin.isPinEnabled, isTrue);
   });
+
+  test('a PIN the reset could not clear still holds the user out', () async {
+    final passed = await passesPinCheckAfterSignIn(
+      pinUtil: pin,
+      forgotPin: true,
+      canResetPin: true,
+      askForPin: answer(),
+      resetPin: () async => false,
+    );
+
+    expect(passed, isFalse);
+    expect(pin.isPinEnabled, isTrue);
+  });
+
+  test('a PIN the reset cleared lets the user in', () async {
+    final passed = await passesPinCheckAfterSignIn(
+      pinUtil: pin,
+      forgotPin: true,
+      canResetPin: true,
+      askForPin: answer(),
+      resetPin: () async => true,
+    );
+
+    expect(passed, isTrue);
+  });
 }

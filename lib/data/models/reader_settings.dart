@@ -43,6 +43,8 @@ class ReaderSettings {
   final bool justify;
   final bool bold;
 
+  final bool scrolled;
+
   final double brightness;
 
   final double warmth;
@@ -55,6 +57,7 @@ class ReaderSettings {
     this.margin = ReaderMargin.normal,
     this.justify = false,
     this.bold = false,
+    this.scrolled = false,
     this.brightness = 1.0,
     this.warmth = 0.0,
   });
@@ -73,6 +76,7 @@ class ReaderSettings {
     ReaderMargin? margin,
     bool? justify,
     bool? bold,
+    bool? scrolled,
     double? brightness,
     double? warmth,
   }) {
@@ -86,6 +90,7 @@ class ReaderSettings {
       margin: margin ?? this.margin,
       justify: justify ?? this.justify,
       bold: bold ?? this.bold,
+      scrolled: scrolled ?? this.scrolled,
       brightness: (brightness ?? this.brightness).clamp(0.3, 1.0).toDouble(),
       warmth: (warmth ?? this.warmth).clamp(0.0, 1.0).toDouble(),
     );
@@ -174,6 +179,7 @@ class ReaderSettings {
     'margin': margin.name,
     'justify': justify,
     'bold': bold,
+    'scrolled': scrolled,
     'brightness': brightness,
     'warmth': warmth,
   };
@@ -218,6 +224,7 @@ class ReaderSettings {
       ),
       justify: json['justify'] == true,
       bold: json['bold'] == true,
+      scrolled: json['scrolled'] == true,
       brightness: parseDouble(json['brightness'], 1.0),
       warmth: parseDouble(json['warmth'], 0.0),
     );
@@ -243,6 +250,7 @@ class ReaderSettings {
       other.margin == margin &&
       other.justify == justify &&
       other.bold == bold &&
+      other.scrolled == scrolled &&
       other.brightness == brightness &&
       other.warmth == warmth;
 
@@ -255,6 +263,7 @@ class ReaderSettings {
     margin,
     justify,
     bold,
+    scrolled,
     brightness,
     warmth,
   );

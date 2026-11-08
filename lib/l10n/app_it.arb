@@ -528,10 +528,6 @@
     "@discoverySubjects": {
         "description": "Title for the book discovery subject picker panel"
     },
-    "pickDiscoverySubjects": "Scegli quali feed di argomenti mostrare in Scopri.",
-    "@pickDiscoverySubjects": {
-        "description": "Instruction text in discovery subject picker"
-    },
     "apply": "Applica",
     "@apply": {
         "description": "Button label to apply selected options"
@@ -539,27 +535,6 @@
     "audiobookGenres": "Generi Audiolibri",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
-    },
-    "pickAudiobookGenres": "Scegli quali generi mostrare in Scopri Audiolibri.",
-    "@pickAudiobookGenres": {
-        "description": "Instruction text in audiobook genre picker"
-    },
-    "discoverAudiobooks": "Scopri Audiolibri",
-    "@discoverAudiobooks": {
-        "description": "Section title for audiobook discovery"
-    },
-    "librivoxDescription": "Titoli popolari di dominio pubblico da LibriVox.",
-    "@librivoxDescription": {
-        "description": "Subtitle for audiobook discovery section"
-    },
-    "titlesCount": "{count} titoli",
-    "@titlesCount": {
-        "description": "Label showing number of titles",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
     },
     "scrollLeft": "Scorri a sinistra",
     "@scrollLeft": {
@@ -736,10 +711,6 @@
     "discover": "Scopri",
     "@discover": {
         "description": "Section title for book discovery"
-    },
-    "trendingTitlesOpenLibrary": "Titoli di tendenza per argomento da Open Library.",
-    "@trendingTitlesOpenLibrary": {
-        "description": "Subtitle for book discovery section"
     },
     "noBookmarkedItems": "Nessun elemento nei segnalibri",
     "@noBookmarkedItems": {
@@ -3446,14 +3417,6 @@
     "@showLibrariesFromAllServers": {
         "description": "Description for multi-server libraries"
     },
-    "enableFolderView": "Abilita Visualizzazione Cartelle",
-    "@enableFolderView": {
-        "description": "Setting for enabling folder view"
-    },
-    "showFolderBrowsingOption": "Mostra opzione di navigazione cartelle",
-    "@showFolderBrowsingOption": {
-        "description": "Description for folder view"
-    },
     "libraryVisibility": "Visibilità Libreria",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
@@ -4143,10 +4106,6 @@
     "featuredContentAppearance": "Contenuti in evidenza, aspetto",
     "@featuredContentAppearance": {
         "description": "Media bar settings subtitle"
-    },
-    "posterSizeImageTypeFolderView": "Dimensione poster, tipo immagine, visualizzazione cartelle",
-    "@posterSizeImageTypeFolderView": {
-        "description": "Library display settings subtitle"
     },
     "mdbListTmdbRatingSources": "MDBList, TMDB e fonti di valutazione",
     "@mdbListTmdbRatingSources": {
@@ -7300,7 +7259,6 @@
     "failedToExtractCbrArchive": "Impossibile estrarre l'archivio .cbr.",
     "cb7ExtractionUnavailable": "L'estrazione CB7 non è disponibile su questa piattaforma.",
     "cb7ExtractionPluginUnavailable": "Il plugin di estrazione CB7 non è disponibile su questa piattaforma.",
-    "closeGenrePanel": "Chiudi il pannello dei generi",
     "loadingShuffle": "Caricamento riproduzione casuale…",
     "libraryShuffleLabel": "CASUALE DALLA LIBRERIA",
     "randomShuffleLabel": "CASUALE",

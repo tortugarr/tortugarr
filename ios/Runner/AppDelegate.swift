@@ -77,6 +77,7 @@ private final class NativeAirPlayEventStreamHandler: NSObject, FlutterStreamHand
   fileprivate var castEventSink: FlutterEventSink?
 
   private var aetherVideoChannel: AetherVideoChannel?
+  private var nativeVideoChannel: NativeApplePlayerChannel?
   private var pipController: IosPiPController?
   private var themeMusicChannel: AppleTvThemeMusicChannel?
   private var previewChannel: AppleTvPreviewChannel?
@@ -345,10 +346,21 @@ private final class NativeAirPlayEventStreamHandler: NSObject, FlutterStreamHand
       // surface factory, and PiP (which owns the org.moonfin.ios/pip channel).
       let aetherChannel = AetherVideoChannel(messenger: messenger)
       self.aetherVideoChannel = aetherChannel
-      self.pipController = IosPiPController(
+      // The native player option plays video through the Apple TV player,
+      // which has its own channel and its own wrapper around the shared engine.
+      let nativeChannel = NativeApplePlayerChannel(
         messenger: messenger,
-        wrapper: aetherChannel.player,
+        textures: sharedEngine.registrar(forPlugin: "moonfin_native_apple_player")?.textures(),
+        rootProvider: { [weak self] in self?.flutterViewController })
+      self.nativeVideoChannel = nativeChannel
+      let pip = IosPiPController(
+        messenger: messenger,
+        wrapperProvider: { [weak nativeChannel, weak aetherChannel] in
+          nativeChannel?.activePlayer ?? aetherChannel?.playerIfCreated
+        },
         engine: AetherPlayerWrapper.sharedEngine())
+      self.pipController = pip
+      nativeChannel.onPlayerChanged = { [weak pip] in pip?.rebind() }
       if let registrar = sharedEngine.registrar(forPlugin: "moonfin_aether_video") {
         registrar.register(
           AetherVideoViewFactory(

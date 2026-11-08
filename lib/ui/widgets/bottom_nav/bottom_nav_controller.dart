@@ -189,7 +189,6 @@ class BottomNavController extends ChangeNotifier {
         _prefs.get(UserPreferences.showGenresButton),
         _prefs.get(UserPreferences.showLiveTvButton),
         _prefs.get(UserPreferences.showSeerrButton),
-        _prefs.get(UserPreferences.enableFolderView),
         _prefs.get(UserPreferences.showShuffleButton),
         _prefs.get(UserPreferences.syncPlayEnabled),
         _prefs.get(UserPreferences.showSyncPlayButton),

@@ -32,7 +32,6 @@ String bottomNavTabLabel(AppLocalizations l10n, BottomNavTab tab) =>
       BottomNavTab.discover => GetIt.instance.isRegistered<SeerrPreferences>()
           ? GetIt.instance<SeerrPreferences>().labelOrDefault(l10n.seerr)
           : l10n.seerr,
-      BottomNavTab.folders => l10n.folders,
     };
 
 String bottomNavHubActionLabel(
@@ -97,8 +96,6 @@ Widget bottomNavTabIconWidget(
       adaptive(Icons.favorite_rounded, Icons.favorite_border_rounded),
     BottomNavTab.liveTv =>
       adaptive(Icons.live_tv_rounded, Icons.live_tv_outlined),
-    BottomNavTab.folders =>
-      adaptive(Icons.folder_rounded, Icons.folder_outlined),
     BottomNavTab.genres => Image.asset(
         'assets/icons/genres.png',
         width: size,
@@ -159,7 +156,6 @@ void openBottomNavTab(BuildContext context, BottomNavTab tab) {
     BottomNavTab.genres => Destinations.allGenres,
     BottomNavTab.liveTv => Destinations.liveTvGuide,
     BottomNavTab.discover => Destinations.seerrDiscover,
-    BottomNavTab.folders => Destinations.folderView,
     BottomNavTab.libraries => null,
   };
   if (route == null) return;

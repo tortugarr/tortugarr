@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
+import 'package:moonfin/auth/repositories/session_repository.dart';
+import 'package:moonfin/data/services/media_server_client_factory.dart';
 import 'package:moonfin/preference/preference_constants.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:moonfin/ui/screens/setup/setup_wizard_gate.dart';
@@ -23,6 +26,23 @@ class _FakeClient implements MediaServerClient {
 class _AnonymousClient extends _FakeClient {
   @override
   String? get userId => null;
+}
+
+class _FakeClientFactory extends Fake implements MediaServerClientFactory {
+  _FakeClientFactory(this.clients);
+
+  @override
+  final Map<String, MediaServerClient> clients;
+
+  @override
+  MediaServerClient getActiveClient() => clients.values.last;
+}
+
+class _FakeSessions extends Fake implements SessionRepository {
+  _FakeSessions(this.activeServerId);
+
+  @override
+  final String? activeServerId;
 }
 
 void main() {
@@ -249,6 +269,32 @@ void main() {
 
     test('a client with nobody signed in is left alone', () {
       expect(gate.shouldRun(_AnonymousClient()), isFalse);
+    });
+  });
+
+  group('which server the wizard asks about', () {
+    tearDown(() => GetIt.instance.reset());
+
+    test('the signed-in one, not whichever client was made last', () {
+      final signedIn = _FakeClient();
+      final other = _FakeClient();
+      GetIt.instance
+        ..registerSingleton<MediaServerClientFactory>(
+          _FakeClientFactory({'home': signedIn, 'other': other}),
+        )
+        ..registerSingleton<SessionRepository>(_FakeSessions('home'));
+
+      expect(SetupWizardGate.activeClient(), same(signedIn));
+    });
+
+    test('the factory decides when there is no session to go by', () {
+      final first = _FakeClient();
+      final last = _FakeClient();
+      GetIt.instance.registerSingleton<MediaServerClientFactory>(
+        _FakeClientFactory({'a': first, 'b': last}),
+      );
+
+      expect(SetupWizardGate.activeClient(), same(last));
     });
   });
 }

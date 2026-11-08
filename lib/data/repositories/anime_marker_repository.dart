@@ -24,6 +24,14 @@ AnimeMarkerPlacement parseAnimeMarkerPlacement(Object? raw) => switch (raw) {
   _ => AnimeMarkerPlacement.below,
 };
 
+/// Anime Markers audio style
+enum AnimeAudioLabelStyle { full, short }
+
+AnimeAudioLabelStyle parseAnimeAudioLabelStyle(Object? raw) => switch (raw) {
+  'short' => AnimeAudioLabelStyle.short,
+  _ => AnimeAudioLabelStyle.full,
+};
+
 /// The marker for a single episode.
 ///
 /// The two halves are independent: an episode can have a subbed/dubbed verdict without
@@ -80,6 +88,8 @@ class AnimeMarkerRepository {
   );
 
   AnimeMarkerPlacement placement = AnimeMarkerPlacement.below;
+
+  AnimeAudioLabelStyle labelStyle = AnimeAudioLabelStyle.full;
 
   /// Series the plugin matched but hasnt fetched a table for yet. Not a cache: it becomes
   /// a real verdict on its own once the nightly task reaches the show.
@@ -244,6 +254,7 @@ class AnimeMarkerRepository {
       }
 
       placement = parseAnimeMarkerPlacement(data['placement']);
+      labelStyle = parseAnimeAudioLabelStyle(data['labelStyle']);
 
       final rawSeasons = data['seasons'];
       final seasons = <String, AnimeAudioKind>{};
@@ -360,6 +371,7 @@ class AnimeMarkerRepository {
       final data = response.data;
       if (data is Map<String, dynamic>) {
         placement = parseAnimeMarkerPlacement(data['placement']);
+        labelStyle = parseAnimeAudioLabelStyle(data['labelStyle']);
 
         if (data['items'] is Map) {
           (data['items'] as Map).forEach((key, value) {

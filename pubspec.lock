@@ -448,7 +448,7 @@ packages:
     source: hosted
     version: "4.5.4"
   fake_async:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: fake_async
       sha256: "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44"
@@ -1050,10 +1050,10 @@ packages:
     dependency: transitive
     description:
       name: liquid_glass_widgets
-      sha256: c4bcf1fb615e339c6558cf3d7c6bbb95b0e187b906ff52c21c520557f0784637
+      sha256: "47c38caa98528ae8b51fb7f6ede523602fcf1393d664f78dc8081a0b27ac404a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.6.0"
   logger:
     dependency: "direct main"
     description:
@@ -1137,8 +1137,8 @@ packages:
     dependency: "direct main"
     description:
       path: "libs/windows/media_kit_libs_windows_video"
-      ref: "43368ec394dcce7795707358b751a748c1fdc610"
-      resolved-ref: "43368ec394dcce7795707358b751a748c1fdc610"
+      ref: "50013aee7429633ae2df656982167ca6d21237ce"
+      resolved-ref: "50013aee7429633ae2df656982167ca6d21237ce"
       url: "https://github.com/RadicalMuffinMan/media-kit.git"
     source: git
     version: "1.0.12"
@@ -1146,8 +1146,8 @@ packages:
     dependency: "direct main"
     description:
       path: media_kit_video
-      ref: "43368ec394dcce7795707358b751a748c1fdc610"
-      resolved-ref: "43368ec394dcce7795707358b751a748c1fdc610"
+      ref: "50013aee7429633ae2df656982167ca6d21237ce"
+      resolved-ref: "50013aee7429633ae2df656982167ca6d21237ce"
       url: "https://github.com/RadicalMuffinMan/media-kit.git"
     source: git
     version: "2.0.1"
@@ -1434,6 +1434,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  playback_plex:
+    dependency: "direct main"
+    description:
+      path: "packages/playback_plex"
+      relative: true
+    source: path
+    version: "0.1.0"
   plugin_platform_interface:
     dependency: "direct dev"
     description:
@@ -1675,6 +1682,13 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/server_jellyfin"
+      relative: true
+    source: path
+    version: "0.1.0"
+  server_plex:
+    dependency: "direct main"
+    description:
+      path: "packages/server_plex"
       relative: true
     source: path
     version: "0.1.0"

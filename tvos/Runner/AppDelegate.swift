@@ -37,7 +37,8 @@ final class GamepadNavigationHostViewController: GCEventViewController {
 
 @main
 class AppDelegate: FlutterAppDelegate {
-    private var appleTvVideoChannel: AppleTvVideoChannel?
+    private var nativeApplePlayerChannel: NativeApplePlayerChannel?
+    private var aetherVideoChannel: AetherVideoChannel?
     private var topShelfChannel: TopShelfChannel?
     private var previewChannel: AppleTvPreviewChannel?
     private var systemChannel: AppleTvSystemChannel?
@@ -63,9 +64,20 @@ class AppDelegate: FlutterAppDelegate {
         // register against the controller directly.
         GeneratedPluginRegistrant.register(with: flutterViewController)
 
-        appleTvVideoChannel = AppleTvVideoChannel(
+        nativeApplePlayerChannel = NativeApplePlayerChannel(
             messenger: flutterViewController.binaryMessenger,
-            rootViewController: flutterViewController)
+            textures: flutterViewController,
+            rootProvider: { [weak flutterViewController] in flutterViewController })
+        // The Flutter player option draws its own controls over this video view.
+        let aetherChannel = AetherVideoChannel(messenger: flutterViewController.binaryMessenger)
+        aetherVideoChannel = aetherChannel
+        flutterViewController.registrar(forPlugin: "moonfin_aether_video")?.register(
+            AetherVideoViewFactory(
+                messenger: flutterViewController.binaryMessenger,
+                wrapperProvider: { [weak aetherChannel] in
+                    aetherChannel?.player ?? AetherPlayerWrapper()
+                }),
+            withId: AetherVideoViewFactory.viewType)
         topShelfChannel = TopShelfChannel(
             messenger: flutterViewController.binaryMessenger)
         previewChannel = AppleTvPreviewChannel(

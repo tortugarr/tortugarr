@@ -72,7 +72,7 @@ class AudioCapabilityProfile {
   final AudioRouteType activeRouteType;
   final bool routeSupportsHdAudio;
 
-  bool get _isHdRoute =>
+  bool get isHdRoute =>
       activeRouteType == AudioRouteType.hdmi ||
       activeRouteType == AudioRouteType.earc;
 
@@ -82,8 +82,8 @@ class AudioCapabilityProfile {
   bool get canIecAc3 => canIecLow;
   bool get canIecEac3 => canIecMid;
   bool get canIecDts => canIecLow;
-  bool get canIecDtsHd => canIecHbr && _isHdRoute;
-  bool get canIecTrueHd => canIecHbr && _isHdRoute;
+  bool get canIecDtsHd => canIecHbr && isHdRoute;
+  bool get canIecTrueHd => canIecHbr && isHdRoute;
 
   bool get hasCompressedPassthroughRoute =>
       canPassthroughAc3 ||

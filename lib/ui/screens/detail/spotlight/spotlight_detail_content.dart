@@ -27,6 +27,7 @@ import '../../../../util/platform_detection.dart';
 import '../../../navigation/destinations.dart';
 import '../../../navigation/playback_launcher.dart';
 import '../../../widgets/focus/can_claim_initial_focus.dart';
+import '../../../widgets/live_tv/incomplete_recording.dart';
 import '../../../widgets/logo_view.dart';
 import '../../../widgets/navigation_layout.dart';
 import '../../../widgets/offline_aware_image.dart';
@@ -44,6 +45,7 @@ import '../item_detail_screen.dart'
         PersonDates,
         selectedMediaSourceForItem,
         technicalDetailsFor;
+import '../play_item_on_screen.dart';
 import 'spotlight_cards.dart';
 import 'spotlight_images.dart';
 import 'spotlight_landscape_layout.dart';
@@ -101,6 +103,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
   final _scrollController = ScrollController();
   final _cardsScrollController = ScrollController();
   final _overviewFocusNode = FocusNode(debugLabel: 'SpotlightOverview');
+  final _collectionSortFocusNode = FocusNode(debugLabel: 'SpotlightCollectionSort');
   final _cardFocusNodes = <String, FocusNode>{};
   final _trackFocusNodes = <String, FocusNode>{};
 
@@ -272,6 +275,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
     _scrollController.dispose();
     _cardsScrollController.dispose();
     _overviewFocusNode.dispose();
+    _collectionSortFocusNode.dispose();
     for (final node in _cardFocusNodes.values) {
       node.dispose();
     }
@@ -327,10 +331,8 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
       final credits = await loadSeerrPersonCredits(repo, personId);
       if (!mounted) return;
       setState(() {
-        // Seerr lists a title once per credit, so a title has to be folded
-        // into a single entry before it reaches a keyed grid.
-        _seerrAppearances = groupSeerrCredits(credits.cast, isCrew: false);
-        _seerrCrewCredits = groupSeerrCredits(credits.crew, isCrew: true);
+        _seerrAppearances = credits.cast;
+        _seerrCrewCredits = credits.crew;
       });
       _selectPersonBackdrop();
     } catch (_) {
@@ -356,7 +358,9 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
   SpotlightCardActions _cardActions(AggregatedItem item) {
     return SpotlightCardActions(
       openItem: (entry) => _closeModalThen(() {
-        if (entry.serverId == 'seerr') {
+        if (item.type == 'Episode' && entry.id == item.id) {
+          playItemOnScreen(context);
+        } else if (entry.serverId == 'seerr') {
           final mediaType = entry.seerrMediaType ??
               (entry.type == 'Series' || entry.type == 'tv' ? 'tv' : 'movie');
           final tmdbId = entry.tmdbId;
@@ -371,14 +375,17 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
             ),
           );
         } else {
-          context.push(
-            Destinations.itemOrPhoto(
-              entry.id,
-              serverId: entry.serverId,
-              type: entry.type,
-              channelId: entry.channelId,
-            ),
+          final location = Destinations.itemOrPhoto(
+            entry.id,
+            serverId: entry.serverId,
+            type: entry.type,
+            channelId: entry.channelId,
           );
+          // One episode to the next takes this page's place, so Back leaves
+          // the run of episodes in one press.
+          item.type == 'Episode' && entry.type == 'Episode'
+              ? context.pushReplacement(location)
+              : context.push(location);
         }
       }),
       openPerson: (personId) => _closeModalThen(() {
@@ -421,6 +428,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
           _closeModalThen(() => _playItems(_vm.playlistItems, index)),
       trackFocusNode: (id) =>
           _trackFocusNodes.putIfAbsent(id, () => FocusNode()),
+      collectionSortFocusNode: _collectionSortFocusNode,
     );
   }
 
@@ -475,7 +483,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
         // before that lands would otherwise keep the sections it was built
         // with and never gain its Seerr rows, which is most visible on the
         // similar card. Re-derive the card while the modal is open instead.
-        refreshOn: _vm,
+        refreshOn: Listenable.merge([_vm, widget.prefs]),
         refresh: () => _liveCardContent(spec),
         // The collection grid arrives a page at a time, and this modal is the
         // only place Spotlight shows it, so it has to ask for the rest.
@@ -561,15 +569,18 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
       children: [
         ColoredBox(color: base),
         if (url != null && url.isNotEmpty) ...[
-          OfflineAwareImage(
-            imageUrl: url,
-            fit: BoxFit.cover,
-            alignment: landscape ? Alignment.centerRight : Alignment.topCenter,
-            fadeInDuration: Duration.zero,
-            sourceAspectRatio: 16 / 9,
-            maxDecodeWidth: ArtworkDecode.maxSourceWidth,
-            priority: ImageFetchPriority.high,
-            errorWidget: (context, url, error) => const SizedBox.shrink(),
+          DetailBackdropFit(
+            prefs: widget.prefs,
+            child: OfflineAwareImage(
+              imageUrl: url,
+              fit: BoxFit.cover,
+              alignment: landscape ? Alignment.centerRight : Alignment.topCenter,
+              fadeInDuration: Duration.zero,
+              sourceAspectRatio: 16 / 9,
+              maxDecodeWidth: ArtworkDecode.maxSourceWidth,
+              priority: ImageFetchPriority.high,
+              errorWidget: (context, url, error) => const SizedBox.shrink(),
+            ),
           ),
           ColoredBox(color: Colors.black.withValues(alpha: alpha)),
         ],
@@ -1146,7 +1157,10 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
             showVersionBadge: visibility.shows(DetailSection.versionBadge),
           ),
         const SizedBox(height: 8),
-        if (!isPerson) _metadataRow(context, item, selectedSource),
+        if (!isPerson) ...[
+          _metadataRow(context, item, selectedSource),
+          IncompleteRecordingDetailLine(itemId: item.id),
+        ],
         if (techRow != null) ...[const SizedBox(height: 8), techRow],
         if (showRatings) ...[
           const SizedBox(height: 8),
@@ -1259,6 +1273,25 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
     );
   }
 
+  static const _cardsScrollStep = 480.0;
+  static const _cardsScrollDuration = Duration(milliseconds: 380);
+  static const _cardsScrollCurve = Curves.easeInOut;
+
+  void _scrollCardsBy(double delta) {
+    if (!_cardsScrollController.hasClients) return;
+    final current = _cardsScrollController.offset;
+    final target = (current + delta).clamp(
+      0.0,
+      _cardsScrollController.position.maxScrollExtent,
+    );
+    if ((target - current).abs() < 0.5) return;
+    _cardsScrollController.animateTo(
+      target,
+      duration: _cardsScrollDuration,
+      curve: _cardsScrollCurve,
+    );
+  }
+
   Widget _buildCards(BuildContext context, List<SpotlightCardSpec> cards) {
     if (cards.isEmpty) return const SizedBox.shrink();
     // Taller cards show more of the artwork through the scrim. The landscape
@@ -1343,6 +1376,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
             },
           ),
           child: ListView.separated(
+            controller: _cardsScrollController,
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.none,
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -1355,6 +1389,56 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
       );
     }
 
+    final showDesktopControls =
+        PlatformDetection.useDesktopUi && !PlatformDetection.isTV && cards.length > 1;
+
+    final Widget content;
+    if (showDesktopControls) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: _landscape ? 0 : 20,
+                bottom: 4,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Focus(
+                    canRequestFocus: false,
+                    skipTraversal: true,
+                    descendantsAreFocusable: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.chevron_left),
+                      onPressed: () => _scrollCardsBy(-_cardsScrollStep),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
+                  Focus(
+                    canRequestFocus: false,
+                    skipTraversal: true,
+                    descendantsAreFocusable: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.chevron_right),
+                      onPressed: () => _scrollCardsBy(_cardsScrollStep),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          band,
+        ],
+      );
+    } else {
+      content = band;
+    }
+
     return Focus(
       canRequestFocus: false,
       skipTraversal: true,
@@ -1363,7 +1447,7 @@ class _SpotlightDetailContentState extends State<SpotlightDetailContent> {
           widget.onToggleNavbar?.call(!focused);
         }
       },
-      child: band,
+      child: content,
     );
   }
 

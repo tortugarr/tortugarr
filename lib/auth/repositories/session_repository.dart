@@ -40,6 +40,7 @@ import '../../data/services/tv_channels_service.dart';
 import '../../data/services/watch_next_service.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../data/services/achievements_service.dart';
+import '../../data/services/plex_tv_service.dart';
 import '../../data/services/plugin_sync_service.dart';
 import '../../data/services/tortugarr/download_features.dart';
 import '../../data/services/adult_library_service.dart';
@@ -51,7 +52,7 @@ import '../../data/services/user_data_sync.dart';
 import '../../di/modules/app_module.dart';
 import '../../di/modules/playback_module.dart';
 import '../../di/modules/server_module.dart';
-import '../../playback/appletv_backend.dart';
+import '../../playback/native_apple_player_backend.dart';
 import '../../playback/audio_handler.dart';
 import '../../playback/headless_session_bootstrap.dart';
 import '../../playback/last_playback_session_store.dart';
@@ -65,6 +66,7 @@ import '../../util/focus/gamepad/gamepad_key_synthesizer.dart';
 import '../store/authentication_preferences.dart';
 import '../store/authentication_store.dart';
 import '../store/credential_store.dart';
+import '../models/server.dart';
 import '../models/user.dart';
 import 'server_repository.dart';
 import 'user_repository.dart';
@@ -240,6 +242,9 @@ class SessionRepository {
     String? password,
     bool validateToken = false,
   }) async {
+    if (serverId != _activeServerId || userId != _activeUserId) {
+      await _stopPlaybackForSessionChange();
+    }
     _setState(SessionState.switching);
     _remoteVolumeGeneration++;
     _remoteNavigationGeneration++;
@@ -281,11 +286,18 @@ class SessionRepository {
       return false;
     }
 
+    // An address that never answers would hold startup for the whole probe,
+    // so the saved one is used past a short wait. The probe carries on and
+    // saves a better one for next time.
+    final address = await _bestPlexAddress(server)
+        .timeout(const Duration(seconds: 2), onTimeout: () => server.address);
     final client = _clientFactory.getClient(
       serverId: serverId,
       serverType: server.serverType,
-      baseUrl: server.address,
+      baseUrl: address,
     );
+    // A client kept from an earlier session still has the old address.
+    if (address != server.address) client.baseUrl = address;
 
     client.accessToken = accessToken;
     client.userId = userId;
@@ -366,6 +378,22 @@ class SessionRepository {
     return true;
   }
 
+  /// The best address a Plex server answers at right now, saved when it
+  /// changed. Without an answer the saved one stays.
+  Future<String> _bestPlexAddress(Server server) async {
+    if (server.candidateAddresses.length < 2 ||
+        !GetIt.instance.isRegistered<PlexTvService>()) {
+      return server.address;
+    }
+    final best = await GetIt.instance<PlexTvService>().findReachableUri(
+      server.candidateAddresses,
+      server.id,
+    );
+    if (best == null || best == server.address) return server.address;
+    await _serverRepository.saveServer(server.copyWith(address: best));
+    return best;
+  }
+
   Future<void> _postLoginSync(
     MediaServerClient client,
     PrivateUser user,
@@ -390,16 +418,20 @@ class SessionRepository {
           serverUser.policy?.canFetchRemoteSubtitles ?? false;
       final canManageCollections =
           serverUser.policy?.enableCollectionManagement ?? false;
+      final canManageLiveTv =
+          serverUser.policy?.enableLiveTvManagement ?? false;
 
       if (isAdmin != user.isAdministrator ||
           canDownload != user.canDownload ||
           canManageSubtitles != user.canManageSubtitles ||
-          canManageCollections != user.canManageCollections) {
+          canManageCollections != user.canManageCollections ||
+          canManageLiveTv != user.canManageLiveTv) {
         final updatedUser = user.copyWith(
           isAdministrator: isAdmin,
           canDownload: canDownload,
           canManageSubtitles: canManageSubtitles,
           canManageCollections: canManageCollections,
+          canManageLiveTv: canManageLiveTv,
         );
         await _authStore.putUser(updatedUser);
         _userRepository.setCurrentUser(updatedUser);
@@ -433,6 +465,10 @@ class SessionRepository {
         }),
       );
     }
+
+    // Plugin sync, push enrollment and Seerr all need the Moonbase plugin,
+    // which only runs on Jellyfin and Emby.
+    if (client.serverType == ServerType.plex) return;
 
     await _pluginSyncService.syncOnLogin(client, serverId: serverId);
     unawaited(DownloadFeatures.refresh(client));
@@ -546,7 +582,18 @@ class SessionRepository {
   /// [tokenKnownInvalid] is set when the server has already rejected the
   /// token. The push unregister and the logout both authenticate with it, so
   /// sending them would only add 401s to the burst that got us here.
+  // Music left playing in the background belongs to the user being left, and
+  // the sign-in screen has no mini player to stop it. Running before the token
+  // changes reports the stop for that user.
+  Future<void> _stopPlaybackForSessionChange() async {
+    if (!GetIt.instance.isRegistered<PlaybackManager>()) return;
+    try {
+      await GetIt.instance<PlaybackManager>().stop(userInitiated: false);
+    } catch (_) {}
+  }
+
   Future<void> destroyCurrentSession({bool tokenKnownInvalid = false}) async {
+    await _stopPlaybackForSessionChange();
     _remoteVolumeGeneration++;
     _remoteNavigationGeneration++;
     _remoteSearch?.close();
@@ -794,7 +841,7 @@ class SessionRepository {
 
   Future<void> _navigateRemote(String command, GamepadNavKey key) async {
     final backend = GetIt.instance<PlaybackManager>().backend;
-    if (backend is AppleTvBackend && backend.isPlayerPresented) {
+    if (backend is NativeApplePlayerBackend && backend.isPlayerPresented) {
       // Native playback owns its input, including any menu above the player.
       await backend.sendRemoteNavigation(command);
       return;
@@ -1198,7 +1245,7 @@ class SessionRepository {
         if (generation != _remoteNavigationGeneration) return;
         await manager.stop(userInitiated: false);
         if (generation != _remoteNavigationGeneration) return;
-        if (backend is AppleTvBackend) await backend.dismissPlayer();
+        if (backend is NativeApplePlayerBackend) await backend.dismissPlayer();
         if (generation != _remoteNavigationGeneration) return;
         _router.go(Destinations.home);
       case 'gotosearch':
@@ -1254,7 +1301,7 @@ class SessionRepository {
       if (!search.active) return;
       // Native tvOS playback is presented above Flutter's routes.
       final backend = manager.backend;
-      if (backend is AppleTvBackend) await backend.dismissPlayer();
+      if (backend is NativeApplePlayerBackend) await backend.dismissPlayer();
       if (!search.active) return;
       final path = _remoteRoutePath;
       if (path == Destinations.search || Destinations.isPlayerRoute(path)) {

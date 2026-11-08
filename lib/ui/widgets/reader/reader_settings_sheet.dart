@@ -11,6 +11,7 @@ Future<void> showReaderSettingsSheet({
   required Color accent,
   required ReaderThemeColors pageColors,
   required ValueChanged<ReaderSettings> onChanged,
+  bool showScroll = false,
 }) {
   final apple = PlatformDetection.isApple;
   final surface = pageColors.isDark
@@ -31,6 +32,7 @@ Future<void> showReaderSettingsSheet({
         accent: accent,
         surface: surface,
         textColor: pageColors.foreground,
+        showScroll: showScroll,
         onChanged: onChanged,
       ),
     );
@@ -50,6 +52,7 @@ Future<void> showReaderSettingsSheet({
       surface: surface,
       textColor: pageColors.foreground,
       showGrabber: false,
+      showScroll: showScroll,
       onChanged: onChanged,
     ),
   );
@@ -61,6 +64,7 @@ class _ReaderSettingsBody extends StatefulWidget {
   final Color surface;
   final Color textColor;
   final bool showGrabber;
+  final bool showScroll;
   final ValueChanged<ReaderSettings> onChanged;
 
   const _ReaderSettingsBody({
@@ -70,6 +74,7 @@ class _ReaderSettingsBody extends StatefulWidget {
     required this.textColor,
     required this.onChanged,
     this.showGrabber = true,
+    this.showScroll = false,
   });
 
   @override
@@ -312,6 +317,17 @@ class _ReaderSettingsBodyState extends State<_ReaderSettingsBody> {
                 onTap: () => _update(_s.copyWith(bold: !_s.bold)),
               ),
             ),
+            if (widget.showScroll) ...[
+              const SizedBox(width: 10),
+              Expanded(
+                child: _pill(
+                  label: 'Scroll',
+                  icon: Icons.swap_vert,
+                  selected: _s.scrolled,
+                  onTap: () => _update(_s.copyWith(scrolled: !_s.scrolled)),
+                ),
+              ),
+            ],
           ],
         ),
       ],

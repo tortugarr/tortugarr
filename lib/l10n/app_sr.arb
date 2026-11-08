@@ -1,6 +1,6 @@
 {
     "@@locale": "sr",
-    "appTitle": "Tortugarr",
+    "appTitle": "Moonfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Мунфин (Tortugarr)",
+    "themeMoonfin": "Мунфин (Moonfin)",
     "@themeMoonfin": {
-        "description": "Display name for the Tortugarr theme"
+        "description": "Display name for the Moonfin theme"
     },
     "themeMoonfinSubtitle": "Оригинални, једноставни подразумевани изглед Мунфина.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Tortugarr theme"
+        "description": "Preview description for the Moonfin theme"
     },
     "themeNeonPulse": "Неонски пулс",
     "@themeNeonPulse": {
@@ -528,10 +528,6 @@
     "@discoverySubjects": {
         "description": "Title for the book discovery subject picker panel"
     },
-    "pickDiscoverySubjects": "Изаберите које ће се тематске категорије приказивати у одељку „Откриј“.",
-    "@pickDiscoverySubjects": {
-        "description": "Instruction text in discovery subject picker"
-    },
     "apply": "Примени",
     "@apply": {
         "description": "Button label to apply selected options"
@@ -547,27 +543,6 @@
     "audiobookGenres": "Жанрови аудио-књига",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
-    },
-    "pickAudiobookGenres": "Изаберите жанрове који ће се приказивати у одељку „Откриј аудио-књиге“.",
-    "@pickAudiobookGenres": {
-        "description": "Instruction text in audiobook genre picker"
-    },
-    "discoverAudiobooks": "Откриј аудио-књиге",
-    "@discoverAudiobooks": {
-        "description": "Section title for audiobook discovery"
-    },
-    "librivoxDescription": "Популарни наслови из јавног домена са Либривокса (LibriVox).",
-    "@librivoxDescription": {
-        "description": "Subtitle for audiobook discovery section"
-    },
-    "titlesCount": "{count} наслова",
-    "@titlesCount": {
-        "description": "Label showing number of titles",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
     },
     "scrollLeft": "Помери улево",
     "@scrollLeft": {
@@ -744,10 +719,6 @@
     "discover": "Откријте",
     "@discover": {
         "description": "Section title for book discovery"
-    },
-    "trendingTitlesOpenLibrary": "Популарни наслови по темама са Отворене библиотеке (Open Library).",
-    "@trendingTitlesOpenLibrary": {
-        "description": "Subtitle for book discovery section"
     },
     "noBookmarkedItems": "Још нема обележених ставки",
     "@noBookmarkedItems": {
@@ -1283,7 +1254,7 @@
     "@downloadSubtitlesLabel": {
         "description": "Label for the download subtitles option"
     },
-    "searchOpenSubtitlesPlugin": "Претражи помоћу додатка Опенсабтајтлс (OpenSubtitles)",
+    "searchOpenSubtitlesPlugin": "Претражи помоћу Опенсабтајтлс (OpenSubtitles)",
     "@searchOpenSubtitlesPlugin": {
         "description": "Subtitle for the download subtitles option"
     },
@@ -3109,7 +3080,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Није подешено. Мунфин (Tortugarr) ће покушати да пронађе подразумевану датотеку mpv.conf у фасциклама апликације или података.",
+    "notSetMpvConf": "Није подешено. Мунфин (Moonfin) ће покушати да пронађе подразумевану датотеку mpv.conf у фасциклама апликације или података.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3336,7 +3307,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Downloads/Tortugarr — видљиво другим апликацијама",
+    "downloadsVisibleToOtherApps": "Downloads/Moonfin — видљиво другим апликацијама",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3372,7 +3343,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Преузети медијски садржај биће сачуван у фасцикли Downloads/Tortugarr на вашем уређају. Те датотеке биће видљиве другим апликацијама, као што су галерија или музички плејер.\n\nПостојећа преузимања остаће на тренутној локацији.",
+    "saveToDownloadsFolderDescription": "Преузети медијски садржај биће сачуван у фасцикли Downloads/Moonfin на вашем уређају. Те датотеке биће видљиве другим апликацијама, као што су галерија или музички плејер.\n\nПостојећа преузимања остаће на тренутној локацији.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3500,19 +3471,11 @@
     "@showLibrariesFromAllServers": {
         "description": "Description for multi-server libraries"
     },
-    "enableFolderView": "Омогући приказ фасцикли",
-    "@enableFolderView": {
-        "description": "Setting for enabling folder view"
-    },
-    "showFolderBrowsingOption": "Прикажи опцију прегледања фасцикли",
-    "@showFolderBrowsingOption": {
-        "description": "Description for folder view"
-    },
     "libraryVisibility": "Видљивост библиотеке",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Tortugarr) да би промене ступиле на снагу.",
+    "libraryVisibilityDescription": "Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Moonfin) да би промене ступиле на снагу.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -3561,9 +3524,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Мунфин (Tortugarr)",
+    "mediaBarModeMoonfin": "Мунфин (Moonfin)",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Tortugarr"
+        "description": "Media bar style option: Moonfin"
     },
     "mediaBarModeMakd": "МакД (MakD)",
     "@mediaBarModeMakd": {
@@ -4121,7 +4084,7 @@
     "@sourceCode": {
         "description": "Link to source code"
     },
-    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
+    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -4231,10 +4194,6 @@
     "@featuredContentAppearance": {
         "description": "Media bar settings subtitle"
     },
-    "posterSizeImageTypeFolderView": "Величина постера, тип слике, приказ фасцикли",
-    "@posterSizeImageTypeFolderView": {
-        "description": "Library display settings subtitle"
-    },
     "mdbListTmdbRatingSources": "MDBList, TMDB и извори оцена",
     "@mdbListTmdbRatingSources": {
         "description": "Ratings settings subtitle"
@@ -4293,9 +4252,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Пусти у Мунфину (Tortugarr)",
+    "playInMoonfin": "Пусти у Мунфину (Moonfin)",
     "@playInMoonfin": {
-        "description": "Button to play available media in Tortugarr"
+        "description": "Button to play available media in Moonfin"
     },
     "requestedByName": "Затражио/ла: {name}",
     "@requestedByName": {
@@ -4347,7 +4306,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Ставка није пронађена у вашој библиотеци Мунфина (Tortugarr)",
+    "itemNotFoundInLibrary": "Ставка није пронађена у вашој библиотеци Мунфина (Moonfin)",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4651,7 +4610,7 @@
         }
     },
     "adminServerRebootInProgress": "Поновно покретање сервера је у току",
-    "adminServerRebootMessage": "Поновно покретање сервера је у току, поново покрените Мунфин (Tortugarr)",
+    "adminServerRebootMessage": "Поновно покретање сервера је у току, поново покрените Мунфин (Moonfin)",
     "adminActiveSessions": "Активне сесије",
     "adminSessionsLoadFailed": "Учитавање сесија није успело",
     "adminNoActiveSessions": "Нема активних сесија",
@@ -6539,7 +6498,7 @@
     "settingsShowGenresButtonInNavigation": "Прикажи дугме за жанрове у траци за навигацију",
     "settingsShowFavoritesButtonInNavigation": "Прикажи дугме за омиљене у траци за навигацију",
     "settingsShowLibrariesButtonInNavigation": "Прикажи дугме за библиотеке у траци за навигацију",
-    "settingsLibraryVisibilitySubtitle": "Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Tortugarr) да би промене ступиле на снагу.",
+    "settingsLibraryVisibilitySubtitle": "Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Moonfin) да би промене ступиле на снагу.",
     "settingsMediaBarAndLocalPreviews": "Медијска трака и локални прегледи",
     "settingsVisualOverlays": "Визуелни преклопи",
     "settingsSeasonalSurprise": "Сезонско изненађење",
@@ -6558,14 +6517,14 @@
     "settingsJoinDiscord": "Придружи се Дискорду (Discord)",
     "settingsJoinDiscordSubtitle": "Разговарајте са заједницом",
     "settingsJoinTheDiscord": "Придружи се Дискорду (Discord)",
-    "settingsSupportMoonfin": "Подржи Мунфин (Tortugarr)",
+    "settingsSupportMoonfin": "Подржи Мунфин (Moonfin)",
     "settingsLegal": "ПРАВНЕ ИНФОРМАЦИЈЕ",
     "settingsLicenses": "Лиценце",
     "settingsOpenSourceLicenseNotices": "Обавештења о лиценцама отвореног кода",
     "settingsPrivacyPolicy": "Политика приватности",
-    "settingsPrivacyPolicySubtitle": "Како Мунфин (Tortugarr) поступа са вашим подацима",
+    "settingsPrivacyPolicySubtitle": "Како Мунфин (Moonfin) поступа са вашим подацима",
     "settingsCheckForUpdates": "Провери да ли постоје ажурирања",
-    "settingsCheckForUpdatesSubtitle": "Проверите да ли је доступно најновије издање Мунфина (Tortugarr)",
+    "settingsCheckForUpdatesSubtitle": "Проверите да ли је доступно најновије издање Мунфина (Moonfin)",
     "settingsPoweredByFlutter": "Поверед би Флуттер",
     "settingsLicenseNoticesCount": "{count, plural, one {# лиценцно обавештење} few {# лиценцна обавештења} other {# лиценцних обавештења}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +6994,7 @@
         }
     },
     "savedThemesTitle": "Сачуване теме",
-    "savedThemesDescription": "Ово су теме преузете из додатка Муфин (Tortugarr) за тренутни сервер. Брисањем се уклања само локална копија.",
+    "savedThemesDescription": "Ово су теме преузете из додатка Муфин (Moonfin) за тренутни сервер. Брисањем се уклања само локална копија.",
     "savedThemesEmpty": "За овај сервер нису пронађене сачуване теме.",
     "savedThemesCurrentThemeId": "{themeId} • Тренутно активна",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7008,7 @@
     "savedThemesDeleteTooltip": "Избриши сачувану тему",
     "savedThemesManageSubtitle": "Управљај преузетим темама додатка на овом уређају",
     "themeEditor": "Уређивач тема",
-    "themeEditorSubtitle": "Отвори уређивач тема Муфин (Tortugarr) у прегледачу",
+    "themeEditorSubtitle": "Отвори уређивач тема Муфин (Moonfin) у прегледачу",
     "homeScreen": "Почетни екран",
     "bottomBar": "Доња трака",
     "homeRowsStyleClassic": "Класични",
@@ -7098,12 +7057,12 @@
     "preferSdhSubtitles": "Дај предност титловима за глуве и наглуве",
     "preferSdhSubtitlesSubtitle": "При аутоматском избору дај предност титловима за глуве и наглуве (SDH/CC).",
     "webDiagnostics": "Веб-дијагностика",
-    "webDiagnosticsTitle": "Веб-дијагностика Муфин (Tortugarr)",
+    "webDiagnosticsTitle": "Веб-дијагностика Муфин (Moonfin)",
     "webDiagnosticsIntro": "Ову страницу користите за откривање проблема са повезивањем прегледача (ЦОРС (CORS), мешовит садржај и поставке откривања сервера).",
     "webDiagnosticsDetectedMixedContentFailure": "Откривен је неуспех због мешовитог садржаја",
     "webDiagnosticsDetectedCorsPreflightFailure": "Откривен је неуспех ЦОРС-а (CORS) или претходне провере",
-    "webDiagnosticsMixedContentFailureBody": "Муфин (Tortugarr) је открио да страница учитана преко ХТТПС-а (HTTPS) покушава да приступи адреси сервера преко ХТТП-а (HTTP). Прегледачи блокирају овај захтев пре него што стигне до сервера.",
-    "webDiagnosticsCorsFailureBody": "Муфин (Tortugarr) је открио неуспех захтева на нивоу прегледача, који је често последица недостајућих заглавља за ЦОРС (CORS) или претходну проверу на медијском серверу.",
+    "webDiagnosticsMixedContentFailureBody": "Муфин (Moonfin) је открио да страница учитана преко ХТТПС-а (HTTPS) покушава да приступи адреси сервера преко ХТТП-а (HTTP). Прегледачи блокирају овај захтев пре него што стигне до сервера.",
+    "webDiagnosticsCorsFailureBody": "Муфин (Moonfin) је открио неуспех захтева на нивоу прегледача, који је често последица недостајућих заглавља за ЦОРС (CORS) или претходну проверу на медијском серверу.",
     "webDiagnosticsTargetUrl": "Циљна адреса: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7092,7 @@
     "notConfigured": "није подешено",
     "webDiagnosticsMixedContent": "Мешовит садржај",
     "webDiagnosticsMixedContentDetected": "Ова страница је учитана преко ХТТПС-а (HTTPS), али једна или више подешених адреса користе ХТТП (HTTP). Прегледачи блокирају приступ ХТТП (HTTP) програмским интерфејсима са страница учитаних преко ХТТПС-а (HTTPS).",
-    "webDiagnosticsMixedContentFix": "Решење: омогућите приступ медијском серверу или адреси посредника преко ХТТПС-а (HTTPS), или учитајте Муфин (Tortugarr) преко ХТТП-а (HTTP) само на поузданим локалним мрежама.",
+    "webDiagnosticsMixedContentFix": "Решење: омогућите приступ медијском серверу или адреси посредника преко ХТТПС-а (HTTPS), или учитајте Муфин (Moonfin) преко ХТТП-а (HTTP) само на поузданим локалним мрежама.",
     "webDiagnosticsNoMixedContentDetected": "У тренутним поставкама окружења нису уочена очигледна подешавања мешовитог садржаја.",
     "webDiagnosticsCorsChecklist": "Контролна листа за ЦОРС (CORS)",
     "webDiagnosticsCorsChecklistItem1": "• Дозволите порекло прегледача у заглављу Access-Control-Allow-Origin.",
@@ -7300,7 +7259,6 @@
     "failedToExtractCbrArchive": "Распаковање архиве .cbr није успело.",
     "cb7ExtractionUnavailable": "Распаковање ЦБ7-а (CB7) није доступно на овој платформи.",
     "cb7ExtractionPluginUnavailable": "Додатак за распакивање ЦБ7-а (CB7) није доступан на овој платформи.",
-    "closeGenrePanel": "Затвори панел жанрова",
     "loadingShuffle": "Учитавање насумичног избора...",
     "libraryShuffleLabel": "НАСУМИЧНИ ИЗБОР ИЗ МЕДИЈАТЕКЕ",
     "randomShuffleLabel": "НАСУМИЧНИ ИЗБОР",
@@ -7368,7 +7326,7 @@
     },
     "recommendationSystemMoonfin": "Мунфинове препоруке",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Tortugarr Recommends"
+        "description": "Recommendation system option: Moonfin Recommends"
     },
     "recommendationSystemTmdb": "Сличност према ТМДБ-у (TMDb)",
     "@recommendationSystemTmdb": {
@@ -7426,7 +7384,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Прилагођене теме мењају изглед елемената широм апликације Мунфин (Tortugarr). Изаберите једну од понуђених опција према свом укусу.",
+    "customThemeSubtitle": "Прилагођене теме мењају изглед елемената широм апликације Мунфин (Moonfin). Изаберите једну од понуђених опција према свом укусу.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7557,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Пријавите се у апликацију Мунфин (Tortugarr) на телефону",
+    "carSignInPrompt": "Пријавите се у апликацију Мунфин (Moonfin) на телефону",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -9241,7 +9199,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "Прилагодите анимације учитавања које се користе широм Мунфина (Tortugarr)",
+    "loadingAnimationDescription": "Прилагодите анимације учитавања које се користе широм Мунфина (Moonfin)",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -9253,9 +9211,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Лого Мунфина (Tortugarr)",
+    "loadingAnimationImageMoonfinLogo": "Лого Мунфина (Moonfin)",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Tortugarr Logo"
+        "description": "Loading animation image option: Moonfin Logo"
     },
     "loadingAnimationImageSpinner": "Ротирајући индикатор",
     "@loadingAnimationImageSpinner": {
@@ -9269,13 +9227,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Мене Мунфина (Tortugarr)",
+    "loadingAnimationImageMoonfinPhases": "Мене Мунфина (Moonfin)",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
+        "description": "Loading animation image option: Moonfin Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Мене Неонфина (Neon)",
+    "loadingAnimationImageNeonfinPhases": "Мене Неонфина (Neonfin)",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neon Phases in neon colors"
+        "description": "Loading animation image option: Neonfin Phases in neon colors"
     },
     "loadingAnimationSize": "Величина анимације",
     "@loadingAnimationSize": {
@@ -9486,9 +9444,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Мунфин (Tortugarr)",
+    "screensaverBackdropMoonfin": "Мунфин (Moonfin)",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Tortugarr"
+        "description": "Screensaver backdrop: Moonfin"
     },
     "screensaverBackdropCalm": "Смирена",
     "@screensaverBackdropCalm": {
@@ -9506,9 +9464,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Лого Мунфина (Tortugarr)",
+    "screensaverComponentMoonfinLogo": "Лого Мунфина (Moonfin)",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Tortugarr Logo"
+        "description": "Screensaver component: Moonfin Logo"
     },
     "screensaverComponentRunner": "Покретни елемент",
     "@screensaverComponentRunner": {
@@ -10944,7 +10902,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Андроид (Android) дозвољава Мунфину (Tortugarr) да уписује само у фасцикле које припадају апликацији, а овај уређај нема преносиво складиште. Укључите опцију „Сачувај у фасциклу за преузимања“ изнад да би преузимања била на месту доступном другим апликацијама.",
+    "downloadLocationLimitedByAndroid": "Андроид (Android) дозвољава Мунфину (Moonfin) да уписује само у фасцикле које припадају апликацији, а овај уређај нема преносиво складиште. Укључите опцију „Сачувај у фасциклу за преузимања“ изнад да би преузимања била на месту доступном другим апликацијама.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -12939,7 +12897,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "Транскодирани квалитети преузимају се само док је Мунфин (Tortugarr) отворен. Оригинални квалитет се преузима и у позадини.",
+    "autoDownloadTranscodedForegroundNote": "Транскодирани квалитети преузимају се само док је Мунфин (Moonfin) отворен. Оригинални квалитет се преузима и у позадини.",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -12947,7 +12905,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "Преузима се само док је Мунфин (Tortugarr) отворен",
+    "autoDownloadForegroundOnly": "Преузима се само док је Мунфин (Moonfin) отворен",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -13017,15 +12975,15 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "Дозволи систему да повремено проверава има ли нових епизода док је Мунфин (Tortugarr) затворен",
+    "autoDownloadBackgroundRefreshSubtitle": "Дозволи систему да повремено проверава има ли нових епизода док је Мунфин (Moonfin) затворен",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
-    "autoDownloadBackgroundRefreshDenied": "Освежавање апликације у позадини је онемогућено за Мунфин (Tortugarr). Омогућите га у подешавањима иОС-а (iOS).",
+    "autoDownloadBackgroundRefreshDenied": "Освежавање апликације у позадини је онемогућено за Мунфин (Moonfin). Омогућите га у подешавањима иОС-а (iOS).",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "Употреба Мунфина (Tortugarr) у позадини ограничена је у подешавањима Андроида (Android).",
+    "autoDownloadBackgroundRestrictedAndroid": "Употреба Мунфина (Moonfin) у позадини ограничена је у подешавањима Андроида (Android).",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },
@@ -13317,9 +13275,9 @@
     },
     "topShelf": "Горња полица",
     "@topShelf": {
-        "description": "Apple TV settings label for what the tvOS home screen shows above the Tortugarr icon. Top Shelf is Apple's name for that area"
+        "description": "Apple TV settings label for what the tvOS home screen shows above the Moonfin icon. Top Shelf is Apple's name for that area"
     },
-    "topShelfDescription": "Садржај који се приказује изнад иконе Мунфина (Tortugarr) на почетном екрану Епл ТВ-а (Apple TV) када је изабрана. Ово подешавање важи само за овај уређај.",
+    "topShelfDescription": "Садржај који се приказује изнад иконе Мунфина (Moonfin) на почетном екрану Епл ТВ-а (Apple TV) када је изабрана. Ово подешавање важи само за овај уређај.",
     "@topShelfDescription": {
         "description": "Apple TV settings subtitle for the Top Shelf option"
     },
@@ -13327,9 +13285,9 @@
     "@topShelfLatestMedia": {
         "description": "Top Shelf option that shows a carousel of the newest items from the home screen's Latest rows"
     },
-    "topShelfAppBanner": "Банер Мунфина (Tortugarr)",
+    "topShelfAppBanner": "Банер Мунфина (Moonfin)",
     "@topShelfAppBanner": {
-        "description": "Top Shelf option that shows only the static Tortugarr logo banner, nothing from the library"
+        "description": "Top Shelf option that shows only the static Moonfin logo banner, nothing from the library"
     },
     "keepVideoClearOfDynamicIsland": "Не прекривај видео динамичким острвом",
     "@keepVideoClearOfDynamicIsland": {
@@ -13399,6 +13357,270 @@
     "@navYou": {
         "description": "Bottom bar tab that opens the user's own menu with their profile, extra destinations and settings"
     },
+    "animeMarkerSubbedShort": "Саб",
+    "@animeMarkerSubbedShort": {
+        "description": "Short form of the Subbed badge"
+    },
+    "animeMarkerDubbedShort": "Даб",
+    "@animeMarkerDubbedShort": {
+        "description": "Short form of the Dubbed badge"
+    },
+    "animeMarkerSubbedAndDubbedShort": "Саб/Даб",
+    "@animeMarkerSubbedAndDubbedShort": {
+        "description": "Short form of the Subbed/Dubbed badge"
+    },
+    "quickConnectScanHint": "Или скенирајте ово телефоном који је пријављен на ваш сервер",
+    "@quickConnectScanHint": {
+        "description": "Caption under the Quick Connect QR code that opens the server's web page with the code filled in"
+    },
+    "quickConnectTapOrScanHint": "Додирните да бисте одобрили у прегледачу или скенирајте ово другим уређајем",
+    "@quickConnectTapOrScanHint": {
+        "description": "Caption under the Quick Connect QR code on a phone or tablet, where tapping the code opens the server's web page with the code filled in"
+    },
+    "timesUpTitle": "Време је истекло",
+    "@timesUpTitle": {
+        "description": "Title of the screen that covers the app when the user's access schedule doesn't allow the current time"
+    },
+    "timesUpMessage": "Овај налог тренутно није доступан.",
+    "@timesUpMessage": {
+        "description": "Explanation on the Time's up screen"
+    },
+    "timesUpResumesToday": "Биће вам поново доступан за коришћење данас у {time}.",
+    "@timesUpResumesToday": {
+        "description": "When access returns, on the Time's up screen, for a time later today",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "timesUpResumesTomorrow": "Биће вам поново доступан за коришћење сутра у {time}.",
+    "@timesUpResumesTomorrow": {
+        "description": "When access returns, on the Time's up screen, for a time tomorrow",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "timesUpResumesOn": "Биће вам поново доступно за коришћење {day} у {time}.",
+    "@timesUpResumesOn": {
+        "description": "When access returns, on the Time's up screen, for a time on a later day",
+        "placeholders": {
+            "day": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "loginForbidden": "Овим налогом тренутно не можете да се пријавите. Могуће је да пријављивање није дозвољено у ово време, да је налог закључан или да је онемогућен. Покушајте поново касније или затражите помоћ од администратора.",
+    "@loginForbidden": {
+        "description": "Sign in error when the server refuses the account with a 403, which Jellyfin does for an access schedule, a lockout or a disabled account without saying which"
+    },
+    "rendererMode": "Рендерер",
+    "@rendererMode": {
+        "description": "Label for the TV graphics renderer setting"
+    },
+    "rendererModeSubtitle": "Аутоматски режим користи Импелер на боксовима чија графика омогућава да ради глатко, а Скију свуда другде. Изаберите Скију ако анимације или видео не изгледају исправно. Промена ступа на снагу при следећем покретању.",
+    "@rendererModeSubtitle": {
+        "description": "Explanation under the TV graphics renderer setting"
+    },
+    "rendererModeAuto": "Аутоматски",
+    "@rendererModeAuto": {
+        "description": "Renderer option: let the app choose per device"
+    },
+    "rendererModeSkia": "Скиа",
+    "@rendererModeSkia": {
+        "description": "Renderer option: always use the Skia renderer"
+    },
+    "keyboardStyle": "Стил тастатуре",
+    "@keyboardStyle": {
+        "description": "Label for the setting that picks how the on-screen keyboard looks, or whether the TV's own keyboard is used"
+    },
+    "keyboardStyleDescription": "Нативна користи тастатуру вашег телевизора. Класична је оригинална Мунфин тастатура. Стаклена је панел од мат стакла са већим тастерима. Усидрена испуњава доњи део екрана и приказује оно што куцате изнад тастера.",
+    "@keyboardStyleDescription": {
+        "description": "Explanation under the keyboard style setting"
+    },
+    "keyboardStyleNative": "Нативна",
+    "@keyboardStyleNative": {
+        "description": "Keyboard style option: the TV or device's own system keyboard"
+    },
+    "keyboardStyleClassic": "Класична",
+    "@keyboardStyleClassic": {
+        "description": "Keyboard style option: the original in-app keyboard"
+    },
+    "keyboardStyleGlass": "Стаклена",
+    "@keyboardStyleGlass": {
+        "description": "Keyboard style option: a frosted glass panel with larger keys"
+    },
+    "keyboardStyleDocked": "Усидрена",
+    "@keyboardStyleDocked": {
+        "description": "Keyboard style option: a full-width keyboard docked to the bottom of the screen"
+    },
+    "keyboardSpace": "размак",
+    "@keyboardSpace": {
+        "description": "Label on the on-screen keyboard's space bar, lowercase like a printed key"
+    },
+    "keyboardHoldForAccents": "држи за акценте",
+    "@keyboardHoldForAccents": {
+        "description": "On-screen keyboard hint next to an OK button cap: holding OK on a letter shows its accented versions"
+    },
+    "keyboardClose": "затвори",
+    "@keyboardClose": {
+        "description": "On-screen keyboard hint next to a Back button cap, lowercase like the hold for accents hint: Back closes the keyboard"
+    },
+    "signInWithPlex": "Пријави се на Плекс",
+    "@signInWithPlex": {
+        "description": "Plex sign-in option label and title of the Plex sign-in screen"
+    },
+    "plexLinkInstructions": "На било ком уређају отворите plex.tv/link и унесите овај код",
+    "@plexLinkInstructions": {
+        "description": "Instructions above the code on the Plex sign-in screen"
+    },
+    "plexOpenLink": "Отвори plex.tv/link",
+    "@plexOpenLink": {
+        "description": "Button that opens plex.tv/link in the browser with the code filled in"
+    },
+    "plexWaitingForApproval": "Чекам да одобриш код...",
+    "@plexWaitingForApproval": {
+        "description": "Status shown while the app waits for the Plex code to be approved"
+    },
+    "plexSignInWithPassword": "Пријавите се лозинком",
+    "@plexSignInWithPassword": {
+        "description": "Button on the Plex sign-in screen that swaps the code for an email or username and password form"
+    },
+    "plexVerificationCode": "Верификациони код",
+    "@plexVerificationCode": {
+        "description": "Field for the account's two-step verification code, shown once Plex asks for it"
+    },
+    "plexNoServers": "На овом налогу нису пронађени Плекс сервери",
+    "@plexNoServers": {
+        "description": "Shown when the Plex account has no servers"
+    },
+    "gameOrientation": "Оријентација игре",
+    "@gameOrientation": {
+        "description": "Setting and in-game menu row for how the device is held while playing games"
+    },
+    "gameOrientationSubtitle": "Оријентација екрана током играња игара",
+    "@gameOrientationSubtitle": {
+        "description": "Subtitle of the game orientation setting"
+    },
+    "landscape": "Водоравно",
+    "@landscape": {
+        "description": "Orientation choice: the device held sideways"
+    },
+    "portrait": "Вертикално",
+    "@portrait": {
+        "description": "Orientation choice: the device held upright"
+    },
+    "gameKeepPlaying": "Настави са игром",
+    "@gameKeepPlaying": {
+        "description": "Exit confirmation choice that returns to the game"
+    },
+    "gameSaveAndExit": "Сачувај и изађи",
+    "@gameSaveAndExit": {
+        "description": "Exit confirmation choice that saves the game state and then leaves, staying in the game if the save fails"
+    },
+    "gameExitGame": "Изађи из игре",
+    "@gameExitGame": {
+        "description": "Exit confirmation choice that leaves the game"
+    },
+    "gameSavingBeforeExit": "Чувам…",
+    "@gameSavingBeforeExit": {
+        "description": "Shown over the paused game while it saves on the way out"
+    },
+    "gameSaveFailedStillPlaying": "Стање није могло да се сачува. Игра и даље траје.",
+    "@gameSaveFailedStillPlaying": {
+        "description": "Message shown when Save & exit could not save, so the game keeps running"
+    },
+    "additionalParts": "Додатни делови",
+    "@additionalParts": {
+        "description": "Heading for the other files of a movie split across several files, like DVD1 and DVD2"
+    },
+    "fetchingSubtitles": "Преузимање титлова",
+    "@fetchingSubtitles": {
+        "description": "Playback status shown while the selected subtitle file is loading"
+    },
+    "keyNameDelete": "Обриши",
+    "@keyNameDelete": {
+        "description": "Key cap label for the Delete key"
+    },
+    "shortcutHideControls": "Сакриј контроле",
+    "@shortcutHideControls": {
+        "description": "What Backspace and Delete do in the player: hide the controls or the panel on top of them"
+    },
+    "shortcutSkipSegment": "Прескочите уводну или одјавну шпицу када вам се понуди та могућност",
+    "@shortcutSkipSegment": {
+        "description": "Player shortcut action that presses the skip intro or credits button while it is showing"
+    },
+    "videoRenderer": "Видео рендерер",
+    "@videoRenderer": {
+        "description": "Settings label for choosing where Windows draws video, in its own window or inside the app"
+    },
+    "videoRendererDescription": "Изворни прозор омогућава најглаткији приказ покрета и прослеђује ХДР екрану без измена. Ако се видео не приказује исправно, покушајте са другом опцијом.",
+    "@videoRendererDescription": {
+        "description": "Settings description for the video renderer choice"
+    },
+    "videoRendererNativeWindow": "Нативни прозор (препоручено)",
+    "@videoRendererNativeWindow": {
+        "description": "Video renderer option that plays every title in its own window"
+    },
+    "videoRendererNativeHdrOnly": "Нативни прозор само за ХДР",
+    "@videoRendererNativeHdrOnly": {
+        "description": "Video renderer option that uses its own window for HDR titles and the in-app renderer for SDR"
+    },
+    "videoRendererInApp": "У апликацији (застарело)",
+    "@videoRendererInApp": {
+        "description": "Video renderer option that draws every title inside the app and converts HDR to SDR"
+    },
+    "bookReadingUnavailableTitle": "Књиге не могу да се читају на Епл ТВ-у",
+    "@bookReadingUnavailableTitle": {
+        "description": "Title of the dialog shown on Apple TV when the user tries to open a book or comic, which tvOS has no reader for"
+    },
+    "pickDiscoverySubjects": "Изаберите које ће се тематске категорије приказивати у одељку „Откриј“.",
+    "@pickDiscoverySubjects": {
+        "description": "Instruction text in discovery subject picker"
+    },
+    "pickAudiobookGenres": "Изаберите жанрове који ће се приказивати у одељку „Откриј аудио-књиге“.",
+    "@pickAudiobookGenres": {
+        "description": "Instruction text in audiobook genre picker"
+    },
+    "discoverAudiobooks": "Откриј аудио-књиге",
+    "@discoverAudiobooks": {
+        "description": "Section title for audiobook discovery"
+    },
+    "librivoxDescription": "Популарни наслови из јавног домена са Либривокса (LibriVox).",
+    "@librivoxDescription": {
+        "description": "Subtitle for audiobook discovery section"
+    },
+    "titlesCount": "{count} наслова",
+    "@titlesCount": {
+        "description": "Label showing number of titles",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "trendingTitlesOpenLibrary": "Популарни наслови по темама са Отворене библиотеке (Open Library).",
+    "@trendingTitlesOpenLibrary": {
+        "description": "Subtitle for book discovery section"
+    },
+    "enableFolderView": "Омогући приказ фасцикли",
+    "@enableFolderView": {
+        "description": "Setting for enabling folder view"
+    },
+    "showFolderBrowsingOption": "Прикажи опцију прегледања фасцикли",
+    "@showFolderBrowsingOption": {
+        "description": "Description for folder view"
+    },
+    "posterSizeImageTypeFolderView": "Величина постера, тип слике, приказ фасцикли",
+    "@posterSizeImageTypeFolderView": {
+        "description": "Library display settings subtitle"
+    },
+    "closeGenrePanel": "Затвори панел жанрова",
     "tgMissing": "Недостаје",
     "tgComing": "Долази",
     "tgComingOn": "Долази {date}",

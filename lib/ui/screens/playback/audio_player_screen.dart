@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import '../../widgets/offline_aware_image.dart';
 import 'package:flutter/material.dart' hide RepeatMode;
@@ -25,6 +26,8 @@ import '../../../util/focus/input_mode_tracker.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/playback_time_label.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
+import '../../widgets/add_to_playlist_dialog.dart';
+import '../../widgets/marquee_text.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../widgets/player_volume_control.dart';
 import '../../widgets/remote_play_to_session_dialog.dart';
@@ -35,13 +38,6 @@ import 'package:moonfin/util/app_l10n.dart';
 import '../../util/error_message.dart';
 import 'audiobook_player_view.dart';
 
-/// First queue index the Up Next panel lists. Tracks that have played drop off
-/// the top, and stepping back to an earlier one brings it into the list again.
-int upNextStartIndex(int queueLength, int currentIndex) {
-  if (queueLength <= 0 || currentIndex <= 0) return 0;
-  return currentIndex >= queueLength ? queueLength - 1 : currentIndex;
-}
-
 class AudioPlayerScreen extends StatefulWidget {
   const AudioPlayerScreen({super.key});
 
@@ -49,11 +45,31 @@ class AudioPlayerScreen extends StatefulWidget {
   State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
 }
 
-enum _TvAudioFocusArea { favorite, viewTabs, panelBody, progress, transport }
+enum _TvAudioFocusArea { panelBody, progress, dock }
+
+enum _DockAction {
+  favorite,
+  addToPlaylist,
+  shuffle,
+  previous,
+  playPause,
+  next,
+  repeat,
+  lyrics,
+  queue,
+  cast,
+}
+
+const _transportActions = [
+  _DockAction.shuffle,
+  _DockAction.previous,
+  _DockAction.playPause,
+  _DockAction.next,
+  _DockAction.repeat,
+];
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   static const _tvSeekStepMs = 10000;
-  static const _tvBackPopSuppressDuration = Duration(milliseconds: 280);
 
   final _manager = GetIt.instance<PlaybackManager>();
   final _castService = GetIt.instance<CastService>();
@@ -70,15 +86,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   String? _favoriteItemId;
   LyricsData? _lyrics;
   String? _lyricsItemId;
-  _TvAudioFocusArea _tvFocusArea = _TvAudioFocusArea.transport;
-  int _tvTransportActionIndex = 2;
+  _TvAudioFocusArea _tvFocusArea = _TvAudioFocusArea.dock;
+  _DockAction _tvDockFocus = _DockAction.playPause;
   int _tvQueueFocusIndex = 0;
   int _tvLyricCursor = 0;
-  // Which panel the TV right column shows: 0 = Up Next, 1 = Lyrics.
-  int _tvViewTab = 0;
+  bool _wideShowQueue = false;
   int? _hoveredQueueIndex;
   final _tvLyricScrollController = ScrollController();
-  DateTime? _tvBackPopSuppressedUntil;
   Timer? _sleepTimer;
   Timer? _persistVolumeTimer;
   double _playerVolume = 100.0;
@@ -101,7 +115,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _tvQueueFocusIndex = _queueStartIndex;
+    _tvQueueFocusIndex = _queueCurrentRow;
     _subs.addAll([
       _manager.backendChangedStream.listen((_) {
         _applyPlayerVolume();
@@ -136,7 +150,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _tvOverlayFocus.requestFocus();
-        _scrollTvQueueIntoView(_tvQueueFocusIndex, animate: false);
       });
     }
     _loadLyricsIfNeeded();
@@ -146,8 +159,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     if (mounted) setState(() {});
   }
 
-  // Mobile only: toggles the full-screen queue panel. The wide player
-  // (desktop/TV) uses the two-column view switcher instead.
+  // Phone only. The wide layout switches its panel with _wideShowQueue.
   void _toggleQueuePanel() {
     setState(() {
       _showQueue = !_showQueue;
@@ -167,8 +179,21 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       PlatformDetection.isTV || PlatformDetection.useDesktopUi;
 
   bool get _tvLyricsAvailable => _lyrics?.isNotEmpty ?? false;
-  int get _tvTabCount => _tvLyricsAvailable ? 2 : 1;
-  bool get _tvPanelIsLyrics => _tvViewTab == 1 && _tvLyricsAvailable;
+  bool get _tvPanelIsLyrics => !_wideShowQueue && _tvLyricsAvailable;
+
+  List<_DockAction> _dockActions(AggregatedItem? item) => [
+    if (item != null) _DockAction.favorite,
+    if (item != null && !_manager.isOfflinePlayback) _DockAction.addToPlaylist,
+    ..._transportActions,
+    // Without lyrics Up Next is the only panel, so there's nothing to toggle.
+    if (_tvLyricsAvailable) ...[_DockAction.lyrics, _DockAction.queue],
+    if (item != null && !PlatformDetection.isTV) _DockAction.cast,
+  ];
+
+  // Falls back to play/pause when the focused button goes away, for example
+  // the lyrics toggle on a track without lyrics.
+  _DockAction _dockFocusIn(List<_DockAction> actions) =>
+      actions.contains(_tvDockFocus) ? _tvDockFocus : _DockAction.playPause;
 
   int _currentLyricLineIndex() {
     final lyrics = _lyrics;
@@ -185,61 +210,50 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   }
 
   void _moveTvHorizontalFocus(int delta) {
-    switch (_tvFocusArea) {
-      case _TvAudioFocusArea.viewTabs:
-        {
-          final next = (_tvViewTab + delta).clamp(0, _tvTabCount - 1);
-          if (next != _tvViewTab) setState(() => _tvViewTab = next);
-        }
-        break;
-      case _TvAudioFocusArea.transport:
-        {
-          final next = (_tvTransportActionIndex + delta).clamp(0, 4);
-          if (next != _tvTransportActionIndex) {
-            setState(() => _tvTransportActionIndex = next);
-          }
-        }
-        break;
-      case _TvAudioFocusArea.progress:
-        _seekTvRelative(delta < 0 ? -_tvSeekStepMs : _tvSeekStepMs);
-        break;
-      case _TvAudioFocusArea.panelBody:
-        if (delta < 0) {
-          setState(() => _tvFocusArea = _TvAudioFocusArea.viewTabs);
-        }
-        break;
-      case _TvAudioFocusArea.favorite:
-        break;
+    if (_tvFocusArea == _TvAudioFocusArea.progress) {
+      _seekTvRelative(delta < 0 ? -_tvSeekStepMs : _tvSeekStepMs);
+      return;
+    }
+    final actions = _dockActions(_resolveCurrentItem());
+    final next = actions[(actions.indexOf(_dockFocusIn(actions)) + delta).clamp(
+      0,
+      actions.length - 1,
+    )];
+    if (next != _tvDockFocus) setState(() => _tvDockFocus = next);
+  }
+
+  void _moveTvVerticalFocus(int delta) {
+    if (delta > 0) {
+      if (_tvFocusArea == _TvAudioFocusArea.progress) {
+        setState(() => _tvFocusArea = _TvAudioFocusArea.dock);
+      }
+    } else if (_tvFocusArea == _TvAudioFocusArea.dock) {
+      setState(() => _tvFocusArea = _TvAudioFocusArea.progress);
+    } else if (_tvFocusArea == _TvAudioFocusArea.progress) {
+      _enterTvPanel();
     }
   }
 
-  // panelBody is entered via SELECT on the switcher and left via LEFT/BACK, so
-  // it is not part of this vertical chain.
-  void _moveTvVerticalFocus(int delta) {
-    final current = _tvFocusArea;
-    final next = delta < 0
-        ? switch (current) {
-            _TvAudioFocusArea.transport => _TvAudioFocusArea.progress,
-            _TvAudioFocusArea.progress => _TvAudioFocusArea.viewTabs,
-            _TvAudioFocusArea.viewTabs => _TvAudioFocusArea.favorite,
-            _ => current,
-          }
-        : switch (current) {
-            _TvAudioFocusArea.favorite => _TvAudioFocusArea.viewTabs,
-            _TvAudioFocusArea.viewTabs => _TvAudioFocusArea.progress,
-            _TvAudioFocusArea.progress => _TvAudioFocusArea.transport,
-            _ => current,
-          };
-    if (next != current) setState(() => _tvFocusArea = next);
+  // Back pops this route before the focus tree sees the key, so the panel
+  // claims it through the interceptor while it has focus.
+  bool _exitTvPanelFromBack() {
+    _exitTvPanel();
+    return true;
+  }
+
+  void _exitTvPanel() {
+    InlineBackInterceptor.remove(_exitTvPanelFromBack);
+    setState(() => _tvFocusArea = _TvAudioFocusArea.progress);
   }
 
   void _enterTvPanel() {
+    InlineBackInterceptor.push(_exitTvPanelFromBack);
     setState(() {
       _tvFocusArea = _TvAudioFocusArea.panelBody;
       if (_tvPanelIsLyrics) {
         _tvLyricCursor = _currentLyricLineIndex();
       } else {
-        _tvQueueFocusIndex = _queueStartIndex;
+        _tvQueueFocusIndex = _queueCurrentRow;
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -280,27 +294,50 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     }
   }
 
-  void _activateTvTransportAction() {
-    switch (_tvTransportActionIndex) {
-      case 0:
-        _manager.toggleShuffle();
-        return;
-      case 1:
-        unawaited(_manager.previous());
-        return;
-      case 2:
-        if (_state.isPlaying) {
-          unawaited(_manager.pause());
-        } else {
-          unawaited(_manager.resume());
+  void _activateDockAction(
+    _DockAction action,
+    AggregatedItem? item, {
+    bool fromDpad = false,
+  }) {
+    switch (action) {
+      case _DockAction.favorite:
+        if (item != null) unawaited(_toggleFavorite(item));
+      case _DockAction.addToPlaylist:
+        if (item != null) {
+          unawaited(
+            AddToPlaylistDialog.show(
+              context,
+              itemIds: [item.id],
+              serverId: item.serverId,
+            ),
+          );
         }
-        return;
-      case 3:
+      case _DockAction.shuffle:
+        _manager.toggleShuffle();
+      case _DockAction.previous:
+        unawaited(_manager.previous());
+      case _DockAction.playPause:
+        unawaited(_state.isPlaying ? _manager.pause() : _manager.resume());
+      case _DockAction.next:
         unawaited(_manager.next());
-        return;
-      case 4:
+      case _DockAction.repeat:
         _manager.toggleRepeat();
-        return;
+      // Selecting the toggle that is already showing moves D-pad focus into
+      // its panel.
+      case _DockAction.lyrics:
+        if (fromDpad && _tvPanelIsLyrics) {
+          _enterTvPanel();
+        } else {
+          setState(() => _wideShowQueue = false);
+        }
+      case _DockAction.queue:
+        if (fromDpad && !_tvPanelIsLyrics) {
+          _enterTvPanel();
+        } else {
+          setState(() => _wideShowQueue = _tvPanelIsLyrics);
+        }
+      case _DockAction.cast:
+        if (item != null) _onCastPressed(item);
     }
   }
 
@@ -345,8 +382,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     );
   }
 
-  int get _queueStartIndex =>
-      upNextStartIndex(_queue.length, _queue.currentIndex);
+  // The whole queue stays listed, and it opens on the playing track.
+  int get _queueCurrentRow =>
+      math.max(0, math.min(_queue.currentIndex, _queue.items.length - 1));
 
   void _syncTvQueueFocusIndex() {
     if (!_isWidePlayer || _tvPanelIsLyrics) return;
@@ -358,14 +396,17 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       return;
     }
 
-    final clamped = _tvQueueFocusIndex.clamp(_queueStartIndex, count - 1);
-    if (clamped != _tvQueueFocusIndex) {
-      setState(() => _tvQueueFocusIndex = clamped);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        _scrollTvQueueIntoView(_tvQueueFocusIndex, animate: false);
-      });
+    // Outside the panel the list follows playback to the new track.
+    final target = _tvFocusArea == _TvAudioFocusArea.panelBody
+        ? _tvQueueFocusIndex.clamp(0, count - 1)
+        : _queueCurrentRow;
+    if (target != _tvQueueFocusIndex) {
+      setState(() => _tvQueueFocusIndex = target);
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _scrollTvQueueIntoView(_tvQueueFocusIndex, animate: false);
+    });
   }
 
   void _setTvQueueFocusIndex(int index) {
@@ -377,7 +418,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       return;
     }
 
-    final clamped = index.clamp(_queueStartIndex, count - 1);
+    final clamped = index.clamp(0, count - 1);
     if (clamped == _tvQueueFocusIndex) return;
 
     setState(() => _tvQueueFocusIndex = clamped);
@@ -386,8 +427,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
   void _scrollTvQueueIntoView(int index, {bool animate = true}) {
     if (!_queueScrollController.hasClients) return;
-    final row = index - _queueStartIndex;
-    final targetOffset = (row * 72.0).clamp(
+    // A two-line ListTile is 72 high, plus the tile's margin and border.
+    final targetOffset = (index * 82.0).clamp(
       _queueScrollController.position.minScrollExtent,
       _queueScrollController.position.maxScrollExtent,
     );
@@ -404,21 +445,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     }
   }
 
-  bool _isTvBackPopSuppressed() {
-    final until = _tvBackPopSuppressedUntil;
-    if (!PlatformDetection.isTV || until == null) return false;
-    if (DateTime.now().isAfter(until)) {
-      _tvBackPopSuppressedUntil = null;
-      return false;
-    }
-    return true;
-  }
-
-  void _suppressTvBackPop() {
-    if (!PlatformDetection.isTV) return;
-    _tvBackPopSuppressedUntil = DateTime.now().add(_tvBackPopSuppressDuration);
-  }
-
   KeyEventResult _handleTvKeyEvent(FocusNode node, KeyEvent event) {
     if (!_isWidePlayer || !event.isActionable) {
       return KeyEventResult.ignored;
@@ -426,14 +452,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
     final key = event.logicalKey;
 
-    // Back: when inside the panel, step out to the switcher; otherwise let the
-    // framework handle it (exit playback).
+    // Back leaves the panel through _exitTvPanelFromBack, so only repeats are
+    // swallowed here.
     if (key.isBackKey) {
-      if (_tvFocusArea == _TvAudioFocusArea.panelBody) {
-        if (event is KeyRepeatEvent) return KeyEventResult.handled;
-        setState(() => _tvFocusArea = _TvAudioFocusArea.viewTabs);
-        return KeyEventResult.handled;
-      }
       if (event is KeyRepeatEvent) return KeyEventResult.handled;
       return KeyEventResult.ignored;
     }
@@ -446,7 +467,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           return KeyEventResult.handled;
         }
         if (key.isDownKey) {
-          _setTvLyricCursor(_tvLyricCursor + 1);
+          if (_tvLyricCursor >= (_lyrics?.lines.length ?? 0) - 1) {
+            _exitTvPanel();
+          } else {
+            _setTvLyricCursor(_tvLyricCursor + 1);
+          }
           return KeyEventResult.handled;
         }
         if (key.isSelectKey) {
@@ -462,7 +487,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           return KeyEventResult.handled;
         }
         if (key.isDownKey) {
-          _setTvQueueFocusIndex(_tvQueueFocusIndex + 1);
+          if (_tvQueueFocusIndex >= _queue.items.length - 1) {
+            _exitTvPanel();
+          } else {
+            _setTvQueueFocusIndex(_tvQueueFocusIndex + 1);
+          }
           return KeyEventResult.handled;
         }
         if (key.isSelectKey) {
@@ -476,7 +505,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         }
       }
       if (key.isLeftKey) {
-        setState(() => _tvFocusArea = _TvAudioFocusArea.viewTabs);
+        _exitTvPanel();
         return KeyEventResult.handled;
       }
       return KeyEventResult.handled;
@@ -499,13 +528,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       return KeyEventResult.handled;
     }
     if (key.isSelectKey) {
-      if (_tvFocusArea == _TvAudioFocusArea.favorite) {
+      if (_tvFocusArea == _TvAudioFocusArea.dock) {
         final item = _resolveCurrentItem();
-        if (item != null) unawaited(_toggleFavorite(item));
-      } else if (_tvFocusArea == _TvAudioFocusArea.viewTabs) {
-        _enterTvPanel();
-      } else if (_tvFocusArea == _TvAudioFocusArea.transport) {
-        _activateTvTransportAction();
+        _activateDockAction(
+          _dockFocusIn(_dockActions(item)),
+          item,
+          fromDpad: true,
+        );
       }
       return KeyEventResult.handled;
     }
@@ -774,6 +803,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     }
     _sleepTimer?.cancel();
     _persistVolumeTimer?.cancel();
+    InlineBackInterceptor.remove(_exitTvPanelFromBack);
     _tvOverlayFocus.dispose();
     _queueScrollController.dispose();
     _tvLyricScrollController.dispose();
@@ -832,17 +862,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     }
   }
 
-  String? _getArtUrl(AggregatedItem item) =>
-      audioArtUrl(item, clientFactory: _clientFactory, maxHeight: 600);
-
-  bool _shouldUseSplitLyricsLayout(BuildContext context) {
-    if (_showQueue || _lyrics == null || _lyrics!.isEmpty) {
-      return false;
-    }
-    final size = MediaQuery.sizeOf(context);
-    final isLandscape = size.width > size.height;
-    return !PlatformDetection.useMobileUi || isLandscape;
-  }
+  String? _getArtUrl(AggregatedItem item, {int maxHeight = 600}) =>
+      audioArtUrl(item, clientFactory: _clientFactory, maxHeight: maxHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -855,10 +876,15 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       return const AudiobookPlayerView();
     }
     final localPoster = _offlinePosterPath();
+    final size = MediaQuery.sizeOf(context);
+    // Phones in landscape get the wide layout, without the D-pad handling.
+    final wideLayout = _isWidePlayer || size.width > size.height;
+    final mobilePanelOpen =
+        !wideLayout && (_showQueue || (_showLyrics && _tvLyricsAvailable));
+    // The phone hero fills the whole width, so it needs a larger image.
     final artUrl = item != null && !_manager.isOfflinePlayback
-        ? _getArtUrl(item)
+        ? _getArtUrl(item, maxHeight: wideLayout ? 600 : 1200)
         : null;
-    final useSplitLyricsLayout = _shouldUseSplitLyricsLayout(context);
 
     final ImageProvider? ambientImage =
         (localPoster != null && File(localPoster).existsSync())
@@ -871,42 +897,12 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         Positioned.fill(
           child: AmbientBackground(
             image: ambientImage,
+            // The phone hero bleeds under the status bar.
             child: SafeArea(
-              child: _isWidePlayer
-                  ? _buildTvBody(item, artUrl, localPoster: localPoster)
-                  : Column(
-                children: [
-                  _buildTopBar(context, item),
-                  Expanded(
-                    child: _showQueue
-                        ? _buildQueueList()
-                        : useSplitLyricsLayout
-                        ? _buildNowPlayingWithLyrics(
-                            item,
-                            artUrl,
-                            localPoster: localPoster,
-                          )
-                        : _showLyrics && _lyrics != null && _lyrics!.isNotEmpty
-                        ? LyricsView(
-                            lyrics: _lyrics!,
-                            positionStream: _state.positionStream,
-                            position: _state.position,
-                            onSeekToLine: (d) => unawaited(_manager.seekTo(d)),
-                          )
-                        : _buildNowPlaying(
-                            item,
-                            artUrl,
-                            localPoster: localPoster,
-                          ),
-                  ),
-                  if (item != null && !_showQueue && !_showLyrics)
-                    _buildFavoriteRow(item),
-                  _buildProgressBar(),
-                  _buildTransportControls(),
-                  if (!useSplitLyricsLayout) _buildMobileViewSwitcher(),
-                  const SizedBox(height: AppSpacing.spaceLg),
-                ],
-              ),
+              top: wideLayout,
+              child: wideLayout
+                  ? _buildWideBody(item, artUrl, localPoster: localPoster)
+                  : _buildMobileBody(item, artUrl, localPoster: localPoster),
             ),
           ),
         ),
@@ -923,14 +919,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         : content;
 
     return PopScope(
-      canPop: !_showQueue,
+      canPop: !mobilePanelOpen,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        if (_isTvBackPopSuppressed()) return;
-        if (_showQueue) {
-          _suppressTvBackPop();
-          _toggleQueuePanel();
-        }
+        setState(() {
+          _showQueue = false;
+          _showLyrics = false;
+        });
       },
       child: Scaffold(
         backgroundColor: AppColorScheme.background,
@@ -939,8 +934,87 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     );
   }
 
-  Widget _buildTopBar(BuildContext context, AggregatedItem? item) {
-    final isTv = PlatformDetection.isTV;
+  /// Phone portrait: full-bleed art that fades into the ambient background,
+  /// with the title row on top of the fade. Lyrics and Up Next replace the art.
+  Widget _buildMobileBody(
+    AggregatedItem? item,
+    String? artUrl, {
+    String? localPoster,
+  }) {
+    final topInset = MediaQuery.paddingOf(context).top;
+    final Widget? panel = _showQueue
+        ? _buildQueueList()
+        : _showLyrics && _tvLyricsAvailable
+        ? LyricsView(
+            lyrics: _lyrics!,
+            positionStream: _state.positionStream,
+            position: _state.position,
+            onSeekToLine: (d) => unawaited(_manager.seekTo(d)),
+          )
+        : null;
+
+    return Column(
+      children: [
+        Expanded(
+          child: panel != null
+              ? Padding(
+                  padding: EdgeInsets.only(top: topInset),
+                  child: Column(
+                    children: [
+                      _buildMobileTopBar(item),
+                      Expanded(child: panel),
+                    ],
+                  ),
+                )
+              : Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ShaderMask(
+                      shaderCallback: (rect) => const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white,
+                          Colors.white,
+                          Colors.transparent,
+                        ],
+                        stops: [0.0, 0.62, 1.0],
+                      ).createShader(rect),
+                      blendMode: BlendMode.dstIn,
+                      child: _artImage(artUrl, localPoster),
+                    ),
+                    Positioned(
+                      top: topInset,
+                      left: 0,
+                      right: 0,
+                      child: _buildMobileTopBar(item),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: _buildMobileMeta(item),
+                    ),
+                  ],
+                ),
+        ),
+        _buildProgressBar(),
+        _buildTransportControls(item),
+        _buildMobileActions(item),
+        const SizedBox(height: AppSpacing.spaceLg),
+      ],
+    );
+  }
+
+  Widget _buildMobileTopBar(AggregatedItem? item) {
+    Widget scrimmed(Widget child) => DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.black.withValues(alpha: 0.28),
+      ),
+      child: child,
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.spaceSm,
@@ -948,180 +1022,380 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       ),
       child: Row(
         children: [
-          if (!isTv)
+          scrimmed(
             IconButton(
-              icon: const AdaptiveIcon(Icons.arrow_back, size: 24),
+              icon: const AdaptiveIcon(Icons.keyboard_arrow_down, size: 28),
               onPressed: () => Navigator.of(context).pop(),
             ),
-          const Spacer(),
+          ),
+          Expanded(
+            child: Center(
+              child: item != null
+                  ? AudioQualityBadge(item: item)
+                  : const SizedBox.shrink(),
+            ),
+          ),
           if (item != null)
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: AppSpacing.spaceSm),
-              child: AudioQualityBadge(item: item),
-            ),
-          const Spacer(),
-          if (!isTv && item != null)
-            ValueListenableBuilder<CastTargetKind?>(
-              valueListenable: _castService.activeKindNotifier,
-              builder: (context, kind, _) => IconButton(
-                icon: AdaptiveIcon(
-                  _castIcon(kind),
-                  size: 24,
-                  color: kind != null ? AppColorScheme.accent : null,
-                ),
-                onPressed: () => _castToDevice(item),
+            scrimmed(
+              IconButton(
+                icon: const AdaptiveIcon(Icons.more_vert, size: 24),
+                onPressed: () => _showOverflowSheet(item),
               ),
-            ),
-          if (!isTv)
-            ValueListenableBuilder<CastTargetKind?>(
-              valueListenable: _castService.activeKindNotifier,
-              builder: (context, kind, _) {
-                if (kind == null) return const SizedBox.shrink();
-                return IconButton(
-                  icon: const AdaptiveIcon(Icons.settings_remote_rounded, size: 24),
-                  onPressed: _showCastControls,
-                );
-              },
-            ),
-          if (!isTv && item != null)
-            IconButton(
-              icon: const AdaptiveIcon(Icons.more_vert, size: 24),
-              onPressed: () => _showOverflowSheet(item),
-            ),
+            )
+          else
+            const SizedBox(width: 48),
         ],
       ),
     );
   }
 
-  Widget _buildNowPlayingWithLyrics(
-    AggregatedItem? item,
-    String? artUrl, {
-    String? localPoster,
-  }) {
+  Widget _buildMobileMeta(AggregatedItem? item) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.spaceXl,
+        0,
+        AppSpacing.spaceLg,
+        0,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(child: _buildTitleBlock(item, titleSize: 28)),
+          if (item != null)
+            _dockButton(_DockAction.favorite, item, mobile: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitleBlock(AggregatedItem? item, {double titleSize = 32}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MarqueeText(
+          text: item?.name ?? '',
+          style: TextStyle(
+            fontSize: titleSize,
+            fontWeight: FontWeight.w800,
+            color: AppColorScheme.onSurface,
+          ),
+        ),
+        Text(
+          _artistLine(item),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: AppColorScheme.accent,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (item?.album != null)
+          MarqueeText(
+            text: item!.album!,
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColorScheme.onSurface.withValues(alpha: 0.5),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildMobileActions(AggregatedItem? item) {
+    final l10n = AppLocalizations.of(context);
+
+    Widget action(
+      IconData icon,
+      String label,
+      VoidCallback onTap, {
+      bool on = false,
+    }) => Expanded(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.spaceXs),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: on
+                      ? AppColorScheme.accent.withValues(alpha: 0.22)
+                      : AppColorScheme.onSurface.withValues(alpha: 0.09),
+                ),
+                child: Center(
+                  child: AdaptiveIcon(
+                    icon,
+                    size: 22,
+                    color: on
+                        ? AppColorScheme.accent
+                        : AppColorScheme.onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColorScheme.onSurface.withValues(alpha: 0.75),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.spaceMd,
+        AppSpacing.spaceMd,
+        AppSpacing.spaceMd,
+        0,
+      ),
       child: Row(
         children: [
-          Expanded(
-            flex: 11,
-            child: _buildNowPlaying(item, artUrl, localPoster: localPoster),
+          if (_tvLyricsAvailable)
+            action(
+              Icons.lyrics_outlined,
+              l10n.audiobookLyrics,
+              () => setState(() {
+                _showLyrics = !_showLyrics;
+                if (_showLyrics) _showQueue = false;
+              }),
+              on: _showLyrics,
+            ),
+          action(
+            Icons.queue_music,
+            l10n.upNext,
+            _toggleQueuePanel,
+            on: _showQueue,
           ),
-          const SizedBox(width: AppSpacing.spaceLg),
-          Expanded(
-            flex: 9,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.spaceSm),
-              child: LyricsView(
-                lyrics: _lyrics!,
-                positionStream: _state.positionStream,
-                position: _state.position,
-                onSeekToLine: (d) => unawaited(_manager.seekTo(d)),
+          if (item != null && !_manager.isOfflinePlayback)
+            action(
+              Icons.playlist_add,
+              l10n.addToPlaylist,
+              () => _activateDockAction(_DockAction.addToPlaylist, item),
+            ),
+          if (item != null)
+            ValueListenableBuilder<CastTargetKind?>(
+              valueListenable: _castService.activeKindNotifier,
+              builder: (context, kind, _) => action(
+                _castIcon(kind),
+                l10n.cast,
+                () => _onCastPressed(item),
+                on: kind != null,
               ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildNowPlaying(
+  /// Desktop, TV and phone landscape: art and metadata on the left, lyrics
+  /// (or Up Next) filling the right, and every control in one dock row so the
+  /// D-pad only needs left/right.
+  Widget _buildWideBody(
     AggregatedItem? item,
     String? artUrl, {
     String? localPoster,
   }) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxArtByWidth = (constraints.maxWidth - (AppSpacing.space2xl * 2))
-            .clamp(160.0, 560.0);
-        final maxArtByHeight = (constraints.maxHeight * 0.62).clamp(
-          160.0,
-          560.0,
-        );
-        final artSize = maxArtByWidth < maxArtByHeight
-            ? maxArtByWidth
-            : maxArtByHeight;
+    final isTv = PlatformDetection.isTV;
+    final actions = _dockActions(item);
+    final focus = _dockFocusIn(actions);
+    List<Widget> slots(List<_DockAction> group) => [
+      for (final action in group)
+        if (actions.contains(action)) _dockSlot(action, item, focus),
+    ];
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space2xl),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.spaceLg,
+            AppSpacing.spaceSm,
+            AppSpacing.spaceLg,
+            0,
+          ),
+          child: SizedBox(
+            height: 48,
+            child: Row(
               children: [
-                SizedBox(
-                  width: artSize,
-                  height: artSize,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: AppRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: AppColors.black,
-                          blurRadius: 30,
-                          offset: Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: localPoster != null && File(localPoster).existsSync()
-                        ? Image.file(
-                            File(localPoster),
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => _artPlaceholder(),
-                          )
-                        : artUrl != null
-                        ? OfflineAwareImage(
-                            imageUrl: artUrl,
-                            fit: BoxFit.cover,
-                            placeholder: (_, _) => _artPlaceholder(),
-                            errorWidget: (_, _, _) => _artPlaceholder(),
-                          )
-                        : _artPlaceholder(),
+                if (!isTv)
+                  IconButton(
+                    icon: const AdaptiveIcon(Icons.arrow_back, size: 24),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.spaceXl),
-                Text(
-                  item?.name ?? '',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColorScheme.onSurface,
+                const Spacer(),
+                if (item != null) AudioQualityBadge(item: item),
+                if (!_isWidePlayer && item != null)
+                  IconButton(
+                    icon: const AdaptiveIcon(Icons.more_vert, size: 24),
+                    onPressed: () => _showOverflowSheet(item),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppSpacing.spaceXs),
-                Text(
-                  _artistLine(item),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-                if (item?.album != null) ...[
-                  const SizedBox(height: AppSpacing.space2xs),
-                  Text(
-                    item!.album!,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: AppColorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
               ],
             ),
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.space2xl,
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Leaves room for the three text lines under the art.
+                final artSize = math
+                    .min(
+                      constraints.maxHeight - 112,
+                      constraints.maxWidth * 0.32,
+                    )
+                    .clamp(72.0, 420.0);
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: artSize,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: artSize,
+                            height: artSize,
+                            decoration: BoxDecoration(
+                              borderRadius: AppRadius.circular(16),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppColors.black,
+                                  blurRadius: 30,
+                                  offset: Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: _artImage(artUrl, localPoster),
+                          ),
+                          const SizedBox(height: 14),
+                          _buildTitleBlock(item),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 40),
+                    Expanded(
+                      child: _tvPanelIsLyrics
+                          ? _buildTvLyricsPanel()
+                          : _buildQueueList(),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.spaceSm,
+            0,
+            AppSpacing.spaceSm,
+            AppSpacing.spaceMd,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildProgressBar(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.spaceLg,
+                ),
+                child: Row(
+                  children: [
+                    // In a narrow window the side groups shrink to fit
+                    // instead of overflowing the dock.
+                    Expanded(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            children: slots([
+                              _DockAction.favorite,
+                              _DockAction.addToPlaylist,
+                            ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: AppSpacing.spaceMd,
+                      children: slots(_transportActions),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            children: [
+                              ...slots([
+                                _DockAction.lyrics,
+                                _DockAction.queue,
+                                _DockAction.cast,
+                              ]),
+                              if (_isWidePlayer && !isTv)
+                                PlayerVolumeControl(
+                                  volume: _playerVolume / 100.0,
+                                  onChanged: (v) =>
+                                      _setPlayerVolume(v * 100.0),
+                                  onToggleMute: () => _setPlayerVolume(
+                                    _playerVolume > 0
+                                        ? 0.0
+                                        : _volumeBeforeMute,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
+  }
+
+  Widget _artImage(String? artUrl, String? localPoster) {
+    if (localPoster != null && File(localPoster).existsSync()) {
+      return Image.file(
+        File(localPoster),
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => _artPlaceholder(),
+      );
+    }
+    if (artUrl != null) {
+      return OfflineAwareImage(
+        imageUrl: artUrl,
+        fit: BoxFit.cover,
+        placeholder: (_, _) => _artPlaceholder(),
+        errorWidget: (_, _, _) => _artPlaceholder(),
+      );
+    }
+    return _artPlaceholder();
   }
 
   Widget _artPlaceholder() {
@@ -1153,6 +1427,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     if (item.artists.isNotEmpty) return item.artists.join(', ');
     if (item.albumArtist != null) return item.albumArtist!;
     return '';
+  }
+
+  void _onCastPressed(AggregatedItem item) {
+    if (_castService.activeKind != null) {
+      _showCastControls();
+    } else {
+      unawaited(_castToDevice(item));
+    }
   }
 
   Future<void> _castToDevice(AggregatedItem item) async {
@@ -1410,66 +1692,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     );
   }
 
-  /// Mobile bottom switcher: `[ Lyrics | Up Next ]` pills that toggle the
-  /// centre view, mirroring the wide player's view switcher.
-  Widget _buildMobileViewSwitcher() {
-    final hasLyrics = _lyrics?.isNotEmpty ?? false;
-
-    Widget chip(String label, bool active, VoidCallback onTap) => Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.easeOut,
-          margin: const EdgeInsets.all(4),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? AppColorScheme.accent : Colors.transparent,
-            borderRadius: AppRadius.circular(20),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: active
-                  ? AppColorScheme.onAccent
-                  : AppColorScheme.onSurface.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
-    );
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.spaceLg,
-        AppSpacing.spaceSm,
-        AppSpacing.spaceLg,
-        0,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColorScheme.onSurface.withValues(alpha: 0.08),
-          borderRadius: AppRadius.circular(24),
-        ),
-        child: Row(
-          children: [
-            if (hasLyrics)
-              chip(appL10n().audiobookLyrics, _showLyrics, () {
-                setState(() {
-                  _showLyrics = !_showLyrics;
-                  if (_showLyrics) _showQueue = false;
-                });
-              }),
-            chip(appL10n().upNext, _showQueue, _toggleQueuePanel),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _applyPlayerVolume() {
     if (!PlatformDetection.isDesktop) return;
     unawaited(_manager.backend?.setVolume(_playerVolume));
@@ -1484,167 +1706,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     _persistVolumeTimer = Timer(const Duration(milliseconds: 400), () {
       unawaited(_prefs.set(UserPreferences.playerVolume, _playerVolume));
     });
-  }
-
-  Widget _buildFavoriteRow(AggregatedItem item) {
-    final isFav = _getIsFavorite(item);
-    return IconButton(
-      icon: AdaptiveIcon(
-        isFav ? Icons.favorite : Icons.favorite_border,
-        size: 28,
-        color: isFav
-            ? AppColorScheme.accent
-            : AppColorScheme.onSurface.withValues(alpha: 0.7),
-      ),
-      onPressed: () => _toggleFavorite(item),
-    );
-  }
-
-  Widget _tvFavoriteButton(AggregatedItem item) {
-    return _tvFocusShell(
-      focused: _tvFocusArea == _TvAudioFocusArea.favorite,
-      borderRadius: const BorderRadius.all(Radius.circular(24)),
-      child: _buildFavoriteRow(item),
-    );
-  }
-
-  /// TV/leanback two-column player: album art + metadata on the left, and a
-  /// D-pad-driven `[Up Next | Lyrics]` panel on the right, with full-width
-  /// progress + transport below.
-  Widget _buildTvBody(
-    AggregatedItem? item,
-    String? artUrl, {
-    String? localPoster,
-  }) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.spaceLg,
-            AppSpacing.spaceSm,
-            AppSpacing.spaceLg,
-            0,
-          ),
-          child: Row(
-            children: [
-              if (!PlatformDetection.isTV)
-                IconButton(
-                  icon: const AdaptiveIcon(Icons.arrow_back, size: 24),
-                  onPressed: () => Navigator.of(context).pop(),
-                )
-              else
-                const SizedBox(width: 48),
-              Expanded(
-                child: Center(
-                  child: item != null
-                      ? AudioQualityBadge(item: item)
-                      : const SizedBox.shrink(),
-                ),
-              ),
-              if (!PlatformDetection.isTV)
-                PlayerVolumeControl(
-                  volume: _playerVolume / 100.0,
-                  onChanged: (v) => _setPlayerVolume(v * 100.0),
-                  onToggleMute: () => _setPlayerVolume(
-                    _playerVolume > 0 ? 0.0 : _volumeBeforeMute,
-                  ),
-                ),
-              if (item != null)
-                _tvFavoriteButton(item)
-              else
-                const SizedBox(width: 48),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: _buildNowPlaying(
-                    item,
-                    artUrl,
-                    localPoster: localPoster,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.spaceXl),
-                Expanded(
-                  child: Column(
-                    children: [
-                      _buildTvViewTabs(),
-                      const SizedBox(height: AppSpacing.spaceSm),
-                      Expanded(
-                        child: _tvPanelIsLyrics
-                            ? _buildTvLyricsPanel()
-                            : _buildQueueList(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        _buildProgressBar(),
-        _buildTransportControls(),
-        const SizedBox(height: AppSpacing.spaceLg),
-      ],
-    );
-  }
-
-  Widget _buildTvViewTabs() {
-    final focused = _tvFocusArea == _TvAudioFocusArea.viewTabs;
-    final showLyricsTab = _tvLyricsAvailable;
-
-    Widget tab(String label, int index, bool active) => GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => setState(() {
-        _tvViewTab = index;
-        _tvFocusArea = _TvAudioFocusArea.viewTabs;
-      }),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        decoration: BoxDecoration(
-          color: active ? AppColorScheme.accent : Colors.transparent,
-          borderRadius: AppRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active
-                ? AppColorScheme.onAccent
-                : AppColorScheme.onSurface.withValues(alpha: 0.8),
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-    );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _tvFocusShell(
-          focused: focused,
-          borderRadius: const BorderRadius.all(Radius.circular(24)),
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: AppColorScheme.onSurface.withValues(alpha: 0.08),
-              borderRadius: AppRadius.circular(24),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                tab(appL10n().upNext, 0, _tvViewTab == 0 || !showLyricsTab),
-                if (showLyricsTab) tab(appL10n().audiobookLyrics, 1, _tvViewTab == 1),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _buildTvLyricsPanel() {
@@ -1666,6 +1727,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     if (!inPanel) {
       return LyricsView(
         lyrics: lyrics,
+        textAlign: TextAlign.start,
         positionStream: _state.positionStream,
         position: _state.position,
         onSeekToLine: (d) => unawaited(_manager.seekTo(d)),
@@ -1693,7 +1755,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           ),
           child: Text(
             lines[index].text,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
             style: TextStyle(
               color: isCursor
                   ? AppColorScheme.onSurface
@@ -1713,7 +1775,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     final maxMs = dur.inMilliseconds.toDouble();
     final isTvFocused =
         _isWidePlayer &&
-        !_showQueue &&
         _tvFocusArea == _TvAudioFocusArea.progress &&
         InputModeTracker.showFocusVisuals(context, true);
 
@@ -1778,116 +1839,123 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     );
   }
 
-  Widget _buildTransportControls() {
-    final isPlaying = _state.isPlaying;
-    final repeatMode = _queue.repeatMode;
-    final isShuffled = _queue.isShuffled;
-
-    Widget wrapTvTransport({
-      required int index,
-      required Widget child,
-      BorderRadius borderRadius = const BorderRadius.all(Radius.circular(16)),
-    }) {
-      final focused =
-          _isWidePlayer &&
-          !_showQueue &&
-          _tvFocusArea == _TvAudioFocusArea.transport &&
-          _tvTransportActionIndex == index;
-      return _tvFocusShell(
-        focused: focused,
-        borderRadius: borderRadius,
-        child: child,
-      );
-    }
-
+  Widget _buildTransportControls(AggregatedItem? item) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          wrapTvTransport(
-            index: 0,
-            child: IconButton(
-              icon: AdaptiveIcon(
-                Icons.shuffle,
-                size: 24,
-                color: isShuffled
-                    ? AppColorScheme.accent
-                    : AppColorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-              onPressed: () => _manager.toggleShuffle(),
-            ),
-          ),
-          wrapTvTransport(
-            index: 1,
-            child: IconButton(
-              icon: AdaptiveIcon(
-                Icons.skip_previous,
-                size: 36,
-                color: AppColorScheme.onSurface,
-              ),
-              onPressed: () => _manager.previous(),
-            ),
-          ),
-          wrapTvTransport(
-            index: 2,
-            borderRadius: const BorderRadius.all(Radius.circular(30)),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColorScheme.accent,
-              ),
-              child: IconButton(
-                icon: AdaptiveIcon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                  size: 36,
-                  color: AppColorScheme.onSurface,
-                ),
-                onPressed: () {
-                  if (isPlaying) {
-                    _manager.pause();
-                  } else {
-                    _manager.resume();
-                  }
-                },
-              ),
-            ),
-          ),
-          wrapTvTransport(
-            index: 3,
-            child: IconButton(
-              icon: AdaptiveIcon(
-                Icons.skip_next,
-                size: 36,
-                color: AppColorScheme.onSurface,
-              ),
-              onPressed: () => _manager.next(),
-            ),
-          ),
-          wrapTvTransport(
-            index: 4,
-            child: IconButton(
-              icon: AdaptiveIcon(
-                repeatMode == RepeatMode.repeatOne
-                    ? Icons.repeat_one
-                    : Icons.repeat,
-                size: 24,
-                color: repeatMode != RepeatMode.none
-                    ? AppColorScheme.accent
-                    : AppColorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-              onPressed: () => _manager.toggleRepeat(),
-            ),
-          ),
+          for (final action in _transportActions)
+            _dockButton(action, item, mobile: true),
         ],
       ),
     );
   }
 
+  Widget _dockSlot(
+    _DockAction action,
+    AggregatedItem? item,
+    _DockAction focus,
+  ) {
+    return _tvFocusShell(
+      focused: _tvFocusArea == _TvAudioFocusArea.dock && focus == action,
+      borderRadius: BorderRadius.all(
+        Radius.circular(action == _DockAction.playPause ? 30 : 24),
+      ),
+      child: _dockButton(action, item),
+    );
+  }
+
+  Widget _dockButton(
+    _DockAction action,
+    AggregatedItem? item, {
+    bool mobile = false,
+  }) {
+    final l10n = AppLocalizations.of(context);
+    final accent = AppColorScheme.accent;
+    final dim = AppColorScheme.onSurface.withValues(alpha: 0.7);
+
+    Widget button(
+      IconData icon, {
+      Color? color,
+      double size = 24,
+      String? tooltip,
+      bool on = false,
+    }) => IconButton(
+      tooltip: tooltip,
+      style: on
+          ? IconButton.styleFrom(
+              backgroundColor: accent.withValues(alpha: 0.18),
+            )
+          : null,
+      icon: AdaptiveIcon(
+        icon,
+        size: size,
+        color: on ? accent : color ?? AppColorScheme.onSurface,
+      ),
+      onPressed: () => _activateDockAction(action, item),
+    );
+
+    final isFav = item != null && _getIsFavorite(item);
+    final repeatMode = _queue.repeatMode;
+    final playSize = mobile ? 68.0 : 52.0;
+
+    return switch (action) {
+      _DockAction.favorite => button(
+        isFav ? Icons.favorite : Icons.favorite_border,
+        color: isFav ? accent : dim,
+        size: mobile ? 30 : 24,
+        tooltip: l10n.favorite,
+      ),
+      _DockAction.addToPlaylist => button(
+        Icons.playlist_add,
+        tooltip: l10n.addToPlaylist,
+      ),
+      _DockAction.shuffle => button(
+        Icons.shuffle,
+        color: _queue.isShuffled ? accent : dim,
+      ),
+      _DockAction.previous => button(Icons.skip_previous, size: 36),
+      _DockAction.playPause => Container(
+        width: playSize,
+        height: playSize,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: accent),
+        child: button(
+          _state.isPlaying ? Icons.pause : Icons.play_arrow,
+          size: playSize * 0.62,
+        ),
+      ),
+      _DockAction.next => button(Icons.skip_next, size: 36),
+      _DockAction.repeat => button(
+        repeatMode == RepeatMode.repeatOne ? Icons.repeat_one : Icons.repeat,
+        color: repeatMode != RepeatMode.none ? accent : dim,
+      ),
+      _DockAction.lyrics => button(
+        Icons.lyrics_outlined,
+        color: dim,
+        tooltip: l10n.audiobookLyrics,
+        on: _tvPanelIsLyrics,
+      ),
+      _DockAction.queue => button(
+        Icons.queue_music,
+        color: dim,
+        tooltip: l10n.upNext,
+        on: !_tvPanelIsLyrics,
+      ),
+      _DockAction.cast => ValueListenableBuilder<CastTargetKind?>(
+        valueListenable: _castService.activeKindNotifier,
+        builder: (context, kind, _) => button(
+          _castIcon(kind),
+          color: kind != null ? accent : dim,
+          tooltip: l10n.cast,
+        ),
+      ),
+    };
+  }
+
   Widget _buildQueueList() {
     final items = _queue.items;
     final currentIdx = _queue.currentIndex;
-    final start = upNextStartIndex(items.length, currentIdx);
     final isWide = _isWidePlayer;
     final keyboardFocus = InputModeTracker.showFocusVisuals(context, true);
 
@@ -1902,13 +1970,30 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       );
     }
 
+    // A list that's about to appear opens on the playing track.
+    if (!_queueScrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _scrollTvQueueIntoView(_queueCurrentRow, animate: false);
+      });
+    }
+
     Widget buildTile(int index) {
       final raw = items[index];
       final item = raw is AggregatedItem ? raw : null;
       final isCurrent = index == currentIdx;
       final isDpadFocused =
-          isWide && index == _tvQueueFocusIndex && keyboardFocus;
+          isWide &&
+          _tvFocusArea == _TvAudioFocusArea.panelBody &&
+          index == _tvQueueFocusIndex &&
+          keyboardFocus;
       final highlighted = isDpadFocused || index == _hoveredQueueIndex;
+      final title =
+          item?.name ?? AppLocalizations.of(context).trackNumber(index + 1);
+      final titleStyle = TextStyle(
+        fontSize: 18,
+        color: isCurrent ? AppColorScheme.accent : AppColorScheme.onSurface,
+        fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+      );
       final artUrl = item != null ? _getArtUrl(item) : null;
 
       return MouseRegion(
@@ -1945,8 +2030,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           child: ListTile(
             shape: RoundedRectangleBorder(borderRadius: AppRadius.circular(16)),
             leading: SizedBox(
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               child: ClipRRect(
                 borderRadius: AppRadius.circular(4),
                 child: artUrl != null
@@ -1959,21 +2044,19 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                     : _queueArtPlaceholder(),
               ),
             ),
-            title: Text(
-              item?.name ?? AppLocalizations.of(context).trackNumber(index + 1),
-              style: TextStyle(
-                color: isCurrent
-                    ? AppColorScheme.accent
-                    : AppColorScheme.onSurface,
-                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            // The focused or hovered row scrolls a name too long to fit.
+            title: highlighted
+                ? MarqueeText(text: title, style: titleStyle)
+                : Text(
+                    title,
+                    style: titleStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
             subtitle: Text(
               _artistLine(item),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: AppColorScheme.onSurface.withValues(alpha: 0.5),
               ),
               maxLines: 1,
@@ -2001,19 +2084,20 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       return ListView.builder(
         controller: _queueScrollController,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
-        itemCount: items.length - start,
-        itemBuilder: (context, row) => buildTile(start + row),
+        itemCount: items.length,
+        itemBuilder: (context, index) => buildTile(index),
       );
     }
 
     // Mobile / desktop: drag to reorder the queue.
     return ReorderableListView.builder(
+      scrollController: _queueScrollController,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
-      itemCount: items.length - start,
-      onReorder: (oldRow, newRow) {
-        setState(() => _queue.reorder(start + oldRow, start + newRow));
+      itemCount: items.length,
+      onReorder: (oldIndex, newIndex) {
+        setState(() => _queue.reorder(oldIndex, newIndex));
       },
-      itemBuilder: (context, row) => buildTile(start + row),
+      itemBuilder: (context, index) => buildTile(index),
     );
   }
 }

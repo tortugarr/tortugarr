@@ -12,6 +12,7 @@ import 'package:server_core/server_core.dart';
 
 import '../../data/repositories/seerr_repository.dart';
 import 'seerr/seerr_discover_sliders.dart';
+import 'incomplete_recordings_service.dart';
 import 'server_messages_service.dart';
 import 'settings_stream_transport.dart';
 import 'storage_path_service.dart';
@@ -31,8 +32,8 @@ enum _PluginAvailabilityStatus { available, unavailable, unknown }
 /// Without them the socket falls back to whatever the system allows, which is
 /// minutes on a link that drops connection attempts. Sign-in waits on the
 /// themes call before it reads the profile that decides which home rows exist,
-/// so a request left hanging there holds the whole profile back.
-@visibleForTesting
+/// so a request left hanging there holds the whole profile back. The
+/// incomplete recordings service shares them.
 BaseOptions pluginRequestOptions() => BaseOptions(
   connectTimeout: const Duration(seconds: 8),
   receiveTimeout: const Duration(seconds: 30),
@@ -57,6 +58,11 @@ class PluginSyncService extends ChangeNotifier {
   ServerMessagesService? get _messages =>
       GetIt.instance.isRegistered<ServerMessagesService>()
       ? GetIt.instance<ServerMessagesService>()
+      : null;
+
+  IncompleteRecordingsService? get _incompleteRecordings =>
+      GetIt.instance.isRegistered<IncompleteRecordingsService>()
+      ? GetIt.instance<IncompleteRecordingsService>()
       : null;
 
   bool _pluginAvailable = false;
@@ -87,6 +93,20 @@ class PluginSyncService extends ChangeNotifier {
   bool _tmdbThumbsSupported = false;
   bool get tmdbThumbsAvailable =>
       _pluginAvailable && _tmdbAvailable && _tmdbThumbsSupported;
+
+  /// Whether the plugin can look up a person's social accounts on TMDB. It
+  /// uses the user's own TMDB key before the server's, so the admin key alone
+  /// doesn't decide it.
+  bool _tmdbPersonLinksSupported = false;
+  bool get tmdbPersonLinksAvailable =>
+      _pluginAvailable && _tmdbPersonLinksSupported;
+  bool _tmdbReviewsSupported = false;
+  bool get tmdbReviewsAvailable => _pluginAvailable && _tmdbReviewsSupported;
+
+  /// Whether the plugin can fill in a title the server doesn't have with its
+  /// TMDB overview, score, logo and trailer.
+  bool _tmdbDetailsSupported = false;
+  bool get tmdbDetailsAvailable => _pluginAvailable && _tmdbDetailsSupported;
   bool _recommendationsSupported = false;
   bool get recommendationsSupported =>
       _pluginAvailable && _recommendationsSupported;
@@ -209,7 +229,11 @@ class PluginSyncService extends ChangeNotifier {
     return value is String ? value : null;
   }
 
-  void resetState({bool notify = true, bool stopStream = true}) {
+  void resetState({
+    bool notify = true,
+    bool stopStream = true,
+    bool keepIncompleteRecordings = false,
+  }) {
     _syncRetryTimer?.cancel();
     if (stopStream) {
       _stopSettingsStream();
@@ -225,8 +249,12 @@ class PluginSyncService extends ChangeNotifier {
     _mdblistAvailable = false;
     _tmdbAvailable = false;
     _tmdbThumbsSupported = false;
+    _tmdbPersonLinksSupported = false;
+    _tmdbReviewsSupported = false;
+    _tmdbDetailsSupported = false;
     _recommendationsSupported = false;
     _clientLogSupported = false;
+    if (!keepIncompleteRecordings) _incompleteRecordings?.setSupported(false);
     _activeThemeCacheServerId = null;
     if (notify) {
       _setLocalSeerrEnabled(false);
@@ -251,11 +279,18 @@ class PluginSyncService extends ChangeNotifier {
   Future<_PluginAvailabilityStatus> _refreshAvailabilityStatus(
     MediaServerClient client,
   ) async {
-    resetState(notify: false, stopStream: false);
+    // A re-ping of the same session keeps the incomplete recordings it has
+    // unless the answer says the plugin no longer offers them.
+    resetState(
+      notify: false,
+      stopStream: false,
+      keepIncompleteRecordings: true,
+    );
 
     try {
       final pingResult = await _ping(client);
       if (pingResult == null) {
+        _incompleteRecordings?.setSupported(false);
         _stopSettingsStream();
         notifyListeners();
         return _PluginAvailabilityStatus.unknown;
@@ -263,6 +298,7 @@ class PluginSyncService extends ChangeNotifier {
 
       final installed = _readBool(pingResult, 'installed');
       if (installed != null && !installed) {
+        _incompleteRecordings?.setSupported(false);
         _stopSettingsStream();
         _setLocalSeerrEnabled(false);
         notifyListeners();
@@ -271,6 +307,7 @@ class PluginSyncService extends ChangeNotifier {
 
       final syncEnabled = _readBool(pingResult, 'settingsSyncEnabled');
       if (syncEnabled != null && !syncEnabled) {
+        _incompleteRecordings?.setSupported(false);
         _stopSettingsStream();
         _setLocalSeerrEnabled(false);
         notifyListeners();
@@ -285,6 +322,12 @@ class PluginSyncService extends ChangeNotifier {
       _tmdbAvailable = _readBool(pingResult, 'tmdbAvailable') ?? false;
       _tmdbThumbsSupported =
           _readBool(pingResult, 'tmdbThumbsSupported') ?? false;
+      _tmdbPersonLinksSupported =
+          _readBool(pingResult, 'tmdbPersonLinksSupported') ?? false;
+      _tmdbReviewsSupported =
+          _readBool(pingResult, 'tmdbReviewsSupported') ?? false;
+      _tmdbDetailsSupported =
+          _readBool(pingResult, 'tmdbDetailsSupported') ?? false;
       _recommendationsSupported =
           _readBool(pingResult, 'recommendationsSupported') ?? false;
       // Older plugins leave this out, which reads as false and hides the button.
@@ -292,6 +335,11 @@ class PluginSyncService extends ChangeNotifier {
         _readBool(pingResult, 'messagesSupported') ?? false,
       );
       _clientLogSupported = _readBool(pingResult, 'clientLogSupported') ?? false;
+      // The Emby port and older plugins leave this out, which hides the feature.
+      _incompleteRecordings?.setSupported(
+        _readBool(pingResult, 'incompleteRecordingsSupported') ?? false,
+        extended: _readBool(pingResult, 'extendedCompleteShowingsSupported') ?? false,
+      );
 
       final seerrConfig = await _fetchSeerrConfig(client);
       if (seerrConfig != null) {
@@ -1027,6 +1075,8 @@ class PluginSyncService extends ChangeNotifier {
       UserPreferences.mediaBarEnabled,
       UserPreferences.mediaBarContentType,
       UserPreferences.enabledRatings,
+      UserPreferences.homeRowsEnabledRatings,
+      UserPreferences.mediaBarEnabledRatings,
       UserPreferences.homeSectionsJson,
     ]) {
       await _prefs.removePreference(pref);
@@ -1413,16 +1463,22 @@ class PluginSyncService extends ChangeNotifier {
     _applyMediaBarMode(resolved);
     _applyMediaBarContentType(resolved);
     _applyHomeRowImageTypes(resolved);
-    if (resolved['mdblistRatingSources'] is List) {
-      final sources = (resolved['mdblistRatingSources'] as List)
-          .cast<String>()
-          .map((s) => _serverToClientRatingSource[s] ?? s)
-          .join(',');
-      _store.set(
-        _prefs.getEffectivePreference(UserPreferences.enabledRatings),
-        sources,
-      );
-    }
+    _applyRatingSources(
+      resolved,
+      'mdblistRatingSources',
+      UserPreferences.enabledRatings,
+      emptyKeepsLocal: false,
+    );
+    _applyRatingSources(
+      resolved,
+      'homeRowsMdblistRatingSources',
+      UserPreferences.homeRowsEnabledRatings,
+    );
+    _applyRatingSources(
+      resolved,
+      'mediaBarMdblistRatingSources',
+      UserPreferences.mediaBarEnabledRatings,
+    );
 
     // Prefer the full homeSections layout when present which unlike homeRowOrder it
     // carries dynamic and disabled rows. home_sections_config is per-server
@@ -1589,6 +1645,9 @@ class PluginSyncService extends ChangeNotifier {
       }
     }
 
+    // A profile written by an app that only knows the preview switch can
+    // carry a mode that disagrees with it.
+    await _prefs.reconcileMediaPreviewMode();
     _prefs.notifyPreferenceChanged();
 
     final currentNavbarPos = _prefs.get(UserPreferences.navbarPosition);
@@ -2018,6 +2077,26 @@ class PluginSyncService extends ChangeNotifier {
     return _prefs.get(pref).split(',').where((s) => s.isNotEmpty).toList();
   }
 
+  List<String> _ratingSourcesForServer(Preference<String> pref) =>
+      _csvToList(pref).map((s) => _clientToServerRatingSource[s] ?? s).toList();
+
+  /// [emptyKeepsLocal] treats an empty list as unset. A user with no settings
+  /// file gets the raw admin defaults, where an unset list arrives as [].
+  void _applyRatingSources(
+    Map<String, dynamic> resolved,
+    String serverKey,
+    Preference<String> pref, {
+    bool emptyKeepsLocal = true,
+  }) {
+    final raw = resolved[serverKey];
+    if (raw is! List || (emptyKeepsLocal && raw.isEmpty)) return;
+    final sources = raw
+        .cast<String>()
+        .map((s) => _serverToClientRatingSource[s] ?? s)
+        .join(',');
+    _store.set(_prefs.getEffectivePreference(pref), sources);
+  }
+
   Map<String, dynamic> _buildProfileFromLocal() {
     final mediaBarMode = UserPreferences.normalizeMediaBarMode(
       _prefs.get(UserPreferences.mediaBarMode),
@@ -2034,9 +2113,15 @@ class PluginSyncService extends ChangeNotifier {
       'mediaBarContentType': UserPreferences.normalizeMediaBarContentType(
         _prefs.get(UserPreferences.mediaBarContentType),
       ),
-      'mdblistRatingSources': _csvToList(UserPreferences.enabledRatings)
-          .map((s) => _clientToServerRatingSource[s] ?? s)
-          .toList(),
+      'mdblistRatingSources': _ratingSourcesForServer(
+        UserPreferences.enabledRatings,
+      ),
+      'homeRowsMdblistRatingSources': _ratingSourcesForServer(
+        UserPreferences.homeRowsEnabledRatings,
+      ),
+      'mediaBarMdblistRatingSources': _ratingSourcesForServer(
+        UserPreferences.mediaBarEnabledRatings,
+      ),
       'homeRowOrder': _prefs.homeSectionsConfig
           .where((c) => c.enabled)
           .map((c) => c.type.serializedName)

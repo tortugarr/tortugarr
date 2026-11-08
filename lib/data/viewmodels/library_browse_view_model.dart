@@ -471,6 +471,10 @@ class LibraryBrowseViewModel extends ChangeNotifier {
     _groupBy = _prefs.get(
       UserPreferences.libraryGroupBy(_imagePrefKey),
     );
+    final folderViewPref = UserPreferences.libraryFolderView(_prefKey);
+    _folderViewChoice = _prefs.containsPreference(folderViewPref)
+        ? _prefs.get(folderViewPref)
+        : null;
     _prefs.addListener(_onPrefsChanged);
     userDataSync.addListener(_onUserDataChanged);
   }
@@ -604,10 +608,12 @@ class LibraryBrowseViewModel extends ChangeNotifier {
 
       // Folders come first until something else is picked, and a saved sort
       // these libraries don't offer goes back to that too.
-      if (isFolderyLibrary &&
+      if (folderView &&
           (!_prefs.containsPreference(UserPreferences.librarySortBy(_prefKey)) ||
               !sortOptions.contains(_sortBy))) {
         _sortBy = LibrarySortBy.foldersFirst;
+      } else if (!sortOptions.contains(_sortBy)) {
+        _sortBy = LibrarySortBy.name;
       }
 
       _refreshPosterSizeFromScope();
@@ -744,6 +750,8 @@ class LibraryBrowseViewModel extends ChangeNotifier {
           includeTypes.add('BoxSet');
         }
       }
+    } else if (folderView) {
+      collapseBoxSets = false;
     } else {
       switch (_collectionType) {
         case 'movies':
@@ -783,8 +791,11 @@ class LibraryBrowseViewModel extends ChangeNotifier {
       recursive = true;
       includeTypes = ['Book', 'Audio', 'AudioBook'];
       sortBy = 'SortName';
-    } else if (isFolderyLibrary) {
+    } else if (folderView) {
       recursive = false;
+    } else if (isHomeVideosLibrary || isMixedContentLibrary) {
+      // A flat list leaves out the folders the files sit in.
+      excludeTypes = {...?excludeTypes, ...kDirectoryItemTypes}.toList();
     }
 
     // A genre tag sits on anything the tree holds, so an unscoped browse comes
@@ -837,7 +848,7 @@ class LibraryBrowseViewModel extends ChangeNotifier {
     // Plain directories come in full with the first page and everything else
     // follows by name.
     final directoriesFirst =
-        isFolderyLibrary && _sortBy == LibrarySortBy.foldersFirst;
+        folderView && _sortBy == LibrarySortBy.foldersFirst;
     if (directoriesFirst) {
       sortBy = 'SortName';
       excludeTypes = {...?excludeTypes, ...kDirectoryItemTypes}.toList();
@@ -1626,15 +1637,32 @@ class LibraryBrowseViewModel extends ChangeNotifier {
       (includeItemTypes != null &&
           includeItemTypes!.any((t) => t == 'Movie' || t == 'Series'));
 
-  /// Only movies and series carry the metadata the groupings read.
-  bool get isGrouping =>
-      _groupBy != LibraryGroupBy.none && isMovieOrSeriesLibrary;
+  /// Only movies and series carry the metadata the groupings read, and folders
+  /// carry none of it.
+  bool get canGroup => isMovieOrSeriesLibrary && !folderView;
+
+  bool get isGrouping => _groupBy != LibraryGroupBy.none && canGroup;
 
   bool get isSongsBrowse =>
       includeItemTypes != null && includeItemTypes!.contains('Audio');
 
-  /// Libraries that list folders beside their items.
-  bool get isFolderyLibrary => isHomeVideosLibrary || isMixedContentLibrary;
+  bool get canFolderView => !isFilterBrowse && includeItemTypes == null;
+
+  bool? _folderViewChoice;
+
+  /// One level of the library's own folders at a time. Home videos and untyped
+  /// libraries start in it, everything else starts flat.
+  bool get folderView =>
+      canFolderView &&
+      (_folderViewChoice ?? (isHomeVideosLibrary || isMixedContentLibrary));
+
+  Future<void> setFolderView(bool value) async {
+    if (value == folderView) return;
+    _folderViewChoice = value;
+    await _prefs.set(UserPreferences.libraryFolderView(_prefKey), value);
+    _sortBy = _prefs.get(UserPreferences.librarySortBy(_prefKey));
+    await load();
+  }
 
   /// Only video holds a picture quality or a disc source worth filtering on.
   bool get supportsVideoFilters =>
@@ -1643,7 +1671,11 @@ class LibraryBrowseViewModel extends ChangeNotifier {
   /// Emby's items query takes no 4K flag and its series status holds only
   /// continuing and ended, so those two options stay out of the picker rather
   /// than sitting there doing nothing.
-  bool get supportsUhdFilter => _client.serverType == ServerType.jellyfin;
+  bool get supportsUhdFilter => _client.serverType != ServerType.emby;
+
+  /// Plex keeps no series status, likes, 3D, extras or disc source to filter
+  /// on, so those stay out of the picker for the same reason.
+  bool get supportsExtraFilters => _client.serverType != ServerType.plex;
 
   bool get supportsUnreleasedSeriesFilter =>
       _client.serverType == ServerType.jellyfin;
@@ -1653,7 +1685,7 @@ class LibraryBrowseViewModel extends ChangeNotifier {
     isMusicBrowse: isMusicBrowse,
     isSeriesLibrary: isSeriesLibrary,
     isBookLibrary: isBookLibrary,
-    isFolderyLibrary: isFolderyLibrary,
+    isFolderyLibrary: folderView,
     isMovieOrSeriesLibrary: isMovieOrSeriesLibrary,
     supportsMyRating: supportsMyRatingSort,
   );

@@ -12,11 +12,13 @@ import '../preference/user_preferences.dart';
 import '../util/loggable_url.dart';
 import '../util/platform_detection.dart';
 
+import 'apple_secondary_subtitle_controls.dart';
 import 'device_profile_builder.dart';
 import 'dolby_vision_av1.dart';
 import 'engine_trust.dart';
 import 'known_defects.dart';
 import 'letterbox_croppers.dart';
+import 'lossless_audio_bridge.dart';
 import 'server_transcode_capabilities.dart';
 
 /// Playback backend driving the native AetherEngine wrapper over a method
@@ -24,7 +26,8 @@ import 'server_transcode_capabilities.dart';
 /// music, audiobooks and offline playback. Unlike the tvOS sibling there is
 /// no native player UI: Flutter owns the OSD and the video arrives through
 /// the `moonfin/aether_video` platform view.
-class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
+class AetherBackend with SubtitleDelayState, AppleSecondarySubtitleControls
+    implements PlayerBackend, SubtitleLoadingBackend, SecondarySubtitleBackend {
   AetherBackend(this._prefs) {
     _eventSub = _events.receiveBroadcastStream().listen(
       _handleEvent,
@@ -88,6 +91,7 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   final _errorStream = StreamController<Map<String, dynamic>>.broadcast();
   final _remoteCommandStream =
       StreamController<Map<String, dynamic>>.broadcast();
+  final _systemVolumeStream = StreamController<double>.broadcast();
 
   @override
   Stream<Map<String, dynamic>> get errorStream => _errorStream.stream;
@@ -96,6 +100,9 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   /// engine's own Now Playing session, which audio_service never sees.
   Stream<Map<String, dynamic>> get remoteCommandStream =>
       _remoteCommandStream.stream;
+
+  /// iOS device volume changes, read without touching the audio session.
+  Stream<double> get systemVolumeStream => _systemVolumeStream.stream;
 
   /// Fills that session in. iOS shows it in place of the audio_service entry
   /// while music plays, so without this the card has no title or artwork.
@@ -120,6 +127,13 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
       return null;
     }
   }
+
+  @override
+  Future<T?> invokeAppleSecondaryControl<T>(
+    String method, [
+    dynamic arguments,
+  ]) =>
+      _invoke<T>(method, arguments);
 
   @override
   bool get isSubtitleLoading => _isSubtitleLoading;
@@ -184,6 +198,9 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
       case 'next':
       case 'previous':
         _remoteCommandStream.add(map.cast<String, dynamic>());
+      case 'systemVolume':
+        final volume = map['value'];
+        if (volume is num) _systemVolumeStream.add(volume.toDouble());
       case 'playerError':
       case 'error':
         _logPlaybackError(map);
@@ -267,6 +284,7 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
         ? mediaItem
         : payload['url']?.toString() ?? '';
     if (_disposed || url.isEmpty) return;
+    updateSubtitleDelaySession(payload['subtitleDelaySessionId'] as int?);
 
     final headers = payload['headers'] is Map
         ? (payload['headers'] as Map).map(
@@ -299,6 +317,11 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
       'autoPlay': autoPlay,
       'startPositionMs': startPosition.inMilliseconds,
       'audioStreamIndex': (payload['audioStreamIndex'] as num?)?.toInt() ?? -1,
+      'audioBridgeLossless': usesLosslessAudioBridge(
+        _prefs.detectedAudioCapabilities,
+        maxAudioChannels: _prefs.resolveMaxAudioChannels(),
+        downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      ),
       'isLive': payload['isLive'] == true,
       'mediaType': payload['mediaType']?.toString() ?? 'video',
       'normalizationGainDb':
@@ -309,6 +332,16 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
           _prefs.get(UserPreferences.subtitleMode) == SubtitleMode.none,
       'dolbyVisionBaseLayerOnly': needsBaseLayerOnlyForDolbyVisionAv1(payload),
       'externalSubtitles': payload['externalSubtitles'] ?? const [],
+      'secondarySubtitleTrackId': payload['secondarySubtitleTrackId'],
+      'secondarySubtitleUrl': payload['secondarySubtitleUrl'],
+      'subtitleDelayMs': (subtitleDelaySeconds * 1000).round(),
+      'secondarySubtitleDelayMs': payload['secondarySubtitleDelayMs'] ?? 0,
+      'secondarySubtitleOffset': PlaybackManager.clampSecondarySubtitleOffset(
+        (payload['secondarySubtitleOffset'] as num?)?.toDouble() ??
+            PlaybackManager.defaultSecondarySubtitleOffset,
+      ),
+      'secondarySubtitleFontSize': payload['secondarySubtitleFontSize'],
+      'secondarySubtitleTextColor': payload['secondarySubtitleTextColor'],
     });
   }
 
@@ -441,17 +474,22 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   }) {
     final maxBitrate = int.tryParse(_prefs.get(UserPreferences.maxBitrate));
     final maxResolution = _prefs.get(UserPreferences.maxVideoResolution);
+    final softwareAv1Uhd =
+        PlatformDetection.offersAv1SoftwareUhd &&
+        _prefs.get(UserPreferences.av1SoftwareUhdDirectPlay);
     final audioCapabilityProfile = _prefs.detectedAudioCapabilities;
 
     return DeviceProfileBuilder.build(
       maxBitrateMbps: maxBitrate,
       audioCapabilityProfile: audioCapabilityProfile,
       audioFallbackCodec: _prefs.resolveAudioFallbackCodec(),
+      transcodeAudioCodecs: _prefs.resolveTranscodeAudioCodecs(),
       ac3PassthroughEnabled: _prefs.resolveAc3PassthroughEnabled(),
       eac3PassthroughEnabled: _prefs.resolveEac3PassthroughEnabled(),
       dtsCorePassthroughEnabled: _prefs.resolveDtsCorePassthroughEnabled(),
       trueHdPassthroughEnabled: _prefs.resolveTrueHdPassthroughEnabled(),
       downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      maxAudioChannels: _prefs.resolveMaxAudioChannels(),
       // AetherEngine plays every advertised audio codec: AAC/AC3/EAC3(+JOC
       // Atmos)/FLAC/ALAC are stream-copied intact, and TrueHD/DTS/MP3/Opus/
       // Vorbis/PCM are bridged to EAC3 or FLAC on-device.
@@ -479,7 +517,9 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
       supportsAv1: PlatformDetection.supportsAv1,
       supportsAv1Main10: PlatformDetection.supportsAv1Main10,
       supportsAv1DolbyVision: PlatformDetection.supportsAv1DolbyVision,
-      supportsAv1Hdr10: PlatformDetection.supportsAv1Hdr10,
+      supportsAv1Hdr10:
+          PlatformDetection.supportsAv1Hdr10 ||
+          (softwareAv1Uhd && PlatformDetection.supportsHevcHdr10),
       supportsAv1Hdr10Plus: PlatformDetection.supportsAv1Hdr10Plus,
       rendersAv1DoviViaHdr10BaseLayer: true,
       supportsVc1: PlatformDetection.supportsVc1,
@@ -487,8 +527,12 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
       maxResolutionAvcHeight: PlatformDetection.maxResolutionAvcHeight,
       maxResolutionHevcWidth: PlatformDetection.maxResolutionHevcWidth,
       maxResolutionHevcHeight: PlatformDetection.maxResolutionHevcHeight,
-      maxResolutionAv1Width: PlatformDetection.maxResolutionAv1Width,
-      maxResolutionAv1Height: PlatformDetection.maxResolutionAv1Height,
+      maxResolutionAv1Width: softwareAv1Uhd
+          ? 3840
+          : PlatformDetection.maxResolutionAv1Width,
+      maxResolutionAv1Height: softwareAv1Uhd
+          ? 2160
+          : PlatformDetection.maxResolutionAv1Height,
       maxResolutionVc1Width: PlatformDetection.maxResolutionVc1Width,
       maxResolutionVc1Height: PlatformDetection.maxResolutionVc1Height,
       supportsDvProfile5: PlatformDetection.supportsDoViProfile5,
@@ -573,19 +617,6 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   }
 
   @override
-  Future<void> setSecondarySubtitle({String? url, String? codec}) async {}
-
-  @override
-  Future<void> setSecondarySubtitleDelay(double seconds) async {}
-
-  @override
-  Future<void> configureSecondarySubtitleStyle({
-    double? fontSize,
-    double? verticalOffset,
-    int? textColor,
-  }) async {}
-
-  @override
   int? get activeSubtitleTrackIndex => _activeSubtitleTrackIndex;
 
   @override
@@ -645,6 +676,7 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
 
   @override
   Future<void> setSubtitleDelay(double seconds) async {
+    subtitleDelaySeconds = seconds;
     await _invoke<void>('setSubtitleDelay', {
       'delayMs': (seconds * 1000).round(),
     });
@@ -720,6 +752,9 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
   @override
   bool get demuxesEmbeddedSubtitles => true;
 
+  @override
+  bool get decodesHevcOnlyFromOriginalFile => false;
+
   // Same engine as the Apple TV backend, so a seek costs the same reopen.
   // Provisional pending a trace of its own.
   @override
@@ -763,6 +798,7 @@ class AetherBackend implements PlayerBackend, SubtitleLoadingBackend {
     _completedStream.close();
     _errorStream.close();
     _remoteCommandStream.close();
+    _systemVolumeStream.close();
     _tracksChangedController.close();
     _subtitleLoadingStream.close();
   }

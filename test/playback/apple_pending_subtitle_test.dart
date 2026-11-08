@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
-import 'package:moonfin/playback/appletv_backend.dart';
+import 'package:moonfin/playback/native_apple_player_backend.dart';
 import 'package:moonfin/playback/aether_backend.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:playback_core/playback_core.dart';
@@ -11,7 +11,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   for (final tv in [true, false]) {
     group(tv ? 'tvOS' : 'Aether', () {
-      final prefix = tv ? 'appletv_video' : 'ios_aether';
+      final prefix = tv ? 'native_apple_player' : 'ios_aether';
       final calls = <MethodCall>[];
       late PlayerBackend backend;
       late UserPreferences prefs;
@@ -49,7 +49,7 @@ void main() {
         final store = PreferenceStore();
         await store.init();
         prefs = UserPreferences(store);
-        backend = tv ? AppleTvBackend(prefs) : AetherBackend(prefs);
+        backend = tv ? NativeApplePlayerBackend(prefs) : AetherBackend(prefs);
         await Future<void>.delayed(Duration.zero);
       });
       tearDown(() {

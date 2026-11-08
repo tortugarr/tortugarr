@@ -1,16 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jellyfin_preference/jellyfin_preference.dart';
-import 'package:moonfin/playback/appletv_backend.dart';
+import 'package:moonfin/playback/native_apple_player_backend.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  const control = MethodChannel('moonfin/appletv_video_control');
-  const events = MethodChannel('moonfin/appletv_video_events');
+  const control = MethodChannel('moonfin/native_apple_player_control');
+  const events = MethodChannel('moonfin/native_apple_player_events');
   final calls = <MethodCall>[];
-  late AppleTvBackend backend;
+  late NativeApplePlayerBackend backend;
 
   setUp(() async {
     calls.clear();
@@ -24,7 +24,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final store = PreferenceStore();
     await store.init();
-    backend = AppleTvBackend(UserPreferences(store));
+    backend = NativeApplePlayerBackend(UserPreferences(store));
   });
 
   tearDown(() => backend.dispose());

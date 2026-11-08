@@ -1260,8 +1260,8 @@ class _SeerrLoginCardState extends State<_SeerrLoginCard> {
                 TextFieldType.username => InputPurpose.username,
                 _ => InputPurpose.text,
               },
-              preferSystemIme: _userPreferences.get(
-                UserPreferences.preferSystemImeKeyboard,
+              keyboardStyle: _userPreferences.get(
+                UserPreferences.keyboardStyle,
               ),
               hint: label,
               textFieldType: tvType,

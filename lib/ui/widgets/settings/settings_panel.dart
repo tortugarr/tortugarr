@@ -9,7 +9,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../util/idiom/app_ui_idiom.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/focus/dpad_keys.dart';
-import '../overlay_sheet.dart';
 import 'preference_tiles.dart';
 
 class SettingsPanel extends StatelessWidget {
@@ -187,7 +186,6 @@ class _SettingsNavigatorState extends State<_SettingsNavigator> {
       return;
     }
     _rootDismissInProgress = true;
-    DialogBackSuppressor.markDismissed();
     Navigator.of(context, rootNavigator: true).pop();
   }
 

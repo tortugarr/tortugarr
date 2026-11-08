@@ -54,6 +54,8 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final cinemaEnabled = _prefs.get(UserPreferences.cinemaModeEnabled) ||
+        _prefs.get(UserPreferences.cinemaModeEpisodesEnabled);
     final nextUpBehavior = _prefs.get(UserPreferences.nextUpBehavior);
     final mediaSegmentActions = _prefs.get(UserPreferences.mediaSegmentActions);
     final segmentActions = parseMediaSegmentActions(mediaSegmentActions);
@@ -85,6 +87,13 @@ class _AutomationQueueScreenState extends State<_AutomationQueueScreen> {
                 subtitle: l10n.settingsCinemaModeEpisodesSubtitle,
                 icon: Icons.live_tv,
               ),
+              if (cinemaEnabled)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.cinemaModeSkipEnabled,
+                  title: l10n.cinemaSkipPrerolls,
+                  subtitle: l10n.cinemaSkipPrerollsDescription,
+                  icon: Icons.skip_next,
+                ),
               // Every type writes to the one preference, so each tile is
               // keyed on the current value. The tiles seed their notifier in
               // initState, so without the key a tile left over from the

@@ -72,6 +72,7 @@ bool bottomNavTabMatchesRoute(BottomNavTab tab, String route) {
     BottomNavTab.search => route == Destinations.search,
     BottomNavTab.libraries => under('/library') ||
         under('/library-view') ||
+        under('/folder') ||
         under('/music') ||
         under('/books') ||
         under('/games'),
@@ -79,8 +80,6 @@ bool bottomNavTabMatchesRoute(BottomNavTab tab, String route) {
     BottomNavTab.genres => route == Destinations.allGenres,
     BottomNavTab.liveTv => under(Destinations.liveTv),
     BottomNavTab.discover => under('/seerr'),
-    BottomNavTab.folders =>
-      route == Destinations.folderView || under('/folder'),
   };
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moonfin/data/models/aggregated_item.dart';
+import 'package:moonfin/l10n/app_localizations.dart';
 import 'package:moonfin/ui/widgets/book/book_navigation.dart';
 
 AggregatedItem _item(String type, {bool isFolder = false}) => AggregatedItem(
@@ -38,7 +39,13 @@ void main() {
       ],
     );
     addTearDown(router.dispose);
-    await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+    await tester.pumpWidget(
+      MaterialApp.router(
+        routerConfig: router,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
   }
 
   Future<void> open(WidgetTester tester, AggregatedItem item) async {
@@ -86,5 +93,16 @@ void main() {
 
     expect(find.textContaining('/item/id-1?'), findsOneWidget);
     expect(find.textContaining('autoPlay=true'), findsOneWidget);
+  });
+
+  testWidgets("the Apple TV dialog says why a book won't open", (tester) async {
+    await pumpRouter(tester);
+    showBookReadingUnavailableDialog(home);
+    await tester.pumpAndSettle();
+
+    expect(find.text("Books can't be read on Apple TV"), findsOneWidget);
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    expect(find.text("Books can't be read on Apple TV"), findsNothing);
   });
 }

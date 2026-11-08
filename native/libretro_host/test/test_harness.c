@@ -429,6 +429,46 @@ static void test_analog_passthrough(void) {
   lh_destroy(host);
 }
 
+// The run loop samples the pointer once per frame, so a tap shorter than a
+// frame has to be held over to the next one.
+static void test_pointer_tap_latch(void) {
+  printf("pointer tap latch:\n");
+  lh_callbacks cb;
+  memset(&cb, 0, sizeof(cb));
+  lh_host *host = lh_create(LH_FORMAT_RGBA8888, cb);
+  CHECK(host != NULL, "pointer test host allocates");
+  if (!host) return;
+
+  lh_set_pointer(host, 0, 1, 500, -600);
+  lh_set_pointer(host, 0, 0, 0, 0);
+  lh_test_poll_input(host);
+  CHECK(lh_test_read_pointer(host, 0, 2) == 1,
+        "a tap released before the frame latch is still pressed for a frame");
+  CHECK(lh_test_read_pointer(host, 0, 0) == 500 &&
+            lh_test_read_pointer(host, 0, 1) == -600,
+        "the latched tap keeps the position it landed on, not the release's");
+  lh_test_core_poll_input(host);
+  CHECK(lh_test_read_pointer(host, 0, 2) == 1,
+        "a core poll inside the same frame still sees the latched tap");
+  lh_test_poll_input(host);
+  CHECK(lh_test_read_pointer(host, 0, 2) == 0,
+        "the latched tap is released on the next frame");
+
+  lh_set_pointer(host, 0, 1, 10, 20);
+  lh_test_poll_input(host);
+  lh_set_pointer(host, 0, 1, 30, 40);
+  lh_test_poll_input(host);
+  CHECK(lh_test_read_pointer(host, 0, 2) == 1 &&
+            lh_test_read_pointer(host, 0, 0) == 30,
+        "a held touch stays pressed and follows the finger");
+  lh_set_pointer(host, 0, 0, 0, 0);
+  lh_test_poll_input(host);
+  CHECK(lh_test_read_pointer(host, 0, 2) == 0,
+        "lifting a held touch releases it on the next frame, not one later");
+
+  lh_destroy(host);
+}
+
 // ---------------------------------------------------------------------------
 // Coverage that requires calling through the real input_state_cb dispatch
 // (index/id mapping, derivation from the digital mask, and the domains other
@@ -2660,6 +2700,7 @@ int main(int argc, char **argv) {
   test_input_latch();
   test_input_transition_latch();
   test_analog_passthrough();
+  test_pointer_tap_latch();
   test_analog_via_core(core_path, rom_path, work_dir);
   test_analog_stick_ports(core_path, rom_path, work_dir);
   test_vfs_zip(core_path, work_dir);

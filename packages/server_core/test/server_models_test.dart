@@ -56,6 +56,16 @@ void main() {
       expect(policy.canFetchRemoteSubtitles, isTrue);
     });
 
+    test('an administrator may fetch without either flag', () {
+      final policy = UserPolicy.fromJson({
+        'IsAdministrator': true,
+        'EnableSubtitleManagement': false,
+        'EnableSubtitleDownloading': false,
+      });
+
+      expect(policy.canFetchRemoteSubtitles, isTrue);
+    });
+
     test('an account granted neither may not', () {
       final policy = UserPolicy.fromJson({
         'EnableSubtitleManagement': false,
@@ -92,6 +102,105 @@ void main() {
 
       expect(json['OrderedViews'], ['a', 'b']);
       expect(json.containsKey('orderedViews'), isFalse);
+    });
+  });
+
+  group('PlaybackMediaSource placeholder', () {
+    test('a source with no streams that only transcodes is one', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': '3',
+        'SupportsTranscoding': true,
+      });
+
+      expect(source.isUnprobedPlaceholder, isTrue);
+    });
+
+    test('a probed source is not', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': '12:1:0',
+        'SupportsDirectPlay': true,
+        'MediaStreams': [
+          {'Type': 'Video', 'Codec': 'h264'},
+        ],
+      });
+
+      expect(source.isUnprobedPlaceholder, isFalse);
+    });
+
+    test('a live stream waiting to be tuned is not', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': 'live',
+        'LiveStreamId': 'abc',
+        'SupportsTranscoding': true,
+      });
+
+      expect(source.isUnprobedPlaceholder, isFalse);
+    });
+  });
+
+  group('PlaybackMediaSource transcode reasons', () {
+    test('reads them from the Jellyfin transcode URL', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': 'src',
+        'TranscodingUrl': '/videos/item/master.m3u8?MediaSourceId=src'
+            '&VideoCodec=h264&TranscodeReasons=VideoResolutionNotSupported,'
+            'VideoRangeTypeNotSupported&api_key=x',
+      });
+
+      expect(source.transcodingReasons, [
+        'VideoResolutionNotSupported',
+        'VideoRangeTypeNotSupported',
+      ]);
+    });
+
+    test('decodes an escaped list', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': 'src',
+        'TranscodingUrl':
+            '/videos/item/master.m3u8?TranscodeReasons=ContainerNotSupported%2C%20AudioCodecNotSupported',
+      });
+
+      expect(source.transcodingReasons, [
+        'ContainerNotSupported',
+        'AudioCodecNotSupported',
+      ]);
+    });
+
+    test('prefers a reasons field over the URL', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': 'src',
+        'TranscodeReasons': ['AudioCodecNotSupported'],
+        'TranscodingUrl':
+            '/videos/item/master.m3u8?TranscodeReasons=VideoCodecNotSupported',
+      });
+
+      expect(source.transcodingReasons, ['AudioCodecNotSupported']);
+    });
+
+    test('splits and trims a reasons string', () {
+      final source = PlaybackMediaSource.fromJson({
+        'Id': 'src',
+        'TranscodeReasons': 'ContainerNotSupported, AudioCodecNotSupported',
+      });
+
+      expect(source.transcodingReasons, [
+        'ContainerNotSupported',
+        'AudioCodecNotSupported',
+      ]);
+    });
+
+    test('stays empty when nothing names a reason', () {
+      expect(
+        PlaybackMediaSource.fromJson({
+          'Id': 'src',
+          'TranscodingUrl': '/videos/item/master.m3u8?MediaSourceId=src',
+        }).transcodingReasons,
+        isEmpty,
+      );
+      expect(
+        PlaybackMediaSource.fromJson({'Id': 'src'}).transcodingReasons,
+        isEmpty,
+      );
     });
   });
 }

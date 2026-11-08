@@ -528,10 +528,6 @@
     "@discoverySubjects": {
         "description": "Title for the book discovery subject picker panel"
     },
-    "pickDiscoverySubjects": "둘러보기에 표시할 주제 피드를 선택하세요.",
-    "@pickDiscoverySubjects": {
-        "description": "Instruction text in discovery subject picker"
-    },
     "apply": "적용",
     "@apply": {
         "description": "Button label to apply selected options"
@@ -547,27 +543,6 @@
     "audiobookGenres": "오디오북 장르",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
-    },
-    "pickAudiobookGenres": "오디오북 둘러보기에 표시할 장르를 선택하세요.",
-    "@pickAudiobookGenres": {
-        "description": "Instruction text in audiobook genre picker"
-    },
-    "discoverAudiobooks": "오디오북 둘러보기",
-    "@discoverAudiobooks": {
-        "description": "Section title for audiobook discovery"
-    },
-    "librivoxDescription": "LibriVox의 인기 공개 도메인 타이틀.",
-    "@librivoxDescription": {
-        "description": "Subtitle for audiobook discovery section"
-    },
-    "titlesCount": "{count}개 작품",
-    "@titlesCount": {
-        "description": "Label showing number of titles",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
     },
     "scrollLeft": "왼쪽으로 스크롤",
     "@scrollLeft": {
@@ -744,10 +719,6 @@
     "discover": "둘러보기",
     "@discover": {
         "description": "Section title for book discovery"
-    },
-    "trendingTitlesOpenLibrary": "Open Library의 주제별 인기 도서.",
-    "@trendingTitlesOpenLibrary": {
-        "description": "Subtitle for book discovery section"
     },
     "noBookmarkedItems": "아직 북마크한 항목이 없습니다",
     "@noBookmarkedItems": {
@@ -3500,14 +3471,6 @@
     "@showLibrariesFromAllServers": {
         "description": "Description for multi-server libraries"
     },
-    "enableFolderView": "폴더 보기 활성화",
-    "@enableFolderView": {
-        "description": "Setting for enabling folder view"
-    },
-    "showFolderBrowsingOption": "폴더 탐색 옵션 표시",
-    "@showFolderBrowsingOption": {
-        "description": "Description for folder view"
-    },
     "libraryVisibility": "라이브러리 표시 여부",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
@@ -4230,10 +4193,6 @@
     "featuredContentAppearance": "추천 콘텐츠, 모양",
     "@featuredContentAppearance": {
         "description": "Media bar settings subtitle"
-    },
-    "posterSizeImageTypeFolderView": "포스터 크기, 이미지 유형, 폴더 보기",
-    "@posterSizeImageTypeFolderView": {
-        "description": "Library display settings subtitle"
     },
     "mdbListTmdbRatingSources": "MDBList, TMDB 및 평가 소스",
     "@mdbListTmdbRatingSources": {
@@ -7300,7 +7259,6 @@
     "failedToExtractCbrArchive": ".cbr 압축 파일을 풀지 못했습니다.",
     "cb7ExtractionUnavailable": "이 플랫폼에서는 CB7 압축 해제를 사용할 수 없습니다.",
     "cb7ExtractionPluginUnavailable": "이 플랫폼에서는 CB7 압축 해제 플러그인을 사용할 수 없습니다.",
-    "closeGenrePanel": "장르 패널 닫기",
     "loadingShuffle": "셔플을 불러오는 중...",
     "libraryShuffleLabel": "라이브러리 셔플",
     "randomShuffleLabel": "랜덤 셔플",

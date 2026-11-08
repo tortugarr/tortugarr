@@ -22,9 +22,34 @@ class ServerTypeIcon extends StatelessWidget {
       painter: switch (serverType) {
         ServerType.jellyfin => _JellyfinLogoPainter(effectiveColor),
         ServerType.emby => _EmbyLogoPainter(effectiveColor),
+        ServerType.plex => _PlexLogoPainter(effectiveColor),
       },
     );
   }
+}
+
+class _PlexLogoPainter extends CustomPainter {
+  final Color color;
+  _PlexLogoPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.scale(size.width / 256);
+
+    final path = Path()
+      ..moveTo(64, 24)
+      ..lineTo(128, 24)
+      ..lineTo(192, 128)
+      ..lineTo(128, 232)
+      ..lineTo(64, 232)
+      ..lineTo(128, 128)
+      ..close();
+
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_PlexLogoPainter old) => old.color != color;
 }
 
 class _JellyfinLogoPainter extends CustomPainter {

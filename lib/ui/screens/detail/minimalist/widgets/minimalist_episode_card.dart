@@ -23,6 +23,7 @@ class MinimalistEpisodeCard extends StatefulWidget {
   final String? imageUrl;
   final double width;
   final bool isFocused;
+  final bool isCurrent;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -32,6 +33,7 @@ class MinimalistEpisodeCard extends StatefulWidget {
     required this.imageUrl,
     required this.width,
     this.isFocused = false,
+    this.isCurrent = false,
     this.onTap,
     this.onLongPress,
   });
@@ -76,7 +78,13 @@ class _MinimalistEpisodeCardState extends State<MinimalistEpisodeCard> {
                     border: Border.all(
                       color: _highlighted
                           ? AppColorScheme.onSurface
-                          : Colors.transparent,
+                          : widget.isCurrent
+                              ? (ThemeRegistry.active.id ==
+                                        ThemeRegistry.neonPulseId
+                                    ? const Color(0xFF00FFFF)
+                                    : AppColorScheme.accent
+                                          .withValues(alpha: 0.7))
+                              : Colors.transparent,
                       width: 3,
                     ),
                   ),

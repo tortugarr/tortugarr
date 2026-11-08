@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "appTitle": "Tortugarr",
+    "appTitle": "Moonfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Tortugarr version {version}",
+    "appVersionFooter": "Moonfin version {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Tortugarr n'a pas pu accéder au trousseau de votre système. La connexion peut continuer, mais le stockage sécurisé des jetons peut rester indisponible tant que le trousseau n'est pas déverrouillé.",
+    "secureStorageUnavailableMessage": "Moonfin n'a pas pu accéder au trousseau de votre système. La connexion peut continuer, mais le stockage sécurisé des jetons peut rester indisponible tant que le trousseau n'est pas déverrouillé.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -172,13 +172,13 @@
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Tortugarr",
+    "themeMoonfin": "Moonfin",
     "@themeMoonfin": {
-        "description": "Display name for the Tortugarr theme"
+        "description": "Display name for the Moonfin theme"
     },
-    "themeMoonfinSubtitle": "Le look actuel de Tortugarr que vous aimez tous.",
+    "themeMoonfinSubtitle": "Le look actuel de Moonfin que vous aimez tous.",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Tortugarr theme"
+        "description": "Preview description for the Moonfin theme"
     },
     "themeNeonPulse": "Neon Pulse",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Quitter Tortugarr ?",
+    "exitApp": "Quitter Moonfin ?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -528,10 +528,6 @@
     "@discoverySubjects": {
         "description": "Title for the book discovery subject picker panel"
     },
-    "pickDiscoverySubjects": "Choisissez quels flux de sujets afficher dans Découvrir.",
-    "@pickDiscoverySubjects": {
-        "description": "Instruction text in discovery subject picker"
-    },
     "apply": "Appliquer",
     "@apply": {
         "description": "Button label to apply selected options"
@@ -539,27 +535,6 @@
     "audiobookGenres": "Genres de livres audio",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
-    },
-    "pickAudiobookGenres": "Choisissez quels genres afficher dans Découvrir pour les livres audio.",
-    "@pickAudiobookGenres": {
-        "description": "Instruction text in audiobook genre picker"
-    },
-    "discoverAudiobooks": "Découvrir des livres audio",
-    "@discoverAudiobooks": {
-        "description": "Section title for audiobook discovery"
-    },
-    "librivoxDescription": "Titres populaires du domaine public de LibriVox.",
-    "@librivoxDescription": {
-        "description": "Subtitle for audiobook discovery section"
-    },
-    "titlesCount": "{count} titres",
-    "@titlesCount": {
-        "description": "Label showing number of titles",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
     },
     "scrollLeft": "Faire défiler vers la gauche",
     "@scrollLeft": {
@@ -736,10 +711,6 @@
     "discover": "Découvrir",
     "@discover": {
         "description": "Section title for book discovery"
-    },
-    "trendingTitlesOpenLibrary": "Titres tendance par sujet depuis Open Library.",
-    "@trendingTitlesOpenLibrary": {
-        "description": "Subtitle for book discovery section"
     },
     "noBookmarkedItems": "Aucun élément dans les marque-pages pour le moment",
     "@noBookmarkedItems": {
@@ -3075,7 +3046,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "Non défini. Tortugarr tentera d’utiliser un mpv.conf par défaut dans les dossiers app/data.",
+    "notSetMpvConf": "Non défini. Moonfin tentera d’utiliser un mpv.conf par défaut dans les dossiers app/data.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3282,7 +3253,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Téléchargements/Tortugarr — visible pour les autres applications",
+    "downloadsVisibleToOtherApps": "Téléchargements/Moonfin — visible pour les autres applications",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3318,7 +3289,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "Les médias téléchargés seront enregistrés dans Téléchargements/Tortugarr sur votre appareil. Ces fichiers seront visibles par d’autres applications, comme votre galerie ou votre lecteur de musique.\n\nLes téléchargements existants resteront à leur emplacement actuel.",
+    "saveToDownloadsFolderDescription": "Les médias téléchargés seront enregistrés dans Téléchargements/Moonfin sur votre appareil. Ces fichiers seront visibles par d’autres applications, comme votre galerie ou votre lecteur de musique.\n\nLes téléchargements existants resteront à leur emplacement actuel.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3446,14 +3417,6 @@
     "@showLibrariesFromAllServers": {
         "description": "Description for multi-server libraries"
     },
-    "enableFolderView": "Activer la vue dossiers",
-    "@enableFolderView": {
-        "description": "Setting for enabling folder view"
-    },
-    "showFolderBrowsingOption": "Afficher l’option de navigation par dossiers",
-    "@showFolderBrowsingOption": {
-        "description": "Description for folder view"
-    },
     "libraryVisibility": "Visibilité des bibliothèques",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
@@ -3503,9 +3466,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Tortugarr",
+    "mediaBarModeMoonfin": "Moonfin",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Tortugarr"
+        "description": "Media bar style option: Moonfin"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4144,10 +4107,6 @@
     "@featuredContentAppearance": {
         "description": "Media bar settings subtitle"
     },
-    "posterSizeImageTypeFolderView": "Taille des affiches, type d’image, vue des dossiers",
-    "@posterSizeImageTypeFolderView": {
-        "description": "Library display settings subtitle"
-    },
     "mdbListTmdbRatingSources": "MDBList, TMDB et sources des notes",
     "@mdbListTmdbRatingSources": {
         "description": "Ratings settings subtitle"
@@ -4206,9 +4165,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Lire dans Tortugarr",
+    "playInMoonfin": "Lire dans Moonfin",
     "@playInMoonfin": {
-        "description": "Button to play available media in Tortugarr"
+        "description": "Button to play available media in Moonfin"
     },
     "requestedByName": "Demandé par {name}",
     "@requestedByName": {
@@ -4260,7 +4219,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Élément introuvable dans votre bibliothèque Tortugarr",
+    "itemNotFoundInLibrary": "Élément introuvable dans votre bibliothèque Moonfin",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4516,7 +4475,7 @@
         }
     },
     "adminServerRebootInProgress": "Redémarrage du serveur en cours",
-    "adminServerRebootMessage": "Redémarrage du serveur en cours, veuillez redémarrer Tortugarr",
+    "adminServerRebootMessage": "Redémarrage du serveur en cours, veuillez redémarrer Moonfin",
     "adminActiveSessions": "Sessions actives",
     "adminSessionsLoadFailed": "Échec du chargement des sessions",
     "adminNoActiveSessions": "Aucune session active",
@@ -6307,11 +6266,11 @@
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
-    "libraryVisibilityDescription": "Affichez ou masquez chaque bibliothèque sur la page d'accueil. Redémarrez Tortugarr pour appliquer les modifications.",
+    "libraryVisibilityDescription": "Affichez ou masquez chaque bibliothèque sur la page d'accueil. Redémarrez Moonfin pour appliquer les modifications.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
-    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
+    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -6552,7 +6511,7 @@
     "settingsShowGenresButtonInNavigation": "Afficher le bouton des genres dans la barre de navigation",
     "settingsShowFavoritesButtonInNavigation": "Afficher le bouton Favoris dans la barre de navigation",
     "settingsShowLibrariesButtonInNavigation": "Afficher le bouton des bibliothèques dans la barre de navigation",
-    "settingsLibraryVisibilitySubtitle": "Affichez ou masquez chaque bibliothèque sur la page d'accueil. Redémarrez Tortugarr pour appliquer les modifications.",
+    "settingsLibraryVisibilitySubtitle": "Affichez ou masquez chaque bibliothèque sur la page d'accueil. Redémarrez Moonfin pour appliquer les modifications.",
     "settingsMediaBarAndLocalPreviews": "Barre multimédia et aperçus locaux",
     "settingsVisualOverlays": "Superpositions visuelles",
     "settingsSeasonalSurprise": "Surprise saisonnière",
@@ -6571,14 +6530,14 @@
     "settingsJoinDiscord": "Rejoignez Discord",
     "settingsJoinDiscordSubtitle": "Discutez avec la communauté",
     "settingsJoinTheDiscord": "Rejoignez le Discord",
-    "settingsSupportMoonfin": "Soutenir Tortugarr",
+    "settingsSupportMoonfin": "Soutenir Moonfin",
     "settingsLegal": "LÉGAL",
     "settingsLicenses": "Licences",
     "settingsOpenSourceLicenseNotices": "Avis de licence open source",
     "settingsPrivacyPolicy": "Politique de confidentialité",
-    "settingsPrivacyPolicySubtitle": "Comment Tortugarr gère vos données",
+    "settingsPrivacyPolicySubtitle": "Comment Moonfin gère vos données",
     "settingsCheckForUpdates": "Vérifier les mises à jour",
-    "settingsCheckForUpdatesSubtitle": "Recherchez la dernière version de Tortugarr",
+    "settingsCheckForUpdatesSubtitle": "Recherchez la dernière version de Moonfin",
     "settingsPoweredByFlutter": "Propulsé par Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# mention de licence} other {# mentions de licence}}",
     "@settingsLicenseNoticesCount": {
@@ -6646,7 +6605,7 @@
             }
         }
     },
-    "settingsLiveTvDirect": "Télévision en direct en direct",
+    "settingsLiveTvDirect": "Lecture directe pour la TV en direct",
     "settingsLiveTvDirectSubtitle": "Activer la lecture directe pour la télévision en direct",
     "settingsOpenGroups": "Groupes ouverts",
     "settingsOpenGroupsSubtitle": "Créer, rejoindre ou gérer des groupes SyncPlay",
@@ -7035,7 +6994,7 @@
         }
     },
     "savedThemesTitle": "Thèmes enregistrés",
-    "savedThemesDescription": "Ce sont des thèmes téléchargés depuis le plugin Tortugarr pour le serveur actuel. La suppression supprime uniquement cette copie locale.",
+    "savedThemesDescription": "Ce sont des thèmes téléchargés depuis le plugin Moonfin pour le serveur actuel. La suppression supprime uniquement cette copie locale.",
     "savedThemesEmpty": "Aucun thème enregistré n'a été trouvé pour ce serveur.",
     "savedThemesCurrentThemeId": "{themeId} • Actuellement actif",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7008,7 @@
     "savedThemesDeleteTooltip": "Supprimer le thème enregistré",
     "savedThemesManageSubtitle": "Gérer les thèmes de plugin téléchargés sur cet appareil",
     "themeEditor": "Éditeur de thème",
-    "themeEditorSubtitle": "Ouvrez l'éditeur de thème Tortugarr dans votre navigateur",
+    "themeEditorSubtitle": "Ouvrez l'éditeur de thème Moonfin dans votre navigateur",
     "homeScreen": "Écran d'accueil",
     "bottomBar": "Barre inférieure",
     "homeRowsStyleClassic": "Classique",
@@ -7098,12 +7057,12 @@
     "preferSdhSubtitles": "Préférer les sous-titres SME",
     "preferSdhSubtitlesSubtitle": "Donnez la priorité aux pistes de sous-titres SME/CC lors de la sélection automatique.",
     "webDiagnostics": "Diagnostic Web",
-    "webDiagnosticsTitle": "Tortugarr Diagnostic Web",
+    "webDiagnosticsTitle": "Moonfin Diagnostic Web",
     "webDiagnosticsIntro": "Utilisez cette page pour diagnostiquer les problèmes de connectivité du navigateur (CORS, contenu mixte et paramètres de découverte).",
     "webDiagnosticsDetectedMixedContentFailure": "Échec de contenu mixte détecté",
     "webDiagnosticsDetectedCorsPreflightFailure": "Échec CORS/Preflight détecté",
-    "webDiagnosticsMixedContentFailureBody": "Tortugarr a détecté une page HTTPS essayant d'appeler une URL de serveur HTTP. Les navigateurs bloquent cette demande avant qu'elle n'atteigne votre serveur.",
-    "webDiagnosticsCorsFailureBody": "Tortugarr a détecté un échec de requête au niveau du navigateur, généralement provoqué par l'absence d'en-têtes CORS ou de contrôle en amont sur le serveur multimédia.",
+    "webDiagnosticsMixedContentFailureBody": "Moonfin a détecté une page HTTPS essayant d'appeler une URL de serveur HTTP. Les navigateurs bloquent cette demande avant qu'elle n'atteigne votre serveur.",
+    "webDiagnosticsCorsFailureBody": "Moonfin a détecté un échec de requête au niveau du navigateur, généralement provoqué par l'absence d'en-têtes CORS ou de contrôle en amont sur le serveur multimédia.",
     "webDiagnosticsTargetUrl": "URL cible : {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7092,7 @@
     "notConfigured": "non configuré",
     "webDiagnosticsMixedContent": "Contenu mixte",
     "webDiagnosticsMixedContentDetected": "Cette page est chargée via HTTPS, mais une ou plusieurs URL configurées sont HTTP. Les navigateurs empêchent les pages HTTPS d'appeler les API HTTP.",
-    "webDiagnosticsMixedContentFix": "Correctif : servez votre serveur multimédia ou point de terminaison proxy via HTTPS, ou chargez Tortugarr via HTTP sur les réseaux locaux de confiance uniquement.",
+    "webDiagnosticsMixedContentFix": "Correctif : servez votre serveur multimédia ou point de terminaison proxy via HTTPS, ou chargez Moonfin via HTTP sur les réseaux locaux de confiance uniquement.",
     "webDiagnosticsNoMixedContentDetected": "Aucune configuration de contenu mixte évidente détectée à partir des paramètres d'exécution actuels.",
     "webDiagnosticsCorsChecklist": "Liste de contrôle CORS",
     "webDiagnosticsCorsChecklistItem1": "• Autorisez l'origine du navigateur dans Access-Control-Allow-Origin.",
@@ -7300,7 +7259,6 @@
     "failedToExtractCbrArchive": "Échec de l'extraction de l'archive .cbr.",
     "cb7ExtractionUnavailable": "L'extraction CB7 n'est pas disponible sur cette plateforme.",
     "cb7ExtractionPluginUnavailable": "Le plugin d'extraction CB7 n'est pas disponible sur cette plateforme.",
-    "closeGenrePanel": "Fermer le panneau des genres",
     "loadingShuffle": "Chargement de la lecture aléatoire…",
     "libraryShuffleLabel": "BIBLIOTHÈQUE ALÉATOIRE",
     "randomShuffleLabel": "TRI ALÉATOIRE",
@@ -7784,7 +7742,7 @@
     "@dismiss": {
         "description": "Dismiss button text"
     },
-    "libraryWriteAccessProactiveBody": "Votre bibliothèque « {libraryName} » est configurée pour enregistrer les visuels directement dans les dossiers multimédias (l'option « Enregistrer les visuels dans les dossiers multimédias » est activée). Cependant, Jellyfin a testé l'accès en écriture et n'a pas la permission d'écrire des fichiers dans ce répertoire :\n\n{failedPath}",
+    "libraryWriteAccessProactiveBody": "Votre bibliothèque « {libraryName} » est configurée pour enregistrer les visuels directement dans les dossiers multimédias (l'option « Enregistrer les visuels dans les dossiers multimédias » est activée). Cependant, Jellyfin a testé l'accès en écriture et n'a pas la permission d'écrire des fichiers dans ce répertoire :\n\n{failedPath}",
     "@libraryWriteAccessProactiveBody": {
         "description": "Proactive warning message about server write access",
         "placeholders": {
@@ -8055,9 +8013,9 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemMoonfin": "Tortugarr recommande",
+    "recommendationSystemMoonfin": "Moonfin recommande",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Tortugarr Recommends"
+        "description": "Recommendation system option: Moonfin Recommends"
     },
     "audiobookSave": "Enregistrer",
     "detailScreenStyleModern": "Moderne",
@@ -8068,7 +8026,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Classique correspond à la mise en page centrée d'origine de Tortugarr. Moderne propose une mise en page cinématographique et adaptative. Spotlight met en avant un grand visuel, avec des fenêtres surgissantes pour le contenu. Nouveau occupe tout l'écran, avec des sections empilées les unes sous les autres. Minimaliste se résume au visuel, à un bouton de lecture et aux épisodes.",
+    "detailScreenStyleSubtitle": "Classique correspond à la mise en page centrée d'origine de Moonfin. Moderne propose une mise en page cinématographique et adaptative. Spotlight met en avant un grand visuel, avec des fenêtres surgissantes pour le contenu. Nouveau occupe tout l'écran, avec des sections empilées les unes sous les autres. Minimaliste se résume au visuel, à un bouton de lecture et aux épisodes.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -8088,7 +8046,7 @@
     "@showTechnicalDetailsSubtitle": {
         "description": "Explanation under the show technical details setting"
     },
-    "recommendationSystemSubtitle": "Utilisez l'algorithme local « Tortugarr recommande », le serveur « Jellyfin recommande » ou les mesures de similarité TMDb en ligne. Remarque : les recommandations en ligne nécessitent l'intégration Seerr.",
+    "recommendationSystemSubtitle": "Utilisez l'algorithme local « Moonfin recommande », le serveur « Jellyfin recommande » ou les mesures de similarité TMDb en ligne. Remarque : les recommandations en ligne nécessitent l'intégration Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
@@ -8100,7 +8058,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limiter les suggestions de « Tortugarr recommande » selon la classification parentale du média ciblé",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limiter les suggestions de « Moonfin recommande » selon la classification parentale du média ciblé",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -8112,7 +8070,7 @@
     "@glassQualitySubtitle": {
         "description": "Explanation under the glass quality setting"
     },
-    "customThemeSubtitle": "Les thèmes personnalisés modifient les éléments visuels dans tout Tortugarr. Choisissez l'une de ces options selon votre style.",
+    "customThemeSubtitle": "Les thèmes personnalisés modifient les éléments visuels dans tout Moonfin. Choisissez l'une de ces options selon votre style.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8211,7 +8169,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Connectez-vous à Tortugarr sur votre téléphone",
+    "carSignInPrompt": "Connectez-vous à Moonfin sur votre téléphone",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8549,7 +8507,7 @@
     "adminDrawerNfo": "Paramètres NFO",
     "adminActivitySeverityAll": "Toutes les gravités",
     "adminActivityDateRange": "Plage de dates",
-    "adminRemoveDeviceConfirm": "Supprimer l'appareil « {name} » ? L'utilisateur devra se reconnecter sur cet appareil.",
+    "adminRemoveDeviceConfirm": "Supprimer l'appareil « {name} » ? L'utilisateur devra se reconnecter sur cet appareil.",
     "@adminRemoveDeviceConfirm": {
         "placeholders": {
             "name": {
@@ -8943,7 +8901,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller est le moteur de rendu GPU moderne de Flutter : animations plus fluides et moins de saccades. Sur certains boîtiers TV et GPU anciens, il peut provoquer des artefacts ou une image noire ; désactivez-le si vous constatez ces problèmes. Automatique choisit le meilleur réglage pour votre appareil. Redémarrez Tortugarr pour appliquer.",
+    "impellerRenderingSubtitle": "Impeller est le moteur de rendu GPU moderne de Flutter : animations plus fluides et moins de saccades. Sur certains boîtiers TV et GPU anciens, il peut provoquer des artefacts ou une image noire ; désactivez-le si vous constatez ces problèmes. Automatique choisit le meilleur réglage pour votre appareil. Redémarrez Moonfin pour appliquer.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8954,7 +8912,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Tortugarr doit redémarrer pour changer de moteur de rendu. Fermez l'application maintenant, puis rouvrez-la pour appliquer le changement.",
+    "impellerRestartMessage": "Moonfin doit redémarrer pour changer de moteur de rendu. Fermez l'application maintenant, puis rouvrez-la pour appliquer le changement.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9407,7 +9365,7 @@
     "@playbackTimeBelowBarCenter": {
         "description": "Progress bar time slot below the bar in the center"
     },
-    "downloadLocationLimitedByAndroid": "Android autorise Tortugarr à écrire uniquement dans ses propres dossiers, et cet appareil n'a pas de stockage amovible. Activez « Enregistrer dans le dossier Téléchargements » ci-dessus pour que vos téléchargements soient accessibles.",
+    "downloadLocationLimitedByAndroid": "Android autorise Moonfin à écrire uniquement dans ses propres dossiers, et cet appareil n'a pas de stockage amovible. Activez « Enregistrer dans le dossier Téléchargements » ci-dessus pour que vos téléchargements soient accessibles.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9662,7 +9620,7 @@
     "@interfaceLayout": {
         "description": "Setting to override which UI layout the app uses"
     },
-    "interfaceLayoutSubtitle": "Remplacer le type détecté si votre appareil n'est pas reconnu correctement. Redémarrez Tortugarr pour appliquer les modifications.",
+    "interfaceLayoutSubtitle": "Remplacer le type détecté si votre appareil n'est pas reconnu correctement. Redémarrez Moonfin pour appliquer les modifications.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -10576,7 +10534,7 @@
     "@shortcutToggleFullscreen": {
         "description": "F11 and Alt+Enter anywhere, F in the player"
     },
-    "shortcutQuit": "Quitter Tortugarr",
+    "shortcutQuit": "Quitter Moonfin",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },
@@ -10729,7 +10687,7 @@
     "@loadingAnimation": {
         "description": "Setting title for custom loading animation"
     },
-    "loadingAnimationDescription": "Personnalisez les animations de chargement utilisées dans Tortugarr",
+    "loadingAnimationDescription": "Personnalisez les animations de chargement utilisées dans Moonfin",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10741,9 +10699,9 @@
     "@loadingAnimationImage": {
         "description": "Title for loading animation image selection"
     },
-    "loadingAnimationImageMoonfinLogo": "Logo Tortugarr",
+    "loadingAnimationImageMoonfinLogo": "Logo Moonfin",
     "@loadingAnimationImageMoonfinLogo": {
-        "description": "Loading animation image option: Tortugarr Logo"
+        "description": "Loading animation image option: Moonfin Logo"
     },
     "loadingAnimationImageSpinner": "Roue de chargement",
     "@loadingAnimationImageSpinner": {
@@ -10757,13 +10715,13 @@
     "@loadingAnimationImageMoonPhases": {
         "description": "Loading animation image option: Moon Phases"
     },
-    "loadingAnimationImageMoonfinPhases": "Phases Tortugarr",
+    "loadingAnimationImageMoonfinPhases": "Phases Moonfin",
     "@loadingAnimationImageMoonfinPhases": {
-        "description": "Loading animation image option: Tortugarr Phases in brand gradient"
+        "description": "Loading animation image option: Moonfin Phases in brand gradient"
     },
-    "loadingAnimationImageNeonfinPhases": "Phases Neon",
+    "loadingAnimationImageNeonfinPhases": "Phases Neonfin",
     "@loadingAnimationImageNeonfinPhases": {
-        "description": "Loading animation image option: Neon Phases in neon colors"
+        "description": "Loading animation image option: Neonfin Phases in neon colors"
     },
     "loadingAnimationSize": "Taille de l'animation",
     "@loadingAnimationSize": {
@@ -11036,9 +10994,9 @@
     "@screensaverBackdropBlack": {
         "description": "Screensaver backdrop: Black"
     },
-    "screensaverBackdropMoonfin": "Tortugarr",
+    "screensaverBackdropMoonfin": "Moonfin",
     "@screensaverBackdropMoonfin": {
-        "description": "Screensaver backdrop: Tortugarr"
+        "description": "Screensaver backdrop: Moonfin"
     },
     "screensaverBackdropCalm": "Apaisé",
     "@screensaverBackdropCalm": {
@@ -11056,9 +11014,9 @@
     "@screensaverAdditionalComponent": {
         "description": "Setting for screensaver additional component"
     },
-    "screensaverComponentMoonfinLogo": "Logo Tortugarr",
+    "screensaverComponentMoonfinLogo": "Logo Moonfin",
     "@screensaverComponentMoonfinLogo": {
-        "description": "Screensaver component: Tortugarr Logo"
+        "description": "Screensaver component: Moonfin Logo"
     },
     "screensaverComponentRunner": "Runner",
     "@screensaverComponentRunner": {
@@ -11287,7 +11245,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "Les qualités transcodées ne se téléchargent que lorsque Tortugarr est ouvert. La qualité d'origine se télécharge aussi en arrière-plan.",
+    "autoDownloadTranscodedForegroundNote": "Les qualités transcodées ne se téléchargent que lorsque Moonfin est ouvert. La qualité d'origine se télécharge aussi en arrière-plan.",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -11295,7 +11253,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "Télécharge uniquement lorsque Tortugarr est ouvert",
+    "autoDownloadForegroundOnly": "Télécharge uniquement lorsque Moonfin est ouvert",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -11365,15 +11323,15 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "Autorise le système à rechercher périodiquement de nouveaux épisodes lorsque Tortugarr est fermé",
+    "autoDownloadBackgroundRefreshSubtitle": "Autorise le système à rechercher périodiquement de nouveaux épisodes lorsque Moonfin est fermé",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
-    "autoDownloadBackgroundRefreshDenied": "L'actualisation en arrière-plan est désactivée pour Tortugarr. Activez-la dans les réglages iOS.",
+    "autoDownloadBackgroundRefreshDenied": "L'actualisation en arrière-plan est désactivée pour Moonfin. Activez-la dans les réglages iOS.",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "L'utilisation en arrière-plan est restreinte pour Tortugarr dans les paramètres Android.",
+    "autoDownloadBackgroundRestrictedAndroid": "L'utilisation en arrière-plan est restreinte pour Moonfin dans les paramètres Android.",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },
@@ -13620,9 +13578,9 @@
     },
     "topShelf": "Top Shelf",
     "@topShelf": {
-        "description": "Apple TV settings label for what the tvOS home screen shows above the Tortugarr icon. Top Shelf is Apple's name for that area"
+        "description": "Apple TV settings label for what the tvOS home screen shows above the Moonfin icon. Top Shelf is Apple's name for that area"
     },
-    "topShelfDescription": "Ce que l'écran d'accueil de l'Apple TV affiche au-dessus de l'icône Tortugarr lorsqu'elle est sélectionnée. Ce paramètre ne s'applique qu'à cet appareil.",
+    "topShelfDescription": "Ce que l'écran d'accueil de l'Apple TV affiche au-dessus de l'icône Moonfin lorsqu'elle est sélectionnée. Ce paramètre ne s'applique qu'à cet appareil.",
     "@topShelfDescription": {
         "description": "Apple TV settings subtitle for the Top Shelf option"
     },
@@ -13630,9 +13588,9 @@
     "@topShelfLatestMedia": {
         "description": "Top Shelf option that shows a carousel of the newest items from the home screen's Latest rows"
     },
-    "topShelfAppBanner": "Bannière Tortugarr",
+    "topShelfAppBanner": "Bannière Moonfin",
     "@topShelfAppBanner": {
-        "description": "Top Shelf option that shows only the static Tortugarr logo banner, nothing from the library"
+        "description": "Top Shelf option that shows only the static Moonfin logo banner, nothing from the library"
     },
     "detailsPage": "Page de détails",
     "@detailsPage": {
@@ -13823,6 +13781,1050 @@
     "@playlistNoMatchingTracks": {
         "description": "Empty state message shown when playlist filters match no items"
     },
+    "quickConnectScanHint": "Ou scannez ce code avec un téléphone connecté à votre serveur",
+    "@quickConnectScanHint": {
+        "description": "Caption under the Quick Connect QR code that opens the server's web page with the code filled in"
+    },
+    "quickConnectTapOrScanHint": "Touchez le code pour approuver dans votre navigateur, ou scannez-le avec un autre appareil",
+    "@quickConnectTapOrScanHint": {
+        "description": "Caption under the Quick Connect QR code on a phone or tablet, where tapping the code opens the server's web page with the code filled in"
+    },
+    "timesUpTitle": "Temps écoulé",
+    "@timesUpTitle": {
+        "description": "Title of the screen that covers the app when the user's access schedule doesn't allow the current time"
+    },
+    "timesUpMessage": "Ce compte n'est pas disponible pour le moment.",
+    "@timesUpMessage": {
+        "description": "Explanation on the Time's up screen"
+    },
+    "timesUpResumesToday": "Vous pourrez l'utiliser à nouveau aujourd'hui à {time}.",
+    "@timesUpResumesToday": {
+        "description": "When access returns, on the Time's up screen, for a time later today",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "timesUpResumesTomorrow": "Vous pourrez l'utiliser à nouveau demain à {time}.",
+    "@timesUpResumesTomorrow": {
+        "description": "When access returns, on the Time's up screen, for a time tomorrow",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "timesUpResumesOn": "Vous pourrez l'utiliser à nouveau {day} à {time}.",
+    "@timesUpResumesOn": {
+        "description": "When access returns, on the Time's up screen, for a time on a later day",
+        "placeholders": {
+            "day": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "gameOrientation": "Orientation du jeu",
+    "@gameOrientation": {
+        "description": "Setting and in-game menu row for how the device is held while playing games"
+    },
+    "gameOrientationSubtitle": "Orientation de l'écran pendant les jeux",
+    "@gameOrientationSubtitle": {
+        "description": "Subtitle of the game orientation setting"
+    },
+    "gameSaveAndExit": "Sauvegarder et quitter",
+    "@gameSaveAndExit": {
+        "description": "Exit confirmation choice that saves the game state and then leaves, staying in the game if the save fails"
+    },
+    "gameSaveFailedStillPlaying": "Échec de la sauvegarde. Le jeu continue.",
+    "@gameSaveFailedStillPlaying": {
+        "description": "Message shown when Save & exit could not save, so the game keeps running"
+    },
+    "subtitleDownloadLanguages": "Langues de téléchargement des sous-titres",
+    "@subtitleDownloadLanguages": {
+        "description": "Setting that picks which languages a subtitle download searches"
+    },
+    "subtitleDownloadLanguagesDescription": "Langues à rechercher lors du téléchargement de sous-titres, 5 au maximum. « Auto » recherche une seule langue, déduite de votre langue de sous-titres par défaut ou de la vidéo.",
+    "@subtitleDownloadLanguagesDescription": {
+        "description": "Description for the subtitle download languages setting"
+    },
+    "libraryStyle": "Style de la bibliothèque vidéo",
+    "@libraryStyle": {
+        "description": "Label for the setting that picks the library page header layout"
+    },
+    "libraryStyleDescription": "Classique correspond à l'en-tête d'origine, avec des boutons en icônes. Moderne réunit la recherche et les boutons de tri, de regroupement et de filtre, avec leurs libellés, dans une seule barre. Dock déplace les commandes et l'index alphabétique dans un panneau latéral.",
+    "@libraryStyleDescription": {
+        "description": "Explanation under the library style setting on TV and desktop"
+    },
+    "libraryStyleDescriptionPhone": "Classique correspond à l'en-tête d'origine, avec des boutons en icônes. Moderne ajoute sous la recherche des boutons de tri, de regroupement et de filtre, avec leurs libellés. Dock garde les commandes dans une barre en bas de l'écran.",
+    "@libraryStyleDescriptionPhone": {
+        "description": "Explanation under the library style setting on phones"
+    },
+    "libraryStyleClassic": "Classique",
+    "@libraryStyleClassic": {
+        "description": "Library style option: the original header"
+    },
+    "libraryStyleModern": "Moderne",
+    "@libraryStyleModern": {
+        "description": "Library style option: one bar with labeled buttons"
+    },
+    "libraryStyleDocked": "Dock",
+    "@libraryStyleDocked": {
+        "description": "Library style option: a side panel on TV and desktop, a bottom bar on phones"
+    },
+    "bookLibraryStyle": "Style de la bibliothèque de livres",
+    "@bookLibraryStyle": {
+        "description": "Label for the setting that picks the book and audiobook library layout"
+    },
+    "bookLibraryStyleDescription": "Classique correspond aux étagères d'origine, sous un titre mis en avant. Salle de lecture commence par vos lectures en cours, sur de grands visuels. Librairie parcourt toute la bibliothèque en grille.",
+    "@bookLibraryStyleDescription": {
+        "description": "Explanation under the book library style setting"
+    },
+    "bookLibraryStyleClassic": "Classique",
+    "@bookLibraryStyleClassic": {
+        "description": "Book library style option: the original shelves"
+    },
+    "bookLibraryStyleReadingRoom": "Salle de lecture",
+    "@bookLibraryStyleReadingRoom": {
+        "description": "Book library style option: large Continue cards over a few shelves"
+    },
+    "bookLibraryStyleBookstore": "Librairie",
+    "@bookLibraryStyleBookstore": {
+        "description": "Book library style option: browse entries over a title grid"
+    },
+    "musicLibraryStyle": "Style de la bibliothèque musicale",
+    "@musicLibraryStyle": {
+        "description": "Label for the setting that picks the music library layout"
+    },
+    "musicLibraryStyleDescription": "Classique correspond aux rangées d'origine, sous un visuel « Reprendre l'écoute ». Accès rapide commence par une grille de vos albums et playlists récents. Immersif met en avant l'album que vous écoutez.",
+    "@musicLibraryStyleDescription": {
+        "description": "Explanation under the music library style setting"
+    },
+    "musicLibraryStyleClassic": "Classique",
+    "@musicLibraryStyleClassic": {
+        "description": "Music library style option: the original rows"
+    },
+    "musicLibraryStyleQuickAccess": "Accès rapide",
+    "@musicLibraryStyleQuickAccess": {
+        "description": "Music library style option: a grid of recent albums and playlists over the rows"
+    },
+    "musicLibraryStyleImmersive": "Immersif",
+    "@musicLibraryStyleImmersive": {
+        "description": "Music library style option: a full-width album hero over the rows"
+    },
+    "homeRowsGenresAndStudios": "Genres et studios",
+    "@homeRowsGenresAndStudios": {
+        "description": "Home Rows editor: heading of the group of disabled genre and studio rows"
+    },
+    "homeRowsExternalLists": "Listes externes",
+    "@homeRowsExternalLists": {
+        "description": "Home Rows editor: heading of the group of disabled rows from IMDb, TMDB, Letterboxd and MDBList lists"
+    },
+    "adminPremiereNoteLiveTv": "La TV en direct nécessite Emby Premiere. Sans lui, le serveur n'importe aucune chaîne et n'enregistre rien.",
+    "adminPremiereNoteBackups": "Backup & Restore nécessite Emby Premiere une fois sa période d'essai terminée.",
+    "adminGeneralRunAtStartup": "Lancer le serveur au démarrage",
+    "adminGeneralLaunchWebApp": "Ouvrir l'application web dans un navigateur au démarrage du serveur",
+    "adminGeneralBannerText": "Texte de la bannière de l'écran d'accueil",
+    "adminGeneralBannerTextHelp": "Affiché à tous les utilisateurs sur leur écran d'accueil",
+    "adminGeneralSectionMaintenance": "Mode maintenance",
+    "adminGeneralMaintenanceMode": "Mettre le serveur en mode maintenance",
+    "adminGeneralMaintenanceModeHelp": "Les utilisateurs ne voient que le message de maintenance.",
+    "adminGeneralMaintenanceMessage": "Message de maintenance",
+    "adminGeneralMaintenanceMessageHelp": "Laissez vide pour afficher un message générique dans la langue de chaque utilisateur.",
+    "adminGeneralSectionUpdates": "Mises à jour automatiques",
+    "adminGeneralAutoUpdate": "Mettre à jour le serveur automatiquement",
+    "adminGeneralAutoRestart": "Redémarrer automatiquement pour appliquer les mises à jour",
+    "adminGeneralAutoRestartHelp": "Le serveur ne redémarre que lorsqu'aucun utilisateur n'est actif.",
+    "adminTaskTriggerSystemEvent": "Après un événement système ({event})",
+    "@adminTaskTriggerSystemEvent": {
+        "placeholders": {
+            "event": {
+                "type": "String"
+            }
+        }
+    },
+    "adminPluginNeedsPremiere": "Nécessite Emby Premiere après un essai gratuit de 14 jours",
+    "adminEmbyBackupsHelp": "Emby effectue ses sauvegardes via son plugin Backup & Restore.",
+    "adminEmbyBackupsNoPlugin": "Le plugin Backup & Restore n'est pas installé. Installez-le depuis le catalogue de plugins pour sauvegarder ce serveur.",
+    "adminEmbyBackupNow": "Sauvegarder maintenant",
+    "adminEmbyFullBackup": "Sauvegarde complète",
+    "adminEmbyLightBackups": "Sauvegardes de la base de données",
+    "adminEmbyBackupServerVersion": "Emby {version}",
+    "@adminEmbyBackupServerVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "adminEmbyRestoreConfirm": "Restaurer {name} ? Cela remplace les bibliothèques, les paramètres, les utilisateurs et les mots de passe de ce serveur, et le serveur s'arrête une fois l'opération terminée. Vous devrez peut-être le redémarrer vous-même.",
+    "@adminEmbyRestoreConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "adminEmbyRestoreServerId": "Restaurer l'ID du serveur",
+    "adminEmbyRestoreServerIdHelp": "Désactivez cette option si vous restaurez la même sauvegarde sur plusieurs serveurs.",
+    "adminEmbyRestoreShuttingDown": "La restauration est terminée et le serveur s'arrête. Redémarrez-le s'il ne repart pas de lui-même.",
+    "adminHiddenRemotely": "Masquer des écrans de connexion lors d'un accès à distance",
+    "adminHiddenFromUnusedDevices": "Masquer des écrans de connexion sur les appareils jamais utilisés pour se connecter",
+    "adminSimultaneousStreamLimitHelp": "Limite le nombre de vidéos que cet utilisateur peut lire simultanément.",
+    "adminUnlimited": "Illimité",
+    "adminAutoRemoteQuality": "Qualité automatique à distance (Mbit/s)",
+    "adminAutoRemoteQualityHelp": "Utilisée à distance lorsque le lecteur est réglé sur la qualité automatique. Laisser vide pour la détecter.",
+    "adminAllowCameraUpload": "Autoriser le téléversement des photos",
+    "adminAllowSubtitleDownloading": "Autoriser le téléchargement des sous-titres",
+    "adminAllowMediaConversion": "Autoriser la conversion des médias",
+    "adminAllowSyncTranscoding": "Autoriser les téléchargements nécessitant un transcodage",
+    "adminAllowSharingPersonalItems": "Autoriser le partage des playlists avec les autres utilisateurs",
+    "adminAllowPreferenceAccess": "Autoriser la modification de son mot de passe et de son image de profil",
+    "adminTagMode": "Mode des tags",
+    "adminEmbyConnect": "Emby Connect",
+    "adminEmbyConnectUser": "Nom d'utilisateur ou e-mail Emby Connect",
+    "adminEmbyConnectHelp": "Permet à cet utilisateur de se connecter depuis n'importe quelle application Emby sans connaître l'adresse du serveur.",
+    "adminEmbyConnectLink": "Lier",
+    "adminEmbyConnectUnlink": "Dissocier",
+    "adminEmbyConnectLinked": "Lié à Emby Connect",
+    "adminEmbyConnectPending": "Invitation envoyée. Le lien sera établi une fois qu'elle sera acceptée.",
+    "adminEmbyConnectUnlinked": "Lien Emby Connect supprimé",
+    "adminEmbyConnectNotFound": "Aucun compte Emby Connect ne correspond à ce nom d'utilisateur ou à cet e-mail.",
+    "adminLibImportPlaylists": "Importer les fichiers de playlist",
+    "adminLibExcludeFromSearch": "Exclure de la recherche globale",
+    "adminLibForcedSubtitlesOnly": "Télécharger uniquement les sous-titres forcés",
+    "adminLibImportCollections": "Importer les collections depuis les téléchargeurs de métadonnées",
+    "adminLibThumbnailInterval": "Intervalle des miniatures d'aperçu",
+    "adminLibThumbnailEverySeconds": "Toutes les {count} secondes",
+    "@adminLibThumbnailEverySeconds": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "adminLibThumbnailAtChapters": "Aux marqueurs de chapitre",
+    "adminLibSaveThumbnailsWithMedia": "Enregistrer les miniatures d'aperçu dans les dossiers multimédias",
+    "adminLibrarySectionMarkers": "Marqueurs d'intro",
+    "adminLibIntroDetection": "Détecter les intros",
+    "adminLibIntroDetectionDuringScan": "Détecter les intros pendant l'analyse de la bibliothèque",
+    "adminProviderEmbyGuide": "Données de guide Emby",
+    "adminLiveTvEmbyGuideSelectLineup": "Sélectionnez une grille de chaînes. Si aucune n'apparaît, vérifiez le code postal. Les grilles de chaînes nécessitent Emby Premiere.",
+    "adminLiveTvWakeServer": "Réveiller le serveur pour les enregistrements",
+    "adminDrawerLiveTvChannels": "Chaînes TV en direct",
+    "adminPageDescLiveTvChannels": "Activer ou désactiver les chaînes et définir leur ordre",
+    "adminLiveTvChannelsEmpty": "Aucune chaîne pour l'instant. Elles apparaîtront ici une fois un tuner configuré et ses chaînes importées par le serveur.",
+    "adminTranscodingHwaAdvanced": "Avancé",
+    "adminTranscodingHwaHelp": "Le mode Avancé permet de choisir les codecs matériels et leur ordre.",
+    "adminTranscodingHwDecoders": "Décodeurs matériels préférés",
+    "adminTranscodingHwEncoders": "Encodeurs matériels préférés",
+    "adminTranscodingTempPathHelp": "Emplacement des fichiers de travail du transcodeur. Laissez le champ vide pour utiliser le dossier de données du serveur.",
+    "adminTranscodingThrottleHelp": "Ralentit le transcodage une fois la mémoire tampon suffisamment remplie, pour réduire l'utilisation du processeur.",
+    "adminTranscodingDownmixHelp": "Augmente le volume lors du downmix audio. 1 conserve le volume d'origine.",
+    "adminTranscodingFontExtraction": "Autoriser l'extraction des polices à la volée",
+    "adminTranscodingMaxResolution": "Résolution maximale de transcodage",
+    "adminTranscodingMaxResolutionHelp": "Limite appliquée à tous les transcodages, quelle que soit la qualité demandée par l'application.",
+    "adminTranscodingToneMapSoftware": "Tone mapping dans les transcodages logiciels",
+    "adminTranscodingToneMapHardware": "Tone mapping dans les transcodages matériels",
+    "adminTranscodingToneMapHelp": "Évite que la vidéo HDR paraisse sombre et délavée lors du transcodage.",
+    "adminNetworkingLocalAddress": "Adresse IP locale",
+    "adminNetworkingLocalAddressHelp": "Adresse locale que le serveur communique aux applications. Laissez le champ vide pour la détecter automatiquement.",
+    "adminNetworkingBehindProxy": "HTTPS est géré par un reverse proxy",
+    "adminNetworkingExternalDomain": "Domaine externe",
+    "adminNetworkingExternalDomainHelp": "Domaine ou nom DNS dynamique pour les connexions distantes, sans le protocole ni le port. Nécessaire pour un certificat personnalisé.",
+    "adminNetworkingUpnp": "Activer la redirection automatique des ports",
+    "adminNetworkingUpnpHelp": "Tente de rediriger le port public vers le port local via UPnP. Certains routeurs ne le prennent pas en charge.",
+    "adminNetworkingProxyHeaders": "Lire les en-têtes de proxy pour les adresses des clients",
+    "adminNetworkingProxyHeadersHelp": "Utilise des en-têtes comme X-Forwarded-For pour déterminer l'adresse de chaque client. À n'activer que derrière un reverse proxy.",
+    "adminNetworkingProxyHeadersRemote": "Uniquement si elles contiennent des adresses distantes",
+    "adminNetworkingIpv4Only": "Utiliser IPv4 pour les requêtes sortantes",
+    "adminNetworkingIpv4OnlyHelp": "Utile lorsque les fournisseurs de métadonnées et d'autres services sont inaccessibles en IPv6.",
+    "adminOnePerLine": "Un par ligne",
+    "adminStreamingStreamLimit": "Nombre maximal de flux vidéo simultanés",
+    "adminStreamingStreamLimitHelp": "Nombre de vidéos pouvant être lues simultanément sur l'ensemble du serveur. 0 signifie aucune limite.",
+    "adminSyncJobsConversions": "Tâches de conversion",
+    "adminSyncJobsDownloads": "Tâches de téléchargement",
+    "adminSyncJobsEmpty": "Aucune tâche",
+    "adminSyncJobCancel": "Annuler la tâche",
+    "adminSyncJobCancelConfirm": "Annuler {name} et retirer cette tâche de la liste ?",
+    "@adminSyncJobCancelConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "adminSyncJobConverting": "Conversion en cours",
+    "adminSyncJobReady": "Prêt à transférer",
+    "adminSyncJobTransferring": "Transfert en cours",
+    "adminSyncJobCompletedWithError": "Terminé avec des erreurs",
+    "adminSyncJobItemCount": "{count, plural, one{{count} élément} other{{count} éléments}}",
+    "@adminSyncJobItemCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "adminDrawerDatabase": "Base de données",
+    "adminPageDescDatabase": "Taille du cache et maintenance",
+    "adminDatabaseWarning": "Ces options sont avancées. Laissez-les à leurs valeurs par défaut, sauf si vous avez une raison de les modifier.",
+    "adminDatabaseCacheSize": "Taille du cache de la base de données (Mo)",
+    "adminDatabaseCacheSizeHelp": "Part de chaque fichier de base de données que le serveur garde en mémoire. Plus elle est élevée, plus le serveur peut être rapide. Prend effet après un redémarrage.",
+    "adminDatabaseOptimize": "Optimiser la base de données à l'arrêt du serveur",
+    "adminDatabaseOptimizeHelp": "La plupart du temps, cela ne fait rien, mais de temps en temps une analyse est lancée pour accélérer les requêtes du serveur. Les arrêts peuvent durer plus longtemps.",
+    "adminDatabaseAnalysisLimit": "Limite de lignes analysées",
+    "adminDatabaseAnalysisLimitHelp": "Nombre approximatif de lignes de chaque index que l'étape d'optimisation lit. Plus il y a de lignes, meilleur est le résultat, mais les arrêts peuvent être plus lents.",
+    "adminDatabaseVacuum": "Compacter la base de données au prochain démarrage",
+    "adminDatabaseVacuumHelp": "Reconstruit le fichier de base de données pour qu'il occupe le moins d'espace possible, ce qui peut améliorer les performances. Le serveur est inutilisable pendant l'opération et n'affiche aucune progression. Ne forcez pas sa fermeture. L'option se désactive d'elle-même après ce démarrage.",
+    "adminDrawerCinemaIntros": "Intros de cinéma",
+    "adminPageDescCinemaIntros": "Bandes-annonces et intros avant la lecture",
+    "adminCinemaIntrosPlayBefore": "Lire les intros avant",
+    "adminCinemaIntrosUpcoming": "Inclure les bandes-annonces des films récents et à venir",
+    "adminCinemaIntrosOlder": "Inclure les bandes-annonces des films plus anciens",
+    "adminCinemaIntrosLibrary": "Inclure les bandes-annonces des films de mes bibliothèques",
+    "adminCinemaIntrosLibraryHelp": "Les bandes-annonces locales doivent être configurées.",
+    "adminCinemaIntrosCount": "Nombre de bandes-annonces à lire",
+    "adminCinemaIntrosParental": "Contrôle parental intelligent",
+    "adminCinemaIntrosParentalHelp": "Ne retient que les bandes-annonces dont la classification est identique ou inférieure à celle du contenu en cours de lecture.",
+    "adminCinemaIntrosUnwatchedOnly": "Lire les intros uniquement avant un contenu non vu",
+    "adminCinemaIntrosSimilarOnly": "Lire uniquement les bandes-annonces similaires au contenu en cours de lecture",
+    "adminCinemaIntrosSimilarOnlyHelp": "D'après les genres, tags, studios et autres éléments en commun.",
+    "adminCinemaIntrosCustom": "Intros personnalisées",
+    "adminCinemaIntrosCustomPath": "Dossier des intros personnalisées",
+    "adminCinemaIntrosCustomPathHelp": "Un dossier de vidéos. L'une d'elles est choisie au hasard et lue après les bandes-annonces.",
+    "adminCinemaIntrosCodecPath": "Dossier des intros de codec",
+    "adminCinemaIntrosCodecPathHelp": "Un dossier de vidéos. Celle dont le nom de fichier correspond au codec vidéo, au codec audio, au profil audio ou à un tag est lue avant le film principal.",
+    "adminDrawerDlna": "DLNA",
+    "adminPageDescDlna": "La lecture sur les appareils (Play To) et le serveur DLNA",
+    "adminDlnaPlayTo": "Activer la lecture sur les appareils DLNA (Play To)",
+    "adminDlnaPlayToHelp": "Emby peut détecter les appareils de votre réseau et les contrôler à distance.",
+    "adminDlnaServer": "Activer le serveur DLNA",
+    "adminDlnaServerHelp": "Permet au serveur de diffuser des médias vers les appareils DLNA.",
+    "adminDlnaDefaultUser": "Utilisateur par défaut",
+    "adminDlnaDefaultUserHelp": "Les appareils connectés voient les bibliothèques de cet utilisateur. Un profil d'appareil peut remplacer ce choix.",
+    "adminDlnaDebugLog": "Activer les journaux de débogage DLNA",
+    "adminDlnaDebugLogHelp": "Produit des fichiers de journal volumineux. Ne l'activez que le temps d'un diagnostic.",
+    "adminDrawerCameraUpload": "Téléversement des photos",
+    "adminPageDescCameraUpload": "Où sont enregistrées les photos venant des téléphones",
+    "adminCameraUploadPath": "Dossier de téléversement des photos",
+    "adminCameraUploadPathHelp": "Laissez le champ vide pour utiliser le dossier par défaut. Un dossier personnalisé doit aussi être ajouté comme bibliothèque.",
+    "adminCameraUploadSubfolders": "Créer un sous-dossier par appareil",
+    "adminDrawerConversions": "Conversions",
+    "adminPageDescConversions": "Médias convertis et téléchargements",
+    "adminConversionsTempPath": "Dossier des fichiers temporaires",
+    "adminConversionsTempPathHelp": "Emplacement où les médias sont conservés pendant leur conversion.",
+    "adminConversionsFullSpeed": "Convertir à pleine vitesse",
+    "adminConversionsFullSpeedHelp": "Par défaut, les conversions sont ralenties pour limiter la charge.",
+    "adminDrawerPremiere": "Emby Premiere",
+    "adminPageDescPremiere": "Statut et clé de licence",
+    "adminPremiereActive": "Premiere est actif sur ce serveur.",
+    "adminPremiereInactive": "Ce serveur n'a pas de clé Premiere.",
+    "adminPremiereKeyInvalid": "Une clé est renseignée mais elle n'est pas active. Elle est peut-être mal saisie ou expirée.",
+    "adminPremiereCurrentKey": "Clé actuelle",
+    "adminPremiereNewKey": "Nouvelle clé",
+    "adminPremiereNewKeyHint": "Collez la clé reçue dans votre e-mail Emby Premiere.",
+    "adminPremiereSaveKey": "Enregistrer la clé",
+    "adminPremiereRemoveKey": "Supprimer la clé",
+    "adminPremiereKeyRejected": "Emby a enregistré la clé mais ne l'a pas acceptée.",
+    "adminPremiereLoadFailed": "Impossible de charger le statut Premiere",
+    "embyPremiereRequiredTitle": "Emby Premiere requis",
+    "embyPremiereRequiredBody": "Nécessite un abonnement Emby Premiere actif sur le serveur.",
+    "embyPremiereRequiredSaveBody": "Nécessite un abonnement Emby Premiere actif. Emby conserve le paramètre mais ne l'utilisera pas tant que Premiere n'est pas actif.",
+    "embyPremiereLearnMore": "En savoir plus",
+    "embyPremiereSaveAnyway": "Enregistrer quand même",
+    "embyPremiereEnterKey": "Saisir la clé",
+    "adminPremiereNote": "Nécessite Emby Premiere. Le serveur conserve ce paramètre mais ne l'utilisera pas tant que Premiere n'est pas actif.",
+    "adminExternalIdLabel": "ID {name}",
+    "@adminExternalIdLabel": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "adminExternalIdTypePerson": "Personne",
+    "adminExternalIdTypeArtist": "Artiste",
+    "adminExternalIdTypeAlbumArtist": "Artiste de l'album",
+    "adminExternalIdTypeOtherArtist": "Autre artiste",
+    "adminExternalIdTypeReleaseGroup": "Release Group",
+    "adminExternalIdTypeBook": "Livre",
+    "adminPlaybackHwAccelWarning": "L'accélération matérielle peut être instable sur certains systèmes. Maintenez le système d'exploitation et les pilotes vidéo à jour, et revenez à « Aucun » si la vidéo ne se lit plus.",
+    "adminLibMetadataChangeHelp": "Les modifications des paramètres de métadonnées s'appliquent aux nouveaux contenus. Pour mettre à jour un contenu existant, actualisez-le depuis son écran de détails ou actualisez la bibliothèque.",
+    "adminLibFetcherSettings": "Paramètres du récupérateur",
+    "adminLibImageOptionsTitle": "Options d'images pour {type}",
+    "@adminLibImageOptionsTitle": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "adminLibFetchImages": "Récupérer les images",
+    "adminLibMaxBackdrops": "Nombre maximal de vignettes par élément",
+    "adminLibMinBackdropWidth": "Largeur minimale des vignettes à télécharger",
+    "adminImageTypeArt": "Visuel détouré",
+    "adminImageTypeBox": "Jaquette",
+    "adminImageTypeBoxRear": "Jaquette (dos)",
+    "adminImageTypeDisc": "Disque",
+    "adminImageTypeMenu": "Menu",
+    "adminActivityMediaDetails": "Détails du média",
+    "adminNetworkingOtherPublishedUriHint": "ex. 192.168.1.0/24=http://192.168.1.5:8096",
+    "adminMetadataFieldOriginalLanguage": "Langue originale",
+    "adminMetadataFieldDateAdded": "Date d'ajout",
+    "adminMetadataFieldArtists": "Artistes",
+    "adminMetadataFieldAlbumArtists": "Artistes de l'album",
+    "adminMetadataFieldAlbum": "Album",
+    "adminMetadataFieldSeriesName": "Nom de la série",
+    "adminMetadataFieldEpisodeNumber": "Numéro d'épisode",
+    "adminMetadataFieldSeasonNumber": "Numéro de saison",
+    "adminMetadataFieldTrackNumber": "Numéro de piste",
+    "adminMetadataFieldDiscNumber": "Numéro de disque",
+    "adminMetadataFieldAirTime": "Heure de diffusion",
+    "adminMetadataFieldRuntime": "Durée en minutes",
+    "adminMetadataFieldPlaceOfBirth": "Lieu de naissance",
+    "adminMetadataFieldBirthDate": "Date de naissance",
+    "adminMetadataFieldBirthYear": "Année de naissance",
+    "adminMetadataFieldDeathDate": "Date de décès",
+    "adminMetadataFieldAspectRatio": "Format d'image original",
+    "adminMetadataFieldAirsBeforeSeason": "Diffusé avant la saison",
+    "adminMetadataFieldAirsAfterSeason": "Diffusé après la saison",
+    "adminMetadataFieldAirsBeforeEpisode": "Diffusé avant l'épisode",
+    "adminMetadataNamesHelp": "Séparez plusieurs noms par un point-virgule.",
+    "adminMetadataSectionRatings": "Notes",
+    "adminMetadataItemLocked": "Les métadonnées de cet élément sont verrouillées. Déverrouillez-les avant de l'identifier.",
+    "adminMetadataNameOrIdRequired": "Saisissez un nom ou un ID externe.",
+    "adminLibMetadataReaders": "Lecteurs de métadonnées",
+    "adminLibSimilarProvidersFor": "Fournisseurs d'éléments similaires : {type}",
+    "@adminLibSimilarProvidersFor": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "adminLibMediaSegmentProviders": "Fournisseurs de segments média",
+    "adminLibEnableLibrary": "Activer la bibliothèque",
+    "adminLibEnableLibraryHelp": "Désactiver la bibliothèque la masque dans toutes les vues des utilisateurs.",
+    "adminLibSaveLyricsWithMedia": "Enregistrer les paroles dans les dossiers multimédias",
+    "adminLibUseCustomTagDelimiters": "Utiliser un délimiteur de tags personnalisé",
+    "adminLibCustomTagDelimiters": "Délimiteur de tags personnalisé",
+    "adminLibCustomTagDelimitersHelp": "Caractères à traiter comme des délimiteurs séparant les tags.",
+    "adminLibDelimiterWhitelist": "Liste blanche de délimiteurs",
+    "adminLibDelimiterWhitelistHelp": "Éléments à exclure de la séparation des tags, un par ligne.",
+    "adminLibDownloadLanguages": "Langues à télécharger",
+    "adminLibraryFolderRequired": "Ajoutez au moins un dossier à cette bibliothèque.",
+    "adminRenameLibraryWarning": "Renommer une bibliothèque efface toutes ses métadonnées. Procédez avec prudence.",
+    "adminDeleteLibraryConfirm": "Supprimer la bibliothèque « {name} » ? Les fichiers sur le disque ne sont pas supprimés.",
+    "@adminDeleteLibraryConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "adminDeleteLibraryLocations": "Ces emplacements de médias seront retirés de la bibliothèque :",
+    "adminRefreshMode": "Mode d'actualisation",
+    "adminRefreshModeScan": "Rechercher les fichiers nouveaux et modifiés",
+    "adminRefreshModeMissing": "Rechercher les métadonnées manquantes",
+    "adminReplaceTrickplayImages": "Remplacer les images trickplay existantes",
+    "adminRefreshDialogHelp": "Les métadonnées sont actualisées selon les paramètres et les services internet activés dans le tableau de bord.",
+    "adminActivityCount": "{shown} sur {total}",
+    "@adminActivityCount": {
+        "placeholders": {
+            "shown": {
+                "type": "String"
+            },
+            "total": {
+                "type": "String"
+            }
+        }
+    },
+    "adminLiveTvTabSources": "Tuners et guide",
+    "adminLiveTvTabRecordings": "Enregistrements",
+    "adminLiveTvAddTuner": "Ajouter un périphérique tuner",
+    "adminLiveTvEditTuner": "Modifier le périphérique tuner",
+    "adminLiveTvTunerType": "Type de tuner",
+    "adminLiveTvDetectDevices": "Détecter mes périphériques",
+    "adminLiveTvNoNewDevices": "Aucun nouveau périphérique trouvé",
+    "adminLiveTvDrmNote": "Les chaînes protégées par DRM ne seront pas importées.",
+    "adminLiveTvTunerSaved": "Tuner enregistré",
+    "adminLiveTvDeleteTuner": "Supprimer le périphérique tuner",
+    "adminLiveTvDeleteTunerConfirm": "Êtes-vous sûr de vouloir supprimer ce périphérique tuner ?",
+    "adminLiveTvDeleteProvider": "Supprimer le fournisseur de guide",
+    "adminLiveTvDeleteProviderConfirm": "Êtes-vous sûr de vouloir supprimer ce fournisseur de guide ?",
+    "adminLiveTvProviderSaved": "Fournisseur de guide enregistré",
+    "adminLiveTvAddProvider": "Ajouter un fournisseur",
+    "adminLiveTvRefreshGuide": "Actualiser les données du guide",
+    "adminLiveTvMapChannels": "Mapper les chaînes",
+    "adminLiveTvNoTunerChannels": "Aucune chaîne de tuner trouvée",
+    "adminLiveTvXmltvPathHelp": "Chemin ou URL d'un fichier XMLTV. Le serveur le lit et vérifie s'il a été mis à jour. C'est à vous de créer et de mettre à jour ce fichier.",
+    "adminLiveTvSdCreateAccount": "Créez un compte sur {url}",
+    "@adminLiveTvSdCreateAccount": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "adminLiveTvSdSignIn": "Se connecter",
+    "adminLiveTvSdLineup": "Grille de chaînes",
+    "adminLiveTvSdSelectLineup": "Sélectionnez une grille de chaînes. Si aucune n'apparaît, vérifiez votre nom d'utilisateur, votre mot de passe et le code postal.",
+    "adminLiveTvGuideDays": "Nombre de jours de données du guide à télécharger",
+    "adminLiveTvGuideDaysHelp": "Un nombre de jours élevé permet de programmer plus loin à l'avance et d'afficher plus de programmes, mais le téléchargement prend plus de temps. Le réglage Automatique choisit une valeur d'après le nombre de chaînes.",
+    "adminLiveTvRecordingPath": "Chemin d'enregistrement par défaut",
+    "adminLiveTvRecordingPathHelp": "Emplacement où les enregistrements sont stockés. Si le champ est vide, le dossier de données du serveur est utilisé.",
+    "adminLiveTvStartWhenPossible": "Démarrer si possible",
+    "adminLiveTvStopWhenPossible": "Arrêter si possible",
+    "adminLiveTvMinutesBefore": "minutes avant",
+    "adminLiveTvMinutesAfter": "minutes après",
+    "adminLiveTvSectionGuide": "Données du guide",
+    "adminLiveTvSectionDefaultRecording": "Paramètres d'enregistrement par défaut",
+    "adminLiveTvSectionMetadata": "Métadonnées des enregistrements",
+    "adminUserLastActivity": "Dernière activité : {time}",
+    "@adminUserLastActivity": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "adminCurrentPassword": "Mot de passe actuel",
+    "adminChannelAccess": "Accès aux chaînes",
+    "adminDeviceAccess": "Accès aux appareils",
+    "adminDeleteFromAllLibraries": "Toutes les bibliothèques",
+    "adminUserDisabledBanner": "Cet utilisateur est désactivé. Désactivez l'option « Désactivé » dans « Autorisations » pour lui permettre de se reconnecter.",
+    "adminNewPasswordEmpty": "Le nouveau mot de passe ne peut pas être vide",
+    "adminScheduleStartBeforeEnd": "L'heure de début doit précéder l'heure de fin",
+    "adminDashboardAlerts": "Alertes",
+    "adminSessionGoHome": "Aller à l'écran d'accueil",
+    "adminPlayMethodRemux": "Remuxage",
+    "adminPlayMethodDirectStream": "Flux direct",
+    "adminPlayMethodDirectPlay": "Lecture directe",
+    "adminLogLevelTrace": "Trace",
+    "adminLogLevelDebug": "Débogage",
+    "adminLogLevelInformation": "Information",
+    "adminLogLevelWarning": "Avertissement",
+    "adminLogLevelError": "Erreur",
+    "adminLogLevelCritical": "Critique",
+    "adminLogLevelNone": "Aucun",
+    "adminActivityAllUsers": "Tous les utilisateurs",
+    "adminTaskLastRan": "Dernière exécution {time}, durée : {duration}.",
+    "@adminTaskLastRan": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            },
+            "duration": {
+                "type": "String"
+            }
+        }
+    },
+    "adminTaskResultFailed": "Échouée",
+    "adminTaskResultCancelled": "Annulée",
+    "adminTaskResultAborted": "Interrompue par l'arrêt du serveur",
+    "adminDurationSecondsShort": "{seconds}s",
+    "@adminDurationSecondsShort": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "adminDeleteTaskTrigger": "Supprimer le déclencheur",
+    "adminDeleteTaskTriggerConfirm": "Êtes-vous sûr de vouloir supprimer ce déclencheur ?",
+    "adminTaskTriggerEveryMinutes": "Toutes les {minutes} minutes",
+    "@adminTaskTriggerEveryMinutes": {
+        "placeholders": {
+            "minutes": {
+                "type": "String"
+            }
+        }
+    },
+    "adminTaskTriggerEveryHours": "Toutes les {hours} heures",
+    "@adminTaskTriggerEveryHours": {
+        "placeholders": {
+            "hours": {
+                "type": "String"
+            }
+        }
+    },
+    "adminTaskMinutesValue": "{minutes} minutes",
+    "@adminTaskMinutesValue": {
+        "placeholders": {
+            "minutes": {
+                "type": "String"
+            }
+        }
+    },
+    "adminTaskHoursValue": "{hours} heures",
+    "@adminTaskHoursValue": {
+        "placeholders": {
+            "hours": {
+                "type": "String"
+            }
+        }
+    },
+    "adminTimeLimitHours": "Limite de temps (heures)",
+    "adminTranscodingDecodingFor": "Activer le décodage matériel pour",
+    "adminTranscodingThreadCountHelp": "Nombre maximal de threads qu'un transcodage peut utiliser. Moins de threads sollicitent moins le processeur, mais risquent d'être trop lents pour une lecture fluide.",
+    "adminTranscodingThreadMax": "Max",
+    "adminTranscodingFfmpegPath": "Chemin de FFmpeg",
+    "adminTranscodingFfmpegPathHelp": "Le FFmpeg utilisé par le serveur. Il se configure sur le serveur, pas ici.",
+    "adminTranscodingAudioSeek": "Stratégie de recherche audio",
+    "adminTranscodingAudioSeekHelp": "Comment le serveur gère l'audio lorsque vous effectuez une recherche dans un flux HLS.",
+    "adminTranscodingTrimCopiedAudio": "Rogner l'audio copié",
+    "adminTranscodingTranscodeAudio": "Transcoder l'audio",
+    "adminResumeMinAudiobookMinutes": "Reprise minimale des livres audio (minutes)",
+    "adminResumeMinAudiobookHelp": "Les livres audio arrêtés avant cette durée sont considérés comme non lus.",
+    "adminResumeAudiobookRemaining": "Minutes restantes pour reprendre un livre audio",
+    "adminResumeAudiobookRemainingHelp": "Les livres audio arrêtés à moins de ce nombre de minutes de la fin sont considérés comme lus.",
+    "adminBrandingSplashSection": "Écran de démarrage",
+    "adminBrandingSectionWebClient": "Client web",
+    "adminBrandingSplashSizeHint": "Les images personnalisées doivent avoir un rapport de 16x9 et une taille minimale de 1920x1080.",
+    "adminNetworkingSectionServerAddress": "Paramètres d'adresse du serveur",
+    "adminNetworkingSectionHttps": "Paramètres HTTPS",
+    "adminNetworkingSectionRemoteAccess": "Paramètres d'accès distant",
+    "adminNetworkingSectionIpProtocols": "Protocoles IP",
+    "adminNetworkingSectionDiscovery": "Découverte réseau",
+    "adminNetworkingSectionFirewall": "Paramètres de pare-feu et de proxy",
+    "adminNetworkingLocalHttpPort": "Numéro de port HTTP local",
+    "adminNetworkingLocalHttpPortHelp": "Numéro de port TCP du serveur HTTP.",
+    "adminNetworkingEnableHttpsHelp": "Écoute sur le port HTTPS. Un certificat valide doit également être configuré pour que cela prenne effet.",
+    "adminNetworkingLocalHttpsPort": "Numéro de port HTTPS local",
+    "adminNetworkingLocalHttpsPortHelp": "Numéro de port TCP du serveur HTTPS.",
+    "adminNetworkingBaseUrlHelp": "Ajoute un sous-répertoire à l'URL du serveur, par exemple https://example.com/jellyfin.",
+    "adminNetworkingBindAddress": "Lier à l'adresse du réseau local",
+    "adminNetworkingBindAddressHelp": "Remplace l'adresse IP locale du serveur HTTP. Laissez le champ vide pour écouter sur toutes les adresses. Toute modification nécessite un redémarrage.",
+    "adminNetworkingLanNetworksHelp": "Adresses IP ou entrées IP/masque des réseaux considérés comme locaux pour les limites de bande passante et d'accès distant. Laissez le champ vide pour considérer toutes les adresses RFC1918 comme locales.",
+    "adminNetworkingKnownProxiesHelp": "Adresses IP ou noms d'hôte des proxys placés devant ce serveur. Nécessaire pour lire les en-têtes X-Forwarded-For. Toute modification nécessite un redémarrage.",
+    "adminNetworkingCustomCertPath": "Chemin du certificat SSL personnalisé",
+    "adminNetworkingCertPathHelp": "Chemin d'un fichier PKCS #12 contenant un certificat et une clé privée, pour le TLS sur un domaine personnalisé.",
+    "adminNetworkingCertPasswordHelp": "Saisissez le mot de passe si votre certificat en exige un.",
+    "adminNetworkingAllowRemote": "Autoriser les connexions distantes à ce serveur",
+    "adminNetworkingAllowRemoteHelp": "Si cette option est désactivée, toutes les connexions distantes sont bloquées.",
+    "adminNetworkingRemoteIpFilterHelp": "Adresses IP ou entrées IP/masque des réseaux distants. Laissez le champ vide pour autoriser toutes les adresses distantes.",
+    "adminNetworkingRemoteIpFilterMode": "Mode du filtre IP distant",
+    "adminNetworkingPublicHttpPortHelp": "Port public associé au port HTTP local.",
+    "adminNetworkingPublicHttpsPortHelp": "Port public associé au port HTTPS local.",
+    "adminNetworkingAutoDiscoveryLabel": "Activer la découverte automatique",
+    "adminNetworkingAutoDiscoveryHelp": "Permet aux applications de trouver ce serveur sur le port UDP 7359.",
+    "adminNetworkingSamePublishedUri": "Utiliser la même URI publiée du serveur pour l'accès interne et externe",
+    "adminNetworkingPublishedUri": "URI publiée du serveur",
+    "adminNetworkingPublishedUriHelp": "Remplace l'URI communiquée par le serveur, selon l'interface ou l'adresse IP du client.",
+    "adminNetworkingInternalUri": "URI interne",
+    "adminNetworkingInternalUriHelp": "URI publiée du serveur pour l'accès interne.",
+    "adminNetworkingExternalUri": "URI externe",
+    "adminNetworkingExternalUriHelp": "URI publiée du serveur pour l'accès externe.",
+    "adminNetworkingOtherPublishedUris": "Autres URI publiées",
+    "adminNetworkingOtherPublishedUrisHelp": "URI propres à un sous-réseau ou à une interface, au format sous-réseau=URI.",
+    "adminBackupsHelp": "Créez et restaurez des instantanés de votre serveur. Ils peuvent inclure la base de données, les métadonnées, les sous-titres et les images trickplay.",
+    "adminBackupDisclaimer": "Selon la taille de votre bibliothèque, la sauvegarde peut prendre un certain temps.",
+    "adminBackupTasksWarningTitle": "Des tâches planifiées sont en cours",
+    "adminBackupTasksWarning": "Arrêtez ces tâches ou attendez qu'elles se terminent avant de créer une sauvegarde.",
+    "adminBackupArchiveNotFound": "Le serveur n'a pas trouvé cette archive de sauvegarde.",
+    "adminRestoreInProgress": "Restauration en cours",
+    "adminRestoreWaitingForServer": "En attente du retour en ligne du serveur.",
+    "adminRestoreSucceeded": "Restauration terminée",
+    "adminLogWatch": "Suivre en direct",
+    "adminLogStopWatching": "Arrêter le suivi",
+    "adminPluginInstallConfirmTitle": "Confirmer l'installation du plugin",
+    "adminPluginInstallDisclaimer": "Installer un plugin tiers comporte des risques. Il peut contenir du code instable ou malveillant, et il peut changer à tout moment. N'installez que des plugins d'auteurs de confiance, en sachant ce qu'ils peuvent faire : interroger des services externes, ralentir l'analyse des bibliothèques ou ajouter des traitements en arrière-plan.",
+    "adminGroupOverview": "Vue d'ensemble",
+    "adminGroupLibrary": "Bibliothèque",
+    "adminGroupPlayback": "Lecture",
+    "adminGroupPeople": "Personnes",
+    "adminGroupSystem": "Système",
+    "adminAreasLabel": "Zones d'administration",
+    "adminPagesLabel": "Pages",
+    "adminPageDescDashboard": "État du serveur, sessions et activité récente",
+    "adminPageDescAnalytics": "Tailles des bibliothèques, codecs et formats",
+    "adminPageDescActivity": "Tout ce qui s'est passé sur le serveur",
+    "adminPageDescTasks": "Analyses, nettoyages et leurs déclencheurs",
+    "adminPageDescLibraries": "Dossiers, analyseurs et récupérateurs de métadonnées",
+    "adminPageDescDisplay": "Comment les bibliothèques s'affichent aux utilisateurs",
+    "adminPageDescMetadata": "Langue, pays et images par défaut",
+    "adminPageDescNfo": "Lecture et enregistrement des NFO Kodi",
+    "adminPageDescLiveTv": "Tuners, données du guide et enregistrements",
+    "adminPageDescTranscoding": "Accélération matérielle, encodeurs, tone mapping",
+    "adminPageDescResume": "Quand un élément est considéré comme commencé ou lu",
+    "adminPageDescStreaming": "Limite de débit des connexions distantes",
+    "adminPageDescTrickplay": "Miniatures d'aperçu lors de la recherche",
+    "adminPageDescUsers": "Comptes, accès et contrôle parental",
+    "adminPageDescDevices": "Appareils connectés et leurs noms",
+    "adminPageDescApiKeys": "Clés pour les applications et les scripts",
+    "adminPageDescSettings": "Nom du serveur, langue, chemins, performances",
+    "adminPageDescBranding": "Message de connexion, CSS personnalisé, écran de démarrage",
+    "adminPageDescNetworking": "Ports, HTTPS, réseau local et accès distant",
+    "adminPageDescPlugins": "Plugins installés et catalogue",
+    "adminPageDescRepositories": "D'où viennent les plugins",
+    "adminPageDescBackups": "Créer et restaurer les sauvegardes du serveur",
+    "adminPageDescLogs": "Fichiers journaux du serveur",
+    "adminSearchSettingsHint": "Rechercher parmi {count} paramètres",
+    "@adminSearchSettingsHint": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "adminSearchNoResults": "Aucun paramètre correspondant",
+    "adminSearchClear": "Effacer la recherche",
+    "adminUnsavedChanges": "Modifications non enregistrées",
+    "adminDiscard": "Abandonner",
+    "adminLeaveTitle": "Abandonner les modifications non enregistrées ?",
+    "adminLeaveMessage": "Les modifications de cette page n'ont pas encore été enregistrées.",
+    "adminKeepEditing": "Continuer l'édition",
+    "clientCertTitle": "Certificat client",
+    "@clientCertTitle": {
+        "description": "Title of the dialog that imports a TLS client certificate for a server"
+    },
+    "clientCertHost": "Certificat pour {host}",
+    "@clientCertHost": {
+        "description": "Names the server host the client certificate will be presented to",
+        "placeholders": {
+            "host": {
+                "type": "String"
+            }
+        }
+    },
+    "clientCertChooseFile": "Choisir un fichier",
+    "@clientCertChooseFile": {
+        "description": "Button that picks a .p12 or .pfx file"
+    },
+    "clientCertPassword": "Mot de passe du certificat",
+    "@clientCertPassword": {
+        "description": "Label for the password that unlocks the .p12 or .pfx file"
+    },
+    "clientCertStartUpload": "Envoyer depuis un téléphone",
+    "@clientCertStartUpload": {
+        "description": "Button on a TV that opens a one-time page a phone on the same network can send the certificate to"
+    },
+    "clientCertUploadHint": "Scannez ce code avec votre téléphone, ou ouvrez l'adresse dans son navigateur, puis choisissez le fichier et saisissez son mot de passe.",
+    "@clientCertUploadHint": {
+        "description": "Shown under the QR code while the TV waits for the phone to send the certificate"
+    },
+    "clientCertStopUpload": "Arrêter l'attente",
+    "@clientCertStopUpload": {
+        "description": "Button that closes the phone upload page before a certificate arrives"
+    },
+    "clientCertNoFileData": "Lecture du fichier impossible. Réessayez.",
+    "@clientCertNoFileData": {
+        "description": "Shown when the picked file has no contents"
+    },
+    "clientCertPickFailed": "Ouverture du sélecteur de fichiers impossible.",
+    "@clientCertPickFailed": {
+        "description": "Shown when the file picker fails to open"
+    },
+    "clientCertUploadFailed": "Ouverture de la page de téléversement impossible. Réessayez.",
+    "@clientCertUploadFailed": {
+        "description": "Shown when the TV can't open the page the phone sends the certificate to"
+    },
+    "clientCertNoSecureStorage": "Cet appareil n'a pas de stockage sécurisé, le certificat ne peut donc pas être enregistré. Sous Linux, installez libsecret et réessayez.",
+    "@clientCertNoSecureStorage": {
+        "description": "Shown when there is no keychain or secret store to keep the certificate in"
+    },
+    "clientCertDecodeFailed": "Impossible de lire ce fichier comme un certificat. Vérifiez qu'il s'agit bien d'un .p12 ou d'un .pfx.",
+    "@clientCertDecodeFailed": {
+        "description": "Shown when the file isn't a usable .p12 or .pfx"
+    },
+    "clientCertWrongPassword": "Ce mot de passe ne déverrouille pas ce certificat.",
+    "@clientCertWrongPassword": {
+        "description": "Shown when the password for the .p12 or .pfx file is wrong"
+    },
+    "clientCertRequired": "Ce serveur exige un certificat client (mTLS). Ajoutez-en un pour cet hôte afin de continuer.",
+    "@clientCertRequired": {
+        "description": "Shown on the sign-in screens when the server turned the connection away for lack of a client certificate"
+    },
+    "clientCertExpired": "Le certificat de ce serveur a expiré le {date}. Remplacez-le pour continuer.",
+    "@clientCertExpired": {
+        "description": "Shown on the sign-in screen when the server turned the connection away and the stored certificate has expired",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "clientCertAddButton": "Ajouter un certificat client",
+    "@clientCertAddButton": {
+        "description": "Button that opens the certificate import from the add-server and sign-in screens"
+    },
+    "settingsClientCertificates": "Certificats client",
+    "@settingsClientCertificates": {
+        "description": "Settings entry that lists the imported client certificates"
+    },
+    "settingsClientCertificatesSubtitle": "Certificats que cette application présente aux serveurs qui en exigent un (mTLS)",
+    "@settingsClientCertificatesSubtitle": {
+        "description": "Subtitle for the client certificates settings entry"
+    },
+    "clientCertSubject": "Sujet",
+    "@clientCertSubject": {
+        "description": "Label for the name on a client certificate"
+    },
+    "clientCertExpires": "Expire le {date}",
+    "@clientCertExpires": {
+        "description": "When a client certificate stops being valid",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "clientCertReplace": "Remplacer",
+    "@clientCertReplace": {
+        "description": "Button that imports a new certificate in place of the stored one for a host"
+    },
+    "clientCertAdd": "Ajouter un certificat",
+    "@clientCertAdd": {
+        "description": "Button that starts importing a certificate for a new host"
+    },
+    "clientCertAddHostPrompt": "Quel hôte de serveur a besoin d'un certificat ?",
+    "@clientCertAddHostPrompt": {
+        "description": "Title of the prompt that asks which host a new certificate is for"
+    },
+    "removeWatchedDownloads": "Supprimer les téléchargements vus",
+    "@removeWatchedDownloads": {
+        "description": "Storage setting that picks how soon an episode or movie the user downloaded themselves is removed after it was watched"
+    },
+    "removeWatchedDownloadsSubtitle": "Quand supprimer les épisodes et films que vous avez téléchargés vous-même. Seuls ceux que vous regardez après l'activation de ce réglage sont supprimés",
+    "@removeWatchedDownloadsSubtitle": {
+        "description": "Explains the remove-watched-downloads setting"
+    },
+    "keepDownloaded": "Conserver le téléchargement",
+    "@keepDownloaded": {
+        "description": "Toggle on the download sheet that stops watched downloads of this title from being removed automatically"
+    },
+    "keepDownloadedSubtitle": "Ne jamais supprimer ce téléchargement automatiquement après visionnage",
+    "@keepDownloadedSubtitle": {
+        "description": "Explains the keep-downloaded toggle"
+    },
+    "librarySortPlaylistOrder": "Ordre de la playlist",
+    "@librarySortPlaylistOrder": {
+        "description": "Sort option: the playlist's own track order"
+    },
+    "librarySortDateAdded": "Date d'ajout",
+    "@librarySortDateAdded": {
+        "description": "Sort option: when an item was added to the server library"
+    },
+    "librarySortDateEpisodeAdded": "Date d'ajout de l'épisode",
+    "@librarySortDateEpisodeAdded": {
+        "description": "Sort option for series: when the newest episode was added"
+    },
+    "librarySortParentalRating": "Classification parentale",
+    "@librarySortParentalRating": {
+        "description": "Sort option: by parental (age) rating such as PG-13"
+    },
+    "librarySortMyRating": "Ma note",
+    "@librarySortMyRating": {
+        "description": "Sort option: by the viewer's own like or dislike"
+    },
+    "librarySortAlbumArtist": "Artiste de l'album",
+    "@librarySortAlbumArtist": {
+        "description": "Sort option for music: by album artist"
+    },
+    "librarySortAlbum": "Album",
+    "@librarySortAlbum": {
+        "description": "Sort option for music: by album name"
+    },
+    "librarySortArtist": "Artiste",
+    "@librarySortArtist": {
+        "description": "Sort option for music: by track artist"
+    },
+    "librarySortTrackNumber": "Numéro de piste",
+    "@librarySortTrackNumber": {
+        "description": "Sort option for music: by track number"
+    },
+    "librarySortGenre": "Genre",
+    "@librarySortGenre": {
+        "description": "Sort option: by genre"
+    },
+    "librarySortFoldersFirst": "Dossiers en premier",
+    "@librarySortFoldersFirst": {
+        "description": "Sort option for folder libraries: folders before files, then by name"
+    },
+    "librarySortLength": "Durée",
+    "@librarySortLength": {
+        "description": "Sort option for music: by track or album length"
+    },
+    "loginForbidden": "Impossible de se connecter avec ce compte pour le moment. Il est peut-être hors des horaires autorisés, verrouillé ou désactivé. Réessayez plus tard ou contactez un administrateur.",
+    "@loginForbidden": {
+        "description": "Sign in error when the server refuses the account with a 403, which Jellyfin does for an access schedule, a lockout or a disabled account without saying which"
+    },
+    "landscape": "Paysage",
+    "@landscape": {
+        "description": "Orientation choice: the device held sideways"
+    },
+    "portrait": "Portrait",
+    "@portrait": {
+        "description": "Orientation choice: the device held upright"
+    },
+    "gameKeepPlaying": "Continuer à jouer",
+    "@gameKeepPlaying": {
+        "description": "Exit confirmation choice that returns to the game"
+    },
+    "gameExitGame": "Quitter le jeu",
+    "@gameExitGame": {
+        "description": "Exit confirmation choice that leaves the game"
+    },
+    "gameSavingBeforeExit": "Sauvegarde…",
+    "@gameSavingBeforeExit": {
+        "description": "Shown over the paused game while it saves on the way out"
+    },
+    "keyNameDelete": "Suppr",
+    "@keyNameDelete": {
+        "description": "Key cap label for the Delete key"
+    },
+    "shortcutHideControls": "Masquer les commandes",
+    "@shortcutHideControls": {
+        "description": "What Backspace and Delete do in the player: hide the controls or the panel on top of them"
+    },
+    "shortcutSkipSegment": "Ignorer l'intro ou le générique lorsque c'est proposé",
+    "@shortcutSkipSegment": {
+        "description": "Player shortcut action that presses the skip intro or credits button while it is showing"
+    },
+    "liveTvJumpToLive": "Revenir au direct",
+    "@liveTvJumpToLive": {
+        "description": "Live TV player button that leaves a rewound or paused stream and returns to what is airing now"
+    },
+    "playbackVideoUnsupported": "Cet appareil ne peut pas lire le format de cette vidéo. Essayez un lecteur externe.",
+    "@playbackVideoUnsupported": {
+        "description": "Shown when the player can't show an item's video and no transcode is left to try, instead of playing the audio over a black screen"
+    },
+    "buttonShownInSyncPlayGroup": "S'affiche uniquement lorsque vous êtes dans un groupe SyncPlay",
+    "@buttonShownInSyncPlayGroup": {
+        "description": "Hint under the SyncPlay and Watch with group buttons in the button settings, which only appear once the user has joined a group"
+    },
+    "jumpBackIn": "Reprendre l'écoute",
+    "@jumpBackIn": {
+        "description": "Heading over the albums and playlists the user played recently in a music library"
+    },
+    "yourPlaylists": "Vos playlists",
+    "@yourPlaylists": {
+        "description": "Heading over the user's playlists in a music library"
+    },
+    "fromThisAlbum": "De cet album",
+    "@fromThisAlbum": {
+        "description": "Heading over the track list of the album shown in the music library hero"
+    },
+    "searchMusic": "Rechercher de la musique",
+    "@searchMusic": {
+        "description": "Placeholder and label for the search control in a music library"
+    },
+    "bookSeriesCount": "{count, plural, one{{count} série} other{{count} séries}}",
+    "@bookSeriesCount": {
+        "description": "How many series a book library holds",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "bookInProgressCount": "{count} en cours",
+    "@bookInProgressCount": {
+        "description": "How many books or audiobooks are started but not finished",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "bookBrowseAllTitles": "{count, plural, one{Parcourir {count} titre} other{Parcourir tous les {count} titres}}",
+    "@bookBrowseAllTitles": {
+        "description": "Link from the book library to the full title grid",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchBooks": "Rechercher des livres",
+    "@searchBooks": {
+        "description": "Button in the book library that opens search within it"
+    },
+    "libraryShowLabel": "Afficher",
+    "@libraryShowLabel": {
+        "description": "Library button that opens the played status filter, followed by its current value such as All or Unwatched"
+    },
+    "libraryAToZ": "A à Z",
+    "@libraryAToZ": {
+        "description": "Library bottom bar button that turns the alphabet on and off"
+    },
+    "libraryJumpToLetter": "Aller à une lettre",
+    "@libraryJumpToLetter": {
+        "description": "Label of the alphabet in a library, which scrolls to the first item starting with the chosen letter"
+    },
+    "analyticsLibraryShare": "Répartition des éléments par bibliothèque",
+    "analyticsTopRating": "Classification la plus fréquente",
+    "analyticsTypicalRuntime": "Durée habituelle",
+    "analyticsShareOfItems": "{percent} % des éléments",
+    "@analyticsShareOfItems": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "smartDownloadsEnableDescription": "Lorsque vous terminez un épisode sur n'importe quel appareil, Moonfin télécharge les suivants. Les épisodes qu'il télécharge sont supprimés une fois vus.",
+    "@smartDownloadsEnableDescription": {
+        "description": "Explains the smart downloads switch, including that watched episodes are deleted"
+    },
+    "autoDownloadDeleteFollowedSubtitle": "Quand supprimer les épisodes téléchargés pour les séries que vous suivez, après les avoir vus",
+    "@autoDownloadDeleteFollowedSubtitle": {
+        "description": "Explains the delete-after-watching setting"
+    },
+    "animeMarkerSubbedShort": "Sub",
+    "@animeMarkerSubbedShort": {
+        "description": "Short form of the Subbed badge"
+    },
+    "animeMarkerDubbedShort": "Dub",
+    "@animeMarkerDubbedShort": {
+        "description": "Short form of the Dubbed badge"
+    },
+    "pickDiscoverySubjects": "Choisissez quels flux de sujets afficher dans Découvrir.",
+    "@pickDiscoverySubjects": {
+        "description": "Instruction text in discovery subject picker"
+    },
+    "pickAudiobookGenres": "Choisissez quels genres afficher dans Découvrir pour les livres audio.",
+    "@pickAudiobookGenres": {
+        "description": "Instruction text in audiobook genre picker"
+    },
+    "discoverAudiobooks": "Découvrir des livres audio",
+    "@discoverAudiobooks": {
+        "description": "Section title for audiobook discovery"
+    },
+    "librivoxDescription": "Titres populaires du domaine public de LibriVox.",
+    "@librivoxDescription": {
+        "description": "Subtitle for audiobook discovery section"
+    },
+    "titlesCount": "{count} titres",
+    "@titlesCount": {
+        "description": "Label showing number of titles",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "trendingTitlesOpenLibrary": "Titres tendance par sujet depuis Open Library.",
+    "@trendingTitlesOpenLibrary": {
+        "description": "Subtitle for book discovery section"
+    },
+    "enableFolderView": "Activer la vue dossiers",
+    "@enableFolderView": {
+        "description": "Setting for enabling folder view"
+    },
+    "showFolderBrowsingOption": "Afficher l’option de navigation par dossiers",
+    "@showFolderBrowsingOption": {
+        "description": "Description for folder view"
+    },
+    "posterSizeImageTypeFolderView": "Taille des affiches, type d’image, vue des dossiers",
+    "@posterSizeImageTypeFolderView": {
+        "description": "Library display settings subtitle"
+    },
+    "closeGenrePanel": "Fermer le panneau des genres",
     "tgMissing": "Manquant",
     "tgComing": "À venir",
     "tgComingOn": "Arrive le {date}",

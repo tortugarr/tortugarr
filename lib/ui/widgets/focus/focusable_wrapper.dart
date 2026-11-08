@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../util/focus/dpad_keys.dart';
+import '../../../util/focus/input_mode_tracker.dart';
 import '../../../util/focus/key_event_utils.dart';
 import 'focus_theme.dart';
 
@@ -36,6 +37,9 @@ class FocusableWrapper extends StatefulWidget {
   final String? semanticLabel;
   final bool suppressFocusGlow;
 
+  /// Draws the focus border while a mouse is over it too.
+  final bool highlightOnHover;
+
   const FocusableWrapper({
     super.key,
     required this.child,
@@ -63,10 +67,32 @@ class FocusableWrapper extends StatefulWidget {
     this.onKeyEvent,
     this.semanticLabel,
     this.suppressFocusGlow = false,
+    this.highlightOnHover = false,
   });
+
+  /// Whether the [FocusableWrapper] with [useBackgroundFocus] above [context]
+  /// is showing its solid focus.
+  static bool isHighlighted(BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<_BackgroundFocusScope>()
+          ?.highlighted ??
+      false;
 
   @override
   State<FocusableWrapper> createState() => _FocusableWrapperState();
+}
+
+class _BackgroundFocusScope extends InheritedWidget {
+  final bool highlighted;
+
+  const _BackgroundFocusScope({
+    required this.highlighted,
+    required super.child,
+  });
+
+  @override
+  bool updateShouldNotify(_BackgroundFocusScope oldWidget) =>
+      highlighted != oldWidget.highlighted;
 }
 
 class _FocusableWrapperState extends State<FocusableWrapper>
@@ -75,8 +101,10 @@ class _FocusableWrapperState extends State<FocusableWrapper>
   late AnimationController _scaleController;
   late Animation<double> _scaleAnimation;
   bool _focused = false;
+  bool _hovered = false;
   Timer? _longPressTimer;
   bool _longPressFired = false;
+  late final GlobalKey _contentKey = GlobalKey();
 
   FocusNode get _node => widget.focusNode ?? (_ownedNode ??= FocusNode());
 
@@ -206,17 +234,21 @@ class _FocusableWrapperState extends State<FocusableWrapper>
   @override
   Widget build(BuildContext context) {
     final color = FocusTheme.resolveColor(context, widget.focusColor);
+    // A touch leaves focus parked on whatever it hit, which shouldn't read as
+    // a pick, so background focus only lights for a remote, a keyboard or the
+    // mouse.
+    final highlighted = widget.useBackgroundFocus
+        ? (InputModeTracker.of(context) == InputMode.keyboard
+              ? _focused
+              : _hovered)
+        : _focused || _hovered;
     final decoration = widget.useBackgroundFocus
-        ? FocusTheme.focusDecoration(
-            isFocused: _focused,
+        ? FocusTheme.solidFocusDecoration(
+            active: highlighted,
             radius: widget.borderRadius,
-            backgroundColor: _focused
-                ? color.withValues(alpha: 0.18)
-                : null,
-            suppressFocusGlow: widget.suppressFocusGlow,
           )
         : FocusTheme.focusDecoration(
-            isFocused: _focused,
+            isFocused: highlighted,
             radius: widget.borderRadius,
             color: null,
             suppressFocusGlow: widget.suppressFocusGlow,
@@ -229,12 +261,28 @@ class _FocusableWrapperState extends State<FocusableWrapper>
     final borders = ThemeRegistry.active.borders;
     final effectiveRadius = AppColorScheme.isPixel ? 0.0 : widget.borderRadius;
     final borderWidth = FocusTheme.borderWidth;
-    final showOverlayBorder = _focused && !widget.useBackgroundFocus;
+    final showOverlayBorder = highlighted && !widget.useBackgroundFocus;
+    var child = widget.child;
+    if (widget.useBackgroundFocus) {
+      // Recolors the content to read on the solid fill. The key carries its
+      // state across as the filter comes and goes.
+      child = KeyedSubtree(key: _contentKey, child: child);
+      if (highlighted) {
+        child = ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            FocusTheme.solidFocusForeground,
+            BlendMode.srcIn,
+          ),
+          child: child,
+        );
+      }
+      child = _BackgroundFocusScope(highlighted: highlighted, child: child);
+    }
     final childWithOverlay = Stack(
       clipBehavior: Clip.none,
       fit: StackFit.passthrough,
       children: [
-        widget.child,
+        child,
         if (showOverlayBorder)
           Positioned.fill(
             child: IgnorePointer(
@@ -269,19 +317,31 @@ class _FocusableWrapperState extends State<FocusableWrapper>
       content = Semantics(label: widget.semanticLabel, child: content);
     }
 
+    Widget tappable = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onSelect != null ? _handleTap : null,
+      onLongPress: widget.onLongPress != null ? _handleLongPress : null,
+      onSecondaryTap: widget.onLongPress != null ? _handleLongPress : null,
+      child: content,
+    );
+    if (widget.highlightOnHover || widget.useBackgroundFocus) {
+      tappable = MouseRegion(
+        cursor: widget.onSelect != null
+            ? SystemMouseCursors.click
+            : MouseCursor.defer,
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: tappable,
+      );
+    }
+
     return Focus(
       focusNode: _node,
       autofocus: widget.autofocus,
       descendantsAreFocusable: widget.descendantsAreFocusable,
       onKeyEvent: _onKeyEvent,
       onFocusChange: _handleFocusChange,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: widget.onSelect != null ? _handleTap : null,
-        onLongPress: widget.onLongPress != null ? _handleLongPress : null,
-        onSecondaryTap: widget.onLongPress != null ? _handleLongPress : null,
-        child: content,
-      ),
+      child: tappable,
     );
   }
 }

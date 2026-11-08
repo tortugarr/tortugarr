@@ -242,7 +242,9 @@ void lh_set_pad_state(lh_host *host, int port, uint16_t mask,
 
 // Touchscreen for cores that read RETRO_DEVICE_POINTER (melonDS). A level, not
 // an edge: [x]/[y] are -32767..32767 across the whole video frame and the
-// platform sends pressed=0 on finger-up. One pointer per port.
+// platform sends pressed=0 on finger-up, whose position is ignored. A tap that
+// ends before the next frame still reaches the core for one frame. One
+// pointer per port.
 void lh_set_pointer(lh_host *host, int port, int pressed, int16_t x, int16_t y);
 
 // Loads [core_path] and [rom_path]. [system_dir] and [save_dir] back the core's
@@ -406,6 +408,9 @@ uint16_t lh_test_read_input(lh_host *host, int port);
 // comment for why these hooks exist.
 int16_t lh_test_read_analog(lh_host *host, int port, int index, int axis);
 uint16_t lh_test_read_trigger(lh_host *host, int port, int which);
+// Test-only: the post-latch pointer snapshot for [port], with [field] 0=X,
+// 1=Y and 2=pressed.
+int16_t lh_test_read_pointer(lh_host *host, int port, int field);
 
 // Distinct environment commands this host has answered with the default
 // false. Test-only: the diagnostic those commands emit goes to stderr or

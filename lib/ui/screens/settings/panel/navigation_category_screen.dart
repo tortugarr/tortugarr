@@ -229,6 +229,17 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       icon: Icons.video_library,
                       onChanged: _pushPersonalizationSync,
                     ),
+                  // The bottom navbar keeps its Libraries sheet, so this only
+                  // applies to the top bar and the sidebar.
+                  if (!NavigationLayout.usesBottomNavbar &&
+                      prefs.get(UserPreferences.showLibrariesInToolbar))
+                    SwitchPreferenceTile(
+                      preference: UserPreferences.showLibrariesIndividually,
+                      title: l10n.showLibrariesIndividually,
+                      subtitle: l10n.showLibrariesIndividuallySubtitle,
+                      icon: Icons.video_library,
+                      onChanged: _pushPersonalizationSync,
+                    ),
                   SwitchPreferenceTile(
                     preference: UserPreferences.showSyncPlayButton,
                     title: l10n.settingsSyncplayButton,
@@ -236,15 +247,6 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     icon: Icons.groups,
                     onChanged: _pushPersonalizationSync,
                   ),
-                  if (!onBar.contains(BottomNavTab.folders))
-                    SwitchPreferenceTile(
-                      key: const ValueKey(BottomNavTab.folders),
-                      preference: UserPreferences.enableFolderView,
-                      title: l10n.enableFolderView,
-                      subtitle: l10n.showFolderBrowsingOption,
-                      icon: Icons.folder,
-                      onChanged: _pushPersonalizationSync,
-                    ),
                   if (seerrEnabledOnAccount &&
                       _syncService.seerrAvailable &&
                       !onBar.contains(BottomNavTab.discover))

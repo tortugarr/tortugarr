@@ -85,13 +85,41 @@ class BookReaderService {
     DateTime? localSavedAt,
   }) {
     final ticks = item.playbackPositionTicks ?? 0;
-    if (ticks <= 0) return null;
-    final serverSavedAt = item.lastPlayedDate;
-    if (localSavedAt != null &&
-        (serverSavedAt == null || !serverSavedAt.isAfter(localSavedAt))) {
+    if (ticks <= 0 || !_serverSavedLater(item, localSavedAt)) return null;
+    return (ticks / ticksPerPage).round();
+  }
+
+  /// Jellyfin 12 gives an EPUB a runtime of one second's worth of ticks and
+  /// stores the reading position as that share of it.
+  static const int epubTicksPerBook = 10000000;
+
+  /// The server position for [fraction] of an EPUB. jellyfin-web floors it
+  /// too, and epub.js rounds a percentage up to the next location when it
+  /// restores one, so flooring brings back the location that was saved.
+  static int epubTicks(double fraction) =>
+      (fraction.clamp(0.0, 1.0) * epubTicksPerBook).floor();
+
+  /// The share of the book that EPUB [item]'s server position points at, or
+  /// null when it has none, it's the position this device reported last
+  /// ([localTicks]), or this device saved its own place more recently.
+  static double? newerServerEpubFraction(
+    AggregatedItem item, {
+    int? localTicks,
+    DateTime? localSavedAt,
+  }) {
+    final ticks = item.playbackPositionTicks ?? 0;
+    if (ticks <= 0 ||
+        ticks == localTicks ||
+        !_serverSavedLater(item, localSavedAt)) {
       return null;
     }
-    return (ticks / ticksPerPage).round();
+    return (ticks / epubTicksPerBook).clamp(0.0, 1.0);
+  }
+
+  static bool _serverSavedLater(AggregatedItem item, DateTime? localSavedAt) {
+    final serverSavedAt = item.lastPlayedDate;
+    return localSavedAt == null ||
+        (serverSavedAt != null && serverSavedAt.isAfter(localSavedAt));
   }
 
   static List<Uri> buildDownloadUris(MediaServerClient client, AggregatedItem item) {

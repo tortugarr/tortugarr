@@ -1,0 +1,1058 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:playback_core/playback_core.dart';
+
+import '../data/services/client_certificate_service.dart';
+import '../data/services/log_service.dart';
+import '../preference/preference_constants.dart';
+import '../preference/user_preferences.dart';
+import '../util/loggable_url.dart';
+import '../util/platform_detection.dart';
+
+import 'apple_secondary_subtitle_controls.dart';
+import 'device_profile_builder.dart';
+import 'dolby_vision_av1.dart';
+import 'engine_trust.dart';
+import 'known_defects.dart';
+import 'letterbox_croppers.dart';
+import 'lossless_audio_bridge.dart';
+import 'server_transcode_capabilities.dart';
+
+class NativeApplePlayerBackend
+    with SubtitleDelayState, AppleSecondarySubtitleControls
+    implements PlayerBackend, SecondarySubtitleBackend {
+  NativeApplePlayerBackend(this._prefs) {
+    _eventSub = _events.receiveBroadcastStream().listen(
+      _handleEvent,
+      onError: (_) {},
+    );
+    _prefs.addListener(_syncNativePreferences);
+    _syncNativePreferences();
+  }
+
+  static const _control = MethodChannel('moonfin/native_apple_player_control');
+  static const _events = EventChannel('moonfin/native_apple_player_events');
+
+  final UserPreferences _prefs;
+
+  StreamSubscription<dynamic>? _eventSub;
+
+  Duration _position = Duration.zero;
+  Duration _duration = Duration.zero;
+  Duration _buffer = Duration.zero;
+  bool _isPlaying = false;
+  bool _isBuffering = false;
+  double _playbackSpeed = 1.0;
+  double _volume = 100.0;
+  double _audioDelaySeconds = 0.0;
+  bool _completed = false;
+  SubtitleRendererMode _requestedSubtitleRendererMode =
+      SubtitleRendererMode.native;
+
+  int _textTrackCount = 0;
+  bool _tracksKnown = false;
+  int? _activeSubtitleTrackIndex;
+  Map<String, dynamic>? _pendingEmbeddedSubtitle;
+  Completer<void>? _tracksReadyCompleter;
+  List<EmbeddedCaptionTrack> _embeddedCaptionTracks = const [];
+  final _tracksChangedController = StreamController<void>.broadcast();
+
+  bool _disposed = false;
+  bool? _engineLogForwarding;
+  EngineTrust? _trust;
+  bool _playerPresented = false;
+  bool _audioOnly = false;
+  Timer? _audioDelayDebounce;
+
+  final _positionStream = StreamController<Duration>.broadcast();
+  final _durationStream = StreamController<Duration>.broadcast();
+  final _bufferStream = StreamController<Duration>.broadcast();
+  final _playingStream = StreamController<bool>.broadcast();
+  final _bufferingStream = StreamController<bool>.broadcast();
+  final _completedStream = StreamController<bool>.broadcast();
+  final _errorStream = StreamController<Map<String, dynamic>>.broadcast();
+  final _userExitStream = StreamController<void>.broadcast();
+  final _uiActionStream = StreamController<Map<String, dynamic>>.broadcast();
+
+  @override
+  Stream<Map<String, dynamic>> get errorStream => _errorStream.stream;
+
+  Stream<void> get userExitStream => _userExitStream.stream;
+
+  Stream<Map<String, dynamic>> get uiActionStream => _uiActionStream.stream;
+
+  Future<T?> _invoke<T>(String method, [dynamic arguments]) async {
+    if (_disposed) return null;
+    try {
+      return await _control.invokeMethod<T>(method, arguments);
+    } on PlatformException catch (error) {
+      _log(
+        'Channel call $method failed code=${error.code}',
+        level: LogLevel.error,
+        error: error.message,
+      );
+      return null;
+    } catch (error) {
+      _log('Channel call $method failed', level: LogLevel.error, error: error);
+      return null;
+    }
+  }
+
+  @override
+  Future<T?> invokeAppleSecondaryControl<T>(
+    String method, [
+    dynamic arguments,
+  ]) =>
+      _invoke<T>(method, arguments);
+
+  void _log(String message, {LogLevel level = LogLevel.debug, Object? error}) {
+    if (!GetIt.instance.isRegistered<LogService>()) return;
+    GetIt.instance<LogService>().playback(message, level: level, error: error);
+  }
+
+  Future<void> _ensurePlayerPresented({bool audioOnly = false}) async {
+    if (_disposed || _playerPresented) return;
+    _playerPresented = true;
+    _audioOnly = audioOnly;
+    await _invoke<void>('present', {'audioOnly': audioOnly});
+  }
+
+  Future<void> _dismissPlayer() async {
+    if (!_playerPresented) return;
+    _playerPresented = false;
+    await _invoke<void>('dismiss');
+  }
+
+  Future<void> dismissPlayer() => _dismissPlayer();
+
+  /// Takes the player off screen without stopping it, so Flutter can draw
+  /// over the live picture. Answers with a texture showing that picture, or
+  /// null when the engine has no frames to share.
+  Future<int?> suspendPlayer() => _invoke<int>('suspend');
+
+  /// Puts a suspended player back on screen, still on the same stream.
+  Future<void> resumePlayer() => _invoke<void>('resume');
+
+  /// The live recovery's "Reconnecting" line, or null to take it down.
+  Future<void> setReconnecting(String? label) =>
+      _invoke<void>('setReconnecting', {'label': label});
+
+  /// An alert over the player. [actionLabel] adds a button that answers with
+  /// a `messageAction` event.
+  Future<void> showMessage(
+    String message, {
+    String? actionLabel,
+    required String closeLabel,
+  }) => _invoke<void>('showMessage', {
+    'message': message,
+    'actionLabel': ?actionLabel,
+    'closeLabel': closeLabel,
+  });
+
+  bool get isPlayerPresented => _playerPresented && !_audioOnly;
+
+  Future<void> sendRemoteNavigation(String command) =>
+      _invoke<void>('remoteNavigation', {'command': command});
+
+  void _handleEvent(dynamic event) {
+    if (_disposed || event is! Map) return;
+    final map = event.map((k, v) => MapEntry(k.toString(), v));
+    final eventType = map['event']?.toString();
+
+    switch (eventType) {
+      case 'state':
+        _position = Duration(milliseconds: _toInt(map['positionMs']));
+        _duration = Duration(milliseconds: _toInt(map['durationMs']));
+        _buffer = Duration(milliseconds: _toInt(map['bufferedMs']));
+        _isPlaying = _toBool(map['isPlaying']);
+        _isBuffering = _toBool(map['isBuffering']);
+
+        final completedNow =
+            _duration > Duration.zero && _position >= _duration && !_isPlaying;
+        if (completedNow != _completed) {
+          _completed = completedNow;
+          _completedStream.add(_completed);
+        }
+
+        _positionStream.add(_position);
+        _durationStream.add(_duration);
+        _bufferStream.add(_buffer);
+        _playingStream.add(_isPlaying);
+        _bufferingStream.add(_isBuffering);
+      case 'presented':
+        _playerPresented = true;
+      case 'dismissed':
+        _playerPresented = false;
+        _isPlaying = false;
+        _isBuffering = false;
+        _playingStream.add(false);
+        _bufferingStream.add(false);
+      case 'userExited':
+        _userExitStream.add(null);
+      case 'play':
+      case 'pause':
+      case 'seek':
+      case 'next':
+      case 'previous':
+      case 'selectAudio':
+      case 'selectSubtitle':
+      case 'setSubtitleSize':
+      case 'setSubtitlePosition':
+      case 'selectSecondarySubtitle':
+      case 'setSecondarySubtitleDelay':
+      case 'configureSecondarySubtitleStyle':
+      case 'setSpeed':
+      case 'setBitrate':
+      case 'selectChannel':
+      case 'openGuide':
+      case 'record':
+      case 'messageAction':
+      case 'toggleOrientation':
+      case 'toggleFavorite':
+      case 'stillWatchingContinue':
+      case 'stillWatchingStop':
+      case 'nextUpPlay':
+      case 'nextUpCancel':
+      case 'nextUpDismiss':
+      case 'skipSegment':
+      case 'cinemaSkipAction':
+      case 'userSeeked':
+      case 'searchSubtitles':
+      case 'downloadSubtitle':
+      case 'syncplayLeave':
+      case 'syncplayIgnoreWait':
+      case 'openEpisodes':
+      case 'selectEpisodesSeason':
+      case 'selectEpisode':
+      case 'episodesClosed':
+        _uiActionStream.add(map.cast<String, dynamic>());
+      case 'tracksChanged':
+        _tracksKnown = true;
+        _textTrackCount = _toInt(map['textTrackCount']);
+        _applyPendingEmbeddedSubtitle();
+        _embeddedCaptionTracks = EmbeddedCaptionTrack.listFromWire(
+          map['closedCaptionTracks'],
+        );
+        if (_tracksReadyCompleter != null &&
+            !_tracksReadyCompleter!.isCompleted) {
+          _tracksReadyCompleter!.complete();
+        }
+        if (!_tracksChangedController.isClosed) {
+          _tracksChangedController.add(null);
+        }
+      case 'completed':
+        _completed = _toBool(map['completed']);
+        _completedStream.add(_completed);
+      case 'syncDelays':
+        _audioDelaySeconds = _toInt(map['audioDelayMs']) / 1000.0;
+        subtitleDelaySeconds = _toInt(map['subtitleDelayMs']) / 1000.0;
+      case 'engineLog':
+        _logEngineLine(map['line']);
+      case 'playerError':
+      case 'error':
+        _logPlaybackError(map);
+        _errorStream.add(map.cast<String, dynamic>());
+        _isPlaying = false;
+        _isBuffering = false;
+        _completed = false;
+        _playingStream.add(false);
+        _bufferingStream.add(false);
+        _completedStream.add(false);
+    }
+  }
+
+  /// The preferences notify on every change, so each sync below guards its
+  /// own flag and only a real change reaches the channel.
+  void _syncNativePreferences() {
+    _syncEngineLogForwarding();
+    _syncAllowUntrustedTls();
+  }
+
+  void _syncEngineLogForwarding() {
+    final enabled = _prefs.get(UserPreferences.diagnosticLoggingEnabled);
+    if (enabled == _engineLogForwarding) return;
+    _engineLogForwarding = enabled;
+    _invoke<void>('setEngineLogForwarding', {'enabled': enabled});
+  }
+
+  void _logEngineLine(dynamic line) {
+    if (line is! String || line.isEmpty) return;
+    _log(line);
+  }
+
+  /// A native failure never reaches the server, so without this the report
+  /// from a user whose playback didn't start shows only browsing.
+  void _logPlaybackError(Map<dynamic, dynamic> map) {
+    _log(
+      'Native player error kind=${map['kind'] ?? 'unknown'} '
+      'recoverable=${map['recoverable']}',
+      level: LogLevel.error,
+      error: map['message'],
+    );
+  }
+
+  /// The engine streams over URLSession, which enforces system certificate
+  /// trust that the Dart client bypasses through its bad certificate
+  /// callback, so without this a self signed server browses fine and fails
+  /// every playback.
+  void _syncAllowUntrustedTls() {
+    final trust = EngineTrust.current(
+      _prefs.get(UserPreferences.allowSelfSignedCerts),
+    );
+    if (trust.matches(_trust)) return;
+    _trust = trust;
+    _invoke<void>('setAllowUntrustedTls', trust.toChannelArguments());
+  }
+
+  int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
+  bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    return false;
+  }
+
+  String? _normalizeTrackLanguagePref(String? value) {
+    final normalized = (value ?? '').trim().toLowerCase();
+    if (normalized.isEmpty || normalized == 'auto' || normalized == 'none') {
+      return null;
+    }
+    return normalized;
+  }
+
+  @override
+  Future<void> play(
+    dynamic mediaItem, {
+    Duration startPosition = Duration.zero,
+  }) async {
+    final payload = mediaItem is Map ? mediaItem : const <String, dynamic>{};
+    final url = mediaItem is String
+        ? mediaItem
+        : payload['url']?.toString() ?? '';
+    if (_disposed || url.isEmpty) return;
+    updateSubtitleDelaySession(payload['subtitleDelaySessionId'] as int?);
+
+    final autoPlay = payload['autoPlay'] != false;
+
+    final headers = payload['headers'] is Map
+        ? (payload['headers'] as Map).map(
+            (key, value) => MapEntry(key.toString(), value.toString()),
+          )
+        : <String, String>{};
+
+    _completed = false;
+    // Until the new session ticks, the previous item's end would stand in
+    // for this one's position, and a stop then reports it as watched.
+    _position = startPosition;
+    _positionStream.add(_position);
+    _tracksKnown = false;
+    _textTrackCount = 0;
+    _activeSubtitleTrackIndex = null;
+    _pendingEmbeddedSubtitle = null;
+    _tracksReadyCompleter = null;
+    _embeddedCaptionTracks = const [];
+
+    final audioOnly =
+        (payload['mediaType']?.toString() ?? 'video') == 'audio';
+    _log(
+      'play ${loggableUrl(url)} live=${payload['isLive'] == true} '
+      'audioOnly=$audioOnly startMs=${startPosition.inMilliseconds} '
+      'headers=${(headers.keys.toList()..sort()).join(',')} '
+      'autoPlay=$autoPlay',
+    );
+    await _ensurePlayerPresented(audioOnly: audioOnly);
+
+    await _invoke<void>('setClientCertificates', {
+      'certificates': nativeClientCertificates(pkcs12: true),
+    });
+
+    await _invoke<void>('setSource', {
+      'url': url,
+      'headers': headers,
+      'autoPlay': autoPlay,
+      'startPositionMs': startPosition.inMilliseconds,
+      'container': payload['container']?.toString(),
+      'videoRangeType': payload['videoRangeType']?.toString(),
+      'videoCodec': payload['videoCodec']?.toString(),
+      'videoDvProfile': payload['videoDvProfile'],
+      'dolbyVisionBaseLayerOnly': needsBaseLayerOnlyForDolbyVisionAv1(payload),
+      'externalSubtitles': payload['externalSubtitles'] ?? const [],
+      'secondarySubtitleTrackId': payload['secondarySubtitleTrackId'],
+      'secondarySubtitleUrl': payload['secondarySubtitleUrl'],
+      'secondarySubtitleDelayMs': payload['secondarySubtitleDelayMs'] ?? 0,
+      'secondarySubtitleOffset': PlaybackManager.clampSecondarySubtitleOffset(
+        (payload['secondarySubtitleOffset'] as num?)?.toDouble() ??
+            PlaybackManager.defaultSecondarySubtitleOffset,
+      ),
+      'secondarySubtitleFontSize': payload['secondarySubtitleFontSize'],
+      'secondarySubtitleTextColor': payload['secondarySubtitleTextColor'],
+      'videoFrameRate': payload['videoFrameRate'],
+      'videoWidth': payload['videoWidth'],
+      'videoHeight': payload['videoHeight'],
+      'audioCodec': payload['audioCodec']?.toString(),
+      'audioProfile': payload['audioProfile']?.toString(),
+      'audioChannels': payload['audioChannels'],
+      'audioStreamIndex': (payload['audioStreamIndex'] as num?)?.toInt() ?? -1,
+      'audioBridgeLossless': usesLosslessAudioBridge(
+        _prefs.detectedAudioCapabilities,
+        maxAudioChannels: _prefs.resolveMaxAudioChannels(),
+        downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      ),
+      'isLive': payload['isLive'] == true,
+      'mediaType': payload['mediaType']?.toString() ?? 'video',
+      'normalizationGainDb': (payload['normalizationGainDb'] as num?)?.toDouble(),
+      'dolbyVisionFallbackBehavior':
+          _prefs.get(UserPreferences.dolbyVisionFallbackBehavior).name,
+      'preferredAudioLanguage': _normalizeTrackLanguagePref(
+        payload['preferredAudioLanguage']?.toString() ??
+            _prefs.get(UserPreferences.defaultAudioLanguage),
+      ),
+      'preferredTextLanguage': _normalizeTrackLanguagePref(
+        payload['preferredTextLanguage']?.toString() ??
+            _prefs.get(UserPreferences.defaultSubtitleLanguage),
+      ),
+      'speed': _playbackSpeed,
+      'volume': _volume,
+      'audioDelayMs': (_audioDelaySeconds * 1000).round(),
+      'subtitleDelayMs': (subtitleDelaySeconds * 1000).round(),
+      'subtitleRendererMode': _modeToWire(_requestedSubtitleRendererMode),
+      'forceSubtitlesDisabledOnStart':
+          !audioOnly && _prefs.get(UserPreferences.subtitleMode) == SubtitleMode.none,
+    });
+  }
+
+  @override
+  Future<void> resume() async {
+    // On iOS this backend only plays while its player is up. After that the
+    // manager still holds it, and a stray play from the lock screen or a
+    // headset would otherwise bring up an empty player.
+    if (PlatformDetection.isIOS && !_playerPresented) return;
+    await _ensurePlayerPresented();
+    await _invoke<void>('play');
+  }
+
+  @override
+  Future<void> pause() async {
+    await _invoke<void>('pause');
+  }
+
+  // Implements rather than extends, so the interface default is not inherited.
+  @override
+  bool? get playWhenReady => null;
+
+  // No way to re-open a live source in place, so the manager escalates.
+  @override
+  Future<bool> resumeLiveEdge() async => false;
+
+  @override
+  LiveSeekWindow? get liveSeekWindow => null;
+
+  @override
+  Future<void> stop() async {
+    _pendingEmbeddedSubtitle = null;
+    await _invoke<void>('stop');
+    if (_isPlaying) {
+      _isPlaying = false;
+      _playingStream.add(false);
+    }
+  }
+
+  @override
+  Future<void> seekTo(Duration position) async {
+    await _invoke<void>('seek', {'positionMs': position.inMilliseconds});
+  }
+
+  @override
+  Duration get position => _position;
+
+  @override
+  Duration get duration => _duration;
+
+  @override
+  Duration get buffer => _buffer;
+
+  @override
+  bool get isPlaying => _isPlaying;
+
+  @override
+  bool get isBuffering => _isBuffering;
+
+  @override
+  double get playbackSpeed => _playbackSpeed;
+
+  @override
+  Stream<Duration> get positionStream => _positionStream.stream;
+
+  @override
+  Stream<Duration> get durationStream => _durationStream.stream;
+
+  @override
+  Stream<Duration> get bufferStream => _bufferStream.stream;
+
+  @override
+  Stream<bool> get playingStream => _playingStream.stream;
+
+  @override
+  Stream<bool> get bufferingStream => _bufferingStream.stream;
+
+  @override
+  Stream<bool> get completedStream => _completedStream.stream;
+
+  @override
+  bool get decodesHevcOnlyFromOriginalFile =>
+      PlatformDetection.offersHevcSoftwareDecode &&
+      _prefs.get(UserPreferences.hevcSoftwareDirectPlay);
+
+  @override
+  Map<String, dynamic> getDeviceProfile({
+    bool useProgressiveTranscode = false,
+  }) {
+    final maxBitrate = int.tryParse(_prefs.get(UserPreferences.maxBitrate));
+    final maxResolution = _prefs.get(UserPreferences.maxVideoResolution);
+    final audioCapabilityProfile = _prefs.detectedAudioCapabilities;
+    final softwareHevc = decodesHevcOnlyFromOriginalFile;
+    final softwareAv1Uhd =
+        PlatformDetection.offersAv1SoftwareUhd &&
+        _prefs.get(UserPreferences.av1SoftwareUhdDirectPlay);
+
+    return DeviceProfileBuilder.build(
+      maxBitrateMbps: maxBitrate,
+      audioCapabilityProfile: audioCapabilityProfile,
+      audioFallbackCodec: _prefs.resolveAudioFallbackCodec(),
+      transcodeAudioCodecs: _prefs.resolveTranscodeAudioCodecs(),
+      ac3PassthroughEnabled: _prefs.resolveAc3PassthroughEnabled(),
+      eac3PassthroughEnabled: _prefs.resolveEac3PassthroughEnabled(),
+      dtsCorePassthroughEnabled: _prefs.resolveDtsCorePassthroughEnabled(),
+      trueHdPassthroughEnabled: _prefs.resolveTrueHdPassthroughEnabled(),
+      downmixToStereo: _prefs.get(UserPreferences.downmixToStereo),
+      maxAudioChannels: _prefs.resolveMaxAudioChannels(),
+      // AetherEngine plays every advertised audio codec: AAC/AC3/EAC3(+JOC
+      // Atmos)/FLAC/ALAC are stream-copied intact, and TrueHD/DTS/MP3/Opus/
+      // Vorbis/PCM are bridged to EAC3 or FLAC on-device, so stereo routes
+      // never need a server-side audio transcode.
+      universalAudioDecode: true,
+      appliesDownmixToStereo: false,
+      bridgesAudioToEac3: true,
+      maxResolution: maxResolution,
+      pgsDirectPlay: _prefs.get(UserPreferences.pgsDirectPlay),
+      assDirectPlay: _prefs.get(UserPreferences.assDirectPlay),
+      supportsAvc: PlatformDetection.supportsAvc,
+      supportsAvcHigh10: PlatformDetection.supportsAvcHigh10,
+      avcMainLevel: PlatformDetection.avcMainLevel,
+      avcHigh10Level: PlatformDetection.avcHigh10Level,
+      capsAvcRefFrames: false,
+      supportsHevc: PlatformDetection.supportsHevc || softwareHevc,
+      supportsHevcMain10: PlatformDetection.supportsHevcMain10 || softwareHevc,
+      transcodeHevcAllowed: serverAllowsHevcTranscode(),
+      hevcRequiresFmp4Hls: true,
+      hevcDirectPlayOnly: softwareHevc,
+      hlsAudioForAvFoundation: true,
+      hevcMainLevel: PlatformDetection.hevcMainLevel,
+      supportsHevcDolbyVision: PlatformDetection.supportsHevcDolbyVision,
+      supportsHevcDolbyVisionEl: PlatformDetection.supportsHevcDolbyVisionEl,
+      supportsHevcHdr10: PlatformDetection.supportsHevcHdr10,
+      supportsHevcHdr10Plus: PlatformDetection.supportsHevcHdr10Plus,
+      supportsAv1: PlatformDetection.supportsAv1,
+      supportsAv1Main10: PlatformDetection.supportsAv1Main10,
+      supportsAv1DolbyVision: PlatformDetection.supportsAv1DolbyVision,
+      supportsAv1Hdr10:
+          PlatformDetection.supportsAv1Hdr10 ||
+          (softwareAv1Uhd && PlatformDetection.supportsHevcHdr10),
+      supportsAv1Hdr10Plus: PlatformDetection.supportsAv1Hdr10Plus,
+      rendersAv1DoviViaHdr10BaseLayer: true,
+      supportsVc1: PlatformDetection.supportsVc1,
+      maxResolutionAvcWidth: PlatformDetection.maxResolutionAvcWidth,
+      maxResolutionAvcHeight: PlatformDetection.maxResolutionAvcHeight,
+      maxResolutionHevcWidth: PlatformDetection.maxResolutionHevcWidth,
+      maxResolutionHevcHeight: PlatformDetection.maxResolutionHevcHeight,
+      maxResolutionAv1Width: softwareAv1Uhd
+          ? 3840
+          : PlatformDetection.maxResolutionAv1Width,
+      maxResolutionAv1Height: softwareAv1Uhd
+          ? 2160
+          : PlatformDetection.maxResolutionAv1Height,
+      maxResolutionVc1Width: PlatformDetection.maxResolutionVc1Width,
+      maxResolutionVc1Height: PlatformDetection.maxResolutionVc1Height,
+      supportsDvProfile5: PlatformDetection.supportsDoViProfile5,
+      // AetherEngine converts P7 (dual-layer) to P8.1 per-packet via libdovi,
+      // so P7 direct play no longer depends on a native-decode preference.
+      supportsDvProfile7: PlatformDetection.supportsDoViProfile7,
+      supportsDvProfile8: PlatformDetection.supportsDoViProfile8,
+      knownHevcDoviHdr10PlusBug: PlatformDetection.knownHevcDoviHdr10PlusBug,
+      allowDolbyVisionProfile7ElDirectPlay:
+          KnownDefects.shouldAllowDolbyVisionProfile7ElDirectPlay(
+            behavior: _prefs.get(
+              UserPreferences.dolbyVisionProfile7DirectPlayBehavior,
+            ),
+            // Auto otherwise falls through to a model list that no Apple
+            // device is on, so every P7 title transcodes on hardware that
+            // can play it.
+            hasHardwareDolbyVisionDecoder:
+                PlatformDetection.supportsDoViProfile7,
+          ),
+    );
+  }
+
+  Future<void> setUiMetadata({
+    required String topTitle,
+    required String topSubtitle,
+    required List<Map<String, dynamic>> chapters,
+    // Gates the marks alone. The chapter list still travels in full, since
+    // the chapters button and its menu read the same array. Off by default
+    // to match the preference.
+    bool showChapterMarkers = false,
+    required bool hasPrevious,
+    required bool hasNext,
+    required int skipForwardMs,
+    required int skipBackMs,
+    required List<Map<String, dynamic>> audioTracks,
+    required List<Map<String, dynamic>> subtitleTracks,
+    Map<String, dynamic>? subtitleControls,
+    String logoUrl = '',
+    List<Map<String, dynamic>> streamInfoSections = const [],
+    String streamInfoTitle = '',
+    String streamInfoDroppedFramesLabel = '',
+    Map<String, dynamic>? trickplay,
+    bool hasCast = false,
+    List<Map<String, dynamic>> castPeople = const [],
+    Map<String, dynamic>? pauseMeta,
+    int selectedBitrateMbps = -1,
+    bool canFavorite = false,
+    bool isFavorite = false,
+    bool canDownloadSubtitles = false,
+    Map<String, dynamic>? syncPlay,
+    bool isLive = false,
+    Map<String, dynamic>? liveProgram,
+    Map<String, dynamic>? liveRecord,
+    bool? orientationLocked,
+    String liveChannelNumber = '',
+    List<Map<String, dynamic>> channelList = const [],
+    List<Map<String, dynamic>> streamStats = const [],
+    List<String>? osdButtons,
+    bool canBrowseEpisodes = false,
+    bool? transportDocked,
+  }) async {
+    await _invoke<void>('setUiMetadata', {
+      'topTitle': topTitle,
+      'topSubtitle': topSubtitle,
+      'chapters': chapters,
+      'showChapterMarkers': showChapterMarkers,
+      'hasPrevious': hasPrevious,
+      'hasNext': hasNext,
+      'skipForwardMs': skipForwardMs,
+      'skipBackMs': skipBackMs,
+      'audioTracks': audioTracks,
+      'subtitleTracks': subtitleTracks,
+      'subtitleControls': ?subtitleControls,
+      'logoUrl': logoUrl,
+      'streamInfoSections': streamInfoSections,
+      'streamInfoTitle': streamInfoTitle,
+      'streamInfoDroppedFramesLabel': streamInfoDroppedFramesLabel,
+      'trickplay': ?trickplay,
+      'hasCast': hasCast,
+      'castPeople': castPeople,
+      'pauseMeta': ?pauseMeta,
+      'selectedBitrateMbps': selectedBitrateMbps,
+      'canFavorite': canFavorite,
+      'isFavorite': isFavorite,
+      'canDownloadSubtitles': canDownloadSubtitles,
+      'syncPlay': ?syncPlay,
+      'isLive': isLive,
+      'liveProgram': ?liveProgram,
+      'liveRecord': ?liveRecord,
+      // Left out where the player carries no rotation lock.
+      'orientationLocked': ?orientationLocked,
+      'liveChannelNumber': liveChannelNumber,
+      'channelList': channelList,
+      'streamStats': streamStats,
+      // The buttons the user left switched on, in their order. A caller with
+      // no row to arrange leaves this out, which reads as no opinion rather
+      // than as everything switched off.
+      'osdButtons': ?osdButtons,
+      'canBrowseEpisodes': canBrowseEpisodes,
+      // Only iOS reads it. The television always docks the transport.
+      'transportDocked': ?transportDocked,
+      // Only iOS reads these, the touch screen's volume and brightness swipes.
+      'swipeGestures': _prefs.get(UserPreferences.playerSwipeGestures),
+      'gestureIndicatorsInverted':
+          _prefs.get(UserPreferences.gestureIndicatorPlacement) ==
+          GestureIndicatorPlacement.inverted,
+    });
+  }
+
+  Future<void> showEpisodeBrowser(Map<String, dynamic> content) async {
+    await _invoke<void>('showEpisodeBrowser', content);
+  }
+
+  /// New content for an open browser. One the viewer already closed ignores it.
+  Future<void> updateEpisodeBrowser(Map<String, dynamic> content) async {
+    await _invoke<void>('updateEpisodeBrowser', content);
+  }
+
+  Future<void> hideEpisodeBrowser() async {
+    await _invoke<void>('hideEpisodeBrowser');
+  }
+
+  Future<void> showNextUp({
+    required String title,
+    required String episodeInfo,
+    required String imageUrl,
+    required bool isMinimal,
+    required String countdownStyle,
+    required int timeoutMs,
+  }) async {
+    await _invoke<void>('showNextUp', {
+      'title': title,
+      'episodeInfo': episodeInfo,
+      'imageUrl': imageUrl,
+      'isMinimal': isMinimal,
+      'countdownStyle': countdownStyle,
+      'timeoutMs': timeoutMs,
+    });
+  }
+
+  Future<void> hideNextUp() async {
+    await _invoke<void>('hideNextUp');
+  }
+
+  /// Returns whether the native modal actually presented so the caller can
+  /// fail open instead of waiting on a prompt that never appeared.
+  Future<bool> showStillWatching() async {
+    final presented = await _invoke<bool>('showStillWatching');
+    return presented ?? false;
+  }
+
+  Future<void> setCinemaSkipState(Map<String, Object?> state) =>
+      _invoke<void>('setCinemaSkipState', state);
+
+  Future<void> showSkipSegment(
+    String label, {
+    required String countdownStyle,
+    required int segmentStartMs,
+    required int segmentEndMs,
+  }) async {
+    await _invoke<void>('showSkipSegment', {
+      'label': label,
+      'countdownStyle': countdownStyle,
+      'segmentStartMs': segmentStartMs,
+      'segmentEndMs': segmentEndMs,
+    });
+  }
+
+  Future<void> hideSkipSegment() async {
+    await _invoke<void>('hideSkipSegment');
+  }
+
+  Future<void> showRemoteSubtitles(List<Map<String, dynamic>> results) async {
+    await _invoke<void>('showRemoteSubtitles', {'results': results});
+  }
+
+  Future<void> showSubtitleProgress(String message) async {
+    await _invoke<void>('showSubtitleProgress', {'message': message});
+  }
+
+  /// Pass a message to leave the viewer with something to acknowledge, or null
+  /// when the subtitle arrived and the progress alert can just go away.
+  Future<void> hideSubtitleProgress({String? message}) async {
+    await _invoke<void>('hideSubtitleProgress', {'message': message});
+  }
+
+  Future<void> setThemeConfig({
+    required bool isGlass,
+    required int accentARGB,
+    required int surfaceARGB,
+    required int surfaceVariantARGB,
+    required int onSurfaceARGB,
+    required int rangeProgressARGB,
+    required int rangeTrackARGB,
+  }) async {
+    await _invoke<void>('setThemeConfig', {
+      'isGlass': isGlass,
+      'accent': accentARGB,
+      'surface': surfaceARGB,
+      'surfaceVariant': surfaceVariantARGB,
+      'onSurface': onSurfaceARGB,
+      'rangeProgress': rangeProgressARGB,
+      'rangeTrack': rangeTrackARGB,
+    });
+  }
+
+  Future<void> setPromptStrings(Map<String, String> strings) async {
+    await _invoke<void>('setPromptStrings', strings);
+  }
+
+  Future<void> setTimeSlots(Map<String, Object> slots) async {
+    await _invoke<void>('setTimeSlots', slots);
+  }
+
+  @override
+  Future<void> setPlaybackSpeed(double speed) async {
+    _playbackSpeed = speed;
+    await _invoke<void>('setSpeed', {'speed': speed});
+  }
+
+  @override
+  Future<void> setAudioTrack(int index) async {
+    await _invoke<void>('setAudioTrack', {'index': index});
+  }
+
+  @override
+  Future<void> setSubtitleTrack(
+    int index, {
+    bool isBitmapSubtitle = false,
+    String? subtitleCodec,
+    bool isExternalSubtitle = false,
+    String? externalSubtitleUrl,
+  }) async {
+    _pendingEmbeddedSubtitle = null;
+    _activeSubtitleTrackIndex = index;
+    _log(
+      'setSubtitleTrack index=$index external=$isExternalSubtitle '
+      'bitmap=$isBitmapSubtitle codec=${subtitleCodec ?? 'none'} '
+      'url=${externalSubtitleUrl == null ? 'none' : loggableUrl(externalSubtitleUrl)}',
+    );
+    final arguments = <String, dynamic>{
+      'index': index,
+      'isBitmapSubtitle': isBitmapSubtitle,
+      'codec': subtitleCodec,
+      'isExternalSubtitle': isExternalSubtitle,
+      'externalSubtitleUrl': externalSubtitleUrl,
+    };
+    // Native track discovery can announce zero subtitles before demux ends.
+    // Keep the choice until its ordinal exists instead of losing it in Swift.
+    if (!isExternalSubtitle && index > _textTrackCount) {
+      _pendingEmbeddedSubtitle = arguments;
+      return;
+    }
+    await _invoke<void>('setSubtitleTrack', arguments);
+  }
+
+  void _applyPendingEmbeddedSubtitle() {
+    final pending = _pendingEmbeddedSubtitle;
+    if (_disposed ||
+        pending == null ||
+        (pending['index'] as int) > _textTrackCount) {
+      return;
+    }
+    // Consume before dispatch so repeated track events cannot reselect it.
+    _pendingEmbeddedSubtitle = null;
+    unawaited(_invoke<void>('setSubtitleTrack', pending));
+  }
+
+  @override
+  Future<void> disableSubtitleTrack() async {
+    _pendingEmbeddedSubtitle = null;
+    _activeSubtitleTrackIndex = -1;
+    _log('disableSubtitleTrack');
+    await _invoke<void>('disableSubtitleTrack');
+  }
+
+  @override
+  int? get activeSubtitleTrackIndex => _activeSubtitleTrackIndex;
+
+  @override
+  Future<int?> getActiveSubtitleTrackIndexAsync() async =>
+      _activeSubtitleTrackIndex;
+
+  @override
+  Future<void> waitForTracksReady() async {
+    if (_tracksKnown) {
+      return;
+    }
+    _tracksReadyCompleter ??= Completer<void>();
+    await _tracksReadyCompleter!.future.timeout(
+      const Duration(seconds: 6),
+      onTimeout: () {},
+    );
+  }
+
+  @override
+  Future<void> waitForEmbeddedSubtitleCount(int count) async {
+    final started = DateTime.now();
+    final deadline = started.add(const Duration(seconds: 6));
+    var satisfied = false;
+    while (DateTime.now().isBefore(deadline)) {
+      if (_textTrackCount >= count) {
+        satisfied = true;
+        break;
+      }
+      await waitForTracksReady();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    _log(
+      'waitForEmbeddedSubtitleCount want=$count have=$_textTrackCount '
+      'satisfied=$satisfied '
+      'waited=${DateTime.now().difference(started).inMilliseconds}ms',
+    );
+  }
+
+  @override
+  Future<void> setVolume(double volume) async {
+    if (_disposed) throw StateError('Player is disposed');
+    final value = volume.clamp(0.0, 100.0);
+    // Unlike fire-and-forget player commands, report volume only after the
+    // native setter succeeds. Keep failures visible to the session receiver.
+    await _control.invokeMethod<void>('setVolume', {'volume': value});
+    _volume = value;
+  }
+
+  @override
+  Future<void> setAudioDelay(double seconds) async {
+    _audioDelaySeconds = seconds;
+    _audioDelayDebounce?.cancel();
+    _audioDelayDebounce = Timer(const Duration(milliseconds: 350), () {
+      _audioDelayDebounce = null;
+      if (_disposed) return;
+      unawaited(_invoke<void>('setAudioDelay', {
+        'delayMs': (_audioDelaySeconds * 1000).round(),
+      }));
+    });
+  }
+
+  @override
+  Future<void> setSubtitleDelay(double seconds) async {
+    subtitleDelaySeconds = seconds;
+    await _invoke<void>('setSubtitleDelay', {
+      'delayMs': (seconds * 1000).round(),
+    });
+  }
+
+  @override
+  Future<void> addExternalSubtitle(
+    String url, {
+    String? title,
+    String? language,
+    String? codec,
+  }) async {
+    _log(
+      'addExternalSubtitle ${loggableUrl(url)} title=${title ?? 'none'} '
+      'language=${language ?? 'none'} codec=${codec ?? 'none'}',
+    );
+    await _invoke<void>('addExternalSubtitle', {
+      'url': url,
+      'title': title,
+      'language': language,
+      'codec': codec,
+    });
+  }
+
+  @override
+  Future<void> configureSubtitleStyle({
+    int? textColor,
+    int? backgroundColor,
+    int? strokeColor,
+    double? fontSize,
+    int? fontWeight,
+    double? verticalOffset,
+  }) async {
+    await _invoke<void>('configureSubtitleStyle', {
+      'textColor': textColor,
+      'backgroundColor': backgroundColor,
+      'strokeColor': strokeColor,
+      'fontSize': fontSize,
+      'fontWeight': fontWeight,
+      'verticalOffset': verticalOffset,
+    });
+  }
+
+  @override
+  Future<void> setSubtitleRendererMode(SubtitleRendererMode mode) async {
+    _requestedSubtitleRendererMode = mode;
+    await _invoke<void>('setSubtitleRendererMode', {'mode': _modeToWire(mode)});
+  }
+
+  String _modeToWire(SubtitleRendererMode mode) {
+    return switch (mode) {
+      SubtitleRendererMode.native => 'native',
+      SubtitleRendererMode.assOverlay => 'assOverlay',
+    };
+  }
+
+  @override
+  bool get supportsRuntimeTrackSelection => true;
+
+  @override
+  LetterboxCropper get letterboxCropper => const AppleTvLetterboxCropper();
+
+  @override
+  bool get supportsLetterboxCrop => letterboxCropper.isSupported;
+
+  @override
+  bool get supportsDirectPlayAudioSwitch => false;
+
+  @override
+  bool get requiresStartupMediaReadyCheck => false;
+
+  @override
+  bool get nativelyHandlesStartPosition => true;
+
+  @override
+  bool get managesAudioFocus => false;
+
+  @override
+  bool get canRenderBitmapSubtitles => true;
+
+  @override
+  bool get demuxesEmbeddedSubtitles => true;
+
+  // Every seek here goes through `.seeking`, which the wrapper reports as
+  // buffering with no in-buffer fast path, and one that restarts a transcode
+  // has to open the session again before a frame is rendered. Provisional
+  // until a device trace measures the real distribution; SyncPlay measures
+  // each seek anyway and only uses these to pace itself and to decide when a
+  // gap has stopped being seek cost.
+  @override
+  Duration get typicalSeekLatency => const Duration(seconds: 4);
+
+  @override
+  Duration get maxSeekLatency => const Duration(seconds: 20);
+
+  // A rate write goes straight to the engine's AVPlayer rate. Every one of
+  // them audibly reconfigures the audio, and passthrough audio cannot play at
+  // anything but 1x, so a SyncPlay nudge every two seconds is a stutter that
+  // never stops.
+  @override
+  bool get supportsSmoothRateChange => false;
+
+  @override
+  List<EmbeddedCaptionTrack> get embeddedCaptionTracks =>
+      _embeddedCaptionTracks;
+
+  @override
+  Future<void> setEmbeddedCaptionTrack(int id) async {
+    _pendingEmbeddedSubtitle = null;
+    await _invoke<void>('setClosedCaptionTrack', {'id': id});
+  }
+
+  @override
+  Stream<void> get tracksChangedStream => _tracksChangedController.stream;
+
+  @override
+  void dispose() {
+    if (_disposed) return;
+    _pendingEmbeddedSubtitle = null;
+    _disposed = true;
+    _prefs.removeListener(_syncNativePreferences);
+    _audioDelayDebounce?.cancel();
+    _audioDelayDebounce = null;
+    unawaited(_dismissPlayer());
+    unawaited(_eventSub?.cancel());
+    _positionStream.close();
+    _durationStream.close();
+    _bufferStream.close();
+    _playingStream.close();
+    _bufferingStream.close();
+    _completedStream.close();
+    _errorStream.close();
+    _userExitStream.close();
+    _uiActionStream.close();
+    _tracksChangedController.close();
+  }
+}

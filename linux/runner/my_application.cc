@@ -191,6 +191,34 @@ static void my_application_install_icon() {
               &copy_error);
 }
 
+// Clears the entry an AppImage run left once that image is gone. It shares its
+// name with the one an installed package ships, so it hides that entry, and
+// with nothing left to launch the desktop drops Moonfin from the menu.
+static void my_application_remove_stale_desktop_entry() {
+  g_autofree gchar* applications_dir =
+      g_build_filename(g_get_user_data_dir(), "applications", nullptr);
+  g_autofree gchar* entry_path = g_build_filename(
+      applications_dir, APPLICATION_ID ".desktop", nullptr);
+
+  g_autofree gchar* contents = nullptr;
+  if (!g_file_get_contents(entry_path, &contents, nullptr, nullptr) ||
+      !my_application_is_own_entry(contents)) {
+    return;
+  }
+
+  const gchar* image = contents + sizeof(MOONFIN_ENTRY_SIGNATURE) - 1;
+  const gchar* image_end = g_strstr_len(image, -1, "\"");
+  if (image_end == nullptr) {
+    return;
+  }
+  g_autofree gchar* image_path = g_strndup(image, image_end - image);
+  if (g_file_test(image_path, G_FILE_TEST_EXISTS)) {
+    return;
+  }
+
+  my_application_remove_desktop_entry(applications_dir, entry_path);
+}
+
 // Gives a Wayland compositor something to find when it looks up this window.
 //
 // A Wayland window carries no icon of its own, so the desktop resolves one by
@@ -200,12 +228,14 @@ static void my_application_install_icon() {
 // directory, pointing back at the running image, is the only thing that
 // answers that lookup.
 //
-// This runs for AppImage only. Every other package installs its own entry, and
-// a second copy here would shadow it and go stale. An AppImage under a manager
-// already has an entry too, so that case steps aside the same way.
+// Only an AppImage writes one. Every other package installs its own entry, and
+// a second copy here would shadow it and go stale, so those runs only clear a
+// stale one. An AppImage under a manager already has an entry too, so that
+// case steps aside the same way.
 static void my_application_install_desktop_entry() {
   const gchar* appimage = g_getenv("APPIMAGE");
   if (appimage == nullptr || *appimage == '\0') {
+    my_application_remove_stale_desktop_entry();
     return;
   }
 

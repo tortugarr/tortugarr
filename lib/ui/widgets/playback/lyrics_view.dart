@@ -15,12 +15,15 @@ class LyricsView extends StatefulWidget {
   /// line's timestamp so the player can seek to it. Null disables seeking.
   final ValueChanged<Duration>? onSeekToLine;
 
+  final TextAlign textAlign;
+
   const LyricsView({
     super.key,
     required this.lyrics,
     required this.positionStream,
     required this.position,
     this.onSeekToLine,
+    this.textAlign = TextAlign.center,
   });
 
   @override
@@ -137,7 +140,7 @@ class _LyricsViewState extends State<LyricsView> {
               fontSize: 16,
               height: 1.5,
             ),
-            textAlign: TextAlign.center,
+            textAlign: widget.textAlign,
           ),
         ),
       );
@@ -153,8 +156,11 @@ class _LyricsViewState extends State<LyricsView> {
       itemCount: lines.length,
       itemBuilder: (context, index) {
         final isActive = index == _activeIndex;
-        final line = Center(
+        final line = Align(
           key: _lineKeys[index],
+          alignment: widget.textAlign == TextAlign.center
+              ? Alignment.center
+              : AlignmentDirectional.centerStart,
           child: AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 220),
             curve: Curves.easeOut,
@@ -167,7 +173,7 @@ class _LyricsViewState extends State<LyricsView> {
               height: 1.35,
               shadows: isActive ? glow : null,
             ),
-            child: Text(lines[index].text, textAlign: TextAlign.center),
+            child: Text(lines[index].text, textAlign: widget.textAlign),
           ),
         );
         if (widget.onSeekToLine == null) return line;

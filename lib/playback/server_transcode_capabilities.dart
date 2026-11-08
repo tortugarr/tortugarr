@@ -3,7 +3,7 @@ import 'package:server_core/server_core.dart';
 
 /// Reads the cached probe result for the active server. False whenever the
 /// service is not registered, so profile builds outside a full app session
-/// keep the H264-only offer.
+/// keep the H264-first offer.
 bool serverAllowsHevcTranscode() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered<ServerTranscodeCapabilities>()) return false;
@@ -14,7 +14,7 @@ bool serverAllowsHevcTranscode() {
 /// its encoding options, so device profiles can offer an HEVC transcode
 /// target only when the admin explicitly enabled it. The value resets to
 /// false the moment a new server activates and stays false on Emby, probe
-/// failures, or blocked endpoints, so every fallback keeps the H264-only
+/// failures, or blocked endpoints, so every fallback keeps the H264-first
 /// offer.
 class ServerTranscodeCapabilities {
   int _generation = 0;

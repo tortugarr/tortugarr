@@ -111,7 +111,8 @@ enum VideoCapabilityDetector {
         // Apple TV HD is an A8 with no HEVC decoder, and not enough headroom to
         // decode HEVC, High 10 or VC-1 in software either. Claiming them made
         // the server direct play files the box then couldn't decode, so nothing
-        // played. Advertising H.264 only gets those transcoded instead.
+        // played. Advertising H.264 only gets those transcoded instead, unless
+        // the viewer opts into decoding 1080p HEVC in software.
         let isHd = generation == .hd
         let avcLevel = isHd ? 42 : 52
 
@@ -124,6 +125,7 @@ enum VideoCapabilityDetector {
             "hevcMainLevel": 153,
             "supportsHevcMain10": !isHd,
             "hevcMain10Level": 153,
+            "offersHevcSoftwareDecode": isHd,
             "supportsHevcDolbyVision": dolbyVision,
             // AetherEngine converts P7 dual-layer to P8.1 per-packet (libdovi),
             // so EL sources direct-play (base-layer quality, no FEL decode).

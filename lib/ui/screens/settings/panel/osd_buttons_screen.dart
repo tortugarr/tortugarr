@@ -21,6 +21,18 @@ class _OsdButtonsScreen extends StatelessWidget {
           appBar: buildSettingsAppBar(context, Text(l10n.osdButtons)),
           body: ListView(
             children: [
+              if (!PlatformDetection.isTV)
+                EnumPreferenceTile<PlayerTransportPosition>(
+                  preference: UserPreferences.playerTransportPosition,
+                  title: l10n.playerTransportPosition,
+                  description: l10n.playerTransportPositionDescription,
+                  icon: Icons.play_circle_outline,
+                  labelOf: (v) => switch (v) {
+                    PlayerTransportPosition.onScreen =>
+                      l10n.playerTransportOnScreen,
+                    PlayerTransportPosition.docked => l10n.playerTransportDocked,
+                  },
+                ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                 child: Text(l10n.osdButtonsSectionDescription, style: hint),

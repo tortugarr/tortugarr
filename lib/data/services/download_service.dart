@@ -11,6 +11,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as p;
+import 'package:playback_core/playback_core.dart' show MediaStreamResolver;
 import 'package:server_core/server_core.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,6 +29,7 @@ import '../database/offline_database.dart';
 import '../models/aggregated_item.dart';
 import '../models/download_quality.dart';
 import '../models/download_source.dart';
+import '../offline/offline_media_segments.dart';
 import 'auto_download_downloader.dart';
 import '../repositories/offline_repository.dart';
 import '../utils/next_up_enrichment.dart';
@@ -1719,6 +1721,7 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     if (token == null || token.isEmpty) {
       return const {};
     }
+    if (_client.serverType == ServerType.plex) return {'X-Plex-Token': token};
 
     return {
       'X-Emby-Token': token,
@@ -1765,7 +1768,7 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     final percent = (job['CompletionPercentage'] as num?)?.toDouble();
     final positionTicks = (job['PositionTicks'] as num?)?.toInt();
     final runtimeTicks = (job['RuntimeTicks'] as num?)?.toInt();
-    final start = DateTime.tryParse(job['StartTime'] as String? ?? '');
+    final start = parseServerDate(job['StartTime']);
     final elapsed = start == null
         ? null
         : DateTime.now().toUtc().difference(start.toUtc()).inSeconds;
@@ -1812,21 +1815,11 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     notifyListeners();
   }
 
-  Map<String, String> _buildDownloadRequestHeaders() {
-    final token = _client.accessToken;
-    if (token == null || token.isEmpty) {
-      return {
-        'Accept': 'application/octet-stream',
-        'User-Agent': serverUserAgent,
-      };
-    }
-    return {
-      'Accept': 'application/octet-stream',
-      'User-Agent': serverUserAgent,
-      'X-Emby-Token': token,
-      'Authorization': 'MediaBrowser Token="$token"',
-    };
-  }
+  Map<String, String> _buildDownloadRequestHeaders() => {
+    'Accept': 'application/octet-stream',
+    'User-Agent': serverUserAgent,
+    ..._buildAuthHeaders(),
+  };
 
   bool _usesAudioDownloadEndpoint(AggregatedItem item) {
     final mediaType = item.rawData['MediaType'] as String?;
@@ -1860,9 +1853,15 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
   }
 
   String? _primaryMediaSourceId(AggregatedItem item) {
-    return item.mediaSources.isNotEmpty
+    final id = item.mediaSources.isNotEmpty
         ? item.mediaSources.first['Id']?.toString()
         : null;
+    // A channel item's lone placeholder source fails every download endpoint
+    // when named, while the server finds the real file on its own without it.
+    if (MediaStreamResolver.isStreamlessStaticSource(item.rawData, id)) {
+      return null;
+    }
+    return id;
   }
 
   String _encodeQuery(Map<String, String> params) {
@@ -1903,6 +1902,8 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     AggregatedItem item, {
     required String primaryUrl,
   }) {
+    // The other routes are all Jellyfin's.
+    if (_client.serverType == ServerType.plex) return const [];
     final candidates = <String>[
       if (item.type == 'Book')
         ...BookReaderService.buildDownloadUris(
@@ -2137,6 +2138,14 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
   }
 
   String _buildDirectItemDownloadUrl(AggregatedItem item) {
+    if (_client.serverType == ServerType.plex) {
+      final part = item.mediaSources.firstOrNull?['DirectStreamUrl'];
+      final query = _encodeQuery({
+        'download': '1',
+        ..._baseDownloadParams(item, includeMediaSourceId: false),
+      });
+      return '${_client.baseUrl}$part?$query';
+    }
     // Emby picks the version from MediaSourceId, not from the path.
     final query = _encodeQuery(
       _baseDownloadParams(
@@ -2213,6 +2222,10 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     }
   }
 
+  /// Plex's transcoder makes streams rather than files, so Plex only
+  /// downloads originals.
+  bool get canDownloadTranscoded => _client.serverType != ServerType.plex;
+
   /// [mediaSourceId] picks one version of a multi-version item, the server's
   /// default when null. [audioStreamIndex] picks the audio track a transcode
   /// keeps, the audio language settings' choice when null.
@@ -2223,6 +2236,7 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     String? mediaSourceId,
     int? audioStreamIndex,
   }) {
+    if (!canDownloadTranscoded) quality = DownloadQuality.original;
     // Browser downloads are delegated to the platform and do not have a
     // process-owned transfer to schedule.
     if (PlatformDetection.isWeb) {
@@ -2280,6 +2294,15 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
     String? mediaSourceId,
     int? audioStreamIndex,
   }) async {
+    // Plex items don't name their server, and a row without one never syncs
+    // its offline progress back.
+    if (item.serverId.isEmpty) {
+      item = AggregatedItem(
+        id: item.id,
+        serverId: _serverId,
+        rawData: item.rawData,
+      );
+    }
     if (PlatformDetection.isWeb) {
       try {
         final fullItem = withPreferredMediaSource(
@@ -2440,6 +2463,12 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
         savePath,
       );
       if (preparationCancelled()) return;
+      final metadata = await withMediaSegments(
+        _client.itemsApi,
+        item.id,
+        fullItem.rawData,
+      );
+      if (preparationCancelled()) return;
 
       await _offlineRepo.upsertItem(
         DownloadedItemsCompanion(
@@ -2447,7 +2476,7 @@ class DownloadService extends ChangeNotifier implements AutoDownloadDownloader {
           serverId: Value(item.serverId),
           type: Value(item.type ?? 'Unknown'),
           name: Value(item.name),
-          metadataJson: Value(jsonEncode(fullItem.rawData)),
+          metadataJson: Value(jsonEncode(metadata)),
           downloadStatus: const Value(1),
           qualityPreset: Value(quality.name),
           downloadSource: Value(source.name),

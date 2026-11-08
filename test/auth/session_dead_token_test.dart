@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:moonfin/auth/models/server.dart';
 import 'package:moonfin/auth/models/user.dart';
 import 'package:moonfin/auth/repositories/server_repository.dart';
@@ -12,6 +13,7 @@ import 'package:moonfin/data/services/media_server_client_factory.dart';
 import 'package:moonfin/data/services/plugin_sync_service.dart';
 import 'package:moonfin/data/services/socket_handler.dart';
 import 'package:moonfin/preference/preference_constants.dart';
+import 'package:playback_core/playback_core.dart';
 import 'package:server_core/server_core.dart';
 
 // A dead token at startup used to fan out into a parallel burst of 401s,
@@ -145,7 +147,18 @@ class _TestUserRepository extends Fake implements UserRepository {
 
 class _TestPluginSyncService extends Fake implements PluginSyncService {
   @override
-  void resetState({bool notify = true, bool stopStream = true}) {}
+  void resetState({
+    bool notify = true,
+    bool stopStream = true,
+    bool keepIncompleteRecordings = false,
+  }) {}
+}
+
+class _RecordingManager extends PlaybackManager {
+  int stops = 0;
+
+  @override
+  Future<void> stop({bool userInitiated = true}) async => stops++;
 }
 
 void main() {
@@ -201,4 +214,44 @@ void main() {
       expect(clientFactory.removedClients, 1);
     },
   );
+
+  // Music left playing in the background belongs to the user signing out, and
+  // the sign-in screen has nothing to stop it.
+  test('signing out stops music left playing', () async {
+    final manager = _RecordingManager();
+    GetIt.instance.registerSingleton<PlaybackManager>(manager);
+    addTearDown(() async {
+      manager.dispose();
+      await GetIt.instance.reset();
+    });
+    final server = Server(
+      id: 'server-1',
+      name: 'Test',
+      address: 'https://server.test',
+      version: '10.11.0',
+      serverType: ServerType.jellyfin,
+      dateAdded: DateTime.utc(2026, 8, 21),
+    );
+    final user = PrivateUser(
+      id: 'user-1',
+      name: 'kis',
+      serverId: 'server-1',
+      accessToken: 'token',
+      lastUsed: DateTime.utc(2026, 8, 21),
+    );
+    final repo = SessionRepository(
+      _TestAuthStore(user),
+      _TestAuthPrefs(),
+      _TestCredentialStore(),
+      _TestClientFactory(),
+      _TestSocketHandler(),
+      _TestServerRepository(server),
+      _TestUserRepository(),
+      _TestPluginSyncService(),
+    );
+
+    await repo.destroyCurrentSession();
+
+    expect(manager.stops, 1);
+  });
 }

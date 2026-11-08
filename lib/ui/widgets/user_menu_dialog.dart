@@ -15,8 +15,9 @@ import '../../auth/repositories/session_repository.dart';
 import '../../auth/repositories/user_repository.dart';
 import '../../auth/store/authentication_store.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/services/pin_guard.dart';
+import '../../data/services/server_pin_service.dart';
 import '../../util/platform_detection.dart';
-import '../../util/pin_code_util.dart';
 import '../navigation/destinations.dart';
 import 'adaptive/adaptive_dialog.dart';
 import '../screens/settings/settings_side_panel.dart';
@@ -110,6 +111,7 @@ class _AccountDialogState extends State<_AccountDialog> {
     }
     return '$base&tag=$tag';
   }
+
   Future<void> _switchAccount(_StoredAccount account) async {
     if (_busy) return;
 
@@ -118,14 +120,32 @@ class _AccountDialogState extends State<_AccountDialog> {
       return;
     }
 
-    final store = GetIt.instance<PreferenceStore>();
-    final pinUtil = PinCodeUtil(store, account.user.id);
+    // Held through the PIN lookup and dialog too, or another account could be
+    // picked while this one is still being asked for.
+    setState(() => _busy = true);
+    try {
+      await _switchVerifiedAccount(account);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
-    if (pinUtil.isPinEnabled) {
+  Future<void> _switchVerifiedAccount(_StoredAccount account) async {
+    final guard = PinGuard.forAccount(
+      store: GetIt.instance<PreferenceStore>(),
+      service: GetIt.instance<ServerPinService>(),
+      userId: account.user.id,
+      serverAddress: account.server.address,
+      accessToken: account.user.accessToken,
+    );
+    await guard.refresh();
+    if (!mounted) return;
+
+    if (guard.pin.isPinEnabled) {
       final verified = await PinEntryDialog.show(
         context,
         mode: PinEntryMode.verify,
-        onVerify: pinUtil.verifyPin,
+        onVerifyAsync: guard.verify,
         onForgotPin: () {
           if (mounted) {
             Navigator.of(context).pop();
@@ -138,13 +158,11 @@ class _AccountDialogState extends State<_AccountDialog> {
       if (!verified) return;
     }
 
-    setState(() => _busy = true);
     final ok = await _sessionRepo.switchCurrentSession(
       serverId: account.server.id,
       userId: account.user.id,
     );
     if (!mounted) return;
-    setState(() => _busy = false);
     final router = GoRouter.of(context);
 
     if (ok) {
@@ -844,90 +862,86 @@ class _AccountCardState extends State<_AccountCard> {
                   _focusNode.requestFocus();
                   widget.onTap!();
                 },
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 120),
-            scale: _focused ? 1.06 : 1,
-            child: SizedBox(
-              width: 140,
-              child: Column(
-                children: [
-                  Container(
-                    width: 130,
-                    height: 130,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: borderColor, width: 3),
-                      color: AppColorScheme.surfaceVariant,
-                    ),
-                    child: ClipOval(
-                      child: _avatarFailed || widget.avatarUrl == null
-                          ? Icon(
-                              Icons.person,
-                              color: AppColorScheme.onSurface.withValues(alpha: 0.55),
-                              size: 68,
-                            )
-                          : Image.network(
-                              widget.avatarUrl!,
-                              headers: serverImageHeaders,
-                              fit: BoxFit.cover,
-                              cacheWidth: ArtworkDecode.widthFor(
-                                68,
-                                MediaQuery.devicePixelRatioOf(context),
-                              ),
-                              errorBuilder: (_, _, _) {
-                                if (!_avatarFailed) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                        if (mounted) {
-                                          setState(() => _avatarFailed = true);
-                                        }
-                                      });
-                                }
-                                return Icon(
-                                  Icons.person,
-                                  color: AppColorScheme.onSurface.withValues(alpha: 0.55),
-                                  size: 68,
-                                );
-                              },
+          child: SizedBox(
+            width: 140,
+            child: Column(
+              children: [
+                Container(
+                  width: 130,
+                  height: 130,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: borderColor, width: 3),
+                    color: AppColorScheme.surfaceVariant,
+                  ),
+                  child: ClipOval(
+                    child: _avatarFailed || widget.avatarUrl == null
+                        ? Icon(
+                            Icons.person,
+                            color: AppColorScheme.onSurface.withValues(alpha: 0.55),
+                            size: 68,
+                          )
+                        : Image.network(
+                            widget.avatarUrl!,
+                            headers: serverImageHeaders,
+                            fit: BoxFit.cover,
+                            cacheWidth: ArtworkDecode.widthFor(
+                              130,
+                              MediaQuery.devicePixelRatioOf(context),
                             ),
-                    ),
+                            errorBuilder: (_, _, _) {
+                              if (!_avatarFailed) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                      if (mounted) {
+                                        setState(() => _avatarFailed = true);
+                                      }
+                                    });
+                              }
+                              return Icon(
+                                Icons.person,
+                                color: AppColorScheme.onSurface.withValues(alpha: 0.55),
+                                size: 68,
+                              );
+                            },
+                          ),
                   ),
-                  const SizedBox(height: 12),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.username,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: AppColorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  widget.serverName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColorScheme.onSurface.withValues(alpha: 0.45),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                if (widget.active)
                   Text(
-                    widget.username,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                    'ACTIVE',
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: AppColorScheme.onSurface,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                      color: AppColorScheme.accent,
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    widget.serverName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColorScheme.onSurface.withValues(alpha: 0.45),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  if (widget.active)
-                    Text(
-                      'ACTIVE',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                        color: AppColorScheme.accent,
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
         ),
@@ -1008,43 +1022,39 @@ class _AddUserCardState extends State<_AddUserCard> {
                   _focusNode.requestFocus();
                   widget.onTap!();
                 },
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 120),
-            scale: _focused ? 1.06 : 1,
-            child: SizedBox(
-              width: 140,
-              child: Column(
-                children: [
-                  Container(
-                    width: 130,
-                    height: 130,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: bg,
-                      border: Border.all(color: borderColor, width: 3),
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      size: 48,
-                      color: _focused
-                          ? widget.focusColor
-                          : AppColorScheme.onSurface.withValues(alpha: 0.54),
-                    ),
+          child: SizedBox(
+            width: 140,
+            child: Column(
+              children: [
+                Container(
+                  width: 130,
+                  height: 130,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: bg,
+                    border: Border.all(color: borderColor, width: 3),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.label,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: AppColorScheme.onSurface,
-                    ),
+                  child: Icon(
+                    Icons.add,
+                    size: 48,
+                    color: _focused
+                        ? widget.focusColor
+                        : AppColorScheme.onSurface.withValues(alpha: 0.54),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: AppColorScheme.onSurface,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

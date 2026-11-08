@@ -24,6 +24,7 @@ class BookSeeAllButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FocusableWrapper(
+      highlightOnHover: true,
       focusNode: focusNode,
       borderRadius: 16,
       autoScroll: true,

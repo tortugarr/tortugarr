@@ -1,8 +1,3 @@
-// tvOS drives playback through AppleTvVideoChannel and its native player UI,
-// so this channel is only built for the two platforms where Flutter owns the
-// OSD and the video arrives through a platform view.
-#if os(iOS) || os(macOS)
-
 import AVFoundation
 import AetherEngine
 import VideoToolbox
@@ -17,7 +12,8 @@ import UIKit
 import AppKit
 #endif
 
-/// Playback channel driving the shared AetherPlayerWrapper on iOS and macOS.
+/// Playback channel driving the shared AetherPlayerWrapper for the Flutter
+/// player on iOS, macOS and tvOS.
 /// One wrapper lives for the app's lifetime while video surfaces attach and
 /// detach around it, so background audio and PiP survive a route pop.
 @MainActor
@@ -25,6 +21,8 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
     private let control: FlutterMethodChannel
     private let events: FlutterEventChannel
     private nonisolated(unsafe) var eventSink: FlutterEventSink?
+
+    private var playerCreated = false
 
     private(set) lazy var player: AetherPlayerWrapper = {
         let created = AetherPlayerWrapper()
@@ -34,14 +32,22 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
         created.onNowPlayingCommand = { [weak self] payload in
             self?.send(payload)
         }
+        self.playerCreated = true
         return created
     }()
+
+    /// The wrapper if something has already asked for it, so PiP can look for
+    /// a layer without building a player nobody is using.
+    var playerIfCreated: AetherPlayerWrapper? { playerCreated ? player : nil }
 
     private var stateTimer: Timer?
     private var lastTextTrackCount = -1
     private var lastClosedCaptionCount = -1
     private var didComplete = false
     private var didReportTerminalError = false
+    #if os(iOS)
+        private var volumeObservation: NSKeyValueObservation?
+    #endif
 
     init(messenger: FlutterBinaryMessenger) {
         control = FlutterMethodChannel(
@@ -51,13 +57,29 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
         super.init()
         control.setMethodCallHandler { [weak self] call, result in
             if call.method == "getCapabilities" {
+                #if os(tvOS)
+                // An Apple TV can be plugged into any screen, so this asks the
+                // display rather than assuming HDR the way a phone can.
+                result(VideoCapabilityDetector.deviceProfileCapabilities())
+                #else
                 result(AetherVideoCapabilities.deviceProfileCapabilities())
+                #endif
                 return
             }
             result(nil)
             Task { @MainActor in self?.handle(call) }
         }
         events.setStreamHandler(self)
+        #if os(iOS)
+            volumeObservation = AVAudioSession.sharedInstance().observe(
+                \.outputVolume, options: [.new]
+            ) { [weak self] _, change in
+                guard let volume = change.newValue else { return }
+                Task { @MainActor in
+                    self?.send(["event": "systemVolume", "value": Double(volume)])
+                }
+            }
+        #endif
     }
 
     nonisolated func onListen(withArguments arguments: Any?, eventSink: @escaping FlutterEventSink)
@@ -118,6 +140,17 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
             player.setClosedCaptionTrack((args["id"] as? NSNumber)?.int32Value ?? 0)
         case "disableSubtitleTrack":
             player.disableSubtitles()
+        case "setSecondarySubtitle":
+            player.setSecondarySubtitle(
+                embeddedTrackId: (args["embeddedTrackId"] as? NSNumber)?.intValue,
+                url: (args["url"] as? String).flatMap { urlFrom($0) })
+        case "setSecondarySubtitleDelay":
+            player.setSecondarySubtitleDelay(ms(args["delayMs"]))
+        case "configureSecondarySubtitleStyle":
+            player.configureSecondarySubtitleStyle(
+                fontSize: (args["fontSize"] as? NSNumber)?.doubleValue,
+                verticalOffset: (args["verticalOffset"] as? NSNumber)?.doubleValue,
+                textColor: (args["textColor"] as? NSNumber)?.intValue)
         case "setAudioDelay":
             player.setAudioDelay(ms(args["delayMs"]))
         case "setSubtitleDelay":
@@ -192,9 +225,12 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
                 audioStreamIndex: (args["audioStreamIndex"] as? NSNumber).flatMap {
                     $0.intValue >= 0 ? Int32($0.intValue) : nil
                 },
+                audioBridgeLossless: (args["audioBridgeLossless"] as? Bool) ?? false,
                 dolbyVisionBaseLayerOnly: (args["dolbyVisionBaseLayerOnly"] as? Bool) ?? false,
                 externalSubtitles: AetherPlayerWrapper.externalSubtitleTracks(
-                    from: args["externalSubtitles"])))
+                    from: args["externalSubtitles"]),
+                subtitleDelay: ((args["subtitleDelayMs"] as? NSNumber)?.doubleValue ?? 0) / 1000,
+                secondarySubtitle: AetherPlayerWrapper.secondarySubtitleConfiguration(from: args)))
         player.setForceSubtitlesDisabledOnStart(
             (args["forceSubtitlesDisabledOnStart"] as? Bool) ?? false)
         player.setReplayGainDb((args["normalizationGainDb"] as? NSNumber)?.doubleValue)
@@ -288,8 +324,8 @@ final class AetherVideoChannel: NSObject, FlutterStreamHandler {
 
 /// Device-profile capabilities for AetherEngine. HEVC and H.264 decode in
 /// hardware everywhere this builds. AV1 has hardware on the newest chips with
-/// software dav1d covering the rest at lower resolutions, and VP9, MPEG-2,
-/// VC-1 and interlaced H.264 route through the engine's software path.
+/// software dav1d covering the rest, and VP9, MPEG-2, VC-1 and interlaced
+/// H.264 route through the engine's software path.
 ///
 /// Every iOS device that reaches the deployment floor has an HDR capable
 /// screen. A Mac may be driving anything, so there HDR and Dolby Vision are
@@ -313,10 +349,25 @@ enum AetherVideoCapabilities {
         #endif
     }
 
+    // Even an M1 decodes heavy 4K HDR10 AV1 at about 2.9x real time, so Apple
+    // Silicon Macs and M1 or M2 iPads lift the 1080p SDR cap. Those iPads are
+    // the only iOS devices with 8 GB or more and no AV1 hardware. iOS reports a
+    // little under the real size, which is why the check is 7 GB.
+    private static var softwareAv1HandlesUhd: Bool {
+        #if os(macOS) && arch(arm64)
+            return true
+        #elseif os(iOS)
+            return ProcessInfo.processInfo.physicalMemory >= 7 << 30
+        #else
+            return false
+        #endif
+    }
+
     static func deviceProfileCapabilities() -> [String: Any] {
         let hardwareAv1 = VTIsHardwareDecodeSupported(kCMVideoCodecType_AV1)
-        let av1Width = hardwareAv1 ? 3840 : 1920
-        let av1Height = hardwareAv1 ? 2160 : 1080
+        let fullAv1 = hardwareAv1 || softwareAv1HandlesUhd
+        let av1Width = fullAv1 ? 3840 : 1920
+        let av1Height = fullAv1 ? 2160 : 1080
         let hdr = displaySupportsHdr
         return [
             "supportsAvc": true,
@@ -338,7 +389,7 @@ enum AetherVideoCapabilities {
             "supportsVc1": true,
             "supportsAv1": true,
             "supportsAv1Main10": true,
-            "supportsAv1Hdr10": hardwareAv1 && hdr,
+            "supportsAv1Hdr10": fullAv1 && hdr,
             "supportsAv1Hdr10Plus": false,
             "supportsAv1DolbyVision": false,
             "maxResolutionAvc": ["width": 3840, "height": 2160],
@@ -349,5 +400,3 @@ enum AetherVideoCapabilities {
         ]
     }
 }
-
-#endif

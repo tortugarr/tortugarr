@@ -226,6 +226,8 @@ class PlaybackManager implements AudioOwnable {
   // defaults enableDirectPlay to true, and without this it would silently
   // switch a viewer who had direct play off back on.
   bool _directPlayAllowedForQueue = true;
+  String? _streamFromServerItemId;
+  bool _streamFromServerForQueue = false;
   bool _backendSelectionLockedForSession = false;
   PlayerBackend? _sessionLockedBackend;
   Future<void> Function()? _onOfflineStop;
@@ -331,11 +333,15 @@ class PlaybackManager implements AudioOwnable {
   bool _liveStallWatchActive = false;
 
   /// Set by [pause], cleared by [resume], [playItems], [stop] and a fresh
-  /// live open. Backends that report no `playWhenReady` (AppleTvBackend,
+  /// live open. Backends that report no `playWhenReady` (NativeApplePlayerBackend,
   /// AetherBackend, the web video backend, MediaKitPlayerBackend) can't tell
   /// a viewer pause from a stall on their own, so the manager tracks the
   /// viewer's own last pause/resume call and falls back to it.
   bool _viewerPaused = false;
+
+  /// Whether the viewer's last pause or resume call was a pause. On an engine
+  /// that reports no `playWhenReady`, this is what tells a pause from a stall.
+  bool get viewerPaused => _viewerPaused;
 
   /// Whether a frame has rendered since the current live stream opened.
   /// Reset at each fresh open, set the first time `playing` reports true.
@@ -599,12 +605,18 @@ class PlaybackManager implements AudioOwnable {
   void markStreamsOutdated(String itemId) => _streamsOutdatedItemId = itemId;
   int? get audioStreamIndex => _audioStreamIndex;
 
-  /// How far the secondary track can be shifted against the video, either
-  /// way.
+  /// Maximum extra secondary delay in either direction, in seconds, added to the
+  /// primary delay.
   static const secondarySubtitleMaxDelaySeconds = 5.0;
 
-  /// Where the secondary track sits by default, as a fraction of the height.
-  static const defaultSecondarySubtitleOffset = 0.08;
+  /// Default extra gap between primary and secondary subtitles, as a fraction of player
+  /// height. Zero keeps the normal gap.
+  static const defaultSecondarySubtitleOffset = 0.0;
+  static const secondarySubtitleMinOffset = 0.0;
+  static const secondarySubtitleMaxOffset = 0.06;
+
+  static double clampSecondarySubtitleOffset(double value) =>
+      value.clamp(secondarySubtitleMinOffset, secondarySubtitleMaxOffset).toDouble();
 
   int? get secondarySubtitleStreamIndex => _secondarySubtitleStreamIndex;
   double get secondarySubtitleDelaySeconds => _secondarySubtitleDelaySeconds;
@@ -613,6 +625,7 @@ class PlaybackManager implements AudioOwnable {
   double get secondarySubtitleOffset => _secondarySubtitleOffset;
 
   bool canUseAsSecondarySubtitle(int streamIndex) {
+    if (_backend is! SecondarySubtitleBackend) return false;
     final stream = _currentMediaStreams
         .where((s) => s['Type'] == 'Subtitle' && s['Index'] == streamIndex)
         .firstOrNull;
@@ -624,7 +637,8 @@ class PlaybackManager implements AudioOwnable {
         codec != 'webvtt') {
       return false;
     }
-    return _secondarySubtitleUrlForStream(streamIndex)?.isNotEmpty ?? false;
+    return _secondaryEmbeddedTrackId(streamIndex) != null ||
+        (_secondarySubtitleUrlForStream(streamIndex)?.isNotEmpty ?? false);
   }
 
   int? get subtitleStreamIndex {
@@ -702,17 +716,29 @@ class PlaybackManager implements AudioOwnable {
     _forceExternalChooserOnce = true;
   }
 
+  /// The next queue that starts on [itemId] streams from the server even
+  /// where a downloaded copy exists.
+  void streamFromServerOnce(String itemId) {
+    _streamFromServerItemId = itemId;
+  }
+
   bool consumeForceExternalChooserOnce() {
     final shouldForce = _forceExternalChooserOnce;
     _forceExternalChooserOnce = false;
     return shouldForce;
   }
 
+  bool get streamsFromServer => _streamFromServerForQueue;
+
   void setBitrateOverride(int? mbps) {
     _maxBitrateOverrideMbps = mbps;
   }
 
   int? get maxBitrateOverrideMbps => _maxBitrateOverrideMbps;
+
+  /// True when this queue was started with direct play and direct stream both
+  /// turned off.
+  bool get isTranscodeForced => _forceTranscodeForQueue;
   bool get isOfflinePlayback => _isOfflinePlayback;
 
   /// Completes when any in-flight stop operation (including the offline
@@ -796,6 +822,8 @@ class PlaybackManager implements AudioOwnable {
     bool audioLike = false,
     String? secondarySubtitleUrl,
     String? secondarySubtitleCodec,
+    String? secondarySubtitleLanguage,
+    int? secondarySubtitleTrackId,
   }) {
     // Music and audiobooks are audio whatever their streams say. Media3 only
     // plays audio with no view when the payload says audio, so a stray video
@@ -925,6 +953,8 @@ class PlaybackManager implements AudioOwnable {
           normalizationGainDb ??
           MediaStreamResolver.extractNormalizationGainDb(mediaStreams),
       if (declaredSubtitles.isNotEmpty) 'externalSubtitles': declaredSubtitles,
+      if (secondarySubtitleTrackId != null)
+        'secondarySubtitleTrackId': secondarySubtitleTrackId,
       'secondarySubtitleDelayMs': (_secondarySubtitleDelaySeconds * 1000)
           .round(),
       'secondarySubtitleOffset': _secondarySubtitleOffset,
@@ -935,6 +965,8 @@ class PlaybackManager implements AudioOwnable {
       if (secondarySubtitleUrl != null && secondarySubtitleCodec != null) ...{
         'secondarySubtitleUrl': secondarySubtitleUrl,
         'secondarySubtitleCodec': secondarySubtitleCodec,
+        if (secondarySubtitleLanguage != null)
+          'secondarySubtitleLanguage': secondarySubtitleLanguage,
       },
       if (selectedExternalSubtitleUrl != null)
         'selectedExternalSubtitleUrl': selectedExternalSubtitleUrl,
@@ -2250,6 +2282,10 @@ class PlaybackManager implements AudioOwnable {
     _mediaSourceId = mediaSourceId;
     _forceTranscodeForQueue = !enableDirectPlay && !enableDirectStream;
     _directPlayAllowedForQueue = enableDirectPlay;
+    _streamFromServerForQueue =
+        pendingItem != null &&
+        _traceItemId(pendingItem) == _streamFromServerItemId;
+    _streamFromServerItemId = null;
     final adjuster = _startPositionAdjuster;
     if (adjuster != null && startPosition > Duration.zero && items.isNotEmpty) {
       final currentItem = items[startIndex.clamp(0, items.length - 1)];
@@ -2460,24 +2496,77 @@ class PlaybackManager implements AudioOwnable {
       }
     }
 
-    Future<StreamResolutionResult> resolve(int? cap) => _resolver!.resolve(
-      item,
-      deviceProfile: profile,
-      maxStreamingBitrate: cap,
-      audioStreamIndex: _audioStreamIndex,
-      subtitleStreamIndex: _subtitleStreamIndex,
-      startTimeTicks: startTicks,
-      mediaSourceId: _mediaSourceId,
-      enableDirectPlay: enableDirectPlay,
-      enableDirectStream: enableDirectStream,
-      enableTranscoding: enableTranscoding,
-    );
+    Future<StreamResolutionResult> resolve(
+      int? cap, {
+      bool originalFile = false,
+    }) async {
+      try {
+        return await _resolver!.resolve(
+          item,
+          deviceProfile: profile,
+          maxStreamingBitrate: cap,
+          audioStreamIndex: _audioStreamIndex,
+          subtitleStreamIndex: _subtitleStreamIndex,
+          startTimeTicks: startTicks,
+          mediaSourceId: _mediaSourceId,
+          enableDirectPlay: enableDirectPlay,
+          enableDirectStream: enableDirectStream && !originalFile,
+          enableTranscoding: enableTranscoding && !originalFile,
+        );
+      } catch (e) {
+        // A server can turn a play down outright, and its reason is all the
+        // player has to show before it closes. Other errors carry text meant
+        // for a log, not a viewer.
+        if (sessionToken == _playbackSessionToken) {
+          _setBringupState(
+            PlaybackBringupState(
+              phase: PlaybackBringupPhase.failed,
+              sessionToken: sessionToken,
+              itemId: itemId,
+              backend: _traceBackendName(_backend),
+              error: e is StateError ? e.message : 'Playback failed.',
+            ),
+          );
+        }
+        rethrow;
+      }
+    }
 
     var resolution = await resolve(maxBitrate);
 
     if (sessionToken != _playbackSessionToken) {
       _cleanupPreemptedSession(item, resolution);
       return;
+    }
+
+    // Unless the request names the source as well, the server judges the
+    // audio by its own default track whatever track was asked for, and with
+    // none asked for it can direct play without checking the audio at all.
+    // So when a codec the profile holds back is involved either way, it is
+    // asked again with the track and source named. A live stream is left
+    // alone, since asking again would open a second one.
+    final requestedAudioIndex =
+        _audioStreamIndex ?? resolution.selectedAudioStreamIndex;
+    if (_mediaSourceId == null &&
+        requestedAudioIndex != null &&
+        resolution.liveStreamId == null &&
+        {requestedAudioIndex, resolution.selectedAudioStreamIndex}.any(
+          (index) => _videoWithholdsAudioCodec(
+            profile,
+            resolution.mediaStreams.firstWhere(
+                  (s) => s['Type'] == 'Audio' && s['Index'] == index,
+                  orElse: () => const <String, dynamic>{},
+                )['Codec']
+                as String?,
+          ),
+        )) {
+      _audioStreamIndex = requestedAudioIndex;
+      _mediaSourceId = resolution.mediaSourceId;
+      resolution = await resolve(maxBitrate);
+      if (sessionToken != _playbackSessionToken) {
+        _cleanupPreemptedSession(item, resolution);
+        return;
+      }
     }
 
     // An item that came without its sources only learns the source bitrate
@@ -2499,6 +2588,22 @@ class PlaybackManager implements AudioOwnable {
           _cleanupPreemptedSession(item, resolution);
           return;
         }
+      }
+    }
+
+    // A server that only meant to copy HEVC video into HLS would hand it to a
+    // player that can't decode it there, so the original file is asked for
+    // instead. One that has to re-encode the video keeps its transcode.
+    if (enableDirectPlay &&
+        resolution.playMethod == StreamPlayMethod.transcode &&
+        resolution.liveStreamId == null &&
+        _sourceVideoCodec(resolution) == 'hevc' &&
+        !resolution.transcodingReasons.any(_reencodesVideo) &&
+        _backend!.decodesHevcOnlyFromOriginalFile) {
+      resolution = await resolve(maxBitrate, originalFile: true);
+      if (sessionToken != _playbackSessionToken) {
+        _cleanupPreemptedSession(item, resolution);
+        return;
       }
     }
 
@@ -2795,8 +2900,14 @@ class PlaybackManager implements AudioOwnable {
                 canUseAsSecondarySubtitle(_secondarySubtitleStreamIndex!)
             ? _secondarySubtitleUrlForStream(_secondarySubtitleStreamIndex!)
             : null,
+        secondarySubtitleTrackId: _secondarySubtitleStreamIndex != null
+            ? _secondaryEmbeddedTrackId(_secondarySubtitleStreamIndex!)
+            : null,
         secondarySubtitleCodec: _secondarySubtitleStreamIndex != null
             ? _subtitleCodecForStream(_secondarySubtitleStreamIndex!)
+            : null,
+        secondarySubtitleLanguage: _secondarySubtitleStreamIndex != null
+            ? _subtitleLanguageForStream(_secondarySubtitleStreamIndex!)
             : null,
       );
       await _arbiter?.acquire(AudioProducer.mainPlayback);
@@ -3419,11 +3530,13 @@ class PlaybackManager implements AudioOwnable {
     }
 
     final streams = _currentMediaStreams;
+    String? selectedCodec;
     if (streams.isNotEmpty) {
       final selectedStream = streams.firstWhere(
         (s) => s['Type'] == 'Audio' && s['Index'] == streamIndex,
         orElse: () => const <String, dynamic>{},
       );
+      selectedCodec = selectedStream['Codec'] as String?;
       if (selectedStream.isNotEmpty) {
         _lastExplicitAudioLanguage = _extractLanguage(selectedStream);
         _lastExplicitAudioIndex = streamIndex;
@@ -3439,7 +3552,11 @@ class PlaybackManager implements AudioOwnable {
         _waitAndApplyTrackSelections(_playbackSessionToken);
       }
     } else if (_currentResolution?.playMethod == StreamPlayMethod.directPlay &&
-        (_backend?.supportsDirectPlayAudioSwitch ?? false)) {
+        (_backend?.supportsDirectPlayAudioSwitch ?? false) &&
+        !_videoWithholdsAudioCodec(
+          _backend?.getDeviceProfile(),
+          selectedCodec,
+        )) {
       // Every embedded track is already in a direct-played stream, so a
       // re-resolve would tear the player down and rebuild it for a track it
       // already has. The next progress report carries the new index anyway.
@@ -3453,6 +3570,42 @@ class PlaybackManager implements AudioOwnable {
       await _reResolveAtCurrentPosition();
     }
   });
+
+  /// Whether [profile] keeps [codec] out of video direct play while music
+  /// still direct plays it, which is how a codec the user has the server
+  /// convert shows up.
+  static bool _videoWithholdsAudioCodec(
+    Map<String, dynamic>? profile,
+    String? codec,
+  ) {
+    final entries = profile?['DirectPlayProfiles'];
+    if (codec == null || codec.isEmpty || entries is! List) return false;
+    final lowered = codec.toLowerCase();
+    bool lists(String type) => entries.any(
+      (entry) =>
+          entry is Map &&
+          entry['Type'] == type &&
+          (entry['AudioCodec'] as String? ?? '')
+              .split(',')
+              .any((c) => c.trim().toLowerCase() == lowered),
+    );
+    return lists('Audio') && !lists('Video');
+  }
+
+  static String? _sourceVideoCodec(StreamResolutionResult resolution) {
+    final codec = resolution.mediaStreams
+        .where((s) => s['Type'] == 'Video')
+        .firstOrNull?['Codec'];
+    return codec is String ? codec.toLowerCase() : null;
+  }
+
+  static bool _reencodesVideo(String reason) {
+    final lowered = reason.toLowerCase();
+    return lowered.contains('video') ||
+        lowered.contains('bitrate') ||
+        lowered.contains('resolution') ||
+        lowered == 'refframesnotsupported';
+  }
 
   static const _bitmapSubCodecs = {
     'pgs',
@@ -3527,6 +3680,12 @@ class PlaybackManager implements AudioOwnable {
     return false;
   }
 
+  String? _subtitleLanguageForStream(int streamIndex) => _extractLanguage(
+    _currentMediaStreams
+        .where((s) => s['Type'] == 'Subtitle' && s['Index'] == streamIndex)
+        .firstOrNull,
+  );
+
   String? _subtitleCodecForStream(int streamIndex) {
     final streams = _currentMediaStreams;
     if (streams.isNotEmpty) {
@@ -3591,9 +3750,17 @@ class PlaybackManager implements AudioOwnable {
     return null;
   }
 
-  /// The sidecar the server offers for [streamIndex], or else the file it can
-  /// serve from an embedded SRT or WebVTT track. Only the secondary overlay
-  /// takes the second kind.
+  /// Use original embedded track numbers only during direct play.
+  int? _secondaryEmbeddedTrackId(int streamIndex) {
+    if (_currentResolution?.playMethod != StreamPlayMethod.directPlay ||
+        _embeddedSubtitlesUnavailable || _isSubtitleExternal(streamIndex)) {
+      return null;
+    }
+    return _mpvTrackIdForStream(streamIndex, 'Subtitle');
+  }
+
+  /// Returns the server's subtitle file URL for this stream, using an extracted
+  /// embedded text track when no external file URL is available.
   String? _secondarySubtitleUrlForStream(int streamIndex) {
     final sidecar = _externalSubtitleUrlForStream(streamIndex);
     if (sidecar != null && sidecar.isNotEmpty) return sidecar;
@@ -3678,8 +3845,8 @@ class PlaybackManager implements AudioOwnable {
     ),
   );
 
-  /// Picks the SRT or WebVTT track the secondary overlay draws, or none for
-  /// null. A track the server can't serve as a file stays primary-only.
+  /// Selects a secondary SRT or WebVTT track. Passing null, or the current primary
+  /// track, turns secondary subtitles off.
   Future<void> changeSecondarySubtitleTrack(int? streamIndex) async {
     final selectedIndex = streamIndex == _subtitleStreamIndex
         ? null
@@ -3722,10 +3889,10 @@ class PlaybackManager implements AudioOwnable {
     double? verticalOffset,
     int? textColor,
   }) async {
-    _secondarySubtitleFontSize = fontSize?.clamp(8.0, 72.0).toDouble();
+    _secondarySubtitleFontSize = fontSize?.clamp(6.0, 72.0).toDouble();
     _secondarySubtitleTextColor = textColor;
     final offset = verticalOffset ?? defaultSecondarySubtitleOffset;
-    _secondarySubtitleOffset = offset.clamp(0.0, 0.4).toDouble();
+    _secondarySubtitleOffset = clampSecondarySubtitleOffset(offset);
     await _backend?.configureSecondarySubtitleStyle(
       fontSize: _secondarySubtitleFontSize,
       verticalOffset: _secondarySubtitleOffset,
@@ -3743,6 +3910,8 @@ class PlaybackManager implements AudioOwnable {
     await _backend?.setSecondarySubtitle(
       url: _secondarySubtitleUrlForStream(index),
       codec: _subtitleCodecForStream(index),
+      language: _subtitleLanguageForStream(index),
+      embeddedTrackId: _secondaryEmbeddedTrackId(index),
     );
     await _backend?.setSecondarySubtitleDelay(_secondarySubtitleDelaySeconds);
     await _backend?.configureSecondarySubtitleStyle(
@@ -4345,6 +4514,11 @@ class PlaybackManager implements AudioOwnable {
     }
   }
 
+  void _resetSubtitleDelaySession() {
+    _subtitleDelaySessionId++;
+    _secondarySubtitleDelaySeconds = 0;
+  }
+
   Future<bool> _stopAndReportCurrent({
     bool skipQueueChange = false,
     dynamic expectedItem,
@@ -4354,7 +4528,7 @@ class PlaybackManager implements AudioOwnable {
     final existingStop = _stopInFlight;
     if (existingStop != null) {
       await existingStop;
-      if (!preserveSubtitleDelay) _subtitleDelaySessionId++;
+      if (!preserveSubtitleDelay) _resetSubtitleDelaySession();
       return false;
     }
 
@@ -4371,7 +4545,7 @@ class PlaybackManager implements AudioOwnable {
         'releaseServerResources=$releaseServerResources '
         'position=${_lastKnownPosition.inMilliseconds}ms',
       );
-      if (!preserveSubtitleDelay) _subtitleDelaySessionId++;
+      if (!preserveSubtitleDelay) _resetSubtitleDelaySession();
       _deferredStartPosition = Duration.zero;
       _deferPlaybackToExternalPlayer = false;
       _endLiveStallWatch();
@@ -4382,6 +4556,7 @@ class PlaybackManager implements AudioOwnable {
         if (!skipQueueChange) {
           _forceTranscodeForQueue = false;
           _directPlayAllowedForQueue = true;
+          _streamFromServerForQueue = false;
           _resetBackendSelectionLock();
           queueService.clear();
           state.reset();
@@ -4402,6 +4577,7 @@ class PlaybackManager implements AudioOwnable {
           _isOfflinePlayback = false;
           _forceTranscodeForQueue = false;
           _directPlayAllowedForQueue = true;
+          _streamFromServerForQueue = false;
           _resetBackendSelectionLock();
           queueService.clear();
           state.reset();
@@ -4460,6 +4636,7 @@ class PlaybackManager implements AudioOwnable {
       if (!skipQueueChange) {
         _forceTranscodeForQueue = false;
         _directPlayAllowedForQueue = true;
+        _streamFromServerForQueue = false;
         _resetBackendSelectionLock();
         queueService.clear();
         state.reset();

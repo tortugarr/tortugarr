@@ -8,6 +8,7 @@ import 'package:server_core/server_core.dart';
 import '../../data/repositories/item_mutation_repository.dart';
 import '../../data/services/media_server_client_factory.dart';
 import '../../l10n/app_localizations.dart';
+import '../../preference/user_preferences.dart';
 import '../../util/focus/dpad_keys.dart';
 import '../../util/platform_detection.dart';
 import 'focusable_dialog_row.dart';
@@ -324,6 +325,9 @@ class _AddToCollectionDialogState extends State<AddToCollectionDialog> {
                                     controller: _nameController,
                                     isFocused: _createNameFocus.hasFocus,
                                     hint: l10n.collections,
+                                    keyboardStyle: GetIt.instance<
+                                      UserPreferences
+                                    >().get(UserPreferences.keyboardStyle),
                                     onFieldSubmitted: (_) {
                                       Navigator.pop(ctx);
                                       _createAndAdd();

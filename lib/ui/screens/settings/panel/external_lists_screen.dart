@@ -295,10 +295,43 @@ class _ImdbListsScreenState extends State<_ImdbListsScreen> {
             autofocus: true,
             child: ListView(
               children: [
+                _SectionHeader(l10n.sorting),
+                adaptiveListSection(
+                  children: [
+                    EnumPreferenceTile<ExternalRowSortBy>(
+                      focusNode: _firstFocusNode,
+                      preference: UserPreferences.imdbRowsSortBy,
+                      title: l10n.imdbRowsSorting,
+                      description: l10n.imdbRowsSortingDescription,
+                      icon: Icons.sort,
+                      labelOf: (v) => externalRowSortLabel(v, l10n),
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                        if (mounted) setState(() {});
+                      },
+                    ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.imdbRowsSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.imdbRowsSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      enabled: prefs.get(UserPreferences.imdbRowsSortBy) != ExternalRowSortBy.none &&
+                          prefs.get(UserPreferences.imdbRowsSortBy) != ExternalRowSortBy.shuffle,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                      },
+                    ),
+                  ],
+                ),
+                const _SectionHeader('IMDb Lists'),
                 adaptiveListSection(
                   children: [
                     SwitchPreferenceTile(
-                      focusNode: _firstFocusNode,
                       preference: UserPreferences.imdbTop250MoviesEnabled,
                       title: l10n.imdbTop250Movies,
                       icon: Icons.movie_outlined,
@@ -505,6 +538,7 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
   @override
   Widget build(BuildContext context) {
     final prefs = GetIt.instance<UserPreferences>();
+    final l10n = AppLocalizations.of(context);
 
     return withCleanSettingsTypography(
       context,
@@ -520,10 +554,43 @@ class _TmdbListsScreenState extends State<_TmdbListsScreen> {
             autofocus: true,
             child: ListView(
               children: [
+                _SectionHeader(l10n.sorting),
+                adaptiveListSection(
+                  children: [
+                    EnumPreferenceTile<ExternalRowSortBy>(
+                      focusNode: _firstFocusNode,
+                      preference: UserPreferences.tmdbRowsSortBy,
+                      title: l10n.tmdbRowsSorting,
+                      description: l10n.tmdbRowsSortingDescription,
+                      icon: Icons.sort,
+                      labelOf: (v) => externalRowSortLabel(v, l10n),
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                        if (mounted) setState(() {});
+                      },
+                    ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.tmdbRowsSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.tmdbRowsSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      enabled: prefs.get(UserPreferences.tmdbRowsSortBy) != ExternalRowSortBy.none &&
+                          prefs.get(UserPreferences.tmdbRowsSortBy) != ExternalRowSortBy.shuffle,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                      },
+                    ),
+                  ],
+                ),
+                const _SectionHeader('TMDB Lists'),
                 adaptiveListSection(
                   children: [
                     SwitchPreferenceTile(
-                      focusNode: _firstFocusNode,
                       preference: UserPreferences.tmdbPopularMoviesEnabled,
                       title: appL10n().popularMovies,
                       icon: Icons.movie_outlined,
@@ -1129,6 +1196,7 @@ class _SeerrListsScreenState extends State<_SeerrListsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final prefs = GetIt.instance<UserPreferences>();
     return withCleanSettingsTypography(
       context,
       RequestInitialFocus(
@@ -1143,13 +1211,45 @@ class _SeerrListsScreenState extends State<_SeerrListsScreen> {
             autofocus: true,
             child: ListView(
               children: [
+                _SectionHeader(l10n.sorting),
+                adaptiveListSection(
+                  children: [
+                    EnumPreferenceTile<ExternalRowSortBy>(
+                      focusNode: _firstFocusNode,
+                      preference: UserPreferences.seerrRowsSortBy,
+                      title: l10n.seerrRowsSorting,
+                      description: l10n.seerrRowsSortingDescription,
+                      icon: Icons.sort,
+                      labelOf: (v) => externalRowSortLabel(v, l10n),
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                        if (mounted) setState(() {});
+                      },
+                    ),
+                    EnumPreferenceTile<SortDirection>(
+                      preference: UserPreferences.seerrRowsSortOrder,
+                      title: l10n.sortOrder,
+                      description: l10n.seerrRowsSortOrderDescription,
+                      icon: Icons.swap_vert,
+                      enabled: prefs.get(UserPreferences.seerrRowsSortBy) != ExternalRowSortBy.none &&
+                          prefs.get(UserPreferences.seerrRowsSortBy) != ExternalRowSortBy.shuffle,
+                      labelOf: (v) => v == SortDirection.ascending
+                          ? l10n.ascending
+                          : l10n.descending,
+                      onChanged: () {
+                        _pushPersonalizationSync();
+                        _reloadHomeRows();
+                      },
+                    ),
+                  ],
+                ),
                 _SectionHeader(appL10n().tgSeerrHomePageRows),
                 adaptiveListSection(
                   children: _rows.asMap().entries.map((entry) {
                     final rowIndex = entry.key;
                     final row = entry.value;
                     return _SeerrRowSwitchTile(
-                      focusNode: rowIndex == 0 ? _firstFocusNode : null,
                       title: localizeSeerrRowTitle(row.type, l10n),
                       value: row.enabled,
                       onChanged: (enabled) {
@@ -1187,13 +1287,11 @@ class _SeerrRowSwitchTile extends StatelessWidget {
   final String title;
   final bool value;
   final ValueChanged<bool> onChanged;
-  final FocusNode? focusNode;
 
   const _SeerrRowSwitchTile({
     required this.title,
     required this.value,
     required this.onChanged,
-    this.focusNode,
   });
 
   @override
@@ -1212,7 +1310,6 @@ class _SeerrRowSwitchTile extends StatelessWidget {
         );
 
         return SwitchListTile.adaptive(
-          focusNode: focusNode,
           secondary: secondary,
           title: Text(
             title,
@@ -2446,8 +2543,8 @@ class _SettingsTextFieldState extends State<_SettingsTextField> {
               isFocused: focused,
               popParentOnKeyboardClose: false,
               hint: widget.hint,
-              preferSystemIme: GetIt.instance<UserPreferences>().get(
-                UserPreferences.preferSystemImeKeyboard,
+              keyboardStyle: GetIt.instance<UserPreferences>().get(
+                UserPreferences.keyboardStyle,
               ),
               filled: true,
               fillColor: focused

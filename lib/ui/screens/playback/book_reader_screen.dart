@@ -30,6 +30,7 @@ import '../../../data/services/book_document_service.dart';
 import '../../../data/services/book_reader_service.dart';
 import '../../../data/services/media_server_client_factory.dart';
 import '../../../data/services/reader_settings_store.dart';
+import '../../../util/focus/dpad_keys.dart';
 import '../../../util/platform_detection.dart';
 import '../../../util/insecure_certificates.dart';
 import '../../../util/webview_client_cert.dart';
@@ -38,6 +39,9 @@ import '../../util/error_message.dart';
 import '../../../l10n/current_app_localizations.dart';
 import '../../../util/system_ui.dart';
 import '../../widgets/adaptive/sf_symbol.dart';
+import '../../widgets/focus/focusable_wrapper.dart';
+import '../../widgets/overlay_sheet.dart';
+import '../../widgets/reader/epub_js_view.dart';
 import '../../widgets/reader/reader_chrome_bar.dart';
 import '../../widgets/reader/reader_contents_hub.dart';
 import '../../widgets/reader/reader_settings_sheet.dart';
@@ -101,6 +105,13 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   String? _fallbackMessage;
   Uri? _fallbackExternalUri;
   bool _overlayVisible = true;
+  bool _overlayAutoHide = true;
+  Timer? _overlayHideTimer;
+  bool _overlayHovered = false;
+  final FocusNode _comicFocusNode = FocusNode(debugLabel: 'comic reader');
+  final Map<_ComicLayout, FocusNode> _comicLayoutFocusNodes = {
+    for (final layout in _ComicLayout.values) layout: FocusNode(),
+  };
   Uint8List? _pdfBytes;
   int _currentPdfPage = 1;
   int _pdfPageCount = 0;
@@ -110,6 +121,20 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   final Map<String, List<String>> _epubThemeCache = {};
   final ScrollController _epubScrollController = ScrollController();
   bool _epubScrollToBottomOnLoad = false;
+  final EpubJsController _epubJs = EpubJsController();
+  bool _epubJsFailed = false;
+  int _epubSectionCount = 0;
+  bool _epubBookRtl = false;
+  String? _epubStartCfi;
+  double? _epubStartFraction;
+  int _epubStartSection = 0;
+  String? _epubCfi;
+  double? _epubFraction;
+  bool _epubAtEnd = false;
+  int? _epubMinutesLeft;
+  int? _reportedEpubTicks;
+  Timer? _epubSaveDebounce;
+  Future<void> _epubSaveChain = Future.value();
   Timer? _comicStateSaveDebounce;
   Timer? _pdfPageSaveDebounce;
   int? _reportedPageIndex;
@@ -124,6 +149,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       'book_reader_fixed_layout_invert';
   static const String _comicLayoutPrefKey = 'book_reader_comic_layout';
   static const String _comicDirectionPrefKey = 'book_reader_comic_direction';
+  static const String _comicAutoHidePrefKey = 'book_reader_comic_auto_hide';
   ReaderSettings _settings = ReaderSettings.defaults;
   bool _invertFixedLayout = false;
 
@@ -133,12 +159,32 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   Color get _readerAccent => AppColorScheme.accent;
 
   bool get _useNativeHtmlEpub =>
+      !_useEpubJs &&
       !kIsWeb &&
       (PlatformDetection.isMacOS ||
           PlatformDetection.isLinux ||
           PlatformDetection.isWindows);
 
-  bool get _epubIsRtl => Directionality.of(context) == TextDirection.rtl;
+  /// Build with --dart-define=MOONFIN_EPUBJS=false to go back to the chapter
+  /// HTML reader everywhere.
+  static const bool _epubJsEnabled = bool.fromEnvironment(
+    'MOONFIN_EPUBJS',
+    defaultValue: true,
+  );
+
+  // Linux has no embeddable web view, so it keeps the chapter reader. Web has
+  // no flutter_inappwebview JavaScript handlers for the bridge.
+  bool get _useEpubJs =>
+      _epubJsEnabled &&
+      !_epubJsFailed &&
+      (PlatformDetection.isAndroid ||
+          PlatformDetection.isIOS ||
+          PlatformDetection.isMacOS ||
+          PlatformDetection.isWindows);
+
+  bool get _epubIsRtl => _useEpubJs
+      ? _epubBookRtl
+      : Directionality.of(context) == TextDirection.rtl;
 
   static const _fixedLayoutChromeColors = ReaderThemeColors(
     background: Color(0xFF0A0A0A),
@@ -278,6 +324,15 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     return 'book_reader_epub_${item.serverId}_${item.id}_chapter';
   }
 
+  String get _epubJsPlacePrefKey {
+    final item = _item;
+    if (item == null) return 'book_reader_epubjs_unknown_place';
+    return 'book_reader_epubjs_${item.serverId}_${item.id}_place';
+  }
+
+  bool get _reportsEpubProgress =>
+      _resolveClient().serverType == ServerType.jellyfin;
+
   String get _pdfProgressPrefKey {
     final item = _item;
     if (item == null) return 'book_reader_pdf_unknown_page';
@@ -326,6 +381,10 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    HardwareKeyboard.instance.addHandler(_onAnyKey);
+    if (PlatformDetection.isTV) {
+      InlineBackInterceptor.push(_hideOverlayFromBack);
+    }
     unawaited(_loadDisplayPreferences());
     _loadAndPrepare();
   }
@@ -333,8 +392,16 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    HardwareKeyboard.instance.removeHandler(_onAnyKey);
+    InlineBackInterceptor.remove(_hideOverlayFromBack);
+    if (_epubSaveDebounce != null) _saveEpubPlace();
     _comicStateSaveDebounce?.cancel();
     _pdfPageSaveDebounce?.cancel();
+    _overlayHideTimer?.cancel();
+    _comicFocusNode.dispose();
+    for (final node in _comicLayoutFocusNodes.values) {
+      node.dispose();
+    }
     _pageController.dispose();
     _comicTransformController.dispose();
     _comicVerticalController.dispose();
@@ -346,9 +413,91 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused && _epubSaveDebounce != null) {
+      _saveEpubPlace();
+    }
     if (state == AppLifecycleState.resumed && !_loading && !_loadingContent) {
       _refreshItem();
     }
+  }
+
+  void _onEpubRelocated(EpubJsLocation location) {
+    setState(() {
+      _currentEpubChapter = location.sectionIndex;
+      _epubFraction = location.fraction;
+      _epubMinutesLeft = location.minutesLeftInSection;
+    });
+    _epubCfi = location.cfi;
+    _epubAtEnd = location.atEnd;
+    _epubSaveDebounce?.cancel();
+    _epubSaveDebounce = Timer(const Duration(seconds: 2), _saveEpubPlace);
+  }
+
+  ({String cfi, int? ticks, DateTime savedAt})? _readEpubJsPlace(
+    SharedPreferences prefs,
+    int bookBytes,
+  ) {
+    try {
+      final raw = jsonDecode(prefs.getString(_epubJsPlacePrefKey) ?? '');
+      // A changed file size means the server has a different copy of the
+      // book, where the saved CFI may point anywhere.
+      if (raw is! Map || raw['bytes'] != bookBytes) return null;
+      return (
+        cfi: raw['cfi'] as String,
+        ticks: raw['ticks'] as int?,
+        savedAt: DateTime.fromMillisecondsSinceEpoch(raw['savedAt'] as int),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Saves the exact place on this device and reports the Jellyfin position.
+  /// Saves run one after another so an older one can't land last.
+  void _saveEpubPlace() {
+    _epubSaveDebounce?.cancel();
+    _epubSaveDebounce = null;
+    final item = _item;
+    final cfi = _epubCfi;
+    final bytes = _epubBytes;
+    if (item == null || cfi == null || bytes == null) return;
+    final fraction = _epubFraction;
+    final ticks = fraction != null && _reportsEpubProgress
+        ? BookReaderService.epubTicks(fraction)
+        : null;
+    final atEnd = _epubAtEnd;
+    final chapter = _currentEpubChapter;
+    final placeKey = _epubJsPlacePrefKey;
+    final chapterKey = _epubProgressPrefKey;
+    final api = _resolveClient().userLibraryApi;
+    final savedAt = DateTime.now().millisecondsSinceEpoch;
+    // The ticks kept with the place are the last ones the server took, which
+    // is how the next open knows the server position is this one.
+    String place(int? reported) => jsonEncode({
+      'cfi': cfi,
+      'ticks': reported,
+      'bytes': bytes.length,
+      'savedAt': savedAt,
+    });
+
+    _epubSaveChain = _epubSaveChain.then((_) async {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(placeKey, place(_reportedEpubTicks));
+        await prefs.setInt(chapterKey, chapter);
+        if (ticks == null || ticks == _reportedEpubTicks) return;
+        await api.updatePlayedPosition(item.id, positionTicks: ticks);
+        _reportedEpubTicks = ticks;
+        await prefs.setString(placeKey, place(ticks));
+        if (atEnd) await api.markPlayed(item.id);
+      } catch (_) {}
+    });
+  }
+
+  void _onEpubJsError() {
+    if (!mounted) return;
+    setState(() => _epubJsFailed = true);
+    _prepareReaderContent();
   }
 
   Future<void> _reportServerProgress() async {
@@ -457,6 +606,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
     Uri? fallbackUriCandidate;
 
+    if (_epubSaveDebounce != null) _saveEpubPlace();
     setState(() {
       _loadingContent = true;
       _error = null;
@@ -471,6 +621,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       _webController = null;
       _fallbackExternalUri = null;
       _overlayVisible = true;
+      _overlayHideTimer?.cancel();
       _pdfBytes = null;
       _currentPdfPage = 1;
       _pdfPageCount = 0;
@@ -478,6 +629,11 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       _currentEpubChapter = 0;
       _epubBytes = null;
       _epubThemeCache.clear();
+      _epubSectionCount = 0;
+      _epubCfi = null;
+      _epubFraction = null;
+      _epubAtEnd = false;
+      _epubMinutesLeft = null;
     });
 
     setImmersive(false);
@@ -645,6 +801,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         setState(() {
           _loadingContent = false;
         });
+        _scheduleOverlayHide();
       }
     }
   }
@@ -676,17 +833,51 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     if (kindleFormat) {
       bytes = await compute(BookDocumentService.convertKindleToEpub, bytes);
     }
-    final chapterHtml = _resolveEpubChapterHtml(bytes, _currentEpubTheme);
-    final tocEntries = BookDocumentService.extractEpubTocEntries(bytes);
+    final tocEntries = await compute(
+      BookDocumentService.extractEpubTocEntries,
+      bytes,
+    );
     if (mounted && tocEntries.isNotEmpty) {
       setState(() => _epubTocEntries = tocEntries);
     }
 
     final prefs = await SharedPreferences.getInstance();
-    final initialChapter =
-        (widget.initialMode == 'epub' && widget.initialPosition != null)
+    final chapterRequested =
+        widget.initialMode == 'epub' && widget.initialPosition != null;
+    final initialChapter = chapterRequested
         ? widget.initialPosition!
         : (prefs.getInt(_epubProgressPrefKey) ?? 0);
+
+    if (_useEpubJs) {
+      final item = _item;
+      final local = chapterRequested
+          ? null
+          : _readEpubJsPlace(prefs, bytes.length);
+      final serverFraction =
+          chapterRequested || item == null || !_reportsEpubProgress
+          ? null
+          : BookReaderService.newerServerEpubFraction(
+              item,
+              localTicks: local?.ticks,
+              localSavedAt: local?.savedAt,
+            );
+      if (!mounted) return;
+      setState(() {
+        _mode = _ReaderMode.epub;
+        _webController = null;
+        _epubBytes = bytes;
+        _epubChapterHtml = const [];
+        _epubStartFraction = serverFraction;
+        _epubStartCfi = serverFraction == null ? local?.cfi : null;
+        _epubStartSection = initialChapter < 0 ? 0 : initialChapter;
+        _currentEpubChapter = _epubStartSection;
+        _reportedEpubTicks = local?.ticks;
+        _webLoadProgress = 100;
+      });
+      return;
+    }
+
+    final chapterHtml = _resolveEpubChapterHtml(bytes, _currentEpubTheme);
     final savedChapter = initialChapter.clamp(0, chapterHtml.length - 1);
 
     if (!mounted) {
@@ -722,6 +913,12 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   }
 
   Future<void> _loadEpubChapter(int index) async {
+    if (_useEpubJs) {
+      if (_epubSectionCount > 0) {
+        await _epubJs.displaySection(index.clamp(0, _epubSectionCount - 1));
+      }
+      return;
+    }
     if (_epubChapterHtml.isEmpty) {
       return;
     }
@@ -773,6 +970,10 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   /// current chapter and crossing into the neighbour once its edge is reached.
   Future<void> _epubPage(int dir) async {
     final forward = dir > 0;
+    if (_useEpubJs) {
+      await (forward ? _epubJs.next() : _epubJs.prev());
+      return;
+    }
     if (_useNativeHtmlEpub) {
       if (!_epubScrollController.hasClients) {
         return;
@@ -974,11 +1175,165 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   Future<void> _previousPdfPage() => _goToPdfPage(_currentPdfPage - 1);
 
-  void _toggleOverlay() {
+  void _toggleOverlay() => _setOverlayVisible(!_overlayVisible);
+
+  void _setOverlayVisible(bool visible) {
     setState(() {
-      _overlayVisible = !_overlayVisible;
+      _overlayVisible = visible;
     });
-    setImmersive(!_overlayVisible);
+    setImmersive(!visible);
+    if (visible) {
+      _scheduleOverlayHide();
+      if (PlatformDetection.isTV && _mode == _ReaderMode.comic) {
+        _focusComicBars();
+      }
+      return;
+    }
+    _overlayHideTimer?.cancel();
+    // Take focus out of the hidden bars, so the remote's next press reaches
+    // [_onComicTvKey].
+    if (PlatformDetection.isTV && _mode == _ReaderMode.comic) {
+      _comicFocusNode.requestFocus();
+    }
+  }
+
+  /// Shows the bars, or keeps them up a little longer if they're showing.
+  void _revealOverlay() {
+    if (_overlayVisible) {
+      _scheduleOverlayHide();
+    } else {
+      _setOverlayVisible(true);
+    }
+  }
+
+  /// The comic reader's bars hide after a few seconds, like the photo
+  /// player's, so they don't cover the bottom of the page. They stay while the
+  /// mouse is over them or a finger is down on them, and the eye button in the
+  /// controls bar keeps them up for good.
+  void _scheduleOverlayHide() {
+    _overlayHideTimer?.cancel();
+    if (_mode != _ReaderMode.comic ||
+        !_overlayAutoHide ||
+        !_overlayVisible ||
+        _overlayHovered) {
+      return;
+    }
+    _overlayHideTimer = Timer(const Duration(seconds: 4), () {
+      if (!mounted || !_overlayVisible || !_overlayAutoHide) return;
+      // Leave the bars up under the contents sheet, and try again later.
+      if (ModalRoute.of(context)?.isCurrent == false) {
+        _scheduleOverlayHide();
+        return;
+      }
+      _setOverlayVisible(false);
+    });
+  }
+
+  Future<void> _setOverlayAutoHide(bool value) async {
+    setState(() => _overlayAutoHide = value);
+    _scheduleOverlayHide();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_comicAutoHidePrefKey, value);
+  }
+
+  /// While the bars hide by themselves, moving the mouse brings them up, so a
+  /// click on the page only toggles them for touch. With hiding turned off, a
+  /// click toggles them too.
+  void _toggleOverlayFromTap(PointerDeviceKind kind) {
+    if (kind != PointerDeviceKind.mouse || !_overlayAutoHide) {
+      _toggleOverlay();
+    }
+  }
+
+  /// Any press on a TV remote keeps the bars up, wherever focus is in them.
+  /// This runs ahead of the focus tree and never claims the key.
+  bool _onAnyKey(KeyEvent event) {
+    if (PlatformDetection.isTV && _overlayVisible) {
+      _scheduleOverlayHide();
+    }
+    return false;
+  }
+
+  /// On TV, Back hides the comic reader's bars, whether or not they'd hide by
+  /// themselves, and only leaves the reader once they're hidden or fading.
+  /// Back pops this route before the focus tree sees the key, so the bars
+  /// claim it through the interceptor while they're up.
+  bool _hideOverlayFromBack() {
+    if (_mode != _ReaderMode.comic ||
+        _loading ||
+        _loadingContent ||
+        _comicEntries.isEmpty ||
+        !_overlayVisible ||
+        ModalRoute.of(context)?.isCurrent == false) {
+      return false;
+    }
+    _setOverlayVisible(false);
+    return true;
+  }
+
+  /// Puts the remote on the current layout's button, where a stray OK
+  /// changes nothing. The D-pad can't find the bars from the page, which
+  /// covers the whole screen.
+  void _focusComicBars() {
+    _comicLayoutFocusNodes[_comicLayout]!.requestFocus();
+  }
+
+  /// On TV, while the comic reader's bars are hidden, the D-pad turns the page
+  /// and Select or the rest of the D-pad brings the bars back. While they're
+  /// up the remote moves through them. Back is handled by
+  /// [_hideOverlayFromBack], and other buttons like volume are left for the
+  /// system.
+  KeyEventResult _onComicTvKey(FocusNode node, KeyEvent event) {
+    final key = event.logicalKey;
+    if (!PlatformDetection.isTV ||
+        !event.isActionable ||
+        !(key.isSelectKey || key.isDirectional)) {
+      return KeyEventResult.ignored;
+    }
+    if (_overlayVisible) {
+      if (!node.hasPrimaryFocus) return KeyEventResult.ignored;
+      if (event is KeyDownEvent) _focusComicBars();
+      return KeyEventResult.handled;
+    }
+    final rtl = _comicDirection == _ComicDirection.rtl;
+    final vertical = _comicLayout == _ComicLayout.vertical;
+    final forward = vertical
+        ? key.isDownKey
+        : (rtl ? key.isLeftKey : key.isRightKey);
+    final back = vertical
+        ? key.isUpKey
+        : (rtl ? key.isRightKey : key.isLeftKey);
+    if (forward) {
+      _nextComicPage();
+      return KeyEventResult.handled;
+    }
+    if (back) {
+      _previousComicPage();
+      return KeyEventResult.handled;
+    }
+    if (event is KeyDownEvent) _setOverlayVisible(true);
+    return KeyEventResult.handled;
+  }
+
+  Widget _holdOverlayWhileUsed(Widget child) {
+    return MouseRegion(
+      opaque: false,
+      hitTestBehavior: HitTestBehavior.deferToChild,
+      onEnter: (_) {
+        _overlayHovered = true;
+        _overlayHideTimer?.cancel();
+      },
+      onExit: (_) {
+        _overlayHovered = false;
+        _scheduleOverlayHide();
+      },
+      child: Listener(
+        onPointerDown: (_) => _overlayHideTimer?.cancel(),
+        onPointerUp: (_) => _scheduleOverlayHide(),
+        onPointerCancel: (_) => _scheduleOverlayHide(),
+        child: child,
+      ),
+    );
   }
 
   Future<Uri> _resolveReadableUri(
@@ -1055,6 +1410,12 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   }
 
   Future<List<ArchiveFile>> _extractCbrEntries(Uint8List bytes) async {
+    // A browser has no temp folder to extract into.
+    if (kIsWeb) {
+      throw UnsupportedError(
+        currentAppLocalizations().cbrExtractionPluginUnavailable,
+      );
+    }
     final workspace = await Directory.systemTemp.createTemp('moonfin_cbr_');
     try {
       final archiveFile = File('${workspace.path}/archive.cbr');
@@ -1063,18 +1424,16 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       final outputDir = Directory('${workspace.path}/out');
       await outputDir.create(recursive: true);
 
-      if (!kIsWeb) {
-        try {
-          await ArchiveExtract.extract7z(
-            archivePath: archiveFile.path,
-            destinationPath: outputDir.path,
-          );
-          final entries = await _readExtractedComicEntries(outputDir);
-          if (entries.isNotEmpty) {
-            return entries;
-          }
-        } catch (_) {}
-      }
+      try {
+        await ArchiveExtract.extract7z(
+          archivePath: archiveFile.path,
+          destinationPath: outputDir.path,
+        );
+        final entries = await _readExtractedComicEntries(outputDir);
+        if (entries.isNotEmpty) {
+          return entries;
+        }
+      } catch (_) {}
 
       if (!_supportsRarExtraction) {
         throw UnsupportedError(
@@ -1447,6 +1806,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   double _readerProgressFraction() {
     switch (_mode) {
       case _ReaderMode.epub:
+        if (_useEpubJs) return _epubFraction ?? 0;
         final count = _epubChapterHtml.length;
         if (count <= 1) return 0;
         return ((_currentEpubChapter + 1) / count).clamp(0.0, 1.0);
@@ -1467,6 +1827,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   }
 
   int _estimateEpubChapterMinutes() {
+    if (_useEpubJs) return _epubMinutesLeft ?? 0;
     if (_currentEpubChapter < 0 ||
         _currentEpubChapter >= _epubChapterHtml.length) {
       return 0;
@@ -1612,7 +1973,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   void _handleComicTap(TapUpDetails details) {
     if (_comicZoomed) {
-      _toggleOverlay();
+      _toggleOverlayFromTap(details.kind);
       return;
     }
     final width = MediaQuery.sizeOf(context).width;
@@ -1624,7 +1985,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     } else if (x > width - edge) {
       rtl ? _previousComicPage() : _nextComicPage();
     } else {
-      _toggleOverlay();
+      _toggleOverlayFromTap(details.kind);
     }
   }
 
@@ -1697,13 +2058,19 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     }
 
     final key = event.logicalKey;
-    if (key == LogicalKeyboardKey.arrowRight ||
+    // The arrows follow the reading direction, like the tap zones do.
+    final rtl = _comicDirection == _ComicDirection.rtl;
+    final forwardArrow =
+        rtl ? LogicalKeyboardKey.arrowLeft : LogicalKeyboardKey.arrowRight;
+    final backArrow =
+        rtl ? LogicalKeyboardKey.arrowRight : LogicalKeyboardKey.arrowLeft;
+    if (key == forwardArrow ||
         key == LogicalKeyboardKey.pageDown ||
         key == LogicalKeyboardKey.space) {
       _nextComicPage();
       return KeyEventResult.handled;
     }
-    if (key == LogicalKeyboardKey.arrowLeft ||
+    if (key == backArrow ||
         key == LogicalKeyboardKey.pageUp) {
       _previousComicPage();
       return KeyEventResult.handled;
@@ -1825,6 +2192,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
           )
         : (legacyTwoPage ? _ComicLayout.double : _ComicLayout.single);
     final directionName = prefs.getString(_comicDirectionPrefKey);
+    final autoHide = prefs.getBool(_comicAutoHidePrefKey) ?? true;
     final direction = _ComicDirection.values.firstWhere(
       (e) => e.name == directionName,
       orElse: () => _ComicDirection.ltr,
@@ -1839,6 +2207,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       _invertFixedLayout = invert;
       _comicLayout = layout;
       _comicDirection = direction;
+      _overlayAutoHide = autoHide;
     });
   }
 
@@ -1870,6 +2239,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       accent: _readerAccent,
       pageColors: _pageColors,
       onChanged: _applyReaderSettings,
+      showScroll: _useEpubJs,
     );
   }
 
@@ -1895,7 +2265,8 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   Future<void> _refreshEpubTheme() async {
     final bytes = _epubBytes;
-    if (bytes == null || _mode != _ReaderMode.epub) {
+    // epub.js gets the new style when the reader rebuilds.
+    if (bytes == null || _mode != _ReaderMode.epub || _useEpubJs) {
       return;
     }
 
@@ -2177,7 +2548,24 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     );
   }
 
+  /// Moving the mouse brings the comic reader's bars back while they hide by
+  /// themselves, and the remote works the page and the bars on TV.
   Widget _buildComicFullscreen() {
+    return Focus(
+      focusNode: _comicFocusNode,
+      autofocus: PlatformDetection.isTV,
+      skipTraversal: true,
+      onKeyEvent: _onComicTvKey,
+      child: Listener(
+        onPointerHover: (_) {
+          if (_overlayAutoHide) _revealOverlay();
+        },
+        child: _buildComicScaffold(),
+      ),
+    );
+  }
+
+  Widget _buildComicScaffold() {
     final item = _item;
     final l10n = AppLocalizations.of(context);
     final title = item?.name ?? l10n.bookReader;
@@ -2204,20 +2592,22 @@ class _BookReaderScreenState extends State<BookReaderScreen>
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: IgnorePointer(
-                    ignoring: !_overlayVisible,
-                    child: AnimatedOpacity(
-                      opacity: _overlayVisible ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 250),
-                      child: ReaderTopBar(
-                        title: title,
-                        pageColors: _fixedLayoutChromeColors,
-                        onBack: () => Navigator.of(context).pop(),
-                        onContents: _openContentsHub,
-                        onSettings: () {},
-                        showSettings: false,
-                        onBookmark: _addCurrentBookmark,
-                        hasBookmarks: _bookmarks.isNotEmpty,
+                  child: _holdOverlayWhileUsed(
+                    IgnorePointer(
+                      ignoring: !_overlayVisible,
+                      child: AnimatedOpacity(
+                        opacity: _overlayVisible ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 250),
+                        child: ReaderTopBar(
+                          title: title,
+                          pageColors: _fixedLayoutChromeColors,
+                          onBack: () => Navigator.of(context).pop(),
+                          onContents: _openContentsHub,
+                          onSettings: () {},
+                          showSettings: false,
+                          onBookmark: _addCurrentBookmark,
+                          hasBookmarks: _bookmarks.isNotEmpty,
+                        ),
                       ),
                     ),
                   ),
@@ -2227,43 +2617,48 @@ class _BookReaderScreenState extends State<BookReaderScreen>
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: IgnorePointer(
-                    ignoring: !_overlayVisible,
-                    child: AnimatedOpacity(
-                      opacity: _overlayVisible ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 250),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildComicControlsBar(),
-                          if (_filmstripVisible) _buildComicFilmstrip(),
-                          ReaderBottomBar(
-                            pageColors: _fixedLayoutChromeColors,
-                            accent: _readerAccent,
-                            leftLabel: _currentComicPageLabel(),
-                            captionLabel: _readerProgressCaption(),
-                            value:
-                                (_viewportFromPageIndex(_currentComicPage) + 1)
-                                    .toDouble(),
-                            min: 1,
-                            max: _comicViewportCount > 0
-                                ? _comicViewportCount.toDouble()
-                                : 1,
-                            divisions: _comicViewportCount > 1
-                                ? _comicViewportCount - 1
-                                : null,
-                            onPrev: _currentComicPage > 0
-                                ? _previousComicPage
-                                : null,
-                            onNext: _currentComicPage < _comicPageCount - 1
-                                ? _nextComicPage
-                                : null,
-                            onChanged: (value) {
-                              final viewport = value.round() - 1;
-                              _goToComicPage(_pageIndexFromViewport(viewport));
-                            },
-                          ),
-                        ],
+                  child: _holdOverlayWhileUsed(
+                    IgnorePointer(
+                      ignoring: !_overlayVisible,
+                      child: AnimatedOpacity(
+                        opacity: _overlayVisible ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 250),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildComicControlsBar(),
+                            if (_filmstripVisible) _buildComicFilmstrip(),
+                            ReaderBottomBar(
+                              pageColors: _fixedLayoutChromeColors,
+                              accent: _readerAccent,
+                              leftLabel: _currentComicPageLabel(),
+                              captionLabel: _readerProgressCaption(),
+                              value:
+                                  (_viewportFromPageIndex(_currentComicPage) +
+                                          1)
+                                      .toDouble(),
+                              min: 1,
+                              max: _comicViewportCount > 0
+                                  ? _comicViewportCount.toDouble()
+                                  : 1,
+                              divisions: _comicViewportCount > 1
+                                  ? _comicViewportCount - 1
+                                  : null,
+                              onPrev: _currentComicPage > 0
+                                  ? _previousComicPage
+                                  : null,
+                              onNext: _currentComicPage < _comicPageCount - 1
+                                  ? _nextComicPage
+                                  : null,
+                              onChanged: (value) {
+                                final viewport = value.round() - 1;
+                                _goToComicPage(
+                                  _pageIndexFromViewport(viewport),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -2286,7 +2681,10 @@ class _BookReaderScreenState extends State<BookReaderScreen>
 
   Widget _buildComicPaged(AppLocalizations l10n) {
     return Focus(
-      autofocus: true,
+      // On TV focus starts on [_comicFocusNode] instead, and the D-pad must
+      // never land here, where it couldn't find its way back to the bars.
+      autofocus: !PlatformDetection.isTV,
+      skipTraversal: PlatformDetection.isTV,
       onKeyEvent: _onComicKey,
       child: Listener(
         onPointerSignal: _handleComicPointerSignal,
@@ -2412,7 +2810,7 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         return false;
       },
       child: GestureDetector(
-        onTap: _toggleOverlay,
+        onTapUp: (details) => _toggleOverlayFromTap(details.kind),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth.isFinite
@@ -2463,27 +2861,30 @@ class _BookReaderScreenState extends State<BookReaderScreen>
         itemBuilder: (context, index) {
           final selected = index == _currentComicPage;
           final bytes = _comicEntries[index].content;
-          return GestureDetector(
-            onTap: () => _goToComicPage(index),
-            child: Container(
-              width: 54,
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: selected ? _readerAccent : Colors.white24,
-                  width: selected ? 2 : 1,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: _comicPressable(
+              () => _goToComicPage(index),
+              Container(
+                width: 54,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: selected ? _readerAccent : Colors.white24,
+                    width: selected ? 2 : 1,
+                  ),
+                  borderRadius: AppRadius.circular(4),
                 ),
-                borderRadius: AppRadius.circular(4),
+                clipBehavior: Clip.antiAlias,
+                child: Image.memory(
+                  bytes,
+                  fit: BoxFit.cover,
+                  cacheWidth: 110,
+                  gaplessPlayback: true,
+                  errorBuilder: (context, error, stack) =>
+                      const ColoredBox(color: Colors.white10),
+                ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: Image.memory(
-                bytes,
-                fit: BoxFit.cover,
-                cacheWidth: 110,
-                gaplessPlayback: true,
-                errorBuilder: (context, error, stack) =>
-                    const ColoredBox(color: Colors.white10),
-              ),
+              radius: 4,
             ),
           );
         },
@@ -2491,16 +2892,41 @@ class _BookReaderScreenState extends State<BookReaderScreen>
     );
   }
 
+  /// On TV the remote reaches the comic's controls and thumbnails through
+  /// focus, and OK presses them.
+  Widget _comicPressable(
+    VoidCallback onTap,
+    Widget child, {
+    required double radius,
+    FocusNode? focusNode,
+  }) {
+    if (!PlatformDetection.isTV) {
+      return GestureDetector(onTap: onTap, child: child);
+    }
+    return FocusableWrapper(
+      onSelect: onTap,
+      focusNode: focusNode,
+      borderRadius: radius,
+      autoScroll: true,
+      disableScale: true,
+      focusColor: Colors.white,
+      child: child,
+    );
+  }
+
   Widget _buildComicControlsBar() {
+    final l10n = AppLocalizations.of(context);
     final accent = _readerAccent;
     const double controlHeight = 36;
+    final paged = _comicLayout != _ComicLayout.vertical;
 
-    Widget pill(String label, bool selected, VoidCallback onTap) {
+    Widget pill(String label, _ComicLayout layout) {
+      final selected = _comicLayout == layout;
       return Padding(
         padding: const EdgeInsets.only(right: 6),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
+        child: _comicPressable(
+          () => _setComicLayout(layout),
+          Container(
             height: controlHeight,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -2517,6 +2943,8 @@ class _BookReaderScreenState extends State<BookReaderScreen>
               ),
             ),
           ),
+          radius: controlHeight / 2,
+          focusNode: _comicLayoutFocusNodes[layout],
         ),
       );
     }
@@ -2527,30 +2955,32 @@ class _BookReaderScreenState extends State<BookReaderScreen>
       String tooltip,
       VoidCallback onTap,
     ) {
-      return Tooltip(
-        message: tooltip,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            margin: const EdgeInsets.only(left: 6),
-            width: controlHeight,
-            height: controlHeight,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: active ? accent : Colors.white.withValues(alpha: 0.14),
-              shape: BoxShape.circle,
+      return Padding(
+        padding: const EdgeInsets.only(left: 6),
+        child: Tooltip(
+          message: tooltip,
+          child: _comicPressable(
+            onTap,
+            Container(
+              width: controlHeight,
+              height: controlHeight,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: active ? accent : Colors.white.withValues(alpha: 0.14),
+                shape: BoxShape.circle,
+              ),
+              child: AdaptiveIcon(
+                icon,
+                size: 18,
+                color: active ? Colors.white : Colors.white70,
+              ),
             ),
-            child: AdaptiveIcon(
-              icon,
-              size: 18,
-              color: active ? Colors.white : Colors.white70,
-            ),
+            radius: controlHeight / 2,
           ),
         ),
       );
     }
 
-    final paged = _comicLayout != _ComicLayout.vertical;
     return Container(
       color: Colors.black.withValues(alpha: 0.55),
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
@@ -2561,21 +2991,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  pill(
-                    'Single',
-                    _comicLayout == _ComicLayout.single,
-                    () => _setComicLayout(_ComicLayout.single),
-                  ),
-                  pill(
-                    'Two-page',
-                    _comicLayout == _ComicLayout.double,
-                    () => _setComicLayout(_ComicLayout.double),
-                  ),
-                  pill(
-                    'Vertical',
-                    _comicLayout == _ComicLayout.vertical,
-                    () => _setComicLayout(_ComicLayout.vertical),
-                  ),
+                  pill('Single', _ComicLayout.single),
+                  pill('Two-page', _ComicLayout.double),
+                  pill('Vertical', _ComicLayout.vertical),
                 ],
               ),
             ),
@@ -2607,6 +3025,14 @@ class _BookReaderScreenState extends State<BookReaderScreen>
             'Invert colors',
             () => _setFixedLayoutInvert(!_invertFixedLayout),
           ),
+          iconToggle(
+            _overlayAutoHide ? Icons.visibility_off : Icons.visibility,
+            _overlayAutoHide,
+            _overlayAutoHide
+                ? l10n.bookReaderControlsAutoHide
+                : l10n.bookReaderControlsStayVisible,
+            () => _setOverlayAutoHide(!_overlayAutoHide),
+          ),
         ],
       ),
     );
@@ -2615,7 +3041,9 @@ class _BookReaderScreenState extends State<BookReaderScreen>
   Widget _buildEpubFullscreen() {
     final l10n = AppLocalizations.of(context);
     final title = _item?.name ?? l10n.bookReader;
-    final chapterCount = _epubChapterHtml.length;
+    final chapterCount = _useEpubJs
+        ? _epubSectionCount
+        : _epubChapterHtml.length;
     final chromeColors = _pageColors;
     final epubMinutes = _estimateEpubChapterMinutes();
 
@@ -3062,6 +3490,48 @@ class _BookReaderScreenState extends State<BookReaderScreen>
               ),
             ),
           ),
+        ),
+      );
+    }
+
+    if (_mode == _ReaderMode.epub && _useEpubJs) {
+      final bytes = _epubBytes;
+      if (bytes == null) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return SafeArea(
+        child: EpubJsView(
+          bytes: bytes,
+          controller: _epubJs,
+          style: _epubStyle(),
+          scrolled: _settings.scrolled,
+          startCfi: _epubStartCfi,
+          startFraction: _epubStartFraction,
+          startSection: _epubStartSection,
+          // macOS and Windows don't build custom menu items.
+          contextMenu: PlatformDetection.isAndroid || PlatformDetection.isIOS
+              ? ContextMenu(
+                  menuItems: [
+                    ContextMenuItem(
+                      id: 1,
+                      title: 'Highlight',
+                      action: () async {
+                        final selected = await _epubJs.selectedText();
+                        if (selected.trim().isNotEmpty) {
+                          await _addHighlight(selected);
+                        }
+                      },
+                    ),
+                  ],
+                )
+              : null,
+          onReady: (sections, rtl) => setState(() {
+            _epubSectionCount = sections;
+            _epubBookRtl = rtl;
+          }),
+          onRelocated: _onEpubRelocated,
+          onToggleChrome: _toggleOverlay,
+          onError: _onEpubJsError,
         ),
       );
     }

@@ -80,6 +80,7 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
     final transcodeCodecs = DeviceProfileBuilder.transcodeTargetAudioCodecs(
       fallbackCodec: _prefs.get(UserPreferences.audioFallbackCodec),
       forAvFoundation: PlatformDetection.isApple || PlatformDetection.isAppleTV,
+      transcodeAudioCodecs: _prefs.resolveTranscodeAudioCodecs(),
     ).map((codec) => codec == 'opus' ? 'Opus' : codec.toUpperCase());
 
     return <Widget>[
@@ -427,6 +428,14 @@ class _AudioPreferencesScreenState extends State<_AudioPreferencesScreen> {
                   dialogLabelOf: (v) => v == AudioFallbackCodec.auto
                       ? l10n.settingsAudioFallbackCodecAuto
                       : _fallbackCodecLabel(l10n, v),
+                ),
+                MultiSelectPreferenceTile(
+                  preference: UserPreferences.transcodeAudioCodecs,
+                  title: l10n.transcodeAudioCodecs,
+                  description: l10n.transcodeAudioCodecsDescription,
+                  icon: Icons.transform,
+                  options: DeviceProfileBuilder.transcodableAudioCodecs,
+                  emptyLabel: l10n.none,
                 ),
               ],
             ),

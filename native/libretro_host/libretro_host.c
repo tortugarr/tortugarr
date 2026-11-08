@@ -514,6 +514,11 @@ struct lh_host {
   // position can't tear, [1] is pressed.
   atomic_uint pointer_level[LH_MAX_PORTS][2];
   atomic_uint pointer_frame[LH_MAX_PORTS][2];  // published, read cross-thread
+  // A tap can start and end between two frame latches. tap records a press
+  // since the last latch, and hold keeps it down for the next frame so the
+  // core still sees it.
+  atomic_uint pointer_tap[LH_MAX_PORTS];
+  atomic_uint pointer_hold[LH_MAX_PORTS];
 
   // Ports the core has actually READ an analog stick on, bit N = port N; half
   // of lh_analog_stick_ports' answer. Written from whatever thread the core
@@ -1189,6 +1194,8 @@ static void reset_analog_state(struct lh_host *h) {
     atomic_store(&h->pointer_level[p][1], 0u);
     atomic_store(&h->pointer_frame[p][0], 0u);
     atomic_store(&h->pointer_frame[p][1], 0u);
+    atomic_store(&h->pointer_tap[p], 0u);
+    atomic_store(&h->pointer_hold[p], 0u);
   }
 }
 
@@ -2057,7 +2064,8 @@ static void latch_analog(struct lh_host *h) {
                           atomic_load(&h->pointer_level[p][0]),
                           memory_order_release);
     atomic_store_explicit(&h->pointer_frame[p][1],
-                          atomic_load(&h->pointer_level[p][1]),
+                          atomic_load(&h->pointer_level[p][1]) |
+                              atomic_load(&h->pointer_hold[p]),
                           memory_order_release);
   }
 }
@@ -2150,6 +2158,7 @@ static void latch_input(struct lh_host *h) {
         }
       }
     }
+    atomic_store(&h->pointer_hold[p], atomic_exchange(&h->pointer_tap[p], 0u));
   }
   latch_analog(h);
   // Runs before retro_run, so the flag being rolled up here belongs to the
@@ -2719,10 +2728,17 @@ void lh_set_pad_state(lh_host *host, int port, uint16_t mask, int16_t lx,
 void lh_set_pointer(lh_host *host, int port, int pressed, int16_t x,
                     int16_t y) {
   if (!host || port < 0 || port >= LH_MAX_PORTS) return;
+  if (!pressed) {
+    // A latched tap still needs the position it landed on.
+    atomic_store(&host->pointer_level[port][1], 0u);
+    return;
+  }
   // Position first, for the same reason as the analog-first order above: a
   // poll that sees the press already sees where it landed.
   atomic_store(&host->pointer_level[port][0], pack_axes(x, y));
-  atomic_store(&host->pointer_level[port][1], pressed ? 1u : 0u);
+  if (!atomic_exchange(&host->pointer_level[port][1], 1u)) {
+    atomic_store(&host->pointer_tap[port], 1u);
+  }
 }
 
 void lh_test_poll_input(lh_host *host) {
@@ -2774,6 +2790,13 @@ uint16_t lh_test_read_trigger(lh_host *host, int port, int which) {
   if (!host || port < 0 || port >= LH_MAX_PORTS) return 0;
   uint32_t packed = atomic_load(&host->trigger_frame[port]);
   return which == 0 ? (uint16_t)unpack_x(packed) : (uint16_t)unpack_y(packed);
+}
+
+int16_t lh_test_read_pointer(lh_host *host, int port, int field) {
+  if (!host || port < 0 || port >= LH_MAX_PORTS) return 0;
+  if (field == 2) return (int16_t)atomic_load(&host->pointer_frame[port][1]);
+  uint32_t packed = atomic_load(&host->pointer_frame[port][0]);
+  return field == 0 ? unpack_x(packed) : unpack_y(packed);
 }
 
 static void free_load_paths(struct lh_host *h) {

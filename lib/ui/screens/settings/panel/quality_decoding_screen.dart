@@ -76,27 +76,6 @@ class _QualityDecodingScreen extends StatelessWidget {
                   subtitle: appL10n().tgAutoPlayerSubtitle,
                   icon: Icons.auto_mode,
                 ),
-              if (PlatformDetection.isAndroid)
-                EnumPreferenceTile<PlaybackEnginePreference>(
-                  preference: UserPreferences.playbackEnginePreference,
-                  title: PlatformDetection.isTV
-                      ? l10n.settingsPlaybackEngineAndroidTv
-                      : l10n.settingsPlaybackEngineAndroidTv.replaceAll(
-                          'Android TV',
-                          'Android',
-                        ),
-                  description: PlatformDetection.isTV
-                      ? l10n.settingsPlaybackEngineAndroidTvDescription
-                      : l10n.settingsPlaybackEngineAndroidTvDescription
-                            .replaceAll('Android TV', 'Android'),
-                  icon: Icons.video_settings,
-                  labelOf: (v) => switch (v) {
-                    PlaybackEnginePreference.media3 =>
-                      l10n.settingsPlaybackEngineMedia3Recommended,
-                    PlaybackEnginePreference.mpv =>
-                      l10n.settingsPlaybackEngineMpvLegacy,
-                  },
-                ),
               if (PlatformDetection.isAndroid && PlatformDetection.isTV)
                 SwitchPreferenceTile(
                   preference: UserPreferences.mpvOnBluetooth,
@@ -104,8 +83,8 @@ class _QualityDecodingScreen extends StatelessWidget {
                   subtitle: l10n.settingsMpvOnBluetoothDescription,
                   icon: Icons.bluetooth_audio,
                 ),
-              // Next to the engine choice: both are what to try when a film
-              // stutters on the TV.
+              // What to try when a film stutters on the TV (the engine choice
+              // itself is under Video Playback since Moonfin 3.0).
               if (PlatformDetection.isAndroid && PlatformDetection.isTV)
                 SwitchPreferenceTile(
                   preference: UserPreferences.media3TunnelingDisabled,
@@ -129,6 +108,20 @@ class _QualityDecodingScreen extends StatelessWidget {
                   preference: UserPreferences.preferExoPlayerFfmpeg,
                   title: l10n.preferSoftwareDecoders,
                   subtitle: l10n.preferSoftwareDecodersSubtitle,
+                  icon: Icons.memory,
+                ),
+              if (PlatformDetection.offersHevcSoftwareDecode)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.hevcSoftwareDirectPlay,
+                  title: l10n.hevcSoftwareDirectPlay,
+                  subtitle: l10n.hevcSoftwareDirectPlaySubtitle,
+                  icon: Icons.memory,
+                ),
+              if (PlatformDetection.offersAv1SoftwareUhd)
+                SwitchPreferenceTile(
+                  preference: UserPreferences.av1SoftwareUhdDirectPlay,
+                  title: l10n.av1SoftwareUhdDirectPlay,
+                  subtitle: l10n.av1SoftwareUhdDirectPlaySubtitle,
                   icon: Icons.memory,
                 ),
               if (DisplayHdrProbe.isSupported) const _RedetectDisplayTile(),
@@ -223,6 +216,14 @@ class _QualityDecodingScreen extends StatelessWidget {
                   subtitle: l10n.mapDolbyVisionP7Subtitle,
                   icon: Icons.hdr_strong,
                 ),
+                if (KnownDefects.hevcDoviHdr10PlusBug)
+                  SwitchPreferenceTile(
+                    preference:
+                        UserPreferences.media3StripDolbyVisionWithHdr10Plus,
+                    title: l10n.stripDolbyVisionHdr10PlusTitle,
+                    subtitle: l10n.stripDolbyVisionHdr10PlusSubtitle,
+                    icon: Icons.hdr_strong,
+                  ),
               ],
             ),
           ],

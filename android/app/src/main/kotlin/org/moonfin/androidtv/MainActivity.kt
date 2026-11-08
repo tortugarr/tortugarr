@@ -626,10 +626,10 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                     }
                 }
                 "stopGoogleCastSession" -> {
-                    withRemoteMediaClient(result) { remoteClient ->
-                        remoteClient.stop()
-                        result.success(null)
-                    }
+                    // Stopping only the media leaves the session up, and with it the
+                    // receiver, the cast icon and the notification.
+                    runCatching { CastContext.getSharedInstance(this).sessionManager.endCurrentSession(true) }
+                    result.success(null)
                 }
                 "getGoogleCastVolume" -> {
                     val session = getCurrentCastSession()
@@ -1658,8 +1658,10 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
                 emitGoogleCastEvent("error", "Failed to start cast session: $error")
             }
 
+            // The SDK tries to resume the last session on launch, and failing that
+            // just means there's nothing left to rejoin.
             override fun onSessionResumeFailed(session: CastSession, error: Int) {
-                emitGoogleCastEvent("error", "Failed to resume cast session: $error")
+                emitGoogleCastEvent("disconnected")
             }
 
             override fun onSessionEnding(session: CastSession) {}
@@ -1852,7 +1854,7 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
             return
         }
 
-        startExternalPlayerProxy(launchIntent, result)
+        startExternalPlayer(launchIntent, args, result)
     }
 
     private fun chooseAndLaunchExternalPlayer(args: Map<*, *>, result: MethodChannel.Result) {
@@ -1882,7 +1884,36 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
         }
 
         val chooserIntent = Intent.createChooser(baseIntent, EXTERNAL_PLAYER_CHOOSER_TITLE)
-        startExternalPlayerProxy(chooserIntent, result)
+        startExternalPlayer(chooserIntent, args, result)
+    }
+
+    // A player that relaunches itself, as VLC does for a live stream, answers
+    // a waiting proxy at once and brings Moonfin back over it. A detached
+    // launch runs in its own task instead and the app waits for the viewer
+    // to come back.
+    private fun startExternalPlayer(
+        intent: Intent,
+        args: Map<*, *>,
+        result: MethodChannel.Result,
+    ) {
+        if (args["detached"] != true) {
+            startExternalPlayerProxy(intent, result)
+            return
+        }
+        try {
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            result.success(
+                mapOf(
+                    "completed" to false,
+                    "hasError" to false,
+                    "resultCode" to Activity.RESULT_OK,
+                ),
+            )
+        } catch (error: ActivityNotFoundException) {
+            result.error("PLAYER_NOT_FOUND", error.message, null)
+        } catch (error: Exception) {
+            result.error("LAUNCH_FAILED", error.message, null)
+        }
     }
 
     private fun startExternalPlayerProxy(

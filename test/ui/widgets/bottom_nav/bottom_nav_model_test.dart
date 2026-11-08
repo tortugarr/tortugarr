@@ -41,8 +41,8 @@ void main() {
 
   group('activeBarIndex', () {
     final items = resolveBarItems(
-      const BottomNavTabGates(folderView: true),
-      'search,libraries,folders',
+      const BottomNavTabGates(),
+      'search,libraries,favorites',
     );
 
     int? active(String? route, {bool hubOpen = false}) =>
@@ -54,8 +54,8 @@ void main() {
       expect(active('/library/abc'), 2);
       expect(active('/music/abc'), 2);
       expect(active('/books/abc'), 2);
-      expect(active('/folders'), 3);
-      expect(active('/folder/xyz'), 3);
+      expect(active('/folder/xyz'), 2);
+      expect(active('/favorites'), 3);
     });
 
     test('lights nothing on a screen that belongs to no tab', () {
@@ -135,14 +135,12 @@ void main() {
           kidsMode: true,
           showLiveTv: true,
           seerrAvailable: true,
-          folderView: true,
         ),
         saved: true,
       );
       expect(kids.map((t) => t.tab), isNot(contains(BottomNavTab.libraries)));
       expect(kids.map((t) => t.tab), isNot(contains(BottomNavTab.liveTv)));
       expect(kids.map((t) => t.tab), isNot(contains(BottomNavTab.discover)));
-      expect(kids, contains(const BottomNavHubTile.tab(BottomNavTab.folders)));
       expect(kids,
           contains(const BottomNavHubTile.action(BottomNavHubAction.saved)));
     });

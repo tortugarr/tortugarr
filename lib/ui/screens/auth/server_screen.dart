@@ -8,13 +8,15 @@ import 'package:server_core/server_core.dart';
 import '../../../auth/models/login_state.dart';
 import '../../../auth/models/server.dart';
 import '../../../auth/repositories/auth_repository.dart';
+import '../../../auth/repositories/plex_repository.dart';
 import '../../../auth/repositories/server_repository.dart';
 import '../../../auth/repositories/server_user_repository.dart';
 import '../../../auth/repositories/session_repository.dart';
 import '../../../auth/store/authentication_preferences.dart';
 import '../../../data/services/media_server_client_factory.dart';
+import '../../../data/services/pin_guard.dart';
+import '../../../data/services/server_pin_service.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../util/pin_code_util.dart';
 import '../../../util/platform_detection.dart';
 import '../../navigation/destinations.dart';
 import '../../widgets/login_scaffold.dart';
@@ -35,6 +37,7 @@ class _ServerScreenState extends State<ServerScreen> {
   final _userRepo = GetIt.instance<ServerUserRepository>();
   final _authRepo = GetIt.instance<AuthRepository>();
   final _sessionRepo = GetIt.instance<SessionRepository>();
+  final _plexRepo = GetIt.instance<PlexRepository>();
   final _clientFactory = GetIt.instance<MediaServerClientFactory>();
 
   Server? _server;
@@ -60,7 +63,9 @@ class _ServerScreenState extends State<ServerScreen> {
       }
 
       final stored = _userRepo.getStoredServerUsers(server.id);
-      final publicUsers = await _userRepo.getPublicServerUsers(server);
+      final publicUsers = server.serverType == ServerType.plex
+          ? await _plexRepo.homeUsers(server)
+          : await _userRepo.getPublicServerUsers(server);
 
       final merged = <String, _MergedUser>{};
       for (final u in stored) {
@@ -138,18 +143,43 @@ class _ServerScreenState extends State<ServerScreen> {
     ).toString();
   }
 
+  /// Set while a tapped user is being handled, since the PIN lookup before the
+  /// dialog takes long enough that Select gets pressed again.
+  bool _handlingUserTap = false;
+
   Future<void> _onUserTap(_MergedUser user) async {
+    if (_handlingUserTap) return;
+    _handlingUserTap = true;
+    try {
+      await _handleUserTap(user);
+    } finally {
+      _handlingUserTap = false;
+    }
+  }
+
+  Future<void> _handleUserTap(_MergedUser user) async {
     final server = _server;
     if (server == null) return;
 
-    final store = GetIt.instance<PreferenceStore>();
-    final pinUtil = PinCodeUtil(store, user.id);
+    final guard = PinGuard.forAccount(
+      store: GetIt.instance<PreferenceStore>(),
+      service: GetIt.instance<ServerPinService>(),
+      userId: user.id,
+      serverAddress: server.address,
+      accessToken: _userRepo
+          .getStoredServerUsers(server.id)
+          .where((stored) => stored.id == user.id)
+          .map((stored) => stored.accessToken)
+          .firstOrNull,
+    );
+    await guard.refresh();
+    if (!mounted) return;
 
-    if (pinUtil.isPinEnabled) {
+    if (guard.pin.isPinEnabled) {
       final verified = await PinEntryDialog.show(
         context,
         mode: PinEntryMode.verify,
-        onVerify: pinUtil.verifyPin,
+        onVerifyAsync: guard.verify,
         onForgotPin: () {
           if (mounted) {
             context.go(_buildUserLoginRoute(server, user, resetPin: true));
@@ -174,6 +204,11 @@ class _ServerScreenState extends State<ServerScreen> {
       return;
     }
 
+    if (server.serverType == ServerType.plex) {
+      await _switchPlexHomeUser(server, user);
+      return;
+    }
+
     if (!user.hasPassword && !alwaysAuthenticate) {
       final result = await _tryPasswordlessAuth(server, user);
       if (result is Authenticated && mounted) {
@@ -194,6 +229,48 @@ class _ServerScreenState extends State<ServerScreen> {
 
     if (mounted) {
       context.go(_buildUserLoginRoute(server, user));
+    }
+  }
+
+  /// Plex Home members sign in through plex.tv, with their PIN when they have
+  /// one, and get a server token of their own.
+  Future<void> _switchPlexHomeUser(Server server, _MergedUser user) async {
+    String? plexToken;
+    try {
+      if (user.hasPassword) {
+        final verified = await PinEntryDialog.show(
+          context,
+          mode: PinEntryMode.verify,
+          onVerifyAsync: (pin) async {
+            plexToken = await _plexRepo.homeUserToken(
+              server.id,
+              user.id,
+              pin: pin,
+            );
+            return plexToken == null
+                ? const PinRejected()
+                : const PinAccepted();
+          },
+        );
+        if (!verified) return;
+      } else {
+        plexToken = await _plexRepo.homeUserToken(server.id, user.id);
+      }
+      final signedIn =
+          plexToken != null &&
+          await _plexRepo.signInHomeUser(
+            server,
+            userId: user.id,
+            name: user.name,
+            plexToken: plexToken!,
+          );
+      if (signedIn && mounted) {
+        context.go(Destinations.home);
+        return;
+      }
+    } catch (_) {}
+    if (mounted) {
+      setState(() => _errorMessage = AppLocalizations.of(context).loginFailed);
     }
   }
 
@@ -230,7 +307,12 @@ class _ServerScreenState extends State<ServerScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => SignInBackScope(
+    onBack: () => context.go(Destinations.serverSelect),
+    child: _buildContent(context),
+  );
+
+  Widget _buildContent(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -426,12 +508,18 @@ class _ServerScreenState extends State<ServerScreen> {
     );
   }
 
-  String _userImageUrl(_MergedUser user) {
+  /// Plex keeps every account's avatar on plex.tv, under its uuid.
+  String? _userImageUrl(_MergedUser user) {
     final server = _server!;
+    if (server.serverType == ServerType.plex) {
+      return 'https://plex.tv/users/${user.id}/avatar';
+    }
+    if (user.imageTag == null) return null;
     return '${server.address}/Users/${user.id}/Images/Primary?tag=${user.imageTag}';
   }
 
   Widget _buildUserCard(_MergedUser user, int index) {
+    final imageUrl = _userImageUrl(user);
     final hasFocus = ValueNotifier(false);
     final focusNode = index < _userFocusNodes.length
         ? _userFocusNodes[index]
@@ -480,13 +568,13 @@ class _ServerScreenState extends State<ServerScreen> {
                           child: CircleAvatar(
                             radius: 36,
                             backgroundColor: Colors.white.withValues(alpha: 0.1),
-                            backgroundImage: user.imageTag != null
+                            backgroundImage: imageUrl != null
                                 ? NetworkImage(
-                                    _userImageUrl(user),
+                                    imageUrl,
                                     headers: serverImageHeaders,
                                   )
                                 : null,
-                            child: user.imageTag == null
+                            child: imageUrl == null
                                 ? Icon(
                                     Icons.person,
                                     size: 32,

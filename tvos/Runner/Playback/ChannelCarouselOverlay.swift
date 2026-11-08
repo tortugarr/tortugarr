@@ -134,6 +134,9 @@ final class ChannelCarouselOverlayViewController: UIViewController, RemotePlayer
 
         addMenuRecognizer()
         addSwipeRecognizers()
+        #if os(iOS)
+        addTouchRecognizer()
+        #endif
         updateHeader()
         resetInactivity()
     }
@@ -376,6 +379,11 @@ final class ChannelCarouselOverlayViewController: UIViewController, RemotePlayer
         // window level recognizer, which overriding pressesBegan cannot stop.
         let menuTap = UITapGestureRecognizer(target: self, action: #selector(handleMenuTap))
         menuTap.allowedPressTypes = [NSNumber(value: UIPress.PressType.menu.rawValue)]
+        #if os(iOS)
+        // A tap recognizer takes every finger too, which would close the
+        // carousel on any touch. Only the Menu press should reach this one.
+        menuTap.allowedTouchTypes = []
+        #endif
         view.addGestureRecognizer(menuTap)
     }
 
@@ -396,9 +404,15 @@ final class ChannelCarouselOverlayViewController: UIViewController, RemotePlayer
 
     @objc private func handleSwipe(_ recognizer: UISwipeGestureRecognizer) {
         resetInactivity()
+        #if os(iOS)
+        // A finger drags the strip, so a swipe left brings in the next channel.
+        let leftStep = 1
+        #else
+        let leftStep = -1
+        #endif
         switch recognizer.direction {
-        case .left: move(by: -1)
-        case .right: move(by: 1)
+        case .left: move(by: leftStep)
+        case .right: move(by: -leftStep)
         case .down: dismissCarousel(showingControls: true)
         default: break
         }
@@ -515,6 +529,34 @@ final class ChannelCarouselOverlayViewController: UIViewController, RemotePlayer
             Task { @MainActor in self?.endHold() }
         }
     }
+
+    #if os(iOS)
+    /// Touch stands in for the remote on iPhone and iPad. A tap on a side card
+    /// brings it to the center, where its program shows above the strip, and a
+    /// tap on the centered card tunes it. A tap above the panel closes the
+    /// carousel the same way Menu does.
+    private func addTouchRecognizer() {
+        view.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(handleTouchTap(_:))))
+    }
+
+    @objc private func handleTouchTap(_ recognizer: UITapGestureRecognizer) {
+        guard !dismissed else { return }
+        resetInactivity()
+        guard scrim.bounds.contains(recognizer.location(in: scrim)) else {
+            dismissCarousel()
+            return
+        }
+        let point = recognizer.location(in: stripContainer)
+        guard let slot = cards.firstIndex(where: { $0.frame.contains(point) }) else { return }
+        let offset = slot - halfSpan
+        if offset == 0 {
+            tuneCenteredChannel()
+        } else {
+            move(by: offset)
+        }
+    }
+    #endif
 
     private func resetInactivity() {
         inactivityTimer?.invalidate()

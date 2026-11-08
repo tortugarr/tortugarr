@@ -1,14 +1,51 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../data/models/aggregated_item.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../preference/preference_constants.dart';
 import '../../../preference/user_preferences.dart';
 import '../../../util/focus/row_focus_coordinator.dart';
 import '../../../util/platform_detection.dart';
 import '../../navigation/destinations.dart';
+import '../adaptive/adaptive_dialog.dart';
 import '../navigation_layout.dart';
+import '../overlay_sheet.dart';
+
+/// The places a book library's navigation leads, each with its own screen.
+enum BookCategoryKind {
+  titles,
+  series,
+  authors,
+  genres,
+  collections,
+  favorites,
+  discover;
+
+  static BookCategoryKind? parse(String? name) =>
+      values.where((kind) => kind.name == name).firstOrNull;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    titles => l10n.titles,
+    series => l10n.series,
+    authors => l10n.authors,
+    genres => l10n.genres,
+    collections => l10n.collections,
+    favorites => l10n.favorites,
+    discover => l10n.discover,
+  };
+
+  IconData get icon => switch (this) {
+    titles => Icons.library_books_outlined,
+    series => Icons.layers_outlined,
+    authors => Icons.person_outline_rounded,
+    genres => Icons.sell_outlined,
+    collections => Icons.collections_bookmark_outlined,
+    favorites => Icons.favorite_border_rounded,
+    discover => Icons.explore_outlined,
+  };
+}
 
 /// Opens a title from a book library on its details screen, or the browse
 /// page that fits a series, genre, collection or folder.
@@ -19,8 +56,10 @@ void openBookLibraryItem(
 }) {
   final type = item.type;
   final isFolder = item.rawData['IsFolder'] as bool? ?? false;
-  // A series named only by metadata has no folder to open.
-  if (type == 'BookSeries' && !isFolder) {
+  // A series named only by metadata has no folder to open, and an author known
+  // only by name has no item.
+  if ((type == 'BookSeries' && !isFolder) ||
+      (type == 'Person' && item.id == item.name)) {
     context.push(Destinations.searchInLibrary(libraryId, query: item.name));
     return;
   }
@@ -54,7 +93,32 @@ void readOrListenBook(
     );
     return;
   }
+  if (PlatformDetection.isAppleTV) {
+    showBookReadingUnavailableDialog(context);
+    return;
+  }
   context.push(Destinations.book(item.id, serverId: item.serverId));
+}
+
+/// tvOS has no web view for the reader, so opening a book or comic there
+/// explains that instead.
+Future<void> showBookReadingUnavailableDialog(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  return showFocusRestoringDialog<void>(
+    context: context,
+    builder: (ctx) => AlertDialog.adaptive(
+      title: Text(l10n.bookReadingUnavailableTitle),
+      content: Text(l10n.bookReadingUnavailableMessage),
+      actions: [
+        adaptiveDialogAction(
+          onPressed: () => Navigator.of(ctx).pop(),
+          isDefault: true,
+          autofocus: true,
+          child: Text(l10n.ok),
+        ),
+      ],
+    ),
+  );
 }
 
 /// Moves D-pad focus up or down a book library's [coordinator] chain from

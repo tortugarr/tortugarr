@@ -6,13 +6,22 @@ import 'package:playback_core/playback_core.dart';
 const _mediaStreams = <Map<String, dynamic>>[
   {'Index': 0, 'Type': 'Audio', 'IsExternal': true},
   {'Index': 1, 'Type': 'Video', 'IsExternal': false},
-  {'Index': 2, 'Type': 'Audio', 'IsExternal': false},
-  {'Index': 3, 'Type': 'Audio', 'IsExternal': false},
+  {'Index': 2, 'Type': 'Audio', 'IsExternal': false, 'Codec': 'eac3'},
+  {'Index': 3, 'Type': 'Audio', 'IsExternal': false, 'Codec': 'aac'},
 ];
+
+// What a profile with AAC sent to the server for conversion looks like.
+const _aacHeldBack = <String, dynamic>{
+  'DirectPlayProfiles': [
+    {'Type': 'Video', 'AudioCodec': 'ac3,eac3'},
+    {'Type': 'Audio', 'AudioCodec': 'aac,ac3,eac3'},
+  ],
+};
 
 class _TestBackend extends Fake implements PlayerBackend {
   final List<Map<String, dynamic>> payloads = <Map<String, dynamic>>[];
   final List<int> audioTracks = <int>[];
+  Map<String, dynamic> profile = <String, dynamic>{};
 
   @override
   Duration get position => const Duration(seconds: 90);
@@ -75,7 +84,7 @@ class _TestBackend extends Fake implements PlayerBackend {
   @override
   Map<String, dynamic> getDeviceProfile({
     bool useProgressiveTranscode = false,
-  }) => <String, dynamic>{};
+  }) => profile;
 
   @override
   Future<void> play(
@@ -106,6 +115,8 @@ class _TestBackend extends Fake implements PlayerBackend {
 
 class _TestResolver extends MediaStreamResolver {
   final List<int?> requestedAudio = <int?>[];
+  final List<String?> requestedSources = <String?>[];
+  int? serverDefaultAudio;
 
   @override
   Future<StreamResolutionResult> resolve(
@@ -121,12 +132,14 @@ class _TestResolver extends MediaStreamResolver {
     bool enableTranscoding = true,
   }) async {
     requestedAudio.add(audioStreamIndex);
+    requestedSources.add(mediaSourceId);
     return StreamResolutionResult(
       streamUrl: 'https://example.test/session-${requestedAudio.length}',
       mediaSourceId: 'movie',
       playSessionId: 'session-${requestedAudio.length}',
       playMethod: StreamPlayMethod.directPlay,
       mediaStreams: _mediaStreams,
+      selectedAudioStreamIndex: serverDefaultAudio,
     );
   }
 }
@@ -211,6 +224,50 @@ void main() {
     expect(backend.audioTracks, isNotEmpty);
     expect(backend.audioTracks, everyElement(2));
     expect(resolver.requestedAudio, hasLength(1));
+  });
+
+  test('a track in a codec the profile no longer direct plays asks the '
+      'server for it', () async {
+    backend.profile = _aacHeldBack;
+    await startPlayback(audioStreamIndex: 2);
+    backend.audioTracks.clear();
+
+    await manager.changeAudioTrack(3);
+
+    expect(resolver.requestedAudio.last, 3);
+    expect(backend.payloads, hasLength(2));
+  });
+
+  test('an unnamed track in a held back codec is named and '
+      'asked again', () async {
+    backend.profile = _aacHeldBack;
+    resolver.serverDefaultAudio = 3;
+
+    await startPlayback();
+
+    expect(resolver.requestedAudio, <int?>[null, 3]);
+    expect(resolver.requestedSources.last, 'movie');
+  });
+
+  test('an unnamed track in a codec video still plays is not '
+      'asked again', () async {
+    backend.profile = _aacHeldBack;
+    resolver.serverDefaultAudio = 2;
+
+    await startPlayback();
+
+    expect(resolver.requestedAudio, <int?>[null]);
+  });
+
+  test('a named track goes again with its source when the server judged '
+      'a held back default', () async {
+    backend.profile = _aacHeldBack;
+    resolver.serverDefaultAudio = 3;
+
+    await startPlayback(audioStreamIndex: 2);
+
+    expect(resolver.requestedAudio, <int?>[2, 2]);
+    expect(resolver.requestedSources, <String?>[null, 'movie']);
   });
 
   test('switching to the external file asks the server for it', () async {

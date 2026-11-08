@@ -75,6 +75,25 @@ class _DetailsScreenSettingsScreenState
                       PersonalRatingStyle.numeric => l10n.personalRatingNumeric,
                     },
                   ),
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.detailsBackdropEnabled,
+                    title: l10n.detailsScreenBackdrop,
+                    icon: Icons.photo,
+                    onChanged: _pushPersonalizationSync,
+                  ),
+                  if (PlatformDetection.useMobileUi)
+                    StringPickerPreferenceTile(
+                      preference: UserPreferences.detailsBackdropSize,
+                      title: l10n.detailsBackdropSize,
+                      icon: Icons.fit_screen,
+                      options: {
+                        UserPreferences.detailsBackdropFullScreen:
+                            l10n.detailsBackdropFullScreen,
+                        UserPreferences.detailsBackdropFit:
+                            l10n.detailsBackdropFit,
+                      },
+                      onChanged: _pushPersonalizationSync,
+                    ),
                   if (prefs.get(UserPreferences.detailScreenStyle) == DetailScreenStyle.classic)
                     SliderPreferenceTile(
                       preference: UserPreferences.detailsBackgroundBlurAmount,
@@ -169,6 +188,13 @@ class _DetailsScreenSettingsScreenState
                     onChanged: _pushPersonalizationSync,
                   ),
                   SwitchPreferenceTile(
+                    preference: UserPreferences.mediaBarTrailerCaptions,
+                    title: l10n.trailerCaptions,
+                    subtitle: l10n.trailerCaptionsDescription,
+                    icon: Icons.closed_caption_outlined,
+                    onChanged: _pushPersonalizationSync,
+                  ),
+                  SwitchPreferenceTile(
                     preference: UserPreferences.hideDetailsMediaDescription,
                     title: l10n.hideDetailsMediaDescription,
                     subtitle: l10n.hideDetailsMediaDescriptionSubtitle,
@@ -207,43 +233,11 @@ class _DetailsScreenSettingsScreenState
               ),
               _SectionHeader(l10n.ratings),
               adaptiveListSection(
-                children: [
-                  SwitchPreferenceTile(
-                    preference: UserPreferences.enableAdditionalRatings,
-                    title: l10n.additionalRatings,
-                    subtitle: l10n.showMdbListAndTmdbRatings,
-                    icon: Icons.star,
-                    onChanged: _pushPersonalizationSync,
-                  ),
-                  _TvSettingsListTile(
-                    leading: const Icon(Icons.reorder),
-                    title: Text(l10n.ratingSources),
-                    subtitle: Text(l10n.ratingSourcesDescription),
-                    onTap: () =>
-                        context.pushSettingsScreen(const RatingsConfigScreen()),
-                  ),
-                  SwitchPreferenceTile(
-                    preference: UserPreferences.enableEpisodeRatings,
-                    title: l10n.episodeRatings,
-                    subtitle: l10n.showRatingsOnEpisodes,
-                    icon: Icons.stars,
-                    onChanged: _pushPersonalizationSync,
-                  ),
-                  SwitchPreferenceTile(
-                    preference: UserPreferences.showRatingLabels,
-                    title: l10n.ratingLabels,
-                    subtitle: l10n.showLabelsNextToIcons,
-                    icon: Icons.label,
-                    onChanged: _pushPersonalizationSync,
-                  ),
-                  SwitchPreferenceTile(
-                    preference: UserPreferences.showRatingBadges,
-                    title: l10n.ratingBadges,
-                    subtitle: l10n.showDecorativeBadges,
-                    icon: Icons.style,
-                    onChanged: _pushPersonalizationSync,
-                  ),
-                ],
+                children: _ratingsSettingsTiles(
+                  context,
+                  l10n,
+                  UserPreferences.detailsRatings,
+                ),
               ),
               _SectionHeader(l10n.themeMusic),
               adaptiveListSection(
@@ -289,3 +283,46 @@ class _DetailsScreenSettingsScreenState
     );
   }
 }
+
+List<Widget> _ratingsSettingsTiles(
+  BuildContext context,
+  AppLocalizations l10n,
+  RatingSettings settings,
+) => [
+  SwitchPreferenceTile(
+    preference: settings.additionalRatings,
+    title: l10n.additionalRatings,
+    subtitle: l10n.showMdbListAndTmdbRatings,
+    icon: Icons.star,
+    onChanged: _pushPersonalizationSync,
+  ),
+  _TvSettingsListTile(
+    leading: const Icon(Icons.reorder),
+    title: Text(l10n.ratingSources),
+    subtitle: Text(l10n.ratingSourcesDescription),
+    onTap: () =>
+        context.pushSettingsScreen(RatingsConfigScreen(settings: settings)),
+  ),
+  if (settings.episodeRatings case final episodeRatings?)
+    SwitchPreferenceTile(
+      preference: episodeRatings,
+      title: l10n.episodeRatings,
+      subtitle: l10n.showRatingsOnEpisodes,
+      icon: Icons.stars,
+      onChanged: _pushPersonalizationSync,
+    ),
+  SwitchPreferenceTile(
+    preference: settings.labels,
+    title: l10n.ratingLabels,
+    subtitle: l10n.showLabelsNextToIcons,
+    icon: Icons.label,
+    onChanged: _pushPersonalizationSync,
+  ),
+  SwitchPreferenceTile(
+    preference: settings.badges,
+    title: l10n.ratingBadges,
+    subtitle: l10n.showDecorativeBadges,
+    icon: Icons.style,
+    onChanged: _pushPersonalizationSync,
+  ),
+];

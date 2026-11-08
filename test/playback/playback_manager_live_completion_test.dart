@@ -24,7 +24,7 @@ class _TestBackend extends Fake implements PlayerBackend {
   /// model a viewer pause or a buffer stall without conflating them.
   bool? playWhenReadyOverride;
   /// True simulates a backend that never reports its own intent (e.g.
-  /// AppleTvBackend, AetherBackend, the web video backend,
+  /// NativeApplePlayerBackend, AetherBackend, the web video backend,
   /// MediaKitPlayerBackend): [playWhenReady] always reads null, even while
   /// playing.
   bool forceNoIntent = false;

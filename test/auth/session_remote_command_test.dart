@@ -24,7 +24,7 @@ import 'package:moonfin/data/services/media_server_client_factory.dart';
 import 'package:moonfin/data/services/plugin_sync_service.dart';
 import 'package:moonfin/data/services/socket_handler.dart';
 import 'package:moonfin/data/services/remote_search_session.dart';
-import 'package:moonfin/playback/appletv_backend.dart';
+import 'package:moonfin/playback/native_apple_player_backend.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:moonfin/ui/navigation/app_router.dart';
 import 'package:moonfin/ui/navigation/destinations.dart';
@@ -63,7 +63,7 @@ class _VolumeBackend extends Fake implements PlayerBackend {
   }
 }
 
-class _AppleTvBackend extends Fake implements AppleTvBackend {
+class _NativeApplePlayerBackend extends Fake implements NativeApplePlayerBackend {
   bool dismissed = false;
   final navigation = <String>[];
   @override
@@ -401,7 +401,7 @@ void main() {
     tester,
   ) async {
     PlatformDetection.setTvMode(true);
-    final backend = _AppleTvBackend();
+    final backend = _NativeApplePlayerBackend();
     manager.backend = backend;
     var selected = 0;
     await tester.pumpWidget(
@@ -424,7 +424,7 @@ void main() {
   });
 
   test('Home stops playback and dismisses its native presentation', () async {
-    final backend = _AppleTvBackend();
+    final backend = _NativeApplePlayerBackend();
     manager.backend = backend;
     appRouter.go(Destinations.search);
     manager.stopBarrier = Completer<void>();
@@ -493,7 +493,7 @@ void main() {
         appRouter.routeInformationProvider.value.state as RouteInformationState;
 
     test('buffers text while stopping playback and dismisses the native Apple TV player', () async {
-      final backend = _AppleTvBackend();
+      final backend = _NativeApplePlayerBackend();
       manager.backend = backend;
       manager.stopBarrier = Completer<void>();
       final opening = sendGeneral(

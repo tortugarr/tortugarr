@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:playback_core/playback_core.dart';
 import 'package:server_core/server_core.dart';
 import 'package:dio/dio.dart';
 
+import '../../l10n/current_app_localizations.dart';
+import '../../preference/detail_section_layout.dart';
 import '../../preference/preference_constants.dart';
 import '../../preference/user_preferences.dart';
 import '../models/aggregated_item.dart';
@@ -36,6 +39,7 @@ import '../services/seerr/movie_collection.dart';
 import 'package:moonfin/util/app_l10n.dart';
 
 enum CollectionSortOption {
+  server,
   alphabetical,
   releaseAscending,
   releaseDescending,
@@ -288,6 +292,8 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   List<AggregatedItem> _similar = const [];
   List<AggregatedItem> get similar => _similar;
+  List<TmdbReview> _reviews = const [];
+  List<TmdbReview> get reviews => _reviews;
   bool _similarInitialLoadComplete = false;
   bool get similarInitialLoadComplete => _similarInitialLoadComplete;
 
@@ -298,6 +304,9 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   List<AggregatedItem> _filmography = const [];
   List<AggregatedItem> get filmography => _filmography;
+
+  TmdbPersonAccounts? _personAccounts;
+  TmdbPersonAccounts? get personAccounts => _personAccounts;
 
   List<AggregatedItem> _seasons = const [];
   List<AggregatedItem> get seasons => _seasons;
@@ -328,6 +337,28 @@ class ItemDetailViewModel extends ChangeNotifier {
   /// All episodes of a Series across every season, in the server's
   /// season/episode order. Empty until [loadAllSeriesEpisodes] completes.
   List<AggregatedItem> get seriesEpisodes => _seriesEpisodes;
+
+  /// Compares two episodes by season ([AggregatedItem.parentIndexNumber]),
+  /// episode number ([AggregatedItem.indexNumber]), and finally [AggregatedItem.name]
+  /// as a tie-breaker.
+  static int compareEpisodes(AggregatedItem a, AggregatedItem b) {
+    final sa = a.parentIndexNumber ?? 0;
+    final sb = b.parentIndexNumber ?? 0;
+    if (sa != sb) return sa.compareTo(sb);
+    final ea = a.indexNumber ?? 0;
+    final eb = b.indexNumber ?? 0;
+    if (ea != eb) return ea.compareTo(eb);
+    return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+  }
+
+  /// Compares two special features by index number ([AggregatedItem.indexNumber]),
+  /// and finally [AggregatedItem.name] as a tie-breaker.
+  static int compareFeatures(AggregatedItem a, AggregatedItem b) {
+    final ea = a.indexNumber ?? 0;
+    final eb = b.indexNumber ?? 0;
+    if (ea != eb) return ea.compareTo(eb);
+    return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+  }
 
   AggregatedItem? _nextUp;
   AggregatedItem? get nextUp => _nextUp;
@@ -431,16 +462,24 @@ class ItemDetailViewModel extends ChangeNotifier {
   /// How many series are asked for their episodes at once during the scan.
   static const _indexScanBatchSize = 8;
 
+  /// Member types that play on their own. A series is swapped for its episodes.
+  static const _playableTypes = {'Movie', 'Audio', 'Video', 'MusicVideo', 'Episode'};
+
   /// True while the index is being built. The playlist area shows a spinner.
   bool _playlistIndexBuilding = false;
   bool get playlistIndexBuilding => _playlistIndexBuilding;
+  bool _playlistFallbackTriggered = false;
+  bool _playlistSortRefreshing = false;
+  bool get playlistSortRefreshing => _playlistSortRefreshing;
 
-  /// The id and sort keys of every playable item, kept so the order can change
-  /// without fetching anything again. Null until the collection is scanned.
+  /// The id and sort keys of every playable item in the order the server lists
+  /// them, kept so the order can change without fetching anything again. Null
+  /// until the collection is scanned.
   List<_PlaylistItemIndexEntry>? _playlistIndexEntries;
 
   /// Ids in the order the playlist currently shows, which pages are read from.
   List<String>? _flattenedIds;
+  List<String>? get flattenedIds => _flattenedIds;
 
   /// Ids in the order the user arranged them, either dragged here or saved on
   /// the server. Kept apart from [_flattenedIds] so switching to another sort
@@ -510,7 +549,13 @@ class ItemDetailViewModel extends ChangeNotifier {
   List<AggregatedItem> _playlistItems = const [];
   List<AggregatedItem> get playlistItems => _playlistItems;
 
-  CollectionSortOption _collectionSort = CollectionSortOption.releaseAscending;
+  /// What the collection's Playlist tab shows. Until the playlist has items,
+  /// that's the collection's own playable members.
+  List<AggregatedItem> get collectionPlaylistItems => _playlistItems.isNotEmpty
+      ? _playlistItems
+      : _collectionItems.where((i) => _playableTypes.contains(i.type)).toList();
+
+  CollectionSortOption _collectionSort = CollectionSortOption.server;
   CollectionSortOption get collectionSort => _collectionSort;
 
   List<ParentCollection> _parentCollections = const [];
@@ -538,6 +583,16 @@ class ItemDetailViewModel extends ChangeNotifier {
   bool get supportsNumericUserRatings =>
       _client.userLibraryApi.supportsNumericUserRatings;
 
+  /// Plex has no likes, and its own rating already stands in for favorites.
+  bool get supportsPersonalRating => _client.serverType != ServerType.plex;
+
+  /// Plex can only favorite media, never people.
+  bool get supportsPersonFavorites => _client.serverType != ServerType.plex;
+
+  /// Plex keeps no YouTube links, so a trailer it doesn't have is searched
+  /// for on YouTube instead.
+  bool get searchesYouTubeForTrailer => _client.serverType == ServerType.plex;
+
   bool _isRatingMutationInProgress = false;
   bool get isRatingMutationInProgress => _isRatingMutationInProgress;
 
@@ -548,6 +603,10 @@ class ItemDetailViewModel extends ChangeNotifier {
 
   final String? _serverId;
   bool _isDisposed = false;
+
+  /// What the server probed in place of the item's placeholder source, kept so
+  /// a reload of the item doesn't put the placeholder back.
+  List<Map<String, dynamic>>? _probedMediaSources;
 
   /// The Seerr side of this title, when there is one. Null until the lookup
   /// lands, and null forever when Seerr is off or doesn't know the title.
@@ -839,9 +898,10 @@ class ItemDetailViewModel extends ChangeNotifier {
     _state = ItemDetailState.ready;
     notifyListeners();
 
-    // Everything else in _loadSecondary needs a library id, but ratings are
-    // keyed by TMDB id, which this does have.
+    // Everything else in _loadSecondary needs a library id, but ratings and
+    // reviews are keyed by TMDB id, which this does have.
     unawaited(_loadRatings());
+    unawaited(_loadReviews());
     if (state.isTv) {
       unawaited(_loadUpcomingEpisode());
     }
@@ -921,6 +981,8 @@ class ItemDetailViewModel extends ChangeNotifier {
     _collectionHasMore = false;
     _collectionLoadingMore = false;
     _playlistIndexBuilding = false;
+    _playlistFallbackTriggered = false;
+    _playlistSortRefreshing = false;
     _playlistFetchedCount = 0;
     _playlistHasMore = false;
     _playlistLoadingMore = false;
@@ -1038,15 +1100,81 @@ class ItemDetailViewModel extends ChangeNotifier {
     }
   }
 
+  static const _probedSourceTypes = {
+    'Movie',
+    'Episode',
+    'Video',
+    'MusicVideo',
+    'Trailer',
+  };
+
+  bool _hasPlaceholderSource(Map<String, dynamic> data) {
+    if (!_probedSourceTypes.contains(data['Type'])) return false;
+    final sources = data['MediaSources'];
+    if (sources is! List || sources.length != 1) return false;
+    final first = sources.first;
+    return first is Map &&
+        MediaStreamResolver.isStreamlessStaticSource(
+          data,
+          first['Id']?.toString(),
+        );
+  }
+
+  /// [data] with its placeholder source swapped for the probed ones, once
+  /// they are known.
+  Map<String, dynamic> _withProbedSources(Map<String, dynamic> data) {
+    final probed = _probedMediaSources;
+    if (probed == null || !_hasPlaceholderSource(data)) return data;
+    return <String, dynamic>{...data, 'MediaSources': probed};
+  }
+
+  /// A channel item, like one from a plugin's virtual library, comes with a
+  /// bare placeholder source: no streams, no size, a link for a file name.
+  /// The server only probes the real file for PlaybackInfo, so the page asks
+  /// for it and shows that source instead.
+  Future<void> _loadProbedMediaSources() async {
+    final item = _item;
+    if (item == null || !_hasPlaceholderSource(item.rawData)) return;
+    try {
+      final info = await _client.playbackApi.getPlaybackInfo(
+        itemId,
+        requestBody: PlaybackInfoRequest(
+          itemId: itemId,
+          autoOpenLiveStream: false,
+        ).toJson(),
+        userId: _client.userId,
+      );
+      final probed = (info['MediaSources'] as List?)
+              ?.whereType<Map>()
+              .map((e) => e.cast<String, dynamic>())
+              .where((s) => (s['MediaStreams'] as List?)?.isNotEmpty ?? false)
+              .toList() ??
+          const <Map<String, dynamic>>[];
+      if (probed.isEmpty || _isDisposed) return;
+      _probedMediaSources = probed;
+      final current = _item;
+      if (current == null || current.id != item.id) return;
+      _item = AggregatedItem(
+        id: current.id,
+        serverId: current.serverId,
+        rawData: _withProbedSources(current.rawData),
+      );
+      notifyListeners();
+    } catch (_) {}
+  }
+
   Future<void> _loadSecondary() async {
     final type = _item?.type;
     final futures = <Future>[];
+    unawaited(_loadProbedMediaSources());
     // Deliberately outside the Future.wait below, so a slow Seerr server never
     // holds up library content that is already here.
     unawaited(_loadSeerrOverlay());
     if (type == 'Person') {
       futures.add(_loadFilmography());
+      futures.add(_loadPersonAccounts());
     } else if (type == 'Series') {
+      unawaited(_loadReviews());
       futures.add(_loadRatings());
       futures.add(_loadSeasons());
       futures.add(_loadNextUp());
@@ -1101,6 +1229,7 @@ class ItemDetailViewModel extends ChangeNotifier {
       if (type == 'Movie') {
         futures.add(loadMovieCollection());
       }
+      if (type == 'Movie') unawaited(_loadReviews());
     } else {
       futures.add(_loadRatings());
       futures.add(_loadSimilar());
@@ -1599,15 +1728,22 @@ class ItemDetailViewModel extends ChangeNotifier {
   Future<void> setCollectionSort(CollectionSortOption option) async {
     if (_collectionSort == option) return;
     _collectionSort = option;
-    // A saved order arrives ready to use, so the scan is only worth paying for
-    // when the sort actually needs the keys.
-    if (option != CollectionSortOption.custom) {
-      await _ensurePlaylistIndexEntries();
-    }
-    _rebuildFlattenedIds();
-    _resetPlaylistPaging();
+    _playlistSortRefreshing = true;
     notifyListeners();
-    await loadMorePlaylistItems();
+    try {
+      // A saved order arrives ready to use, so the scan is only worth paying for
+      // when the sort actually needs the keys.
+      if (option != CollectionSortOption.custom) {
+        await _ensurePlaylistIndexEntries();
+      }
+      _rebuildFlattenedIds();
+      _resetPlaylistPaging();
+      notifyListeners();
+      await loadMorePlaylistItems();
+    } finally {
+      _playlistSortRefreshing = false;
+      notifyListeners();
+    }
   }
 
   /// Points [_flattenedIds] at the active sort. Every option lands here, so the
@@ -1621,21 +1757,27 @@ class ItemDetailViewModel extends ChangeNotifier {
     }
     final entries = _playlistIndexEntries;
     if (entries == null || entries.isEmpty) return;
+    // Sorted as a copy, so the entries keep the order the server gave them.
+    final sorted = [...entries];
     switch (_collectionSort) {
       case CollectionSortOption.alphabetical:
-        entries.sort(
+        sorted.sort(
           (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
         );
       case CollectionSortOption.releaseAscending:
-        entries.sort(_PlaylistItemIndexEntry.compareReleaseAscending);
+        sorted.sort(_PlaylistItemIndexEntry.compareReleaseAscending);
       case CollectionSortOption.releaseDescending:
-        entries.sort(
+        sorted.sort(
           (a, b) => _PlaylistItemIndexEntry.compareReleaseAscending(b, a),
         );
-      case CollectionSortOption.custom:
-        return;
+      case CollectionSortOption.server || CollectionSortOption.custom:
+        break;
     }
-    _flattenedIds = entries.map((e) => e.id).toList();
+    final seenIds = <String>{};
+    _flattenedIds = [
+      for (final e in sorted)
+        if (seenIds.add(e.id)) e.id,
+    ];
   }
 
   /// Drops the loaded pages so the next fetch starts at the head of the index.
@@ -1802,6 +1944,12 @@ class ItemDetailViewModel extends ChangeNotifier {
         ? _collectionFetchedCount < _collectionTotalCount
         : newItems.length == _collectionPageSize;
     _collectionItems = [..._collectionItems, ...newItems];
+    if ((_playlistIndexEntries == null || _playlistIndexEntries!.isEmpty) &&
+        !_playlistIndexBuilding &&
+        !_playlistFallbackTriggered) {
+      _playlistFallbackTriggered = true;
+      _buildPlaylistIndex();
+    }
     notifyListeners();
   }
 
@@ -1957,9 +2105,8 @@ class ItemDetailViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // A saved order already lists movie and episode ids in story order, so it
-      // can stand in for the index and skip enumerating the collection. The
-      // entries only get built if the user later picks a different sort.
+      // A saved order still needs the scan to find members added since it was
+      // saved. They go on the end in release order so they aren't lost.
       final syncService = GetIt.instance<PluginSyncService>();
       if (syncService.pluginAvailable) {
         try {
@@ -1969,7 +2116,18 @@ class ItemDetailViewModel extends ChangeNotifier {
           );
           if (customOrder != null && customOrder.isNotEmpty) {
             _customOrderIds = customOrder;
-            _flattenedIds = List<String>.from(customOrder);
+            await _ensurePlaylistIndexEntries();
+            final customSet = customOrder.toSet();
+            final remaining = (_playlistIndexEntries ?? [])
+                .where((e) => !customSet.contains(e.id))
+                .toList()
+              ..sort(_PlaylistItemIndexEntry.compareReleaseAscending);
+            final seenIds = <String>{};
+            _flattenedIds = [
+              for (final id in [...customOrder, ...remaining.map((e) => e.id)])
+                if (seenIds.add(id)) id,
+            ];
+            _customOrderIds = _flattenedIds;
             _collectionSort = CollectionSortOption.custom;
           }
         } catch (_) {}
@@ -1977,7 +2135,7 @@ class ItemDetailViewModel extends ChangeNotifier {
 
       if (_flattenedIds == null) {
         await _ensurePlaylistIndexEntries();
-        _collectionSort = CollectionSortOption.releaseAscending;
+        _collectionSort = CollectionSortOption.server;
         _rebuildFlattenedIds();
       }
 
@@ -2009,15 +2167,7 @@ class ItemDetailViewModel extends ChangeNotifier {
       final allTopLevel = _mapItems((allData['Items'] as List?) ?? []);
 
       final seriesItems = allTopLevel.where((i) => i.type == 'Series').toList();
-      final flat = allTopLevel
-          .where(
-            (i) =>
-                i.type == 'Movie' ||
-                i.type == 'Audio' ||
-                i.type == 'Video' ||
-                i.type == 'MusicVideo',
-          )
-          .toList();
+      final episodesBySeries = <String, List<AggregatedItem>>{};
 
       // A batch at a time. One request per series all at once would open as
       // many sockets as the collection has shows.
@@ -2040,12 +2190,27 @@ class ItemDetailViewModel extends ChangeNotifier {
             }
           }),
         );
-        for (final episodes in episodeLists) {
-          flat.addAll(episodes);
+        for (var j = 0; j < batch.length; j++) {
+          episodesBySeries[batch[j].id] = episodeLists[j];
         }
       }
 
-      _playlistIndexEntries = flat
+      // Each series' episodes take its place, so the server's order holds.
+      final flat = [
+        for (final item in allTopLevel)
+          if (item.type == 'Series')
+            ...?episodesBySeries[item.id]
+          else if (_playableTypes.contains(item.type))
+            item,
+      ];
+
+      final seenIds = <String>{};
+      final uniqueFlat = [
+        for (final item in flat)
+          if (seenIds.add(item.id)) item,
+      ];
+
+      _playlistIndexEntries = uniqueFlat
           .map(
             (i) => _PlaylistItemIndexEntry(
               id: i.id,
@@ -2056,6 +2221,22 @@ class ItemDetailViewModel extends ChangeNotifier {
           )
           .toList();
     } catch (_) {}
+    if (_playlistIndexEntries == null || _playlistIndexEntries!.isEmpty) {
+      if (_collectionItems.isNotEmpty) {
+        final seenIds = <String>{};
+        _playlistIndexEntries = _collectionItems
+            .where((i) => _playableTypes.contains(i.type) && seenIds.add(i.id))
+            .map(
+              (i) => _PlaylistItemIndexEntry(
+                id: i.id,
+                name: i.name,
+                premiereDate: i.premiereDate,
+                productionYear: i.productionYear,
+              ),
+            )
+            .toList();
+      }
+    }
   }
 
   /// Reads the next run of ids into [_playlistItems].
@@ -2441,9 +2622,11 @@ class ItemDetailViewModel extends ChangeNotifier {
     final parts = _loadAdditionalParts();
     try {
       final items = await _client.itemsApi.getSpecialFeatures(itemId);
+      final mapped = _mapItems(items).where((item) => item.id != itemId).toList()
+        ..sort(compareFeatures);
       _features = [
         ...await parts,
-        ..._mapItems(items).where((item) => item.id != itemId),
+        ...mapped,
       ];
       notifyListeners();
     } catch (_) {
@@ -2499,6 +2682,44 @@ class ItemDetailViewModel extends ChangeNotifier {
       ];
       notifyListeners();
     } catch (_) {}
+  }
+
+  Future<void> _loadPersonAccounts() async {
+    final tmdbId = _item?.tmdbId;
+    if (tmdbId == null || tmdbId.isEmpty) return;
+    final getIt = GetIt.instance;
+    if (!getIt.isRegistered<PluginSyncService>() ||
+        !getIt<PluginSyncService>().tmdbPersonLinksAvailable ||
+        !DetailSection.personLinks.isOffered ||
+        !DetailSectionVisibility.of(
+          getIt<UserPreferences>(),
+        ).shows(DetailSection.personLinks)) {
+      return;
+    }
+    final accounts = await _tmdbRepository.getPersonAccounts(tmdbId);
+    if (accounts == null) return;
+    _personAccounts = accounts;
+    notifyListeners();
+  }
+
+  Future<void> _loadReviews() async {
+    final item = _item;
+    final tmdbId = item?.tmdbId;
+    if (item == null || tmdbId == null || tmdbId.isEmpty) return;
+    if (!DetailSection.reviews.isOffered ||
+        !DetailSectionVisibility.of(
+          GetIt.instance<UserPreferences>(),
+        ).shows(DetailSection.reviews)) {
+      return;
+    }
+    final reviews = await _tmdbRepository.getReviews(
+      tmdbId: tmdbId,
+      type: item.type == 'Series' ? 'tv' : 'movie',
+      language: currentAppLocale().toLanguageTag(),
+    );
+    if (reviews == null || reviews.isEmpty || _item?.id != item.id) return;
+    _reviews = reviews;
+    notifyListeners();
   }
 
   Future<void> _loadSimilar() async {
@@ -2777,7 +2998,7 @@ class ItemDetailViewModel extends ChangeNotifier {
       _item = AggregatedItem(
         id: itemId,
         serverId: _serverId ?? _client.baseUrl,
-        rawData: data,
+        rawData: _withProbedSources(data),
       );
       notifyListeners();
     } catch (_) {}

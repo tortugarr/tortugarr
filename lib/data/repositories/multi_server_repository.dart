@@ -55,7 +55,7 @@ class MultiServerRepository {
       'ParentThumbImageTag,SeriesId,SeriesPrimaryImageTag,'
       'ParentLogoItemId,ParentLogoImageTag,PrimaryImageTag,PrimaryImageAspectRatio';
   // Cap image tags to one per type (server returns all by default)
-  static const _imageTypes = 'Primary,Backdrop,Thumb,Banner';
+  static const _imageTypes = 'Primary,Backdrop,Thumb,Banner,Logo';
   static const _imageTypeLimit = 1;
   static const _defaultLimit = 15;
   static const _maxItems = 100;
@@ -1441,10 +1441,7 @@ class MultiServerRepository {
     return sorted;
   }
 
-  static DateTime? _parseDateCreated(dynamic value) {
-    if (value is String) return DateTime.tryParse(value);
-    return null;
-  }
+  static DateTime? _parseDateCreated(dynamic value) => parseServerDate(value);
 
   static int _compareNullableDate(DateTime? a, DateTime? b) {
     if (a == null && b == null) return 0;

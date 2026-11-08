@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:playback_core/playback_core.dart';
 import 'package:playback_jellyfin/playback_jellyfin.dart';
 import 'package:playback_emby/playback_emby.dart';
+import 'package:playback_plex/playback_plex.dart';
 import 'package:server_core/server_core.dart';
 
 import '../../data/models/aggregated_item.dart';
@@ -21,6 +24,8 @@ import '../../data/services/offline_playback_tracker.dart';
 import '../../data/services/remove_watched_planner.dart';
 import '../../data/services/remove_watched_service.dart';
 import '../../playback/auto_player.dart';
+import '../../util/secondary_subtitle_track_selection.dart';
+import '../../data/services/user_data_sync.dart';
 import '../../playback/local_aware_player_service.dart';
 import '../../playback/local_first_media_stream_resolver.dart';
 
@@ -31,7 +36,8 @@ import '../../playback/media_browse_service.dart';
 import '../../playback/html_video_backend.dart';
 import '../../playback/known_defects.dart';
 import '../../playback/external_player_policy.dart';
-import '../../playback/appletv_backend.dart';
+import '../../playback/apple_player_ui.dart';
+import '../../playback/native_apple_player_backend.dart';
 import '../../playback/auto_bitrate_service.dart';
 import '../../playback/aether_backend.dart';
 import '../../playback/media_kit_player_backend.dart';
@@ -325,18 +331,27 @@ void registerPlaybackModule() {
 
   MediaKitPlayerBackend? backend;
   Media3PlayerBackend? media3Backend;
-  AppleTvBackend? appleTvBackend;
+  NativeApplePlayerBackend? nativeApplePlayerBackend;
   AetherBackend? iosBackend;
 
   if (PlatformDetection.isAppleTV) {
-    appleTvBackend = AppleTvBackend(prefs);
-    _getIt.registerSingleton<AppleTvBackend>(appleTvBackend);
+    nativeApplePlayerBackend = NativeApplePlayerBackend(prefs);
+    _getIt.registerSingleton<NativeApplePlayerBackend>(nativeApplePlayerBackend);
+    // Backs the Flutter player option. It sits idle until a video picks it.
+    iosBackend = AetherBackend(prefs);
+    _getIt.registerSingleton<AetherBackend>(iosBackend);
   } else if (PlatformDetection.isIOS || PlatformDetection.isMacOS) {
     // AetherEngine serves main playback on iOS and macOS: video, live TV,
     // music, audiobooks and offline. The media_kit backend isn't constructed,
     // though on macOS media_kit itself stays for trailers and theme music.
     iosBackend = AetherBackend(prefs);
     _getIt.registerSingleton<AetherBackend>(iosBackend);
+    if (PlatformDetection.isIOS) {
+      // Backs the native player option, which plays video through the player
+      // the Apple TV app uses. It sits idle until a video picks it.
+      nativeApplePlayerBackend = NativeApplePlayerBackend(prefs);
+      _getIt.registerSingleton<NativeApplePlayerBackend>(nativeApplePlayerBackend);
+    }
   } else {
     backend = MediaKitPlayerBackend(prefs);
     _getIt.registerSingleton<MediaKitPlayerBackend>(backend);
@@ -357,7 +372,7 @@ void registerPlaybackModule() {
   final useMedia3ByDefault =
       PlatformDetection.isAndroid && prefs.prefersMedia3Now;
   final PlayerBackend initialBackend = PlatformDetection.isAppleTV
-      ? appleTvBackend!
+      ? nativeApplePlayerBackend!
       : (PlatformDetection.isIOS || PlatformDetection.isMacOS)
       ? iosBackend!
       : PlatformDetection.isWeb
@@ -420,6 +435,35 @@ void registerPlaybackModule() {
     _getIt<UserPreferences>().setItemAudioStreamIndex(itemId, index);
   };
 
+  manager.onSecondarySubtitleTrackSelected = (itemId, index, stream) async {
+    final streams = manager.currentResolution?.mediaStreams
+            .where((s) => s['Type'] == 'Subtitle')
+            .toList() ??
+        const <Map<String, dynamic>>[];
+    await prefs.setItemSecondarySubtitleSelection(
+      itemId,
+      stream == null
+          ? const {'off': true}
+          : secondarySubtitleTrackSelection(streams, index),
+    );
+  };
+  manager.secondarySubtitleTrackSelector = (itemId, streams) {
+    if (itemId.isEmpty ||
+        !prefs.get(UserPreferences.secondarySubtitlesEnabled)) {
+      return null;
+    }
+    return restoreSecondarySubtitleTrack(
+      prefs.getItemSecondarySubtitleSelection(itemId),
+      streams,
+      isCompatible: (stream) {
+        final index = stream['Index'];
+        return index is int &&
+            index != manager.subtitleStreamIndex &&
+            manager.canUseAsSecondarySubtitle(index);
+      },
+    );
+  };
+
   // This choice carries to the next episode, so it takes the selected signal
   // rather than the changed ones above, which also fire without the viewer.
   manager.onSubtitleTrackSelected = (itemId, index) {
@@ -451,11 +495,25 @@ void registerPlaybackModule() {
   manager.setBackend(initialBackend);
   manager.setBackendSelector((resolution, currentBackend) {
     if (PlatformDetection.isAppleTV) {
-      if (currentBackend is AppleTvBackend) return currentBackend;
-      return _getIt<AppleTvBackend>();
+      // Music and audiobooks keep the native player whichever video player
+      // is picked.
+      final isAudio = resolution.mediaType.toLowerCase().contains('audio');
+      if (isAudio || useNativeApplePlayer()) {
+        if (currentBackend is NativeApplePlayerBackend) return currentBackend;
+        return _getIt<NativeApplePlayerBackend>();
+      }
+      if (currentBackend is AetherBackend) return currentBackend;
+      return _getIt<AetherBackend>();
     }
 
     if (PlatformDetection.isIOS || PlatformDetection.isMacOS) {
+      // Music and audiobooks stay on the Flutter path, which owns the lock
+      // screen and CarPlay on iOS.
+      final isAudio = resolution.mediaType.toLowerCase().contains('audio');
+      if (!isAudio && useNativeApplePlayer()) {
+        if (currentBackend is NativeApplePlayerBackend) return currentBackend;
+        return _getIt<NativeApplePlayerBackend>();
+      }
       if (currentBackend is AetherBackend) return currentBackend;
       return _getIt<AetherBackend>();
     }
@@ -559,24 +617,7 @@ void registerPlaybackModule() {
     },
   );
 
-  manager.setExternalPlaybackDecider((items) {
-    if (!PlatformDetection.isAndroid) {
-      return false;
-    }
-
-    if (!prefs.get(UserPreferences.useExternalPlayer)) {
-      return false;
-    }
-
-    if (_getIt.isRegistered<SyncPlayManager>()) {
-      final syncPlayManager = _getIt<SyncPlayManager>();
-      if (syncPlayManager.state.enabled) {
-        return false;
-      }
-    }
-
-    return ExternalPlayerPolicy.isEligibleQueue(items);
-  });
+  manager.setExternalPlaybackDecider(ExternalPlayerPolicy.coversQueue);
   manager.setNextSeasonItemsProvider(_nextSeasonItemsProvider);
   manager.setResolverConfigurator(_ensureResolverForItem);
   final audioArbiter = PlaybackArbiter();
@@ -792,6 +833,10 @@ void setActiveStreamResolver(MediaServerClient client) {
       final p = EmbyPlugin(client);
       return (p.createStreamResolver(), p.createPlaySessionService());
     }(),
+    ServerType.plex => (
+      PlexMediaStreamResolver(client),
+      PlexPlaySessionService(client),
+    ),
   };
 
   // Local-first: completed downloads play from disk instead of streaming,
@@ -800,6 +845,7 @@ void setActiveStreamResolver(MediaServerClient client) {
   final resolver = LocalFirstMediaStreamResolver(
     inner: serverResolver,
     offline: _getIt<OfflineStreamResolver>(),
+    streamFromServer: () => _getIt<PlaybackManager>().streamsFromServer,
     restoreSubtitles: (itemId) async {
       if (_getIt.isRegistered<DownloadService>()) {
         await _getIt<DownloadService>().restoreMissingSubtitles(itemId);
@@ -836,6 +882,25 @@ void _onItemStopped(dynamic item) {
   if (removeWatchedTypes.contains(item.type) &&
       _getIt.isRegistered<RemoveWatchedService>()) {
     _getIt<RemoveWatchedService>().onItemStopped(item.id);
+  }
+  // Plex sends no user data events, so the new resume point and watched state
+  // have to be asked for. Plex items don't name their server, so one without
+  // an id belongs to the active client.
+  if (!_getIt.isRegistered<MediaServerClientFactory>() ||
+      !_getIt.isRegistered<MediaServerClient>()) {
+    return;
+  }
+  final client = _getIt<MediaServerClientFactory>().clientForServerOrActive(
+    item.serverId,
+  );
+  if (client.serverType == ServerType.plex) {
+    unawaited(
+      userDataSync.refreshFromServer(client, [
+        item.id,
+        ?item.seasonId,
+        ?item.seriesId,
+      ]),
+    );
   }
 }
 

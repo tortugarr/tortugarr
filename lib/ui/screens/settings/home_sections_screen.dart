@@ -1777,90 +1777,8 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
           ? cfg.pluginDisplayText!
           : (cfg.pluginSection ?? l10n.none);
     }
-    return _labelForType(cfg.type, l10n);
+    return homeSectionTypeLabel(cfg.type, l10n);
   }
-
-  String _labelForType(HomeSectionType type, AppLocalizations l10n) =>
-      switch (type) {
-        HomeSectionType.mediaBar => l10n.mediaBar,
-        HomeSectionType.latestMedia => l10n.latestMedia,
-        HomeSectionType.recentlyReleased => l10n.recentlyReleased,
-        HomeSectionType.libraryTilesSmall => l10n.myMedia,
-        HomeSectionType.libraryButtons => l10n.myMediaSmall,
-        HomeSectionType.resume => l10n.continueWatching,
-        HomeSectionType.resumeAudio => l10n.resumeAudio,
-        HomeSectionType.resumeBook => l10n.resumeBooks,
-        HomeSectionType.activeRecordings => l10n.activeRecordings,
-        HomeSectionType.nextUp => l10n.nextUp,
-        HomeSectionType.playlists => l10n.playlists,
-        HomeSectionType.audioArtists => l10n.artists,
-        HomeSectionType.audioAlbums => l10n.albums,
-        HomeSectionType.audioPlaylists => l10n.audioPlaylists,
-        HomeSectionType.favoriteMovies =>
-          l10n.tgFavoriteMovies,
-        HomeSectionType.favoriteSeries =>
-          l10n.tgFavoriteSeries,
-        HomeSectionType.favoriteEpisodes =>
-          l10n.tgFavoriteEpisodes,
-        HomeSectionType.favoritePeople =>
-          l10n.tgFavoritePeople,
-        HomeSectionType.favoriteArtists =>
-          l10n.tgFavoriteArtists,
-        HomeSectionType.favoriteMusicVideos =>
-          l10n.tgFavoriteMusicVideos,
-        HomeSectionType.favoriteAlbums =>
-          l10n.tgFavoriteAlbums,
-        HomeSectionType.favoriteSongs =>
-          l10n.tgFavoriteSongs,
-        HomeSectionType.collections => l10n.collections,
-        HomeSectionType.genres => l10n.genres,
-        HomeSectionType.studios => l10n.studios,
-        HomeSectionType.liveTv => l10n.liveTV,
-        HomeSectionType.onNow => l10n.onNow,
-        HomeSectionType.seerrShortcuts => l10n.seerrShortcutsRow,
-        HomeSectionType.seerrRecentRequests => l10n.recentRequests,
-        HomeSectionType.seerrWatchlist => l10n.yourWatchlist,
-        HomeSectionType.seerrRecentlyAdded => l10n.recentlyAdded,
-        HomeSectionType.seerrPopularMovies => l10n.popularMovies,
-        HomeSectionType.seerrUpcomingMovies => l10n.upcomingMovies,
-        HomeSectionType.seerrPopularSeries => l10n.popularSeries,
-        HomeSectionType.seerrUpcomingSeries => l10n.upcomingSeries,
-        HomeSectionType.seerrTrending => l10n.trending,
-        HomeSectionType.seerrMovieGenres => l10n.movieGenres,
-        HomeSectionType.seerrStudios => l10n.studios,
-        HomeSectionType.seerrSeriesGenres => l10n.seriesGenres,
-        HomeSectionType.seerrNetworks => l10n.networks,
-        HomeSectionType.radarrCalendar => l10n.tgRowUpcomingMoviesRadarr,
-        HomeSectionType.sonarrCalendar => l10n.tgRowUpcomingTvSonarr,
-        HomeSectionType.imdbTop250Movies => l10n.imdbTop250Movies,
-        HomeSectionType.imdbTop250TvShows => l10n.imdbTop250TvShows,
-        HomeSectionType.imdbMostPopularMovies => l10n.imdbMostPopularMovies,
-        HomeSectionType.imdbMostPopularTvShows => l10n.imdbMostPopularTvShows,
-        HomeSectionType.imdbLowestRatedMovies => l10n.imdbLowestRatedMovies,
-        HomeSectionType.imdbTopEnglishMovies => l10n.imdbTopEnglishMovies,
-        HomeSectionType.tmdbPopularMovies => l10n.popularMovies,
-        HomeSectionType.tmdbTopRatedMovies => l10n.tgRowTopRatedMovies,
-        HomeSectionType.tmdbNowPlayingMovies => l10n.tgRowNowPlayingMovies,
-        HomeSectionType.tmdbUpcomingMovies => l10n.upcomingMovies,
-        HomeSectionType.tmdbPopularTv => l10n.tgRowPopularTv,
-        HomeSectionType.tmdbTopRatedTv => l10n.tgRowTopRatedTv,
-        HomeSectionType.tmdbAiringTodayTv => l10n.tgRowAiringTodayTv,
-        HomeSectionType.tmdbOnTheAirTv => l10n.tgRowOnTheAirTv,
-        HomeSectionType.tmdbTrendingMovieDaily => l10n.tgRowTrendingMoviesDaily,
-        HomeSectionType.tmdbTrendingMovieWeekly => l10n.tgRowTrendingMoviesWeekly,
-        HomeSectionType.tmdbTrendingTvDaily => l10n.tgRowTrendingTvDaily,
-        HomeSectionType.tmdbTrendingTvWeekly => l10n.tgRowTrendingTvWeekly,
-        HomeSectionType.tmdbTrendingAllWeekly => l10n.tgRowTrendingAllWeekly,
-        HomeSectionType.sinceYouWatched1 => l10n.tgRowSinceYouWatchedNumber(1),
-        HomeSectionType.sinceYouWatched2 => l10n.tgRowSinceYouWatchedNumber(2),
-        HomeSectionType.sinceYouWatched3 => l10n.tgRowSinceYouWatchedNumber(3),
-        HomeSectionType.sinceYouWatched4 => l10n.tgRowSinceYouWatchedNumber(4),
-        HomeSectionType.sinceYouWatched5 => l10n.tgRowSinceYouWatchedNumber(5),
-        HomeSectionType.rewatch => l10n.tgRewatch,
-        HomeSectionType.seasonal => l10n.seasonalRow,
-        HomeSectionType.tortugarrTopLists => l10n.tgTopListsRow,
-        HomeSectionType.none => l10n.none,
-      };
 
   Widget _buildLoadingOverlay(BuildContext context) {
     final theme = Theme.of(context);
@@ -3339,3 +3257,86 @@ class _SectionGroupHeaderState extends State<_SectionGroupHeader> {
     );
   }
 }
+
+/// The name a built-in home row goes by in settings.
+String homeSectionTypeLabel(HomeSectionType type, AppLocalizations l10n) =>
+    switch (type) {
+      HomeSectionType.mediaBar => l10n.mediaBar,
+      HomeSectionType.latestMedia => l10n.latestMedia,
+      HomeSectionType.recentlyReleased => l10n.recentlyReleased,
+      HomeSectionType.libraryTilesSmall => l10n.myMedia,
+      HomeSectionType.libraryButtons => l10n.myMediaSmall,
+      HomeSectionType.resume => l10n.continueWatching,
+      HomeSectionType.resumeAudio => l10n.resumeAudio,
+      HomeSectionType.resumeBook => l10n.resumeBooks,
+      HomeSectionType.activeRecordings => l10n.activeRecordings,
+      HomeSectionType.nextUp => l10n.nextUp,
+      HomeSectionType.playlists => l10n.playlists,
+      HomeSectionType.audioArtists => l10n.artists,
+      HomeSectionType.audioAlbums => l10n.albums,
+      HomeSectionType.audioPlaylists => l10n.audioPlaylists,
+      HomeSectionType.favoriteMovies =>
+        l10n.tgFavoriteMovies,
+      HomeSectionType.favoriteSeries =>
+        l10n.tgFavoriteSeries,
+      HomeSectionType.favoriteEpisodes =>
+        l10n.tgFavoriteEpisodes,
+      HomeSectionType.favoritePeople =>
+        l10n.tgFavoritePeople,
+      HomeSectionType.favoriteArtists =>
+        l10n.tgFavoriteArtists,
+      HomeSectionType.favoriteMusicVideos =>
+        l10n.tgFavoriteMusicVideos,
+      HomeSectionType.favoriteAlbums =>
+        l10n.tgFavoriteAlbums,
+      HomeSectionType.favoriteSongs =>
+        l10n.tgFavoriteSongs,
+      HomeSectionType.collections => l10n.collections,
+      HomeSectionType.genres => l10n.genres,
+      HomeSectionType.studios => l10n.studios,
+      HomeSectionType.liveTv => l10n.liveTV,
+      HomeSectionType.onNow => l10n.onNow,
+      HomeSectionType.seerrShortcuts => l10n.seerrShortcutsRow,
+      HomeSectionType.seerrRecentRequests => l10n.recentRequests,
+      HomeSectionType.seerrWatchlist => l10n.yourWatchlist,
+      HomeSectionType.seerrRecentlyAdded => l10n.recentlyAdded,
+      HomeSectionType.seerrPopularMovies => l10n.popularMovies,
+      HomeSectionType.seerrUpcomingMovies => l10n.upcomingMovies,
+      HomeSectionType.seerrPopularSeries => l10n.popularSeries,
+      HomeSectionType.seerrUpcomingSeries => l10n.upcomingSeries,
+      HomeSectionType.seerrTrending => l10n.trending,
+      HomeSectionType.seerrMovieGenres => l10n.movieGenres,
+      HomeSectionType.seerrStudios => l10n.studios,
+      HomeSectionType.seerrSeriesGenres => l10n.seriesGenres,
+      HomeSectionType.seerrNetworks => l10n.networks,
+      HomeSectionType.radarrCalendar => l10n.tgRowUpcomingMoviesRadarr,
+      HomeSectionType.sonarrCalendar => l10n.tgRowUpcomingTvSonarr,
+      HomeSectionType.imdbTop250Movies => l10n.imdbTop250Movies,
+      HomeSectionType.imdbTop250TvShows => l10n.imdbTop250TvShows,
+      HomeSectionType.imdbMostPopularMovies => l10n.imdbMostPopularMovies,
+      HomeSectionType.imdbMostPopularTvShows => l10n.imdbMostPopularTvShows,
+      HomeSectionType.imdbLowestRatedMovies => l10n.imdbLowestRatedMovies,
+      HomeSectionType.imdbTopEnglishMovies => l10n.imdbTopEnglishMovies,
+      HomeSectionType.tmdbPopularMovies => l10n.popularMovies,
+      HomeSectionType.tmdbTopRatedMovies => l10n.tgRowTopRatedMovies,
+      HomeSectionType.tmdbNowPlayingMovies => l10n.tgRowNowPlayingMovies,
+      HomeSectionType.tmdbUpcomingMovies => l10n.upcomingMovies,
+      HomeSectionType.tmdbPopularTv => l10n.tgRowPopularTv,
+      HomeSectionType.tmdbTopRatedTv => l10n.tgRowTopRatedTv,
+      HomeSectionType.tmdbAiringTodayTv => l10n.tgRowAiringTodayTv,
+      HomeSectionType.tmdbOnTheAirTv => l10n.tgRowOnTheAirTv,
+      HomeSectionType.tmdbTrendingMovieDaily => l10n.tgRowTrendingMoviesDaily,
+      HomeSectionType.tmdbTrendingMovieWeekly => l10n.tgRowTrendingMoviesWeekly,
+      HomeSectionType.tmdbTrendingTvDaily => l10n.tgRowTrendingTvDaily,
+      HomeSectionType.tmdbTrendingTvWeekly => l10n.tgRowTrendingTvWeekly,
+      HomeSectionType.tmdbTrendingAllWeekly => l10n.tgRowTrendingAllWeekly,
+      HomeSectionType.sinceYouWatched1 => l10n.tgRowSinceYouWatchedNumber(1),
+      HomeSectionType.sinceYouWatched2 => l10n.tgRowSinceYouWatchedNumber(2),
+      HomeSectionType.sinceYouWatched3 => l10n.tgRowSinceYouWatchedNumber(3),
+      HomeSectionType.sinceYouWatched4 => l10n.tgRowSinceYouWatchedNumber(4),
+      HomeSectionType.sinceYouWatched5 => l10n.tgRowSinceYouWatchedNumber(5),
+      HomeSectionType.rewatch => l10n.tgRewatch,
+      HomeSectionType.seasonal => l10n.seasonalRow,
+      HomeSectionType.tortugarrTopLists => l10n.tgTopListsRow,
+      HomeSectionType.none => l10n.none,
+    };

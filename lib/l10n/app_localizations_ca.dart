@@ -10,7 +10,7 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
-  String get appTitle => 'Tortugarr';
+  String get appTitle => 'Moonfin';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -32,6 +32,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get animeMarkerSubbedAndDubbed => 'Sub/Dub';
+
+  @override
+  String get animeMarkerSubbedShort => 'SUB';
+
+  @override
+  String get animeMarkerDubbedShort => 'DUB';
+
+  @override
+  String get animeMarkerSubbedAndDubbedShort => 'SUB/DUB';
 
   @override
   String get animeMarkerPending => 'Pendent';
@@ -81,24 +90,24 @@ class AppLocalizationsCa extends AppLocalizations {
       'Toca per aprovar-ho al navegador, o escaneja-ho amb un altre dispositiu';
 
   @override
-  String get timesUpTitle => 'Time\'s up';
+  String get timesUpTitle => 'S\'ha acabat el temps';
 
   @override
-  String get timesUpMessage => 'This account isn\'t available right now.';
+  String get timesUpMessage => 'Aquest compte no està disponible ara mateix.';
 
   @override
   String timesUpResumesToday(String time) {
-    return 'You can use it again today at $time.';
+    return 'El podràs tornar a fer servir avui a les $time.';
   }
 
   @override
   String timesUpResumesTomorrow(String time) {
-    return 'You can use it again tomorrow at $time.';
+    return 'El podràs tornar a fer servir demà a les $time.';
   }
 
   @override
   String timesUpResumesOn(String day, String time) {
-    return 'You can use it again on $day at $time.';
+    return 'El podràs tornar a fer servir el $day a les $time.';
   }
 
   @override
@@ -115,7 +124,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get loginForbidden =>
-      'This account can\'t sign in right now. It may be outside its allowed hours, locked or disabled. Try again later or ask an administrator.';
+      'Aquest compte no pot iniciar sessió ara mateix. Pot ser que sigui fora del seu horari permès, o que estigui bloquejat o desactivat. Torna-ho a provar més tard o demana-ho a un administrador.';
 
   @override
   String quickConnectUnavailable(String detail) {
@@ -138,7 +147,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Tortugarr versió $version';
+    return 'Moonfin versió $version';
   }
 
   @override
@@ -190,7 +199,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Tortugarr no ha pogut accedir al teu gestor de claus del sistema. L\'inici de sessió pot continuar, però és possible que l\'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.';
+      'Moonfin no ha pogut accedir al teu gestor de claus del sistema. L\'inici de sessió pot continuar, però és possible que l\'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.';
 
   @override
   String get ok => 'D\'acord';
@@ -203,7 +212,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get detailScreenStyleSubtitle =>
-      'Clàssic és la disposició original centrada de Tortugarr. Modern és una disposició cinematogràfica adaptativa. Spotlight és una disposició que posa la il·lustració al davant, amb targetes de contingut emergents. Nouveau és una disposició a pantalla completa amb les seccions apilades al llarg de la pàgina. Minimalista és la il·lustració, un botó de reproducció i els episodis.';
+      'Clàssic és la disposició original centrada de moonfin. Modern és una disposició cinematogràfica adaptativa. Spotlight és una disposició que posa la il·lustració al davant, amb targetes de contingut emergents. Nouveau és una disposició a pantalla completa amb les seccions apilades al llarg de la pàgina. Minimalista és la il·lustració, un botó de reproducció i els episodis.';
 
   @override
   String get detailScreenStyleMoonfin => 'Clàssic';
@@ -443,10 +452,10 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get recommendationSystemSubtitle =>
-      'Fes servir l\'algorisme de biblioteca local Recomanacions Tortugarr, el motor del servidor Recomanacions Jellyfin o les mètriques de similitud en línia de TMDb. Nota: les recomanacions en línia requereixen la integració amb Seerr.';
+      'Fes servir l\'algorisme de biblioteca local Recomanacions Moonfin, el motor del servidor Recomanacions Jellyfin o les mètriques de similitud en línia de TMDb. Nota: les recomanacions en línia requereixen la integració amb Seerr.';
 
   @override
-  String get recommendationSystemMoonfin => 'Recomanacions Tortugarr';
+  String get recommendationSystemMoonfin => 'Recomanacions Moonfin';
 
   @override
   String get recommendationSystemJellyfin => 'Recomanacions Jellyfin';
@@ -460,7 +469,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get recommendationsApplyParentalRatingCapSubtitle =>
-      'Limita els suggeriments de Recomanacions Tortugarr segons la classificació per edats del contingut de destinació';
+      'Limita els suggeriments de Recomanacions Moonfin segons la classificació per edats del contingut de destinació';
 
   @override
   String get interfaceStyle => 'Estil de l\'interfaç';
@@ -483,7 +492,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Canvia el tipus de disposicó detectada si el teu dispositiu no es reconeix correctament. Reinicia Tortugarr per aplicar els canvis.';
+      'Canvia el tipus de disposicó detectada si el teu dispositiu no es reconeix correctament. Reinicia Moonfin per aplicar els canvis.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automàtic';
@@ -568,14 +577,35 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Els temes personalitzats modifiquen els elements visuals de tot Tortugarr. Tria una d\'aquestes opcions segons el teu estil.';
+      'Els temes personalitzats modifiquen els elements visuals de tot Moonfin. Tria una d\'aquestes opcions segons el teu estil.';
 
   @override
-  String get keyboardPreferSystemIme => 'Preferiu el teclat del sistema';
+  String get keyboardStyle => 'Estil del teclat';
 
   @override
-  String get keyboardPreferSystemImeDescription =>
-      'Utilitzeu el mètode d\'entrada del dispositiu de manera predeterminada per a l\'entrada de text';
+  String get keyboardStyleDescription =>
+      '«Natiu» fa servir el teclat de la teva TV. «Clàssic» és el teclat original de Moonfin. «Glass» és un panell esmerilat amb tecles més grans. «Acoblat» ocupa la part inferior de la pantalla i mostra el que escrius a sobre de les tecles.';
+
+  @override
+  String get keyboardStyleNative => 'Natiu';
+
+  @override
+  String get keyboardStyleClassic => 'Clàssic';
+
+  @override
+  String get keyboardStyleGlass => 'Glass';
+
+  @override
+  String get keyboardStyleDocked => 'Acoblat';
+
+  @override
+  String get keyboardSpace => 'Espai';
+
+  @override
+  String get keyboardHoldForAccents => 'mantén premut per als accents';
+
+  @override
+  String get keyboardClose => 'Tanca';
 
   @override
   String get controller => 'Controlador';
@@ -588,10 +618,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Permet que un comandament de joc connectat mogui el focus i seleccioni elements';
 
   @override
-  String get themeMoonfin => 'Tortugarr';
+  String get themeMoonfin => 'Moonfin';
 
   @override
-  String get themeMoonfinSubtitle => 'L\'aspecte original de Tortugarr.';
+  String get themeMoonfinSubtitle => 'L\'aspecte original de Moonfin.';
 
   @override
   String get themeNeonPulse => 'Neon Pulse';
@@ -648,6 +678,30 @@ class AppLocalizationsCa extends AppLocalizations {
       'Error de xarxa en contactar amb Emby Connect o amb el servidor seleccionat';
 
   @override
+  String get signInWithPlex => 'Inicia la sessió amb Plex';
+
+  @override
+  String get plexLinkInstructions =>
+      'Ves a plex.tv/link des de qualsevol dispositiu i introdueix aquest codi';
+
+  @override
+  String get plexOpenLink => 'Obre plex.tv/link';
+
+  @override
+  String get plexWaitingForApproval =>
+      'S\'està esperant que aprovis el codi...';
+
+  @override
+  String get plexSignInWithPassword => 'Inicia la sessió amb una contrasenya';
+
+  @override
+  String get plexVerificationCode => 'Codi de verificació';
+
+  @override
+  String get plexNoServers =>
+      'No s\'ha trobat cap servidor Plex en aquest compte';
+
+  @override
   String get loadingLinkedServers =>
       'S\'estan carregant servidors enllaçats...';
 
@@ -668,7 +722,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Sortir de Tortugarr?';
+  String get exitApp => 'Sortir de Moonfin?';
 
   @override
   String get exitAppConfirmation => 'Esteu segur que voleu sortir?';
@@ -946,10 +1000,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get discoverySubjects => 'Matèries de descoberta';
 
   @override
-  String get pickDiscoverySubjects =>
-      'Trieu quins feeds de temes voleu mostrar a Discover.';
-
-  @override
   String get apply => 'Aplica';
 
   @override
@@ -960,22 +1010,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get audiobookGenres => 'Gèneres d\'audiollibres';
-
-  @override
-  String get pickAudiobookGenres =>
-      'Trieu quins gèneres voleu mostrar a Audiobook Discover.';
-
-  @override
-  String get discoverAudiobooks => 'Descobreix Audiollibres';
-
-  @override
-  String get librivoxDescription =>
-      'Títols de domini públic populars de LibriVox.';
-
-  @override
-  String titlesCount(int count) {
-    return '$count títols';
-  }
 
   @override
   String get scrollLeft => 'Desplaça\'t cap a l\'esquerra';
@@ -1112,10 +1146,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get discover => 'Descobreix';
-
-  @override
-  String get trendingTitlesOpenLibrary =>
-      'Títols de tendència per assignatura d\'Open Library.';
 
   @override
   String get noBookmarkedItems => 'Encara no hi ha cap element marcat';
@@ -1637,8 +1667,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get downloadSubtitlesLabel => 'Baixa els subtítols...';
 
   @override
-  String get searchOpenSubtitlesPlugin =>
-      'Cerca amb el connector OpenSubtitles';
+  String get searchOpenSubtitlesPlugin => 'Cerca amb OpenSubtitles';
 
   @override
   String get downloadSubtitles => 'Baixa els subtítols';
@@ -1858,7 +1887,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get shuffleAllMusic => 'Barreja tota la música';
 
   @override
-  String get carSignInPrompt => 'Inicia la sessió a Tortugarr al teu telèfon';
+  String get carSignInPrompt => 'Inicia la sessió a Moonfin al teu telèfon';
 
   @override
   String get carServerUnreachable => 'No es pot connectar amb el teu servidor';
@@ -1883,17 +1912,6 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String framerateFps(String rate) {
     return '$rate fps';
-  }
-
-  @override
-  String channelsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Canals',
-      one: '1 Canal',
-    );
-    return '$_temp0';
   }
 
   @override
@@ -2036,9 +2054,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get bitrateOverride => 'Taxa de bits (manual)';
-
-  @override
   String get audioDelay => 'Retard d\'àudio';
 
   @override
@@ -2156,7 +2171,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Activa o desactiva la pantalla completa';
 
   @override
-  String get shortcutQuit => 'Surt de Tortugarr';
+  String get shortcutQuit => 'Surt de Moonfin';
 
   @override
   String get shortcutPlayPause => 'Reprodueix o posa en pausa';
@@ -2205,7 +2220,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Surt de la pantalla completa; si no hi ets, atura la reproducció';
 
   @override
-  String get shortcutHideControls => 'Hide controls';
+  String get shortcutHideControls => 'Amaga els controls';
 
   @override
   String get shortcutStopPlayback => 'Atura la reproducció';
@@ -2281,28 +2296,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get hdr => 'HDR';
 
   @override
-  String get hdrOutput => 'Sortida HDR';
-
-  @override
-  String hdrOutputActive(String format) {
-    return 'Actiu — $format';
-  }
-
-  @override
-  String get hdrOutputActiveTonemapped =>
-      'Actiu — amb mapatge de tons a SDR per a aquesta pantalla';
-
-  @override
-  String get hdrOutputContentSdr => 'Inactiu — el contingut és SDR';
-
-  @override
-  String get hdrOutputDisabled => 'Inactiu — desactivat a la configuració';
-
-  @override
-  String get hdrOutputFailed =>
-      'Inactiu — no s\'ha pogut iniciar; s\'utilitza la via estàndard';
-
-  @override
   String get videoRenderer => 'Renderitzador de vídeo';
 
   @override
@@ -2319,22 +2312,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get videoRendererInApp => 'Dins de l\'aplicació (antic)';
 
   @override
-  String get codec => 'Còdec';
-
-  @override
-  String get videoBitrate => 'Velocitat de bits de vídeo';
-
-  @override
   String get track => 'Pista';
 
   @override
   String get channels => 'Canals';
-
-  @override
-  String get audioBitrate => 'Taxa de bits d\'àudio';
-
-  @override
-  String get sampleRate => 'Freqüència de mostreig';
 
   @override
   String get format => 'Format';
@@ -2358,6 +2339,14 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get epubUnavailableOnPlatform =>
       'La representació d\'EPUB a l\'aplicació encara no està disponible en aquesta plataforma.';
+
+  @override
+  String get bookReadingUnavailableTitle =>
+      'No es poden llegir llibres a l\'Apple TV';
+
+  @override
+  String get bookReadingUnavailableMessage =>
+      'Obre\'l al Moonfin en un telèfon, una tauleta o un ordinador per llegir-lo. Els audiollibres sí que es poden reproduir aquí.';
 
   @override
   String formatCannotRenderInApp(String extension) {
@@ -2601,6 +2590,47 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get noUpcomingSeriesRecording =>
       'L\'enregistrament de la sèrie està programat, però la guia no té cap episodi pròxim';
+
+  @override
+  String get seriesRecordingSkipsShowing =>
+      'L\'enregistrament de la sèrie ometrà aquesta emissió';
+
+  @override
+  String get seriesRecordingEpisodesQuestion =>
+      'Quins episodis s\'han d\'enregistrar?';
+
+  @override
+  String get seriesRecordingAllEpisodes => 'Tots els episodis';
+
+  @override
+  String get seriesRecordingAllEpisodesDescription =>
+      'Totes les emissions, incloses les reposicions';
+
+  @override
+  String get seriesRecordingNotRecordedEpisodes =>
+      'Episodis encara no enregistrats';
+
+  @override
+  String get seriesRecordingNotRecordedEpisodesDescription =>
+      'Omet els episodis que ja són a la teva biblioteca i enregistra cada episodi una sola vegada';
+
+  @override
+  String get seriesRecordingNewEpisodesOnly => 'Només episodis nous';
+
+  @override
+  String get seriesRecordingNewEpisodesOnlyDescription =>
+      'Només primeres emissions, sense reposicions';
+
+  @override
+  String get seriesRecordingSettings => 'Configuració de la sèrie';
+
+  @override
+  String get seriesRecordingUpdated =>
+      'S\'ha actualitzat l\'enregistrament de la sèrie';
+
+  @override
+  String get failedToUpdateSeriesRecording =>
+      'No s\'ha pogut actualitzar l\'enregistrament de la sèrie';
 
   @override
   String get recordCurrentEpisode => 'Enregistra aquest episodi';
@@ -3121,13 +3151,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'Escala targetes i fitxes enfocades o posades';
 
   @override
-  String get backgroundBackdrops => 'Fons de fons';
-
-  @override
-  String get showBackdropImages =>
-      'Mostra imatges de fons darrere del contingut';
-
-  @override
   String get seriesThumbnails => 'Miniatures de la sèrie';
 
   @override
@@ -3163,7 +3186,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Personalitza les animacions de càrrega que utilitza Tortugarr';
+      'Personalitza les animacions de càrrega que utilitza Moonfin';
 
   @override
   String get loadingAnimationConfiguration =>
@@ -3173,7 +3196,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get loadingAnimationImage => 'Imatge';
 
   @override
-  String get loadingAnimationImageMoonfinLogo => 'Logotip de Tortugarr';
+  String get loadingAnimationImageMoonfinLogo => 'Logotip de Moonfin';
 
   @override
   String get loadingAnimationImageSpinner => 'Roda de càrrega';
@@ -3185,10 +3208,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get loadingAnimationImageMoonPhases => 'Fases lunars';
 
   @override
-  String get loadingAnimationImageMoonfinPhases => 'Fases de Tortugarr';
+  String get loadingAnimationImageMoonfinPhases => 'Fases de Moonfin';
 
   @override
-  String get loadingAnimationImageNeonfinPhases => 'Fases de Neon';
+  String get loadingAnimationImageNeonfinPhases => 'Fases de Neonfin';
 
   @override
   String get loadingAnimationSize => 'Mida de l\'animació';
@@ -3294,6 +3317,17 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get seasonalDensityHeavy => 'Intens';
+
+  @override
+  String get seasonalFollower => 'Focus Follower';
+
+  @override
+  String get seasonalFollowerDescription =>
+      'A holiday piece, like Halloween\'s planchette, follows what you select on Home';
+
+  @override
+  String get seasonalFollowerPointerDescription =>
+      'A holiday piece, like Halloween\'s planchette, replaces the mouse pointer on Home';
 
   @override
   String get seasonalRow => 'Fila de temporada';
@@ -3546,6 +3580,19 @@ class AppLocalizationsCa extends AppLocalizations {
       'Desplaça el controlador cap amunt o cap avall per canviar la brillantor a l\'esquerra i el volum a la dreta';
 
   @override
+  String get invertGestureIndicators => 'Inverteix els indicadors de gestos';
+
+  @override
+  String get invertGestureIndicatorsDescription =>
+      'Col·loca els indicadors visuals de brillantor i volum al mateix costat de la pantalla que el lliscament o al costat oposat';
+
+  @override
+  String get gestureIndicatorSame => 'Mateix costat';
+
+  @override
+  String get gestureIndicatorInverted => 'Costat oposat';
+
+  @override
   String get osdButtons => 'Botons del reproductor';
 
   @override
@@ -3722,6 +3769,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get detailSectionSeerrStats => 'Estadístiques';
 
   @override
+  String get detailSectionSeerrStreaming => 'Serveis de streaming';
+
+  @override
+  String get seerrStreamingOn => 'Disponible a';
+
+  @override
   String get detailSectionSeerrRecommendations => 'Recomanacions';
 
   @override
@@ -3744,6 +3797,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get detailSectionBirthplace => 'Lloc de naixement';
+
+  @override
+  String get detailSectionPersonLinks => 'Enllaços';
+
+  @override
+  String get detailSectionPersonLinksSubtitle => 'IMDb, TMDB i xarxes socials';
 
   @override
   String get detailSectionGuestAppearances => 'Aparicions de convidats';
@@ -3818,22 +3877,6 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get preferAudioDescriptionDescription =>
       'Prefereix les pistes d\'audiodescripció en comptes de les normals.';
-
-  @override
-  String get transcodingAudio => 'Transcodificació (àudio)';
-
-  @override
-  String get directStreamRemux => 'Transmissió directa (Remux)';
-
-  @override
-  String get transcodingBitrateOrResolution =>
-      'Transcodificació (taxa de bits o resolució)';
-
-  @override
-  String get transcodingVideoAndAudio => 'Transcodificació (vídeo i àudio)';
-
-  @override
-  String get transcodingVideo => 'Transcodificació (vídeo)';
 
   @override
   String get autoServerDefault => 'Automàtic (Servidor per defecte)';
@@ -3913,6 +3956,13 @@ class AppLocalizationsCa extends AppLocalizations {
       'Tria el format de destinació per transcodificar l\'àudio multicanal quan el flux d\'origen no es pot reproduir de manera nativa ni transmetre directament.';
 
   @override
+  String get transcodeAudioCodecs => 'Còdecs d\'àudio a transcodificar';
+
+  @override
+  String get transcodeAudioCodecsDescription =>
+      'El servidor converteix l\'àudio en aquests formats en lloc d\'enviar-lo tal com és.';
+
+  @override
   String get settingsAudioFallbackCodecAuto =>
       'Detecció automàtica\n(Recomanat)';
 
@@ -3967,7 +4017,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsMaxAudioChannels6_1 => '6.1 Surround';
 
   @override
-  String get settingsMaxAudioChannels7_1 => '7.1 Envolvent';
+  String get settingsMaxAudioChannels7_1 => '7.1 Envoltant';
 
   @override
   String get settingsAudioPassthroughAdvanced => 'Passthrough (avançat)';
@@ -4088,41 +4138,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get settingsAudioDiagnostics => 'Diagnòstics';
-
-  @override
-  String get settingsAudioDiagnosticsVideoLevel => 'Nivell de vídeo';
-
-  @override
-  String get settingsAudioDiagnosticsVideoRange => 'Gamma de vídeo';
-
-  @override
-  String get settingsAudioDiagnosticsSubtitleCodec => 'Còdec de subtítols';
-
-  @override
-  String get settingsAudioDiagnosticsAllowedAudioCodecs =>
-      'Còdecs d\'àudio permesos';
-
-  @override
-  String get settingsAudioDiagnosticsHlsMpegTsAudioCodecs =>
-      'Còdecs d\'àudio HLS MPEG-TS';
-
-  @override
-  String get settingsAudioDiagnosticsHlsFmp4AudioCodecs =>
-      'Còdecs d\'àudio HLS fMP4';
-
-  @override
-  String get settingsAudioDiagnosticsAudioSpdifPassthrough =>
-      'pas d\'àudio-spdif';
-
-  @override
-  String get settingsAudioDiagnosticsActiveAudioRoute => 'Ruta d\'àudio actiu';
-
-  @override
-  String get settingsAudioDiagnosticsRouteHdAudioSupport =>
-      'Ruta de suport d\'àudio HD';
-
-  @override
   String get nightMode => 'Mode nocturn';
 
   @override
@@ -4219,7 +4234,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'No configurat. Tortugarr provarà un mpv.conf predeterminat a les carpetes d\'aplicacions/dades.';
+      'No configurat. Moonfin provarà un mpv.conf predeterminat a les carpetes d\'aplicacions/dades.';
 
   @override
   String get selectMpvConf => 'Seleccioneu mpv.conf';
@@ -4246,6 +4261,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Idioma preferit dels subtítols secundaris';
 
   @override
+  String get secondarySubtitlesEnabledSubtitle =>
+      'Show a second subtitle track at the same time. The subtitle menu then asks for the primary or secondary track first';
+
+  @override
   String get defaultToNoSubtitles => 'Per defecte, Sense subtítols';
 
   @override
@@ -4263,6 +4282,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get secondarySubtitleTrack => 'Pista de subtítols secundària';
+
+  @override
+  String get secondaryDelayAdjustment => 'Secondary Delay Adjustment';
 
   @override
   String decreaseValue(String setting) {
@@ -4514,14 +4536,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android només permet que Tortugarr escrigui a les carpetes que posseeix, i aquest dispositiu no té emmagatzematge extraïble. Activa la carpeta «Desar a Baixades» anterior per guardar les baixades en un lloc al qual les altres aplicacions puguin accedir.';
+      'Android només permet que Moonfin escrigui a les carpetes que posseeix, i aquest dispositiu no té emmagatzematge extraïble. Activa la carpeta «Desar a Baixades» anterior per guardar les baixades en un lloc al qual les altres aplicacions puguin accedir.';
 
   @override
   String get saveToDownloadsFolder => 'Desa a la carpeta Baixades';
 
   @override
   String get downloadsVisibleToOtherApps =>
-      'Baixades/Tortugarr: visible per a altres aplicacions';
+      'Baixades/Moonfin: visible per a altres aplicacions';
 
   @override
   String get dangerZone => 'Zona de perill';
@@ -4552,7 +4574,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get saveToDownloadsFolderDescription =>
-      'Els mitjans baixats es desaran a Baixades/Tortugarr al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.';
+      'Els mitjans baixats es desaran a Baixades/Moonfin al vostre dispositiu. Aquests fitxers seran visibles per a altres aplicacions, com ara la galeria o el reproductor de música.\n\nLes baixades existents es mantindran a la seva ubicació actual.';
 
   @override
   String get transcodingTimeRemainingUnavailable =>
@@ -4595,6 +4617,13 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get showLibrariesInToolbar =>
       'Mostra les biblioteques a la barra d\'eines';
+
+  @override
+  String get showLibrariesIndividually => 'Show Libraries Individually';
+
+  @override
+  String get showLibrariesIndividuallySubtitle =>
+      'Show each library as its own button in the navigation bar instead of in the Libraries menu';
 
   @override
   String get navbarAlwaysExpanded =>
@@ -4783,13 +4812,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get libraryJumpToLetter => 'Salta a la lletra';
 
   @override
-  String get enableFolderView => 'Activa la vista de carpetes';
-
-  @override
-  String get showFolderBrowsingOption =>
-      'Mostra l\'opció de navegació de carpetes';
-
-  @override
   String get groupItemsIntoCollections => 'Agrupa els elements en col·leccions';
 
   @override
@@ -4809,7 +4831,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Commuta la visibilitat de la pàgina d\'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.';
+      'Commuta la visibilitat de la pàgina d\'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.';
 
   @override
   String get showInNavigation => 'Mostra a la navegació';
@@ -4870,10 +4892,17 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mediaBarModeDescription =>
-      'Trieu entre Tortugarr, MakD o desactiva la barra multimèdia';
+      'Trieu entre Moonfin, MakD o desactiva la barra multimèdia';
 
   @override
-  String get mediaBarModeMoonfin => 'Tortugarr';
+  String get peekHomeRows => 'Avançament de les files d\'inici';
+
+  @override
+  String get peekHomeRowsDescription =>
+      'Mostra la meitat superior de la primera fila a la part inferior de la barra multimèdia';
+
+  @override
+  String get mediaBarModeMoonfin => 'Moonfin';
 
   @override
   String get mediaBarModeMakd => 'MakD';
@@ -4952,11 +4981,18 @@ class AppLocalizationsCa extends AppLocalizations {
       'Activa l\'àudio dels tràilers a la barra multimèdia';
 
   @override
+  String get trailerVolume => 'Volum dels tràilers';
+
+  @override
+  String get trailerVolumeDescription =>
+      'Volum al qual es reprodueixen els tràilers de la barra multimèdia';
+
+  @override
   String get trailerCaptions => 'Subtítols del Tràiler';
 
   @override
   String get trailerCaptionsDescription =>
-      'Mostra els subtítols dels tràilers de YouTube a la barra de mitjans';
+      'Mostra els subtítols als tràilers de YouTube';
 
   @override
   String get episodePreview => 'Vista prèvia de l\'episodi';
@@ -4978,6 +5014,13 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get enablePreviewAudio =>
       'Activa l’àudio per a les previsualitzacions multimèdia';
+
+  @override
+  String get previewVolume => 'Volum de les vistes prèvies';
+
+  @override
+  String get previewVolumeDescription =>
+      'Volum al qual es reprodueixen les vistes prèvies de les targetes';
 
   @override
   String get latestMedia => 'Continguts afegits recentment';
@@ -5037,6 +5080,19 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get combineBothRows =>
       'Combina les dues files en una sola secció d\'inici';
+
+  @override
+  String get continueWatchingDefaultAction => 'Acció predeterminada';
+
+  @override
+  String get continueWatchingDefaultActionDescription =>
+      'Què passa quan selecciones un element de «Continuar mirant» o «Següent»';
+
+  @override
+  String get goToDetailsScreen => 'Ves als detalls';
+
+  @override
+  String get playImmediately => 'Reprodueix immediatament';
 
   @override
   String get nextUpMaxDays => 'Màxim de dies a \"A continuació\"';
@@ -5113,6 +5169,13 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get enablePinCode => 'Activa el codi PIN';
+
+  @override
+  String get pinSynced => 'PIN sincronitzat';
+
+  @override
+  String get pinResetFailed =>
+      'No s\'ha pogut esborrar el PIN del servidor. Si encara està definit, demana a un administrador del servidor que l\'elimini.';
 
   @override
   String get requirePinToAccess => 'Requereix un PIN per accedir al teu compte';
@@ -5205,7 +5268,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get screensaverBackdropBlack => 'Negre';
 
   @override
-  String get screensaverBackdropMoonfin => 'Tortugarr';
+  String get screensaverBackdropMoonfin => 'Moonfin';
 
   @override
   String get screensaverBackdropCalm => 'Calma';
@@ -5220,7 +5283,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get screensaverAdditionalComponent => 'Component addicional';
 
   @override
-  String get screensaverComponentMoonfinLogo => 'Logotip de Tortugarr';
+  String get screensaverComponentMoonfinLogo => 'Logotip de Moonfin';
 
   @override
   String get screensaverComponentRunner => 'Corredor';
@@ -5513,7 +5576,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get sourceCode => 'Codi font';
 
   @override
-  String get sourceCodeUrl => 'https://github.com/tortugarr/tortugarr';
+  String get sourceCodeUrl => 'https://github.com/Moonfin-Client/Moonfin-Core';
 
   @override
   String get checkForUpdatesNow => 'Comproveu si hi ha actualitzacions ara';
@@ -5599,10 +5662,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get featuredContentAppearance => 'Contingut destacat, aparença';
-
-  @override
-  String get posterSizeImageTypeFolderView =>
-      'Mida del pòster, tipus d\'imatge, vista de carpeta';
 
   @override
   String gbValue(String value) {
@@ -5694,7 +5753,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get cancelRequest4k => 'Cancel·la la sol·licitud de 4K';
 
   @override
-  String get playInMoonfin => 'Reprodueix a Tortugarr';
+  String get playInMoonfin => 'Reprodueix a Moonfin';
 
   @override
   String get requestedByLabel => 'Sol·licitat per';
@@ -5740,7 +5799,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'No s\'ha trobat l\'element a la vostra biblioteca de Tortugarr';
+      'No s\'ha trobat l\'element a la vostra biblioteca de Moonfin';
 
   @override
   String get errorSearchingLibrary =>
@@ -7789,7 +7848,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'S\'està reiniciant el servidor, reinicieu Tortugarr';
+      'S\'està reiniciant el servidor, reinicieu Moonfin';
 
   @override
   String get adminActiveSessions => 'Sessions actives';
@@ -7907,7 +7966,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String adminRemoveDeviceConfirm(String name) {
-    return 'Vols eliminar el dispositiu \'$name\'? L\'usuari haurà d\'iniciar la sessió de nou en aquest dispositiu.';
+    return 'Vols eliminar el dispositiu «$name»? L\'usuari haurà d\'iniciar la sessió de nou en aquest dispositiu.';
   }
 
   @override
@@ -11605,7 +11664,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Commuta la visibilitat de la pàgina d\'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.';
+      'Commuta la visibilitat de la pàgina d\'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11730,7 +11789,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsJoinTheDiscord => 'Uneix-te al Discord';
 
   @override
-  String get settingsSupportMoonfin => 'Suport Tortugarr';
+  String get settingsSupportMoonfin => 'Suport Moonfin';
 
   @override
   String get settingsSupportMoonfinSubtitle => 'Dona un cafè al desenvolupador';
@@ -11750,14 +11809,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Com Tortugarr gestiona les vostres dades';
+      'Com Moonfin gestiona les vostres dades';
 
   @override
   String get settingsCheckForUpdates => 'Comproveu si hi ha actualitzacions';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Comproveu l\'últim llançament de Tortugarr';
+      'Comproveu l\'últim llançament de Moonfin';
 
   @override
   String get settingsBoth => 'Tots dos';
@@ -11840,13 +11899,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsPlaybackEngineMpvLegacy => 'mpv (legat)';
-
-  @override
-  String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
-
-  @override
-  String get settingsMpvOnBluetoothDescription =>
-      'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.';
 
   @override
   String get settingsRedetectDisplay => 'Torna a detectar la pantalla';
@@ -12116,6 +12168,14 @@ class AppLocalizationsCa extends AppLocalizations {
       'Omet la conversió al perfil 8 i converteix els fluxos del perfil Dolby Vision 7 a HEVC compatible amb HDR10. Utilitza-ho si els fluxos convertits es mostren incorrectament.';
 
   @override
+  String get stripDolbyVisionHdr10PlusTitle =>
+      'Play Dolby Vision with HDR10+ as HDR10+';
+
+  @override
+  String get stripDolbyVisionHdr10PlusSubtitle =>
+      'Drop the Dolby Vision layer from videos that also have HDR10+. Turn this on if those videos play with sound but a black screen.';
+
+  @override
   String get subtitlesUseEmbeddedStyles =>
       'Utilitza els estils de subtítols incrustats';
 
@@ -12140,8 +12200,11 @@ class AppLocalizationsCa extends AppLocalizations {
       'Mostra els detalls de l\'item seleccionat a dalt la pàgina de Biblioteca.';
 
   @override
-  String get hideBackdropsInLibraries =>
-      'Amaga els telons de fons mentre navegues';
+  String get libraryCardTitles => 'Titles Under Posters';
+
+  @override
+  String get libraryCardTitlesDescription =>
+      'Show each item\'s title and details below its artwork in library grids.';
 
   @override
   String get useDetailedSubHeadings => 'Utilitzeu subtítols detallats';
@@ -12207,7 +12270,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get savedThemesDescription =>
-      'Aquests són temes baixats del connector Tortugarr per al servidor actual. En suprimir, només s\'elimina aquesta còpia local.';
+      'Aquests són temes baixats del connector Moonfin per al servidor actual. En suprimir, només s\'elimina aquesta còpia local.';
 
   @override
   String get savedThemesEmpty =>
@@ -12230,7 +12293,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get themeEditorSubtitle =>
-      'Obriu l\'editor de temes Tortugarr al vostre navegador';
+      'Obriu l\'editor de temes Moonfin al vostre navegador';
 
   @override
   String get homeScreen => 'Pantalla d\'inici';
@@ -12434,6 +12497,60 @@ class AppLocalizationsCa extends AppLocalizations {
       'Ordena les files d\'àudio en ordre ascendent o descendent.';
 
   @override
+  String get sorting => 'Ordenació';
+
+  @override
+  String get imdbRowsSorting => 'Ordenació de les files d\'IMDb';
+
+  @override
+  String get imdbRowsSortingDescription =>
+      'Ordena les files d\'IMDb per nom, data d\'estrena, valoració i més.';
+
+  @override
+  String get imdbRowsSortOrderDescription =>
+      'Ordena les files d\'IMDb en ordre ascendent o descendent.';
+
+  @override
+  String get tmdbRowsSorting => 'Ordenació de les files de TMDB';
+
+  @override
+  String get tmdbRowsSortingDescription =>
+      'Ordena les files de TMDB per nom, data d\'estrena, valoració i més.';
+
+  @override
+  String get tmdbRowsSortOrderDescription =>
+      'Ordena les files de TMDB en ordre ascendent o descendent.';
+
+  @override
+  String get seerrRowsSorting => 'Ordenació de les files de Seerr';
+
+  @override
+  String get seerrRowsSortingDescription =>
+      'Ordena les files de Seerr per nom, data d\'estrena, valoració i més.';
+
+  @override
+  String get seerrRowsSortOrderDescription =>
+      'Ordena les files de Seerr en ordre ascendent o descendent.';
+
+  @override
+  String get externalRowSortDefault => 'Predeterminat (ordre de la llista)';
+
+  @override
+  String get externalRowSortName => 'Nom';
+
+  @override
+  String get externalRowSortReleaseDate => 'Data d\'estrena';
+
+  @override
+  String get externalRowSortRating => 'Valoració';
+
+  @override
+  String get externalRowSortPopularity => 'Popularitat';
+
+  @override
+  String get externalRowSortShuffle => 'Aleatori';
+
+  @override
   String get audioPlaylists => 'Llistes de reproducció d\'àudio';
 
   @override
@@ -12524,11 +12641,33 @@ class AppLocalizationsCa extends AppLocalizations {
       'Utilitzeu FFmpeg (àudio) i libgav1 (AV1) abans dels descodificadors de maquinari. Desactiveu-lo si es trenca el pas d\'àudio HDMI.';
 
   @override
+  String get hevcSoftwareDirectPlay =>
+      'Reproducció nativa d\'HEVC (descodificació per programari)';
+
+  @override
+  String get hevcSoftwareDirectPlaySubtitle =>
+      'Reprodueix HEVC fins a 1080p des del fitxer original en lloc de demanar al servidor que el transcodifiqui. Aquest Apple TV el descodifica per programari, així que els fitxers exigents de 10 bits o amb una taxa de bits alta poden anar a batzegades.';
+
+  @override
+  String get av1SoftwareUhdDirectPlay => 'Direct Play 4K AV1 (Software Decode)';
+
+  @override
+  String get av1SoftwareUhdDirectPlaySubtitle =>
+      'Play AV1 above 1080p, including HDR10, from the original file instead of asking the server to transcode it. This device decodes AV1 in software, so heavy 4K or high bitrate files may stutter.';
+
+  @override
   String get useExternalPlayer => 'Utilitza sempre un reproductor extern';
 
   @override
   String get useExternalPlayerSubtitle =>
       'Obriu la reproducció de vídeo a l\'aplicació externa seleccionada a Android TV.';
+
+  @override
+  String get externalPlayerLiveTvOnly => 'Només TV en directe';
+
+  @override
+  String get externalPlayerLiveTvOnlySubtitle =>
+      'Utilitza el reproductor extern per a la TV en directe i reprodueix tota la resta amb el reproductor integrat.';
 
   @override
   String get automaticQueuing => 'Cua automàtica';
@@ -12558,7 +12697,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get webDiagnostics => 'Diagnòstic web';
 
   @override
-  String get webDiagnosticsTitle => 'Tortugarr Diagnòstic web';
+  String get webDiagnosticsTitle => 'Moonfin Diagnòstic web';
 
   @override
   String get webDiagnosticsIntro =>
@@ -12574,11 +12713,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFailureBody =>
-      'Tortugarr ha detectat una pàgina HTTPS que intentava trucar a un URL de servidor HTTP. Els navegadors bloquegen aquesta sol·licitud abans que arribi al vostre servidor.';
+      'Moonfin ha detectat una pàgina HTTPS que intentava trucar a un URL de servidor HTTP. Els navegadors bloquegen aquesta sol·licitud abans que arribi al vostre servidor.';
 
   @override
   String get webDiagnosticsCorsFailureBody =>
-      'Tortugarr ha detectat un error de sol·licitud a nivell de navegador que sol ser causat per la falta de capçaleres CORS o de comprovació prèvia al servidor multimèdia.';
+      'Moonfin ha detectat un error de sol·licitud a nivell de navegador que sol ser causat per la falta de capçaleres CORS o de comprovació prèvia al servidor multimèdia.';
 
   @override
   String webDiagnosticsTargetUrl(String url) {
@@ -12628,7 +12767,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get webDiagnosticsMixedContentFix =>
-      'Solució: doneu servei al vostre servidor multimèdia o punt final del servidor intermediari mitjançant HTTPS o carregueu Tortugarr mitjançant HTTP només a xarxes locals de confiança.';
+      'Solució: doneu servei al vostre servidor multimèdia o punt final del servidor intermediari mitjançant HTTPS o carregueu Moonfin mitjançant HTTP només a xarxes locals de confiança.';
 
   @override
   String get webDiagnosticsNoMixedContentDetected =>
@@ -12745,6 +12884,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get crewContributionsSeerr => 'Contribucions de l\'equip (Seerr)';
+
+  @override
+  String get personWebsite => 'Lloc web oficial';
 
   @override
   String get watchWithGroup => 'Veure amb grup';
@@ -13738,9 +13880,6 @@ class AppLocalizationsCa extends AppLocalizations {
       'El connector d\'extracció CB7 no està disponible en aquesta plataforma.';
 
   @override
-  String get closeGenrePanel => 'Tanca el tauler de gènere';
-
-  @override
   String get loadingShuffle => 'S\'està carregant la reproducció aleatòria...';
 
   @override
@@ -14091,7 +14230,7 @@ class AppLocalizationsCa extends AppLocalizations {
     String libraryName,
     String failedPath,
   ) {
-    return 'La teva biblioteca \'$libraryName\' està configurada per desar les il·lustracions directament a les carpetes multimèdia (\'Desa les il·lustracions a les carpetes multimèdia\' està activat). Tanmateix, Jellyfin ha comprovat l\'accés d\'escriptura i no té permís per escriure fitxers en aquest directori:\n\n$failedPath';
+    return 'La teva biblioteca «$libraryName» està configurada per desar les il·lustracions directament a les carpetes multimèdia (\'Desa les il·lustracions a les carpetes multimèdia\' està activat). Tanmateix, Jellyfin ha comprovat l\'accés d\'escriptura i no té permís per escriure fitxers en aquest directori:\n\n$failedPath';
   }
 
   @override
@@ -14303,6 +14442,9 @@ class AppLocalizationsCa extends AppLocalizations {
       'La reproducció nativa no s\'admet per a aquest format multimèdia.';
 
   @override
+  String get sortServerOrder => 'Ordre del servidor';
+
+  @override
   String get sortAlphabetical => 'Alfabètic';
 
   @override
@@ -14313,6 +14455,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get sortCustomDragDrop => 'Personalitzat (arrossega i deixa anar)';
+
+  @override
+  String sortCurrent(String option) {
+    return 'Ordenació: $option';
+  }
 
   @override
   String get playlistSortOptions =>
@@ -14340,7 +14487,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva\'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Tortugarr per aplicar-ho.';
+      'Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva\'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Moonfin per aplicar-ho.';
 
   @override
   String get impellerAuto => 'Automàtic';
@@ -14356,7 +14503,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Tortugarr s\'ha de reiniciar per canviar el motor de renderització. Tanca l\'aplicació ara i torna a obrir-la per aplicar-ho.';
+      'Moonfin s\'ha de reiniciar per canviar el motor de renderització. Tanca l\'aplicació ara i torna a obrir-la per aplicar-ho.';
 
   @override
   String get impellerCloseNow => 'Tanca l\'aplicació ara';
@@ -14551,6 +14698,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get showAlphabeticalFilters => 'Mostra l\'alfabet';
+
+  @override
+  String get libraryFolderView => 'Folder View';
 
   @override
   String get personalRatingStyle => 'Estil de puntuació personal';
@@ -14808,6 +14958,55 @@ class AppLocalizationsCa extends AppLocalizations {
   String get setupTourBulletMore => 'I molt més';
 
   @override
+  String setupStepOf(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get setupCurrent => 'Current';
+
+  @override
+  String get setupTvHint =>
+      'Up and down to preview · OK to choose · Back twice to skip';
+
+  @override
+  String get setupNavbarTopHint => 'Tabs across the top of the screen.';
+
+  @override
+  String get setupNavbarLeftHint => 'A slim rail of icons down the left side.';
+
+  @override
+  String get setupNavbarBottomHint =>
+      'Tabs along the bottom edge, in easy reach of your thumb.';
+
+  @override
+  String get setupMediaBarMoonfinHint =>
+      'Large artwork with the title, details and overview laid over it.';
+
+  @override
+  String get setupMediaBarMakdHint => 'Large artwork led by a big title logo.';
+
+  @override
+  String get setupMediaBarBookshelfHint =>
+      'Titles shelved as book spines, with the featured one face out.';
+
+  @override
+  String get setupMediaBarGalleryHint =>
+      'The featured title opened up, with the next few lined up beside it.';
+
+  @override
+  String get setupMediaBarBannerHint =>
+      'A shorter banner above your rows, so more of them fit on screen.';
+
+  @override
+  String get setupMediaBarAyaHint =>
+      'Artwork first in a framed panel, with your rows right underneath.';
+
+  @override
+  String get setupMediaBarOffHint =>
+      'No featured area. Home opens straight onto your rows.';
+
+  @override
   String get runSetupAgain => 'Iniciar la configuració de nou';
 
   @override
@@ -14862,7 +15061,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Les qualitats transcodificades només es baixen mentre Tortugarr està obert. La qualitat original també es baixa en segon pla.';
+      'Les qualitats transcodificades només es baixen mentre Moonfin està obert. La qualitat original també es baixa en segon pla.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -14870,7 +15069,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Només es baixa mentre Tortugarr està obert';
+      'Només es baixa mentre Moonfin està obert';
 
   @override
   String get autoDownloadQualityTitle => 'Qualitat de la baixada automàtica';
@@ -14893,7 +15092,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'Quan acabes un episodi en qualsevol dispositiu, Tortugarr baixa els següents. Els episodis que baixa s\'eliminen un cop vistos.';
+      'Quan acabes un episodi en qualsevol dispositiu, Moonfin baixa els següents. Els episodis que baixa s\'eliminen un cop vistos.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodis que es mantenen baixats';
@@ -14967,15 +15166,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Permet que el sistema comprovi periòdicament si hi ha episodis nous mentre Tortugarr està tancat';
+      'Permet que el sistema comprovi periòdicament si hi ha episodis nous mentre Moonfin està tancat';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Background App Refresh està desactivat per a Tortugarr. Activa\'l a iOS Settings.';
+      'Background App Refresh està desactivat per a Moonfin. Activa\'l a iOS Settings.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'L\'ús en segon pla està restringit per a Tortugarr a Android Settings.';
+      'L\'ús en segon pla està restringit per a Moonfin a Android Settings.';
 
   @override
   String get autoDownloadCheckNow => 'Comprova ara';
@@ -15195,13 +15394,13 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get topShelfDescription =>
-      'El que mostra la pantalla d\'inici de l\'Apple TV a sobre de la icona de Tortugarr quan està seleccionada. Aquesta configuració només es desa en aquest dispositiu.';
+      'El que mostra la pantalla d\'inici de l\'Apple TV a sobre de la icona de Moonfin quan està seleccionada. Aquesta configuració només es desa en aquest dispositiu.';
 
   @override
   String get topShelfLatestMedia => 'Contingut més recent';
 
   @override
-  String get topShelfAppBanner => 'Bàner de Tortugarr';
+  String get topShelfAppBanner => 'Bàner de Moonfin';
 
   @override
   String get keepVideoClearOfDynamicIsland =>
@@ -15259,6 +15458,13 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get navYou => 'Tu';
+
+  @override
+  String get cinemaSkipPrerolls => 'Botó per saltar del mode cinema';
+
+  @override
+  String get cinemaSkipPrerollsDescription =>
+      'Mostra un botó «Salta» durant els tràilers, els anuncis i altres vídeos previs del mode cinema.';
 
   @override
   String get detailsPage => 'Pàgina de detalls';
@@ -15458,6 +15664,854 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get librarySortLength => 'Durada';
+
+  @override
+  String get homeScreenBackdrop => 'Teló de fons de la pantalla d\'inici';
+
+  @override
+  String get homeScreenBackdropFullScreen => 'Pantalla completa';
+
+  @override
+  String get homeScreenBackdropCorner => 'Cantonada';
+
+  @override
+  String get homeScreenBackdropTop => 'Top';
+
+  @override
+  String get detailsScreenBackdrop => 'Teló de fons de la pantalla de detalls';
+
+  @override
+  String get detailsBackdropSize => 'Mida del teló de fons';
+
+  @override
+  String get detailsBackdropFullScreen => 'Pantalla completa';
+
+  @override
+  String get detailsBackdropFit => 'Ajustar';
+
+  @override
+  String get libraryBackdrops => 'Telons de fons de les biblioteques';
+
+  @override
+  String get playbackInfoChannel => 'Canal';
+
+  @override
+  String get playbackInfoProgram => 'Programa';
+
+  @override
+  String get playbackInfoWhy => 'Motiu';
+
+  @override
+  String get playbackInfoQualityLimit => 'Límit de qualitat';
+
+  @override
+  String get playbackInfoFrameRate => 'Velocitat de fotogrames';
+
+  @override
+  String get playbackInfoDelivery => 'Lliurament';
+
+  @override
+  String get playbackInfoFile => 'Fitxer';
+
+  @override
+  String get playbackInfoTechnical => 'Informació tècnica';
+
+  @override
+  String get playbackInfoDevice => 'Dispositiu';
+
+  @override
+  String get playbackInfoAudioRoute => 'Sortida d\'àudio';
+
+  @override
+  String get playbackInfoSurround51 => '5.1 envoltant';
+
+  @override
+  String get playbackInfoSurround71 => '7.1 envoltant';
+
+  @override
+  String playbackInfoChannelCount(int count) {
+    return '$count canals';
+  }
+
+  @override
+  String get playbackInfoBurnedIn => 'Incrustats pel servidor';
+
+  @override
+  String playbackInfoOriginal(String value, String original) {
+    return '$value (original $original)';
+  }
+
+  @override
+  String playbackInfoConvertedFrom(String value, String source) {
+    return '$value (convertit des de $source)';
+  }
+
+  @override
+  String playbackInfoResolutionConverted(
+    String name,
+    String size,
+    String source,
+  ) {
+    return '$name ($size, convertit des de $source)';
+  }
+
+  @override
+  String get playbackInfoNoteDirectPlay =>
+      'S\'està reproduint el fitxer original tal com és.';
+
+  @override
+  String get playbackInfoNoteDirectStream =>
+      'El servidor està reempaquetant el fitxer sense convertir-lo.';
+
+  @override
+  String get playbackInfoNoteTranscodeVideo =>
+      'El servidor està convertint el vídeo perquè aquest dispositiu el pugui reproduir.';
+
+  @override
+  String get playbackInfoNoteTranscodeAudio =>
+      'El servidor està convertint l\'àudio perquè aquest dispositiu el pugui reproduir.';
+
+  @override
+  String get playbackInfoNoteTranscodeBoth =>
+      'El servidor està convertint el vídeo i l\'àudio perquè aquest dispositiu els pugui reproduir.';
+
+  @override
+  String get playbackInfoNoteTranscodeUnknown =>
+      'El servidor està convertint aquest fitxer perquè aquest dispositiu el pugui reproduir.';
+
+  @override
+  String get playbackInfoNoteOffline => 'S\'està reproduint una còpia baixada.';
+
+  @override
+  String get playbackInfoWhyForced =>
+      'La transcodificació està forçada a la configuració';
+
+  @override
+  String get playbackInfoWhyBitrate =>
+      'La taxa de bits supera el límit de transmissió';
+
+  @override
+  String get playbackInfoWhyContainer =>
+      'Aquest dispositiu no pot reproduir aquest tipus de fitxer';
+
+  @override
+  String get playbackInfoWhyVideo =>
+      'Aquest dispositiu no pot reproduir aquest format de vídeo';
+
+  @override
+  String get playbackInfoWhyHdr =>
+      'Aquest dispositiu no pot mostrar aquest format HDR';
+
+  @override
+  String get playbackInfoWhyAudio =>
+      'Aquest dispositiu no pot reproduir aquest format d\'àudio';
+
+  @override
+  String get playbackInfoWhySubtitles =>
+      'Els subtítols s\'estan incrustant al vídeo';
+
+  @override
+  String get playbackInfoWhyOther =>
+      'No s\'ha pogut reproduir el fitxer directament';
+
+  @override
+  String playbackInfoWhyBitrateLimit(String bitrate, String limit) {
+    return '$bitrate supera el límit de transmissió de $limit';
+  }
+
+  @override
+  String playbackInfoWhyContainerName(String container) {
+    return 'Aquest dispositiu no pot obrir fitxers $container';
+  }
+
+  @override
+  String playbackInfoWhyVideoCodec(String codec) {
+    return 'Aquest dispositiu no pot reproduir vídeo $codec';
+  }
+
+  @override
+  String playbackInfoWhyVideoProfile(String codec, String profile) {
+    return 'Aquest dispositiu no pot reproduir vídeo $codec $profile';
+  }
+
+  @override
+  String playbackInfoWhyVideoLevel(String codec, String level) {
+    return 'Aquest dispositiu no pot reproduir vídeo $codec de nivell $level';
+  }
+
+  @override
+  String playbackInfoWhyVideoBitDepth(int bits) {
+    return 'Aquest dispositiu no pot reproduir vídeo de $bits bits';
+  }
+
+  @override
+  String playbackInfoWhyVideoResolution(String resolution) {
+    return 'Aquest dispositiu no pot reproduir vídeo $resolution';
+  }
+
+  @override
+  String playbackInfoWhyVideoFrameRate(String fps) {
+    return 'Aquest dispositiu no pot reproduir vídeo a $fps fps';
+  }
+
+  @override
+  String get playbackInfoWhyInterlaced =>
+      'Aquest dispositiu no pot reproduir vídeo entrellaçat';
+
+  @override
+  String get playbackInfoWhyAnamorphic =>
+      'Aquest dispositiu no pot reproduir vídeo anamòrfic';
+
+  @override
+  String playbackInfoWhyHdrName(String range) {
+    return 'Aquest dispositiu no pot mostrar $range';
+  }
+
+  @override
+  String playbackInfoWhyAudioCodec(String format) {
+    return 'Aquest dispositiu no pot reproduir àudio $format';
+  }
+
+  @override
+  String playbackInfoWhyAudioProfile(String fullFormat) {
+    return 'Aquest dispositiu no pot reproduir $fullFormat';
+  }
+
+  @override
+  String playbackInfoWhyAudioChannels(String channels) {
+    return 'Aquest dispositiu no pot reproduir àudio $channels';
+  }
+
+  @override
+  String playbackInfoWhyAudioSampleRate(String rate) {
+    return 'Aquest dispositiu no pot reproduir àudio a $rate kHz';
+  }
+
+  @override
+  String playbackInfoWhyAudioBitDepth(int bits) {
+    return 'Aquest dispositiu no pot reproduir àudio de $bits bits';
+  }
+
+  @override
+  String get playbackInfoWhyAudioExternal =>
+      'La pista d\'àudio és en un fitxer separat';
+
+  @override
+  String get playbackInfoWhySecondaryAudio =>
+      'Aquest dispositiu només pot reproduir la primera pista d\'àudio';
+
+  @override
+  String playbackInfoWhySubtitleFormat(String format) {
+    return 'Els subtítols $format s\'estan incrustant al vídeo';
+  }
+
+  @override
+  String get playbackInfoDroppedFrames => 'Fotogrames perduts';
+
+  @override
+  String get playFromServer => 'Reprodueix des del servidor';
+
+  @override
+  String get settingsApplePlayerUi => 'Reproductor de vídeo';
+
+  @override
+  String get settingsApplePlayerUiDescription =>
+      'El reproductor natiu d\'estil Apple no té enviament a altres dispositius, gestos de lliscament, bloqueig de l\'orientació, retard d\'àudio ni botó de PiP';
+
+  @override
+  String get settingsApplePlayerUiStandard => 'Estàndard';
+
+  @override
+  String get settingsApplePlayerUiNative => 'Natiu d\'estil Apple';
+
+  @override
+  String get playerTransportPosition => 'Botons de reproducció';
+
+  @override
+  String get playerTransportPositionDescription =>
+      'Mostra els botons de reproduir, saltar i desplaçar-se al mig del vídeo o acoblats a la barra inferior';
+
+  @override
+  String get playerTransportOnScreen => 'A la pantalla';
+
+  @override
+  String get playerTransportDocked => 'Acoblat';
+
+  @override
+  String get incompleteRecording => 'Incomplet';
+
+  @override
+  String incompleteRecordingMinutes(int recorded, int expected) {
+    return '$recorded de $expected min';
+  }
+
+  @override
+  String completeShowingScheduled(String dateTime) {
+    return 'Emissió completa programada: $dateTime';
+  }
+
+  @override
+  String completeCopyRecorded(String dateTime) {
+    return 'Còpia completa enregistrada: $dateTime';
+  }
+
+  @override
+  String get noCompleteShowingFound => 'No s\'ha trobat cap emissió completa';
+
+  @override
+  String get keepAsComplete => 'Mantén com a complet';
+
+  @override
+  String get keptAsComplete => 'Marcat com a complet';
+
+  @override
+  String get unableToKeepAsComplete => 'No s\'ha pogut marcar com a complet';
+
+  @override
+  String recordPromptTitle(String name) {
+    return 'Enregistra $name';
+  }
+
+  @override
+  String recordPromptStarted(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other:
+          'Aquesta emissió ha començat fa $minutes minuts, així que l\'enregistrament no en tindrà l\'inici.',
+      one: 'Aquesta emissió ha començat fa 1 minut, així que l\'enregistrament no en tindrà l\'inici.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get recordPromptAlsoRecordLater =>
+      'Vols enregistrar també l\'emissió futura per tenir un enregistrament complet?';
+
+  @override
+  String get recordPromptSearchLater =>
+      'Vols enregistrar automàticament una emissió futura quan se\'n trobi una, per tenir un enregistrament complet?';
+
+  @override
+  String get recordPromptNow => 'Ara';
+
+  @override
+  String get recordPromptLater => 'Emissió futura';
+
+  @override
+  String recordPromptAired(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Ja s\'han emès $minutes min',
+      one: 'Ja s\'ha emès 1 min',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get recordPromptUncertainMatch =>
+      'Coincidència només pel títol i la descripció. Comprova que sigui el mateix programa.';
+
+  @override
+  String get recordPromptDescriptionsDiffer =>
+      'Les descripcions són diferents; pot ser un altre programa.';
+
+  @override
+  String recordPromptSameEpisode(int season, int episode) {
+    return 'Mateix episodi (T${season}E$episode)';
+  }
+
+  @override
+  String get recordPromptAlreadyScheduled =>
+      'Ja està programat per enregistrar';
+
+  @override
+  String get recordPromptTomorrow => 'Demà';
+
+  @override
+  String get recordNowOnly => 'Enregistra només ara';
+
+  @override
+  String recordNowAnd(String when) {
+    return 'Enregistra ara i $when';
+  }
+
+  @override
+  String get recordNowAndLater => 'Enregistra ara i l\'emissió futura';
+
+  @override
+  String recordOnlyLater(String when) {
+    return 'Enregistra només $when';
+  }
+
+  @override
+  String get recordLaterShowingOnly => 'Enregistra només l\'emissió futura';
+
+  @override
+  String get laterShowingOnlyRequested => 'S\'enregistrarà l\'emissió futura.';
+
+  @override
+  String get unableToRequestLaterShowingOnly =>
+      'No s\'ha pogut sol·licitar l\'emissió futura, així que no s\'enregistrarà res.';
+
+  @override
+  String get laterShowingRequested =>
+      'S\'ha començat a enregistrar. També s\'enregistrarà una emissió posterior.';
+
+  @override
+  String get unableToRequestLaterShowing =>
+      'S\'ha començat a enregistrar, però no s\'ha pogut sol·licitar una emissió posterior.';
+
+  @override
+  String trailerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tràilers',
+      one: '1 tràiler',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String trailerNumber(int number) {
+    return 'Tràiler $number';
+  }
+
+  @override
+  String get subtitled => 'Subtitulat';
+
+  @override
+  String get rommAccount => 'Compte de RomM';
+
+  @override
+  String get rommAccountIntro =>
+      'Enllaça el teu compte de RomM per jugar des de la teva biblioteca de RomM i conservar les partides desades a RomM.';
+
+  @override
+  String get rommLinkAccount => 'Enllaça el compte de RomM';
+
+  @override
+  String get rommLinkInstructions =>
+      'Inicia la sessió a RomM i introdueix aquest codi per enllaçar el teu compte.';
+
+  @override
+  String rommLinkScanOrVisit(String url) {
+    return 'Escaneja el codi QR amb el telèfon o ves a $url';
+  }
+
+  @override
+  String get rommOpen => 'Obre RomM';
+
+  @override
+  String get rommWaitingForApproval =>
+      'S\'està esperant que aprovis el codi a RomM...';
+
+  @override
+  String rommLinkedAs(String username) {
+    return 'Enllaçat com a $username';
+  }
+
+  @override
+  String get rommLinked => 'El teu compte de RomM està enllaçat.';
+
+  @override
+  String get rommUnlinkNote =>
+      'En desenllaçar-lo, Moonfin deixa de fer servir la teva clau de RomM. La clau es manté a RomM fins que l\'eliminis dels testimonis de l\'API de RomM.';
+
+  @override
+  String get rommUnlink => 'Desenllaça';
+
+  @override
+  String get rommLinkExpired =>
+      'El codi ha caducat abans de ser aprovat. Torna a enllaçar per obtenir-ne un de nou.';
+
+  @override
+  String get rommLinkDenied => 'S\'ha rebutjat l\'enllaç a RomM.';
+
+  @override
+  String get rommUnreachable =>
+      'Moonfin no ha pogut connectar amb RomM. Torna-ho a provar d\'aquí a un moment.';
+
+  @override
+  String get rommNotAvailable =>
+      'Aquest servidor no té cap biblioteca de RomM.';
+
+  @override
+  String get rommAccountLoadFailed =>
+      'No s\'ha pogut carregar el teu compte de RomM.';
+
+  @override
+  String get reviews => 'Ressenyes';
+
+  @override
+  String get detailSectionReviews => 'Ressenyes';
+
+  @override
+  String spotlightReviewsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ressenyes',
+      one: '1 ressenya',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get readOnTmdb => 'Llegeix-la a TMDB';
+
+  @override
+  String get addServerButtonSubtitle =>
+      'Per adreça, o amb un compte de Plex o d\'Emby Connect';
+
+  @override
+  String get addServerChooseHow => 'Tria com et vols connectar.';
+
+  @override
+  String get addServerAddressChoice =>
+      'Jellyfin o Emby a la teva xarxa o en línia';
+
+  @override
+  String get addServerPlexChoice =>
+      'Fes servir el teu compte de Plex per trobar-ne els servidors';
+
+  @override
+  String get addServerAddressHelp =>
+      'La mateixa adreça que obriries en un navegador, inclòs el port.';
+
+  @override
+  String get addServerDetectNote =>
+      'Funciona amb Jellyfin i Emby. Una adreça de Plex obre l\'inici de sessió de Plex.';
+
+  @override
+  String addServerChecking(String address) {
+    return 'S\'està comprovant $address';
+  }
+
+  @override
+  String get addServerUnreachableDetail =>
+      'Comprova l\'adreça i el port, i que el servidor estigui en funcionament.';
+
+  @override
+  String get addServerFound => 'S\'ha trobat el servidor';
+
+  @override
+  String get addServerFoundNote => 'Continua per triar qui inicia la sessió.';
+
+  @override
+  String get addServerUseDifferentAddress => 'Fes servir una altra adreça';
+
+  @override
+  String musicArtistCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count artists',
+      one: '1 artist',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String musicSongCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count songs',
+      one: '1 song',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String musicPlaylistCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count playlists',
+      one: '1 playlist',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String musicPlayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count plays',
+      one: '1 play',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get allArtists => 'All Artists';
+
+  @override
+  String get libraryZToA => 'Z to A';
+
+  @override
+  String get musicSortYear => 'Year';
+
+  @override
+  String get musicFilter => 'Filter';
+
+  @override
+  String get musicGenreFilterTitle => 'Filter by Genre';
+
+  @override
+  String get openAlbum => 'Open Album';
+
+  @override
+  String get openPlaylist => 'Open Playlist';
+
+  @override
+  String get allSongsAToZ => 'All Songs A to Z';
+
+  @override
+  String get musicMix => 'Mix';
+
+  @override
+  String get musicMixEverything => 'Everything';
+
+  @override
+  String get musicMixEverythingSubtitle => '300 songs at random';
+
+  @override
+  String get mostPlayed => 'Most Played';
+
+  @override
+  String get musicMixMostPlayedSubtitle => 'Your top 100';
+
+  @override
+  String get musicMixFreshArrivals => 'Fresh Arrivals';
+
+  @override
+  String get musicMixFreshArrivalsSubtitle => 'The newest 100 songs';
+
+  @override
+  String get musicMixRediscover => 'Rediscover';
+
+  @override
+  String get musicMixRediscoverSubtitle =>
+      'Favorites you haven\'t played lately';
+
+  @override
+  String get musicSortMostAlbums => 'Most Albums';
+
+  @override
+  String bookSeriesPosition(int index, int total) {
+    return 'Book $index of $total';
+  }
+
+  @override
+  String bookFavoriteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count favorites',
+      one: '1 favorite',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookSortZToA => 'Z to A';
+
+  @override
+  String get bookSortMostTitles => 'Most Titles';
+
+  @override
+  String get bookSurpriseMe => 'Surprise Me';
+
+  @override
+  String get bookShuffleAudiobooks => 'Shuffle Audiobooks';
+
+  @override
+  String get bookStartReading => 'Start Reading';
+
+  @override
+  String get bookOtherBooks => 'Other Books';
+
+  @override
+  String get bookDiscoverSearchBooks => 'Search Open Library';
+
+  @override
+  String get bookDiscoverSearchAudiobooks => 'Search LibriVox';
+
+  @override
+  String get bookDiscoverFeatured => 'Featured';
+
+  @override
+  String get bookReaderControlsAutoHide => 'Controls hide automatically';
+
+  @override
+  String get bookReaderControlsStayVisible => 'Controls stay visible';
+
+  @override
+  String get keyboardPreferSystemIme => 'Preferiu el teclat del sistema';
+
+  @override
+  String get keyboardPreferSystemImeDescription =>
+      'Utilitzeu el mètode d\'entrada del dispositiu de manera predeterminada per a l\'entrada de text';
+
+  @override
+  String get pickDiscoverySubjects =>
+      'Trieu quins feeds de temes voleu mostrar a Discover.';
+
+  @override
+  String get pickAudiobookGenres =>
+      'Trieu quins gèneres voleu mostrar a Audiobook Discover.';
+
+  @override
+  String get discoverAudiobooks => 'Descobreix Audiollibres';
+
+  @override
+  String get librivoxDescription =>
+      'Títols de domini públic populars de LibriVox.';
+
+  @override
+  String titlesCount(int count) {
+    return '$count títols';
+  }
+
+  @override
+  String get trendingTitlesOpenLibrary =>
+      'Títols de tendència per assignatura d\'Open Library.';
+
+  @override
+  String channelsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Canals',
+      one: '1 Canal',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bitrateOverride => 'Taxa de bits (manual)';
+
+  @override
+  String get hdrOutput => 'Sortida HDR';
+
+  @override
+  String hdrOutputActive(String format) {
+    return 'Actiu — $format';
+  }
+
+  @override
+  String get hdrOutputActiveTonemapped =>
+      'Actiu — amb mapatge de tons a SDR per a aquesta pantalla';
+
+  @override
+  String get hdrOutputContentSdr => 'Inactiu — el contingut és SDR';
+
+  @override
+  String get hdrOutputDisabled => 'Inactiu — desactivat a la configuració';
+
+  @override
+  String get hdrOutputFailed =>
+      'Inactiu — no s\'ha pogut iniciar; s\'utilitza la via estàndard';
+
+  @override
+  String get codec => 'Còdec';
+
+  @override
+  String get videoBitrate => 'Velocitat de bits de vídeo';
+
+  @override
+  String get audioBitrate => 'Taxa de bits d\'àudio';
+
+  @override
+  String get sampleRate => 'Freqüència de mostreig';
+
+  @override
+  String get backgroundBackdrops => 'Fons de fons';
+
+  @override
+  String get showBackdropImages =>
+      'Mostra imatges de fons darrere del contingut';
+
+  @override
+  String get transcodingAudio => 'Transcodificació (àudio)';
+
+  @override
+  String get directStreamRemux => 'Transmissió directa (Remux)';
+
+  @override
+  String get transcodingBitrateOrResolution =>
+      'Transcodificació (taxa de bits o resolució)';
+
+  @override
+  String get transcodingVideoAndAudio => 'Transcodificació (vídeo i àudio)';
+
+  @override
+  String get transcodingVideo => 'Transcodificació (vídeo)';
+
+  @override
+  String get settingsAudioDiagnostics => 'Diagnòstics';
+
+  @override
+  String get settingsAudioDiagnosticsVideoLevel => 'Nivell de vídeo';
+
+  @override
+  String get settingsAudioDiagnosticsVideoRange => 'Gamma de vídeo';
+
+  @override
+  String get settingsAudioDiagnosticsSubtitleCodec => 'Còdec de subtítols';
+
+  @override
+  String get settingsAudioDiagnosticsAllowedAudioCodecs =>
+      'Còdecs d\'àudio permesos';
+
+  @override
+  String get settingsAudioDiagnosticsHlsMpegTsAudioCodecs =>
+      'Còdecs d\'àudio HLS MPEG-TS';
+
+  @override
+  String get settingsAudioDiagnosticsHlsFmp4AudioCodecs =>
+      'Còdecs d\'àudio HLS fMP4';
+
+  @override
+  String get settingsAudioDiagnosticsAudioSpdifPassthrough =>
+      'pas d\'àudio-spdif';
+
+  @override
+  String get settingsAudioDiagnosticsActiveAudioRoute => 'Ruta d\'àudio actiu';
+
+  @override
+  String get settingsAudioDiagnosticsRouteHdAudioSupport =>
+      'Ruta de suport d\'àudio HD';
+
+  @override
+  String get enableFolderView => 'Activa la vista de carpetes';
+
+  @override
+  String get showFolderBrowsingOption =>
+      'Mostra l\'opció de navegació de carpetes';
+
+  @override
+  String get posterSizeImageTypeFolderView =>
+      'Mida del pòster, tipus d\'imatge, vista de carpeta';
+
+  @override
+  String get settingsMpvOnBluetooth => 'Use mpv with Bluetooth audio';
+
+  @override
+  String get settingsMpvOnBluetoothDescription =>
+      'Plays with mpv while the sound goes to Bluetooth headphones or a speaker. Media3 can stutter and jump with Bluetooth on some TVs.';
+
+  @override
+  String get hideBackdropsInLibraries =>
+      'Amaga els telons de fons mentre navegues';
+
+  @override
+  String get closeGenrePanel => 'Tanca el tauler de gènere';
 
   @override
   String get seerrFilterNotSupported => 'Filter not supported';

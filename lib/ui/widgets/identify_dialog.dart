@@ -944,8 +944,8 @@ class _IdentifyDialogState extends State<IdentifyDialog> {
                     child: ListenableBuilder(
                       listenable: fieldFocusNode,
                       builder: (ctx, _) {
-                        final preferSystemIme =
-                            _prefs.get(UserPreferences.preferSystemImeKeyboard);
+                        final keyboardStyle =
+                            _prefs.get(UserPreferences.keyboardStyle);
                         return GestureDetector(
                           onTap: () {
                             if (!fieldFocusNode.hasFocus) {
@@ -961,7 +961,7 @@ class _IdentifyDialogState extends State<IdentifyDialog> {
                             keyboardType: keyboardType == TextInputType.number
                                 ? KeyboardType.numeric
                                 : KeyboardType.alphabetic,
-                            preferSystemIme: preferSystemIme,
+                            keyboardStyle: keyboardStyle,
                             hint: label,
                             filled: true,
                             fillColor: theme.colorScheme.surfaceContainerHighest

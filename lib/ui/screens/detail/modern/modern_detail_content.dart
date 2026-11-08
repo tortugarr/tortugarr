@@ -38,6 +38,7 @@ import '../../../../util/focus/focus_scroll.dart';
 import '../../../navigation/destinations.dart';
 import '../../../navigation/playback_launcher.dart';
 import '../../../widgets/horizontal_scroll_section.dart';
+import '../../../widgets/live_tv/incomplete_recording.dart';
 import '../../../widgets/logo_view.dart';
 import '../../../widgets/marquee_text.dart';
 import '../../../widgets/media_card.dart';
@@ -56,6 +57,7 @@ import '../../../../data/repositories/tmdb_repository.dart';
 import '../../../../data/services/seerr/seerr_api_models.dart';
 import '../../../../data/services/plugin_sync_service.dart';
 import '../../../../data/services/book_reader_service.dart';
+import '../collection_sort_dialog.dart';
 import '../detail_layout_metrics.dart';
 import '../playlist_sort_filter_bar.dart';
 import '../item_detail_screen.dart'
@@ -97,6 +99,8 @@ import '../../../widgets/seerr/seerr_request_dialog.dart';
 import '../../../widgets/seerr/seerr_item_status.dart';
 import '../../../widgets/seerr/seerr_status_pill.dart';
 import '../../../widgets/seerr/seerr_stats_card.dart';
+import '../../../widgets/seerr/seerr_streaming_row.dart';
+import '../../../widgets/detail_reviews.dart';
 import '../../../widgets/seerr_icons.dart';
 import '../../../navigation/single_push.dart';
 import 'package:moonfin/util/app_l10n.dart';
@@ -243,6 +247,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
   final FocusNode _studiosFirstFocusNode = FocusNode(debugLabel: 'studiosFirst');
   final FocusNode _chaptersFirstFocusNode = FocusNode(debugLabel: 'chaptersFirst');
   final FocusNode _similarFirstFocusNode = FocusNode(debugLabel: 'similarFirst');
+  final FocusNode _reviewsFirstFocusNode = FocusNode(debugLabel: 'reviewsFirst');
   final FocusNode _gridFirstFocusNode = FocusNode(debugLabel: 'gridFirst');
   final FocusNode _collectionSortFocusNode = FocusNode(debugLabel: 'collectionSort');
   LibrarySortBy _playlistSortBy = LibrarySortBy.playlistOrder;
@@ -284,6 +289,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
   /// Whether the Season page shows the season switcher above its episodes,
   /// so Up from the first episode goes there instead of to the tab bar.
   bool _seasonSwitcherShown = false;
+  final FocusNode _episodesCurrentFocusNode = FocusNode(debugLabel: 'episodesCurrent');
   final FocusNode _overviewFocusNode = FocusNode(debugLabel: 'overview');
   final FocusNode _personMoviesFirstFocusNode = FocusNode(debugLabel: 'personMoviesFirst');
   final FocusNode _personSeriesFirstFocusNode = FocusNode(debugLabel: 'personSeriesFirst');
@@ -397,6 +403,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
         mediaSourceId: mediaSource?['Id']?.toString(),
         audioStreamIndex: _vm.selectedAudioIndex ?? effectiveAudio,
         subtitleStreamIndex: _vm.selectedSubtitleIndex ?? effectiveSubtitle,
+        hasOtherVersions: item.mediaSources.length > 1,
       );
       if (mounted) {
         // Drop the result if the track selection changed mid-request.
@@ -479,27 +486,11 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     }
   }
 
-  List<AggregatedItem> _sortJellyfinItems(List<AggregatedItem> list) {
-    final sortOpt = widget.prefs.get(UserPreferences.personPageSortOption);
-    final sorted = List<AggregatedItem>.from(list);
-    if (sortOpt == 'alphabetical') {
-      sorted.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    } else {
-      final asc = sortOpt == 'releaseDateAsc';
-      sorted.sort((a, b) {
-        final dateA = a.premiereDate ?? (a.productionYear != null ? DateTime(a.productionYear!) : null);
-        final dateB = b.premiereDate ?? (b.productionYear != null ? DateTime(b.productionYear!) : null);
-        if (dateA == null && dateB == null) {
-          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-        }
-        if (dateA == null) return 1;
-        if (dateB == null) return -1;
-        final comp = dateA.compareTo(dateB);
-        return asc ? comp : -comp;
-      });
-    }
-    return sorted;
-  }
+  List<AggregatedItem> _sortJellyfinItems(List<AggregatedItem> list) =>
+      sortJellyfinFilmography(
+        list,
+        widget.prefs.get(UserPreferences.personPageSortOption),
+      );
 
   List<SeerrDiscoverItem> _groupSeerrItems(List<SeerrDiscoverItem> list, bool isCrew) {
     if (!widget.prefs.get(UserPreferences.personPageGroupItems)) return list;
@@ -537,6 +528,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     _studiosFirstFocusNode.onKeyEvent = leftToSidebarHandler;
     _chaptersFirstFocusNode.onKeyEvent = leftToSidebarHandler;
     _similarFirstFocusNode.onKeyEvent = leftToSidebarHandler;
+    _reviewsFirstFocusNode.onKeyEvent = leftToSidebarHandler;
     _seasonsFirstFocusNode.onKeyEvent = leftToSidebarHandler;
     _episodesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
     _personMoviesFirstFocusNode.onKeyEvent = leftToSidebarHandler;
@@ -573,6 +565,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     attachAutoScroll(_similarFirstFocusNode);
     attachAutoScroll(_seasonsFirstFocusNode);
     attachAutoScroll(_episodesFirstFocusNode);
+    attachAutoScroll(_episodesCurrentFocusNode);
 
     for (final cat in extraCategoriesOrder) {
       final node = FocusNode(debugLabel: 'modernFeatureFirst_$cat');
@@ -582,16 +575,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     _collectionSortFocusNode.onKeyEvent = (node, event) {
       if (event is KeyDownEvent) {
         if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          if (_vm.playlistItems.isNotEmpty) {
-            final firstTrack = _vm.playlistItems.first;
-            final rawId = firstTrack.rawData['PlaylistItemId']?.toString();
-            final firstTrackId =
-                (rawId != null && rawId.isNotEmpty) ? rawId : firstTrack.id;
-            final firstNode = _trackFocusNodes[firstTrackId];
-            if (firstNode != null && firstNode.context?.mounted == true) {
-              firstNode.requestFocus();
-              return KeyEventResult.handled;
-            }
+          if (_focusFirstTrack(_vm.collectionPlaylistItems)) {
+            return KeyEventResult.handled;
           }
         } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
           _focusSelectedTab();
@@ -728,6 +713,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     _studiosFirstFocusNode.dispose();
     _chaptersFirstFocusNode.dispose();
     _similarFirstFocusNode.dispose();
+    _reviewsFirstFocusNode.dispose();
     _gridFirstFocusNode.dispose();
     _collectionSortFocusNode.dispose();
     _playlistSortFocusNode.dispose();
@@ -742,6 +728,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
     _episodesFirstFocusNode.dispose();
     _seasonSwitcherFocusNode.dispose();
     _seasonMonitorFocusNode.dispose();
+    _episodesCurrentFocusNode.dispose();
     _overviewFocusNode.dispose();
     _personMoviesFirstFocusNode.dispose();
     _personSeriesFirstFocusNode.dispose();
@@ -852,11 +839,19 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       tabs.isEmpty ? null : _tabNode(_selectedTab >= 0 ? _selectedTab : 0);
 
   // Moves D-pad focus into the first track of the track list, using the same
-  // focus node the DetailTrackList attaches to that row.
-  void _focusFirstTrack() {
-    if (_vm.tracks.isEmpty) return;
-    final id = _vm.tracks.first.id;
-    _trackFocusNodes.putIfAbsent(id, () => FocusNode()).requestFocus();
+  // focus node the DetailTrackList attaches to that row. Returns false when
+  // that row isn't on screen.
+  bool _focusFirstTrack([List<AggregatedItem>? tracksOverride]) {
+    final list = tracksOverride ?? _vm.tracks;
+    if (list.isEmpty) return false;
+    final firstTrack = list.first;
+    final rawId = firstTrack.rawData['PlaylistItemId']?.toString();
+    final firstTrackId =
+        (rawId != null && rawId.isNotEmpty) ? rawId : firstTrack.id;
+    final node = _trackFocusNodes.putIfAbsent(firstTrackId, () => FocusNode());
+    if (node.context?.mounted != true) return false;
+    node.requestFocus();
+    return true;
   }
 
   void _onTabBarNavigateDown(int tabIndex) {
@@ -894,6 +889,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             case 'similar':
               _similarFirstFocusNode.requestFocus();
               break;
+            case 'reviews':
+              _reviewsFirstFocusNode.requestFocus();
+              break;
             case 'collections':
               if (_vm.parentCollections.length == 1) {
                 _collectionFirstFocusNode.requestFocus();
@@ -905,7 +903,11 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
               _seasonsFirstFocusNode.requestFocus();
               break;
             case 'episodes':
-              _episodesFirstFocusNode.requestFocus();
+              // Opens on the episode being viewed when it isn't the first one.
+              (_episodesCurrentFocusNode.context != null
+                      ? _episodesCurrentFocusNode
+                      : _episodesFirstFocusNode)
+                  .requestFocus();
               break;
             case 'movies':
               if (_vm.item?.type == 'BoxSet') {
@@ -946,10 +948,10 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
               _focusFirstTrack();
               break;
             case 'playlist':
-              if (_vm.item?.type == 'BoxSet' && _vm.playlistItems.isNotEmpty) {
+              if (_collectionSortFocusNode.context?.mounted == true) {
                 _collectionSortFocusNode.requestFocus();
               } else {
-                _focusFirstTrack();
+                _focusFirstTrack(_vm.collectionPlaylistItems);
               }
               break;
           }
@@ -1014,10 +1016,14 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
             (context, item) => _seerrTab(context, seerrState, seerrPieces),
           );
 
+    final hasReviews =
+        sections.shows(DetailSection.reviews) && _vm.reviews.isNotEmpty;
+    final reviews = _ModernTab('reviews', l10n.reviews, (_, _) => _reviewsTab());
+
     // A title that isn't in the library has no episodes to list, no chapters,
     // no extras and no file to describe, so the rest would all be empty.
     if (_vm.isSeerrOnly) {
-      return [if (hasCast) cast, ?seerrTab];
+      return [if (hasCast) cast, if (hasReviews) reviews, ?seerrTab];
     }
 
     final hasCrew = sections.shows(DetailSection.crew) &&
@@ -1075,6 +1081,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
               (context, item) => _collectionsTab(context, item),
             ),
           if (hasSimilar) similar,
+          if (hasReviews) reviews,
           ?seerrTab,
         ];
       case 'Season':
@@ -1187,37 +1194,41 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
           if (hasCast) _ModernTab('cast', l10n.castMembers, _boxSetCastTab),
           if (hasCrew) _ModernTab('crew', l10n.crewSection, _boxSetCrewTab),
           if (hasStudios) studios,
-          // Show the Playlist tab while the index is building (spinner) OR
-          // once items are available (the list). Placed last so simple
-          // movie-only collections land on Movies by default.
-          if (sections.shows(DetailSection.playlistOrder) &&
-              (_vm.playlistItems.isNotEmpty || _vm.playlistIndexBuilding))
+          // Placed last so movie-only collections still open on Movies.
+          if (sections.shows(DetailSection.playlistOrder))
             _ModernTab(
               'playlist',
               l10n.playlist,
               (context, item) {
-                // Phase 1: flat ID index still building — show full spinner.
-                if (_vm.playlistIndexBuilding) {
+                final hasPlaylistItems = _vm.playlistItems.isNotEmpty;
+                if (_vm.playlistSortRefreshing ||
+                    (_vm.playlistIndexBuilding && !hasPlaylistItems)) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 final listWidget = DetailTrackList(
-                  tracks: _vm.playlistItems,
+                  tracks: _vm.collectionPlaylistItems,
                   imageApi: _vm.imageApi,
                   isPlaylist: true,
                   getFocusNode: (id) =>
                       _trackFocusNodes.putIfAbsent(id, () => FocusNode()),
                   onPlayTrack: (index) => _playPlaylistTrack(context, index),
-                  reorderable: _vm.collectionSort == CollectionSortOption.custom,
-                  onReorder: (oldIndex, newIndex) {
-                    var target = newIndex;
-                    if (target > oldIndex) {
-                      target -= 1;
-                    }
-                    _vm.reorderCollectionPlaylistItem(oldIndex, target);
-                  },
-                  onMoveUp: (index) => _vm.reorderCollectionPlaylistItem(index, index - 1),
-                  onMoveDown: (index) => _vm.reorderCollectionPlaylistItem(index, index + 1),
+                  reorderable: hasPlaylistItems && _vm.collectionSort == CollectionSortOption.custom,
+                  onReorder: hasPlaylistItems
+                      ? (oldIndex, newIndex) {
+                          var target = newIndex;
+                          if (target > oldIndex) {
+                            target -= 1;
+                          }
+                          _vm.reorderCollectionPlaylistItem(oldIndex, target);
+                        }
+                      : null,
+                  onMoveUp: hasPlaylistItems
+                      ? (index) => _vm.reorderCollectionPlaylistItem(index, index - 1)
+                      : null,
+                  onMoveDown: hasPlaylistItems
+                      ? (index) => _vm.reorderCollectionPlaylistItem(index, index + 1)
+                      : null,
                   onFirstTrackUp: () => _collectionSortFocusNode.requestFocus(),
                   onTrackFocused: widget.onBackdropItemFocused,
                 );
@@ -1248,12 +1259,12 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                                 FocusableToolbarButton(
                                   icon: Icons.sort_rounded,
                                   focusNode: _collectionSortFocusNode,
-                                  tooltip: l10n.resetSort,
-                                  onTap: () => _showCollectionSortDialog(context),
+                                  tooltip: l10n.playlistSortOptions,
+                                  onTap: () => showCollectionSortDialog(context, vm: _vm),
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  'Sort: ${_getCollectionSortLabel(_vm.collectionSort, l10n)}',
+                                  l10n.sortCurrent(getCollectionSortLabel(_vm.collectionSort, l10n)),
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: Colors.white70,
                                         fontWeight: FontWeight.bold,
@@ -1293,6 +1304,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
               (context, item) => _collectionsTab(context, item),
             ),
           if (hasSimilar) similar,
+          if (hasReviews) reviews,
           ?seerrTab,
         ];
     }
@@ -1787,11 +1799,12 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
         heightRatio: 9 / 16,
       );
     }
-    // For Season pages _vm.nextUp is null (the API call uses seriesId which
-    // on a Season item resolves to nothing). Fall back to the first unplayed
-    // episode so the cyan "next up" border still renders correctly.
-    final nextUpId = _vm.nextUp?.id ??
-        _vm.episodes.firstWhereOrNull((e) => !e.isPlayed)?.id;
+    // An episode marks itself. A season page has no next up loaded, so it
+    // marks its first unplayed episode.
+    final activeId = item.type == 'Episode'
+        ? item.id
+        : _vm.nextUp?.id ??
+            _vm.episodes.firstWhereOrNull((e) => !e.isPlayed)?.id;
     // Season pages and Episode pages (Continue Watching / Next Up) both list
     // one season, so both get Sonarr's missing episodes merged in.
     final season = MissingEpisodes.seasonShownBy(
@@ -1830,9 +1843,15 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
         episode: episode,
         imageApi: _vm.imageApi,
         onChanged: () => _vm.load(),
-        isActive: episode.id == nextUpId,
+        isActive: episode.id == activeId,
+        isOnScreen: episode.id == item.id,
         contextSeasonId: _vm.effectiveSeasonId,
-        focusNode: first ? _episodesFirstFocusNode : null,
+        replacePage: item.type == 'Episode',
+        focusNode: first
+            ? _episodesFirstFocusNode
+            : episode.id == item.id
+                ? _episodesCurrentFocusNode
+                : null,
         onKeyEvent: first
             ? (node, event) {
                 if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.arrowUp) {
@@ -1909,12 +1928,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
         heightRatio: 9 / 16,
       );
     }
-    final sorted = [...episodes]..sort((a, b) {
-        final sa = a.parentIndexNumber ?? 0;
-        final sb = b.parentIndexNumber ?? 0;
-        if (sa != sb) return sa.compareTo(sb);
-        return (a.indexNumber ?? 0).compareTo(b.indexNumber ?? 0);
-      });
+    final sorted = [...episodes]..sort(ItemDetailViewModel.compareEpisodes);
 
     // Group by season
     final Map<int, List<AggregatedItem>> seasonGroups = {};
@@ -2930,6 +2944,8 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
           onNavigateDown: below(_seerrChipsFocusNode),
         ),
       if (pieces.stats) SeerrStatsCard(state: state),
+      if (pieces.streaming)
+        SeerrStreamingRow(providers: state.streamingProviders),
       if (pieces.recommendations)
         _seerrTabRow(
           l10n.recommendations,
@@ -3109,8 +3125,17 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       return const SizedBox.shrink();
     }
 
+    final showMissing = widget.prefs.get(
+      UserPreferences.seerrShowMissingCollectionItems,
+    );
+
     if (collections.length == 1) {
-      return _mediaGrid(context, collections.first.items,
+      final col = collections.first;
+      final items = [
+        col.boxSetItem,
+        ...(showMissing ? col.itemsWithMissing : col.items),
+      ];
+      return _mediaGrid(context, items,
           firstFocusNode: _collectionFirstFocusNode);
     }
 
@@ -3142,6 +3167,10 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
         itemBuilder: (context, index) {
           final col = collections[index];
           final rowFocusNode = _collectionRowFocusNodeFor(col.id);
+          final items = [
+            col.boxSetItem,
+            ...(showMissing ? col.itemsWithMissing : col.items),
+          ];
 
           return Builder(
             builder: (rowContext) {
@@ -3168,7 +3197,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                     ),
                     const SizedBox(height: 12),
                     DetailSimilarRow(
-                      items: col.items,
+                      items: items,
                       imageApi: _vm.imageApi,
                       prefs: widget.prefs,
                       customCardWidth: isMobile ? 96.0 : 120.0 * desktopScale,
@@ -3191,7 +3220,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                             }
                           }
                           if (event.logicalKey == LogicalKeyboardKey.arrowRight &&
-                              itemIndex == col.items.length - 1) {
+                              itemIndex == items.length - 1) {
                             return KeyEventResult.handled;
                           }
                           if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
@@ -3906,6 +3935,12 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
   Widget _similarTab(BuildContext context, List<AggregatedItem> items) =>
       _mediaGrid(context, items, firstFocusNode: _similarFirstFocusNode);
 
+  Widget _reviewsTab() => DetailReviewsGrid(
+    reviews: _vm.reviews,
+    firstFocusNode: _reviewsFirstFocusNode,
+    onTopRowUp: _focusSelectedTab,
+  );
+
   /// The shared menu for a card in a collection's own grid, plus the entry
   /// that pulls the card out of this collection.
   void _showCollectionItemMenu(AggregatedItem entry) {
@@ -4361,8 +4396,10 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
   }
 
   Future<void> _playPlaylistTrack(BuildContext context, int index) async {
+    if (_vm.playlistSortRefreshing) return;
     final manager = GetIt.instance<PlaybackManager>();
-    final isAudio = _vm.playlistItems.every(_isAudioItem);
+    final tracks = _vm.collectionPlaylistItems;
+    final isAudio = tracks.every(_isAudioItem);
     await launchPlayerWhilePreparing(
       context,
       manager: manager,
@@ -4372,103 +4409,9 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       startPlayback: (launchSession) async {
         await runPlaybackStart(
           launchSession,
-          () => manager.playItems(_vm.playlistItems, startIndex: index),
+          () => manager.playItems(tracks, startIndex: index),
         );
         return true;
-      },
-    );
-  }
-
-  String _getCollectionSortLabel(CollectionSortOption option, AppLocalizations l10n) {
-    return switch (option) {
-      CollectionSortOption.alphabetical => l10n.sortAlphabetical,
-      CollectionSortOption.releaseAscending => l10n.sortReleaseAscending,
-      CollectionSortOption.releaseDescending => l10n.sortReleaseDescending,
-      CollectionSortOption.custom => l10n.sortCustomDragDrop,
-    };
-  }
-
-  void _showCollectionSortDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF1E1E24),
-          title: Text(
-            l10n.playlistSortOptions,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: CollectionSortOption.values.map((option) {
-              final active = _vm.collectionSort == option;
-              return Focus(
-                onKeyEvent: (_, event) {
-                  if (isActivateKey(event)) {
-                    _vm.setCollectionSort(option);
-                    Navigator.of(context).pop();
-                    return KeyEventResult.handled;
-                  }
-                  return KeyEventResult.ignored;
-                },
-                child: Builder(
-                  builder: (context) {
-                    final focused = Focus.of(context).hasFocus;
-                    return InkWell(
-                      onTap: () {
-                        _vm.setCollectionSort(option);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: focused
-                              ? Colors.white12
-                              : Colors.transparent,
-                          borderRadius: AppRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              active
-                                  ? Icons.radio_button_checked
-                                  : Icons.radio_button_off,
-                              color: active
-                                  ? AppColorScheme.accent
-                                  : Colors.white54,
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              _getCollectionSortLabel(option, l10n),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: active
-                                        ? AppColorScheme.accent
-                                        : Colors.white,
-                                    fontWeight: active
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }).toList(),
-          ),
-        );
       },
     );
   }
@@ -5040,6 +4983,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
           ],
           const SizedBox(height: 6),
           _metadataRow(context, item, selectedSource),
+          IncompleteRecordingDetailLine(itemId: item.id),
           if (techRow != null) ...[
             const SizedBox(height: 6),
             techRow,
@@ -5594,15 +5538,18 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
       children: [
         ColoredBox(color: base),
         if (url != null && url.isNotEmpty) ...[
-          OfflineAwareImage(
-            imageUrl: url,
-            fit: BoxFit.cover,
-            alignment: landscape ? Alignment.centerRight : Alignment.topCenter,
-            fadeInDuration: Duration.zero,
-            sourceAspectRatio: 16 / 9,
-            maxDecodeWidth: ArtworkDecode.maxSourceWidth,
-            priority: ImageFetchPriority.high,
-            errorWidget: (context, url, error) => const SizedBox.shrink(),
+          DetailBackdropFit(
+            prefs: widget.prefs,
+            child: OfflineAwareImage(
+              imageUrl: url,
+              fit: BoxFit.cover,
+              alignment: landscape ? Alignment.centerRight : Alignment.topCenter,
+              fadeInDuration: Duration.zero,
+              sourceAspectRatio: 16 / 9,
+              maxDecodeWidth: ArtworkDecode.maxSourceWidth,
+              priority: ImageFetchPriority.high,
+              errorWidget: (context, url, error) => const SizedBox.shrink(),
+            ),
           ),
           if (item?.type == 'Person' && _randomBackdropUrl == null)
             Positioned.fill(
@@ -5935,6 +5882,7 @@ class _ModernDetailContentState extends State<ModernDetailContent> {
                 const SizedBox(height: 6),
               ],
               _metadataRow(context, item, selectedSource),
+              IncompleteRecordingDetailLine(itemId: item.id),
               if (showRatings) ...[
                 const SizedBox(height: 6),
                 RatingsRow(

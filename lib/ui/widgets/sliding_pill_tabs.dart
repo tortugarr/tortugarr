@@ -149,7 +149,11 @@ class _SlidingPillTabsState extends State<SlidingPillTabs> {
       widths.add(box.size.width);
     }
     if (widths.isEmpty || listEquals(widths, _widths)) return;
+    final first = _widths.isEmpty;
     setState(() => _widths = widths);
+    // The first measurement rebuilds the strip around a new scroll view, so a
+    // segment picked from the start is only brought into view after it.
+    if (first && widget.selectedIndex > 0) _revealSelected();
   }
 
   void _scheduleEnsureVisible() {
@@ -163,6 +167,16 @@ class _SlidingPillTabsState extends State<SlidingPillTabs> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
       );
+    });
+  }
+
+  /// Scrolls the strip, and only the strip, to the selected segment.
+  void _revealSelected() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _selectedKey?.currentContext;
+      final object = ctx?.findRenderObject();
+      if (!mounted || ctx == null || object == null) return;
+      Scrollable.maybeOf(ctx)?.position.ensureVisible(object, alignment: 0.5);
     });
   }
 

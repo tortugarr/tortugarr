@@ -1,6 +1,6 @@
 {
     "@@locale": "es",
-    "appTitle": "Tortugarr",
+    "appTitle": "Moonfin",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Versión Tortugarr {version}",
+    "appVersionFooter": "Versión Moonfin {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Tortugarr no pudo acceder al llavero del sistema. El inicio de sesión puede continuar, pero el almacenamiento seguro de tokens podría no estar disponible hasta que se desbloquee el llavero.",
+    "secureStorageUnavailableMessage": "Moonfin no pudo acceder al llavero del sistema. El inicio de sesión puede continuar, pero el almacenamiento seguro de tokens podría no estar disponible hasta que se desbloquee el llavero.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -168,17 +168,17 @@
     "@settingsAppearanceTheme": {
         "description": "Title for the theme selection screen and theme settings entry"
     },
-    "settingsAppearanceThemeSubtitle": "Cambia entre Tortugarr y Neon Pulse sin reiniciar la aplicación",
+    "settingsAppearanceThemeSubtitle": "Cambia entre Moonfin y Neon Pulse sin reiniciar la aplicación",
     "@settingsAppearanceThemeSubtitle": {
         "description": "Subtitle for the theme selection screen and theme settings entry"
     },
-    "themeMoonfin": "Tortugarr",
+    "themeMoonfin": "Moonfin",
     "@themeMoonfin": {
-        "description": "Display name for the Tortugarr theme"
+        "description": "Display name for the Moonfin theme"
     },
-    "themeMoonfinSubtitle": "Aspecto actual de Tortugarr que a todos les encanta",
+    "themeMoonfinSubtitle": "Aspecto actual de Moonfin que a todos les encanta",
     "@themeMoonfinSubtitle": {
-        "description": "Preview description for the Tortugarr theme"
+        "description": "Preview description for the Moonfin theme"
     },
     "themeNeonPulse": "Pulso de neón",
     "@themeNeonPulse": {
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "¿Salir de Tortugarr?",
+    "exitApp": "¿Salir de Moonfin?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -528,10 +528,6 @@
     "@discoverySubjects": {
         "description": "Title for the book discovery subject picker panel"
     },
-    "pickDiscoverySubjects": "Elige qué temas mostrar en Descubrir.",
-    "@pickDiscoverySubjects": {
-        "description": "Instruction text in discovery subject picker"
-    },
     "apply": "Aplicar",
     "@apply": {
         "description": "Button label to apply selected options"
@@ -539,27 +535,6 @@
     "audiobookGenres": "Géneros de audiolibros",
     "@audiobookGenres": {
         "description": "Title for audiobook genre picker panel"
-    },
-    "pickAudiobookGenres": "Elige qué géneros mostrar en Descubrir audiolibros.",
-    "@pickAudiobookGenres": {
-        "description": "Instruction text in audiobook genre picker"
-    },
-    "discoverAudiobooks": "Descubrir audiolibros",
-    "@discoverAudiobooks": {
-        "description": "Section title for audiobook discovery"
-    },
-    "librivoxDescription": "Títulos populares de dominio público de LibriVox.",
-    "@librivoxDescription": {
-        "description": "Subtitle for audiobook discovery section"
-    },
-    "titlesCount": "{count} títulos",
-    "@titlesCount": {
-        "description": "Label showing number of titles",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
     },
     "scrollLeft": "Desplazar a la izquierda",
     "@scrollLeft": {
@@ -736,10 +711,6 @@
     "discover": "Descubrir",
     "@discover": {
         "description": "Section title for book discovery"
-    },
-    "trendingTitlesOpenLibrary": "Títulos en tendencia por tema de Open Library.",
-    "@trendingTitlesOpenLibrary": {
-        "description": "Subtitle for book discovery section"
     },
     "noBookmarkedItems": "Aún no hay elementos marcados",
     "@noBookmarkedItems": {
@@ -3079,7 +3050,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "No establecido. Tortugarr intentará usar un mpv.conf predeterminado en las carpetas de la app/datos.",
+    "notSetMpvConf": "No establecido. Moonfin intentará usar un mpv.conf predeterminado en las carpetas de la app/datos.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3286,7 +3257,7 @@
     "@saveToDownloadsFolder": {
         "description": "Setting for saving to downloads folder"
     },
-    "downloadsVisibleToOtherApps": "Descargas/Tortugarr — visible para otras apps",
+    "downloadsVisibleToOtherApps": "Descargas/Moonfin — visible para otras apps",
     "@downloadsVisibleToOtherApps": {
         "description": "Description for downloads folder visibility"
     },
@@ -3322,7 +3293,7 @@
     "@saveToDownloadsFolderQuestion": {
         "description": "Dialog title for saving to downloads folder"
     },
-    "saveToDownloadsFolderDescription": "El contenido descargado se guardará en Descargas/Tortugarr en tu dispositivo. Estos archivos serán visibles para otras apps como tu galería o reproductor de música.",
+    "saveToDownloadsFolderDescription": "El contenido descargado se guardará en Descargas/Moonfin en tu dispositivo. Estos archivos serán visibles para otras apps como tu galería o reproductor de música.",
     "@saveToDownloadsFolderDescription": {
         "description": "Description for saving to downloads folder"
     },
@@ -3450,14 +3421,6 @@
     "@showLibrariesFromAllServers": {
         "description": "Description for multi-server libraries"
     },
-    "enableFolderView": "Habilitar vista de carpetas",
-    "@enableFolderView": {
-        "description": "Setting for enabling folder view"
-    },
-    "showFolderBrowsingOption": "Mostrar opción de exploración por carpetas",
-    "@showFolderBrowsingOption": {
-        "description": "Description for folder view"
-    },
     "libraryVisibility": "Visibilidad de la biblioteca",
     "@libraryVisibility": {
         "description": "Section title for library visibility"
@@ -3527,9 +3490,9 @@
     "@mediaBarModeDescription": {
         "description": "Description for media bar style setting"
     },
-    "mediaBarModeMoonfin": "Tortugarr",
+    "mediaBarModeMoonfin": "Moonfin",
     "@mediaBarModeMoonfin": {
-        "description": "Media bar style option: Tortugarr"
+        "description": "Media bar style option: Moonfin"
     },
     "mediaBarModeMakd": "MakD",
     "@mediaBarModeMakd": {
@@ -4176,10 +4139,6 @@
     "@featuredContentAppearance": {
         "description": "Media bar settings subtitle"
     },
-    "posterSizeImageTypeFolderView": "Tamaño de póster, tipo de imagen, vista de carpetas",
-    "@posterSizeImageTypeFolderView": {
-        "description": "Library display settings subtitle"
-    },
     "mdbListTmdbRatingSources": "MDBList, TMDB y fuentes de valoración",
     "@mdbListTmdbRatingSources": {
         "description": "Ratings settings subtitle"
@@ -4238,9 +4197,9 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Reproducir en Tortugarr",
+    "playInMoonfin": "Reproducir en Moonfin",
     "@playInMoonfin": {
-        "description": "Button to play available media in Tortugarr"
+        "description": "Button to play available media in Moonfin"
     },
     "requestedByName": "Solicitado por {name}",
     "@requestedByName": {
@@ -4292,7 +4251,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Elemento no encontrado en tu biblioteca de Tortugarr",
+    "itemNotFoundInLibrary": "Elemento no encontrado en tu biblioteca de Moonfin",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4548,7 +4507,7 @@
         }
     },
     "adminServerRebootInProgress": "Reinicio del servidor en curso",
-    "adminServerRebootMessage": "Reinicio del servidor en curso, por favor reinicia Tortugarr",
+    "adminServerRebootMessage": "Reinicio del servidor en curso, por favor reinicia Moonfin",
     "adminActiveSessions": "Sesiones activas",
     "adminSessionsLoadFailed": "Error al cargar las sesiones",
     "adminNoActiveSessions": "No hay sesiones activas",
@@ -6339,11 +6298,11 @@
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
-    "libraryVisibilityDescription": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Tortugarr para que los cambios surtan efecto.",
+    "libraryVisibilityDescription": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Moonfin para que los cambios surtan efecto.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
-    "sourceCodeUrl": "https://github.com/tortugarr/tortugarr",
+    "sourceCodeUrl": "https://github.com/Moonfin-Client/Moonfin-Core",
     "@sourceCodeUrl": {
         "description": "Displayed source code repository URL"
     },
@@ -6584,7 +6543,7 @@
     "settingsShowGenresButtonInNavigation": "Mostrar el botón de géneros en la barra de navegación",
     "settingsShowFavoritesButtonInNavigation": "Mostrar el botón de favoritos en la barra de navegación",
     "settingsShowLibrariesButtonInNavigation": "Mostrar el botón de bibliotecas en la barra de navegación",
-    "settingsLibraryVisibilitySubtitle": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Tortugarr para que los cambios surtan efecto.",
+    "settingsLibraryVisibilitySubtitle": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Moonfin para que los cambios surtan efecto.",
     "settingsMediaBarAndLocalPreviews": "Barra multimedia y vistas previas locales",
     "settingsVisualOverlays": "Superposiciones visuales",
     "settingsSeasonalSurprise": "Sorpresa estacional",
@@ -6603,14 +6562,14 @@
     "settingsJoinDiscord": "Únase a Discord",
     "settingsJoinDiscordSubtitle": "Chatea con la comunidad",
     "settingsJoinTheDiscord": "Únase al Discord",
-    "settingsSupportMoonfin": "Apoyar Tortugarr",
+    "settingsSupportMoonfin": "Apoyar Moonfin",
     "settingsLegal": "LEGAL",
     "settingsLicenses": "Licencias",
     "settingsOpenSourceLicenseNotices": "Avisos de licencia de código abierto",
     "settingsPrivacyPolicy": "política de privacidad",
-    "settingsPrivacyPolicySubtitle": "Cómo maneja Tortugarr tus datos",
+    "settingsPrivacyPolicySubtitle": "Cómo maneja Moonfin tus datos",
     "settingsCheckForUpdates": "Buscar actualizaciones",
-    "settingsCheckForUpdatesSubtitle": "Busque la última versión de Tortugarr",
+    "settingsCheckForUpdatesSubtitle": "Busque la última versión de Moonfin",
     "settingsPoweredByFlutter": "Desarrollado por Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# aviso de licencia} other {# avisos de licencia}}",
     "@settingsLicenseNoticesCount": {
@@ -7035,7 +6994,7 @@
         }
     },
     "savedThemesTitle": "Temas guardados",
-    "savedThemesDescription": "Estos son temas descargados del complemento Tortugarr para el servidor actual. Al eliminar se elimina solo esta copia local.",
+    "savedThemesDescription": "Estos son temas descargados del complemento Moonfin para el servidor actual. Al eliminar se elimina solo esta copia local.",
     "savedThemesEmpty": "No se encontraron temas guardados para este servidor.",
     "savedThemesCurrentThemeId": "{themeId} • Actualmente activo",
     "@savedThemesCurrentThemeId": {
@@ -7049,7 +7008,7 @@
     "savedThemesDeleteTooltip": "Eliminar tema guardado",
     "savedThemesManageSubtitle": "Administrar temas de complementos descargados en este dispositivo",
     "themeEditor": "Editor de temas",
-    "themeEditorSubtitle": "Abra el editor de temas Tortugarr en su navegador",
+    "themeEditorSubtitle": "Abra el editor de temas Moonfin en su navegador",
     "homeScreen": "Pantalla de inicio",
     "bottomBar": "Barra inferior",
     "homeRowsStyleClassic": "Clásico",
@@ -7098,12 +7057,12 @@
     "preferSdhSubtitles": "Prefiere subtítulos SDH",
     "preferSdhSubtitlesSubtitle": "Priorice las pistas de subtítulos SDH/CC al realizar la selección automática.",
     "webDiagnostics": "Diagnóstico web",
-    "webDiagnosticsTitle": "Tortugarr Diagnóstico web",
+    "webDiagnosticsTitle": "Moonfin Diagnóstico web",
     "webDiagnosticsIntro": "Utilice esta página para diagnosticar problemas de conectividad del navegador (CORS, contenido mixto y configuración de descubrimiento).",
     "webDiagnosticsDetectedMixedContentFailure": "Error de contenido mixto detectado",
     "webDiagnosticsDetectedCorsPreflightFailure": "Falla CORS/verificación previa detectada",
-    "webDiagnosticsMixedContentFailureBody": "Tortugarr detectó una página HTTPS que intentaba llamar a una URL del servidor HTTP. Los navegadores bloquean esta solicitud antes de que llegue a su servidor.",
-    "webDiagnosticsCorsFailureBody": "Tortugarr detectó una falla en la solicitud a nivel del navegador que comúnmente se debe a la falta de CORS o encabezados de verificación previa en el servidor de medios.",
+    "webDiagnosticsMixedContentFailureBody": "Moonfin detectó una página HTTPS que intentaba llamar a una URL del servidor HTTP. Los navegadores bloquean esta solicitud antes de que llegue a su servidor.",
+    "webDiagnosticsCorsFailureBody": "Moonfin detectó una falla en la solicitud a nivel del navegador que comúnmente se debe a la falta de CORS o encabezados de verificación previa en el servidor de medios.",
     "webDiagnosticsTargetUrl": "URL de destino: {url}",
     "@webDiagnosticsTargetUrl": {
         "description": "Target URL shown in diagnostics summary",
@@ -7133,7 +7092,7 @@
     "notConfigured": "no configurado",
     "webDiagnosticsMixedContent": "Contenido mixto",
     "webDiagnosticsMixedContentDetected": "Esta página se carga a través de HTTPS, pero una o más URL configuradas son HTTP. Los navegadores impiden que las páginas HTTPS llamen a las API HTTP.",
-    "webDiagnosticsMixedContentFix": "Solución: sirva su servidor de medios o punto final proxy a través de HTTPS, o cargue Tortugarr a través de HTTP solo en redes locales confiables.",
+    "webDiagnosticsMixedContentFix": "Solución: sirva su servidor de medios o punto final proxy a través de HTTPS, o cargue Moonfin a través de HTTP solo en redes locales confiables.",
     "webDiagnosticsNoMixedContentDetected": "No se detectó ninguna configuración obvia de contenido mixto en la configuración actual del tiempo de ejecución.",
     "webDiagnosticsCorsChecklist": "Lista de verificación CORS",
     "webDiagnosticsCorsChecklistItem1": "• Permitir el origen del navegador en Access-Control-Allow-Origin.",
@@ -7300,7 +7259,6 @@
     "failedToExtractCbrArchive": "No se pudo extraer el archivo .cbr.",
     "cb7ExtractionUnavailable": "La extracción CB7 no está disponible en esta plataforma.",
     "cb7ExtractionPluginUnavailable": "El complemento de extracción CB7 no está disponible en esta plataforma.",
-    "closeGenrePanel": "Cerrar panel de género",
     "loadingShuffle": "Cargando reproducción aleatoria...",
     "libraryShuffleLabel": "ALEATORIO POR BIBLIOTECA",
     "randomShuffleLabel": "ALEATORIO TOTAL",
@@ -7330,7 +7288,7 @@
     "@detailScreenStyle": {
         "description": "Label for the media detail screen layout style setting"
     },
-    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de Tortugarr. Moderno es un diseño cinematográfico adaptable.",
+    "detailScreenStyleSubtitle": "Clásico es el diseño centrado original de moonfin. Moderno es un diseño cinematográfico adaptable.",
     "@detailScreenStyleSubtitle": {
         "description": "Explanation under the detail screen style setting"
     },
@@ -7362,13 +7320,13 @@
     "@recommendationSystem": {
         "description": "Label for the Recommendation System setting"
     },
-    "recommendationSystemSubtitle": "Usa el algoritmo local de la biblioteca Tortugarr Recommends o las métricas de similitud en línea de TMDb. Nota: las recomendaciones en línea requieren la integración con Seerr.",
+    "recommendationSystemSubtitle": "Usa el algoritmo local de la biblioteca Moonfin Recommends o las métricas de similitud en línea de TMDb. Nota: las recomendaciones en línea requieren la integración con Seerr.",
     "@recommendationSystemSubtitle": {
         "description": "Explanation under the recommendation system setting"
     },
-    "recommendationSystemMoonfin": "Tortugarr Recommends",
+    "recommendationSystemMoonfin": "Moonfin Recommends",
     "@recommendationSystemMoonfin": {
-        "description": "Recommendation system option: Tortugarr Recommends"
+        "description": "Recommendation system option: Moonfin Recommends"
     },
     "recommendationSystemTmdb": "Similitud de TMDb",
     "@recommendationSystemTmdb": {
@@ -7378,7 +7336,7 @@
     "@recommendationsApplyParentalRatingCap": {
         "description": "Label for the toggle that controls whether similar suggestions are capped by target media parental rating"
     },
-    "recommendationsApplyParentalRatingCapSubtitle": "Limita las sugerencias de Tortugarr Recommends según la clasificación parental del contenido de referencia",
+    "recommendationsApplyParentalRatingCapSubtitle": "Limita las sugerencias de Moonfin Recommends según la clasificación parental del contenido de referencia",
     "@recommendationsApplyParentalRatingCapSubtitle": {
         "description": "Explanation under the parental rating cap setting toggle"
     },
@@ -7426,7 +7384,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Los temas personalizados modifican los elementos visuales de todo Tortugarr. Elige una de estas opciones según tu estilo.",
+    "customThemeSubtitle": "Los temas personalizados modifican los elementos visuales de todo Moonfin. Elige una de estas opciones según tu estilo.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -7599,7 +7557,7 @@
     "@shuffleAllMusic": {
         "description": "Car browse action that shuffles the whole music library"
     },
-    "carSignInPrompt": "Inicia sesión en Tortugarr desde tu teléfono",
+    "carSignInPrompt": "Inicia sesión en Moonfin desde tu teléfono",
     "@carSignInPrompt": {
         "description": "Shown in the car when no account is signed in"
     },
@@ -8939,7 +8897,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller es el renderizador de GPU moderno de Flutter, que ofrece animaciones más fluidas y menos tirones. En algunos TV box y GPU antiguas puede provocar fallos gráficos o vídeo en negro; desactívalo si te ocurre. Automático elige la mejor opción para tu dispositivo. Reinicia Tortugarr para aplicar los cambios.",
+    "impellerRenderingSubtitle": "Impeller es el renderizador de GPU moderno de Flutter, que ofrece animaciones más fluidas y menos tirones. En algunos TV box y GPU antiguas puede provocar fallos gráficos o vídeo en negro; desactívalo si te ocurre. Automático elige la mejor opción para tu dispositivo. Reinicia Moonfin para aplicar los cambios.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8950,7 +8908,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Tortugarr debe reiniciarse para cambiar el motor de renderizado. Cierra la aplicación ahora y vuelve a abrirla para aplicar los cambios.",
+    "impellerRestartMessage": "Moonfin debe reiniciarse para cambiar el motor de renderizado. Cierra la aplicación ahora y vuelve a abrirla para aplicar los cambios.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9019,6 +8977,64 @@
     "@homeRowsPaddingDescription": {
         "description": "Description for home rows padding setting"
     },
+    "animeMarkerFiller": "Insignia en un episodio de anime que es de relleno, lo que significa que no está adaptada del manga original",
+    "@animeMarkerFiller": {
+        "description": "Badge on an anime episode that is filler, meaning it is not adapted from the source manga"
+    },
+    "animeMarkerMixed": "Insignia en un episodio de anime que mezcla material original con relleno, por lo que aún contiene historia",
+    "@animeMarkerMixed": {
+        "description": "Badge on an anime episode that mixes source material with filler, so it still contains story"
+    },
+    "animeMarkerAnimeCanon": "Insignia en un episodio de anime que no está en el manga original pero que es parte de la propia continuidad del anime",
+    "@animeMarkerAnimeCanon": {
+        "description": "Badge on an anime episode that is not in the source manga but is part of the anime's own continuity"
+    },
+    "animeMarkerMangaCanon": "Insignia en un episodio de anime adaptado del manga original",
+    "@animeMarkerMangaCanon": {
+        "description": "Badge on an anime episode adapted from the source manga"
+    },
+    "pickDiscoverySubjects": "Elige qué temas mostrar en Descubrir.",
+    "@pickDiscoverySubjects": {
+        "description": "Instruction text in discovery subject picker"
+    },
+    "pickAudiobookGenres": "Elige qué géneros mostrar en Descubrir audiolibros.",
+    "@pickAudiobookGenres": {
+        "description": "Instruction text in audiobook genre picker"
+    },
+    "discoverAudiobooks": "Descubrir audiolibros",
+    "@discoverAudiobooks": {
+        "description": "Section title for audiobook discovery"
+    },
+    "librivoxDescription": "Títulos populares de dominio público de LibriVox.",
+    "@librivoxDescription": {
+        "description": "Subtitle for audiobook discovery section"
+    },
+    "titlesCount": "{count} títulos",
+    "@titlesCount": {
+        "description": "Label showing number of titles",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "trendingTitlesOpenLibrary": "Títulos en tendencia por tema de Open Library.",
+    "@trendingTitlesOpenLibrary": {
+        "description": "Subtitle for book discovery section"
+    },
+    "enableFolderView": "Habilitar vista de carpetas",
+    "@enableFolderView": {
+        "description": "Setting for enabling folder view"
+    },
+    "showFolderBrowsingOption": "Mostrar opción de exploración por carpetas",
+    "@showFolderBrowsingOption": {
+        "description": "Description for folder view"
+    },
+    "posterSizeImageTypeFolderView": "Tamaño de póster, tipo de imagen, vista de carpetas",
+    "@posterSizeImageTypeFolderView": {
+        "description": "Library display settings subtitle"
+    },
+    "closeGenrePanel": "Cerrar panel de género",
     "tgMissing": "Falta",
     "tgComing": "Próximamente",
     "tgComingOn": "Disponible {date}",

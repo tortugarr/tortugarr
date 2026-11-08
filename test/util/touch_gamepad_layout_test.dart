@@ -126,8 +126,13 @@ void main() {
           aspect,
           portrait: portrait,
         );
+        final layout = touchPadLayoutFor(
+          core,
+          tall: portrait,
+          padType: padType,
+        );
         final placed = placeTouchPad(
-          touchPadLayoutFor(core, tall: portrait, padType: padType),
+          layout,
           size,
           EdgeInsets.zero,
           picture,
@@ -164,6 +169,21 @@ void main() {
               p.rect.top >= picture.bottom - 0.5,
               isTrue,
               reason: '$core ${p.control.label} covers the picture',
+            );
+          }
+        } else if (layout.touchScreen && aspect == 2 / 3) {
+          // The lower half of a real DS picture is its touch screen.
+          final lower = Rect.fromLTRB(
+            picture.left,
+            picture.center.dy,
+            picture.right,
+            picture.bottom,
+          );
+          for (final p in placed) {
+            expect(
+              p.rect.overlaps(lower),
+              isFalse,
+              reason: '$core ${p.control.label} covers the touch screen',
             );
           }
         }

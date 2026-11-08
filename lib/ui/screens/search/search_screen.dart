@@ -560,7 +560,15 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   String _voiceLocaleCode(BuildContext context) {
-    final locale = Localizations.localeOf(context);
+    final appLocale = Localizations.localeOf(context);
+    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    // Recognizers pick their language pack by region, so a bare app language
+    // like en borrows the device's region when the languages match.
+    final locale =
+        (appLocale.countryCode ?? '').isEmpty &&
+            deviceLocale.languageCode == appLocale.languageCode
+        ? deviceLocale
+        : appLocale;
     final languageCode = locale.languageCode.trim();
     final countryCode = locale.countryCode?.trim();
 
@@ -614,6 +622,7 @@ class _SearchScreenState extends State<SearchScreen>
       onText: (text, {required isFinal}) {
         _applyVoiceSearchResult(text, isFinal: isFinal);
       },
+      onError: () => _showVoiceSearchError(_voiceErrorMessage(l10n)),
     );
 
     if (!mounted) return;
@@ -660,9 +669,8 @@ class _SearchScreenState extends State<SearchScreen>
     if (code.contains('error_busy') || code.contains('error_client')) {
       return l10n.voiceSearchServiceBusy;
     }
-    final message = _voiceController.lastErrorMessage?.trim();
-    if (message != null && message.isNotEmpty) {
-      return message;
+    if (code == 'speech_unavailable') {
+      return l10n.speechRecognitionUnavailable;
     }
     return l10n.voiceSearchUnavailable;
   }
@@ -690,9 +698,15 @@ class _SearchScreenState extends State<SearchScreen>
     );
 
     // A screen reader can keep the snackbar from auto-dismissing, so close this
-    // specific snackbar after a delay rather than whatever is current then.
-    await Future.delayed(const Duration(seconds: 5));
-    controller.close();
+    // specific snackbar if it's still up after a delay rather than whatever is
+    // current then.
+    await controller.closed.timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        controller.close();
+        return SnackBarClosedReason.hide;
+      },
+    );
   }
 
   KeyEventResult _onVoiceKey(FocusNode node, KeyEvent event) {
@@ -754,7 +768,7 @@ class _SearchScreenState extends State<SearchScreen>
           : KeyEventResult.ignored;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowRight &&
-        !PlatformDetection.isAppleTV) {
+        VoiceSearchController.isSupported) {
       _voiceFocus.requestFocus();
       return KeyEventResult.handled;
     }
@@ -849,15 +863,6 @@ class _SearchScreenState extends State<SearchScreen>
         decoration: BoxDecoration(
           color: backgroundColor,
           shape: BoxShape.circle,
-          boxShadow: isListening
-              ? [
-                  BoxShadow(
-                    color: AppColorScheme.accent.withValues(alpha: 0.27),
-                    blurRadius: 18,
-                    spreadRadius: 2,
-                  ),
-                ]
-              : null,
         ),
         child: Center(
           child: isInitializing
@@ -883,7 +888,15 @@ class _SearchScreenState extends State<SearchScreen>
     return Focus(
       focusNode: _voiceFocus,
       onKeyEvent: _onVoiceKey,
-      child: button,
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          if (isListening && !MediaQuery.disableAnimationsOf(context))
+            _ListeningPulse(size: size),
+          button,
+        ],
+      ),
     );
   }
 
@@ -959,8 +972,8 @@ class _SearchScreenState extends State<SearchScreen>
                                 inputPurpose: InputPurpose.search,
                                 suggestionsBuilder: _fetchKeyboardSuggestions,
                                 recentSuggestions: _recentSearches,
-                                preferSystemIme: _userPreferences.get(
-                                  UserPreferences.preferSystemImeKeyboard,
+                                keyboardStyle: _userPreferences.get(
+                                  UserPreferences.keyboardStyle,
                                 ),
                                 hint: searchHint,
                                 textStyle: TextStyle(
@@ -972,9 +985,9 @@ class _SearchScreenState extends State<SearchScreen>
                                   fontSize: searchFontSize,
                                 ),
                                 prefixIcon: searchIcon,
-                                suffixIcon: PlatformDetection.isAppleTV
-                                    ? null
-                                    : _buildVoiceActivation(searchIconColor),
+                                suffixIcon: VoiceSearchController.isSupported
+                                    ? _buildVoiceActivation(searchIconColor)
+                                    : null,
                                 filled: true,
                                 fillColor: AppColorScheme.surfaceVariant,
                                 borderRadius: searchHeight / 2,
@@ -1038,7 +1051,8 @@ class _SearchScreenState extends State<SearchScreen>
                                       onPressed: _searchController.clear,
                                       visualDensity: VisualDensity.compact,
                                     ),
-                                  _buildVoiceActivation(searchIconColor),
+                                  if (VoiceSearchController.isSupported)
+                                    _buildVoiceActivation(searchIconColor),
                                   const SizedBox(width: 6),
                                 ],
                               ),
@@ -1777,6 +1791,49 @@ class _ServerBadge extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A red ring that keeps growing out of the mic while it listens.
+class _ListeningPulse extends StatefulWidget {
+  const _ListeningPulse({required this.size});
+
+  final double size;
+
+  @override
+  State<_ListeningPulse> createState() => _ListeningPulseState();
+}
+
+class _ListeningPulseState extends State<_ListeningPulse>
+    with SingleTickerProviderStateMixin {
+  late final _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1200),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, _) {
+        final t = _controller.value;
+        final size = widget.size * (1 + 0.6 * t);
+        return Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red.withValues(alpha: 0.5 * (1 - t)),
+          ),
+        );
+      },
     );
   }
 }

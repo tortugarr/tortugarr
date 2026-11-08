@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:moonfin/data/models/aggregated_item.dart';
 import 'package:moonfin/data/services/media_server_client_factory.dart';
 import 'package:moonfin/playback/appletv_audio_now_playing_feeder.dart';
-import 'package:moonfin/playback/appletv_backend.dart';
+import 'package:moonfin/playback/native_apple_player_backend.dart';
 import 'package:playback_core/playback_core.dart';
 
 // On tvOS music has no player screen, so the feeder takes the presses that
@@ -30,7 +30,7 @@ class _RecordingManager extends PlaybackManager {
   Future<void> previous() async => calls.add('previous');
 }
 
-class _FakeBackend implements AppleTvBackend {
+class _FakeBackend implements NativeApplePlayerBackend {
   final actions = StreamController<Map<String, dynamic>>.broadcast();
 
   @override

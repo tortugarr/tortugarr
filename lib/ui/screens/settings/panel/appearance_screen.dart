@@ -228,13 +228,6 @@ class _AppearanceScreenState extends State<_AppearanceScreen>
                     },
                     onChanged: _pushPersonalizationSync,
                   ),
-                  SwitchPreferenceTile(
-                    preference: UserPreferences.backdropEnabled,
-                    title: l10n.backgroundBackdrops,
-                    subtitle: l10n.showBackdropImages,
-                    icon: Icons.photo,
-                    onChanged: _pushPersonalizationSync,
-                  ),
                   EnumPreferenceTile<OledMode>(
                     preference: UserPreferences.oledMode,
                     title: l10n.oledMode,

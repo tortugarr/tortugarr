@@ -620,6 +620,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     final itemAspectRatio = _itemAspectRatio(item);
     return MediaCard(
       animeMarkerItemId: item.id,
+      recordingItemId: item.id,
       title: item.name,
       subtitle: _cardSubtitle(item),
       imageUrl: _imageUrl(
@@ -740,6 +741,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                   final itemAspectRatio = _itemAspectRatio(item);
 
                   Widget card = MediaCard(
+                    recordingItemId: item.id,
                     title: item.name,
                     subtitle: _cardSubtitle(item),
                     imageUrl: _imageUrl(

@@ -707,7 +707,8 @@ const Size _tabSizeTall = Size(110, 40);
 const Size _pillSize = Size(80, 28);
 
 /// Absolute rects for every control. Landscape: thumb clusters at the bottom
-/// corners, shoulders at the top corners, pills bottom centre, menu top centre.
+/// corners, shoulders at the top corners, pills bottom centre or under the
+/// shoulders for a touch screen, menu top centre.
 /// Upright: the controller fills the space under [pictureRect], scaled to fit,
 /// with the two clusters mirrored about the centre line so matching rows read
 /// level.
@@ -815,17 +816,23 @@ List<PlacedControl> placeTouchPad(
   }
   const gap = 10.0;
   final total = pills.length * _pillSize.width + (pills.length - 1) * gap;
+  // Sideways the touch screen fills the bottom middle, so the pills move
+  // under the shoulder tabs, the first half on the left.
+  final besideTabs = !portrait && layout.touchScreen;
+  final half = (pills.length + 1) ~/ 2;
+  final besideTop = tabY + math.max(shL.length, shR.length) * tabStep;
   for (final (i, c) in pills.indexed) {
+    double x, y;
+    if (besideTabs) {
+      final onLeft = i < half;
+      x = onLeft ? safe.left + tabX : w - safe.right - tabX - _pillSize.width;
+      y = besideTop + (onLeft ? i : i - half) * (_pillSize.height + gap);
+    } else {
+      x = w / 2 - total / 2 + i * (_pillSize.width + gap);
+      y = pillY;
+    }
     out.add(
-      PlacedControl(
-        c,
-        Rect.fromLTWH(
-          w / 2 - total / 2 + i * (_pillSize.width + gap),
-          pillY,
-          _pillSize.width,
-          _pillSize.height,
-        ),
-      ),
+      PlacedControl(c, Rect.fromLTWH(x, y, _pillSize.width, _pillSize.height)),
     );
   }
   for (final c in layout.controls) {

@@ -16,14 +16,17 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
   final MediaStreamResolver _inner;
   final OfflineStreamResolver _offline;
   final Future<void> Function(String itemId)? _restoreSubtitles;
+  final bool Function()? _streamFromServer;
 
   LocalFirstMediaStreamResolver({
     required MediaStreamResolver inner,
     required OfflineStreamResolver offline,
     Future<void> Function(String itemId)? restoreSubtitles,
+    bool Function()? streamFromServer,
   }) : _inner = inner,
        _offline = offline,
-       _restoreSubtitles = restoreSubtitles;
+       _restoreSubtitles = restoreSubtitles,
+       _streamFromServer = streamFromServer;
 
   @override
   Future<StreamResolutionResult> resolve(
@@ -41,7 +44,13 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
     // Only substitute the local copy on direct-play-eligible requests.
     // Force-transcode requests disable direct play and should keep streaming.
     if (enableDirectPlay) {
-      final local = await _tryResolveLocal(mediaItem, mediaSourceId);
+      // A play from server pick skips the download, unless the server is out
+      // of reach and the download is the only copy left.
+      final skipLocal =
+          (_streamFromServer?.call() ?? false) && !shouldUseOfflineCatalog();
+      final local = skipLocal
+          ? null
+          : await _tryResolveLocal(mediaItem, mediaSourceId);
       if (local != null) return local;
       // With no local copy and no server, the network resolve below just
       // burns through its timeouts before failing anyway. TV now has both
@@ -92,17 +101,7 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
       // stream index to player track mapping that turns a selection into a
       // player call, so it describes those and nothing else.
       final mediaStreams = local.isTranscoded
-          ? [
-              for (final sub in local.externalSubtitles)
-                <String, dynamic>{
-                  'Type': 'Subtitle',
-                  'Index': sub.index,
-                  'IsExternal': true,
-                  'Codec': sub.codec,
-                  'Title': sub.title,
-                  'Language': sub.language,
-                },
-            ]
+          ? transcodedDownloadSubtitleStreams(local)
           : local.mediaStreams;
 
       return StreamResolutionResult(
@@ -152,4 +151,30 @@ class LocalFirstMediaStreamResolver extends MediaStreamResolver {
     if (dot < 0 || dot == path.length - 1) return null;
     return path.substring(dot + 1).toLowerCase();
   }
+}
+
+/// Describe the actual playable sidecars, but preserve each original stream's
+/// selection identity so a saved secondary language survives server/download
+/// switches. Playback must continue using the local codec and delivery flags.
+List<Map<String, dynamic>> transcodedDownloadSubtitleStreams(
+  OfflineStreamResult local,
+) {
+  final originals = <int, Map<String, dynamic>>{
+    for (final stream in local.mediaStreams)
+      if (stream['Type'] == 'Subtitle' && stream['Index'] is int)
+        stream['Index'] as int: stream,
+  };
+  return [
+    for (final sub in local.externalSubtitles)
+      <String, dynamic>{
+        'Type': 'Subtitle',
+        'Index': sub.index,
+        'IsExternal': true,
+        'Codec': sub.codec,
+        'Title': sub.title,
+        'Language': sub.language,
+        if (originals.containsKey(sub.index))
+          'OriginalSubtitleStream': originals[sub.index],
+      },
+  ];
 }

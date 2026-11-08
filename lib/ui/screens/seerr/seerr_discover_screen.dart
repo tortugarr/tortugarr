@@ -349,7 +349,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
     final topPad = MediaQuery.of(context).padding.top;
     final prefs = GetIt.instance<UserPreferences>();
     final navbarPosition = prefs.get(UserPreferences.navbarPosition);
-    final backdropEnabled = prefs.get(UserPreferences.backdropEnabled);
+    final backdropEnabled = prefs.get(UserPreferences.homeBackdropEnabled);
     final navbarHeight = navbarPosition == NavbarPosition.top
         ? (PlatformDetection.isTV ? 95.0 : PlatformDetection.useMobileUi ? 60.0 : 80.0)
         : 0.0;
@@ -783,7 +783,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
     final platformScale =
         PlatformDetection.isTV ? 0.8 * desktopScale : desktopScale;
     final imageHeight =
-        modernImageHeight(modernPosterSize(_prefs), platformScale);
+        modernImageHeight(_prefs.get(UserPreferences.posterSize), platformScale);
     return (
       imageHeight: imageHeight,
       portraitWidth: imageHeight * 2 / 3,
@@ -856,7 +856,8 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
         : sizes.focusedWidth;
     final rowPadding = 5.0 * desktopScale;
     final rowHeight = sizes.imageHeight +
-        modernMetadataBudget(_prefs) * desktopScale +
+        modernMetadataBudget(_prefs, UserPreferences.detailsRatings) *
+            desktopScale +
         2 * rowPadding;
     final scrollController = _getRowScroll(rowIndex);
 
@@ -950,27 +951,35 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
                 card: card,
                 prefs: _prefs,
                 details: expanded
-                    ? ValueListenableBuilder<Map<String, Map<String, double>>>(
-                        valueListenable: _modernRatings,
-                        builder: (context, ratings, _) => ModernCardDetails(
-                          prefs: _prefs,
-                          cardWidth: width,
-                          detailsWidth: modernDetailsWidth(
-                            controller: scrollController,
-                            index: index,
-                            itemCount: row.items.length,
-                            itemExtent: sizes.portraitWidth,
-                            itemSpacing: itemSpacing,
-                            focusedWidth: width,
-                            maxWidth: maxDetailsWidth,
-                            leadingInset: sideInset,
-                            trailingInset: sideInset,
+                    ? ModernHoverBuilder(
+                        expansion: _modernExpansion,
+                        cardKey: key,
+                        controller: scrollController,
+                        builder: (context, hovered) =>
+                            ValueListenableBuilder<Map<String, Map<String, double>>>(
+                          valueListenable: _modernRatings,
+                          builder: (context, ratings, _) => ModernCardDetails(
+                            prefs: _prefs,
+                            ratingSettings: UserPreferences.detailsRatings,
+                            cardWidth: width,
+                            detailsWidth: modernDetailsWidth(
+                              controller: scrollController,
+                              index: index,
+                              itemCount: row.items.length,
+                              itemExtent: sizes.portraitWidth,
+                              itemSpacing: itemSpacing,
+                              focusedWidth: width,
+                              maxWidth: maxDetailsWidth,
+                              leadingInset: sideInset,
+                              trailingInset: sideInset,
+                              hovered: hovered,
+                            ),
+                            overview: item.overview,
+                            communityRating: (item.voteAverage ?? 0) > 0
+                                ? item.voteAverage
+                                : null,
+                            additionalRatings: ratings[key] ?? const {},
                           ),
-                          overview: item.overview,
-                          communityRating: (item.voteAverage ?? 0) > 0
-                              ? item.voteAverage
-                              : null,
-                          additionalRatings: ratings[key] ?? const {},
                         ),
                       )
                     : null,

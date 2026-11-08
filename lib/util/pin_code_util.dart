@@ -24,6 +24,7 @@ class PinCodeUtil {
   String get _pinEnabledKey => '${_namespace}_pin_enabled_$_userId';
   String get _failedAttemptsKey => '${_namespace}_pin_failed_$_userId';
   String get _lockedUntilKey => '${_namespace}_pin_locked_until_$_userId';
+  String get _serverBackedKey => '${_namespace}_pin_server_$_userId';
 
   /// Wrong guesses allowed before each further one costs a wait.
   static const _freeAttempts = 5;
@@ -34,8 +35,26 @@ class PinCodeUtil {
   static const _lockoutStep = Duration(seconds: 30);
   static const _maxLockout = Duration(minutes: 15);
 
-  /// Whether the user has a PIN enabled.
-  bool get isPinEnabled => _store.getBool(_pinEnabledKey) ?? false;
+  /// Whether the user has a PIN enabled, here or on the server.
+  bool get isPinEnabled =>
+      (_store.getBool(_pinEnabledKey) ?? false) || isServerBacked;
+
+  /// Whether the server holds a PIN for the user, as last heard. The hash kept
+  /// here is then only a copy of what the user last typed, for when the server
+  /// cannot be asked.
+  bool get isServerBacked => _store.getBool(_serverBackedKey) ?? false;
+
+  Future<void> setServerBacked(bool value) async {
+    if (value) {
+      await _store.setBool(_serverBackedKey, true);
+    } else {
+      await _store.remove(_serverBackedKey);
+    }
+  }
+
+  /// Whether there is a PIN on the device to check a guess against.
+  bool get hasLocalVerifier =>
+      (_store.getString(_pinHashKey) ?? '').isNotEmpty;
 
   /// Hash a PIN string using SHA-256.
   static String hashPin(String pin) {
@@ -97,6 +116,7 @@ class PinCodeUtil {
   Future<void> removePin() async {
     await _store.remove(_pinHashKey);
     await _store.setBool(_pinEnabledKey, false);
+    await _store.remove(_serverBackedKey);
     await clearFailedAttempts();
   }
 

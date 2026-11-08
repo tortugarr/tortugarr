@@ -5,7 +5,7 @@ import 'package:playback_core/playback_core.dart';
 import '../data/models/aggregated_item.dart';
 import '../data/services/media_server_client_factory.dart';
 import '../util/audio_artwork_url.dart';
-import 'appletv_backend.dart';
+import 'native_apple_player_backend.dart';
 
 /// Keeps the tvOS system Now Playing card (and Siri Remote / Control Center
 /// transport) fed for MUSIC.
@@ -20,14 +20,14 @@ class AppleTvAudioNowPlayingFeeder {
   AppleTvAudioNowPlayingFeeder({
     required PlaybackManager manager,
     required MediaServerClientFactory clientFactory,
-    required AppleTvBackend backend,
+    required NativeApplePlayerBackend backend,
   })  : _manager = manager,
         _clientFactory = clientFactory,
         _backend = backend;
 
   final PlaybackManager _manager;
   final MediaServerClientFactory _clientFactory;
-  final AppleTvBackend _backend;
+  final NativeApplePlayerBackend _backend;
   final _subs = <StreamSubscription>[];
 
   void start() {

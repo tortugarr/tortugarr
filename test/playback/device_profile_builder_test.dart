@@ -124,7 +124,9 @@ Set<String> _codecUnsupportedRangeTypes(
 
   for (final rawProfile in codecProfiles) {
     final codecProfile = rawProfile as Map<dynamic, dynamic>;
-    if (codecProfile['Type'] != 'Video' || codecProfile['Codec'] != codec) {
+    if (codecProfile['Type'] != 'Video' ||
+        codecProfile['Codec'] != codec ||
+        codecProfile['Container'] != null) {
       continue;
     }
 
@@ -145,6 +147,31 @@ Set<String> _codecUnsupportedRangeTypes(
   }
 
   return <String>{};
+}
+
+Map<dynamic, dynamic>? _hlsHevcCodecProfile(
+  Map<String, dynamic> profile,
+  String property,
+) {
+  final codecProfiles = (profile['CodecProfiles'] as List<dynamic>)
+      .cast<Map<dynamic, dynamic>>();
+  for (final entry in codecProfiles) {
+    if (entry['Container'] == 'hls' &&
+        entry['Codec'] == 'hevc' &&
+        (entry['Conditions'] as List<dynamic>).any(
+          (condition) => condition['Property'] == property,
+        )) {
+      return entry;
+    }
+  }
+  return null;
+}
+
+Set<String> _hlsHevcRangeTypes(Map<String, dynamic> profile) {
+  final entry = _hlsHevcCodecProfile(profile, 'VideoRangeType');
+  if (entry == null) return <String>{};
+  final condition = (entry['Conditions'] as List<dynamic>).single as Map;
+  return (condition['Value'] as String).split('|').toSet();
 }
 
 Map<dynamic, dynamic>? _stereoAacFallbackProfile(Map<String, dynamic> profile) {
@@ -497,6 +524,93 @@ void main() {
     });
   });
 
+  group('DeviceProfileBuilder transcode audio codecs', () {
+    Set<String> audioDirectPlayCodecs(Map<String, dynamic> profile) {
+      final audio = (profile['DirectPlayProfiles'] as List<dynamic>)
+          .cast<Map<String, dynamic>>()
+          .firstWhere((entry) => entry['Type'] == 'Audio');
+      return (audio['AudioCodec'] as String).split(',').toSet();
+    }
+
+    List<String> hlsAudioCodecs(
+      Map<String, dynamic> profile,
+      String container,
+    ) =>
+        (_hlsVideoTranscodingProfiles(profile).firstWhere(
+                  (entry) => entry['Container'] == container,
+                )['AudioCodec']
+                as String)
+            .split(',');
+
+    test('a picked codec leaves video direct play under every label', () {
+      final profile = DeviceProfileBuilder.build(
+        universalAudioDecode: true,
+        transcodeAudioCodecs: {'aac', 'dts', 'pcm'},
+      );
+      final video = _videoDirectPlayAudioCodecs(profile);
+      for (final codec in [
+        'aac',
+        'aac_latm',
+        'dts',
+        'dca',
+        'pcm_s16le',
+        'pcm_s24le',
+        'pcm_alaw',
+      ]) {
+        expect(video, isNot(contains(codec)), reason: codec);
+      }
+      expect(video, containsAll(<String>['ac3', 'eac3', 'opus', 'flac']));
+      expect(
+        audioDirectPlayCodecs(profile),
+        containsAll(<String>['aac', 'dts']),
+      );
+    });
+
+    test('the transcode re-encodes it to the fallback instead of copying', () {
+      final profile = DeviceProfileBuilder.build(
+        universalAudioDecode: true,
+        audioFallbackCodec: AudioFallbackCodec.eac3,
+        transcodeAudioCodecs: {'aac', 'opus'},
+      );
+      for (final container in ['ts', 'mp4']) {
+        final codecs = hlsAudioCodecs(profile, container);
+        expect(codecs.first, 'eac3', reason: container);
+        expect(codecs, isNot(contains('aac')), reason: container);
+        expect(codecs, isNot(contains('opus')), reason: container);
+      }
+    });
+
+    test('picking everything never leaves an empty list, which means any', () {
+      final profile = DeviceProfileBuilder.build(
+        universalAudioDecode: true,
+        transcodeAudioCodecs: DeviceProfileBuilder.transcodableAudioCodecs.keys
+            .toSet(),
+      );
+      final directPlay = (profile['DirectPlayProfiles'] as List<dynamic>)
+          .cast<Map<String, dynamic>>();
+      expect(directPlay.where((entry) => entry['Type'] == 'Video'), isEmpty);
+      for (final entry
+          in (profile['TranscodingProfiles'] as List<dynamic>)
+              .cast<Map<String, dynamic>>()) {
+        expect(
+          entry['AudioCodec'],
+          isNotEmpty,
+          reason: '${entry['Container']}',
+        );
+      }
+    });
+
+    test('the settings readout drops the picks too', () {
+      final targets = DeviceProfileBuilder.transcodeTargetAudioCodecs(
+        fallbackCodec: AudioFallbackCodec.auto,
+        forAvFoundation: false,
+        transcodeAudioCodecs: {'aac'},
+      );
+      expect(targets, isNot(contains('aac')));
+      expect(targets, contains('ac3'));
+    });
+  });
+
   group('DeviceProfileBuilder bridged audio sample rate', () {
     test('a player that bridges audio caps the codecs it has to re-encode', () {
       final cap = _sampleRateCap(
@@ -713,6 +827,70 @@ void main() {
 
       expect(_excludesVideoProfile(profile, 'hevc', 'main 10'), isFalse);
     });
+
+    test('hevcRequiresFmp4Hls holds HLS copies to Main and Main 10 and leaves '
+        'direct play alone', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        hevcRequiresFmp4Hls: true,
+      );
+
+      final hevcAllowLists = (profile['CodecProfiles'] as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>()
+          .where(
+            (entry) =>
+                entry['Codec'] == 'hevc' &&
+                (entry['Conditions'] as List<dynamic>).any(
+                  (c) =>
+                      c['Property'] == 'VideoProfile' &&
+                      c['Condition'] == 'EqualsAny',
+                ),
+          )
+          .toList();
+      expect(hevcAllowLists, hasLength(1));
+      expect(hevcAllowLists.single['Container'], 'hls');
+      expect(
+        (hevcAllowLists.single['Conditions'] as List<dynamic>).single['Value'],
+        'main|main 10',
+      );
+    });
+
+    test('hevcDirectPlayOnly keeps HEVC direct playable but out of HLS', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        transcodeHevcAllowed: true,
+        hevcRequiresFmp4Hls: true,
+        hevcDirectPlayOnly: true,
+      );
+
+      final directPlayVideo = (profile['DirectPlayProfiles'] as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>()
+          .singleWhere((entry) => entry['Type'] == 'Video');
+      expect(
+        (directPlayVideo['VideoCodec'] as String).split(','),
+        contains('hevc'),
+      );
+      for (final entry
+          in (profile['TranscodingProfiles'] as List<dynamic>)
+              .cast<Map<dynamic, dynamic>>()
+              .where((entry) => entry['Type'] == 'Video')) {
+        expect(
+          (entry['VideoCodec'] as String).split(','),
+          isNot(contains('hevc')),
+        );
+      }
+    });
+
+    test('without hevcRequiresFmp4Hls no HLS HEVC allow-list is sent', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+      );
+
+      expect(_hlsHevcCodecProfile(profile, 'VideoProfile'), isNull);
+    });
   });
 
   group('DeviceProfileBuilder HEVC range filtering', () {
@@ -841,6 +1019,108 @@ void main() {
 
       expect(unsupportedRanges, isNot(contains('DOVI_WITH_HDR10_PLUS')));
       expect(unsupportedRanges, isNot(contains('DOVI_WITH_ELHDR10_PLUS')));
+    });
+
+    test('hevcRequiresFmp4Hls asks for Dolby Vision on HLS copies but '
+        'refuses profile 7, which still direct plays', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        supportsHevcDolbyVision: true,
+        supportsHevcDolbyVisionEl: true,
+        supportsHevcHdr10: true,
+        supportsHevcHdr10Plus: true,
+        supportsDvProfile5: true,
+        supportsDvProfile7: true,
+        supportsDvProfile8: true,
+        hevcRequiresFmp4Hls: true,
+      );
+
+      final directPlay = _codecUnsupportedRangeTypes(profile, 'hevc');
+      expect(directPlay, isNot(contains('DOVIWithEL')));
+      expect(directPlay, isNot(contains('DOVIWithELHDR10Plus')));
+
+      final entry = _hlsHevcCodecProfile(profile, 'VideoRangeType')!;
+      final condition = (entry['Conditions'] as List<dynamic>).single as Map;
+      expect(condition['Condition'], 'EqualsAny');
+
+      final hls = _hlsHevcRangeTypes(profile);
+      expect(
+        hls,
+        containsAll(<String>[
+          'SDR',
+          'HDR10',
+          'DOVI',
+          'DOVIWithHDR10',
+          'DOVIWithHDR10Plus',
+          'DOVIInvalid',
+        ]),
+      );
+      expect(hls, isNot(contains('DOVIWithEL')));
+      expect(hls, isNot(contains('DOVIWithELHDR10Plus')));
+    });
+
+    test('the HLS entry skips only profiles 8.4 and 8.2, one value per '
+        'condition since the server parses no list there', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        supportsHevcDolbyVision: true,
+        supportsHevcHdr10: true,
+        hevcRequiresFmp4Hls: true,
+      );
+
+      final entry = _hlsHevcCodecProfile(profile, 'VideoRangeType')!;
+      final apply = (entry['ApplyConditions'] as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>();
+      expect(apply.map((c) => c['Condition']).toSet(), <String>{'NotEquals'});
+      expect(apply.map((c) => c['Value']), <String>[
+        'DOVIWithHLG',
+        'DOVIWithSDR',
+      ]);
+    });
+
+    test('the HLS entry leaves out every direct play exclusion and comes '
+        'first, since the server lets the first matching entry win', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        hevcRequiresFmp4Hls: true,
+      );
+
+      final directPlay = _codecUnsupportedRangeTypes(profile, 'hevc');
+      expect(directPlay, contains('HDR10'));
+      // A lone SDR is what makes the server refuse to copy an HDR source.
+      expect(_hlsHevcRangeTypes(profile), <String>{'SDR'});
+
+      final codecProfiles = (profile['CodecProfiles'] as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>();
+      bool isHevcRange(Map<dynamic, dynamic> entry) =>
+          entry['Codec'] == 'hevc' &&
+          (entry['Conditions'] as List<dynamic>).any(
+            (condition) => condition['Property'] == 'VideoRangeType',
+          );
+      final hlsIndex = codecProfiles.indexWhere(
+        (entry) => isHevcRange(entry) && entry['Container'] == 'hls',
+      );
+      final generalIndex = codecProfiles.indexWhere(
+        (entry) => isHevcRange(entry) && entry['Container'] == null,
+      );
+      expect(hlsIndex, isNonNegative);
+      expect(hlsIndex, lessThan(generalIndex));
+    });
+
+    test('without hevcRequiresFmp4Hls no HLS-scoped range entry is sent', () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        supportsHevcMain10: true,
+        supportsHevcDolbyVision: true,
+        supportsHevcDolbyVisionEl: true,
+        supportsHevcHdr10: true,
+        supportsDvProfile7: true,
+      );
+
+      expect(_hlsHevcCodecProfile(profile, 'VideoRangeType'), isNull);
     });
   });
 
@@ -979,8 +1259,8 @@ void main() {
   });
 
   group('DeviceProfileBuilder HLS transcode video codec', () {
-    test('transcodes only to h264 when the server was not probed as allowing '
-        'HEVC encoding', () {
+    test('lists hevc after h264 when the server was not probed as allowing '
+        'HEVC encoding, so HEVC video can still be copied', () {
       final profile = DeviceProfileBuilder.build(
         supportsHevc: true,
         supportsHevcMain10: true,
@@ -990,7 +1270,7 @@ void main() {
       final videoTargets = _videoTranscodingVideoCodecs(profile);
       expect(videoTargets, isNotEmpty);
       for (final codec in videoTargets) {
-        expect(codec, 'h264');
+        expect(codec, 'h264,hevc');
       }
 
       // Direct play still advertises hevc, so HEVC content plays without
@@ -1039,6 +1319,20 @@ void main() {
       final videoProfiles = _hlsVideoTranscodingProfiles(profile);
       expect(videoProfiles.first['Container'], 'mp4');
       expect(videoProfiles.first['VideoCodec'], 'hevc,h264');
+      final ts = videoProfiles.firstWhere((p) => p['Container'] == 'ts');
+      expect(ts['VideoCodec'], 'h264');
+    });
+
+    test('hevcRequiresFmp4Hls lists hevc after h264 in the fMP4 offer only '
+        "when the server doesn't allow HEVC encoding", () {
+      final profile = DeviceProfileBuilder.build(
+        supportsHevc: true,
+        hevcRequiresFmp4Hls: true,
+      );
+
+      final videoProfiles = _hlsVideoTranscodingProfiles(profile);
+      expect(videoProfiles.first['Container'], 'mp4');
+      expect(videoProfiles.first['VideoCodec'], 'h264,hevc');
       final ts = videoProfiles.firstWhere((p) => p['Container'] == 'ts');
       expect(ts['VideoCodec'], 'h264');
     });

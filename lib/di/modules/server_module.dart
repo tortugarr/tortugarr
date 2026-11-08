@@ -142,7 +142,7 @@ void setActiveServerClient(
   }
 
   // Fire and forget: device profiles read the cached result and fall back to
-  // the H264-only transcode offer until the probe lands.
+  // the H264-first transcode offer until the probe lands.
   _getIt<ServerTranscodeCapabilities>().refresh(rawClient);
 
   // Absent on the background isolates, which never sync progress. On the app

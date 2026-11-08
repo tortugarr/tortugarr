@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../data/services/plugin_sync_service.dart';
 import '../l10n/app_localizations.dart';
+import '../util/platform_detection.dart';
 import 'button_layout.dart';
 import 'preference_constants.dart';
 import 'user_preferences.dart';
@@ -78,16 +79,23 @@ enum DetailSection {
     _modern,
     _spotlight,
     _nouveau,
+    _minimalist,
   }),
   collections(
     'collections',
     Icons.collections_bookmark_outlined,
     DetailSectionGroup.sections,
-    {_classic, _modern, _spotlight},
+    {_classic, _modern, _spotlight, _nouveau},
   ),
   moreLikeThis(
     'moreLikeThis',
     Icons.recommend_outlined,
+    DetailSectionGroup.sections,
+    {_classic, _modern, _spotlight, _nouveau},
+  ),
+  reviews(
+    'reviews',
+    Icons.rate_review_outlined,
     DetailSectionGroup.sections,
     {_classic, _modern, _spotlight, _nouveau},
   ),
@@ -114,6 +122,12 @@ enum DetailSection {
     _spotlight,
     _nouveau,
   }),
+  seerrStreaming(
+    'seerrStreaming',
+    Icons.live_tv_outlined,
+    DetailSectionGroup.seerr,
+    {_classic, _modern, _spotlight, _nouveau},
+  ),
   seerrRecommendations(
     'seerrRecommendations',
     Icons.auto_awesome_outlined,
@@ -153,6 +167,12 @@ enum DetailSection {
   birthplace('birthplace', Icons.place_outlined, DetailSectionGroup.person, {
     _classic,
     _modern,
+    _nouveau,
+  }),
+  personLinks('personLinks', Icons.link, DetailSectionGroup.person, {
+    _classic,
+    _modern,
+    _spotlight,
     _nouveau,
   }),
   guestAppearances(
@@ -197,9 +217,14 @@ enum DetailSection {
       (style == DetailScreenStyle.minimalist &&
           styles.contains(DetailScreenStyle.spotlight));
 
-  /// Whether this device and server can show it at all.
-  bool get isOffered => switch (group) {
-    DetailSectionGroup.seerr =>
+  /// Whether this device and server can show it at all. A TV has no browser
+  /// to open a person's links in, and reviews need a plugin that serves them.
+  bool get isOffered => switch (this) {
+    DetailSection.personLinks => !PlatformDetection.isTV,
+    DetailSection.reviews =>
+      GetIt.instance.isRegistered<PluginSyncService>() &&
+          GetIt.instance<PluginSyncService>().tmdbReviewsAvailable,
+    _ when group == DetailSectionGroup.seerr =>
       GetIt.instance.isRegistered<PluginSyncService>() &&
           GetIt.instance<PluginSyncService>().seerrAvailable,
     _ => true,
@@ -219,10 +244,12 @@ enum DetailSection {
     DetailSection.extras => l10n.detailSectionExtras,
     DetailSection.collections => l10n.detailSectionCollections,
     DetailSection.moreLikeThis => l10n.detailSectionMoreLikeThis,
+    DetailSection.reviews => l10n.detailSectionReviews,
     DetailSection.moreEpisodes => l10n.detailSectionMoreEpisodes,
     DetailSection.mediaInfo => l10n.detailSectionMediaInfo,
     DetailSection.seerrGenresTags => l10n.detailSectionSeerrGenresTags,
     DetailSection.seerrStats => l10n.detailSectionSeerrStats,
+    DetailSection.seerrStreaming => l10n.detailSectionSeerrStreaming,
     DetailSection.seerrRecommendations =>
       l10n.detailSectionSeerrRecommendations,
     DetailSection.seerrSimilar => l10n.detailSectionSeerrSimilar,
@@ -232,6 +259,7 @@ enum DetailSection {
     DetailSection.seerrPersonCrew => l10n.detailSectionSeerrPersonCrew,
     DetailSection.biography => l10n.detailSectionBiography,
     DetailSection.birthplace => l10n.detailSectionBirthplace,
+    DetailSection.personLinks => l10n.detailSectionPersonLinks,
     DetailSection.guestAppearances => l10n.detailSectionGuestAppearances,
     DetailSection.musicVideos => l10n.detailSectionMusicVideos,
     DetailSection.playlistOrder => l10n.detailSectionPlaylistOrder,
@@ -247,6 +275,7 @@ enum DetailSection {
     DetailSection.mediaInfo => l10n.detailSectionMediaInfoSubtitle,
     DetailSection.seerrPersonAppearances ||
     DetailSection.seerrPersonCrew => l10n.detailSectionPersonPagesSubtitle,
+    DetailSection.personLinks => l10n.detailSectionPersonLinksSubtitle,
     _ => null,
   };
 }

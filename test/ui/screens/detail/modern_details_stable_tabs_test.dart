@@ -18,6 +18,7 @@ import 'package:moonfin/preference/detail_section_layout.dart';
 import 'package:moonfin/preference/preference_constants.dart';
 import 'package:moonfin/preference/seerr_preferences.dart';
 import 'package:moonfin/preference/user_preferences.dart';
+import 'package:moonfin/ui/screens/detail/item_detail_screen.dart';
 import 'package:moonfin/ui/screens/detail/modern/modern_detail_content.dart';
 import 'package:moonfin/ui/screens/detail/modern/widgets/details_tab_bar.dart';
 import 'package:moonfin/ui/widgets/skeleton/skeleton_home_row.dart';
@@ -114,6 +115,7 @@ void main() {
     when(() => vm.episodesLoaded).thenReturn(false);
     when(() => vm.seriesEpisodesLoaded).thenReturn(false);
     when(() => vm.similar).thenReturn([]);
+    when(() => vm.reviews).thenReturn(const []);
     when(() => vm.collectionItems).thenReturn([]);
     when(() => vm.missingCollectionItems).thenReturn([]);
     when(() => vm.parentCollections).thenReturn([]);
@@ -145,6 +147,8 @@ void main() {
     when(() => vm.filmographyMovies).thenReturn([]);
     when(() => vm.filmographySeries).thenReturn([]);
     when(() => vm.supportsNumericUserRatings).thenReturn(false);
+    when(() => vm.supportsPersonalRating).thenReturn(true);
+    when(() => vm.searchesYouTubeForTrailer).thenReturn(false);
     when(() => vm.isRatingMutationInProgress).thenReturn(false);
     when(() => vm.contextSeasonId).thenReturn(null);
   });
@@ -417,6 +421,37 @@ void main() {
 
     // SkeletonHomeRow should be rendered in the tab body
     expect(find.byType(SkeletonHomeRow), findsOneWidget);
+  });
+
+  testWidgets('an episode borders itself in its season and Down from the tab lands on it', (tester) async {
+    AggregatedItem episode(int number) => AggregatedItem(
+          id: 'episode-$number',
+          serverId: 'server-1',
+          rawData: {
+            'Id': 'episode-$number',
+            'Name': 'Episode $number',
+            'Type': 'Episode',
+            'IndexNumber': number,
+          },
+        );
+    final season = [episode(1), episode(2), episode(3)];
+    when(() => vm.item).thenReturn(season[1]);
+    when(() => vm.episodes).thenReturn(season);
+    when(() => vm.episodesLoaded).thenReturn(true);
+
+    await tester.pumpWidget(buildTestWidget());
+    await tester.pump(const Duration(milliseconds: 100));
+
+    final cards = tester.widgetList<DetailEpisodeCard>(find.byType(DetailEpisodeCard));
+    expect(cards.map((c) => c.isActive), [false, true, false]);
+
+    final bar = tester.widget<DetailsTabBar>(find.byType(DetailsTabBar));
+    bar.focusNodeFor(bar.selectedIndex).requestFocus();
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(FocusManager.instance.primaryFocus?.debugLabel, 'episodesCurrent');
   });
 
   Future<void> hideSections(String ids) =>
