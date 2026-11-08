@@ -2308,13 +2308,12 @@ def cmd_doctor():
             if torrent_client() == "qbittorrent-ext":
                 raise BootstrapError("no remote path mapping for your qBittorrent - run repair")
             return "none needed"
-        mounted = [x["container_path"].rstrip("/") for x in external_qbit().get("mounts", [])]
         bad_maps = []
         for m in maps:
             local = m["localPath"].rstrip("/")
-            if mounted and not any(local == c or local.startswith(c + "/") for c in mounted):
-                bad_maps.append(f"{m['remotePath']} -> {m['localPath']} (outside the folders mounted from your qBittorrent)")
-                continue
+            # Only what the container cannot see is wrong. A mapping into a library folder (the
+            # plugin can download straight into the library's drive, 2026-11) is fine as long as
+            # the folder is mounted there; it used to be flagged for not being a download mount.
             parent = local.rsplit("/", 1)[0] or "/"
             listing = h.get(f"/filesystem?path={urllib.parse.quote(parent + '/')}&includeFiles=false"
                             f"&allowFoldersWithoutTrailingSlashes=true")

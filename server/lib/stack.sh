@@ -431,7 +431,7 @@ ensure_dirs() {
 stale_mounts() {
   local svc dir target stale=() probe=".tortugarr-probe-$$"
   for svc in $(expected_services); do
-    case $svc in flaresolverr|gluetun) continue ;; seerr) dir=seerr; target=/app/config ;; *) dir=$svc; target=/config ;; esac
+    case $svc in flaresolverr|gluetun) continue ;; seerr) dir=seerr; target=/app/config ;; ntfy) dir=ntfy; target=/var/cache/ntfy ;; *) dir=$svc; target=/config ;; esac
     [ -d "$CONFIG_DIR/$dir" ] || continue
     docker inspect "tortugarr-$svc" >/dev/null 2>&1 || continue
     touch "$CONFIG_DIR/$dir/$probe" 2>/dev/null || continue
