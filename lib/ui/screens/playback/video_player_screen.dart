@@ -428,6 +428,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   DateTime? _seekHoldStart;
   DateTime? _seekLastRepeat;
 
+  /// A press's skip, run on release unless the key was held (TV): a held key
+  /// starts the gentle speed-up without the 30/10-second jump first (user,
+  /// 2026-11-08).
+  VoidCallback? _seekTap;
+
   double _brightnessValue = 0.5;
   double _systemVolume = 1.0;
   bool _showVolumeOverlay = false;
@@ -3258,16 +3263,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   /// One press moves by the user's skip length. Held, the seek marker
   /// speeds up with how long the key has been held (not with how fast the
   /// remote repeats, which differs between TVs): see [holdSeekSpeed].
-  int _accelerateSeekStep(int baseMs, KeyEvent event) {
+  ///
+  /// With [deferTapTo] the press itself does not move (0 is returned) and
+  /// [deferTapTo] runs on release when the key was not held.
+  int _accelerateSeekStep(int baseMs, KeyEvent event, {VoidCallback? deferTapTo}) {
     final key = event.logicalKey;
     final now = DateTime.now();
     if (event is KeyDownEvent || _seekDirection != key || _seekHoldStart == null) {
       _seekDirection = key;
       _seekHoldStart = now;
       _seekLastRepeat = now;
-      return baseMs;
+      _seekTap = deferTapTo;
+      return deferTapTo == null ? baseMs : 0;
     }
     if (event is KeyRepeatEvent) {
+      _seekTap = null; // held: no jump on release
       final sinceLast = now.difference(_seekLastRepeat ?? now).inMilliseconds.clamp(20, 250);
       _seekLastRepeat = now;
       final held = now.difference(_seekHoldStart!);
@@ -3277,6 +3287,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
   }
 
   void _resetSeekAcceleration() {
+    _seekTap = null;
     _seekDirection = null;
     _seekHoldStart = null;
     _seekLastRepeat = null;
@@ -3457,6 +3468,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
       }
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
           event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        final tap = _seekTap;
+        _seekTap = null;
+        tap?.call(); // a short press: the skip set in the settings
         _resetSeekAcceleration();
         // While the preview holds a paused frame the session survives
         // key-release and play is what commits. Otherwise release commits
@@ -3592,11 +3606,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             return KeyEventResult.ignored;
           }
           if (!_controlsVisible) {
-            final step = _accelerateSeekStep(
-              _prefs.get(UserPreferences.skipBackLength),
-              event,
-            );
-            _seekRelative(-step, showControls: false);
+            final back = _prefs.get(UserPreferences.skipBackLength);
+            final step = _accelerateSeekStep(back, event,
+                deferTapTo: () => _seekRelative(-back, showControls: false));
+            if (step != 0) _seekRelative(-step, showControls: false);
             _showControls(focusSeekbar: true);
             return KeyEventResult.handled;
           }
@@ -3606,11 +3619,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
             return KeyEventResult.ignored;
           }
           if (!_controlsVisible) {
-            final step = _accelerateSeekStep(
-              _prefs.get(UserPreferences.skipForwardLength),
-              event,
-            );
-            _seekRelative(step, showControls: false);
+            final forward = _prefs.get(UserPreferences.skipForwardLength);
+            final step = _accelerateSeekStep(forward, event,
+                deferTapTo: () => _seekRelative(forward, showControls: false));
+            if (step != 0) _seekRelative(step, showControls: false);
             _showControls(focusSeekbar: true);
             return KeyEventResult.handled;
           }
@@ -5112,22 +5124,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen>
                                 // gently, the same both ways (Tortugarr,
                                 // lost in the 2.7 rebuild, back 2026-11-08).
                                 case LogicalKeyboardKey.arrowLeft:
-                                  _seekRelativeAccumulate(
-                                    -_accelerateSeekStep(
-                                      _prefs.get(UserPreferences.skipBackLength),
-                                      event,
-                                    ),
-                                  );
+                                  final back = _prefs.get(UserPreferences.skipBackLength);
+                                  final step = _accelerateSeekStep(back, event,
+                                      deferTapTo: () => _seekRelativeAccumulate(-back));
+                                  if (step != 0) _seekRelativeAccumulate(-step);
                                   return KeyEventResult.handled;
                                 case LogicalKeyboardKey.arrowRight:
-                                  _seekRelativeAccumulate(
-                                    _accelerateSeekStep(
-                                      _prefs.get(
-                                        UserPreferences.skipForwardLength,
-                                      ),
-                                      event,
-                                    ),
-                                  );
+                                  final forward = _prefs.get(UserPreferences.skipForwardLength);
+                                  final step = _accelerateSeekStep(forward, event,
+                                      deferTapTo: () => _seekRelativeAccumulate(forward));
+                                  if (step != 0) _seekRelativeAccumulate(step);
                                   return KeyEventResult.handled;
                                 case LogicalKeyboardKey.arrowUp:
                                   // The skip button sits just above the
