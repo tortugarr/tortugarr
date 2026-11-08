@@ -254,4 +254,78 @@ void main() {
     await tester.pumpAndSettle();
     expect(scroll.offset, greaterThan(0));
   });
+
+  // 2026-11-08 on the TV: Left from the page list went into the page instead
+  // of to the rail.
+  testWidgets('Left from the page list goes to the rail, never into the page',
+      (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final pages = GlobalKey<NavigatorState>();
+    final rail = FocusNode(debugLabel: 'rail');
+    final list = List.generate(3, (i) => FocusNode(debugLabel: 'list$i'));
+    final page = FocusNode(debugLabel: 'page');
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          pages: pages,
+          exit: rail,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FocusTraversalGroup(
+                child: SizedBox(width: 100, child: TextButton(focusNode: rail, onPressed: () {}, child: const Text('Exit'))),
+              ),
+              FocusTraversalGroup(
+                child: SizedBox(
+                  width: 200,
+                  child: Column(children: [
+                    for (var i = 0; i < 3; i++)
+                      TextButton(focusNode: list[i], onPressed: () {}, child: Text('Page $i')),
+                  ]),
+                ),
+              ),
+              Expanded(
+                child: Navigator(
+                  key: pages,
+                  onGenerateRoute: (_) => MaterialPageRoute<void>(
+                    builder: (_) => Align(
+                      alignment: Alignment.topLeft,
+                      child: TextButton(focusNode: page, onPressed: () {}, child: const Text('Setting')),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
+    list[0].requestFocus();
+    await tester.pumpAndSettle();
+    // Down the list, into the page, Back to the list: then Left.
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.pumpAndSettle();
+    expect(list[2].hasPrimaryFocus, isTrue);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(page.hasPrimaryFocus, isTrue);
+    expect(InlineBackInterceptor.handleBack(), isTrue);
+    await tester.pumpAndSettle();
+    expect(list[0].hasPrimaryFocus || list[1].hasPrimaryFocus || list[2].hasPrimaryFocus, isTrue);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.pumpAndSettle();
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pumpAndSettle();
+    expect(rail.hasPrimaryFocus, isTrue);
+
+    // Left on the rail stays there.
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pumpAndSettle();
+    expect(rail.hasPrimaryFocus, isTrue);
+    expect(page.hasPrimaryFocus, isFalse);
+  });
 }

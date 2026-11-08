@@ -205,6 +205,21 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   };
 
   void _move(FocusNode node, BuildContext ctx, TraversalDirection direction) {
+    // Left from the page list (or the rail) belongs to the column to its left.
+    // Flutter's own move found nothing there in the list's group and went into
+    // the page instead (2026-11-08).
+    if (direction == TraversalDirection.left) {
+      final pages = widget.pages?.currentContext;
+      if (pages != null && !_isInside(ctx, pages)) {
+        final target = _nearestInArea(
+          node,
+          TraversalDirection.left,
+          where: (c) => !_isInside(c, pages),
+        );
+        if (target != null) target.requestFocus();
+        return;
+      }
+    }
     if (node.focusInDirection(direction)) return;
     if (direction == TraversalDirection.up) {
       final position = Scrollable.maybeOf(ctx)?.position;
