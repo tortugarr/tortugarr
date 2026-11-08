@@ -1,18 +1,49 @@
 # Changelog
 
-## Unreleased (TV test build 2000059, Tortugarr plugin 1.3.0.2)
+## 4.20.03 - unreleased (app build 2000060, Tortugarr plugin 1.3.0.32, Moonfin 3.0.0)
 
 **App**
 
-- A series that TMDB has not linked to TVDB yet (common for new titles, e.g. *The Traitor
-  Within*) can be downloaded: the app asks the server for the TVDB id instead of stopping with
-  "has no TVDB id".
+- **Moonfin 3.0.0** is in, with every Tortugarr change kept. A routine and checks
+  (`docs/MOONFIN-UPSTREAM.md`, `scripts/tortugarr-invariants.sh`) now guard against an upstream
+  update quietly undoing Tortugarr features.
+- **Release picker:** most seeders first, live seeder counts from the trackers, dead torrents
+  hidden, and Left/Right switches resolution tier straight from the list, with sound badges per
+  release.
+- **Held seek speeds up** gently, on the seek bar too (20x, 40x, 90x, 180x, up to 300x); a
+  single press still skips by the step you set.
+- **Subtitles:** the menu shows only the languages you picked; untagged tracks only when there
+  is no track in your language.
+- **Home rows from top lists** (IMDb Top 250, Trakt, weekly Top 10).
+- **Administration on TV** works with the remote everywhere: focus starts on the page list,
+  stays on screen, Back goes one step at a time, Left goes to the menu.
+- **Server health** card on the admin dashboard: services, library drives and *arr warnings.
+- **Plugin settings open inside the app**, signed in; Tortugarr's own settings are a native
+  screen made for the remote.
+- The activity count on the dashboard counts only new warnings and errors.
+- Downloads: an imported title leaves *Importing* at once; series without a TVDB id on TMDB can
+  be downloaded; Seerr *Requests* also lists series downloaded in the app.
+- XXX: titles can be deleted, and the search box keeps its text.
+- The intro video starts only once its first picture is on screen (no stutter at start).
 
-**Server** (Tortugarr plugin 1.3.0.2)
+**Server** (Tortugarr plugin 1.3.0.32)
 
-- The release picker no longer lists torrents for other films. Radarr marks them "Unknown
-  Movie"; that is now always a hard rejection, also with release filters saved earlier.
-- New `GET /Tortugarr/v1/Series/Tvdb?tmdbId=`: the TVDB id Sonarr knows for a TMDB id.
+- **Fill the fullest drive first:** new movies, series and downloads go to the drive with the
+  least free space that still keeps 25 GB free (*Fill drives down to* setting; 0 = always the
+  roomiest drive). No more downloads dead-ending on a full drive: a title is moved to a drive
+  with room before the grab, and a held import is moved to the roomiest drive.
+- **Torrent clients:** Transmission and Deluge work as well as qBittorrent.
+- **Phone notifications** through the stack's own ntfy server: download ready, problems that
+  need the admin.
+- **Stuck downloads** are handled: a nudge when data stops, a swap, delete or stop after 3
+  hours, a watchdog for torrents stuck at 100 %, fake downloads removed, and a video check on
+  every torrent.
+- Releases for a different movie are dropped, Radarr's own grabs of early "mockbuster"
+  releases are refused, and a title whose folder is taken gets a tagged folder.
+- Moonbase updates only after an app-contract check; playlists and collections can be deleted
+  again.
+- Installer: ntfy in the stack, OMDb off for TV libraries, and `doctor` checks ntfy's folder
+  and library path mappings without false alarms.
 
 ## 4.20.02 - 2026-10-27
 
