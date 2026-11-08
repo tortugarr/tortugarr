@@ -142,7 +142,7 @@ public static class ArrQbitAddress
     }
 }
 
-public sealed class QbitClient
+public sealed class QbitClient : ITorrentClient
 {
     private readonly HttpClient _http;
     private readonly string _base;
@@ -161,6 +161,10 @@ public sealed class QbitClient
         _user = user;
         _pass = pass;
     }
+
+    public string Name => "qBittorrent";
+
+    public bool CanShutdown => true;
 
     /// <summary>Files of a torrent, or null while its metadata is not there yet.</summary>
     public async Task<List<(string Name, long Size)>?> Files(string hash, CancellationToken ct)

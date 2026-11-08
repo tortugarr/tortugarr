@@ -164,7 +164,7 @@ public sealed class LibraryDeleteService
         var root = AdultLibraryService.FolderOf(Cfg, item.Path) ?? Cfg.AdultSavePath;
         var clientRoot = folders.FirstOrDefault(f => f.Local.TrimEnd('/') == root.TrimEnd('/')).Client;
         var torrentsRemoved = 0;
-        if (Cfg.DownloadClientType == "qbittorrent")
+        if (TortugarrService.HasTorrentClient(Cfg))
         {
             var qbit = _svc.Qbit;
             var torrent = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false))
@@ -295,7 +295,7 @@ public sealed class LibraryDeleteService
     /// <summary>Removes the title's torrents (with their download copies) - only from qBittorrent and only in the *arr's category.</summary>
     private async Task<int> RemoveTorrents(List<string> hashes, string category, CancellationToken ct)
     {
-        if (hashes.Count == 0 || Cfg.DownloadClientType != "qbittorrent")
+        if (hashes.Count == 0 || !TortugarrService.HasTorrentClient(Cfg))
         {
             return 0;
         }

@@ -111,9 +111,13 @@ public sealed class TortugarrService
     /// <summary>Seerr (API v1, X-Api-Key) - only to clear titles after deletes (spec 3.10, 3.11).</summary>
     public ArrClient Seerr => new(Http, "Seerr", Cfg.SeerrUrl, Cfg.SeerrApiKey, "/api/v1");
 
-    internal QbitClient Qbit => Cfg.DownloadClientType == "qbittorrent"
-        ? new QbitClient(Http, QbitUrl, Cfg.DownloadClientUsername, Cfg.DownloadClientPassword)
-        : throw new NotConfiguredException("qBittorrent");
+    /// <summary>The torrent client (qBittorrent, Transmission or Deluge), always in qBittorrent's shape.</summary>
+    internal ITorrentClient Qbit => TorrentClient.Create(Http, Cfg.DownloadClientType,
+        Cfg.DownloadClientType == "qbittorrent" ? QbitUrl : Cfg.DownloadClientUrl, Cfg.DownloadClientUsername, Cfg.DownloadClientPassword);
+
+    /// <summary>A torrent client is set up (any of the three).</summary>
+    internal static bool HasTorrentClient(Configuration.PluginConfiguration c) =>
+        TorrentClient.IsTorrent(c.DownloadClientType) && !string.IsNullOrWhiteSpace(c.DownloadClientUrl);
 
     private static readonly TimeSpan QbitAddressFresh = TimeSpan.FromMinutes(5);
     private static readonly TimeSpan QbitAddressFirstWait = TimeSpan.FromSeconds(3);
@@ -186,7 +190,7 @@ public sealed class TortugarrService
 
     /// <summary>The adult library is usable: switched on, Prowlarr set, qBittorrent as the client.</summary>
     public static bool AdultReady(Configuration.PluginConfiguration c) =>
-        c.AdultEnabled && c.DownloadClientType == "qbittorrent" && !string.IsNullOrWhiteSpace(c.DownloadClientUrl)
+        c.AdultEnabled && HasTorrentClient(c)
         && !string.IsNullOrWhiteSpace(c.ProwlarrUrl) && !string.IsNullOrWhiteSpace(c.ProwlarrApiKey);
 
     // ------------------------------------------------------------------ capabilities
@@ -209,7 +213,7 @@ public sealed class TortugarrService
         var limited = limits is not null;
         bool Has(string url, string key) => !string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(key);
         var arrs = Has(c.SonarrUrl, c.SonarrApiKey) && Has(c.RadarrUrl, c.RadarrApiKey);
-        var qbit = c.DownloadClientType == "qbittorrent" && !string.IsNullOrWhiteSpace(c.DownloadClientUrl);
+        var qbit = HasTorrentClient(c);
         return new
         {
             apiVersion = 1,
@@ -1763,7 +1767,7 @@ public sealed class TortugarrService
     private async Task<Dictionary<string, (double Size, double Left)>> LiveTorrents(CancellationToken ct)
     {
         var live = new Dictionary<string, (double, double)>(StringComparer.OrdinalIgnoreCase);
-        if (Cfg.DownloadClientType != "qbittorrent")
+        if (!HasTorrentClient(Cfg))
         {
             return live;
         }
@@ -2091,14 +2095,14 @@ public sealed class TortugarrService
     public async Task<object> Check(string downloadId, CancellationToken ct)
     {
         var c = Cfg;
-        if (c.DownloadClientType != "qbittorrent")
+        if (!HasTorrentClient(c))
         {
-            throw new NotConfiguredException("the video check (needs qBittorrent)");
+            throw new NotConfiguredException("the video check (needs a torrent client)");
         }
 
         // qBittorrent itself, not the Radarr/Sonarr queue: a grab is not in the queue at once, and a
         // fast download is imported and gone from it before the app asks (lab: 404 for 79 s).
-        var qbit = new QbitClient(Http, QbitUrl, c.DownloadClientUsername, c.DownloadClientPassword);
+        var qbit = Qbit;
         var torrent = (await qbit.ListAll(ct).ConfigureAwait(false))
             .FirstOrDefault(t => string.Equals((string?)t?["hash"], downloadId, StringComparison.OrdinalIgnoreCase));
         var category = (string?)torrent?["category"];
@@ -2122,7 +2126,7 @@ public sealed class TortugarrService
     /// for it after its own grabs; the watchdog runs it on every new torrent (2026-11-07: Sonarr's
     /// own RSS grabs of an .exe and a .zip never passed it and sat in qBittorrent for hours).
     /// </summary>
-    internal async Task<(bool? HasVideo, List<(string Name, long Size)>? Files)> ScreenDownload(QbitClient qbit, string hash, string category, CancellationToken ct)
+    internal async Task<(bool? HasVideo, List<(string Name, long Size)>? Files)> ScreenDownload(ITorrentClient qbit, string hash, string category, CancellationToken ct)
     {
         var files = await qbit.Files(hash, ct).ConfigureAwait(false);
         if (files is null)
@@ -2189,9 +2193,9 @@ public sealed class TortugarrService
     public async Task<object> Space(CancellationToken ct)
     {
         var c = Cfg;
-        if (c.DownloadClientType == "qbittorrent")
+        if (HasTorrentClient(c))
         {
-            var qbit = new QbitClient(Http, QbitUrl, c.DownloadClientUsername, c.DownloadClientPassword);
+            var qbit = Qbit;
             var free = await qbit.FreeSpace(ct).ConfigureAwait(false);
             if (free is not null)
             {

@@ -40,7 +40,7 @@ public sealed class HealthService
         if (Has(c.RadarrUrl)) probes.Add(Probe("radarr", "Radarr", async t => (string?)(await _svc.Radarr.Get("/system/status", t, 8).ConfigureAwait(false))?["version"], ct));
         if (Has(c.SonarrUrl)) probes.Add(Probe("sonarr", "Sonarr", async t => (string?)(await _svc.Sonarr.Get("/system/status", t, 8).ConfigureAwait(false))?["version"], ct));
         if (Has(c.ProwlarrUrl)) probes.Add(Probe("prowlarr", "Prowlarr", async t => (string?)(await _svc.Prowlarr.Get("/system/status", t, 8).ConfigureAwait(false))?["version"], ct));
-        if (c.DownloadClientType == "qbittorrent" && Has(c.DownloadClientUrl)) probes.Add(Probe("qbittorrent", "qBittorrent", async t => await _svc.Qbit.Version(t).ConfigureAwait(false), ct));
+        if (TortugarrService.HasTorrentClient(c)) probes.Add(Probe(c.DownloadClientType, _svc.Qbit.Name, async t => await _svc.Qbit.Version(t).ConfigureAwait(false), ct));
         if (Has(c.BazarrUrl)) probes.Add(Probe("bazarr", "Bazarr", async t => (string?)(await _svc.Bazarr.Get("/system/status", t, 8).ConfigureAwait(false))?["data"]?["bazarr_version"], ct));
         if (Has(c.SeerrUrl)) probes.Add(Probe("seerr", "Seerr", async t => (string?)(await _svc.Seerr.Get("/settings/about", t, 8).ConfigureAwait(false))?["version"], ct));
 

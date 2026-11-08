@@ -706,3 +706,14 @@ Seerr, plus administrators with `everything`; episodes of one season within 5 mi
 message. Every activity-log notice of warning level (stall give-up, fake or wrong release
 removed, qBittorrent restarted) also goes to administrators with `problems`.
 
+### Torrent clients (plugin 1.3.0.31)
+
+The plugin talks to qBittorrent, Transmission (RPC with the session-id handshake) or Deluge (Web
+UI JSON-RPC; the Label plugin is switched on when needed, as Radarr/Sonarr do) through one
+interface (`ITorrentClient`). Transmission and Deluge torrents are returned in qBittorrent's shape
+(hash, state such as stalledDL/metaDL/stoppedDL/uploading, progress 0..1, category, amount_left,
+completion_on, …), so the watchdog (nudge, give-up, fake/early sweeps), the video check, live
+progress, the adult library, disk space, deletes and the health card work the same for all three.
+Only qBittorrent is ever closed for a restart. Live-tested against the pinned Transmission 4.1.3
+and Deluge 2.2.0 images (`TorrentClientLiveTests`, env TG_LIVE_TRANSMISSION / TG_LIVE_DELUGE).
+

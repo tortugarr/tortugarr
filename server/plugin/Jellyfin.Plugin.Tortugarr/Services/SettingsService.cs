@@ -208,8 +208,8 @@ public sealed class SettingsService
                 "prowlarr" => (string?)(await new ArrClient(http, "Prowlarr", t.Url, Key("ProwlarrApiKey"), "/api/v1").Get("/system/status", ct, 15).ConfigureAwait(false))?["version"],
                 "seerr" => (string?)(await new ArrClient(http, "Seerr", t.Url, Key("SeerrApiKey"), "/api/v1").Get("/settings/about", ct, 15).ConfigureAwait(false))?["version"],
                 "bazarr" => (string?)(await new BazarrClient(http, t.Url, Key("BazarrApiKey")).Get("/system/status", ct, 15).ConfigureAwait(false))?["data"]?["bazarr_version"],
-                "qbittorrent" => await QbitVersion(http, t, Key("DownloadClientPassword"), ct).ConfigureAwait(false),
-                _ => throw new ArgumentException("service: sonarr, radarr, prowlarr, bazarr, seerr or qbittorrent"),
+                "qbittorrent" or "transmission" or "deluge" => await TorrentVersion(http, t, Key("DownloadClientPassword"), ct).ConfigureAwait(false),
+                _ => throw new ArgumentException("service: sonarr, radarr, prowlarr, bazarr, seerr, qbittorrent, transmission or deluge"),
             };
             return new { ok = true, version = version ?? string.Empty };
         }
@@ -219,9 +219,6 @@ public sealed class SettingsService
         }
     }
 
-    private static async Task<string?> QbitVersion(HttpClient http, TestRequest t, string password, CancellationToken ct)
-    {
-        var qbit = new QbitClient(http, t.Url, t.Username, password);
-        return await qbit.Version(ct).ConfigureAwait(false);
-    }
+    private static Task<string> TorrentVersion(HttpClient http, TestRequest t, string password, CancellationToken ct) =>
+        TorrentClient.Create(http, t.Service, t.Url, t.Username, password).Version(ct);
 }

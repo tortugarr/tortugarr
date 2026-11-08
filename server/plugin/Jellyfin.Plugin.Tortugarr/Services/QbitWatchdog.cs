@@ -125,14 +125,14 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     private async Task RunAsync(CancellationToken ct)
     {
         var cfg = Plugin.Instance?.Configuration;
-        if (cfg is null || !cfg.QbitWatchdogEnabled || cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(cfg.DownloadClientUrl))
+        if (cfg is null || !cfg.QbitWatchdogEnabled || !TortugarrService.HasTorrentClient(cfg))
         {
             return;
         }
 
         var qbit = _svc.Qbit;
         var torrents = await qbit.ListAll(ct).ConfigureAwait(false);
-        var plan = Decide(torrents, _state, DateTimeOffset.UtcNow, cfg.QbitWatchdogRestart);
+        var plan = Decide(torrents, _state, DateTimeOffset.UtcNow, cfg.QbitWatchdogRestart && qbit.CanShutdown);
         if (plan.Recheck.Count > 0)
         {
             await qbit.Recheck(plan.Recheck, ct).ConfigureAwait(false);
@@ -256,7 +256,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     private async Task ScreenNewAsync(CancellationToken ct)
     {
         var cfg = Plugin.Instance?.Configuration;
-        if (cfg is null || !cfg.QbitWatchdogEnabled || cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(cfg.DownloadClientUrl))
+        if (cfg is null || !cfg.QbitWatchdogEnabled || !TortugarrService.HasTorrentClient(cfg))
         {
             return;
         }
@@ -303,7 +303,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
     private async Task NudgeAsync(CancellationToken ct)
     {
         var cfg = Plugin.Instance?.Configuration;
-        if (cfg is null || !cfg.QbitWatchdogEnabled || !cfg.QbitStallNudge || cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(cfg.DownloadClientUrl))
+        if (cfg is null || !cfg.QbitWatchdogEnabled || !cfg.QbitStallNudge || !TortugarrService.HasTorrentClient(cfg))
         {
             return;
         }
