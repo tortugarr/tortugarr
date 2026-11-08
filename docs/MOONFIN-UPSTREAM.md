@@ -39,11 +39,14 @@ Day-to-day work continues on the normal branch meanwhile. When resolving conflic
   example where a Tortugarr row or button sits inside a Moonfin screen).
 - Version numbers: keep Tortugarr's (`4.20.x`); note the Moonfin base in CHANGELOG.
 - New upstream strings come in English; give every new Tortugarr string a Norwegian text.
+- Never take a whole file from Moonfin without checking what Tortugarr had in it: 3.0.0 lost the
+  subtitle-language filter that way (`tortugarr-lost-lines.sh` finds such losses).
 
 ## 4. Check
 
 ```bash
 scripts/tortugarr-invariants.sh                # what must still be Tortugarr
+scripts/tortugarr-lost-lines.sh HEAD^1         # Tortugarr lines the merge dropped (after committing it)
 flutter pub get && flutter gen-l10n
 flutter analyze lib test                       # 0 errors (packages/*/test errors are old)
 flutter test                                   # all green

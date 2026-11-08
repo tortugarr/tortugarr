@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/services/download/prowlarr_search_client.dart';
@@ -267,14 +268,34 @@ class _ReleasePickerBodyState extends State<_ReleasePickerBody> {
               final count = t == 'all'
                   ? _releases.length
                   : (_byTier[t] ?? const []).length;
-              return SeerrChoiceChip(
-                label: '${switch (t) {
-                  'all' => appL10n().tgTierAll,
-                  'other' => appL10n().tgTierOther,
-                  _ => t,
-                }} · $count',
-                selected: t == _tier,
-                onSelected: (_) => setState(() => _tier = t),
+              // Left/Right on the tier chips switch the list at once, like
+              // tabs, instead of only moving the highlight (user, 2026-11-08).
+              // Up into the chips from the list never switches by itself.
+              return Focus(
+                canRequestFocus: false,
+                skipTraversal: true,
+                onKeyEvent: (_, event) {
+                  if (event is! KeyDownEvent) return KeyEventResult.ignored;
+                  final by = event.logicalKey == LogicalKeyboardKey.arrowRight
+                      ? 1
+                      : event.logicalKey == LogicalKeyboardKey.arrowLeft
+                          ? -1
+                          : 0;
+                  final next = availableTiers.indexOf(t) + by;
+                  if (by != 0 && next >= 0 && next < availableTiers.length) {
+                    setState(() => _tier = availableTiers[next]);
+                  }
+                  return KeyEventResult.ignored; // focus moves to that chip as usual
+                },
+                child: SeerrChoiceChip(
+                  label: '${switch (t) {
+                    'all' => appL10n().tgTierAll,
+                    'other' => appL10n().tgTierOther,
+                    _ => t,
+                  }} · $count',
+                  selected: t == _tier,
+                  onSelected: (_) => setState(() => _tier = t),
+                ),
               );
             }).toList(),
           ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -52,15 +54,42 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
   /// (2026-10-25: Library and People could only be reached with a mouse).
   LogicalKeyboardKey? _moved;
 
+  Timer? _startTimer;
+
   @override
   void initState() {
     super.initState();
     HardwareKeyboard.instance.addHandler(_onKey);
     InlineBackInterceptor.push(_onBack);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focusStart());
+  }
+
+  /// The area opened with nothing in it focused, so the remote did nothing
+  /// until Back put the focus on Exit (2026-11-08). Start on the page list,
+  /// next to Exit, the way Back would get there.
+  void _focusStart([int tries = 0]) {
+    if (!mounted) return;
+    final ctx = FocusManager.instance.primaryFocus?.context;
+    if (ctx != null && _insideArea(ctx) &&
+        FocusManager.instance.primaryFocus is! FocusScopeNode) {
+      return;
+    }
+    final exit = widget.exit;
+    if (exit == null) return;
+    final start = _nearestInArea(exit, TraversalDirection.right);
+    if (start != null) {
+      start.requestFocus();
+    } else if (exit.canRequestFocus) {
+      exit.requestFocus();
+    } else if (tries < 5) {
+      // The pages may not be laid out yet.
+      _startTimer = Timer(const Duration(milliseconds: 150), () => _focusStart(tries + 1));
+    }
   }
 
   @override
   void dispose() {
+    _startTimer?.cancel();
     HardwareKeyboard.instance.removeHandler(_onKey);
     InlineBackInterceptor.remove(_onBack);
     super.dispose();

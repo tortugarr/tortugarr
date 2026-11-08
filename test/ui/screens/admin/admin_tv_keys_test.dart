@@ -200,4 +200,29 @@ void main() {
     }
     expect(rail.hasPrimaryFocus, isTrue);
   });
+
+  // 2026-11-08 on the TV: the admin area opened with nothing focused, so the
+  // remote did nothing until Back put the focus on Exit.
+  testWidgets('opening the area focuses the page list next to Exit', (tester) async {
+    final exit = FocusNode(debugLabel: 'exit');
+    final dashboard = FocusNode(debugLabel: 'dashboard');
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          exit: exit,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextButton(focusNode: exit, onPressed: () {}, child: const Text('Exit')),
+              const SizedBox(width: 40),
+              TextButton(focusNode: dashboard, onPressed: () {}, child: const Text('Dashboard')),
+            ],
+          ),
+        ),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump();
+    expect(dashboard.hasPrimaryFocus, isTrue);
+  });
 }

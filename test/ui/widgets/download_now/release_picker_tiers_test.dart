@@ -92,6 +92,21 @@ void main() {
     expect(find.text('Dune.2160p.B'), findsOneWidget);
   });
 
+  testWidgets('Right on the 2160p chip shows 1080p at once; Up from the list does not switch', (tester) async {
+    await open(tester);
+    Focus.of(tester.element(find.textContaining('2160p ·'))).requestFocus();
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(find.text('Dune.1080p.B'), findsOneWidget, reason: '1080p list shown');
+    expect(find.text('Dune.2160p.B'), findsNothing);
+
+    await focus(tester, 'Dune.1080p.A.AAC2.0');
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.pumpAndSettle();
+    expect(find.text('Dune.1080p.B'), findsOneWidget, reason: 'still 1080p after Up into the chips');
+  });
+
   testWidgets('sound badges under the release name', (tester) async {
     await open(tester);
     expect(find.text('Atmos'), findsOneWidget);
