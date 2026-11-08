@@ -15,6 +15,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../util/error_message.dart';
 import '../../../../util/platform_detection.dart';
 import 'admin_plugin_install_confirm.dart';
+import 'plugin_settings_web_screen.dart';
 
 final _packageInfoProvider = FutureProvider.family<PackageInfo?, String>((
   ref,
@@ -81,9 +82,9 @@ String? pluginThumbUrl(String baseUrl, PluginInfo plugin) {
       '?tag=${Uri.encodeQueryComponent(tag)}';
 }
 
-/// A plugin's settings page is the server's own web client, written for a
-/// desktop browser and signed in by its own session, so it opens in the
-/// browser rather than a web view the app would have to sign into itself.
+/// A plugin's settings page is the server's own web client. On Android and
+/// iOS it opens in an in-app web view signed in with the app's session; on
+/// desktop (and for Emby) in the browser.
 Future<void> openPluginSettingsPage(
   BuildContext context,
   String pageName,
@@ -98,6 +99,35 @@ Future<void> openPluginSettingsPage(
         ? '$root/web/index.html#!/configurationpage?name=$name'
         : '$root/web/#/configurationpage?name=$name',
   );
+  // On Android and iOS the page opens inside the app, signed in with the app's
+  // session; the TV's browser asked first and then needed its own sign-in
+  // (2026-11-08). Desktop and Emby keep the browser.
+  final client = GetIt.instance<MediaServerClient>();
+  final token = client.accessToken;
+  final userId = client.userId;
+  if ((PlatformDetection.isAndroid || PlatformDetection.isIOS) &&
+      !AdminServerScope.isEmby(context) &&
+      token != null &&
+      userId != null) {
+    String serverId = '';
+    try {
+      serverId = '${(await client.systemApi.getSystemInfo())['Id'] ?? ''}';
+    } catch (_) {}
+    if (!context.mounted) return;
+    await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
+      builder: (_) => PluginSettingsWebScreen(
+        title: pageName,
+        url: uri,
+        credentials: PluginSettingsWebScreen.credentialsFor(
+          serverAddress: root,
+          serverId: serverId,
+          userId: userId,
+          accessToken: token,
+        ),
+      ),
+    ));
+    return;
+  }
   final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!opened && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
