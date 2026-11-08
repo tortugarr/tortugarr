@@ -1245,7 +1245,7 @@ public sealed class TortugarrService
         }
     }
 
-    private static DateTimeOffset? HomeRelease(JsonNode movie)
+    internal static DateTimeOffset? HomeRelease(JsonNode movie)
     {
         var dates = new[] { (string?)movie["digitalRelease"], (string?)movie["physicalRelease"] }
             .Select(s => DateTimeOffset.TryParse(s, out var d) ? d : (DateTimeOffset?)null)
@@ -1915,6 +1915,56 @@ public sealed class TortugarrService
         var arr = fake.Arr == "Radarr" ? Radarr : Sonarr;
         await arr.Delete($"/queue/{fake.QueueId}?removeFromClient=true&blocklist=true&skipRedownload=false", ct).ConfigureAwait(false);
     }
+
+    // ------------------------------------------------------------------ early grabs
+
+    /// <summary>A release posted before the film can exist in that quality (the search rule 4.1, for any grab).</summary>
+    internal static bool IsEarlyGrab(DateTimeOffset? published, DateTimeOffset? homeRelease, int earlyDays) =>
+        published is not null && homeRelease is not null && published.Value < homeRelease.Value.AddDays(-earlyDays);
+
+    /// <summary>
+    /// Radarr downloads whose release was posted well before the film came out at home (2026-11-08):
+    /// once Nolan's "The Odyssey" is out digitally, Radarr's own RSS would happily grab a mockbuster
+    /// "The Odyssey (2026) 1080p" posted months earlier. The app's searches already drop these; this
+    /// covers what Radarr grabs by itself. Each download id is looked at once (<paramref name="seen"/>).
+    /// </summary>
+    internal async Task<List<EarlyGrab>> ListEarlyGrabs(HashSet<string> seen, CancellationToken ct)
+    {
+        var found = new List<EarlyGrab>();
+        var q = await Radarr.Get("/queue?pageSize=1000&includeMovie=true", ct).ConfigureAwait(false);
+        var records = (q?["records"] as JsonArray ?? new JsonArray()).Where(r => r is not null).Select(r => r!).ToList();
+        var present = records.Select(r => (string?)r["downloadId"]).Where(id => !string.IsNullOrEmpty(id)).Select(id => id!).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        seen.RemoveWhere(id => !present.Contains(id));
+        foreach (var r in records)
+        {
+            var id = (string?)r["downloadId"];
+            if (string.IsNullOrEmpty(id) || r["id"] is null || !seen.Add(id) || r["movie"] is not { } movie)
+            {
+                continue;
+            }
+
+            var home = HomeRelease(movie);
+            if (home is null)
+            {
+                continue;
+            }
+
+            var hist = await Radarr.Get($"/history?downloadId={Uri.EscapeDataString(id)}&pageSize=20", ct).ConfigureAwait(false);
+            var grabbed = (hist?["records"] as JsonArray ?? new JsonArray())
+                .FirstOrDefault(h => string.Equals((string?)h?["eventType"], "grabbed", StringComparison.OrdinalIgnoreCase));
+            var published = DateTimeOffset.TryParse((string?)grabbed?["data"]?["publishedDate"], out var p) ? p : (DateTimeOffset?)null;
+            if (IsEarlyGrab(published, home, Cfg.EarlyReleaseDays))
+            {
+                found.Add(new EarlyGrab((int)r["id"]!, id, (string?)r["title"] ?? id, (string?)movie["title"] ?? string.Empty, published!.Value, home.Value));
+            }
+        }
+
+        return found;
+    }
+
+    /// <summary>Removes an early grab with its files and blocklists it; no new search (RSS keeps watching).</summary>
+    internal Task RejectEarlyGrab(EarlyGrab g, CancellationToken ct) =>
+        Radarr.Delete($"/queue/{g.QueueId}?removeFromClient=true&blocklist=true&skipRedownload=true", ct);
 
     // ------------------------------------------------------------------ stalled downloads
 

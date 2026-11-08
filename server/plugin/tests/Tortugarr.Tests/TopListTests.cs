@@ -67,3 +67,32 @@ public class FolderNameTests
         Assert.Equal("Given (2020)", TortugarrService.FolderName(new System.Text.Json.Nodes.JsonObject { ["folder"] = "Given (2020)", ["title"] = "x" }));
     }
 }
+
+/// <summary>2026-11-08: Radarr's own grabs get the early-release rule too.</summary>
+public class RadarrEarlyGrabTests
+{
+    private static readonly DateTimeOffset NolanDigital = new(2026, 11, 17, 0, 0, 0, TimeSpan.Zero);
+
+    [Fact]
+    public void A_mockbuster_posted_in_july_is_early_for_nolans_film()
+    {
+        Assert.True(TortugarrService.IsEarlyGrab(new DateTimeOffset(2026, 7, 4, 0, 0, 0, TimeSpan.Zero), NolanDigital, 2));
+    }
+
+    [Fact]
+    public void A_release_two_days_before_or_later_is_fine_and_unknown_dates_never_count()
+    {
+        Assert.False(TortugarrService.IsEarlyGrab(NolanDigital.AddDays(-2), NolanDigital, 2));
+        Assert.False(TortugarrService.IsEarlyGrab(NolanDigital.AddDays(1), NolanDigital, 2));
+        Assert.False(TortugarrService.IsEarlyGrab(null, NolanDigital, 2));
+        Assert.False(TortugarrService.IsEarlyGrab(NolanDigital.AddDays(-90), null, 2));
+    }
+
+    [Fact]
+    public void Home_release_is_the_earlier_of_digital_and_physical()
+    {
+        var movie = System.Text.Json.Nodes.JsonNode.Parse("""{"digitalRelease":"2026-11-17T00:00:00Z","physicalRelease":"2026-12-01T00:00:00Z"}""")!;
+        Assert.Equal(NolanDigital, TortugarrService.HomeRelease(movie));
+        Assert.Null(TortugarrService.HomeRelease(System.Text.Json.Nodes.JsonNode.Parse("{}")!));
+    }
+}

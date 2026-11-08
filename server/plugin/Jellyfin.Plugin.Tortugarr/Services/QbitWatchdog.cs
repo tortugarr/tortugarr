@@ -143,6 +143,7 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
         }
 
         await SweepFakesAsync(ct).ConfigureAwait(false);
+        await SweepEarlyAsync(ct).ConfigureAwait(false);
 
         if (plan.Restart)
         {
@@ -179,6 +180,39 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
             Report($"removed fake download {fake.Title} ({fake.Reason}); blocklisted, {fake.Arr} searches again");
             await _notice.PostAsync("Stall", $"Fake download removed: {fake.Title}",
                 $"It held no video ({fake.Reason}). Tortugarr removed it from qBittorrent with its files, blocklisted the release, and {fake.Arr} is looking for another one.",
+                LogLevel.Warning).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>Radarr grabs of a release posted before the film was out at home: removed and blocklisted.</summary>
+    private async Task SweepEarlyAsync(CancellationToken ct)
+    {
+        List<EarlyGrab> early;
+        try
+        {
+            early = await _svc.ListEarlyGrabs(_state.EarlyChecked, ct).ConfigureAwait(false);
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            _log.LogDebug(e, "Tortugarr: early-grab check skipped");
+            return;
+        }
+
+        foreach (var g in early)
+        {
+            try
+            {
+                await _svc.RejectEarlyGrab(g, ct).ConfigureAwait(false);
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                _log.LogWarning(e, "Tortugarr: could not remove the early grab {Title}", g.Title);
+                continue;
+            }
+
+            Report($"removed {g.Title}: posted {g.Published:yyyy-MM-dd}, before {g.Movie} was out at home ({g.HomeRelease:yyyy-MM-dd}); blocklisted");
+            await _notice.PostAsync("Stall", $"Wrong release removed: {g.Title}",
+                $"It was posted {g.Published:d MMM yyyy}, before {g.Movie} came out digitally ({g.HomeRelease:d MMM yyyy}), so it is almost surely another film of the same name or a fake. Tortugarr removed and blocklisted it; Radarr keeps watching for a real release.",
                 LogLevel.Warning).ConfigureAwait(false);
         }
     }
@@ -505,6 +539,8 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
 /// <summary>What the watchdog remembers between passes.</summary>
 internal sealed class WatchdogState
 {
+    public HashSet<string> EarlyChecked { get; } = new(StringComparer.OrdinalIgnoreCase);
+
     public HashSet<string> Screened { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public Dictionary<string, DateTimeOffset> Fakes { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -563,3 +599,6 @@ internal sealed class WatchdogPlan
 
 /// <summary>A finished Radarr/Sonarr download that will never import: it holds no video.</summary>
 internal sealed record FakeDownload(string Arr, int QueueId, string DownloadId, string Title, string Reason);
+
+/// <summary>A Radarr download whose release was posted before the film came out at home.</summary>
+internal sealed record EarlyGrab(int QueueId, string DownloadId, string Title, string Movie, DateTimeOffset Published, DateTimeOffset HomeRelease);
