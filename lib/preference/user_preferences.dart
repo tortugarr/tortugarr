@@ -3783,6 +3783,13 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: true,
   );
 
+  /// When the administrator last saw the dashboard's alerts (ms since epoch):
+  /// the Alerts tile counts only newer ones (2026-11-08).
+  static final adminAlertsSeenAt = Preference(
+    key: 'admin_alerts_seen_at',
+    defaultValue: 0,
+  );
+
   static final seasonalRowEnabled = Preference(
     key: 'seasonal_row_enabled',
     defaultValue: false,

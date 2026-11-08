@@ -4,6 +4,7 @@ import 'package:server_core/server_core.dart';
 
 import '../admin_plugin_version_utils.dart';
 import 'admin_user_providers.dart';
+import '../../../../preference/user_preferences.dart';
 
 class AdminNotificationSummary {
   final int pluginUpdateCount;
@@ -53,6 +54,32 @@ final adminDashboardAlertsProvider =
     hasUserId: false,
   );
 });
+
+/// Alerts that came in after the administrator last looked at them, so the
+/// Alerts tile turns orange for new ones only instead of counting every
+/// "fake download removed" of the past week (user, 2026-11-08).
+final adminUnseenAlertsProvider = FutureProvider.autoDispose<int>((ref) async {
+  final seenMs = GetIt.instance.isRegistered<UserPreferences>()
+      ? GetIt.instance<UserPreferences>().get(UserPreferences.adminAlertsSeenAt)
+      : 0;
+  final weekAgo = DateTime.now().subtract(const Duration(days: 7));
+  final seen = DateTime.fromMillisecondsSinceEpoch(seenMs);
+  final since = seen.isAfter(weekAgo) ? seen : weekAgo;
+  final result = await GetIt.instance<MediaServerClient>().adminSystemApi.getActivityLog(
+    startIndex: 0,
+    limit: 1,
+    minDate: since,
+    hasUserId: false,
+  );
+  return result.totalRecordCount;
+});
+
+/// Marks the alerts as seen now.
+Future<void> markAdminAlertsSeen() async {
+  if (!GetIt.instance.isRegistered<UserPreferences>()) return;
+  await GetIt.instance<UserPreferences>()
+      .set(UserPreferences.adminAlertsSeenAt, DateTime.now().millisecondsSinceEpoch);
+}
 
 final adminNotificationSummaryProvider =
     FutureProvider.autoDispose<AdminNotificationSummary>((ref) async {

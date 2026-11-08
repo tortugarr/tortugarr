@@ -270,9 +270,13 @@ void main() {
     await pumpDashboard(tester);
     final now = DateTime.now();
 
-    expect(system.logCalls, hasLength(2));
+    // Activity, the alerts panel, and (2026-11-08) the count of alerts not
+    // seen yet for the Alerts tile.
+    expect(system.logCalls, hasLength(3));
     final activity = system.logCalls.singleWhere((c) => c['limit'] == 7);
     final alerts = system.logCalls.singleWhere((c) => c['limit'] == 4);
+    final unseen = system.logCalls.singleWhere((c) => c['limit'] == 1);
+    expect(unseen['hasUserId'], isFalse);
     expect(activity['startIndex'], 0);
     expect(activity['hasUserId'], isTrue);
     expect(

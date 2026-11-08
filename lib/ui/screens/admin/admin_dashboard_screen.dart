@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,6 +50,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
 
   @override
   void dispose() {
+    // Whatever alerts were on the dashboard have been seen now.
+    unawaited(markAdminAlertsSeen());
     _scrollController.dispose();
     super.dispose();
   }
@@ -118,13 +121,15 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     ref
       ..invalidate(adminDashboardActivityProvider)
       ..invalidate(adminDashboardAlertsProvider)
+      ..invalidate(adminUnseenAlertsProvider)
       ..invalidate(adminMediaSummaryProvider);
     await _loadData();
   }
 
-  void _openActivity(bool userActivity) => context.push(
-        '${Destinations.adminActivity}?useractivity=$userActivity',
-      );
+  void _openActivity(bool userActivity) {
+    if (!userActivity) unawaited(markAdminAlertsSeen());
+    context.push('${Destinations.adminActivity}?useractivity=$userActivity');
+  }
 
   String _inferOsFromStorage(StorageInfo storage) {
     final paths = [
@@ -222,7 +227,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               _AdminAttentionCard(summary: summary),
             _DashboardKpiStrip(
               sessionCount: sessionCount,
-              alertCount: alerts?.totalRecordCount ?? 0,
+              alertCount: ref.watch(adminUnseenAlertsProvider).valueOrNull ?? 0,
               worstStorageFill: _worstStorageFill(_storageInfo),
               // Emby reports its folders without their sizes.
               showDisk: !isEmby,

@@ -688,6 +688,28 @@ class TortugarrPluginClient {
             if (int.tryParse('${e.key}') != null) int.parse('${e.key}'): e.value == true,
       };
 
+  /// The plugin's server-side settings (administrator). Secrets come back
+  /// only as `<Name>Set: true/false`.
+  Future<Map<String, dynamic>> serverSettings() async =>
+      ((await _send('GET', '/Settings')) as Map).cast<String, dynamic>();
+
+  /// Saves only the given fields; an empty secret keeps the saved one.
+  Future<Map<String, dynamic>> saveServerSettings(Map<String, dynamic> changes) async =>
+      ((await _send('PUT', '/Settings', body: changes)) as Map).cast<String, dynamic>();
+
+  /// Tests one service with an address (and the saved key when none is typed).
+  Future<({bool ok, String text})> testConnection({
+    required String service,
+    required String url,
+    String username = '',
+    String key = '',
+  }) async {
+    final r = ((await _send('POST', '/Settings/Test',
+            body: {'service': service, 'url': url, 'username': username, 'key': key})) as Map)
+        .cast<String, dynamic>();
+    return (ok: r['ok'] == true, text: '${r['ok'] == true ? r['version'] ?? '' : r['message'] ?? ''}');
+  }
+
   /// This user's phone notifications: where to subscribe and what they get.
   Future<Map<String, dynamic>> myNotifications() async =>
       ((await _send('GET', '/Notifications/Me')) as Map).cast<String, dynamic>();

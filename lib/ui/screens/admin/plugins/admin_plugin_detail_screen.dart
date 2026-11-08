@@ -16,6 +16,7 @@ import '../../../util/error_message.dart';
 import '../../../../util/platform_detection.dart';
 import 'admin_plugin_install_confirm.dart';
 import 'plugin_settings_web_screen.dart';
+import 'tortugarr_server_settings_screen.dart';
 
 final _packageInfoProvider = FutureProvider.family<PackageInfo?, String>((
   ref,
@@ -81,6 +82,11 @@ String? pluginThumbUrl(String baseUrl, PluginInfo plugin) {
   return '$baseUrl/Plugins/${Uri.encodeComponent(plugin.id)}/Thumb'
       '?tag=${Uri.encodeQueryComponent(tag)}';
 }
+
+/// Tortugarr's own plugin gets a settings screen made for the remote instead
+/// of its web page (2026-11-08: the D-pad could not get into that page).
+bool _isTortugarr(String pluginId) =>
+    pluginId.replaceAll('-', '').toLowerCase() == '19f30fb1bb78444ba75e2997883b215c';
 
 /// A plugin's settings page is the server's own web client. On Android and
 /// iOS it opens in an in-app web view signed in with the app's session; on
@@ -416,7 +422,11 @@ class _AdminPluginDetailScreenState
                         onUninstall: () => _uninstallPlugin(plugin),
                         onOpenHtmlSettings: configPage == null
                             ? null
-                            : () => openPluginSettingsPage(context, configPage),
+                            : () => _isTortugarr(plugin.id)
+                                ? Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
+                                    builder: (_) => const TortugarrServerSettingsScreen(),
+                                  ))
+                                : openPluginSettingsPage(context, configPage),
                       ),
                       const SizedBox(height: 16),
                     ],
