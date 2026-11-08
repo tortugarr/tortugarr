@@ -39,6 +39,12 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>Spec 3.15: free space kept on top of a release before a download (the app's 10 GB buffer).</summary>
     public long SpaceBufferBytes { get; set; } = 10L * 1024 * 1024 * 1024;
 
+    /// <summary>Fill the fullest drive first: a new movie, series or download goes to the drive with
+    /// the least free space that still keeps this much free after it, and only when none can, to the
+    /// drive with the most free space. 0: always the drive with the most free space (2026-11-08:
+    /// the owner wants one drive filled before the next is started).</summary>
+    public long FillFloorBytes { get; set; } = 25L * 1024 * 1024 * 1024;
+
     /// <summary>qbittorrent, transmission, deluge or none. Only qBittorrent can list torrent files (video check, free space).</summary>
     public string DownloadClientType { get; set; } = "none";
 
@@ -49,8 +55,8 @@ public class PluginConfiguration : BasePluginConfiguration
     public string DownloadClientPassword { get; set; } = string.Empty;
 
     /// <summary>Folders the client downloads to, one per line as "its path|our path"
-    /// (H:\Downloads\|/data/torrents-ext/1). With more than one, each grab goes to the one with
-    /// the most free space. Written by the installer.</summary>
+    /// (H:\Downloads\|/data/torrents-ext/1). With more than one, each grab goes to the one to fill
+    /// (<see cref="FillFloorBytes"/>). Written by the installer.</summary>
     public string DownloadRoots { get; set; } = string.Empty;
 
     /// <summary>Radarr root folders a new movie may go to (comma-separated); empty = any.</summary>
@@ -125,7 +131,7 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>
     /// Every adult folder, one per line: the folder as qBittorrent sees it, a |, and the same
     /// folder as Jellyfin sees it (E:\-=XxX=-|/data/library/5). Each download goes to the one
-    /// with the most free space, and all of them are in the adult library (2026-11-07: E: was
+    /// to fill (<see cref="FillFloorBytes"/>), and all of them are in the adult library (2026-11-07: E: was
     /// full and adult downloads still went there). Empty: only <see cref="AdultSavePath"/>.
     /// </summary>
     public string AdultFolders { get; set; } = string.Empty;

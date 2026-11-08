@@ -284,8 +284,8 @@ public sealed class ReleaseFilter
                 continue; // 4.2
             }
 
-            // A full drive is not the release's fault: the grab moves the title to the drive with
-            // the most free space first (TortugarrService.MakeRoomAsync).
+            // A full drive is not the release's fault: the grab first moves the title to a drive
+            // that has room (TortugarrService.MakeRoomAsync).
             var rejections = r.Rejections.Where(x => !FreeSpaceRejection.IsMatch(x)).ToList();
             if (rejections.Any(x => UpgradeRejection.IsMatch(x)))
             {

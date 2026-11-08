@@ -93,7 +93,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
                 continue;
             }
 
-            var target = await TortugarrService.RootWithMostSpace(arr, ct).ConfigureAwait(false);
+            var target = await TortugarrService.RootToFill(arr, ct).ConfigureAwait(false);
             foreach (var server in await seerr.Get($"/settings/{kind}", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray())
             {
                 if (server is not JsonObject s || WithFolder(s, target) is not { } changed)
@@ -104,7 +104,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
                 await seerr.Put($"/settings/{kind}/{(int?)s["id"] ?? 0}", changed, ct).ConfigureAwait(false);
                 _log.LogInformation("Tortugarr: Seerr {Kind} \"{Name}\" now adds to {Target} (was {Old})", kind, (string?)s["name"], target, (string?)s["activeDirectory"]);
                 await _notice.PostAsync("SeerrFolder" + kind, $"Seerr requests now go to {target}",
-                    $"{(string?)s["activeDirectory"]} was low on space; new {(kind == "sonarr" ? "series" : "movies")} requested through Seerr go to the drive with the most free space. Nothing to do.",
+                    $"{(string?)s["activeDirectory"]} is no longer the drive to fill; new {(kind == "sonarr" ? "series" : "movies")} requested through Seerr go to {target}. Tortugarr fills the fullest drive first while it keeps {c.FillFloorBytes >> 30} GB free. Nothing to do.",
                     LogLevel.Information).ConfigureAwait(false);
             }
         }
@@ -166,7 +166,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
 
             var title = await arr.Get($"{titlePath}/{id}", ct).ConfigureAwait(false);
             var from = ((string?)title?["rootFolderPath"] ?? string.Empty).TrimEnd('/');
-            var target = await TortugarrService.RootWithMostSpace(arr, ct, arr.Name == "Radarr" && TortugarrService.IsDocumentary(title)).ConfigureAwait(false);
+            var target = await TortugarrService.RootToFill(arr, ct, arr.Name == "Radarr" && TortugarrService.IsDocumentary(title), roomiest: true).ConfigureAwait(false);
             if (title is null || string.Equals(from, target.TrimEnd('/'), StringComparison.Ordinal))
             {
                 continue; // already on the roomiest drive: moving would not help

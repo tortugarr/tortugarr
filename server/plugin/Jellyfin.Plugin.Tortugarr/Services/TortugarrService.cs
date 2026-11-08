@@ -797,10 +797,10 @@ public sealed class TortugarrService
         public int IndexerId { get; set; }
     }
 
-    /// <summary>The adult folder with the most free space, as qBittorrent writes it. A folder
-    /// Jellyfin cannot see (not mounted) is skipped; with none visible, the first one.</summary>
-    internal static string AdultSaveFolder(List<(string Client, string Local)> folders, Func<string, long?> free) =>
-        RoomiestDownloadRoot(folders.Select(f => (f.Client, f.Local)), free)?.Remote ?? folders[0].Client;
+    /// <summary>The adult folder to fill (<see cref="FillFirst"/>), as qBittorrent writes it. A
+    /// folder Jellyfin cannot see (not mounted) is skipped; with none visible, the first one.</summary>
+    internal static string AdultSaveFolder(List<(string Client, string Local)> folders, Func<string, long?> free, long need = 0, long floor = 0) =>
+        DownloadRootToFill(folders.Select(f => (f.Client, f.Local)), free, need, floor)?.Remote ?? folders[0].Client;
 
     /// <summary>Only a release shown in that search; straight to qBittorrent (no *arr).</summary>
     public async Task<object> AdultGrab(Guid userId, AdultGrabRequest g, CancellationToken ct)
@@ -815,7 +815,7 @@ public sealed class TortugarrService
         var url = !string.IsNullOrWhiteSpace(rel.MagnetUrl) ? rel.MagnetUrl : rel.DownloadUrl;
         var qbit = Qbit;
         var before = (await qbit.List(Cfg.AdultCategory, ct).ConfigureAwait(false)).Select(t => (string?)t?["hash"]).ToHashSet();
-        var savePath = AdultSaveFolder(AdultLibraryService.Folders(Cfg), FreeBytes);
+        var savePath = AdultSaveFolder(AdultLibraryService.Folders(Cfg), FreeBytes, rel.Size, Cfg.FillFloorBytes);
         if (url.StartsWith("magnet:", StringComparison.OrdinalIgnoreCase))
         {
             await qbit.Add(url, Cfg.AdultCategory, savePath, ct).ConfigureAwait(false);
@@ -968,7 +968,7 @@ public sealed class TortugarrService
                     ?? throw new UpstreamException("Radarr", $"no movie with TMDB id {tmdbId}");
         var body = found.DeepClone().AsObject();
         body["qualityProfileId"] = await DefaultProfile(radarr, ct).ConfigureAwait(false);
-        body["rootFolderPath"] = await RootWithMostSpace(radarr, ct, IsDocumentary(found)).ConfigureAwait(false);
+        body["rootFolderPath"] = await RootToFill(radarr, ct, IsDocumentary(found)).ConfigureAwait(false);
         body["monitored"] = true;
         body["minimumAvailability"] = "released";
         body["addOptions"] = new JsonObject { ["searchForMovie"] = false, ["monitor"] = "movieOnly" };
@@ -1029,7 +1029,7 @@ public sealed class TortugarrService
                     ?? throw new UpstreamException("Sonarr", $"no series with TVDB id {tvdbId}");
         var body = found.DeepClone().AsObject();
         body["qualityProfileId"] = await DefaultProfile(sonarr, ct).ConfigureAwait(false);
-        body["rootFolderPath"] = await RootWithMostSpace(sonarr, ct).ConfigureAwait(false);
+        body["rootFolderPath"] = await RootToFill(sonarr, ct).ConfigureAwait(false);
         body["monitored"] = false;
         body["monitorNewItems"] = "none";
         body["seasonFolder"] = true;
@@ -1109,7 +1109,11 @@ public sealed class TortugarrService
         return (int?)profiles.FirstOrDefault(p => Regex.IsMatch((string?)p?["name"] ?? string.Empty, "^(" + pattern + ")$", RegexOptions.IgnoreCase))?["id"];
     }
 
-    internal static async Task<string> RootWithMostSpace(ArrClient arr, CancellationToken ct, bool documentary = false)
+    /// <summary>The root folder a new title goes to: the fullest one that still keeps the fill
+    /// floor free after <paramref name="need"/> bytes (<see cref="FillFirst"/>). With
+    /// <paramref name="roomiest"/> the one with the most free space: a download held for lack of
+    /// space must go where there is most room.</summary>
+    internal static async Task<string> RootToFill(ArrClient arr, CancellationToken ct, bool documentary = false, long need = 0, bool roomiest = false)
     {
         var roots = await arr.Get("/rootfolder", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
         var docs = AllowedRoots(Cfg.DocumentaryRoots);
@@ -1117,7 +1121,7 @@ public sealed class TortugarrService
             : documentary && docs.Count > 0 ? docs
             : AllowedRoots(Cfg.MovieRoots);
         var titles = await arr.Get(arr.Name == "Radarr" ? "/movie" : "/series", ct).ConfigureAwait(false) as JsonArray ?? new JsonArray();
-        return PickRoot(roots, allowed, TitlesPerRoot(titles)) ?? throw new UpstreamException(arr.Name, "no root folder");
+        return PickRoot(roots, allowed, TitlesPerRoot(titles), need, roomiest ? 0 : Cfg.FillFloorBytes) ?? throw new UpstreamException(arr.Name, "no root folder");
     }
 
     /// <summary>How many movies or series each root folder holds.</summary>
@@ -1161,7 +1165,7 @@ public sealed class TortugarrService
             return;
         }
 
-        var target = await RootWithMostSpace(radarr, ct, documentary: true).ConfigureAwait(false);
+        var target = await RootToFill(radarr, ct, documentary: true).ConfigureAwait(false);
         await radarr.Put("/movie/editor", new JsonObject
         {
             ["movieIds"] = new JsonArray(movieId),
@@ -1175,19 +1179,47 @@ public sealed class TortugarrService
         list.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(p => p.TrimEnd('/')).ToHashSet(StringComparer.Ordinal);
 
-    /// <summary>The accessible root with the most free space, among the folders of the right type
-    /// when the installer named them. A root folder of another type is skipped: on 2026-10-20 a
+    /// <summary>The accessible root to fill (<see cref="FillFirst"/>; with floor 0 the one with
+    /// the most free space), among the folders of the right type when the installer named them. A root folder of another type is skipped: on 2026-10-20 a
     /// series folder that was not mounted into Radarr reported the WSL disk's 866 GB and got
     /// three new movies. Folders on one drive have the same free space; the one with the most
     /// titles is the main one, so a movie went to E:\-=MOVIES=- and not E:\-=Dokumentarer=-
     /// (2026-10-21: Fall landed among the documentaries and not in Movies).</summary>
-    internal static string? PickRoot(JsonArray roots, HashSet<string> allowed, IReadOnlyDictionary<string, int>? titles = null) =>
-        (string?)roots
+    internal static string? PickRoot(JsonArray roots, HashSet<string> allowed, IReadOnlyDictionary<string, int>? titles = null, long need = 0, long floor = 0)
+    {
+        var usable = roots
             .Where(r => (bool?)r?["accessible"] != false)
             .Where(r => allowed.Count == 0 || allowed.Contains(((string?)r?["path"] ?? string.Empty).TrimEnd('/')))
-            .OrderByDescending(r => ((long?)r?["freeSpace"] ?? 0) >> 30)
-            .ThenByDescending(r => titles?.GetValueOrDefault(((string?)r?["path"] ?? string.Empty).TrimEnd('/')) ?? 0)
-            .FirstOrDefault()?["path"];
+            .ToList();
+        var i = FillFirst(usable, r => (long?)r?["freeSpace"] ?? 0, need, floor,
+            r => titles?.GetValueOrDefault(((string?)r?["path"] ?? string.Empty).TrimEnd('/')) ?? 0);
+        return i < 0 ? null : (string?)usable[i]?["path"];
+    }
+
+    /// <summary>
+    /// Fill the fullest drive first (2026-11-08, the owner's wish): among the places whose free
+    /// space is known, the one with the least free space that still keeps <paramref name="floor"/>
+    /// bytes free after <paramref name="need"/> bytes; when none can, or the floor is 0, the one with
+    /// the most free space. Free space counts in whole GB, so folders on one drive tie and
+    /// <paramref name="rank"/> (more is better) decides. -1 when nothing is known.
+    /// </summary>
+    internal static int FillFirst<T>(IReadOnlyList<T> items, Func<T, long?> free, long need, long floor, Func<T, int>? rank = null)
+    {
+        var known = items.Select((item, i) => (i, Free: free(item), Rank: rank?.Invoke(item) ?? 0))
+            .Where(x => x.Free is not null)
+            .Select(x => (x.i, Free: x.Free!.Value, x.Rank))
+            .ToList();
+        if (known.Count == 0)
+        {
+            return -1;
+        }
+
+        var fits = floor > 0 ? known.Where(x => x.Free - Math.Max(0, need) >= floor).ToList() : new();
+        var pick = fits.Count > 0
+            ? fits.OrderBy(x => x.Free >> 30).ThenByDescending(x => x.Rank).First()
+            : known.OrderByDescending(x => x.Free >> 30).ThenByDescending(x => x.Rank).First();
+        return pick.i;
+    }
 
     internal static List<(string Remote, string Local)> ParseDownloadRoots(string text) =>
         text.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
@@ -1208,14 +1240,15 @@ public sealed class TortugarrService
         }
     }
 
-    /// <summary>The download folder with the most free space, as the client writes it, and its
-    /// free bytes. Null with fewer than one usable folder.</summary>
-    internal static (string Remote, long Free)? RoomiestDownloadRoot(IEnumerable<(string Remote, string Local)> roots, Func<string, long?> free) =>
-        roots.Select(r => (r.Remote, Free: free(r.Local)))
-            .Where(r => r.Free is not null)
-            .OrderByDescending(r => r.Free)
-            .Select(r => ((string Remote, long Free)?)(r.Remote, r.Free!.Value))
-            .FirstOrDefault();
+    /// <summary>The download folder to fill (<see cref="FillFirst"/>; with floor 0 the one with
+    /// the most free space), as the client writes it, and its free bytes. Null with no usable
+    /// folder.</summary>
+    internal static (string Remote, long Free)? DownloadRootToFill(IEnumerable<(string Remote, string Local)> roots, Func<string, long?> free, long need = 0, long floor = 0)
+    {
+        var known = roots.Select(r => (r.Remote, Free: free(r.Local))).Where(r => r.Free is not null).ToList();
+        var i = FillFirst(known, r => r.Free, need, floor);
+        return i < 0 ? null : (known[i].Remote, known[i].Free!.Value);
+    }
 
     /// <summary>The category's folder on a client path: H:\Downloads\ + radarr -> H:\Downloads\radarr.</summary>
     internal static string CategoryPath(string root, string category)
@@ -1225,8 +1258,9 @@ public sealed class TortugarrService
     }
 
     /// <summary>With several download folders (on several drives), point the category at the
-    /// one with the most free space before a grab, so the download lands where there is room.</summary>
-    private async Task PointCategoryAtRoomiestDrive(string category, CancellationToken ct)
+    /// one to fill before a grab of <paramref name="size"/> bytes, so the download lands where
+    /// there is room.</summary>
+    private async Task PointCategoryAtDriveToFill(string category, long size, CancellationToken ct)
     {
         var roots = ParseDownloadRoots(Cfg.DownloadRoots);
         if (roots.Count < 2 || Cfg.DownloadClientType != "qbittorrent")
@@ -1234,7 +1268,7 @@ public sealed class TortugarrService
             return;
         }
 
-        var best = RoomiestDownloadRoot(roots, FreeBytes);
+        var best = DownloadRootToFill(roots, FreeBytes, size, Cfg.FillFloorBytes);
         if (best is null)
         {
             return;
@@ -1429,8 +1463,8 @@ public sealed class TortugarrService
     private ArrClient Arr(SearchJob job) => job.IsMovie ? Radarr : Sonarr;
 
     /// <summary>
-    /// A title whose folder's drive cannot hold the download moves, with its files, to the root
-    /// with the most free space before the grab, so the download can be imported. Sonarr always
+    /// A title whose folder's drive cannot hold the download moves, with its files, before the
+    /// grab to the root to fill that has room for it (<see cref="FillFirst"/>), so the download can be imported. Sonarr always
     /// imports into the series' folder (2026-11-05: Detective Hole sat on E: with 67 MB left and
     /// every release said "may not fit"). Where files live does not matter to the app.
     /// </summary>
@@ -1457,7 +1491,7 @@ public sealed class TortugarrService
             return;
         }
 
-        var target = (await RootWithMostSpace(arr, ct, job.IsMovie && IsDocumentary(title)).ConfigureAwait(false)).TrimEnd('/');
+        var target = (await RootToFill(arr, ct, job.IsMovie && IsDocumentary(title), size).ConfigureAwait(false)).TrimEnd('/');
         if (target == from)
         {
             return;
@@ -1491,7 +1525,7 @@ public sealed class TortugarrService
             }
         }
 
-        await PointCategoryAtRoomiestDrive(job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory, ct).ConfigureAwait(false);
+        await PointCategoryAtDriveToFill(job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory, shown.Size, ct).ConfigureAwait(false);
         await MakeRoomAsync(arr, job, shown.Size, ct).ConfigureAwait(false);
         try
         {

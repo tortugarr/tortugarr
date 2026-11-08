@@ -48,6 +48,7 @@ public sealed class SettingsService
         [nameof(PluginConfiguration.DocumentaryRoots)] = Kind.Text,
         [nameof(PluginConfiguration.TvRoots)] = Kind.Text,
         [nameof(PluginConfiguration.SpaceBufferBytes)] = Kind.Number,
+        [nameof(PluginConfiguration.FillFloorBytes)] = Kind.Number,
         [nameof(PluginConfiguration.SearchTimeoutSeconds)] = Kind.Number,
         [nameof(PluginConfiguration.AdultEnabled)] = Kind.Switch,
         [nameof(PluginConfiguration.AdultCategory)] = Kind.Text,

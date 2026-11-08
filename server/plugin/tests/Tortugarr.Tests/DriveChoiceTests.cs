@@ -56,7 +56,7 @@ public class DriveChoiceTests
         var roots = TortugarrService.ParseDownloadRoots("H:\\Downloads\\|/data/torrents-ext/1\nE:\\Downloads\\|/data/torrents-ext/2\n");
         Assert.Equal(2, roots.Count);
         var free = new Dictionary<string, long?> { ["/data/torrents-ext/1"] = 5L << 30, ["/data/torrents-ext/2"] = 53L << 30 };
-        var best = TortugarrService.RoomiestDownloadRoot(roots, p => free[p]);
+        var best = TortugarrService.DownloadRootToFill(roots, p => free[p]);
         Assert.Equal("E:\\Downloads\\", best!.Value.Remote);
     }
 
@@ -64,8 +64,69 @@ public class DriveChoiceTests
     public void Unreadable_download_root_is_ignored()
     {
         var roots = TortugarrService.ParseDownloadRoots("H:\\Downloads\\|/a\nE:\\Downloads\\|/b");
-        var best = TortugarrService.RoomiestDownloadRoot(roots, p => p == "/a" ? 5L << 30 : null);
+        var best = TortugarrService.DownloadRootToFill(roots, p => p == "/a" ? 5L << 30 : null);
         Assert.Equal("H:\\Downloads\\", best!.Value.Remote);
+    }
+
+    // 2026-11-08: fill the fullest drive first, down to 25 GB free; only then the next one.
+    private const long Floor = 25L << 30;
+
+    [Fact]
+    public void The_fullest_drive_that_keeps_the_floor_is_filled_first()
+    {
+        var roots = Roots(("/data/library/3", 40), ("/data/library/7", 300), ("/data/library/9", 120));
+        Assert.Equal("/data/library/3", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), floor: Floor));
+    }
+
+    [Fact]
+    public void A_drive_under_the_floor_is_passed_over()
+    {
+        var roots = Roots(("/data/library/3", 11), ("/data/library/7", 300), ("/data/library/9", 120));
+        Assert.Equal("/data/library/9", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), floor: Floor));
+    }
+
+    [Fact]
+    public void The_download_size_counts_against_the_floor()
+    {
+        var roots = Roots(("/data/library/3", 40), ("/data/library/9", 120));
+        // 40 GB minus a 20 GB release leaves 20 GB, under the floor.
+        Assert.Equal("/data/library/9", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), need: 20L << 30, floor: Floor));
+        Assert.Equal("/data/library/3", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), need: 10L << 30, floor: Floor));
+    }
+
+    [Fact]
+    public void When_no_drive_keeps_the_floor_the_roomiest_wins()
+    {
+        var roots = Roots(("/data/library/3", 11), ("/data/library/9", 20));
+        Assert.Equal("/data/library/9", TortugarrService.PickRoot(roots, TortugarrService.AllowedRoots(string.Empty), floor: Floor));
+    }
+
+    [Fact]
+    public void Filling_keeps_the_type_list_and_the_main_folder_on_a_drive()
+    {
+        var roots = Roots(("/data/library/1", 30), ("/data/library/2", 52), ("/data/library/3", 52));
+        var allowed = TortugarrService.AllowedRoots("/data/library/2,/data/library/3");
+        var titles = TortugarrService.TitlesPerRoot(JsonNode.Parse(
+            "[{\"rootFolderPath\":\"/data/library/3\"},{\"rootFolderPath\":\"/data/library/3\"}]")!.AsArray());
+        Assert.Equal("/data/library/3", TortugarrService.PickRoot(roots, allowed, titles, floor: Floor));
+    }
+
+    [Fact]
+    public void Download_folders_fill_the_fullest_drive_first()
+    {
+        var roots = TortugarrService.ParseDownloadRoots("H:\\Downloads\\|/h\nE:\\Downloads\\|/e\nI:\\Downloads\\|/i");
+        var free = new Dictionary<string, long?> { ["/h"] = 111L << 30, ["/e"] = 11L << 30, ["/i"] = 644L << 30 };
+        Assert.Equal("H:\\Downloads\\", TortugarrService.DownloadRootToFill(roots, p => free[p], 5L << 30, Floor)!.Value.Remote);
+        // An 90 GB download would take H: under 25 GB: I: then.
+        Assert.Equal("I:\\Downloads\\", TortugarrService.DownloadRootToFill(roots, p => free[p], 90L << 30, Floor)!.Value.Remote);
+    }
+
+    [Fact]
+    public void Adult_downloads_fill_the_fullest_folder_first()
+    {
+        var folders = new List<(string, string)> { (@"E:\-=XxX=-", "/e"), (@"H:\-=XxX=-", "/h"), (@"I:\-=XxX=-", "/i") };
+        var free = new Dictionary<string, long?> { ["/e"] = 11L << 30, ["/h"] = 111L << 30, ["/i"] = 644L << 30 };
+        Assert.Equal(@"H:\-=XxX=-", TortugarrService.AdultSaveFolder(folders, p => free[p], 2L << 30, Floor));
     }
 
     [Theory]

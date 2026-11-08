@@ -47,11 +47,11 @@ public sealed class SpaceService
         }
 
         var qbit = _svc.Qbit;
-        // With several download folders the next download goes to the roomiest (see
-        // TortugarrService.PointCategoryAtRoomiestDrive); qBittorrent itself only reports its
+        // With several download folders the next download goes to the one to fill (see
+        // TortugarrService.PointCategoryAtDriveToFill); qBittorrent itself only reports its
         // default folder's drive.
-        var roomiest = TortugarrService.RoomiestDownloadRoot(
-            TortugarrService.ParseDownloadRoots(Cfg.DownloadRoots), TortugarrService.FreeBytes);
+        var roomiest = TortugarrService.DownloadRootToFill(
+            TortugarrService.ParseDownloadRoots(Cfg.DownloadRoots), TortugarrService.FreeBytes, bytes, Cfg.FillFloorBytes);
         var free = roomiest?.Free
             ?? await qbit.FreeSpace(ct).ConfigureAwait(false)
             ?? throw new UpstreamException("qBittorrent", "no free-space figure");

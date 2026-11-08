@@ -56,6 +56,7 @@ const _downloads = [
   _Field('DocumentaryRoots', 'Documentary folders', 'Radarr root folders for documentaries, comma-separated.'),
   _Field('TvRoots', 'Series folders', 'Sonarr root folders for new series, comma-separated. Empty = any.'),
   _Field('SpaceBufferBytes', 'Free space to keep', 'Kept free on top of a download before the app offers to make room.', _Kind.gb),
+  _Field('FillFloorBytes', 'Fill drives down to', 'New downloads go to the fullest drive that keeps this much free; 0 = always the drive with the most free space.', _Kind.gb),
   _Field('SearchTimeoutSeconds', 'Search time limit (seconds)', '', _Kind.number),
   _Field('TopLists', 'Top lists on Home', 'One per line: Title|mdblist-user/list.', _Kind.multiline),
 ];
