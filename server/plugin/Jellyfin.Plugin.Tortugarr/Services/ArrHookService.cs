@@ -20,9 +20,11 @@ public sealed class ArrHookService
     private readonly SeerrSync _seerr;
     private readonly TortugarrService _svc;
     private readonly ILogger<ArrHookService> _log;
+    private readonly NotifyService _notify;
 
-    public ArrHookService(ILibraryManager library, IProviderManager providers, IFileSystem fileSystem, SeerrSync seerr, TortugarrService svc, ILogger<ArrHookService> log)
+    public ArrHookService(ILibraryManager library, IProviderManager providers, IFileSystem fileSystem, SeerrSync seerr, TortugarrService svc, ILogger<ArrHookService> log, NotifyService notify)
     {
+        _notify = notify;
         _library = library;
         _providers = providers;
         _fileSystem = fileSystem;
@@ -88,6 +90,10 @@ public sealed class ArrHookService
         if (evt == "Download")
         {
             _seerr.TriggerRecentlyAdded(); // an import (or upgrade): Seerr shows it as available soon
+            if (_notify.Enabled && body["isUpgrade"]?.GetValue<bool>() != true)
+            {
+                _ = Task.Run(() => NotifyReadyAsync(body));
+            }
         }
 
         var items = HookPaths(body).Select(Affected).Where(i => i is not null).Select(i => i!).DistinctBy(i => i.Id).ToList();
@@ -104,6 +110,61 @@ public sealed class ArrHookService
             _log.LogInformation("Tortugarr: {Event} hook - refreshing {Name} ({Path}) only", evt, item.Name, item.Path);
             _providers.QueueRefresh(item.Id, new MetadataRefreshOptions(new DirectoryService(_fileSystem)), RefreshPriority.High);
         }
+    }
+
+    /// <summary>"Ready to watch" (G) to whoever started the download, else whoever asked Seerr for it.</summary>
+    private async Task NotifyReadyAsync(JsonNode body)
+    {
+        try
+        {
+            var downloadId = (string?)body["downloadId"];
+            var owners = new List<Guid>();
+            if (_notify.WhoGrabbed(downloadId) is { } grabber)
+            {
+                owners.Add(grabber);
+            }
+            else if (await SeerrRequesterAsync(body).ConfigureAwait(false) is { } requester)
+            {
+                owners.Add(requester);
+            }
+
+            if (body["movie"] is { } movie)
+            {
+                var title = (string?)movie["title"] ?? "A film";
+                var year = (int?)movie["year"];
+                var name = year > 0 ? $"{title} ({year})" : title;
+                await _notify.ReadyAsync(owners, $"Ready: {name}", $"{name} is ready to watch.").ConfigureAwait(false);
+            }
+            else if (body["series"] is { } series && body["episodes"] is JsonArray eps)
+            {
+                foreach (var season in eps.Where(e => e is not null).GroupBy(e => (int?)e!["seasonNumber"] ?? 0))
+                {
+                    _notify.EpisodesReady(owners, (string?)series["title"] ?? "A series", season.Key,
+                        season.Select(e => (int?)e!["episodeNumber"] ?? 0).Where(n => n > 0));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            _log.LogDebug(e, "Tortugarr: ready notification skipped");
+        }
+    }
+
+    /// <summary>The Jellyfin user behind the Seerr request for this title, when there is one.</summary>
+    private async Task<Guid?> SeerrRequesterAsync(JsonNode body)
+    {
+        var tmdb = (int?)body["movie"]?["tmdbId"];
+        var tvdb = (int?)body["series"]?["tvdbId"];
+        if (tmdb is null && tvdb is null)
+        {
+            return null;
+        }
+
+        var page = await _svc.Seerr.Get("/request?take=100&sort=added&filter=all", CancellationToken.None, 15).ConfigureAwait(false);
+        var hit = (page?["results"] as JsonArray ?? new JsonArray()).FirstOrDefault(r =>
+            (tmdb is not null && (int?)r?["media"]?["tmdbId"] == tmdb && (string?)r?["type"] == "movie")
+            || (tvdb is not null && (int?)r?["media"]?["tvdbId"] == tvdb && (string?)r?["type"] == "tv"));
+        return Guid.TryParse((string?)hit?["requestedBy"]?["jellyfinUserId"], out var id) ? id : null;
     }
 
     /// <summary>

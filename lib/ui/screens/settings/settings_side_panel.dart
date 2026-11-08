@@ -112,6 +112,7 @@ import 'plugin_settings_screen.dart';
 import 'ratings_config_screen.dart';
 import 'seerr_config_screen.dart';
 import 'settings_app_bar.dart';
+import 'notifications_screen.dart';
 import 'subtitle_customization_screen.dart';
 import 'subtitle_settings_screen.dart';
 import '../../../preference/detail_metadata_layout.dart';
@@ -367,6 +368,13 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
               onTap: () =>
                   context.pushSettingsScreen(const _TortugarrLanguageScreen()),
             ),
+            if (DownloadFeatures.viaPlugin && DownloadFeatures.capabilities.value.notifications)
+              _PanelEntry(
+                icon: Icons.notifications_active_outlined,
+                title: appL10n().tgNotifyTitle,
+                subtitle: appL10n().tgNotifySubtitle,
+                onTap: () => context.pushSettingsScreen(const NotificationsScreen()),
+              ),
             _PanelEntry(
               icon: Icons.lock,
               title: l10n.account,

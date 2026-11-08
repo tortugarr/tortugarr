@@ -30076,6 +30076,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Top lists'**
   String get tgTopListsRow;
+
+  /// No description provided for @tgNotifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone notifications'**
+  String get tgNotifyTitle;
+
+  /// No description provided for @tgNotifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A message on your phone when something is ready'**
+  String get tgNotifySubtitle;
+
+  /// No description provided for @tgNotifyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Tortugarr can tell your phone when a film or episode you asked for is ready to watch. It goes through the server\'s own ntfy, with no Google or Firebase account.'**
+  String get tgNotifyIntro;
+
+  /// No description provided for @tgNotifyStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Install the free ntfy app on your phone (Google Play, F-Droid or App Store).'**
+  String get tgNotifyStep1;
+
+  /// No description provided for @tgNotifyStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Scan the code with the phone, or in ntfy add a subscription with the server and topic below (\"Use another server\").'**
+  String get tgNotifyStep2;
+
+  /// No description provided for @tgNotifyStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Press Send test. Away from home, the phone reaches the server through your VPN (WireGuard).'**
+  String get tgNotifyStep3;
+
+  /// No description provided for @tgNotifyServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Server'**
+  String get tgNotifyServer;
+
+  /// No description provided for @tgNotifyTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic'**
+  String get tgNotifyTopic;
+
+  /// No description provided for @tgNotifyOpenApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in ntfy'**
+  String get tgNotifyOpenApp;
+
+  /// No description provided for @tgNotifyReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to watch'**
+  String get tgNotifyReady;
+
+  /// No description provided for @tgNotifyReadySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When something you downloaded or requested has arrived'**
+  String get tgNotifyReadySubtitle;
+
+  /// No description provided for @tgNotifyProblems.
+  ///
+  /// In en, this message translates to:
+  /// **'Problems Tortugarr dealt with'**
+  String get tgNotifyProblems;
+
+  /// No description provided for @tgNotifyProblemsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stuck, fake or wrong downloads that were removed or replaced'**
+  String get tgNotifyProblemsSubtitle;
+
+  /// No description provided for @tgNotifyEverything.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for everyone'**
+  String get tgNotifyEverything;
+
+  /// No description provided for @tgNotifyEverythingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Also when other users\' downloads arrive'**
+  String get tgNotifyEverythingSubtitle;
+
+  /// No description provided for @tgNotifyTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send test'**
+  String get tgNotifyTest;
+
+  /// No description provided for @tgNotifyTestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Test sent. Check your phone.'**
+  String get tgNotifyTestSent;
+
+  /// No description provided for @tgNotifyTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The test could not be sent. Is ntfy running on the server?'**
+  String get tgNotifyTestFailed;
+
+  /// No description provided for @tgNotifySaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the choice.'**
+  String get tgNotifySaveFailed;
+
+  /// No description provided for @tgNotifyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer from the Tortugarr plugin.'**
+  String get tgNotifyUnavailable;
+
+  /// No description provided for @tgNotifyNotSetUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone notifications are not set up on the server yet. Running the installer\'s repair adds them.'**
+  String get tgNotifyNotSetUp;
 }
 
 class _AppLocalizationsDelegate

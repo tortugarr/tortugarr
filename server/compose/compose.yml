@@ -103,6 +103,27 @@ services:
       - ${BIND_IP}:${SEERR_PORT}:5055
     logging: *logging
 
+  ntfy:
+    # Phone notifications without Firebase: the Tortugarr plugin posts "ready to watch" and
+    # problems to each user's secret topic; phones subscribe with the ntfy app. iPhones get a
+    # content-free wake-up through ntfy.sh (Apple's push), the message itself comes from here.
+    image: ${IMAGE_NTFY}
+    container_name: tortugarr-ntfy
+    user: "${PUID}:${PGID}"
+    restart: unless-stopped
+    command: serve
+    environment:
+      TZ: ${TZ}
+      NTFY_BASE_URL: http://${LAN_IP}:${NTFY_PORT}
+      NTFY_CACHE_FILE: /var/cache/ntfy/cache.db
+      NTFY_CACHE_DURATION: 72h
+      NTFY_UPSTREAM_BASE_URL: https://ntfy.sh
+    volumes:
+      - ${TORTUGARR_CONFIG}/ntfy:/var/cache/ntfy
+    ports:
+      - ${BIND_IP}:${NTFY_PORT}:80
+    logging: *logging
+
   flaresolverr:
     # Only Prowlarr talks to it, container to container - never published.
     image: ${IMAGE_FLARESOLVERR}

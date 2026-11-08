@@ -17216,4 +17216,77 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get tgTopListsRow => 'Top lists';
+
+  @override
+  String get tgNotifyTitle => 'Phone notifications';
+
+  @override
+  String get tgNotifySubtitle =>
+      'A message on your phone when something is ready';
+
+  @override
+  String get tgNotifyIntro =>
+      'Tortugarr can tell your phone when a film or episode you asked for is ready to watch. It goes through the server\'s own ntfy, with no Google or Firebase account.';
+
+  @override
+  String get tgNotifyStep1 =>
+      '1. Install the free ntfy app on your phone (Google Play, F-Droid or App Store).';
+
+  @override
+  String get tgNotifyStep2 =>
+      '2. Scan the code with the phone, or in ntfy add a subscription with the server and topic below (\"Use another server\").';
+
+  @override
+  String get tgNotifyStep3 =>
+      '3. Press Send test. Away from home, the phone reaches the server through your VPN (WireGuard).';
+
+  @override
+  String get tgNotifyServer => 'Server';
+
+  @override
+  String get tgNotifyTopic => 'Topic';
+
+  @override
+  String get tgNotifyOpenApp => 'Open in ntfy';
+
+  @override
+  String get tgNotifyReady => 'Ready to watch';
+
+  @override
+  String get tgNotifyReadySubtitle =>
+      'When something you downloaded or requested has arrived';
+
+  @override
+  String get tgNotifyProblems => 'Problems Tortugarr dealt with';
+
+  @override
+  String get tgNotifyProblemsSubtitle =>
+      'Stuck, fake or wrong downloads that were removed or replaced';
+
+  @override
+  String get tgNotifyEverything => 'Ready for everyone';
+
+  @override
+  String get tgNotifyEverythingSubtitle =>
+      'Also when other users\' downloads arrive';
+
+  @override
+  String get tgNotifyTest => 'Send test';
+
+  @override
+  String get tgNotifyTestSent => 'Test sent. Check your phone.';
+
+  @override
+  String get tgNotifyTestFailed =>
+      'The test could not be sent. Is ntfy running on the server?';
+
+  @override
+  String get tgNotifySaveFailed => 'Could not save the choice.';
+
+  @override
+  String get tgNotifyUnavailable => 'No answer from the Tortugarr plugin.';
+
+  @override
+  String get tgNotifyNotSetUp =>
+      'Phone notifications are not set up on the server yet. Running the installer\'s repair adds them.';
 }

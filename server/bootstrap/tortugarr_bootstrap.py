@@ -562,6 +562,9 @@ def tortugarr_plugin_config(h):
         # The adult library stays as the administrator set it (off by default); only its place is set.
         "AdultCategory": "adult", "AdultSavePath": adult_save_path(), "AdultDownloadPath": adult_download_path(),
         "AdultFolders": adult_folders(),
+        # Phone notifications (G): the plugin posts container to container, phones use the LAN address.
+        "NtfyUrl": "http://ntfy:80",
+        "NtfyPublicUrl": f"http://{STATE.get('lan_ip')}:{(STATE.get('ports') or {}).get('ntfy') or 8099}",
     })
     h.post(f"/Plugins/{TORTUGARR_PLUGIN_GUID}/Configuration", conf)
     ok("jellyfin: Tortugarr plugin linked to Sonarr, Radarr, Bazarr and the download client")

@@ -31,9 +31,11 @@ public class TortugarrController : ControllerBase
     private readonly MediaBrowser.Controller.Library.IUserManager _users;
     private readonly HealthService _health;
     private readonly TopListService _top;
+    private readonly NotifyService _notify;
 
-    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users, HealthService health, TopListService top)
+    public TortugarrController(TortugarrService svc, LibraryDeleteService delete, ArrHookService hook, SeriesService series, SpaceService space, UserLimitService limits, SettingsService settings, MediaBrowser.Controller.Library.IUserManager users, HealthService health, TopListService top, NotifyService notify)
     {
+        _notify = notify;
         _top = top;
         _health = health;
         _users = users;
@@ -337,6 +339,33 @@ public class TortugarrController : ControllerBase
     [Authorize(Policy = Admin)]
     public Task<IActionResult> Check([FromRoute] string downloadId) =>
         Run(async () => Json(await _svc.Check(downloadId, HttpContext.RequestAborted).ConfigureAwait(false)));
+
+    /// <summary>The user's phone notifications (ntfy): where to subscribe and what they get. Any logged-in user.</summary>
+    [HttpGet("Notifications/Me")]
+    public Task<IActionResult> MyNotifications() => Run(() =>
+        Task.FromResult<IActionResult>(Json(_notify.Describe(_notify.Me(UserId, IsAdmin), IsAdmin))));
+
+    public sealed class NotifyChoice
+    {
+        public bool? Ready { get; set; }
+
+        public bool? Problems { get; set; }
+
+        public bool? Everything { get; set; }
+    }
+
+    [HttpPut("Notifications/Me")]
+    public Task<IActionResult> SetMyNotifications([FromBody] NotifyChoice c) => Run(() =>
+        Task.FromResult<IActionResult>(Json(_notify.Describe(_notify.Update(UserId, c.Ready, c.Problems, c.Everything, IsAdmin), IsAdmin))));
+
+    /// <summary>Sends a test notification to the user's own topic.</summary>
+    [HttpPost("Notifications/Test")]
+    public Task<IActionResult> TestNotification() => Run(async () =>
+    {
+        var me = _notify.Me(UserId, IsAdmin);
+        var sent = await _notify.SendAsync(me.Topic, "Tortugarr test", "Notifications work. You will hear from Tortugarr here.", "tada", 3, HttpContext.RequestAborted).ConfigureAwait(false);
+        return sent ? NoContent() : Error(502, "not_sent", "ntfy did not take the message");
+    });
 
     /// <summary>The top lists the home screen may show. Any logged-in user.</summary>
     [HttpGet("TopLists")]

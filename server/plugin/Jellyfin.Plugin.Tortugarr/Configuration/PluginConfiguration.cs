@@ -147,6 +147,18 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>Non-administrators who may use Download Now within these limits (a "limited downloader").</summary>
     public UserLimit[] UserLimits { get; set; } = Array.Empty<UserLimit>();
 
+    /// <summary>
+    /// ntfy as the plugin reaches it, container to container (G, 2026-11-08). Empty switches
+    /// phone notifications off.
+    /// </summary>
+    public string NtfyUrl { get; set; } = string.Empty;
+
+    /// <summary>ntfy as the phones reach it (http://LAN-IP:port), shown in the app for subscribing.</summary>
+    public string NtfyPublicUrl { get; set; } = string.Empty;
+
+    /// <summary>Each user's secret ntfy topic and what they want to hear about.</summary>
+    public NotifyUser[] NotifyUsers { get; set; } = Array.Empty<NotifyUser>();
+
     /// <summary>Moonbase updates only through the Tortugarr repository, after the app-contract check (MoonbaseGate).</summary>
     public bool MoonbaseGateEnabled { get; set; } = true;
 
@@ -197,3 +209,23 @@ public class UserLimit
 
     public int EpisodesPerWeek { get; set; }
 }
+
+/// <summary>A user's phone notifications (ntfy).</summary>
+public class NotifyUser
+{
+    /// <summary>The Jellyfin user id, as Guid.ToString("N").</summary>
+    public string UserId { get; set; } = string.Empty;
+
+    /// <summary>Secret, random topic; whoever knows it can read it.</summary>
+    public string Topic { get; set; } = string.Empty;
+
+    /// <summary>"Ready to watch" for what this user downloaded or requested.</summary>
+    public bool Ready { get; set; } = true;
+
+    /// <summary>Administrators: stuck, fake or wrong downloads Tortugarr dealt with.</summary>
+    public bool Problems { get; set; } = true;
+
+    /// <summary>Administrators: "ready" for everything, whoever asked for it.</summary>
+    public bool Everything { get; set; }
+}
+

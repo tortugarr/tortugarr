@@ -17379,4 +17379,76 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgTopListsRow => 'Topplister';
+
+  @override
+  String get tgNotifyTitle => 'Varsler på telefonen';
+
+  @override
+  String get tgNotifySubtitle => 'En melding på telefonen når noe er klart';
+
+  @override
+  String get tgNotifyIntro =>
+      'Tortugarr kan si fra på telefonen når en film eller episode du har bestilt, er klar til å se. Det går via serverens egen ntfy, uten Google- eller Firebase-konto.';
+
+  @override
+  String get tgNotifyStep1 =>
+      '1. Installer den gratis ntfy-appen på telefonen (Google Play, F-Droid eller App Store).';
+
+  @override
+  String get tgNotifyStep2 =>
+      '2. Skann koden med telefonen, eller legg til et abonnement i ntfy med serveren og kanalen under («Use another server»).';
+
+  @override
+  String get tgNotifyStep3 =>
+      '3. Trykk Send test. Borte fra hjemmet når telefonen serveren gjennom VPN-en (WireGuard).';
+
+  @override
+  String get tgNotifyServer => 'Server';
+
+  @override
+  String get tgNotifyTopic => 'Kanal';
+
+  @override
+  String get tgNotifyOpenApp => 'Åpne i ntfy';
+
+  @override
+  String get tgNotifyReady => 'Klar til å se';
+
+  @override
+  String get tgNotifyReadySubtitle =>
+      'Når noe du har lastet ned eller bestilt, er kommet';
+
+  @override
+  String get tgNotifyProblems => 'Problemer Tortugarr har løst';
+
+  @override
+  String get tgNotifyProblemsSubtitle =>
+      'Fastlåste, falske eller feil nedlastinger som ble fjernet eller byttet ut';
+
+  @override
+  String get tgNotifyEverything => 'Klar for alle';
+
+  @override
+  String get tgNotifyEverythingSubtitle =>
+      'Også når andre brukeres nedlastinger kommer';
+
+  @override
+  String get tgNotifyTest => 'Send test';
+
+  @override
+  String get tgNotifyTestSent => 'Test sendt. Sjekk telefonen.';
+
+  @override
+  String get tgNotifyTestFailed =>
+      'Testen kunne ikke sendes. Kjører ntfy på serveren?';
+
+  @override
+  String get tgNotifySaveFailed => 'Kunne ikke lagre valget.';
+
+  @override
+  String get tgNotifyUnavailable => 'Fikk ikke svar fra Tortugarr-pluginen.';
+
+  @override
+  String get tgNotifyNotSetUp =>
+      'Varsler på telefonen er ikke satt opp på serveren ennå. Reparer i installeren legger dem til.';
 }

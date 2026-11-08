@@ -30,6 +30,9 @@ class TortugarrCapabilities {
   /// Top lists as home rows (plugin 1.3.0.24+).
   final bool topLists;
 
+  /// Phone notifications through the stack's ntfy (plugin 1.3.0.29+).
+  final bool notifications;
+
   /// Set for a limited downloader (a non-administrator with download
   /// limits); null for administrators and everyone else.
   final TortugarrUserLimits? limits;
@@ -47,6 +50,7 @@ class TortugarrCapabilities {
     this.adult = false,
     this.health = false,
     this.topLists = false,
+    this.notifications = false,
     this.limits,
   });
 
@@ -68,6 +72,7 @@ class TortugarrCapabilities {
       adult: on('adult'),
       health: on('health'),
       topLists: on('topLists'),
+      notifications: on('notifications'),
       limits: json['limits'] is Map
           ? TortugarrUserLimits.fromJson((json['limits'] as Map).cast<String, dynamic>())
           : null,
@@ -682,6 +687,22 @@ class TortugarrPluginClient {
           for (final e in raw.entries)
             if (int.tryParse('${e.key}') != null) int.parse('${e.key}'): e.value == true,
       };
+
+  /// This user's phone notifications: where to subscribe and what they get.
+  Future<Map<String, dynamic>> myNotifications() async =>
+      ((await _send('GET', '/Notifications/Me')) as Map).cast<String, dynamic>();
+
+  Future<Map<String, dynamic>> setMyNotifications({bool? ready, bool? problems, bool? everything}) async =>
+      ((await _send('PUT', '/Notifications/Me', body: {
+        if (ready != null) 'ready': ready,
+        if (problems != null) 'problems': problems,
+        if (everything != null) 'everything': everything,
+      })) as Map).cast<String, dynamic>();
+
+  /// Sends a test message to this user's topic.
+  Future<void> testNotification() async {
+    await _send('POST', '/Notifications/Test');
+  }
 
   /// The top lists the server offers as home rows: index and title.
   Future<List<({int index, String title})>> topLists() async {

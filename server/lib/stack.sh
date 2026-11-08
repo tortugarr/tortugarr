@@ -45,6 +45,8 @@ load_state() {
   P_TORRENT_PEER=$(state_get .ports.torrent_peer); P_SABNZBD=$(state_get .ports.sabnzbd)
   # Installs from before Bazarr was added have no port or languages yet.
   P_BAZARR=$(state_get .ports.bazarr); P_BAZARR=${P_BAZARR:-6767}
+  # Installs from before ntfy (2026-11-08) have no port for it yet.
+  P_NTFY=$(state_get .ports.ntfy); P_NTFY=${P_NTFY:-8099}
   SUB_LANGS=$(jq -r '(.subtitle_languages // ["en"]) | join(",")' "$f")
   METADATA_LANG=$(state_get .metadata_language); METADATA_COUNTRY=$(state_get .metadata_country)
   QUALITY_PROFILE=$(state_get .default_quality_profile)
@@ -70,7 +72,7 @@ write_state() {
     --argjson vpn "$( [ "$VPN" = true ] && echo true || echo false)" \
     --argjson hwaccel "$( [ "$HWACCEL" = true ] && echo true || echo false)" \
     --argjson pj "$P_JELLYFIN" --argjson ps "$P_SEERR" --argjson pso "$P_SONARR" --argjson pr "$P_RADARR" \
-    --argjson pp "$P_PROWLARR" --argjson ptw "$P_TORRENT_WEB" --argjson ptp "$P_TORRENT_PEER" --argjson psab "$P_SABNZBD" --argjson pbz "${P_BAZARR:-6767}" \
+    --argjson pp "$P_PROWLARR" --argjson ptw "$P_TORRENT_WEB" --argjson ptp "$P_TORRENT_PEER" --argjson psab "$P_SABNZBD" --argjson pbz "${P_BAZARR:-6767}" --argjson pnt "${P_NTFY:-8099}" \
     --argjson extra "${EXTRA_LIBS_JSON:-[]}" --argjson newextra "$( [ "${NEW_IN_EXTRA:-y}" = y ] && echo true || echo false)" --arg profile "${QUALITY_PROFILE:-HD-1080p}" \
     --argjson scan "${SCAN_MINUTES:-30}" --arg sublangs "${SUB_LANGS:-en}" \
     --arg prepo "$MOONFIN_PLUGIN_REPO" --arg pguid "$MOONFIN_PLUGIN_GUID" --arg pver "$MOONFIN_PLUGIN_VERSION" --arg pmin "${MOONFIN_PLUGIN_MIN_VERSION:-$MOONFIN_PLUGIN_VERSION}" \
@@ -80,7 +82,7 @@ write_state() {
       tz:$tz, lan_ip:$lan_ip, bind_ip:$bind_ip, language:$language,
       metadata_language:$mlang, metadata_country:$mcountry,
       torrent_client:$client, usenet:$usenet, vpn:$vpn, hwaccel:$hwaccel,
-      ports:{jellyfin:$pj, seerr:$ps, sonarr:$pso, radarr:$pr, prowlarr:$pp, bazarr:$pbz,
+      ports:{jellyfin:$pj, seerr:$ps, sonarr:$pso, radarr:$pr, prowlarr:$pp, bazarr:$pbz, ntfy:$pnt,
              torrent_web:$ptw, torrent_peer:$ptp, sabnzbd:$psab},
       extra_libraries:$extra, new_titles_in_extra_only:$newextra, default_quality_profile:$profile, library_scan_minutes:$scan,
       subtitle_languages:($sublangs | split(",") | map(select(length > 0))),
@@ -276,6 +278,7 @@ write_env() {
     echo "RADARR_PORT=$P_RADARR"
     echo "PROWLARR_PORT=$P_PROWLARR"
     echo "BAZARR_PORT=$P_BAZARR"
+    echo "NTFY_PORT=${P_NTFY:-8099}"
     echo "TORRENT_WEB_PORT=$P_TORRENT_WEB"
     echo "TORRENT_PEER_PORT=$P_TORRENT_PEER"
     echo "SABNZBD_PORT=$P_SABNZBD"
@@ -329,7 +332,7 @@ engine() {
 }
 
 expected_services() {
-  local s=(jellyfin sonarr radarr prowlarr bazarr seerr flaresolverr)
+  local s=(jellyfin sonarr radarr prowlarr bazarr seerr flaresolverr ntfy)
   client_in_stack && s+=("$TORRENT_CLIENT")
   [ "$USENET" = true ] && s+=(sabnzbd)
   [ "$VPN" = true ] && client_in_stack && s+=(gluetun)
@@ -351,7 +354,7 @@ wait_containers() {
 }
 
 published_ports() {
-  local p=("$P_JELLYFIN" "$P_SEERR" "$P_SONARR" "$P_RADARR" "$P_PROWLARR" "$P_BAZARR")
+  local p=("$P_JELLYFIN" "$P_SEERR" "$P_SONARR" "$P_RADARR" "$P_PROWLARR" "$P_BAZARR" "${P_NTFY:-8099}")
   client_in_stack && p+=("$P_TORRENT_WEB")
   [ "$USENET" = true ] && p+=("$P_SABNZBD")
   echo "${p[@]}"
@@ -417,6 +420,8 @@ ensure_dirs() {
     "$DATA_DIR"/usenet/complete/{tv,movies,prowlarr} 2>/dev/null || true
   chmod 775 "$DATA_DIR" "$DATA_DIR"/{media,torrents,usenet} 2>/dev/null || true
   chown "$PUID:$PGID" "$CONFIG_DIR"
+  # ntfy runs as PUID:PGID, so its cache folder must be theirs before Compose would make it as root.
+  mkdir -p "$CONFIG_DIR/ntfy" && chown "$PUID:$PGID" "$CONFIG_DIR/ntfy"
   chmod 700 "$INSTALL_DIR/backups"
 }
 

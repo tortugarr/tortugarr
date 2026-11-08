@@ -37,7 +37,7 @@ win_helper_present() {
 win_ports() {
   local f; f=$(STATE_FILE)
   jq -r --arg c "$(jq -r .torrent_client "$f")" --argjson u "$(jq -r '.usenet // false' "$f")" '
-    [.ports.jellyfin, .ports.seerr, .ports.sonarr, .ports.radarr, .ports.prowlarr, .ports.bazarr]
+    [.ports.jellyfin, .ports.seerr, .ports.sonarr, .ports.radarr, .ports.prowlarr, .ports.bazarr, .ports.ntfy]
     + (if $c != "none" and $c != "qbittorrent-ext" then [.ports.torrent_web] else [] end)
     + (if $u then [.ports.sabnzbd] else [] end)
     | map(select(. != null) | tostring) | join(",")' "$f"

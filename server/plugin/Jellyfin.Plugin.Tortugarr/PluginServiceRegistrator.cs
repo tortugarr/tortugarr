@@ -21,6 +21,7 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false });
         serviceCollection.AddSingleton<TortugarrService>();
         serviceCollection.AddSingleton<AdminNotice>();
+        serviceCollection.AddSingleton<NotifyService>();
         serviceCollection.AddSingleton<UserLimitService>();
         serviceCollection.AddSingleton<SeriesRequestLog>();
         serviceCollection.AddSingleton<SettingsService>();

@@ -688,3 +688,21 @@ series by TVDB id). Adult entries are left out.
 The app's home section "Top lists" (`tortugarr_top_lists`, on by default) shows one row per list:
 owned titles as library cards, the rest as Seerr cards that lead to Download now.
 
+### Phone notifications (G, plugin 1.3.0.29+, capability `notifications`)
+
+The stack runs ntfy (`tortugarr-ntfy`, image pinned in versions.env, port `NTFY_PORT`, default
+8099; iPhones get a content-free wake-up through ntfy.sh). The plugin settings `NtfyUrl`
+(container to container, `http://ntfy:80`) and `NtfyPublicUrl` (`http://LAN-IP:8099`) are set
+by the installer. Each user gets a secret random topic (`tortugarr-` + 26 base32 characters) the
+first time they open the app's notification page.
+
+- `GET /Notifications/Me` (any user): `{available, server, topic, subscribeUrl, appUrl (ntfy://…), ready, problems, everything, isAdmin}`.
+- `PUT /Notifications/Me` `{ready?, problems?, everything?}`; problems/everything only for administrators.
+- `POST /Notifications/Test`: a test message to the user's topic (204, or 502 when ntfy refused).
+
+"Ready" goes out on Radarr/Sonarr's import hook (not for upgrades) to whoever started the
+download in the app (a small ledger by download id, 30 days), else to whoever requested it in
+Seerr, plus administrators with `everything`; episodes of one season within 5 minutes become one
+message. Every activity-log notice of warning level (stall give-up, fake or wrong release
+removed, qBittorrent restarted) also goes to administrators with `problems`.
+

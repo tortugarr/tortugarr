@@ -13,10 +13,12 @@ public sealed class AdminNotice
 {
     private readonly IActivityManager _activity;
     private readonly ILogger<AdminNotice> _log;
+    private readonly NotifyService _notify;
     private readonly Dictionary<string, string> _last = new(StringComparer.Ordinal);
 
-    public AdminNotice(IActivityManager activity, ILogger<AdminNotice> log)
+    public AdminNotice(IActivityManager activity, ILogger<AdminNotice> log, NotifyService notify)
     {
+        _notify = notify;
         _activity = activity;
         _log = log;
     }
@@ -46,6 +48,12 @@ public sealed class AdminNotice
         catch (Exception e)
         {
             _log.LogDebug(e, "Tortugarr: activity log entry not written");
+        }
+
+        // The same to administrators' phones (G): what went wrong and what Tortugarr did.
+        if (severity >= LogLevel.Warning)
+        {
+            await _notify.ProblemAsync(name, overview).ConfigureAwait(false);
         }
     }
 }

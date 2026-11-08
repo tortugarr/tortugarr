@@ -271,6 +271,7 @@ ask_questions() {
     pick_port P_RADARR "${P_RADARR:-7878}" Radarr
     pick_port P_PROWLARR "${P_PROWLARR:-9696}" Prowlarr
     pick_port P_BAZARR "${P_BAZARR:-6767}" Bazarr
+    pick_port P_NTFY "${P_NTFY:-8099}" "ntfy (phone notifications)"
     local def_web=8080
     case "$TORRENT_CLIENT" in transmission) def_web=9091 ;; deluge) def_web=8112 ;; esac
     if client_in_stack; then
@@ -279,7 +280,7 @@ ask_questions() {
     fi
     [ "$USENET" = true ] && pick_port P_SABNZBD "${P_SABNZBD:-8085}" SABnzbd
   fi
-  P_TORRENT_WEB=${P_TORRENT_WEB:-8080}; P_TORRENT_PEER=${P_TORRENT_PEER:-6881}; P_SABNZBD=${P_SABNZBD:-8085}; P_BAZARR=${P_BAZARR:-6767}
+  P_TORRENT_WEB=${P_TORRENT_WEB:-8080}; P_TORRENT_PEER=${P_TORRENT_PEER:-6881}; P_SABNZBD=${P_SABNZBD:-8085}; P_BAZARR=${P_BAZARR:-6767}; P_NTFY=${P_NTFY:-8099}
   SCAN_MINUTES=${SCAN_MINUTES:-30}
 
   if [ "$reconf" = 0 ]; then
@@ -317,7 +318,7 @@ show_summary() {
   printf '  %-26s %s\n' "$(t s_install_dir)" "$INSTALL_DIR" "$(t s_config_dir)" "$CONFIG_DIR" \
     "$(t s_data_dir)" "$DATA_DIR" "$(t s_client)" "$(client_label "$TORRENT_CLIENT")" "$(t s_usenet)" "$(yes_no "$USENET")" \
     "$(t s_vpn)" "$(yes_no "$VPN")" "$(t s_hwaccel)" "$(yes_no "$HWACCEL")" "$(t s_lan_ip)" "$LAN_IP" "$(t s_owner)" "$PUID:$PGID" \
-    "$(t s_ports)" "Jellyfin $P_JELLYFIN, Seerr $P_SEERR, Sonarr $P_SONARR, Radarr $P_RADARR, Prowlarr $P_PROWLARR, Bazarr $P_BAZARR"
+    "$(t s_ports)" "Jellyfin $P_JELLYFIN, Seerr $P_SEERR, Sonarr $P_SONARR, Radarr $P_RADARR, Prowlarr $P_PROWLARR, Bazarr $P_BAZARR, ntfy $P_NTFY"
   local n; n=$(jq length <<< "${EXTRA_LIBS_JSON:-[]}")
   if [ "$TORRENT_CLIENT" = qbittorrent-ext ]; then
     printf '  %-26s %s\n' "$(t s_ext_downloads)" "$(jq -r '[.mounts[]?.remote] | join(", ")' <<< "${EXT_QBIT_JSON:-{\}}")"

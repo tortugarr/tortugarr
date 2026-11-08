@@ -78,9 +78,11 @@ public sealed class TortugarrService
     private readonly AdultLibraryService _adultLibrary;
     private readonly UserLimitService _limits;
     private readonly SeriesRequestLog _seriesLog;
+    private readonly NotifyService _notify;
 
-    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary, UserLimitService limits, SeriesRequestLog seriesLog)
+    public TortugarrService(IHttpClientFactory httpFactory, ILogger<TortugarrService> log, AdultLibraryService adultLibrary, UserLimitService limits, SeriesRequestLog seriesLog, NotifyService notify)
     {
+        _notify = notify;
         _seriesLog = seriesLog;
         _httpFactory = httpFactory;
         _log = log;
@@ -226,6 +228,7 @@ public sealed class TortugarrService
                 adult = isAdmin && AdultReady(c),
                 health = isAdmin,
                 topLists = !string.IsNullOrWhiteSpace(c.TopLists),
+                notifications = _notify.Enabled,
             },
             categories = new { movies = c.MovieCategory, tv = c.TvCategory },
             limits,
@@ -1314,6 +1317,7 @@ public sealed class TortugarrService
 
         // The movie's Seerr request (made by the app) must wait until Radarr has it queued.
         var (queued, downloadId) = await WaitQueued(Arr(job), job, TimeSpan.FromSeconds(job.IsMovie ? 60 : 30), ct).ConfigureAwait(false);
+        _notify.RememberGrab(downloadId, userId); // its "ready" goes to this user
         if (!job.IsMovie)
         {
             await RememberSeriesGrab(userId, job, downloadId, ct).ConfigureAwait(false);
