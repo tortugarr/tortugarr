@@ -4,7 +4,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../data/services/tortugarr/tortugarr_plugin_client.dart';
 import '../../../widgets/download_now/free_space_dialog.dart' show formatBytes;
 import '../../../../util/platform_detection.dart';
-import '../../../widgets/focus/focusable_wrapper.dart';
 import 'admin_form_styles.dart';
 
 /// Server health on the admin dashboard (2026-11-08): every service Tortugarr
@@ -240,10 +239,23 @@ class _TortugarrHealthCardState extends State<TortugarrHealthCard> {
     // lands on it (it is at the top of the dashboard), Down goes on to the
     // buttons below. Nothing inside it takes the focus (2026-11-08).
     if (!PlatformDetection.isTV) return section;
-    return FocusableWrapper(
-      disableScale: true,
-      borderRadius: 18,
-      child: ExcludeFocus(child: section),
+    return Focus(
+      child: Builder(
+        builder: (context) {
+          final focused = Focus.of(context).hasFocus;
+          return DecoratedBox(
+            position: DecorationPosition.foreground,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: focused ? Colors.white : Colors.transparent,
+                width: 3,
+              ),
+            ),
+            child: ExcludeFocus(child: section),
+          );
+        },
+      ),
     );
   }
 

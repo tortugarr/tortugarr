@@ -214,7 +214,23 @@ class _AdminTvKeysState extends State<AdminTvKeys> {
         return;
       }
     }
-    _nearestInArea(node, direction)?.requestFocus();
+    final next = _nearestInArea(node, direction);
+    if (next != null) {
+      next.requestFocus();
+      return;
+    }
+    // Nothing focusable below yet: a list builds its rows only near the
+    // screen, so scroll on and let the next press find them (2026-11-08: Down
+    // stuck on the server health card above the dashboard's buttons).
+    if (direction == TraversalDirection.down) {
+      final position = Scrollable.maybeOf(ctx)?.position;
+      if (position != null && position.pixels < position.maxScrollExtent - 1) {
+        final target = (position.pixels + position.viewportDimension * 0.6)
+            .clamp(position.minScrollExtent, position.maxScrollExtent);
+        position.animateTo(target,
+            duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+      }
+    }
   }
 
   /// The closest focusable control in [direction] across the whole admin

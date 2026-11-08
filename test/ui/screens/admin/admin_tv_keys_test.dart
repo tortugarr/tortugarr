@@ -225,4 +225,33 @@ void main() {
     await tester.pump();
     expect(dashboard.hasPrimaryFocus, isTrue);
   });
+
+  // 2026-11-08 on the TV: Down from the server health card found nothing,
+  // because the buttons further down were not built yet; it now scrolls on.
+  testWidgets('Down with nothing focusable below scrolls the page on', (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final card = FocusNode();
+    final scroll = ScrollController();
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: AdminTvKeys(
+          child: ListView(
+            controller: scroll,
+            children: [
+              Focus(focusNode: card, child: const SizedBox(height: 300, child: Text('health'))),
+              const SizedBox(height: 2000),
+              TextButton(onPressed: () {}, child: const Text('Scan All Libraries')),
+            ],
+          ),
+        ),
+      ),
+    ));
+    card.requestFocus();
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.pumpAndSettle();
+    expect(scroll.offset, greaterThan(0));
+  });
 }
