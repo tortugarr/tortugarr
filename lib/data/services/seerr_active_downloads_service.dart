@@ -65,6 +65,10 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
   final Map<int, double> _lastFraction = <int, double>{};
   final Map<int, bool> _lastImporting = <int, bool>{};
 
+  /// Titles looked up by TMDB id ('movie:1' / 'tv:2'): Seerr's request list
+  /// sends media without a title, so the bar read "Movie · · 4K".
+  final Map<String, String> _titles = <String, String>{};
+
   List<SeerrActiveDownload> get downloads => _downloads;
   bool get hasActive => _downloads.isNotEmpty;
 
@@ -244,9 +248,23 @@ class SeerrActiveDownloadsService extends ChangeNotifier {
         for (final i in [...?media.downloadStatus, ...?media.downloadStatus4k])
           if (i.downloadId != null) i.downloadId!.toUpperCase(),
       ]);
+      final queueName = LiveDownloadProgress.queue
+          .where((q) => LiveDownloadProgress.matches(q, tmdbId: tmdbId, tvdbId: tvdbId))
+          .map((q) => q.name)
+          .firstWhere((n) => n != null && n.isNotEmpty, orElse: () => null);
+      final titleKey = '$type:${media.tmdbId}';
+      var title = media.title ?? media.name ?? queueName ?? _titles[titleKey] ?? '';
+      if (title.isEmpty && media.tmdbId != null) {
+        try {
+          title = type == 'movie'
+              ? (await repo.getMovieDetails(media.tmdbId!)).title
+              : ((await repo.getTvDetails(media.tmdbId!)).name ?? '');
+          if (title.isNotEmpty) _titles[titleKey] = title;
+        } catch (_) {}
+      }
       out.add(SeerrActiveDownload(
         requestId: req.id,
-        title: media.title ?? media.name ?? '',
+        title: title,
         mediaType: media.mediaType ?? req.type,
         is4k: req.is4k,
         hdSummary: hd,
