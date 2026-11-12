@@ -680,6 +680,14 @@ class SeerrRepository {
     (c) async => SeerrMovieDetails.fromJson(await c.getMovieDetails(tmdbId)),
   );
 
+  /// Seerr's movie details as raw JSON (Tortugarr badges read fields the
+  /// typed model leaves out, like productionCompanies).
+  Future<Map<String, dynamic>> getMovieDetailsRaw(int tmdbId) =>
+      _withClient((c) => c.getMovieDetails(tmdbId));
+
+  Future<Map<String, dynamic>> getTvDetailsRaw(int tmdbId) =>
+      _withClient((c) => c.getTvDetails(tmdbId));
+
   Future<SeerrTvDetails> getTvDetails(int tmdbId) => _withClient(
     (c) async => SeerrTvDetails.fromJson(await c.getTvDetails(tmdbId)),
   );

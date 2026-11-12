@@ -657,6 +657,123 @@ class AppLocalizationsMk extends AppLocalizations {
   String get tgTopListsNone => 'The server offers no top lists right now.';
 
   @override
+  String get tgPosterBadges => 'Poster badges';
+
+  @override
+  String get tgPosterBadgesSubtitle =>
+      'BB on blockbusters, MB on mockbusters, the network logo on series';
+
+  @override
+  String get tgShowMockbusters => 'Show mockbusters';
+
+  @override
+  String get tgShowMockbustersSubtitle =>
+      'Off: titles marked MB are left out of Home';
+
+  @override
+  String get tgBbColor => 'BB colour';
+
+  @override
+  String get tgMbColor => 'MB colour';
+
+  @override
+  String get tgBadgeOpacity => 'Badge opacity';
+
+  @override
+  String get tgBadgeCorner => 'Badge corner';
+
+  @override
+  String get tgBadgeSize => 'Badge size';
+
+  @override
+  String get tgNetworkLogos => 'Network logo on series';
+
+  @override
+  String get tgNetworkLogosSubtitle =>
+      'The logo of the channel or service that made the series';
+
+  @override
+  String get tgNetworkBoxColor => 'Logo box colour';
+
+  @override
+  String get tgNetworkOpacity => 'Logo box opacity';
+
+  @override
+  String get tgNetworkCorner => 'Logo corner';
+
+  @override
+  String get tgColorBrass => 'Brass';
+
+  @override
+  String get tgColorGold => 'Gold';
+
+  @override
+  String get tgColorOrange => 'Orange';
+
+  @override
+  String get tgColorRed => 'Red';
+
+  @override
+  String get tgColorBlue => 'Blue';
+
+  @override
+  String get tgColorGreen => 'Green';
+
+  @override
+  String get tgColorWhite => 'White';
+
+  @override
+  String get tgColorBlack => 'Black';
+
+  @override
+  String get tgCornerTopLeft => 'Top left';
+
+  @override
+  String get tgCornerTopRight => 'Top right';
+
+  @override
+  String get tgCornerBottomLeft => 'Bottom left';
+
+  @override
+  String get tgCornerBottomRight => 'Bottom right';
+
+  @override
+  String get tgSizeSmall => 'Small';
+
+  @override
+  String get tgSizeMedium => 'Medium';
+
+  @override
+  String get tgSizeLarge => 'Large';
+
+  @override
+  String get tgNavHarbor => 'Harbor';
+
+  @override
+  String get tgNavSpyglass => 'Spyglass';
+
+  @override
+  String get tgNavShuffle => 'Roll the dice';
+
+  @override
+  String get tgNavGenres => 'Charts';
+
+  @override
+  String get tgNavTreasure => 'Treasure';
+
+  @override
+  String get tgNavBountyBoard => 'Bounty board';
+
+  @override
+  String get tgNavQuarters => 'Captain\'s quarters';
+
+  @override
+  String get tgSpotlight => 'Spotlight';
+
+  @override
+  String get tgHarborLoading => 'Loading your harbor…';
+
+  @override
   String get tgSmartTube => 'SmartTube';
 
   @override

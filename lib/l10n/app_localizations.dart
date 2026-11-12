@@ -1186,6 +1186,234 @@ abstract class AppLocalizations {
   /// **'The server offers no top lists right now.'**
   String get tgTopListsNone;
 
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Poster badges'**
+  String get tgPosterBadges;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'BB on blockbusters, MB on mockbusters, the network logo on series'**
+  String get tgPosterBadgesSubtitle;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Show mockbusters'**
+  String get tgShowMockbusters;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Off: titles marked MB are left out of Home'**
+  String get tgShowMockbustersSubtitle;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'BB colour'**
+  String get tgBbColor;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'MB colour'**
+  String get tgMbColor;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Badge opacity'**
+  String get tgBadgeOpacity;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Badge corner'**
+  String get tgBadgeCorner;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Badge size'**
+  String get tgBadgeSize;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Network logo on series'**
+  String get tgNetworkLogos;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'The logo of the channel or service that made the series'**
+  String get tgNetworkLogosSubtitle;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Logo box colour'**
+  String get tgNetworkBoxColor;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Logo box opacity'**
+  String get tgNetworkOpacity;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Logo corner'**
+  String get tgNetworkCorner;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Brass'**
+  String get tgColorBrass;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Gold'**
+  String get tgColorGold;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Orange'**
+  String get tgColorOrange;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get tgColorRed;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get tgColorBlue;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get tgColorGreen;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get tgColorWhite;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get tgColorBlack;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Top left'**
+  String get tgCornerTopLeft;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Top right'**
+  String get tgCornerTopRight;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom left'**
+  String get tgCornerBottomLeft;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom right'**
+  String get tgCornerBottomRight;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get tgSizeSmall;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get tgSizeMedium;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get tgSizeLarge;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Harbor'**
+  String get tgNavHarbor;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Spyglass'**
+  String get tgNavSpyglass;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Roll the dice'**
+  String get tgNavShuffle;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Charts'**
+  String get tgNavGenres;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Treasure'**
+  String get tgNavTreasure;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Bounty board'**
+  String get tgNavBountyBoard;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Captain\'s quarters'**
+  String get tgNavQuarters;
+
+  /// Harbor home: the random picks shown above the first deck
+  ///
+  /// In en, this message translates to:
+  /// **'Spotlight'**
+  String get tgSpotlight;
+
+  /// Harbor home while rows are still loading
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your harbor…'**
+  String get tgHarborLoading;
+
   /// Menu entry that opens the SmartTube app (product name, do not translate)
   ///
   /// In en, this message translates to:

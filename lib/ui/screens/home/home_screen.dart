@@ -96,6 +96,10 @@ import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../navigation/single_push.dart';
 
+import '../../../data/services/tortugarr/title_badges.dart';
+import '../../widgets/title_badge.dart';
+part 'harbor_home.dart';
+
 Color get _homeBackground => AppColorScheme.background;
 
 /// How far the rows have to scroll before the return is worth offering.
@@ -590,6 +594,16 @@ class _HomeShellState extends State<_HomeShell>
                       },
                     ),
                   const _GradientScrim(),
+                  if (!PlatformDetection.useMobileUi &&
+                      _userPrefs.get(UserPreferences.homeRowsStyle) ==
+                          HomeRowsStyle.harbor)
+                    Positioned.fill(
+                      child: _HarborHome(
+                        viewModel: _viewModel,
+                        onItemSelected: onItemSelected,
+                      ),
+                    )
+                  else
                   Positioned.fill(
                     child: _ContentRows(
                       key: _contentRowsKey,

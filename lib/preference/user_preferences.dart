@@ -1287,6 +1287,20 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: true,
   );
 
+  // Tortugarr poster badges (BB / MB / series network), 2026-11-12.
+  static final tgBadgesEnabled = Preference<bool>(key: 'tg_badges_enabled', defaultValue: true);
+  static final tgShowMockbusters = Preference<bool>(key: 'tg_show_mockbusters', defaultValue: true);
+  static final tgBbColor = Preference<String>(key: 'tg_bb_color', defaultValue: 'D9B44A');
+  static final tgMbColor = Preference<String>(key: 'tg_mb_color', defaultValue: 'E0703A');
+  static final tgBadgeOpacity = Preference<int>(key: 'tg_badge_opacity', defaultValue: 100);
+  static final tgBadgeCorner = Preference<String>(key: 'tg_badge_corner', defaultValue: 'topLeft');
+  static final tgBadgeSize = Preference<String>(key: 'tg_badge_size', defaultValue: 'medium');
+  static final tgNetworkLogos = Preference<bool>(key: 'tg_network_logos', defaultValue: true);
+  static final tgNetworkBoxColor = Preference<String>(key: 'tg_network_box_color', defaultValue: '000000');
+  static final tgNetworkOpacity = Preference<int>(key: 'tg_network_opacity', defaultValue: 60);
+  static final tgNetworkCorner = Preference<String>(key: 'tg_network_corner', defaultValue: 'topRight');
+  static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache', defaultValue: '');
+
   static final tgHiddenTopLists = Preference<String>(
     key: 'tg_hidden_top_lists',
     defaultValue: '',

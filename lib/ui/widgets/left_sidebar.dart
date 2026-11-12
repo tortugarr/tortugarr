@@ -1048,7 +1048,9 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
         _prefs.get(UserPreferences.syncPlayEnabled) &&
         _prefs.get(UserPreferences.showSyncPlayButton);
     final seerrPrefs = GetIt.instance<SeerrPreferences>();
-    final seerrNavLabel = seerrPrefs.labelOrDefault(l10n.seerr);
+    final seerrNavLabel = _tortuga
+        ? appL10n().tgNavBountyBoard
+        : seerrPrefs.labelOrDefault(l10n.seerr);
     final clockBehavior = _prefs.get(UserPreferences.clockBehavior);
     final showClock =
         clockBehavior == ClockBehavior.always ||
@@ -1083,7 +1085,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                 _SidebarItem(
                   key: const ValueKey('sidebar-home'),
                   icon: Icons.home_rounded,
-                  label: l10n.home,
+                  label: _tortuga ? appL10n().tgNavHarbor : l10n.home,
                   baseColor: nextMainSidebarColor(),
                   focusNode: _homeFocusNode,
                   showLabel: _showLabels,
@@ -1102,7 +1104,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                 _SidebarItem(
                   key: const ValueKey('sidebar-search'),
                   icon: Icons.search_rounded,
-                  label: l10n.search,
+                  label: _tortuga ? appL10n().tgNavSpyglass : l10n.search,
                   baseColor: nextMainSidebarColor(),
                   showLabel: _showLabels,
                   onPressed: () {
@@ -1119,7 +1121,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                   _SidebarItem(
                     key: const ValueKey('sidebar-shuffle'),
                     icon: Icons.shuffle_rounded,
-                    label: l10n.shuffle,
+                    label: _tortuga ? appL10n().tgNavShuffle : l10n.shuffle,
                     baseColor: nextMainSidebarColor(),
                     showLabel: _showLabels,
                     onPressed: () {
@@ -1137,7 +1139,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                       height: size,
                       color: color,
                     ),
-                    label: l10n.genres,
+                    label: _tortuga ? appL10n().tgNavGenres : l10n.genres,
                     showLabel: _showLabels,
                     onPressed: () {
                       _onNavigate();
@@ -1153,7 +1155,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                   _SidebarItem(
                     key: const ValueKey('sidebar-favorites'),
                     icon: Icons.favorite_rounded,
-                    label: l10n.favorites,
+                    label: _tortuga ? appL10n().tgNavTreasure : l10n.favorites,
                     baseColor: nextMainSidebarColor(),
                     showLabel: _showLabels,
                     onPressed: () {
@@ -1322,7 +1324,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                 _SidebarItem(
                   key: const ValueKey('sidebar-settings'),
                   icon: Icons.settings_rounded,
-                  label: l10n.settings,
+                  label: _tortuga ? appL10n().tgNavQuarters : l10n.settings,
                   baseColor: nextMainSidebarColor(),
                   focusNode: _settingsFocusNode,
                   showLabel: _showLabels,
@@ -2137,3 +2139,6 @@ Color _navFocusFill() =>
 
 Color _navFocusText() =>
     OverlayColorPalette.navFollowsTheme ? AppColorScheme.onButtonFocused : Colors.black;
+
+/// Under the Tortuga theme the menu speaks pirate (Harbor, Spyglass, …).
+bool get _tortuga => ThemeRegistry.active.id == ThemeRegistry.tortugaId;
