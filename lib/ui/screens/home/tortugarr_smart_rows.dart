@@ -11,12 +11,19 @@ const tonightMaxRuntime = Duration(minutes: 105);
 
 String _percent(double f) => '${(f * 100).clamp(0, 99).floor()} %';
 
-String _status(String? s, double fraction) => switch (s) {
+String _eta(int? seconds) {
+  if (seconds == null || seconds <= 0) return '';
+  final m = (seconds / 60).ceil();
+  if (m < 60) return ' · $m min';
+  return ' · ${m ~/ 60} h ${m % 60} min';
+}
+
+String _status(String? s, double fraction, [int? eta]) => switch (s) {
       'queued' => 'Queued',
       'paused' => 'Paused',
       'importPending' || 'importing' => 'Ready in a moment',
       'failed' || 'warning' => 'Needs a look',
-      _ => _percent(fraction),
+      _ => '${_percent(fraction)}${_eta(eta)}',
     };
 
 /// What Radarr and Sonarr are downloading, as one card per title: episodes
@@ -44,9 +51,11 @@ HomeRow? mapDownloadsRow(
     final size = list.fold<int>(0, (a, q) => a + q.size);
     final left = list.fold<int>(0, (a, q) => a + q.sizeLeft);
     final fraction = size > 0 ? (size - left) / size : 0.0;
+    final etas = list.map((q) => q.etaSeconds).whereType<int>();
+    final eta = etas.isEmpty ? null : etas.reduce((a, b) => a > b ? a : b);
     final status = list.length == 1
-        ? _status(first.status, fraction)
-        : '${list.length} episodes · ${_percent(fraction)}';
+        ? _status(first.status, fraction, first.etaSeconds)
+        : '${list.length} episodes · ${_percent(fraction)}${_eta(eta)}';
     final tmdb = first.tmdbId;
     items.add(AggregatedItem(
       id: tmdb != null && tmdb > 0 ? '$tmdb' : key,

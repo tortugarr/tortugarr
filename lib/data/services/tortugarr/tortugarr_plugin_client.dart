@@ -834,6 +834,7 @@ class TortugarrQueueItem {
     this.size = 0,
     this.sizeLeft = 0,
     this.status,
+    this.etaSeconds,
   });
 
   factory TortugarrQueueItem.fromJson(Map<String, dynamic> j) {
@@ -851,6 +852,7 @@ class TortugarrQueueItem {
       size: size,
       sizeLeft: left,
       status: j['status'] as String?,
+      etaSeconds: (j['etaSeconds'] as num?)?.toInt(),
     );
   }
 
@@ -870,6 +872,9 @@ class TortugarrQueueItem {
   /// The plugin's status: downloading, queued, paused, importPending,
   /// importing, completed, failed or warning.
   final String? status;
+
+  /// Time left as Radarr/Sonarr estimate it, when they know it.
+  final int? etaSeconds;
 
   /// Sonarr/Radarr keep an imported download in their queue until their next
   /// look at the client, up to a minute or more; the plugin reports it as

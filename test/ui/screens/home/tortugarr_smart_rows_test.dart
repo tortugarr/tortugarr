@@ -55,4 +55,12 @@ void main() {
     final row = mapTonightRow(mixed, title: 't', serverId: 's')!;
     expect(row.items.map((i) => i.id), ['m1', 'e1', 'm2']);
   });
+
+  test('time left shows next to the percentage when Radarr/Sonarr know it', () {
+    final row = mapDownloadsRow([
+      TortugarrQueueItem(downloadId: 'A', kind: 'movie', tmdbId: 1, size: 100, sizeLeft: 58, status: 'downloading', name: 'X', etaSeconds: 1080),
+      TortugarrQueueItem(downloadId: 'B', kind: 'movie', tmdbId: 2, size: 100, sizeLeft: 50, status: 'downloading', name: 'Y', etaSeconds: 4500),
+    ], title: 't')!;
+    expect(row.items.map((i) => i.rawData['Subtitle']), ['42 % · 18 min', '50 % · 1 h 15 min']);
+  });
 }
