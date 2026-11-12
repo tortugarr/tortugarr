@@ -40,5 +40,6 @@ public class PluginServiceRegistrator : IPluginServiceRegistrator
         serviceCollection.AddHostedService<MoonbaseGate>();
         serviceCollection.AddHostedService<QbitWatchdog>();
         serviceCollection.AddHostedService<SpaceRescue>();
+        serviceCollection.AddHostedService<SeerrFourKSync>();
     }
 }
