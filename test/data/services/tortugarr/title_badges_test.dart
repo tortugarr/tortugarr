@@ -18,7 +18,7 @@ void main() {
   test('a series gets its first network and a white logo', () {
     final i = seriesInfo({'networks': [{'name': 'HBO', 'logoPath': '/hbo.png'}, {'name': 'Max'}]});
     expect(i.network, 'HBO');
-    expect(i.networkLogo, 'https://image.tmdb.org/t/p/w154_filter(duotone,ffffff,bababa)/hbo.png');
+    expect(i.networkLogo, 'https://image.tmdb.org/t/p/w185/hbo.png');
     expect(seriesInfo({}).networkLogo, isNull);
   });
 
@@ -34,7 +34,7 @@ void main() {
     final i = movieInfo({
       'budget': 90000000,
       'productionCompanies': [
-        {'name': 'Small Co'},
+        {'name': 'Syncopy', 'logoPath': '/sy.png'},
         {'name': 'Warner Bros. Pictures', 'logoPath': '/wb.png'},
       ],
     });

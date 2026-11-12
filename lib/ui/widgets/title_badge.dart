@@ -91,7 +91,8 @@ class TitleBadgeOverlay extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 6 * s, vertical: 4 * s),
                   child: Image.network(
                     logo,
-                    height: 14 * s,
+                    height: 16 * s,
+                    filterQuality: FilterQuality.medium,
                     fit: BoxFit.contain,
                     errorBuilder: (_, _, _) => Text(
                       info.network ?? '',

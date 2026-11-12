@@ -1296,10 +1296,10 @@ class UserPreferences extends ChangeNotifier {
   static final tgBadgeCorner = Preference<String>(key: 'tg_badge_corner', defaultValue: 'topLeft');
   static final tgBadgeSize = Preference<String>(key: 'tg_badge_size', defaultValue: 'medium');
   static final tgNetworkLogos = Preference<bool>(key: 'tg_network_logos', defaultValue: true);
-  static final tgNetworkBoxColor = Preference<String>(key: 'tg_network_box_color', defaultValue: '000000');
-  static final tgNetworkOpacity = Preference<int>(key: 'tg_network_opacity', defaultValue: 60);
+  static final tgNetworkBoxColor = Preference<String>(key: 'tg_network_box_color_v2', defaultValue: 'FFFFFF');
+  static final tgNetworkOpacity = Preference<int>(key: 'tg_network_opacity_v2', defaultValue: 88);
   static final tgNetworkCorner = Preference<String>(key: 'tg_network_corner', defaultValue: 'topRight');
-  static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache_v2', defaultValue: '');
+  static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache_v3', defaultValue: '');
 
   static final tgHiddenTopLists = Preference<String>(
     key: 'tg_hidden_top_lists',

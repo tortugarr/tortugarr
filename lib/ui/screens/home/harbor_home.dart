@@ -707,8 +707,19 @@ class _HarborInlineBadges extends StatelessWidget {
         if (info.networkLogo != null) {
           chips.add(Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(6)),
-            child: Image.network(info.networkLogo!, height: 16, errorBuilder: (_, _, _) => const SizedBox.shrink()),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Image.network(
+              info.networkLogo!,
+              height: 20,
+              filterQuality: FilterQuality.medium,
+              errorBuilder: (_, _, _) => Text(
+                info.network ?? '',
+                style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w700),
+              ),
+            ),
           ));
         }
         return Row(mainAxisSize: MainAxisSize.min, children: [

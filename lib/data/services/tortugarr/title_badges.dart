@@ -64,8 +64,8 @@ TitleClass classifyMovie(Map<String, dynamic> json) {
   return TitleClass.plain;
 }
 
-/// The network a series was made by (TMDB's first network) and its logo,
-/// drawn white so it reads on a dark box.
+/// The network a series was made by (TMDB's first network) and its logo in
+/// its own colours (shown on a light box).
 @visibleForTesting
 TitleBadgeInfo seriesInfo(Map<String, dynamic> json) {
   final nets = (json['networks'] as List? ?? const []).whereType<Map>().toList();
@@ -76,26 +76,41 @@ TitleBadgeInfo seriesInfo(Map<String, dynamic> json) {
     network: n['name'] as String?,
     networkLogo: logo == null || logo.isEmpty
         ? null
-        : 'https://image.tmdb.org/t/p/w154_filter(duotone,ffffff,bababa)$logo',
+        : 'https://image.tmdb.org/t/p/w185$logo',
   );
 }
 
 /// The studio a film is from: TMDB's first production company that has a
 /// logo (TMDB lists the main one first: Warner Bros., Universal, Netflix,
 /// Apple Original Films …), drawn white like the series networks.
+/// The studios people know, in the order they win when a film lists several
+/// (Oppenheimer: Universal, not Syncopy).
+final _knownStudios = RegExp(
+  r'^(warner bros|universal|paramount|walt disney|disney|pixar|marvel studios|lucasfilm|'
+  r'20th century|twentieth century|columbia|sony pictures|tristar|lionsgate|lions gate|'
+  r'metro-goldwyn-mayer|mgm|amazon|netflix|apple|a24|neon|legendary|dreamworks|'
+  r'new line|focus features|searchlight|summit|blumhouse|illumination|hbo|max|'
+  r'studiocanal|nordisk film|sf studios)',
+  caseSensitive: false,
+);
+
 @visibleForTesting
 TitleBadgeInfo movieInfo(Map<String, dynamic> json) {
   final kind = classifyMovie(json);
   final companies = (json['productionCompanies'] as List? ?? const []).whereType<Map>().toList();
-  final withLogo = companies.where((c) => (c['logoPath'] as String?)?.isNotEmpty == true);
-  final pick = withLogo.isNotEmpty ? withLogo.first : (companies.isNotEmpty ? companies.first : null);
+  bool hasLogo(Map c) => (c['logoPath'] as String?)?.isNotEmpty == true;
+  final known = companies.where((c) => hasLogo(c) && _knownStudios.hasMatch('${c['name']}'));
+  final withLogo = companies.where(hasLogo);
+  final pick = known.isNotEmpty
+      ? known.first
+      : (withLogo.isNotEmpty ? withLogo.first : (companies.isNotEmpty ? companies.first : null));
   final logo = pick?['logoPath'] as String?;
   return TitleBadgeInfo(
     kind: kind,
     network: pick?['name'] as String?,
     networkLogo: logo == null || logo.isEmpty
         ? null
-        : 'https://image.tmdb.org/t/p/w154_filter(duotone,ffffff,bababa)$logo',
+        : 'https://image.tmdb.org/t/p/w185$logo',
   );
 }
 
