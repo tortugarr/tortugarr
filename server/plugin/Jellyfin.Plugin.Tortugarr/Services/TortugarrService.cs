@@ -1228,6 +1228,115 @@ public sealed class TortugarrService
             .Select(p => (p[0], p[1]))
             .ToList();
 
+    /// <summary>The folders a category downloads to: the hidden .incoming folders inside its
+    /// libraries when the installer set them up (imports are moves), else the download folders.</summary>
+    internal static List<(string Remote, string Local)> RootsFor(string category, Configuration.PluginConfiguration c)
+    {
+        var kind = category == c.MovieCategory ? "movies" : category == c.TvCategory ? "tv" : null;
+        var incoming = kind is null ? new List<(string, string)>() : ParseIncomingRoots(c.IncomingRoots, kind);
+        return incoming.Count > 0 ? incoming : ParseDownloadRoots(c.DownloadRoots);
+    }
+
+    /// <summary>The .incoming folder inside the library holding <paramref name="titlePath"/>, of any
+    /// kind (movies, documentaries, series), or null.</summary>
+    internal static (string Remote, string Local)? IncomingForTitle(string text, string titlePath)
+    {
+        foreach (var line in text.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var p = line.Split('|');
+            if (p.Length != 3)
+            {
+                continue;
+            }
+
+            var library = p[2].TrimEnd('/');
+            library = library.EndsWith("/.incoming", StringComparison.Ordinal) ? library[..^"/.incoming".Length] : library;
+            if (titlePath.StartsWith(library + "/", StringComparison.Ordinal))
+            {
+                return (p[1], p[2]);
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// An app grab downloads into the .incoming folder of the library the title lives in (a
+    /// documentary into Documentaries, Rocky III into H:'s movies), so the import is a move of
+    /// seconds. Left on the drive to fill when that library has no .incoming or no room.
+    /// </summary>
+    private async Task PointCategoryAtTitleLibrary(ArrClient arr, SearchJob job, long size, CancellationToken ct)
+    {
+        if (Cfg.DownloadClientType != "qbittorrent" || string.IsNullOrWhiteSpace(Cfg.IncomingRoots))
+        {
+            return;
+        }
+
+        try
+        {
+            var id = job.ArrId;
+            if (job.Request.Type == "episode")
+            {
+                id = (int?)(await arr.Get($"/episode/{job.ArrId}", ct).ConfigureAwait(false))?["seriesId"] ?? 0;
+            }
+
+            var title = await arr.Get(job.IsMovie ? $"/movie/{id}" : $"/series/{id}", ct).ConfigureAwait(false);
+            if ((string?)title?["path"] is not string path || IncomingForTitle(Cfg.IncomingRoots, path) is not { } inc)
+            {
+                return;
+            }
+
+            EnsureIncomingFolder(inc.Local);
+            if (FreeBytes(inc.Local) is not long free || NeedsRoom(free, size))
+            {
+                return;
+            }
+
+            var category = job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory;
+            var target = CategoryPath(inc.Remote, category);
+            await Qbit.EditCategory(category, target, ct).ConfigureAwait(false);
+            LastCategoryPaths[category] = target;
+            _log.LogInformation("Download folder for {Category}: {Path} (the title's own library)", category, target);
+        }
+        catch (Exception e) when (e is UpstreamException or HttpRequestException or TaskCanceledException)
+        {
+            _log.LogWarning("Could not point the download at the title's library: {Error}", e.Message);
+        }
+    }
+
+    /// <summary>Creates a library's hidden .incoming folder (with a .ignore so Jellyfin never
+    /// lists half-done downloads) when its drive is mounted. Download folders are left alone.</summary>
+    internal static void EnsureIncomingFolder(string local)
+    {
+        if (!local.TrimEnd('/').EndsWith("/.incoming", StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        try
+        {
+            var library = Path.GetDirectoryName(local.TrimEnd('/'));
+            if (library is null || !Directory.Exists(library) || Directory.Exists(local))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(local);
+            File.WriteAllText(Path.Combine(local, ".ignore"), string.Empty);
+        }
+        catch (Exception)
+        {
+            // Not writable here: the folder is simply not chosen (no free space known).
+        }
+    }
+
+    internal static List<(string Remote, string Local)> ParseIncomingRoots(string text, string kind) =>
+        text.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(l => l.Split('|'))
+            .Where(p => p.Length == 3 && p[0] == kind && p[1].Length > 0 && p[2].Length > 0)
+            .Select(p => (p[1], p[2]))
+            .ToList();
+
     internal static long? FreeBytes(string path)
     {
         try
@@ -1262,10 +1371,15 @@ public sealed class TortugarrService
     /// there is room.</summary>
     internal async Task PointCategoryAtDriveToFill(string category, long size, CancellationToken ct, bool onlyWhenChanged = false)
     {
-        var roots = ParseDownloadRoots(Cfg.DownloadRoots);
+        var roots = RootsFor(category, Cfg);
         if (roots.Count < 2 || Cfg.DownloadClientType != "qbittorrent")
         {
             return;
+        }
+
+        foreach (var (_, local) in roots)
+        {
+            EnsureIncomingFolder(local);
         }
 
         var best = DownloadRootToFill(roots, FreeBytes, size, Cfg.FillFloorBytes);
@@ -1537,6 +1651,7 @@ public sealed class TortugarrService
 
         await PointCategoryAtDriveToFill(job.IsMovie ? Cfg.MovieCategory : Cfg.TvCategory, shown.Size, ct).ConfigureAwait(false);
         await MakeRoomAsync(arr, job, shown.Size, ct).ConfigureAwait(false);
+        await PointCategoryAtTitleLibrary(arr, job, shown.Size, ct).ConfigureAwait(false);
         try
         {
             await arr.Post("/release", GrabBody(job.Request.Type, job.ArrId, g.Guid, g.IndexerId), ct, 60).ConfigureAwait(false);

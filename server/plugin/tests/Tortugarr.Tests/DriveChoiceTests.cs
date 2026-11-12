@@ -135,4 +135,42 @@ public class DriveChoiceTests
     [InlineData("/volume1/downloads/", "radarr", "/volume1/downloads/radarr")]
     public void Category_path_keeps_the_client_separator(string root, string category, string expected) =>
         Assert.Equal(expected, TortugarrService.CategoryPath(root, category));
+
+    [Fact]
+    public void Movies_and_series_download_into_their_libraries_hidden_incoming_folders()
+    {
+        var c = new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration
+        {
+            DownloadRoots = "H:\\Downloads\\|/data/torrents-ext/1\nI:\\Downloads\\|/data/torrents-ext/5",
+            IncomingRoots = "movies|H:\\-=MOVIES=-\\.incoming\\|/data/library/7/.incoming\n"
+                + "movies|I:\\-=MOVIES=-\\.incoming\\|/data/library/14/.incoming\n"
+                + "tv|I:\\-=Serier=-\\.incoming\\|/data/library/13/.incoming",
+        };
+        Assert.Equal(new[] { "H:\\-=MOVIES=-\\.incoming\\", "I:\\-=MOVIES=-\\.incoming\\" },
+            TortugarrService.RootsFor("radarr", c).Select(r => r.Remote));
+        Assert.Equal(new[] { "I:\\-=Serier=-\\.incoming\\" }, TortugarrService.RootsFor("sonarr", c).Select(r => r.Remote));
+        // Other categories (adult) keep the download folders.
+        Assert.Equal(2, TortugarrService.RootsFor("adult", c).Count);
+    }
+
+    [Fact]
+    public void Without_incoming_folders_the_download_folders_are_used()
+    {
+        var c = new Jellyfin.Plugin.Tortugarr.Configuration.PluginConfiguration
+        {
+            DownloadRoots = "H:\\Downloads\\|/data/torrents-ext/1\nI:\\Downloads\\|/data/torrents-ext/5",
+        };
+        Assert.Equal("/data/torrents-ext/1", TortugarrService.RootsFor("radarr", c)[0].Local);
+    }
+
+    [Theory]
+    [InlineData("/data/library/6/Planet Earth (2006)", "H:\\-=Dokumentarer=-\\.incoming\\")]
+    [InlineData("/data/library/7/Rocky III (1982)", "H:\\-=MOVIES=-\\.incoming\\")]
+    [InlineData("/data/library/70/Other (2000)", null)]
+    public void A_grab_downloads_into_the_titles_own_library(string titlePath, string? expected)
+    {
+        const string roots = "movies|H:\\-=MOVIES=-\\.incoming\\|/data/library/7/.incoming\n"
+            + "docs|H:\\-=Dokumentarer=-\\.incoming\\|/data/library/6/.incoming";
+        Assert.Equal(expected, TortugarrService.IncomingForTitle(roots, titlePath)?.Remote);
+    }
 }

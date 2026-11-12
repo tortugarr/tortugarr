@@ -554,6 +554,8 @@ def tortugarr_plugin_config(h):
         "MovieCategory": CATEGORY["radarr"], "TvCategory": CATEGORY["sonarr"],
         # Several download folders (one per drive): the plugin picks the roomiest per grab.
         "DownloadRoots": "\n".join(f"{m['remote']}|{m['container_path']}" for m in external_qbit().get("mounts", [])),
+        # Hidden .incoming folders inside the libraries: imports there are moves, not copies.
+        "IncomingRoots": incoming_roots(),
         # New titles only go to root folders of their own type (never a folder not mounted there).
         "MovieRoots": ",".join(new_title_roots("radarr")), "TvRoots": ",".join(new_title_roots("sonarr")),
         "DocumentaryRoots": ",".join(doc_roots()),
@@ -865,6 +867,13 @@ def configure_remote_paths(app, h):
     if torrent_client() != "qbittorrent-ext":
         return
     host = url_parts(external_qbit()["url"])[0]
+    # A library's own path first (H:\\-=MOVIES=-\\ -> /data/library/7/): a download in its
+    # .incoming folder is then found on the library's mount and moved in seconds.
+    for _kind, remote, local in incoming_libraries(app):
+        if not any(p["host"].lower() == host.lower() and p["remotePath"].lower() == remote.lower()
+                   for p in h.get("/remotepathmapping")):
+            h.post("/remotepathmapping", {"host": host, "remotePath": remote, "localPath": local + "/"})
+            ok(f"{app}: {remote} on {host} -> {local}/ (downloads into the library move in seconds)")
     mounts = external_qbit().get("mounts", [])
     for m in mounts:
         remote, local = m["remote"], m["container_path"].rstrip("/") + "/"
@@ -1013,6 +1022,41 @@ def arr_roots(app):
     own = "/data/media/tv" if app == "sonarr" else "/data/media/movies"
     return [own] + [e["container_path"] for e in STATE.get("extra_libraries", [])
                     if e.get("type") == kind and e.get("arr_manage")] + (doc_roots() if app == "radarr" else [])
+
+
+INCOMING_KINDS = {"movies": "radarr", "docs": "radarr", "tv": "sonarr"}
+
+
+def library_remote(host_path):
+    """The Windows path of a library on a Windows drive (/mnt/h/-=MOVIES=- -> H:\\-=MOVIES=-\\),
+    or None for a folder that is not on a drive letter."""
+    m = re.match(r"^/mnt/([a-zA-Z])(/.*)?$", host_path.rstrip("/"))
+    if not m:
+        return None
+    rest = (m.group(2) or "").strip("/").replace("/", "\\")
+    return f"{m.group(1).upper()}:\\" + (rest + "\\" if rest else "")
+
+
+def incoming_libraries(app=None):
+    """Movie, documentary and series libraries on Windows drives that Radarr/Sonarr manage, for a
+    qBittorrent on Windows: (kind, library remote, container path). Downloads go into their hidden
+    .incoming folder, on the library's own mount, so an import is a move of seconds instead of a
+    copy across mounts (2026-11-12: 34 GB took 18 minutes from H:\\Downloads)."""
+    if torrent_client() != "qbittorrent-ext":
+        return []
+    out = []
+    for e in STATE.get("extra_libraries", []):
+        kind = e.get("type")
+        if kind not in INCOMING_KINDS or not e.get("arr_manage") or (app and INCOMING_KINDS[kind] != app):
+            continue
+        remote = library_remote(e["host_path"])
+        if remote:
+            out.append((kind, remote, e["container_path"].rstrip("/")))
+    return out
+
+
+def incoming_roots():
+    return "\n".join(f"{k}|{r}.incoming\\|{c}/.incoming" for k, r, c in incoming_libraries())
 
 
 def doc_roots():

@@ -194,9 +194,11 @@ Your qBittorrent's settings are otherwise left alone. If it does not block progr
 installer says so: turn on *Tools > Options > Downloads > Excluded file names* with
 `*.exe`, `*.scr`, `*.lnk`, `*.msi`, `*.bat`, `*.cmd`, `*.com`, `*.pif`, `*.vbs`, `*.js`.
 
-Hardlinks do not work across a Windows drive, so a finished download is **copied** into the
-library and takes its space twice while it is still seeding. Keep room for that on the drive.
-The copy also takes time: a few minutes for a large file, while the app shows *Importing*.
+Movies, documentaries and series download into a hidden `.incoming` folder inside their own
+library (`H:\-=MOVIES=-\.incoming\radarr`), on the drive Tortugarr fills. Radarr and Sonarr then
+**move** the finished file into place in a few seconds. A title whose folder is on another drive
+than the download (an older movie on a full drive) is **copied** instead: a few minutes for a
+large file, while the app shows *Importing*, and it takes its space twice while it is seeding.
 
 Already switched to your own qBittorrent by hand? Run `sudo tortugarr reconfigure` and choose
 **qBittorrent I already have**; the Tortugarr container is removed and the paths are set up.

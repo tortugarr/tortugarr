@@ -59,6 +59,14 @@ public class PluginConfiguration : BasePluginConfiguration
     /// (<see cref="FillFloorBytes"/>). Written by the installer.</summary>
     public string DownloadRoots { get; set; } = string.Empty;
 
+    /// <summary>Hidden download folders inside the movie and series libraries, one per line as
+    /// "movies|its path|our path" or "tv|its path|our path"
+    /// (movies|H:\-=MOVIES=-\.incoming\|/data/library/7/.incoming). A download there is on the
+    /// library's own mount, so the import is a move of a few seconds instead of a copy (2026-11-12:
+    /// 34 GB took 18 minutes from H:\Downloads). Used before <see cref="DownloadRoots"/>.
+    /// Written by the installer.</summary>
+    public string IncomingRoots { get; set; } = string.Empty;
+
     /// <summary>Radarr root folders a new movie may go to (comma-separated); empty = any.</summary>
     public string MovieRoots { get; set; } = string.Empty;
 

@@ -64,6 +64,25 @@ def main():
     n = len(arr.maps)
     tb.configure_remote_paths("radarr", arr)
     check("running again changes nothing", len(arr.maps) == n)
+    # Libraries on Windows drives: downloads go into their .incoming folder, and the library's own
+    # path is mapped (before the download folders), so the import is a move of seconds.
+    tb.STATE["extra_libraries"] = [
+        {"host_path": "/mnt/h/-=MOVIES=-", "container_path": "/data/library/7", "type": "movies", "arr_manage": True},
+        {"host_path": "/mnt/i/-=Dokumentarer=-", "container_path": "/data/library/12", "type": "docs", "arr_manage": True},
+        {"host_path": "/mnt/i/-=Serier=-", "container_path": "/data/library/13", "type": "tv", "arr_manage": True},
+        {"host_path": "/mnt/i/-=XxX=-", "container_path": "/data/library/11", "type": "adult", "arr_manage": False},
+    ]
+    check("incoming roots for movies, documentaries and series, not adult",
+          tb.incoming_roots().splitlines() == [
+              "movies|H:\\-=MOVIES=-\\.incoming\\|/data/library/7/.incoming",
+              "docs|I:\\-=Dokumentarer=-\\.incoming\\|/data/library/12/.incoming",
+              "tv|I:\\-=Serier=-\\.incoming\\|/data/library/13/.incoming"], tb.incoming_roots())
+    arr = FakeArr([])
+    tb.configure_remote_paths("radarr", arr)
+    got = [(m["remotePath"], m["localPath"]) for m in arr.maps]
+    check("Radarr maps its libraries first", got[:2] == [("H:\\-=MOVIES=-\\", "/data/library/7/"),
+                                                          ("I:\\-=Dokumentarer=-\\", "/data/library/12/")], got)
+    check("Radarr does not map the series library", ("I:\\-=Serier=-\\", "/data/library/13/") not in got, got)
     print("all passed" if not FAILED else f"{len(FAILED)} failed")
     sys.exit(1 if FAILED else 0)
 
