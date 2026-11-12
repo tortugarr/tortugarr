@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+**Installer**
+
+- **Windows: no false "network is Public" warning with a VPN.** `doctor` and setup now check
+  the network the server's address is on. Before, a VPN or virtual network listed first by
+  Windows (WireGuard, Hyper-V) gave "the firewall blocks other devices", and setup could offer
+  to change that network instead of your home network.
+
 ## 4.20.03 - 2026-11-08 (app build 2000060, Tortugarr plugin 1.3.0.32, Moonfin 3.0.0)
 
 **App**

@@ -188,7 +188,16 @@ function Get-LanIp {
   return $cfg.IPv4Address.IPAddress
 }
 
+# The network the TV and phones reach the server on: the same adapter Get-LanIp takes (up, with
+# a default gateway). Not simply the first profile - a VPN (WireGuard) or Hyper-V switch listed
+# before the LAN made doctor warn "network 'bastion' is Public" and setup ask about the wrong
+# network (owner's PC, 2026-11-12).
 function Get-ActiveProfile {
+  $cfg = Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -and $_.NetAdapter.Status -eq 'Up' } | Select-Object -First 1
+  if ($cfg) {
+    $p = Get-NetConnectionProfile -InterfaceIndex $cfg.InterfaceIndex -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($p) { return $p }
+  }
   Get-NetConnectionProfile | Where-Object { $_.IPv4Connectivity -ne 'Disconnected' } | Select-Object -First 1
 }
 

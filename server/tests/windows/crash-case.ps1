@@ -46,17 +46,27 @@ function Test-TestHttpAnswers([string]$Address, [int]$Port) {
   [bool]($sys.portproxy | Where-Object { $_ -and $_.kind -eq 'v4tov4' -and $_.ip -eq $Address -and [int]$_.port -eq $Port -and $_.to -eq "127.0.0.1/$Port" })
 }
 function Get-NetTCPConnection { }
+# other_networks: adapters without a default gateway (a VPN such as WireGuard, a Hyper-V
+# switch), listed BEFORE the LAN like Windows did on the owner's PC (2026-11-12).
 function Get-NetIPConfiguration {
-  [pscustomobject]@{ IPv4DefaultGateway = '192.0.2.1'; NetAdapter = [pscustomobject]@{ Status = 'Up' }; IPv4Address = [pscustomobject]@{ IPAddress = (Get-Sys).lan_ip } }
+  $sys = Get-Sys
+  foreach ($o in @($sys.other_networks)) {
+    if ($o) { [pscustomobject]@{ InterfaceIndex = $o.index; IPv4DefaultGateway = $null; NetAdapter = [pscustomobject]@{ Status = 'Up' }; IPv4Address = [pscustomobject]@{ IPAddress = $o.ip } } }
+  }
+  [pscustomobject]@{ InterfaceIndex = $sys.network.index; IPv4DefaultGateway = '192.0.2.1'; NetAdapter = [pscustomobject]@{ Status = 'Up' }; IPv4Address = [pscustomobject]@{ IPAddress = $sys.lan_ip } }
 }
 function Get-NetConnectionProfile([int]$InterfaceIndex, $ErrorAction) {
-  $n = (Get-Sys).network
-  if ($InterfaceIndex -and $InterfaceIndex -ne $n.index) { return }
-  [pscustomobject]@{ Name = $n.name; InterfaceIndex = $n.index; NetworkCategory = $n.category; IPv4Connectivity = 'Internet' }
+  $sys = Get-Sys
+  foreach ($n in @(@($sys.other_networks) + $sys.network)) {
+    if (-not $n -or ($InterfaceIndex -and $InterfaceIndex -ne $n.index)) { continue }
+    [pscustomobject]@{ Name = $n.name; InterfaceIndex = $n.index; NetworkCategory = $n.category; IPv4Connectivity = 'Internet' }
+  }
 }
 function Set-NetConnectionProfile([int]$InterfaceIndex, [string]$NetworkCategory) {
   Write-Call "Set-NetConnectionProfile $InterfaceIndex $NetworkCategory"
-  $sys = Get-Sys; $sys.network.category = $NetworkCategory; Set-Sys $sys
+  $sys = Get-Sys
+  foreach ($n in @(@($sys.other_networks) + $sys.network)) { if ($n -and $n.index -eq $InterfaceIndex) { $n.category = $NetworkCategory } }
+  Set-Sys $sys
 }
 function Get-NetFirewallRule([string]$Group, $ErrorAction) {
   @((Get-Sys).firewall | Where-Object { $_ -and (-not $Group -or $_.group -eq $Group) })

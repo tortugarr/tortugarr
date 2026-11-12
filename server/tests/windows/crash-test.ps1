@@ -260,6 +260,37 @@ $s = Get-Sys $w; $s.forwarding_slow = $false; $s.answer_delay_ms = 0; $s | Conve
 Invoke-Helper $w '' '' @('remove') | Out-Null
 Test-Clean 'after remove' $w
 
+# Owner's PC 2026-11-12: Windows listed the WireGuard tunnel 'bastion' (Public, no gateway)
+# before the LAN (Private), and doctor warned "network 'bastion' is Public" although phones
+# reached the server fine. The network that counts is the one with the server's address.
+Write-Host 'A VPN listed first (Public, no gateway), the LAN Private: no warning, the VPN left alone'
+$sys = New-System; $sys.network.category = 'Private'
+$sys.other_networks = @(@{ name = 'bastion'; index = 57; category = 'Public'; ip = '10.99.0.1' })
+$w = New-Work 'vpn-first-lan-private' $sys
+$rc = Invoke-Helper $w '' '' $leave
+$log = Get-Content (Join-Path $w 'output.log') -Raw
+Check 'setup succeeds, exit 0' ($rc -eq 0) "rc=$rc"
+Check 'no "firewall blocks other devices" warning' ($log -notmatch 'firewall blocks other devices') (($log -split "`n" | Select-String 'blocks other') -join '; ')
+Check 'no question about the VPN' ($log -notmatch "network 'bastion'")
+Check 'every port answers' ($log -match 'ok  http://192\.0\.2\.10:58096 answers')
+Check 'the VPN is still Public' ((Get-Sys $w).other_networks[0].category -eq 'Public')
+Invoke-Helper $w '' '' @('remove') | Out-Null
+Test-Clean 'after remove (the LAN stays Private)' $w 'Private'
+
+Write-Host 'A VPN listed first (Private), the LAN Public: the LAN is the one set to Private'
+$sys = New-System
+$sys.other_networks = @(@{ name = 'bastion'; index = 57; category = 'Private'; ip = '10.99.0.1' })
+$w = New-Work 'vpn-first-lan-public' $sys
+$rc = Invoke-Helper $w '' '' $setup
+$log = Get-Content (Join-Path $w 'output.log') -Raw
+Check 'setup succeeds, exit 0' ($rc -eq 0) "rc=$rc"
+Check 'speaks of the LAN, not the VPN' ($log -match "network 'TestNet' to Public" -and $log -notmatch "network 'bastion'")
+Check 'the LAN is Private now' ((Get-Sys $w).network.category -eq 'Private')
+Check 'the VPN''s profile was never changed' (@(Get-Content (Join-Path $w 'calls.log') | Where-Object { $_ -like 'Set-NetConnectionProfile 57 *' }).Count -eq 0)
+Invoke-Helper $w '' '' @('remove') | Out-Null
+Test-Clean 'after remove (the LAN back to Public)' $w
+Check 'the VPN is still Private' ((Get-Sys $w).other_networks[0].category -eq 'Private')
+
 Write-Host 'The network question has no default: Enter alone or a wrong key asks again'
 $sys = New-System; $sys.answers = @('', 'x', '2')
 $w = New-Work 'ask' $sys
