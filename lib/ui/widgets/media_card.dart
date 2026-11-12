@@ -992,8 +992,20 @@ class _CardImage extends StatelessWidget {
                         width: 3.0,
                       ),
                     ),
+                    // The ring sits above the picture, so the glow may only
+                    // paint outside it (BlurStyle.outer); a normal shadow
+                    // laid a coloured film over the poster.
                     boxShadow: ThemeRegistry.active.cardFocusGlow
-                        ? borders.focusGlow
+                        ? [
+                            for (final g in borders.focusGlow)
+                              BoxShadow(
+                                color: g.color,
+                                offset: g.offset,
+                                blurRadius: g.blurRadius,
+                                spreadRadius: g.spreadRadius,
+                                blurStyle: BlurStyle.outer,
+                              ),
+                          ]
                         : null,
                   ),
                 ),
