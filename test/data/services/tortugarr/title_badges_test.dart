@@ -47,8 +47,8 @@ void main() {
 
   test('episodes and seasons are looked up through their series, films and series by TMDB id', () {
     AggregatedItem it(Map<String, dynamic> raw, {String server = 's1'}) => AggregatedItem(id: 'x', serverId: server, rawData: raw);
-    expect(TitleBadges.keyFor(it({'Type': 'Episode', 'SeriesId': 'abc'})), 'jfseries:s1:abc');
-    expect(TitleBadges.keyFor(it({'Type': 'Season', 'SeriesId': 'abc'})), 'jfseries:s1:abc');
+    expect(TitleBadges.keyFor(it({'Type': 'Episode', 'SeriesId': 'abc'}, server: 'http://192.168.1.15:8096')), 'jfseries:abc@http://192.168.1.15:8096');
+    expect(TitleBadges.keyFor(it({'Type': 'Season', 'SeriesId': 'abc'})), 'jfseries:abc@s1');
     expect(TitleBadges.keyFor(it({'Type': 'Episode'})), isNull);
     expect(TitleBadges.keyFor(it({'Type': 'Series', 'ProviderIds': {'Tmdb': '42'}})), 'tv:42');
     expect(TitleBadges.keyFor(it({'Type': 'Movie', 'ProviderIds': {'Tmdb': '7'}})), 'movie:7');

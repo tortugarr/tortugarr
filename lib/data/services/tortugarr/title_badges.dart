@@ -148,7 +148,8 @@ class TitleBadges extends ChangeNotifier {
       if (series == null || series.isEmpty || item.serverId == 'seerr') {
         return null;
       }
-      return 'jfseries:${item.serverId}:$series';
+      // Series id first: the server id is the server's address and has colons.
+      return 'jfseries:$series@${item.serverId}';
     }
     final tmdb =
         item.tmdbId ??
@@ -222,8 +223,9 @@ class TitleBadges extends ChangeNotifier {
       if (!repo.isAvailable) return;
       final TitleBadgeInfo info;
       if (key.startsWith('jfseries:')) {
-        final parts = key.split(':');
-        final tmdb = await _seriesTmdb(parts[1], parts.sublist(2).join(':'));
+        final rest = key.substring('jfseries:'.length);
+        final at = rest.indexOf('@');
+        final tmdb = await _seriesTmdb(rest.substring(at + 1), rest.substring(0, at));
         // Unknown series id: not remembered, so it is asked again next time.
         if (tmdb == null) return;
         info = seriesInfo(await repo.getTvDetailsRaw(tmdb));
