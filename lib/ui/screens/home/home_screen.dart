@@ -89,7 +89,6 @@ import '../../util/home_row_title_localizer.dart';
 import '../../../util/game_library.dart';
 import 'home_row_prefetch.dart';
 import 'home_row_shift.dart';
-import 'harbor_cards.dart';
 import 'home_view_model.dart';
 import '../../widgets/seerr/seerr_genre_label.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
@@ -2547,17 +2546,9 @@ class _ContentRowsState extends State<_ContentRows>
 
   PosterSize _homePosterSize() => widget.prefs.get(UserPreferences.posterSize);
 
-  bool _isHarborHome() =>
-      !PlatformDetection.useMobileUi &&
-      widget.prefs.get(UserPreferences.homeRowsStyle) == HomeRowsStyle.harbor;
-
   bool _showHomeRowInfoOverlay() {
     if (PlatformDetection.useMobileUi) {
       return false;
-    }
-    // Harbor's fixed hero is the info overlay, always on.
-    if (_isHarborHome()) {
-      return true;
     }
     if (_isHomeRowsStyleV2()) {
       return false;
@@ -4463,8 +4454,6 @@ class _ContentRowsState extends State<_ContentRows>
     return (padding - 10).clamp(0.0, double.infinity);
   }
 
-  static const _harborDuration = Duration(milliseconds: 260);
-
   Widget _buildShiftedRow({
     required Widget child,
     required int rowIndex,
@@ -4503,32 +4492,6 @@ class _ContentRowsState extends State<_ContentRows>
           rowViewportTop: rowViewportTop,
           rowExtent: rowExtent,
           overlayBottom: overlayBottom,
-        ),
-      );
-    }
-
-    if (_isHarborHome()) {
-      final look = harborRowLookFor(
-        rowIndex: rowIndex,
-        focusedRowIndex: _focusedRowIndex(FocusManager.instance.primaryFocus),
-        rowExtents: rowExtents,
-      );
-      // Always the same three wrappers in Harbor, so a row keeps its
-      // elements as it grows and shrinks; at rest they are inert.
-      child = AnimatedSlide(
-        offset: Offset(0, rowExtent > 0 ? -look.lift / rowExtent : 0),
-        duration: _harborDuration,
-        curve: Curves.easeOutCubic,
-        child: AnimatedScale(
-          scale: look.scale,
-          alignment: Alignment.topLeft,
-          duration: _harborDuration,
-          curve: Curves.easeOutCubic,
-          child: AnimatedOpacity(
-            opacity: look.opacity,
-            duration: _harborDuration,
-            child: child,
-          ),
         ),
       );
     }
@@ -5434,12 +5397,6 @@ class _ContentRowsState extends State<_ContentRows>
           (_classicCardMetadataHeight * metadataScale);
     }
 
-    // Harbor: ranked rows get a big number left of each poster.
-    final harborRanked = _isHarborHome() &&
-        HomeViewModel.isTopListRow(row) &&
-        HomeViewModel.isRankedTopList(row.title);
-    final rankGutter = harborRanked ? maxImageHeight * 0.5 : 0.0;
-
     final rowPadding = 5.0 * metadataScale;
     final topPadding =
         rowPadding + _focusHeadroom(maxImageHeight, cardExpansion);
@@ -5494,7 +5451,7 @@ class _ContentRowsState extends State<_ContentRows>
           hubKey: _hubKeyForRow(row),
           controller: _rowHorizontalController(rowIndex),
           height: lockedRowHeight,
-          itemExtent: firstCardWidth + rankGutter,
+          itemExtent: firstCardWidth,
           itemSpacing: itemSpacing,
           leadingPadding: isRowsV2 ? _kHomeRowLabelInset : 0,
           glide: glide,
@@ -5949,21 +5906,6 @@ class _ContentRowsState extends State<_ContentRows>
                     );
                   }
 
-                  if (harborRanked) {
-                    return HarborRankedCard(
-                      rank: idx + 1,
-                      gutter: rankGutter,
-                      imageHeight: maxImageHeight,
-                      child: previewWrappedCard,
-                    );
-                  }
-                  if (_isHarborHome() && item.type == 'BoxSet') {
-                    return HarborStackedCard(
-                      width: width,
-                      imageHeight: width / ar,
-                      child: previewWrappedCard,
-                    );
-                  }
                   return previewWrappedCard;
                 },
               );
