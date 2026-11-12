@@ -44,7 +44,7 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
             await Task.Delay(TimeSpan.FromMinutes(1), token).ConfigureAwait(false);
             while (!token.IsCancellationRequested)
             {
-                foreach (var step in new Func<CancellationToken, Task>[] { SeerrFoldersAsync, RescueAsync })
+                foreach (var step in new Func<CancellationToken, Task>[] { SeerrFoldersAsync, CategoriesAsync, RescueAsync })
                 {
                     try
                     {
@@ -108,6 +108,19 @@ public sealed class SpaceRescue : Microsoft.Extensions.Hosting.IHostedService
                     LogLevel.Information).ConfigureAwait(false);
             }
         }
+    }
+
+    /// <summary>
+    /// 2026-11-12: only downloads started in the app moved the movie and series categories to the
+    /// drive to fill; what Radarr, Sonarr and Seerr grabbed on their own kept going to the folder
+    /// the category had last (H: with 24 GB left while I: had 1.7 TB). Keep both categories on the
+    /// drive to fill.
+    /// </summary>
+    private async Task CategoriesAsync(CancellationToken ct)
+    {
+        var c = Cfg;
+        await _svc.PointCategoryAtDriveToFill(c.MovieCategory, 0, ct, onlyWhenChanged: true).ConfigureAwait(false);
+        await _svc.PointCategoryAtDriveToFill(c.TvCategory, 0, ct, onlyWhenChanged: true).ConfigureAwait(false);
     }
 
     /// <summary>The Seerr server settings with the default folder set to target, or null when it already is.</summary>

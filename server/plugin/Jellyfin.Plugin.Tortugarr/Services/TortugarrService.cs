@@ -1260,7 +1260,7 @@ public sealed class TortugarrService
     /// <summary>With several download folders (on several drives), point the category at the
     /// one to fill before a grab of <paramref name="size"/> bytes, so the download lands where
     /// there is room.</summary>
-    private async Task PointCategoryAtDriveToFill(string category, long size, CancellationToken ct)
+    internal async Task PointCategoryAtDriveToFill(string category, long size, CancellationToken ct, bool onlyWhenChanged = false)
     {
         var roots = ParseDownloadRoots(Cfg.DownloadRoots);
         if (roots.Count < 2 || Cfg.DownloadClientType != "qbittorrent")
@@ -1275,9 +1275,15 @@ public sealed class TortugarrService
         }
 
         var path = CategoryPath(best.Value.Remote, category);
+        if (onlyWhenChanged && LastCategoryPaths.TryGetValue(category, out var last) && last == path)
+        {
+            return;
+        }
+
         try
         {
             await Qbit.EditCategory(category, path, ct).ConfigureAwait(false);
+            LastCategoryPaths[category] = path;
             _log.LogInformation("Download folder for {Category}: {Path} ({Free} GB free)", category, path, best.Value.Free / (1L << 30));
         }
         catch (Exception e) when (e is UpstreamException or HttpRequestException or TaskCanceledException)
@@ -1285,6 +1291,10 @@ public sealed class TortugarrService
             _log.LogWarning("Could not point {Category} at {Path}: {Error}", category, path, e.Message);
         }
     }
+
+    /// <summary>The folder each category was last pointed at, so the periodic check only
+    /// writes (and logs) a change.</summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> LastCategoryPaths = new(StringComparer.Ordinal);
 
     internal static DateTimeOffset? HomeRelease(JsonNode movie)
     {
