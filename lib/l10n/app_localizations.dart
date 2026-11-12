@@ -1432,6 +1432,36 @@ abstract class AppLocalizations {
   /// **'The SmartTube entry opens SmartTube, an ad-free YouTube app for Android TV by Yuriy Liskov. It is a separate project: install it yourself first; Tortugarr only starts it.'**
   String get tgSmartTubeCredit;
 
+  /// Tortugarr Harbor trailer setting
+  ///
+  /// In en, this message translates to:
+  /// **'Harbor trailer'**
+  String get tgHarborTrailer;
+
+  /// Tortugarr Harbor trailer setting
+  ///
+  /// In en, this message translates to:
+  /// **'Plays, muted, when you stay on a title for a moment'**
+  String get tgHarborTrailerDescription;
+
+  /// Tortugarr Harbor trailer setting
+  ///
+  /// In en, this message translates to:
+  /// **'Background'**
+  String get tgHarborTrailerBackground;
+
+  /// Tortugarr Harbor trailer setting
+  ///
+  /// In en, this message translates to:
+  /// **'Box in the corner'**
+  String get tgHarborTrailerCorner;
+
+  /// Tortugarr Harbor trailer setting
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get tgHarborTrailerOff;
+
   /// Harbor home: the random picks shown above the first deck
   ///
   /// In en, this message translates to:

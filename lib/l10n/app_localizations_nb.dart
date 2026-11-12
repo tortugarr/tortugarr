@@ -785,6 +785,22 @@ class AppLocalizationsNb extends AppLocalizations {
       'SmartTube-valget åpner SmartTube, en reklamefri YouTube-app for Android TV laget av Yuriy Liskov. Det er et eget prosjekt: installer det selv først; Tortugarr bare starter det.';
 
   @override
+  String get tgHarborTrailer => 'Trailer i Harbor';
+
+  @override
+  String get tgHarborTrailerDescription =>
+      'Spilles uten lyd når du blir stående på en tittel en liten stund';
+
+  @override
+  String get tgHarborTrailerBackground => 'Bakgrunn';
+
+  @override
+  String get tgHarborTrailerCorner => 'Boks i hjørnet';
+
+  @override
+  String get tgHarborTrailerOff => 'Av';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

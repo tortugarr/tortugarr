@@ -231,6 +231,18 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 onTap: () =>
                     context.pushSettingsScreen(const MediaBarSettingsScreen()),
               ),
+              if (rowsStyle == HomeRowsStyle.harbor)
+                StringPickerPreferenceTile(
+                  preference: UserPreferences.tgHarborTrailer,
+                  title: l10n.tgHarborTrailer,
+                  description: l10n.tgHarborTrailerDescription,
+                  icon: Icons.movie_filter_outlined,
+                  options: {
+                    'background': l10n.tgHarborTrailerBackground,
+                    'corner': l10n.tgHarborTrailerCorner,
+                    'off': l10n.tgHarborTrailerOff,
+                  },
+                ),
               _TvSettingsListTile(
                 leading: const Icon(Icons.local_offer_outlined),
                 title: Text(l10n.tgPosterBadges),

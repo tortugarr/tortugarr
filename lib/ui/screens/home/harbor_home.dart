@@ -50,6 +50,14 @@ class _HarborHomeState extends State<_HarborHome>
   Timer? _spotTimer;
   AggregatedItem? _reported;
 
+  // Trailer of the focused title, after it has been focused for a moment.
+  Timer? _trailerTimer;
+  Player? _trailerPlayer;
+  VideoController? _trailerController;
+  String? _trailerFor;
+  bool _trailerShowing = false;
+  int _trailerTry = 0;
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +72,8 @@ class _HarborHomeState extends State<_HarborHome>
     widget.viewModel.removeListener(_rebuildDecks);
     TitleBadges.instance.removeListener(_rebuildDecks);
     _spotTimer?.cancel();
+    _trailerTimer?.cancel();
+    _trailerPlayer?.dispose();
     _pos.dispose();
     _focus.dispose();
     super.dispose();
@@ -150,7 +160,77 @@ class _HarborHomeState extends State<_HarborHome>
     if (item == null || identical(item, _reported)) return;
     _reported = item;
     widget.onItemSelected(item, preserveBackground: true);
+    _scheduleTrailer(item);
   }
+
+  String get _trailerMode => GetIt.instance<UserPreferences>().get(UserPreferences.tgHarborTrailer);
+
+  /// Stops any trailer and, unless trailers are off, starts the focused
+  /// title's after 2.5 s on it.
+  void _scheduleTrailer(AggregatedItem item) {
+    _trailerTimer?.cancel();
+    _trailerTry++;
+    if (_trailerShowing || _trailerFor != null) {
+      _trailerPlayer?.stop();
+      if (mounted) setState(() => _trailerShowing = false);
+      _trailerFor = null;
+    }
+    if (_trailerMode == 'off' || item.serverId == 'seerr') return;
+    final attempt = _trailerTry;
+    _trailerTimer = Timer(const Duration(milliseconds: 2500), () => _playTrailer(item, attempt));
+  }
+
+  Future<void> _playTrailer(AggregatedItem item, int attempt) async {
+    try {
+      var trailers = (item.rawData['RemoteTrailers'] as List?)?.whereType<Map>().toList() ?? const [];
+      if (trailers.isEmpty) {
+        final full = await GetIt.instance<MediaServerClientFactory>().clientForServerOrActive(item.serverId).itemsApi.getItem(
+              item.type == 'Episode' && item.seriesId != null ? item.seriesId! : item.id,
+            );
+        trailers = (full['RemoteTrailers'] as List?)?.whereType<Map>().toList() ?? const [];
+      }
+      if (!mounted || attempt != _trailerTry) return;
+      String? stream;
+      String? language;
+      for (final t in trailers) {
+        final url = t['Url'] as String?;
+        if (url == null || YouTubeStreamResolver.extractVideoId(url) == null) continue;
+        final s = await YouTubeStreamResolver.resolveFromUrl(url).timeout(const Duration(seconds: 10), onTimeout: () => null);
+        if (!mounted || attempt != _trailerTry) return;
+        if (s != null) {
+          stream = s.url;
+          language = s.audioLanguage;
+          break;
+        }
+      }
+      if (stream == null) return;
+      final player = _trailerPlayer ??= Player(configuration: const PlayerConfiguration(libass: false));
+      _trailerController ??= VideoController(player);
+      await player.setVolume(0);
+      await YouTubeStreamResolver.preferAudioLanguage(player, language);
+      final media = await YouTubeStreamResolver.previewMedia(player, stream, youTube: true, audioLanguage: language);
+      if (!mounted || attempt != _trailerTry) return;
+      await player.open(media);
+      if (!mounted || attempt != _trailerTry) {
+        await player.stop();
+        return;
+      }
+      setState(() {
+        _trailerFor = item.id;
+        _trailerShowing = true;
+      });
+    } catch (_) {
+      // No trailer: the backdrop stays.
+    }
+  }
+
+  Widget _trailerVideo() => Video(
+        controller: _trailerController!,
+        controls: NoVideoControls,
+        fit: BoxFit.cover,
+        pauseUponEnteringBackgroundMode: true,
+        fill: Colors.transparent,
+      );
 
   void _moveItem(int delta) {
     if (_deck < 0) {
@@ -222,6 +302,11 @@ class _HarborHomeState extends State<_HarborHome>
 
   void _open(AggregatedItem? item) {
     if (item == null) return;
+    // Leaving Home: no trailer playing behind the details page.
+    _trailerTimer?.cancel();
+    _trailerTry++;
+    _trailerPlayer?.stop();
+    if (_trailerShowing) setState(() => _trailerShowing = false);
     if (item.serverId == 'seerr') {
       _ContentRowsState._navigateToSeerrItem(context, item);
       return;
@@ -308,7 +393,25 @@ class _HarborHomeState extends State<_HarborHome>
             fit: StackFit.expand,
             children: [
               _buildBackdrop(item),
+              if (_trailerShowing && _trailerController != null && _trailerMode == 'background')
+                Positioned.fill(child: IgnorePointer(child: _trailerVideo())),
               const IgnorePointer(child: _HarborScrims()),
+              if (_trailerShowing && _trailerController != null && _trailerMode == 'corner')
+                Positioned(
+                  right: w * 0.04,
+                  top: h * 0.07,
+                  width: w * 0.36,
+                  height: w * 0.36 * 9 / 16,
+                  child: IgnorePointer(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(color: Colors.black),
+                        child: _trailerVideo(),
+                      ),
+                    ),
+                  ),
+                ),
               if (item != null)
                 Positioned(
                   left: w * 0.07,

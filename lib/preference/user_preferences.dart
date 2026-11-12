@@ -1303,6 +1303,10 @@ class UserPreferences extends ChangeNotifier {
   static final tgLogoStyle = Preference<String>(key: 'tg_logo_style_v2', defaultValue: 'logo');
   static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache_v5', defaultValue: '');
 
+  /// Harbor home: where the focused title's trailer plays after a short pause
+  /// on it: 'background' (behind the text), 'corner' (a box top right) or 'off'.
+  static final tgHarborTrailer = Preference<String>(key: 'tg_harbor_trailer', defaultValue: 'background');
+
   static final tgHiddenTopLists = Preference<String>(
     key: 'tg_hidden_top_lists',
     defaultValue: '',
