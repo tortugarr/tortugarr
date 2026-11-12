@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:moonfin_design/moonfin_design.dart';
 
 import '../../../data/services/tortugarr/tortugarr_plugin_client.dart';
 import '../../../l10n/app_localizations.dart';
@@ -78,9 +79,9 @@ class _TopListsSettingsScreenState extends State<TopListsSettingsScreen> {
                   adaptiveListSection(
                     children: [
                       for (final (i, l) in lists.indexed)
-                        SwitchListTile(
+                        _TopListTile(
                           autofocus: i == 0,
-                          title: Text(l.title),
+                          title: l.title,
                           value: !hidden.contains(HomeViewModel.topListKey(l.title)),
                           onChanged: (v) => _set(l.title, v),
                         ),
@@ -89,6 +90,78 @@ class _TopListsSettingsScreenState extends State<TopListsSettingsScreen> {
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One list with its switch. The whole row takes focus and shows it the
+/// way the other settings rows do (theme's focused-button colours), so the
+/// remote always shows where you are.
+class _TopListTile extends StatefulWidget {
+  const _TopListTile({
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    this.autofocus = false,
+  });
+
+  final String title;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final bool autofocus;
+
+  @override
+  State<_TopListTile> createState() => _TopListTileState();
+}
+
+class _TopListTileState extends State<_TopListTile> {
+  bool _focused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = _focused ? AppColorScheme.onButtonFocused : AppColorScheme.onSurface;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          autofocus: widget.autofocus,
+          borderRadius: BorderRadius.circular(16),
+          focusColor: Colors.transparent,
+          onFocusChange: (f) => setState(() => _focused = f),
+          onTap: () => widget.onChanged(!widget.value),
+          child: AnimatedContainer(
+            key: ValueKey('top-list-${widget.title}'),
+            duration: const Duration(milliseconds: 120),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: _focused ? AppColorScheme.buttonFocused : AppColorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _focused
+                    ? AppColorScheme.buttonFocused
+                    : AppColorScheme.onSurface.withValues(alpha: 0.12),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(color: fg, fontSize: 17, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                ExcludeFocus(
+                  child: Switch(
+                    value: widget.value,
+                    onChanged: widget.onChanged,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

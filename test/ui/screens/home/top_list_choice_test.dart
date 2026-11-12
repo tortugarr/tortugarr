@@ -36,7 +36,7 @@ void main() {
       ),
     ));
     await tester.pumpAndSettle();
-    expect(find.byType(SwitchListTile), findsNWidgets(2));
+    expect(find.byType(Switch), findsNWidgets(2));
 
     await tester.tap(find.text('IMDb Top 250'));
     await tester.pumpAndSettle();
