@@ -178,7 +178,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                 children: [
                   SwitchPreferenceTile(
                     preference: UserPreferences.showShuffleButton,
-                    title: l10n.showShuffleButton,
+                    title: _pirate(l10n.showShuffleButton, l10n.tgNavShuffle),
                     subtitle: l10n.settingsShowShuffleButtonInNavigation,
                     icon: Icons.shuffle,
                     onChanged: _pushPersonalizationSync,
@@ -191,7 +191,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.genres),
                       preference: UserPreferences.showGenresButton,
-                      title: l10n.showGenresButton,
+                      title: _pirate(l10n.showGenresButton, l10n.tgNavGenres),
                       subtitle: l10n.settingsShowGenresButtonInNavigation,
                       icon: Icons.theater_comedy,
                       onChanged: _pushPersonalizationSync,
@@ -200,7 +200,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.favorites),
                       preference: UserPreferences.showFavoritesButton,
-                      title: l10n.showFavoritesButton,
+                      title: _pirate(l10n.showFavoritesButton, l10n.tgNavTreasure),
                       subtitle: l10n.settingsShowFavoritesButtonInNavigation,
                       icon: Icons.favorite,
                       onChanged: _pushPersonalizationSync,
@@ -253,7 +253,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.discover),
                       preference: UserPreferences.showSeerrButton,
-                      title: l10n.showSeerrButton,
+                      title: _pirate(l10n.showSeerrButton, l10n.tgNavBountyBoard),
                       subtitle: l10n.settingsShowSeerrButtonInNavigation,
                       iconBuilder: (size, color) => Image.asset(
                         'assets/icons/seerr.png',
@@ -266,7 +266,7 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       !PlatformDetection.isWeb)
                     SwitchPreferenceTile(
                       preference: UserPreferences.showDownloadsButton,
-                      title: l10n.showDownloadsButton,
+                      title: _pirate(l10n.showDownloadsButton, l10n.tgBooty),
                       subtitle: appL10n().tgShowSavedDownloadsSubtitle,
                       icon: Icons.download_for_offline,
                       onChanged: _pushPersonalizationSync,
@@ -297,3 +297,8 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
     );
   }
 }
+
+/// Under Tortuga the menu uses pirate names; the setting shows both, so the
+/// switch for "Roll the dice" can be found as "Show Shuffle Button".
+String _pirate(String title, String pirateName) =>
+    ThemeRegistry.active.id == ThemeRegistry.tortugaId ? '$title ($pirateName)' : title;
