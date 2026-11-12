@@ -88,11 +88,26 @@ void main() {
     test('streaming sliders split region and providers', () {
       final movie = _slider(SeerrSliderType.movieStreaming, 'US,8|337').query!;
       expect(movie.path, 'discover/movies');
-      expect(movie.params, {'watchRegion': 'US', 'watchProviders': '8|337'});
+      expect(movie.params, containsPair('watchRegion', 'US'));
+      expect(movie.params, containsPair('watchProviders', '8|337'));
 
       final tv = _slider(SeerrSliderType.tvStreaming, 'GB,8').query!;
       expect(tv.path, 'discover/tv');
-      expect(tv.params, {'watchRegion': 'GB', 'watchProviders': '8'});
+      expect(tv.params, containsPair('watchRegion', 'GB'));
+      expect(tv.params, containsPair('watchProviders', '8'));
+    });
+
+    test('streaming sliders only ask for the last 18 months (Tortugarr)', () {
+      final since = DateTime.now().subtract(const Duration(days: 548));
+      final movie = _slider(SeerrSliderType.movieStreaming, 'NO,1899').query!;
+      final tv = _slider(SeerrSliderType.tvStreaming, 'NO,1899').query!;
+      final movieDay = DateTime.parse(movie.params['primaryReleaseDateGte']!);
+      final tvDay = DateTime.parse(tv.params['firstAirDateGte']!);
+      for (final d in [movieDay, tvDay]) {
+        expect(d.difference(DateTime(since.year, since.month, since.day)).inDays.abs(), lessThanOrEqualTo(1));
+      }
+      expect(movie.params.containsKey('firstAirDateGte'), isFalse);
+      expect(tv.params.containsKey('primaryReleaseDateGte'), isFalse);
     });
 
     test('a streaming slider missing its providers has no query', () {

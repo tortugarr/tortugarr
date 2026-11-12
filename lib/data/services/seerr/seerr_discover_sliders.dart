@@ -88,9 +88,17 @@ class SeerrDiscoverSlider {
     final region = parts[0].trim();
     final providers = parts[1].trim();
     if (region.isEmpty || providers.isEmpty) return null;
+    // Tortugarr (2026-11-12): only titles from the last 18 months, so a
+    // "Popular on <service>" row shows what is popular there now rather than
+    // evergreen catalogue (HBO Max otherwise opened with The Mentalist).
+    final since = DateTime.now().subtract(const Duration(days: 548));
+    final day = '${since.year.toString().padLeft(4, '0')}-'
+        '${since.month.toString().padLeft(2, '0')}-'
+        '${since.day.toString().padLeft(2, '0')}';
     return SeerrSliderQuery(path, {
       'watchRegion': region,
       'watchProviders': providers,
+      if (path == 'discover/movies') 'primaryReleaseDateGte': day else 'firstAirDateGte': day,
     });
   }
 
