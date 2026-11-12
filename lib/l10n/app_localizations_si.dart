@@ -646,6 +646,13 @@ class AppLocalizationsSi extends AppLocalizations {
       'ඝන වර්ණාවලියක්, කොටස්-හැඩැති මායිම්, තද සෙවනැලි සහ පික්සල අකුරු සහිත රෙට්‍රෝ පික්සල-කලා විලාසය';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle => 'ඔබගේ Emby Connect ගිණුමෙන් පුරන්න';
 
   @override

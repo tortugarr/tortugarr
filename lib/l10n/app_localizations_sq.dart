@@ -647,6 +647,13 @@ class AppLocalizationsSq extends AppLocalizations {
       'Stilim retro me pixel-art, paletë të trashë, korniza blloqesh, hije të forta dhe font pikselësh';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle => 'Hyni me llogarinë tuaj Emby Connect';
 
   @override

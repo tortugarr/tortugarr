@@ -646,6 +646,13 @@ class AppLocalizationsVi extends AppLocalizations {
       'Phong cách pixel-art hoài cổ với bảng màu đậm, viền khối, đổ bóng sắc nét và phông chữ pixel';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'Đăng nhập bằng tài khoản Emby Connect của bạn';
 

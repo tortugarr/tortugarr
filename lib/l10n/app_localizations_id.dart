@@ -646,6 +646,13 @@ class AppLocalizationsId extends AppLocalizations {
       'Gaya pixel-art retro dengan palet tebal, bingkai kotak, bayangan tajam, dan font piksel';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle => 'Masuk dengan akun Emby Connect Anda';
 
   @override

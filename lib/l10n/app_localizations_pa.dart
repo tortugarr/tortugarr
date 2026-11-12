@@ -646,6 +646,13 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਮੋਟੇ ਪੈਲੇਟ, ਬਲਾਕੀ ਕਿਨਾਰਿਆਂ, ਸਖ਼ਤ ਪਰਛਾਵੇਂ ਅਤੇ ਪਿਕਸਲ ਫੌਂਟ ਨਾਲ ਰੈਟਰੋ ਪਿਕਸਲ-ਆਰਟ ਸ਼ੈਲੀ';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'ਆਪਣੇ Emby ਕਨੈਕਟ ਖਾਤੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ';
 

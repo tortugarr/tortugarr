@@ -646,6 +646,13 @@ class AppLocalizationsHu extends AppLocalizations {
       'Retró pixel-art stílus egyedi színpalettával, szögletes szegélyekkel, éles vetett árnyékokkal és pixel betűtípussal';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'Jelentkezz be az Emby Connect fiókoddal';
 

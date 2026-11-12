@@ -107,6 +107,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
       ThemeRegistry.neonPulseId => l10n.themeNeonPulse,
       ThemeRegistry.glassId => l10n.themeGlass,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHero,
+      ThemeRegistry.tortugaId => l10n.tgThemeTortuga,
       _ => spec.displayName,
     };
   }
@@ -117,6 +118,7 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
       ThemeRegistry.neonPulseId => l10n.themeNeonPulseSubtitle,
       ThemeRegistry.glassId => l10n.themeGlassSubtitle,
       ThemeRegistry.eightbitHeroId => l10n.theme8BitHeroSubtitle,
+      ThemeRegistry.tortugaId => l10n.tgThemeTortugaSubtitle,
       _ => spec.description,
     };
   }
@@ -126,7 +128,8 @@ class _AppearanceThemeScreenState extends State<AppearanceThemeScreen> {
     if (id == ThemeRegistry.neonPulseId) return 1;
     if (id == ThemeRegistry.glassId) return 2;
     if (id == ThemeRegistry.eightbitHeroId) return 3;
-    return 4;
+    if (id == ThemeRegistry.tortugaId) return 4;
+    return 5;
   }
 }
 

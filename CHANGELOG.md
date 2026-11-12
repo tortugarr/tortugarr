@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+**App**
+
+- **New theme: Tortuga** (Settings › Appearance › Theme). Dark wood, parchment text, brass
+  accents, pirate headings and a soft lantern glow on the focused card. Headings only use the
+  pirate font; everything you read stays in the normal font. No blur, so it stays smooth on
+  slower TVs.
+
 **Installer**
 
 - **Windows: no false "network is Public" warning with a VPN.** `doctor` and setup now check

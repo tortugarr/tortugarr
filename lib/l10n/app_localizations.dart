@@ -1168,6 +1168,18 @@ abstract class AppLocalizations {
   /// **'Retro pixel-art styling with a chunky palette, blocky borders, hard drop-shadows, and a pixel font'**
   String get theme8BitHeroSubtitle;
 
+  /// Display name for Tortugarr's own Tortuga theme
+  ///
+  /// In en, this message translates to:
+  /// **'Tortuga'**
+  String get tgThemeTortuga;
+
+  /// Preview description for the Tortuga theme
+  ///
+  /// In en, this message translates to:
+  /// **'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card'**
+  String get tgThemeTortugaSubtitle;
+
   /// Subtitle on the Emby Connect sign-in screen
   ///
   /// In en, this message translates to:

@@ -5,6 +5,7 @@ import 'themes/moonfin_theme_spec.dart';
 import 'themes/neon_pulse_theme_spec.dart';
 import 'themes/glass_theme_spec.dart';
 import 'themes/eightbit_hero_theme_spec.dart';
+import 'themes/tortuga_theme_spec.dart';
 
 class ThemeRegistry {
   const ThemeRegistry._();
@@ -13,6 +14,7 @@ class ThemeRegistry {
   static const String neonPulseId = 'neon_pulse';
   static const String glassId = 'glass';
   static const String eightbitHeroId = '8bit_hero';
+  static const String tortugaId = 'tortuga';
 
   /// IDs that are bundled with the app and cannot be removed.
   static const Set<String> builtInIds = {
@@ -20,6 +22,7 @@ class ThemeRegistry {
     neonPulseId,
     glassId,
     eightbitHeroId,
+    tortugaId,
   };
 
   static const Map<String, ThemeSpec> _builtIns = {
@@ -27,6 +30,7 @@ class ThemeRegistry {
     neonPulseId: neonPulseThemeSpec,
     glassId: glassThemeSpec,
     eightbitHeroId: eightbitHeroThemeSpec,
+    tortugaId: tortugaThemeSpec,
   };
 
   static final Map<String, ThemeSpec> _custom = {};

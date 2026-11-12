@@ -646,6 +646,13 @@ class AppLocalizationsAf extends AppLocalizations {
       'Retro pixelkuns-styl met \'n growwe palet, blokkerige rande, harde valskaduwees en \'n pixel-lettertipe';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'Meld aan met jou Emby Connect-rekening';
 

@@ -646,6 +646,13 @@ class AppLocalizationsMk extends AppLocalizations {
       'Ретро пиксел-арт стил со дебела палета, блокови рабови, остри сенки и пикселен фонт';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'Најавете се со вашата сметка на Emby Connect';
 

@@ -345,7 +345,8 @@ enum AppTheme {
   indigo(0xFF4B0082),
   moonfinCyan(0xFF00A4DC),
   neonPulseMagenta(0xFFFF2E92),
-  eightBitGold(0xFFFFCD75);
+  eightBitGold(0xFFFFCD75),
+  tortugaBrass(0xFFD9B44A);
 
   const AppTheme(this.colorValue);
   final int colorValue;
@@ -356,6 +357,7 @@ enum VisualThemeId {
   neonPulse,
   glass,
   eightbitHero,
+  tortuga,
 }
 
 /// Selectable structural style for the media detail screen.

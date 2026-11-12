@@ -646,6 +646,13 @@ class AppLocalizationsPt extends AppLocalizations {
       'Estilo retro em pixel art com paleta robusta, bordas em blocos, sombras marcadas e fonte de pixels';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle => 'Entre com sua conta Emby Connect';
 
   @override

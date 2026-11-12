@@ -661,6 +661,13 @@ class AppLocalizationsRo extends AppLocalizations {
       'Stil retro pixel-art, cu o paletă îndrăzneață, margini în blocuri, umbre puternice și un font pixelat';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'Autentifică-te cu contul tău Emby Connect';
 

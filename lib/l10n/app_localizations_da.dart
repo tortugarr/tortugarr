@@ -648,6 +648,13 @@ class AppLocalizationsDa extends AppLocalizations {
       'Retro pixelart-design med en fed palet, kantede rammer, hårde slagskygger og en pixelskrifttype';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle => 'Log ind med din Emby Connect-konto';
 
   @override

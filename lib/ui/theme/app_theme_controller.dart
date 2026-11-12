@@ -37,6 +37,7 @@ class AppThemeController extends ChangeNotifier {
       VisualThemeId.neonPulse => ThemeRegistry.neonPulseId,
       VisualThemeId.glass => ThemeRegistry.glassId,
       VisualThemeId.eightbitHero => ThemeRegistry.eightbitHeroId,
+      VisualThemeId.tortuga => ThemeRegistry.tortugaId,
     };
   }
 
@@ -46,6 +47,7 @@ class AppThemeController extends ChangeNotifier {
       ThemeRegistry.neonPulseId => VisualThemeId.neonPulse,
       ThemeRegistry.glassId => VisualThemeId.glass,
       ThemeRegistry.eightbitHeroId => VisualThemeId.eightbitHero,
+      ThemeRegistry.tortugaId => VisualThemeId.tortuga,
       _ => null,
     };
   }
@@ -56,6 +58,7 @@ class AppThemeController extends ChangeNotifier {
       VisualThemeId.neonPulse => AppTheme.neonPulseMagenta,
       VisualThemeId.glass => AppTheme.white,
       VisualThemeId.eightbitHero => AppTheme.eightBitGold,
+      VisualThemeId.tortuga => AppTheme.tortugaBrass,
     };
   }
 

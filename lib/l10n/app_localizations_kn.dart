@@ -646,6 +646,13 @@ class AppLocalizationsKn extends AppLocalizations {
       'ದಪ್ಪ ಬಣ್ಣದ ಪ್ಯಾಲೆಟ್, ಬ್ಲಾಕಿ ಅಂಚುಗಳು, ಗಟ್ಟಿಯಾದ ಡ್ರಾಪ್-ಶ್ಯಾಡೋಗಳು ಮತ್ತು ಪಿಕ್ಸೆಲ್ ಫಾಂಟ್‌ನೊಂದಿಗೆ ರೆಟ್ರೊ ಪಿಕ್ಸೆಲ್-ಆರ್ಟ್ ಶೈಲಿ';
 
   @override
+  String get tgThemeTortuga => 'Tortuga';
+
+  @override
+  String get tgThemeTortugaSubtitle =>
+      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+
+  @override
   String get embyConnectSignInSubtitle =>
       'ನಿಮ್ಮ Emby ಸಂಪರ್ಕ ಖಾತೆಯೊಂದಿಗೆ ಸೈನ್ ಇನ್ ಮಾಡಿ';
 

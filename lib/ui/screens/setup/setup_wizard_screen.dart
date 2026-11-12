@@ -647,6 +647,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             VisualThemeId.neonPulse => l10n.themeNeonPulse,
             VisualThemeId.glass => l10n.themeGlass,
             VisualThemeId.eightbitHero => l10n.theme8BitHero,
+            VisualThemeId.tortuga => l10n.tgThemeTortuga,
           },
           hint: '${l10n.setupTourMoreHeader}: $more',
           selected: active == theme,

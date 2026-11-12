@@ -753,6 +753,14 @@
     "@theme8BitHeroSubtitle": {
         "description": "Preview description for the 8-bit Hero theme"
     },
+    "tgThemeTortuga": "Tortuga",
+    "@tgThemeTortuga": {
+        "description": "Display name for Tortugarr's own Tortuga theme"
+    },
+    "tgThemeTortugaSubtitle": "A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card",
+    "@tgThemeTortugaSubtitle": {
+        "description": "Preview description for the Tortuga theme"
+    },
     "embyConnectSignInSubtitle": "Sign in with your Emby Connect account",
     "@embyConnectSignInSubtitle": {
         "description": "Subtitle on the Emby Connect sign-in screen"

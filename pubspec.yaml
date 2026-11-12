@@ -325,6 +325,10 @@ flutter:
     - family: EightBitHero
       fonts:
         - asset: assets/fonts/PressStart2P-Regular.ttf
+    # Tortuga theme headings (SIL OFL 1.1, assets/fonts/PirataOne-LICENSE.txt).
+    - family: TortugaHeading
+      fonts:
+        - asset: assets/fonts/PirataOne-Regular.ttf
     - family: Literata
       fonts:
         - asset: assets/fonts/Literata-Regular.ttf

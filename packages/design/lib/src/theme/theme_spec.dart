@@ -463,6 +463,12 @@ class ThemeSpec {
   /// platform default.
   final String? fontFamily;
 
+  /// Optional font for headings only (display, headline and titleLarge:
+  /// screen and section titles). Body text, labels and card titles keep
+  /// [fontFamily], so a decorative heading font never has to carry small
+  /// text. `null`: headings use [fontFamily] too.
+  final String? headingFontFamily;
+
   /// Text glow shadows applied to styled text elements (clock, labels, etc.).
   /// Empty list means no glow (default for Moonfin).
   final List<Shadow> textGlow;
@@ -496,6 +502,7 @@ class ThemeSpec {
     this.semantic = ThemeSemanticTokens.defaults,
     this.book = ThemeBookTokens.defaults,
     this.fontFamily,
+    this.headingFontFamily,
     this.textGlow = const [],
     this.navColorCycle = const [],
     this.transparentNavbarSurface = false,
@@ -514,6 +521,7 @@ class ThemeSpec {
         semantic: semantic,
         book: book,
         fontFamily: fontFamily,
+        headingFontFamily: headingFontFamily,
         textGlow: textGlow,
         navColorCycle: navColorCycle,
         transparentNavbarSurface: transparentNavbarSurface,
@@ -552,6 +560,10 @@ class ThemeSpec {
     final font = (fontRaw is String && fontRaw.trim().isNotEmpty)
         ? fontRaw.trim()
         : null;
+    final headingRaw = json['headingFontFamily'];
+    final headingFont = (headingRaw is String && headingRaw.trim().isNotEmpty)
+        ? headingRaw.trim()
+        : null;
     final descRaw = json['description'];
     final description = (descRaw is String && descRaw.trim().isNotEmpty)
         ? descRaw.trim()
@@ -569,6 +581,7 @@ class ThemeSpec {
           ? ThemeBookTokens.fromJson(bookJson.cast<String, dynamic>())
           : ThemeBookTokens.defaults,
       fontFamily: font,
+      headingFontFamily: headingFont,
       textGlow: _parseTextShadowList(json['textGlow']),
       navColorCycle: _parseColorList(json['navColorCycle']),
       transparentNavbarSurface: (json['transparentNavbarSurface'] as bool?) ?? false,
@@ -583,6 +596,7 @@ class ThemeSpec {
         'displayName': displayName,
         if (description != null) 'description': description,
         if (fontFamily != null) 'fontFamily': fontFamily,
+        if (headingFontFamily != null) 'headingFontFamily': headingFontFamily,
         if (textGlow.isNotEmpty)
           'textGlow': textGlow.map(_encodeTextShadow).toList(),
         if (navColorCycle.isNotEmpty)

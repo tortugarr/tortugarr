@@ -17,7 +17,7 @@ class AppTheme {
       fontFamily: spec.fontFamily,
     ).textTheme;
     if (spec.textGlow.isEmpty) {
-      return base;
+      return _withHeadingFont(base, spec.headingFontFamily);
     }
 
     final themedShadows = spec.textGlow;
@@ -57,6 +57,23 @@ class AppTheme {
       labelLarge: neonBody(base.labelLarge)?.copyWith(color: c.accent),
       labelMedium: neonBody(base.labelMedium),
       labelSmall: neonBody(base.labelSmall),
+    );
+  }
+
+  /// Screen and section headings (display, headline and titleLarge - the
+  /// home row titles) in the theme's heading font; smaller titles, body and
+  /// labels keep the main font.
+  static TextTheme _withHeadingFont(TextTheme t, String? family) {
+    if (family == null) return t;
+    TextStyle? h(TextStyle? s) => s?.copyWith(fontFamily: family);
+    return t.copyWith(
+      displayLarge: h(t.displayLarge),
+      displayMedium: h(t.displayMedium),
+      displaySmall: h(t.displaySmall),
+      headlineLarge: h(t.headlineLarge),
+      headlineMedium: h(t.headlineMedium),
+      headlineSmall: h(t.headlineSmall),
+      titleLarge: h(t.titleLarge),
     );
   }
 
