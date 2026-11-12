@@ -1492,7 +1492,7 @@ def configure_sabnzbd():
 # --------------------------------------------------------------------------- jellyfin
 
 def jellyfin_auth_header(token=None):
-    version = os.environ.get("TORTUGARR_VERSION") or "4.20.03"
+    version = os.environ.get("TORTUGARR_VERSION") or "4.20.04"
     parts = ['Client="Tortugarr Installer"', 'Device="installer"', 'DeviceId="tortugarr-installer"', f'Version="{version}"']
     if token:
         parts.append(f'Token="{token}"')
