@@ -323,7 +323,14 @@ class _HarborHomeState extends State<_HarborHome>
 
   // ---------------------------------------------------------------- images
 
+  /// Network, studio and genre tiles: a logo, not a poster.
+  static bool _isLogoTile(AggregatedItem item) =>
+      item.rawData['FilterType'] != null ||
+      const {'Studio', 'Network', 'Genre', 'MusicGenre'}.contains(item.type);
+
   String? _backdropUrl(AggregatedItem item) {
+    // A logo blown up behind the page is no backdrop.
+    if (_isLogoTile(item)) return null;
     final path = item.rawData['BackdropPath'] as String?;
     if (item.serverId == 'seerr' || (path != null && path.isNotEmpty)) {
       if (path == null || path.isEmpty) return null;
@@ -372,7 +379,8 @@ class _HarborHomeState extends State<_HarborHome>
         item,
         widget.viewModel.imageApiForServer(item.serverId),
         height,
-        ImageType.poster,
+        // Logo tiles use the wide artwork their rows use.
+        _isLogoTile(item) ? ImageType.thumb : ImageType.poster,
         false,
         MediaQuery.devicePixelRatioOf(context).clamp(1.0, 2.0),
       );
@@ -650,8 +658,10 @@ class _HarborHomeState extends State<_HarborHome>
     final deck = _decks[_deck];
     return LayoutBuilder(
       builder: (context, box) {
-        final cardH = box.maxHeight * 0.80;
-        final cardW = cardH * 2 / 3;
+        // Logo decks (Networks, Studios, Genres) get wide tiles.
+        final logos = deck.items.isNotEmpty && _isLogoTile(deck.items.first);
+        final cardH = box.maxHeight * (logos ? 0.55 : 0.80);
+        final cardW = logos ? cardH * 16 / 9 : cardH * 2 / 3;
         final centerX = w * 0.5;
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 320),
@@ -748,7 +758,12 @@ class _HarborHomeState extends State<_HarborHome>
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (url != null)
+            if (url != null && _isLogoTile(item))
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: cardW * 0.12, vertical: cardH * 0.18),
+                child: BoundedNetworkImage(imageUrl: url, fit: BoxFit.contain, maxWidth: 600),
+              )
+            else if (url != null)
               BoundedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
