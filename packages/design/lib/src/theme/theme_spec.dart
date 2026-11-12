@@ -479,6 +479,12 @@ class ThemeSpec {
   /// default.
   final Color? backdropTint;
 
+  /// Background of the navigation bar / left sidebar while the user keeps the
+  /// default navbar colour (gray). When set, the sidebar also takes its focus
+  /// pill, text and avatar colours from the theme instead of plain white /
+  /// black / Moonfin cyan. `null`: the default look.
+  final Color? navSurface;
+
   /// Text glow shadows applied to styled text elements (clock, labels, etc.).
   /// Empty list means no glow (default for Moonfin).
   final List<Shadow> textGlow;
@@ -515,6 +521,7 @@ class ThemeSpec {
     this.headingFontFamily,
     this.cardFocusGlow = false,
     this.backdropTint,
+    this.navSurface,
     this.textGlow = const [],
     this.navColorCycle = const [],
     this.transparentNavbarSurface = false,
@@ -536,6 +543,7 @@ class ThemeSpec {
         headingFontFamily: headingFontFamily,
         cardFocusGlow: cardFocusGlow,
         backdropTint: backdropTint,
+        navSurface: navSurface,
         textGlow: textGlow,
         navColorCycle: navColorCycle,
         transparentNavbarSurface: transparentNavbarSurface,
@@ -600,6 +608,9 @@ class ThemeSpec {
       backdropTint: json['backdropTint'] is String
           ? _parseColor(json['backdropTint'], 'backdropTint')
           : null,
+      navSurface: json['navSurface'] is String
+          ? _parseColor(json['navSurface'], 'navSurface')
+          : null,
       textGlow: _parseTextShadowList(json['textGlow']),
       navColorCycle: _parseColorList(json['navColorCycle']),
       transparentNavbarSurface: (json['transparentNavbarSurface'] as bool?) ?? false,
@@ -617,6 +628,7 @@ class ThemeSpec {
         if (headingFontFamily != null) 'headingFontFamily': headingFontFamily,
         if (cardFocusGlow) 'cardFocusGlow': true,
         if (backdropTint != null) 'backdropTint': _encodeColor(backdropTint!),
+        if (navSurface != null) 'navSurface': _encodeColor(navSurface!),
         if (textGlow.isNotEmpty)
           'textGlow': textGlow.map(_encodeTextShadow).toList(),
         if (navColorCycle.isNotEmpty)

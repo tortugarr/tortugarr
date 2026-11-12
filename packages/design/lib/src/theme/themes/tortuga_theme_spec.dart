@@ -14,6 +14,7 @@ const tortugaThemeSpec = ThemeSpec(
   cardFocusGlow: true,
   // Warm lamp-lit cast over the home backdrop instead of the cool default.
   backdropTint: Color(0x8C24150A),
+  navSurface: Color(0xFF2A1C10),
   semantic: ThemeSemanticTokens(
     statusAvailable: Color(0xFF6F9A4A),
     statusRequested: Color(0xFF8A5A9E),

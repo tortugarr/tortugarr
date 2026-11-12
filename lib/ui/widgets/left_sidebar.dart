@@ -378,7 +378,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   bool get _kidsMode => _prefs.get(UserPreferences.kidsModeEnabled);
 
   Color _overlayColor() {
-    return OverlayColorPalette.resolveColor(
+    return OverlayColorPalette.resolveNavbarColor(
       _prefs.get(UserPreferences.navbarColor),
     );
   }
@@ -1407,12 +1407,14 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     final avatar = Container(
       width: 40,
       height: 40,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF00A4DC), Color(0xFF0077B6)],
+          colors: OverlayColorPalette.navFollowsTheme
+              ? [AppColorScheme.accent, AppColorScheme.buttonActive]
+              : const [Color(0xFF00A4DC), Color(0xFF0077B6)],
         ),
       ),
       child: ClipOval(
@@ -1445,7 +1447,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       padding: EdgeInsets.all(innerPad),
       decoration: BoxDecoration(
         color: (tvFocused && _showLabels)
-            ? Colors.white
+            ? _navFocusFill()
             : (isFocused && !tvFocused)
             ? focusColor.withValues(alpha: 0.12)
             : Colors.transparent,
@@ -1461,7 +1463,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                 user?.name ?? '',
                 style: TextStyle(
                   color: tvFocused
-                      ? Colors.black
+                      ? _navFocusText()
                       : isFocused
                       ? focusColor
                       : Colors.white.withValues(alpha: 0.9),
@@ -1588,7 +1590,7 @@ class _SidebarItemState extends State<_SidebarItem> {
     final tvFocused = PlatformDetection.isTV && _isFocused;
     final baseColor = widget.baseColor ?? Colors.white.withValues(alpha: 0.6);
     final fgColor = tvFocused
-        ? Colors.black
+        ? _navFocusText()
         : highlighted
         ? (useBaseForFocus ? baseColor : focusColor)
         : baseColor;
@@ -1621,7 +1623,7 @@ class _SidebarItemState extends State<_SidebarItem> {
               ),
               decoration: BoxDecoration(
                 color: tvFocused
-                    ? Colors.white
+                    ? _navFocusFill()
                     : highlighted
                     ? (useBaseForFocus
                           ? baseColor.withValues(alpha: 0.12)
@@ -1747,7 +1749,7 @@ class _SidebarLibraryItemState extends State<_SidebarLibraryItem> {
               ),
               decoration: BoxDecoration(
                 color: tvFocused
-                    ? Colors.white
+                    ? _navFocusFill()
                     : highlighted
                     ? (useBaseForFocus
                           ? baseColor.withValues(alpha: 0.12)
@@ -1763,7 +1765,7 @@ class _SidebarLibraryItemState extends State<_SidebarLibraryItem> {
                       widget.label,
                       style: TextStyle(
                         color: tvFocused
-                            ? Colors.black
+                            ? _navFocusText()
                             : highlighted
                             ? (useBaseForFocus ? baseColor : focusColor)
                             : baseColor,
@@ -2101,3 +2103,11 @@ class _SidebarMusicCardState extends State<SidebarMusicCard> {
     );
   }
 }
+
+/// The TV focus pill and its text: white / black by default, the theme's
+/// focused-button colours when the navigation follows the theme (Tortuga).
+Color _navFocusFill() =>
+    OverlayColorPalette.navFollowsTheme ? AppColorScheme.buttonFocused : Colors.white;
+
+Color _navFocusText() =>
+    OverlayColorPalette.navFollowsTheme ? AppColorScheme.onButtonFocused : Colors.black;

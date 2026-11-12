@@ -288,7 +288,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   }
 
   Color _overlayColor() {
-    return OverlayColorPalette.resolveColor(
+    return OverlayColorPalette.resolveNavbarColor(
       _prefs.get(UserPreferences.navbarColor),
     );
   }

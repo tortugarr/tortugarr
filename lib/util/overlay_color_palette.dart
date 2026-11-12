@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moonfin_design/moonfin_design.dart';
 
 import '../l10n/app_localizations.dart';
 
@@ -67,6 +68,18 @@ abstract final class OverlayColorPalette {
 
     return _aliases[lower] ?? 'gray';
   }
+
+  /// The navigation bar colour: the active theme's [ThemeSpec.navSurface]
+  /// while the user keeps the default (gray), else their own choice.
+  static Color resolveNavbarColor(String colorName) {
+    final themed = ThemeRegistry.active.navSurface;
+    if (themed != null && normalizeKey(colorName) == 'gray') return themed;
+    return resolveColor(colorName);
+  }
+
+  /// Whether the navigation chrome follows the theme (see
+  /// [resolveNavbarColor]).
+  static bool get navFollowsTheme => ThemeRegistry.active.navSurface != null;
 
   static Color resolveColor(String colorName) {
     return switch (normalizeKey(colorName)) {

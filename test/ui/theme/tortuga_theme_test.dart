@@ -4,6 +4,7 @@ import 'package:moonfin/preference/preference_constants.dart';
 import 'package:moonfin/preference/user_preferences.dart';
 import 'package:moonfin/ui/theme/app_theme.dart' as theming;
 import 'package:moonfin/ui/theme/app_theme_controller.dart';
+import 'package:moonfin/util/overlay_color_palette.dart';
 import 'package:moonfin_design/moonfin_design.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,15 +69,28 @@ void main() {
     expect(oled.backdropTint, spec.backdropTint);
   });
 
+  test('the sidebar takes the Tortuga colour only while the user keeps the default', () {
+    ThemeRegistry.setActiveById(ThemeRegistry.tortugaId);
+    addTearDown(() => ThemeRegistry.setActiveById(ThemeRegistry.moonfinId));
+    expect(OverlayColorPalette.navFollowsTheme, isTrue);
+    expect(OverlayColorPalette.resolveNavbarColor('gray'), ThemeRegistry.active.navSurface);
+    expect(OverlayColorPalette.resolveNavbarColor('black'), OverlayColorPalette.resolveColor('black'));
+    ThemeRegistry.setActiveById(ThemeRegistry.moonfinId);
+    expect(OverlayColorPalette.navFollowsTheme, isFalse);
+    expect(OverlayColorPalette.resolveNavbarColor('gray'), OverlayColorPalette.resolveColor('gray'));
+  });
+
   test('card glow and backdrop tint survive JSON; other themes keep neither', () {
     final spec = ThemeRegistry.resolveById(ThemeRegistry.tortugaId);
     final back = ThemeSpec.fromJson(spec.toJson());
     expect(back.cardFocusGlow, isTrue);
     expect(back.backdropTint, spec.backdropTint);
+    expect(back.navSurface, spec.navSurface);
     for (final id in [ThemeRegistry.moonfinId, ThemeRegistry.neonPulseId, ThemeRegistry.glassId, ThemeRegistry.eightbitHeroId]) {
       final other = ThemeRegistry.resolveById(id);
       expect(other.cardFocusGlow, isFalse, reason: id);
       expect(other.backdropTint, isNull, reason: id);
+      expect(other.navSurface, isNull, reason: id);
     }
   });
 }

@@ -61,7 +61,7 @@ class BottomNavTheme {
       // The navbar colour and opacity still count, with a floor so the bar
       // never fades into the posters under it.
       surface = Color.alphaBlend(
-        OverlayColorPalette.resolveColor(prefs.get(UserPreferences.navbarColor))
+        OverlayColorPalette.resolveNavbarColor(prefs.get(UserPreferences.navbarColor))
             .withValues(alpha: 0.78 + 0.19 * opacity),
         AppColorScheme.surface,
       );

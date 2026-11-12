@@ -569,7 +569,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
   }
 
   Widget _buildFloatingBackButton() {
-    final overlayColor = OverlayColorPalette.resolveColor(
+    final overlayColor = OverlayColorPalette.resolveNavbarColor(
       _prefs.get(UserPreferences.navbarColor),
     );
     final opacity = _prefs.get(UserPreferences.navbarOpacity) / 100.0;
