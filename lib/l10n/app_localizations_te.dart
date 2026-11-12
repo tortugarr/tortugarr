@@ -646,6 +646,17 @@ class AppLocalizationsTe extends AppLocalizations {
       'దట్టమైన రంగుల ప్యాలెట్, చతురస్రాకార అంచులు, గట్టి నీడలు, పిక్సెల్ ఫాంట్‌తో రెట్రో పిక్సెల్-ఆర్ట్ శైలి';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

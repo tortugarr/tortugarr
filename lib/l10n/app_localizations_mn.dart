@@ -646,6 +646,17 @@ class AppLocalizationsMn extends AppLocalizations {
       'Бүдүүн өнгөний палитр, дөрвөлжин хүрээ, хатуу сүүдэр, пиксел фонттой ретро пиксел-арт хэв маяг';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

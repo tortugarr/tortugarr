@@ -5421,7 +5421,9 @@ class _ContentRowsState extends State<_ContentRows>
     }
 
     // Harbor: ranked rows get a big number left of each poster.
-    final harborRanked = _isHarborHome() && HomeViewModel.isTopListRow(row);
+    final harborRanked = _isHarborHome() &&
+        HomeViewModel.isTopListRow(row) &&
+        HomeViewModel.isRankedTopList(row.title);
     final rankGutter = harborRanked ? maxImageHeight * 0.5 : 0.0;
 
     final rowPadding = 5.0 * metadataScale;

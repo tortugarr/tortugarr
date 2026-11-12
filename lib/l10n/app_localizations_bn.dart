@@ -646,6 +646,17 @@ class AppLocalizationsBn extends AppLocalizations {
       'মোটা প্যালেট, ব্লকি বর্ডার, কড়া ড্রপ-শ্যাডো এবং পিক্সেল ফন্ট সহ রেট্রো পিক্সেল-আর্ট স্টাইলিং';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

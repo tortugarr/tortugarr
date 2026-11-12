@@ -1168,6 +1168,24 @@ abstract class AppLocalizations {
   /// **'Retro pixel-art styling with a chunky palette, blocky borders, hard drop-shadows, and a pixel font'**
   String get theme8BitHeroSubtitle;
 
+  /// Subtitle of the Top lists entry in Home Screen settings
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which top lists show on Home'**
+  String get tgTopListsSettingsSubtitle;
+
+  /// Hint above the per-list switches in Top lists settings
+  ///
+  /// In en, this message translates to:
+  /// **'Lists switched off are not loaded. Your server decides which lists exist.'**
+  String get tgTopListsSettingsHint;
+
+  /// Shown when the Tortugarr server has no top lists
+  ///
+  /// In en, this message translates to:
+  /// **'The server offers no top lists right now.'**
+  String get tgTopListsNone;
+
   /// Home rows style: Tortugarr's Harbor home (fixed info on top that follows focus, rows below shrink to strips)
   ///
   /// In en, this message translates to:

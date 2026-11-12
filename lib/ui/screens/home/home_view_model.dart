@@ -3432,8 +3432,18 @@ class HomeViewModel extends ChangeNotifier {
   static const _topListsPlaceholderId = 'tortugarr_top_lists';
   static const _topListRowPrefix = 'tortugarr_top_';
 
-  /// Rows from the plugin's top lists (ranked, first is number one).
+  /// Rows from the plugin's top lists (first is number one).
   static bool isTopListRow(HomeRow row) => row.id.startsWith(_topListRowPrefix);
+
+  /// Whether a top list is a ranking (Top 10, most watched, popular,
+  /// trending) rather than a plain collection (new on digital, certified
+  /// fresh): only rankings get numbers in the Harbor home.
+  static bool isRankedTopList(String title) =>
+      RegExp(r'top|most|popular|trending', caseSensitive: false).hasMatch(title);
+
+  /// How a list title is stored in [UserPreferences.tgHiddenTopLists]
+  /// (comma separated, so no commas).
+  static String topListKey(String title) => title.replaceAll(',', ' ').trim();
   static const _topListOwnedFields =
       'DateCreated,Type,UserData,Overview,Genres,CommunityRating,CriticRating,'
       'OfficialRating,RunTimeTicks,ProductionYear,Status,ImageTags,BackdropImageTags,'
@@ -3451,7 +3461,11 @@ class HomeViewModel extends ChangeNotifier {
     if (!_topListsAvailable) return const [];
     try {
       final plugin = TortugarrPluginClient();
-      final lists = await plugin.topLists();
+      final hidden = _prefs.tgHiddenTopListTitles;
+      final lists = [
+        for (final l in await plugin.topLists())
+          if (!hidden.contains(topListKey(l.title))) l,
+      ];
       final answers = await Future.wait(lists.map((l) async {
         try {
           return await plugin.topList(l.index);

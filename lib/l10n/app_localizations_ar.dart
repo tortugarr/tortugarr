@@ -645,6 +645,17 @@ class AppLocalizationsAr extends AppLocalizations {
       'تصميم بكسل كلاسيكي بلوحة ألوان جريئة وحدود مربّعة وظلال حادة وخط بكسلي';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

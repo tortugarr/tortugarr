@@ -1278,6 +1278,20 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: 360,
   );
 
+  /// Tortugarr top lists the user switched off, by list title, comma
+  /// separated (Settings > Appearance > Home Screen > Top lists).
+  static final tgHiddenTopLists = Preference<String>(
+    key: 'tg_hidden_top_lists',
+    defaultValue: '',
+  );
+
+  /// [tgHiddenTopLists] as a set.
+  Set<String> get tgHiddenTopListTitles => get(tgHiddenTopLists)
+      .split(',')
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty)
+      .toSet();
+
   static final classicHomeRowsPadding = Preference<int>(
     key: 'pref_classic_home_rows_padding',
     defaultValue: 30,

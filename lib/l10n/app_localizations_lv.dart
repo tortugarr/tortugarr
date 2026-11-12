@@ -646,6 +646,17 @@ class AppLocalizationsLv extends AppLocalizations {
       'Retro pikseļu mākslas stils ar rupju paleti, kvadrātveida apmalēm, asām ēnām un pikseļu fontu';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

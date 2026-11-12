@@ -646,6 +646,17 @@ class AppLocalizationsTa extends AppLocalizations {
       'தடிமனான வண்ணத்தட்டு, சதுரமான ஓரங்கள், கூர்மையான நிழல்கள் மற்றும் பிக்சல் எழுத்துருவுடன் கூடிய ரெட்ரோ பிக்சல்-கலை பாணி';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

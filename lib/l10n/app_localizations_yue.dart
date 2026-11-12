@@ -637,6 +637,17 @@ class AppLocalizationsYue extends AppLocalizations {
   String get theme8BitHeroSubtitle => '復古像素風格，配粗獷色盤、方塊邊框、硬陰影同像素字體';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

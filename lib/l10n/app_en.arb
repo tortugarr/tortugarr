@@ -753,6 +753,12 @@
     "@theme8BitHeroSubtitle": {
         "description": "Preview description for the 8-bit Hero theme"
     },
+    "tgTopListsSettingsSubtitle": "Choose which top lists show on Home",
+    "@tgTopListsSettingsSubtitle": {"description": "Subtitle of the Top lists entry in Home Screen settings"},
+    "tgTopListsSettingsHint": "Lists switched off are not loaded. Your server decides which lists exist.",
+    "@tgTopListsSettingsHint": {"description": "Hint above the per-list switches in Top lists settings"},
+    "tgTopListsNone": "The server offers no top lists right now.",
+    "@tgTopListsNone": {"description": "Shown when the Tortugarr server has no top lists"},
     "tgHomeRowsStyleHarbor": "Harbor",
     "@tgHomeRowsStyleHarbor": {
         "description": "Home rows style: Tortugarr's Harbor home (fixed info on top that follows focus, rows below shrink to strips)"

@@ -640,6 +640,17 @@ class AppLocalizationsKo extends AppLocalizations {
       '투박한 색상, 각진 테두리, 진한 그림자, 픽셀 글꼴을 사용한 레트로 픽셀아트 스타일';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

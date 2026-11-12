@@ -645,6 +645,17 @@ class AppLocalizationsFa extends AppLocalizations {
       'استایل پیکسل‌آرت رترو با پالت درشت، حاشیه‌های بلوکی، سایه‌های تیز و فونت پیکسلی';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

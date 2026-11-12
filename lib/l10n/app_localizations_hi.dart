@@ -646,6 +646,17 @@ class AppLocalizationsHi extends AppLocalizations {
       'रेट्रो पिक्सेल-आर्ट स्टाइलिंग, चंकी पैलेट, ब्लॉकी बॉर्डर, गहरे ड्रॉप-शैडो और पिक्सेल फ़ॉन्ट के साथ';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

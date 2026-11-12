@@ -231,6 +231,16 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
                 onTap: () =>
                     context.pushSettingsScreen(const MediaBarSettingsScreen()),
               ),
+              if (DownloadFeatures.viaPlugin &&
+                  DownloadFeatures.capabilities.value.topLists)
+                _TvSettingsListTile(
+                  leading: const Icon(Icons.format_list_numbered),
+                  title: Text(l10n.tgTopListsRow),
+                  subtitle: Text(l10n.tgTopListsSettingsSubtitle),
+                  onTap: () => context.pushSettingsScreen(
+                    const TopListsSettingsScreen(),
+                  ),
+                ),
             ],
           ),
 

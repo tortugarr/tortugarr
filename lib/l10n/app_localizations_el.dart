@@ -648,6 +648,17 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ρετρό στυλ pixel-art με χοντροκομμένη παλέτα, τετράγωνα περιγράμματα, έντονες σκιές και γραμματοσειρά pixel';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

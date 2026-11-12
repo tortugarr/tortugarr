@@ -661,6 +661,17 @@ class AppLocalizationsSr extends AppLocalizations {
       'Ретро пиксел-арт изглед са изразитом палетом боја, угластим ивицама, оштрим сенкама и пикселским фонтом';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

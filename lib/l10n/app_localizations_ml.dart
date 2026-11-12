@@ -646,6 +646,17 @@ class AppLocalizationsMl extends AppLocalizations {
       'കട്ടിയുള്ള പാലറ്റ്, ബ്ലോക്കി ബോർഡറുകൾ, കടുത്ത ഡ്രോപ്പ്-ഷാഡോകൾ, പിക്സൽ ഫോണ്ട് എന്നിവയുള്ള റെട്രോ പിക്സൽ-ആർട്ട് ശൈലി';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

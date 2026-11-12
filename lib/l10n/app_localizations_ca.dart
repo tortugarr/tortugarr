@@ -645,6 +645,17 @@ class AppLocalizationsCa extends AppLocalizations {
       'Estil retro de pixel art amb una paleta contundent, vores quadrades, ombres marcades i una tipografia de píxels';
 
   @override
+  String get tgTopListsSettingsSubtitle =>
+      'Choose which top lists show on Home';
+
+  @override
+  String get tgTopListsSettingsHint =>
+      'Lists switched off are not loaded. Your server decides which lists exist.';
+
+  @override
+  String get tgTopListsNone => 'The server offers no top lists right now.';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override
