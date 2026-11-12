@@ -60,8 +60,23 @@ void main() {
     expect(ThemeSpec.fromJson({...json}..remove('headingFontFamily')).headingFontFamily, isNull);
   });
 
-  test('OLED mode keeps the heading font', () {
+  test('OLED mode keeps the heading font, card glow and backdrop tint', () {
     final spec = ThemeRegistry.resolveById(ThemeRegistry.tortugaId);
-    expect(spec.withColors(spec.colors).headingFontFamily, 'TortugaHeading');
+    final oled = spec.withColors(spec.colors);
+    expect(oled.headingFontFamily, 'TortugaHeading');
+    expect(oled.cardFocusGlow, isTrue);
+    expect(oled.backdropTint, spec.backdropTint);
+  });
+
+  test('card glow and backdrop tint survive JSON; other themes keep neither', () {
+    final spec = ThemeRegistry.resolveById(ThemeRegistry.tortugaId);
+    final back = ThemeSpec.fromJson(spec.toJson());
+    expect(back.cardFocusGlow, isTrue);
+    expect(back.backdropTint, spec.backdropTint);
+    for (final id in [ThemeRegistry.moonfinId, ThemeRegistry.neonPulseId, ThemeRegistry.glassId, ThemeRegistry.eightbitHeroId]) {
+      final other = ThemeRegistry.resolveById(id);
+      expect(other.cardFocusGlow, isFalse, reason: id);
+      expect(other.backdropTint, isNull, reason: id);
+    }
   });
 }

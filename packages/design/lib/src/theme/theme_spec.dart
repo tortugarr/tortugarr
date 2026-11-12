@@ -469,6 +469,16 @@ class ThemeSpec {
   /// text. `null`: headings use [fontFamily] too.
   final String? headingFontFamily;
 
+  /// When `true`, poster and thumbnail cards draw [ThemeBorderTokens.focusGlow]
+  /// around their focus ring (one shadow on the focused card only). Off by
+  /// default so existing themes look exactly as before.
+  final bool cardFocusGlow;
+
+  /// Colour laid over the home screen's backdrop picture instead of the
+  /// default light scrim, alpha included (a warm or cool cast). `null`: the
+  /// default.
+  final Color? backdropTint;
+
   /// Text glow shadows applied to styled text elements (clock, labels, etc.).
   /// Empty list means no glow (default for Moonfin).
   final List<Shadow> textGlow;
@@ -503,6 +513,8 @@ class ThemeSpec {
     this.book = ThemeBookTokens.defaults,
     this.fontFamily,
     this.headingFontFamily,
+    this.cardFocusGlow = false,
+    this.backdropTint,
     this.textGlow = const [],
     this.navColorCycle = const [],
     this.transparentNavbarSurface = false,
@@ -522,6 +534,8 @@ class ThemeSpec {
         book: book,
         fontFamily: fontFamily,
         headingFontFamily: headingFontFamily,
+        cardFocusGlow: cardFocusGlow,
+        backdropTint: backdropTint,
         textGlow: textGlow,
         navColorCycle: navColorCycle,
         transparentNavbarSurface: transparentNavbarSurface,
@@ -582,6 +596,10 @@ class ThemeSpec {
           : ThemeBookTokens.defaults,
       fontFamily: font,
       headingFontFamily: headingFont,
+      cardFocusGlow: (json['cardFocusGlow'] as bool?) ?? false,
+      backdropTint: json['backdropTint'] is String
+          ? _parseColor(json['backdropTint'], 'backdropTint')
+          : null,
       textGlow: _parseTextShadowList(json['textGlow']),
       navColorCycle: _parseColorList(json['navColorCycle']),
       transparentNavbarSurface: (json['transparentNavbarSurface'] as bool?) ?? false,
@@ -597,6 +615,8 @@ class ThemeSpec {
         if (description != null) 'description': description,
         if (fontFamily != null) 'fontFamily': fontFamily,
         if (headingFontFamily != null) 'headingFontFamily': headingFontFamily,
+        if (cardFocusGlow) 'cardFocusGlow': true,
+        if (backdropTint != null) 'backdropTint': _encodeColor(backdropTint!),
         if (textGlow.isNotEmpty)
           'textGlow': textGlow.map(_encodeTextShadow).toList(),
         if (navColorCycle.isNotEmpty)

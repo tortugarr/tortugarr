@@ -11,6 +11,9 @@ const tortugaThemeSpec = ThemeSpec(
   id: 'tortuga',
   displayName: 'Tortuga',
   headingFontFamily: 'TortugaHeading',
+  cardFocusGlow: true,
+  // Warm lamp-lit cast over the home backdrop instead of the cool default.
+  backdropTint: Color(0x8C24150A),
   semantic: ThemeSemanticTokens(
     statusAvailable: Color(0xFF6F9A4A),
     statusRequested: Color(0xFF8A5A9E),
@@ -62,9 +65,9 @@ const tortugaThemeSpec = ThemeSpec(
     navBorder: BorderSide(color: Color(0xFF2A2117)),
     focusGlow: [
       BoxShadow(
-        color: Color(0x55FFBE5A),
-        blurRadius: 18,
-        spreadRadius: 2,
+        color: Color(0x80FFB84D),
+        blurRadius: 22,
+        spreadRadius: 3,
       ),
     ],
   ),

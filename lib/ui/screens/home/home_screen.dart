@@ -708,7 +708,8 @@ class _Backdrop extends StatelessWidget {
                 image,
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    color: AppColorScheme.scrim.withValues(alpha: 0.26),
+                    color: ThemeRegistry.active.backdropTint ??
+                        AppColorScheme.scrim.withValues(alpha: 0.26),
                   ),
                   child: const SizedBox.expand(),
                 ),
@@ -6049,6 +6050,8 @@ class _ContentRowsState extends State<_ContentRows>
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColorScheme.onSurface,
                           fontWeight: FontWeight.w600,
+                          // A theme's heading font (Tortuga) for row titles.
+                          fontFamily: ThemeRegistry.active.headingFontFamily,
                         ),
                       ),
                       if (subtitle != null && subtitle.isNotEmpty) ...[

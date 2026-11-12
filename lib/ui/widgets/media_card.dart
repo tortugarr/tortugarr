@@ -992,6 +992,9 @@ class _CardImage extends StatelessWidget {
                         width: 3.0,
                       ),
                     ),
+                    boxShadow: ThemeRegistry.active.cardFocusGlow
+                        ? borders.focusGlow
+                        : null,
                   ),
                 ),
               ),
