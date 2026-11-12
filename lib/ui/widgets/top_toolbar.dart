@@ -145,8 +145,6 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
   final _musicBarFocusNode = FocusNode(debugLabel: 'TopMusicBar');
   late final VoidCallback _focusNavbarCallback;
   late final VoidCallback _focusAvatarCallback;
-  VoidCallback? _previousFocusNavbarCallback;
-  VoidCallback? _previousFocusAvatarCallback;
   FocusNode? _previousFocus;
   // Tracked per instance so only the toolbar that actually held focus
   // clears the shared isFocusedNotifier on dispose.
@@ -176,11 +174,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
       if (!mounted || _avatarFocus.context == null) return;
       _avatarFocus.requestFocus();
     };
-    _previousFocusNavbarCallback = NavigationLayout.focusNavbarNotifier.value;
-    _previousFocusAvatarCallback =
-        NavigationLayout.focusNavbarAvatarNotifier.value;
-    NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
-    NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    NavigationLayout.claimChromeFocus(
+      this,
+      _focusNavbarCallback,
+      _focusAvatarCallback,
+    );
     NavigationLayout.chromeFocusRoots.add(_toolbarScopeNode);
     _avatarFocus.addListener(_onAvatarFocusChanged);
     FocusManager.instance.addListener(_trackPreviousFocus);
@@ -226,8 +224,11 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
     // Our route is current again. An out of order route teardown can leave
     // the focus bridge pointing at a torn-down chrome instance, so re-assert
     // that it targets this live one.
-    NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
-    NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    NavigationLayout.claimChromeFocus(
+      this,
+      _focusNavbarCallback,
+      _focusAvatarCallback,
+    );
   }
 
   @override
@@ -236,19 +237,7 @@ class _TopToolbarState extends State<TopToolbar> with RouteAware {
       routeLifecycleObserver.unsubscribe(this);
       _observedRoute = null;
     }
-    if (identical(
-      NavigationLayout.focusNavbarNotifier.value,
-      _focusNavbarCallback,
-    )) {
-      NavigationLayout.focusNavbarNotifier.value = _previousFocusNavbarCallback;
-    }
-    if (identical(
-      NavigationLayout.focusNavbarAvatarNotifier.value,
-      _focusAvatarCallback,
-    )) {
-      NavigationLayout.focusNavbarAvatarNotifier.value =
-          _previousFocusAvatarCallback;
-    }
+    NavigationLayout.releaseChromeFocus(this);
     _clockTimer?.cancel();
     _librariesReloadDebounce?.cancel();
     // Only clear the shared flag if this instance held focus, so a torn-down

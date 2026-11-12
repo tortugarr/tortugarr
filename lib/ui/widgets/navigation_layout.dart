@@ -64,6 +64,42 @@ class NavigationLayout extends StatefulWidget {
 
   static final focusNavbarNotifier = ValueNotifier<VoidCallback?>(null);
   static final focusNavbarAvatarNotifier = ValueNotifier<VoidCallback?>(null);
+
+  /// The sidebars and toolbars that are mounted, oldest first. The newest one
+  /// owns [focusNavbarNotifier] and [focusNavbarAvatarNotifier]; when one goes
+  /// away, the newest one still mounted takes over. Each used to remember only
+  /// the one before it, so routes torn down out of order (a delete that goes
+  /// Home and removes the Seerr page and the details page at once) left the
+  /// bridge on a disposed menu, and Left on Home reached nothing (2026-11-12).
+  static final List<(Object, VoidCallback, VoidCallback)> _chromeFocus = [];
+
+  /// [owner]'s menu takes the focus bridge (on mount, and when its route is
+  /// on top again).
+  static void claimChromeFocus(
+    Object owner,
+    VoidCallback navbar,
+    VoidCallback avatar,
+  ) {
+    _chromeFocus.removeWhere((c) => identical(c.$1, owner));
+    _chromeFocus.add((owner, navbar, avatar));
+    focusNavbarNotifier.value = navbar;
+    focusNavbarAvatarNotifier.value = avatar;
+  }
+
+  /// [owner]'s menu is gone; a bridge no longer pointing at a mounted menu
+  /// moves to the newest one still mounted.
+  static void releaseChromeFocus(Object owner) {
+    _chromeFocus.removeWhere((c) => identical(c.$1, owner));
+    final top = _chromeFocus.isEmpty ? null : _chromeFocus.last;
+    if (!_chromeFocus.any((c) => identical(c.$2, focusNavbarNotifier.value))) {
+      focusNavbarNotifier.value = top?.$2;
+    }
+    if (!_chromeFocus.any(
+      (c) => identical(c.$3, focusNavbarAvatarNotifier.value),
+    )) {
+      focusNavbarAvatarNotifier.value = top?.$3;
+    }
+  }
   static final focusContentFromNavbarNotifier = ValueNotifier<VoidCallback?>(
     null,
   );

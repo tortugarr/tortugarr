@@ -878,20 +878,31 @@ run_doctor() {
     else good "$(t d_disk_ok "$d" "$free")"; fi
   done
   if [ "$TORRENT_CLIENT" = qbittorrent-ext ]; then
-    # Downloads land on the user's own qBittorrent's drive: imports are copies, so free space
-    # there is what decides whether the next download fits.
-    local host
+    # Downloads land on the user's own qBittorrent's drives. A library's hidden .incoming folder
+    # is on the library's own mount (imports are moves); a download folder is not (copies).
+    # The plugin fills the fullest drive first and skips a full one, so a full drive is only a
+    # problem when no download folder has room left (2026-11-12: H: and E: full, I: 1.6 TB).
+    local host room=0 hosts=()
     while read -r host; do
       [ -n "$host" ] || continue
+      hosts+=("$host")
+      if [ -d "$host" ]; then
+        pct=$(df -P "$host" 2>/dev/null | awk 'NR==2 {gsub("%","",$5); print $5}')
+        [ "${pct:-0}" -lt 95 ] && room=1
+      fi
+    done < <(jq -r '.mounts[]?.host_path' <<< "${EXT_QBIT_JSON:-{\}}")
+    for host in "${hosts[@]}"; do
       if [ -d "$host" ]; then
         pct=$(df -P "$host" 2>/dev/null | awk 'NR==2 {gsub("%","",$5); print $5}')
         free=$(free_gb "$host")
-        if [ "${pct:-0}" -ge 95 ]; then warning "$(t d_ext_space_low "$host" "$free")"; warns=$((warns + 1))
-        else good "$(t d_ext_space_ok "$host" "$free")"; fi
+        local kind=ext; [[ $host == */.incoming ]] && kind=inc
+        if [ "${pct:-0}" -lt 95 ]; then good "$(t d_${kind}_space_ok "$host" "$free")"
+        elif [ "$room" = 1 ]; then good "$(t d_${kind}_space_full_skipped "$host" "$free")"
+        else warning "$(t d_${kind}_space_low "$host" "$free")"; warns=$((warns + 1)); fi
       else
         error "$(t ext_host_missing "$host")"; fails=$((fails + 1))
       fi
-    done < <(jq -r '.mounts[]?.host_path' <<< "${EXT_QBIT_JSON:-{\}}")
+    done
   else
     # Hardlinks between downloads and library let imports be instant and use no extra space.
     local a="$DATA_DIR/torrents/.tortugarr-link-test" b="$DATA_DIR/media/.tortugarr-link-test"

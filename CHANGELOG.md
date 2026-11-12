@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+**App**
+
+- **The side menu can always be reached again after deleting a title.** Deleting a movie from
+  a page opened through Seerr went Home with the menu out of reach (Left did nothing; only
+  restarting the app helped). The menu link now always follows the newest menu still on
+  screen, however pages are closed.
+
+**Installer**
+
+- `doctor` no longer warns about a nearly full download drive while another one has room
+  (Tortugarr fills the fullest drive first and skips a full one), and says when downloads go
+  straight into the library, where imports are moves of seconds.
+- `doctor` no longer counts Radarr's "downloads in the root folder" warning: downloads go into
+  a hidden `.incoming` folder inside the library on purpose (the app's health card already
+  skipped it).
+
 ## 4.20.05 - 2026-11-12 (app build 2000062, Tortugarr plugin 1.3.0.37, Moonfin 3.0.0)
 
 **App**

@@ -1492,7 +1492,7 @@ def configure_sabnzbd():
 # --------------------------------------------------------------------------- jellyfin
 
 def jellyfin_auth_header(token=None):
-    version = os.environ.get("TORTUGARR_VERSION") or "4.20.05"
+    version = os.environ.get("TORTUGARR_VERSION") or "4.20.06"
     parts = ['Client="Tortugarr Installer"', 'Device="installer"', 'DeviceId="tortugarr-installer"', f'Version="{version}"']
     if token:
         parts.append(f'Token="{token}"')
@@ -2337,6 +2337,10 @@ def cmd_doctor():
             msg = i.get("message", "")
             if "indexer" in msg.lower():
                 # Expected until the user adds indexers in Prowlarr; said once, below.
+                continue
+            if i.get("source") == "DownloadClientRootFolderCheck" and incoming_libraries(app):
+                # Downloads go into a hidden .incoming folder inside the library on purpose, so the
+                # import is a move of seconds; the plugin's health card skips this one too.
                 continue
             real += 1
             (fail if i["type"] == "error" else warn)(f"{app}: {msg}")

@@ -112,8 +112,6 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   final _musicCardFocusNode = FocusNode(debugLabel: 'SidebarMusicCard');
   late final VoidCallback _focusNavbarCallback;
   late final VoidCallback _focusAvatarCallback;
-  VoidCallback? _previousFocusNavbarCallback;
-  VoidCallback? _previousFocusAvatarCallback;
   final _scrollController = ScrollController();
 
   List<AggregatedLibrary> _libraries = [];
@@ -172,11 +170,11 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
         });
       }
     };
-    _previousFocusNavbarCallback = NavigationLayout.focusNavbarNotifier.value;
-    _previousFocusAvatarCallback =
-        NavigationLayout.focusNavbarAvatarNotifier.value;
-    NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
-    NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    NavigationLayout.claimChromeFocus(
+      this,
+      _focusNavbarCallback,
+      _focusAvatarCallback,
+    );
     NavigationLayout.chromeFocusRoots.add(_sidebarFocus);
     _updateClock();
     _clockTimer = Timer.periodic(
@@ -223,8 +221,11 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     // Our route is current again. An out of order route teardown can leave
     // the focus bridge pointing at a torn-down chrome instance, so re-assert
     // that it targets this live one.
-    NavigationLayout.focusNavbarNotifier.value = _focusNavbarCallback;
-    NavigationLayout.focusNavbarAvatarNotifier.value = _focusAvatarCallback;
+    NavigationLayout.claimChromeFocus(
+      this,
+      _focusNavbarCallback,
+      _focusAvatarCallback,
+    );
     _awaitingPopFocusRestore = _openedRouteFromRail;
     _openedRouteFromRail = false;
   }
@@ -235,19 +236,7 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
       routeLifecycleObserver.unsubscribe(this);
       _observedRoute = null;
     }
-    if (identical(
-      NavigationLayout.focusNavbarNotifier.value,
-      _focusNavbarCallback,
-    )) {
-      NavigationLayout.focusNavbarNotifier.value = _previousFocusNavbarCallback;
-    }
-    if (identical(
-      NavigationLayout.focusNavbarAvatarNotifier.value,
-      _focusAvatarCallback,
-    )) {
-      NavigationLayout.focusNavbarAvatarNotifier.value =
-          _previousFocusAvatarCallback;
-    }
+    NavigationLayout.releaseChromeFocus(this);
     NavigationLayout.chromeFocusRoots.remove(_sidebarFocus);
     FocusManager.instance.removeListener(_trackPreviousFocus);
     if (PlatformDetection.isTV ||
