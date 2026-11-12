@@ -646,6 +646,9 @@ class AppLocalizationsCy extends AppLocalizations {
       'Arddull celf picsel retro gyda phalet trwchus, borderi bloclyd, cysgodion caled, a ffont picsel';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

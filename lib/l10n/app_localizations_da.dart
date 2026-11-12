@@ -648,6 +648,9 @@ class AppLocalizationsDa extends AppLocalizations {
       'Retro pixelart-design med en fed palet, kantede rammer, hårde slagskygger og en pixelskrifttype';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

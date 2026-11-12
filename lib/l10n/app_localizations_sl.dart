@@ -647,6 +647,9 @@ class AppLocalizationsSl extends AppLocalizations {
       'Retro slog pikselske grafike z izrazito paleto, oglatimi robovi, ostrimi sencami in pikselsko pisavo';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

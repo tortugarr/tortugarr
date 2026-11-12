@@ -646,6 +646,9 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਮੋਟੇ ਪੈਲੇਟ, ਬਲਾਕੀ ਕਿਨਾਰਿਆਂ, ਸਖ਼ਤ ਪਰਛਾਵੇਂ ਅਤੇ ਪਿਕਸਲ ਫੌਂਟ ਨਾਲ ਰੈਟਰੋ ਪਿਕਸਲ-ਆਰਟ ਸ਼ੈਲੀ';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

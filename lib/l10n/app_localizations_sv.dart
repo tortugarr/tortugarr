@@ -646,6 +646,9 @@ class AppLocalizationsSv extends AppLocalizations {
       'Retro pixelkonst med kraftig palett, blockiga kanter, hårda skuggor och pixelteckensnitt';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

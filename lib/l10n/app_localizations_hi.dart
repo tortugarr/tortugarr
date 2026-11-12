@@ -646,6 +646,9 @@ class AppLocalizationsHi extends AppLocalizations {
       'रेट्रो पिक्सेल-आर्ट स्टाइलिंग, चंकी पैलेट, ब्लॉकी बॉर्डर, गहरे ड्रॉप-शैडो और पिक्सेल फ़ॉन्ट के साथ';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

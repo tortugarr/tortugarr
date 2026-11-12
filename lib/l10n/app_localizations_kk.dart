@@ -646,6 +646,9 @@ class AppLocalizationsKk extends AppLocalizations {
       'Ретро пиксель-арт стилі: ірі палитра, блокты жиектер, қатты көлеңкелер және пиксельдік қаріп';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

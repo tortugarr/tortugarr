@@ -753,6 +753,10 @@
     "@theme8BitHeroSubtitle": {
         "description": "Preview description for the 8-bit Hero theme"
     },
+    "tgHomeRowsStyleHarbor": "Harbor",
+    "@tgHomeRowsStyleHarbor": {
+        "description": "Home rows style: Tortugarr's Harbor home (fixed info on top that follows focus, rows below shrink to strips)"
+    },
     "tgThemeTortuga": "Tortuga",
     "@tgThemeTortuga": {
         "description": "Display name for Tortugarr's own Tortuga theme"

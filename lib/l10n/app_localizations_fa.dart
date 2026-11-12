@@ -645,6 +645,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'استایل پیکسل‌آرت رترو با پالت درشت، حاشیه‌های بلوکی، سایه‌های تیز و فونت پیکسلی';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -646,6 +646,9 @@ class AppLocalizationsSi extends AppLocalizations {
       'ඝන වර්ණාවලියක්, කොටස්-හැඩැති මායිම්, තද සෙවනැලි සහ පික්සල අකුරු සහිත රෙට්‍රෝ පික්සල-කලා විලාසය';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

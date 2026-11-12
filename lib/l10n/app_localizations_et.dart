@@ -647,6 +647,9 @@ class AppLocalizationsEt extends AppLocalizations {
       'Retro pikslikunsti stiil jämeda paleti, kandiliste äärte, teravate varjude ja pikslifondiga';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

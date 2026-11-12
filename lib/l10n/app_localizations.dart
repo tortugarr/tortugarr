@@ -1168,6 +1168,12 @@ abstract class AppLocalizations {
   /// **'Retro pixel-art styling with a chunky palette, blocky borders, hard drop-shadows, and a pixel font'**
   String get theme8BitHeroSubtitle;
 
+  /// Home rows style: Tortugarr's Harbor home (fixed info on top that follows focus, rows below shrink to strips)
+  ///
+  /// In en, this message translates to:
+  /// **'Harbor'**
+  String get tgHomeRowsStyleHarbor;
+
   /// Display name for Tortugarr's own Tortuga theme
   ///
   /// In en, this message translates to:

@@ -646,6 +646,9 @@ class AppLocalizationsBe extends AppLocalizations {
       'Рэтра-аздабленне ў стылі піксель-арт з грубай палітрай, блочнымі рамкамі, рэзкімі ценямі і піксельным шрыфтом';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

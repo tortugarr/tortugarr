@@ -646,6 +646,9 @@ class AppLocalizationsBg extends AppLocalizations {
       'Ретро пиксел-арт стил с плътна палитра, блокови рамки, резки сенки и пикселен шрифт';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

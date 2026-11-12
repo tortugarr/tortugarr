@@ -646,6 +646,9 @@ class AppLocalizationsNb extends AppLocalizations {
       'Retro pikselkunst-styling med grov palett, blokkete kanter, harde slagskygger og pikselfont';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

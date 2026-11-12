@@ -637,6 +637,9 @@ class AppLocalizationsYue extends AppLocalizations {
   String get theme8BitHeroSubtitle => '復古像素風格，配粗獷色盤、方塊邊框、硬陰影同像素字體';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -646,6 +646,9 @@ class AppLocalizationsTa extends AppLocalizations {
       'தடிமனான வண்ணத்தட்டு, சதுரமான ஓரங்கள், கூர்மையான நிழல்கள் மற்றும் பிக்சல் எழுத்துருவுடன் கூடிய ரெட்ரோ பிக்சல்-கலை பாணி';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

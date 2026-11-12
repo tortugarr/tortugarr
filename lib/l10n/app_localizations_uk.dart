@@ -646,6 +646,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ретростиль піксель-арту з насиченою палітрою, масивними рамками, різкими тінями та піксельним шрифтом';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

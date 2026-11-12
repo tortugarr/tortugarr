@@ -646,6 +646,9 @@ class AppLocalizationsMn extends AppLocalizations {
       'Бүдүүн өнгөний палитр, дөрвөлжин хүрээ, хатуу сүүдэр, пиксел фонттой ретро пиксел-арт хэв маяг';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

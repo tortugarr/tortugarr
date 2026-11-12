@@ -647,6 +647,9 @@ class AppLocalizationsTl extends AppLocalizations {
       'Retro na pixel-art na istilo na may makapal na palette, blocky na mga border, matitinding drop-shadow, at pixel font';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

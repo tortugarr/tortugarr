@@ -645,6 +645,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'تصميم بكسل كلاسيكي بلوحة ألوان جريئة وحدود مربّعة وظلال حادة وخط بكسلي';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

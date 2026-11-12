@@ -646,6 +646,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Gaya pixel-art retro dengan palet tebal, bingkai kotak, bayangan tajam, dan font piksel';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -640,6 +640,9 @@ class AppLocalizationsKo extends AppLocalizations {
       '투박한 색상, 각진 테두리, 진한 그림자, 픽셀 글꼴을 사용한 레트로 픽셀아트 스타일';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

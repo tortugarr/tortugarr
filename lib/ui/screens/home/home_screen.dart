@@ -2532,9 +2532,17 @@ class _ContentRowsState extends State<_ContentRows>
 
   PosterSize _homePosterSize() => widget.prefs.get(UserPreferences.posterSize);
 
+  bool _isHarborHome() =>
+      !PlatformDetection.useMobileUi &&
+      widget.prefs.get(UserPreferences.homeRowsStyle) == HomeRowsStyle.harbor;
+
   bool _showHomeRowInfoOverlay() {
     if (PlatformDetection.useMobileUi) {
       return false;
+    }
+    // Harbor's fixed hero is the info overlay, always on.
+    if (_isHarborHome()) {
+      return true;
     }
     if (_isHomeRowsStyleV2()) {
       return false;
@@ -4440,6 +4448,8 @@ class _ContentRowsState extends State<_ContentRows>
     return (padding - 10).clamp(0.0, double.infinity);
   }
 
+  static const _harborDuration = Duration(milliseconds: 260);
+
   Widget _buildShiftedRow({
     required Widget child,
     required int rowIndex,
@@ -4478,6 +4488,32 @@ class _ContentRowsState extends State<_ContentRows>
           rowViewportTop: rowViewportTop,
           rowExtent: rowExtent,
           overlayBottom: overlayBottom,
+        ),
+      );
+    }
+
+    if (_isHarborHome()) {
+      final look = harborRowLookFor(
+        rowIndex: rowIndex,
+        focusedRowIndex: _focusedRowIndex(FocusManager.instance.primaryFocus),
+        rowExtents: rowExtents,
+      );
+      // Always the same three wrappers in Harbor, so a row keeps its
+      // elements as it grows and shrinks; at rest they are inert.
+      child = AnimatedSlide(
+        offset: Offset(0, rowExtent > 0 ? -look.lift / rowExtent : 0),
+        duration: _harborDuration,
+        curve: Curves.easeOutCubic,
+        child: AnimatedScale(
+          scale: look.scale,
+          alignment: Alignment.topLeft,
+          duration: _harborDuration,
+          curve: Curves.easeOutCubic,
+          child: AnimatedOpacity(
+            opacity: look.opacity,
+            duration: _harborDuration,
+            child: child,
+          ),
         ),
       );
     }

@@ -646,6 +646,9 @@ class AppLocalizationsTe extends AppLocalizations {
       'దట్టమైన రంగుల ప్యాలెట్, చతురస్రాకార అంచులు, గట్టి నీడలు, పిక్సెల్ ఫాంట్‌తో రెట్రో పిక్సెల్-ఆర్ట్ శైలి';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

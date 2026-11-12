@@ -646,6 +646,9 @@ class AppLocalizationsLv extends AppLocalizations {
       'Retro pikseļu mākslas stils ar rupju paleti, kvadrātveida apmalēm, asām ēnām un pikseļu fontu';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

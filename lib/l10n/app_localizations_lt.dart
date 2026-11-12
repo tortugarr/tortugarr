@@ -646,6 +646,9 @@ class AppLocalizationsLt extends AppLocalizations {
       'Retro pikselių meno stilius su stambia palete, blokiniais rėmeliais, ryškiais šešėliais ir pikselių šriftu';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

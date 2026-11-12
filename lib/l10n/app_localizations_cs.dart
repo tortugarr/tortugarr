@@ -647,6 +647,9 @@ class AppLocalizationsCs extends AppLocalizations {
       'Retro pixel-art styl s hrubou paletou, hranatými okraji, ostrými stíny a pixelovým písmem';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

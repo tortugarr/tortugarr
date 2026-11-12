@@ -646,6 +646,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Phong cách pixel-art hoài cổ với bảng màu đậm, viền khối, đổ bóng sắc nét và phông chữ pixel';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

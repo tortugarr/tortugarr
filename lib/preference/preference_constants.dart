@@ -157,6 +157,9 @@ enum FavoritesViewStyle {
 enum HomeRowsStyle {
   v1,
   v2,
+  /// Tortugarr's Harbor home (TV/desktop): classic rows under a fixed info
+  /// hero that follows focus; rows below the focused one shrink to strips.
+  harbor,
 }
 
 enum DesktopUiScale {

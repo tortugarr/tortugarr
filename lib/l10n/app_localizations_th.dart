@@ -647,6 +647,9 @@ class AppLocalizationsTh extends AppLocalizations {
       'สไตล์พิกเซลอาร์ตย้อนยุค พร้อมชุดสีหนา ขอบทึบเป็นบล็อก เงาตกกระทบคมชัด และฟอนต์พิกเซล';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

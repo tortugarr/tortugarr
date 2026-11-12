@@ -650,6 +650,9 @@ class AppLocalizationsFi extends AppLocalizations {
       'Retrohenkinen pikselitaidetyyli, jossa on karkea väripaletti, kulmikkaat reunat, terävät varjot ja pikselifontti';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

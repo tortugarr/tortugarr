@@ -645,6 +645,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bloklu renk paleti, kalın kenarlıkları, sert düşen gölgeleri ve piksel yazı tipiyle retro piksel sanatı stili';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

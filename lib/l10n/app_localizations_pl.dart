@@ -675,6 +675,9 @@ class AppLocalizationsPl extends AppLocalizations {
       'Retro pikselowy styl z grubą paletą kolorów, kanciastymi ramkami, twardymi cieniami i pikselową czcionką';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -646,6 +646,9 @@ class AppLocalizationsEo extends AppLocalizations {
       'Retro piksel-arta stilo kun dika paletro, blokecaj borderoj, akraj falombroj kaj piksela tiparo';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -646,6 +646,9 @@ class AppLocalizationsBn extends AppLocalizations {
       'মোটা প্যালেট, ব্লকি বর্ডার, কড়া ড্রপ-শ্যাডো এবং পিক্সেল ফন্ট সহ রেট্রো পিক্সেল-আর্ট স্টাইলিং';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

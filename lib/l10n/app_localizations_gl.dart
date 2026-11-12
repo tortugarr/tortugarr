@@ -646,6 +646,9 @@ class AppLocalizationsGl extends AppLocalizations {
       'Estilo retro de pixel art cunha paleta contundente, bordos cadrados, sombras marcadas e unha tipografía de píxeles';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

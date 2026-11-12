@@ -641,6 +641,9 @@ class AppLocalizationsJa extends AppLocalizations {
       '太めのパレット、角張った枠線、くっきりしたドロップシャドウ、ピクセルフォントによるレトロなドット絵風スタイル';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

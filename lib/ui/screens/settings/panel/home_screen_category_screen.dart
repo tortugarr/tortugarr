@@ -172,6 +172,7 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
       switch (style) {
         HomeRowsStyle.v1 => l10n.homeRowsStyleClassic,
         HomeRowsStyle.v2 => l10n.homeRowsStyleModern,
+        HomeRowsStyle.harbor => l10n.tgHomeRowsStyleHarbor,
       };
 
   void _reloadHomeRows() {
@@ -189,8 +190,9 @@ class _HomeScreenCategoryScreenState extends State<_HomeScreenCategoryScreen> {
         _prefs.get(UserPreferences.fullScreenRows);
     final isInfoOverlayOn =
         !isMobileUi &&
-        rowsStyle == HomeRowsStyle.v1 &&
-        _prefs.get(UserPreferences.homeRowInfoOverlay);
+        ((rowsStyle == HomeRowsStyle.v1 &&
+                _prefs.get(UserPreferences.homeRowInfoOverlay)) ||
+            rowsStyle == HomeRowsStyle.harbor);
     final isPaddingEnabled = !isFullScreenRows && !isInfoOverlayOn;
     final syncService = GetIt.instance<PluginSyncService>();
     final pluginAvailable = syncService.pluginAvailable;

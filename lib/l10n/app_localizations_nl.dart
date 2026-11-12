@@ -647,6 +647,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Retro pixelart-styling met een stevig palet, blokkerige randen, harde slagschaduwen en een pixellettertype';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

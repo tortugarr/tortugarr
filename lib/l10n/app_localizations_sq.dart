@@ -647,6 +647,9 @@ class AppLocalizationsSq extends AppLocalizations {
       'Stilim retro me pixel-art, paletë të trashë, korniza blloqesh, hije të forta dhe font pikselësh';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

@@ -645,6 +645,9 @@ class AppLocalizationsHe extends AppLocalizations {
       'עיצוב פיקסל-ארט רטרו עם פלטה עבה, מסגרות מרובעות, צללים חדים וגופן פיקסלים';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

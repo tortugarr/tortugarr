@@ -646,6 +646,9 @@ class AppLocalizationsUg extends AppLocalizations {
       'قويۇق رەڭ تاختىسى، بۆلەكسىمان گىرۋەكلەر، قاتتىق سايىلەر ۋە پىكسېل خەت نۇسخىسى بار رېترو پىكسېل ئۇسلۇبى';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

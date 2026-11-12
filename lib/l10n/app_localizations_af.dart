@@ -646,6 +646,9 @@ class AppLocalizationsAf extends AppLocalizations {
       'Retro pixelkuns-styl met \'n growwe palet, blokkerige rande, harde valskaduwees en \'n pixel-lettertipe';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

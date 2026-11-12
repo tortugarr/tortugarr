@@ -646,6 +646,9 @@ class AppLocalizationsHu extends AppLocalizations {
       'Retró pixel-art stílus egyedi színpalettával, szögletes szegélyekkel, éles vetett árnyékokkal és pixel betűtípussal';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override

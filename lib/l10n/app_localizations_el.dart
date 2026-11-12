@@ -648,6 +648,9 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ρετρό στυλ pixel-art με χοντροκομμένη παλέτα, τετράγωνα περιγράμματα, έντονες σκιές και γραμματοσειρά pixel';
 
   @override
+  String get tgHomeRowsStyleHarbor => 'Harbor';
+
+  @override
   String get tgThemeTortuga => 'Tortuga';
 
   @override
