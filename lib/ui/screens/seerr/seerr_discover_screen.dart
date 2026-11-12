@@ -43,6 +43,7 @@ import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
 import '../../widgets/offline_aware_image.dart';
 import '../../navigation/single_push.dart';
+import '../../widgets/title_badge.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w300';
 const _tmdbBackdropBase = 'https://image.tmdb.org/t/p/w1280';
@@ -748,6 +749,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
         focusNode: autofocusFirst ? firstFocusNode : null,
         itemBuilder: (context, item, index, isFocused) {
           return MediaCard(
+            badgeItem: badgeItemForTmdb(item.id, item.mediaType),
             title: item.displayTitle,
             subtitle: _yearFromItem(item),
             imageUrl: _posterUrl(item),
@@ -911,6 +913,7 @@ class _SeerrDiscoverScreenState extends State<SeerrDiscoverScreen> {
             builder: (context, expanded) {
               final width = expanded ? focusedWidth : sizes.portraitWidth;
               final card = MediaCard(
+                badgeItem: badgeItemForTmdb(item.id, item.mediaType),
                 title: item.displayTitle,
                 subtitle: _yearFromItem(item),
                 imageUrl: expanded ? _modernFocusedImageUrl(item) : _posterUrl(item),

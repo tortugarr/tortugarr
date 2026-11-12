@@ -45,4 +45,14 @@ void main() {
     ], title: 'Fits tonight', serverId: 's')!;
     expect(row.items.map((i) => i.id), ['a', 'd']);
   });
+
+  test('Fits tonight mixes films and next-up episodes', () {
+    int ticks(int minutes) => Duration(minutes: minutes).inMicroseconds * 10;
+    final mixed = mixTonight(
+      movies: [{'Id': 'm1', 'RunTimeTicks': ticks(90)}, {'Id': 'm2', 'RunTimeTicks': ticks(95)}],
+      episodes: [{'Id': 'e1', 'RunTimeTicks': ticks(45)}],
+    );
+    final row = mapTonightRow(mixed, title: 't', serverId: 's')!;
+    expect(row.items.map((i) => i.id), ['m1', 'e1', 'm2']);
+  });
 }

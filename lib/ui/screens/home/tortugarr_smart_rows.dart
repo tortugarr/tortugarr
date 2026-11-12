@@ -73,8 +73,8 @@ HomeRow? mapDownloadsRow(
   );
 }
 
-/// Unwatched films that fit an evening: at most [tonightMaxRuntime], in the
-/// order given (the caller asks the server for a random order), up to 20.
+/// Unwatched films and next-up episodes that fit an evening: at most
+/// [tonightMaxRuntime], in the order given, up to 20.
 HomeRow? mapTonightRow(
   List<Map<String, dynamic>> movies, {
   required String title,
@@ -95,4 +95,18 @@ HomeRow? mapTonightRow(
     rowType: HomeRowType.pluginDynamic,
     items: items,
   );
+}
+
+/// Films and next-up episodes taken in turn (film, episode, film …), so the
+/// "Fits tonight" row offers both.
+List<Map<String, dynamic>> mixTonight({
+  required List<Map<String, dynamic>> movies,
+  required List<Map<String, dynamic>> episodes,
+}) {
+  final out = <Map<String, dynamic>>[];
+  for (var i = 0; i < movies.length || i < episodes.length; i++) {
+    if (i < movies.length) out.add(movies[i]);
+    if (i < episodes.length) out.add(episodes[i]);
+  }
+  return out;
 }

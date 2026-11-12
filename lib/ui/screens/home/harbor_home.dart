@@ -715,6 +715,26 @@ class _HarborHomeState extends State<_HarborHome>
                       ),
                     ),
                   ),
+                // Collections lie on two fanned plates, like a small stack.
+                if (item.type == 'BoxSet')
+                  for (final (angle, alpha) in const [(0.10, 0.5), (0.05, 0.8)])
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      width: cardW,
+                      height: cardH,
+                      child: Transform.rotate(
+                        angle: angle,
+                        alignment: Alignment.bottomLeft,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: AppColorScheme.surfaceVariant.withValues(alpha: alpha),
+                            borderRadius: ThemeRegistry.active.borders.cardRadius,
+                            border: Border.all(color: AppColorScheme.onSurface.withValues(alpha: 0.18)),
+                          ),
+                        ),
+                      ),
+                    ),
                 card,
                 if (focused)
                   Positioned(

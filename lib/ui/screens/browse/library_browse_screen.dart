@@ -1812,6 +1812,7 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
 
     Widget card(BuildContext? revealContext) {
       return MediaCard(
+        badgeItem: item,
         animeMarkerItemId: item.id,
         recordingItemId: item.id,
         title: item.name,
@@ -2088,6 +2089,7 @@ class _LibraryBrowseScreenState extends State<LibraryBrowseScreen>
                       if (index >= items.length) return null;
                       final item = items[index];
                       return MediaCard(
+                        badgeItem: item,
                         recordingItemId: item.id,
                         title: item.name,
                         subtitle: _cardSubtitle(item),

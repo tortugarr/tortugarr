@@ -5733,6 +5733,7 @@ class _ContentRowsState extends State<_ContentRows>
                   final isSeerrGenreCard =
                       _isSeerrFilterRow(row) && item.type == 'Genre';
                   final card = MediaCard(
+                    badgeItem: item,
                     animeMarkerItemId: isSeerrGenreCard ? null : item.id,
                     recordingItemId: isSeerrGenreCard ? null : item.id,
                     title: cardTitle,

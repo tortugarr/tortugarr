@@ -45,6 +45,7 @@ import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/sliding_pill_tabs.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../navigation/single_push.dart';
+import '../../widgets/title_badge.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
@@ -1510,6 +1511,7 @@ class _SearchScreenState extends State<SearchScreen>
     // the line under the name instead.
     final serverOnSubtitle = serverName != null && item.type == 'Person';
     return MediaCard(
+      badgeItem: item,
       title: item.name,
       subtitle: serverOnSubtitle ? serverName : _subtitle(item),
       imageUrl: _imageUrl(item, maxWidth: requestWidth),
@@ -1585,6 +1587,7 @@ class _SearchScreenState extends State<SearchScreen>
         ? year.substring(0, 4)
         : null;
     return MediaCard(
+      badgeItem: badgeItemForTmdb(item.id, item.mediaType),
       title: item.displayTitle,
       subtitle: yearStr,
       imageUrl: item.posterPath != null

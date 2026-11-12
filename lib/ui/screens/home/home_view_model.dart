@@ -3598,7 +3598,25 @@ class HomeViewModel extends ChangeNotifier {
         for (final raw in (res['Items'] as List? ?? const []).whereType<Map>())
           Map<String, dynamic>.from(raw),
       ];
-      final row = mapTonightRow(movies, title: appL10n().tgTonightRow, serverId: _serverId);
+      // Series too (owner, 2026-11-12): the next episode of each series you
+      // are watching, which always fits an evening.
+      var episodes = <Map<String, dynamic>>[];
+      try {
+        final next = await _client.itemsApi.getNextUp(
+          limit: 10,
+          fields: _topListOwnedFields,
+          enableImageTypes: 'Primary,Backdrop,Thumb',
+        );
+        episodes = [
+          for (final raw in (next['Items'] as List? ?? const []).whereType<Map>())
+            Map<String, dynamic>.from(raw),
+        ];
+      } catch (_) {}
+      final row = mapTonightRow(
+        mixTonight(movies: movies, episodes: episodes),
+        title: appL10n().tgTonightRow,
+        serverId: _serverId,
+      );
       return row == null ? const [] : [row];
     } catch (e) {
       debugPrint('[Tonight row] $e');

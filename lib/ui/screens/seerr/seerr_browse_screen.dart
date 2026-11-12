@@ -25,6 +25,7 @@ import '../../widgets/focus/request_initial_focus.dart';
 import '../../widgets/quick_return_wrapper.dart';
 import '../../widgets/skeleton/skeleton_library_grid.dart';
 import '../../navigation/single_push.dart';
+import '../../widgets/title_badge.dart';
 
 const _tmdbPosterBase = 'https://image.tmdb.org/t/p/w342';
 Color get _navyBackground => AppColorScheme.background;
@@ -333,6 +334,7 @@ class _SeerrBrowseScreenState extends State<SeerrBrowseScreen> {
                     final suppressFocusGlow =
                       ThemeRegistry.active.borders.focusGlow.isNotEmpty;
                   return MediaCard(
+                    badgeItem: badgeItemForTmdb(item.id, item.mediaType),
                     title: item.displayTitle,
                     subtitle: _cardSubtitle(item, l10n),
                     imageUrl:

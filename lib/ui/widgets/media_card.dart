@@ -21,6 +21,8 @@ import 'live_tv/incomplete_recording.dart';
 import 'media_badge.dart';
 import 'seerr/seerr_status_dot.dart';
 import '../mixins/focus_state_mixin.dart';
+import 'title_badge.dart';
+import '../../data/models/aggregated_item.dart';
 
 class MediaCard extends StatefulWidget {
   /// How much a focused card grows. A card with a title grows from the bottom
@@ -160,6 +162,10 @@ class MediaCard extends StatefulWidget {
   /// format badges. Position each with [Positioned].
   final List<Widget> imageOverlays;
 
+  /// The title behind the card, for Tortugarr's poster badges (BB / MB,
+  /// studio or network). Null: no badges.
+  final AggregatedItem? badgeItem;
+
   /// Like [imageOverlays], but drawn under the badges.
   final List<Widget> imageUnderlays;
 
@@ -209,6 +215,7 @@ class MediaCard extends StatefulWidget {
     this.titleColor,
     this.subtitleColor,
     this.imageOverlays = const [],
+    this.badgeItem,
     this.imageUnderlays = const [],
     this.imageSourceAspectRatio,
     this.overlayOccupiesTopLeft = false,
@@ -480,7 +487,13 @@ class _MediaCardState extends State<MediaCard> with FocusStateMixin {
                       seerrMediaType: widget.seerrMediaType,
                       seerrStatus: widget.seerrStatus,
                       seerrLanguageMark: widget.seerrLanguageMark,
-                      imageOverlays: widget.imageOverlays,
+                      imageOverlays: [
+                        ...widget.imageOverlays,
+                        if (widget.badgeItem != null)
+                          Positioned.fill(
+                            child: TitleBadgeOverlay(item: widget.badgeItem!, size: 0.8),
+                          ),
+                      ],
                       imageUnderlays: widget.imageUnderlays,
                       imageSourceAspectRatio: widget.imageSourceAspectRatio,
                       overlayOccupiesTopLeft: widget.overlayOccupiesTopLeft,

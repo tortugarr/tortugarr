@@ -308,3 +308,13 @@ String? curatedLogoUrl(String name, {int width = 300}) {
   }
   return path?.replaceFirst('/w780_', '/w${width}_');
 }
+
+/// A Seerr result (TMDB id + media type) as the item the badges look up.
+AggregatedItem badgeItemForTmdb(int tmdbId, String? mediaType) => AggregatedItem(
+      id: '$tmdbId',
+      serverId: 'seerr',
+      rawData: {
+        'Type': mediaType == 'tv' ? 'Series' : 'Movie',
+        'ProviderIds': {'Tmdb': '$tmdbId'},
+      },
+    );
