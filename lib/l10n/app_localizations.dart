@@ -1186,6 +1186,36 @@ abstract class AppLocalizations {
   /// **'The server offers no top lists right now.'**
   String get tgTopListsNone;
 
+  /// Downloads menu entry under the Tortuga theme (pirate word for loot)
+  ///
+  /// In en, this message translates to:
+  /// **'Booty'**
+  String get tgBooty;
+
+  /// Downloads menu entry with active downloads under the Tortuga theme
+  ///
+  /// In en, this message translates to:
+  /// **'Booty ({count})'**
+  String tgBootyCount(int count);
+
+  /// Home row with titles downloading now
+  ///
+  /// In en, this message translates to:
+  /// **'On the way in'**
+  String get tgDownloadsRow;
+
+  /// Home row with titles downloading now, pirate wording for the Tortuga theme
+  ///
+  /// In en, this message translates to:
+  /// **'Booty on the way in'**
+  String get tgDownloadsRowTortuga;
+
+  /// Home row with unwatched films of at most 1 h 45
+  ///
+  /// In en, this message translates to:
+  /// **'Fits tonight'**
+  String get tgTonightRow;
+
   /// Home rows style: Tortugarr's Harbor home (fixed info on top that follows focus, rows below shrink to strips)
   ///
   /// In en, this message translates to:

@@ -48,6 +48,8 @@ import '../../util/home_row_title_localizer.dart';
 import 'package:moonfin/util/app_l10n.dart';
 import '../../../data/services/tortugarr/download_features.dart';
 import '../../../data/services/tortugarr/tortugarr_plugin_client.dart';
+import 'tortugarr_smart_rows.dart';
+import 'package:moonfin_design/moonfin_design.dart' show ThemeRegistry;
 
 class HomeViewModel extends ChangeNotifier {
   /// Cards in a merged row, matching what a single library row shows.
@@ -245,7 +247,9 @@ class HomeViewModel extends ChangeNotifier {
       HomeSectionType.radarrCalendar ||
       HomeSectionType.sonarrCalendar ||
       HomeSectionType.seasonal ||
-      HomeSectionType.tortugarrTopLists =>
+      HomeSectionType.tortugarrTopLists ||
+      HomeSectionType.tortugarrDownloads ||
+      HomeSectionType.tortugarrTonight =>
         false,
       final t when _isSeerrSectionType(t) || _isTmdbSectionType(t) => false,
       _ => true,
@@ -491,7 +495,8 @@ class HomeViewModel extends ChangeNotifier {
                 (c.type.sinceYouWatchedRow == 0 || (showSinceYouWatched && c.type.sinceYouWatchedRow <= sinceYouWatchedNum)) &&
                 (c.type != HomeSectionType.rewatch || showRewatch) &&
                 (c.type != HomeSectionType.seasonal || showSeasonal) &&
-                (c.type != HomeSectionType.tortugarrTopLists || _topListsAvailable),
+                (c.type != HomeSectionType.tortugarrTopLists || _topListsAvailable) &&
+                (c.type != HomeSectionType.tortugarrDownloads || DownloadFeatures.viaPlugin),
           )
           .toList(growable: false);
 
@@ -977,6 +982,10 @@ class HomeViewModel extends ChangeNotifier {
         return row.id == 'seasonal';
       case HomeSectionType.tortugarrTopLists:
         return row.id == _topListsPlaceholderId || row.id.startsWith(_topListRowPrefix);
+      case HomeSectionType.tortugarrDownloads:
+        return row.id == tortugarrDownloadsRowId;
+      case HomeSectionType.tortugarrTonight:
+        return row.id == tortugarrTonightRowId;
       case HomeSectionType.mediaBar:
       case HomeSectionType.recentlyReleased:
         return row.rowType == HomeRowType.recentlyReleased;
@@ -1379,6 +1388,8 @@ class HomeViewModel extends ChangeNotifier {
       case HomeSectionType.seasonal:
         return const {'seasonal'};
       case HomeSectionType.tortugarrTopLists:
+      case HomeSectionType.tortugarrDownloads:
+      case HomeSectionType.tortugarrTonight:
         return const <String>{};
       case HomeSectionType.sinceYouWatched1:
         return const {'sinceYouWatched1'};
@@ -1798,6 +1809,10 @@ class HomeViewModel extends ChangeNotifier {
         return _loadSeasonalRow(l10n, forceRefresh: forceRefresh);
       case HomeSectionType.tortugarrTopLists:
         return _loadTortugarrTopLists();
+      case HomeSectionType.tortugarrDownloads:
+        return _loadTortugarrDownloads();
+      case HomeSectionType.tortugarrTonight:
+        return _loadTortugarrTonight();
       case HomeSectionType.sinceYouWatched1:
       case HomeSectionType.sinceYouWatched2:
       case HomeSectionType.sinceYouWatched3:
@@ -2309,6 +2324,20 @@ class HomeViewModel extends ChangeNotifier {
         return HomeRow(
           id: _topListsPlaceholderId,
           title: appL10n().tgTopListsRow,
+          rowType: HomeRowType.pluginDynamic,
+          isLoading: true,
+        );
+      case HomeSectionType.tortugarrDownloads:
+        return HomeRow(
+          id: tortugarrDownloadsRowId,
+          title: downloadsRowTitle(),
+          rowType: HomeRowType.pluginDynamic,
+          isLoading: true,
+        );
+      case HomeSectionType.tortugarrTonight:
+        return HomeRow(
+          id: tortugarrTonightRowId,
+          title: appL10n().tgTonightRow,
           rowType: HomeRowType.pluginDynamic,
           isLoading: true,
         );
@@ -3503,6 +3532,76 @@ class HomeViewModel extends ChangeNotifier {
       ];
     } catch (e) {
       debugPrint('[TopLists] Failed to load the top lists: $e');
+      return const [];
+    }
+  }
+
+  /// "On the way in", or "Booty on the way in" with the Tortuga theme.
+  static String downloadsRowTitle() =>
+      ThemeRegistry.active.id == ThemeRegistry.tortugaId
+          ? appL10n().tgDownloadsRowTortuga
+          : appL10n().tgDownloadsRow;
+
+  /// What is downloading now, one card per title, with posters from Seerr.
+  Future<List<HomeRow>> _loadTortugarrDownloads() async {
+    if (!DownloadFeatures.viaPlugin) return const [];
+    try {
+      final queue = await TortugarrPluginClient().downloadQueue();
+      final active = queue.where((q) => !q.isImported).toList();
+      if (active.isEmpty) return const [];
+      final posters = <String, String>{};
+      try {
+        final repo = await GetIt.instance.getAsync<SeerrRepository>();
+        await repo.ensureInitialized();
+        if (repo.isAvailable) {
+          final seen = <String>{};
+          for (final q in active) {
+            final movie = q.kind == 'movie';
+            final key = movie ? 'movie:${q.tmdbId}' : 'tv:${q.tmdbId ?? q.tvdbId}';
+            if (!seen.add(key) || (movie && q.tmdbId == null)) continue;
+            try {
+              final path = movie
+                  ? (await repo.getMovieDetails(q.tmdbId!)).posterPath
+                  : (q.tmdbId != null
+                          ? await repo.getTvDetails(q.tmdbId!)
+                          : await repo.getTvDetailsByTvdb(q.tvdbId!))
+                      .posterPath;
+              if (path != null && path.isNotEmpty) {
+                posters[key] = 'https://image.tmdb.org/t/p/w342$path';
+              }
+            } catch (_) {}
+          }
+        }
+      } catch (_) {}
+      final row = mapDownloadsRow(active, title: downloadsRowTitle(), posters: posters);
+      return row == null ? const [] : [row];
+    } catch (e) {
+      debugPrint('[Downloads row] $e');
+      return const [];
+    }
+  }
+
+  /// Unwatched films that fit an evening (at most 1 h 45), in random order.
+  Future<List<HomeRow>> _loadTortugarrTonight() async {
+    try {
+      final res = await _client.itemsApi.getItems(
+        includeItemTypes: const ['Movie'],
+        recursive: true,
+        filters: const ['IsUnplayed'],
+        sortBy: 'Random',
+        limit: 80,
+        fields: _topListOwnedFields,
+        enableImageTypes: 'Primary,Backdrop,Thumb',
+        imageTypeLimit: 1,
+      );
+      final movies = [
+        for (final raw in (res['Items'] as List? ?? const []).whereType<Map>())
+          Map<String, dynamic>.from(raw),
+      ];
+      final row = mapTonightRow(movies, title: appL10n().tgTonightRow, serverId: _serverId);
+      return row == null ? const [] : [row];
+    } catch (e) {
+      debugPrint('[Tonight row] $e');
       return const [];
     }
   }

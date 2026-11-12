@@ -651,6 +651,23 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tgTopListsNone => 'The server offers no top lists right now.';
 
   @override
+  String get tgBooty => 'Booty';
+
+  @override
+  String tgBootyCount(int count) {
+    return 'Booty ($count)';
+  }
+
+  @override
+  String get tgDownloadsRow => 'On the way in';
+
+  @override
+  String get tgDownloadsRowTortuga => 'Booty on the way in';
+
+  @override
+  String get tgTonightRow => 'Fits tonight';
+
+  @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
 
   @override

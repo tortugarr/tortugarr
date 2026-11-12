@@ -1739,7 +1739,11 @@ class PluginSyncService extends ChangeNotifier {
   /// the server that does not name them keeps this device's choice (on by
   /// default) instead of switching them off.
   bool _keptOnWhenUnsynced(prefs.HomeSectionType type) {
-    if (type != prefs.HomeSectionType.tortugarrTopLists) return false;
+    if (type != prefs.HomeSectionType.tortugarrTopLists &&
+        type != prefs.HomeSectionType.tortugarrDownloads &&
+        type != prefs.HomeSectionType.tortugarrTonight) {
+      return false;
+    }
     for (final c in _prefs.homeSectionsConfig) {
       if (c.isBuiltin && c.type == type) return c.enabled;
     }

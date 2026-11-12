@@ -132,6 +132,8 @@ class _HomeRowsImageTypeScreenState extends State<HomeRowsImageTypeScreen> {
         HomeSectionType.rewatch => l10n.tgRewatch,
         HomeSectionType.seasonal => l10n.seasonalRow,
         HomeSectionType.tortugarrTopLists => l10n.tgTopListsRow,
+        HomeSectionType.tortugarrDownloads => l10n.tgDownloadsRow,
+        HomeSectionType.tortugarrTonight => l10n.tgTonightRow,
         HomeSectionType.none => l10n.none,
       };
 

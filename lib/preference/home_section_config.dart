@@ -402,6 +402,18 @@ class HomeSectionConfig {
       enabled: true,
       order: 48,
     ),
+    // Tortugarr smart rows (2026-11-12): what is downloading now, and
+    // unwatched films that fit an evening.
+    HomeSectionConfig(
+      type: HomeSectionType.tortugarrDownloads,
+      enabled: true,
+      order: 49,
+    ),
+    HomeSectionConfig(
+      type: HomeSectionType.tortugarrTonight,
+      enabled: true,
+      order: 50,
+    ),
   ];
 
   static bool isSupportedJson(Map<String, dynamic> json) {

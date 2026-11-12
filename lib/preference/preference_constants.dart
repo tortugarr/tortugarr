@@ -578,6 +578,8 @@ enum HomeSectionType {
   rewatch('rewatch'),
   seasonal('seasonal'),
   tortugarrTopLists('tortugarr_top_lists'),
+  tortugarrDownloads('tortugarr_downloads'),
+  tortugarrTonight('tortugarr_tonight'),
   none('none');
 
   const HomeSectionType(this.serializedName);

@@ -900,7 +900,12 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
         return _SidebarItem(
           key: const ValueKey('sidebar-active-downloads'),
           icon: Icons.downloading_rounded,
-          label: downloads.hasActive
+          // Tortuga calls downloads "Booty".
+          label: ThemeRegistry.active.id == ThemeRegistry.tortugaId
+              ? (downloads.hasActive
+                    ? appL10n().tgBootyCount(downloads.downloads.length)
+                    : appL10n().tgBooty)
+              : downloads.hasActive
               ? appL10n().tgDownloadsCount(downloads.downloads.length)
               : appL10n().tgDownloadsButton,
           baseColor: navColor,
