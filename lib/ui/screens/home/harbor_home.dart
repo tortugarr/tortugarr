@@ -17,11 +17,20 @@ class _HarborHome extends StatefulWidget {
 }
 
 class _HarborDeck {
-  const _HarborDeck(this.id, this.title, this.items, {this.ranked = false});
+  const _HarborDeck(
+    this.id,
+    this.title,
+    this.items, {
+    this.ranked = false,
+    this.library = false,
+  });
   final String id;
   final String title;
   final List<AggregatedItem> items;
   final bool ranked;
+
+  /// My Media: the libraries (Movies, TV Shows, Documentaries …).
+  final bool library;
 }
 
 const _harborCardTypes = {
@@ -44,6 +53,7 @@ class _HarborHomeState extends State<_HarborHome>
   /// -1 is the Spotlight.
   int _deck = -1;
   final Map<String, int> _index = {};
+  final Set<String> _libraryIds = {};
   List<_HarborDeck> _decks = const [];
   List<AggregatedItem> _spotlight = const [];
   int _spot = 0;
@@ -84,6 +94,26 @@ class _HarborHomeState extends State<_HarborHome>
     final decks = <_HarborDeck>[];
     final l10n = AppLocalizations.of(context);
     for (final row in widget.viewModel.rows) {
+      // My Media: the libraries, as wide tiles that open the library.
+      if ((row.rowType == HomeRowType.libraryTiles ||
+              row.rowType == HomeRowType.libraryTilesSmall) &&
+          row.items.isNotEmpty) {
+        _libraryIds.addAll(row.items.map((i) => i.id));
+        decks.add(
+          _HarborDeck(
+            row.id,
+            localizeHomeRowTitle(
+              row: row,
+              l10n: l10n,
+              mergeContinueWatchingAndNextUp: GetIt.instance<UserPreferences>()
+                  .effectiveMergeContinueWatchingNextUp,
+            ),
+            row.items,
+            library: true,
+          ),
+        );
+        continue;
+      }
       if (row.rowType == HomeRowType.libraryTiles ||
           row.rowType == HomeRowType.libraryTilesSmall ||
           row.rowType == HomeRowType.liveTv ||
@@ -163,7 +193,8 @@ class _HarborHomeState extends State<_HarborHome>
     _scheduleTrailer(item);
   }
 
-  String get _trailerMode => GetIt.instance<UserPreferences>().get(UserPreferences.tgHarborTrailer);
+  String get _trailerMode =>
+      GetIt.instance<UserPreferences>().get(UserPreferences.tgHarborTrailer);
 
   /// Stops any trailer and, unless trailers are off, starts the focused
   /// title's after 2.5 s on it.
@@ -177,25 +208,41 @@ class _HarborHomeState extends State<_HarborHome>
     }
     if (_trailerMode == 'off' || item.serverId == 'seerr') return;
     final attempt = _trailerTry;
-    _trailerTimer = Timer(const Duration(milliseconds: 2500), () => _playTrailer(item, attempt));
+    _trailerTimer = Timer(
+      const Duration(milliseconds: 2500),
+      () => _playTrailer(item, attempt),
+    );
   }
 
   Future<void> _playTrailer(AggregatedItem item, int attempt) async {
     try {
-      var trailers = (item.rawData['RemoteTrailers'] as List?)?.whereType<Map>().toList() ?? const [];
+      var trailers =
+          (item.rawData['RemoteTrailers'] as List?)
+              ?.whereType<Map>()
+              .toList() ??
+          const [];
       if (trailers.isEmpty) {
-        final full = await GetIt.instance<MediaServerClientFactory>().clientForServerOrActive(item.serverId).itemsApi.getItem(
-              item.type == 'Episode' && item.seriesId != null ? item.seriesId! : item.id,
+        final full = await GetIt.instance<MediaServerClientFactory>()
+            .clientForServerOrActive(item.serverId)
+            .itemsApi
+            .getItem(
+              item.type == 'Episode' && item.seriesId != null
+                  ? item.seriesId!
+                  : item.id,
             );
-        trailers = (full['RemoteTrailers'] as List?)?.whereType<Map>().toList() ?? const [];
+        trailers =
+            (full['RemoteTrailers'] as List?)?.whereType<Map>().toList() ??
+            const [];
       }
       if (!mounted || attempt != _trailerTry) return;
       String? stream;
       String? language;
       for (final t in trailers) {
         final url = t['Url'] as String?;
-        if (url == null || YouTubeStreamResolver.extractVideoId(url) == null) continue;
-        final s = await YouTubeStreamResolver.resolveFromUrl(url).timeout(const Duration(seconds: 10), onTimeout: () => null);
+        if (url == null || YouTubeStreamResolver.extractVideoId(url) == null)
+          continue;
+        final s = await YouTubeStreamResolver.resolveFromUrl(url)
+            .timeout(const Duration(seconds: 10), onTimeout: () => null);
         if (!mounted || attempt != _trailerTry) return;
         if (s != null) {
           stream = s.url;
@@ -204,11 +251,18 @@ class _HarborHomeState extends State<_HarborHome>
         }
       }
       if (stream == null) return;
-      final player = _trailerPlayer ??= Player(configuration: const PlayerConfiguration(libass: false));
+      final player = _trailerPlayer ??= Player(
+        configuration: const PlayerConfiguration(libass: false),
+      );
       _trailerController ??= VideoController(player);
       await player.setVolume(0);
       await YouTubeStreamResolver.preferAudioLanguage(player, language);
-      final media = await YouTubeStreamResolver.previewMedia(player, stream, youTube: true, audioLanguage: language);
+      final media = await YouTubeStreamResolver.previewMedia(
+        player,
+        stream,
+        youTube: true,
+        audioLanguage: language,
+      );
       if (!mounted || attempt != _trailerTry) return;
       await player.open(media);
       if (!mounted || attempt != _trailerTry) {
@@ -225,12 +279,12 @@ class _HarborHomeState extends State<_HarborHome>
   }
 
   Widget _trailerVideo() => Video(
-        controller: _trailerController!,
-        controls: NoVideoControls,
-        fit: BoxFit.cover,
-        pauseUponEnteringBackgroundMode: true,
-        fill: Colors.transparent,
-      );
+    controller: _trailerController!,
+    controls: NoVideoControls,
+    fit: BoxFit.cover,
+    pauseUponEnteringBackgroundMode: true,
+    fill: Colors.transparent,
+  );
 
   void _moveItem(int delta) {
     if (_deck < 0) {
@@ -307,6 +361,10 @@ class _HarborHomeState extends State<_HarborHome>
     _trailerTry++;
     _trailerPlayer?.stop();
     if (_trailerShowing) setState(() => _trailerShowing = false);
+    if (_libraryIds.contains(item.id)) {
+      _ContentRowsState._navigateToLibrary(context, item);
+      return;
+    }
     if (item.serverId == 'seerr') {
       _ContentRowsState._navigateToSeerrItem(context, item);
       return;
@@ -329,8 +387,8 @@ class _HarborHomeState extends State<_HarborHome>
       const {'Studio', 'Network', 'Genre', 'MusicGenre'}.contains(item.type);
 
   String? _backdropUrl(AggregatedItem item) {
-    // A logo blown up behind the page is no backdrop.
-    if (_isLogoTile(item)) return null;
+    // A logo blown up behind the page is no backdrop; libraries have none.
+    if (_isLogoTile(item) || _libraryIds.contains(item.id)) return null;
     final path = item.rawData['BackdropPath'] as String?;
     if (item.serverId == 'seerr' || (path != null && path.isNotEmpty)) {
       if (path == null || path.isEmpty) return null;
@@ -379,10 +437,13 @@ class _HarborHomeState extends State<_HarborHome>
         item,
         widget.viewModel.imageApiForServer(item.serverId),
         height,
-        // Logo tiles use the wide artwork their rows use.
-        _isLogoTile(item) ? ImageType.thumb : ImageType.poster,
+        // Logo and library tiles use the wide artwork their rows use.
+        _isLogoTile(item) || _libraryIds.contains(item.id)
+            ? ImageType.thumb
+            : ImageType.poster,
         false,
         MediaQuery.devicePixelRatioOf(context).clamp(1.0, 2.0),
+        isMyMediaRow: _libraryIds.contains(item.id),
       );
 
   // ---------------------------------------------------------------- build
@@ -401,10 +462,14 @@ class _HarborHomeState extends State<_HarborHome>
             fit: StackFit.expand,
             children: [
               _buildBackdrop(item),
-              if (_trailerShowing && _trailerController != null && _trailerMode == 'background')
+              if (_trailerShowing &&
+                  _trailerController != null &&
+                  _trailerMode == 'background')
                 Positioned.fill(child: IgnorePointer(child: _trailerVideo())),
               const IgnorePointer(child: _HarborScrims()),
-              if (_trailerShowing && _trailerController != null && _trailerMode == 'corner')
+              if (_trailerShowing &&
+                  _trailerController != null &&
+                  _trailerMode == 'corner')
                 Positioned(
                   right: w * 0.04,
                   top: h * 0.07,
@@ -659,7 +724,9 @@ class _HarborHomeState extends State<_HarborHome>
     return LayoutBuilder(
       builder: (context, box) {
         // Logo decks (Networks, Studios, Genres) get wide tiles.
-        final logos = deck.items.isNotEmpty && _isLogoTile(deck.items.first);
+        final logos =
+            deck.library ||
+            (deck.items.isNotEmpty && _isLogoTile(deck.items.first));
         final cardH = box.maxHeight * (logos ? 0.55 : 0.80);
         final cardW = logos ? cardH * 16 / 9 : cardH * 2 / 3;
         final centerX = w * 0.5;
@@ -760,8 +827,15 @@ class _HarborHomeState extends State<_HarborHome>
           children: [
             if (url != null && _isLogoTile(item))
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: cardW * 0.12, vertical: cardH * 0.18),
-                child: BoundedNetworkImage(imageUrl: url, fit: BoxFit.contain, maxWidth: 600),
+                padding: EdgeInsets.symmetric(
+                  horizontal: cardW * 0.12,
+                  vertical: cardH * 0.18,
+                ),
+                child: BoundedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.contain,
+                  maxWidth: 600,
+                ),
               )
             else if (url != null)
               BoundedNetworkImage(
@@ -780,7 +854,35 @@ class _HarborHomeState extends State<_HarborHome>
                   ),
                 ),
               ),
-            TitleBadgeOverlay(item: item, size: 0.9),
+            if (deck.library && url != null)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Color(0xCC000000)],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 18, 10, 8),
+                    child: Text(
+                      item.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (!deck.library) TitleBadgeOverlay(item: item, size: 0.9),
             if (played is num && played > 0 && played < 100)
               Positioned(
                 left: 8,
@@ -846,9 +948,16 @@ class _HarborHomeState extends State<_HarborHome>
                         alignment: Alignment.bottomLeft,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
-                            color: AppColorScheme.surfaceVariant.withValues(alpha: alpha),
-                            borderRadius: ThemeRegistry.active.borders.cardRadius,
-                            border: Border.all(color: AppColorScheme.onSurface.withValues(alpha: 0.18)),
+                            color: AppColorScheme.surfaceVariant.withValues(
+                              alpha: alpha,
+                            ),
+                            borderRadius:
+                                ThemeRegistry.active.borders.cardRadius,
+                            border: Border.all(
+                              color: AppColorScheme.onSurface.withValues(
+                                alpha: 0.18,
+                              ),
+                            ),
                           ),
                         ),
                       ),
