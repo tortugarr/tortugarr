@@ -26,9 +26,11 @@
   / SkyShowtime" show what is popular there now (External Sources).
 - **New rows:** *On the way in* (Booty) shows your downloads with progress and time left;
   *Fits tonight* shows unwatched films under 1 h 45 and the next episode of your series.
-- **SmartTube** (by Yuriy Liskov) opens from the side menu and plays trailers when it is
-  installed; never the YouTube app. Install SmartTube first. *Show SmartTube button* under
-  Settings › Navigation; credit in About.
+- **SmartTube** (by Yuriy Liskov), when it is installed: an entry in the side menu, trailers
+  from a title's page play there (*Play trailers in SmartTube*, Settings › Appearance › Details Page; off
+  plays them in Tortugarr), and a search without results offers *Search in SmartTube*. Never
+  the YouTube app. Install SmartTube first. *Show SmartTube button* under Settings ›
+  Navigation; credit in About.
 - **Requests:** a 4K request shows Available once the title is in the library.
 - The download bar names the title being downloaded.
 - Home rows switched off stay listed under Settings › Home Screen › Rows, so they can be
