@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:moonfin/data/models/aggregated_item.dart';
 import 'package:moonfin/data/services/tortugarr/title_badges.dart';
 
 void main() {
@@ -42,5 +43,14 @@ void main() {
     expect(i.network, 'Warner Bros. Pictures');
     expect(i.networkLogo, endsWith('/wb.png'));
     expect(movieInfo({}).networkLogo, isNull);
+  });
+
+  test('episodes and seasons are looked up through their series, films and series by TMDB id', () {
+    AggregatedItem it(Map<String, dynamic> raw, {String server = 's1'}) => AggregatedItem(id: 'x', serverId: server, rawData: raw);
+    expect(TitleBadges.keyFor(it({'Type': 'Episode', 'SeriesId': 'abc'})), 'jfseries:s1:abc');
+    expect(TitleBadges.keyFor(it({'Type': 'Season', 'SeriesId': 'abc'})), 'jfseries:s1:abc');
+    expect(TitleBadges.keyFor(it({'Type': 'Episode'})), isNull);
+    expect(TitleBadges.keyFor(it({'Type': 'Series', 'ProviderIds': {'Tmdb': '42'}})), 'tv:42');
+    expect(TitleBadges.keyFor(it({'Type': 'Movie', 'ProviderIds': {'Tmdb': '7'}})), 'movie:7');
   });
 }

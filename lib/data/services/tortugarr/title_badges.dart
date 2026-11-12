@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import '../../../preference/user_preferences.dart';
 import '../../models/aggregated_item.dart';
 import '../../repositories/seerr_repository.dart';
+import '../media_server_client_factory.dart';
 
 /// What a title is: a blockbuster (BB), a mockbuster (MB), or neither.
 enum TitleClass { blockbuster, mockbuster, plain }
@@ -126,11 +127,29 @@ class TitleBadges extends ChangeNotifier {
   Timer? _saveTimer;
 
   static String? keyFor(AggregatedItem item) {
+    // An episode or season carries its own ids, not the series': look the
+    // series up on the server first (Stick, Widow's Bay in Continue
+    // Watching).
+    if (item.type == 'Episode' || item.type == 'Season') {
+      final series = item.seriesId;
+      if (series == null || series.isEmpty || item.serverId == 'seerr') return null;
+      return 'jfseries:${item.serverId}:$series';
+    }
     final tmdb = item.tmdbId ?? (item.rawData['ProviderIds'] as Map?)?['Tmdb']?.toString();
     if (tmdb == null || tmdb.isEmpty || tmdb == '0') return null;
-    final tv = item.type == 'Series' || item.type == 'Season' || item.type == 'Episode';
-    if (item.type == 'Episode' || item.type == 'Season') return null; // their ids are the episode's
+    final tv = item.type == 'Series';
     return '${tv ? 'tv' : 'movie'}:$tmdb';
+  }
+
+  /// The TMDB id of a series on a Jellyfin server, from its ProviderIds.
+  Future<int?> _seriesTmdb(String serverId, String seriesId) async {
+    final client = GetIt.instance<MediaServerClientFactory>().clientForServerOrActive(serverId);
+    final res = await client.itemsApi.getItems(ids: [seriesId], fields: 'ProviderIds');
+    final items = (res['Items'] as List? ?? const []).whereType<Map>();
+    if (items.isEmpty) return null;
+    final ids = items.first['ProviderIds'];
+    final tmdb = ids is Map ? (ids['Tmdb'] ?? ids['tmdb'])?.toString() : null;
+    return int.tryParse(tmdb ?? '');
   }
 
   UserPreferences? get _prefs =>
@@ -177,10 +196,17 @@ class TitleBadges extends ChangeNotifier {
       final repo = await GetIt.instance.getAsync<SeerrRepository>();
       await repo.ensureInitialized();
       if (!repo.isAvailable) return;
-      final id = int.parse(key.split(':').last);
-      final info = key.startsWith('tv:')
-          ? seriesInfo(await repo.getTvDetailsRaw(id))
-          : movieInfo(await repo.getMovieDetailsRaw(id));
+      final TitleBadgeInfo info;
+      if (key.startsWith('jfseries:')) {
+        final parts = key.split(':');
+        final tmdb = await _seriesTmdb(parts[1], parts.sublist(2).join(':'));
+        info = tmdb == null ? const TitleBadgeInfo() : seriesInfo(await repo.getTvDetailsRaw(tmdb));
+      } else {
+        final id = int.parse(key.split(':').last);
+        info = key.startsWith('tv:')
+            ? seriesInfo(await repo.getTvDetailsRaw(id))
+            : movieInfo(await repo.getMovieDetailsRaw(id));
+      }
       _known[key] = info;
       _scheduleSave();
       notifyListeners();
