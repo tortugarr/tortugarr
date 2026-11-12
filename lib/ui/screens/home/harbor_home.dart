@@ -166,8 +166,15 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.arrowLeft) {
-      // From the first card, Left goes on to the side menu.
-      if (atFirst || (_deck < 0 && _spot == 0)) return KeyEventResult.ignored;
+      // From the first card (or the Spotlight), Left goes to the side menu.
+      if (atFirst || _deck < 0) {
+        final toMenu = NavigationLayout.focusNavbarNotifier.value;
+        if (toMenu != null) {
+          toMenu();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      }
       _moveItem(-1);
       return KeyEventResult.handled;
     }

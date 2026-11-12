@@ -3476,7 +3476,7 @@ class HomeViewModel extends ChangeNotifier {
   static const _topListOwnedFields =
       'DateCreated,Type,UserData,Overview,Genres,CommunityRating,CriticRating,'
       'OfficialRating,RunTimeTicks,ProductionYear,Status,ImageTags,BackdropImageTags,'
-      'PrimaryImageTag,PrimaryImageAspectRatio';
+      'PrimaryImageTag,PrimaryImageAspectRatio,ProviderIds';
 
   /// Top lists need the Tortugarr plugin (public build); the section's own
   /// switch in the home sections list turns them off.

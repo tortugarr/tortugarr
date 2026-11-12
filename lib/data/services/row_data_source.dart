@@ -46,7 +46,9 @@ class RowDataSource {
       'ParentIndexNumber,IndexNumber,Status,ImageTags,BackdropImageTags,'
       'ParentBackdropItemId,ParentBackdropImageTags,ParentThumbItemId,'
       'ParentThumbImageTag,SeriesId,SeriesPrimaryImageTag,'
-      'ParentLogoItemId,ParentLogoImageTag,PrimaryImageTag,PrimaryImageAspectRatio';
+      'ParentLogoItemId,ParentLogoImageTag,PrimaryImageTag,PrimaryImageAspectRatio,'
+      // Tortugarr poster badges look titles up by their TMDB id.
+      'ProviderIds';
   static const _fallbackFields =
       'DateCreated,Type,UserData,OfficialRating,RunTimeTicks,ProductionYear,SeriesName,'
       'ParentIndexNumber,IndexNumber,ImageTags,BackdropImageTags,'
