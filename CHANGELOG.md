@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+**App**
+
+- **Welcome tour:** five short cards over Harbor the first time the app opens: moving around
+  (remote or touch), the poster badges, getting a title, making Home yours, and SmartTube when
+  it is installed. Settings › About › Welcome tour shows it again.
+
 ## 4.20.04 - 2026-11-12 (app build 2000061, Tortugarr plugin 1.3.0.37, Moonfin 3.0.0)
 
 **App**
