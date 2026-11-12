@@ -9,7 +9,8 @@ class _HarborHome extends StatefulWidget {
   const _HarborHome({required this.viewModel, required this.onItemSelected});
 
   final HomeViewModel viewModel;
-  final void Function(AggregatedItem? item, {bool preserveBackground}) onItemSelected;
+  final void Function(AggregatedItem? item, {bool preserveBackground})
+  onItemSelected;
 
   @override
   State<_HarborHome> createState() => _HarborHomeState();
@@ -24,12 +25,21 @@ class _HarborDeck {
 }
 
 const _harborCardTypes = {
-  'Movie', 'Series', 'Episode', 'Season', 'BoxSet', 'Video', 'MusicVideo',
+  'Movie',
+  'Series',
+  'Episode',
+  'Season',
+  'BoxSet',
+  'Video',
+  'MusicVideo',
 };
 
-class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderStateMixin {
+class _HarborHomeState extends State<_HarborHome>
+    with SingleTickerProviderStateMixin {
   final _focus = FocusNode(debugLabel: 'HarborHome');
-  late final AnimationController _pos = AnimationController.unbounded(vsync: this);
+  late final AnimationController _pos = AnimationController.unbounded(
+    vsync: this,
+  );
 
   /// -1 is the Spotlight.
   int _deck = -1;
@@ -79,19 +89,25 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
             i,
       ];
       if (items.isEmpty) continue;
-      decks.add(_HarborDeck(
-        row.id,
-        localizeHomeRowTitle(
-          row: row,
-          l10n: l10n,
-          mergeContinueWatchingAndNextUp:
-              GetIt.instance<UserPreferences>().effectiveMergeContinueWatchingNextUp,
+      decks.add(
+        _HarborDeck(
+          row.id,
+          localizeHomeRowTitle(
+            row: row,
+            l10n: l10n,
+            mergeContinueWatchingAndNextUp: GetIt.instance<UserPreferences>()
+                .effectiveMergeContinueWatchingNextUp,
+          ),
+          items,
+          ranked:
+              HomeViewModel.isTopListRow(row) &&
+              HomeViewModel.isRankedTopList(row.title),
         ),
-        items,
-        ranked: HomeViewModel.isTopListRow(row) && HomeViewModel.isRankedTopList(row.title),
-      ));
+      );
     }
-    final current = _deck >= 0 && _deck < _decks.length ? _decks[_deck].id : null;
+    final current = _deck >= 0 && _deck < _decks.length
+        ? _decks[_deck].id
+        : null;
     setState(() {
       _decks = decks;
       if (current != null) {
@@ -102,9 +118,10 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
         final pool = <String, AggregatedItem>{
           for (final d in decks)
             for (final i in d.items)
-              if ((i.type == 'Movie' || i.type == 'Series') && _backdropUrl(i) != null) i.id: i,
-        }.values.toList()
-          ..shuffle();
+              if ((i.type == 'Movie' || i.type == 'Series') &&
+                  _backdropUrl(i) != null)
+                i.id: i,
+        }.values.toList()..shuffle();
         _spotlight = pool.take(10).toList();
       }
     });
@@ -121,7 +138,8 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
   }
 
   AggregatedItem? get _current {
-    if (_deck < 0) return _spotlight.isEmpty ? null : _spotlight[_spot % _spotlight.length];
+    if (_deck < 0)
+      return _spotlight.isEmpty ? null : _spotlight[_spot % _spotlight.length];
     if (_deck >= _decks.length) return null;
     final d = _decks[_deck];
     return d.items[(_index[d.id] ?? 0).clamp(0, d.items.length - 1)];
@@ -145,7 +163,11 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     final d = _decks[_deck];
     final next = ((_index[d.id] ?? 0) + delta).clamp(0, d.items.length - 1);
     setState(() => _index[d.id] = next);
-    _pos.animateTo(next.toDouble(), duration: const Duration(milliseconds: 260), curve: Curves.easeOutCubic);
+    _pos.animateTo(
+      next.toDouble(),
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
+    );
     _report();
   }
 
@@ -204,12 +226,14 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
       _ContentRowsState._navigateToSeerrItem(context, item);
       return;
     }
-    context.push(Destinations.itemOrPhoto(
-      item.id,
-      serverId: item.serverId,
-      type: item.type,
-      channelId: item.channelId,
-    ));
+    context.push(
+      Destinations.itemOrPhoto(
+        item.id,
+        serverId: item.serverId,
+        type: item.type,
+        channelId: item.channelId,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------- images
@@ -218,7 +242,9 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     final path = item.rawData['BackdropPath'] as String?;
     if (item.serverId == 'seerr' || (path != null && path.isNotEmpty)) {
       if (path == null || path.isEmpty) return null;
-      return path.startsWith('http') ? path : 'https://image.tmdb.org/t/p/w1280$path';
+      return path.startsWith('http')
+          ? path
+          : 'https://image.tmdb.org/t/p/w1280$path';
     }
     final api = widget.viewModel.imageApiForServer(item.serverId);
     final tags = item.backdropImageTags;
@@ -228,7 +254,11 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     final parent = item.parentBackdropItemId;
     final parentTags = item.parentBackdropImageTags;
     if (parent != null && parentTags.isNotEmpty) {
-      return api.getBackdropImageUrl(parent, maxWidth: 1920, tag: parentTags.first);
+      return api.getBackdropImageUrl(
+        parent,
+        maxWidth: 1920,
+        tag: parentTags.first,
+      );
     }
     return null;
   }
@@ -238,12 +268,16 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     final tags = item.rawData['ImageTags'];
     final tag = tags is Map ? tags['Logo'] as String? : null;
     if (tag != null) {
-      return widget.viewModel.imageApiForServer(item.serverId).getLogoImageUrl(item.id, maxWidth: 700, tag: tag);
+      return widget.viewModel
+          .imageApiForServer(item.serverId)
+          .getLogoImageUrl(item.id, maxWidth: 700, tag: tag);
     }
     final parentTag = item.rawData['ParentLogoImageTag'] as String?;
     final parentId = item.rawData['ParentLogoItemId'] as String?;
     if (parentTag != null && parentId != null) {
-      return widget.viewModel.imageApiForServer(item.serverId).getLogoImageUrl(parentId, maxWidth: 700, tag: parentTag);
+      return widget.viewModel
+          .imageApiForServer(item.serverId)
+          .getLogoImageUrl(parentId, maxWidth: 700, tag: parentTag);
     }
     return null;
   }
@@ -282,7 +316,9 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
                   width: w * 0.5,
                   child: _buildInfo(context, item, h),
                 ),
-              if (_deck < 0) _buildSpotlightFoot(context, w, h) else ...[
+              if (_deck < 0)
+                _buildSpotlightFoot(context, w, h)
+              else ...[
                 Positioned(
                   left: w * 0.07,
                   right: 0,
@@ -309,7 +345,10 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 550),
       child: url == null
-          ? SizedBox.expand(key: const ValueKey('none'), child: ColoredBox(color: AppColorScheme.background))
+          ? SizedBox.expand(
+              key: const ValueKey('none'),
+              child: ColoredBox(color: AppColorScheme.background),
+            )
           : SizedBox.expand(
               key: ValueKey(url),
               child: BoundedNetworkImage(
@@ -336,9 +375,14 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
         : _decks[_deck].title;
     final meta = <String>[
       if (year != null) '$year',
-      if (minutes != null && minutes > 0) minutes >= 60 ? '${minutes ~/ 60} h ${minutes % 60} min' : '$minutes min',
+      if (minutes != null && minutes > 0)
+        minutes >= 60
+            ? '${minutes ~/ 60} h ${minutes % 60} min'
+            : '$minutes min',
       if (rating is num && rating > 0) '★ ${rating.toStringAsFixed(1)}',
-      if (item.type == 'Episode' && item.parentIndexNumber != null && item.indexNumber != null)
+      if (item.type == 'Episode' &&
+          item.parentIndexNumber != null &&
+          item.indexNumber != null)
         'S${item.parentIndexNumber}:E${item.indexNumber}',
     ];
     return AnimatedSwitcher(
@@ -360,11 +404,18 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
           if (logo != null)
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: h * 0.17, maxWidth: 520),
-              child: BoundedNetworkImage(imageUrl: logo, fit: BoxFit.contain, alignment: Alignment.centerLeft, maxWidth: 800),
+              child: BoundedNetworkImage(
+                imageUrl: logo,
+                fit: BoxFit.contain,
+                alignment: Alignment.centerLeft,
+                maxWidth: 800,
+              ),
             )
           else
             Text(
-              item.type == 'Episode' ? (item.seriesName ?? item.name) : item.name,
+              item.type == 'Episode'
+                  ? (item.seriesName ?? item.name)
+                  : item.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.displaySmall?.copyWith(
@@ -381,7 +432,12 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               for (final m in meta)
-                Text(m, style: theme.textTheme.titleMedium?.copyWith(color: AppColorScheme.onBackground.withValues(alpha: 0.9))),
+                Text(
+                  m,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: AppColorScheme.onBackground.withValues(alpha: 0.9),
+                  ),
+                ),
               _HarborInlineBadges(item: item),
             ],
           ),
@@ -417,7 +473,9 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
               width: i == _spot ? 28 : 9,
               height: 9,
               decoration: BoxDecoration(
-                color: i == _spot ? AppColorScheme.accent : AppColorScheme.onBackground.withValues(alpha: 0.35),
+                color: i == _spot
+                    ? AppColorScheme.accent
+                    : AppColorScheme.onBackground.withValues(alpha: 0.35),
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
@@ -426,10 +484,14 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
             Text(
               '▼  ${_decks.first.title}',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColorScheme.onBackground.withValues(alpha: 0.85),
-                  ),
+                color: AppColorScheme.onBackground.withValues(alpha: 0.85),
+              ),
             ),
-          if (_decks.isEmpty) Text(l10n.tgHarborLoading, style: Theme.of(context).textTheme.titleMedium),
+          if (_decks.isEmpty)
+            Text(
+              l10n.tgHarborLoading,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
         ],
       ),
     );
@@ -438,24 +500,41 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
   Widget _buildDeckTabs(BuildContext context) {
     final theme = Theme.of(context);
     final tabs = <Widget>[];
-    for (var i = (_deck - 1).clamp(0, _decks.length); i < _decks.length && i <= _deck + 3; i++) {
+    for (
+      var i = (_deck - 1).clamp(0, _decks.length);
+      i < _decks.length && i <= _deck + 3;
+      i++
+    ) {
       final on = i == _deck;
-      tabs.add(AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        margin: const EdgeInsets.only(right: 12),
-        padding: EdgeInsets.symmetric(horizontal: on ? 18 : 12, vertical: on ? 8 : 5),
-        decoration: BoxDecoration(
-          color: on ? AppColorScheme.accent : AppColorScheme.surface.withValues(alpha: 0.55),
-          borderRadius: BorderRadius.circular(22),
-        ),
-        child: Text(
-          _decks[i].title,
-          style: (on ? theme.textTheme.headlineSmall : theme.textTheme.titleSmall)?.copyWith(
-            color: on ? AppColorScheme.onAccent : AppColorScheme.onBackground.withValues(alpha: 0.7),
-            fontWeight: on ? FontWeight.w700 : FontWeight.w500,
+      tabs.add(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          margin: const EdgeInsets.only(right: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: on ? 18 : 12,
+            vertical: on ? 8 : 5,
+          ),
+          decoration: BoxDecoration(
+            color: on
+                ? AppColorScheme.accent
+                : AppColorScheme.surface.withValues(alpha: 0.55),
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Text(
+            _decks[i].title,
+            style:
+                (on
+                        ? theme.textTheme.headlineSmall
+                        : theme.textTheme.titleSmall)
+                    ?.copyWith(
+                      color: on
+                          ? AppColorScheme.onAccent
+                          : AppColorScheme.onBackground.withValues(alpha: 0.7),
+                      fontWeight: on ? FontWeight.w700 : FontWeight.w500,
+                    ),
           ),
         ),
-      ));
+      );
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -476,7 +555,10 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
           transitionBuilder: (child, anim) => FadeTransition(
             opacity: anim,
             child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.25), end: Offset.zero).animate(anim),
+              position: Tween(
+                begin: const Offset(0, 0.25),
+                end: Offset.zero,
+              ).animate(anim),
               child: child,
             ),
           ),
@@ -494,7 +576,16 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
                 clipBehavior: Clip.none,
                 children: [
                   for (final i in order)
-                    _coverCard(context, deck, i, i - pos, cardW, cardH, centerX, i == focusedIndex),
+                    _coverCard(
+                      context,
+                      deck,
+                      i,
+                      i - pos,
+                      cardW,
+                      cardH,
+                      centerX,
+                      i == focusedIndex,
+                    ),
                 ],
               );
             },
@@ -504,11 +595,23 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
     );
   }
 
-  Widget _coverCard(BuildContext context, _HarborDeck deck, int i, double d, double cardW, double cardH, double centerX, bool focused) {
+  Widget _coverCard(
+    BuildContext context,
+    _HarborDeck deck,
+    int i,
+    double d,
+    double cardW,
+    double cardH,
+    double centerX,
+    bool focused,
+  ) {
     final item = deck.items[i];
     final a = d.abs();
     final near = a.clamp(0.0, 1.0);
-    final x = centerX - cardW / 2 + d.sign * (near * cardW * 0.92 + (a > 1 ? (a - 1) * cardW * 0.52 : 0));
+    final x =
+        centerX -
+        cardW / 2 +
+        d.sign * (near * cardW * 0.92 + (a > 1 ? (a - 1) * cardW * 0.52 : 0));
     final scale = 1.0 - 0.24 * near;
     final opacity = (1.0 - ((a - 4.5).clamp(0.0, 1.5) / 1.5)).clamp(0.0, 1.0);
     final m = Matrix4.identity()
@@ -524,10 +627,17 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
       decoration: BoxDecoration(
         borderRadius: radius,
         color: AppColorScheme.surface,
-        border: focused ? Border.all(color: AppColorScheme.accent, width: 3) : null,
+        border: focused
+            ? Border.all(color: AppColorScheme.accent, width: 3)
+            : null,
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.55), blurRadius: focused ? 26 : 10, offset: const Offset(0, 10)),
-          if (focused && ThemeRegistry.active.cardFocusGlow) ...borders.focusGlow,
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.55),
+            blurRadius: focused ? 26 : 10,
+            offset: const Offset(0, 10),
+          ),
+          if (focused && ThemeRegistry.active.cardFocusGlow)
+            ...borders.focusGlow,
         ],
       ),
       child: ClipRRect(
@@ -536,12 +646,20 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
           fit: StackFit.expand,
           children: [
             if (url != null)
-              BoundedNetworkImage(imageUrl: url, fit: BoxFit.cover, maxWidth: 600)
+              BoundedNetworkImage(
+                imageUrl: url,
+                fit: BoxFit.cover,
+                maxWidth: 600,
+              )
             else
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(item.name, textAlign: TextAlign.center, style: TextStyle(color: AppColorScheme.onSurface)),
+                  child: Text(
+                    item.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppColorScheme.onSurface),
+                  ),
                 ),
               ),
             TitleBadgeOverlay(item: item, size: 0.9),
@@ -606,11 +724,14 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
                     child: Column(
                       children: [
                         Text(
-                          item.type == 'Episode' ? (item.seriesName ?? item.name) : item.name,
+                          item.type == 'Episode'
+                              ? (item.seriesName ?? item.name)
+                              : item.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
                                 color: AppColorScheme.onBackground,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -621,8 +742,11 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColorScheme.onBackground.withValues(alpha: 0.75),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: AppColorScheme.onBackground.withValues(
+                                    alpha: 0.75,
+                                  ),
                                 ),
                           ),
                       ],
@@ -652,7 +776,11 @@ class _HarborScrims extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [bg.withValues(alpha: 0.92), bg.withValues(alpha: 0.55), bg.withValues(alpha: 0.0)],
+              colors: [
+                bg.withValues(alpha: 0.92),
+                bg.withValues(alpha: 0.55),
+                bg.withValues(alpha: 0.0),
+              ],
               stops: const [0.0, 0.38, 0.72],
             ),
           ),
@@ -662,7 +790,11 @@ class _HarborScrims extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-              colors: [bg.withValues(alpha: 0.97), bg.withValues(alpha: 0.75), bg.withValues(alpha: 0.0)],
+              colors: [
+                bg.withValues(alpha: 0.97),
+                bg.withValues(alpha: 0.75),
+                bg.withValues(alpha: 0.0),
+              ],
               stops: const [0.0, 0.42, 0.68],
             ),
           ),
@@ -687,44 +819,59 @@ class _HarborInlineBadges extends StatelessWidget {
         final chips = <Widget>[];
         if (info.kind != TitleClass.plain) {
           final mb = info.kind == TitleClass.mockbuster;
-          chips.add(Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: mb ? const Color(0xFFE0703A) : AppColorScheme.accent,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              mb ? 'MOCKBUSTER' : 'BLOCKBUSTER',
-              style: TextStyle(
-                color: mb ? Colors.white : AppColorScheme.onAccent,
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1,
+          chips.add(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: mb ? const Color(0xFFE0703A) : AppColorScheme.accent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                mb ? 'MOCKBUSTER' : 'BLOCKBUSTER',
+                style: TextStyle(
+                  color: mb ? Colors.white : AppColorScheme.onAccent,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                ),
               ),
             ),
-          ));
+          );
         }
         if (info.networkLogo != null) {
-          chips.add(Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Image.network(
-              info.networkLogo!,
-              height: 20,
-              filterQuality: FilterQuality.medium,
-              errorBuilder: (_, _, _) => Text(
-                info.network ?? '',
-                style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w700),
+          chips.add(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 110, maxHeight: 20),
+                child: Image.network(
+                  info.networkLogo!,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.medium,
+                  errorBuilder: (_, _, _) => Text(
+                    info.network ?? '',
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ));
+          );
         }
-        return Row(mainAxisSize: MainAxisSize.min, children: [
-          for (final c in chips) Padding(padding: const EdgeInsets.only(right: 8), child: c),
-        ]);
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final c in chips)
+              Padding(padding: const EdgeInsets.only(right: 8), child: c),
+          ],
+        );
       },
     );
   }
