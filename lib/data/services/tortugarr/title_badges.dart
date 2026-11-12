@@ -132,7 +132,11 @@ class TitleBadges extends ChangeNotifier {
     // Watching).
     if (item.type == 'Episode' || item.type == 'Season') {
       final series = item.seriesId;
-      if (series == null || series.isEmpty || item.serverId == 'seerr') return null;
+      if (series == null || series.isEmpty || item.serverId == 'seerr') {
+        debugPrint('[TitleBadges] no series for ${item.type} ${item.name}: '
+            '${item.rawData.keys.where((k) => '$k'.toLowerCase().contains('series')).toList()} server=${item.serverId}');
+        return null;
+      }
       return 'jfseries:${item.serverId}:$series';
     }
     final tmdb = item.tmdbId ?? (item.rawData['ProviderIds'] as Map?)?['Tmdb']?.toString();
@@ -200,6 +204,7 @@ class TitleBadges extends ChangeNotifier {
       if (key.startsWith('jfseries:')) {
         final parts = key.split(':');
         final tmdb = await _seriesTmdb(parts[1], parts.sublist(2).join(':'));
+        debugPrint('[TitleBadges] $key -> series tmdb $tmdb');
         info = tmdb == null ? const TitleBadgeInfo() : seriesInfo(await repo.getTvDetailsRaw(tmdb));
       } else {
         final id = int.parse(key.split(':').last);
