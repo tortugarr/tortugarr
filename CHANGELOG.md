@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.20.05 - 2026-11-12 (app build 2000062, Tortugarr plugin 1.3.0.37, Moonfin 3.0.0)
 
 **App**
 
