@@ -67,6 +67,12 @@ class _AboutCategoryScreen extends StatelessWidget {
             ),
           ),
           _TvSettingsListTile(
+            leading: const Icon(Icons.sailing_rounded),
+            title: Text(l10n.tgTourAgain),
+            subtitle: Text(l10n.tgTourAgainSubtitle),
+            onTap: () => showHarborTour(context),
+          ),
+          _TvSettingsListTile(
             leading: const Icon(Icons.auto_awesome),
             title: Text(l10n.runSetupAgain),
             // Asking again on purpose says more than the stored answers do,

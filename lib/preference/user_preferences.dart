@@ -1291,6 +1291,12 @@ class UserPreferences extends ChangeNotifier {
     defaultValue: false,
   );
 
+  /// The welcome tour has been shown (once per install; again from Settings › About).
+  static final tgTourShown = Preference<bool>(
+    key: 'tg_tour_shown_v1',
+    defaultValue: false,
+  );
+
   static final tgShowSmartTubeButton = Preference<bool>(
     key: 'tg_show_smarttube_button',
     defaultValue: true,

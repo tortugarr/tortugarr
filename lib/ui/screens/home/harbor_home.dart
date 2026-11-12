@@ -75,6 +75,10 @@ class _HarborHomeState extends State<_HarborHome>
     TitleBadges.instance.addListener(_rebuildDecks);
     _rebuildDecks();
     _restartSpotlightTimer();
+    // The welcome tour, once, over Harbor.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) showHarborTourOnce(context);
+    });
   }
 
   @override

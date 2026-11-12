@@ -37,6 +37,7 @@ import '../../../data/services/youtube_stream_resolver.dart';
 import '../../../data/services/connectivity_service.dart';
 import '../../../data/services/log_service.dart';
 import '../../../data/utils/media_type_badges.dart';
+import 'harbor_tour.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../playback/appletv_preview_player.dart';
 import '../../../playback/inline_preview_engine.dart';

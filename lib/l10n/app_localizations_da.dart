@@ -755,6 +755,67 @@ class AppLocalizationsDa extends AppLocalizations {
   String get tgNavSpyglass => 'Spyglass';
 
   @override
+  String get tgTourWelcomeTitle => 'Welcome aboard Tortugarr';
+
+  @override
+  String get tgTourWelcomeRemote =>
+      'This is Harbor, your Home. Left and Right browse the cards, Up and Down switch rows, OK opens a title. Left on the first card opens the menu.';
+
+  @override
+  String get tgTourWelcomeTouch =>
+      'This is Harbor, your Home. Swipe sideways through the cards, up and down between rows, and tap the middle card to open it.';
+
+  @override
+  String get tgTourBadgesTitle => 'Badges on the posters';
+
+  @override
+  String get tgTourBadgesBody =>
+      'BB marks a blockbuster, MB a mockbuster. The small logo shows the studio or streaming service. Change them under Settings › Home Screen › Poster badges.';
+
+  @override
+  String get tgTourDownloadTitle => 'Get a title';
+
+  @override
+  String get tgTourDownloadBody =>
+      'Open a title and press Download Now, or request it through Seerr. It shows up in On the way in with progress and time left, and is ready to watch seconds after it finishes.';
+
+  @override
+  String get tgTourHomeTitle => 'Make Home yours';
+
+  @override
+  String get tgTourHomeBody =>
+      'Switch top lists and rows on or off under Settings › Home Screen. Row Type switches between Harbor, Classic and Modern.';
+
+  @override
+  String get tgTourSmartTubeTitle => 'Trailers in SmartTube';
+
+  @override
+  String get tgTourSmartTubeBody =>
+      'Trailers open in SmartTube, an ad-free YouTube app, and the menu has a SmartTube button too.';
+
+  @override
+  String get tgTourNext => 'Next';
+
+  @override
+  String get tgTourDone => 'Set sail';
+
+  @override
+  String get tgTourSkip => 'Skip';
+
+  @override
+  String get tgTourRemoteHint =>
+      'Right or OK: next  ·  Left: back  ·  Back: skip';
+
+  @override
+  String get tgTourRemoteHintLast => 'OK: set sail';
+
+  @override
+  String get tgTourAgain => 'Welcome tour';
+
+  @override
+  String get tgTourAgainSubtitle => 'The short tour from the first start';
+
+  @override
   String get tgNavShuffle => 'Roll the dice';
 
   @override

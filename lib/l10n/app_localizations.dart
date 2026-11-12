@@ -1372,6 +1372,114 @@ abstract class AppLocalizations {
   /// **'Spyglass'**
   String get tgNavSpyglass;
 
+  /// No description provided for @tgTourWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome aboard Tortugarr'**
+  String get tgTourWelcomeTitle;
+
+  /// No description provided for @tgTourWelcomeRemote.
+  ///
+  /// In en, this message translates to:
+  /// **'This is Harbor, your Home. Left and Right browse the cards, Up and Down switch rows, OK opens a title. Left on the first card opens the menu.'**
+  String get tgTourWelcomeRemote;
+
+  /// No description provided for @tgTourWelcomeTouch.
+  ///
+  /// In en, this message translates to:
+  /// **'This is Harbor, your Home. Swipe sideways through the cards, up and down between rows, and tap the middle card to open it.'**
+  String get tgTourWelcomeTouch;
+
+  /// No description provided for @tgTourBadgesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Badges on the posters'**
+  String get tgTourBadgesTitle;
+
+  /// No description provided for @tgTourBadgesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'BB marks a blockbuster, MB a mockbuster. The small logo shows the studio or streaming service. Change them under Settings › Home Screen › Poster badges.'**
+  String get tgTourBadgesBody;
+
+  /// No description provided for @tgTourDownloadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a title'**
+  String get tgTourDownloadTitle;
+
+  /// No description provided for @tgTourDownloadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a title and press Download Now, or request it through Seerr. It shows up in On the way in with progress and time left, and is ready to watch seconds after it finishes.'**
+  String get tgTourDownloadBody;
+
+  /// No description provided for @tgTourHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Home yours'**
+  String get tgTourHomeTitle;
+
+  /// No description provided for @tgTourHomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch top lists and rows on or off under Settings › Home Screen. Row Type switches between Harbor, Classic and Modern.'**
+  String get tgTourHomeBody;
+
+  /// No description provided for @tgTourSmartTubeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trailers in SmartTube'**
+  String get tgTourSmartTubeTitle;
+
+  /// No description provided for @tgTourSmartTubeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Trailers open in SmartTube, an ad-free YouTube app, and the menu has a SmartTube button too.'**
+  String get tgTourSmartTubeBody;
+
+  /// No description provided for @tgTourNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get tgTourNext;
+
+  /// No description provided for @tgTourDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Set sail'**
+  String get tgTourDone;
+
+  /// No description provided for @tgTourSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get tgTourSkip;
+
+  /// No description provided for @tgTourRemoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Right or OK: next  ·  Left: back  ·  Back: skip'**
+  String get tgTourRemoteHint;
+
+  /// No description provided for @tgTourRemoteHintLast.
+  ///
+  /// In en, this message translates to:
+  /// **'OK: set sail'**
+  String get tgTourRemoteHintLast;
+
+  /// No description provided for @tgTourAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome tour'**
+  String get tgTourAgain;
+
+  /// No description provided for @tgTourAgainSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The short tour from the first start'**
+  String get tgTourAgainSubtitle;
+
   /// Tortugarr
   ///
   /// In en, this message translates to:

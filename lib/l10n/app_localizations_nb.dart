@@ -753,6 +753,67 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tgNavSpyglass => 'Kikkerten';
 
   @override
+  String get tgTourWelcomeTitle => 'Velkommen om bord i Tortugarr';
+
+  @override
+  String get tgTourWelcomeRemote =>
+      'Dette er Harbor, din Home. Venstre og Høyre blar i kortene, Opp og Ned bytter rad, OK åpner en tittel. Venstre på første kort åpner menyen.';
+
+  @override
+  String get tgTourWelcomeTouch =>
+      'Dette er Harbor, din Home. Sveip til siden gjennom kortene, opp og ned mellom radene, og trykk på kortet i midten for å åpne det.';
+
+  @override
+  String get tgTourBadgesTitle => 'Merker på plakatene';
+
+  @override
+  String get tgTourBadgesBody =>
+      'BB betyr storfilm, MB betyr mockbuster. Den lille logoen viser studioet eller strømmetjenesten. Endre dem under Innstillinger › Startskjerm › Plakatmerker.';
+
+  @override
+  String get tgTourDownloadTitle => 'Skaff en tittel';
+
+  @override
+  String get tgTourDownloadBody =>
+      'Åpne en tittel og trykk Last ned nå, eller bestill den via Seerr. Den dukker opp i På vei inn med fremdrift og tid igjen, og er klar til å se sekunder etter at den er ferdig.';
+
+  @override
+  String get tgTourHomeTitle => 'Gjør Home til din';
+
+  @override
+  String get tgTourHomeBody =>
+      'Slå topplister og rader av og på under Innstillinger › Startskjerm. Der bytter du også mellom Harbor, Klassisk og Moderne.';
+
+  @override
+  String get tgTourSmartTubeTitle => 'Trailere i SmartTube';
+
+  @override
+  String get tgTourSmartTubeBody =>
+      'Trailere åpnes i SmartTube, en YouTube-app uten reklame, og menyen har også en SmartTube-knapp.';
+
+  @override
+  String get tgTourNext => 'Neste';
+
+  @override
+  String get tgTourDone => 'Sett seil';
+
+  @override
+  String get tgTourSkip => 'Hopp over';
+
+  @override
+  String get tgTourRemoteHint =>
+      'Høyre eller OK: neste  ·  Venstre: tilbake  ·  Tilbake: hopp over';
+
+  @override
+  String get tgTourRemoteHintLast => 'OK: sett seil';
+
+  @override
+  String get tgTourAgain => 'Velkomstomvisning';
+
+  @override
+  String get tgTourAgainSubtitle => 'Den korte omvisningen fra første oppstart';
+
+  @override
   String get tgNavShuffle => 'Kast terningen';
 
   @override
