@@ -408,6 +408,11 @@ class _SwitchPreferenceTileState extends State<SwitchPreferenceTile> {
           valueListenable: _binding,
           builder: (context, value, _) => SwitchListTile.adaptive(
             focusNode: widget.focusNode,
+            // On a focused row the row itself is the focus colour; a switch
+            // in the same colour vanished (Tortuga: brass on brass). Draw it
+            // in the focused text colour there instead.
+            activeTrackColor: focused ? AppColorScheme.onButtonFocused : null,
+            activeThumbColor: focused ? AppColorScheme.buttonFocused : null,
             secondary: secondary,
             title: Text(widget.title, style: _kSettingsTitleTextStyle),
             subtitle: widget.subtitle != null

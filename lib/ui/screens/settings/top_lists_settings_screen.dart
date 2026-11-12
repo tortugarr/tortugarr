@@ -158,6 +158,8 @@ class _TopListTileState extends State<_TopListTile> {
                   child: Switch(
                     value: widget.value,
                     onChanged: widget.onChanged,
+                    activeTrackColor: _focused ? AppColorScheme.onButtonFocused : null,
+                    activeThumbColor: _focused ? AppColorScheme.buttonFocused : null,
                   ),
                 ),
               ],

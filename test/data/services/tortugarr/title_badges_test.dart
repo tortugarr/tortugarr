@@ -50,6 +50,9 @@ void main() {
     expect(TitleBadges.keyFor(it({'Type': 'Episode', 'SeriesId': 'abc'}, server: 'http://192.168.1.15:8096')), 'jfseries:abc@http://192.168.1.15:8096');
     expect(TitleBadges.keyFor(it({'Type': 'Season', 'SeriesId': 'abc'})), 'jfseries:abc@s1');
     expect(TitleBadges.keyFor(it({'Type': 'Episode'})), isNull);
+    expect(TitleBadges.keyFor(AggregatedItem(id: 'ser1', serverId: 's1', rawData: {'Type': 'Series'})), 'jfseries:ser1@s1');
+    expect(TitleBadges.keyFor(AggregatedItem(id: 'mov1', serverId: 's1', rawData: {'Type': 'Movie'})), 'jfmovie:mov1@s1');
+    expect(TitleBadges.keyFor(AggregatedItem(id: '9', serverId: 'seerr', rawData: {'Type': 'Movie'})), isNull);
     expect(TitleBadges.keyFor(it({'Type': 'Series', 'ProviderIds': {'Tmdb': '42'}})), 'tv:42');
     expect(TitleBadges.keyFor(it({'Type': 'Movie', 'ProviderIds': {'Tmdb': '7'}})), 'movie:7');
   });

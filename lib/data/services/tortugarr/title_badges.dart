@@ -154,8 +154,13 @@ class TitleBadges extends ChangeNotifier {
     final tmdb =
         item.tmdbId ??
         (item.rawData['ProviderIds'] as Map?)?['Tmdb']?.toString();
-    if (tmdb == null || tmdb.isEmpty || tmdb == '0') return null;
     final tv = item.type == 'Series';
+    if (tmdb == null || tmdb.isEmpty || tmdb == '0') {
+      // Some rows (Recently Added TV Shows) come without ProviderIds: ask the
+      // server for the item itself.
+      if (item.serverId == 'seerr' || item.id.isEmpty) return null;
+      return '${tv ? 'jfseries' : 'jfmovie'}:${item.id}@${item.serverId}';
+    }
     return '${tv ? 'tv' : 'movie'}:$tmdb';
   }
 
@@ -222,10 +227,22 @@ class TitleBadges extends ChangeNotifier {
       await repo.ensureInitialized();
       if (!repo.isAvailable) return;
       final TitleBadgeInfo info;
-      if (key.startsWith('jfseries:')) {
+      if (key.startsWith('jfmovie:')) {
+        final rest = key.substring('jfmovie:'.length);
+        final at = rest.indexOf('@');
+        final tmdb = await _seriesTmdb(
+          rest.substring(at + 1),
+          rest.substring(0, at),
+        );
+        if (tmdb == null) return;
+        info = movieInfo(await repo.getMovieDetailsRaw(tmdb));
+      } else if (key.startsWith('jfseries:')) {
         final rest = key.substring('jfseries:'.length);
         final at = rest.indexOf('@');
-        final tmdb = await _seriesTmdb(rest.substring(at + 1), rest.substring(0, at));
+        final tmdb = await _seriesTmdb(
+          rest.substring(at + 1),
+          rest.substring(0, at),
+        );
         // Unknown series id: not remembered, so it is asked again next time.
         if (tmdb == null) return;
         info = seriesInfo(await repo.getTvDetailsRaw(tmdb));
