@@ -200,7 +200,10 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.favorites),
                       preference: UserPreferences.showFavoritesButton,
-                      title: _pirate(l10n.showFavoritesButton, l10n.tgNavTreasure),
+                      title: _pirate(
+                        l10n.showFavoritesButton,
+                        l10n.tgNavTreasure,
+                      ),
                       subtitle: l10n.settingsShowFavoritesButtonInNavigation,
                       icon: Icons.favorite,
                       onChanged: _pushPersonalizationSync,
@@ -253,7 +256,10 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                     SwitchPreferenceTile(
                       key: const ValueKey(BottomNavTab.discover),
                       preference: UserPreferences.showSeerrButton,
-                      title: _pirate(l10n.showSeerrButton, l10n.tgNavBountyBoard),
+                      title: _pirate(
+                        l10n.showSeerrButton,
+                        l10n.tgNavBountyBoard,
+                      ),
                       subtitle: l10n.settingsShowSeerrButtonInNavigation,
                       iconBuilder: (size, color) => Image.asset(
                         'assets/icons/seerr.png',
@@ -271,6 +277,19 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
                       icon: Icons.download_for_offline,
                       onChanged: _pushPersonalizationSync,
                     ),
+                  // SmartTube: the switch is only there when SmartTube is installed.
+                  FutureBuilder<String?>(
+                    future: SmartTube.installedPackage(),
+                    builder: (context, snap) => snap.data == null
+                        ? const SizedBox.shrink()
+                        : SwitchPreferenceTile(
+                            preference: UserPreferences.tgShowSmartTubeButton,
+                            title: appL10n().tgShowSmartTubeButton,
+                            subtitle: appL10n().tgShowSmartTubeButtonSubtitle,
+                            icon: Icons.smart_display_rounded,
+                            onChanged: _pushPersonalizationSync,
+                          ),
+                  ),
                   SwitchPreferenceTile(
                     preference: UserPreferences.showServerMessagesButton,
                     title: l10n.serverMessagesShowButton,
@@ -301,4 +320,6 @@ class _NavigationCategoryScreenState extends State<_NavigationCategoryScreen> {
 /// Under Tortuga the menu uses pirate names; the setting shows both, so the
 /// switch for "Roll the dice" can be found as "Show Shuffle Button".
 String _pirate(String title, String pirateName) =>
-    ThemeRegistry.active.id == ThemeRegistry.tortugaId ? '$title ($pirateName)' : title;
+    ThemeRegistry.active.id == ThemeRegistry.tortugaId
+    ? '$title ($pirateName)'
+    : title;

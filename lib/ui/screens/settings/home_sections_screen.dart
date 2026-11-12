@@ -31,7 +31,9 @@ import '../../widgets/settings/clean_settings_typography.dart';
 import '../../widgets/settings/preference_tiles.dart';
 import '../../widgets/settings/settings_section_header.dart';
 import '../../../l10n/app_localizations.dart';
+
 import 'package:moonfin/util/app_l10n.dart';
+
 import 'settings_app_bar.dart';
 
 const double _kHomeSectionTileRadius = 16;
@@ -555,39 +557,31 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
     }
   }
 
-  bool _isAnyTmdbSectionEnabled() =>
-      UserPreferences.tmdbSectionEnabled.values.any(_prefs.get);
-
   bool _isTmdbRowEnabled(HomeSectionType type) {
     final prefKey = UserPreferences.tmdbSectionEnabled[type];
     if (prefKey == null) return false;
     return _prefs.get(prefKey);
   }
 
-  void _disableSeerrHomeRow(HomeSectionType type) {
+  void _setSeerrHomeRow(HomeSectionType type, bool enabled) {
     final seerrType = type.seerrRowType;
     if (seerrType == null) return;
     final seerrPrefs = GetIt.instance<SeerrPreferences>();
     final configs = List<SeerrRowConfig>.from(seerrPrefs.homeRowsConfig);
     final idx = configs.indexWhere((c) => c.type == seerrType);
     if (idx >= 0) {
-      configs[idx] = configs[idx].copyWith(enabled: false);
+      configs[idx] = configs[idx].copyWith(enabled: enabled);
       seerrPrefs.setHomeRowsConfig(configs);
     } else {
       configs.add(
-        SeerrRowConfig(type: seerrType, enabled: false, order: configs.length),
+        SeerrRowConfig(
+          type: seerrType,
+          enabled: enabled,
+          order: configs.length,
+        ),
       );
       seerrPrefs.setHomeRowsConfig(configs);
     }
-  }
-
-  bool _isAnyImdbSectionEnabled() {
-    return _prefs.get(UserPreferences.imdbTop250MoviesEnabled) ||
-        _prefs.get(UserPreferences.imdbTop250TvShowsEnabled) ||
-        _prefs.get(UserPreferences.imdbMostPopularMoviesEnabled) ||
-        _prefs.get(UserPreferences.imdbMostPopularTvShowsEnabled) ||
-        _prefs.get(UserPreferences.imdbLowestRatedMoviesEnabled) ||
-        _prefs.get(UserPreferences.imdbTopEnglishMoviesEnabled);
   }
 
   bool _isImdbRowEnabled(HomeSectionType type) {
@@ -629,8 +623,6 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
     final showGenresRows = _prefs.get(UserPreferences.displayGenresRows);
     final showPlaylistsRows = _prefs.get(UserPreferences.displayPlaylistsRows);
     final showSeerrRows = GetIt.instance<PluginSyncService>().seerrAvailable;
-    final showImdbRows = _isAnyImdbSectionEnabled();
-    final showTmdbRows = _isAnyTmdbSectionEnabled();
 
     final hiddenByFavorites =
         !showFavoritesRows && _isFavoriteSectionType(section.type);
@@ -667,23 +659,16 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         (section.type == HomeSectionType.sonarrCalendar &&
             !_prefs.get(UserPreferences.enableSonarrCalendar));
     final hiddenBySeerr =
-        (_isSeerrSectionType(section.type) &&
-            (!showSeerrRows ||
-                !GetIt.instance<SeerrPreferences>().isSeerrHomeRowEnabled(
-                  section.type,
-                ))) ||
-        // Like Seerr's own rows, a slider row switched off goes back to Seerr
-        // Lists, where it's switched on again.
+        // A Seerr row switched off stays in the list, switched off, like any
+        // other row (2026-11-12: they vanished to Seerr Lists).
+        (_isSeerrSectionType(section.type) && !showSeerrRows) ||
         (isSeerrSliderSection(section) &&
             (!showSeerrRows ||
-                !section.enabled ||
                 _unshownSeerrSliderIds.contains(section.stableId)));
-    final hiddenByImdb =
-        _isImdbSectionType(section.type) &&
-        (!showImdbRows || !_isImdbRowEnabled(section.type));
-    final hiddenByTmdb =
-        _isTmdbSectionType(section.type) &&
-        (!showTmdbRows || !_isTmdbRowEnabled(section.type));
+    // IMDb and TMDB rows switched off stay listed, switched off, so they can
+    // be switched on again here.
+    const hiddenByImdb = false;
+    const hiddenByTmdb = false;
     final hiddenBySeasonal =
         section.type == HomeSectionType.seasonal &&
         (!GetIt.instance<PluginSyncService>().pluginAvailable ||
@@ -766,8 +751,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
     List<int> visibleIndices,
     AppLocalizations l10n, {
     required bool hasEnabledRows,
-    required Widget Function(BuildContext context, int sectionIndex)
-    rowBuilder,
+    required Widget Function(BuildContext context, int sectionIndex) rowBuilder,
   }) {
     final groups = SplayTreeMap<int, List<int>>();
     for (final i in visibleIndices) {
@@ -880,6 +864,13 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
   /// every other type.
   bool? _toggleAuthoritativeEnabled(HomeSectionType type) {
     if (_isImdbSectionType(type)) return _isImdbRowEnabled(type);
+    if (_isTmdbSectionType(type)) return _isTmdbRowEnabled(type);
+    // A Seerr row switched off in Seerr's own row settings shows as off here.
+    if (_isSeerrSectionType(type) &&
+        GetIt.instance.isRegistered<SeerrPreferences>() &&
+        !GetIt.instance<SeerrPreferences>().isSeerrHomeRowEnabled(type)) {
+      return false;
+    }
     if (type == HomeSectionType.seasonal) {
       return _prefs.get(UserPreferences.seasonalRowEnabled);
     }
@@ -942,7 +933,8 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
         final mergedPlaylistSections = _mergePlaylistSections(
           discoveredPlaylists,
         );
-        final mergedSeerrSliderSections = discoveredSeerrSliders != null &&
+        final mergedSeerrSliderSections =
+            discoveredSeerrSliders != null &&
             _mergeSeerrSliderSections(discoveredSeerrSliders);
 
         final beforeIds = _sections.map((s) => s.stableId).toList();
@@ -1000,8 +992,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
     var others = const <ServerUserSession>[];
     try {
       others = [
-        for (final session in await GetIt.instance<MultiServerRepository>()
-            .getLoggedInServers())
+        for (final session
+            in await GetIt.instance<MultiServerRepository>()
+                .getLoggedInServers())
           if (normalizeServerBaseUrl(session.client.baseUrl) !=
               normalizeServerBaseUrl(active.baseUrl))
             session,
@@ -1553,8 +1546,8 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
           _sections[i].stableId,
     ];
     final at = leaving.indexOf(toggledStableId);
-    if (!enabled && _isSeerrSectionType(toggled.type)) {
-      _disableSeerrHomeRow(toggled.type);
+    if (_isSeerrSectionType(toggled.type)) {
+      _setSeerrHomeRow(toggled.type, enabled);
     }
 
     final nodeMap = <String, FocusNode>{};
@@ -1827,14 +1820,18 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                 SkeletonBox(
                                   width: 120.0 + ((i * 17) % 80),
                                   height: 15,
-                                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
                                 ),
                                 if (i % 3 != 0) ...[
                                   const SizedBox(height: 6),
                                   SkeletonBox(
                                     width: 80.0 + ((i * 13) % 50),
                                     height: 11,
-                                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(4),
+                                    ),
                                   ),
                                 ],
                               ],
@@ -2001,18 +1998,15 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       );
       if (nextUpIndex >= 0) {
         final nextUpSection = _sections[nextUpIndex];
-        final isNextUpEmpty = _emptySectionIds.contains(
-          nextUpSection.stableId,
-        );
+        final isNextUpEmpty = _emptySectionIds.contains(nextUpSection.stableId);
 
         return Padding(
           key: const ValueKey('merged_resume_nextup'),
           padding: _kHomeSectionTileOuterPadding,
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerLow.withValues(alpha: 0.82),
+              color: Theme.of(context).colorScheme.surfaceContainerLow
+                  .withValues(alpha: 0.82),
               borderRadius: AppRadius.circular(_kHomeSectionTileRadius),
               border: Border.all(
                 color: const Color(0xFF00F0FF), // Neon cyan border
@@ -2049,8 +2043,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                     : Icons.check_box_outline_blank,
                               ),
                               focused: false,
-                              iconColor: AppColorScheme.onSurface
-                                  .withValues(alpha: 0.78),
+                              iconColor: AppColorScheme.onSurface.withValues(
+                                alpha: 0.78,
+                              ),
                             ),
                             title: Text(
                               _labelFor(section, l10n),
@@ -2096,8 +2091,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                     : Icons.check_box_outline_blank,
                               ),
                               focused: false,
-                              iconColor: AppColorScheme.onSurface
-                                  .withValues(alpha: 0.78),
+                              iconColor: AppColorScheme.onSurface.withValues(
+                                alpha: 0.78,
+                              ),
                             ),
                             title: Text(
                               _labelFor(nextUpSection, l10n),
@@ -2142,8 +2138,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       UserPreferences.mergeRadarrSonarrCalendars,
     );
     final isMergedCalendars =
-        mergeCalendarsEnabled &&
-        section.type == HomeSectionType.radarrCalendar;
+        mergeCalendarsEnabled && section.type == HomeSectionType.radarrCalendar;
 
     if (isMergedCalendars) {
       final sonarrIndex = _sections.indexWhere(
@@ -2151,18 +2146,15 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       );
       if (sonarrIndex >= 0) {
         final sonarrSection = _sections[sonarrIndex];
-        final isSonarrEmpty = _emptySectionIds.contains(
-          sonarrSection.stableId,
-        );
+        final isSonarrEmpty = _emptySectionIds.contains(sonarrSection.stableId);
 
         return Padding(
           key: const ValueKey('merged_radarr_sonarr_calendars'),
           padding: _kHomeSectionTileOuterPadding,
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerLow.withValues(alpha: 0.82),
+              color: Theme.of(context).colorScheme.surfaceContainerLow
+                  .withValues(alpha: 0.82),
               borderRadius: AppRadius.circular(_kHomeSectionTileRadius),
               border: Border.all(
                 color: const Color(0xFF00F0FF), // Neon cyan border
@@ -2199,8 +2191,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                     : Icons.check_box_outline_blank,
                               ),
                               focused: false,
-                              iconColor: AppColorScheme.onSurface
-                                  .withValues(alpha: 0.78),
+                              iconColor: AppColorScheme.onSurface.withValues(
+                                alpha: 0.78,
+                              ),
                             ),
                             title: Text(
                               _labelFor(section, l10n),
@@ -2246,8 +2239,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                     : Icons.check_box_outline_blank,
                               ),
                               focused: false,
-                              iconColor: AppColorScheme.onSurface
-                                  .withValues(alpha: 0.78),
+                              iconColor: AppColorScheme.onSurface.withValues(
+                                alpha: 0.78,
+                              ),
                             ),
                             title: Text(
                               _labelFor(sonarrSection, l10n),
@@ -2294,10 +2288,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       child: Opacity(
         opacity: isEmpty ? 0.45 : 1.0,
         child: Container(
-          decoration: _homeSectionTileDecoration(
-            context,
-            focused: false,
-          ),
+          decoration: _homeSectionTileDecoration(context, focused: false),
           child: Material(
             type: MaterialType.transparency,
             child: ListTile(
@@ -2314,9 +2305,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                       : Icons.check_box_outline_blank,
                 ),
                 focused: false,
-                iconColor: AppColorScheme.onSurface.withValues(
-                  alpha: 0.78,
-                ),
+                iconColor: AppColorScheme.onSurface.withValues(alpha: 0.78),
               ),
               title: Row(
                 children: [
@@ -2362,9 +2351,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: kCleanSettingsFontFamily,
-                        color: AppColorScheme.onSurface.withValues(
-                          alpha: 0.7,
-                        ),
+                        color: AppColorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     )
                   : (_isAudioSectionType(section.type)
@@ -2384,8 +2371,9 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontFamily: kCleanSettingsFontFamily,
-                                    color: AppColorScheme.onSurface
-                                        .withValues(alpha: 0.7),
+                                    color: AppColorScheme.onSurface.withValues(
+                                      alpha: 0.7,
+                                    ),
                                   ),
                                 )
                               : (_isImdbSectionType(section.type)
@@ -2393,8 +2381,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                         appL10n().tgImdbList,
                                         style: TextStyle(
                                           fontSize: 12,
-                                          fontFamily:
-                                              kCleanSettingsFontFamily,
+                                          fontFamily: kCleanSettingsFontFamily,
                                           color: AppColorScheme.onSurface
                                               .withValues(alpha: 0.7),
                                         ),
@@ -2406,11 +2393,8 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                                                 fontSize: 12,
                                                 fontFamily:
                                                     kCleanSettingsFontFamily,
-                                                color: AppColorScheme
-                                                    .onSurface
-                                                    .withValues(
-                                                      alpha: 0.7,
-                                                    ),
+                                                color: AppColorScheme.onSurface
+                                                    .withValues(alpha: 0.7),
                                               ),
                                             )
                                           : null)))),
@@ -2425,9 +2409,7 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
                       dragIndex,
                       Icon(
                         Icons.drag_handle,
-                        color: AppColorScheme.onSurface.withValues(
-                          alpha: 0.7,
-                        ),
+                        color: AppColorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                 ],
@@ -2869,14 +2851,15 @@ class _HomeSectionsScreenState extends State<HomeSectionsScreen>
       },
       HomeSectionPluginSource.genres => appL10n().tgGenresRow,
       HomeSectionPluginSource.playlists => appL10n().tgPlaylistsRow,
-      HomeSectionPluginSource.seerr =>
-        AppLocalizations.of(context).seerrDiscoveryRows,
+      HomeSectionPluginSource.seerr => AppLocalizations.of(
+        context,
+      ).seerrDiscoveryRows,
       HomeSectionPluginSource.custom => (() {
         Map<String, dynamic> rowConfig = {};
         try {
-          rowConfig =
-              jsonDecode(section.pluginAdditionalData ?? '{}')
-                  as Map<String, dynamic>;
+          rowConfig = jsonDecode(
+            section.pluginAdditionalData ?? '{}',
+          ) as Map<String, dynamic>;
         } catch (_) {}
         final source = rowConfig['source'] as String? ?? 'imdb';
         final type = rowConfig['type'] as String? ?? 'user_list';
@@ -3275,22 +3258,14 @@ String homeSectionTypeLabel(HomeSectionType type, AppLocalizations l10n) =>
       HomeSectionType.audioArtists => l10n.artists,
       HomeSectionType.audioAlbums => l10n.albums,
       HomeSectionType.audioPlaylists => l10n.audioPlaylists,
-      HomeSectionType.favoriteMovies =>
-        l10n.tgFavoriteMovies,
-      HomeSectionType.favoriteSeries =>
-        l10n.tgFavoriteSeries,
-      HomeSectionType.favoriteEpisodes =>
-        l10n.tgFavoriteEpisodes,
-      HomeSectionType.favoritePeople =>
-        l10n.tgFavoritePeople,
-      HomeSectionType.favoriteArtists =>
-        l10n.tgFavoriteArtists,
-      HomeSectionType.favoriteMusicVideos =>
-        l10n.tgFavoriteMusicVideos,
-      HomeSectionType.favoriteAlbums =>
-        l10n.tgFavoriteAlbums,
-      HomeSectionType.favoriteSongs =>
-        l10n.tgFavoriteSongs,
+      HomeSectionType.favoriteMovies => l10n.tgFavoriteMovies,
+      HomeSectionType.favoriteSeries => l10n.tgFavoriteSeries,
+      HomeSectionType.favoriteEpisodes => l10n.tgFavoriteEpisodes,
+      HomeSectionType.favoritePeople => l10n.tgFavoritePeople,
+      HomeSectionType.favoriteArtists => l10n.tgFavoriteArtists,
+      HomeSectionType.favoriteMusicVideos => l10n.tgFavoriteMusicVideos,
+      HomeSectionType.favoriteAlbums => l10n.tgFavoriteAlbums,
+      HomeSectionType.favoriteSongs => l10n.tgFavoriteSongs,
       HomeSectionType.collections => l10n.collections,
       HomeSectionType.genres => l10n.genres,
       HomeSectionType.studios => l10n.studios,

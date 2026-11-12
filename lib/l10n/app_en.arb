@@ -822,6 +822,8 @@
     "tgNavSpyglass": "Spyglass",
     "@tgNavSpyglass": {"description": "Tortugarr"},
     "tgNavShuffle": "Roll the dice",
+    "tgShowSmartTubeButton": "Show SmartTube button",
+    "tgShowSmartTubeButtonSubtitle": "Opens SmartTube from the side menu",
     "@tgNavShuffle": {"description": "Tortugarr"},
     "tgNavGenres": "Charts",
     "@tgNavGenres": {"description": "Tortugarr"},

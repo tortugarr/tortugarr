@@ -756,6 +756,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tgNavShuffle => 'Kast terningen';
 
   @override
+  String get tgShowSmartTubeButton => 'Vis SmartTube-knapp';
+
+  @override
+  String get tgShowSmartTubeButtonSubtitle => 'Åpner SmartTube fra sidemenyen';
+
+  @override
   String get tgNavGenres => 'Sjøkart';
 
   @override

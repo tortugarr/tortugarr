@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'top_lists_settings_screen.dart';
 import 'poster_badges_settings_screen.dart';
 
@@ -20,6 +21,7 @@ import '../../../data/services/achievements_service.dart';
 import '../../../data/services/auto_download_service.dart';
 import '../../../data/services/plugin_sync_service.dart';
 import '../../../data/services/tortugarr/download_features.dart';
+import '../../../data/services/tortugarr/smart_tube.dart';
 import '../../../data/services/custom_external_lists_service.dart';
 import '../../../data/services/topshelf_service.dart';
 import '../../../data/models/media_segment.dart';
@@ -126,6 +128,7 @@ import '../detail/detail_buttons.dart';
 import '../detail/playlist_sort_filter_bar.dart';
 import '../playback/osd_buttons.dart';
 import '../syncplay/syncplay_screen.dart';
+
 import 'package:moonfin/util/app_l10n.dart';
 
 part 'panel/settings_panel_infra.dart';
@@ -192,9 +195,9 @@ Future<void> _openThemeEditor(BuildContext context) async {
 
   if (!ok && context.mounted) {
     final l10n = AppLocalizations.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.adminCouldNotOpenUrl('$uri'))),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.adminCouldNotOpenUrl('$uri'))));
   }
 }
 
@@ -209,9 +212,12 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
   // The panel opens on its top entry. Admins and other users get a node of
   // their own: the admin entries can appear on top after the panel opened.
   final _firstFocusNode = FocusNode(debugLabel: 'TvSettingsPanelFirstItem');
-  final _firstUserFocusNode = FocusNode(debugLabel: 'TvSettingsPanelFirstUserItem');
+  final _firstUserFocusNode = FocusNode(
+    debugLabel: 'TvSettingsPanelFirstUserItem',
+  );
 
-  FocusNode get _topNode => _shownAsAdmin == true ? _firstFocusNode : _firstUserFocusNode;
+  FocusNode get _topNode =>
+      _shownAsAdmin == true ? _firstFocusNode : _firstUserFocusNode;
   final _searchController = TextEditingController();
   final _searchFieldFocus = FocusNode(debugLabel: 'SettingsSearchField');
   final _searchTvFieldKey = GlobalKey<CustomTVTextFieldState>();
@@ -247,8 +253,11 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
     await pin.removePin();
   }
 
-  void _openAdmin(BuildContext context) =>
-      closeThenNavigateTopLevel(context, _closeSettingsPanel, Destinations.admin);
+  void _openAdmin(BuildContext context) => closeThenNavigateTopLevel(
+    context,
+    _closeSettingsPanel,
+    Destinations.admin,
+  );
 
   void _closeSettingsPanel() {
     final rootNavigator = Navigator.of(context, rootNavigator: true);
@@ -288,7 +297,6 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
       _searchFieldFocus.onKeyEvent = _onDesktopSearchKey;
     }
   }
-
 
   @override
   void dispose() {
@@ -338,7 +346,9 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
     final showAdmin =
         !kidsMode && ref.watch(isAdminProvider) && adminServerSupported();
     final enablePanelAutofocus = !PlatformDetection.useMobileUi;
-    if (_shownAsAdmin != null && _shownAsAdmin != showAdmin && enablePanelAutofocus) {
+    if (_shownAsAdmin != null &&
+        _shownAsAdmin != showAdmin &&
+        enablePanelAutofocus) {
       _requestInitialFocus();
     }
     _shownAsAdmin = showAdmin;
@@ -374,12 +384,14 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
               onTap: () =>
                   context.pushSettingsScreen(const _TortugarrLanguageScreen()),
             ),
-            if (DownloadFeatures.viaPlugin && DownloadFeatures.capabilities.value.notifications)
+            if (DownloadFeatures.viaPlugin &&
+                DownloadFeatures.capabilities.value.notifications)
               _PanelEntry(
                 icon: Icons.notifications_active_outlined,
                 title: appL10n().tgNotifyTitle,
                 subtitle: appL10n().tgNotifySubtitle,
-                onTap: () => context.pushSettingsScreen(const NotificationsScreen()),
+                onTap: () =>
+                    context.pushSettingsScreen(const NotificationsScreen()),
               ),
             _PanelEntry(
               icon: Icons.lock,
@@ -397,7 +409,8 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
               icon: Icons.palette,
               title: l10n.appearance,
               subtitle: l10n.settingsAppearanceSubtitle,
-              onTap: () => context.pushSettingsScreen(const _AppearanceScreen()),
+              onTap: () =>
+                  context.pushSettingsScreen(const _AppearanceScreen()),
             ),
             _PanelEntry(
               icon: Icons.play_circle,
@@ -426,7 +439,8 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
               icon: Icons.info_outline,
               title: l10n.aboutTitle,
               subtitle: l10n.settingsAboutSubtitle,
-              onTap: () => context.pushSettingsScreen(const _AboutCategoryScreen()),
+              onTap: () =>
+                  context.pushSettingsScreen(const _AboutCategoryScreen()),
             ),
           ];
     if (enablePanelAutofocus && entries.isNotEmpty) {
@@ -467,7 +481,10 @@ class _SettingsSidePanelState extends ConsumerState<SettingsSidePanel> {
                           // tile must keep its own focus state, not inherit the
                           // one of whatever stood in its place before.
                           for (final entry in entries)
-                            _PanelEntryTile(key: ValueKey(entry.title), entry: entry),
+                            _PanelEntryTile(
+                              key: ValueKey(entry.title),
+                              entry: entry,
+                            ),
                         ],
                       ),
                     ],

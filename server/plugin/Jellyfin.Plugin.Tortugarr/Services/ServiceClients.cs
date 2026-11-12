@@ -270,10 +270,18 @@ public sealed class QbitClient : ITorrentClient
         await Request(HttpMethod.Post, "/api/v2/app/shutdown", null, cookie, ct).ConfigureAwait(false);
     }
 
+    /// <summary>qBittorrent preference: a category's new folder does not move its torrents.</summary>
+    internal const string KeepTorrentsInPlace = "{\"category_changed_tmm_enabled\":false}";
+
     /// <summary>Points a category at a folder; torrents added to it from now on save there.</summary>
     public async Task EditCategory(string category, string savePath, CancellationToken ct)
     {
         var cookie = await Login(ct).ConfigureAwait(false);
+        // 2026-11-12: with "When Category Save Path changed: Relocate torrents" on, every switch of
+        // the drive to fill moved finished torrents to the other drive, under Radarr's import
+        // (Rocky III failed half copied). Switch that to "manual mode": torrents stay where they are.
+        var pref = new FormUrlEncodedContent(new Dictionary<string, string> { ["json"] = KeepTorrentsInPlace });
+        await Request(HttpMethod.Post, "/api/v2/app/setPreferences", pref, cookie, ct).ConfigureAwait(false);
         var form = new FormUrlEncodedContent(new Dictionary<string, string> { ["category"] = category, ["savePath"] = savePath });
         await Request(HttpMethod.Post, "/api/v2/torrents/editCategory", form, cookie, ct).ConfigureAwait(false);
     }

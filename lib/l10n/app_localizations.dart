@@ -1378,6 +1378,18 @@ abstract class AppLocalizations {
   /// **'Roll the dice'**
   String get tgNavShuffle;
 
+  /// No description provided for @tgShowSmartTubeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Show SmartTube button'**
+  String get tgShowSmartTubeButton;
+
+  /// No description provided for @tgShowSmartTubeButtonSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens SmartTube from the side menu'**
+  String get tgShowSmartTubeButtonSubtitle;
+
   /// Tortugarr
   ///
   /// In en, this message translates to:

@@ -1282,6 +1282,11 @@ class UserPreferences extends ChangeNotifier {
   /// separated (Settings > Appearance > Home Screen > Top lists).
   /// Trailers open in SmartTube (when installed) instead of the built-in
   /// trailer player.
+  static final tgShowSmartTubeButton = Preference<bool>(
+    key: 'tg_show_smarttube_button',
+    defaultValue: true,
+  );
+
   static final tgTrailersInSmartTube = Preference<bool>(
     key: 'tg_trailers_in_smarttube',
     defaultValue: true,

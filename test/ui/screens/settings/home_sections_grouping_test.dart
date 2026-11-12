@@ -180,7 +180,22 @@ void main() {
     ]) {
       expect(top(tester, label), greaterThan(top(tester, 'Seerr')));
     }
-    expect(find.text('Studios'), findsOneWidget);
+    // Jellyfin's Studios row, and Seerr's Studios row listed switched off.
+    expect(find.text('Studios'), findsNWidgets(2));
+  });
+
+  testWidgets('a Seerr row switched off stays listed, switched off', (
+    tester,
+  ) async {
+    when(() => sync.seerrAvailable).thenReturn(true);
+    final seerrPrefs = _MockSeerrPreferences();
+    when(() => seerrPrefs.isSeerrHomeRowEnabled(any())).thenReturn(false);
+    GetIt.instance.registerSingleton<SeerrPreferences>(seerrPrefs);
+    await pump(tester, InterfaceLayout.phone);
+
+    await tester.tap(find.text('Seerr'));
+    await tester.pumpAndSettle();
+    expect(find.text('Seerr Browse'), findsOneWidget);
   });
 
   testWidgets('ticking a grouped row moves it to Enabled and back', (

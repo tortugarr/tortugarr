@@ -759,6 +759,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tgNavShuffle => 'Roll the dice';
 
   @override
+  String get tgShowSmartTubeButton => 'Show SmartTube button';
+
+  @override
+  String get tgShowSmartTubeButtonSubtitle =>
+      'Opens SmartTube from the side menu';
+
+  @override
   String get tgNavGenres => 'Charts';
 
   @override
