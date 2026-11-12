@@ -294,6 +294,13 @@ On many Android TVs, yes, with the free app **Button Mapper** (by flar2) from th
 remap the button to open Tortugarr. Add the button in Button Mapper *before* you disable the
 original app, or the TV may never report the key.
 
+**What is the SmartTube entry in the menu?**
+A shortcut to **SmartTube**, an ad-free YouTube app for Android TV by Yuriy Liskov
+([github.com/yuliskov/SmartTube](https://github.com/yuliskov/SmartTube)). Tortugarr only starts
+it, and SmartTube keeps its own settings and updates. **Install SmartTube on the TV first**: the
+entry shows only when it is there. Trailers can open in it too (Settings › Appearance › Details
+Page › Play trailers in SmartTube).
+
 **After remapping, holding the volume button moves only one step at a time.**
 On some TVs (TCL in particular) any app that listens to key presses breaks hold-to-repeat on
 volume. That is a limit of the TV, not of Tortugarr. You choose: remapped buttons, or smooth

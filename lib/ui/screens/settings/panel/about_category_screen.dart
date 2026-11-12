@@ -52,6 +52,20 @@ class _AboutCategoryScreen extends StatelessWidget {
               title: l10n.settingsBuiltOnOriginal,
             ),
           ),
+          // SmartTube is only opened as its own app; credit its author.
+          _TvSettingsListTile(
+            leading: const Icon(Icons.smart_display_rounded),
+            title: Text(l10n.tgSmartTubeCreditTitle),
+            subtitle: Text(
+              '${l10n.tgSmartTubeCredit}\n$_smartTubeGitHub',
+              style: const TextStyle(fontSize: 13),
+            ),
+            onTap: () => showQrOrLaunch(
+              context,
+              url: _smartTubeGitHub,
+              title: l10n.tgSmartTubeCreditTitle,
+            ),
+          ),
           _TvSettingsListTile(
             leading: const Icon(Icons.auto_awesome),
             title: Text(l10n.runSetupAgain),
@@ -195,6 +209,7 @@ class _AboutCategoryScreen extends StatelessWidget {
 
 const _tortugarrGitHub = 'https://github.com/tortugarr';
 const _moonfinGitHub = 'https://github.com/Moonfin-Client/Moonfin-Core';
+const _smartTubeGitHub = 'https://github.com/yuliskov/SmartTube';
 const _tmdbNoticeEnglish =
     'This product uses the TMDB API but is not endorsed or certified by TMDB.';
 

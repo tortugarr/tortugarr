@@ -779,6 +779,13 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tgLogoStyleFull => 'Logo';
 
   @override
+  String get tgSmartTubeCreditTitle => 'SmartTube shortcut';
+
+  @override
+  String get tgSmartTubeCredit =>
+      'The SmartTube entry opens SmartTube, an ad-free YouTube app for Android TV by Yuriy Liskov. It is a separate project: install it yourself first; Tortugarr only starts it.';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

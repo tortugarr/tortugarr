@@ -778,6 +778,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tgLogoStyleFull => 'Logo';
 
   @override
+  String get tgSmartTubeCreditTitle => 'SmartTube-snarvei';
+
+  @override
+  String get tgSmartTubeCredit =>
+      'SmartTube-valget åpner SmartTube, en reklamefri YouTube-app for Android TV laget av Yuriy Liskov. Det er et eget prosjekt: installer det selv først; Tortugarr bare starter det.';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

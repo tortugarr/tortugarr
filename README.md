@@ -326,6 +326,10 @@ room. If it is useful to you, it can be so much more, and **you are warmly invit
 
 Every pirate ship started as somebody else's boat. This one started as Moonfin.
 
+The menu's **SmartTube** entry is a shortcut to [SmartTube](https://github.com/yuliskov/SmartTube)
+by Yuriy Liskov, an ad-free YouTube app for Android TV. It is a separate project: install SmartTube
+on the TV first, and Tortugarr will offer to open it.
+
 ## What is in this repository
 
 | Folder | What |

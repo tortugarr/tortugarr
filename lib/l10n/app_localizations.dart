@@ -1420,6 +1420,18 @@ abstract class AppLocalizations {
   /// **'Logo'**
   String get tgLogoStyleFull;
 
+  /// Tortugarr About: credit for SmartTube
+  ///
+  /// In en, this message translates to:
+  /// **'SmartTube shortcut'**
+  String get tgSmartTubeCreditTitle;
+
+  /// Tortugarr About: credit for SmartTube
+  ///
+  /// In en, this message translates to:
+  /// **'The SmartTube entry opens SmartTube, an ad-free YouTube app for Android TV by Yuriy Liskov. It is a separate project: install it yourself first; Tortugarr only starts it.'**
+  String get tgSmartTubeCredit;
+
   /// Harbor home: the random picks shown above the first deck
   ///
   /// In en, this message translates to:
