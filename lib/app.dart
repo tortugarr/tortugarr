@@ -26,7 +26,9 @@ import 'data/services/seerr_notification_service.dart';
 import 'data/services/plugin_sync_service.dart';
 import 'data/services/server_messages_service.dart';
 import 'data/services/tortugarr/download_notice_watcher.dart';
+
 import 'package:server_core/server_core.dart' show ActivityLogEntry;
+
 import 'data/services/retro_artwork/retro_artwork_data_source.dart';
 import 'data/services/theme_music_service.dart';
 import 'data/services/deep_link_service.dart';
@@ -42,6 +44,7 @@ import 'ui/navigation/deferred_route_pop.dart';
 import 'ui/navigation/deep_link_navigator.dart';
 import 'ui/navigation/destinations.dart';
 import 'ui/navigation/home_refresh_bus.dart';
+import 'ui/theme/tortugarr_defaults.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/theme/app_theme_controller.dart';
 import 'ui/widgets/app_update_banner.dart';
@@ -71,11 +74,14 @@ import 'util/idiom/glass_capability.dart';
 import 'util/platform_detection.dart';
 import 'util/tv_ui_scale.dart';
 import 'ui/widgets/overlay_sheet.dart';
+
 import 'package:moonfin_design/moonfin_design.dart';
+
 import 'util/focus/key_event_utils.dart';
 import 'util/focus/gamepad/gamepad_navigation_scope.dart';
 import 'util/focus/gamepad/gamepad_key_synthesizer.dart';
 import 'util/focus/open_popup.dart';
+
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 
 class MoonfinApp extends StatefulWidget {
@@ -97,6 +103,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
     _prefs = GetIt.instance<UserPreferences>();
     CustomKeyboard.onStylePicked = (style) =>
         _prefs.set(UserPreferences.keyboardStyle, style);
+    applyTortugarrDefaultsOnce(_prefs);
     _themeController = AppThemeController.fromPreferences(_prefs);
     _lastResolvedLocale = _resolveLocale();
     AppUiIdiomResolver.setOverride(_prefs.get(UserPreferences.interfaceStyle));
@@ -405,9 +412,8 @@ class _MoonfinAppState extends State<MoonfinApp> {
                     final scale = _prefs
                         .get(UserPreferences.desktopUiScale)
                         .scaleFactor;
-                    final systemScale = MediaQuery.textScalerOf(
-                      context,
-                    ).scale(1.0);
+                    final systemScale = MediaQuery.textScalerOf(context)
+                        .scale(1.0);
                     // The pixel font renders far larger and wider than a normal
                     // face at a given size, so shrink all text to keep dense
                     // layouts from overflowing.
@@ -854,11 +860,13 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       return true;
     }
 
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
     if (PlatformDetection.useDesktopUi &&
-        (key == LogicalKeyboardKey.f11 || (key == LogicalKeyboardKey.enter && altPressed))) {
+        (key == LogicalKeyboardKey.f11 ||
+            (key == LogicalKeyboardKey.enter && altPressed))) {
       unawaited(FullscreenHelper.toggle());
       return true;
     }
@@ -1039,10 +1047,12 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
 
     final key = event.logicalKey;
     final keys = HardwareKeyboard.instance.logicalKeysPressed;
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
-    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) && !altPressed) {
+    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) &&
+        !altPressed) {
       return activateFocusedTarget(context);
     }
 
@@ -1236,7 +1246,10 @@ class _ConnectivityListenerState extends ConsumerState<_ConnectivityListener>
           children: [
             for (final e in entries) ...[
               if (entries.length > 1)
-                Text(e.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text(
+                  e.name,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
               if (e.overview != null) Text(e.overview!),
               const SizedBox(height: 12),
             ],

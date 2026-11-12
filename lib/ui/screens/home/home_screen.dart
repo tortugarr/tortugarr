@@ -593,9 +593,9 @@ class _HomeShellState extends State<_HomeShell>
                       },
                     ),
                   const _GradientScrim(),
-                  if (!PlatformDetection.useMobileUi &&
-                      _userPrefs.get(UserPreferences.homeRowsStyle) ==
-                          HomeRowsStyle.harbor)
+                  // Harbor on TV and, with touch, on phones and tablets.
+                  if (_userPrefs.get(UserPreferences.homeRowsStyle) ==
+                      HomeRowsStyle.harbor)
                     Positioned.fill(
                       child: _HarborHome(
                         viewModel: _viewModel,

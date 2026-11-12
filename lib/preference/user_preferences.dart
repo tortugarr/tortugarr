@@ -962,7 +962,8 @@ class UserPreferences extends ChangeNotifier {
       get(playbackEnginePreference) == PlaybackEnginePreference.media3 &&
       !(PlatformDetection.isTV &&
           get(mpvOnBluetooth) &&
-          detectedAudioCapabilities.activeRouteType == AudioRouteType.bluetooth);
+          detectedAudioCapabilities.activeRouteType ==
+              AudioRouteType.bluetooth);
 
   AudioCapabilityProfile get detectedAudioCapabilities =>
       PlatformDetection.hasAudioCapabilities
@@ -1183,8 +1184,11 @@ class UserPreferences extends ChangeNotifier {
   /// [value] upper-cased when it is a two letter country code, else null.
   static String? parseCountryCode(String? value) {
     final trimmed = (value ?? '').trim();
-    final isCode = trimmed.length == 2 &&
-        trimmed.codeUnits.every((c) => (c >= 65 && c <= 90) || (c >= 97 && c <= 122));
+    final isCode =
+        trimmed.length == 2 &&
+        trimmed.codeUnits.every(
+          (c) => (c >= 65 && c <= 90) || (c >= 97 && c <= 122),
+        );
     return isCode ? trimmed.toUpperCase() : null;
   }
 
@@ -1262,9 +1266,8 @@ class UserPreferences extends ChangeNotifier {
 
   static final homeRowsStyle = EnumPreference(
     key: 'pref_home_rows_style',
-    defaultValue: PlatformDetection.useMobileUi
-        ? HomeRowsStyle.v1
-        : HomeRowsStyle.v2,
+    // Tortugarr's own home, on TV and phone.
+    defaultValue: HomeRowsStyle.harbor,
     values: HomeRowsStyle.values,
   );
 
@@ -1282,6 +1285,12 @@ class UserPreferences extends ChangeNotifier {
   /// separated (Settings > Appearance > Home Screen > Top lists).
   /// Trailers open in SmartTube (when installed) instead of the built-in
   /// trailer player.
+  /// Set once the one-time move to Tortuga + Harbor has run (see applyTortugarrDefaultsOnce).
+  static final tgDefaultsApplied = Preference<bool>(
+    key: 'tg_defaults_applied_v1',
+    defaultValue: false,
+  );
+
   static final tgShowSmartTubeButton = Preference<bool>(
     key: 'tg_show_smarttube_button',
     defaultValue: true,
@@ -1293,24 +1302,67 @@ class UserPreferences extends ChangeNotifier {
   );
 
   // Tortugarr poster badges (BB / MB / series network), 2026-11-12.
-  static final tgBadgesEnabled = Preference<bool>(key: 'tg_badges_enabled', defaultValue: true);
-  static final tgShowMockbusters = Preference<bool>(key: 'tg_show_mockbusters', defaultValue: true);
-  static final tgBbColor = Preference<String>(key: 'tg_bb_color', defaultValue: 'D9B44A');
-  static final tgMbColor = Preference<String>(key: 'tg_mb_color', defaultValue: 'E0703A');
-  static final tgBadgeOpacity = Preference<int>(key: 'tg_badge_opacity', defaultValue: 100);
-  static final tgBadgeCorner = Preference<String>(key: 'tg_badge_corner', defaultValue: 'topLeft');
-  static final tgBadgeSize = Preference<String>(key: 'tg_badge_size', defaultValue: 'medium');
-  static final tgNetworkLogos = Preference<bool>(key: 'tg_network_logos', defaultValue: true);
-  static final tgNetworkBoxColor = Preference<String>(key: 'tg_network_box_color_v2', defaultValue: 'FFFFFF');
-  static final tgNetworkOpacity = Preference<int>(key: 'tg_network_opacity_v2', defaultValue: 88);
-  static final tgNetworkCorner = Preference<String>(key: 'tg_network_corner', defaultValue: 'topRight');
+  static final tgBadgesEnabled = Preference<bool>(
+    key: 'tg_badges_enabled',
+    defaultValue: true,
+  );
+  static final tgShowMockbusters = Preference<bool>(
+    key: 'tg_show_mockbusters',
+    defaultValue: true,
+  );
+  static final tgBbColor = Preference<String>(
+    key: 'tg_bb_color',
+    defaultValue: 'D9B44A',
+  );
+  static final tgMbColor = Preference<String>(
+    key: 'tg_mb_color',
+    defaultValue: 'E0703A',
+  );
+  static final tgBadgeOpacity = Preference<int>(
+    key: 'tg_badge_opacity',
+    defaultValue: 100,
+  );
+  static final tgBadgeCorner = Preference<String>(
+    key: 'tg_badge_corner',
+    defaultValue: 'topLeft',
+  );
+  static final tgBadgeSize = Preference<String>(
+    key: 'tg_badge_size',
+    defaultValue: 'medium',
+  );
+  static final tgNetworkLogos = Preference<bool>(
+    key: 'tg_network_logos',
+    defaultValue: true,
+  );
+  static final tgNetworkBoxColor = Preference<String>(
+    key: 'tg_network_box_color_v2',
+    defaultValue: 'FFFFFF',
+  );
+  static final tgNetworkOpacity = Preference<int>(
+    key: 'tg_network_opacity_v2',
+    defaultValue: 88,
+  );
+  static final tgNetworkCorner = Preference<String>(
+    key: 'tg_network_corner',
+    defaultValue: 'topRight',
+  );
+
   /// 'mark' (N, D+, WB … on small cards) or 'full' (the studio's logo).
-  static final tgLogoStyle = Preference<String>(key: 'tg_logo_style_v2', defaultValue: 'logo');
-  static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache_v5', defaultValue: '');
+  static final tgLogoStyle = Preference<String>(
+    key: 'tg_logo_style_v2',
+    defaultValue: 'logo',
+  );
+  static final tgBadgeCache = Preference<String>(
+    key: 'tg_badge_cache_v5',
+    defaultValue: '',
+  );
 
   /// Harbor home: where the focused title's trailer plays after a short pause
   /// on it: 'background' (behind the text), 'corner' (a box top right) or 'off'.
-  static final tgHarborTrailer = Preference<String>(key: 'tg_harbor_trailer', defaultValue: 'background');
+  static final tgHarborTrailer = Preference<String>(
+    key: 'tg_harbor_trailer',
+    defaultValue: 'background',
+  );
 
   static final tgHiddenTopLists = Preference<String>(
     key: 'tg_hidden_top_lists',
@@ -1318,11 +1370,12 @@ class UserPreferences extends ChangeNotifier {
   );
 
   /// [tgHiddenTopLists] as a set.
-  Set<String> get tgHiddenTopListTitles => get(tgHiddenTopLists)
-      .split(',')
-      .map((s) => s.trim())
-      .where((s) => s.isNotEmpty)
-      .toSet();
+  Set<String> get tgHiddenTopListTitles =>
+      get(tgHiddenTopLists)
+          .split(',')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toSet();
 
   static final classicHomeRowsPadding = Preference<int>(
     key: 'pref_classic_home_rows_padding',
@@ -1704,7 +1757,7 @@ class UserPreferences extends ChangeNotifier {
 
   static final focusColor = EnumPreference(
     key: 'focus_color',
-    defaultValue: AppTheme.white,
+    defaultValue: AppTheme.tortugaBrass,
     values: AppTheme.values,
   );
 
@@ -1754,9 +1807,8 @@ class UserPreferences extends ChangeNotifier {
 
   static final visualTheme = EnumPreference(
     key: 'app_theme_id',
-    defaultValue: PlatformDetection.isApple || PlatformDetection.isAppleTV
-        ? VisualThemeId.glass
-        : VisualThemeId.moonfin,
+    // Tortugarr's own theme from the start, on every device (2026-11-12).
+    defaultValue: VisualThemeId.tortuga,
     values: VisualThemeId.values,
   );
 
@@ -1963,9 +2015,8 @@ class UserPreferences extends ChangeNotifier {
       ? RecommendationSystemSource.local
       : get(recommendationSystemSource);
 
-  bool get effectiveRecommendationsApplyParentalRatingCap => get(kidsModeEnabled)
-      ? true
-      : get(recommendationsApplyParentalRatingCap);
+  bool get effectiveRecommendationsApplyParentalRatingCap =>
+      get(kidsModeEnabled) ? true : get(recommendationsApplyParentalRatingCap);
 
   /// Default mobile view for the Live TV guide (Now/Next list vs compact grid).
   static final epgMobileView = EnumPreference(
@@ -2339,7 +2390,6 @@ class UserPreferences extends ChangeNotifier {
     key: 'pref_screensaver_dimming',
     defaultValue: 30,
   );
-
 
   /// TV: show the Downloads button in the menu all the time, not only while
   /// something downloads.
@@ -2775,6 +2825,7 @@ class UserPreferences extends ChangeNotifier {
     key: 'pref_subtitle_language',
     defaultValue: '',
   );
+
   /// Off keeps the single subtitle list, without the step that picks a
   /// primary or secondary track.
   static final secondarySubtitlesEnabled = Preference<bool>(
@@ -3385,13 +3436,12 @@ class UserPreferences extends ChangeNotifier {
     badges: mediaBarShowRatingBadges,
   );
 
-  static bool mediaBarModeDrawsRatings(String? mode) =>
-      const {
-        mediaBarModeMoonfin,
-        mediaBarModeMakd,
-        mediaBarModeGallery,
-        mediaBarModeBanner,
-      }.contains(normalizeMediaBarMode(mode));
+  static bool mediaBarModeDrawsRatings(String? mode) => const {
+    mediaBarModeMoonfin,
+    mediaBarModeMakd,
+    mediaBarModeGallery,
+    mediaBarModeBanner,
+  }.contains(normalizeMediaBarMode(mode));
 
   /// Content ratings the viewer has blocked, as an upper cased CSV. Blocked
   /// means hidden from every list and refused on open and on play, not just
@@ -3795,10 +3845,7 @@ class UserPreferences extends ChangeNotifier {
   /// kept out of the synced fields so a new device asks rather than inheriting
   /// somebody else's answer.
   static Preference<int> setupWizardVersionForServer(String serverKey) =>
-      Preference(
-        key: 'pref_setup_wizard_version_$serverKey',
-        defaultValue: 0,
-      );
+      Preference(key: 'pref_setup_wizard_version_$serverKey', defaultValue: 0);
 
   /// Bumped only when a release adds a step that earns its place. Everything
   /// already answered stays answered.
@@ -4052,13 +4099,12 @@ class UserPreferences extends ChangeNotifier {
     values: LibraryScrollDirection.values,
   );
 
-  static EnumPreference<LibraryGroupBy> libraryGroupBy(
-    String libraryId,
-  ) => EnumPreference(
-    key: 'library_group_by_$libraryId',
-    defaultValue: LibraryGroupBy.none,
-    values: LibraryGroupBy.values,
-  );
+  static EnumPreference<LibraryGroupBy> libraryGroupBy(String libraryId) =>
+      EnumPreference(
+        key: 'library_group_by_$libraryId',
+        defaultValue: LibraryGroupBy.none,
+        values: LibraryGroupBy.values,
+      );
 
   /// Only written once someone picks it, since the default depends on the
   /// library's type.
@@ -4421,7 +4467,10 @@ class UserPreferences extends ChangeNotifier {
     return SeriesTrackPreference.fromRawString(raw);
   }
 
-  Future<void> setSeriesAudioPreference(String seriesId, SeriesTrackPreference pref) async {
+  Future<void> setSeriesAudioPreference(
+    String seriesId,
+    SeriesTrackPreference pref,
+  ) async {
     final key = Preference(
       key: 'pref_series_audio_lang_$seriesId',
       defaultValue: '',
@@ -4450,7 +4499,6 @@ class UserPreferences extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   int getItemAudioStreamIndex(String itemId) {
     final pref = Preference<int>(
@@ -4637,6 +4685,7 @@ class UserPreferences extends ChangeNotifier {
         ? '$_itemSecondarySubtitleSelectionPrefix$itemId'
         : '$_itemSecondarySubtitleSelectionPrefix${suffix}_$itemId';
   }
+
   Map<String, dynamic>? getItemSecondarySubtitleSelection(String itemId) {
     final pref = Preference<String>(
       key: _itemSecondarySubtitleSelectionKey(itemId),
@@ -4664,7 +4713,6 @@ class UserPreferences extends ChangeNotifier {
     await _store.set(pref, jsonEncode(selection));
     notifyListeners();
   }
-
 }
 
 /// The ratings settings one surface reads.

@@ -458,62 +458,107 @@ class _HarborHomeState extends State<_HarborHome>
       child: LayoutBuilder(
         builder: (context, box) {
           final w = box.maxWidth, h = box.maxHeight;
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildBackdrop(item),
-              if (_trailerShowing &&
-                  _trailerController != null &&
-                  _trailerMode == 'background')
-                Positioned.fill(child: IgnorePointer(child: _trailerVideo())),
-              const IgnorePointer(child: _HarborScrims()),
-              if (_trailerShowing &&
-                  _trailerController != null &&
-                  _trailerMode == 'corner')
-                Positioned(
-                  right: w * 0.04,
-                  top: h * 0.07,
-                  width: w * 0.36,
-                  height: w * 0.36 * 9 / 16,
-                  child: IgnorePointer(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(color: Colors.black),
-                        child: _trailerVideo(),
+          // Touch (phones, tablets): swipe sideways through the cards, up and down between
+          // decks, tap the middle card to open it or a side card to go to it.
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onHorizontalDragStart: (_) => _dragX = 0,
+            onHorizontalDragUpdate: (d) {
+              _dragX += d.delta.dx;
+              final step = (w * 0.12).clamp(40.0, 110.0);
+              while (_dragX.abs() >= step) {
+                final dir = _dragX > 0 ? -1 : 1;
+                _dragX += dir * step;
+                _moveItem(dir);
+              }
+            },
+            onVerticalDragEnd: (d) {
+              final v = d.primaryVelocity ?? 0;
+              if (v < -250) _moveDeck(1);
+              if (v > 250 && _deck >= 0) _moveDeck(-1);
+            },
+            onTapUp: (d) => _onTap(d.localPosition, w, h),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildBackdrop(item),
+                if (_trailerShowing &&
+                    _trailerController != null &&
+                    _trailerMode == 'background')
+                  Positioned.fill(child: IgnorePointer(child: _trailerVideo())),
+                const IgnorePointer(child: _HarborScrims()),
+                if (_trailerShowing &&
+                    _trailerController != null &&
+                    _trailerMode == 'corner')
+                  Positioned(
+                    right: w * 0.04,
+                    top: h * 0.07,
+                    width: w * 0.36,
+                    height: w * 0.36 * 9 / 16,
+                    child: IgnorePointer(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(color: Colors.black),
+                          child: _trailerVideo(),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              if (item != null)
-                Positioned(
-                  left: w * 0.07,
-                  top: h * (_deck < 0 ? 0.16 : 0.08),
-                  width: w * 0.5,
-                  child: _buildInfo(context, item, h),
-                ),
-              if (_deck < 0)
-                _buildSpotlightFoot(context, w, h)
-              else ...[
-                Positioned(
-                  left: w * 0.07,
-                  right: 0,
-                  top: h * 0.565,
-                  child: _buildDeckTabs(context),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: h * 0.63,
-                  bottom: h * 0.02,
-                  child: _buildCoverFlow(context, w),
-                ),
+                if (item != null)
+                  Positioned(
+                    left: w * 0.07,
+                    top: h * (_deck < 0 ? 0.16 : 0.08),
+                    // A phone held upright is narrow: the text gets the width.
+                    width: w * (w < h ? 0.86 : 0.5),
+                    child: _buildInfo(context, item, h),
+                  ),
+                if (_deck < 0)
+                  _buildSpotlightFoot(context, w, h)
+                else ...[
+                  Positioned(
+                    left: w * 0.07,
+                    right: 0,
+                    top: h * 0.565,
+                    child: _buildDeckTabs(context),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: h * 0.63,
+                    bottom: h * 0.02,
+                    child: _buildCoverFlow(context, w),
+                  ),
+                ],
               ],
-            ],
+            ),
           );
         },
       ),
     );
+  }
+
+  double _dragX = 0;
+
+  /// A tap: the Spotlight or the title text opens the title; in the cover flow the middle card
+  /// opens it and a card to the side is moved to.
+  void _onTap(Offset at, double w, double h) {
+    if (_deck < 0 || at.dy < h * 0.56) {
+      _open(_current);
+      return;
+    }
+    final deck = _decks[_deck];
+    final logos =
+        deck.library ||
+        (deck.items.isNotEmpty && _isLogoTile(deck.items.first));
+    final cardH = h * 0.35 * (logos ? 0.55 : 0.80);
+    final cardW = logos ? cardH * 16 / 9 : cardH * 2 / 3;
+    final dx = at.dx - w * 0.5;
+    if (dx.abs() <= cardW / 2) {
+      _open(_current);
+    } else {
+      _moveItem(dx > 0 ? 1 : -1);
+    }
   }
 
   Widget _buildBackdrop(AggregatedItem? item) {
