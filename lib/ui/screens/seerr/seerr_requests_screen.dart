@@ -94,6 +94,11 @@ Color _onStatusColor(Color background) =>
     : Colors.white;
 
 class SeerrRequestsScreen extends StatefulWidget {
+  /// The label and colour a request shows (status pill), for tests.
+  @visibleForTesting
+  static (String, Color) statusInfoFor(SeerrRequest request, AppLocalizations l10n) =>
+      _StatusChip.infoFor(request, l10n);
+
   final int initialTab;
 
   const SeerrRequestsScreen({super.key, this.initialTab = 0});
@@ -1952,9 +1957,18 @@ class _StatusChip extends StatelessWidget {
     // Media status wins, not the request status. A completed request whose
     // media was later deleted is media status 7. Seerr's own RequestCard reads
     // media.status too.
-    final mediaStatus = request.is4k
+    var mediaStatus = request.is4k
         ? request.media?.status4k
         : request.media?.status;
+    // Tortugarr runs one library and one Radarr for every quality, so Seerr's
+    // separate 4K status (it follows a 4K Radarr only) never turns Available.
+    // A 4K request is fulfilled once the title is available at all.
+    if (request.is4k &&
+        request.media?.status == 5 &&
+        mediaStatus != 6 &&
+        mediaStatus != 7) {
+      mediaStatus = 5;
+    }
     // Seerr shows one media status as two words. Its StatusBadge reads
     // "Processing" when downloadStatus is not empty and "Requested" when it is
     // empty. Waiting on Radarr and downloading are the same code but not the
