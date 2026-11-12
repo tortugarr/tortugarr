@@ -35,6 +35,35 @@ public sealed class TopListService
         _library = library;
         _users = users;
         _log = log;
+        AddNewDefaultLists(Plugin.Instance);
+    }
+
+    /// <summary>The four lists 1.3.0.25 to 1.3.0.36 shipped with. A server that still has exactly
+    /// these gets the lists added in 4.20.04 (Trending, Netflix Top 10, Rotten Tomatoes,
+    /// Certified Fresh); a list the user changed is left alone.</summary>
+    internal const string FirstDefaultLists =
+        "Most watched films this week|linaspurinis/top-watched-movies-of-the-week\n" +
+        "Most watched shows this week|jah57/trakt-most-watched-shows-of-the-week\n" +
+        "New on digital|snoak/latest-movies-digital-release\n" +
+        "IMDb Top 250|georgenilas/imdb-top-250";
+
+    internal static bool AddNewDefaultLists(Configuration.PluginConfiguration c)
+    {
+        if ((c.TopLists ?? string.Empty).Replace("\r", string.Empty).Trim() != FirstDefaultLists)
+        {
+            return false;
+        }
+
+        c.TopLists = new Configuration.PluginConfiguration().TopLists;
+        return true;
+    }
+
+    private static void AddNewDefaultLists(Plugin? plugin)
+    {
+        if (plugin is not null && AddNewDefaultLists(plugin.Configuration))
+        {
+            plugin.SaveConfiguration();
+        }
     }
 
     private static Configuration.PluginConfiguration Cfg => Plugin.Instance?.Configuration ?? new Configuration.PluginConfiguration();

@@ -1,13 +1,55 @@
 # Changelog
 
-## Unreleased
+## 4.20.04 - 2026-11-12 (app build 2000061, Tortugarr plugin 1.3.0.37, Moonfin 3.0.0)
 
 **App**
 
-- **New theme: Tortuga** (Settings › Appearance › Theme). Dark wood, parchment text, brass
-  accents, pirate headings and a soft lantern glow on the focused card. Headings only use the
-  pirate font; everything you read stays in the normal font. No blur, so it stays smooth on
-  slower TVs.
+- **New theme: Tortuga**, on from the start (Settings › Appearance › Theme). Dark wood,
+  parchment text, brass accents, pirate headings and a soft lantern glow on the focused card;
+  everything you read stays in the normal font. No blur, so it stays smooth on slower TVs. An
+  app updated from Moonfin's default theme moves to Tortuga once; a theme you pick later stays.
+  Under Tortuga the side menu has pirate names (Harbor, Spyglass, Booty, Captain's Quarters …),
+  also shown in brackets under Settings › Navigation.
+- **Harbor, a new Home** (Settings › Home Screen › Row Type › Harbor, the default): the
+  focused title fills the screen, one row at a time as a 3D cover flow, a Spotlight of random
+  titles, My Media as wide library tiles, Networks/Studios/Genres as logo tiles, collections as
+  a small stack and big rank numbers on real rankings only. The focused title's trailer plays
+  muted after a moment, in the background or a corner box (or off). On phones and tablets:
+  swipe sideways through the cards, up and down between rows, tap to open.
+- **Poster badges:** BB (blockbuster) and MB (mockbuster) on movies, and the studio or network
+  logo on movies, series and episodes, everywhere posters are shown. Settings › Home Screen ›
+  Poster badges: colours, opacity, corner, size, logo or app icon, and *Show mockbusters* to
+  hide mockbusters from Home.
+- **Top lists:** eight new lists (Trending, Netflix Top 10, Rotten Tomatoes, Certified Fresh)
+  next to the four from before; each one can be switched on or off (Settings › Home Screen ›
+  Top lists). Streaming rows "Popular on Netflix / HBO Max / Disney+ / Apple TV+ / Prime Video
+  / SkyShowtime" show what is popular there now (External Sources).
+- **New rows:** *On the way in* (Booty) shows your downloads with progress and time left;
+  *Fits tonight* shows unwatched films under 1 h 45 and the next episode of your series.
+- **SmartTube** (by Yuriy Liskov) opens from the side menu and plays trailers when it is
+  installed; never the YouTube app. Install SmartTube first. *Show SmartTube button* under
+  Settings › Navigation; credit in About.
+- **Requests:** a 4K request shows Available once the title is in the library.
+- The download bar names the title being downloaded.
+- Home rows switched off stay listed under Settings › Home Screen › Rows, so they can be
+  switched on again (Seerr, IMDb and TMDB rows used to disappear).
+- Switches are visible on a focused settings row.
+- The app says Tortugarr, not Moonfin, where it means itself.
+
+**Server** (Tortugarr plugin 1.3.0.37)
+
+- **Imports in seconds:** movies, documentaries and series download into a hidden `.incoming`
+  folder inside their own library on the drive being filled, so Radarr and Sonarr move the
+  finished file instead of copying it. A download started in the app goes to the library its
+  title lives in.
+- Finished torrents are no longer moved between drives when the download folder changes drive
+  (qBittorrent's *relocate on category change* is switched off).
+- The movie and series download folders follow the drive to fill, also for what Radarr, Sonarr
+  and Seerr grab on their own.
+- Seerr's 4K status is kept in step with the library.
+- Servers still on the first four top lists get the eight new ones.
+- Installer: Jellyfin's library folders are writable, so titles can be deleted from the app;
+  the streaming rows are added to Seerr (switched off until chosen in the app).
 
 **Installer**
 

@@ -2129,9 +2129,35 @@ def configure_seerr():
             h.post(f"/settings/{app}", body)
             ok(f"seerr: {app} added (profile {prof['name']}, {root['path']})")
 
+    seerr_streaming_sliders(h)
+
     if not public.get("initialized"):
         h.post("/settings/initialize")
         ok("seerr: setup marked complete")
+
+
+# "Popular on <service>" rows (app: Settings > Home Screen > External Sources). TMDB watch
+# provider ids; added switched off, the user switches on the ones they want.
+STREAMING_SERVICES = [("Netflix", 8), ("HBO Max", 1899), ("Disney+", 337), ("Apple TV+", 350),
+                      ("Prime Video", 119), ("SkyShowtime", 1773)]
+
+
+def seerr_streaming_sliders(h):
+    """Seerr discover sliders for the big streaming services, for the country the libraries use.
+    Only missing ones are added; ones the user changed or removed by title are left alone."""
+    country = STATE.get("metadata_country", "US")
+    try:
+        have = {s.get("title") for s in h.get("/settings/discover") or []}
+        added = 0
+        for name, provider in STREAMING_SERVICES:
+            for kind, label in ((20, "movies"), (21, "shows")):
+                title = f"Popular on {name}: {label}"
+                if title not in have:
+                    h.post("/settings/discover/add", {"type": kind, "title": title, "data": f"{country},{provider}"})
+                    added += 1
+        ok(f"seerr: streaming rows ready ({added} added, switched off until chosen in the app)")
+    except BootstrapError as e:
+        warn(f"seerr: could not add the streaming rows ({str(e)[-120:]}) - 'tortugarr repair' tries again")
 
 
 def configure_moonfin_webhook():

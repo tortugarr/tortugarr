@@ -12,7 +12,7 @@ public class TopListTests
     public void The_default_lists_parse()
     {
         var lists = TopListService.Parse(new PluginConfiguration().TopLists);
-        Assert.Equal(4, lists.Count);
+        Assert.Equal(12, lists.Count);
         Assert.Equal(new TopListDef(0, "Most watched films this week", "linaspurinis/top-watched-movies-of-the-week"), lists[0]);
         Assert.Equal("IMDb Top 250", lists[3].Title);
     }

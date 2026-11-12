@@ -107,7 +107,15 @@ public class PluginConfiguration : BasePluginConfiguration
         "Most watched films this week|linaspurinis/top-watched-movies-of-the-week\n" +
         "Most watched shows this week|jah57/trakt-most-watched-shows-of-the-week\n" +
         "New on digital|snoak/latest-movies-digital-release\n" +
-        "IMDb Top 250|georgenilas/imdb-top-250";
+        "IMDb Top 250|georgenilas/imdb-top-250\n" +
+        "Trending movies now|xbmc2/trakt-trending-movies\n" +
+        "Trending on TMDB|tonkapug/tmdb-trending\n" +
+        "Netflix Top 10 movies|diimaan/netflix-top-10-movies\n" +
+        "Netflix Top 10 shows|diimaan/netflix-top-10-shows\n" +
+        "Popular on Rotten Tomatoes: movies|snoak/most-popular-movies-on-rotten-tomatoes\n" +
+        "Popular on Rotten Tomatoes: shows|snoak/most-popular-shows-on-rotten-tomatoes\n" +
+        "Certified Fresh: new movies|sig1878/latest-certified-fresh-movies\n" +
+        "Certified Fresh: current TV|darktimes/certified-fresh-current-tv";
 
     public string BannedExtensions { get; set; } =
         ".exe .msi .apk .app .dmg .pkg .bat .cmd .ps1 .sh .scr .com .jar .py .rb .pl .php .zip .rar .7z .tar .gz .bz2 .xz .iso .img .vhd .vhdx .pdf .doc .docx .txt .rtf";
