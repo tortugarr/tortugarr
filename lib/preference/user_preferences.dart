@@ -1280,6 +1280,13 @@ class UserPreferences extends ChangeNotifier {
 
   /// Tortugarr top lists the user switched off, by list title, comma
   /// separated (Settings > Appearance > Home Screen > Top lists).
+  /// Trailers open in SmartTube (when installed) instead of the built-in
+  /// trailer player.
+  static final tgTrailersInSmartTube = Preference<bool>(
+    key: 'tg_trailers_in_smarttube',
+    defaultValue: true,
+  );
+
   static final tgHiddenTopLists = Preference<String>(
     key: 'tg_hidden_top_lists',
     defaultValue: '',

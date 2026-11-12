@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
+import '../../../data/services/tortugarr/smart_tube.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -1086,12 +1087,33 @@ class _SearchScreenState extends State<SearchScreen>
       case SearchState.ready
           when _vm.results.isEmpty && _vm.seerrResults.isEmpty:
         return Center(
-          child: Text(
-            AppLocalizations.of(context).noResultsForQuery(_vm.query),
-            style: TextStyle(
-              color: AppColorScheme.onSurface.withAlpha(179),
-              fontSize: 16,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context).noResultsForQuery(_vm.query),
+                style: TextStyle(
+                  color: AppColorScheme.onSurface.withAlpha(179),
+                  fontSize: 16,
+                ),
+              ),
+              // Nothing here: offer the same search in SmartTube.
+              FutureBuilder<String?>(
+                future: SmartTube.installedPackage(),
+                builder: (context, snap) => snap.data == null
+                    ? const SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: FilledButton.icon(
+                          onPressed: () => SmartTube.search(_vm.query),
+                          icon: const Icon(Icons.smart_display_rounded),
+                          label: Text(
+                            AppLocalizations.of(context).tgSearchInSmartTube,
+                          ),
+                        ),
+                      ),
+              ),
+            ],
           ),
         );
       case SearchState.ready:

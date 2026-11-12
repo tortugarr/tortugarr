@@ -1,5 +1,6 @@
 import '../../../data/services/seerr/seerr_api_models.dart';
 import '../../../data/viewmodels/seerr_media_detail_view_model.dart';
+import '../../../data/services/tortugarr/smart_tube.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -129,9 +130,9 @@ Future<void> openSeerrTrailer(BuildContext context, SeerrVideo video) async {
     if (!context.mounted) return;
   }
   if (isYouTube && key != null && key.isNotEmpty) {
-    await context.push(Destinations.trailer(videoId: key));
+    await SmartTube.playTrailer(context, videoId: key);
     return;
   }
   if (url == null || url.isEmpty) return;
-  await context.push(Destinations.trailer(url: url));
+  await SmartTube.playTrailer(context, url: url);
 }

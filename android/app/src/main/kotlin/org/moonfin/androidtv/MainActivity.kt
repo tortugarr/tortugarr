@@ -370,6 +370,7 @@ class MainActivity : AudioServiceActivity(), GamepadsCompatibleActivity {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         engineHandedToActivity = flutterEngine
+        ExternalAppsChannel.register(flutterEngine, applicationContext)
 
         val bridge = LibretroBridge(
             flutterEngine,

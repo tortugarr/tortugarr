@@ -81,6 +81,12 @@ class _DetailsScreenSettingsScreenState
                     icon: Icons.photo,
                     onChanged: _pushPersonalizationSync,
                   ),
+                  SwitchPreferenceTile(
+                    preference: UserPreferences.tgTrailersInSmartTube,
+                    title: l10n.tgTrailersInSmartTube,
+                    subtitle: l10n.tgTrailersInSmartTubeSubtitle,
+                    icon: Icons.smart_display_rounded,
+                  ),
                   if (PlatformDetection.useMobileUi)
                     StringPickerPreferenceTile(
                       preference: UserPreferences.detailsBackdropSize,

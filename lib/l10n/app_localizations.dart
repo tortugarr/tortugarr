@@ -1186,6 +1186,30 @@ abstract class AppLocalizations {
   /// **'The server offers no top lists right now.'**
   String get tgTopListsNone;
 
+  /// Menu entry that opens the SmartTube app (product name, do not translate)
+  ///
+  /// In en, this message translates to:
+  /// **'SmartTube'**
+  String get tgSmartTube;
+
+  /// Button on an empty search result that runs the same search in the SmartTube app
+  ///
+  /// In en, this message translates to:
+  /// **'Search in SmartTube'**
+  String get tgSearchInSmartTube;
+
+  /// Setting title: open trailers in the SmartTube app
+  ///
+  /// In en, this message translates to:
+  /// **'Play trailers in SmartTube'**
+  String get tgTrailersInSmartTube;
+
+  /// Setting subtitle for playing trailers in SmartTube
+  ///
+  /// In en, this message translates to:
+  /// **'When SmartTube is installed. Off: trailers play in Tortugarr.'**
+  String get tgTrailersInSmartTubeSubtitle;
+
   /// Downloads menu entry under the Tortuga theme (pirate word for loot)
   ///
   /// In en, this message translates to:

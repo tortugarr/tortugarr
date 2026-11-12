@@ -656,6 +656,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get tgTopListsNone => 'The server offers no top lists right now.';
 
   @override
+  String get tgSmartTube => 'SmartTube';
+
+  @override
+  String get tgSearchInSmartTube => 'Search in SmartTube';
+
+  @override
+  String get tgTrailersInSmartTube => 'Play trailers in SmartTube';
+
+  @override
+  String get tgTrailersInSmartTubeSubtitle =>
+      'When SmartTube is installed. Off: trailers play in Tortugarr.';
+
+  @override
   String get tgBooty => 'Booty';
 
   @override

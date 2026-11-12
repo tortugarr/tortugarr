@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import '../../data/services/adult_library_service.dart';
 import '../../data/services/tortugarr/download_features.dart';
+import '../../data/services/tortugarr/smart_tube.dart';
 import 'adult_library_dialog.dart' show searchNewAdult;
 import 'package:go_router/go_router.dart';
 import 'package:moonfin_design/moonfin_design.dart';
@@ -916,6 +917,24 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
     );
   }
 
+  /// Opens SmartTube as its own app, only when it is installed.
+  Widget _smartTubeSidebarItem({required Color? navColor}) {
+    return FutureBuilder<String?>(
+      future: SmartTube.installedPackage(),
+      builder: (context, snap) {
+        if (snap.data == null) return const SizedBox.shrink();
+        return _SidebarItem(
+          key: const ValueKey('sidebar-smarttube'),
+          icon: Icons.smart_display_rounded,
+          label: appL10n().tgSmartTube,
+          baseColor: navColor,
+          showLabel: _showLabels,
+          onPressed: () => SmartTube.open(),
+        );
+      },
+    );
+  }
+
   /// Search for new titles in the adult library, only while it is shown.
   Widget _adultSearchSidebarItem({required Color? navColor}) {
     return ListenableBuilder(
@@ -1298,6 +1317,8 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
                   _activeDownloadsSidebarItem(navColor: nextMainSidebarColor()),
                 // XXX search, only while the adult library is shown.
                 _adultSearchSidebarItem(navColor: nextMainSidebarColor()),
+                // SmartTube, only when it is installed (Android).
+                _smartTubeSidebarItem(navColor: nextMainSidebarColor()),
                 _SidebarItem(
                   key: const ValueKey('sidebar-settings'),
                   icon: Icons.settings_rounded,

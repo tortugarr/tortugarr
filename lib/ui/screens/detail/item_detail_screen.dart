@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../../../data/services/tortugarr/download_features.dart';
+import '../../../data/services/tortugarr/smart_tube.dart';
 import '../../widgets/subtitles/find_subtitles_dialog.dart';
 import 'dart:ui';
 
@@ -10500,7 +10501,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       return;
     }
     if (!context.mounted) return;
-    await context.push(Destinations.trailer(url: trailerUrl));
+    await SmartTube.playTrailer(context, url: trailerUrl);
   }
 
   void _showAudioSelector(
