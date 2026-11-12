@@ -89,6 +89,7 @@ import '../../util/home_row_title_localizer.dart';
 import '../../../util/game_library.dart';
 import 'home_row_prefetch.dart';
 import 'home_row_shift.dart';
+import 'harbor_cards.dart';
 import 'home_view_model.dart';
 import '../../widgets/seerr/seerr_genre_label.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
@@ -5419,6 +5420,10 @@ class _ContentRowsState extends State<_ContentRows>
           (_classicCardMetadataHeight * metadataScale);
     }
 
+    // Harbor: ranked rows get a big number left of each poster.
+    final harborRanked = _isHarborHome() && HomeViewModel.isTopListRow(row);
+    final rankGutter = harborRanked ? maxImageHeight * 0.5 : 0.0;
+
     final rowPadding = 5.0 * metadataScale;
     final topPadding =
         rowPadding + _focusHeadroom(maxImageHeight, cardExpansion);
@@ -5473,7 +5478,7 @@ class _ContentRowsState extends State<_ContentRows>
           hubKey: _hubKeyForRow(row),
           controller: _rowHorizontalController(rowIndex),
           height: lockedRowHeight,
-          itemExtent: firstCardWidth,
+          itemExtent: firstCardWidth + rankGutter,
           itemSpacing: itemSpacing,
           leadingPadding: isRowsV2 ? _kHomeRowLabelInset : 0,
           glide: glide,
@@ -5928,6 +5933,21 @@ class _ContentRowsState extends State<_ContentRows>
                     );
                   }
 
+                  if (harborRanked) {
+                    return HarborRankedCard(
+                      rank: idx + 1,
+                      gutter: rankGutter,
+                      imageHeight: maxImageHeight,
+                      child: previewWrappedCard,
+                    );
+                  }
+                  if (_isHarborHome() && item.type == 'BoxSet') {
+                    return HarborStackedCard(
+                      width: width,
+                      imageHeight: width / ar,
+                      child: previewWrappedCard,
+                    );
+                  }
                   return previewWrappedCard;
                 },
               );

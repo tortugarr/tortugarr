@@ -3431,6 +3431,9 @@ class HomeViewModel extends ChangeNotifier {
 
   static const _topListsPlaceholderId = 'tortugarr_top_lists';
   static const _topListRowPrefix = 'tortugarr_top_';
+
+  /// Rows from the plugin's top lists (ranked, first is number one).
+  static bool isTopListRow(HomeRow row) => row.id.startsWith(_topListRowPrefix);
   static const _topListOwnedFields =
       'DateCreated,Type,UserData,Overview,Genres,CommunityRating,CriticRating,'
       'OfficialRating,RunTimeTicks,ProductionYear,Status,ImageTags,BackdropImageTags,'
