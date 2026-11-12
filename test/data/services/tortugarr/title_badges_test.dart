@@ -29,4 +29,18 @@ void main() {
     expect(back.network, 'X');
     expect(back.networkLogo, 'u');
   });
+
+  test('a film gets its first studio with a logo, plus its BB/MB class', () {
+    final i = movieInfo({
+      'budget': 90000000,
+      'productionCompanies': [
+        {'name': 'Small Co'},
+        {'name': 'Warner Bros. Pictures', 'logoPath': '/wb.png'},
+      ],
+    });
+    expect(i.kind, TitleClass.blockbuster);
+    expect(i.network, 'Warner Bros. Pictures');
+    expect(i.networkLogo, endsWith('/wb.png'));
+    expect(movieInfo({}).networkLogo, isNull);
+  });
 }

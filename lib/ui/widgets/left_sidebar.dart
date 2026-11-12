@@ -385,7 +385,10 @@ class _LeftSidebarState extends State<LeftSidebar> with RouteAware {
   }
 
   double _overlayOpacity() {
-    return _prefs.get(UserPreferences.navbarOpacity) / 100.0;
+    final o = _prefs.get(UserPreferences.navbarOpacity) / 100.0;
+    // A theme that colours the menu (Tortuga) keeps it near solid, so its
+    // labels stay readable over Harbor's sharp backdrop.
+    return OverlayColorPalette.navFollowsTheme && o < 0.92 ? 0.92 : o;
   }
 
   void _expand() {

@@ -80,6 +80,25 @@ TitleBadgeInfo seriesInfo(Map<String, dynamic> json) {
   );
 }
 
+/// The studio a film is from: TMDB's first production company that has a
+/// logo (TMDB lists the main one first: Warner Bros., Universal, Netflix,
+/// Apple Original Films …), drawn white like the series networks.
+@visibleForTesting
+TitleBadgeInfo movieInfo(Map<String, dynamic> json) {
+  final kind = classifyMovie(json);
+  final companies = (json['productionCompanies'] as List? ?? const []).whereType<Map>().toList();
+  final withLogo = companies.where((c) => (c['logoPath'] as String?)?.isNotEmpty == true);
+  final pick = withLogo.isNotEmpty ? withLogo.first : (companies.isNotEmpty ? companies.first : null);
+  final logo = pick?['logoPath'] as String?;
+  return TitleBadgeInfo(
+    kind: kind,
+    network: pick?['name'] as String?,
+    networkLogo: logo == null || logo.isEmpty
+        ? null
+        : 'https://image.tmdb.org/t/p/w154_filter(duotone,ffffff,bababa)$logo',
+  );
+}
+
 /// Looks up and remembers badge facts per TMDB id, through Seerr. Facts are
 /// kept on the device (they barely change), so each title is asked once.
 class TitleBadges extends ChangeNotifier {
@@ -146,7 +165,7 @@ class TitleBadges extends ChangeNotifier {
       final id = int.parse(key.split(':').last);
       final info = key.startsWith('tv:')
           ? seriesInfo(await repo.getTvDetailsRaw(id))
-          : TitleBadgeInfo(kind: classifyMovie(await repo.getMovieDetailsRaw(id)));
+          : movieInfo(await repo.getMovieDetailsRaw(id));
       _known[key] = info;
       _scheduleSave();
       notifyListeners();

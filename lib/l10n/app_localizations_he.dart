@@ -660,7 +660,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get tgPosterBadgesSubtitle =>
-      'BB on blockbusters, MB on mockbusters, the network logo on series';
+      'BB / MB, and the studio or network logo on films and series';
 
   @override
   String get tgShowMockbusters => 'Show mockbusters';
@@ -685,11 +685,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get tgBadgeSize => 'Badge size';
 
   @override
-  String get tgNetworkLogos => 'Network logo on series';
+  String get tgNetworkLogos => 'Studio and network logo';
 
   @override
   String get tgNetworkLogosSubtitle =>
-      'The logo of the channel or service that made the series';
+      'Who made it: Warner Bros., Universal, Netflix, Apple, HBO …';
 
   @override
   String get tgNetworkBoxColor => 'Logo box colour';

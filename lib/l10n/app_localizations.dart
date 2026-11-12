@@ -1195,7 +1195,7 @@ abstract class AppLocalizations {
   /// Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'BB on blockbusters, MB on mockbusters, the network logo on series'**
+  /// **'BB / MB, and the studio or network logo on films and series'**
   String get tgPosterBadgesSubtitle;
 
   /// Tortugarr
@@ -1243,13 +1243,13 @@ abstract class AppLocalizations {
   /// Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Network logo on series'**
+  /// **'Studio and network logo'**
   String get tgNetworkLogos;
 
   /// Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'The logo of the channel or service that made the series'**
+  /// **'Who made it: Warner Bros., Universal, Netflix, Apple, HBO …'**
   String get tgNetworkLogosSubtitle;
 
   /// Tortugarr
