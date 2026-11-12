@@ -1299,6 +1299,8 @@ class UserPreferences extends ChangeNotifier {
   static final tgNetworkBoxColor = Preference<String>(key: 'tg_network_box_color_v2', defaultValue: 'FFFFFF');
   static final tgNetworkOpacity = Preference<int>(key: 'tg_network_opacity_v2', defaultValue: 88);
   static final tgNetworkCorner = Preference<String>(key: 'tg_network_corner', defaultValue: 'topRight');
+  /// 'mark' (N, D+, WB … on small cards) or 'full' (the studio's logo).
+  static final tgLogoStyle = Preference<String>(key: 'tg_logo_style', defaultValue: 'mark');
   static final tgBadgeCache = Preference<String>(key: 'tg_badge_cache_v3', defaultValue: '');
 
   static final tgHiddenTopLists = Preference<String>(

@@ -103,6 +103,15 @@ class PosterBadgesSettingsScreen extends StatelessWidget {
                     icon: Icons.tv,
                   ),
                   StringPickerPreferenceTile(
+                    preference: UserPreferences.tgLogoStyle,
+                    title: l10n.tgLogoStyle,
+                    icon: Icons.short_text,
+                    options: {
+                      'mark': l10n.tgLogoStyleMark,
+                      'full': l10n.tgLogoStyleFull,
+                    },
+                  ),
+                  StringPickerPreferenceTile(
                     preference: UserPreferences.tgNetworkBoxColor,
                     title: l10n.tgNetworkBoxColor,
                     icon: Icons.palette_outlined,

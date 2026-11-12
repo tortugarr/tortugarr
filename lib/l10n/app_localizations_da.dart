@@ -770,6 +770,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get tgNavQuarters => 'Captain\'s quarters';
 
   @override
+  String get tgLogoStyle => 'Logo on cards';
+
+  @override
+  String get tgLogoStyleMark => 'Short mark (N, D+, WB …)';
+
+  @override
+  String get tgLogoStyleFull => 'Full logo';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

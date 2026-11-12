@@ -1402,6 +1402,24 @@ abstract class AppLocalizations {
   /// **'Captain\'s quarters'**
   String get tgNavQuarters;
 
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Logo on cards'**
+  String get tgLogoStyle;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Short mark (N, D+, WB …)'**
+  String get tgLogoStyleMark;
+
+  /// Tortugarr
+  ///
+  /// In en, this message translates to:
+  /// **'Full logo'**
+  String get tgLogoStyleFull;
+
   /// Harbor home: the random picks shown above the first deck
   ///
   /// In en, this message translates to:
