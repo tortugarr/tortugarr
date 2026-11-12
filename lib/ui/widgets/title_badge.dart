@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../data/models/aggregated_item.dart';
 import '../../data/services/tortugarr/title_badges.dart';
+import '../../data/viewmodels/seerr_discover_view_model.dart';
 import '../../preference/user_preferences.dart';
 
 Color _hex(String v, Color fallback) {
@@ -93,11 +94,43 @@ class TitleBadgeOverlay extends StatelessWidget {
           );
         }
         final logo = info.networkLogo;
-        final mark = info.network == null ? null : studioMark(info.network!);
+        final icon = info.network == null
+            ? null
+            : providerIconUrl(info.network!);
+        final curated = info.network == null
+            ? null
+            : curatedLogoUrl(info.network!);
         if (prefs.get(UserPreferences.tgNetworkLogos) &&
-            prefs.get(UserPreferences.tgLogoStyle) != 'full' &&
-            mark != null) {
-          // Short mark (N, D+, WB …) in the corner.
+            prefs.get(UserPreferences.tgLogoStyle) == 'icon' &&
+            icon != null) {
+          // A streaming service's own square app icon in the corner.
+          children.add(
+            Align(
+              alignment: _corner(prefs.get(UserPreferences.tgNetworkCorner)),
+              child: Padding(
+                padding: EdgeInsets.all(6 * s),
+                child: Opacity(
+                  opacity: (prefs.get(UserPreferences.tgNetworkOpacity) / 100)
+                      .clamp(0.3, 1.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5 * s),
+                    child: Image.network(
+                      icon,
+                      width: 22 * s,
+                      height: 22 * s,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.medium,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (curated != null &&
+            prefs.get(UserPreferences.tgNetworkLogos)) {
+          // The white logo from the app's Networks / Studios rows, small, in
+          // its own proportions, on a dark box.
           children.add(
             Align(
               alignment: _corner(prefs.get(UserPreferences.tgNetworkCorner)),
@@ -105,23 +138,28 @@ class TitleBadgeOverlay extends StatelessWidget {
                 padding: EdgeInsets.all(6 * s),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: mark.background.withValues(
-                      alpha: prefs.get(UserPreferences.tgNetworkOpacity) / 100,
+                    color: Colors.black.withValues(
+                      alpha:
+                          (prefs.get(UserPreferences.tgNetworkOpacity) / 100) *
+                          0.7,
                     ),
-                    borderRadius: BorderRadius.circular(4 * s),
+                    borderRadius: BorderRadius.circular(5 * s),
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 6 * s,
-                      vertical: 2 * s,
+                      horizontal: 5 * s,
+                      vertical: 4 * s,
                     ),
-                    child: Text(
-                      mark.text,
-                      style: TextStyle(
-                        color: mark.foreground,
-                        fontSize: 12 * s,
-                        fontWeight: FontWeight.w900,
-                        height: 1.1,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: 56 * s,
+                        maxHeight: 14 * s,
+                      ),
+                      child: Image.network(
+                        curated,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.medium,
+                        errorBuilder: (_, _, _) => const SizedBox.shrink(),
                       ),
                     ),
                   ),
@@ -196,155 +234,77 @@ bool hideAsMockbuster(AggregatedItem item) {
   return TitleBadges.instance.infoFor(item)?.kind == TitleClass.mockbuster;
 }
 
-/// A short mark for a studio or network: brand letters on a brand-like
-/// colour (not the brand's logo), for small cards. Unknown names get their
-/// initials on a neutral box.
-class StudioMark {
-  const StudioMark(this.text, this.background, this.foreground);
-  final String text;
-  final Color background;
-  final Color foreground;
+/// The streaming service's real app icon (TMDB watch-provider logos, square)
+/// for a studio or network that is one of them, or null. Used as the small
+/// mark on cards: Netflix's N, Disney+, Apple TV+, Prime Video, HBO Max,
+/// SkyShowtime.
+String? providerIconUrl(String name) {
+  const base = 'https://image.tmdb.org/t/p/w92';
+  final n = name.trim().toLowerCase();
+  if (n.startsWith('netflix')) return '$base/rK1KljqmbvO9HQa1PBFLILWah72.png';
+  if (n.startsWith('disney') || n.startsWith('walt disney'))
+    return '$base/5eZ872CghnHFLB1j8grszbrx0dx.png';
+  if (n.startsWith('apple')) return '$base/9icYBfYFcwgCbky5VdGUIKJ4C5i.png';
+  if (n.startsWith('amazon') || n.startsWith('prime video'))
+    return '$base/gMZdpavHmxFNnLpMHwVxfqeux2g.png';
+  if (n.startsWith('hbo') || n == 'max')
+    return '$base/skypuy7SXuugIQeYg0IglmzoKaS.png';
+  if (n.startsWith('skyshowtime'))
+    return '$base/ube1pVpP3FklRkeyQjlDkkC3tL2.png';
+  return null;
 }
 
-final _marks = <(RegExp, StudioMark)>[
-  (
-    RegExp(r'^netflix', caseSensitive: false),
-    const StudioMark('N', Color(0xFFE50914), Colors.white),
-  ),
-  (
-    RegExp(r'^(disney\+|disney plus)', caseSensitive: false),
-    const StudioMark('D+', Color(0xFF113CCF), Colors.white),
-  ),
-  (
-    RegExp(r'^(walt disney|disney)', caseSensitive: false),
-    const StudioMark('D', Color(0xFF113CCF), Colors.white),
-  ),
-  (
-    RegExp(r'^pixar', caseSensitive: false),
-    const StudioMark('PX', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^marvel', caseSensitive: false),
-    const StudioMark('M', Color(0xFFEC1D24), Colors.white),
-  ),
-  (
-    RegExp(r'^lucasfilm', caseSensitive: false),
-    const StudioMark('LF', Color(0xFF1B1B1B), Color(0xFFFFE81F)),
-  ),
-  (
-    RegExp(r'^(hbo|max\b|hbo max)', caseSensitive: false),
-    const StudioMark('HBO', Color(0xFF5822B4), Colors.white),
-  ),
-  (
-    RegExp(r'^warner', caseSensitive: false),
-    const StudioMark('WB', Color(0xFF0057B8), Color(0xFFFFD700)),
-  ),
-  (
-    RegExp(r'^new line', caseSensitive: false),
-    const StudioMark('NL', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^(apple|apple tv)', caseSensitive: false),
-    const StudioMark('tv+', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^(amazon|prime video)', caseSensitive: false),
-    const StudioMark('prime', Color(0xFF00A8E1), Colors.white),
-  ),
-  (
-    RegExp(r'^(metro-goldwyn|mgm)', caseSensitive: false),
-    const StudioMark('MGM', Color(0xFFB8860B), Colors.black),
-  ),
-  (
-    RegExp(r'^universal', caseSensitive: false),
-    const StudioMark('U', Color(0xFF1C3F94), Colors.white),
-  ),
-  (
-    RegExp(r'^illumination', caseSensitive: false),
-    const StudioMark('IL', Color(0xFFFFD100), Colors.black),
-  ),
-  (
-    RegExp(r'^dreamworks', caseSensitive: false),
-    const StudioMark('DW', Color(0xFF0E6BB8), Colors.white),
-  ),
-  (
-    RegExp(r'^paramount', caseSensitive: false),
-    const StudioMark('P', Color(0xFF0064FF), Colors.white),
-  ),
-  (
-    RegExp(r'^(20th century|twentieth century)', caseSensitive: false),
-    const StudioMark('20', Color(0xFF1B1B1B), Color(0xFFFFC72C)),
-  ),
-  (
-    RegExp(r'^searchlight', caseSensitive: false),
-    const StudioMark('SL', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^(columbia|sony|tristar)', caseSensitive: false),
-    const StudioMark('S', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^(lionsgate|lions gate)', caseSensitive: false),
-    const StudioMark('L', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^summit', caseSensitive: false),
-    const StudioMark('SE', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^a24', caseSensitive: false),
-    const StudioMark('A24', Colors.white, Colors.black),
-  ),
-  (
-    RegExp(r'^neon', caseSensitive: false),
-    const StudioMark('NEON', Color(0xFF111111), Color(0xFFFF2BD6)),
-  ),
-  (
-    RegExp(r'^legendary', caseSensitive: false),
-    const StudioMark('LG', Color(0xFF1B1B1B), Colors.white),
-  ),
-  (
-    RegExp(r'^blumhouse', caseSensitive: false),
-    const StudioMark('BH', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^skyshowtime', caseSensitive: false),
-    const StudioMark('SST', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^(nrk)', caseSensitive: false),
-    const StudioMark('NRK', Color(0xFF0B2350), Colors.white),
-  ),
-  (
-    RegExp(r'^(bbc)', caseSensitive: false),
-    const StudioMark('BBC', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^(fx)', caseSensitive: false),
-    const StudioMark('FX', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^(amc)', caseSensitive: false),
-    const StudioMark('AMC', Color(0xFF111111), Colors.white),
-  ),
-  (
-    RegExp(r'^(showtime)', caseSensitive: false),
-    const StudioMark('SHO', Color(0xFFB10000), Colors.white),
-  ),
-];
+const _curatedAliases = <String, String>{
+  'walt disney': 'disney',
+  'disney plus': 'disney+',
+  'columbia': 'sony pictures',
+  'sony': 'sony pictures',
+  'tristar': 'sony pictures',
+  'warner bros': 'warner bros. pictures',
+  'universal': 'universal',
+  'paramount+': 'paramount+',
+  'paramount': 'paramount',
+  'amazon': 'prime video',
+  'prime video': 'prime video',
+  'apple': 'apple tv+',
+  'hbo max': 'hbo max',
+  'hbo': 'hbo',
+  '20th century': '20th century studios',
+  'twentieth century': '20th century studios',
+  'marvel': 'marvel studios',
+  'dc comics': 'dc',
+  'dreamworks': 'dreamworks',
+  'pixar': 'pixar',
+  'a24': 'a24',
+  'netflix': 'netflix',
+};
 
-StudioMark studioMark(String name) {
-  for (final (re, m) in _marks) {
-    if (re.hasMatch(name.trim())) return m;
+/// The clean white logo the app already shows in its Networks and Studios
+/// rows, for a studio or network that is one of them, or null. [width] is
+/// the TMDB size asked for (small on cards).
+String? curatedLogoUrl(String name, {int width = 300}) {
+  final n = name.trim().toLowerCase();
+  final all = [
+    for (final x in SeerrDiscoverViewModel.popularNetworks)
+      (x.name.toLowerCase(), x.logoPath),
+    for (final x in SeerrDiscoverViewModel.popularStudios)
+      (x.name.toLowerCase(), x.logoPath),
+  ];
+  String? find(String key) {
+    for (final (k, path) in all) {
+      if (k == key) return path;
+    }
+    return null;
   }
-  final words = name
-      .split(RegExp(r'\s+'))
-      .where((w) => w.isNotEmpty && RegExp(r'[A-Za-z0-9]').hasMatch(w[0]))
-      .toList();
-  final text = words.take(2).map((w) => w[0].toUpperCase()).join();
-  return StudioMark(
-    text.isEmpty ? '?' : text,
-    const Color(0xFF2A2A2A),
-    Colors.white,
-  );
+
+  var path = find(n);
+  if (path == null) {
+    for (final e in _curatedAliases.entries) {
+      if (n.startsWith(e.key)) {
+        path = find(e.value);
+        if (path != null) break;
+      }
+    }
+  }
+  return path?.replaceFirst('/w780_', '/w${width}_');
 }

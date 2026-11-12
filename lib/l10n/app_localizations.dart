@@ -1411,13 +1411,13 @@ abstract class AppLocalizations {
   /// Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Short mark (N, D+, WB …)'**
+  /// **'Service icon when there is one (Netflix, Disney+, Apple …)'**
   String get tgLogoStyleMark;
 
   /// Tortugarr
   ///
   /// In en, this message translates to:
-  /// **'Full logo'**
+  /// **'Logo'**
   String get tgLogoStyleFull;
 
   /// Harbor home: the random picks shown above the first deck

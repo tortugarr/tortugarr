@@ -107,8 +107,8 @@ class PosterBadgesSettingsScreen extends StatelessWidget {
                     title: l10n.tgLogoStyle,
                     icon: Icons.short_text,
                     options: {
-                      'mark': l10n.tgLogoStyleMark,
-                      'full': l10n.tgLogoStyleFull,
+                      'logo': l10n.tgLogoStyleFull,
+                      'icon': l10n.tgLogoStyleMark,
                     },
                   ),
                   StringPickerPreferenceTile(

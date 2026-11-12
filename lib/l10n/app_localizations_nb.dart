@@ -647,170 +647,171 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgTopListsSettingsSubtitle =>
-      'Choose which top lists show on Home';
+      'Velg hvilke topplister som vises på Hjem';
 
   @override
   String get tgTopListsSettingsHint =>
-      'Lists switched off are not loaded. Your server decides which lists exist.';
+      'Lister som er slått av, lastes ikke. Serveren din bestemmer hvilke lister som finnes.';
 
   @override
-  String get tgTopListsNone => 'The server offers no top lists right now.';
+  String get tgTopListsNone => 'Serveren tilbyr ingen topplister akkurat nå.';
 
   @override
-  String get tgPosterBadges => 'Poster badges';
+  String get tgPosterBadges => 'Plakatmerker';
 
   @override
   String get tgPosterBadgesSubtitle =>
-      'BB / MB, and the studio or network logo on films and series';
+      'BB / MB, og studio- eller nettverkslogo på filmer og serier';
 
   @override
-  String get tgShowMockbusters => 'Show mockbusters';
+  String get tgShowMockbusters => 'Vis mockbusters';
 
   @override
   String get tgShowMockbustersSubtitle =>
-      'Off: titles marked MB are left out of Home';
+      'Av: titler merket MB vises ikke på Hjem';
 
   @override
-  String get tgBbColor => 'BB colour';
+  String get tgBbColor => 'BB-farge';
 
   @override
-  String get tgMbColor => 'MB colour';
+  String get tgMbColor => 'MB-farge';
 
   @override
-  String get tgBadgeOpacity => 'Badge opacity';
+  String get tgBadgeOpacity => 'Merkets dekkevne';
 
   @override
-  String get tgBadgeCorner => 'Badge corner';
+  String get tgBadgeCorner => 'Merkets hjørne';
 
   @override
-  String get tgBadgeSize => 'Badge size';
+  String get tgBadgeSize => 'Merkets størrelse';
 
   @override
-  String get tgNetworkLogos => 'Studio and network logo';
+  String get tgNetworkLogos => 'Studio- og nettverkslogo';
 
   @override
   String get tgNetworkLogosSubtitle =>
-      'Who made it: Warner Bros., Universal, Netflix, Apple, HBO …';
+      'Hvem som laget den: Warner Bros., Universal, Netflix, Apple, HBO …';
 
   @override
-  String get tgNetworkBoxColor => 'Logo box colour';
+  String get tgNetworkBoxColor => 'Farge på logoboksen';
 
   @override
-  String get tgNetworkOpacity => 'Logo box opacity';
+  String get tgNetworkOpacity => 'Logoboksens dekkevne';
 
   @override
-  String get tgNetworkCorner => 'Logo corner';
+  String get tgNetworkCorner => 'Logoens hjørne';
 
   @override
-  String get tgColorBrass => 'Brass';
+  String get tgColorBrass => 'Messing';
 
   @override
-  String get tgColorGold => 'Gold';
+  String get tgColorGold => 'Gull';
 
   @override
-  String get tgColorOrange => 'Orange';
+  String get tgColorOrange => 'Oransje';
 
   @override
-  String get tgColorRed => 'Red';
+  String get tgColorRed => 'Rød';
 
   @override
-  String get tgColorBlue => 'Blue';
+  String get tgColorBlue => 'Blå';
 
   @override
-  String get tgColorGreen => 'Green';
+  String get tgColorGreen => 'Grønn';
 
   @override
-  String get tgColorWhite => 'White';
+  String get tgColorWhite => 'Hvit';
 
   @override
-  String get tgColorBlack => 'Black';
+  String get tgColorBlack => 'Svart';
 
   @override
-  String get tgCornerTopLeft => 'Top left';
+  String get tgCornerTopLeft => 'Øverst til venstre';
 
   @override
-  String get tgCornerTopRight => 'Top right';
+  String get tgCornerTopRight => 'Øverst til høyre';
 
   @override
-  String get tgCornerBottomLeft => 'Bottom left';
+  String get tgCornerBottomLeft => 'Nederst til venstre';
 
   @override
-  String get tgCornerBottomRight => 'Bottom right';
+  String get tgCornerBottomRight => 'Nederst til høyre';
 
   @override
-  String get tgSizeSmall => 'Small';
+  String get tgSizeSmall => 'Liten';
 
   @override
-  String get tgSizeMedium => 'Medium';
+  String get tgSizeMedium => 'Middels';
 
   @override
-  String get tgSizeLarge => 'Large';
+  String get tgSizeLarge => 'Stor';
 
   @override
-  String get tgNavHarbor => 'Harbor';
+  String get tgNavHarbor => 'Havna';
 
   @override
-  String get tgNavSpyglass => 'Spyglass';
+  String get tgNavSpyglass => 'Kikkerten';
 
   @override
-  String get tgNavShuffle => 'Roll the dice';
+  String get tgNavShuffle => 'Kast terningen';
 
   @override
-  String get tgNavGenres => 'Charts';
+  String get tgNavGenres => 'Sjøkart';
 
   @override
-  String get tgNavTreasure => 'Treasure';
+  String get tgNavTreasure => 'Skatten';
 
   @override
-  String get tgNavBountyBoard => 'Bounty board';
+  String get tgNavBountyBoard => 'Dusørtavla';
 
   @override
-  String get tgNavQuarters => 'Captain\'s quarters';
+  String get tgNavQuarters => 'Kapteinens lugar';
 
   @override
-  String get tgLogoStyle => 'Logo on cards';
+  String get tgLogoStyle => 'Logo på kortene';
 
   @override
-  String get tgLogoStyleMark => 'Short mark (N, D+, WB …)';
+  String get tgLogoStyleMark =>
+      'Tjenestens ikon når det finnes (Netflix, Disney+, Apple …)';
 
   @override
-  String get tgLogoStyleFull => 'Full logo';
+  String get tgLogoStyleFull => 'Logo';
 
   @override
   String get tgSpotlight => 'Spotlight';
 
   @override
-  String get tgHarborLoading => 'Loading your harbor…';
+  String get tgHarborLoading => 'Laster havna di …';
 
   @override
   String get tgSmartTube => 'SmartTube';
 
   @override
-  String get tgSearchInSmartTube => 'Search in SmartTube';
+  String get tgSearchInSmartTube => 'Søk i SmartTube';
 
   @override
-  String get tgTrailersInSmartTube => 'Play trailers in SmartTube';
+  String get tgTrailersInSmartTube => 'Spill trailere i SmartTube';
 
   @override
   String get tgTrailersInSmartTubeSubtitle =>
-      'When SmartTube is installed. Off: trailers play in Tortugarr.';
+      'Når SmartTube er installert. Av: trailere spilles i Tortugarr.';
 
   @override
-  String get tgBooty => 'Booty';
+  String get tgBooty => 'Byttet';
 
   @override
   String tgBootyCount(int count) {
-    return 'Booty ($count)';
+    return 'Byttet ($count)';
   }
 
   @override
-  String get tgDownloadsRow => 'On the way in';
+  String get tgDownloadsRow => 'På vei inn';
 
   @override
-  String get tgDownloadsRowTortuga => 'Booty on the way in';
+  String get tgDownloadsRowTortuga => 'Byttet er på vei';
 
   @override
-  String get tgTonightRow => 'Fits tonight';
+  String get tgTonightRow => 'Rekker i kveld';
 
   @override
   String get tgHomeRowsStyleHarbor => 'Harbor';
@@ -820,7 +821,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tgThemeTortugaSubtitle =>
-      'A harbour tavern at night: dark wood, parchment text, brass accents, pirate headings and a lantern glow on the focused card';
+      'En havnekro om natta: mørkt tre, pergamenttekst, messingdetaljer, piratoverskrifter og et lyktskjær rundt kortet i fokus';
 
   @override
   String get embyConnectSignInSubtitle =>

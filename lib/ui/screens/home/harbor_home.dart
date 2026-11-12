@@ -838,7 +838,28 @@ class _HarborInlineBadges extends StatelessWidget {
             ),
           );
         }
-        if (info.networkLogo != null) {
+        final curated = info.network == null
+            ? null
+            : curatedLogoUrl(info.network!, width: 500);
+        if (curated != null) {
+          chips.add(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 110, maxHeight: 20),
+                child: Image.network(
+                  curated,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                ),
+              ),
+            ),
+          );
+        } else if (info.networkLogo != null) {
           chips.add(
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

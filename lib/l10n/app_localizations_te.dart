@@ -771,10 +771,11 @@ class AppLocalizationsTe extends AppLocalizations {
   String get tgLogoStyle => 'Logo on cards';
 
   @override
-  String get tgLogoStyleMark => 'Short mark (N, D+, WB …)';
+  String get tgLogoStyleMark =>
+      'Service icon when there is one (Netflix, Disney+, Apple …)';
 
   @override
-  String get tgLogoStyleFull => 'Full logo';
+  String get tgLogoStyleFull => 'Logo';
 
   @override
   String get tgSpotlight => 'Spotlight';
