@@ -567,7 +567,9 @@ class _HarborHomeState extends State<_HarborHome> with SingleTickerProviderState
           transform: m,
           child: Transform.scale(
             scale: scale,
-            alignment: Alignment.topCenter,
+            // Centred on the card's middle (not the poster's top), so the
+            // side cards line up with the middle of the focused one.
+            alignment: Alignment(0, -0.1),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
