@@ -10,7 +10,7 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Täytejakso';
@@ -148,7 +148,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin versio $version';
+    return 'Tortugarr versio $version';
   }
 
   @override
@@ -202,7 +202,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin ei voinut käyttää järjestelmän avainketjua. \tVoit kirjautua, mutta suojatun tunnuksen tallennus ei välttämättä ole käytettävissä, ennen kuin avainketju on avattu.';
+      'Tortugarr ei voinut käyttää järjestelmän avainketjua. \tVoit kirjautua, mutta suojatun tunnuksen tallennus ei välttämättä ole käytettävissä, ennen kuin avainketju on avattu.';
 
   @override
   String get ok => 'OK';
@@ -496,7 +496,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Ohita havaittu asettelu, jos laitteen tiedot on luettu virheellisesti. Käynnistä Moonfin uudelleen, jotta muutokset astuvat voimaan.';
+      'Ohita havaittu asettelu, jos laitteen tiedot on luettu virheellisesti. Käynnistä Tortugarr uudelleen, jotta muutokset astuvat voimaan.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automaattinen';
@@ -581,7 +581,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Mukautetut teemat muuttavat Moonfinin ulkoasua kauttaaltaan. Valitse tyyliisi sopiva vaihtoehto.';
+      'Mukautetut teemat muuttavat Tortugarrin ulkoasua kauttaaltaan. Valitse tyyliisi sopiva vaihtoehto.';
 
   @override
   String get keyboardStyle => 'Näppäimistötyyli';
@@ -734,7 +734,7 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Poistutko Moonfinista?';
+  String get exitApp => 'Poistutko Tortugarrista?';
 
   @override
   String get exitAppConfirmation => 'Haluatko varmasti poistua?';
@@ -2173,7 +2173,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Koko näytön tila päällä tai pois päältä';
 
   @override
-  String get shortcutQuit => 'Poistu Moonfinistä';
+  String get shortcutQuit => 'Poistu Tortugarristä';
 
   @override
   String get shortcutPlayPause => 'Toista tai keskeytä';
@@ -2350,7 +2350,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get bookReadingUnavailableMessage =>
-      'Avaa se Moonfin-sovelluksessa puhelimella, tabletilla tai tietokoneella lukeaksesi sen. Äänikirjat toimivat edelleen tässä sovelluksessa.';
+      'Avaa se Tortugarr-sovelluksessa puhelimella, tabletilla tai tietokoneella lukeaksesi sen. Äänikirjat toimivat edelleen tässä sovelluksessa.';
 
   @override
   String formatCannotRenderInApp(String extension) {
@@ -3178,7 +3178,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Mukauta Moonfin sovelluksessa käytettyjä latausanimaatioita';
+      'Mukauta Tortugarr sovelluksessa käytettyjä latausanimaatioita';
 
   @override
   String get loadingAnimationConfiguration => 'Ladataan Animaation Asetuksia';
@@ -4222,7 +4222,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Ei asetettu. Moonfin yrittää oletusarvoista mpv.conf-tiedostoa app/data-kansioissa.';
+      'Ei asetettu. Tortugarr yrittää oletusarvoista mpv.conf-tiedostoa app/data-kansioissa.';
 
   @override
   String get selectMpvConf => 'Valitse mpv.conf';
@@ -4523,7 +4523,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android sallii Moonfinin kirjoittaa vain niihin kansioihin, jotka se omistaa, eikä tässä laitteessa ole irrotettavaa tallennustilaa. Ota yllä oleva ”Tallenna Lataukset-kansioon” -vaihtoehto käyttöön, jotta lataukset tallennetaan paikkaan, johon muut sovellukset pääsevät käsiksi.';
+      'Android sallii Tortugarrin kirjoittaa vain niihin kansioihin, jotka se omistaa, eikä tässä laitteessa ole irrotettavaa tallennustilaa. Ota yllä oleva ”Tallenna Lataukset-kansioon” -vaihtoehto käyttöön, jotta lataukset tallennetaan paikkaan, johon muut sovellukset pääsevät käsiksi.';
 
   @override
   String get saveToDownloadsFolder => 'Tallenna Lataukset Kansioon';
@@ -4816,7 +4816,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Moonfin uudelleen, jotta muutokset tulevat voimaan.';
+      'Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Tortugarr uudelleen, jotta muutokset tulevat voimaan.';
 
   @override
   String get showInNavigation => 'Näytä navigoinnissa';
@@ -5727,7 +5727,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get cancelRequest4k => 'Peruuta 4K-pyyntö';
 
   @override
-  String get playInMoonfin => 'Toista Moonfinissä';
+  String get playInMoonfin => 'Toista Tortugarrissä';
 
   @override
   String get requestedByLabel => 'Pyytäjän nimi';
@@ -5772,7 +5772,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get keep => 'Pitää';
 
   @override
-  String get itemNotFoundInLibrary => 'Kohdetta ei löydy Moonfin-kirjastostasi';
+  String get itemNotFoundInLibrary =>
+      'Kohdetta ei löydy Tortugarr-kirjastostasi';
 
   @override
   String get errorSearchingLibrary => 'Virhe haettaessa kirjastoa';
@@ -7809,7 +7810,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Palvelimen uudelleenkäynnistys käynnissä, käynnistä Moonfin uudelleen';
+      'Palvelimen uudelleenkäynnistys käynnissä, käynnistä Tortugarr uudelleen';
 
   @override
   String get adminActiveSessions => 'Aktiiviset istunnot';
@@ -11561,7 +11562,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Moonfin uudelleen, jotta muutokset tulevat voimaan.';
+      'Vaihda etusivun näkyvyys kirjastoittain. Käynnistä Tortugarr uudelleen, jotta muutokset tulevat voimaan.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11704,14 +11705,14 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Kuinka Moonfin käsittelee tietojasi';
+      'Kuinka Tortugarr käsittelee tietojasi';
 
   @override
   String get settingsCheckForUpdates => 'Tarkista päivitykset';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Tarkista viimeisin Moonfin-julkaisu';
+      'Tarkista viimeisin Tortugarr-julkaisu';
 
   @override
   String get settingsBoth => 'Molemmat';
@@ -14357,7 +14358,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller on Flutterin moderni GPU-renderöijä, joka tuo sulavammat animaatiot ja vähemmän nykimistä. Joissakin TV-bokseissa ja vanhemmissa GPU:issa se voi aiheuttaa häiriöitä tai mustan kuvan; valitse silloin Ei käytössä. Automaattinen valitsee laitteellesi parhaan oletuksen. Ota muutos käyttöön käynnistämällä Moonfin uudelleen.';
+      'Impeller on Flutterin moderni GPU-renderöijä, joka tuo sulavammat animaatiot ja vähemmän nykimistä. Joissakin TV-bokseissa ja vanhemmissa GPU:issa se voi aiheuttaa häiriöitä tai mustan kuvan; valitse silloin Ei käytössä. Automaattinen valitsee laitteellesi parhaan oletuksen. Ota muutos käyttöön käynnistämällä Tortugarr uudelleen.';
 
   @override
   String get impellerAuto => 'Automaattinen';
@@ -14373,7 +14374,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin on käynnistettävä uudelleen renderöintimoottorin vaihtamiseksi. Sulje sovellus nyt ja avaa se uudelleen, niin muutos tulee voimaan.';
+      'Tortugarr on käynnistettävä uudelleen renderöintimoottorin vaihtamiseksi. Sulje sovellus nyt ja avaa se uudelleen, niin muutos tulee voimaan.';
 
   @override
   String get impellerCloseNow => 'Sulje sovellus nyt';
@@ -14926,7 +14927,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Transkoodatut versiot ladataan vain silloin, kun Moonfin on auki. Alkuperäinen versio ladataan myös taustalla.';
+      'Transkoodatut versiot ladataan vain silloin, kun Tortugarr on auki. Alkuperäinen versio ladataan myös taustalla.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -14934,7 +14935,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Lataaminen on mahdollista vain, kun Moonfin on auki';
+      'Lataaminen on mahdollista vain, kun Tortugarr on auki';
 
   @override
   String get autoDownloadQualityTitle => 'Automaattisen latauksen laatu';
@@ -14957,7 +14958,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'Kun olet katsonut jakson loppuun millä tahansa laitteella, Moonfin lataa seuraavat jaksot. Ladatut jaksot poistetaan, kun ne on katsottu.';
+      'Kun olet katsonut jakson loppuun millä tahansa laitteella, Tortugarr lataa seuraavat jaksot. Ladatut jaksot poistetaan, kun ne on katsottu.';
 
   @override
   String get smartDownloadsKeepReady => 'Lataa tallennettavat jaksot';
@@ -15032,15 +15033,15 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Salli järjestelmän tarkistaa säännöllisesti uusien jaksojen saatavuuden, vaikka Moonfin-sovellus olisi suljettuna';
+      'Salli järjestelmän tarkistaa säännöllisesti uusien jaksojen saatavuuden, vaikka Tortugarr-sovellus olisi suljettuna';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Sovelluksen taustapäivitys on poistettu käytöstä Moonfin-sovelluksessa. Ota se käyttöön iOS:n Asetuksissa.';
+      'Sovelluksen taustapäivitys on poistettu käytöstä Tortugarr-sovelluksessa. Ota se käyttöön iOS:n Asetuksissa.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Moonfinin taustakäyttö on rajoitettu Androidin asetuksissa.';
+      'Tortugarrin taustakäyttö on rajoitettu Androidin asetuksissa.';
 
   @override
   String get autoDownloadCheckNow => 'Tarkista nyt';

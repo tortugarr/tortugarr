@@ -1,6 +1,6 @@
 {
     "@@locale": "es",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Versión Moonfin {version}",
+    "appVersionFooter": "Versión Tortugarr {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin no pudo acceder al llavero del sistema. El inicio de sesión puede continuar, pero el almacenamiento seguro de tokens podría no estar disponible hasta que se desbloquee el llavero.",
+    "secureStorageUnavailableMessage": "Tortugarr no pudo acceder al llavero del sistema. El inicio de sesión puede continuar, pero el almacenamiento seguro de tokens podría no estar disponible hasta que se desbloquee el llavero.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "¿Salir de Moonfin?",
+    "exitApp": "¿Salir de Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3050,7 +3050,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "No establecido. Moonfin intentará usar un mpv.conf predeterminado en las carpetas de la app/datos.",
+    "notSetMpvConf": "No establecido. Tortugarr intentará usar un mpv.conf predeterminado en las carpetas de la app/datos.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -4197,7 +4197,7 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Reproducir en Moonfin",
+    "playInMoonfin": "Reproducir en Tortugarr",
     "@playInMoonfin": {
         "description": "Button to play available media in Moonfin"
     },
@@ -4251,7 +4251,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "Elemento no encontrado en tu biblioteca de Moonfin",
+    "itemNotFoundInLibrary": "Elemento no encontrado en tu biblioteca de Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4507,7 +4507,7 @@
         }
     },
     "adminServerRebootInProgress": "Reinicio del servidor en curso",
-    "adminServerRebootMessage": "Reinicio del servidor en curso, por favor reinicia Moonfin",
+    "adminServerRebootMessage": "Reinicio del servidor en curso, por favor reinicia Tortugarr",
     "adminActiveSessions": "Sesiones activas",
     "adminSessionsLoadFailed": "Error al cargar las sesiones",
     "adminNoActiveSessions": "No hay sesiones activas",
@@ -6298,7 +6298,7 @@
     "@subtitlePreviewText": {
         "description": "Sample text shown in the subtitle live preview"
     },
-    "libraryVisibilityDescription": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Moonfin para que los cambios surtan efecto.",
+    "libraryVisibilityDescription": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Tortugarr para que los cambios surtan efecto.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -6543,7 +6543,7 @@
     "settingsShowGenresButtonInNavigation": "Mostrar el botón de géneros en la barra de navegación",
     "settingsShowFavoritesButtonInNavigation": "Mostrar el botón de favoritos en la barra de navegación",
     "settingsShowLibrariesButtonInNavigation": "Mostrar el botón de bibliotecas en la barra de navegación",
-    "settingsLibraryVisibilitySubtitle": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Moonfin para que los cambios surtan efecto.",
+    "settingsLibraryVisibilitySubtitle": "Alternar la visibilidad de la página de inicio por biblioteca. Reinicie Tortugarr para que los cambios surtan efecto.",
     "settingsMediaBarAndLocalPreviews": "Barra multimedia y vistas previas locales",
     "settingsVisualOverlays": "Superposiciones visuales",
     "settingsSeasonalSurprise": "Sorpresa estacional",
@@ -6567,9 +6567,9 @@
     "settingsLicenses": "Licencias",
     "settingsOpenSourceLicenseNotices": "Avisos de licencia de código abierto",
     "settingsPrivacyPolicy": "política de privacidad",
-    "settingsPrivacyPolicySubtitle": "Cómo maneja Moonfin tus datos",
+    "settingsPrivacyPolicySubtitle": "Cómo maneja Tortugarr tus datos",
     "settingsCheckForUpdates": "Buscar actualizaciones",
-    "settingsCheckForUpdatesSubtitle": "Busque la última versión de Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Busque la última versión de Tortugarr",
     "settingsPoweredByFlutter": "Desarrollado por Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# aviso de licencia} other {# avisos de licencia}}",
     "@settingsLicenseNoticesCount": {
@@ -7384,7 +7384,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Los temas personalizados modifican los elementos visuales de todo Moonfin. Elige una de estas opciones según tu estilo.",
+    "customThemeSubtitle": "Los temas personalizados modifican los elementos visuales de todo Tortugarr. Elige una de estas opciones según tu estilo.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8897,7 +8897,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller es el renderizador de GPU moderno de Flutter, que ofrece animaciones más fluidas y menos tirones. En algunos TV box y GPU antiguas puede provocar fallos gráficos o vídeo en negro; desactívalo si te ocurre. Automático elige la mejor opción para tu dispositivo. Reinicia Moonfin para aplicar los cambios.",
+    "impellerRenderingSubtitle": "Impeller es el renderizador de GPU moderno de Flutter, que ofrece animaciones más fluidas y menos tirones. En algunos TV box y GPU antiguas puede provocar fallos gráficos o vídeo en negro; desactívalo si te ocurre. Automático elige la mejor opción para tu dispositivo. Reinicia Tortugarr para aplicar los cambios.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8908,7 +8908,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin debe reiniciarse para cambiar el motor de renderizado. Cierra la aplicación ahora y vuelve a abrirla para aplicar los cambios.",
+    "impellerRestartMessage": "Tortugarr debe reiniciarse para cambiar el motor de renderizado. Cierra la aplicación ahora y vuelve a abrirla para aplicar los cambios.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },

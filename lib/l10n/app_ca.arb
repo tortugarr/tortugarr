@@ -1,6 +1,6 @@
 {
     "@@locale": "ca",
-    "appTitle": "Moonfin",
+    "appTitle": "Tortugarr",
     "@appTitle": {
         "description": "The application title"
     },
@@ -82,7 +82,7 @@
     "@selectServer": {
         "description": "Button to navigate back to server selection"
     },
-    "appVersionFooter": "Moonfin versió {version}",
+    "appVersionFooter": "Tortugarr versió {version}",
     "@appVersionFooter": {
         "description": "App version shown in footer",
         "placeholders": {
@@ -156,7 +156,7 @@
     "@secureStorageUnavailable": {
         "description": "Dialog title when system keyring is inaccessible"
     },
-    "secureStorageUnavailableMessage": "Moonfin no ha pogut accedir al teu gestor de claus del sistema. L'inici de sessió pot continuar, però és possible que l'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.",
+    "secureStorageUnavailableMessage": "Tortugarr no ha pogut accedir al teu gestor de claus del sistema. L'inici de sessió pot continuar, però és possible que l'emmagatzematge de testimoni segur no estigui disponible fins que no es desbloquegi el gestor de claus.",
     "@secureStorageUnavailableMessage": {
         "description": "Explanation when secure storage is not available"
     },
@@ -249,7 +249,7 @@
             }
         }
     },
-    "exitApp": "Sortir de Moonfin?",
+    "exitApp": "Sortir de Tortugarr?",
     "@exitApp": {
         "description": "Title of exit confirmation dialog"
     },
@@ -3080,7 +3080,7 @@
     "@customMpvConfPath": {
         "description": "Setting for custom mpv.conf path"
     },
-    "notSetMpvConf": "No configurat. Moonfin provarà un mpv.conf predeterminat a les carpetes d'aplicacions/dades.",
+    "notSetMpvConf": "No configurat. Tortugarr provarà un mpv.conf predeterminat a les carpetes d'aplicacions/dades.",
     "@notSetMpvConf": {
         "description": "Description when no custom mpv.conf is set"
     },
@@ -3475,7 +3475,7 @@
     "@libraryVisibility": {
         "description": "Section title for library visibility"
     },
-    "libraryVisibilityDescription": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.",
+    "libraryVisibilityDescription": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.",
     "@libraryVisibilityDescription": {
         "description": "Explanation shown on the library visibility settings screen"
     },
@@ -4252,7 +4252,7 @@
     "@cancelRequest": {
         "description": "Button/dialog title to cancel a media request"
     },
-    "playInMoonfin": "Reprodueix a Moonfin",
+    "playInMoonfin": "Reprodueix a Tortugarr",
     "@playInMoonfin": {
         "description": "Button to play available media in Moonfin"
     },
@@ -4306,7 +4306,7 @@
     "@keep": {
         "description": "Button to keep/dismiss a cancel dialog"
     },
-    "itemNotFoundInLibrary": "No s'ha trobat l'element a la vostra biblioteca de Moonfin",
+    "itemNotFoundInLibrary": "No s'ha trobat l'element a la vostra biblioteca de Tortugarr",
     "@itemNotFoundInLibrary": {
         "description": "Snackbar when Seerr item cannot be found in Jellyfin"
     },
@@ -4610,7 +4610,7 @@
         }
     },
     "adminServerRebootInProgress": "Reinici del servidor en curs",
-    "adminServerRebootMessage": "S'està reiniciant el servidor, reinicieu Moonfin",
+    "adminServerRebootMessage": "S'està reiniciant el servidor, reinicieu Tortugarr",
     "adminActiveSessions": "Sessions actives",
     "adminSessionsLoadFailed": "No s'han pogut carregar les sessions",
     "adminNoActiveSessions": "No hi ha sessions actives",
@@ -6498,7 +6498,7 @@
     "settingsShowGenresButtonInNavigation": "Mostra el botó de gèneres a la barra de navegació",
     "settingsShowFavoritesButtonInNavigation": "Mostra el botó de preferits a la barra de navegació",
     "settingsShowLibrariesButtonInNavigation": "Mostra el botó de biblioteques a la barra de navegació",
-    "settingsLibraryVisibilitySubtitle": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Moonfin perquè els canvis tinguin efecte.",
+    "settingsLibraryVisibilitySubtitle": "Commuta la visibilitat de la pàgina d'inici per biblioteca. Reinicieu Tortugarr perquè els canvis tinguin efecte.",
     "settingsMediaBarAndLocalPreviews": "Barra multimèdia i visualitzacions prèvies locals",
     "settingsVisualOverlays": "Superposicions visuals",
     "settingsSeasonalSurprise": "Sorpresa de temporada",
@@ -6522,9 +6522,9 @@
     "settingsLicenses": "Llicències",
     "settingsOpenSourceLicenseNotices": "Avisos de llicència de codi obert",
     "settingsPrivacyPolicy": "Política de privadesa",
-    "settingsPrivacyPolicySubtitle": "Com Moonfin gestiona les vostres dades",
+    "settingsPrivacyPolicySubtitle": "Com Tortugarr gestiona les vostres dades",
     "settingsCheckForUpdates": "Comproveu si hi ha actualitzacions",
-    "settingsCheckForUpdatesSubtitle": "Comproveu l'últim llançament de Moonfin",
+    "settingsCheckForUpdatesSubtitle": "Comproveu l'últim llançament de Tortugarr",
     "settingsPoweredByFlutter": "Desenvolupat per Flutter",
     "settingsLicenseNoticesCount": "{count, plural, one {# avís de llicència} other {# avisos de llicència}}",
     "@settingsLicenseNoticesCount": {
@@ -7641,7 +7641,7 @@
     "@customThemeTitle": {
         "description": "Title for the custom theme settings section"
     },
-    "customThemeSubtitle": "Els temes personalitzats modifiquen els elements visuals de tot Moonfin. Tria una d'aquestes opcions segons el teu estil.",
+    "customThemeSubtitle": "Els temes personalitzats modifiquen els elements visuals de tot Tortugarr. Tria una d'aquestes opcions segons el teu estil.",
     "@customThemeSubtitle": {
         "description": "Description under custom themes section"
     },
@@ -8897,7 +8897,7 @@
     "@impellerRendering": {
         "description": "Title of the setting that selects the Flutter rendering engine (Impeller vs. legacy)."
     },
-    "impellerRenderingSubtitle": "Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Moonfin per aplicar-ho.",
+    "impellerRenderingSubtitle": "Impeller és el renderitzador de GPU modern de Flutter, per a animacions més fluides i menys interrupcions. En alguns descodificadors de TV i GPU antigues pot provocar defectes visuals o vídeo en negre; desactiva'l si en detectes. Automàtic tria el millor valor predeterminat per al teu dispositiu. Reinicia Tortugarr per aplicar-ho.",
     "@impellerRenderingSubtitle": {
         "description": "Explanatory description under the rendering engine setting."
     },
@@ -8908,7 +8908,7 @@
     "@impellerRestartTitle": {
         "description": "Title of the dialog shown after changing the rendering engine."
     },
-    "impellerRestartMessage": "Moonfin s'ha de reiniciar per canviar el motor de renderització. Tanca l'aplicació ara i torna a obrir-la per aplicar-ho.",
+    "impellerRestartMessage": "Tortugarr s'ha de reiniciar per canviar el motor de renderització. Tanca l'aplicació ara i torna a obrir-la per aplicar-ho.",
     "@impellerRestartMessage": {
         "description": "Body of the dialog shown after changing the rendering engine."
     },
@@ -9430,7 +9430,7 @@
     "@sdCard": {
         "description": "Download location option for a removable storage volume"
     },
-    "downloadLocationLimitedByAndroid": "Android només permet que Moonfin escrigui a les carpetes que posseeix, i aquest dispositiu no té emmagatzematge extraïble. Activa la carpeta «Desar a Baixades» anterior per guardar les baixades en un lloc al qual les altres aplicacions puguin accedir.",
+    "downloadLocationLimitedByAndroid": "Android només permet que Tortugarr escrigui a les carpetes que posseeix, i aquest dispositiu no té emmagatzematge extraïble. Activa la carpeta «Desar a Baixades» anterior per guardar les baixades en un lloc al qual les altres aplicacions puguin accedir.",
     "@downloadLocationLimitedByAndroid": {
         "description": "Note shown when the only download location Android allows is the default one"
     },
@@ -9592,7 +9592,7 @@
     "@scrollSensitivitySubtitle": {
         "description": "Explains the desktop scroll sensitivity slider."
     },
-    "interfaceLayoutSubtitle": "Canvia el tipus de disposicó detectada si el teu dispositiu no es reconeix correctament. Reinicia Moonfin per aplicar els canvis.",
+    "interfaceLayoutSubtitle": "Canvia el tipus de disposicó detectada si el teu dispositiu no es reconeix correctament. Reinicia Tortugarr per aplicar els canvis.",
     "@interfaceLayoutSubtitle": {
         "description": "Subtitle for the interface layout setting"
     },
@@ -10242,7 +10242,7 @@
     "@loadingAnimationConfiguration": {
         "description": "Subtitle header for loading animation settings"
     },
-    "loadingAnimationDescription": "Personalitza les animacions de càrrega que utilitza Moonfin",
+    "loadingAnimationDescription": "Personalitza les animacions de càrrega que utilitza Tortugarr",
     "@loadingAnimationDescription": {
         "description": "Description for loading animation customization settings"
     },
@@ -10589,7 +10589,7 @@
             }
         }
     },
-    "autoDownloadTranscodedForegroundNote": "Les qualitats transcodificades només es baixen mentre Moonfin està obert. La qualitat original també es baixa en segon pla.",
+    "autoDownloadTranscodedForegroundNote": "Les qualitats transcodificades només es baixen mentre Tortugarr està obert. La qualitat original també es baixa en segon pla.",
     "@autoDownloadTranscodedForegroundNote": {
         "description": "Shown under transcoded options when choosing the quality of an auto-download subscription"
     },
@@ -10597,7 +10597,7 @@
     "@autoDownloadTranscodedRunningNote": {
         "description": "Shown under a running transcoded download that a subscription queued"
     },
-    "autoDownloadForegroundOnly": "Només es baixa mentre Moonfin està obert",
+    "autoDownloadForegroundOnly": "Només es baixa mentre Tortugarr està obert",
     "@autoDownloadForegroundOnly": {
         "description": "Short note next to a followed series in a transcoded quality"
     },
@@ -10667,15 +10667,15 @@
     "@autoDownloadBackgroundRefresh": {
         "description": "Setting that lets the system wake the app to check for new episodes"
     },
-    "autoDownloadBackgroundRefreshSubtitle": "Permet que el sistema comprovi periòdicament si hi ha episodis nous mentre Moonfin està tancat",
+    "autoDownloadBackgroundRefreshSubtitle": "Permet que el sistema comprovi periòdicament si hi ha episodis nous mentre Tortugarr està tancat",
     "@autoDownloadBackgroundRefreshSubtitle": {
         "description": "Explains the background refresh setting"
     },
-    "autoDownloadBackgroundRefreshDenied": "Background App Refresh està desactivat per a Moonfin. Activa'l a iOS Settings.",
+    "autoDownloadBackgroundRefreshDenied": "Background App Refresh està desactivat per a Tortugarr. Activa'l a iOS Settings.",
     "@autoDownloadBackgroundRefreshDenied": {
         "description": "Shown when iOS forbids background refresh for the app"
     },
-    "autoDownloadBackgroundRestrictedAndroid": "L'ús en segon pla està restringit per a Moonfin a Android Settings.",
+    "autoDownloadBackgroundRestrictedAndroid": "L'ús en segon pla està restringit per a Tortugarr a Android Settings.",
     "@autoDownloadBackgroundRestrictedAndroid": {
         "description": "Shown when Android restricts the app from running in the background"
     },
@@ -11174,7 +11174,7 @@
     "@shortcutToggleFullscreen": {
         "description": "F11 and Alt+Enter anywhere, F in the player"
     },
-    "shortcutQuit": "Surt de Moonfin",
+    "shortcutQuit": "Surt de Tortugarr",
     "@shortcutQuit": {
         "description": "What Ctrl+Q does on desktop"
     },
@@ -14701,7 +14701,7 @@
     "@searchMusic": {
         "description": "Placeholder and label for the search control in a music library"
     },
-    "smartDownloadsEnableDescription": "Quan acabes un episodi en qualsevol dispositiu, Moonfin baixa els següents. Els episodis que baixa s'eliminen un cop vistos.",
+    "smartDownloadsEnableDescription": "Quan acabes un episodi en qualsevol dispositiu, Tortugarr baixa els següents. Els episodis que baixa s'eliminen un cop vistos.",
     "@smartDownloadsEnableDescription": {
         "description": "Explains the smart downloads switch, including that watched episodes are deleted"
     },
@@ -14789,7 +14789,7 @@
     "@bookReadingUnavailableTitle": {
         "description": "Title of the dialog shown on Apple TV when the user tries to open a book or comic, which tvOS has no reader for"
     },
-    "bookReadingUnavailableMessage": "Obre'l al Moonfin en un telèfon, una tauleta o un ordinador per llegir-lo. Els audiollibres sí que es poden reproduir aquí.",
+    "bookReadingUnavailableMessage": "Obre'l al Tortugarr en un telèfon, una tauleta o un ordinador per llegir-lo. Els audiollibres sí que es poden reproduir aquí.",
     "@bookReadingUnavailableMessage": {
         "description": "Body of the dialog shown on Apple TV when the user tries to open a book or comic"
     },

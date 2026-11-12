@@ -10,7 +10,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Filler';
@@ -148,7 +148,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String appVersionFooter(String version) {
-    return 'Moonfin version $version';
+    return 'Tortugarr version $version';
   }
 
   @override
@@ -200,7 +200,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get secureStorageUnavailableMessage =>
-      'Moonfin n\'a pas pu accéder au trousseau de votre système. La connexion peut continuer, mais le stockage sécurisé des jetons peut rester indisponible tant que le trousseau n\'est pas déverrouillé.';
+      'Tortugarr n\'a pas pu accéder au trousseau de votre système. La connexion peut continuer, mais le stockage sécurisé des jetons peut rester indisponible tant que le trousseau n\'est pas déverrouillé.';
 
   @override
   String get ok => 'OK';
@@ -495,7 +495,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get interfaceLayoutSubtitle =>
-      'Remplacer le type détecté si votre appareil n\'est pas reconnu correctement. Redémarrez Moonfin pour appliquer les modifications.';
+      'Remplacer le type détecté si votre appareil n\'est pas reconnu correctement. Redémarrez Tortugarr pour appliquer les modifications.';
 
   @override
   String get interfaceLayoutAutomatic => 'Automatique';
@@ -580,7 +580,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Les thèmes personnalisés modifient les éléments visuels dans tout Moonfin. Choisissez l\'une de ces options selon votre style.';
+      'Les thèmes personnalisés modifient les éléments visuels dans tout Tortugarr. Choisissez l\'une de ces options selon votre style.';
 
   @override
   String get keyboardStyle => 'Keyboard Style';
@@ -731,7 +731,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get exitApp => 'Quitter Moonfin ?';
+  String get exitApp => 'Quitter Tortugarr ?';
 
   @override
   String get exitAppConfirmation => 'Voulez-vous vraiment quitter ?';
@@ -2185,7 +2185,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shortcutToggleFullscreen => 'Activer ou quitter le plein écran';
 
   @override
-  String get shortcutQuit => 'Quitter Moonfin';
+  String get shortcutQuit => 'Quitter Tortugarr';
 
   @override
   String get shortcutPlayPause => 'Lecture ou pause';
@@ -2360,7 +2360,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get bookReadingUnavailableMessage =>
-      'Open it in Moonfin on a phone, tablet or computer to read it. Audiobooks still play here.';
+      'Open it in Tortugarr on a phone, tablet or computer to read it. Audiobooks still play here.';
 
   @override
   String formatCannotRenderInApp(String extension) {
@@ -3195,7 +3195,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Personnalisez les animations de chargement utilisées dans Moonfin';
+      'Personnalisez les animations de chargement utilisées dans Tortugarr';
 
   @override
   String get loadingAnimationConfiguration =>
@@ -4243,7 +4243,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Non défini. Moonfin tentera d’utiliser un mpv.conf par défaut dans les dossiers app/data.';
+      'Non défini. Tortugarr tentera d’utiliser un mpv.conf par défaut dans les dossiers app/data.';
 
   @override
   String get selectMpvConf => 'Sélectionner mpv.conf';
@@ -4546,7 +4546,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Android autorise Moonfin à écrire uniquement dans ses propres dossiers, et cet appareil n\'a pas de stockage amovible. Activez « Enregistrer dans le dossier Téléchargements » ci-dessus pour que vos téléchargements soient accessibles.';
+      'Android autorise Tortugarr à écrire uniquement dans ses propres dossiers, et cet appareil n\'a pas de stockage amovible. Activez « Enregistrer dans le dossier Téléchargements » ci-dessus pour que vos téléchargements soient accessibles.';
 
   @override
   String get saveToDownloadsFolder =>
@@ -4843,7 +4843,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Affichez ou masquez chaque bibliothèque sur la page d\'accueil. Redémarrez Moonfin pour appliquer les modifications.';
+      'Affichez ou masquez chaque bibliothèque sur la page d\'accueil. Redémarrez Tortugarr pour appliquer les modifications.';
 
   @override
   String get showInNavigation => 'Afficher dans la navigation';
@@ -5761,7 +5761,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancelRequest4k => 'Annuler la demande 4K';
 
   @override
-  String get playInMoonfin => 'Lire dans Moonfin';
+  String get playInMoonfin => 'Lire dans Tortugarr';
 
   @override
   String get requestedByLabel => 'Demandé par';
@@ -5807,7 +5807,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Élément introuvable dans votre bibliothèque Moonfin';
+      'Élément introuvable dans votre bibliothèque Tortugarr';
 
   @override
   String get errorSearchingLibrary =>
@@ -7851,7 +7851,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Redémarrage du serveur en cours, veuillez redémarrer Moonfin';
+      'Redémarrage du serveur en cours, veuillez redémarrer Tortugarr';
 
   @override
   String get adminActiveSessions => 'Sessions actives';
@@ -11644,7 +11644,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Affichez ou masquez chaque bibliothèque sur la page d\'accueil. Redémarrez Moonfin pour appliquer les modifications.';
+      'Affichez ou masquez chaque bibliothèque sur la page d\'accueil. Redémarrez Tortugarr pour appliquer les modifications.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11788,14 +11788,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Comment Moonfin gère vos données';
+      'Comment Tortugarr gère vos données';
 
   @override
   String get settingsCheckForUpdates => 'Vérifier les mises à jour';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Recherchez la dernière version de Moonfin';
+      'Recherchez la dernière version de Tortugarr';
 
   @override
   String get settingsBoth => 'Les deux';
@@ -14453,7 +14453,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get impellerRenderingSubtitle =>
-      'Impeller est le moteur de rendu GPU moderne de Flutter : animations plus fluides et moins de saccades. Sur certains boîtiers TV et GPU anciens, il peut provoquer des artefacts ou une image noire ; désactivez-le si vous constatez ces problèmes. Automatique choisit le meilleur réglage pour votre appareil. Redémarrez Moonfin pour appliquer.';
+      'Impeller est le moteur de rendu GPU moderne de Flutter : animations plus fluides et moins de saccades. Sur certains boîtiers TV et GPU anciens, il peut provoquer des artefacts ou une image noire ; désactivez-le si vous constatez ces problèmes. Automatique choisit le meilleur réglage pour votre appareil. Redémarrez Tortugarr pour appliquer.';
 
   @override
   String get impellerAuto => 'Automatique';
@@ -14469,7 +14469,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get impellerRestartMessage =>
-      'Moonfin doit redémarrer pour changer de moteur de rendu. Fermez l\'application maintenant, puis rouvrez-la pour appliquer le changement.';
+      'Tortugarr doit redémarrer pour changer de moteur de rendu. Fermez l\'application maintenant, puis rouvrez-la pour appliquer le changement.';
 
   @override
   String get impellerCloseNow => 'Fermer l\'application immédiatement';
@@ -15031,7 +15031,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Les qualités transcodées ne se téléchargent que lorsque Moonfin est ouvert. La qualité d\'origine se télécharge aussi en arrière-plan.';
+      'Les qualités transcodées ne se téléchargent que lorsque Tortugarr est ouvert. La qualité d\'origine se télécharge aussi en arrière-plan.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -15039,7 +15039,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Télécharge uniquement lorsque Moonfin est ouvert';
+      'Télécharge uniquement lorsque Tortugarr est ouvert';
 
   @override
   String get autoDownloadQualityTitle =>
@@ -15063,7 +15063,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'Lorsque vous terminez un épisode sur n\'importe quel appareil, Moonfin télécharge les suivants. Les épisodes qu\'il télécharge sont supprimés une fois vus.';
+      'Lorsque vous terminez un épisode sur n\'importe quel appareil, Tortugarr télécharge les suivants. Les épisodes qu\'il télécharge sont supprimés une fois vus.';
 
   @override
   String get smartDownloadsKeepReady => 'Épisodes à garder téléchargés';
@@ -15137,15 +15137,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Autorise le système à rechercher périodiquement de nouveaux épisodes lorsque Moonfin est fermé';
+      'Autorise le système à rechercher périodiquement de nouveaux épisodes lorsque Tortugarr est fermé';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'L\'actualisation en arrière-plan est désactivée pour Moonfin. Activez-la dans les réglages iOS.';
+      'L\'actualisation en arrière-plan est désactivée pour Tortugarr. Activez-la dans les réglages iOS.';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'L\'utilisation en arrière-plan est restreinte pour Moonfin dans les paramètres Android.';
+      'L\'utilisation en arrière-plan est restreinte pour Tortugarr dans les paramètres Android.';
 
   @override
   String get autoDownloadCheckNow => 'Vérifier maintenant';

@@ -10,7 +10,7 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
-  String get appTitle => 'Moonfin';
+  String get appTitle => 'Tortugarr';
 
   @override
   String get animeMarkerFiller => 'Филер';
@@ -592,7 +592,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get customThemeSubtitle =>
-      'Прилагођене теме мењају изглед елемената широм апликације Мунфин (Moonfin). Изаберите једну од понуђених опција према свом укусу.';
+      'Прилагођене теме мењају изглед елемената широм апликације Мунфин (Tortugarr). Изаберите једну од понуђених опција према свом укусу.';
 
   @override
   String get keyboardStyle => 'Стил тастатуре';
@@ -2369,7 +2369,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get bookReadingUnavailableMessage =>
-      'Open it in Moonfin on a phone, tablet or computer to read it. Audiobooks still play here.';
+      'Open it in Tortugarr on a phone, tablet or computer to read it. Audiobooks still play here.';
 
   @override
   String formatCannotRenderInApp(String extension) {
@@ -3199,7 +3199,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get loadingAnimationDescription =>
-      'Прилагодите анимације учитавања које се користе широм Мунфина (Moonfin)';
+      'Прилагодите анимације учитавања које се користе широм Мунфина (Tortugarr)';
 
   @override
   String get loadingAnimationConfiguration => 'Подешавање анимације учитавања';
@@ -4253,7 +4253,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get notSetMpvConf =>
-      'Није подешено. Мунфин (Moonfin) ће покушати да пронађе подразумевану датотеку mpv.conf у фасциклама апликације или података.';
+      'Није подешено. Мунфин (Tortugarr) ће покушати да пронађе подразумевану датотеку mpv.conf у фасциклама апликације или података.';
 
   @override
   String get selectMpvConf => 'Изабери mpv.conf';
@@ -4554,7 +4554,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get downloadLocationLimitedByAndroid =>
-      'Андроид (Android) дозвољава Мунфину (Moonfin) да уписује само у фасцикле које припадају апликацији, а овај уређај нема преносиво складиште. Укључите опцију „Сачувај у фасциклу за преузимања“ изнад да би преузимања била на месту доступном другим апликацијама.';
+      'Андроид (Android) дозвољава Мунфину (Tortugarr) да уписује само у фасцикле које припадају апликацији, а овај уређај нема преносиво складиште. Укључите опцију „Сачувај у фасциклу за преузимања“ изнад да би преузимања била на месту доступном другим апликацијама.';
 
   @override
   String get saveToDownloadsFolder => 'Сачувај у фасциклу за преузимања';
@@ -4849,7 +4849,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get libraryVisibilityDescription =>
-      'Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Moonfin) да би промене ступиле на снагу.';
+      'Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Tortugarr) да би промене ступиле на снагу.';
 
   @override
   String get showInNavigation => 'Прикажи у навигацији';
@@ -5762,7 +5762,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get cancelRequest4k => 'Откажи захтев за 4К резолуцију';
 
   @override
-  String get playInMoonfin => 'Пусти у Мунфину (Moonfin)';
+  String get playInMoonfin => 'Пусти у Мунфину (Tortugarr)';
 
   @override
   String get requestedByLabel => 'Затражио/ла';
@@ -5808,7 +5808,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get itemNotFoundInLibrary =>
-      'Ставка није пронађена у вашој библиотеци Мунфина (Moonfin)';
+      'Ставка није пронађена у вашој библиотеци Мунфина (Tortugarr)';
 
   @override
   String get errorSearchingLibrary => 'Грешка при претрази библиотеке';
@@ -7808,7 +7808,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get adminServerRebootMessage =>
-      'Поновно покретање сервера је у току, поново покрените Мунфин (Moonfin)';
+      'Поновно покретање сервера је у току, поново покрените Мунфин (Tortugarr)';
 
   @override
   String get adminActiveSessions => 'Активне сесије';
@@ -11584,7 +11584,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get settingsLibraryVisibilitySubtitle =>
-      'Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Moonfin) да би промене ступиле на снагу.';
+      'Укључите или искључите видљивост сваке библиотеке на почетној страници. Поново покрените Мунфин (Tortugarr) да би промене ступиле на снагу.';
 
   @override
   String get settingsMediaBarAndLocalPreviews =>
@@ -11729,14 +11729,14 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicySubtitle =>
-      'Како Мунфин (Moonfin) поступа са вашим подацима';
+      'Како Мунфин (Tortugarr) поступа са вашим подацима';
 
   @override
   String get settingsCheckForUpdates => 'Провери да ли постоје ажурирања';
 
   @override
   String get settingsCheckForUpdatesSubtitle =>
-      'Проверите да ли је доступно најновије издање Мунфина (Moonfin)';
+      'Проверите да ли је доступно најновије издање Мунфина (Tortugarr)';
 
   @override
   String get settingsBoth => 'Обоје';
@@ -14960,7 +14960,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get autoDownloadTranscodedForegroundNote =>
-      'Транскодирани квалитети преузимају се само док је Мунфин (Moonfin) отворен. Оригинални квалитет се преузима и у позадини.';
+      'Транскодирани квалитети преузимају се само док је Мунфин (Tortugarr) отворен. Оригинални квалитет се преузима и у позадини.';
 
   @override
   String get autoDownloadTranscodedRunningNote =>
@@ -14968,7 +14968,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get autoDownloadForegroundOnly =>
-      'Преузима се само док је Мунфин (Moonfin) отворен';
+      'Преузима се само док је Мунфин (Tortugarr) отворен';
 
   @override
   String get autoDownloadQualityTitle => 'Квалитет аутоматског преузимања';
@@ -14991,7 +14991,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get smartDownloadsEnableDescription =>
-      'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.';
+      'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.';
 
   @override
   String get smartDownloadsKeepReady => 'Episodes to Keep Downloaded';
@@ -15065,15 +15065,15 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get autoDownloadBackgroundRefreshSubtitle =>
-      'Дозволи систему да повремено проверава има ли нових епизода док је Мунфин (Moonfin) затворен';
+      'Дозволи систему да повремено проверава има ли нових епизода док је Мунфин (Tortugarr) затворен';
 
   @override
   String get autoDownloadBackgroundRefreshDenied =>
-      'Освежавање апликације у позадини је онемогућено за Мунфин (Moonfin). Омогућите га у подешавањима иОС-а (iOS).';
+      'Освежавање апликације у позадини је онемогућено за Мунфин (Tortugarr). Омогућите га у подешавањима иОС-а (iOS).';
 
   @override
   String get autoDownloadBackgroundRestrictedAndroid =>
-      'Употреба Мунфина (Moonfin) у позадини ограничена је у подешавањима Андроида (Android).';
+      'Употреба Мунфина (Tortugarr) у позадини ограничена је у подешавањима Андроида (Android).';
 
   @override
   String get autoDownloadCheckNow => 'Провери сада';

@@ -223,7 +223,7 @@ abstract class AppLocalizations {
   /// The application title
   ///
   /// In en, this message translates to:
-  /// **'Moonfin'**
+  /// **'Tortugarr'**
   String get appTitle;
 
   /// Badge on an anime episode that is filler, meaning it is not adapted from the source manga
@@ -463,7 +463,7 @@ abstract class AppLocalizations {
   /// App version shown in footer
   ///
   /// In en, this message translates to:
-  /// **'Moonfin version {version}'**
+  /// **'Tortugarr version {version}'**
   String appVersionFooter(String version);
 
   /// Section heading for previously saved servers
@@ -559,7 +559,7 @@ abstract class AppLocalizations {
   /// Explanation when secure storage is not available
   ///
   /// In en, this message translates to:
-  /// **'Moonfin could not access your system keyring. Login can continue, but secure token storage may be unavailable until the keyring is unlocked.'**
+  /// **'Tortugarr could not access your system keyring. Login can continue, but secure token storage may be unavailable until the keyring is unlocked.'**
   String get secureStorageUnavailableMessage;
 
   /// Generic OK button label
@@ -889,7 +889,7 @@ abstract class AppLocalizations {
   /// Subtitle for the interface layout setting
   ///
   /// In en, this message translates to:
-  /// **'Override the detected layout when this device is read wrong. Restart Moonfin for changes to take effect.'**
+  /// **'Override the detected layout when this device is read wrong. Restart Tortugarr for changes to take effect.'**
   String get interfaceLayoutSubtitle;
 
   /// Interface layout option: detect from the device
@@ -1045,7 +1045,7 @@ abstract class AppLocalizations {
   /// Description under custom themes section
   ///
   /// In en, this message translates to:
-  /// **'Custom themes alter visual elements across Moonfin. Choose one of these options to suit your style.'**
+  /// **'Custom themes alter visual elements across Tortugarr. Choose one of these options to suit your style.'**
   String get customThemeSubtitle;
 
   /// Label for the setting that picks how the on-screen keyboard looks, or whether the TV's own keyboard is used
@@ -1315,7 +1315,7 @@ abstract class AppLocalizations {
   /// Title of exit confirmation dialog
   ///
   /// In en, this message translates to:
-  /// **'Exit Moonfin?'**
+  /// **'Exit Tortugarr?'**
   String get exitApp;
 
   /// Body text of exit confirmation dialog
@@ -3769,7 +3769,7 @@ abstract class AppLocalizations {
   /// What Ctrl+Q does on desktop
   ///
   /// In en, this message translates to:
-  /// **'Quit Moonfin'**
+  /// **'Quit Tortugarr'**
   String get shortcutQuit;
 
   /// Player shortcut action
@@ -4093,7 +4093,7 @@ abstract class AppLocalizations {
   /// Body of the dialog shown on Apple TV when the user tries to open a book or comic
   ///
   /// In en, this message translates to:
-  /// **'Open it in Moonfin on a phone, tablet or computer to read it. Audiobooks still play here.'**
+  /// **'Open it in Tortugarr on a phone, tablet or computer to read it. Audiobooks still play here.'**
   String get bookReadingUnavailableMessage;
 
   /// Fallback message for unsupported document format
@@ -5491,7 +5491,7 @@ abstract class AppLocalizations {
   /// Description for loading animation customization settings
   ///
   /// In en, this message translates to:
-  /// **'Customize the loading animations used throughout Moonfin'**
+  /// **'Customize the loading animations used throughout Tortugarr'**
   String get loadingAnimationDescription;
 
   /// Subtitle header for loading animation settings
@@ -7429,7 +7429,7 @@ abstract class AppLocalizations {
   /// Description when no custom mpv.conf is set
   ///
   /// In en, this message translates to:
-  /// **'Not set. Moonfin will try a default mpv.conf in app/data folders.'**
+  /// **'Not set. Tortugarr will try a default mpv.conf in app/data folders.'**
   String get notSetMpvConf;
 
   /// Dialog title for selecting mpv.conf
@@ -7957,7 +7957,7 @@ abstract class AppLocalizations {
   /// Note shown when the only download location Android allows is the default one
   ///
   /// In en, this message translates to:
-  /// **'Android only lets Moonfin write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.'**
+  /// **'Android only lets Tortugarr write to the folders it owns, and this device has no removable storage. Turn on Save to Downloads folder above to keep downloads somewhere other apps can reach.'**
   String get downloadLocationLimitedByAndroid;
 
   /// Setting for saving to downloads folder
@@ -8467,7 +8467,7 @@ abstract class AppLocalizations {
   /// Explanation shown on the library visibility settings screen
   ///
   /// In en, this message translates to:
-  /// **'Toggle home page visibility per library. Restart Moonfin for changes to take effect.'**
+  /// **'Toggle home page visibility per library. Restart Tortugarr for changes to take effect.'**
   String get libraryVisibilityDescription;
 
   /// Toggle for showing library in navigation
@@ -10111,7 +10111,7 @@ abstract class AppLocalizations {
   /// Button to play available media in Moonfin
   ///
   /// In en, this message translates to:
-  /// **'Play in Moonfin'**
+  /// **'Play in Tortugarr'**
   String get playInMoonfin;
 
   /// Label above the name of whoever requested media, where the name sits on its own line
@@ -10189,7 +10189,7 @@ abstract class AppLocalizations {
   /// Snackbar when Seerr item cannot be found in Jellyfin
   ///
   /// In en, this message translates to:
-  /// **'Item not found in your Moonfin library'**
+  /// **'Item not found in your Tortugarr library'**
   String get itemNotFoundInLibrary;
 
   /// Snackbar when library search fails
@@ -13717,7 +13717,7 @@ abstract class AppLocalizations {
   /// No description provided for @adminServerRebootMessage.
   ///
   /// In en, this message translates to:
-  /// **'Server reboot in progress, please restart Moonfin'**
+  /// **'Server reboot in progress, please restart Tortugarr'**
   String get adminServerRebootMessage;
 
   /// No description provided for @adminActiveSessions.
@@ -20263,7 +20263,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLibraryVisibilitySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Toggle home page visibility per library. Restart Moonfin for changes to take effect.'**
+  /// **'Toggle home page visibility per library. Restart Tortugarr for changes to take effect.'**
   String get settingsLibraryVisibilitySubtitle;
 
   /// No description provided for @settingsMediaBarAndLocalPreviews.
@@ -20509,7 +20509,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPrivacyPolicySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'How Moonfin handles your data'**
+  /// **'How Tortugarr handles your data'**
   String get settingsPrivacyPolicySubtitle;
 
   /// No description provided for @settingsCheckForUpdates.
@@ -20521,7 +20521,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsCheckForUpdatesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Check for the latest Moonfin release'**
+  /// **'Check for the latest Tortugarr release'**
   String get settingsCheckForUpdatesSubtitle;
 
   /// Option label to show both progress bar and countdown timer on media segment countdown overlay
@@ -24982,7 +24982,7 @@ abstract class AppLocalizations {
   /// Explanatory description under the rendering engine setting.
   ///
   /// In en, this message translates to:
-  /// **'Impeller is Flutter\'s modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Moonfin to apply.'**
+  /// **'Impeller is Flutter\'s modern GPU renderer for smoother animations and less stutter. On some TV boxes and older GPUs it can cause glitches or black video; switch it Off if you see those. Automatic picks the best default for your device. Restart Tortugarr to apply.'**
   String get impellerRenderingSubtitle;
 
   /// No description provided for @impellerAuto.
@@ -25012,7 +25012,7 @@ abstract class AppLocalizations {
   /// Body of the dialog shown after changing the rendering engine.
   ///
   /// In en, this message translates to:
-  /// **'Moonfin needs to restart to change the rendering engine. Close the app now, then reopen it to apply.'**
+  /// **'Tortugarr needs to restart to change the rendering engine. Close the app now, then reopen it to apply.'**
   String get impellerRestartMessage;
 
   /// Button that closes the app so the new rendering engine takes effect on next launch.
@@ -26008,7 +26008,7 @@ abstract class AppLocalizations {
   /// Shown under transcoded options when choosing the quality of an auto-download subscription
   ///
   /// In en, this message translates to:
-  /// **'Transcoded qualities only download while Moonfin is open. Original quality also downloads in the background.'**
+  /// **'Transcoded qualities only download while Tortugarr is open. Original quality also downloads in the background.'**
   String get autoDownloadTranscodedForegroundNote;
 
   /// Shown under a running transcoded download that a subscription queued
@@ -26020,7 +26020,7 @@ abstract class AppLocalizations {
   /// Short note next to a followed series in a transcoded quality
   ///
   /// In en, this message translates to:
-  /// **'Downloads only while Moonfin is open'**
+  /// **'Downloads only while Tortugarr is open'**
   String get autoDownloadForegroundOnly;
 
   /// Title of the quality sheet when it is opened to create an auto-download subscription
@@ -26056,7 +26056,7 @@ abstract class AppLocalizations {
   /// Explains the smart downloads switch, including that watched episodes are deleted
   ///
   /// In en, this message translates to:
-  /// **'When you finish an episode on any device, Moonfin downloads the next ones. Episodes it downloads are deleted once watched.'**
+  /// **'When you finish an episode on any device, Tortugarr downloads the next ones. Episodes it downloads are deleted once watched.'**
   String get smartDownloadsEnableDescription;
 
   /// Setting for how many unwatched episodes of a series stay downloaded after one is watched
@@ -26176,19 +26176,19 @@ abstract class AppLocalizations {
   /// Explains the background refresh setting
   ///
   /// In en, this message translates to:
-  /// **'Allow the system to check for new episodes periodically while Moonfin is closed'**
+  /// **'Allow the system to check for new episodes periodically while Tortugarr is closed'**
   String get autoDownloadBackgroundRefreshSubtitle;
 
   /// Shown when iOS forbids background refresh for the app
   ///
   /// In en, this message translates to:
-  /// **'Background App Refresh is disabled for Moonfin. Enable it in iOS Settings.'**
+  /// **'Background App Refresh is disabled for Tortugarr. Enable it in iOS Settings.'**
   String get autoDownloadBackgroundRefreshDenied;
 
   /// Shown when Android restricts the app from running in the background
   ///
   /// In en, this message translates to:
-  /// **'Background usage is restricted for Moonfin in Android Settings.'**
+  /// **'Background usage is restricted for Tortugarr in Android Settings.'**
   String get autoDownloadBackgroundRestrictedAndroid;
 
   /// Button that runs a subscription check immediately
