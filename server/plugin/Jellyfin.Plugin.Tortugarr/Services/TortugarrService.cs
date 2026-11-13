@@ -2014,6 +2014,28 @@ public sealed class TortugarrService
         @"no files found are eligible for import|unsupported extension|potentially dangerous|dangerous file|executable file|not a video file|no video files? found",
         System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
+    /// <summary>
+    /// Reasons that say the *arr could not reach the files, not that they hold no video
+    /// (2026-11-13: after a Windows restart drive I: was not mounted in the server, Radarr saw an
+    /// empty folder, and two complete 4K films were deleted as "fake"). Never a reason to delete.
+    /// </summary>
+    internal static readonly System.Text.RegularExpressions.Regex PathProblemReason = new(
+        @"path does not exist|not accessible|access to the path|permission denied|no such file or directory|could not find (a part of )?the path|unable to access|is not a valid path",
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    /// <summary>File types that make a download real, whatever the *arr says about it.</summary>
+    internal static readonly HashSet<string> VideoExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".mkv", ".mp4", ".m4v", ".avi", ".mov", ".ts", ".m2ts", ".mts", ".wmv", ".webm", ".mpg", ".mpeg", ".iso",
+    };
+
+    /// <summary>Smallest file that counts as video when deciding a download is not fake (samples are smaller).</summary>
+    internal const long RealVideoBytes = 150L * 1024 * 1024;
+
+    /// <summary>True when a torrent's file list holds a real video file.</summary>
+    internal static bool HoldsVideo(IEnumerable<(string Name, long Size)> files) =>
+        files.Any(f => f.Size >= RealVideoBytes && VideoExtensions.Contains(System.IO.Path.GetExtension(f.Name)));
+
     /// <summary>Finished downloads one *arr will never import because they hold no video.</summary>
     internal static List<FakeDownload> FindFakes(string arrName, JsonArray? records)
     {
@@ -2044,7 +2066,7 @@ public sealed class TortugarrService
                 .SelectMany(m => (m?["messages"] as JsonArray ?? new JsonArray()).Select(x => (string?)x))
                 .Where(x => !string.IsNullOrWhiteSpace(x)));
             var match = FakeImportReason.Match(why);
-            if (!match.Success || !ids.Add(downloadId))
+            if (!match.Success || PathProblemReason.IsMatch(why) || !ids.Add(downloadId))
             {
                 continue; // a season pack has one record per episode; the download is one
             }
@@ -2077,6 +2099,23 @@ public sealed class TortugarrService
     }
 
     /// <summary>Removes a fake from qBittorrent with its files, blocklists it and lets the *arr search again.</summary>
+    /// <summary>
+    /// Asks the torrent client what the download really holds. Null when that cannot be told
+    /// (client unreachable, metadata missing): the caller must then leave the download alone.
+    /// </summary>
+    internal async Task<bool?> DownloadHoldsVideo(FakeDownload fake, CancellationToken ct)
+    {
+        try
+        {
+            var files = await Qbit.Files(fake.DownloadId, ct).ConfigureAwait(false);
+            return files is null ? null : HoldsVideo(files);
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            return null;
+        }
+    }
+
     internal async Task RemoveFake(FakeDownload fake, CancellationToken ct)
     {
         var arr = fake.Arr == "Radarr" ? Radarr : Sonarr;

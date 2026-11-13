@@ -71,4 +71,31 @@ public class FakeDownloadTests
         Assert.Empty(QbitWatchdog.DecideFakes(new(), seen, T0.AddMinutes(7)));
         Assert.Empty(seen);
     }
+
+    // 2026-11-13: drive I: was not mounted after a Windows restart. Radarr could not reach the
+    // finished films and Tortugarr deleted two complete 4K downloads as "fake".
+    [Theory]
+    [InlineData("Import failed, path does not exist or is not accessible by Radarr: /data/library/14/.incoming/radarr/Pacific Rim (2013) 4K.mkv")]
+    [InlineData("No files found are eligible for import in /data/library/14/.incoming/radarr/x; path does not exist or is not accessible by Radarr")]
+    [InlineData("Access to the path '/data/library/7/.incoming/x' is denied.")]
+    public void A_download_radarr_cannot_reach_is_never_fake(string message)
+    {
+        Assert.Empty(TortugarrService.FindFakes("Radarr", new JsonArray { Rec(9, "PR", "Pacific Rim", message) }));
+    }
+
+    [Fact]
+    public void A_torrent_with_a_real_video_file_holds_video()
+    {
+        Assert.True(TortugarrService.HoldsVideo(new[] { ("Pacific Rim (2013) 4K.mkv", 25_969_762_472L), ("info.nfo", 2_000L) }));
+        Assert.True(TortugarrService.HoldsVideo(new[] { ("BDMV/STREAM/00001.M2TS", 40_000_000_000L) }));
+    }
+
+    [Fact]
+    public void A_torrent_with_only_an_exe_zip_or_sample_holds_no_video()
+    {
+        Assert.False(TortugarrService.HoldsVideo(new[] { ("Nocturne S01E03.exe", 2_000_000L) }));
+        Assert.False(TortugarrService.HoldsVideo(new[] { ("Nocturne.S01E04.zip", 781_681_950L) }));
+        Assert.False(TortugarrService.HoldsVideo(new[] { ("Sample/sample.mkv", 40_000_000L) }));
+        Assert.False(TortugarrService.HoldsVideo(Array.Empty<(string, long)>()));
+    }
 }

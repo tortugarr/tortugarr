@@ -442,3 +442,48 @@ stale_mounts() {
   done
   echo "${stale[@]}"
 }
+
+# WSL only: the drive guard (lib/drive-guard.sh) keeps the Windows drives the containers
+# read mounted after a Windows restart, and restarts containers that started before
+# their drive was there. Runs from the app copy, so install_app_copy must come first.
+DRIVE_GUARD_UNIT=/etc/systemd/system/tortugarr-drive-guard
+drive_guard_install() {
+  is_wsl && has_systemd && [ "${DOCKER_MODE:-engine}" = engine ] || return 0
+  cat > "$DRIVE_GUARD_UNIT.service" <<UNIT
+[Unit]
+Description=Tortugarr: keep the Windows drives of the media server connected
+After=docker.service
+Wants=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash $INSTALL_DIR/app/lib/drive-guard.sh ${PUID:-1000} ${PGID:-1000}
+UNIT
+  cat > "$DRIVE_GUARD_UNIT.timer" <<'UNIT'
+[Unit]
+Description=Tortugarr: check the Windows drives every minute
+
+[Timer]
+OnBootSec=20s
+OnUnitActiveSec=60s
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target
+UNIT
+  systemctl daemon-reload && systemctl enable --now tortugarr-drive-guard.timer >/dev/null 2>&1 \
+    || warning "$(t drive_guard_failed)"
+}
+
+drive_guard_remove() {
+  [ -f "$DRIVE_GUARD_UNIT.timer" ] || return 0
+  systemctl disable --now tortugarr-drive-guard.timer >/dev/null 2>&1
+  rm -f "$DRIVE_GUARD_UNIT.service" "$DRIVE_GUARD_UNIT.timer"
+  systemctl daemon-reload 2>/dev/null || true
+}
+
+# Doctor: drives that are missing and containers that do not see theirs (nothing changed).
+drive_guard_check() {
+  is_wsl || return 0
+  bash "$TORTUGARR_APP/lib/drive-guard.sh" --check
+}

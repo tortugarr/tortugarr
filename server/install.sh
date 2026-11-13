@@ -354,6 +354,7 @@ pull_stack_images() {
 
 bring_up() {
   install_app_copy
+  drive_guard_install
   write_overrides
   write_env
   step "$(t validating_compose)"
@@ -759,6 +760,7 @@ cmd_uninstall() {
   fi
   firewall_close
   remove_windows_helper
+  drive_guard_remove
   rm -f /usr/local/bin/tortugarr
   rm -rf /etc/tortugarr
   if [ "$wipe" = y ]; then
@@ -845,6 +847,11 @@ run_doctor() {
   done
   local stale; stale=$(stale_mounts)
   [ -n "$stale" ] && { error "$(t stale_mounts "$stale")"; fails=$((fails + 1)); }
+  local drives; drives=$(drive_guard_check)
+  if [ -n "$drives" ]; then
+    while IFS= read -r p; do error "$(t d_drive_bad "$p")"; done <<< "$drives"
+    fails=$((fails + 1))
+  fi
   local p code local_only=()
   for p in $(published_ports); do
     code=$(curl -s -o /dev/null -m 6 -w '%{http_code}' "http://$LAN_IP:$p/" 2>/dev/null)

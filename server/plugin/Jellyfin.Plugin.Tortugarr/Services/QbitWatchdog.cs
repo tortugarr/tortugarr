@@ -167,6 +167,26 @@ public sealed class QbitWatchdog : Microsoft.Extensions.Hosting.IHostedService
         var found = await _svc.ListFakes(ct).ConfigureAwait(false);
         foreach (var fake in DecideFakes(found, _state.Fakes, DateTimeOffset.UtcNow))
         {
+            // Never delete on the *arr's word alone: a download that holds a real video file, or
+            // one whose contents cannot be checked, is left for a person (2026-11-13: an unmounted
+            // drive made Radarr report two complete 4K films as having no files).
+            var holdsVideo = await _svc.DownloadHoldsVideo(fake, ct).ConfigureAwait(false);
+            if (holdsVideo != false)
+            {
+                if (_state.FakesSpared.Add(fake.DownloadId))
+                {
+                    Report($"kept {fake.Title}: {fake.Arr} says it has no video ({fake.Reason}), but "
+                        + (holdsVideo == true ? "it holds a video file" : "its files could not be checked"));
+                    await _notice.PostAsync("Stall", $"Download not imported: {fake.Title}",
+                        holdsVideo == true
+                            ? $"{fake.Arr} cannot import it ({fake.Reason}), but it does hold a video file, so Tortugarr kept it. This usually means a library drive is not connected to the server; check that all drives are there."
+                            : $"{fake.Arr} cannot import it ({fake.Reason}), and Tortugarr could not check its files, so it was kept.",
+                        LogLevel.Warning).ConfigureAwait(false);
+                }
+
+                continue;
+            }
+
             try
             {
                 await _svc.RemoveFake(fake, ct).ConfigureAwait(false);
@@ -544,6 +564,9 @@ internal sealed class WatchdogState
     public HashSet<string> Screened { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public Dictionary<string, DateTimeOffset> Fakes { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Downloads the *arr called fake but that hold video; reported once, never deleted.</summary>
+    public HashSet<string> FakesSpared { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public Dictionary<string, DateTimeOffset> FirstSeen { get; } = new(StringComparer.Ordinal);
 
