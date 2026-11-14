@@ -101,6 +101,10 @@ List<ItemContextAction> contextActionsFor(
   VoidCallback? onChanged,
   CollectionRemovalContext? collectionRemoval,
   bool isContinueWatchingOrNextUp = false,
+
+  /// The card this menu belongs to already plays on select, so the menu leads
+  /// with the way to its details page instead of a second Play.
+  bool selectPlays = false,
 }) {
   final l10n = AppLocalizations.of(context);
   final mutations = GetIt.instance<ItemMutationRepository>();
@@ -131,8 +135,9 @@ List<ItemContextAction> contextActionsFor(
     final defaultAction =
         prefs.get(UserPreferences.continueWatchingDefaultAction);
     final flipTopAction =
-        isContinueWatchingOrNextUp &&
-        defaultAction == ContinueWatchingDefaultAction.play;
+        selectPlays ||
+        (isContinueWatchingOrNextUp &&
+            defaultAction == ContinueWatchingDefaultAction.play);
 
     if (flipTopAction) {
       actions.add(ItemContextAction(

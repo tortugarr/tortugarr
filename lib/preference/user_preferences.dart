@@ -1367,7 +1367,7 @@ class UserPreferences extends ChangeNotifier {
   /// on it: 'background' (behind the text), 'corner' (a box top right) or 'off'.
   static final tgHarborTrailer = Preference<String>(
     key: 'tg_harbor_trailer',
-    defaultValue: 'background',
+    defaultValue: 'corner',
   );
 
   static final tgHiddenTopLists = Preference<String>(

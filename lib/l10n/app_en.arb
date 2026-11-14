@@ -871,6 +871,8 @@
     "@tgHarborTrailerCorner": {"description": "Tortugarr Harbor trailer setting"},
     "tgHarborTrailerOff": "Off",
     "@tgHarborTrailerOff": {"description": "Tortugarr Harbor trailer setting"},
+    "tg4kDownloaded": "Downloaded!",
+    "@tg4kDownloaded": {"description": "Tortugarr: the 4K track of a title that is in the library; Seerr calls it deleted when there is no separate 4K server"},
     "tgSpotlight": "Spotlight",
     "@tgSpotlight": {"description": "Harbor home: the random picks shown above the first deck"},
     "tgHarborLoading": "Loading your harbor…",

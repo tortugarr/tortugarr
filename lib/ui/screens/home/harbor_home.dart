@@ -44,7 +44,7 @@ const _harborCardTypes = {
 };
 
 class _HarborHomeState extends State<_HarborHome>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, ImmersiveSystemUi, RouteAware {
   final _focus = FocusNode(debugLabel: 'HarborHome');
   late final AnimationController _pos = AnimationController.unbounded(
     vsync: this,
@@ -68,6 +68,37 @@ class _HarborHomeState extends State<_HarborHome>
   bool _trailerShowing = false;
   int _trailerTry = 0;
 
+  // Hold a direction key to glide: cards sideways, decks up and down.
+  late final HarborHold _itemHold = HarborHold(
+    onStep: _moveItem,
+    onRelease: _settleSoon,
+  );
+  late final HarborHold _deckHold = HarborHold(
+    onStep: _moveDeck,
+    onRelease: _settleSoon,
+    delay: const Duration(milliseconds: 420),
+    startInterval: const Duration(milliseconds: 330),
+    endInterval: const Duration(milliseconds: 330),
+    rampUp: Duration.zero,
+  );
+  LogicalKeyboardKey? _heldKey;
+
+  /// The title behind the page. It waits for a glide to settle, so gliding
+  /// past twenty cards does not load twenty backdrops.
+  AggregatedItem? _backdropItem;
+  Timer? _settleTimer;
+
+  // How the next deck comes in: from the right (the last card was passed) or
+  // from below/above (Down/Up).
+  bool _deckFromSide = false;
+  int _deckDirection = 1;
+  ModalRoute<dynamic>? _observedRoute;
+
+  /// Phones and tablets: the system bars stay out of the way of Harbor and
+  /// come back for a moment with a swipe from the edge.
+  static bool get _hidesSystemBars =>
+      PlatformDetection.isAndroid && PlatformDetection.useMobileUi;
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +110,41 @@ class _HarborHomeState extends State<_HarborHome>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) showHarborTourOnce(context);
     });
+    if (_hidesSystemBars) setImmersive(true);
+    // A key let go while something else has focus never reaches Harbor, so
+    // losing focus ends any glide.
+    _focus.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (_focus.hasFocus) return;
+    _heldKey = null;
+    _itemHold.release();
+    _deckHold.release();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route == null || route == _observedRoute) return;
+    if (_observedRoute != null) routeLifecycleObserver.unsubscribe(this);
+    _observedRoute = route;
+    routeLifecycleObserver.subscribe(this, route);
+  }
+
+  // Bars back on pages opened from Harbor, gone again on return.
+  @override
+  void didPushNext() {
+    _heldKey = null;
+    _itemHold.release();
+    _deckHold.release();
+    if (_hidesSystemBars) setImmersive(false);
+  }
+
+  @override
+  void didPopNext() {
+    if (_hidesSystemBars) setImmersive(true);
   }
 
   @override
@@ -88,6 +154,11 @@ class _HarborHomeState extends State<_HarborHome>
     _spotTimer?.cancel();
     _trailerTimer?.cancel();
     _trailerPlayer?.dispose();
+    _focus.removeListener(_onFocusChange);
+    _settleTimer?.cancel();
+    _itemHold.dispose();
+    _deckHold.dispose();
+    if (_observedRoute != null) routeLifecycleObserver.unsubscribe(this);
     _pos.dispose();
     _focus.dispose();
     super.dispose();
@@ -189,31 +260,53 @@ class _HarborHomeState extends State<_HarborHome>
     return d.items[(_index[d.id] ?? 0).clamp(0, d.items.length - 1)];
   }
 
+  /// The focused title changed. While a key is held the backdrop, the trailer
+  /// and the home screen are left alone until the glide settles.
   void _report() {
+    _settleTimer?.cancel();
+    if (_itemHold.holding || _deckHold.holding) {
+      _stopTrailer();
+      return;
+    }
+    _reportNow();
+  }
+
+  void _settleSoon() {
+    _settleTimer?.cancel();
+    _settleTimer = Timer(const Duration(milliseconds: 280), _reportNow);
+  }
+
+  void _reportNow() {
+    if (!mounted) return;
     final item = _current;
+    if (!identical(item, _backdropItem)) setState(() => _backdropItem = item);
     if (item == null || identical(item, _reported)) return;
     _reported = item;
     widget.onItemSelected(item, preserveBackground: true);
     _scheduleTrailer(item);
   }
 
-  String get _trailerMode =>
-      GetIt.instance<UserPreferences>().get(UserPreferences.tgHarborTrailer);
-
-  /// Stops any trailer and, unless trailers are off, starts the focused
-  /// title's after 2.5 s on it.
-  void _scheduleTrailer(AggregatedItem item) {
+  void _stopTrailer() {
     _trailerTimer?.cancel();
     _trailerTry++;
     if (_trailerShowing || _trailerFor != null) {
       _trailerPlayer?.stop();
-      if (mounted) setState(() => _trailerShowing = false);
+      if (mounted && _trailerShowing) setState(() => _trailerShowing = false);
       _trailerFor = null;
     }
+  }
+
+  String get _trailerMode =>
+      GetIt.instance<UserPreferences>().get(UserPreferences.tgHarborTrailer);
+
+  /// Stops any trailer and, unless trailers are off, starts the focused
+  /// title's after 1.5 s on it.
+  void _scheduleTrailer(AggregatedItem item) {
+    _stopTrailer();
     if (_trailerMode == 'off' || item.serverId == 'seerr') return;
     final attempt = _trailerTry;
     _trailerTimer = Timer(
-      const Duration(milliseconds: 2500),
+      const Duration(milliseconds: 1500),
       () => _playTrailer(item, attempt),
     );
   }
@@ -290,39 +383,99 @@ class _HarborHomeState extends State<_HarborHome>
     fill: Colors.transparent,
   );
 
-  void _moveItem(int delta) {
+  /// One card sideways. Past the last card of a deck the next deck slides in
+  /// from the right. Returns false when there is nothing to move to.
+  bool _moveItem(int delta) {
     if (_deck < 0) {
-      if (_spotlight.isEmpty) return;
+      if (_spotlight.isEmpty) return false;
       setState(() => _spot = (_spot + delta) % _spotlight.length);
       _restartSpotlightTimer();
       _report();
-      return;
+      return true;
     }
     final d = _decks[_deck];
-    final next = ((_index[d.id] ?? 0) + delta).clamp(0, d.items.length - 1);
+    final at = _index[d.id] ?? 0;
+    final next = (at + delta).clamp(0, d.items.length - 1);
+    if (next == at) {
+      if (delta > 0 && _deck < _decks.length - 1) {
+        _enterDeck(_deck + 1, fromSide: true);
+        // A glide brakes so the new deck can be seen: a short stop, then
+        // it builds up speed again from slow.
+        if (_itemHold.gliding) {
+          _itemHold.brake(const Duration(milliseconds: 380));
+        }
+        return true;
+      }
+      return false;
+    }
     setState(() => _index[d.id] = next);
+    final gliding = _itemHold.gliding;
     _pos.animateTo(
       next.toDouble(),
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOutCubic,
+      // Gliding: one smooth run across the cards instead of a stop at each.
+      duration: gliding
+          ? _itemHold.interval * 1.1
+          : const Duration(milliseconds: 260),
+      curve: gliding ? Curves.linear : Curves.easeOutCubic,
     );
     _report();
+    return true;
   }
 
-  void _moveDeck(int delta) {
+  /// One deck up or down. Returns false at the top or the bottom.
+  bool _moveDeck(int delta) {
     final next = (_deck + delta).clamp(-1, _decks.length - 1);
-    if (next == _deck) return;
-    setState(() => _deck = next);
-    if (next >= 0) _pos.value = (_index[_decks[next].id] ?? 0).toDouble();
+    if (next == _deck) return false;
+    _deckDirection = delta;
+    _enterDeck(next, fromSide: false);
+    return true;
+  }
+
+  void _enterDeck(int next, {required bool fromSide}) {
+    setState(() {
+      _deckFromSide = fromSide;
+      if (fromSide) {
+        _deckDirection = 1;
+        _index[_decks[next].id] = 0;
+      }
+      _deck = next;
+    });
+    if (next >= 0) {
+      _pos.stop();
+      _pos.value = (_index[_decks[next].id] ?? 0).toDouble();
+    }
     _report();
   }
 
+  static final _arrows = {
+    LogicalKeyboardKey.arrowLeft,
+    LogicalKeyboardKey.arrowRight,
+    LogicalKeyboardKey.arrowUp,
+    LogicalKeyboardKey.arrowDown,
+  };
+
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
-    if (event is KeyUpEvent) return KeyEventResult.ignored;
     final key = event.logicalKey;
+    if (event is KeyUpEvent) {
+      if (key == _heldKey) {
+        _heldKey = null;
+        _itemHold.release();
+        _deckHold.release();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    }
+    // A held arrow glides on Harbor's own clock; the remote's repeats are
+    // swallowed so they do not add steps of their own.
+    if (event is KeyRepeatEvent && _arrows.contains(key)) {
+      return key == _heldKey ||
+              !(key == LogicalKeyboardKey.arrowUp && _deck == -1)
+          ? KeyEventResult.handled
+          : KeyEventResult.ignored;
+    }
     final atFirst = _deck >= 0 && (_index[_decks[_deck].id] ?? 0) == 0;
     if (key == LogicalKeyboardKey.arrowRight) {
-      _moveItem(1);
+      _hold(key, _itemHold, 1);
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.arrowLeft) {
@@ -335,17 +488,16 @@ class _HarborHomeState extends State<_HarborHome>
         }
         return KeyEventResult.ignored;
       }
-      _moveItem(-1);
+      _hold(key, _itemHold, -1);
       return KeyEventResult.handled;
     }
-    if (event is KeyRepeatEvent) return KeyEventResult.handled;
     if (key == LogicalKeyboardKey.arrowDown) {
-      _moveDeck(1);
+      _hold(key, _deckHold, 1);
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.arrowUp) {
       if (_deck == -1) return KeyEventResult.ignored;
-      _moveDeck(-1);
+      _hold(key, _deckHold, -1);
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.select ||
@@ -358,13 +510,24 @@ class _HarborHomeState extends State<_HarborHome>
     return KeyEventResult.ignored;
   }
 
+  /// Key down on an arrow: lets go of any other held arrow and starts this one.
+  void _hold(LogicalKeyboardKey key, HarborHold hold, int direction) {
+    if (_heldKey != key) {
+      _itemHold.release();
+      _deckHold.release();
+    }
+    _heldKey = key;
+    hold.press(direction);
+  }
+
   void _open(AggregatedItem? item) {
     if (item == null) return;
+    _heldKey = null;
+    _itemHold.release();
+    _deckHold.release();
+    _settleTimer?.cancel();
     // Leaving Home: no trailer playing behind the details page.
-    _trailerTimer?.cancel();
-    _trailerTry++;
-    _trailerPlayer?.stop();
-    if (_trailerShowing) setState(() => _trailerShowing = false);
+    _stopTrailer();
     if (_libraryIds.contains(item.id)) {
       _ContentRowsState._navigateToLibrary(context, item);
       return;
@@ -485,7 +648,7 @@ class _HarborHomeState extends State<_HarborHome>
             child: Stack(
               fit: StackFit.expand,
               children: [
-                _buildBackdrop(item),
+                _buildBackdrop(_backdropItem ?? item),
                 if (_trailerShowing &&
                     _trailerController != null &&
                     _trailerMode == 'background')
@@ -500,12 +663,9 @@ class _HarborHomeState extends State<_HarborHome>
                     width: w * 0.36,
                     height: w * 0.36 * 9 / 16,
                     child: IgnorePointer(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(color: Colors.black),
-                          child: _trailerVideo(),
-                        ),
+                      child: HarborTrailerFrame(
+                        key: ValueKey('frame-$_trailerFor'),
+                        child: _trailerVideo(),
                       ),
                     ),
                   ),
@@ -610,76 +770,92 @@ class _HarborHomeState extends State<_HarborHome>
           item.indexNumber != null)
         'S${item.parentIndexNumber}:E${item.indexNumber}',
     ];
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      child: Column(
-        key: ValueKey(item.id),
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            kicker.toUpperCase(),
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: AppColorScheme.accent,
-              letterSpacing: 2,
-              fontWeight: FontWeight.w800,
-            ),
+    // The deck name stays put while the cards change and gets its own
+    // entrance when the deck does.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _HarborKicker(
+          text: kicker.toUpperCase(),
+          fromSide: _deckFromSide,
+          direction: _deckDirection,
+        ),
+        const SizedBox(height: 10),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          layoutBuilder: (current, previous) => Stack(
+            alignment: Alignment.topLeft,
+            children: [...previous, ?current],
           ),
-          const SizedBox(height: 10),
-          if (logo != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: h * 0.17, maxWidth: 520),
-              child: BoundedNetworkImage(
-                imageUrl: logo,
-                fit: BoxFit.contain,
-                alignment: Alignment.centerLeft,
-                maxWidth: 800,
-              ),
-            )
-          else
-            Text(
-              item.type == 'Episode'
-                  ? (item.seriesName ?? item.name)
-                  : item.name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.displaySmall?.copyWith(
-                color: AppColorScheme.onBackground,
-                fontWeight: FontWeight.w800,
-                height: 1.0,
-                shadows: const [Shadow(blurRadius: 12, color: Colors.black54)],
-              ),
-            ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 14,
-            runSpacing: 6,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          child: Column(
+            key: ValueKey(item.id),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              for (final m in meta)
+              if (logo != null)
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: h * 0.17,
+                    maxWidth: 520,
+                  ),
+                  child: BoundedNetworkImage(
+                    imageUrl: logo,
+                    fit: BoxFit.contain,
+                    alignment: Alignment.centerLeft,
+                    maxWidth: 800,
+                  ),
+                )
+              else
                 Text(
-                  m,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: AppColorScheme.onBackground.withValues(alpha: 0.9),
+                  item.type == 'Episode'
+                      ? (item.seriesName ?? item.name)
+                      : item.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    color: AppColorScheme.onBackground,
+                    fontWeight: FontWeight.w800,
+                    height: 1.0,
+                    shadows: const [
+                      Shadow(blurRadius: 12, color: Colors.black54),
+                    ],
                   ),
                 ),
-              _HarborInlineBadges(item: item),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 14,
+                runSpacing: 6,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  for (final m in meta)
+                    Text(
+                      m,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: AppColorScheme.onBackground.withValues(
+                          alpha: 0.9,
+                        ),
+                      ),
+                    ),
+                  _HarborInlineBadges(item: item),
+                ],
+              ),
+              if (overview.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  overview,
+                  maxLines: _deck < 0 ? 4 : 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: AppColorScheme.onBackground.withValues(alpha: 0.85),
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ],
           ),
-          if (overview.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-              overview,
-              maxLines: _deck < 0 ? 4 : 3,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: AppColorScheme.onBackground.withValues(alpha: 0.85),
-                height: 1.4,
-              ),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -761,10 +937,38 @@ class _HarborHomeState extends State<_HarborHome>
         ),
       );
     }
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const NeverScrollableScrollPhysics(),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tabs),
+    // A new deck: the tab row slides over from where the deck came from.
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 340),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      layoutBuilder: (current, previous) => Stack(
+        alignment: Alignment.centerLeft,
+        children: [...previous, ?current],
+      ),
+      transitionBuilder: (child, anim) {
+        final incoming = child.key == ValueKey('tabs-$_deck');
+        final dx = (_deckFromSide ? 0.18 : 0.10) * _deckDirection;
+        return FadeTransition(
+          opacity: anim,
+          child: SlideTransition(
+            position: Tween(
+              begin: Offset(incoming ? dx : -dx, 0),
+              end: Offset.zero,
+            ).animate(anim),
+            child: child,
+          ),
+        );
+      },
+      child: SingleChildScrollView(
+        key: ValueKey('tabs-$_deck'),
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: tabs,
+        ),
+      ),
     );
   }
 
@@ -781,16 +985,24 @@ class _HarborHomeState extends State<_HarborHome>
         final centerX = w * 0.5;
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 320),
-          transitionBuilder: (child, anim) => FadeTransition(
-            opacity: anim,
-            child: SlideTransition(
-              position: Tween(
-                begin: const Offset(0, 0.25),
-                end: Offset.zero,
-              ).animate(anim),
-              child: child,
-            ),
-          ),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          // Past the last card the next deck comes in from the right and the
+          // old one leaves to the left; Down/Up bring it from below/above.
+          transitionBuilder: (child, anim) {
+            final incoming = child.key == ValueKey(deck.id);
+            final sign = incoming ? 1.0 : -1.0;
+            final begin = _deckFromSide
+                ? Offset(0.45 * sign, 0)
+                : Offset(0, 0.25 * _deckDirection * sign);
+            return FadeTransition(
+              opacity: anim,
+              child: SlideTransition(
+                position: Tween(begin: begin, end: Offset.zero).animate(anim),
+                child: child,
+              ),
+            );
+          },
           child: AnimatedBuilder(
             key: ValueKey(deck.id),
             animation: _pos,
@@ -1190,6 +1402,78 @@ class _HarborInlineBadges extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// The deck name above the title. When the deck changes the old name slides
+/// away and the new one slides in with a brass rule sweeping under it.
+class _HarborKicker extends StatelessWidget {
+  const _HarborKicker({
+    required this.text,
+    required this.fromSide,
+    required this.direction,
+  });
+
+  final String text;
+  final bool fromSide;
+  final int direction;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.labelLarge?.copyWith(
+      color: AppColorScheme.accent,
+      letterSpacing: 2,
+      fontWeight: FontWeight.w800,
+    );
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 420),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      layoutBuilder: (current, previous) => Stack(
+        alignment: Alignment.centerLeft,
+        children: [...previous, ?current],
+      ),
+      transitionBuilder: (child, anim) {
+        final incoming = child.key == ValueKey(text);
+        final sign = incoming ? 1.0 : -1.0;
+        final begin = fromSide
+            ? Offset(0.35 * sign, 0)
+            : Offset(0, 0.9 * direction * sign);
+        return FadeTransition(
+          opacity: anim,
+          child: SlideTransition(
+            position: Tween(begin: begin, end: Offset.zero).animate(anim),
+            child: child,
+          ),
+        );
+      },
+      child: Column(
+        key: ValueKey(text),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text, style: style),
+          const SizedBox(height: 4),
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 650),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => Container(
+              height: 2,
+              width: 64 * t,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColorScheme.accent,
+                    AppColorScheme.accent.withValues(alpha: 0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

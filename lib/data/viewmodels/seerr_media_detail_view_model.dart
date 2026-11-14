@@ -50,6 +50,10 @@ class SeerrQualityStatus {
   /// to the request list.
   final List<SeerrSeasonAvailability> seasonAvailability;
 
+  /// Tortugarr: a 4K copy that is in the library although Seerr says deleted.
+  /// See [asDownloaded].
+  final bool downloaded;
+
   const SeerrQualityStatus({
     required this.is4k,
     required this.status,
@@ -59,7 +63,24 @@ class SeerrQualityStatus {
     required this.canManageRequests,
     required this.currentUserId,
     this.seasonAvailability = const [],
+    this.downloaded = false,
   });
+
+  /// Tortugarr runs one Radarr for every quality. Seerr marks a 4K file it
+  /// once saw as available, then calls it deleted at its nightly availability
+  /// sync because there is no separate 4K server to find it on. The title is
+  /// in the library all the same, so it reads as downloaded.
+  SeerrQualityStatus asDownloaded() => SeerrQualityStatus(
+    is4k: is4k,
+    status: SeerrMediaStatus.available,
+    requests: requests,
+    activeRequests: activeRequests,
+    download: download,
+    canManageRequests: canManageRequests,
+    currentUserId: currentUserId,
+    seasonAvailability: seasonAvailability,
+    downloaded: true,
+  );
 
   factory SeerrQualityStatus.of({
     required bool is4k,

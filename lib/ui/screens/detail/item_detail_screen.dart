@@ -6000,6 +6000,20 @@ class _HorizontalActionRowState extends State<_HorizontalActionRow> {
 }
 
 class DetailActionButtonsState extends State<DetailActionButtons> {
+  /// The Play buttons of each open detail page, so a card on the same page
+  /// (an episode in the list) can start playback the way Play does without
+  /// opening a page of its own first.
+  static final Map<ModalRoute<dynamic>, DetailActionButtonsState> _byRoute =
+      {};
+  ModalRoute<dynamic>? _route;
+
+  /// The Play buttons on the page that holds [context], if that page has any.
+  static DetailActionButtonsState? of(BuildContext context) {
+    final route = ModalRoute.of(context);
+    final state = route == null ? null : _byRoute[route];
+    return state != null && state.mounted ? state : null;
+  }
+
   int? get _selectedAudioIndex => viewModel.selectedAudioIndex;
   set _selectedAudioIndex(int? value) => viewModel.selectedAudioIndex = value;
 
@@ -6131,7 +6145,22 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route == _route) return;
+    if (_route != null && identical(_byRoute[_route!], this)) {
+      _byRoute.remove(_route);
+    }
+    _route = route;
+    if (route != null) _byRoute[route] = this;
+  }
+
+  @override
   void dispose() {
+    if (_route != null && identical(_byRoute[_route!], this)) {
+      _byRoute.remove(_route);
+    }
     _downloadService?.removeListener(_onDownloadChanged);
     _userSub?.cancel();
     _localTvPlayFocusNode.dispose();
@@ -15063,7 +15092,12 @@ class _EpisodeListCardState extends State<_EpisodeListCard>
   }
 
   void _handleLongPress() {
-    showContextMenu(context, widget.episode, onChanged: widget.onChanged);
+    showContextMenu(
+      context,
+      widget.episode,
+      onChanged: widget.onChanged,
+      selectPlays: true,
+    );
   }
 
   // The row only shows on an episode, so the one picked takes this page's place.
@@ -15292,15 +15326,33 @@ class _EpisodeListCardState extends State<_EpisodeListCard>
 
 /// With [replacePage] the episode takes the current page's place, so Back
 /// leaves the run of episodes in one press.
+/// Picking an episode from a list plays it, the way its Play button does (a
+/// started one asks to resume). It used to open the episode's page, which
+/// shows the same list again and needed a second press to play. The page is
+/// still a long press away: the menu then leads with "Go to details".
 void _openEpisodeDetails(
   BuildContext context,
   AggregatedItem episode, {
   String? contextSeasonId,
   bool replacePage = false,
 }) {
+  // Played from this page, so Back from the player returns here (the season
+  // page with its season row) and not to a page the viewer never asked for.
+  final actions = DetailActionButtonsState.of(context);
+  if (actions != null) {
+    unawaited(
+      actions.playItem(
+        context,
+        episode,
+        resume: watchStateOf(episode).hasProgress,
+      ),
+    );
+    return;
+  }
   final location = Destinations.item(
     episode.id,
     serverId: episode.serverId,
+    autoPlay: true,
     seasonContext: seasonContextParam(
       contextSeasonId: contextSeasonId,
       episodeSeasonId: episode.seasonId,
@@ -15578,7 +15630,12 @@ class DetailEpisodeCardState extends State<DetailEpisodeCard>
   }
 
   void _handleLongPress() {
-    showContextMenu(context, widget.episode, onChanged: widget.onChanged);
+    showContextMenu(
+      context,
+      widget.episode,
+      onChanged: widget.onChanged,
+      selectPlays: true,
+    );
   }
 
   void _open() {

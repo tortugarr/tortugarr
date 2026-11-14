@@ -868,6 +868,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tgHarborTrailerOff => 'Av';
 
   @override
+  String get tg4kDownloaded => 'Lastet ned!';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

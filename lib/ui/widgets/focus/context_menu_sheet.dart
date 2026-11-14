@@ -15,6 +15,7 @@ Future<void> showContextMenu(
   VoidCallback? onChanged,
   CollectionRemovalContext? collectionRemoval,
   bool isContinueWatchingOrNextUp = false,
+  bool selectPlays = false,
 }) {
   final actions = contextActionsFor(
     context,
@@ -22,6 +23,7 @@ Future<void> showContextMenu(
     onChanged: onChanged,
     collectionRemoval: collectionRemoval,
     isContinueWatchingOrNextUp: isContinueWatchingOrNextUp,
+    selectPlays: selectPlays,
   );
   if (actions.isEmpty) return Future<void>.value();
   // A pointer opened this from a spot on screen, so put it there. A remote or

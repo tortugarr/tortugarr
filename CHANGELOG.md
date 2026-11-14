@@ -8,6 +8,25 @@
   a page opened through Seerr went Home with the menu out of reach (Left did nothing; only
   restarting the app helped). The menu link now always follows the newest menu still on
   screen, however pages are closed.
+- **Harbor: hold to glide.** Holding Left or Right glides through the cards by itself, faster
+  the longer it is held, and stops the moment the key is let go (it used to move one card per
+  press). Holding Down or Up moves through the decks. The backdrop and the trailer wait until
+  the glide settles, so it stays smooth.
+- **Harbor: one deck flows into the next.** Right on the last card brings in the next deck from
+  the right, with its name sliding in and a brass rule sweeping under it. A glide brakes there
+  for a moment and builds up speed again, so the new deck is seen.
+- **Harbor trailer in a frame.** The trailer now plays sharp in a box in the corner by default
+  (Settings › Home › Harbor trailer), framed in worn brass with rivets and a strip of film
+  draped over the corner, and starts after 1.5 s on a title instead of 2.5 s.
+- **"4K · Downloaded!" instead of "4K · Deleted".** With one Radarr for every quality, Seerr's
+  nightly availability sync calls the 4K copy of a title deleted although it is in the
+  library. While the title is available the badge now says Downloaded!.
+- **Picking an episode plays it.** In a season's episode list, selecting an episode used to open
+  its page, which showed the same list again and needed a second press. It now starts playing
+  (resuming a started one), as its Play button does, and Back from the player returns to the
+  season page. A long press opens the menu with "Go to details" first.
+- **Phones and tablets:** the system navigation bar no longer sits on top of Harbor. It stays
+  hidden on Home and comes back for a moment with a swipe from the edge.
 
 **Installer**
 

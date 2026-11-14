@@ -870,6 +870,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tgHarborTrailerOff => 'Off';
 
   @override
+  String get tg4kDownloaded => 'Downloaded!';
+
+  @override
   String get tgSpotlight => 'Spotlight';
 
   @override

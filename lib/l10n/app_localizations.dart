@@ -1582,6 +1582,12 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get tgHarborTrailerOff;
 
+  /// Tortugarr: the 4K track of a title that is in the library; Seerr calls it deleted when there is no separate 4K server
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded!'**
+  String get tg4kDownloaded;
+
   /// Harbor home: the random picks shown above the first deck
   ///
   /// In en, this message translates to:

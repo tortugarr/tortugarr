@@ -13,7 +13,9 @@ import '../../../../navigation/destinations.dart';
 import '../../../../widgets/focus/context_menu_sheet.dart';
 import '../../../../widgets/focus/locked_focus_row.dart';
 import '../../../../widgets/sliding_pill_tabs.dart';
+import '../../../../../util/item_watch_state.dart';
 import '../../detail_episode_images.dart';
+import '../../item_detail_screen.dart';
 import '../../detail_layout_metrics.dart';
 import '../../play_item_on_screen.dart';
 import 'minimalist_episode_card.dart';
@@ -133,9 +135,23 @@ class _MinimalistEpisodesSectionState extends State<MinimalistEpisodesSection> {
       playItemOnScreen(context);
       return;
     }
+    // Picking an episode plays it from this page, as its Play button does, so
+    // Back from the player returns here.
+    final actions = DetailActionButtonsState.of(context);
+    if (actions != null) {
+      unawaited(
+        actions.playItem(
+          context,
+          episode,
+          resume: watchStateOf(episode).hasProgress,
+        ),
+      );
+      return;
+    }
     final location = Destinations.item(
       episode.id,
       serverId: episode.serverId,
+      autoPlay: true,
       seasonContext: seasonContextParam(
         contextSeasonId: _isSeason ? _vm.item?.id : null,
         episodeSeasonId: episode.seasonId,

@@ -15,12 +15,14 @@ List<SeerrStatusTrack> seerrStatusTracks(
   SeerrMediaDetailState state,
   AppLocalizations l10n,
 ) {
-  final uhd = state.uhd;
+  var uhd = state.uhd;
   if (!uhd.hasAnyState) return [(state.hd, null)];
+  if (uhd.isDeleted && state.hd.isAvailable) uhd = uhd.asDownloaded();
   return [(state.hd, 'HD'), (uhd, l10n.uhd4k)];
 }
 
 String seerrStatusLabel(SeerrQualityStatus q, AppLocalizations l10n) {
+  if (q.downloaded) return l10n.tg4kDownloaded;
   if (q.isFullyAvailable) return l10n.seerrAvailableStatus;
   if (q.isPartiallyAvailable) return l10n.partiallyAvailable;
   if (q.isProcessing) return l10n.seerrRequestedStatus;
