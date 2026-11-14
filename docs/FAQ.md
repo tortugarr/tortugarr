@@ -93,6 +93,22 @@ Both understand episode codes. Type "American Horror Story S13E04", "the boys s0
 
 ## Downloading
 
+**Who may download, and why does someone only get "Request"?**
+What a user can do depends on whether the administrator has given them **download limits**:
+
+| User | Download Now | Missing episodes | Request |
+|---|---|---|---|
+| Administrator | Yes | Shown | Yes |
+| User with download limits | Yes, within the limits | Shown | Yes |
+| User without download limits | No | Not shown | Yes |
+
+A user without limits only sees what is already in the library and can ask for more with
+**Request**, which the administrator approves. To let someone download, open Jellyfin's
+**Dashboard > Plugins > Tortugarr > Download limits**, switch the user on and set how many movies
+and episodes a week and how large a file may be (empty or 0 means no limit). It takes effect at
+once; the user may have to restart the app to see **Download Now** and the missing episodes.
+Administrators are never limited.
+
 **How do I download something?**
 Open a movie or series and choose **Download Now**. Tortugarr searches for files and lets you
 pick the exact one, with quality, size and how many people share it (seeders). Your choice goes
@@ -165,6 +181,11 @@ Open a series. Every season and every episode is listed, also the ones you don't
 - **Ready soon**: downloaded, being added to the library.
 
 This works however you get to the series: from Series, search, or *Continue watching*.
+
+**Someone else sees only the episodes we have, not the missing ones.**
+Missing episodes are shown only to users who may download them: administrators and users with
+download limits. Everyone else sees the library as it is. Give the user download limits (see *Who may download* under [Downloading](#downloading)) and the missing
+episodes appear.
 
 **Can I choose the quality of an episode?**
 Yes. The file list has the same tabs as for movies: 2160p, 1080p, 720p, other and all, each with
