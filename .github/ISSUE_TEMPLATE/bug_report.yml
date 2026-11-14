@@ -13,7 +13,7 @@ body:
     attributes:
       label: App version
       description: In the app, Settings > About.
-      placeholder: "4.20.06"
+      placeholder: "4.20.07"
     validations:
       required: true
   - type: input

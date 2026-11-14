@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.20.07 - 2026-11-14 (app build 2000064, Tortugarr plugin 1.3.0.38, Moonfin 3.0.0)
 
 **App**
 
@@ -36,6 +36,19 @@
 - `doctor` no longer counts Radarr's "downloads in the root folder" warning: downloads go into
   a hidden `.incoming` folder inside the library on purpose (the app's health card already
   skipped it).
+- **WSL: a library drive missing after a Windows restart is mounted again by itself.** A
+  drive guard checks every minute that each drive the containers use is mounted and readable,
+  remounts a missing or dead one, and restarts the containers that cannot see it (at most once
+  every 10 minutes). It deletes nothing. `doctor` reports drive problems.
+
+**Server** (Tortugarr plugin 1.3.0.38)
+
+- **Real downloads are never deleted when a library drive is missing.** After a restart where
+  a drive was not mounted yet, Radarr could not reach two finished films and the fake-download
+  sweeper removed them as fakes. Import failures caused by an unreachable path no longer count
+  as fakes, and before removing anything the sweeper checks the torrent's file list: a real
+  video file (or a list it cannot read) is kept, and the administrator is told once that a
+  library drive is probably not connected.
 
 ## 4.20.05 - 2026-11-12 (app build 2000062, Tortugarr plugin 1.3.0.37, Moonfin 3.0.0)
 
